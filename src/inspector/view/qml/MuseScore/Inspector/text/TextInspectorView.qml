@@ -44,9 +44,10 @@ InspectorSectionView {
         spacing: 12
 
         DropdownPropertyView {
+            id: fontSection
             navigation.panel: root.navigationPanel
             navigation.name: "Font"
-            navigation.row: root.navigationRow(1)
+            navigationRowStart: root.navigationRowOffset + 1
 
             titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
@@ -72,6 +73,7 @@ InspectorSectionView {
             width: parent.width
 
             InspectorPropertyView {
+                id: styleSection
                 titleText: qsTrc("inspector", "Style")
                 propertyItem: root.model ? root.model.fontStyle : null
 
@@ -81,22 +83,28 @@ InspectorSectionView {
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "StyleMenu"
-                navigation.row: root.navigationRow(3)
+                navigationRowStart: fontSection.navigationRowEnd + 1
+                navigationRowEnd: styleGroup.navigationRowEnd
 
                 RadioButtonGroup {
+                    id: styleGroup
                     height: 30
                     width: implicitWidth
 
+                    property int navigationRowStart: styleSection.navigationRowStart + 1
+                    property int navigationRowEnd: navigationRowStart + count
+
                     model: [
-                        { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD },
-                        { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC  },
-                        { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE  }
+                        { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD, title: qsTrc("inspector", "Bold") },
+                        { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC, title: qsTrc("inspector", "Italic") },
+                        { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE, title: qsTrc("inspector", "Underline") }
                     ]
 
                     delegate: FlatToggleButton {
                         navigation.panel: root.navigationPanel
                         navigation.name: "FontStyle" + model.index
-                        navigation.row: root.navigationRow(model.index + 4)
+                        navigation.row: styleGroup.navigationRowStart + model.index
+                        navigation.accessible.name: styleSection.titleText + " " + modelData["title"]
 
                         icon: modelData["iconCode"]
 
@@ -111,13 +119,14 @@ InspectorSectionView {
             }
 
             DropdownPropertyView {
+                id: sizeSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "Size"
-                navigation.row: root.navigationRow(7)
+                navigationRowStart: styleSection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
@@ -140,12 +149,14 @@ InspectorSectionView {
         }
 
         InspectorPropertyView {
+            id: alignmentSection
             titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.horizontalAlignment : null
 
             navigation.panel: root.navigationPanel
             navigation.name: "AlignmentMenu"
-            navigation.row: root.navigationRow(9)
+            navigationRowStart: sizeSection.navigationRowEnd + 1
+            navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
 
             Item {
                 height: childrenRect.height
@@ -154,6 +165,9 @@ InspectorSectionView {
                 RadioButtonGroup {
                     id: horizontalAlignmentButtonList
 
+                    property int navigationRowStart: alignmentSection.navigationRowStart + 1
+                    property int navigationRowEnd: navigationRowStart + count
+
                     anchors.left: parent.left
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 2
@@ -161,15 +175,16 @@ InspectorSectionView {
                     height: 30
 
                     model: [
-                        { iconRole: IconCode.TEXT_ALIGN_LEFT, typeRole: TextTypes.FONT_ALIGN_H_LEFT },
-                        { iconRole: IconCode.TEXT_ALIGN_CENTER, typeRole: TextTypes.FONT_ALIGN_H_CENTER },
-                        { iconRole: IconCode.TEXT_ALIGN_RIGHT, typeRole: TextTypes.FONT_ALIGN_H_RIGHT }
+                        { iconRole: IconCode.TEXT_ALIGN_LEFT, typeRole: TextTypes.FONT_ALIGN_H_LEFT, title: qsTrc("inspector", "Left") },
+                        { iconRole: IconCode.TEXT_ALIGN_CENTER, typeRole: TextTypes.FONT_ALIGN_H_CENTER, title: qsTrc("inspector", "Center") },
+                        { iconRole: IconCode.TEXT_ALIGN_RIGHT, typeRole: TextTypes.FONT_ALIGN_H_RIGHT, title: qsTrc("inspector", "Right") }
                     ]
 
                     delegate: FlatRadioButton {
                         navigation.panel: root.navigationPanel
                         navigation.name: "HAlign"+model.index
-                        navigation.row: root.navigationRow(model.index + 10)
+                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: alignmentSection.titleText + " " + qsTrc("inspector", "Horizontal") + " " + modelData["title"]
 
                         width: 30
                         transparent: true
@@ -186,6 +201,9 @@ InspectorSectionView {
                 RadioButtonGroup {
                     id: verticalAlignmentButtonList
 
+                    property int navigationRowStart: horizontalAlignmentButtonList.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowStart + count
+
                     anchors.left: parent.horizontalCenter
                     anchors.leftMargin: 2
                     anchors.right: parent.right
@@ -193,16 +211,17 @@ InspectorSectionView {
                     height: 30
 
                     model: [
-                        { iconRole: IconCode.TEXT_ALIGN_UNDER, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM },
-                        { iconRole: IconCode.TEXT_ALIGN_MIDDLE, typeRole: TextTypes.FONT_ALIGN_V_CENTER },
-                        { iconRole: IconCode.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE },
-                        { iconRole: IconCode.TEXT_ALIGN_ABOVE, typeRole: TextTypes.FONT_ALIGN_V_TOP }
+                        { iconRole: IconCode.TEXT_ALIGN_UNDER, typeRole: TextTypes.FONT_ALIGN_V_BOTTOM, title: qsTrc("inspector", "Bottom") },
+                        { iconRole: IconCode.TEXT_ALIGN_MIDDLE, typeRole: TextTypes.FONT_ALIGN_V_CENTER, title: qsTrc("inspector", "Center") },
+                        { iconRole: IconCode.TEXT_ALIGN_BASELINE, typeRole: TextTypes.FONT_ALIGN_V_BASELINE, title: qsTrc("inspector", "Baseline") },
+                        { iconRole: IconCode.TEXT_ALIGN_ABOVE, typeRole: TextTypes.FONT_ALIGN_V_TOP, title: qsTrc("inspector", "Top") }
                     ]
 
                     delegate: FlatRadioButton {
                         navigation.panel: root.navigationPanel
                         navigation.name: "VAlign"+model.index
-                        navigation.row: root.navigationRow(model.index + 13)
+                        navigation.row: verticalAlignmentButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: alignmentSection.titleText + " " + qsTrc("inspector", "Vertical") + " " + modelData["title"]
 
                         width: 30
                         transparent: true
@@ -219,11 +238,12 @@ InspectorSectionView {
         }
 
         FlatButton {
+            id: insertSpecCharactersButton
             width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "Insert special characters"
-            navigation.row: root.navigationRow(18)
+            navigation.row: alignmentSection.navigationRowEnd + 1
 
             text: qsTrc("inspector", "Insert special characters")
 
@@ -244,20 +264,20 @@ InspectorSectionView {
 
             navigation.panel: root.navigationPanel
             navigation.name: "TextAdvancedSettings"
-            navigation.row: root.navigationRow(19)
+            navigation.row: insertSpecCharactersButton.navigation.row + 1
 
             text: qsTrc("inspector", "More…")
             visible: root.model ? !root.model.isEmpty : false
 
             popupContent: TextSettings {
                 id: textSettings
-                navigationPanel.section: textAdvancedSettingsButton.popup.navigationSection
-                navigationPanel.order: 1
                 model: root.model
+
+                navigationPanel: textAdvancedSettingsButton.popupNavigationPanel
             }
 
             onPopupOpened: {
-                textSettings.focusOnFirst()
+                Qt.callLater(textSettings.focusOnFirst)
             }
 
             onEnsureContentVisibleRequested: {
