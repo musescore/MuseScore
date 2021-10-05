@@ -23,7 +23,6 @@
 #define MU_UI_IINTERACTIVEURIREGISTER_H
 
 #include <QVariantMap>
-#include <QDialog>
 
 #include "modularity/imoduleexport.h"
 #include "global/uri.h"

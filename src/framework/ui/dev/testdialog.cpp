@@ -25,13 +25,13 @@
 using namespace mu::ui;
 
 TestDialog::TestDialog(const TestDialog& dialog)
-    : WidgetDialog(dialog.parentWidget()),
+    : QDialog(dialog.parentWidget()),
     ui(dialog.ui)
 {
 }
 
 TestDialog::TestDialog(QWidget* parent)
-    : WidgetDialog(parent),
+    : QDialog(parent),
     ui(new Ui::TestDialog)
 {
     ui->setupUi(this);
@@ -50,11 +50,6 @@ QString TestDialog::title() const
 int TestDialog::static_metaTypeId()
 {
     return qRegisterMetaType<TestDialog>("TestDialog");
-}
-
-int TestDialog::metaTypeId() const
-{
-    return static_metaTypeId();
 }
 
 void TestDialog::setTitle(QString title)

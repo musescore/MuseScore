@@ -27,8 +27,6 @@
 
 #include "ui_masterpalette.h"
 
-#include "ui/view/widgetdialog.h"
-
 namespace mu::palette {
 class PaletteWidget;
 }
@@ -37,17 +35,17 @@ namespace Ms {
 class TimeDialog;
 class KeyEditor;
 
-class MasterPalette : public mu::ui::WidgetDialog, Ui::MasterPalette
+class MasterPalette : public QDialog, Ui::MasterPalette
 {
     Q_OBJECT
 
     Q_PROPERTY(QString selectedPaletteName READ selectedPaletteName WRITE setSelectedPaletteName NOTIFY selectedPaletteNameChanged)
 
 public:
-    MasterPalette(QWidget* parent = nullptr);
+    explicit MasterPalette(QWidget* parent = nullptr);
+    MasterPalette(const MasterPalette& dialog);
 
     static int static_metaTypeId();
-    int metaTypeId() const override;
 
     QString selectedPaletteName() const;
 

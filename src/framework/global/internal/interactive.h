@@ -75,6 +75,8 @@ public:
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
 
+    void activate(const UriQuery& uri) override;
+
     void close(const std::string& uri) override;
     void close(const Uri& uri) override;
 

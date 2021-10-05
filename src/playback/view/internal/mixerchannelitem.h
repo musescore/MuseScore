@@ -132,6 +132,8 @@ private:
     QList<OutputResourceItem*> emptySlotsToRemove() const;
     void removeRedundantEmptySlots();
 
+    void openEditor(const UriQuery& uri);
+
     audio::TrackId m_id = -1;
 
     audio::AudioInputParams m_inputParams;

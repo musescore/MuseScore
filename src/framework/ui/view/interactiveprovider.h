@@ -30,8 +30,9 @@
 #include "modularity/ioc.h"
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
-#include "../imainwindow.h"
 #include "retval.h"
+
+class QDialog;
 
 namespace mu::ui {
 class QmlLaunchData : public QObject
@@ -53,7 +54,6 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
     Q_OBJECT
 
     INJECT(ui, IInteractiveUriRegister, uriRegister)
-    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     explicit InteractiveProvider();
@@ -76,6 +76,8 @@ public:
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
 
+    void activate(const UriQuery& uri) override;
+
     void close(const Uri& uri) override;
 
     ValCh<Uri> currentUri() const override;
@@ -84,11 +86,12 @@ public:
     Q_INVOKABLE QString objectID(const QVariant& val) const;
 
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId);
-    Q_INVOKABLE void onPopupClose(const QString& objectID, const QVariant& rv);
+    Q_INVOKABLE void onPopupClose(const QString& objectId, const QVariant& rv);
 
 signals:
     void fireOpen(QmlLaunchData* data);
     void fireClose(QVariant data);
+    void fireRaise(QVariant data);
 
     void fireOpenStandardDialog(QmlLaunchData* data);
 
@@ -96,7 +99,7 @@ private:
     struct OpenData
     {
         bool sync = false;
-        QString objectID;
+        QString objectId;
     };
 
     struct ObjectInfo
@@ -107,7 +110,7 @@ private:
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
-    void fillStandatdDialogData(QmlLaunchData* data, const QString& type, const QString& title, const framework::IInteractive::Text& text,
+    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const QString& title, const framework::IInteractive::Text& text,
                                 const framework::IInteractive::ButtonDatas& buttons, int defBtn,
                                 const framework::IInteractive::Options& options) const;
 
@@ -121,13 +124,18 @@ private:
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
 
-    void closeWidgetDialog(const QVariant& dialogMetaTypeId);
-    void closeQml(const QVariant& objectID);
+    void closeWidgetDialog(const QVariant& dialogId);
+    void closeQml(const QVariant& objectId);
+
+    void raiseWidgetDialog(const QVariant& dialogId);
+    void raiseQmlDialog(const QVariant& dialogId);
 
     UriQuery m_openingUriQuery;
     QStack<ObjectInfo> m_stack;
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
+
+    QMap<QVariant, QDialog*> m_openedWidgetDialogs;
 };
 }
 
