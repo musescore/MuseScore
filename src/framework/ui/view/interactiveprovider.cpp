@@ -115,6 +115,17 @@ RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const
     return RetVal<bool>::make_ok(false);
 }
 
+RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
+{
+    for (const ObjectInfo& objectInfo: m_stack) {
+        if (objectInfo.uriQuery == uri) {
+            return RetVal<bool>::make_ok(true);
+        }
+    }
+
+    return RetVal<bool>::make_ok(false);
+}
+
 void InteractiveProvider::close(const Uri& uri)
 {
     for (const ObjectInfo& objectInfo: m_stack) {
