@@ -22,8 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,13 +33,24 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "ChordSymbolSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        interpretationSection.focusOnFirst()
+    }
+
     FlatRadioButtonGroupPropertyView {
+        id: interpretationSection
         titleText: qsTrc("inspector", "Interpretation")
         propertyItem: root.model ? root.model.isLiteral : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
 
         model: [
             { text: qsTrc("inspector", "Literal"), value: true },
@@ -46,8 +59,12 @@ Column {
     }
 
     DropdownPropertyView {
+        id: voicingSection
         titleText: qsTrc("inspector", "Voicing")
         propertyItem: root.model ? root.model.voicingType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: interpretationSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: ChordSymbolTypes.VOICING_AUTO },
@@ -63,6 +80,9 @@ Column {
     DropdownPropertyView {
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: voicingSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
