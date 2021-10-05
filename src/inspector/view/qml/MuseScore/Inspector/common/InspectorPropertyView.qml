@@ -33,7 +33,7 @@ Column {
 
     property alias navigation: menuButton.navigation
     property int navigationRowStart: 0
-    property int navigationRowEnd: 0
+    property int navigationRowEnd: menuButton.navigation.row
 
     property alias titleText: titleLabel.text
     property alias showTitle: titleLabel.visible
