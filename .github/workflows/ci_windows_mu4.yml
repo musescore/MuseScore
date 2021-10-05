@@ -26,7 +26,7 @@ jobs:
     runs-on: windows-2019
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
+      uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
@@ -76,6 +76,8 @@ jobs:
           DO_PUBLISH='false'
         fi
 
+        UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win_x64_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}")"
+
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -89,7 +91,9 @@ jobs:
         echo "SENTRY_PROJECT: $SENTRY_PROJECT"
         echo "SENTRY_URL=$SENTRY_URL" >> $GITHUB_ENV
         echo "SENTRY_URL: $SENTRY_URL"
-        
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
@@ -138,7 +142,7 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: MU4_${{ github.run_id }}_Win${{ github.event.pull_request.title }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: build.artifacts\ 
   
   # Builds x32 and portable currently disabled 
@@ -148,7 +152,7 @@ jobs:
   #   runs-on: windows-2019
   #   steps:
   #   - name: Cancel Previous Runs
-  #     uses: styfle/cancel-workflow-action@0.5.0
+  #     uses: styfle/cancel-workflow-action@0.9.1
   #     with:
   #       access_token: ${{ github.token }}
   #   - name: Clone repository
@@ -175,6 +179,11 @@ jobs:
   #       DO_PUBLISH='false'
   #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
   #       echo "DO_PUBLISH: $DO_PUBLISH"
+
+  #       UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win_x86_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}")"
+  #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+  #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+
   #   - name: Setup environment
   #     if: env.DO_BUILD == 'true'
   #     run: |
@@ -211,13 +220,13 @@ jobs:
   #     if: env.DO_BUILD == 'true'
   #     uses: actions/upload-artifact@v2
   #     with:
-  #       name: MuseScore_x86_${{ github.run_id }}
+  #       name: ${{ env.UPLOAD_ARTIFACT_NAME }}
   #       path: build.artifacts\     
   # build_portable:
   #   runs-on: windows-2019
   #   steps:
   #   - name: Cancel Previous Runs
-  #     uses: styfle/cancel-workflow-action@0.5.0
+  #     uses: styfle/cancel-workflow-action@0.9.1
   #     with:
   #       access_token: ${{ github.token }}
   #   - name: Clone repository
@@ -245,6 +254,11 @@ jobs:
   #       DO_PUBLISH='false'
   #       echo "DO_PUBLISH=$DO_PUBLISH" >> $GITHUB_ENV
   #       echo "DO_PUBLISH: $DO_PUBLISH"    
+
+  #       UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win_Portable_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}")"
+  #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+  #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+
   #   - name: Setup environment
   #     if: env.DO_BUILD == 'true'
   #     run: |
@@ -279,5 +293,5 @@ jobs:
   #     if: env.DO_BUILD == 'true'
   #     uses: actions/upload-artifact@v2
   #     with:
-  #       name: MuseScore_MU4_Portable_${{ github.run_id }}
+  #       name: ${{ env.UPLOAD_ARTIFACT_NAME }}
   #       path: build.artifacts\
