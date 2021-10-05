@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,9 +32,16 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "MMRestSettings"
 
     spacing: 12
+
+    function focusOnFirst() {
+        numberVisibilityCheckBox.focusOnFirst()
+    }
 
     Column {
         spacing: 8
@@ -46,6 +54,7 @@ Column {
             width: parent.width
 
             InspectorPropertyView {
+                id: numberVisibilitySection
                 titleText: qsTrc("inspector", "Number visible")
                 propertyItem: root.model ? root.model.isNumberVisible : null
 
@@ -53,12 +62,20 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigation.panel: root.navigationPanel
+                navigationRowStart: root.navigationRowOffset + 1
+                navigationRowEnd: numberVisibilityCheckBox.navigation.row
+
                 CheckBox {
                     id: numberVisibilityCheckBox
 
                     isIndeterminate: root.model ? root.model.isNumberVisible.isUndefined : false
                     checked: root.model && !isIndeterminate ? root.model.isNumberVisible.value : false
                     onClicked: { root.model.isNumberVisible.value = !checked }
+
+                    navigation.name: "NumberVisibilityCheckBox"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: numberVisibilitySection.navigationRowStart + 1
                 }
             }
 
@@ -76,6 +93,9 @@ Column {
                 decimals: 2
                 maxValue: 99.00
                 minValue: -99.00
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: numberVisibilitySection.navigationRowEnd + 1
             }
         }
     }
