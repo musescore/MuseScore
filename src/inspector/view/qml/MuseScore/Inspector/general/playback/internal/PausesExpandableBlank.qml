@@ -28,6 +28,8 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
@@ -35,12 +37,14 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: SpinBoxPropertyView {
+        id: pauseTimeSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
         navigationPanel: root.navigation.panel
         navigationRowStart: root.navigation.row + 1
+        navigationEnabled: root.navigation.enabled && root.enabled
 
         titleText: qsTrc("inspector", "Pause time")
         propertyItem: root.model ? root.model.pauseTime : null

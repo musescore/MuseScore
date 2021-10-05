@@ -32,10 +32,7 @@ Column {
 
     property QtObject model: null
 
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "AppearanceSettings"
-        direction: NavigationPanel.Both
-    }
+    property NavigationPanel navigationPanel: null
 
     height: implicitHeight
     width: parent.width
@@ -52,25 +49,31 @@ Column {
         barWidth: model ? model.barWidth : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: 100
+        navigationRowStart: 0
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     VerticalSpacingSection {
-        navigationPanel: root.navigationPanel
-        navigationRowStart: 200
+        id: verticalSpacingSection
+
         minimumDistance: model ? model.minimumDistance : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: horizontalSpacingSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     AppearanceOffsetSection {
-        navigationPanel: root.navigationPanel
-        navigationRowStart: 300
+        id: offsetSection
+
         horizontalOffset: model ? model.horizontalOffset : null
         verticalOffset: model ? model.verticalOffset : null
         isSnappedToGrid: model ? model.isSnappedToGrid : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: verticalSpacingSection.navigationRowEnd + 1
 
         onSnapToGridToggled: {
             if (model) {
@@ -88,8 +91,11 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ArrangeSection {
+        id: arrangeSection
+
         navigationPanel: root.navigationPanel
-        navigationRowStart: 400
+        navigationRowStart: offsetSection.navigationRowEnd
+
         onPushBackRequested: {
             if (root.model) {
                 root.model.pushBackInOrder()
@@ -106,8 +112,9 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ColorSection {
-        navigationPanel: root.navigationPanel
-        navigationRowStart: 500
         propertyItem: root.model ? root.model.color : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: arrangeSection.navigationRowEnd
     }
 }

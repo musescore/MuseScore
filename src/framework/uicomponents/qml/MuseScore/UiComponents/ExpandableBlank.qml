@@ -27,6 +27,7 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
+    property alias contentItem: contentLoader.item
     property alias contentItemComponent: contentLoader.sourceComponent
     property alias menuItemComponent: expandableSection.menuItemComponent
 

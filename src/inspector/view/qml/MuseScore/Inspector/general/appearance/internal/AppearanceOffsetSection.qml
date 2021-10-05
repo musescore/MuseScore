@@ -37,6 +37,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
+    property int navigationRowEnd: configureGridButton.navigation.row
 
     signal snapToGridToggled(var snap)
     signal configureGridRequested()
@@ -45,14 +46,6 @@ Column {
     width: parent.width
 
     spacing: 12
-
-    QtObject {
-        id: prv
-
-        function navigationRow(r) {
-            return offsets.navigationRowEnd + r
-        }
-    }
 
     OffsetSection {
         id: offsets
@@ -66,7 +59,7 @@ Column {
 
         navigation.name: "Snap to grid"
         navigation.panel: root.navigationPanel
-        navigation.row: prv.navigationRow(1)
+        navigation.row: offsets.navigationRowEnd + 1
 
         text: qsTrc("inspector", "Snap to grid")
 
@@ -78,11 +71,12 @@ Column {
     }
 
     FlatButton {
+        id: configureGridButton
         width: parent.width
 
         navigation.name: "Configure grid"
         navigation.panel: root.navigationPanel
-        navigation.row: prv.navigationRow(2)
+        navigation.row: snapToGridCheckbox.navigation.row + 1
 
         text: qsTrc("inspector", "Configure grid")
 

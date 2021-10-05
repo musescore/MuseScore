@@ -76,7 +76,7 @@ Column {
 
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
-            navigation.enabled: root.navigationEnabled && visible
+            navigation.enabled: root.enabled && root.navigationEnabled && visible
             navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
 
             menuModel: {
