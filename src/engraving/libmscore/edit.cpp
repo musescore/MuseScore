@@ -4965,33 +4965,45 @@ void Score::undoInsertPart(Part* part, int idx)
 
 void Score::undoRemoveStaff(Staff* staff)
 {
-    const int idx = staff->idx();
-    Q_ASSERT(idx >= 0);
+    const int staffIndex = staff->idx();
+    Q_ASSERT(staffIndex >= 0);
 
-    std::vector<Spanner*> toRemove;
-    for (auto i = _spanner.cbegin(); i != _spanner.cend(); ++i) {
-        Spanner* s = i->second;
-        if (s->staffIdx() == idx && (idx != 0 || !s->systemFlag())) {
-            toRemove.push_back(s);
+    auto removingAllowed = [staffIndex, this](const Spanner* spanner) {
+        if (spanner->staffIdx() != staffIndex) {
+            return false;
+        }
+
+        return staffIndex != 0 || _staves.size() == 1 || !spanner->systemFlag();
+    };
+
+    std::vector<Spanner*> spannersToRemove;
+
+    for (auto it = _spanner.cbegin(); it != _spanner.cend(); ++it) {
+        Spanner* spanner = it->second;
+
+        if (removingAllowed(spanner)) {
+            spannersToRemove.push_back(spanner);
         }
     }
-    for (Spanner* s : _unmanagedSpanner) {
-        if (s->staffIdx() == idx && (idx != 0 || !s->systemFlag())) {
-            toRemove.push_back(s);
+
+    for (Spanner* spanner : _unmanagedSpanner) {
+        if (removingAllowed(spanner)) {
+            spannersToRemove.push_back(spanner);
         }
     }
-    for (Spanner* s : toRemove) {
-        s->undoUnlink();
-        undo(new RemoveElement(s));
+
+    for (Spanner* spanner : spannersToRemove) {
+        spanner->undoUnlink();
+        undo(new RemoveElement(spanner));
     }
 
     //
     //    adjust measures
     //
     for (Measure* m = staff->score()->firstMeasure(); m; m = m->nextMeasure()) {
-        m->cmdRemoveStaves(idx, idx + 1);
+        m->cmdRemoveStaves(staffIndex, staffIndex + 1);
         if (m->hasMMRest()) {
-            m->mmRest()->cmdRemoveStaves(idx, idx + 1);
+            m->mmRest()->cmdRemoveStaves(staffIndex, staffIndex + 1);
         }
     }
 

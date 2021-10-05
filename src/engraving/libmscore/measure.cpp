@@ -1249,6 +1249,14 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
 {
     int sTrack = sStaff * VOICES;
     int eTrack = eStaff * VOICES;
+
+    auto removingAllowed = [this, sStaff, eStaff](const EngravingItem* item) {
+        int staffIndex = item->staffIdx();
+        int staffCount = score()->nstaves();
+
+        return (staffIndex >= sStaff) && (staffIndex < eStaff) && (!item->systemFlag() || staffCount == 1);
+    };
+
     for (Segment* s = first(); s; s = s->next()) {
         for (int track = eTrack - 1; track >= sTrack; --track) {
             EngravingItem* el = s->element(track);
@@ -1257,20 +1265,21 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
                 score()->undo(new RemoveElement(el));
             }
         }
-        foreach (EngravingItem* e, s->annotations()) {
-            int staffIdx = e->staffIdx();
-            if ((staffIdx >= sStaff) && (staffIdx < eStaff) && !e->systemFlag()) {
+
+        for (EngravingItem* e : s->annotations()) {
+            if (removingAllowed(e)) {
                 e->undoUnlink();
                 score()->undo(new RemoveElement(e));
             }
         }
     }
+
     for (EngravingItem* e : el()) {
         if (e->track() == -1) {
             continue;
         }
-        int staffIdx = e->staffIdx();
-        if (staffIdx >= sStaff && (staffIdx < eStaff) && !e->systemFlag()) {
+
+        if (removingAllowed(e)) {
             e->undoUnlink();
             score()->undo(new RemoveElement(e));
         }
