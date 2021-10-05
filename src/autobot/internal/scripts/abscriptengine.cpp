@@ -23,9 +23,16 @@
 
 #include "log.h"
 
+using namespace mu;
+using namespace mu::autobot;
+using namespace mu::api;
+
 AbScriptEngine::AbScriptEngine()
 {
     m_engine = new QJSEngine();
+    m_api = new ScriptApi(this, m_engine);
+
+    m_engine->globalObject().setProperty("api", newQObject(m_api));
 }
 
 AbScriptEngine::~AbScriptEngine()
@@ -150,4 +157,12 @@ Ret AbScriptEngine::jsValueToRet(const QJSValue& val) const
     }
 
     return Ret(Ret::Code::Ok);
+}
+
+QJSValue AbScriptEngine::newQObject(QObject* o)
+{
+    if (!o->parent()) {
+        o->setParent(m_engine);
+    }
+    return m_engine->newQObject(o);
 }
