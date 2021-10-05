@@ -32,7 +32,7 @@ StyledDialogView {
     contentWidth: 600
     resizable: true
 
-    AutobotPanel {
+    BatchTestsPanel {
         anchors.fill: parent
     }
 }

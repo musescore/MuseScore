@@ -49,6 +49,7 @@ public:
     AbFilesModel* files() const;
     QString status() const;
 
+    Q_INVOKABLE bool isConfigured() const;
     Q_INVOKABLE void setCurrentTestCase(const QString& testCaseName);
     Q_INVOKABLE void runAllFiles();
     Q_INVOKABLE void runFile(int fileIndex);

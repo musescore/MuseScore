@@ -30,6 +30,8 @@ class AutobotConfiguration : public IAutobotConfiguration
 public:
     AutobotConfiguration() = default;
 
+    bool isConfigured() const override;
+
     io::path dataPath() const override;
 
     io::path filesPath() const override;

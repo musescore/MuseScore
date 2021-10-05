@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/MuseScore/Autobot/qmldir</file>
-        <file>qml/MuseScore/Autobot/AutobotPanel.qml</file>
-        <file>qml/MuseScore/Autobot/AutobotDialog.qml</file>
+        <file>qml/MuseScore/Autobot/BatchTestsPanel.qml</file>
+        <file>qml/MuseScore/Autobot/BatchTestsDialog.qml</file>
     </qresource>
 </RCC>
