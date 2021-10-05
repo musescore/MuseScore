@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 import "../notes/internal"
 
@@ -32,6 +33,9 @@ Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "AmbitusSettings"
 
@@ -77,11 +81,16 @@ Column {
 
     height: childrenRect.height
 
+    function focusOnFirst() {
+        topNoteSection.focusOnFirst()
+    }
+
     Item {
         height: childrenRect.height
         width: parent.width
 
         DropdownPropertyView {
+            id: topNoteSection
             propertyItem: root.model ? root.model.topTpc : null
             titleText: qsTrc("inspector", "Top note")
             showMenuButton: false
@@ -91,9 +100,13 @@ Column {
             anchors.rightMargin: 2
 
             model: root.tpcListModel
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1
         }
 
         SpinBoxPropertyView {
+            id: topOctaveSection
             propertyItem: root.model ? root.model.topOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -106,6 +119,9 @@ Column {
             decimals: 0
             maxValue: 8
             minValue: -1
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: topNoteSection.navigationRowEnd + 1
         }
     }
 
@@ -114,6 +130,7 @@ Column {
         width: parent.width
 
         DropdownPropertyView {
+            id: bottomNoteSection
             propertyItem: root.model ? root.model.bottomTpc : null
             titleText: qsTrc("inspector", "Bottom note")
             showMenuButton: false
@@ -123,9 +140,13 @@ Column {
             anchors.rightMargin: 2
 
             model: root.tpcListModel
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: topOctaveSection.navigationRowEnd + 1
         }
 
         SpinBoxPropertyView {
+            id: bottomOctaveSection
             propertyItem: root.model ? root.model.bottomOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -138,12 +159,21 @@ Column {
             decimals: 0
             maxValue: 8
             minValue: -1
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: bottomNoteSection.navigationRowEnd + 1
         }
     }
 
     FlatButton {
+        id: updateButton
         width: parent.width
         text: qsTrc("inspector", "Update to match the notes on the staff")
+
+        navigation.name: "UpdateButton"
+        navigation.panel: root.navigationPanel
+        navigation.row: bottomOctaveSection.navigationRowEnd + 1
+
         onClicked: {
             if (root.model) {
                 root.model.matchRangesToStaff()
@@ -152,11 +182,15 @@ Column {
     }
 
     ExpandableBlank {
+        id: showItem
         isExpanded: false
 
         title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
         width: parent.width
+
+        navigation.panel: root.navigationPanel
+        navigation.row: updateButton.navigation.row + 1
 
         contentItemComponent: Column {
             height: implicitHeight
@@ -165,22 +199,34 @@ Column {
             spacing: 12
 
             FlatRadioButtonGroupPropertyView {
+                id: directionSection
                 titleText: qsTrc("inspector", "Direction")
                 propertyItem: root.model ? root.model.direction : null
 
+                navigation.panel: root.navigationPanel
+                navigationRowStart: showItem.navigation.row + 1
+
                 model: [
-                    { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO },
-                    { iconCode: IconCode.AMBITUS_LEANING_LEFT, value: DirectionTypes.HORIZONTAL_LEFT },
-                    { iconCode: IconCode.AMBITUS_LEANING_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT }
+                    { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto") },
+                    { iconCode: IconCode.AMBITUS_LEANING_LEFT, value: DirectionTypes.HORIZONTAL_LEFT, title: qsTrc("inspector", "Left") },
+                    { iconCode: IconCode.AMBITUS_LEANING_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT, title: qsTrc("inspector", "Right") }
                 ]
             }
 
             NoteheadGroupSelector {
+                id: noteheadGroup
                 propertyItem: root.model ? root.model.noteheadGroup : null
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: directionSection.navigationRowEnd + 1
             }
 
             NoteheadTypeSelector {
+                id: noteheadType
                 propertyItem: root.model ? root.model.noteheadType : null
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: noteheadGroup.navigationRowEnd + 1
             }
 
             SpinBoxPropertyView {
@@ -195,6 +241,9 @@ Column {
                 maxValue: 10
                 minValue: 0.1
                 decimals: 2
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: noteheadType.navigationRowEnd + 1
             }
         }
     }
