@@ -32,7 +32,7 @@ RetVal<Scripts> AutobotScriptsRepository::scripts() const
 
     io::path scriptsPath = configuration()->scriptsPath();
     LOGD() << "scriptsPath: " << scriptsPath;
-    RetVal<io::paths> paths = fileSystem()->scanFiles(scriptsPath, { "*.muas" }, IFileSystem::ScanMode::OnlyCurrentDir);
+    RetVal<io::paths> paths = fileSystem()->scanFiles(scriptsPath, { "*.js" }, IFileSystem::ScanMode::OnlyCurrentDir);
     if (!paths.ret) {
         return RetVal<Scripts>(paths.ret);
     }

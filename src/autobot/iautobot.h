@@ -59,6 +59,8 @@ public:
     virtual const ValNt<Files>& files() const = 0;
     virtual async::Channel<File> fileFinished() const = 0;
     virtual const ValCh<int>& currentFileIndex() const = 0;
+
+    virtual Ret runScript(const Script& script) = 0;
 };
 }
 

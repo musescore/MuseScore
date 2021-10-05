@@ -24,6 +24,7 @@
 #define MU_FRAMEWORK_RET_H
 
 #include <string>
+#include <QString>
 
 namespace mu {
 class Ret
@@ -120,6 +121,11 @@ inline mu::Ret make_ret(Ret::Code e)
 inline mu::Ret make_ret(Ret::Code e, const std::string& text)
 {
     return Ret(static_cast<int>(e), text);
+}
+
+inline mu::Ret make_ret(Ret::Code e, const QString& text)
+{
+    return Ret(static_cast<int>(e), text.toStdString());
 }
 
 inline bool check_ret(const Ret& r, Ret::Code c)
