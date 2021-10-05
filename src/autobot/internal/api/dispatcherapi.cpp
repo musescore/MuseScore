@@ -19,53 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "logapi.h"
+#include "dispatcherapi.h"
 
 #include "log.h"
 
 using namespace mu::api;
+using namespace mu::actions;
 
-LogApi::LogApi(IApiEngine* e)
+DispatcherApi::DispatcherApi(IApiEngine* e)
     : ApiObject(e)
 {
 }
 
-void LogApi::error(const QString& message)
+void DispatcherApi::dispatch(const QString& action, const QVariantList& args)
 {
-    error("Script", message);
-}
+    ActionData data;
+    int index = 0;
+    for (const QVariant& arg : args) {
+        switch (arg.type()) {
+        case QVariant::Int: data.setArg<int>(index, arg.value<int>());
+            break;
+        default: {
+            LOGE() << "unknown type: " << arg.typeName();
+            continue;
+        } break;
+        }
 
-void LogApi::warn(const QString& message)
-{
-    warn("Script", message);
-}
+        ++index;
+    }
 
-void LogApi::info(const QString& message)
-{
-    info("Script", message);
-}
-
-void LogApi::debug(const QString& message)
-{
-    debug("Script", message);
-}
-
-void LogApi::error(const QString& tag, const QString& message)
-{
-    LOGE_T(tag.toStdString()) << message;
-}
-
-void LogApi::warn(const QString& tag, const QString& message)
-{
-    LOGW_T(tag.toStdString()) << message;
-}
-
-void LogApi::info(const QString& tag, const QString& message)
-{
-    LOGI_T(tag.toStdString()) << message;
-}
-
-void LogApi::debug(const QString& tag, const QString& message)
-{
-    LOGD_T(tag.toStdString()) << message;
+    dispatcher()->dispatch(action.toStdString(), data);
 }
