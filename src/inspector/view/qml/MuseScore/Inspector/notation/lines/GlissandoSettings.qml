@@ -41,7 +41,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        lineSection.navigation.requestActive()
+        lineSection.focusOnFirst()
     }
 
     FlatRadioButtonGroupPropertyView {

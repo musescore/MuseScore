@@ -41,7 +41,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        placementOnStaffSection.navigation.requestActive()
+        placementOnStaffSection.focusOnFirst()
     }
 
     PlacementSection {
