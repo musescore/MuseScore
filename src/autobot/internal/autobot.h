@@ -60,6 +60,8 @@ public:
     async::Channel<File> fileFinished() const override;
     const ValCh<int>& currentFileIndex() const override;
 
+    Ret runScript(const Script& script) override;
+
 private:
 
     mu::RetVal<mu::io::paths> filesList() const;

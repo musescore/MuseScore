@@ -76,6 +76,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp

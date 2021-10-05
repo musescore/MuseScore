@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "../iautobotscriptsrepository.h"
+#include "../iautobot.h"
 
 namespace mu::autobot {
 class AutobotScriptsModel : public QAbstractListModel
@@ -34,6 +35,7 @@ class AutobotScriptsModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(autobot, IAutobotScriptsRepository, scriptsRepository)
+    INJECT(autobot, IAutobot, autobot)
 
 public:
     explicit AutobotScriptsModel(QObject* parent = nullptr);

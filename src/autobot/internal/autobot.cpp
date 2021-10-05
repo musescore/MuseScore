@@ -36,6 +36,8 @@
 #include "steps/abdrawcompstep.h"
 #include "steps/abdiffdrawstep.h"
 
+#include "scripts/abscriptengine.h"
+
 using namespace mu::autobot;
 
 Autobot::Autobot()
@@ -283,4 +285,17 @@ void Autobot::onFileFinished(const IAbContextPtr& ctx)
     } else {
         doStop();
     }
+}
+
+mu::Ret Autobot::runScript(const Script& script)
+{
+    LOGD() << script.path;
+
+    AbScriptEngine engine;
+    engine.setScriptPath(script.path);
+    Ret ret = engine.call("main");
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+    return ret;
 }
