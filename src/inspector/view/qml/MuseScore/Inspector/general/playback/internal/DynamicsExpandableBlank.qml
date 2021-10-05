@@ -30,6 +30,8 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
@@ -39,17 +41,21 @@ ExpandableBlank {
     contentItemComponent: Column {
         id: contentLayout
 
+        property int navigationRowEnd: changeSpeed.navigationRowEnd
+
         height: implicitHeight
         width: root.width
 
         spacing: 12
 
         DropdownPropertyView {
+            id: appliesToSection
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
             navigationPanel: root.navigation.panel
             navigationRowStart: root.navigation.row + 1
+            navigationEnabled: root.navigation.enabled && root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
@@ -63,12 +69,14 @@ ExpandableBlank {
             width: parent.width
 
             SpinBoxPropertyView {
+                id: velocitySection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
                 navigationPanel: root.navigation.panel
-                navigationRowStart: root.navigation.row + 3
+                navigationRowStart: appliesToSection.navigationRowEnd + 1
+                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
@@ -80,12 +88,14 @@ ExpandableBlank {
             }
 
             SpinBoxPropertyView {
+                id: velocityChangeSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
                 navigationPanel: root.navigation.panel
-                navigationRowStart: root.navigation.row + 5
+                navigationRowStart: velocitySection.navigationRowEnd + 1
+                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Velocity change")
                 propertyItem: root.model ? root.model.velocityChange : null
@@ -98,11 +108,13 @@ ExpandableBlank {
         }
 
         FlatRadioButtonGroupPropertyView {
+            id: changeSpeed
             titleText: qsTrc("inspector", "Change speed")
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
             navigationPanel: root.navigation.panel
-            navigationRowStart: root.navigation.row + 7
+            navigationRowStart: velocityChangeSection.navigationRowEnd + 1
+            navigationEnabled: root.navigation.enabled && root.enabled
 
             model: [
                 { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },

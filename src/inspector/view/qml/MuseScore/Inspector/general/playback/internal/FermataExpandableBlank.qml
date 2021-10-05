@@ -29,6 +29,8 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
@@ -42,6 +44,7 @@ ExpandableBlank {
 
         navigationPanel: root.navigation.panel
         navigationRowStart: root.navigation.row + 1
+        navigationEnabled: root.navigation.enabled && root.enabled
 
         titleText: qsTrc("inspector", "Time stretch")
         propertyItem: root.model ? root.model.timeStretch : null

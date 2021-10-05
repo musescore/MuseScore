@@ -35,24 +35,10 @@ Item {
     property QtObject proxyModel: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationColumn: 1
     property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
-
-    QtObject {
-        id: prv
-
-        function navigationCol() {
-            return root.navigationColumn
-        }
-
-        function navigationRow(r) {
-            //! NOTE 100 - to make unique, let's assume that there can be no more than 100 controls in one expandable block.
-            return root.navigationRowStart + r * 100
-        }
-    }
 
     Column {
         id: contentColumn
@@ -63,41 +49,45 @@ Item {
         spacing: 4
 
         NoteExpandableBlank {
+            id: noteSection
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(1)
+            navigation.row: root.navigationRowStart + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTE) : null
         }
 
         ArpeggioExpandableBlank {
+            id:arpeggioSection
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(2)
+            navigation.row: noteSection.navigationRowEnd
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_ARPEGGIO) : null
         }
 
         FermataExpandableBlank {
+            id: fermataSection
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(3)
+            navigation.row: arpeggioSection.navigationRowEnd + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_FERMATA) : null
         }
 
         PausesExpandableBlank {
+            id: pausesSection
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(4)
+            navigation.row: fermataSection.navigationRowEnd + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BREATH) : null
         }
 
         GlissandoExpandableBlank {
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(5)
+            navigation.row: pausesSection.navigationRowEnd + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
         }

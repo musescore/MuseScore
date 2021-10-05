@@ -34,24 +34,10 @@ Item {
     property QtObject proxyModel: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationColumn: 1
     property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
-
-    QtObject {
-        id: prv
-
-        function navigationCol() {
-            return root.navigationColumn
-        }
-
-        function navigationRow(r) {
-            //! NOTE 100 - to make unique, let's assume that there can be no more than 100 controls in one expandable block.
-            return root.navigationRowStart + r * 100
-        }
-    }
 
     Column {
         id: contentColumn
@@ -61,17 +47,18 @@ Item {
         spacing: 4
 
         DynamicsExpandableBlank {
+            id: dynamicSection
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(1)
+            navigation.row: root.navigationRowStart + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_DYNAMIC) : null
         }
 
         HairpinsExpandableBlank {
             navigation.panel: root.navigationPanel
-            navigation.column: prv.navigationCol()
-            navigation.row: prv.navigationRow(2)
+            navigation.row: dynamicSection.navigationRowEnd + 1
+            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_HAIRPIN) : null
         }

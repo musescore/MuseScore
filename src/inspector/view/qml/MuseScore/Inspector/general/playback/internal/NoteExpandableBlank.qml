@@ -29,6 +29,8 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
@@ -37,6 +39,8 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: Column {
+        property int navigationRowEnd: overrideDynamicsSection.navigation.row
+
         spacing: 12
 
         height: implicitHeight
@@ -47,12 +51,14 @@ ExpandableBlank {
             width: root.width
 
             SpinBoxPropertyView {
+                id: velocitySection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
                 navigationPanel: root.navigation.panel
                 navigationRowStart: root.navigation.row + 1
+                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
@@ -64,12 +70,14 @@ ExpandableBlank {
             }
 
             SpinBoxPropertyView {
+                id: tuningsSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
                 navigationPanel: root.navigation.panel
-                navigationRowStart: root.navigation.row + 3
+                navigationRowStart: velocitySection.navigationRowEnd + 1
+                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Tunings (cents)")
                 propertyItem: root.model ? root.model.tuning : null
@@ -77,10 +85,12 @@ ExpandableBlank {
         }
 
         CheckBox {
+            id: overrideDynamicsSection
             navigation.name: "Override dynamics"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 5
+            navigation.row: tuningsSection.navigationRowEnd + 1
+            navigation.enabled: root.navigation.enabled && root.enabled
 
             text: qsTrc("inspector", "Override dynamics")
 

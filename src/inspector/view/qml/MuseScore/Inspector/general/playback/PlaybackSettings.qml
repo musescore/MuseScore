@@ -31,10 +31,7 @@ TabPanel {
 
     property QtObject proxyModel: null
 
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "PlaybackSettings"
-        direction: NavigationPanel.Both
-    }
+    property NavigationPanel navigationPanel: null
 
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              dynamicsTab.visible ? dynamicsTab.implicitHeight : 0) + tabBarHeight + 24
@@ -65,27 +62,26 @@ TabPanel {
         height: implicitHeight
         width: root.width
 
+        title: qsTrc("inspector", "General")
+        checked: root.currentIndex === 0
+
         navigation.name: "GeneralSettingsTab"
         navigation.panel: root.navigationPanel
-        navigation.column: 1
         navigation.row: 1
         onNavigationTriggered: root.currentIndex = 0
-
-        title: qsTrc("inspector", "General")
 
         GeneralSettingsTab {
             id: generalSettings
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 0
-            navigationRowStart: 2
-
-            proxyModel: root.proxyModel
-
             anchors.top: parent.top
             anchors.topMargin: 24
-
             width: root.width
+
+            proxyModel: root.proxyModel
+            enabled: generalTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: 1000
         }
     }
 
@@ -95,27 +91,26 @@ TabPanel {
         height: implicitHeight
         width: root.width
 
+        title: qsTrc("inspector", "Dynamics")
+        checked: root.currentIndex === 1
+
         navigation.name: "DynamicsSettingsTab"
         navigation.panel: root.navigationPanel
-        navigation.column: 2
-        navigation.row: 1
+        navigation.row: 2
         onNavigationTriggered: root.currentIndex = 1
-
-        title: qsTrc("inspector", "Dynamics")
 
         DynamicsSettingsTab {
             id: dynamicsSettings
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 2
-            navigationRowStart: 2
-
-            proxyModel: root.proxyModel
-
             anchors.top: parent.top
             anchors.topMargin: 24
-
             width: root.width
+
+            proxyModel: root.proxyModel
+            enabled: dynamicsTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: 2000
         }
     }
 }

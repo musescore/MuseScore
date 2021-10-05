@@ -29,6 +29,7 @@ Column {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
+    property int navigationRowEnd: forwardsButton.navigation.row
 
     signal pushBackRequested()
     signal pushFrontRequested()
@@ -68,6 +69,7 @@ Column {
             }
 
             FlatButton {
+                id: forwardsButton
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 4
                 anchors.right: parent.right
