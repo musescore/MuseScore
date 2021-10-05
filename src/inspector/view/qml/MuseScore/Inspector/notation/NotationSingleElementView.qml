@@ -36,6 +36,6 @@ InspectorSectionView {
         model: root.model ? root.model.firstModel() : null
 
         navigationPanel: root.navigationPanel
-        navigationRowOffset: root.navigationRowOffset
+        navigationRowStart: root.navigationRowStart
     }
 }

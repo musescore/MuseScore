@@ -112,7 +112,7 @@ Column {
 
         propertyItem: root.model ? root.model.placement : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: lineStyleSection.navigationRowEnd + 1
     }
 }

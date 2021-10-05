@@ -30,7 +30,7 @@ TabPanel {
 
     property QtObject model: null
 
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              advancedTab.visible ? advancedTab.implicitHeight : 0) + tabBarHeight + 24
@@ -48,7 +48,7 @@ TabPanel {
 
         navigation.name: "GeneralTab"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigation.row: root.navigationRowStart
         onNavigationTriggered: root.currentIndex = 0
 
         FretGeneralSettingsTab {
@@ -62,7 +62,7 @@ TabPanel {
             model: root.model
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset + 1000
+            navigationRowStart: root.navigationRowStart + 1000
         }
     }
 
@@ -76,7 +76,7 @@ TabPanel {
 
         navigation.name: "SettingsTab"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 1
+        navigation.row: root.navigationRowStart + 1
         onNavigationTriggered: root.currentIndex = 1
 
         FretAdvancedSettingsTab {
@@ -90,7 +90,7 @@ TabPanel {
             model: root.model
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset + 2000
+            navigationRowStart: root.navigationRowStart + 2000
         }
     }
 }

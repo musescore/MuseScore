@@ -39,7 +39,7 @@ Column {
     property QtObject staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     spacing: 12
 
@@ -52,9 +52,8 @@ Column {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
-        navigation.name: "Style"
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
 
         model: [
             { text: qsTrc("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
@@ -78,8 +77,7 @@ Column {
 
         visible: root.barlineSettingsModel && root.barlineSettingsModel.isRepeatStyleChangingAllowed
 
-        navigation.name: "RepeatStyle"
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: styleSection.navigationRowEnd + 1
 
         model: [
@@ -124,8 +122,7 @@ Column {
             titleText: qsTrc("inspector", "Span from")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom : null
 
-            navigation.name: "SpanFrom"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
         }
 
@@ -138,8 +135,7 @@ Column {
             titleText: qsTrc("inspector", "Span to")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo : null
 
-            navigation.name: "SpanTo"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: spanFrom.navigationRowEnd + 1
         }
     }

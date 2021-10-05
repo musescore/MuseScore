@@ -52,14 +52,14 @@ Column {
         barWidth: model ? model.barWidth : null
 
         navigationPanel: root.navigationPanel
-        navigationRowOffset: 100
+        navigationRowStart: 100
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     VerticalSpacingSection {
         navigationPanel: root.navigationPanel
-        navigationRowOffset: 200
+        navigationRowStart: 200
         minimumDistance: model ? model.minimumDistance : null
     }
 
@@ -67,7 +67,7 @@ Column {
 
     AppearanceOffsetSection {
         navigationPanel: root.navigationPanel
-        navigationRowOffset: 300
+        navigationRowStart: 300
         horizontalOffset: model ? model.horizontalOffset : null
         verticalOffset: model ? model.verticalOffset : null
         isSnappedToGrid: model ? model.isSnappedToGrid : null
@@ -89,7 +89,7 @@ Column {
 
     ArrangeSection {
         navigationPanel: root.navigationPanel
-        navigationRowOffset: 400
+        navigationRowStart: 400
         onPushBackRequested: {
             if (root.model) {
                 root.model.pushBackInOrder()
@@ -106,7 +106,7 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ColorSection {
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: 500
         propertyItem: root.model ? root.model.color : null
     }

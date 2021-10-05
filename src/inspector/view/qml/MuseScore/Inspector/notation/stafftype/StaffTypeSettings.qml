@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "StaffTypeSettings"
 
@@ -52,7 +52,7 @@ Column {
 
         navigation.name: "CuteSizeCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 1
+        navigation.row: root.navigationRowStart + 1
         navigation.enabled: root.enabled
 
         onClicked: { root.model.isSmall.value = !checked }
@@ -75,8 +75,8 @@ Column {
             verticalOffsetControl.minValue: 0.1
             verticalOffsetControl.maxValue: 5
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
         }
 
         SpinBoxPropertyView {
@@ -94,7 +94,7 @@ Column {
             maxValue: 400
             minValue: 20
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: sizeOffset.navigationRowEnd + 1
         }
     }
@@ -119,7 +119,7 @@ Column {
             maxValue: 14
             minValue: 1
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: scaleSection.navigationRowEnd + 1
         }
 
@@ -136,7 +136,7 @@ Column {
             maxValue: 3
             minValue: 0
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: numberOfLinesSection.navigationRowEnd + 1
         }
     }
@@ -155,7 +155,7 @@ Column {
         maxValue: 8
         minValue: -8
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: lineDistance.navigationRowEnd + 1
     }
 
@@ -178,7 +178,7 @@ Column {
         titleText: qsTrc("inspector", "Staff line color")
         propertyItem: root.model ? root.model.color : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: invisibleStaffLinesCheckBox.navigation.row + 1
     }
 
@@ -189,7 +189,7 @@ Column {
         titleText: qsTrc("inspector", "Notehead scheme")
         propertyItem: root.model ? root.model.noteheadSchemeType : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: staffLineColorSection.navigationRowEnd + 1
 
         model: [

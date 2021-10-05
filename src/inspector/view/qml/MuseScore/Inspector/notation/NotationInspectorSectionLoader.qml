@@ -61,7 +61,7 @@ Loader {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
 
     property string viewObjectName: root.item ? root.item.objectName : ""
 
@@ -128,7 +128,7 @@ Loader {
     onLoaded: {
         root.item.model = root.model
         root.item.navigationPanel = root.navigationPanel
-        root.item.navigationRowOffset = root.navigationRowOffset
+        root.item.navigationRowStart = root.navigationRowStart
     }
 
     Component {

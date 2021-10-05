@@ -33,7 +33,7 @@ Item {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "TremoloBarSettings"
 
@@ -57,8 +57,8 @@ Item {
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
 
             model: [
                 { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
@@ -78,7 +78,7 @@ Item {
             titleText: qsTrc("inspector", "Click to add or remove points")
             propertyItem: root.model ? root.model.curve : null
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: tremoloBarTypeSection.navigationRowEnd + 1
 
             GridCanvas {
@@ -121,7 +121,7 @@ Item {
                 step: 0.1
                 decimals: 2
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: tremoloBarCurve.navigationRowEnd + 1
             }
 
@@ -138,7 +138,7 @@ Item {
                 step: 0.1
                 decimals: 2
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: lineThicknessSection.navigationRowEnd + 1
             }
         }

@@ -55,7 +55,7 @@ Item {
 
         icon: IconCode.GAP_ABOVE
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
 
@@ -70,7 +70,7 @@ Item {
 
         icon: IconCode.GAP_BELOW
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: gapAbove.navigationRowEnd + 1
     }
 }

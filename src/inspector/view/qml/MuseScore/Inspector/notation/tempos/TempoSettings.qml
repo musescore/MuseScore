@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "TempoSettings"
 
@@ -53,7 +53,7 @@ Column {
 
         navigation.name: "FollowCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 1
+        navigation.row: root.navigationRowStart + 1
 
         onClicked: { root.model.isDefaultTempoForced.value = !checked }
     }
@@ -65,8 +65,7 @@ Column {
 
         measureUnitsSymbol: qsTrc("inspector", "BPM")
 
-        navigation.name: "Override"
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: followWrittenTempoCheckbox.navigation.row + 1
     }
 }

@@ -52,7 +52,7 @@ Item {
         icon: IconCode.LEFT_MARGIN
         measureUnitsSymbol: qsTrc("inspector", "mm")
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
     }
 
@@ -68,7 +68,7 @@ Item {
         icon: IconCode.RIGHT_MARGIN
         measureUnitsSymbol: qsTrc("inspector", "mm")
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: leftMarginsSection.navigationRowEnd + 1
     }
 }

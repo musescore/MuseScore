@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "GlissandoSettings"
 
@@ -50,8 +50,8 @@ Column {
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     CheckBox {
@@ -74,7 +74,7 @@ Column {
         titleText: qsTrc("inspector", "Text")
         propertyItem: root.model ? root.model.text : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: showTextCheckBox.navigation.row + 1
     }
 }

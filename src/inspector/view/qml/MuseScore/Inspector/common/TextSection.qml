@@ -40,7 +40,7 @@ InspectorPropertyView {
         currentText: root.propertyItem ? root.propertyItem.value : ""
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
 
-        navigation.panel: root.navigation.panel
+        navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
         navigation.accessible.name: root.titleText + " " + currentText
 

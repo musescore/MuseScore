@@ -35,7 +35,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "PedalSettings"
 
@@ -53,7 +53,7 @@ Column {
 
         navigation.name: "ShowPedalSymbolCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigation.row: root.navigationRowStart
         navigation.enabled: root.enabled
 
         onClicked: {
@@ -73,7 +73,7 @@ Column {
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     CheckBox {

@@ -36,7 +36,7 @@ FocusableItem {
     readonly property QtObject beamModesModel: model ? model.beamModesModel : null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -53,9 +53,9 @@ FocusableItem {
             propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
             enabled: root.beamModesModel && !root.beamModesModel.isEmpty
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset
-            navigation.enabled: root.enabled
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+            navigationEnabled: root.enabled
         }
 
         Column {
@@ -91,7 +91,7 @@ FocusableItem {
                     id: featheredBeamsButtonList
 
                     property int navigationRowStart: beamTypeSection.navigationRowEnd + 1
-                    property int navigationRowEnd: navigationRowOffset + model.length
+                    property int navigationRowEnd: navigationRowStart + model.length
 
                     height: 30
                     width: parent.width
@@ -142,8 +142,7 @@ FocusableItem {
                         minValue: 0
                         step: 0.1
 
-                        navigation.name: "FeatheringLeft"
-                        navigation.panel: root.navigationPanel
+                        navigationPanel: root.navigationPanel
                         navigationRowStart: featheredBeamsButtonList.navigationRowEnd + 1
                     }
 
@@ -163,8 +162,7 @@ FocusableItem {
                         minValue: 0
                         step: 0.1
 
-                        navigation.name: "FeatheringRight"
-                        navigation.panel: root.navigationPanel
+                        navigationPanel: root.navigationPanel
                         navigationRowStart: featheringLeftSection.navigationRowEnd + 1
                     }
                 }
@@ -235,7 +233,7 @@ FocusableItem {
                                 navigation.panel: root.navigationPanel
                                 navigation.row: showItem.navigation.row + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
-                                navigation.enabled: root.enabled && beamHeight.enabled
+                                navigation.enabled: root.enabled && beamHeight.enabled && showItem.isExpanded
 
                                 onValueEdited: { root.model.beamVectorX.value = newValue }
                             }
@@ -257,7 +255,7 @@ FocusableItem {
                                 navigation.name: "FontStyle" + model.index
                                 navigation.row: showItem.navigation.row + 2
                                 navigation.accessible.name: qsTrc("inspector", "Lock")
-                                navigation.enabled: root.enabled && beamHeight.enabled
+                                navigation.enabled: root.enabled && beamHeight.enabled && showItem.isExpanded
 
                                 onToggled: {
                                     root.model.isBeamHeightLocked = !root.model.isBeamHeightLocked
@@ -278,7 +276,7 @@ FocusableItem {
                                 navigation.panel: root.navigationPanel
                                 navigation.row: showItem.navigation.row + 3
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
-                                navigation.enabled: root.enabled && beamHeight.enabled
+                                navigation.enabled: root.enabled && beamHeight.enabled && showItem.isExpanded
 
                                 onValueEdited: { root.model.beamVectorY.value = newValue }
                             }

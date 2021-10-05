@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "ImageSettings"
 
@@ -60,8 +60,8 @@ Column {
             icon: IconCode.VERTICAL
             measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
         }
 
         FlatToggleButton {
@@ -99,7 +99,7 @@ Column {
             iconMode: IncrementalPropertyControl.Right
             measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: lockButton.navigation.row + 1
         }
     }

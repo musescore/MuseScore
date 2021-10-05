@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "FermataSettings"
 
@@ -49,7 +49,7 @@ Column {
         titleText: qsTrc("inspector", "Placement on staff")
         propertyItem: root.model ? root.model.placementType : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: 1
     }
 }

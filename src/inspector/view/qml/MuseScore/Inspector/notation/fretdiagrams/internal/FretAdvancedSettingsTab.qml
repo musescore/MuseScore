@@ -34,7 +34,7 @@ FocusableItem {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -65,9 +65,8 @@ FocusableItem {
                 maxValue: 300
                 minValue: 1
 
-                navigation.name: "Scale"
-                navigation.panel: root.navigationPanel
-                navigationRowStart: root.navigationRowOffset
+                navigationPanel: root.navigationPanel
+                navigationRowStart: root.navigationRowStart
             }
 
             SpinBoxPropertyView {
@@ -84,8 +83,7 @@ FocusableItem {
                 maxValue: 12
                 minValue: 4
 
-                navigation.name: "Strings"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: scaleSection.navigationRowEnd + 1
             }
         }
@@ -108,8 +106,7 @@ FocusableItem {
                 maxValue: 6
                 minValue: 3
 
-                navigation.name: "VisibleFrets"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: stringsSection.navigationRowEnd + 1
             }
 
@@ -127,8 +124,7 @@ FocusableItem {
                 maxValue: 12
                 minValue: 1
 
-                navigation.name: "StartingFretNumber"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: visibleFrets.navigationRowEnd + 1
             }
         }
@@ -138,7 +134,7 @@ FocusableItem {
             titleText: qsTrc("inspector", "Placement on staff")
             propertyItem: root.model ? root.model.placement : null
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: startingFretNumber.navigationRowEnd + 1
         }
 

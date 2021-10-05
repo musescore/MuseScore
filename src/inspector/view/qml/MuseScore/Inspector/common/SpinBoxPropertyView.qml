@@ -47,9 +47,8 @@ InspectorPropertyView {
     IncrementalPropertyControl {
         id: spinBoxItem
 
-        navigation.name: root.navigation.name + " Value"
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
+        navigation.name: root.titleText + " Value"
+        navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
         navigation.accessible.name: root.titleText + " " + currentValue
 

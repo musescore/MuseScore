@@ -28,7 +28,7 @@ Column {
     id: root
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
 
     signal pushBackRequested()
     signal pushFrontRequested()
@@ -58,7 +58,7 @@ Column {
 
                 navigation.name: "Backwards"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 1
+                navigation.row: root.navigationRowStart + 1
 
                 text: qsTrc("inspector", "Backwards")
 
@@ -74,7 +74,7 @@ Column {
 
                 navigation.name: "Forwards"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 2
+                navigation.row: root.navigationRowStart + 2
 
                 text: qsTrc("inspector", "Forwards")
 

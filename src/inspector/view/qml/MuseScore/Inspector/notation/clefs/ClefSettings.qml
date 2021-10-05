@@ -31,7 +31,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "ClefSettings"
 
@@ -49,7 +49,7 @@ Column {
 
         navigation.name: "ShowCourtesyClefCheckBox"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigation.row: root.navigationRowStart
         navigation.enabled: root.enabled
 
         onClicked: { root.model.shouldShowCourtesy.value = !checked }

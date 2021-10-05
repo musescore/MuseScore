@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "AccidentalSettings"
 
@@ -49,8 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Bracket type")
         propertyItem: root.model ? root.model.bracketType : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
 
         model: [
             { text: qsTrc("inspector", "None"), value: AccidentalTypes.BRACKET_TYPE_NONE },

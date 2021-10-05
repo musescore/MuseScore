@@ -78,7 +78,7 @@ TabPanel {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 0
-            navigationRowOffset: 2
+            navigationRowStart: 2
 
             proxyModel: root.proxyModel
 
@@ -108,7 +108,7 @@ TabPanel {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 2
-            navigationRowOffset: 2
+            navigationRowStart: 2
 
             proxyModel: root.proxyModel
 

@@ -149,7 +149,7 @@ Rectangle {
                         GeneralInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
 
                             onEnsureContentVisibleRequested: {
@@ -164,7 +164,7 @@ Rectangle {
                         TextInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
 
                             onEnsureContentVisibleRequested: {
@@ -179,7 +179,7 @@ Rectangle {
                         NotationMultiElementView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
 
                             onEnsureContentVisibleRequested: {
@@ -194,7 +194,7 @@ Rectangle {
                         NotationSingleElementView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                         }
                     }
 
@@ -204,7 +204,7 @@ Rectangle {
                         ScoreDisplayInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                         }
                     }
 
@@ -214,7 +214,7 @@ Rectangle {
                         ScoreAppearanceInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
+                            navigationRowStart: expandableDelegate.navigation.row + 1
                         }
                     }
                 }

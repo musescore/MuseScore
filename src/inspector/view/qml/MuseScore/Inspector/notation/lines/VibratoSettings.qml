@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "VibratoSettings"
 
@@ -49,9 +49,8 @@ Column {
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
 
-        navigation.name: "Type"
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     SeparatorLine { anchors.margins: -10 }
@@ -59,7 +58,7 @@ Column {
     PlacementSection {
         propertyItem: root.model ? root.model.placement : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: typeSection.navigationRowEnd + 1
     }
 }

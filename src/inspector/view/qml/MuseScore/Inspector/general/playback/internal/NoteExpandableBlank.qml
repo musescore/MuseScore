@@ -51,10 +51,8 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.name: "Velocity"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 1
+                navigationPanel: root.navigation.panel
+                navigationRowStart: root.navigation.row + 1
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
@@ -70,10 +68,8 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                navigation.name: "Tunings"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 3
+                navigationPanel: root.navigation.panel
+                navigationRowStart: root.navigation.row + 3
 
                 titleText: qsTrc("inspector", "Tunings (cents)")
                 propertyItem: root.model ? root.model.tuning : null
