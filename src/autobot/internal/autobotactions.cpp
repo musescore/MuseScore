@@ -32,6 +32,10 @@ const UiActionList AutobotActions::m_actions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Show batch tests…")
              ),
+    UiAction("autobot-show-scripts",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show scripts…")
+             ),
 };
 
 const UiActionList& AutobotActions::actionsList() const
