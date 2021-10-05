@@ -40,7 +40,7 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        typeSection.navigation.requestActive()
+        typeSection.focusOnFirst()
     }
 
     DropdownPropertyView {
