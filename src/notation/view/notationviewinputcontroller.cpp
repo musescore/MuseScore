@@ -140,7 +140,6 @@ void NotationViewInputController::zoomOut()
     setZoom(zoom, findZoomFocusPoint().toPoint());
 }
 
-
 QPointF NotationViewInputController::findZoomFocusPoint()
 {
     INotationSelection* selection = m_view->notationInteraction().get()->selection().get();
@@ -153,7 +152,6 @@ QPointF NotationViewInputController::findZoomFocusPoint()
     else {
         return (selection->canvasBoundingRect().center() * m_view->currentScaling()) + m_view->canvasPos().toQPointF();
     }
-
 }
 
 void NotationViewInputController::zoomToPageWidth()
