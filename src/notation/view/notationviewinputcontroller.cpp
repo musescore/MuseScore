@@ -525,7 +525,9 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    viewInteraction()->editText(event);
+    if (viewInteraction()->isTextEditingStarted()) {
+        viewInteraction()->editText(event);
+    }
 }
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
