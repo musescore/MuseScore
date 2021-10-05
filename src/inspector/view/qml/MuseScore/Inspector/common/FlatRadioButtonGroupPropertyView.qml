@@ -45,10 +45,9 @@ InspectorPropertyView {
         text: modelData["text"] ?? ""
         iconCode: modelData["iconCode"] ?? IconCode.NONE
 
-        navigation.name: root.navigation.name + " Value " + index
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1 + index
+        navigation.name: root.titleText + "Value " + index
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1 + index
         navigation.accessible.name: root.titleText + " " + (Boolean(text) ? text : modelData["title"])
         navigation.enabled: root.enabled && root.visible
 

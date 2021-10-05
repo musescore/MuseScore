@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "OrnamentSettings"
 
@@ -49,8 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Performance")
         propertyItem: root.model ? root.model.performanceType : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         model: [
             { text: qsTrc("inspector", "Standard"), value: OrnamentTypes.STYLE_STANDARD },
@@ -62,7 +62,7 @@ Column {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: performanceSection.navigationRowEnd + 1
 
         model: [

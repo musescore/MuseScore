@@ -32,16 +32,9 @@ SpinBoxPropertyView {
 
     property PropertyItem minimumDistance: null
 
-    property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
-
     anchors.left: parent.left
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
-
-    navigation.name: "Minimum distance Menu"
-    navigation.panel: root.navigationPanel
-    navigation.row: root.navigationRowOffset + 1
 
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance

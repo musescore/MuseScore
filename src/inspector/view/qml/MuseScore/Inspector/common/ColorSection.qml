@@ -32,15 +32,13 @@ InspectorPropertyView {
     width: parent.width
 
     titleText: qsTrc("inspector", "Color")
-    navigation.name: "Color Section Menu"
 
     navigationRowEnd: colorPicker.navigation.row
 
     ColorPicker {
         id: colorPicker
 
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
+        navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
         navigation.accessible.name: root.titleText + " " + Utils.colorToString(colorPicker.color)
 

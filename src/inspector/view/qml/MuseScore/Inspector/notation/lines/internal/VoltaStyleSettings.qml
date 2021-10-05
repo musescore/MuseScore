@@ -53,7 +53,7 @@ FocusableItem {
             titleText: qsTrc("inspector", "Repeat list")
             propertyItem: root.model ? root.model.repeatCount : null
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
         }
 

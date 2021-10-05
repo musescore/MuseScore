@@ -115,8 +115,7 @@ FocusableItem {
                 minValue: 0.1
                 decimals: 2
 
-                navigation.name: "Thickness"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: lineStyleSection.navigationRowEnd + 1
             }
 
@@ -134,8 +133,7 @@ FocusableItem {
                 minValue: 0.1
                 decimals: 2
 
-                navigation.name: "Height"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: thicknessSection.navigationRowEnd + 1
             }
         }
@@ -158,8 +156,7 @@ FocusableItem {
                 minValue: 0.1
                 decimals: 2
 
-                navigation.name: "ContiniousHeight"
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: heightSection.navigationRowEnd + 1
             }
         }
@@ -167,7 +164,7 @@ FocusableItem {
         PlacementSection {
             propertyItem: root.model ? root.model.placement : null
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: continiousHeightSection.navigationRowEnd + 1
         }
     }

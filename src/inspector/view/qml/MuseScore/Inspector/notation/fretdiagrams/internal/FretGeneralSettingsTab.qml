@@ -34,7 +34,7 @@ FocusableItem {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -66,7 +66,7 @@ FocusableItem {
 
                 navigation.name: "BarreModeCheckBox"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 1
+                navigation.row: root.navigationRowStart + 1
                 navigation.enabled: root.enabled
 
                 onClicked: { root.model.isBarreModeOn = !checked }
@@ -85,7 +85,7 @@ FocusableItem {
 
                 navigation.name: "MultipleDotsCheckBox"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 2
+                navigation.row: root.navigationRowStart + 2
                 navigation.enabled: root.enabled
 
                 onClicked: { root.model.isMultipleDotsModeOn = !checked }
@@ -123,7 +123,7 @@ FocusableItem {
 
                     navigation.name: "LineStyleGroup"
                     navigation.panel: root.navigationPanel
-                    navigation.row: root.navigationRowOffset + 3 + index
+                    navigation.row: root.navigationRowStart + 3 + index
                     navigation.enabled: root.enabled
                     navigation.accessible.name: markerTypeLabel.text + " " + modelData["titleRole"]
 

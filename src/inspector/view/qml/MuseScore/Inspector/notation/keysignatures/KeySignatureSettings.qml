@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "KeySignatureSettings"
 
@@ -51,7 +51,7 @@ Column {
 
         navigation.name: "ShowCourtesyKeySignature"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 1
+        navigation.row: root.navigationRowStart + 1
 
         onClicked: { root.model.hasToShowCourtesy.value = !checked }
     }
@@ -60,9 +60,8 @@ Column {
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
 
-        navigation.name: "Mode"
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 2
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 2
 
         model: [
             { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },

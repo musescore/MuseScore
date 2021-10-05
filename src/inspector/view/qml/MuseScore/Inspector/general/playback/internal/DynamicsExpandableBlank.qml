@@ -48,10 +48,8 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
-            navigation.name: "Dynamic Applies to"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 1
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 1
 
             model: [
                 { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
@@ -69,10 +67,8 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.name: "Velocity"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 3
+                navigationPanel: root.navigation.panel
+                navigationRowStart: root.navigation.row + 3
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
@@ -88,10 +84,8 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                navigation.name: "Velocity change"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 5
+                navigationPanel: root.navigation.panel
+                navigationRowStart: root.navigation.row + 5
 
                 titleText: qsTrc("inspector", "Velocity change")
                 propertyItem: root.model ? root.model.velocityChange : null
@@ -107,10 +101,8 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Change speed")
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
-            navigation.name: "Change speed Menu"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 7
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 7
 
             model: [
                 { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },

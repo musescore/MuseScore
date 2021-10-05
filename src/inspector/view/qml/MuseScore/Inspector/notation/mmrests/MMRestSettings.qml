@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "MMRestSettings"
 
@@ -62,8 +62,8 @@ Column {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.panel: root.navigationPanel
-                navigationRowStart: root.navigationRowOffset + 1
+                navigationPanel: root.navigationPanel
+                navigationRowStart: root.navigationRowStart + 1
                 navigationRowEnd: numberVisibilityCheckBox.navigation.row
 
                 CheckBox {
@@ -94,7 +94,7 @@ Column {
                 maxValue: 99.00
                 minValue: -99.00
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: numberVisibilitySection.navigationRowEnd + 1
             }
         }

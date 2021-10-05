@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "TimeSignatureSettings"
 
@@ -50,8 +50,8 @@ Column {
         titleText: qsTrc("inspector", "Scale")
         propertyItem: root.model ? root.model.horizontalScale : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
         navigationRowEnd: verticalScaleControl.navigation.row
 
         Item {

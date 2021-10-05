@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "MarkerSettings"
 
@@ -72,7 +72,7 @@ Column {
         titleText: qsTrc("inspector", "Label")
         propertyItem: root.model ? root.model.label : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 }

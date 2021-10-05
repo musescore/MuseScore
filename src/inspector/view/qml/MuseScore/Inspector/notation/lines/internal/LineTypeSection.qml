@@ -54,7 +54,7 @@ Column {
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }
 
@@ -64,7 +64,7 @@ Column {
         titleText: qsTrc("inspector", "Start hook")
         propertyItem: root.startHookType
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: lineTypeButtonGroup.navigationRowEnd + 1
     }
 
@@ -81,8 +81,7 @@ Column {
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
 
-            navigation.name: "Thickness"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
         }
 
@@ -95,8 +94,7 @@ Column {
             titleText: qsTrc("inspector", "Hook height")
             propertyItem: root.hookHeight
 
-            navigation.name: "HookHeight"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
         }
     }

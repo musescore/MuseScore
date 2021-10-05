@@ -44,10 +44,8 @@ ExpandableBlank {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Spread delay"
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigationPanel: root.navigation.panel
+        navigationRowStart: root.navigation.row + 1
 
         maxValue: 100
         minValue: 0

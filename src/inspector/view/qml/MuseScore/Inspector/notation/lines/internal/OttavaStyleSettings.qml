@@ -52,10 +52,9 @@ FocusableItem {
             propertyItem: root.model ? root.model.ottavaType : null
             model: root.model ? root.model.possibleOttavaTypes() : null
 
-            navigation.name: "Type"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
-            navigation.enabled: root.enabled
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+            navigationEnabled: root.enabled
         }
 
         CheckBox {
