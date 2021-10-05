@@ -19,26 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "autobotactionscontroller.h"
+import QtQuick 2.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-#include "uri.h"
+StyledDialogView {
+    id: root
 
-using namespace mu::autobot;
+    title: "Autobot"
 
-static const mu::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false");
-static const mu::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false");
+    contentHeight: 800
+    contentWidth: 600
+    resizable: true
 
-void AutobotActionsController::init()
-{
-    dispatcher()->reg(this, "autobot-show-batchtests", [this]() { openUri(SHOW_BATCHTESTS_URI); });
-    dispatcher()->reg(this, "autobot-show-scripts", [this]() { openUri(SHOW_SCRIPTS_URI); });
-}
-
-void AutobotActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
-{
-    if (isSingle && interactive()->isOpened(uri.uri()).val) {
-        return;
+    ScriptsPanel {
+        anchors.fill: parent
     }
-
-    interactive()->open(uri);
 }
