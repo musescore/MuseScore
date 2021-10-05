@@ -60,14 +60,16 @@ StyledDialogView {
             var pagePath = Boolean(pageInfo.path) ? pageInfo.path : "Preferences/StubPreferencesPage.qml"
             var pageComponent = Qt.createComponent("../" + pagePath)
 
-            var obj = pageComponent.createObject(stack)
+            var properties = {
+                navigationSection: root.navigationSection,
+                navigationOrderStart: (i + 1) * 100
+            }
+
+            var obj = pageComponent.createObject(stack, properties)
 
             if (!Boolean(obj)) {
                 continue
             }
-
-            obj.navigationSection = root.navigationSection
-            obj.navigationOrderStart = (i + 1) * 100
 
             obj.hideRequested.connect(function() {
                 root.hide()

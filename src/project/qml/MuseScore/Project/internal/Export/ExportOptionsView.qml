@@ -25,27 +25,36 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Project 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 
-ColumnLayout {
+Column {
     id: root
 
     required property ExportDialogModel exportModel
+    property alias navigation: navPanel
 
     spacing: 12
 
-    QtObject {
-        id: privateProperties
-
-        readonly property int firstColumnWidth: 72
+    NavigationPanel {
+        id: navPanel
+        name: "ExportOptionsView"
+        enabled: root.visible && root.enabled
+        direction: NavigationPanel.Vertical
     }
 
     ExportOptionItem {
-        firstColumnWidth: privateProperties.firstColumnWidth
+        id: typeLabel
+        width: parent.width
         text: qsTrc("project", "Format:")
 
         Dropdown {
             id: typeComboBox
             Layout.fillWidth: true
+
+            navigation.name: "ExportTypeDropdown"
+            navigation.panel: navPanel
+            navigation.row: 1
+            navigation.accessible.name: typeLabel.text + " " + currentText
 
             model: exportModel.exportTypeList()
             popupItemsCount: typeComboBox.count
@@ -76,13 +85,19 @@ ColumnLayout {
     }
 
     ExportOptionItem {
+        id: subtypeLabel
+        width: parent.width
         visible: subtypeComboBox.count > 0
         text: qsTrc("project", "File type:")
-        firstColumnWidth: privateProperties.firstColumnWidth
 
         Dropdown {
             id: subtypeComboBox
             Layout.fillWidth: true
+
+            navigation.name: "ExportSubtypeDropdown"
+            navigation.panel: navPanel
+            navigation.row: 2
+            navigation.accessible.name: subtypeLabel.text + " " + currentText
 
             model: {
                 if (typeComboBox.currentIndex > -1) {
@@ -103,18 +118,27 @@ ColumnLayout {
     }
 
     Loader {
-        source: exportModel.selectedExportType.settingsPagePath
-        Layout.fillWidth: true
+        id: pageLoader
+        width: parent.width
 
-        onLoaded: {
-            item.model = Qt.binding(() => (exportModel))
-            item.firstColumnWidth = Qt.binding(() => (privateProperties.firstColumnWidth))
+        Connections {
+            target: root.exportModel
+
+            function onSelectedExportTypeChanged() {
+                var properties = {
+                    model: Qt.binding(() => root.exportModel),
+                    navigationPanel: navPanel,
+                    navigationOrder: 3
+                }
+
+                pageLoader.setSource(root.exportModel.selectedExportType.settingsPagePath, properties)
+            }
         }
     }
 
     RadioButtonGroup {
-        Layout.fillWidth: true
-        visible: model.length > 1
+        width: parent.width
+        visible: count > 1
         spacing: 12
         orientation: Qt.Vertical
 
@@ -122,7 +146,11 @@ ColumnLayout {
 
         delegate: RoundedRadioButton {
             text: modelData["text"]
-            width: parent.width
+
+            navigation.name: "ExportUnitType " + text
+            navigation.panel: navPanel
+            navigation.row: 100000 + model.index
+
             checked: exportModel.selectedUnitType === modelData["value"]
             onToggled: {
                 exportModel.selectedUnitType = modelData["value"]
