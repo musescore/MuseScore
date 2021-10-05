@@ -78,6 +78,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
