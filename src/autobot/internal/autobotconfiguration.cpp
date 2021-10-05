@@ -25,6 +25,11 @@
 
 using namespace mu::autobot;
 
+bool AutobotConfiguration::isConfigured() const
+{
+    return !dataPath().empty() && !filesPath().empty();
+}
+
 mu::io::path AutobotConfiguration::dataPath() const
 {
     return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));

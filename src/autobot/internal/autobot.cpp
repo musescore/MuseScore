@@ -70,6 +70,11 @@ Autobot::Autobot()
     };
 }
 
+bool Autobot::isConfigured() const
+{
+    return configuration()->isConfigured();
+}
+
 std::vector<ITestCasePtr> Autobot::testCases() const
 {
     return m_testCases;
