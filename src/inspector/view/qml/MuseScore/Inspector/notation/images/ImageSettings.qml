@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,9 +32,16 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "ImageSettings"
 
     spacing: 12
+
+    function focusOnFirst() {
+        heightControl.focusOnFirst()
+    }
 
     Item {
         height: childrenRect.height
@@ -51,6 +59,9 @@ Column {
 
             icon: IconCode.VERTICAL
             measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1
         }
 
         FlatToggleButton {
@@ -64,6 +75,11 @@ Column {
 
             icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
+            navigation.name: "Lock"
+            navigation.panel: root.navigationPanel
+            navigation.row: heightControl.navigationRowEnd + 1
+            navigation.accessible.name: qsTrc("inspector", "Lock")
+
             checked: root.model ? root.model.isAspectRatioLocked.value : false
             onToggled: {
                 root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
@@ -71,6 +87,7 @@ Column {
         }
 
         SpinBoxPropertyView {
+            id: imageWidthSection
             anchors.left: lockButton.right
             anchors.leftMargin: 6
             anchors.right: parent.right
@@ -81,6 +98,9 @@ Column {
             icon: IconCode.HORIZONTAL
             iconMode: IncrementalPropertyControl.Right
             measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: lockButton.navigation.row + 1
         }
     }
 
@@ -92,6 +112,10 @@ Column {
         checked: root.model && !isIndeterminate ? root.model.shouldScaleToFrameSize.value : false
         text: qsTrc("inspector", "Scale to frame size")
 
+        navigation.name: "ScaleToFrameSizeCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: imageWidthSection.navigationRowEnd + 1
+
         onClicked: { root.model.shouldScaleToFrameSize.value = !checked }
     }
 
@@ -101,6 +125,10 @@ Column {
         isIndeterminate: root.model ? root.model.isSizeInSpatiums.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.isSizeInSpatiums.value : false
         text: qsTrc("inspector", "Use staff space units")
+
+        navigation.name: "UseStaffSpaceUnitsCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: imageWidthSection.navigationRowEnd + 2
 
         onClicked: { root.model.isSizeInSpatiums.value = !checked }
     }
