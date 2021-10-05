@@ -29,7 +29,7 @@ jobs:
     runs-on: macos-10.15
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
+      uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
@@ -95,7 +95,9 @@ jobs:
           DO_UPLOAD_SYMBOLS='false'
           DO_PUBLISH='false'
         fi
-        
+
+        UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Mac_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}")"
+
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -111,6 +113,8 @@ jobs:
         echo "SENTRY_PROJECT: $SENTRY_PROJECT"
         echo "SENTRY_URL=$SENTRY_URL" >> $GITHUB_ENV
         echo "SENTRY_URL: $SENTRY_URL"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -161,5 +165,5 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: MU4_${{ github.run_id }}_Mac${{ github.event.pull_request.title }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/
