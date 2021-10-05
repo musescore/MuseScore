@@ -21,8 +21,10 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Item {
@@ -30,9 +32,16 @@ Item {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "TremoloBarSettings"
 
     height: content.implicitHeight
+
+    function focusOnFirst() {
+        tremoloBarTypeSection.focusOnFirst()
+    }
 
     Column {
         id: content
@@ -42,10 +51,14 @@ Item {
         spacing: 12
 
         DropdownPropertyView {
+            id: tremoloBarTypeSection
             visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1
 
             model: [
                 { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
@@ -59,10 +72,14 @@ Item {
         }
 
         InspectorPropertyView {
+            id: tremoloBarCurve
             visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Click to add or remove points")
             propertyItem: root.model ? root.model.curve : null
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: tremoloBarTypeSection.navigationRowEnd + 1
 
             GridCanvas {
                 height: 300
@@ -91,6 +108,7 @@ Item {
             visible: root.model ? root.model.areSettingsAvailable : false
 
             SpinBoxPropertyView {
+                id: lineThicknessSection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -102,6 +120,9 @@ Item {
                 minValue: 0.1
                 step: 0.1
                 decimals: 2
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: tremoloBarCurve.navigationRowEnd + 1
             }
 
             SpinBoxPropertyView {
@@ -116,6 +137,9 @@ Item {
                 minValue: 0.1
                 step: 0.1
                 decimals: 2
+
+                navigation.panel: root.navigationPanel
+                navigationRowStart: lineThicknessSection.navigationRowEnd + 1
             }
         }
     }
