@@ -32,7 +32,7 @@ public:
     void setExportMp3Bitrate(std::optional<int> bitrate) override;
 
 private:
-    std::optional<int> m_exportMp3Bitrate = 0;
+    std::optional<int> m_exportMp3Bitrate = std::nullopt;
 };
 }
 

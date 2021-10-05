@@ -25,18 +25,20 @@ import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-ColumnLayout {
+ExportSettingsPage {
     id: root
 
-    property ExportDialogModel model
-    property int firstColumnWidth
-
     ExportOptionItem {
+        id: resolutionLabel
         text: qsTrc("project", "Resolution:")
-        firstColumnWidth: root.firstColumnWidth
 
         IncrementalPropertyControl {
             Layout.preferredWidth: 80
+
+            navigation.name: "ResolutionSpinbox"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 1
+            navigation.accessible.name: resolutionLabel.text + " " + String(currentValue)
 
             currentValue: root.model.pdfResolution
 
@@ -46,7 +48,7 @@ ColumnLayout {
             decimals: 0
             measureUnitsSymbol: qsTrc("project", "dpi")
 
-            onValueEdited: {
+            onValueEdited: function (newValue) {
                 root.model.pdfResolution = newValue
             }
         }

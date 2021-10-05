@@ -25,33 +25,42 @@ import QtQuick.Layouts 1.15
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-ColumnLayout {
+ExportSettingsPage {
     id: root
-    spacing: 12
-
-    property ExportDialogModel model
-    property int firstColumnWidth
 
     ExportOptionItem {
+        id: resolutionLabel
         text: qsTrc("project", "Resolution:")
-        firstColumnWidth: root.firstColumnWidth
 
         IncrementalPropertyControl {
             Layout.preferredWidth: 80
+
+            navigation.name: "ResolutionSpinbox"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 1
+            navigation.accessible.name: resolutionLabel.text + " " + String(currentValue)
+
             currentValue: root.model.pngResolution
             minValue: 32
             maxValue: 5000
             step: 1
             decimals: 0
             measureUnitsSymbol: qsTrc("project", "dpi")
-            onValueEdited: {
+
+            onValueEdited: function(newValue) {
                 root.model.pngResolution = newValue
             }
         }
     }
 
     CheckBox {
+        width: parent.width
         text: qsTrc("project", "Transparent background")
+
+        navigation.name: "TransparentBackgroundCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
         checked: root.model.pngTransparentBackground
         onClicked: {
             root.model.pngTransparentBackground = !checked
@@ -59,7 +68,7 @@ ColumnLayout {
     }
 
     StyledTextLabel {
-        Layout.fillWidth: true
+        width: parent.width
         text: qsTrc("project", "Each page of the selected parts will be exported as a separate PNG file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap

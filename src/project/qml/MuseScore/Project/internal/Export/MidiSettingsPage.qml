@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Project 1.0
 
-ColumnLayout {
+ExportSettingsPage {
     id: root
-    spacing: 12
-
-    property ExportDialogModel model
-    property int firstColumnWidth
 
     CheckBox {
+        width: parent.width
         text: qsTrc("project", "Expand repeats")
+
+        navigation.name: "ExpandRepeatsCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 1
+
         checked: root.model.midiExpandRepeats
         onClicked: {
             root.model.midiExpandRepeats = !checked
@@ -41,7 +41,13 @@ ColumnLayout {
     }
 
     CheckBox {
+        width: parent.width
         text: qsTrc("project", "Export RPNs")
+
+        navigation.name: "ExportRpnsCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
         checked: root.model.midiExportRpns
         onClicked: {
             root.model.midiExportRpns = !checked
@@ -49,7 +55,7 @@ ColumnLayout {
     }
 
     StyledTextLabel {
-        Layout.fillWidth: true
+        width: parent.width
         text: qsTrc("project", "Each selected part will be exported as a separate MIDI file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
