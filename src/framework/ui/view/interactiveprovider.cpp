@@ -24,17 +24,11 @@
 
 #include <QMetaType>
 #include <QMetaProperty>
-#include <QWindow>
-
-#include "widgetdialog.h"
+#include <QDialog>
 
 using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
-
-static const QString PAGE_TYPE_DOCK("dock");
-static const QString PAGE_TYPE_POPUP("popup");
-static const QString PAGE_TYPE_WIDGET("widget");
 
 InteractiveProvider::InteractiveProvider()
     : QObject()
@@ -94,8 +88,8 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
 
     RetVal<Val> returnedRV;
     returnedRV.ret = make_ret(Ret::Code::Ok);
-    if (openedRet.val.sync && !openedRet.val.objectID.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(openedRet.val.objectID);
+    if (openedRet.val.sync && !openedRet.val.objectId.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(openedRet.val.objectId);
         if (rv.ret.valid()) {
             returnedRV = rv;
         }
@@ -124,6 +118,28 @@ RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
     }
 
     return RetVal<bool>::make_ok(false);
+}
+
+void InteractiveProvider::activate(const UriQuery& uri)
+{
+    for (const ObjectInfo& objectInfo: m_stack) {
+        if (objectInfo.uriQuery != uri) {
+            continue;
+        }
+
+        ContainerMeta openMeta = uriRegister()->meta(objectInfo.uriQuery.uri());
+        switch (openMeta.type) {
+        case ContainerType::QWidgetDialog:
+            raiseWidgetDialog(objectInfo.objectId);
+            break;
+        case ContainerType::QmlDialog:
+            raiseQmlDialog(objectInfo.objectId);
+            break;
+        case ContainerType::PrimaryPage:
+        case ContainerType::Undefined:
+            break;
+        }
+    }
 }
 
 void InteractiveProvider::close(const Uri& uri)
@@ -183,7 +199,7 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
     }
 }
 
-void InteractiveProvider::fillStandatdDialogData(QmlLaunchData* data, const QString& type, const QString& title,
+void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const QString& title,
                                                  const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons, int defBtn,
                                                  const IInteractive::Options& options) const
 {
@@ -252,18 +268,18 @@ QString InteractiveProvider::objectID(const QVariant& val) const
 
     ++count;
 
-    QString objectID;
+    QString objectId;
     if (val.canConvert<QObject*>()) {
         QObject* obj = val.value<QObject*>();
         IF_ASSERT_FAILED(obj) {
             return QString();
         }
 
-        objectID = QString(obj->metaObject()->className());
+        objectId = QString(obj->metaObject()->className());
     } else {
-        objectID = "unknown_" + QString::number(count);
+        objectId = "unknown_" + QString::number(count);
     }
-    return "object://" + objectID;
+    return "object://" + objectId;
 }
 
 Ret InteractiveProvider::toRet(const QVariant& jsr) const
@@ -304,7 +320,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     ContainerMeta meta = uriRegister()->meta(q.uri());
     int widgetMetaTypeId = meta.widgetMetaTypeId;
 
-    QString objectId = QString::number(widgetMetaTypeId);
+    static int count(0);
+    QString objectId = QString("%1_%2").arg(widgetMetaTypeId).arg(++count);
 
     void* widgetClassPtr = QMetaType::create(widgetMetaTypeId);
     QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
@@ -339,9 +356,13 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
         onPopupClose(objectId, status);
         dialog->deleteLater();
+
+        m_openedWidgetDialogs.remove(objectId);
     });
 
-    onOpen(ContainerType::QWidgetDialog, widgetMetaTypeId);
+    m_openedWidgetDialogs[objectId] = dialog;
+
+    onOpen(ContainerType::QWidgetDialog, objectId);
 
     bool sync = q.param("sync", Val(false)).toBool();
     if (sync) {
@@ -352,7 +373,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     result.ret = make_ret(Ret::Code::Ok);
     result.val.sync = sync;
-    result.val.objectID = QString::number(widgetMetaTypeId);
+    result.val.objectId = objectId;
+
     return result;
 }
 
@@ -366,7 +388,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     RetVal<OpenData> result;
     result.ret = toRet(data->value("ret"));
     result.val.sync = data->value("sync").toBool();
-    result.val.objectID = data->value("objectID").toString();
+    result.val.objectId = data->value("objectID").toString();
 
     delete data;
 
@@ -378,7 +400,7 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
                                                     const framework::IInteractive::Options& options)
 {
     QmlLaunchData* data = new QmlLaunchData();
-    fillStandatdDialogData(data, type, title, text, buttons, defBtn, options);
+    fillStandardDialogData(data, type, title, text, buttons, defBtn, options);
 
     emit fireOpenStandardDialog(data);
 
@@ -403,33 +425,35 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
     return result;
 }
 
-void InteractiveProvider::closeWidgetDialog(const QVariant& dialogMetaTypeId)
+void InteractiveProvider::closeWidgetDialog(const QVariant& dialogId)
 {
-    const QWindow* window = mainWindow()->qWindow();
-    if (!window) {
-        return;
-    }
-
-    int _dialogMetaTypeId = dialogMetaTypeId.toInt();
-
-    for (QObject* object : window->children()) {
-        WidgetDialog* dialog = dynamic_cast<WidgetDialog*>(object);
-        if (dialog && dialog->metaTypeId() == _dialogMetaTypeId) {
-            dialog->close();
-        }
+    if (m_openedWidgetDialogs.contains(dialogId)) {
+        m_openedWidgetDialogs[dialogId]->close();
     }
 }
 
-void InteractiveProvider::closeQml(const QVariant& objectID)
+void InteractiveProvider::closeQml(const QVariant& objectId)
 {
-    emit fireClose(objectID);
+    emit fireClose(objectId);
+}
+
+void InteractiveProvider::raiseWidgetDialog(const QVariant& dialogId)
+{
+    if (m_openedWidgetDialogs.contains(dialogId)) {
+        m_openedWidgetDialogs[dialogId]->raise();
+    }
+}
+
+void InteractiveProvider::raiseQmlDialog(const QVariant& dialogId)
+{
+    emit fireRaise(dialogId);
 }
 
 void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId)
 {
     ContainerType::Type containerType = type.value<ContainerType::Type>();
 
-    IF_ASSERT_FAILED(!(containerType == ContainerType::Undefined)) {
+    IF_ASSERT_FAILED(containerType != ContainerType::Undefined) {
         containerType = ContainerType::QmlDialog;
     }
 
@@ -454,9 +478,9 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId)
     m_openingUriQuery = UriQuery();
 }
 
-void InteractiveProvider::onPopupClose(const QString& objectID, const QVariant& jsrv)
+void InteractiveProvider::onPopupClose(const QString& objectId, const QVariant& jsrv)
 {
-    m_retvals[objectID] = toRetVal(jsrv);
+    m_retvals[objectId] = toRetVal(jsrv);
 
     IF_ASSERT_FAILED(m_stack.size() > 1) {
         return;

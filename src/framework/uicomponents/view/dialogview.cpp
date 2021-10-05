@@ -88,6 +88,13 @@ void DialogView::hide()
     close();
 }
 
+void DialogView::raise()
+{
+    if (isOpened()) {
+        m_window->raise();
+    }
+}
+
 void DialogView::accept()
 {
     setErrCode(Ret::Code::Ok);

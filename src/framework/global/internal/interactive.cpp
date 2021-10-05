@@ -179,6 +179,11 @@ RetVal<bool> Interactive::isOpened(const UriQuery& uri) const
     return provider()->isOpened(uri);
 }
 
+void Interactive::activate(const UriQuery& uri)
+{
+    provider()->activate(uri);
+}
+
 void Interactive::close(const std::string& uri)
 {
     provider()->close(Uri(uri));

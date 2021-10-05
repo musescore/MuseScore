@@ -45,6 +45,7 @@ public:
     void setContent(QQuickItem* item) override;
 
     void show(QPoint p) override;
+    void raise() override;
     void setPosition(QPoint p) override;
     void hide() override;
 

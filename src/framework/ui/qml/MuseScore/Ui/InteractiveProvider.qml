@@ -91,10 +91,16 @@ Item {
         }
 
         function onFireClose(objectID) {
-            for(var i = 0; i < root.topParent.children.length; ++i) {
-                if (root.topParent.children[i].objectID === objectID) {
-                    root.topParent.children[i].hide()
-                }
+            var dialog = root.findDialog(objectID)
+            if (dialog) {
+                dialog.hide()
+            }
+        }
+
+        function onFireRaise(objectID) {
+            var dialog = root.findDialog(objectID)
+            if (dialog) {
+                dialog.raise()
             }
         }
     }
@@ -123,5 +129,13 @@ Item {
         root.provider.onOpen(ContainerType.QmlDialog, obj.objectID)
 
         return { "ret": ret, "object" : obj }
+    }
+
+    function findDialog(objectID) {
+        for(var i = 0; i < root.topParent.children.length; ++i) {
+            if (root.topParent.children[i].objectID === objectID) {
+                return root.topParent.children[i]
+            }
+        }
     }
 }
