@@ -32,11 +32,19 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "MeasureRepeatSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        numberPositionSection.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
+        id: numberPositionSection
         titleText: qsTrc("inspector", "Number position")
         propertyItem: root.model ? root.model.numberPosition : null
 
@@ -44,5 +52,8 @@ Column {
         minValue: -99.0
         step: 0.5
         decimals: 2
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
     }
 }
