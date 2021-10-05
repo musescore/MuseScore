@@ -563,7 +563,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
     }
     --ngaps;
 
-    qreal spaceRemaining { page->height() - page->bm() - footerPadding - yBottom };
+    qreal spaceRemaining { page->height() - page->bm() - footerPadding - score->styleP(Sid::staffLowerBorder) - yBottom };
     if (nextSpacer) {
         spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleP(Sid::staffLowerBorder));
     }
