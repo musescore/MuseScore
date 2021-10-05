@@ -32,6 +32,8 @@ class IAutobotConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAutobotConfiguration() = default;
 
+    virtual bool isConfigured() const = 0;
+
     virtual io::path dataPath() const = 0;
 
     virtual io::path filesPath() const = 0;
