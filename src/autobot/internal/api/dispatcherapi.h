@@ -19,40 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_SCRIPTAPI_H
-#define MU_API_SCRIPTAPI_H
+#ifndef MU_API_DISPATCHERAPI_H
+#define MU_API_DISPATCHERAPI_H
 
-#include <QObject>
-#include <QMap>
+#include <QVariant>
+
+#include "apiobject.h"
 
 #include "modularity/ioc.h"
-#include "iapiregister.h"
-#include "iapiengine.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::api {
-class ScriptApi : public QObject
+class DispatcherApi : public ApiObject
 {
     Q_OBJECT
-    Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue autobot READ autobot CONSTANT)
-    Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
 
-    INJECT(api, IApiRegister, apiRegister)
+    INJECT(api, actions::IActionsDispatcher, dispatcher)
 
 public:
-    ScriptApi(IApiEngine* engine, QObject* parent);
+    explicit DispatcherApi(IApiEngine* e);
 
-    QJSValue log() const { return api("api.log"); }
-    QJSValue autobot() const { return api("api.autobot"); }
-    QJSValue dispatcher() const { return api("api.dispatcher"); }
-
-private:
-
-    QJSValue api(const std::string& name) const;
-
-    IApiEngine* m_engine = nullptr;
-    mutable QMap<std::string, QJSValue> m_apis;
+    Q_INVOKABLE void dispatch(const QString& action, const QVariantList& args = QVariantList());
 };
 }
 
-#endif // MU_API_SCRIPTAPI_H
+#endif // MU_API_DISPATCHERAPI_H

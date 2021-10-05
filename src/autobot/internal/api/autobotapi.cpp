@@ -19,53 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "logapi.h"
+#include "autobotapi.h"
+
+#include <QTimer>
+#include <QEventLoop>
 
 #include "log.h"
 
 using namespace mu::api;
 
-LogApi::LogApi(IApiEngine* e)
+AutobotApi::AutobotApi(IApiEngine* e)
     : ApiObject(e)
 {
 }
 
-void LogApi::error(const QString& message)
+bool AutobotApi::openProject(const QString& name)
 {
-    error("Script", message);
+    io::path dir = autobotConfiguration()->filesPath();
+    io::path filePath = dir + "/" + name;
+    Ret ret = projectFilesController()->openProject(filePath);
+    return ret;
 }
 
-void LogApi::warn(const QString& message)
+void AutobotApi::sleep(int msec)
 {
-    warn("Script", message);
+    QEventLoop loop;
+    QTimer timer;
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timer.start(msec);
+    loop.exec();
 }
 
-void LogApi::info(const QString& message)
+void AutobotApi::setInterval(int msec)
 {
-    info("Script", message);
+    m_intervalMsec = msec;
 }
 
-void LogApi::debug(const QString& message)
+void AutobotApi::setTestCase(const QString& name)
 {
-    debug("Script", message);
+    LOGD() << "test case: " << name;
 }
 
-void LogApi::error(const QString& tag, const QString& message)
+void AutobotApi::step(const QString& name)
 {
-    LOGE_T(tag.toStdString()) << message;
-}
-
-void LogApi::warn(const QString& tag, const QString& message)
-{
-    LOGW_T(tag.toStdString()) << message;
-}
-
-void LogApi::info(const QString& tag, const QString& message)
-{
-    LOGI_T(tag.toStdString()) << message;
-}
-
-void LogApi::debug(const QString& tag, const QString& message)
-{
-    LOGD_T(tag.toStdString()) << message;
+    LOGD() << "step: " << name;
+    sleep(m_intervalMsec);
 }

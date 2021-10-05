@@ -19,40 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_SCRIPTAPI_H
-#define MU_API_SCRIPTAPI_H
+#ifndef MU_API_AUTOBOTAPI_H
+#define MU_API_AUTOBOTAPI_H
 
-#include <QObject>
-#include <QMap>
+#include "apiobject.h"
 
 #include "modularity/ioc.h"
-#include "iapiregister.h"
-#include "iapiengine.h"
+#include "project/iprojectfilescontroller.h"
+#include "autobot/iautobotconfiguration.h"
 
 namespace mu::api {
-class ScriptApi : public QObject
+class AutobotApi : public ApiObject
 {
     Q_OBJECT
-    Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue autobot READ autobot CONSTANT)
-    Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
 
-    INJECT(api, IApiRegister, apiRegister)
+    INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
+    INJECT(api, project::IProjectFilesController, projectFilesController)
 
 public:
-    ScriptApi(IApiEngine* engine, QObject* parent);
+    explicit AutobotApi(IApiEngine* e);
 
-    QJSValue log() const { return api("api.log"); }
-    QJSValue autobot() const { return api("api.autobot"); }
-    QJSValue dispatcher() const { return api("api.dispatcher"); }
+    Q_INVOKABLE bool openProject(const QString& name);
+    Q_INVOKABLE void sleep(int msec);
+
+    Q_INVOKABLE void setInterval(int msec);
+    Q_INVOKABLE void setTestCase(const QString& name);
+    Q_INVOKABLE void step(const QString& name);
 
 private:
-
-    QJSValue api(const std::string& name) const;
-
-    IApiEngine* m_engine = nullptr;
-    mutable QMap<std::string, QJSValue> m_apis;
+    int m_intervalMsec = 1000;
 };
 }
 
-#endif // MU_API_SCRIPTAPI_H
+#endif // MU_API_AUTOBOTAPI_H
