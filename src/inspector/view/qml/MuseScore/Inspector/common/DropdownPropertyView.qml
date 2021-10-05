@@ -32,7 +32,7 @@ InspectorPropertyView {
     property alias dropdown: dropdownItem
     property alias model: dropdownItem.model
 
-    navigationRowEnd: navigationRowStart + 2
+    navigationRowEnd: dropdownItem.navigation.row
 
     function focusOnFirst() {
         dropdownItem.navigation.requestActive()

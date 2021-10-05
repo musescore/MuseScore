@@ -34,10 +34,8 @@ Column {
 
     property QtObject model: null
 
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "PlaybackSettings"
-        direction: NavigationPanel.Both
-    }
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
 
     width: parent.width
 
@@ -60,7 +58,7 @@ Column {
 
             navigation.name: "Match staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: 1
+            navigation.row: root.navigationRowOffset + 1
 
             isIndeterminate: root.model ? root.model.isSizeSpatiumDependent.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.isSizeSpatiumDependent.value : false
@@ -72,18 +70,22 @@ Column {
         RadioButtonGroup {
             id: subscriptOptionsButtonList
 
+            property int navigationRowStart: matchStaffSize.navigation.row + 1
+            property int navigationRowEnd: navigationRowStart + count
+
             anchors.right: parent.right
             height: 30
 
             model: [
-                { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM },
-                { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP }
+                { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM, titleRole: qsTrc("inspector", "Subscript") },
+                { iconRole: IconCode.TEXT_SUPERSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_TOP, titleRole: qsTrc("inspector", "Superscript") }
             ]
 
             delegate: FlatRadioButton {
                 navigation.name: "ScriptOptions" + model.index
                 navigation.panel: root.navigationPanel
-                navigation.row: 2 + model.index
+                navigation.row: subscriptOptionsButtonList.navigationRowStart + model.index
+                navigation.accessible.name: modelData["titleRole"]
 
                 width: 30
                 transparent: true
@@ -103,17 +105,18 @@ Column {
     }
 
     FlatRadioButtonGroupPropertyView {
+        id: frameSection
         titleText: qsTrc("inspector", "Frame")
         propertyItem: root.model ? root.model.frameType : null
 
         navigation.name: "FrameMenu"
         navigation.panel: root.navigationPanel
-        navigation.row: 4
+        navigation.row: subscriptOptionsButtonList.navigationRowEnd + 1
 
         model: [
-            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE },
-            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE },
-            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE }
+            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE, titleRole: qsTrc("inspector", "Square") },
+            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE, titleRole: qsTrc("inspector", "Circle") }
         ]
     }
 
@@ -122,13 +125,14 @@ Column {
         width: parent.width
 
         ColorSection {
+            id: borderColorSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
             navigation.name: "BorderColorMenu"
             navigation.panel: root.navigationPanel
-            navigationRowStart: 9
+            navigationRowStart: frameSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameBorderColor.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -138,13 +142,14 @@ Column {
         }
 
         ColorSection {
+            id: highlightColorSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
 
             navigation.name: "HighlightColorMenu"
             navigation.panel: root.navigationPanel
-            navigationRowStart: 11
+            navigationRowStart: borderColorSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameHighlightColor.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -159,13 +164,14 @@ Column {
         width: parent.width
 
         SpinBoxPropertyView {
+            id: thicknessSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
             navigation.name: "Thickness"
             navigation.panel: root.navigationPanel
-            navigationRowStart: 13
+            navigationRowStart: highlightColorSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameThickness.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -179,13 +185,14 @@ Column {
         }
 
         SpinBoxPropertyView {
+            id: marginSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
 
             navigation.name: "Margin"
             navigation.panel: root.navigationPanel
-            navigationRowStart: 15
+            navigationRowStart: thicknessSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameMargin.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -200,13 +207,14 @@ Column {
     }
 
     SpinBoxPropertyView {
+        id: cornerRadiusSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
         navigation.name: "Corner radius"
         navigation.panel: root.navigationPanel
-        navigationRowStart: 17
+        navigationRowStart: marginSection.navigationRowEnd + 1
 
         visible: root.model ? root.model.frameCornerRadius.isEnabled : false
         height: visible ? implicitHeight : 0
@@ -222,12 +230,13 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     DropdownPropertyView {
+        id: textStyleSection
         titleText: qsTrc("inspector", "Text style")
         propertyItem: root.model ? root.model.textType : null
 
         navigation.name: "Text style"
         navigation.panel: root.navigationPanel
-        navigation.row: 19
+        navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
@@ -261,7 +270,11 @@ Column {
     }
 
     PlacementSection {
+        id: textPlacementSection
         propertyItem: root.model ? root.model.textPlacement : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: textStyleSection.navigationRowEnd + 1
     }
 
     FlatButton {
@@ -269,7 +282,7 @@ Column {
 
         navigation.name: "Staff text properties"
         navigation.panel: root.navigationPanel
-        navigation.row: 24
+        navigation.row: textPlacementSection.navigationRowEnd + 1
 
         text: qsTrc("inspector", "Staff text properties")
 
