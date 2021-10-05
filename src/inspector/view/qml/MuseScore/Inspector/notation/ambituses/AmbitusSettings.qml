@@ -35,7 +35,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "AmbitusSettings"
 
@@ -101,8 +101,8 @@ Column {
 
             model: root.tpcListModel
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
         }
 
         SpinBoxPropertyView {
@@ -120,7 +120,7 @@ Column {
             maxValue: 8
             minValue: -1
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: topNoteSection.navigationRowEnd + 1
         }
     }
@@ -141,7 +141,7 @@ Column {
 
             model: root.tpcListModel
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: topOctaveSection.navigationRowEnd + 1
         }
 
@@ -160,7 +160,7 @@ Column {
             maxValue: 8
             minValue: -1
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: bottomNoteSection.navigationRowEnd + 1
         }
     }
@@ -203,8 +203,9 @@ Column {
                 titleText: qsTrc("inspector", "Direction")
                 propertyItem: root.model ? root.model.direction : null
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: showItem.navigation.row + 1
+                navigationEnabled: visible && showItem.isExpanded
 
                 model: [
                     { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto") },
@@ -217,16 +218,18 @@ Column {
                 id: noteheadGroup
                 propertyItem: root.model ? root.model.noteheadGroup : null
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: directionSection.navigationRowEnd + 1
+                navigationEnabled: visible && showItem.isExpanded
             }
 
             NoteheadTypeSelector {
                 id: noteheadType
                 propertyItem: root.model ? root.model.noteheadType : null
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadGroup.navigationRowEnd + 1
+                navigationEnabled: visible && showItem.isExpanded
             }
 
             SpinBoxPropertyView {
@@ -242,8 +245,9 @@ Column {
                 minValue: 0.1
                 decimals: 2
 
-                navigation.panel: root.navigationPanel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadType.navigationRowEnd + 1
+                navigationEnabled: visible && showItem.isExpanded
             }
         }
     }

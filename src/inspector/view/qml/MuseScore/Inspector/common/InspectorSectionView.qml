@@ -29,7 +29,7 @@ FocusScope {
 
     property QtObject model: null
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     property var anchorItem: null
     signal ensureContentVisibleRequested(int invisibleContentHeight)
@@ -38,6 +38,6 @@ FocusScope {
     anchors.right: parent.right
 
     function navigationRow(row) {
-        return root.navigationRowOffset + row
+        return root.navigationRowStart + row
     }
 }

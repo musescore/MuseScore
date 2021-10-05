@@ -36,7 +36,7 @@ Column {
     property bool isSnappedToGrid: false
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
 
     signal snapToGridToggled(var snap)
     signal configureGridRequested()
@@ -57,8 +57,8 @@ Column {
     OffsetSection {
         id: offsets
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     CheckBox {

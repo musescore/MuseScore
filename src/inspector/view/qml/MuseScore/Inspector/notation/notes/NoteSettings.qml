@@ -34,7 +34,7 @@ TabPanel {
 
     property QtObject model: null
 
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "NoteSettings"
 
@@ -73,7 +73,7 @@ TabPanel {
 
         navigation.name: "HeadTab"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigation.row: root.navigationRowStart
         onNavigationTriggered: root.currentIndex = 0
 
         HeadSettings {
@@ -89,7 +89,7 @@ TabPanel {
             enabled: headTab.checked
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset + 1000
+            navigationRowStart: root.navigationRowStart + 1000
         }
     }
 
@@ -108,7 +108,7 @@ TabPanel {
 
         navigation.name: "StemTab"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 1
+        navigation.row: root.navigationRowStart + 1
         onNavigationTriggered: root.currentIndex = 1
 
         StemSettings {
@@ -126,7 +126,7 @@ TabPanel {
             enabled: stemTab.checked
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset + 2000
+            navigationRowStart: root.navigationRowStart + 2000
         }
     }
 
@@ -142,7 +142,7 @@ TabPanel {
 
         navigation.name: "BeamTab"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 2
+        navigation.row: root.navigationRowStart + 2
         onNavigationTriggered: root.currentIndex = 2
 
         BeamSettings {
@@ -158,7 +158,7 @@ TabPanel {
             enabled: beamTab.checked
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset + 3000
+            navigationRowStart: root.navigationRowStart + 3000
         }
     }
 }

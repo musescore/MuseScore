@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "JumpSettings"
 
@@ -49,8 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Jump to")
         propertyItem: root.model ? root.model.jumpTo : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     TextSection {
@@ -58,7 +58,7 @@ Column {
         titleText: qsTrc("inspector", "Play until")
         propertyItem: root.model ? root.model.playUntil : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: jumpTo.navigationRowEnd + 1
     }
 
@@ -67,7 +67,7 @@ Column {
         titleText: qsTrc("inspector", "Continue at")
         propertyItem: root.model ? root.model.continueAt : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: playUntil.navigationRowEnd + 1
     }
 

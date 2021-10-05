@@ -33,7 +33,7 @@ Item {
     property alias model: fretDiagramTabPanel.model
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "FretDiagramSettings"
 
@@ -56,7 +56,7 @@ Item {
             width: parent.width
 
             navigationPanel: root.navigationPanel
-            navigationRowOffset: root.navigationRowOffset
+            navigationRowStart: root.navigationRowStart
         }
 
         Column {

@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "BracketSettings"
 
@@ -53,8 +53,8 @@ Column {
         maxValue: 127
         minValue: 0
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     SpinBoxPropertyView {
@@ -66,7 +66,7 @@ Column {
         maxValue: 127
         minValue: 0
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: columnSection.navigationRowEnd + 1
     }
 }

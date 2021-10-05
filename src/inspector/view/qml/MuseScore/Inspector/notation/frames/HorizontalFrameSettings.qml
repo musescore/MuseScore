@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "HorizontalFrameSettings"
 
@@ -55,8 +55,8 @@ Column {
 
         icon: IconCode.HORIZONTAL
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     SeparatorLine { anchors.margins: -10 }

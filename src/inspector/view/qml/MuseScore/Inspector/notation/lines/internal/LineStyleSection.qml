@@ -49,7 +49,7 @@ Column {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.lineStyle
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
 
         model: [
@@ -81,8 +81,7 @@ Column {
             minValue: 0.1
             decimals: 2
 
-            navigation.name: "Dash"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: styleSection.navigationRowEnd + 1
         }
 
@@ -103,8 +102,7 @@ Column {
             minValue: 0.1
             decimals: 2
 
-            navigation.name: "Gap"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: dashSection.navigationRowEnd + 1
         }
     }

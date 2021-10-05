@@ -34,14 +34,14 @@ Item {
     property PropertyItem barWidth: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
 
     function navigationRow(r) {
-        return root.navigationRowOffset + r
+        return root.navigationRowStart + r
     }
 
     function focusOnFirst() {
-        leadingValue.navigation.requestActive()
+        leadingValue.focusOnFirst()
     }
 
     height: childrenRect.height
@@ -54,9 +54,8 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        navigation.name: "Leading"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow(1)
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         titleText: qsTrc("inspector", "Leading")
         propertyItem: root.leadingSpace
@@ -69,9 +68,8 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        navigation.name: "Bar width"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow(3)
+        navigationPanel: root.navigationPanel
+        navigationRowStart: leadingValue.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Bar width")
         propertyItem: root.barWidth

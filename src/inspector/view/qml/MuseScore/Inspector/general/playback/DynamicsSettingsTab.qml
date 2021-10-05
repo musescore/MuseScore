@@ -35,7 +35,7 @@ Item {
 
     property NavigationPanel navigationPanel: null
     property int navigationColumn: 1
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -49,7 +49,7 @@ Item {
 
         function navigationRow(r) {
             //! NOTE 100 - to make unique, let's assume that there can be no more than 100 controls in one expandable block.
-            return root.navigationRowOffset + r * 100
+            return root.navigationRowStart + r * 100
         }
     }
 

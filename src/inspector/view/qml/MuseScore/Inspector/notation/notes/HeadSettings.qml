@@ -33,7 +33,7 @@ FocusableItem {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -52,7 +52,7 @@ FocusableItem {
 
             navigation.name: "HideNoteHeadBox"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowOffset + 1
+            navigation.row: root.navigationRowStart + 1
             navigation.enabled: root.enabled
 
             onClicked: { root.model.isHeadHidden.value = !checked }
@@ -62,9 +62,9 @@ FocusableItem {
             id: noteHeadSection
             propertyItem: root.model ? root.model.headGroup : null
 
-            navigation.panel: root.navigationPanel
-            navigationRowStart: root.navigationRowOffset + 2
-            navigation.enabled: root.enabled
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 2
+            navigationEnabled: root.enabled
         }
 
         FlatRadioButtonGroupPropertyView {
@@ -72,10 +72,9 @@ FocusableItem {
             titleText: qsTrc("inspector", "Dotted note position")
             propertyItem: root.model ? root.model.dotPosition : null
 
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: noteHeadSection.navigationRowEnd + 1
-
-            navigation.enabled: root.enabled
+            navigationEnabled: root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto") },
@@ -106,10 +105,9 @@ FocusableItem {
                     titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
 
-                    navigation.name: "NoteHeadTypeSection"
-                    navigation.panel: root.navigationPanel
+                    navigationPanel: root.navigationPanel
                     navigationRowStart: showItem.navigation.row + 1
-                    navigation.enabled: root.enabled
+                    navigationEnabled: root.enabled && showItem.isExpanded
                 }
 
                 FlatRadioButtonGroupPropertyView {
@@ -117,10 +115,9 @@ FocusableItem {
                     titleText: qsTrc("inspector", "Note direction")
                     propertyItem: root.model ? root.model.headDirection : null
 
-                    navigation.name: "NoteDirectionSection"
-                    navigation.panel: root.navigationPanel
+                    navigationPanel: root.navigationPanel
                     navigationRowStart: noteHeadTypeSection.navigationRowEnd + 1
-                    navigation.enabled: root.enabled
+                    navigationEnabled: root.enabled && showItem.isExpanded
 
                     model: [
                         { text: qsTrc("inspector", "Auto"), value: NoteHead.DIRECTION_H_AUTO, title: qsTrc("inspector", "Auto") },
@@ -134,10 +131,9 @@ FocusableItem {
                     horizontalOffset: root.model ? root.model.horizontalOffset : null
                     verticalOffset: root.model ? root.model.verticalOffset : null
 
-                    navigation.name: "NoteHeadOffsetSection"
-                    navigation.panel: root.navigationPanel
+                    navigationPanel: root.navigationPanel
                     navigationRowStart: noteDirectionSection.navigationRowEnd + 1
-                    navigation.enabled: root.enabled && visible
+                    navigationEnabled: root.enabled && visible && showItem.isExpanded
                 }
             }
         }

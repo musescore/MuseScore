@@ -45,10 +45,8 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
-            navigation.name: "Dynamic Applies to"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 1
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 1
 
             model: [
                 { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
@@ -58,10 +56,8 @@ ExpandableBlank {
         }
 
         SpinBoxPropertyView {
-            navigation.name: "Velocity change"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 2
 
             titleText: qsTrc("inspector", "Velocity change")
             propertyItem: root.model ? root.model.velocityChange : null
@@ -88,10 +84,8 @@ ExpandableBlank {
         }
 
         DropdownPropertyView {
-            navigation.name: "Changes in dynamics range"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 4
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 4
 
             titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null

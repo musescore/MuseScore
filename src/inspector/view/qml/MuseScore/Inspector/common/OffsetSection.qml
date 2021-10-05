@@ -40,18 +40,7 @@ InspectorPropertyView {
     titleText: qsTrc("inspector", "Offset")
     propertyItem: root.horizontalOffset
 
-    navigation.name: "OffsetSection"
-    navigation.row: prv.navigationRow(1)
-
     visible: Boolean(horizontalOffset) || Boolean(verticalOffset)
-
-    QtObject {
-        id: prv
-
-        function navigationRow(r) {
-            return root.navigationRowStart + r
-        }
-    }
 
     RowLayout {
         id: row
@@ -67,8 +56,8 @@ InspectorPropertyView {
             Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "HorizontalOffsetControl"
-            navigation.panel: root.navigation.panel
-            navigation.row: prv.navigationRow(2)
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 1
             navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Horizontal") + " " + currentValue
 
             icon: IconCode.HORIZONTAL
@@ -90,8 +79,8 @@ InspectorPropertyView {
             Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "VerticalOffsetControl"
-            navigation.panel: root.navigation.panel
-            navigation.row: prv.navigationRow(3)
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 2
             navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Vertical") + " " + currentValue
 
             icon: IconCode.VERTICAL

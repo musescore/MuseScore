@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "ArticulationSettings"
 
@@ -49,8 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Direction")
         propertyItem: root.model ? root.model.direction : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.AUTO, title: qsTrc("inspector", "Auto") },
@@ -63,7 +63,7 @@ Column {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: directionSection.navigationRowEnd + 1
 
         model: [

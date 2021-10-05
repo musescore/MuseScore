@@ -22,8 +22,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 Column {
@@ -31,9 +31,10 @@ Column {
 
     property PropertyItem propertyItem: null
 
-    property alias navigation: menuButton.navigation
+    property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
     property int navigationRowEnd: menuButton.navigation.row
+    property bool navigationEnabled: true
 
     property alias titleText: titleLabel.text
     property alias showTitle: titleLabel.visible
@@ -73,7 +74,9 @@ Column {
             height: 20
             width: height
 
+            navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
+            navigation.enabled: root.navigationEnabled && visible
             navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
 
             menuModel: {

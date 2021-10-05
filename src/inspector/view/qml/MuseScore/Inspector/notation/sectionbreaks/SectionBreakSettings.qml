@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "SectionBreakSettings"
 
@@ -54,9 +54,8 @@ Column {
         step: 0.5
         measureUnitsSymbol: qsTrc("inspector", "s")
 
-        navigation.name: "PauseBeforStarts"
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     CheckBox {

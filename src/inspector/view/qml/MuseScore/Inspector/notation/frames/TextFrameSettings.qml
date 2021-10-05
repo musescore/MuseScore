@@ -32,7 +32,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "TextFrameSettings"
 
@@ -48,7 +48,7 @@ Column {
         gapBelow: root.model ? root.model.gapBelow : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     SeparatorLine { anchors.margins: -10 }

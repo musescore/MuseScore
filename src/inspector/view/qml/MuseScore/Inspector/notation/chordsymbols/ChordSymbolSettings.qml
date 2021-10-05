@@ -34,7 +34,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "ChordSymbolSettings"
 
@@ -49,8 +49,8 @@ Column {
         titleText: qsTrc("inspector", "Interpretation")
         propertyItem: root.model ? root.model.isLiteral : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         model: [
             { text: qsTrc("inspector", "Literal"), value: true },
@@ -63,7 +63,7 @@ Column {
         titleText: qsTrc("inspector", "Voicing")
         propertyItem: root.model ? root.model.voicingType : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: interpretationSection.navigationRowEnd + 1
 
         model: [
@@ -81,7 +81,7 @@ Column {
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: voicingSection.navigationRowEnd + 1
 
         model: [

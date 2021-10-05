@@ -33,7 +33,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     objectName: "BendSettings"
 
@@ -48,8 +48,8 @@ Column {
         titleText: qsTrc("inspector", "Bend type")
         propertyItem: root.model ? root.model.bendType : null
 
-        navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         model: [
             { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
@@ -66,7 +66,7 @@ Column {
         titleText: qsTrc("inspector", "Click to add or remove points")
         propertyItem: root.model ? root.model.bendCurve : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: bendTypeSection.navigationRowEnd + 1
 
         GridCanvas {
@@ -97,7 +97,7 @@ Column {
         step: 0.1
         decimals: 2
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: bendCurve.navigationRowEnd + 1
     }
 }

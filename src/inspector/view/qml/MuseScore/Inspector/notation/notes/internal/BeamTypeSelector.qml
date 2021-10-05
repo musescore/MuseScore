@@ -76,7 +76,7 @@ InspectorPropertyView {
                 hint: modelData["hint"] ?? ""
 
                 navigation.name: hint
-                navigation.panel: root.navigation.panel
+                navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1 + index
                 navigation.accessible.name: hint
                 navigation.enabled: root.enabled

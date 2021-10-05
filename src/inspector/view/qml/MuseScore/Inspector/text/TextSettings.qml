@@ -35,7 +35,7 @@ Column {
     property QtObject model: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
 
     width: parent.width
 
@@ -58,7 +58,7 @@ Column {
 
             navigation.name: "Match staff size"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowOffset + 1
+            navigation.row: root.navigationRowStart + 1
 
             isIndeterminate: root.model ? root.model.isSizeSpatiumDependent.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.isSizeSpatiumDependent.value : false
@@ -109,9 +109,8 @@ Column {
         titleText: qsTrc("inspector", "Frame")
         propertyItem: root.model ? root.model.frameType : null
 
-        navigation.name: "FrameMenu"
-        navigation.panel: root.navigationPanel
-        navigation.row: subscriptOptionsButtonList.navigationRowEnd + 1
+        navigationPanel: root.navigationPanel
+        navigationRowStart: subscriptOptionsButtonList.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE, titleRole: qsTrc("inspector", "None") },
@@ -130,8 +129,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            navigation.name: "BorderColorMenu"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: frameSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameBorderColor.isEnabled : false
@@ -147,8 +145,7 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            navigation.name: "HighlightColorMenu"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameHighlightColor.isEnabled : false
@@ -169,8 +166,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            navigation.name: "Thickness"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: highlightColorSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameThickness.isEnabled : false
@@ -190,8 +186,7 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            navigation.name: "Margin"
-            navigation.panel: root.navigationPanel
+            navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
 
             visible: root.model ? root.model.frameMargin.isEnabled : false
@@ -212,8 +207,7 @@ Column {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Corner radius"
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: marginSection.navigationRowEnd + 1
 
         visible: root.model ? root.model.frameCornerRadius.isEnabled : false
@@ -234,8 +228,7 @@ Column {
         titleText: qsTrc("inspector", "Text style")
         propertyItem: root.model ? root.model.textType : null
 
-        navigation.name: "Text style"
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
 
         model: [
@@ -273,7 +266,7 @@ Column {
         id: textPlacementSection
         propertyItem: root.model ? root.model.textPlacement : null
 
-        navigation.panel: root.navigationPanel
+        navigationPanel: root.navigationPanel
         navigationRowStart: textStyleSection.navigationRowEnd + 1
     }
 

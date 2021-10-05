@@ -45,9 +45,8 @@ InspectorSectionView {
 
         DropdownPropertyView {
             id: fontSection
-            navigation.panel: root.navigationPanel
-            navigation.name: "Font"
-            navigationRowStart: root.navigationRowOffset + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
 
             titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
@@ -81,8 +80,7 @@ InspectorSectionView {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "StyleMenu"
+                navigationPanel: root.navigationPanel
                 navigationRowStart: fontSection.navigationRowEnd + 1
                 navigationRowEnd: styleGroup.navigationRowEnd
 
@@ -124,8 +122,7 @@ InspectorSectionView {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "Size"
+                navigationPanel: root.navigationPanel
                 navigationRowStart: styleSection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Size")
@@ -153,8 +150,7 @@ InspectorSectionView {
             titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.horizontalAlignment : null
 
-            navigation.panel: root.navigationPanel
-            navigation.name: "AlignmentMenu"
+            navigationPanel: root.navigationPanel
             navigationRowStart: sizeSection.navigationRowEnd + 1
             navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd
 
