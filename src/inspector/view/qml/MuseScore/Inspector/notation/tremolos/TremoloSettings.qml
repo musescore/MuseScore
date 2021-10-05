@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -32,18 +33,29 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "TremoloSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        styleSection.focusOnFirst()
+    }
+
     FlatRadioButtonGroupPropertyView {
+        id: styleSection
         titleText: qsTrc("inspector", "Style (between notes)")
         propertyItem: root.model ? root.model.style : null
 
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
+
         model: [
-            { iconCode: IconCode.TREMOLO_STYLE_DEFAULT, value: TremoloTypes.STYLE_DEFAULT },
-            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL, value: TremoloTypes.STYLE_TRADITIONAL },
-            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, value: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE }
+            { iconCode: IconCode.TREMOLO_STYLE_DEFAULT, value: TremoloTypes.STYLE_DEFAULT, title: qsTrc("inspector", "Default") },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL, value: TremoloTypes.STYLE_TRADITIONAL, title: qsTrc("inspector", "Traditional") },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, value: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE, title: qsTrc("inspector", "Traditional alternative") }
         ]
     }
 }

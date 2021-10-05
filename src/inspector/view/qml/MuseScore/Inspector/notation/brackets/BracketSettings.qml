@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
@@ -31,11 +32,19 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "BracketSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        columnSection.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
+        id: columnSection
         titleText: qsTrc("inspector", "Column")
         propertyItem: root.model ? root.model.bracketColumnPosition : nul
 
@@ -43,6 +52,9 @@ Column {
         decimals: 0
         maxValue: 127
         minValue: 0
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
     }
 
     SpinBoxPropertyView {
@@ -53,5 +65,8 @@ Column {
         decimals: 0
         maxValue: 127
         minValue: 0
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: columnSection.navigationRowEnd + 1
     }
 }
