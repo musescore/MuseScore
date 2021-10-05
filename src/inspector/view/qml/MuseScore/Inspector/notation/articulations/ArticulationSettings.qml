@@ -33,24 +33,38 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "ArticulationSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        directionSection.focusOnFirst()
+    }
+
     FlatRadioButtonGroupPropertyView {
+        id: directionSection
         titleText: qsTrc("inspector", "Direction")
         propertyItem: root.model ? root.model.direction : null
 
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
+
         model: [
-            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.AUTO },
-            { iconCode: IconCode.ARROW_DOWN, value: ArticulationTypes.DOWN },
-            { iconCode: IconCode.ARROW_UP, value: ArticulationTypes.UP }
+            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.AUTO, title: qsTrc("inspector", "Auto") },
+            { iconCode: IconCode.ARROW_DOWN, value: ArticulationTypes.DOWN, title: qsTrc("inspector", "Down") },
+            { iconCode: IconCode.ARROW_UP, value: ArticulationTypes.UP, title: qsTrc("inspector", "Up") }
         ]
     }
 
     DropdownPropertyView {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: directionSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },

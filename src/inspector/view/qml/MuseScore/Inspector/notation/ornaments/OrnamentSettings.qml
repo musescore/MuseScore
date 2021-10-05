@@ -22,8 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,13 +33,24 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "OrnamentSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        performanceSection.focusOnFirst()
+    }
+
     FlatRadioButtonGroupPropertyView {
+        id: performanceSection
         titleText: qsTrc("inspector", "Performance")
         propertyItem: root.model ? root.model.performanceType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
 
         model: [
             { text: qsTrc("inspector", "Standard"), value: OrnamentTypes.STYLE_STANDARD },
@@ -48,6 +61,9 @@ Column {
     DropdownPropertyView {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: performanceSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
