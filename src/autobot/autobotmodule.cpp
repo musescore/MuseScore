@@ -38,7 +38,11 @@
 #include "internal/autobotactions.h"
 #include "internal/autobotscriptsrepository.h"
 
+#include "internal/api/apiregister.h"
+#include "internal/api/logapi.h"
+
 using namespace mu::autobot;
+using namespace mu::api;
 
 static const std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
 static std::shared_ptr<AutobotActionsController> s_actionsController = std::make_shared<AutobotActionsController>();
@@ -54,6 +58,8 @@ void AutobotModule::registerExports()
     modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
     modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
 
+    modularity::ioc()->registerExport<IApiRegister>(moduleName(), new ApiRegister());
+
     draw::Painter::extended = AbPaintProvider::instance();
 }
 
@@ -68,6 +74,11 @@ void AutobotModule::resolveImports()
     auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
+    }
+
+    auto api = modularity::ioc()->resolve<IApiRegister>(moduleName());
+    if (ar) {
+        api->regApiCreator("global", "api.log", new ApiCreator<LogApi>());
     }
 }
 

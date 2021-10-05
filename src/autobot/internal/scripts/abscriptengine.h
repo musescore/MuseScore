@@ -31,8 +31,11 @@
 #include "system/ifilesystem.h"
 #include "ret.h"
 
+#include "../api/iapiengine.h"
+#include "../api/scriptapi.h"
+
 namespace mu::autobot {
-class AbScriptEngine
+class AbScriptEngine : public api::IApiEngine
 {
     INJECT(autobot, system::IFileSystem, fileSystem)
 public:
@@ -50,6 +53,9 @@ public:
     Ret call(const QString& funcName, QJSValue* retVal = nullptr);
     Ret call(const QString& funcName, const CallData& data, QJSValue* retVal = nullptr);
 
+    // IApiEngine
+    QJSValue newQObject(QObject* o) override;
+
 private:
 
     RetVal<QByteArray> readScriptContent(const io::path& scriptPath) const;
@@ -63,6 +69,7 @@ private:
     };
 
     QJSEngine* m_engine = nullptr;
+    api::ScriptApi* m_api = nullptr;
     io::path m_scriptPath;
     QByteArray m_lastEvalScript;
     FuncData m_lastCallFunc;
