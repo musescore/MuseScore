@@ -21,8 +21,10 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -30,13 +32,24 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "BendSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        bendTypeSection.focusOnFirst()
+    }
+
     DropdownPropertyView {
+        id: bendTypeSection
         titleText: qsTrc("inspector", "Bend type")
         propertyItem: root.model ? root.model.bendType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
 
         model: [
             { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
@@ -49,8 +62,12 @@ Column {
     }
 
     InspectorPropertyView {
+        id: bendCurve
         titleText: qsTrc("inspector", "Click to add or remove points")
         propertyItem: root.model ? root.model.bendCurve : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: bendTypeSection.navigationRowEnd + 1
 
         GridCanvas {
             height: 200
@@ -79,5 +96,8 @@ Column {
         minValue: 0.1
         step: 0.1
         decimals: 2
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: bendCurve.navigationRowEnd + 1
     }
 }
