@@ -272,10 +272,16 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     // Make new master score
     MasterNotationPtr masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     Ms::MasterScore* templateScore = templateProject ? templateProject->masterScore() : nullptr;
+
+    masterNotation->undoStack()->lock();
+
     Ret ret = masterNotation->setupNewScore(masterScore, templateScore, projectOptions.scoreOptions);
     if (!ret) {
+        masterNotation->undoStack()->unlock();
         return ret;
     }
+
+    masterNotation->undoStack()->unlock();
 
     // Setup other stuff
     ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
