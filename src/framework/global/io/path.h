@@ -50,6 +50,8 @@ struct path {
     inline path& operator+=(const QString& other) { m_path += other.toUtf8(); return *this; }
     inline path& operator+=(const char* other) { m_path += other; return *this; }
 
+    inline bool operator<(const path& other) const { return m_path < other.m_path; }
+
     QString toQString() const;
     std::string toStdString() const;
     std::wstring toStdWString() const;

@@ -19,31 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABTYPES_H
-#define MU_AUTOBOT_ABTYPES_H
+#ifndef MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H
+#define MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H
 
-#include <string>
-#include <vector>
-
-#include "io/path.h"
-#include "iteststep.h"
+#include "modularity/imoduleexport.h"
+#include "abtypes.h"
+#include "retval.h"
 
 namespace mu::autobot {
-struct File {
-    io::path path;
-    Ret completeRet; // if undefined - means not tested
-};
-
-using Files = std::vector<File>;
-
-struct Script
+class IAutobotScriptsRepository : MODULE_EXPORT_INTERFACE
 {
-    io::path path;
-    QString title;
-    QString description;
-};
+    INTERFACE_ID(IAutobotScriptsRepository)
+public:
 
-using Scripts = std::vector<Script>;
+    virtual ~IAutobotScriptsRepository() = default;
+
+    virtual RetVal<Scripts> scripts() const = 0;
+};
 }
 
-#endif // MU_AUTOBOT_AUTOBOTTYPES_H
+#endif // MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H

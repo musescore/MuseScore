@@ -54,3 +54,8 @@ mu::io::path AutobotConfiguration::reportsPath() const
 {
     return dataPath() + "/reports";
 }
+
+mu::io::path AutobotConfiguration::scriptsPath() const
+{
+    return io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+}

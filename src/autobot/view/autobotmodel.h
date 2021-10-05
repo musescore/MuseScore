@@ -33,13 +33,13 @@
 namespace mu::autobot {
 class AutobotModel : public QObject, public async::Asyncable
 {
-    INJECT(autobot, IAutobot, autobot)
-
     Q_OBJECT
     Q_PROPERTY(QVariantList testCases READ testCases CONSTANT)
     Q_PROPERTY(QString currentTestCase READ currentTestCase NOTIFY currentTestCaseChanged)
     Q_PROPERTY(AbFilesModel * files READ files CONSTANT)
     Q_PROPERTY(QString status READ status NOTIFY statusChanged)
+
+    INJECT(autobot, IAutobot, autobot)
 
 public:
     explicit AutobotModel(QObject* parent = nullptr);

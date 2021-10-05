@@ -19,31 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABTYPES_H
-#define MU_AUTOBOT_ABTYPES_H
+#ifndef MU_AUTOBOT_AUTOBOTSCRIPTSREPOSITORY_H
+#define MU_AUTOBOT_AUTOBOTSCRIPTSREPOSITORY_H
 
-#include <string>
-#include <vector>
+#include "../iautobotscriptsrepository.h"
 
-#include "io/path.h"
-#include "iteststep.h"
+#include "modularity/ioc.h"
+#include "../iautobotconfiguration.h"
+#include "system/ifilesystem.h"
 
 namespace mu::autobot {
-struct File {
-    io::path path;
-    Ret completeRet; // if undefined - means not tested
-};
-
-using Files = std::vector<File>;
-
-struct Script
+class AutobotScriptsRepository : public IAutobotScriptsRepository
 {
-    io::path path;
-    QString title;
-    QString description;
-};
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
+public:
+    AutobotScriptsRepository() = default;
 
-using Scripts = std::vector<Script>;
+    RetVal<Scripts> scripts() const override;
+};
 }
 
-#endif // MU_AUTOBOT_AUTOBOTTYPES_H
+#endif // MU_AUTOBOT_AUTOBOTSCRIPTSREPOSITORY_H

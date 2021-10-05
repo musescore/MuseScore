@@ -42,6 +42,8 @@ public:
     virtual io::path fileDrawDataPath(const io::path& filePath) const = 0;
 
     virtual io::path reportsPath() const = 0;
+
+    virtual io::path scriptsPath() const = 0;
 };
 }
 
