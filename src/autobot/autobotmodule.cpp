@@ -59,6 +59,7 @@ void AutobotModule::resolveImports()
     auto ir = modularity::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/BatchTestsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/scripts"), "MuseScore/Autobot/ScriptsDialog.qml");
     }
 
     auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());

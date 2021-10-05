@@ -3,5 +3,7 @@
         <file>qml/MuseScore/Autobot/qmldir</file>
         <file>qml/MuseScore/Autobot/BatchTestsPanel.qml</file>
         <file>qml/MuseScore/Autobot/BatchTestsDialog.qml</file>
+        <file>qml/MuseScore/Autobot/ScriptsPanel.qml</file>
+        <file>qml/MuseScore/Autobot/ScriptsDialog.qml</file>
     </qresource>
 </RCC>
