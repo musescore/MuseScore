@@ -42,6 +42,7 @@ InspectorPropertyView {
 
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
+        navigation.enabled: root.enabled && root.navigationEnabled && root.visible
         navigation.accessible.name: root.titleText + " " + currentText
 
         onCurrentTextEdited: {

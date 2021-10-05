@@ -40,6 +40,7 @@ InspectorPropertyView {
 
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
+        navigation.enabled: root.enabled && root.navigationEnabled && root.visible
         navigation.accessible.name: root.titleText + " " + Utils.colorToString(colorPicker.color)
 
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false

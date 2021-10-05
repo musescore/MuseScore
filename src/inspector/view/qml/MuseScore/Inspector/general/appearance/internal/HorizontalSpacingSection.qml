@@ -35,10 +35,7 @@ Item {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-
-    function navigationRow(r) {
-        return root.navigationRowStart + r
-    }
+    property int navigationRowEnd: barWidth.navigationRowEnd
 
     function focusOnFirst() {
         leadingValue.focusOnFirst()
@@ -64,6 +61,7 @@ Item {
     }
 
     SpinBoxPropertyView {
+        id: barWidth
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right

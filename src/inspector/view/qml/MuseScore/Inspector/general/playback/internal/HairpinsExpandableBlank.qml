@@ -29,6 +29,8 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
@@ -36,17 +38,21 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: Column {
+        property int navigationRowEnd: velocityChangeTypeSection.navigationRowEnd
+
         height: implicitHeight
         width: parent.width
 
         spacing: 12
 
         DropdownPropertyView {
+            id: appliesToSection
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
             navigationPanel: root.navigation.panel
             navigationRowStart: root.navigation.row + 1
+            navigationEnabled: root.navigation.enabled && root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
@@ -56,8 +62,11 @@ ExpandableBlank {
         }
 
         SpinBoxPropertyView {
+            id: velocityChangeSection
+
             navigationPanel: root.navigation.panel
-            navigationRowStart: root.navigation.row + 2
+            navigationRowStart: appliesToSection.navigationRowEnd + 1
+            navigationEnabled: root.navigation.enabled && root.enabled
 
             titleText: qsTrc("inspector", "Velocity change")
             propertyItem: root.model ? root.model.velocityChange : null
@@ -69,10 +78,13 @@ ExpandableBlank {
         }
 
         CheckBox {
+            id: singleNoteCheckBox
+
             navigation.name: "Use single note dynamics"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 3
+            navigation.row: velocityChangeSection.navigationRowEnd + 1
+            navigation.enabled: root.navigation.enabled && root.enabled
 
             text: qsTrc("inspector", "Use single note dynamics")
 
@@ -84,8 +96,11 @@ ExpandableBlank {
         }
 
         DropdownPropertyView {
+            id: velocityChangeTypeSection
+
             navigationPanel: root.navigation.panel
-            navigationRowStart: root.navigation.row + 4
+            navigationRowStart: singleNoteCheckBox.navigation.row + 1
+            navigationEnabled: root.navigation.enabled && root.enabled
 
             titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null
