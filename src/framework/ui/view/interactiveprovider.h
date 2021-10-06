@@ -32,8 +32,6 @@
 #include "../iinteractiveuriregister.h"
 #include "retval.h"
 
-class QDialog;
-
 namespace mu::ui {
 class QmlLaunchData : public QObject
 {
@@ -76,7 +74,7 @@ public:
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
 
-    void activate(const UriQuery& uri) override;
+    void raise(const UriQuery& uri) override;
 
     void close(const Uri& uri) override;
 
@@ -85,7 +83,7 @@ public:
 
     Q_INVOKABLE QString objectId(const QVariant& val) const;
 
-    Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId);
+    Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);
     Q_INVOKABLE void onPopupClose(const QString& objectId, const QVariant& rv);
 
 signals:
@@ -106,7 +104,10 @@ private:
     {
         UriQuery uriQuery;
         QVariant objectId;
+        QObject* window = nullptr;
     };
+
+    void raiseWindowInStack(QObject* newActiveWindow);
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
@@ -124,18 +125,15 @@ private:
                                    int defBtn = int(framework::IInteractive::Button::NoButton),
                                    const framework::IInteractive::Options& options = {});
 
-    void closeWidgetDialog(const QVariant& dialogId);
     void closeQml(const QVariant& objectId);
+    void raiseQml(const QVariant& objectId);
 
-    void raiseWidgetDialog(const QVariant& dialogId);
-    void raiseQmlDialog(const QVariant& dialogId);
+    void notifyAboutCurrentUriChanged();
 
     UriQuery m_openingUriQuery;
     QStack<ObjectInfo> m_stack;
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
-
-    QMap<QVariant, QDialog*> m_openedWidgetDialogs;
 };
 }
 
