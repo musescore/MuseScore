@@ -43,6 +43,7 @@
 #include "internal/api/autobotapi.h"
 #include "internal/api/dispatcherapi.h"
 #include "internal/api/navigationapi.h"
+#include "internal/api/contextapi.h"
 
 using namespace mu::autobot;
 using namespace mu::api;
@@ -83,8 +84,9 @@ void AutobotModule::resolveImports()
     if (api) {
         api->regApiCreator("global", "api.log", new ApiCreator<LogApi>());
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<AutobotApi>());
-        api->regApiCreator("autobot", "api.dispatcher", new ApiCreator<DispatcherApi>());
-        api->regApiCreator("autobot", "api.navigation", new ApiCreator<NavigationApi>());
+        api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
+        api->regApiCreator("actions", "api.dispatcher", new ApiCreator<DispatcherApi>());
+        api->regApiCreator("ui", "api.navigation", new ApiCreator<NavigationApi>());
     }
 }
 
