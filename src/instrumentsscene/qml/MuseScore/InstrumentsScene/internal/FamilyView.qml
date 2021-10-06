@@ -122,7 +122,7 @@ Item {
 
             onNavigationActived: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
-                item.clicked()
+                item.clicked(null)
             }
 
             StyledTextLabel {
