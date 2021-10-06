@@ -42,6 +42,10 @@ bool AutobotApi::openProject(const QString& name)
 
 void AutobotApi::sleep(int msec)
 {
+    if (msec < 0) {
+        msec = m_intervalMsec;
+    }
+
     QEventLoop loop;
     QTimer timer;
     connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
