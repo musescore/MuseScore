@@ -47,7 +47,7 @@ public:
 
     Q_INVOKABLE bool openProject(const QString& name);
 
-    Q_INVOKABLE void sleep(int msec);
+    Q_INVOKABLE void sleep(int msec = -1);
 
 private:
 
