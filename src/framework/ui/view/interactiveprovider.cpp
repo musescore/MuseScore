@@ -503,7 +503,13 @@ void InteractiveProvider::onPopupClose(const QString& objectId, const QVariant& 
         return;
     }
 
-    m_stack.pop();
+    for (int i = 0; i < m_stack.size(); ++i) {
+        if (m_stack[i].objectId == objectId) {
+            m_stack.remove(i);
+            break;
+        }
+    }
+
     notifyAboutCurrentUriChanged();
 }
 
