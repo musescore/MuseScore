@@ -350,7 +350,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 void MixerChannelItem::openEditor(const UriQuery& uri)
 {
     if (interactive()->isOpened(uri).val) {
-        interactive()->activate(uri);
+        interactive()->raise(uri);
     } else {
         interactive()->open(uri);
     }
