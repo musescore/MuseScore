@@ -365,19 +365,19 @@ bool PopupView::isMouseWithinBoundaries(const QPoint& mousePos) const
     return contains;
 }
 
-void PopupView::setObjectID(QString objectID)
+void PopupView::setObjectId(QString objectId)
 {
-    if (m_objectID == objectID) {
+    if (m_objectId == objectId) {
         return;
     }
 
-    m_objectID = objectID;
-    emit objectIDChanged(m_objectID);
+    m_objectId = objectId;
+    emit objectIdChanged(m_objectId);
 }
 
-QString PopupView::objectID() const
+QString PopupView::objectId() const
 {
-    return m_objectID;
+    return m_objectId;
 }
 
 QString PopupView::title() const
