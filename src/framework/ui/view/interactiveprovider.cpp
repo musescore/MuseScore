@@ -262,7 +262,7 @@ std::vector<Uri> InteractiveProvider::stack() const
     return uris;
 }
 
-QString InteractiveProvider::objectID(const QVariant& val) const
+QString InteractiveProvider::objectId(const QVariant& val) const
 {
     static int count(0);
 
@@ -388,16 +388,16 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     RetVal<OpenData> result;
     result.ret = toRet(data->value("ret"));
     result.val.sync = data->value("sync").toBool();
-    result.val.objectId = data->value("objectID").toString();
+    result.val.objectId = data->value("objectId").toString();
 
     delete data;
 
     return result;
 }
 
-RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const QString& title, const framework::IInteractive::Text& text,
-                                                    const framework::IInteractive::ButtonDatas& buttons, int defBtn,
-                                                    const framework::IInteractive::Options& options)
+RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const QString& title, const IInteractive::Text& text,
+                                                    const IInteractive::ButtonDatas& buttons, int defBtn,
+                                                    const IInteractive::Options& options)
 {
     QmlLaunchData* data = new QmlLaunchData();
     fillStandardDialogData(data, type, title, text, buttons, defBtn, options);
@@ -405,7 +405,7 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
     emit fireOpenStandardDialog(data);
 
     Ret ret = toRet(data->value("ret"));
-    QString objectID = data->value("objectID").toString();
+    QString objectId = data->value("objectId").toString();
 
     delete data;
 
@@ -415,8 +415,8 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const Q
         return result;
     }
 
-    if (!objectID.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectID);
+    if (!objectId.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             result = rv;
         }

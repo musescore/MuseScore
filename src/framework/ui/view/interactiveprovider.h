@@ -83,7 +83,7 @@ public:
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;
 
-    Q_INVOKABLE QString objectID(const QVariant& val) const;
+    Q_INVOKABLE QString objectId(const QVariant& val) const;
 
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId);
     Q_INVOKABLE void onPopupClose(const QString& objectId, const QVariant& rv);
