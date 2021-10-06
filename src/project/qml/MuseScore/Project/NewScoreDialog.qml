@@ -37,6 +37,8 @@ StyledDialogView {
     contentWidth: 1024
     resizable: true
 
+    objectName: "NewScoreDialog"
+
     NewScoreModel {
         id: newScoreModel
     }

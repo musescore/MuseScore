@@ -36,6 +36,7 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue autobot READ autobot CONSTANT)
     Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
+    Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
 
     INJECT(api, IApiRegister, apiRegister)
 
@@ -45,6 +46,7 @@ public:
     QJSValue log() const { return api("api.log"); }
     QJSValue autobot() const { return api("api.autobot"); }
     QJSValue dispatcher() const { return api("api.dispatcher"); }
+    QJSValue navigation() const { return api("api.navigation"); }
 
 private:
 

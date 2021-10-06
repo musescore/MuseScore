@@ -22,6 +22,9 @@
 #ifndef MU_API_AUTOBOTAPI_H
 #define MU_API_AUTOBOTAPI_H
 
+#include <QJSValue>
+#include <QEventLoop>
+
 #include "apiobject.h"
 
 #include "modularity/ioc.h"
@@ -39,15 +42,29 @@ class AutobotApi : public ApiObject
 public:
     explicit AutobotApi(IApiEngine* e);
 
+    Q_INVOKABLE void setInterval(int msec);
+    Q_INVOKABLE void runTestCase(QJSValue testCase);
+
     Q_INVOKABLE bool openProject(const QString& name);
+
     Q_INVOKABLE void sleep(int msec);
 
-    Q_INVOKABLE void setInterval(int msec);
-    Q_INVOKABLE void setTestCase(const QString& name);
-    Q_INVOKABLE void step(const QString& name);
-
 private:
+
+    struct TestCase
+    {
+        QJSValue testCase;
+        QJSValue steps;
+        int stepsCount = 0;
+        int currentStepIdx = -1;
+        int finishedCount = 0;
+        QEventLoop loop;
+    };
+
+    void nextStep();
+
     int m_intervalMsec = 1000;
+    TestCase m_testCase;
 };
 }
 

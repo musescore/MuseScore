@@ -42,6 +42,7 @@
 #include "internal/api/logapi.h"
 #include "internal/api/autobotapi.h"
 #include "internal/api/dispatcherapi.h"
+#include "internal/api/navigationapi.h"
 
 using namespace mu::autobot;
 using namespace mu::api;
@@ -79,10 +80,11 @@ void AutobotModule::resolveImports()
     }
 
     auto api = modularity::ioc()->resolve<IApiRegister>(moduleName());
-    if (ar) {
+    if (api) {
         api->regApiCreator("global", "api.log", new ApiCreator<LogApi>());
         api->regApiCreator("autobot", "api.autobot", new ApiCreator<AutobotApi>());
         api->regApiCreator("autobot", "api.dispatcher", new ApiCreator<DispatcherApi>());
+        api->regApiCreator("autobot", "api.navigation", new ApiCreator<NavigationApi>());
     }
 }
 

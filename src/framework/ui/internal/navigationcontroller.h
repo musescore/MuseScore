@@ -88,7 +88,7 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
+    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl, bool force = false);
 
     void doActivateSection(INavigationSection* sect, bool isActivateLastPanel = false);
     void doDeactivateSection(INavigationSection* sect);

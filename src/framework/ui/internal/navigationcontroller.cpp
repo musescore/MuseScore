@@ -1038,7 +1038,7 @@ void NavigationController::doTriggerControl()
 bool NavigationController::requestActivateByName(const std::string& sectName, const std::string& panelName, const std::string& controlName)
 {
     INavigationSection* section = findByName(m_sections, QString::fromStdString(sectName));
-    if (section) {
+    if (!section) {
         LOGE() << "not found section with name: " << sectName;
         return false;
     }
@@ -1050,16 +1050,16 @@ bool NavigationController::requestActivateByName(const std::string& sectName, co
     }
 
     INavigationControl* control = findByName(panel->controls(), QString::fromStdString(controlName));
-    if (!panel) {
+    if (!control) {
         LOGE() << "not found control with name: " << controlName << ", panel: " << panelName << ", section: " << sectName;
         return false;
     }
 
-    onActiveRequested(section, panel, control);
+    onActiveRequested(section, panel, control, true);
     return true;
 }
 
-void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl)
+void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl, bool force)
 {
     TRACEFUNC;
 
@@ -1071,13 +1071,13 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
 
     //! NOTE If there is no active section,
     //! we may not be using keyboard navigation, so ignore the request.
-    if (!activeSec) {
+    if (!force && !activeSec) {
         return;
     }
 
     bool isChanged = false;
 
-    if (activeSec != sect) {
+    if (activeSec && activeSec != sect) {
         doDeactivateSection(activeSec);
     }
 

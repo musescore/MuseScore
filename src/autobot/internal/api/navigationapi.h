@@ -1,0 +1,55 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MU_API_NAVIGATIONAPI_H
+#define MU_API_NAVIGATIONAPI_H
+
+#include <QString>
+
+#include "apiobject.h"
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "ui/inavigationcontroller.h"
+
+namespace mu::api {
+class NavigationApi : public ApiObject
+{
+    Q_OBJECT
+
+    INJECT(api, actions::IActionsDispatcher, dispatcher)
+    INJECT(api, ui::INavigationController, navigation)
+
+public:
+    explicit NavigationApi(IApiEngine* e);
+
+    Q_INVOKABLE void nextPanel();
+    Q_INVOKABLE void prevPanel();
+    Q_INVOKABLE void right();
+    Q_INVOKABLE void left();
+    Q_INVOKABLE void up();
+    Q_INVOKABLE void down();
+    Q_INVOKABLE bool goToControlByName(const QString& section, const QString& panel, const QString& contol);
+    Q_INVOKABLE void triggerCurrentControl();
+    Q_INVOKABLE bool triggerControlByName(const QString& section, const QString& panel, const QString& contol);
+};
+}
+
+#endif // MU_API_NAVIGATIONAPI_H

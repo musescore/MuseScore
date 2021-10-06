@@ -22,7 +22,6 @@
 #include "autobotapi.h"
 
 #include <QTimer>
-#include <QEventLoop>
 
 #include "log.h"
 
@@ -55,13 +54,47 @@ void AutobotApi::setInterval(int msec)
     m_intervalMsec = msec;
 }
 
-void AutobotApi::setTestCase(const QString& name)
+void AutobotApi::runTestCase(QJSValue testCase)
 {
-    LOGD() << "test case: " << name;
+    m_testCase.testCase = testCase;
+    m_testCase.steps = testCase.property("steps");
+    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
+    m_testCase.currentStepIdx = -1;
+
+    nextStep();
+
+    if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
+        m_testCase.loop.exec();
+    }
 }
 
-void AutobotApi::step(const QString& name)
+void AutobotApi::nextStep()
 {
-    LOGD() << "step: " << name;
-    sleep(m_intervalMsec);
+    m_testCase.currentStepIdx += 1;
+
+    if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
+        return;
+    }
+
+    QTimer::singleShot(m_intervalMsec, [this]() {
+        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
+        QJSValue func = step.property("func");
+        QJSValue wait = step.property("wait");
+        bool isWait = wait.isUndefined() ? true : wait.toBool();
+
+        if (!isWait) {
+            nextStep();
+        }
+
+        func.call();
+
+        if (isWait) {
+            nextStep();
+        }
+
+        m_testCase.finishedCount += 1;
+        if (m_testCase.finishedCount == m_testCase.stepsCount) {
+            m_testCase.loop.quit();
+        }
+    });
 }
