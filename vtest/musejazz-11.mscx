@@ -197,7 +197,7 @@ p, li { white-space: pre-wrap; }
             <transposingClefType>G</transposingClefType>
             </Clef>
           <StaffText>
-            <text>Emmentaler-Barlines</text>
+            <text>MuseJazz-Barlines</text>
             </StaffText>
           <Rest>
             <durationType>measure</durationType>

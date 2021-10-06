@@ -205,7 +205,7 @@ p, li { white-space: pre-wrap; }
             <showCourtesy>0</showCourtesy>
             </TimeSig>
           <StaffText>
-            <text>Emmentaler Articulations 3</text>
+            <text>MuseJazz Articulations 3</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
