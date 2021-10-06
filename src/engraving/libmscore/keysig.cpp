@@ -244,46 +244,49 @@ void KeySig::layout()
     const signed char* lines = ClefInfo::lines(clef);
 
     // add prefixed naturals, if any
+    qreal accidentalGap = score()->styleS(Sid::accidentalDistance).val();
+    // width is divided by mag() to get the staff-scaling-independent width of the symbols
+    qreal sharpWidth = symWidth(SymId::accidentalSharp) / score()->spatium() / mag() + accidentalGap;
+    qreal flatWidth = symWidth(SymId::accidentalFlat) / score()->spatium() / mag() + accidentalGap;
+    qreal naturalWidth = symWidth(SymId::accidentalNatural) / score()->spatium() / mag() + accidentalGap;
 
     qreal xo = 0.0;
     if (prefixNaturals) {
         for (int i = 0; i < 7; ++i) {
             if (naturals & (1 << i)) {
                 addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
-                xo += 1.0;
+                xo += naturalWidth;
             }
         }
     }
     // add accidentals
-    static const qreal sspread = 1.0;
-    static const qreal fspread = 1.0;
 
     switch (t1) {
-    case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sspread, lines[6]);
+    case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sharpWidth, lines[6]);
     // fall through
-    case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sspread, lines[5]);
+    case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sharpWidth, lines[5]);
     // fall through
-    case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sspread, lines[4]);
+    case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sharpWidth, lines[4]);
     // fall through
-    case 4:  addLayout(SymId::accidentalSharp, xo + 3.0 * sspread, lines[3]);
+    case 4:  addLayout(SymId::accidentalSharp, xo + 3.0 * sharpWidth, lines[3]);
     // fall through
-    case 3:  addLayout(SymId::accidentalSharp, xo + 2.0 * sspread, lines[2]);
+    case 3:  addLayout(SymId::accidentalSharp, xo + 2.0 * sharpWidth, lines[2]);
     // fall through
-    case 2:  addLayout(SymId::accidentalSharp, xo + 1.0 * sspread, lines[1]);
+    case 2:  addLayout(SymId::accidentalSharp, xo + 1.0 * sharpWidth, lines[1]);
     // fall through
     case 1:  addLayout(SymId::accidentalSharp, xo,                 lines[0]);
         break;
-    case -7: addLayout(SymId::accidentalFlat, xo + 6.0 * fspread, lines[13]);
+    case -7: addLayout(SymId::accidentalFlat, xo + 6.0 * flatWidth, lines[13]);
     // fall through
-    case -6: addLayout(SymId::accidentalFlat, xo + 5.0 * fspread, lines[12]);
+    case -6: addLayout(SymId::accidentalFlat, xo + 5.0 * flatWidth, lines[12]);
     // fall through
-    case -5: addLayout(SymId::accidentalFlat, xo + 4.0 * fspread, lines[11]);
+    case -5: addLayout(SymId::accidentalFlat, xo + 4.0 * flatWidth, lines[11]);
     // fall through
-    case -4: addLayout(SymId::accidentalFlat, xo + 3.0 * fspread, lines[10]);
+    case -4: addLayout(SymId::accidentalFlat, xo + 3.0 * flatWidth, lines[10]);
     // fall through
-    case -3: addLayout(SymId::accidentalFlat, xo + 2.0 * fspread, lines[9]);
+    case -3: addLayout(SymId::accidentalFlat, xo + 2.0 * flatWidth, lines[9]);
     // fall through
-    case -2: addLayout(SymId::accidentalFlat, xo + 1.0 * fspread, lines[8]);
+    case -2: addLayout(SymId::accidentalFlat, xo + 1.0 * flatWidth, lines[8]);
     // fall through
     case -1: addLayout(SymId::accidentalFlat, xo,                 lines[7]);
     case 0:
@@ -294,18 +297,12 @@ void KeySig::layout()
     }
     // add suffixed naturals, if any
     if (suffixNaturals) {
-        xo += qAbs(t1);                   // skip accidentals
-        if (t1 > 0) {                     // after sharps, add a little more space
-            xo += 0.15;
-            // if last sharp (t1) is above next natural (t1+1)...
-            if (lines[t1] < lines[t1 + 1]) {
-                xo += 0.2;                // ... add more space
-            }
-        }
+        qreal accidentalWidth = (t1 > 0 ? sharpWidth : flatWidth);
+        xo += qAbs(t1) * accidentalWidth; // skip accidentals
         for (int i = 0; i < 7; ++i) {
             if (naturals & (1 << i)) {
                 addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
-                xo += 1.0;
+                xo += naturalWidth;
             }
         }
     }
