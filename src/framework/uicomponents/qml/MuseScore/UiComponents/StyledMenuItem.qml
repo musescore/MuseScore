@@ -115,7 +115,7 @@ ListItemBlank {
         }
     }
 
-    navigation.onTriggered: root.clicked()
+    navigation.onTriggered: root.clicked(null)
 
     QtObject {
         id: itemPrv

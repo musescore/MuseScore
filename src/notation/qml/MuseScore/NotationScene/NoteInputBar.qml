@@ -101,7 +101,7 @@ Rectangle {
             toolTipShortcut: Boolean(item) ? item.shortcut : ""
 
             navigation.panel: keynavSub
-            navigation.name: toolTipTitle
+            navigation.name: item.id
             navigation.order: Boolean(item) ? item.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
