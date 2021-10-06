@@ -60,22 +60,22 @@ void NavigationApi::down()
     dispatcher()->dispatch("nav-down");
 }
 
-bool NavigationApi::goToControlByName(const QString& section, const QString& panel, const QString& contol)
+bool NavigationApi::goToControl(const QString& section, const QString& panel, const QString& contol)
 {
     bool ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), contol.toStdString());
     return ok;
 }
 
-void NavigationApi::triggerCurrentControl()
+void NavigationApi::trigger()
 {
     dispatcher()->dispatch("nav-trigger-control");
 }
 
-bool NavigationApi::triggerControlByName(const QString& section, const QString& panel, const QString& contol)
+bool NavigationApi::triggerControl(const QString& section, const QString& panel, const QString& contol)
 {
-    bool ok = goToControlByName(section, panel, contol);
+    bool ok = goToControl(section, panel, contol);
     if (ok) {
-        triggerCurrentControl();
+        trigger();
     }
     return ok;
 }
