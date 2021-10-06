@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.01">
+  <programVersion>4.0.0</programVersion>
+  <programRevision>3543170</programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>3.93701</pageWidth>
+      <pageHeight>1.9685</pageHeight>
+      <pagePrintableWidth>3.85827</pagePrintableWidth>
+      <pageEvenLeftMargin>0.0393701</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.0393701</pageOddLeftMargin>
+      <pageEvenTopMargin>0</pageEvenTopMargin>
+      <pageEvenBottomMargin>0</pageEvenBottomMargin>
+      <pageOddTopMargin>0</pageOddTopMargin>
+      <pageOddBottomMargin>0</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <staffUpperBorder>6</staffUpperBorder>
+      <staffLowerBorder>6</staffLowerBorder>
+      <minSystemDistance>7.5</minSystemDistance>
+      <lyricsDashForce>0</lyricsDashForce>
+      <lyricsLineThickness>0.16</lyricsLineThickness>
+      <repeatBarlineDotSeparation>0.39</repeatBarlineDotSeparation>
+      <bracketWidth>0.5</bracketWidth>
+      <clefLeftMargin>0.64</clefLeftMargin>
+      <clefKeyRightMargin>1.75</clefKeyRightMargin>
+      <stemWidth>0.12</stemWidth>
+      <barNoteDistance>1.2</barNoteDistance>
+      <staffLineWidth>0.13</staffLineWidth>
+      <ledgerLineLength>0.4</ledgerLineLength>
+      <beamDistance>0.25</beamDistance>
+      <hairpinWidth>0.16</hairpinWidth>
+      <pedalLineWidth>0.16</pedalLineWidth>
+      <showMeasureNumber>0</showMeasureNumber>
+      <createMultiMeasureRests>1</createMultiMeasureRests>
+      <minEmptyMeasures>1</minEmptyMeasures>
+      <multiMeasureRestMargin>3</multiMeasureRestMargin>
+      <mmRestHBarThickness>1</mmRestHBarThickness>
+      <oldStyleMultiMeasureRests>1</oldStyleMultiMeasureRests>
+      <slurEndWidth>0.1</slurEndWidth>
+      <slurMidWidth>0.22</slurMidWidth>
+      <musicalSymbolFont>Emmentaler</musicalSymbolFont>
+      <musicalTextFont>MScore Text</musicalTextFont>
+      <showFooter>0</showFooter>
+      <voltaLineWidth>0.16</voltaLineWidth>
+      <ottavaLineWidth>0.16</ottavaLineWidth>
+      <tupletBracketWidth>0.16</tupletBracketWidth>
+      <defaultFramePadding>0.5</defaultFramePadding>
+      <defaultFrameWidth>0.2</defaultFrameWidth>
+      <defaultFrameRound>25</defaultFrameRound>
+      <titleFramePadding>0.5</titleFramePadding>
+      <titleFrameWidth>0.2</titleFrameWidth>
+      <titleFrameRound>25</titleFrameRound>
+      <subTitleFramePadding>0.5</subTitleFramePadding>
+      <subTitleFrameWidth>0.2</subTitleFrameWidth>
+      <subTitleFrameRound>25</subTitleFrameRound>
+      <composerFramePadding>0.5</composerFramePadding>
+      <composerFrameWidth>0.2</composerFrameWidth>
+      <composerFrameRound>25</composerFrameRound>
+      <lyricistFramePadding>0.5</lyricistFramePadding>
+      <lyricistFrameWidth>0.2</lyricistFrameWidth>
+      <lyricistFrameRound>25</lyricistFrameRound>
+      <fingeringFramePadding>0.5</fingeringFramePadding>
+      <fingeringFrameWidth>0.2</fingeringFrameWidth>
+      <fingeringFrameRound>25</fingeringFrameRound>
+      <lhGuitarFingeringFramePadding>0.5</lhGuitarFingeringFramePadding>
+      <lhGuitarFingeringFrameWidth>0.2</lhGuitarFingeringFrameWidth>
+      <lhGuitarFingeringFrameRound>25</lhGuitarFingeringFrameRound>
+      <rhGuitarFingeringFramePadding>0.5</rhGuitarFingeringFramePadding>
+      <rhGuitarFingeringFrameWidth>0.2</rhGuitarFingeringFrameWidth>
+      <rhGuitarFingeringFrameRound>25</rhGuitarFingeringFrameRound>
+      <partInstrumentFramePadding>0.5</partInstrumentFramePadding>
+      <partInstrumentFrameWidth>0.2</partInstrumentFrameWidth>
+      <partInstrumentFrameRound>25</partInstrumentFrameRound>
+      <dynamicsFontStyle>0</dynamicsFontStyle>
+      <tempoFramePadding>0.5</tempoFramePadding>
+      <tempoFrameWidth>0.2</tempoFrameWidth>
+      <tempoFrameRound>25</tempoFrameRound>
+      <systemFramePadding>0.5</systemFramePadding>
+      <systemFrameWidth>0.2</systemFrameWidth>
+      <systemFrameRound>25</systemFrameRound>
+      <staffAlign>left,top</staffAlign>
+      <staffPosAbove x="0" y="-4"/>
+      <staffFramePadding>0.5</staffFramePadding>
+      <staffFrameWidth>0.2</staffFrameWidth>
+      <staffFrameRound>25</staffFrameRound>
+      <repeatLeftFramePadding>0.5</repeatLeftFramePadding>
+      <repeatLeftFrameWidth>0.2</repeatLeftFrameWidth>
+      <repeatLeftFrameRound>25</repeatLeftFrameRound>
+      <repeatRightFramePadding>0.5</repeatRightFramePadding>
+      <repeatRightFrameWidth>0.2</repeatRightFrameWidth>
+      <repeatRightFrameRound>25</repeatRightFrameRound>
+      <Spatium>1.764</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2013-09-17</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">X11</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument>
+        <shortName>
+<html><head><meta name="qrichtext" content="1"></meta><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body><p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Pno.</p></body></html></shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>70</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>40</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <!-- Measure 1 -->
+      <Measure>
+        <voice>
+          <TimeSig>
+            <lid>0</lid>
+            <linkedMain/>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 1 -->
+      <Measure len="28/4">
+        <multiMeasureRest>7</multiMeasureRest>
+        <voice>
+          <TimeSig>
+            <lid>0</lid>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>28/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 2 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 3 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 4 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 5 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 6 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 7 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 8 -->
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            </BarLine>
+          </voice>
+        </Measure>
+      <!-- Measure 9 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 9 -->
+      <Measure>
+        <multiMeasureRest>1</multiMeasureRest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 10 -->
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <!-- Measure 11 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 11 -->
+      <Measure len="40/4">
+        <multiMeasureRest>10</multiMeasureRest>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>40/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            <lid>1</lid>
+            <linkedMain/>
+            </BarLine>
+          </voice>
+        </Measure>
+      <!-- Measure 12 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 13 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 14 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 15 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 16 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 17 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 18 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 19 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 20 -->
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>double</subtype>
+            <lid>1</lid>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
+            </BarLine>
+          </voice>
+        </Measure>
+      <!-- Measure 21 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 21 -->
+      <Measure len="24/4">
+        <multiMeasureRest>6</multiMeasureRest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>24/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 22 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 23 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 24 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 25 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 26 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 27 -->
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <!-- Measure 28 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 28 -->
+      <Measure len="8/4">
+        <multiMeasureRest>2</multiMeasureRest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>8/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 29 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 30 -->
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <!-- Measure 31 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 31 -->
+      <Measure len="32/4">
+        <multiMeasureRest>8</multiMeasureRest>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>16/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 32 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 33 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 34 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 35 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 36 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 37 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <!-- Measure 38 -->
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
