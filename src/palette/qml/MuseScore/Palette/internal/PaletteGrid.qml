@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import QtQuick 2.8
-import QtQuick.Controls 2.0
+import QtQuick 2.15
 
 Canvas {
     property bool drawGrid: false
@@ -33,39 +31,52 @@ Canvas {
 
     property color gridColor: ui.theme.strokeColor
 
-    onVisibleChanged: {
-        if (visible)
+    onGridColorChanged: {
+        if (visible) {
             requestPaint();
+        }
+    }
+
+    onVisibleChanged: {
+        if (visible) {
+            requestPaint();
+        }
     }
 
     onEnabledChanged: {
-        if (visible)
+        if (visible) {
             requestPaint();
+        }
     }
 
     onDrawGridChanged: {
-        if (visible)
+        if (visible) {
             requestPaint();
+        }
     }
 
     onOffsetXChanged: {
-        if (visible && drawGrid)
+        if (visible && drawGrid) {
             requestPaint();
+        }
     }
 
     onOffsetYChanged: {
-        if (visible && drawGrid)
+        if (visible && drawGrid) {
             requestPaint();
+        }
     }
 
     onCellWidthChanged: {
-        if (visible && drawGrid)
+        if (visible && drawGrid) {
             requestPaint();
+        }
     }
 
     onCellHeightChanged: {
-        if (visible && drawGrid)
+        if (visible && drawGrid) {
             requestPaint();
+        }
     }
 
     function doDrawGrid(ctx) {
