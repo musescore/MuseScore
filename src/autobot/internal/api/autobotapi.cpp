@@ -72,6 +72,12 @@ void AutobotApi::sleep(int msec)
     loop.exec();
 }
 
+void AutobotApi::waitPopup()
+{
+    //! NOTE We could do it smartly, check a current popup actually opened, but or just sleep some time
+    sleep(500);
+}
+
 void AutobotApi::setInterval(int msec)
 {
     m_intervalMsec = msec;
