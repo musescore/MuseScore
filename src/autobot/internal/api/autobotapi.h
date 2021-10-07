@@ -26,6 +26,7 @@
 #include <QEventLoop>
 
 #include "apiobject.h"
+#include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "project/iprojectfilescontroller.h"
@@ -33,7 +34,7 @@
 #include "iinteractive.h"
 
 namespace mu::api {
-class AutobotApi : public ApiObject
+class AutobotApi : public ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -45,7 +46,7 @@ public:
     explicit AutobotApi(IApiEngine* e);
 
     Q_INVOKABLE void setInterval(int msec);
-    Q_INVOKABLE void runTestCase(QJSValue testCase);
+    Q_INVOKABLE void runTestCase(const QJSValue& testCase);
 
     Q_INVOKABLE bool openProject(const QString& name);
 
@@ -53,6 +54,7 @@ public:
     Q_INVOKABLE bool pause();
     Q_INVOKABLE void sleep(int msec = -1);
     Q_INVOKABLE void waitPopup();
+    Q_INVOKABLE void async(const QJSValue& func, const QJSValueList& args = QJSValueList());
 
 private:
 
