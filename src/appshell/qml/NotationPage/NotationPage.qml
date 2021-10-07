@@ -156,7 +156,7 @@ DockPage {
     ]
 
     panels: [
-        DockPanel {
+        DockPanelQml {
             id: palettesPanel
 
             objectName: pageModel.palettesPanelName()
@@ -175,7 +175,7 @@ DockPage {
             }
         },
 
-        DockPanel {
+        DockPanelQml {
             id: instrumentsPanel
 
             objectName: pageModel.instrumentsPanelName()
@@ -198,7 +198,7 @@ DockPage {
             }
         },
 
-        DockPanel {
+        DockPanelQml {
             id: inspectorPanel
 
             objectName: pageModel.inspectorPanelName()
@@ -217,7 +217,7 @@ DockPage {
             }
         },
 
-        DockPanel {
+        DockPanelQml {
             id: selectionFilterPanel
 
             objectName: pageModel.selectionFiltersPanelName()
@@ -242,7 +242,7 @@ DockPage {
         // Horizontal Panels
         // =============================================
 
-        DockPanel {
+        DockPanelQml {
             id: mixerPanel
 
             objectName: pageModel.mixerPanelName()
@@ -260,17 +260,14 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
-            Loader {
-                asynchronous: true
-                sourceComponent: MixerPanel {
-                    Component.onCompleted: {
-                        mixerPanel.contextMenuModel = contextMenuModel
-                    }
+            MixerPanel {
+                Component.onCompleted: {
+                    mixerPanel.contextMenuModel = contextMenuModel
                 }
             }
         },
 
-        DockPanel {
+        DockPanelQml {
             id: pianoRollPanel
 
             objectName: pageModel.pianoPanelName()
@@ -299,7 +296,7 @@ DockPage {
             }
         },
 
-        DockPanel {
+        DockPanelQml {
             id: timelinePanel
 
             objectName: pageModel.timelinePanelName()
@@ -315,12 +312,10 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
-            Timeline {
-                anchors.fill: parent
-            }
+            Timeline {}
         },
 
-        DockPanel {
+        DockPanelQml {
             id: drumsetPanel
 
             objectName: pageModel.drumsetPanelName()
@@ -331,9 +326,7 @@ DockPage {
             minimumHeight: 30
             maximumHeight: 30
 
-            DrumsetPanel {
-                anchors.fill: parent
-            }
+            DrumsetPanel {}
         }
     ]
 

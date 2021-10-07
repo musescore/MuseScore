@@ -77,7 +77,7 @@ public:
 
     bool isOpen() const;
     void open();
-    void close();
+    void close(bool unloadContent = false);
 
     DockLocation location() const;
 
