@@ -315,13 +315,30 @@ const std::set<INavigationSection*>& NavigationController::sections() const
     return m_sections;
 }
 
+void NavigationController::setIsResetOnMousePress(bool arg)
+{
+    m_isResetOnMousePress = arg;
+}
+
+void NavigationController::resetActiveIfNeed(QObject* watched)
+{
+    if (!m_isResetOnMousePress) {
+        return;
+    }
+
+#ifdef BUILD_DIAGNOSTICS
+    if (diagnostics::isDiagnosticHierarchy(watched)) {
+        return;
+    }
+#endif
+
+    resetActive();
+}
+
 bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
-#ifdef BUILD_DIAGNOSTICS
-        if (!diagnostics::isDiagnosticHierarchy(watched))
-#endif
-        resetActive();
+        resetActiveIfNeed(watched);
     }
 
     return QObject::eventFilter(watched, event);
@@ -420,7 +437,12 @@ void NavigationController::doActivatePanel(INavigationPanel* panel)
             ctrlIndex.row = idxVal.at(0).toInt();
             ctrlIndex.column = idxVal.at(1).toInt();
             control = findByIndex(panel->controls(), ctrlIndex);
-            IF_ASSERT_FAILED(control) {
+            if (!control) {
+                bool isOptional = event->data.value("controlOptional").toBool();
+                if (!isOptional) {
+                    IF_ASSERT_FAILED(control) {
+                    }
+                }
             }
         }
     }

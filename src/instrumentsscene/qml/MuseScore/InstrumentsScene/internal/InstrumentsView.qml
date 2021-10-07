@@ -58,6 +58,8 @@ Item {
         onNavigationEvent: {
             if (event.type === NavigationEvent.AboutActive) {
                 event.setData("controlIndex", prv.currentItemNavigationIndex)
+                //! NOTE If we changed family, then control with saved index maybe not
+                event.setData("controlOptional", true)
             }
         }
     }

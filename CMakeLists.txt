@@ -82,6 +82,8 @@ option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" ON)
 option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
 # -----
 
+option(UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
+
 option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
 
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis

@@ -36,6 +36,7 @@
 #include "popupwindow/popupwindow_qquickview.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu::uicomponents;
 
@@ -161,6 +162,9 @@ void PopupView::open()
         }
         qWindow->setTitle(m_title);
         qWindow->setModality(m_modal ? Qt::ApplicationModal : Qt::NonModal);
+#ifdef UI_DISABLE_MODALITY
+        qWindow->setModality(Qt::NonModal);
+#endif
 
         QRect winRect = m_window->geometry();
         qWindow->setMinimumSize(winRect.size());

@@ -113,7 +113,7 @@ mu::RetVal<mu::io::paths> Autobot::filesList() const
 {
     using namespace mu::system;
 
-    io::path filesPath = configuration()->filesPath();
+    io::path filesPath = configuration()->testingFilesPath();
     LOGI() << "filesPath: " << filesPath;
     RetVal<io::paths> paths = fileSystem()->scanFiles(filesPath, QStringList(), IFileSystem::ScanMode::OnlyCurrentDir);
     return paths;
