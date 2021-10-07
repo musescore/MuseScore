@@ -62,7 +62,7 @@ DockPage {
     }
 
     panels: [
-        DockPanel {
+        DockPanelQml {
             id: devtoolsPanel
 
             objectName: "devtoolsPanel"

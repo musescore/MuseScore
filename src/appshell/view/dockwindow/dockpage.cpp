@@ -217,7 +217,8 @@ void DockPage::setDockOpen(const QString& dockName, bool open)
     if (open) {
         dock->open();
     } else {
-        dock->close();
+        constexpr bool UNLOAD_CONTENT = true;
+        dock->close(UNLOAD_CONTENT);
     }
 }
 
