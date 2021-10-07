@@ -40,6 +40,7 @@ public:
     explicit BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     Q_INVOKABLE void applySpanPreset(const int presetType);
+    Q_INVOKABLE void setSpanIntervalAsStaffDefault();
 
     void createProperties() override;
     void requestElements() override;

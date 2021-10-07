@@ -116,6 +116,11 @@ Column {
             titleText: qsTrc("inspector", "Span from")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom : null
 
+            decimals: 0
+            step: 1
+            minValue: -4
+            maxValue: 99
+
             navigationName: "SpanFrom"
             navigationPanel: root.navigationPanel
             navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
@@ -130,6 +135,11 @@ Column {
             titleText: qsTrc("inspector", "Span to")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo : null
 
+            decimals: 0
+            step: 1
+            minValue: -99
+            maxValue: 99
+
             navigationName: "SpanTo"
             navigationPanel: root.navigationPanel
             navigationRowStart: spanFrom.navigationRowEnd + 1
@@ -137,26 +147,19 @@ Column {
     }
 
     FlatButton {
-        id: applyToAllStaffsButton
+        id: setAsStaffDefaultButton
         width: parent.width
 
-        text: qsTrc("inspector", "Apply to all staffs")
+        text: qsTrc("inspector", "Set as staff default")
 
         enabled: root.barlineSettingsModel
-                 && !root.barlineSettingsModel.spanFrom.isUndefined
-                 && !root.barlineSettingsModel.spanTo.isUndefined
 
-        navigation.name: "ApplyToAllStaffs"
+        navigation.name: "SetAsStaffDefault"
         navigation.panel: root.navigationPanel
         navigation.row: spanTo.navigationRowEnd + 1
 
         onClicked: {
-            if (!root.staffSettingsModel || !root.barlineSettingsModel) {
-                return
-            }
-
-            root.staffSettingsModel.barlinesSpanFrom.value = barlineSettingsModel.spanFrom.currentValue
-            root.staffSettingsModel.barlinesSpanTo.value = barlineSettingsModel.spanTo.currentValue
+            root.barlineSettingsModel.setSpanIntervalAsStaffDefault()
         }
     }
 
@@ -184,7 +187,7 @@ Column {
 
                 navigation.name: "Default"
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToAllStaffsButton.navigation.row + 1
+                navigation.row: setAsStaffDefaultButton.navigation.row + 1
                 navigation.accessible.name: spanPresetsLabel.text + " " + text
 
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_DEFAULT) }
@@ -196,7 +199,7 @@ Column {
 
                 navigation.name: "Tick1"
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToAllStaffsButton.navigation.row + 2
+                navigation.row: setAsStaffDefaultButton.navigation.row + 2
                 navigation.accessible.name: spanPresetsLabel.text + " " + text
 
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_1) }
@@ -208,7 +211,7 @@ Column {
 
                 navigation.name: "Tick2"
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToAllStaffsButton.navigation.row + 3
+                navigation.row: setAsStaffDefaultButton.navigation.row + 3
                 navigation.accessible.name: spanPresetsLabel.text + " " + text
 
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_2) }
@@ -225,7 +228,7 @@ Column {
 
                 navigation.name: "Short1"
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToAllStaffsButton.navigation.row + 4
+                navigation.row: setAsStaffDefaultButton.navigation.row + 4
                 navigation.accessible.name: spanPresetsLabel.text + " " + text
 
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_1) }
@@ -237,7 +240,7 @@ Column {
 
                 navigation.name: "Short2"
                 navigation.panel: root.navigationPanel
-                navigation.row: applyToAllStaffsButton.navigation.row + 5
+                navigation.row: setAsStaffDefaultButton.navigation.row + 5
                 navigation.accessible.name: spanPresetsLabel.text + " " + text
 
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_SHORT_2) }

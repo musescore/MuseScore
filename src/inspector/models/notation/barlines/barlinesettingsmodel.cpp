@@ -116,6 +116,36 @@ void BarlineSettingsModel::applySpanPreset(const int presetType)
     }
 }
 
+void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
+{
+    undoStack()->prepareChanges();
+
+    std::vector<Ms::EngravingItem*> staves;
+
+    for (Ms::EngravingItem* item : m_elementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        Ms::BarLine* barline = Ms::toBarLine(item);
+        Ms::Staff* staff = barline->staff();
+
+        if (std::find(staves.cbegin(), staves.cend(), staff) == staves.cend()) {
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
+            staves.push_back(staff);
+        }
+
+        if (barline->barLineType() == Ms::BarLineType::NORMAL) {
+            barline->setGenerated(true);
+        }
+    }
+
+    undoStack()->commitChanges();
+    updateNotation();
+}
+
 PropertyItem* BarlineSettingsModel::type() const
 {
     return m_type;
