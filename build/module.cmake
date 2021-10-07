@@ -112,6 +112,7 @@ target_include_directories(${MODULE} PUBLIC
 
 target_compile_definitions(${MODULE} PUBLIC
     ${MODULE_DEF}
+    PROJECT_ROOT_DIR="${PROJECT_ROOT_DIR}"
     ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
 )
 
