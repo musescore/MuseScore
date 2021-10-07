@@ -52,6 +52,7 @@ public:
     Q_INVOKABLE void abort();
     Q_INVOKABLE bool pause();
     Q_INVOKABLE void sleep(int msec = -1);
+    Q_INVOKABLE void waitPopup();
 
 private:
 
