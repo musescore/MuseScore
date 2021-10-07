@@ -96,6 +96,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/navigationapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp

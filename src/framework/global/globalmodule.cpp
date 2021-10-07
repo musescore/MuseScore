@@ -43,6 +43,8 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
+#include "config.h"
+
 using namespace mu::framework;
 using namespace mu::modularity;
 
