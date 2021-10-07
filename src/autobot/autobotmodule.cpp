@@ -44,6 +44,7 @@
 #include "internal/api/dispatcherapi.h"
 #include "internal/api/navigationapi.h"
 #include "internal/api/contextapi.h"
+#include "internal/api/shortcutsapi.h"
 
 using namespace mu::autobot;
 using namespace mu::api;
@@ -87,6 +88,7 @@ void AutobotModule::resolveImports()
         api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
         api->regApiCreator("actions", "api.dispatcher", new ApiCreator<DispatcherApi>());
         api->regApiCreator("ui", "api.navigation", new ApiCreator<NavigationApi>());
+        api->regApiCreator("shortcuts", "api.shortcuts", new ApiCreator<ShortcutsApi>());
     }
 }
 

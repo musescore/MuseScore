@@ -64,6 +64,13 @@ function main()
 
                 // Open menu "+" and so on
             }},
+            {name: "Undo", func: function() {
+
+                // To perform undo with a shortcut, the UI context must be "NotationFocused", so go to notation for focused it
+                api.navigation.goToControl("NotationView", "NotationViewTabs", "NotationTab0")
+
+                api.shortcuts.activate("Ctrl+Z")
+            }},
             {name: "Play", func: function() {
                 // api.dispatcher.dispatch("play")
 
