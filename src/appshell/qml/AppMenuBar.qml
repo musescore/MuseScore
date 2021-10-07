@@ -63,6 +63,7 @@ ListView {
         property var item: Boolean(modelData) ? modelData : null
 
         narrowMargins: true
+        drawFocusBorderInsideRect: true
 
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened

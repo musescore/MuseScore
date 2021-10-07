@@ -98,6 +98,7 @@ Rectangle {
             FlatButton {
                 icon: IconCode.MINUS
                 transparent: true
+                drawFocusBorderInsideRect: true
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel
@@ -112,6 +113,7 @@ Rectangle {
             FlatButton {
                 icon: IconCode.SPLIT_OUT_ARROWS
                 transparent: true
+                drawFocusBorderInsideRect: true
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel
@@ -127,6 +129,7 @@ Rectangle {
                 icon: IconCode.CLOSE_X_ROUNDED
                 transparent: true
                 hoverHitColor: "red"
+                drawFocusBorderInsideRect: true
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel

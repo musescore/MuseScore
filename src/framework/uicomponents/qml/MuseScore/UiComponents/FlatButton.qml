@@ -48,6 +48,8 @@ FocusScope {
     property real margins: narrowMargins ? 12 : 16
     property real minWidth: narrowMargins ? 24 : 132
 
+    property bool drawFocusBorderInsideRect: false
+
     property int orientation: Qt.Vertical
     readonly property bool isVertical: root.orientation === Qt.Vertical
 
@@ -108,7 +110,10 @@ FocusScope {
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
 
-            NavigationFocusBorder { navigationCtrl: navCtrl }
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+                drawOutsideParent: !root.drawFocusBorderInsideRect
+            }
 
             states: [
                 State {
