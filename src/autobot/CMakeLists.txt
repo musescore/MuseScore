@@ -76,8 +76,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdrawcompstep.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abdiffdrawstep.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/abscriptengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/scriptengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/scriptengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/jsmoduleloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scripts/jsmoduleloader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.cpp

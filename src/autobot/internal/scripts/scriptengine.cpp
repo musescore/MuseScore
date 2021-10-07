@@ -19,7 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "abscriptengine.h"
+#include "scriptengine.h"
+
+#include "jsmoduleloader.h"
 
 #include "log.h"
 
@@ -27,43 +29,107 @@ using namespace mu;
 using namespace mu::autobot;
 using namespace mu::api;
 
-AbScriptEngine::AbScriptEngine()
+ScriptEngine::ScriptEngine()
 {
     m_engine = new QJSEngine();
     m_api = new ScriptApi(this, m_engine);
 
     m_engine->globalObject().setProperty("api", newQObject(m_api));
+
+    m_moduleLoader = new JsModuleLoader(m_engine);
+    m_moduleLoader->pushEngine(this);
+    QJSValue loaderObj = newQObject(m_moduleLoader);
+    QJSValue requireFn = loaderObj.property("require");
+    m_engine->globalObject().setProperty("require", requireFn);
+    m_engine->globalObject().setProperty("exports", m_engine->newObject());
+    m_engine->globalObject().setProperty("module", loaderObj);
 }
 
-AbScriptEngine::~AbScriptEngine()
+ScriptEngine::ScriptEngine(ScriptEngine* engine)
+    : m_engine(engine->m_engine), m_api(engine->m_api), m_moduleLoader(engine->m_moduleLoader), m_isRequireMode(true)
 {
-    delete m_engine;
+    m_moduleLoader->pushEngine(this);
 }
 
-void AbScriptEngine::setScriptPath(const io::path& arg)
+ScriptEngine::~ScriptEngine()
+{
+    m_moduleLoader->popEngine();
+
+    if (!m_isRequireMode) {
+        delete m_moduleLoader;
+        delete m_api;
+        delete m_engine;
+    }
+}
+
+void ScriptEngine::setScriptPath(const io::path& arg)
 {
     m_scriptPath = arg;
 }
 
-io::path AbScriptEngine::scriptPath() const
+io::path ScriptEngine::scriptPath() const
 {
     return m_scriptPath;
 }
 
-Ret AbScriptEngine::call(const QString& funcName, QJSValue* retVal)
+QJSValue ScriptEngine::require(const QString& filePath)
+{
+    TRACEFUNC;
+
+    RetVal<QByteArray> data = readScriptContent(filePath);
+    if (!data.ret) {
+        LOGE() << "failed read file, err: " << data.ret.toString() << ", file: " << filePath;
+        return QJSValue();
+    }
+
+    QByteArray content = QByteArray("(function() { \n") + data.val + QByteArray("}());");
+
+    ScriptEngine requireEngine(this);
+    requireEngine.setScriptPath(filePath);
+    RetVal<QJSValue> val = requireEngine.evaluateContent(content, filePath);
+    if (!val.ret) {
+        LOGE() << "failed evaluate content ret:" << val.ret.toString();
+        return QJSValue();
+    }
+
+    QJSValue exports = requireEngine.globalProperty("exports");
+    return exports;
+}
+
+void ScriptEngine::setGlobalProperty(const QString& name, const QJSValue& val)
+{
+    m_engine->globalObject().setProperty(name, val);
+}
+
+QJSValue ScriptEngine::globalProperty(const QString& name) const
+{
+    return m_engine->globalObject().property(name);
+}
+
+QJSValue ScriptEngine::exports() const
+{
+    return globalProperty("exports");
+}
+
+void ScriptEngine::setExports(const QJSValue& obj)
+{
+    setGlobalProperty("exports", obj);
+}
+
+Ret ScriptEngine::call(const QString& funcName, QJSValue* retVal)
 {
     CallData data;
     Ret ret = doCall(funcName, data, retVal);
     return ret;
 }
 
-Ret AbScriptEngine::call(const QString& funcName, const CallData& data, QJSValue* retVal)
+Ret ScriptEngine::call(const QString& funcName, const CallData& data, QJSValue* retVal)
 {
     Ret ret = doCall(funcName, data, retVal);
     return ret;
 }
 
-Ret AbScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue* retVal)
+Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue* retVal)
 {
     TRACEFUNC;
 
@@ -129,13 +195,13 @@ Ret AbScriptEngine::doCall(const QString& funcName, const CallData& data, QJSVal
     return ret;
 }
 
-RetVal<QByteArray> AbScriptEngine::readScriptContent(const io::path& scriptPath) const
+RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path& scriptPath) const
 {
     TRACEFUNC;
     return fileSystem()->readFile(scriptPath);
 }
 
-RetVal<QJSValue> AbScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path& filePath)
+RetVal<QJSValue> ScriptEngine::evaluateContent(const QByteArray& fileContent, const io::path& filePath)
 {
     TRACEFUNC;
     RetVal<QJSValue> rv;
@@ -144,7 +210,7 @@ RetVal<QJSValue> AbScriptEngine::evaluateContent(const QByteArray& fileContent, 
     return rv;
 }
 
-Ret AbScriptEngine::jsValueToRet(const QJSValue& val) const
+Ret ScriptEngine::jsValueToRet(const QJSValue& val) const
 {
     TRACEFUNC;
     if (val.isError()) {
@@ -159,7 +225,7 @@ Ret AbScriptEngine::jsValueToRet(const QJSValue& val) const
     return Ret(Ret::Code::Ok);
 }
 
-QJSValue AbScriptEngine::newQObject(QObject* o)
+QJSValue ScriptEngine::newQObject(QObject* o)
 {
     if (!o->parent()) {
         o->setParent(m_engine);

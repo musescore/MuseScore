@@ -57,5 +57,9 @@ mu::io::path AutobotConfiguration::reportsPath() const
 
 mu::io::path AutobotConfiguration::scriptsPath() const
 {
-    return io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    io::path p = io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    if (p.empty()) {
+        p = io::path(QString(PROJECT_ROOT_DIR) + "/test_scripts");
+    }
+    return p;
 }

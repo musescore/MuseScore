@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABSCRIPTENGINE_H
-#define MU_AUTOBOT_ABSCRIPTENGINE_H
+#ifndef MU_AUTOBOT_SCRIPTENGINE_H
+#define MU_AUTOBOT_SCRIPTENGINE_H
 
 #include <QString>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QVariantMap>
+#include <QByteArray>
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
@@ -35,12 +36,13 @@
 #include "../api/scriptapi.h"
 
 namespace mu::autobot {
-class AbScriptEngine : public api::IApiEngine
+class JsModuleLoader;
+class ScriptEngine : public api::IApiEngine
 {
     INJECT(autobot, system::IFileSystem, fileSystem)
 public:
-    AbScriptEngine();
-    ~AbScriptEngine();
+    ScriptEngine();
+    ~ScriptEngine();
 
     struct CallData {
         QVariantMap context;
@@ -53,15 +55,25 @@ public:
     Ret call(const QString& funcName, QJSValue* retVal = nullptr);
     Ret call(const QString& funcName, const CallData& data, QJSValue* retVal = nullptr);
 
+    // js modules
+    QJSValue require(const QString& filePath);
+    QJSValue exports() const;
+    void setExports(const QJSValue& obj);
+
     // IApiEngine
     QJSValue newQObject(QObject* o) override;
 
 private:
 
+    ScriptEngine(ScriptEngine* engine);
+
     RetVal<QByteArray> readScriptContent(const io::path& scriptPath) const;
     RetVal<QJSValue> evaluateContent(const QByteArray& fileContent, const io::path& filePath);
     Ret jsValueToRet(const QJSValue& val) const;
     Ret doCall(const QString& funcName, const CallData& data, QJSValue* retVal);
+
+    void setGlobalProperty(const QString& name, const QJSValue& val);
+    QJSValue globalProperty(const QString& name) const;
 
     struct FuncData {
         QString funcName;
@@ -70,10 +82,12 @@ private:
 
     QJSEngine* m_engine = nullptr;
     api::ScriptApi* m_api = nullptr;
+    JsModuleLoader* m_moduleLoader = nullptr;
+    bool m_isRequireMode = false;
     io::path m_scriptPath;
     QByteArray m_lastEvalScript;
     FuncData m_lastCallFunc;
 };
 }
 
-#endif // MU_AUTOBOT_ABSCRIPTENGINE_H
+#endif // MU_AUTOBOT_SCRIPTENGINE_H
