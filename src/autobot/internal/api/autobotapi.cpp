@@ -40,6 +40,25 @@ bool AutobotApi::openProject(const QString& name)
     return ret;
 }
 
+void AutobotApi::abort()
+{
+    m_abort = true;
+}
+
+bool AutobotApi::pause()
+{
+    using namespace mu::framework;
+    IInteractive::Result res = interactive()->question("Pause", "Continue?",
+                                                       { IInteractive::Button::Continue, IInteractive::Button::Abort });
+
+    if (res.standardButton() == IInteractive::Button::Abort) {
+        abort();
+        return false;
+    }
+
+    return true;
+}
+
 void AutobotApi::sleep(int msec)
 {
     if (msec < 0) {
@@ -60,6 +79,7 @@ void AutobotApi::setInterval(int msec)
 
 void AutobotApi::runTestCase(QJSValue testCase)
 {
+    m_abort = false;
     m_testCase.testCase = testCase;
     m_testCase.steps = testCase.property("steps");
     m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
@@ -74,6 +94,11 @@ void AutobotApi::runTestCase(QJSValue testCase)
 
 void AutobotApi::nextStep()
 {
+    if (m_abort) {
+        m_testCase.loop.quit();
+        return;
+    }
+
     m_testCase.currentStepIdx += 1;
 
     if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {

@@ -21,6 +21,8 @@
  */
 #include "scriptapi.h"
 
+#include "log.h"
+
 using namespace mu::api;
 
 ScriptApi::ScriptApi(IApiEngine* engine, QObject* parent)
@@ -34,12 +36,19 @@ QJSValue ScriptApi::api(const std::string& name) const
         return QJSValue();
     }
 
-    QJSValue val = m_apis.value(name);
-    if (!val.isUndefined()) {
-        return val;
+    Api a = m_apis.value(name);
+    if (!a.jsval.isUndefined()) {
+        return a.jsval;
     }
 
-    val = apiRegister()->createApi(name, m_engine);
-    m_apis[name] = val;
-    return val;
+    a.obj = apiRegister()->createApi(name, m_engine);
+    IF_ASSERT_FAILED(a.obj) {
+        return QJSValue();
+    }
+
+    a.jsval = m_engine->newQObject(a.obj);
+
+    m_apis[name] = a;
+
+    return a.jsval;
 }

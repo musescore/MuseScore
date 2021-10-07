@@ -90,6 +90,7 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::Apply:       return ButtonData(int(b), trc("ui", "Apply"));
     case IInteractive::Button::Reset:       return ButtonData(int(b), trc("ui", "Reset"));
     case IInteractive::Button::RestoreDefaults: return ButtonData(int(b), trc("ui", "Restore Defaults"));
+    case IInteractive::Button::Continue:    return ButtonData(int(b), trc("ui", "Continue"));
     case IInteractive::Button::CustomButton: return ButtonData(int(b), "");
     }
 

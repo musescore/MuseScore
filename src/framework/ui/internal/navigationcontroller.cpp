@@ -1052,6 +1052,11 @@ bool NavigationController::requestActivateByName(const std::string& sectName, co
     INavigationControl* control = findByName(panel->controls(), QString::fromStdString(controlName));
     if (!control) {
         LOGE() << "not found control with name: " << controlName << ", panel: " << panelName << ", section: " << sectName;
+        QString has = "has:\n";
+        for (const INavigationControl* c : panel->controls()) {
+            has += c->name() + "\n";
+        }
+        LOGI() << has;
         return false;
     }
 

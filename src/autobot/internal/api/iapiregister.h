@@ -22,10 +22,9 @@
 #ifndef MU_API_IAPIREGISTER_H
 #define MU_API_IAPIREGISTER_H
 
-#include <QJSValue>
-
 #include "modularity/imoduleexport.h"
 #include "iapiengine.h"
+#include "apiobject.h"
 
 namespace mu::api {
 class IApiRegister : MODULE_EXPORT_INTERFACE
@@ -36,17 +35,17 @@ public:
 
     struct ICreator {
         virtual ~ICreator() {}
-        virtual QJSValue create(IApiEngine* e) = 0;
+        virtual ApiObject* create(IApiEngine* e) = 0;
     };
 
     virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
-    virtual QJSValue createApi(const std::string& api, IApiEngine* e) const = 0;
+    virtual ApiObject* createApi(const std::string& api, IApiEngine* e) const = 0;
 };
 
 template<class T>
 struct ApiCreator : public IApiRegister::ICreator
 {
-    QJSValue create(IApiEngine* e) { return e->newQObject(new T(e)); }
+    ApiObject* create(IApiEngine* e) { return new T(e); }
 };
 }
 

@@ -19,12 +19,11 @@ function main()
             {name: "Select Piano", func: function() {
                 api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
                 api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
-
-
             }},
             {name: "Select Piano (apply)", func: function() {
                 api.navigation.goToControl("NewScoreDialog", "SelectPanel", "Select")
                 api.navigation.trigger()
+                api.autobot.pause()
 
             }},
             {name: "Done", func: function() {

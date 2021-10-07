@@ -37,6 +37,7 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue autobot READ autobot CONSTANT)
     Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
     Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
+    Q_PROPERTY(QJSValue context READ context CONSTANT)
 
     INJECT(api, IApiRegister, apiRegister)
 
@@ -47,13 +48,20 @@ public:
     QJSValue autobot() const { return api("api.autobot"); }
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
+    QJSValue context() const { return api("api.context"); }
 
 private:
 
     QJSValue api(const std::string& name) const;
 
+    struct Api
+    {
+        ApiObject* obj = nullptr;
+        QJSValue jsval;
+    };
+
     IApiEngine* m_engine = nullptr;
-    mutable QMap<std::string, QJSValue> m_apis;
+    mutable QMap<std::string, Api> m_apis;
 };
 }
 
