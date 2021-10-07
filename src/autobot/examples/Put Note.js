@@ -10,7 +10,7 @@ function main()
 
                 api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
                 // wait popup open
-                api.autobot.sleep(500)
+                api.autobot.waitPopup()
                 // New become automatically current, so just trigger
                 api.navigation.trigger()
             }},
@@ -44,7 +44,7 @@ function main()
 
                 api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
                 // wait popup open
-                api.autobot.sleep(500)
+                api.autobot.waitPopup()
                 // First item become automatically current, so just trigger
                 api.navigation.trigger()
 
@@ -63,6 +63,13 @@ function main()
                 // OR
 
                 // Open menu "+" and so on
+            }},
+            {name: "Undo", func: function() {
+
+                // To perform undo with a shortcut, the UI context must be "NotationFocused", so go to notation for focused it
+                api.navigation.goToControl("NotationView", "NotationViewTabs", "NotationTab0")
+
+                api.shortcuts.activate("Ctrl+Z")
             }},
             {name: "Play", func: function() {
                 // api.dispatcher.dispatch("play")
