@@ -962,10 +962,12 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     if (format.fontFamily() == "ScoreText") {
         if (t->parent() && t->isDynamic()) {
             family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
-            m = t->score()->styleV(Sid::dynamicsSymbolFontSize).toReal() * t->mag();
+            // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
+            m *= 2;
         } else if (t->parent() && t->isTempoText()) {
             family = t->score()->styleSt(Sid::MusicalTextFont);
-            m = t->score()->styleV(Sid::tempoSymbolFontSize).toReal();
+            // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
+            m *= 5.0 / 3.0;
         } else {
             family = t->score()->styleSt(Sid::MusicalTextFont);
         }
