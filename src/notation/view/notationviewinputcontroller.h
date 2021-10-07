@@ -113,7 +113,7 @@ private:
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    QPointF findZoomFocusPoint();
+    QPoint findZoomFocusPoint() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
     void setViewMode(const ViewMode& viewMode);
