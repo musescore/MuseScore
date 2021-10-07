@@ -855,18 +855,22 @@ QFont TextFragment::font(const TextBase* t) const
             if (t->parent() && t->isDynamic()) {
 #if 0 // no fontByName() in 3.x?
                   family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+                  //family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalTestFont).replace(" Text", ""))->family();
 #else
                   family = t->score()->styleSt(Sid::MusicalSymbolFont);
+                  //family = t->score()->styleSt(Sid::MusicalTextFont).replace(" Text", "");
                   if (family == "Emmentaler")
                         family = "MScore";
                   else if (family == "Gonville")
                         family = "Gootville";
 #endif
-                  m = t->score()->styleV(Sid::dynamicsSymbolFontSize).toReal() * t->mag();
+                  // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
+                  m *= 2;
                   }
             else if (t->parent() && t->isTempoText()) {
                   family = t->score()->styleSt(Sid::MusicalTextFont);
-                  m = t->score()->styleV(Sid::tempoSymbolFontSize).toReal();
+                  // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
+                  m *= 5.0 / 3.0;
                   }
             else {
                   family = t->score()->styleSt(Sid::MusicalTextFont);
