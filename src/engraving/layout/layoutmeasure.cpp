@@ -696,12 +696,8 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                         chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
                             c->setMag(m * score->styleD(Sid::graceNoteMag));
+                            c->setTrack(t);
                             c->computeUp();
-                            if (c->stemDirection() != Direction::AUTO) {
-                                c->setUp(c->stemDirection() == Direction::UP);
-                            } else {
-                                c->setUp(!(t % 2));
-                            }
                             if (drumset) {
                                 layoutDrumsetChord(c, drumset, st, score->spatium());
                             }
@@ -806,20 +802,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
     }
 
     for (Segment& s : measure->segments()) {
-        // TODO? maybe we do need to process it here to make it possible to enable later
-        //if (!s.enabled())
-        //      continue;
-        // DEBUG: relayout grace notes as beaming/flags may have changed
-        if (s.isChordRestType()) {
-            for (EngravingItem* e : s.elist()) {
-                if (e && e->isChord()) {
-                    Chord* chord = toChord(e);
-                    chord->layout();
-//                              if (chord->tremolo())            // debug
-//                                    chord->tremolo()->layout();
-                }
-            }
-        } else if (s.isEndBarLineType()) {
+        if (s.isEndBarLineType()) {
             continue;
         }
         s.createShapes();

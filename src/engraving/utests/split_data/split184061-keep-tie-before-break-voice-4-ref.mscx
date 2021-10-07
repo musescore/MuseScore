@@ -216,8 +216,8 @@
       <Measure len="63/128">
         <voice>
           <Beam>
-            <l1>-27</l1>
-            <l2>-27</l2>
+            <l1>-50</l1>
+            <l2>-50</l2>
             </Beam>
           <Chord>
             <dots>1</dots>
@@ -301,8 +301,8 @@
         <voice/>
         <voice>
           <Beam>
-            <l1>44</l1>
-            <l2>44</l2>
+            <l1>80</l1>
+            <l2>80</l2>
             </Beam>
           <Chord>
             <durationType>128th</durationType>

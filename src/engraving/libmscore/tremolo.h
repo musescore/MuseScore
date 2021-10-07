@@ -63,7 +63,7 @@ class Tremolo final : public EngravingItem
 
     mu::PainterPath basePath() const;
     void computeShape();
-    void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
+    void layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium);
     void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
 
 public:

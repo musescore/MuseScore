@@ -30,6 +30,7 @@
 
 #include <set>
 #include <functional>
+#include <vector>
 
 #include "infrastructure/draw/color.h"
 #include "chordrest.h"
@@ -90,6 +91,11 @@ class Chord final : public ChordRest
     qreal _spaceLw;
     qreal _spaceRw;
 
+    qreal _defaultStemLength;
+    qreal _minStemLength;
+
+    bool _isUiItem = false;
+
     QVector<Articulation*> _articulations;
 
     friend class mu::engraving::Factory;
@@ -108,6 +114,19 @@ class Chord final : public ChordRest
 
     bool shouldHaveStem() const;
     bool shouldHaveHook() const;
+
+    void createStem();
+    void removeStem();
+    void createHook();
+    void layoutHook();
+
+    qreal stemLengthBeamAddition() const;
+    qreal maxReduction(int extensionOutsideStaff) const;
+    qreal stemOpticalAdjustment(qreal stemEndPosition) const;
+    qreal calcMinStemLength();
+    qreal calcDefaultStemLength();
+
+    bool computeUpContext();
 
 public:
 
@@ -136,10 +155,14 @@ public:
     void setStemDirection(Direction d, Direction beamDir = Direction::AUTO);
     Direction stemDirection() const { return _stemDirection; }
 
+    void setIsUiItem(bool val) { _isUiItem = val; }
+
     LedgerLine* ledgerLines() { return _ledgerLines; }
 
-    qreal defaultStemLength() const;
-    qreal minAbsStemLength() const;
+    qreal defaultStemLength() const { return _defaultStemLength; }
+    qreal minStemLength() const { return _minStemLength; }
+    void setBeamExtension(qreal extension);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook);
 
     void layoutStem();
     void layoutArpeggio2();
@@ -157,6 +180,7 @@ public:
     Note* downNote() const;
     int upString() const;
     int downString() const;
+    std::vector<int> noteDistances() const;
 
     qreal maxHeadWidth() const;
 
@@ -212,6 +236,7 @@ public:
     void setTrack(int val) override;
 
     void computeUp() override;
+    static int computeAutoStemDirection(const std::vector<int>* noteDistances);
 
     qreal dotPosX() const;
 

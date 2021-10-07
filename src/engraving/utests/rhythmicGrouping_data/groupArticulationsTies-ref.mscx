@@ -90,8 +90,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>19</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -264,8 +264,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>18</l1>
-            <l2>19</l2>
+            <l1>32</l1>
+            <l2>34</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

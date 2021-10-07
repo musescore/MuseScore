@@ -213,8 +213,8 @@
             <text>Compound: must expose 2 out of 3 divisions within a beat (similar to Simple Triple)</text>
             </StaffText>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <dots>1</dots>
@@ -296,8 +296,8 @@
             <text>Syncopation: allow simple rhythms to cross unstressed beats</text>
             </StaffText>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -344,8 +344,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -665,8 +665,8 @@
             <text>Incorrect</text>
             </StaffText>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <dots>1</dots>
@@ -772,8 +772,8 @@
             <text>Correct</text>
             </StaffText>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -820,8 +820,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -994,8 +994,8 @@
             <text>Alternative: beam over rests</text>
             </StaffText>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
