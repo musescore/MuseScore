@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "project/iprojectfilescontroller.h"
 #include "autobot/iautobotconfiguration.h"
+#include "iinteractive.h"
 
 namespace mu::api {
 class AutobotApi : public ApiObject
@@ -38,6 +39,7 @@ class AutobotApi : public ApiObject
 
     INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(api, project::IProjectFilesController, projectFilesController)
+    INJECT(api, framework::IInteractive, interactive)
 
 public:
     explicit AutobotApi(IApiEngine* e);
@@ -47,6 +49,8 @@ public:
 
     Q_INVOKABLE bool openProject(const QString& name);
 
+    Q_INVOKABLE void abort();
+    Q_INVOKABLE bool pause();
     Q_INVOKABLE void sleep(int msec = -1);
 
 private:
@@ -65,6 +69,7 @@ private:
 
     int m_intervalMsec = 1000;
     TestCase m_testCase;
+    bool m_abort = false;
 };
 }
 

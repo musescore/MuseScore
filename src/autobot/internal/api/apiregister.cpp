@@ -43,12 +43,12 @@ void ApiRegister::regApiCreator(const std::string& module, const std::string& ap
     m_creators[api] = ac;
 }
 
-QJSValue ApiRegister::createApi(const std::string& api, IApiEngine* e) const
+ApiObject* ApiRegister::createApi(const std::string& api, IApiEngine* e) const
 {
     auto it = m_creators.find(api);
     if (it == m_creators.end()) {
         LOGE() << "not registred creator for api:" << api;
-        return QJSValue();
+        return nullptr;
     }
     return it->second.c->create(e);
 }

@@ -60,6 +60,7 @@ public:
         Apply,
         Reset,
         RestoreDefaults,
+        Continue,
 
         CustomButton
     };

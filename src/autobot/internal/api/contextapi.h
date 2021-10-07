@@ -19,30 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIREGISTER_H
-#define MU_API_APIREGISTER_H
+#ifndef MU_API_CONTEXTAPI_H
+#define MU_API_CONTEXTAPI_H
 
-#include <map>
+#include <QJSValue>
+#include <QHash>
 
-#include "iapiregister.h"
+#include "apiobject.h"
 
 namespace mu::api {
-class ApiRegister : public IApiRegister
+class ContextApi : public ApiObject
 {
 public:
-    ApiRegister() = default;
+    explicit ContextApi(IApiEngine* e);
 
-    void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
-    ApiObject* createApi(const std::string& api, IApiEngine* e) const override;
+    Q_INVOKABLE QJSValue value(const QString& key) const;
+    Q_INVOKABLE void setValue(const QString& key, const QJSValue& value);
 
 private:
-    struct ApiCreator {
-        std::string module;
-        ICreator* c = nullptr;
-    };
 
-    std::map<std::string, ApiCreator> m_creators;
+    QHash<QString, QJSValue> m_values;
 };
 }
 
-#endif // MU_API_APIREGISTER_H
+#endif // MU_API_CONTEXTAPI_H
