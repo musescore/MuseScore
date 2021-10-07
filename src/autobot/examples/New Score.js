@@ -3,8 +3,10 @@ function main()
     var testCase = {
         name: "New Score",
         steps: [
-            {name: "Open Dialog", wait: false, func: function() {
-                api.dispatcher.dispatch("file-new")
+            {name: "Open Dialog", func: function() {
+                api.autobot.async(function() {
+                    api.dispatcher.dispatch("file-new")
+                })
             }},
             {name: "Select Flute", func: function() {
                 api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")

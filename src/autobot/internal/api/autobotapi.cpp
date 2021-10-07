@@ -23,6 +23,8 @@
 
 #include <QTimer>
 
+#include "async/async.h"
+
 #include "log.h"
 
 using namespace mu::api;
@@ -38,6 +40,54 @@ bool AutobotApi::openProject(const QString& name)
     io::path filePath = dir + "/" + name;
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;
+}
+
+void AutobotApi::setInterval(int msec)
+{
+    m_intervalMsec = msec;
+}
+
+void AutobotApi::runTestCase(const QJSValue& testCase)
+{
+    m_abort = false;
+    m_testCase.testCase = testCase;
+    m_testCase.steps = testCase.property("steps");
+    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
+    m_testCase.currentStepIdx = -1;
+
+    nextStep();
+
+    if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
+        m_testCase.loop.exec();
+    }
+}
+
+void AutobotApi::nextStep()
+{
+    if (m_abort) {
+        m_testCase.loop.quit();
+        return;
+    }
+
+    m_testCase.currentStepIdx += 1;
+
+    if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
+        return;
+    }
+
+    QTimer::singleShot(m_intervalMsec, [this]() {
+        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
+        QJSValue func = step.property("func");
+
+        func.call();
+
+        nextStep();
+
+        m_testCase.finishedCount += 1;
+        if (m_testCase.finishedCount == m_testCase.stepsCount) {
+            m_testCase.loop.quit();
+        }
+    });
 }
 
 void AutobotApi::abort()
@@ -78,58 +128,10 @@ void AutobotApi::waitPopup()
     sleep(500);
 }
 
-void AutobotApi::setInterval(int msec)
+void AutobotApi::async(const QJSValue& func, const QJSValueList& args)
 {
-    m_intervalMsec = msec;
-}
-
-void AutobotApi::runTestCase(QJSValue testCase)
-{
-    m_abort = false;
-    m_testCase.testCase = testCase;
-    m_testCase.steps = testCase.property("steps");
-    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
-    m_testCase.currentStepIdx = -1;
-
-    nextStep();
-
-    if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
-        m_testCase.loop.exec();
-    }
-}
-
-void AutobotApi::nextStep()
-{
-    if (m_abort) {
-        m_testCase.loop.quit();
-        return;
-    }
-
-    m_testCase.currentStepIdx += 1;
-
-    if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
-        return;
-    }
-
-    QTimer::singleShot(m_intervalMsec, [this]() {
-        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
-        QJSValue func = step.property("func");
-        QJSValue wait = step.property("wait");
-        bool isWait = wait.isUndefined() ? true : wait.toBool();
-
-        if (!isWait) {
-            nextStep();
-        }
-
-        func.call();
-
-        if (isWait) {
-            nextStep();
-        }
-
-        m_testCase.finishedCount += 1;
-        if (m_testCase.finishedCount == m_testCase.stepsCount) {
-            m_testCase.loop.quit();
-        }
+    async::Async::call(this, [func, args]() {
+        QJSValue mut_func = func;
+        mut_func.call(args);
     });
 }
