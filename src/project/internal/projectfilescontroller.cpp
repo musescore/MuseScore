@@ -42,9 +42,9 @@ void ProjectFilesController::init()
     dispatcher()->reg(this, "file-new", this, &ProjectFilesController::newProject);
     dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
 
-    dispatcher()->reg(this, "file-save", this, &ProjectFilesController::saveScore);
-    dispatcher()->reg(this, "file-save-as", this, &ProjectFilesController::saveScoreAs);
-    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectFilesController::saveScoreCopy);
+    dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
+    dispatcher()->reg(this, "file-save-as", this, &ProjectFilesController::saveProjectAs);
+    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectFilesController::saveProjectCopy);
     dispatcher()->reg(this, "file-save-selection", this, &ProjectFilesController::saveSelection);
     dispatcher()->reg(this, "file-save-online", this, &ProjectFilesController::saveOnline);
 
@@ -206,7 +206,7 @@ bool ProjectFilesController::closeOpenedProject()
         if (btn == IInteractive::Button::Cancel) {
             return false;
         } else if (btn == IInteractive::Button::Save) {
-            saveScore();
+            saveProject();
         }
     }
 
@@ -238,16 +238,21 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
     return result.standardButton();
 }
 
-void ProjectFilesController::saveScore()
+void ProjectFilesController::saveProject(const io::path& path)
 {
     if (!currentNotationProject()->created().val) {
         doSaveScore();
         return;
     }
 
-    io::path defaultFilePath = defaultSavingFilePath();
+    io::path filePath;
+    if (!path.empty()) {
+        filePath = path;
+    } else {
+        io::path defaultFilePath = defaultSavingFilePath();
+        filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
+    }
 
-    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     if (filePath.empty()) {
         return;
     }
@@ -259,7 +264,7 @@ void ProjectFilesController::saveScore()
     doSaveScore(filePath);
 }
 
-void ProjectFilesController::saveScoreAs()
+void ProjectFilesController::saveProjectAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
@@ -270,7 +275,7 @@ void ProjectFilesController::saveScoreAs()
     doSaveScore(selectedFilePath, SaveMode::SaveAs);
 }
 
-void ProjectFilesController::saveScoreCopy()
+void ProjectFilesController::saveProjectCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));

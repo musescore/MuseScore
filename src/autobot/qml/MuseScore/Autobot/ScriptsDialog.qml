@@ -28,8 +28,8 @@ StyledDialogView {
 
     title: "Autobot"
 
-    contentHeight: 800
-    contentWidth: 600
+    contentHeight: 600
+    contentWidth: 400
     resizable: true
 
     ScriptsPanel {

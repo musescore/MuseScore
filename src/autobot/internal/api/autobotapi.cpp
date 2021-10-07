@@ -22,6 +22,9 @@
 #include "autobotapi.h"
 
 #include <QTimer>
+#include <QFileInfo>
+#include <QDir>
+#include <QDateTime>
 
 #include "async/async.h"
 
@@ -36,10 +39,21 @@ AutobotApi::AutobotApi(IApiEngine* e)
 
 bool AutobotApi::openProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->filesPath();
+    io::path dir = autobotConfiguration()->testingFilesPath();
     io::path filePath = dir + "/" + name;
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;
+}
+
+void AutobotApi::saveProject(const QString& name)
+{
+    io::path dir = autobotConfiguration()->savingFilesPath();
+    if (!QFileInfo::exists(dir.toQString())) {
+        QDir().mkpath(dir.toQString());
+    }
+
+    io::path filePath = dir + "/" + QDateTime::currentDateTime().toString(Qt::ISODate) + "_" + name;
+    projectFilesController()->saveProject(filePath);
 }
 
 void AutobotApi::setInterval(int msec)
@@ -109,7 +123,7 @@ bool AutobotApi::pause()
     return true;
 }
 
-void AutobotApi::sleep(int msec)
+void AutobotApi::sleep(int msec) const
 {
     if (msec < 0) {
         msec = m_intervalMsec;
@@ -122,10 +136,15 @@ void AutobotApi::sleep(int msec)
     loop.exec();
 }
 
-void AutobotApi::waitPopup()
+void AutobotApi::waitPopup() const
 {
     //! NOTE We could do it smartly, check a current popup actually opened, but or just sleep some time
     sleep(500);
+}
+
+void AutobotApi::seeChanges(int msec)
+{
+    sleep(msec);
 }
 
 void AutobotApi::async(const QJSValue& func, const QJSValueList& args)
@@ -134,4 +153,11 @@ void AutobotApi::async(const QJSValue& func, const QJSValueList& args)
         QJSValue mut_func = func;
         mut_func.call(args);
     });
+}
+
+int AutobotApi::randomInt(int min, int max) const
+{
+    srand(time(nullptr)); // Seed the time
+    int val = rand() % (max - min + 1) + min;
+    return val;
 }

@@ -36,7 +36,8 @@ public:
 
     virtual io::path dataPath() const = 0;
 
-    virtual io::path filesPath() const = 0;
+    virtual io::path testingFilesPath() const = 0;
+    virtual io::path savingFilesPath() const = 0;
 
     virtual io::path drawDataPath() const = 0;
     virtual io::path fileDrawDataPath(const io::path& filePath) const = 0;

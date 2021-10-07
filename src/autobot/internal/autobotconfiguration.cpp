@@ -22,22 +22,34 @@
 #include "autobotconfiguration.h"
 
 #include <cstdlib>
+#include <QDir>
 
 using namespace mu::autobot;
 
 bool AutobotConfiguration::isConfigured() const
 {
-    return !dataPath().empty() && !filesPath().empty();
+    return !dataPath().empty() && !testingFilesPath().empty();
 }
 
 mu::io::path AutobotConfiguration::dataPath() const
 {
-    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    io::path p = io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    if (p.empty()) {
+        QDir projDir(QString(PROJECT_ROOT_DIR));
+        projDir.cdUp();
+        p = projDir.absolutePath() + "/mu_autobot_data";
+    }
+    return p;
 }
 
-mu::io::path AutobotConfiguration::filesPath() const
+mu::io::path AutobotConfiguration::testingFilesPath() const
 {
     return io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+}
+
+mu::io::path AutobotConfiguration::savingFilesPath() const
+{
+    return dataPath() + "/saving_files";
 }
 
 mu::io::path AutobotConfiguration::drawDataPath() const

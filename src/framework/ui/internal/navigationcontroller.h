@@ -63,6 +63,8 @@ public:
 
     async::Notification navigationChanged() const override;
 
+    void setIsResetOnMousePress(bool arg) override;
+
     void init();
 
 private:
@@ -100,10 +102,12 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
+    void resetActiveIfNeed(QObject* watched);
     void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
+    bool m_isResetOnMousePress = true;
 };
 }
 
