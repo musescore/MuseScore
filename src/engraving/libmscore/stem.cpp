@@ -69,11 +69,6 @@ bool Stem::up() const
     return chord() ? chord()->up() : true;
 }
 
-//! For beamed notes this is called twice. The final stem length
-//! can only be calculated after stretching of the measure. We
-//! need a guessed stem shape to calculate the minimal distance
-//! between segments. The guessed stem must have at least the
-//! right direction.
 void Stem::layout()
 {
     const bool up = this->up();

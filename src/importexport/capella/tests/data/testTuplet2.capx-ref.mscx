@@ -69,8 +69,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -143,8 +143,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -217,8 +217,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -312,8 +312,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -414,8 +414,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -499,8 +499,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -568,8 +568,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -659,8 +659,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -764,8 +764,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -883,8 +883,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -936,8 +936,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -990,8 +990,8 @@
             </Chord>
           <endTuplet/>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -1015,8 +1015,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -1064,8 +1064,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1187,8 +1187,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1233,8 +1233,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1314,8 +1314,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1410,8 +1410,8 @@
             </Chord>
           <endTuplet/>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -1462,8 +1462,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -1572,8 +1572,8 @@
             </Chord>
           <endTuplet/>
           <Beam>
-            <l1>8</l1>
-            <l2>8</l2>
+            <l1>16</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

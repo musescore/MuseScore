@@ -397,8 +397,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-9</l1>
-            <l2>-9</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -520,8 +520,8 @@
             <durationType>eighth</durationType>
             </Rest>
           <Beam>
-            <l1>20</l1>
-            <l2>24</l2>
+            <l1>42</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -989,8 +989,8 @@
                 </Note>
               </Chord>
             <Beam>
-              <l1>-9</l1>
-              <l2>-9</l2>
+              <l1>-16</l1>
+              <l2>-16</l2>
               </Beam>
             <Chord>
               <linked>
@@ -1135,8 +1135,8 @@
               <durationType>eighth</durationType>
               </Rest>
             <Beam>
-              <l1>20</l1>
-              <l2>24</l2>
+              <l1>42</l1>
+              <l2>44</l2>
               </Beam>
             <Chord>
               <linked>

@@ -88,8 +88,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -165,8 +165,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -232,8 +232,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -258,8 +258,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -302,8 +302,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -357,8 +357,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>38</l1>
+            <l2>38</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -383,8 +383,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -427,8 +427,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>20</l1>
-            <l2>20</l2>
+            <l1>40</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

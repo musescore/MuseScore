@@ -61,7 +61,7 @@
             </TimeSig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -92,8 +92,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-7</l2>
+            <l1>-6</l1>
+            <l2>-10</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -135,7 +135,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -166,8 +166,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -210,7 +210,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -241,8 +241,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -284,7 +284,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -315,8 +315,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -359,7 +359,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -390,8 +390,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -433,7 +433,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -464,8 +464,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -508,7 +508,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -539,8 +539,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -582,7 +582,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -613,8 +613,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -657,7 +657,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -688,8 +688,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -731,7 +731,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -762,8 +762,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -809,7 +809,7 @@
             </KeySig>
           <Beam>
             <l1>8</l1>
-            <l2>3</l2>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -840,8 +840,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-3</l1>
-            <l2>-3</l2>
+            <l1>-6</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

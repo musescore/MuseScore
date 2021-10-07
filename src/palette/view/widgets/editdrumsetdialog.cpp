@@ -595,7 +595,7 @@ void EditDrumsetDialog::updateExample()
     chord->setDurationType(TDuration::DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);
-    chord->setUp(up);
+    chord->setIsUiItem(true);
     Note* note = Factory::createNote(chord.get());
     note->setParent(chord.get());
     note->setTrack(v);

@@ -131,8 +131,8 @@
             <root>14</root>
             </Harmony>
           <Beam>
-            <l1>17</l1>
-            <l2>12</l2>
+            <l1>34</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -166,8 +166,8 @@
             <root>15</root>
             </Harmony>
           <Beam>
-            <l1>11</l1>
-            <l2>16</l2>
+            <l1>30</l1>
+            <l2>32</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -254,8 +254,8 @@
             <root>16</root>
             </Harmony>
           <Beam>
-            <l1>11</l1>
-            <l2>16</l2>
+            <l1>30</l1>
+            <l2>32</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -286,8 +286,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>17</l1>
-            <l2>12</l2>
+            <l1>34</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
