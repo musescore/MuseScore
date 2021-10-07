@@ -126,7 +126,7 @@ Rectangle {
             FlatButton {
                 icon: IconCode.CLOSE_X_ROUNDED
                 transparent: true
-                accentColor: "red"
+                hoverHitColor: "red"
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel
