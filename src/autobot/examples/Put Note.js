@@ -1,39 +1,50 @@
+var NewScore = require("steps/NewScore.js")
+
 function main()
 {
     var testCase = {
         name: "New Score and Put Note",
         steps: [
-            {name: "Open Dialog", wait: true, func: function() {
-                // api.dispatcher.dispatch("file-new")
+            {name: "Open Dialog", func: function() {
+//                api.dispatcher.dispatch("file-new")
 
-                // OR
+//                OR
 
-                api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
-                // wait popup open
-                api.autobot.waitPopup()
-                // New become automatically current, so just trigger
-                api.navigation.trigger()
+//                api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
+//                // wait popup open
+//                api.autobot.waitPopup()
+//                // New become automatically current, so just trigger
+//                api.navigation.trigger()
+
+//                OR
+                  // use New Score step module
+                  NewScore.openNewScoreDialog()
+
             }},
             {name: "Select Instruments", func: function() {
 
-                // Flute
-                api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
-                api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Flute")
-                api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+//                // Flute
+//                api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
+//                api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Flute")
+//                api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
 
-                // just for see changes
-                api.autobot.sleep(500)
+//                // just for see changes
+//                api.autobot.sleep(500)
 
-                // Piano
-                api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
-                api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
-                api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+//                // Piano
+//                api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
+//                api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
+//                api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
 
-                // just for see changes
-                api.autobot.sleep(500)
+//                // just for see changes
+//                api.autobot.sleep(500)
 
-                // Done
-                api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+//                // Done
+//                api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+
+                // OR
+                // use New Score step module
+                NewScore.сhooseFluteAndPiano();
 
             }},
             {name: "Note input mode", func: function() {
