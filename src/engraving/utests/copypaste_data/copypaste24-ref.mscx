@@ -96,8 +96,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-7</l1>
-            <l2>-7</l2>
+            <l1>-12</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -188,8 +188,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-7</l1>
-            <l2>-7</l2>
+            <l1>-12</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>

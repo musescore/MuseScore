@@ -70,12 +70,15 @@ protected:
     Beam* _beam;
     Beam::Mode _beamMode;
     bool _up;                             // actual stem direction
+    bool _usesAutoUp;
     bool m_isSmall;
     bool _melismaEnd;
 
     // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
     CrossMeasure _crossMeasure;           ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
     TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
+
+    void setUp(bool val) { _up = val; }
 
 public:
     ChordRest(const ElementType& type, Segment* parent);
@@ -117,10 +120,10 @@ public:
     virtual qreal rightEdge() const = 0;
 
     bool up() const { return _up; }
-    void setUp(bool val) { _up = val; }
+    bool usesAutoUp() const { return _usesAutoUp; }
 
     bool isSmall() const { return m_isSmall; }
-    void setSmall(bool val);
+    void setSmall(bool val) { m_isSmall = val; }
     void undoSetSmall(bool val);
 
     int staffMove() const { return _staffMove; }
@@ -201,7 +204,7 @@ public:
     virtual EngravingItem* prevSegmentElement() override;
     virtual QString accessibleExtraInfo() const override;
     virtual Shape shape() const override;
-    virtual void computeUp() { _up = true; }
+    virtual void computeUp() { _usesAutoUp = false; _up = true; }
 
     bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);

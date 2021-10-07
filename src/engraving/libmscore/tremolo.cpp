@@ -276,44 +276,35 @@ void Tremolo::computeShape()
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
+void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium)
 {
     Q_ASSERT(!twoNotes());
 
     bool up = chord()->up();
-    int line = up ? chord()->upLine() : chord()->downLine();
+    int upValue = up ? -1 : 1;
 
-    qreal t = 0.0;
-    // nearest distance between note and tremolo stroke should be no less than 3.0
-    if (chord()->hook() || chord()->beam()) {
-        t = up ? -3.0 * chordMag() - 2.0 * minHeight() : 3.0 * chordMag();
-    } else {
-        const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
+    qreal yOffset = h - 0.5 * spatium;
 
-        if (!up && !(line & 1)) {   // stem is down; even line
-            t = qMax((4.0 + offset) * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (!up && (line & 1)) { // stem is down; odd line
-            t = qMax(5.0 * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (up && !(line & 1)) { // stem is up; even line
-            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), (-4.0 - offset) * chordMag());
-        } else { /*if ( up &&  (line & 1))*/ // stem is up; odd line
-            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), -5.0 * chordMag());
-        }
+    int beams = chord()->beams();
+    if (chord()->hook()) {
+        yOffset -= up ? 1.5 * spatium : 1 * spatium;
+        yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
+    } else if (beams) {
+        yOffset -= beams * 0.75 * spatium;
+        yOffset += beams == 0 ? 0.0 : 0.25 * spatium;
     }
+    yOffset -= isBuzzRoll() && up ? 0.5 * spatium : 0.0;
+    yOffset *= upValue;
+    yOffset -= up ? 0.0 : minHeight() * spatium;
 
-    qreal yLine = line + t;
-    // prevent stroke from going out of staff at the top while stem direction is down
-    if (!chord()->up()) {
-        yLine = qMax(yLine, 0.0);
-    }
-    // prevent stroke from going out of staff at the bottom while stem direction is up
-    else {
+    y += yOffset;
+
+    if (up) {
         qreal height = isBuzzRoll() ? 0 : minHeight();
-        yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
+        y = qMin(y, ((staff()->lines(tick()) - 1) - height) * spatium);
+    } else {
+        y = qMax(y, 0.0);
     }
-
-    y = yLine * .5 * spatium;
-
     setPos(x, y);
 }
 
@@ -515,7 +506,7 @@ void Tremolo::layout()
     Stem* stem    = _chord1->stem();
     qreal x, y, h;
     if (stem) {
-        x = stem->pos().x();
+        x = stem->pos().x() + stem->width() / 2 * (_chord1->up() ? -1.0 : 1.0);
         y = stem->pos().y();
         h = stem->length();
     } else {
@@ -531,7 +522,7 @@ void Tremolo::layout()
     if (twoNotes()) {
         layoutTwoNotesTremolo(x, y, h, spatium());
     } else {
-        layoutOneNoteTremolo(x, y, spatium());
+        layoutOneNoteTremolo(x, y, h, spatium());
     }
 }
 

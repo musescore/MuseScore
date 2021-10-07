@@ -51,7 +51,7 @@ class Beam final : public EngravingItem
 {
     Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
-    QVector<mu::LineF*> beamSegments;
+    QVector<mu::LineF*> _beamSegments;
     Direction _direction    { Direction::AUTO };
 
     bool _up                { true };
@@ -69,20 +69,37 @@ class Beam final : public EngravingItem
 
     mutable int _id         { 0 };          // used in read()/write()
 
-    int minMove             { 0 };                // set in layout1()
-    int maxMove             { 0 };
-    TDuration maxDuration;
-    qreal slope             { 0.0 };
+    int _minMove             { 0 };                // set in layout1()
+    int _maxMove             { 0 };
+    TDuration _maxDuration;
+    qreal _slope             { 0.0 };
+    std::vector<int> _notes;
 
     friend class mu::engraving::Factory;
     Beam(System* parent);
     Beam(const Beam&);
 
+    int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
+    int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
+    int getBeamCount(std::vector<ChordRest*> chordRests) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+                                      bool isFlat, bool isStartDictator) const;
+    bool isBeamInsideStaff(int yPos, int staffLines) const;
+    int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
+    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const;
+    bool is64thBeamPositionException(int& yPos, int staffLines) const;
+    int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
+    void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
+                               bool isAscending);
+    void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
+    void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool isFlat);
+    void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
+    mu::PointF chordBeamAnchor(Chord* chord) const;
+    bool calcIsBeamletBefore(Chord* chord, int i, int level) const;
+    void createBeamSegment(Chord* startChord, Chord* endChord, int level);
+    void createBeamletSegment(Chord* chord, bool isBefore, int level);
+    void createBeamSegments(std::vector<ChordRest*> chordRests);
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
-    bool twoBeamedNotes();
-    void computeStemLen(const std::vector<ChordRest*>& crl, qreal& py1, int beamLevels);
-    bool slopeZero(const std::vector<ChordRest*>& crl);
-    bool hasNoSlope();
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
@@ -146,13 +163,11 @@ public:
     void setUp(bool v) { _up = v; }
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
-    bool isNoSlope() const;
-    void alignBeamPosition();
 
     void setBeamDirection(Direction d);
     Direction beamDirection() const { return _direction; }
 
-    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this localy
+    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

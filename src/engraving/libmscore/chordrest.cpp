@@ -394,15 +394,6 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 }
 
 //---------------------------------------------------------
-//   setSmall
-//---------------------------------------------------------
-
-void ChordRest::setSmall(bool val)
-{
-    m_isSmall = val;
-}
-
-//---------------------------------------------------------
 //   undoSetSmall
 //---------------------------------------------------------
 

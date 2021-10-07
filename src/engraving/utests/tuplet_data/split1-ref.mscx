@@ -136,8 +136,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>5</l1>
-            <l2>4</l2>
+            <l1>10</l1>
+            <l2>8</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -188,8 +188,8 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>5</l1>
-            <l2>4</l2>
+            <l1>10</l1>
+            <l2>8</l2>
             </Beam>
           <Chord>
             <durationType>16th</durationType>
@@ -262,8 +262,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>15</l1>
-            <l2>15</l2>
+            <l1>30</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -280,8 +280,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>15</l1>
-            <l2>15</l2>
+            <l1>30</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -302,8 +302,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>15</l1>
-            <l2>15</l2>
+            <l1>30</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
@@ -320,8 +320,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>15</l1>
-            <l2>15</l2>
+            <l1>30</l1>
+            <l2>30</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
