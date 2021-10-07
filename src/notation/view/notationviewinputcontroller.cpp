@@ -149,7 +149,8 @@ QPoint NotationViewInputController::findZoomFocusPoint() const
         return QPoint(m_view->width() / 2, m_view->height() / 2);
     }
     // Selection: zoom at the center of the selection
-    return (selection->canvasBoundingRect().center().toPoint() * m_view->currentScaling()) + m_view->canvasPos().toQPoint();
+    return (selection->canvasBoundingRect().center().toPoint() * m_view->currentScaling())
+           + m_view->canvasPos().toQPoint();
 }
 
 void NotationViewInputController::zoomToPageWidth()
