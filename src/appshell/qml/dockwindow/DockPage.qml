@@ -21,14 +21,14 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Dock 1.0 as Dock
+import MuseScore.Dock 1.0
 
-Dock.DockPage {
+DockPageView {
     id: root
 
     property alias central: central.sourceComponent
 
-    centralDock: Dock.DockCentral {
+    centralDock: DockCentralView {
         objectName: root.objectName + "_central"
 
         Loader {
@@ -39,54 +39,54 @@ Dock.DockPage {
     }
 
     toolBarsDockingHolders: [
-        Dock.DockToolBarHolder {
+        DockToolBarHolder {
             objectName: root.objectName + "_toolBarsDockingHolderLeft"
-            location: Dock.DockBase.Left
+            location: DockBase.Left
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHolder {
+        DockToolBarHolder {
             objectName: root.objectName + "_toolBarsDockingHolderRight"
-            location: Dock.DockBase.Right
+            location: DockBase.Right
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHolder {
+        DockToolBarHolder {
             objectName: root.objectName + "_toolBarsDockingHolderTop"
-            location: Dock.DockBase.Top
+            location: DockBase.Top
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockToolBarHolder {
+        DockToolBarHolder {
             objectName: root.objectName + "_toolBarsDockingHolderBottom"
-            location: Dock.DockBase.Bottom
+            location: DockBase.Bottom
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         }
     ]
 
     panelsDockingHolders: [
-        Dock.DockPanelHolder {
+        DockPanelHolder {
             objectName: root.objectName + "_panelsDockingHolderLeft"
-            location: Dock.DockBase.Left
+            location: DockBase.Left
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockPanelHolder {
+        DockPanelHolder {
             objectName: root.objectName + "_panelsDockingHolderRight"
-            location: Dock.DockBase.Right
+            location: DockBase.Right
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockPanelHolder {
+        DockPanelHolder {
             objectName: root.objectName + "_panelsDockingHolderTop"
-            location: Dock.DockBase.Top
+            location: DockBase.Top
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         },
-        Dock.DockPanelHolder {
+        DockPanelHolder {
             objectName: root.objectName + "_panelsDockingHolderBottom"
-            location: Dock.DockBase.Bottom
+            location: DockBase.Bottom
 
             Rectangle { color: ui.theme.backgroundPrimaryColor }
         }

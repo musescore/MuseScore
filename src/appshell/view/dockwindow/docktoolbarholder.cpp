@@ -25,7 +25,7 @@
 using namespace mu::dock;
 
 DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
-    : DockToolBar(parent)
+    : DockToolBarView(parent)
 {
     setVisible(false);
     setMovable(false);
@@ -33,7 +33,7 @@ DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
 
 void DockToolBarHolder::componentComplete()
 {
-    DockToolBar::componentComplete();
+    DockToolBarView::componentComplete();
 
     switch (location()) {
     case DockLocation::Left:

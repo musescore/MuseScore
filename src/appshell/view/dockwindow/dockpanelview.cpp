@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "dockpanel.h"
+#include "dockpanelview.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 
@@ -38,10 +38,10 @@ using namespace mu::actions;
 static const QString SET_DOCK_OPEN_ACTION_CODE = "set-dock-open";
 static const QString TOGGLE_FLOATING_ACTION_CODE = "toggle-floating";
 
-class DockPanel::DockPanelMenuModel : public AbstractMenuModel
+class DockPanelView::DockPanelMenuModel : public AbstractMenuModel
 {
 public:
-    DockPanelMenuModel(DockPanel* panel)
+    DockPanelMenuModel(DockPanelView* panel)
         : AbstractMenuModel(panel), m_panel(panel)
     {
         listenFloatingChanged();
@@ -110,7 +110,7 @@ private:
 
     void listenFloatingChanged()
     {
-        connect(m_panel, &DockPanel::floatingChanged, this, [this]() {
+        connect(m_panel, &DockPanelView::floatingChanged, this, [this]() {
             int index = itemIndex(TOGGLE_FLOATING_ACTION_CODE);
 
             if (index == INVALID_ITEM_INDEX) {
@@ -140,16 +140,16 @@ private:
     }
 
     AbstractMenuModel* m_customMenuModel = nullptr;
-    DockPanel* m_panel = nullptr;
+    DockPanelView* m_panel = nullptr;
 };
 
-DockPanel::DockPanel(QQuickItem* parent)
+DockPanelView::DockPanelView(QQuickItem* parent)
     : DockBase(parent), m_menuModel(new DockPanelMenuModel(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 }
 
-DockPanel::~DockPanel()
+DockPanelView::~DockPanelView()
 {
     KDDockWidgets::DockWidgetQuick* dockWidget = this->dockWidget();
     IF_ASSERT_FAILED(dockWidget) {
@@ -160,12 +160,12 @@ DockPanel::~DockPanel()
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
 }
 
-DockPanel* DockPanel::tabifyPanel() const
+DockPanelView* DockPanelView::tabifyPanel() const
 {
     return m_tabifyPanel;
 }
 
-void DockPanel::setTabifyPanel(DockPanel* panel)
+void DockPanelView::setTabifyPanel(DockPanelView* panel)
 {
     if (panel == m_tabifyPanel) {
         return;
@@ -175,12 +175,12 @@ void DockPanel::setTabifyPanel(DockPanel* panel)
     emit tabifyPanelChanged(panel);
 }
 
-DockType DockPanel::type() const
+DockType DockPanelView::type() const
 {
     return DockType::Panel;
 }
 
-void DockPanel::componentComplete()
+void DockPanelView::componentComplete()
 {
     DockBase::componentComplete();
 
@@ -201,12 +201,12 @@ void DockPanel::componentComplete()
     });
 }
 
-QObject* DockPanel::navigationSection() const
+QObject* DockPanelView::navigationSection() const
 {
     return m_navigationSection;
 }
 
-void DockPanel::setNavigationSection(QObject* newNavigation)
+void DockPanelView::setNavigationSection(QObject* newNavigation)
 {
     if (m_navigationSection == newNavigation) {
         return;
@@ -216,12 +216,12 @@ void DockPanel::setNavigationSection(QObject* newNavigation)
     emit navigationSectionChanged();
 }
 
-AbstractMenuModel* DockPanel::contextMenuModel() const
+AbstractMenuModel* DockPanelView::contextMenuModel() const
 {
     return m_menuModel->customMenuModel();
 }
 
-void DockPanel::setContextMenuModel(AbstractMenuModel* model)
+void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
 {
     if (m_menuModel->customMenuModel() == model) {
         return;

@@ -19,18 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#ifndef MU_DOCK_DOCKCENTRALVIEW_H
+#define MU_DOCK_DOCKCENTRALVIEW_H
 
-import MuseScore.Dock 1.0
+#include "internal/dockbase.h"
 
-DockPanel {
-    id: root
+namespace mu::dock {
+class DockCentralView : public DockBase
+{
+    Q_OBJECT
 
-    default property alias content : contentLoader.sourceComponent
+public:
+    explicit DockCentralView(QQuickItem* parent = nullptr);
 
-    Loader {
-        id: contentLoader
-
-        active: root.visible
-    }
+private:
+    DockType type() const override;
+};
 }
+
+#endif // MU_DOCK_DOCKCENTRALVIEW_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPANEL_H
-#define MU_DOCK_DOCKPANEL_H
+#ifndef MU_DOCK_DOCKPANELVIEW_H
+#define MU_DOCK_DOCKPANELVIEW_H
 
 #include "internal/dockbase.h"
 
@@ -34,29 +34,29 @@ class AbstractMenuModel;
 }
 
 namespace mu::dock {
-class DockPanel : public DockBase
+class DockPanelView : public DockBase
 {
     Q_OBJECT
 
-    Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
+    Q_PROPERTY(DockPanelView * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(mu::ui::AbstractMenuModel* contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
 
 public:
-    explicit DockPanel(QQuickItem* parent = nullptr);
-    ~DockPanel();
+    explicit DockPanelView(QQuickItem* parent = nullptr);
+    ~DockPanelView();
 
-    DockPanel* tabifyPanel() const;
+    DockPanelView* tabifyPanel() const;
     QObject* navigationSection() const;
     ui::AbstractMenuModel* contextMenuModel() const;
 
 public slots:
-    void setTabifyPanel(DockPanel* panel);
+    void setTabifyPanel(DockPanelView* panel);
     void setNavigationSection(QObject* newNavigation);
     void setContextMenuModel(ui::AbstractMenuModel* model);
 
 signals:
-    void tabifyPanelChanged(DockPanel* panel);
+    void tabifyPanelChanged(DockPanelView* panel);
     void navigationSectionChanged();
     void contextMenuModelChanged();
 
@@ -64,7 +64,7 @@ private:
     DockType type() const override;
     void componentComplete() override;
 
-    DockPanel* m_tabifyPanel = nullptr;
+    DockPanelView* m_tabifyPanel = nullptr;
     QObject* m_navigationSection = nullptr;
 
     class DockPanelMenuModel;
@@ -72,4 +72,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKPANEL_H
+#endif // MU_DOCK_DOCKPANELVIEW_H

@@ -19,17 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "dockcentral.h"
+
+#include "dockstatusbarview.h"
 
 using namespace mu::dock;
 
-DockCentral::DockCentral(QQuickItem* parent)
+DockStatusBarView::DockStatusBarView(QQuickItem* parent)
     : DockBase(parent)
 {
-    setAllowedAreas(Qt::NoDockWidgetArea);
+    setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    constexpr int STATUS_BAR_HEIGHT = 36;
+
+    setMinimumHeight(STATUS_BAR_HEIGHT);
+    setMaximumHeight(STATUS_BAR_HEIGHT);
+    setHeight(STATUS_BAR_HEIGHT);
 }
 
-DockType DockCentral::type() const
+DockType DockStatusBarView::type() const
 {
-    return DockType::Central;
+    return DockType::StatusBar;
 }
