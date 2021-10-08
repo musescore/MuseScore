@@ -670,8 +670,11 @@ PointF EngravingItem::canvasPos() const
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
         if (measure) {
-            p.ry() += measure->staffLines(vStaffIdx())->y();
+            const StaffLines* lines = measure->staffLines(vStaffIdx());
+            p.ry() += lines ? lines->y() : 0;
+
             system = measure->system();
+
             if (system) {
                 Page* page = system->page();
                 if (page) {
