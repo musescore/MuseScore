@@ -19,23 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "dockcentralview.h"
 
-#ifndef MU_DOCK_DOCKSTATUSBAR_H
-#define MU_DOCK_DOCKSTATUSBAR_H
+using namespace mu::dock;
 
-#include "internal/dockbase.h"
-
-namespace mu::dock {
-class DockStatusBar : public DockBase
+DockCentralView::DockCentralView(QQuickItem* parent)
+    : DockBase(parent)
 {
-    Q_OBJECT
-
-public:
-    explicit DockStatusBar(QQuickItem* parent = nullptr);
-
-private:
-    DockType type() const override;
-};
+    setAllowedAreas(Qt::NoDockWidgetArea);
 }
 
-#endif // MU_DOCK_DOCKSTATUSBAR_H
+DockType DockCentralView::type() const
+{
+    return DockType::Central;
+}

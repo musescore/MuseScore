@@ -23,10 +23,10 @@
 #ifndef MU_DOCK_DOCKTOOLBARHOLDER_H
 #define MU_DOCK_DOCKTOOLBARHOLDER_H
 
-#include "docktoolbar.h"
+#include "docktoolbarview.h"
 
 namespace mu::dock {
-class DockToolBarHolder : public DockToolBar
+class DockToolBarHolder : public DockToolBarView
 {
     Q_OBJECT
 

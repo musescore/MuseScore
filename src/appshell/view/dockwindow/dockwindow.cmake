@@ -30,20 +30,20 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/idockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/idockwindowprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockpage.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockpanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockpageview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockpageview.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockpanelview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockpanelview.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanelholder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpanelholder.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockstatusbar.h
-    ${CMAKE_CURRENT_LIST_DIR}/docktoolbar.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/docktoolbar.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockstatusbarview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockstatusbarview.h
+    ${CMAKE_CURRENT_LIST_DIR}/docktoolbarview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/docktoolbarview.h
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.h
-    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dockcentral.h
+    ${CMAKE_CURRENT_LIST_DIR}/dockcentralview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dockcentralview.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.cpp

@@ -25,7 +25,7 @@
 using namespace mu::dock;
 
 DockPanelHolder::DockPanelHolder(QQuickItem* parent)
-    : DockPanel(parent)
+    : DockPanelView(parent)
 {
     setVisible(false);
     //setMovable(false);

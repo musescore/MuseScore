@@ -156,7 +156,7 @@ DockPage {
     ]
 
     panels: [
-        DockPanelQml {
+        DockPanel {
             id: palettesPanel
 
             objectName: pageModel.palettesPanelName()
@@ -175,7 +175,7 @@ DockPage {
             }
         },
 
-        DockPanelQml {
+        DockPanel {
             id: instrumentsPanel
 
             objectName: pageModel.instrumentsPanelName()
@@ -198,7 +198,7 @@ DockPage {
             }
         },
 
-        DockPanelQml {
+        DockPanel {
             id: inspectorPanel
 
             objectName: pageModel.inspectorPanelName()
@@ -217,7 +217,7 @@ DockPage {
             }
         },
 
-        DockPanelQml {
+        DockPanel {
             id: selectionFilterPanel
 
             objectName: pageModel.selectionFiltersPanelName()
@@ -242,7 +242,7 @@ DockPage {
         // Horizontal Panels
         // =============================================
 
-        DockPanelQml {
+        DockPanel {
             id: mixerPanel
 
             objectName: pageModel.mixerPanelName()
@@ -267,7 +267,7 @@ DockPage {
             }
         },
 
-        DockPanelQml {
+        DockPanel {
             id: pianoRollPanel
 
             objectName: pageModel.pianoPanelName()
@@ -296,7 +296,7 @@ DockPage {
             }
         },
 
-        DockPanelQml {
+        DockPanel {
             id: timelinePanel
 
             objectName: pageModel.timelinePanelName()
@@ -315,7 +315,7 @@ DockPage {
             Timeline {}
         },
 
-        DockPanelQml {
+        DockPanel {
             id: drumsetPanel
 
             objectName: pageModel.drumsetPanelName()
@@ -341,8 +341,6 @@ DockPage {
     }
 
     statusBar: DockStatusBar {
-        id: notationStatusBar
-
         objectName: pageModel.statusBarName()
 
         NotationStatusBar {}

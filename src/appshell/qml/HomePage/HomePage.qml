@@ -64,7 +64,7 @@ DockPage {
     }
 
     panels: [
-        DockPanelQml {
+        DockPanel {
             objectName: "homeMenu"
 
             minimumWidth: 76

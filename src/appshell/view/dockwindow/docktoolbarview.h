@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTOOLBAR_H
-#define MU_DOCK_DOCKTOOLBAR_H
+#ifndef MU_DOCK_DOCKTOOLBARVIEW_H
+#define MU_DOCK_DOCKTOOLBARVIEW_H
 
 #include "internal/dockbase.h"
 
 namespace mu::dock {
-class DockToolBar : public DockBase
+class DockToolBarView : public DockBase
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ class DockToolBar : public DockBase
     Q_PROPERTY(QSize verticalPreferredSize READ verticalPreferredSize WRITE setVerticalPreferredSize NOTIFY verticalPreferredSizeChanged)
 
 public:
-    explicit DockToolBar(QQuickItem* parent = nullptr);
+    explicit DockToolBarView(QQuickItem* parent = nullptr);
 
     bool movable() const;
     Qt::Orientation orientation() const;
@@ -88,4 +88,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKTOOLBAR_H
+#endif // MU_DOCK_DOCKTOOLBARVIEW_H

@@ -43,10 +43,10 @@ class LayoutSaver;
 }
 
 namespace mu::dock {
-class DockToolBar;
+class DockToolBarView;
 class DockToolBarHolder;
 class DockPanelHolder;
-class DockPage;
+class DockPageView;
 class DockBase;
 class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncable
 {
@@ -54,11 +54,11 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBar> toolBars READ toolBarsProperty)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
     Q_PROPERTY(
         mu::dock::DockToolBarHolder
         * mainToolBarDockingHolder READ mainToolBarDockingHolder WRITE setMainToolBarDockingHolder NOTIFY mainToolBarDockingHolderChanged)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
+    Q_PROPERTY(QQmlListProperty<mu::dock::DockPageView> pages READ pagesProperty)
 
     INJECT(dock, IDockWindowProvider, dockWindowProvider)
     INJECT(dock, ui::IUiConfiguration, uiConfiguration)
@@ -70,8 +70,8 @@ public:
 
     QString currentPageUri() const;
 
-    QQmlListProperty<mu::dock::DockToolBar> toolBarsProperty();
-    QQmlListProperty<mu::dock::DockPage> pagesProperty();
+    QQmlListProperty<mu::dock::DockToolBarView> toolBarsProperty();
+    QQmlListProperty<mu::dock::DockPageView> pagesProperty();
     DockToolBarHolder* mainToolBarDockingHolder() const;
 
     Q_INVOKABLE void loadPage(const QString& uri);
@@ -102,15 +102,15 @@ private slots:
     void onQuit();
 
 private:
-    DockPage* pageByUri(const QString& uri) const;
-    DockPage* currentPage() const;
+    DockPageView* pageByUri(const QString& uri) const;
+    DockPageView* currentPage() const;
 
     void componentComplete() override;
 
-    void loadPageContent(const DockPage* page);
-    void unitePanelsToTabs(const DockPage* page);
-    void loadPageToolbars(const DockPage* page);
-    void loadPagePanels(const DockPage* page);
+    void loadPageContent(const DockPageView* page);
+    void unitePanelsToTabs(const DockPageView* page);
+    void loadPageToolbars(const DockPageView* page);
+    void loadPagePanels(const DockPageView* page);
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
@@ -125,7 +125,7 @@ private:
     void resetWindowState();
     bool restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options = KDDockWidgets::RestoreOptions());
 
-    void initDocks(DockPage* page);
+    void initDocks(DockPageView* page);
 
     DockToolBarHolder* resolveToolbarDockingHolder(const QPoint& localPos) const;
     void showToolBarDockingHolder(const QPoint& globalPos);
@@ -139,9 +139,9 @@ private:
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     QString m_currentPageUri;
-    uicomponents::QmlListProperty<DockToolBar> m_toolBars;
+    uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     DockToolBarHolder* m_mainToolBarDockingHolder = nullptr;
-    uicomponents::QmlListProperty<DockPage> m_pages;
+    uicomponents::QmlListProperty<DockPageView> m_pages;
     DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
     DockPanelHolder* m_currentPanelDockingHolder = nullptr;
     async::Channel<QStringList> m_docksOpenStatusChanged;
