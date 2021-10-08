@@ -737,7 +737,6 @@ bool EngravingObject::isDummy() const
 
 Score* EngravingObject::score(bool required) const
 {
-    TRACEFUNC;
     if (_score) {
         return _score;
     }
