@@ -103,8 +103,6 @@ QString JsModuleLoader::resolvePath(const QString& module, bool* ok)
 QString JsModuleLoader::resolvePath(const QString& basePath, const QString& module, bool* _ok)
 {
     TRACEFUNC;
-    static const QStringList defPathList = QStringList() << configuration()->scriptsPath().toQString() + "/steps";
-
     QString moduleFile = module.endsWith(".js") ? module : (module + ".js");
 
     LOGD() << "basePath:" << basePath << "module:" << moduleFile;
@@ -114,8 +112,10 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
     bool ok = QFileInfo::exists(path);
     if (!ok) {
         //! NOTE Search module in default paths
-        for (const QString& defPath : defPathList) {
-            path = defPath + "/" + moduleFile;
+        static const io::paths defPaths = configuration()->scriptsDirPaths();
+
+        for (const io::path& defPath : defPaths) {
+            path = defPath.toQString() + "/steps/" + moduleFile;
             ok = QFileInfo::exists(path);
             if (ok) {
                 break;

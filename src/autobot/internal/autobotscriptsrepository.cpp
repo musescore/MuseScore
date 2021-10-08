@@ -26,21 +26,21 @@
 using namespace mu;
 using namespace mu::autobot;
 
-RetVal<Scripts> AutobotScriptsRepository::scripts() const
+Scripts AutobotScriptsRepository::scripts() const
 {
     using namespace mu::system;
 
-    io::path scriptsPath = configuration()->scriptsPath();
-    LOGD() << "scriptsPath: " << scriptsPath;
-    RetVal<io::paths> paths = fileSystem()->scanFiles(scriptsPath, { "*.js" }, IFileSystem::ScanMode::OnlyCurrentDir);
-    if (!paths.ret) {
-        return RetVal<Scripts>(paths.ret);
+    io::paths scriptsDirs = configuration()->scriptsDirPaths();
+    io::paths scriptsPaths;
+    for (const io::path& dir : scriptsDirs) {
+        RetVal<io::paths> paths = fileSystem()->scanFiles(dir, { "*.js" }, IFileSystem::ScanMode::OnlyCurrentDir);
+        scriptsPaths.insert(scriptsPaths.end(), paths.val.begin(), paths.val.end());
     }
 
-    std::sort(paths.val.begin(), paths.val.end());
+    std::sort(scriptsPaths.begin(), scriptsPaths.end());
 
     Scripts scripts;
-    for (const io::path& p : paths.val) {
+    for (const io::path& p : scriptsPaths) {
         Script s;
         s.path = p;
         s.title = io::basename(p).toQString();
@@ -48,5 +48,5 @@ RetVal<Scripts> AutobotScriptsRepository::scripts() const
         scripts.push_back(std::move(s));
     }
 
-    return RetVal<Scripts>::make_ok(std::move(scripts));
+    return scripts;
 }
