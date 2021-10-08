@@ -39,7 +39,7 @@ AutobotApi::AutobotApi(IApiEngine* e)
 
 bool AutobotApi::openProject(const QString& name)
 {
-    io::path dir = autobotConfiguration()->testingFilesPath();
+    io::path dir = autobotConfiguration()->testingFilesDirPath();
     io::path filePath = dir + "/" + name;
     Ret ret = projectFilesController()->openProject(filePath);
     return ret;

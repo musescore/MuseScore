@@ -26,30 +26,50 @@
 
 using namespace mu::autobot;
 
-bool AutobotConfiguration::isConfigured() const
+mu::io::paths AutobotConfiguration::scriptsDirPaths() const
 {
-    return !dataPath().empty() && !testingFilesPath().empty();
+    io::path p = io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    if (!p.empty()) {
+        return { p };
+    }
+
+    io::paths paths;
+    paths.push_back(globalConfiguration()->appDataPath() + "/autobotscripts");
+    paths.push_back(globalConfiguration()->userDataPath() + "/AutobotScripts");
+
+    return paths;
+}
+
+mu::io::path AutobotConfiguration::testingFilesDirPath() const
+{
+    io::path p = io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    if (!p.empty()) {
+        return p;
+    }
+
+    p = globalConfiguration()->userDataPath() + "/AutobotTestingFiles";
+    return p;
 }
 
 mu::io::path AutobotConfiguration::dataPath() const
 {
     io::path p = io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
-    if (p.empty()) {
-        QDir projDir(QString(PROJECT_ROOT_DIR));
-        projDir.cdUp();
-        p = projDir.absolutePath() + "/mu_autobot_data";
+    if (!p.empty()) {
+        return p;
     }
-    return p;
-}
 
-mu::io::path AutobotConfiguration::testingFilesPath() const
-{
-    return io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    p = globalConfiguration()->userDataPath() + "/AutobotData";
+    return p;
 }
 
 mu::io::path AutobotConfiguration::savingFilesPath() const
 {
     return dataPath() + "/saving_files";
+}
+
+mu::io::path AutobotConfiguration::reportsPath() const
+{
+    return dataPath() + "/reports";
 }
 
 mu::io::path AutobotConfiguration::drawDataPath() const
@@ -60,18 +80,4 @@ mu::io::path AutobotConfiguration::drawDataPath() const
 mu::io::path AutobotConfiguration::fileDrawDataPath(const io::path& filePath) const
 {
     return drawDataPath() + "/" + io::basename(filePath) + ".json";
-}
-
-mu::io::path AutobotConfiguration::reportsPath() const
-{
-    return dataPath() + "/reports";
-}
-
-mu::io::path AutobotConfiguration::scriptsPath() const
-{
-    io::path p = io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
-    if (p.empty()) {
-        p = io::path(QString(PROJECT_ROOT_DIR) + "/test_scripts");
-    }
-    return p;
 }
