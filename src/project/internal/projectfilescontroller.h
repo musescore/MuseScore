@@ -56,6 +56,7 @@ public:
     Ret openProject(const io::path& projectPath) override;
     bool closeOpenedProject() override;
     bool isProjectOpened(const io::path& scorePath) const override;
+    void saveProject(const io::path& path = io::path()) override;
 
 private:
     void setupConnections();
@@ -72,9 +73,8 @@ private:
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);
     framework::IInteractive::Button askAboutSavingScore(const io::path& filePath);
 
-    void saveScore();
-    void saveScoreAs();
-    void saveScoreCopy();
+    void saveProjectAs();
+    void saveProjectCopy();
     void saveSelection();
     void saveOnline();
 

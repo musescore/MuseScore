@@ -39,6 +39,7 @@ class NavigationApi : public ApiObject
 
 public:
     explicit NavigationApi(IApiEngine* e);
+    ~NavigationApi();
 
     Q_INVOKABLE void nextPanel();
     Q_INVOKABLE void prevPanel();
@@ -46,9 +47,14 @@ public:
     Q_INVOKABLE void left();
     Q_INVOKABLE void up();
     Q_INVOKABLE void down();
+    Q_INVOKABLE void escape();
     Q_INVOKABLE bool goToControl(const QString& section, const QString& panel, const QString& contol);
     Q_INVOKABLE void trigger();
     Q_INVOKABLE bool triggerControl(const QString& section, const QString& panel, const QString& contol);
+
+    Q_INVOKABLE QString activeSection() const;
+    Q_INVOKABLE QString activePanel() const;
+    Q_INVOKABLE QString activeControl() const;
 };
 }
 

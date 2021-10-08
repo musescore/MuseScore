@@ -34,9 +34,10 @@ class IProjectFilesController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectFilesController() = default;
 
-    virtual Ret openProject(const io::path& scorePath) = 0;
+    virtual Ret openProject(const io::path& path) = 0;
     virtual bool closeOpenedProject() = 0;
-    virtual bool isProjectOpened(const io::path& scorePath) const = 0;
+    virtual bool isProjectOpened(const io::path& path) const = 0;
+    virtual void saveProject(const io::path& path = io::path()) = 0;
 };
 }
 
