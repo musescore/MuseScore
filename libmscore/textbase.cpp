@@ -854,16 +854,17 @@ QFont TextFragment::font(const TextBase* t) const
       if (format.fontFamily() == "ScoreText") {
             if (t->parent() && t->isDynamic()) {
 #if 0 // no fontByName() in 3.x?
-                  family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
-                  //family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalTestFont).replace(" Text", ""))->family();
+                  //family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+                  family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalTestFont).replace(" Text", ""))->family();
 #else
-                  family = t->score()->styleSt(Sid::MusicalSymbolFont);
-                  //family = t->score()->styleSt(Sid::MusicalTextFont).replace(" Text", "");
+                  //family = t->score()->styleSt(Sid::MusicalSymbolFont);
+                  family = t->score()->styleSt(Sid::MusicalTextFont).replace(" Text", "");
                   if (family == "Emmentaler")
                         family = "MScore";
                   else if (family == "Gonville")
                         family = "Gootville";
 #endif
+                  //qDebug("Font for Dynamics: %s", family.toLatin1().data());
                   // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
                   m *= 2;
                   }
