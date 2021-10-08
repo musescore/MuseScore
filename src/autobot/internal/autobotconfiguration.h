@@ -34,7 +34,8 @@ public:
 
     io::path dataPath() const override;
 
-    io::path filesPath() const override;
+    io::path testingFilesPath() const override;
+    io::path savingFilesPath() const override;
 
     io::path drawDataPath() const override;
     io::path fileDrawDataPath(const io::path& filePath) const override;

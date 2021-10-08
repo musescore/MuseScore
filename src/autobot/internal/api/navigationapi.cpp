@@ -24,10 +24,19 @@
 #include "log.h"
 
 using namespace mu::api;
+using namespace mu::ui;
 
 NavigationApi::NavigationApi(IApiEngine* e)
     : ApiObject(e)
 {
+    //! NOTE Disable reset on mouse press for testing purpose
+    navigation()->setIsResetOnMousePress(false);
+}
+
+NavigationApi::~NavigationApi()
+{
+    //! NOTE Return default
+    navigation()->setIsResetOnMousePress(true);
 }
 
 void NavigationApi::nextPanel()
@@ -60,6 +69,11 @@ void NavigationApi::down()
     dispatcher()->dispatch("nav-down");
 }
 
+void NavigationApi::escape()
+{
+    dispatcher()->dispatch("nav-escape");
+}
+
 bool NavigationApi::goToControl(const QString& section, const QString& panel, const QString& contol)
 {
     bool ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), contol.toStdString());
@@ -78,4 +92,22 @@ bool NavigationApi::triggerControl(const QString& section, const QString& panel,
         trigger();
     }
     return ok;
+}
+
+QString NavigationApi::activeSection() const
+{
+    INavigationSection* sec = navigation()->activeSection();
+    return sec ? sec->name() : QString();
+}
+
+QString NavigationApi::activePanel() const
+{
+    INavigationPanel* p = navigation()->activePanel();
+    return p ? p->name() : QString();
+}
+
+QString NavigationApi::activeControl() const
+{
+    INavigationControl* c = navigation()->activeControl();
+    return c ? c->name() : QString();
 }
