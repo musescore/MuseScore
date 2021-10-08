@@ -43,8 +43,6 @@ public:
 
     void init();
 
-    bool isConfigured() const override;
-
     std::vector<ITestCasePtr> testCases() const override;
     ITestCasePtr testCase(const std::string& name) const override;
 

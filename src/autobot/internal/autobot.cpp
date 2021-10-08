@@ -72,11 +72,6 @@ Autobot::Autobot()
     };
 }
 
-bool Autobot::isConfigured() const
-{
-    return configuration()->isConfigured();
-}
-
 std::vector<ITestCasePtr> Autobot::testCases() const
 {
     return m_testCases;
@@ -113,7 +108,7 @@ mu::RetVal<mu::io::paths> Autobot::filesList() const
 {
     using namespace mu::system;
 
-    io::path filesPath = configuration()->testingFilesPath();
+    io::path filesPath = configuration()->testingFilesDirPath();
     LOGI() << "filesPath: " << filesPath;
     RetVal<io::paths> paths = fileSystem()->scanFiles(filesPath, QStringList(), IFileSystem::ScanMode::OnlyCurrentDir);
     return paths;

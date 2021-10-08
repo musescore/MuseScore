@@ -64,12 +64,7 @@ void AutobotScriptsModel::load()
 {
     beginResetModel();
 
-    RetVal<Scripts> scripts = scriptsRepository()->scripts();
-    if (!scripts.ret) {
-        LOGE() << "failed get scripts, err: " << scripts.ret.toString();
-    } else {
-        m_scripts = scripts.val;
-    }
+    m_scripts = scriptsRepository()->scripts();
 
     endResetModel();
 }

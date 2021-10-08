@@ -34,7 +34,7 @@ public:
 
     virtual ~IAutobotScriptsRepository() = default;
 
-    virtual RetVal<Scripts> scripts() const = 0;
+    virtual Scripts scripts() const = 0;
 };
 }
 

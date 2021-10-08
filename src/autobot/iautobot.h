@@ -43,8 +43,6 @@ public:
         RunningFile
     };
 
-    virtual bool isConfigured() const = 0;
-
     virtual std::vector<ITestCasePtr> testCases() const = 0;
     virtual ITestCasePtr testCase(const std::string& name) const = 0;
 
