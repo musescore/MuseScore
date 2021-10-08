@@ -75,11 +75,6 @@ QVariantList AutobotModel::testCases() const
     return list;
 }
 
-bool AutobotModel::isConfigured() const
-{
-    return autobot()->isConfigured();
-}
-
 void AutobotModel::setCurrentTestCase(const QString& testCaseName)
 {
     autobot()->setCurrentTestCase(testCaseName.toStdString());

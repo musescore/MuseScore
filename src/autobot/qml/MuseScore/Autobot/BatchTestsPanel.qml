@@ -70,17 +70,6 @@ Rectangle {
         }
     }
 
-    StyledTextLabel {
-        id: confInfo
-        anchors.centerIn: parent
-        verticalAlignment: Text.AlignLeft
-        visible: !autobot.isConfigured()
-        text: "Needs setup environment: \n" +
-              "MU_AUTOBOT_DATA_PATH - path to write data \n" +
-              "MU_AUTOBOT_FILES_PATH - path to score files \n" +
-              "(after configuration reopen the dialog)"
-    }
-
     ListView {
         anchors.top: runPanel.bottom
         anchors.bottom: statusPanel.top

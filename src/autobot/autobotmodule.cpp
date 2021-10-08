@@ -46,10 +46,13 @@
 #include "internal/api/contextapi.h"
 #include "internal/api/shortcutsapi.h"
 
+#include "diagnostics/idiagnosticspathsregister.h"
+
 using namespace mu::autobot;
 using namespace mu::api;
 
-static const std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
+static std::shared_ptr<AutobotConfiguration> s_configuration = std::make_shared<AutobotConfiguration>();
+static std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
 static std::shared_ptr<AutobotActionsController> s_actionsController = std::make_shared<AutobotActionsController>();
 
 std::string AutobotModule::moduleName() const
@@ -60,7 +63,7 @@ std::string AutobotModule::moduleName() const
 void AutobotModule::registerExports()
 {
     modularity::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
-    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
+    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), s_configuration);
     modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
 
     modularity::ioc()->registerExport<IApiRegister>(moduleName(), new ApiRegister());
@@ -102,4 +105,17 @@ void AutobotModule::onInit(const framework::IApplication::RunMode&)
 {
     s_autobot->init();
     s_actionsController->init();
+
+    //! --- Diagnostics ---
+    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    if (pr) {
+        for (const io::path& p : s_configuration->scriptsDirPaths()) {
+            pr->reg("autobotScriptsPath", p);
+        }
+        pr->reg("autobotTestingFilesPath", s_configuration->testingFilesDirPath());
+        pr->reg("autobotDataPath", s_configuration->dataPath());
+        pr->reg("autobotSavingFilesPath", s_configuration->savingFilesPath());
+        pr->reg("autobotReportsPath", s_configuration->reportsPath());
+        pr->reg("autobotDrawDataPath", s_configuration->drawDataPath());
+    }
 }

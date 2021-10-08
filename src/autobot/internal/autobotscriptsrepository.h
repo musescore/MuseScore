@@ -36,7 +36,7 @@ class AutobotScriptsRepository : public IAutobotScriptsRepository
 public:
     AutobotScriptsRepository() = default;
 
-    RetVal<Scripts> scripts() const override;
+    Scripts scripts() const override;
 };
 }
 
