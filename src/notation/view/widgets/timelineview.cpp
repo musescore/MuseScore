@@ -110,7 +110,7 @@ void TimelineView::componentComplete()
         }
     };
 
-    globalContext()->currentNotationChanged().onNotify(this, [this, timeline, updateView]() {
+    auto initTimeline = [this, updateView, timeline] {
         INotationPtr notation = globalContext()->currentNotation();
         timeline->setNotation(notation);
 
@@ -127,7 +127,13 @@ void TimelineView::componentComplete()
         notation->interaction()->selectionChanged().onNotify(this, [=] {
             updateView();
         });
+    };
+
+    globalContext()->currentNotationChanged().onNotify(this, [initTimeline]() {
+        initTimeline();
     });
 
     setWidget(timeline);
+
+    initTimeline();
 }
