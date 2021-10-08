@@ -21,8 +21,6 @@
  */
 #include "jsmoduleloader.h"
 
-#include <QFileInfo>
-
 #include "scriptengine.h"
 
 #include "log.h"
@@ -108,15 +106,15 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
     LOGD() << "basePath:" << basePath << "module:" << moduleFile;
 
     //! NOTE Check relative path
-    QString path = basePath + "/" + moduleFile;
-    bool ok = QFileInfo::exists(path);
+    io::path path = basePath + "/" + moduleFile;
+    bool ok = fileSystem()->exists(path);
     if (!ok) {
         //! NOTE Search module in default paths
         static const io::paths defPaths = configuration()->scriptsDirPaths();
 
         for (const io::path& defPath : defPaths) {
-            path = defPath.toQString() + "/steps/" + moduleFile;
-            ok = QFileInfo::exists(path);
+            path = defPath + "/" + moduleFile;
+            ok = fileSystem()->exists(path);
             if (ok) {
                 break;
             }
@@ -131,5 +129,5 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
         *_ok = ok;
     }
 
-    return ok ? path : "";
+    return ok ? path.toQString() : "";
 }
