@@ -210,6 +210,7 @@ void PlaybackController::onNotationChanged()
     m_masterNotation = globalContext()->currentMasterNotation();
     m_notation = globalContext()->currentNotation();
     if (!m_notation || !m_masterNotation) {
+        m_isPlayAllowedChanged.notify();
         return;
     }
 
