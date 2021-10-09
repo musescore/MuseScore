@@ -147,9 +147,9 @@ Rectangle {
             NavigationPanel {
                 id: navSelectPanel
                 name: "SelectPanel"
+                enabled: root.enabled && root.visible
                 section: root.navigationSection
                 order: 4
-                enabled: root.visible
             }
 
             navigation.name: "Select"
@@ -203,10 +203,10 @@ Rectangle {
             NavigationPanel {
                 id: navUpDownPanel
                 name: "UpDownSelected"
+                enabled: root.enabled && root.visible
                 section: root.navigationSection
                 order: 6
                 direction: NavigationPanel.Vertical
-                enabled: root.visible
             }
 
             FlatButton {

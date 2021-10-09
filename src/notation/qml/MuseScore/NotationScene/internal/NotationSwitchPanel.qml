@@ -55,6 +55,7 @@ Rectangle {
     NavigationPanel {
         id: navPanel
         name: "NotationViewTabs"
+        enabled: root.enabled && root.visible
         section: root.navigationSection
         direction: NavigationPanel.Horizontal
         order: 1

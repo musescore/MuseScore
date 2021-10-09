@@ -65,7 +65,7 @@ Item {
     QtObject {
         id: prv
 
-        property var currentItemNavigationName: ""
+        property string currentItemNavigationName: ""
     }
 
     ColumnLayout {
@@ -167,7 +167,7 @@ Item {
                     name: "InstrumentsTree"
                     section: root.navigationSection
                     direction: NavigationPanel.Both
-                    enabled: root.visible
+                    enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
                     order: 3
 
                     onNavigationEvent: {

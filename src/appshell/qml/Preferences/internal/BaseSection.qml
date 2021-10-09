@@ -42,7 +42,7 @@ Column {
         name: root.title
         direction: NavigationPanel.Vertical
         accessible.name: root.title
-        enabled: root.visible
+        enabled: root.enabled && root.visible
 
         onActiveChanged: {
             if (active) {

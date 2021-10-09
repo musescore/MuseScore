@@ -76,7 +76,7 @@ Rectangle {
         id: navPanel
         name: root.objectName != "" ? root.objectName : "PopupPanel"
 
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: {
             var pctrl = root.navigationParentControl;
             if (pctrl) {

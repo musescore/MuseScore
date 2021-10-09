@@ -40,9 +40,9 @@ RowLayout {
 
     property NavigationPanel navigation: NavigationPanel {
         name: "ShortcutsBottomPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("shortcuts", "Shortcuts bottom panel")
-        enabled: root.visible
 
         onActiveChanged: {
             if (active) {

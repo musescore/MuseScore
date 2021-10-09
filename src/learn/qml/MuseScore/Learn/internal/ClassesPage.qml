@@ -46,6 +46,8 @@ FocusScope {
 
     NavigationPanel {
         id: navPanel
+        name: "Classes"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
     }
 

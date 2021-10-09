@@ -32,6 +32,7 @@ Rectangle {
 
     property NavigationPanel navigation: NavigationPanel {
         name: "PreferencesButtonsPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
 
         onActiveChanged: {

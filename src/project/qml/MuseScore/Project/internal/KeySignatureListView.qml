@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -29,13 +29,14 @@ GridView {
     id: root
     
     property var currentSignature: null
-    property var mode: null
+    property string mode: ""
     signal signatureSelected(var signature)
 
     property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
     property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
 
     property NavigationPanel navigationPanel: NavigationPanel {
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
     }
 
