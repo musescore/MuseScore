@@ -39,13 +39,14 @@ Rectangle {
     NavigationSection {
         id: navSec
         name: "HomeMenuSection"
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: 2
     }
 
     NavigationPanel {
         id: navPanel
         name: "HomeMenuPanel"
+        enabled: root.enabled && root.visible
         section: navSec
         order: 1
         direction: NavigationPanel.Vertical

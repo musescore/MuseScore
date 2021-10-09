@@ -364,10 +364,10 @@ ListView {
                 placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
-            Drag.onDragFinished: {
+            Drag.onDragFinished: function (dropAction) {
                 paletteTree.itemDragged = false;
 
-                if (dropAction != Qt.IgnoreAction) {
+                if (dropAction !== Qt.IgnoreAction) {
                     paletteTree.currentIndex = -1;
                 }
 

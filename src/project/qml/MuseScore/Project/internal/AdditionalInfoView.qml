@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -69,7 +67,7 @@ Row {
         id: navPanel
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         accessible.name: qsTrc("project", "Score options")
     }
 

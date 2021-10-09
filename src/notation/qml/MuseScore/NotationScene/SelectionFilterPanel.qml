@@ -38,7 +38,7 @@ Rectangle {
         name: "SelectionFilter"
         section: root.navigationSection
         direction: NavigationPanel.Vertical
-        enabled: root.visible && root.enabled
+        enabled: root.enabled && root.visible
         order: 2
     }
 

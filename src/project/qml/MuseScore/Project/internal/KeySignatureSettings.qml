@@ -142,7 +142,6 @@ FlatButton {
 
                     navigationPanel.name: "KeySignatureMajorPanel"
                     navigationPanel.section: popup.navigationSection
-                    navigationPanel.enabled: bar.currentIndex === 0
                     navigationPanel.order: 2
 
                     onSignatureSelected: {
@@ -157,7 +156,6 @@ FlatButton {
 
                     navigationPanel.name: "KeySignatureMinorPanel"
                     navigationPanel.section: popup.navigationSection
-                    navigationPanel.enabled: bar.currentIndex === 1
                     navigationPanel.order: 2
 
                     onSignatureSelected: {

@@ -34,9 +34,9 @@ RowLayout {
 
     property NavigationPanel navigation: NavigationPanel {
         name: "MidiMappingTopPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("shortcuts", "Midi mapping top panel")
-        enabled: root.visible
 
         onActiveChanged: {
             if (active) {

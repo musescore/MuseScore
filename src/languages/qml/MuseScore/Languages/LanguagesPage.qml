@@ -41,6 +41,7 @@ Item {
     NavigationPanel {
         id: navPanel
         name: "AddonsLanguages"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Vertical
         accessible.name: qsTrc("languages", "Languages") + navPanel.directionInfo
     }

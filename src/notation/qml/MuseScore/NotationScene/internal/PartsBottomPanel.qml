@@ -38,6 +38,7 @@ Row {
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PartsBottomPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         onActiveChanged: {
             if (active) {

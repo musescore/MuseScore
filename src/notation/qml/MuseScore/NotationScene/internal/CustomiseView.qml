@@ -60,7 +60,8 @@ ListView {
     }
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "CostomiseView"
+        name: "CustomiseView"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {

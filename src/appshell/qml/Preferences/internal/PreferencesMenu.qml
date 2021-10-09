@@ -33,6 +33,7 @@ Item {
 
     property NavigationPanel navigation: NavigationPanel {
         name: "PreferencesMenuPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {

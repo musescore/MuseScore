@@ -40,6 +40,7 @@ Rectangle {
     NavigationSection {
         id: navSec
         name: "AppTitleBar"
+        enabled: root.enabled && root.visible
         order: 0
 
         onActiveChanged: {

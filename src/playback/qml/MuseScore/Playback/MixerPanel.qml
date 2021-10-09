@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -32,16 +32,13 @@ import "internal"
 Rectangle {
     id: root
 
-    property alias navigation: flickable.navigation
-    property alias contextMenuModel: flickable.contextMenuModel
+    property alias navigation: navPanel
+    property alias contextMenuModel: contextMenuModel
 
     color: ui.theme.backgroundPrimaryColor
 
     Flickable {
         id: flickable
-
-        property alias navigation: navPanel
-        property alias contextMenuModel: contextMenuModel
 
         function positionViewAtEnd() {
             if (flickable.contentY == flickable.contentHeight) {
