@@ -5239,6 +5239,26 @@
                   <genre>jazz</genre>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="bb-sousaphone-treble">
+                  <trackName>B♭ Sousaphone (Treble Clef)</trackName>
+                  <longName>B♭ Sousaphone</longName>
+                  <shortName>B♭ Sphn.</shortName>
+                  <description>B♭ Sousaphone (Treble Clef)</description>
+                  <musicXMLid>brass.sousaphone</musicXMLid>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>F</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>30-60</aPitchRange>
+                  <pPitchRange>24-74</pPitchRange>
+                  <transposeDiatonic>-15</transposeDiatonic>
+                  <transposeChromatic>-26</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 58; MS General: Tuba-->
+                        <program value="58"/> <!--Tuba-->
+                  </Channel>
+                  <genre>jazz</genre>
+                  <genre>marching</genre>
+            </Instrument>
             <Instrument id="wagner-tuba">
                   <family>horns</family>
                   <longName>Wagner Tuba</longName>
