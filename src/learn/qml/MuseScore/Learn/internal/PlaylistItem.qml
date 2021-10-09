@@ -41,6 +41,7 @@ FocusScope {
     NavigationControl {
         id: navCtrl
         name: root.title
+        enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
         accessible.name: root.title

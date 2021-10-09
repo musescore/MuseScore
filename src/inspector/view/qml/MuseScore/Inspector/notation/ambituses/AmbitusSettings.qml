@@ -205,7 +205,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: showItem.navigation.row + 1
-                navigationEnabled: visible && showItem.isExpanded
 
                 model: [
                     { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto") },
@@ -220,7 +219,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: directionSection.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
 
             NoteheadTypeSelector {
@@ -229,7 +227,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadGroup.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
 
             SpinBoxPropertyView {
@@ -247,7 +244,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadType.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
         }
     }

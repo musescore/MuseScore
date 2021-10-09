@@ -85,7 +85,6 @@ Item {
             Layout.rightMargin: contentColumn.sideMargin
 
             navigation.section: root.navigationSection
-            navigation.enabled: root.visible
             navigation.order: 2
 
             isMovingUpAvailable: instrumentsTreeModel.isMovingUpAvailable

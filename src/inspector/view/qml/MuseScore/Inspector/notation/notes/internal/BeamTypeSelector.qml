@@ -51,6 +51,8 @@ InspectorPropertyView {
 
             implicitHeight: Math.min(contentHeight, 3 * cellHeight)
 
+            readonly property int cellRadius: 2
+
             cellHeight: 40
             cellWidth: 40
 
@@ -74,12 +76,12 @@ InspectorPropertyView {
                 implicitWidth: gridView.cellWidth
 
                 hint: modelData["hint"] ?? ""
+                background.radius: gridView.cellRadius
 
                 navigation.name: hint
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1 + index
                 navigation.accessible.name: hint
-                navigation.enabled: root.enabled
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         gridView.positionViewAtIndex(index, ListView.Contain)
@@ -92,12 +94,9 @@ InspectorPropertyView {
                     font.pixelSize: 30
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        if (root.propertyItem) {
-                            root.propertyItem.value = modelData["value"]
-                        }
+                onClicked: {
+                    if (root.propertyItem) {
+                        root.propertyItem.value = modelData["value"]
                     }
                 }
             }
@@ -105,7 +104,7 @@ InspectorPropertyView {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 opacity: ui.theme.accentOpacityNormal
-                radius: 2
+                radius: gridView.cellRadius
             }
 
             currentIndex: root.propertyItem && !root.propertyItem.isUndefined

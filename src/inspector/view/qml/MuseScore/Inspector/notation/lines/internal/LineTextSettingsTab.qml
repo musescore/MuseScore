@@ -54,7 +54,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
-            navigationEnabled: root.enabled && visible
         }
 
         OffsetSection {
@@ -64,7 +63,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: beginningTextSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled && visible
         }
 
         SeparatorLine { anchors.margins: -10 }
@@ -76,7 +74,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: beginningTextOffsetSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled && visible
         }
 
         OffsetSection {
@@ -86,7 +83,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: continiousTextSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled && visible
         }
 
         SeparatorLine { anchors.margins: -10; visible: endTextSection.visible }
@@ -99,7 +95,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: continiousTextOffsetSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled && visible
         }
 
         OffsetSection {
@@ -110,7 +105,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: endTextSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled && visible
         }
     }
 }

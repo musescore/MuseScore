@@ -69,7 +69,6 @@ Rectangle {
         anchors.rightMargin: 12
 
         navigation.section: root.navigationSection
-        navigation.enabled: root.visible
         navigation.order: 2
 
         onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
@@ -94,7 +93,6 @@ Rectangle {
         backgroundColor: root.color
 
         navigation.section: root.navigationSection
-        navigation.enabled: root.visible
         navigation.order: 5
 
         filter: palettesPanelHeader.searchText

@@ -115,7 +115,6 @@ Item {
             navigation.panel: root.navigation
             navigation.row: navigationRow
             navigation.column: navigationColumn
-            navigation.enabled: enabled
             navigation.accessible.name: title
             navigation.accessible.role: MUAccessible.ListItem
             navigation.onActiveChanged: {

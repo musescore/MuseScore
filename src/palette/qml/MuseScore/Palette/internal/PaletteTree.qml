@@ -61,6 +61,7 @@ ListView {
     NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
+        enabled: paletteTree.enabled && paletteTree.visible
         direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {

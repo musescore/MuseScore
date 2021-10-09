@@ -28,7 +28,7 @@ InspectorPropertyView {
 
     visible: Boolean(propertyItem)
 
-    navigationRowEnd: navigationRowStart + 2
+    navigationName: "TextSection"
 
     function focusOnFirst() {
         textField.navigation.requestActive()
@@ -40,12 +40,12 @@ InspectorPropertyView {
         currentText: root.propertyItem ? root.propertyItem.value : ""
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
 
+        navigation.name: root.navigationName + " TextInputField"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-        navigation.enabled: root.enabled && root.navigationEnabled && root.visible
         navigation.accessible.name: root.titleText + " " + currentText
 
-        onCurrentTextEdited: {
+        onCurrentTextEdited: function (newTextValue) {
             if (root.propertyItem) {
                 root.propertyItem.value = newTextValue
             }

@@ -63,7 +63,7 @@ RadioDelegate {
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "FlatRadioButton"
-        enabled: root.enabled
+        enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: root.text

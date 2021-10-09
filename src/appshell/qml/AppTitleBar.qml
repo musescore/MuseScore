@@ -90,6 +90,7 @@ Rectangle {
             NavigationPanel {
                 id: navAppControlPanel
                 name: "AppControl"
+                enabled: systemButtons.enabled && systemButtons.visible
                 section: navSec
                 order: 1
                 accessible.name: qsTrc("appshell", "App control")

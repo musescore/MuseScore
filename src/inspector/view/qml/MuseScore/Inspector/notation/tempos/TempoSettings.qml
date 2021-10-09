@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -61,6 +60,7 @@ Column {
 
         measureUnitsSymbol: qsTrc("inspector", "BPM")
 
+        navigationName: "Override"
         navigationPanel: root.navigationPanel
         navigationRowStart: followWrittenTempoCheckbox.navigation.row + 1
     }

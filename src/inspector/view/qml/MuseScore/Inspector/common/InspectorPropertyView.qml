@@ -31,10 +31,13 @@ Column {
 
     property PropertyItem propertyItem: null
 
+    property string navigationName: "InspectorPropertyView"
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
+
+    // Normally, this is just the reset or menu button (navigationRowStart + 0),
+    // and one control (navigationRowStart + 1)
     property int navigationRowEnd: navigationRowStart + 1
-    property bool navigationEnabled: true
 
     property alias titleText: titleLabel.text
     property alias showTitle: titleLabel.visible
@@ -42,6 +45,12 @@ Column {
 
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
     readonly property bool isModified: propertyItem ? propertyItem.isModified : false
+
+    function requestActiveFocus() {
+        if (buttonLoader.item && buttonLoader.item.navigation) {
+            buttonLoader.item.navigation.requestActive()
+        }
+    }
 
     enabled: propertyItem && propertyItem.isEnabled
     visible: propertyItem && propertyItem.isVisible
