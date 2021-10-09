@@ -41,9 +41,11 @@ void GeneralPreferencesModel::load()
         emit languagesChanged(languages());
     });
 
-    telemetryConfiguration()->isTelemetryAllowed().ch.onReceive(this, [this](bool) {
-        emit isTelemetryAllowedChanged(isTelemetryAllowed());
-    });
+    if (telemetryConfiguration()) {
+        telemetryConfiguration()->isTelemetryAllowed().ch.onReceive(this, [this](bool) {
+            emit isTelemetryAllowedChanged(isTelemetryAllowed());
+        });
+    }
 }
 
 void GeneralPreferencesModel::openUpdateTranslationsPage()
@@ -84,6 +86,9 @@ QString GeneralPreferencesModel::currentLanguageCode() const
 
 bool GeneralPreferencesModel::isTelemetryAllowed() const
 {
+    if (!(telemetryConfiguration())) {
+        return false;
+    }
     return telemetryConfiguration()->isTelemetryAllowed().val;
 }
 
