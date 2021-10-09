@@ -614,6 +614,8 @@ GridView {
 
                 draggedIcon.grabToImage(function(result) {
                     Drag.imageSource = result.url
+                    Drag.hotSpot.x = paletteCell.mouseArea.mouseX
+                    Drag.hotSpot.y = paletteCell.mouseArea.mouseY
                     dragDropReorderTimer.restart();
                 })
             }
