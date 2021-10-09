@@ -60,7 +60,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2
-            navigationEnabled: root.enabled
         }
 
         FlatRadioButtonGroupPropertyView {
@@ -70,7 +69,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: noteHeadSection.navigationRowEnd + 1
-            navigationEnabled: root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO, title: qsTrc("inspector", "Auto") },
@@ -101,9 +99,9 @@ FocusableItem {
                     titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
 
+                    navigationName: "NoteHeadTypeSection"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: showItem.navigation.row + 1
-                    navigationEnabled: root.enabled && showItem.isExpanded
                 }
 
                 FlatRadioButtonGroupPropertyView {
@@ -111,9 +109,9 @@ FocusableItem {
                     titleText: qsTrc("inspector", "Note direction")
                     propertyItem: root.model ? root.model.headDirection : null
 
+                    navigationName: "NoteDirectionSection"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: noteHeadTypeSection.navigationRowEnd + 1
-                    navigationEnabled: root.enabled && showItem.isExpanded
 
                     model: [
                         { text: qsTrc("inspector", "Auto"), value: NoteHead.DIRECTION_H_AUTO, title: qsTrc("inspector", "Auto") },
@@ -127,9 +125,9 @@ FocusableItem {
                     horizontalOffset: root.model ? root.model.horizontalOffset : null
                     verticalOffset: root.model ? root.model.verticalOffset : null
 
+                    navigationName: "NoteHeadOffsetSection"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: noteDirectionSection.navigationRowEnd + 1
-                    navigationEnabled: root.enabled && visible && showItem.isExpanded
                 }
             }
         }

@@ -181,7 +181,6 @@ GridView {
             //! NOTE Just Up/Down navigation now
             navigation.row: paletteView.ncells + paletteView.navigationRow
             navigation.column: 1
-            navigation.enabled: paletteView.visible
 
             onActiveFocusChanged: {
                 if (activeFocus) {
@@ -515,7 +514,6 @@ GridView {
             navigation.row: model.index + paletteView.navigationRow
             navigation.column: 1
 
-            navigation.enabled: paletteView.visible
             navigation.onActiveChanged: {
                 if (navigation.active) {
                     paletteView.currentIndex = paletteCell.rowIndex;

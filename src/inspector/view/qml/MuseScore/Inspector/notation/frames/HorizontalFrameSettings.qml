@@ -79,6 +79,5 @@ Column {
         navigation.name: "DisplayKeysAndBracketsCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: horizontalGapsSection.navigationRowEnd + 1
-        navigation.enabled: root.enabled
     }
 }

@@ -81,6 +81,7 @@ Column {
             minValue: 0.1
             decimals: 2
 
+            navigationName: "Dash"
             navigationPanel: root.navigationPanel
             navigationRowStart: styleSection.navigationRowEnd + 1
         }
@@ -102,6 +103,7 @@ Column {
             minValue: 0.1
             decimals: 2
 
+            navigationName: "Gap"
             navigationPanel: root.navigationPanel
             navigationRowStart: dashSection.navigationRowEnd + 1
         }

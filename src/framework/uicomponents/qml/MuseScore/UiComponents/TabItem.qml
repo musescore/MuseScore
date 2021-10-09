@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 import QtQuick.Controls 1.5
+
 import MuseScore.Ui 1.0
 
 Tab {
@@ -35,10 +35,10 @@ Tab {
     property NavigationControl _nav: NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "TabItem"
+        enabled: root.enabled
         accessible.name: root.title
         accessible.role: MUAccessible.RadioButton
         accessible.checked: root.checked
         onTriggered: root.navigationTriggered()
     }
-
 }

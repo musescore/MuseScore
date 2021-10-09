@@ -52,6 +52,7 @@ Column {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
+        navigationName: "Style"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
 
@@ -77,6 +78,7 @@ Column {
 
         visible: root.barlineSettingsModel && root.barlineSettingsModel.isRepeatStyleChangingAllowed
 
+        navigationName: "RepeatStyle"
         navigationPanel: root.navigationPanel
         navigationRowStart: styleSection.navigationRowEnd + 1
 
@@ -92,7 +94,6 @@ Column {
         navigation.name: "SpanToStaffCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: repeatStyleSection.navigationRowEnd + 1
-        navigation.enabled: root.enabled
 
         text: qsTrc("inspector", "Span to next staff")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.isSpanToNextStaff : null
@@ -115,6 +116,7 @@ Column {
             titleText: qsTrc("inspector", "Span from")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom : null
 
+            navigationName: "SpanFrom"
             navigationPanel: root.navigationPanel
             navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
         }
@@ -128,6 +130,7 @@ Column {
             titleText: qsTrc("inspector", "Span to")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo : null
 
+            navigationName: "SpanTo"
             navigationPanel: root.navigationPanel
             navigationRowStart: spanFrom.navigationRowEnd + 1
         }

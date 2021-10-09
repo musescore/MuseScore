@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 2.0
+import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -45,6 +43,7 @@ InspectorSectionView {
 
         DropdownPropertyView {
             id: fontSection
+            navigationName: "Font"
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
 
@@ -80,6 +79,7 @@ InspectorSectionView {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigationName: "StyleMenu"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: fontSection.navigationRowEnd + 1
                 navigationRowEnd: styleGroup.navigationRowEnd
@@ -122,6 +122,7 @@ InspectorSectionView {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigationName: "Size"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: styleSection.navigationRowEnd + 1
 
@@ -150,6 +151,7 @@ InspectorSectionView {
             titleText: qsTrc("inspector", "Alignment")
             propertyItem: root.model ? root.model.horizontalAlignment : null
 
+            navigationName: "AlignmentMenu"
             navigationPanel: root.navigationPanel
             navigationRowStart: sizeSection.navigationRowEnd + 1
             navigationRowEnd: verticalAlignmentButtonList.navigationRowEnd

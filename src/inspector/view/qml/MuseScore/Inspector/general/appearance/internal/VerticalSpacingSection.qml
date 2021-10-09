@@ -36,6 +36,8 @@ SpinBoxPropertyView {
     anchors.right: parent.horizontalCenter
     anchors.rightMargin: 2
 
+    navigationName: "Minimum distance"
+
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
 

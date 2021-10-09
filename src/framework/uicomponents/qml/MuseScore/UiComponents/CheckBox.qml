@@ -52,7 +52,7 @@ FocusScope {
         id: navCtrl
 
         name: root.objectName != "" ? root.objectName : "CheckBox"
-        enabled: root.enabled
+        enabled: root.enabled && root.visible
         accessible.role: MUAccessible.CheckBox
         accessible.name: root.text
         accessible.checked: root.checked

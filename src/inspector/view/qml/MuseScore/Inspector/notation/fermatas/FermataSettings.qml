@@ -50,6 +50,6 @@ Column {
         propertyItem: root.model ? root.model.placementType : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: 1
+        navigationRowStart: root.navigationRowStart
     }
 }

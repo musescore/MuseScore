@@ -103,8 +103,9 @@ Item {
 
     NavigationControl {
         id: navCtrl
+        name: "ItemInstrumentsTree"
         column: 0
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         accessible.role: MUAccessible.ListItem
         accessible.name: titleLabel.text
 

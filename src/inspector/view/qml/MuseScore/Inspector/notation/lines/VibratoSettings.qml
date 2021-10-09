@@ -49,6 +49,7 @@ Column {
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
 
+        navigationName: "Type"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }
