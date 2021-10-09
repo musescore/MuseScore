@@ -16,6 +16,28 @@ def addMessage(f, text, comment='', category='InstrumentsXML'):
 # Create instrumentsxml.h (must specify encoding and line ending on Windows)
 f = open('instrumentsxml.h', 'w', newline='\n', encoding='utf-8')
 
+f.write("/*\n\
+ * SPDX-License-Identifier: GPL-3.0-only\n\
+ * MuseScore-CLA-applies\n\
+ *\n\
+ * MuseScore\n\
+ * Music Composition & Notation\n\
+ *\n\
+ * Copyright (C) 2021 MuseScore BVBA and others\n\
+ *\n\
+ * This program is free software: you can redistribute it and/or modify\n\
+ * it under the terms of the GNU General Public License version 3 as\n\
+ * published by the Free Software Foundation.\n\
+ *\n\
+ * This program is distributed in the hope that it will be useful,\n\
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+ * GNU General Public License for more details.\n\
+ *\n\
+ * You should have received a copy of the GNU General Public License\n\
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.\n\
+ */\n")
+
 #include template names and template categories
 d = "../templates"
 for o in sorted(os.listdir(d)): # sort to get same ordering on all platforms
@@ -50,6 +72,11 @@ for child in root:
         addMessage(f, instrGroup.text)
         instruments = child.findall("Instrument")
         for instrument in instruments:
+            description = instrument.find("description")
+            if description is not None:
+                print("  description : " + description.text)
+                addMessage(f, description.text)
+
             longName = instrument.find("longName")
             if longName is not None:
                 print("  longName : " + longName.text)
