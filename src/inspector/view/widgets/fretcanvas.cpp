@@ -35,10 +35,6 @@
 
 using namespace mu::inspector;
 
-//---------------------------------------------------------
-//   FretCanvas
-//---------------------------------------------------------
-
 FretCanvas::FretCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
@@ -48,10 +44,6 @@ FretCanvas::FretCanvas(QQuickItem* parent)
     m_cstring = -2;
     m_cfret   = -2;
 }
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
 
 void FretCanvas::draw(QPainter* painter)
 {
@@ -183,10 +175,6 @@ void FretCanvas::draw(QPainter* painter)
     }
 }
 
-//---------------------------------------------------------
-//   paintDotSymbol
-//---------------------------------------------------------
-
 void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal dotd, Ms::FretDotType dtype)
 {
     switch (dtype) {
@@ -212,10 +200,6 @@ void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal 
     }
 }
 
-//---------------------------------------------------------
-//   getPosition
-//---------------------------------------------------------
-
 void FretCanvas::getPosition(const QPointF& p, int* string, int* fret)
 {
     double mag = 1.5;
@@ -232,10 +216,6 @@ void FretCanvas::getPosition(const QPointF& p, int* string, int* fret)
     *fret  = (p.y() - yo + fretDist) / fretDist;
     *string = (p.x() - xo + stringDist * .5) / stringDist;
 }
-
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
 
 void FretCanvas::mousePressEvent(QMouseEvent* ev)
 {
@@ -327,10 +307,6 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
     globalContext()->currentNotation()->notationChanged().notify();
 }
 
-//---------------------------------------------------------
-//   hoverMoveEvent
-//---------------------------------------------------------
-
 void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
 {
     int string;
@@ -342,10 +318,6 @@ void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
         update();
     }
 }
-
-//---------------------------------------------------------
-//   setFretDiagram
-//---------------------------------------------------------
 
 void FretCanvas::setFretDiagram(QVariant fd)
 {
@@ -363,16 +335,14 @@ void FretCanvas::setFretDiagram(QVariant fd)
     update();
 }
 
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
 void FretCanvas::clear()
 {
-    m_diagram->score()->startCmd();
+    globalContext()->currentNotation()->undoStack()->prepareChanges();
     m_diagram->undoFretClear();
-    m_diagram->score()->endCmd();
+    globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
+
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 void FretCanvas::paint(QPainter* painter)
