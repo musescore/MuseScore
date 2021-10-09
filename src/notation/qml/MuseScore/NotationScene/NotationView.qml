@@ -68,7 +68,7 @@ FocusScope {
             navigationSection: navSec
         }
 
-        SeparatorLine {}
+        SeparatorLine { visible: tabPanel.visible }
 
         SplitView {
             id: splitView
