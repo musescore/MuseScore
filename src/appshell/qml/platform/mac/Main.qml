@@ -79,6 +79,7 @@ AppWindow {
         menuItem.checkable = itemInfo.checkable
         menuItem.shortcut = itemInfo.shortcut
         menuItem.separator = !Boolean(itemInfo.title)
+        menuItem.role = itemInfo.role
 
         return menuItem
     }
