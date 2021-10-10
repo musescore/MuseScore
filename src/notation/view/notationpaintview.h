@@ -85,7 +85,7 @@ public:
 
     PointF toLogical(const QPoint& point) const override;
 
-    Q_INVOKABLE void moveCanvas(int dx, int dy) override;
+    Q_INVOKABLE bool moveCanvas(int dx, int dy) override;
     void moveCanvasVertical(int dy) override;
     void moveCanvasHorizontal(int dx) override;
 
@@ -174,7 +174,9 @@ private:
     void dropEvent(QDropEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
-    QRectF canvasRect() const;
+    void ensureViewportInsideScrollableArea();
+
+    QRectF scrollableAreaRect() const;
 
     qreal horizontalScrollableAreaSize() const;
     qreal horizontalScrollableSize() const;

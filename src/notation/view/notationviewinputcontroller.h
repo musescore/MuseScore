@@ -47,7 +47,9 @@ public:
 
     virtual PointF canvasPos() const = 0;
 
-    virtual void moveCanvas(int dx, int dy) = 0;
+    //! Returns true if the canvas has been moved
+    virtual bool moveCanvas(int dx, int dy) = 0;
+
     virtual void moveCanvasHorizontal(int dx) = 0;
     virtual void moveCanvasVertical(int dy) = 0;
 
