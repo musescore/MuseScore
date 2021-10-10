@@ -316,6 +316,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         hitStaffIndex = context.staff ? context.staff->idx() : -1;
     }
 
+    if (viewInteraction()->isHitGrip(logicPos)) {
+        viewInteraction()->startEditGrip(logicPos);
+        return;
+    }
+
     if (hitElement) {
         RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(hitElement);
 
@@ -345,11 +350,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         m_view->showContextMenu(type, event->pos());
     } else if (event->button() == Qt::MouseButton::LeftButton) {
         m_view->hideContextMenu();
-    }
-
-    if (viewInteraction()->isHitGrip(logicPos)) {
-        viewInteraction()->startEditGrip(logicPos);
-        return;
     }
 
     if (hitElement) {
