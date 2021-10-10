@@ -18,10 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This is module for convert mscz files to various formats (image, pdf, audio and etc).
-# Main goal - determine what need to do and call necceasers functions.
-# Usually use from command line.
-
 set(MODULE project)
 
 set(MODULE_QRC project.qrc)
@@ -34,13 +30,14 @@ if (OS_IS_MAC)
     set(PLATFORM_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.h
-    )
+        )
     # Don't mix C++ and Objective-C++ in Unity Build
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
-                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
-
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
-                                PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+        )
 elseif(OS_IS_WIN)
     set(PLATFORM_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.cpp
@@ -126,4 +123,3 @@ set(MODULE_SRC
 set(MODULE_LINK notation)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
