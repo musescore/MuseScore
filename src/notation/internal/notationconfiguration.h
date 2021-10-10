@@ -134,6 +134,7 @@ public:
 
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited) override;
+    async::Notification isLimitCanvasScrollAreaChanged() const override;
 
     bool colorNotesOusideOfUsablePitchRange() const override;
     void setColorNotesOusideOfUsablePitchRange(bool value) override;
@@ -185,6 +186,7 @@ private:
     async::Channel<io::path> m_userStylesPathChanged;
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
+    async::Notification m_isLimitCanvasScrollAreaChanged;
 };
 }
 

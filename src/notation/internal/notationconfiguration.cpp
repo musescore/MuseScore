@@ -171,6 +171,9 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
+    settings()->valueChanged(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).onReceive(this, [this](const Val&) {
+        m_isLimitCanvasScrollAreaChanged.notify();
+    });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
@@ -562,6 +565,11 @@ bool NotationConfiguration::isLimitCanvasScrollArea() const
 void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
 {
     settings()->setSharedValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
+}
+
+Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
+{
+    return m_isLimitCanvasScrollAreaChanged;
 }
 
 bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
