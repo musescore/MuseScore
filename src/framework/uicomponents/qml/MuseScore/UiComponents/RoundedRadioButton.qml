@@ -49,7 +49,7 @@ RadioDelegate {
     hoverEnabled: true
 
     //! NONE Disabled default Qt Accessible
-    Accessible.role: Accessible.NoRole
+    Accessible.ignored: true
 
     NavigationControl {
         id: keynavCtrl

@@ -31,6 +31,7 @@
 #include "logremover.h"
 #include "thirdparty/haw_logger/logger/logdefdest.h"
 #include "version.h"
+#include "config.h"
 
 #include "internal/application.h"
 #include "internal/interactive.h"
