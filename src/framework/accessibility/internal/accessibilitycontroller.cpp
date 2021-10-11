@@ -40,6 +40,8 @@
 
 using namespace mu::accessibility;
 
+AccessibleObject* s_rootObject = nullptr;
+
 AccessibilityController::~AccessibilityController()
 {
     unreg(this);
@@ -47,6 +49,12 @@ AccessibilityController::~AccessibilityController()
 
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
+#ifdef Q_OS_MAC
+    if (classname == QLatin1String("QQuickWindow")) {
+        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+    }
+#endif
+
     if (classname == QLatin1String("mu::accessibility::AccessibleObject")) {
         AccessibleObject* aobj = qobject_cast<AccessibleObject*>(object);
         IF_ASSERT_FAILED(aobj) {
@@ -72,9 +80,10 @@ void AccessibilityController::init()
 
     reg(this);
     const Item& self = findItem(this);
+    s_rootObject = self.object;
 
     QAccessible::installRootObjectHandler(nullptr);
-    QAccessible::setRootObject(self.object);
+    QAccessible::setRootObject(s_rootObject);
 
     //! NOTE Disabled any events from Qt
     QAccessible::installRootObjectHandler(rootObjectHandlerNoop);
@@ -88,6 +97,11 @@ const IAccessible* AccessibilityController::accessibleRoot() const
 
 void AccessibilityController::reg(IAccessible* item)
 {
+    if (!m_inited) {
+        m_inited = true;
+        init();
+    }
+
     if (findItem(item).isValid()) {
         LOGW() << "Already registered";
         return;
@@ -315,6 +329,32 @@ int AccessibilityController::indexOfChild(const IAccessible* item, const QAccess
     }
 
     return -1;
+}
+
+QAccessibleInterface* AccessibilityController::focusedChild(const IAccessible* item) const
+{
+    TRACEFUNC;
+    size_t count = item->accessibleChildCount();
+    for (size_t i = 0; i < count; ++i) {
+        const IAccessible* ch = item->accessibleChild(i);
+        const Item& chIt = findItem(ch);
+        if (!chIt.isValid() || !chIt.iface) {
+            continue;
+        }
+
+        if (chIt.iface->state().focused) {
+            return chIt.iface;
+        }
+
+        if (chIt.item->accessibleChildCount() > 0) {
+            QAccessibleInterface* subItem = focusedChild(chIt.item);
+            if (subItem) {
+                return subItem;
+            }
+        }
+    }
+
+    return nullptr;
 }
 
 IAccessible* AccessibilityController::accessibleParent() const
