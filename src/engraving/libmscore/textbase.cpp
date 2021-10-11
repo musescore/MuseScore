@@ -796,7 +796,8 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA) {
             family
-                = String::fromStdString(engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont).toStdString())->family());
+                = String::fromStdString(engravingFonts()->fontByName(t->score()->styleSt(Sid::MusicalTextFont).replace(u" Text",
+                                                                                                                       u"").toStdString())->family());
             fontType = draw::Font::Type::MusicSymbol;
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
