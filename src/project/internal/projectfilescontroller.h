@@ -24,6 +24,8 @@
 
 #include "iprojectfilescontroller.h"
 
+#include <QObject>
+
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
@@ -39,7 +41,7 @@
 #include "iplatformrecentfilescontroller.h"
 
 namespace mu::project {
-class ProjectFilesController : public IProjectFilesController, public actions::Actionable, public async::Asyncable
+class ProjectFilesController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
@@ -60,6 +62,8 @@ public:
 
 private:
     void setupConnections();
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     project::INotationProjectPtr currentNotationProject() const;
     notation::IMasterNotationPtr currentMasterNotation() const;
