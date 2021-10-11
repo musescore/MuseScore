@@ -1862,8 +1862,10 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
 
     constexpr qreal DEFAULT_GRIP_SIZE = 8;
 
-    qreal gripWidth = DEFAULT_GRIP_SIZE / painter->worldTransform().m11();
-    qreal gripHeight = DEFAULT_GRIP_SIZE / painter->worldTransform().m22();
+    qreal guiScaling = configuration()->guiScaling();
+
+    qreal gripWidth = DEFAULT_GRIP_SIZE * guiScaling / painter->worldTransform().m11();
+    qreal gripHeight = DEFAULT_GRIP_SIZE * guiScaling / painter->worldTransform().m22();
     RectF newRect(-gripWidth / 2, -gripHeight / 2, gripWidth, gripHeight);
 
     EngravingItem* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
