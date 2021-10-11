@@ -21,8 +21,8 @@
  */
 #include "projectfilescontroller.h"
 
-#include <QObject>
 #include <QBuffer>
+#include <QFileOpenEvent>
 
 #include "translation.h"
 #include "notation/notationerrors.h"
@@ -38,6 +38,8 @@ using namespace mu::actions;
 
 void ProjectFilesController::init()
 {
+    qApp->installEventFilter(this);
+
     dispatcher()->reg(this, "file-open", this, &ProjectFilesController::openProject);
     dispatcher()->reg(this, "file-new", this, &ProjectFilesController::newProject);
     dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
@@ -54,6 +56,16 @@ void ProjectFilesController::init()
     dispatcher()->reg(this, "clear-recent", this, &ProjectFilesController::clearRecentScores);
 
     dispatcher()->reg(this, "continue-last-session", this, &ProjectFilesController::continueLastSession);
+}
+
+bool ProjectFilesController::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == qApp && event->type() == QEvent::FileOpen) {
+        QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
+        openProject(openEvent->file());
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 INotationProjectPtr ProjectFilesController::currentNotationProject() const
