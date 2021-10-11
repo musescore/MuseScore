@@ -38,14 +38,14 @@ public:
         setFocusPolicy(Qt::NoFocus);
         setHandleWidth(0);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setObjectName("TimeLineAdapter");
+        setObjectName("TimelineAdapter");
 
         m_msTimeline = new Ms::Timeline(this);
     }
 
     void updateView()
     {
-        m_msTimeline->updateGridView();
+        m_msTimeline->updateGridFromCmdState();
     }
 
     void setNotation(INotationPtr notation)
@@ -120,7 +120,7 @@ void TimelineView::componentComplete()
             return;
         }
 
-        notation->notationChanged().onNotify(this, [=] {
+        notation->undoStack()->stackChanged().onNotify(this, [=] {
             updateView();
         });
 
