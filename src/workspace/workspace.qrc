@@ -4,5 +4,7 @@
         <file>qml/MuseScore/Workspace/NewWorkspaceDialog.qml</file>
         <file>qml/MuseScore/Workspace/internal/WorkspacesView.qml</file>
         <file>qml/MuseScore/Workspace/qmldir</file>
+        <file>qml/MuseScore/Workspace/internal/WorkspacesBottomPanel.qml</file>
+        <file>qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml</file>
     </qresource>
 </RCC>
