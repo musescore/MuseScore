@@ -67,12 +67,6 @@ static const qreal BRACKET0_HEIGHT_MAX     = 30;
 // actual 2-staff bracket should be high 18.1 SP ca.
 static const qreal BRACKET_HEIGHT_MIN      = 17;
 static const qreal BRACKET_HEIGHT_MAX      = 20;
-// actual 3-staff bar line should be high 25 SP
-static const qreal BARLINE0_HEIGHT_MIN     = 24;
-static const qreal BARLINE0_HEIGHT_MAX     = 26;
-// actual 2-staff bar line should be high 14.5 SP
-static const qreal BARLINE_HEIGHT_MIN      = 14;
-static const qreal BARLINE_HEIGHT_MAX      = 15;
 
 TEST_F(BarlineTests, barline01)
 {
