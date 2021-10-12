@@ -48,50 +48,19 @@ StyledDialogView {
         anchors.margins: 24
         spacing: 0
 
-        Item {
+        WorkspacesTopPanel {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            StyledTextLabel {
-                anchors.left: parent.left
+            canRemove: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
 
-                text: qsTrc("workspace", "Workspaces")
-                font: ui.theme.headerBoldFont
+            onCreateNewWorkspaceRequested: {
+                workspacesModel.createNewWorkspace()
             }
 
-            FlatButton {
-                text: qsTrc("workspace", "Create new workspace")
-
-                anchors.right: deleteButton.left
-                anchors.rightMargin: 8
-
-                onClicked: {
-                    workspacesModel.createNewWorkspace()
-                }
+            onRemoveSelectedWorkspaceRequested: {
+                workspacesModel.removeWorkspace(workspacesModel.selectedWorkspace.index)
             }
-
-            FlatButton {
-                id: deleteButton
-
-                anchors.right: parent.right
-
-                icon: IconCode.DELETE_TANK
-
-                enabled: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
-
-                onClicked: {
-                    workspacesModel.removeWorkspace(workspacesModel.selectedWorkspace.index)
-                }
-            }
-        }
-
-        StyledTextLabel {
-            Layout.topMargin: 20
-            Layout.fillWidth: true
-
-            text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore interface")
-
-            horizontalAlignment: Qt.AlignLeft
         }
 
         SeparatorLine {
@@ -110,34 +79,24 @@ StyledDialogView {
             model: workspacesModel
         }
 
-        Row {
+        WorkspacesBottomPanel {
             Layout.topMargin: 20
-            Layout.preferredHeight: childrenRect.height
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            Layout.preferredHeight: childrenRect.height
 
-            spacing: 12
+            canSelect: Boolean(workspacesModel.selectedWorkspace)
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
-
-                onClicked: {
-                    root.reject()
-                }
+            onCancelRequested: {
+                root.reject()
             }
 
-            FlatButton {
-                text: qsTrc("global", "Select")
-
-                enabled: Boolean(workspacesModel.selectedWorkspace)
-
-                onClicked: {
-                    if (!workspacesModel.apply()) {
-                        return
-                    }
-
-                    root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
-                    root.hide()
+            onSelectRequested: {
+                if (!workspacesModel.apply()) {
+                    return
                 }
+
+                root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
+                root.hide()
             }
         }
     }
