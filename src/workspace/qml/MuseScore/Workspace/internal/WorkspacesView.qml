@@ -28,17 +28,53 @@ import MuseScore.UiComponents 1.0
 RadioButtonGroup {
     id: root
 
+    property string firstWorkspaceTitle: Boolean(prv.selectedWorkspace) ? prv.selectedWorkspace.title : ""
+
+    property int leftPadding: 0
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "WorkspacesViewPanel"
+        direction: NavigationPanel.Vertical
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+                //! NOTE If we removed workspace, then control with saved index may not be
+                event.setData("controlOptional", true)
+            }
+        }
+    }
+
     clip: true
     spacing: 0
     interactive: height < contentHeight
     boundsBehavior: Flickable.StopAtBounds
     orientation: Qt.Vertical
 
+    function focusOnSelected() {
+        if (prv.selectedWorkspace) {
+            prv.selectedWorkspace.navigation.requestActive()
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+
+        property var selectedWorkspace: {
+            for (var i = 0; i < root.count; i++) {
+                var item = root.itemAtIndex(i)
+                if (item && item.isSelected) {
+                    return item
+                }
+            }
+        }
+    }
+
     ScrollBar.vertical: StyledScrollBar {
         policy: ScrollBar.AsNeeded
     }
-
-    property int leftPadding: 0
 
     Connections {
         target: root.model
@@ -50,29 +86,44 @@ RadioButtonGroup {
         }
     }
 
-    delegate: RoundedRadioButton {
-        ButtonGroup.group: root.radioButtonGroup
+    delegate: ListItemBlank {
+        property string title: model.name
 
         width: ListView.view.width
         height: 46
 
-        leftPadding: root.leftPadding
-        spacing: 12
+        isSelected: model.isSelected
 
-        text: model.name
-        font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
-
-        checked: model.isSelected
-
-        background: ListItemBlank {
-            anchors.fill: parent
-
-            isSelected: model.isSelected
-            onClicked: {
-                root.model.selectWorkspace(model.index)
+        navigation.panel: root.navigationPanel
+        navigation.row: model.index
+        navigation.accessible.ignored: true
+        navigation.accessible.name: title
+        navigation.onActiveChanged: {
+            if (navigation.active) {
+                navigation.accessible.ignored = false
+                positionViewAtIndex(model.index, ListView.Contain)
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
             }
+        }
 
-            SeparatorLine { anchors.bottom: parent.bottom }
+        RoundedRadioButton {
+            anchors.fill: parent
+            leftPadding: root.leftPadding
+
+            ButtonGroup.group: root.radioButtonGroup
+
+            spacing: 12
+
+            text: model.name
+            font: model.isSelected ? ui.theme.bodyBoldFont : ui.theme.bodyFont
+
+            checked: model.isSelected
+        }
+
+        SeparatorLine { anchors.bottom: parent.bottom }
+
+        onClicked: {
+            root.model.selectWorkspace(model.index)
         }
     }
 }
