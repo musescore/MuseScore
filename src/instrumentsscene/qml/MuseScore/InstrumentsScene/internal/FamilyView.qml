@@ -45,6 +45,10 @@ Item {
         groupsView.positionViewAtIndex(groupIndex, ListView.Beginning)
     }
 
+    function focusOnFirst() {
+        root.groupSelected(0)
+    }
+
     QtObject {
         id: prv
 
@@ -123,6 +127,12 @@ Item {
             onNavigationActived: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
                 item.clicked(null)
+            }
+
+            onIsSelectedChanged: {
+                if (isSelected && !navigation.active) {
+                    navigation.requestActive()
+                }
             }
 
             StyledTextLabel {

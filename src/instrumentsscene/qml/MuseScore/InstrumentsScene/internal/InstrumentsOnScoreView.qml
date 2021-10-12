@@ -170,7 +170,7 @@ Item {
             navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
-                item.clicked()
+                item.clicked(null)
             }
 
             StyledTextLabel {

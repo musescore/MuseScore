@@ -56,6 +56,7 @@ StyledPopupView {
         spacing: 12
 
         StyledTextLabel {
+            id: nameLabel
             text: settingsModel.isMainScore ? qsTrc("instruments", "Name on main score") :
                                               qsTrc("instruments", "Name on part score")
         }
@@ -67,6 +68,7 @@ StyledPopupView {
 
             navigation.panel: root.navigationPanel
             navigation.row: 1
+            navigation.accessible.name: nameLabel.text + " " + currentText
 
             currentText: settingsModel.instrumentName
 
@@ -76,6 +78,7 @@ StyledPopupView {
         }
 
         StyledTextLabel {
+            id: abbreviatureLabel
             text: qsTrc("instruments", "Abbreviated name")
         }
 
@@ -84,6 +87,7 @@ StyledPopupView {
 
             navigation.panel: root.navigationPanel
             navigation.row: 2
+            navigation.accessible.name: abbreviatureLabel.text + " " + currentText
 
             currentText: settingsModel.abbreviature
 
@@ -93,6 +97,7 @@ StyledPopupView {
         }
 
         StyledTextLabel {
+            id: partNameLabel
             text: qsTrc("instruments", "Part name")
         }
 
@@ -101,6 +106,7 @@ StyledPopupView {
 
             navigation.panel: root.navigationPanel
             navigation.row: 3
+            navigation.accessible.name: partNameLabel.text + " " + currentText
 
             currentText: settingsModel.partName
 

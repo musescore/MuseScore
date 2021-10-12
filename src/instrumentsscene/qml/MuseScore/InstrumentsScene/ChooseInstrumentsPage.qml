@@ -55,6 +55,10 @@ Rectangle {
         return undefined
     }
 
+    function focusOnFirst() {
+        familyView.focusOnFirst()
+    }
+
     color: ui.theme.backgroundPrimaryColor
 
     InstrumentListModel {
