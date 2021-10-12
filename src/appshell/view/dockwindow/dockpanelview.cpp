@@ -23,6 +23,7 @@
 #include "dockpanelview.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
+#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
 #include "log.h"
 #include "translation.h"
@@ -229,4 +230,25 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
 
     m_menuModel->setCustomMenuModel(model);
     emit contextMenuModelChanged();
+}
+
+void DockPanel::addPanelAsTab(const DockPanel* tab)
+{
+    IF_ASSERT_FAILED(tab && dockWidget()) {
+        return;
+    }
+
+    dockWidget()->addDockWidgetAsTab(tab->dockWidget());
+}
+
+void DockPanel::setCurrentTabIndex(int index)
+{
+    IF_ASSERT_FAILED(dockWidget()) {
+        return;
+    }
+
+    KDDockWidgets::Frame* frame = dockWidget()->frame();
+    if (frame) {
+        frame->setCurrentTabIndex(index);
+    }
 }

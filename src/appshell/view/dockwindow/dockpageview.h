@@ -98,6 +98,8 @@ signals:
 private:
     void componentComplete() override;
 
+    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
