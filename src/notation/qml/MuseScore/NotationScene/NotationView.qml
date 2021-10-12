@@ -155,9 +155,9 @@ FocusScope {
                         id: verticalScrollBar
 
                         anchors.top: parent.top
-                        anchors.bottomMargin: prv.scrollbarMargin
                         anchors.bottom: parent.bottom
                         anchors.right: parent.right
+                        anchors.margins: prv.scrollbarMargin
 
                         orientation: Qt.Vertical
 
@@ -180,7 +180,7 @@ FocusScope {
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
                         anchors.right: parent.right
-                        anchors.rightMargin: prv.scrollbarMargin
+                        anchors.margins: prv.scrollbarMargin
 
                         orientation: Qt.Horizontal
 
