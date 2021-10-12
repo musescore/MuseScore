@@ -2917,6 +2917,21 @@
                   </Channel>
                   <genre>world</genre>
             </Instrument>
+            <Instrument>
+                  <longName>Shakuhachi</longName>
+                  <shortName>Shak.</shortName>
+                  <description>Japanese Bamboo Flute</description>
+                  <musicXMLid>wind.flutes.shakuhachi</musicXMLid>
+                  <clef>G</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>60-88</aPitchRange>
+                  <pPitchRange>60-100</pPitchRange>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 77; MS General: Shakuhachi-->
+                        <program value="77"/> <!--Shakuhachi-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
       </InstrumentGroup>
       <InstrumentGroup id="free-reed">
             <name>Free Reed</name>
