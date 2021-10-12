@@ -284,7 +284,8 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
             { "cutOutNE", SmuflAnchorId::cutOutNE },
             { "cutOutNW", SmuflAnchorId::cutOutNW },
             { "cutOutSE", SmuflAnchorId::cutOutSE },
-            { "cutOutSW", SmuflAnchorId::cutOutSW }
+            { "cutOutSW", SmuflAnchorId::cutOutSW },
+            { "opticalCenter", SmuflAnchorId::opticalCenter },
         };
 
         for (const QString& anchorId : anchors.keys()) {
