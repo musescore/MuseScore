@@ -104,8 +104,9 @@ QAccessibleInterface* AccessibleItemInterface::childAt(int, int) const
 
 QAccessibleInterface* AccessibleItemInterface::focusChild() const
 {
-    NOT_IMPLEMENTED;
-    return nullptr;
+    QAccessibleInterface* child = m_object->controller()->focusedChild(m_object->item());
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", focused child: " << (child ? child->text(QAccessible::Name) : "null");
+    return child;
 }
 
 QAccessible::State AccessibleItemInterface::state() const

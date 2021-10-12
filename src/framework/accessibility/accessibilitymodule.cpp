@@ -32,8 +32,6 @@
 using namespace mu::accessibility;
 using namespace mu::modularity;
 
-static std::shared_ptr<AccessibilityController> s_accessibilityController = std::make_shared<AccessibilityController>();
-
 std::string AccessibilityModule::moduleName() const
 {
     return "accessibility";
@@ -42,14 +40,5 @@ std::string AccessibilityModule::moduleName() const
 void AccessibilityModule::registerExports()
 {
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfiguration());
-    ioc()->registerExport<IAccessibilityController>(moduleName(), s_accessibilityController);
-}
-
-void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
-{
-    if (mode != framework::IApplication::RunMode::Editor) {
-        return;
-    }
-
-    s_accessibilityController->init();
+    ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());
 }
