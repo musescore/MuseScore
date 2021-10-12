@@ -34,6 +34,8 @@ namespace Ms {
 class TieSegment final : public SlurTieSegment
 {
     mu::PointF autoAdjustOffset;
+    qreal shoulderHeightMin = 0.4;
+    qreal shoulderHeightMax = 1.3;
 
     void setAutoAdjust(const mu::PointF& offset);
     void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(mu::PointF(x, y)); }
@@ -53,6 +55,7 @@ public:
 
     void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
     void adjustX();
+    void finalizeSegment();
 
     bool isEdited() const;
     void editDrag(EditData&) override;
