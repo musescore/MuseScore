@@ -43,16 +43,31 @@ StyledDialogView {
         workspacesModel.load()
     }
 
+    onOpened: {
+        Qt.callLater(activateNavigation)
+    }
+
+    function activateNavigation() {
+        view.focusOnSelected()
+        topPanel.readInfo()
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 24
         spacing: 0
 
         WorkspacesTopPanel {
+            id: topPanel
+
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
+            firstWorkspaceTitle: view.firstWorkspaceTitle
             canRemove: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
 
             onCreateNewWorkspaceRequested: {
                 workspacesModel.createNewWorkspace()
@@ -70,6 +85,7 @@ StyledDialogView {
         }
 
         WorkspacesView {
+            id: view
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.leftMargin: -parent.anchors.leftMargin
@@ -77,6 +93,9 @@ StyledDialogView {
             leftPadding: parent.anchors.leftMargin
 
             model: workspacesModel
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
         }
 
         WorkspacesBottomPanel {
@@ -85,6 +104,9 @@ StyledDialogView {
             Layout.preferredHeight: childrenRect.height
 
             canSelect: Boolean(workspacesModel.selectedWorkspace)
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             onCancelRequested: {
                 root.reject()

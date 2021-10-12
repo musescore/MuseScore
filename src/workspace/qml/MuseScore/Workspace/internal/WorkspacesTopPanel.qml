@@ -22,17 +22,38 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Column {
     id: root
 
+    property string firstWorkspaceTitle: ""
     property alias canRemove: deleteButton.enabled
 
     spacing: 24
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "WorkspacesTopPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.role: MUAccessible.Dialog
+        accessible.name: titleLabel.text
+    }
+
     signal createNewWorkspaceRequested()
     signal removeSelectedWorkspaceRequested()
+
+    function readInfo() {
+        accessibleInfo.focused = true
+    }
+
+    AccessibleItem {
+        id: accessibleInfo
+        accessibleParent: root.navigationPanel.accessible
+        visualItem: root
+        role: MUAccessible.Information
+        name: descriptionLabel.text + " " + root.firstWorkspaceTitle
+    }
 
     RowLayout {
         width: parent.width
@@ -40,6 +61,7 @@ Column {
         spacing: 8
 
         StyledTextLabel {
+            id: titleLabel
             Layout.alignment: Qt.AlignLeft
 
             text: qsTrc("workspace", "Workspaces")
@@ -55,6 +77,10 @@ Column {
 
             text: qsTrc("workspace", "Create new workspace")
 
+            navigation.name: "CreateNewWorkspaceButton"
+            navigation.panel: root.navigationPanel
+            navigation.column: 1
+
             onClicked: {
                 root.createNewWorkspaceRequested()
             }
@@ -67,6 +93,11 @@ Column {
 
             icon: IconCode.DELETE_TANK
 
+            navigation.name: "RemoveButton"
+            navigation.panel: root.navigationPanel
+            navigation.column: 2
+            navigation.accessible.name: qsTrc("workspace", "Remove")
+
             onClicked: {
                 root.removeSelectedWorkspaceRequested()
             }
@@ -74,6 +105,8 @@ Column {
     }
 
     StyledTextLabel {
+        id: descriptionLabel
+
         text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore interface")
 
         horizontalAlignment: Qt.AlignLeft
