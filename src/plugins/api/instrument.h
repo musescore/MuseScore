@@ -231,7 +231,7 @@ class Instrument : public QObject
      * For fretted instruments, an information about this
      * instrument's strings.
      */
-    Q_PROPERTY(Ms::PluginAPI::StringData* stringData READ stringData)
+    Q_PROPERTY(Ms::PluginAPI::StringData * stringData READ stringData)
 
     // TODO: a property for drumset?
 

@@ -93,7 +93,7 @@ template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
 
 #define MAKE_ELEMENT(T, P) \
     template<> \
-    std::shared_ptr<T> makeElement<T>(Ms::Score* score) { return std::make_shared<T>(P); } \
+    std::shared_ptr<T> makeElement<T>(Ms::Score * score) { return std::make_shared<T>(P); } \
 
 MAKE_ELEMENT(Dynamic, score->dummy()->segment())
 MAKE_ELEMENT(MeasureRepeat, score->dummy()->segment())

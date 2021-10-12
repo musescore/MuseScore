@@ -134,7 +134,7 @@ ReducedFraction::ReducedFraction(const Fraction& fraction)
 
 ReducedFraction ReducedFraction::fromTicks(int ticks)
 {
-    return ReducedFraction(ticks, MScore::division* 4).reduced();
+    return ReducedFraction(ticks, MScore::division * 4).reduced();
 }
 
 ReducedFraction ReducedFraction::reduced() const

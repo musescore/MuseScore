@@ -53,14 +53,14 @@ class Selection : public QObject
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment* startSegment READ startSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * startSegment READ startSegment)
     /**
      * End segment of selection, excluded. This property is valid
      * only for range selection.
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment* endSegment READ endSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * endSegment READ endSegment)
     /**
      * First staff of selection, included. This property is valid
      * only for range selection.

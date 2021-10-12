@@ -45,7 +45,7 @@ public:
 
     virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 
-    enum BoundaryTick : midi::tick_t {
+    enum BoundaryTick : midi :: tick_t {
         FirstScoreTick = 0,
         SelectedNoteTick,
         LastScoreTick

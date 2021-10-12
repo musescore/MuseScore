@@ -45,7 +45,7 @@ int ticks_beat(int n)
 
 static int ticks_measure(const Fraction& f)
 {
-    return (MScore::division* 4 * f.numerator()) / f.denominator();
+    return (MScore::division * 4 * f.numerator()) / f.denominator();
 }
 
 //---------------------------------------------------------
