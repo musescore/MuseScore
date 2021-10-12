@@ -39,16 +39,11 @@
 
   <font>
 
-    <sym code="0x0394" name="triangle"/>
-    <sym code="0x03bf" name="circle"/>
-    <sym code="0x00f8" name="oslash"/>
-
-    <sym code="0x266d" name="b"/>
-    <sym code="0x266e" name="natural"/>
-    <sym code="0x266f" name="#"/>
-
-    <sym code="0x1d12a" name="##"/>
-    <sym code="0x1d12b" name="bb"/>
+    <sym code="0x0394" name="triangle"/><!-- Greek capital letter delta (Δ) -->
+    <!--<sym code="0x25b3" name="triangle"/>--><!-- White Up-Pointing Triangle (△) -->
+    <!--<sym code="0x03bf" name="circle"/>--><!-- Greek small letter omicron (ο) -->
+    <sym code="0x006f" name="circle"/><!-- Latin small letter ο -->
+    <sym code="0x00f8" name="oslash"/><!-- Latin small letter o with slash (ø) -->
 
 <!-- this allows "b" to render as a literal when when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
@@ -108,10 +103,9 @@
     <sym value="M" name="sM"/>
     <sym value="Ma" name="sMa"/>
     <sym value="Maj" name="sMaj"/>
+    <sym value="mmaj" name="smmaj"/>
     <sym value="ma" name="sma"/>
     <sym value="maj" name="smaj"/>
-    <sym code="0x266d" name="sb"/>
-    <sym code="0x266f" name="s#"/>
     <sym code="0x0394" name="striangle"/>
     </font>
 
@@ -119,6 +113,20 @@
     <mag>0.75</mag>
     <sym value="6" name="696"/>
     <sym value="9" name="699"/>
+    </font>
+
+  <font family="Edwin">
+    <sym code="0x266d" name="b"/>
+    <sym code="0x266e" name="natural"/>
+    <sym code="0x266f" name="#"/>
+
+    <sym code="0x1d12a" name="##"/>
+    <sym code="0x1d12b" name="bb"/>
+    </font>
+
+  <font family="Edwin" class="modifier">
+    <sym code="0x266d" name="sb"/>
+    <sym code="0x266f" name="s#"/>
     </font>
 
 <!--
@@ -145,6 +153,11 @@
   <token>
     <name>0</name>
     <render>oslash</render>
+    </token>
+
+  <token>
+    <name>mmaj</name>
+    <render>mmaj</render>
     </token>
 
   <token>
@@ -355,6 +368,11 @@
   <token class="modifier">
     <name>Maj</name>
     <render>sMaj</render>
+    </token>
+
+  <token class="modifier">
+    <name>mmaj</name>
+    <render>smmaj</render>
     </token>
 
   <token class="modifier">
