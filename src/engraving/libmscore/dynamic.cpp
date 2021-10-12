@@ -27,6 +27,7 @@
 #include "score.h"
 #include "measure.h"
 #include "system.h"
+#include "symid.h"
 #include "segment.h"
 #include "utils.h"
 #include "mscore.h"
@@ -45,6 +46,7 @@ namespace Ms {
 struct Dyn {
     int velocity;        ///< associated midi velocity (0-127, -1 = none)
     bool accent;         ///< if true add velocity to current chord velocity
+    SymId symId;
     const char* tag;     // name of dynamics, eg. "fff"
     const char* text;    // utf8 text of dynamic
     int changeInVelocity;
@@ -54,45 +56,53 @@ struct Dyn {
 
 static Dyn dynList[] = {
     // dynamic:
-    { -1,  true,  "other-dynamics", "", 0 },
-    { 1,  false, "pppppp",
+    { -1,   true,  SymId::noSym,            "other-dynamics", "", 0 },
+    { 1,    false, SymId::dynamicPPPPPP,    "pppppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
       0 },
-    { 5,  false, "ppppp",
+    { 5,    false, SymId::dynamicPPPPP,     "ppppp",
       "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 10,  false, "pppp",   "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 16,  false, "ppp",    "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 33,  false, "pp",     "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 49,  false, "p",      "<sym>dynamicPiano</sym>", 0 },
-    { 64,  false, "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>", 0 },
-    { 80,  false, "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>", 0 },
-    { 96,  false, "f",      "<sym>dynamicForte</sym>", 0 },
-    { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 126,  false, "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "ffff",   "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "fffff",
+    { 10,   false, SymId::dynamicPPPP,      "pppp",
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
+    { 16,   false, SymId::dynamicPPP,       "ppp",    "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
+    { 33,   false, SymId::dynamicPP,        "pp",     "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
+    { 49,   false, SymId::dynamicPiano,     "p",      "<sym>dynamicPiano</sym>", 0 },
+    { 64,   false, SymId::dynamicMP,        "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>", 0 },
+    { 80,   false, SymId::dynamicMF,        "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>", 0 },
+    { 96,   false, SymId::dynamicForte,     "f",      "<sym>dynamicForte</sym>", 0 },
+    { 112,  false, SymId::dynamicFF,        "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
+    { 126,  false, SymId::dynamicFFF,       "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
+    { 127,  false, SymId::dynamicFFFF,      "ffff",
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
+    { 127,  false, SymId::dynamicFFFFF,     "fffff",
       "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "ffffff",
+    { 127,  false, SymId::dynamicFFFFFF,    "ffffff",
       "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
       0 },
 
     // accents:
-    { 96,  true,  "fp",     "<sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-    { 49,  true,  "pf",     "<sym>dynamicPiano</sym><sym>dynamicForte</sym>", 47 },
-    { 112, true,  "sf",     "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>", -18 },
-    { 112, true,  "sfz",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 126, true,  "sff",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", -18 },
-    { 126, true,  "sffz",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 112, true,  "sfp",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-    { 112, true,  "sfpp",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", -79 },
-    { 112, true,  "rfz",    "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 112, true,  "rf",     "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>", -18 },
-    { 112, true,  "fz",     "<sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 96,  true,  "m",      "<sym>dynamicMezzo</sym>", -16 },
-    { 112, true,  "r",      "<sym>dynamicRinforzando</sym>", -18 },
-    { 112, true,  "s",      "<sym>dynamicSforzando</sym>", -18 },
-    { 80,  true,  "z",      "<sym>dynamicZ</sym>", 0 },
-    { 49,  true,  "n",      "<sym>dynamicNiente</sym>", -48 }
+    { 96,  true, SymId::dynamicFortePiano,          "fp",     "<sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
+    { 49,  true, SymId::noSym,                      "pf",     "<sym>dynamicPiano</sym><sym>dynamicForte</sym>", 47 },
+    { 112, true, SymId::dynamicSforzando1,          "sf",     "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>", -18 },
+    { 112, true, SymId::dynamicSforzato,            "sfz",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>",
+      -18 },
+    { 126, true, SymId::noSym,                      "sff",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
+      -18 },
+    { 126, true, SymId::dynamicSforzatoFF,          "sffz",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
+    { 112, true, SymId::dynamicSforzandoPiano,      "sfp",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>",
+      -47 },
+    { 112, true, SymId::dynamicSforzandoPianissimo, "sfpp",
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", -79 },
+    { 112, true, SymId::dynamicRinforzando2,        "rfz",    "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>",
+      -18 },
+    { 112, true, SymId::dynamicRinforzando1,        "rf",     "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>", -18 },
+    { 112, true, SymId::dynamicForzando,            "fz",     "<sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
+    { 96,  true, SymId::dynamicMezzo,               "m",      "<sym>dynamicMezzo</sym>", -16 },
+    { 112, true, SymId::dynamicRinforzando,         "r",      "<sym>dynamicRinforzando</sym>", -18 },
+    { 112, true, SymId::dynamicSforzando,           "s",      "<sym>dynamicSforzando</sym>", -18 },
+    { 80,  true, SymId::dynamicZ,                   "z",      "<sym>dynamicZ</sym>", 0 },
+    { 49,  true, SymId::dynamicNiente,              "n",      "<sym>dynamicNiente</sym>", -48 }
 };
 
 //---------------------------------------------------------
@@ -324,12 +334,28 @@ void Dynamic::layout()
                 continue;
             }
             if (e->isChord() && (align() & Align::HCENTER)) {
-                Chord* c = toChord(e);
-                qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
-                if (c->stem() && !c->up()) {        // stem down
-                    rxpos() += noteHeadWidth * .25;            // center on stem + optical correction
-                } else {
-                    rxpos() += noteHeadWidth * .5;             // center on notehead
+                SymId symId = dynList[int(dynamicType())].symId;
+
+                // this value is different than chord()->mag() or mag()
+                // as it reflects the actual scaling of the text
+                // using chord()->mag(), mag() or fontSize will yield
+                // undesirable results with small staves or cue notes
+                qreal dynamicMag = spatium() / SPATIUM20;
+
+                qreal noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
+                rxpos() += noteHeadWidth * .5;
+
+                qreal opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
+                if (symId != SymId::noSym && opticalCenter) {
+                    static const qreal DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
+                    qreal fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
+                    qreal left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
+
+                    opticalCenter += fontScaling;
+                    left += fontScaling;
+
+                    qreal offset = opticalCenter - left - bbox().width() * 0.5;
+                    rxpos() -= offset;
                 }
             } else {
                 rxpos() += e->width() * .5;
@@ -337,7 +363,7 @@ void Dynamic::layout()
             break;
         }
     } else {
-        setPos(PointF());          // for palette
+        setPos(PointF());
     }
 }
 
