@@ -198,6 +198,7 @@ Rectangle {
         transparent: true
         navigation.panel: keynavSub
         navigation.order: 100
+        navigation.accessible.name: qsTrc("notation", "Customise toolbar")
 
         onClicked: {
             customizePopup.toggleOpened()

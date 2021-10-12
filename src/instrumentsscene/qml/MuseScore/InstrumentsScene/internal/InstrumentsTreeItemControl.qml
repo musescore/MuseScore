@@ -32,6 +32,7 @@ ListItemBlank {
 
     normalColor: ui.theme.textFieldColor
     navigation.column: 0
+    navigation.accessible.name: titleLabel.text
 
     anchors.verticalCenter: parent ? parent.verticalCenter : undefined
     anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
@@ -58,16 +59,12 @@ ListItemBlank {
             Layout.preferredWidth: 24
             Layout.preferredHeight: 24
 
-            objectName: "InstrumentsAddStaffBtn"
-            navigation.panel: root.navigation.panel
-            navigation.row: root.navigation.row
-            navigation.column: 1
-
             icon: IconCode.PLUS
             onClicked: root.clicked(null)
         }
 
         StyledTextLabel {
+            id: titleLabel
             Layout.fillWidth: true
 
             text: model ? model.itemRole.title : ""
