@@ -314,6 +314,7 @@ public:
     inline void moveTo(qreal ax, qreal ay) { m_x = ax; m_y = ay; }
     inline void moveTo(const PointX<T>& p) { m_x = p.x(); m_y = p.y(); }
     inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / 2; m_y = p.y() - m_h / 2; }
+    inline void moveTop(qreal pos) { m_y = pos; }
 
     inline void translate(T dx, T dy) { m_x += dx; m_y += dy; }
     inline void translate(const PointX<T>& p) { m_x += p.x(); m_y += p.y(); }
