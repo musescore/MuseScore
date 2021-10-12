@@ -53,8 +53,6 @@ public:
     AccessibilityController() = default;
     ~AccessibilityController();
 
-    void init();
-
     // IAccessibilityController
     const IAccessible* accessibleRoot() const override;
 
@@ -82,6 +80,7 @@ public:
     int childCount(const IAccessible* item) const;
     QAccessibleInterface* child(const IAccessible* item, int i) const;
     int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
+    QAccessibleInterface* focusedChild(const IAccessible* item) const;
 
     async::Channel<QAccessibleEvent*> eventSent() const;
 
@@ -98,6 +97,8 @@ private:
         bool isValid() const { return item != nullptr; }
     };
 
+    void init();
+
     const Item& findItem(const IAccessible* aitem) const;
 
     void propertyChanged(IAccessible* item, IAccessible::Property p);
@@ -109,6 +110,8 @@ private:
 
     QList<IAccessible*> m_children;
     async::Channel<QAccessibleEvent*> m_eventSent;
+
+    bool m_inited = false;
 };
 }
 
