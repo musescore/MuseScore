@@ -24,7 +24,6 @@
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 
 #include "dockcentralview.h"
@@ -139,10 +138,6 @@ void DockWindow::loadPage(const QString& uri)
     QStringList allDockNames;
 
     for (DockBase* dock : newPage->allDocks()) {
-        if (!dock->isVisible()) {
-            dock->close();
-        }
-
         allDockNames << dock->objectName();
     }
 
@@ -271,17 +266,12 @@ void DockWindow::loadPageContent(const DockPageView* page)
 
 void DockWindow::unitePanelsToTabs(const DockPageView* page)
 {
-    for (const DockPanelView* panel : page->panels()) {
+    for (DockPanelView* panel : page->panels()) {
         const DockPanelView* tab = panel->tabifyPanel();
-        if (!tab) {
-            continue;
-        }
 
-        panel->dockWidget()->addDockWidgetAsTab(tab->dockWidget());
-
-        KDDockWidgets::Frame* frame = panel->dockWidget()->frame();
-        if (frame) {
-            frame->setCurrentTabIndex(0);
+        if (tab && tab->isVisible()) {
+            panel->addPanelAsTab(tab);
+            panel->setCurrentTabIndex(0);
         }
     }
 }
@@ -388,7 +378,13 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
     }
 
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
-    m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, dock->preferredSize());
+
+    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
+                                              : KDDockWidgets::InitialVisibilityOption::StartHidden;
+
+    KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
+
+    m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, options);
 }
 
 DockPageView* DockWindow::pageByUri(const QString& uri) const
