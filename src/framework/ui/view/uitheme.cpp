@@ -38,8 +38,6 @@
 
 using namespace mu::ui;
 
-static const QString SEMIBOLD_STYLE_NAME("SemiBold");
-
 static const QPen NO_BORDER(Qt::transparent, 0);
 static const QBrush NO_FILL(Qt::transparent);
 
@@ -354,10 +352,7 @@ void UiTheme::setupUiFonts()
 
         font->setPixelSize(size);
         font->setFamily(QString::fromStdString(family));
-
-        if (weight == QFont::DemiBold) {
-            font->setStyleName(SEMIBOLD_STYLE_NAME);
-        }
+        font->setWeight(weight);
     }
 }
 

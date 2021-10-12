@@ -45,8 +45,10 @@ FocusScope {
     property color accentColor: ui.theme.accentColor
 
     property bool narrowMargins: false
-    property real margins: narrowMargins ? 12 : 32
+    property real margins: narrowMargins ? 12 : 16
     property real minWidth: narrowMargins ? 24 : 132
+
+    property bool drawFocusBorderInsideRect: false
 
     property int orientation: Qt.Vertical
     readonly property bool isVertical: root.orientation === Qt.Vertical
@@ -67,7 +69,7 @@ FocusScope {
     objectName: root.text
 
     height: contentLoader.item.height + 14
-    width: Boolean(text) ? Math.max(contentLoader.item.width + margins, root.isVertical ? minWidth : 0)
+    width: Boolean(text) ? Math.max(contentLoader.item.width + 2 * margins, root.isVertical ? minWidth : 0)
                          : contentLoader.item.width + 16
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
@@ -108,7 +110,10 @@ FocusScope {
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
 
-            NavigationFocusBorder { navigationCtrl: navCtrl }
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+                drawOutsideParent: !root.drawFocusBorderInsideRect
+            }
 
             states: [
                 State {
