@@ -21,12 +21,18 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Row {
     id: root
 
     property alias canSelect: selectButton.enabled
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "WorkspacesBottomPanel"
+        direction: NavigationPanel.Horizontal
+    }
 
     spacing: 12
 
@@ -35,6 +41,10 @@ Row {
 
     FlatButton {
         text: qsTrc("global", "Cancel")
+
+        navigation.name: "Cancel"
+        navigation.panel: root.navigationPanel
+        navigation.column: 2
 
         onClicked: {
             root.cancelRequested()
@@ -45,6 +55,10 @@ Row {
         id: selectButton
 
         text: qsTrc("global", "Select")
+
+        navigation.name: "Ыудусе"
+        navigation.panel: root.navigationPanel
+        navigation.column: 1
 
         onClicked: {
             root.selectRequested()
