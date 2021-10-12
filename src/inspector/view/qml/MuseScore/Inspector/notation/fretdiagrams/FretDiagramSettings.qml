@@ -70,9 +70,9 @@ Item {
 
                 visible: root.model ? root.model.areSettingsAvailable : false
 
-                text: qsTrc("inspector", "Reset")
+                text: qsTrc("inspector", "Clear")
 
-                navigation.name: "Reset"
+                navigation.name: "Clear"
                 navigation.panel: root.navigationPanel
                 navigation.row: 10000
 
@@ -93,7 +93,6 @@ Item {
 
                 width: parent.width
             }
-
         }
     }
 
