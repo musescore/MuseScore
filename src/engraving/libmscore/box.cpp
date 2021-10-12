@@ -835,6 +835,28 @@ void VBox::layout()
     }
 
     MeasureBase::layout();
+
+    if (MScore::noImages) {
+        adjustLayoutWithoutImages();
+    }
+}
+
+void VBox::adjustLayoutWithoutImages()
+{
+    qreal calcuatedVBoxHeight = 0;
+    const int padding = score()->spatium();
+    auto elementList = el();
+
+    for (auto pElement : elementList) {
+        if (pElement->isText()) {
+            Text* txt = toText(pElement);
+            txt->bbox().moveTop(0);
+            calcuatedVBoxHeight += txt->height() + padding;
+        }
+    }
+
+    setHeight(calcuatedVBoxHeight);
+    Box::layout();
 }
 
 //---------------------------------------------------------
