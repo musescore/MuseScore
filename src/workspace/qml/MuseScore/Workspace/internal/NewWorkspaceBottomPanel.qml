@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -27,20 +28,21 @@ import MuseScore.UiComponents 1.0
 Row {
     id: root
 
-    property alias canSelect: selectButton.enabled
+    spacing: 12
+
+    property alias canCreateWorkspace: selectButton.enabled
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "WorkspacesBottomPanel"
+        name: "NewWorkspaceBottomPanel"
         direction: NavigationPanel.Horizontal
     }
-
-    spacing: 12
 
     signal cancelRequested()
     signal selectRequested()
 
     FlatButton {
         text: qsTrc("global", "Cancel")
+
 
         navigation.name: "CancelButton"
         navigation.panel: root.navigationPanel
@@ -53,7 +55,6 @@ Row {
 
     FlatButton {
         id: selectButton
-
         text: qsTrc("global", "Select")
 
         navigation.name: "SelectButton"
