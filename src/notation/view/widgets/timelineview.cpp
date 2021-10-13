@@ -38,14 +38,14 @@ public:
         setFocusPolicy(Qt::NoFocus);
         setHandleWidth(0);
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        setObjectName("TimeLineAdapter");
+        setObjectName("TimelineAdapter");
 
         m_msTimeline = new Ms::Timeline(this);
     }
 
     void updateView()
     {
-        m_msTimeline->updateGridView();
+        m_msTimeline->updateGridFromCmdState();
     }
 
     void setNotation(INotationPtr notation)
@@ -110,7 +110,7 @@ void TimelineView::componentComplete()
         }
     };
 
-    globalContext()->currentNotationChanged().onNotify(this, [this, timeline, updateView]() {
+    auto initTimeline = [this, updateView, timeline] {
         INotationPtr notation = globalContext()->currentNotation();
         timeline->setNotation(notation);
 
@@ -120,14 +120,20 @@ void TimelineView::componentComplete()
             return;
         }
 
-        notation->notationChanged().onNotify(this, [=] {
+        notation->undoStack()->stackChanged().onNotify(this, [=] {
             updateView();
         });
 
         notation->interaction()->selectionChanged().onNotify(this, [=] {
             updateView();
         });
+    };
+
+    globalContext()->currentNotationChanged().onNotify(this, [initTimeline]() {
+        initTimeline();
     });
 
     setWidget(timeline);
+
+    initTimeline();
 }

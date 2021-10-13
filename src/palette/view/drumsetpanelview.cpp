@@ -97,7 +97,7 @@ void DrumsetPanelView::componentComplete()
         update();
     };
 
-    globalContext()->currentNotationChanged().onNotify(this, [this, drumsetPalette, updateView]() {
+    auto initDrumsetPalette = [this, updateView, drumsetPalette]() {
         INotationPtr notation = globalContext()->currentNotation();
         drumsetPalette->setNotation(notation);
         updateView();
@@ -109,6 +109,10 @@ void DrumsetPanelView::componentComplete()
         notation->interaction()->noteInput()->stateChanged().onNotify(this, [updateView]() {
             updateView();
         });
+    };
+
+    globalContext()->currentNotationChanged().onNotify(this, [initDrumsetPalette]() {
+        initDrumsetPalette();
     });
 
     drumsetPalette->pitchNameChanged().onReceive(this, [this](const QString& pitchName) {
@@ -117,4 +121,6 @@ void DrumsetPanelView::componentComplete()
     });
 
     setWidget(drumsetPalette);
+
+    initDrumsetPalette();
 }

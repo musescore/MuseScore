@@ -29,12 +29,12 @@
 #include "internal/dockwindowprovider.h"
 
 #include "dockwindow.h"
-#include "dockpanel.h"
+#include "dockpanelview.h"
 #include "dockpanelholder.h"
-#include "dockstatusbar.h"
+#include "dockstatusbarview.h"
 #include "docktoolbarholder.h"
-#include "dockcentral.h"
-#include "dockpage.h"
+#include "dockcentralview.h"
+#include "dockpageview.h"
 
 #include "docktypes.h"
 
@@ -84,13 +84,13 @@ static std::shared_ptr<DockWindowActionsController> s_actionsController = std::m
 void DockSetup::registerQmlTypes()
 {
     qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
-    qmlRegisterType<DockPanel>("MuseScore.Dock", 1, 0, "DockPanel");
+    qmlRegisterType<DockPanelView>("MuseScore.Dock", 1, 0, "DockPanelView");
     qmlRegisterType<DockPanelHolder>("MuseScore.Dock", 1, 0, "DockPanelHolder");
-    qmlRegisterType<DockStatusBar>("MuseScore.Dock", 1, 0, "DockStatusBar");
-    qmlRegisterType<DockToolBar>("MuseScore.Dock", 1, 0, "DockToolBar");
+    qmlRegisterType<DockStatusBarView>("MuseScore.Dock", 1, 0, "DockStatusBar");
+    qmlRegisterType<DockToolBarView>("MuseScore.Dock", 1, 0, "DockToolBarView");
     qmlRegisterType<DockToolBarHolder>("MuseScore.Dock", 1, 0, "DockToolBarHolder");
-    qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
-    qmlRegisterType<DockPage>("MuseScore.Dock", 1, 0, "DockPage");
+    qmlRegisterType<DockCentralView>("MuseScore.Dock", 1, 0, "DockCentralView");
+    qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 

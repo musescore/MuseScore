@@ -20,18 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "dockpanelholder.h"
+#include "dockstatusbarview.h"
 
 using namespace mu::dock;
 
-DockPanelHolder::DockPanelHolder(QQuickItem* parent)
-    : DockPanelView(parent)
+DockStatusBarView::DockStatusBarView(QQuickItem* parent)
+    : DockBase(parent)
 {
-    setVisible(false);
-    //setMovable(false);
+    setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    constexpr int STATUS_BAR_HEIGHT = 36;
+
+    setMinimumHeight(STATUS_BAR_HEIGHT);
+    setMaximumHeight(STATUS_BAR_HEIGHT);
+    setHeight(STATUS_BAR_HEIGHT);
 }
 
-DockType DockPanelHolder::type() const
+DockType DockStatusBarView::type() const
 {
-    return DockType::PanelDockingHolder;
+    return DockType::StatusBar;
 }

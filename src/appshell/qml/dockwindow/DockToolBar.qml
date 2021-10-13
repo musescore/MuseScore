@@ -24,9 +24,9 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Dock 1.0 as Dock
+import MuseScore.Dock 1.0
 
-Dock.DockToolBar {
+DockToolBarView {
     id: root
 
     property Component contentComponent

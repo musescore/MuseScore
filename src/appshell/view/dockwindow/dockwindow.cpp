@@ -27,12 +27,12 @@
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 
-#include "dockcentral.h"
-#include "dockpage.h"
-#include "dockpanel.h"
+#include "dockcentralview.h"
+#include "dockpageview.h"
+#include "dockpanelview.h"
 #include "dockpanelholder.h"
-#include "dockstatusbar.h"
-#include "docktoolbar.h"
+#include "dockstatusbarview.h"
+#include "docktoolbarview.h"
 #include "docktoolbarholder.h"
 
 #include "log.h"
@@ -85,7 +85,7 @@ void DockWindow::onQuit()
 
     saveGeometry();
 
-    const DockPage* currPage = currentPage();
+    const DockPageView* currPage = currentPage();
     IF_ASSERT_FAILED(currPage) {
         return;
     }
@@ -98,12 +98,12 @@ QString DockWindow::currentPageUri() const
     return m_currentPageUri;
 }
 
-QQmlListProperty<mu::dock::DockToolBar> DockWindow::toolBarsProperty()
+QQmlListProperty<mu::dock::DockToolBarView> DockWindow::toolBarsProperty()
 {
     return m_toolBars.property();
 }
 
-QQmlListProperty<mu::dock::DockPage> DockWindow::pagesProperty()
+QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
 {
     return m_pages.property();
 }
@@ -121,12 +121,12 @@ void DockWindow::loadPage(const QString& uri)
         restoreGeometry();
     }
 
-    DockPage* newPage = pageByUri(uri);
+    DockPageView* newPage = pageByUri(uri);
     IF_ASSERT_FAILED(newPage) {
         return;
     }
 
-    DockPage* currentPage = this->currentPage();
+    DockPageView* currentPage = this->currentPage();
     if (currentPage) {
         savePageState(currentPage->objectName());
         currentPage->close();
@@ -154,8 +154,8 @@ void DockWindow::loadPage(const QString& uri)
 
 void DockWindow::setToolBarOrientation(const QString& toolBarName, framework::Orientation orientation)
 {
-    const DockPage* page = currentPage();
-    DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(toolBarName)) : nullptr;
+    const DockPageView* page = currentPage();
+    DockToolBarView* toolBar = page ? dynamic_cast<DockToolBarView*>(page->dockByName(toolBarName)) : nullptr;
 
     if (toolBar) {
         toolBar->setOrientation(static_cast<Qt::Orientation>(orientation));
@@ -182,13 +182,13 @@ void DockWindow::hideAllDockingHolders()
 
 bool DockWindow::isDockOpen(const QString& dockName) const
 {
-    const DockPage* currPage = currentPage();
+    const DockPageView* currPage = currentPage();
     return currPage ? currPage->isDockOpen(dockName) : false;
 }
 
 void DockWindow::toggleDock(const QString& dockName)
 {
-    DockPage* currPage = currentPage();
+    DockPageView* currPage = currentPage();
     if (currPage) {
         currPage->toggleDock(dockName);
         m_docksOpenStatusChanged.send({ dockName });
@@ -197,7 +197,7 @@ void DockWindow::toggleDock(const QString& dockName)
 
 void DockWindow::setDockOpen(const QString& dockName, bool open)
 {
-    DockPage* currPage = currentPage();
+    DockPageView* currPage = currentPage();
     if (currPage) {
         currPage->setDockOpen(dockName, open);
         m_docksOpenStatusChanged.send({ dockName });
@@ -211,13 +211,13 @@ Channel<QStringList> DockWindow::docksOpenStatusChanged() const
 
 bool DockWindow::isDockFloating(const QString& dockName) const
 {
-    const DockPage* currPage = currentPage();
+    const DockPageView* currPage = currentPage();
     return currPage ? currPage->isDockFloating(dockName) : false;
 }
 
 void DockWindow::toggleDockFloating(const QString& dockName)
 {
-    DockPage* currPage = currentPage();
+    DockPageView* currPage = currentPage();
     if (currPage) {
         currPage->toggleDockFloating(dockName);
     }
@@ -238,7 +238,7 @@ void DockWindow::setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDocki
     emit mainToolBarDockingHolderChanged(m_mainToolBarDockingHolder);
 }
 
-void DockWindow::loadPageContent(const DockPage* page)
+void DockWindow::loadPageContent(const DockPageView* page)
 {
     TRACEFUNC;
 
@@ -252,12 +252,12 @@ void DockWindow::loadPageContent(const DockPage* page)
         addDock(page->statusBar(), KDDockWidgets::Location_OnBottom);
     }
 
-    QList<DockToolBar*> allToolBars = m_toolBars.list();
+    QList<DockToolBarView*> allToolBars = m_toolBars.list();
     allToolBars << page->mainToolBars();
 
-    DockToolBar* prevToolBar = nullptr;
+    DockToolBarView* prevToolBar = nullptr;
 
-    for (DockToolBar* toolBar : allToolBars) {
+    for (DockToolBarView* toolBar : allToolBars) {
         auto location = prevToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnTop;
         addDock(toolBar, location, prevToolBar);
         prevToolBar = toolBar;
@@ -269,10 +269,10 @@ void DockWindow::loadPageContent(const DockPage* page)
     unitePanelsToTabs(page);
 }
 
-void DockWindow::unitePanelsToTabs(const DockPage* page)
+void DockWindow::unitePanelsToTabs(const DockPageView* page)
 {
-    for (const DockPanel* panel : page->panels()) {
-        const DockPanel* tab = panel->tabifyPanel();
+    for (const DockPanelView* panel : page->panels()) {
+        const DockPanelView* tab = panel->tabifyPanel();
         if (!tab) {
             continue;
         }
@@ -286,15 +286,15 @@ void DockWindow::unitePanelsToTabs(const DockPage* page)
     }
 }
 
-void DockWindow::loadPageToolbars(const DockPage* page)
+void DockWindow::loadPageToolbars(const DockPageView* page)
 {
-    QList<DockToolBar*> leftSideToolbars;
-    QList<DockToolBar*> rightSideToolbars;
-    QList<DockToolBar*> topSideToolbars;
-    QList<DockToolBar*> bottomSideToolbars;
+    QList<DockToolBarView*> leftSideToolbars;
+    QList<DockToolBarView*> rightSideToolbars;
+    QList<DockToolBarView*> topSideToolbars;
+    QList<DockToolBarView*> bottomSideToolbars;
 
-    QList<DockToolBar*> pageToolBars = page->toolBars();
-    for (DockToolBar* toolBar : pageToolBars) {
+    QList<DockToolBarView*> pageToolBars = page->toolBars();
+    for (DockToolBarView* toolBar : pageToolBars) {
         switch (toolBar->location()) {
         case DockBase::DockLocation::Left:
             leftSideToolbars << toolBar;
@@ -332,15 +332,15 @@ void DockWindow::loadPageToolbars(const DockPage* page)
     }
 }
 
-void DockWindow::loadPagePanels(const DockPage* page)
+void DockWindow::loadPagePanels(const DockPageView* page)
 {
-    QList<DockPanel*> leftSidePanels;
-    QList<DockPanel*> rightSidePanels;
-    QList<DockPanel*> topSidePanels;
-    QList<DockPanel*> bottomSidePanels;
+    QList<DockPanelView*> leftSidePanels;
+    QList<DockPanelView*> rightSidePanels;
+    QList<DockPanelView*> topSidePanels;
+    QList<DockPanelView*> bottomSidePanels;
 
-    QList<DockPanel*> pagePanels = page->panels();
-    for (DockPanel* panel : pagePanels) {
+    QList<DockPanelView*> pagePanels = page->panels();
+    for (DockPanelView* panel : pagePanels) {
         switch (panel->location()) {
         case DockBase::DockLocation::Left:
             leftSidePanels << panel;
@@ -391,9 +391,9 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
     m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, dock->preferredSize());
 }
 
-DockPage* DockWindow::pageByUri(const QString& uri) const
+DockPageView* DockWindow::pageByUri(const QString& uri) const
 {
-    for (DockPage* page : m_pages.list()) {
+    for (DockPageView* page : m_pages.list()) {
         if (page->uri() == uri) {
             return page;
         }
@@ -402,7 +402,7 @@ DockPage* DockWindow::pageByUri(const QString& uri) const
     return nullptr;
 }
 
-DockPage* DockWindow::currentPage() const
+DockPageView* DockWindow::currentPage() const
 {
     return pageByUri(m_currentPageUri);
 }
@@ -479,9 +479,9 @@ void DockWindow::resetWindowState()
     loadPage(currentPageUriBackup);
 }
 
-void DockWindow::initDocks(DockPage* page)
+void DockWindow::initDocks(DockPageView* page)
 {
-    for (DockToolBar* toolbar : m_toolBars.list()) {
+    for (DockToolBarView* toolbar : m_toolBars.list()) {
         toolbar->init();
     }
 
@@ -494,7 +494,7 @@ void DockWindow::initDocks(DockPage* page)
 
 DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const
 {
-    const DockPage* page = currentPage();
+    const DockPageView* page = currentPage();
     if (!page) {
         return nullptr;
     }
@@ -532,7 +532,7 @@ DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPo
 
 DockPanelHolder* DockWindow::resolvePanelDockingHolder(const QPoint& localPos) const
 {
-    const DockPage* page = currentPage();
+    const DockPageView* page = currentPage();
     if (!page) {
         return nullptr;
     }

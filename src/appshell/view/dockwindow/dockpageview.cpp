@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "dockpage.h"
+#include "dockpageview.h"
 
-#include "docktoolbar.h"
+#include "docktoolbarview.h"
 #include "docktoolbarholder.h"
-#include "dockcentral.h"
-#include "dockpanel.h"
+#include "dockcentralview.h"
+#include "dockpanelview.h"
 #include "dockpanelholder.h"
-#include "dockstatusbar.h"
+#include "dockstatusbarview.h"
 
 #include "log.h"
 
 using namespace mu::dock;
 
-DockPage::DockPage(QQuickItem* parent)
+DockPageView::DockPageView(QQuickItem* parent)
     : QQuickItem(parent),
     m_mainToolBars(this),
     m_toolBars(this),
@@ -43,7 +43,7 @@ DockPage::DockPage(QQuickItem* parent)
 {
 }
 
-void DockPage::init()
+void DockPageView::init()
 {
     for (DockBase* dock : allDocks()) {
         dock->init();
@@ -52,42 +52,42 @@ void DockPage::init()
     emit inited();
 }
 
-QString DockPage::uri() const
+QString DockPageView::uri() const
 {
     return m_uri;
 }
 
-QQmlListProperty<DockToolBar> DockPage::mainToolBarsProperty()
+QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
 {
     return m_mainToolBars.property();
 }
 
-QQmlListProperty<DockToolBar> DockPage::toolBarsProperty()
+QQmlListProperty<DockToolBarView> DockPageView::toolBarsProperty()
 {
     return m_toolBars.property();
 }
 
-QQmlListProperty<DockPanel> DockPage::panelsProperty()
+QQmlListProperty<DockPanelView> DockPageView::panelsProperty()
 {
     return m_panels.property();
 }
 
-QQmlListProperty<DockToolBarHolder> DockPage::toolBarsDockingHoldersProperty()
+QQmlListProperty<DockToolBarHolder> DockPageView::toolBarsDockingHoldersProperty()
 {
     return m_toolBarsDockingHolders.property();
 }
 
-QQmlListProperty<DockPanelHolder> DockPage::panelsDockingHoldersProperty()
+QQmlListProperty<DockPanelHolder> DockPageView::panelsDockingHoldersProperty()
 {
     return m_panelsDockingHolders.property();
 }
 
-QList<DockToolBar*> DockPage::mainToolBars() const
+QList<DockToolBarView*> DockPageView::mainToolBars() const
 {
     return m_mainToolBars.list();
 }
 
-QList<DockToolBar*> DockPage::toolBars() const
+QList<DockToolBarView*> DockPageView::toolBars() const
 {
     //! NOTE: Order is important for correct drawing
     auto list = m_toolBars.list();
@@ -115,22 +115,22 @@ QList<DockToolBar*> DockPage::toolBars() const
     return list;
 }
 
-QList<DockToolBarHolder*> DockPage::toolBarsHolders() const
+QList<DockToolBarHolder*> DockPageView::toolBarsHolders() const
 {
     return m_toolBarsDockingHolders.list();
 }
 
-DockCentral* DockPage::centralDock() const
+DockCentralView* DockPageView::centralDock() const
 {
     return m_central;
 }
 
-DockStatusBar* DockPage::statusBar() const
+DockStatusBarView* DockPageView::statusBar() const
 {
     return m_statusBar;
 }
 
-QList<DockPanel*> DockPage::panels() const
+QList<DockPanelView*> DockPageView::panels() const
 {
     //! NOTE: Order is important for correct drawing
     auto list = m_panels.list();
@@ -158,12 +158,12 @@ QList<DockPanel*> DockPage::panels() const
     return list;
 }
 
-QList<DockPanelHolder*> DockPage::panelsHolders() const
+QList<DockPanelHolder*> DockPageView::panelsHolders() const
 {
     return m_panelsDockingHolders.list();
 }
 
-DockBase* DockPage::dockByName(const QString& dockName) const
+DockBase* DockPageView::dockByName(const QString& dockName) const
 {
     for (DockBase* dock : allDocks()) {
         if (dock->objectName() == dockName) {
@@ -174,7 +174,7 @@ DockBase* DockPage::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockToolBarHolder* DockPage::toolBarHolderByLocation(DockBase::DockLocation location) const
+DockToolBarHolder* DockPageView::toolBarHolderByLocation(DockBase::DockLocation location) const
 {
     for (DockToolBarHolder* holder : m_toolBarsDockingHolders.list()) {
         if (holder->location() == location) {
@@ -185,7 +185,7 @@ DockToolBarHolder* DockPage::toolBarHolderByLocation(DockBase::DockLocation loca
     return nullptr;
 }
 
-DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location) const
+DockPanelHolder* DockPageView::panelHolderByLocation(DockBase::DockLocation location) const
 {
     for (DockPanelHolder* holder : m_panelsDockingHolders.list()) {
         if (holder->location() == location) {
@@ -196,18 +196,18 @@ DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location
     return nullptr;
 }
 
-bool DockPage::isDockOpen(const QString& dockName) const
+bool DockPageView::isDockOpen(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
     return dock ? dock->isOpen() : false;
 }
 
-void DockPage::toggleDock(const QString& dockName)
+void DockPageView::toggleDock(const QString& dockName)
 {
     setDockOpen(dockName, !isDockOpen(dockName));
 }
 
-void DockPage::setDockOpen(const QString& dockName, bool open)
+void DockPageView::setDockOpen(const QString& dockName, bool open)
 {
     DockBase* dock = dockByName(dockName);
     if (!dock) {
@@ -217,17 +217,18 @@ void DockPage::setDockOpen(const QString& dockName, bool open)
     if (open) {
         dock->open();
     } else {
-        dock->close();
+        constexpr bool UNLOAD_CONTENT = true;
+        dock->close(UNLOAD_CONTENT);
     }
 }
 
-bool DockPage::isDockFloating(const QString& dockName) const
+bool DockPageView::isDockFloating(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
     return dock ? dock->floating() : false;
 }
 
-void DockPage::toggleDockFloating(const QString& dockName)
+void DockPageView::toggleDockFloating(const QString& dockName)
 {
     DockBase* dock = dockByName(dockName);
     if (!dock) {
@@ -237,7 +238,7 @@ void DockPage::toggleDockFloating(const QString& dockName)
     dock->setFloating(!dock->floating());
 }
 
-void DockPage::setUri(const QString& uri)
+void DockPageView::setUri(const QString& uri)
 {
     if (uri == m_uri) {
         return;
@@ -247,7 +248,7 @@ void DockPage::setUri(const QString& uri)
     emit uriChanged(uri);
 }
 
-void DockPage::setCentralDock(DockCentral* central)
+void DockPageView::setCentralDock(DockCentralView* central)
 {
     if (central == m_central) {
         return;
@@ -257,7 +258,7 @@ void DockPage::setCentralDock(DockCentral* central)
     emit centralDockChanged(central);
 }
 
-void DockPage::setStatusBar(DockStatusBar* statusBar)
+void DockPageView::setStatusBar(DockStatusBarView* statusBar)
 {
     if (statusBar == m_statusBar) {
         return;
@@ -267,7 +268,7 @@ void DockPage::setStatusBar(DockStatusBar* statusBar)
     emit statusBarChanged(statusBar);
 }
 
-void DockPage::close()
+void DockPageView::close()
 {
     TRACEFUNC;
 
@@ -276,14 +277,14 @@ void DockPage::close()
     }
 }
 
-void DockPage::componentComplete()
+void DockPageView::componentComplete()
 {
     QQuickItem::componentComplete();
 
     Q_ASSERT(!m_uri.isEmpty());
 }
 
-QList<DockBase*> DockPage::allDocks() const
+QList<DockBase*> DockPageView::allDocks() const
 {
     auto mainToolBars = this->mainToolBars();
     auto toolbars = this->toolBars();

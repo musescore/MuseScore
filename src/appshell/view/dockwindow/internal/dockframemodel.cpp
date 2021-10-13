@@ -28,7 +28,7 @@
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 
 #include "../docktypes.h"
-#include "../dockpanel.h"
+#include "../dockpanelview.h"
 
 #include "log.h"
 
@@ -152,7 +152,7 @@ void DockFrameModel::setTitleBarVisible(bool visible)
 
 QObject* DockFrameModel::currentNavigationSection() const
 {
-    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERY).value<DockPanel*>();
+    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERY).value<DockPanelView*>();
     return dockPanel ? dockPanel->navigationSection() : nullptr;
 }
 

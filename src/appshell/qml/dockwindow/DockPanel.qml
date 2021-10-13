@@ -19,24 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#include "dockstatusbar.h"
+import MuseScore.Dock 1.0
 
-using namespace mu::dock;
+DockPanelView {
+    id: root
 
-DockStatusBar::DockStatusBar(QQuickItem* parent)
-    : DockBase(parent)
-{
-    setAllowedAreas(Qt::BottomDockWidgetArea);
+    default property alias content : contentLoader.sourceComponent
 
-    constexpr int STATUS_BAR_HEIGHT = 36;
+    Loader {
+        id: contentLoader
 
-    setMinimumHeight(STATUS_BAR_HEIGHT);
-    setMaximumHeight(STATUS_BAR_HEIGHT);
-    setHeight(STATUS_BAR_HEIGHT);
-}
-
-DockType DockStatusBar::type() const
-{
-    return DockType::StatusBar;
+        active: root.visible
+    }
 }

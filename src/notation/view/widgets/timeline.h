@@ -136,6 +136,7 @@ public:
     bool handleEvent(QEvent* event);
 
     void updateGridView() { updateGrid(-1, -1); }
+    void updateGridFromCmdState();
     void setNotation(mu::notation::INotationPtr notation);
 
     TRowLabels* labelsColumn() const;
@@ -264,7 +265,6 @@ private:
     const TimelineTheme& activeTheme() const;
 
     void updateGridFull() { updateGrid(0, -1); }
-    void updateGridFromCmdState();
 
     QColor colorBox(QGraphicsRectItem* item);
 

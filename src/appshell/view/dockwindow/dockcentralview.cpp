@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "dockcentral.h"
+#include "dockcentralview.h"
 
 using namespace mu::dock;
 
-DockCentral::DockCentral(QQuickItem* parent)
+DockCentralView::DockCentralView(QQuickItem* parent)
     : DockBase(parent)
 {
     setAllowedAreas(Qt::NoDockWidgetArea);
 }
 
-DockType DockCentral::type() const
+DockType DockCentralView::type() const
 {
     return DockType::Central;
 }
