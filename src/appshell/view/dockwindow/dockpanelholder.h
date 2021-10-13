@@ -23,10 +23,10 @@
 #ifndef MU_DOCK_DOCKPANELHOLDER_H
 #define MU_DOCK_DOCKPANELHOLDER_H
 
-#include "dockpanel.h"
+#include "dockpanelview.h"
 
 namespace mu::dock {
-class DockPanelHolder : public DockPanel
+class DockPanelHolder : public DockPanelView
 {
     Q_OBJECT
 

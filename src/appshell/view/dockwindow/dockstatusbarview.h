@@ -20,22 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKSTATUSBAR_H
-#define MU_DOCK_DOCKSTATUSBAR_H
+#ifndef MU_DOCK_DOCKSTATUSBARVIEW_H
+#define MU_DOCK_DOCKSTATUSBARVIEW_H
 
 #include "internal/dockbase.h"
 
 namespace mu::dock {
-class DockStatusBar : public DockBase
+class DockStatusBarView : public DockBase
 {
     Q_OBJECT
 
 public:
-    explicit DockStatusBar(QQuickItem* parent = nullptr);
+    explicit DockStatusBarView(QQuickItem* parent = nullptr);
 
 private:
     DockType type() const override;
 };
 }
 
-#endif // MU_DOCK_DOCKSTATUSBAR_H
+#endif // MU_DOCK_DOCKSTATUSBARVIEW_H

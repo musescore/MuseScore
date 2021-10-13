@@ -260,12 +260,9 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
-            Loader {
-                asynchronous: true
-                sourceComponent: MixerPanel {
-                    Component.onCompleted: {
-                        mixerPanel.contextMenuModel = contextMenuModel
-                    }
+            MixerPanel {
+                Component.onCompleted: {
+                    mixerPanel.contextMenuModel = contextMenuModel
                 }
             }
         },
@@ -315,9 +312,7 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
-            Timeline {
-                anchors.fill: parent
-            }
+            Timeline {}
         },
 
         DockPanel {
@@ -331,9 +326,7 @@ DockPage {
             minimumHeight: 30
             maximumHeight: 30
 
-            DrumsetPanel {
-                anchors.fill: parent
-            }
+            DrumsetPanel {}
         }
     ]
 
@@ -348,8 +341,6 @@ DockPage {
     }
 
     statusBar: DockStatusBar {
-        id: notationStatusBar
-
         objectName: pageModel.statusBarName()
 
         NotationStatusBar {}
