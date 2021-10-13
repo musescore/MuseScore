@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
+
 import MuseScore.Ui 1.0
 
 FocusScope {
@@ -31,14 +32,13 @@ FocusScope {
 
     property alias text: label.text
     property alias font: label.font
-    property alias wrapMode: label.wrapMode
 
     property alias navigation: navCtrl
 
     signal clicked
 
-    implicitHeight: contentRow.height
-    implicitWidth: contentRow.width
+    implicitHeight: contentRow.implicitHeight
+    implicitWidth: contentRow.implicitWidth
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
@@ -68,10 +68,7 @@ FocusScope {
 
     RowLayout {
         id: contentRow
-
-        height: Math.max(box.height, label.implicitHeight)
-
-        spacing: 8
+        spacing: 6
 
         Rectangle {
             id: box
@@ -98,15 +95,16 @@ FocusScope {
 
         StyledTextLabel {
             id: label
+            visible: !isEmpty
 
-            Layout.preferredWidth: root.width > 0 ? Math.min(root.width, label.implicitWidth) : label.implicitWidth
+            readonly property real availableWidth: root.width - contentRow.spacing - box.width
+
+            Layout.preferredWidth: availableWidth > 0 ? Math.min(availableWidth, label.implicitWidth) : label.implicitWidth
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
 
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             maximumLineCount: 2
-
-            visible: Boolean(text)
         }
     }
 

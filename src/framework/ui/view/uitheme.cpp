@@ -670,13 +670,11 @@ int UiTheme::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option,
     switch (metric) {
     case PM_IndicatorWidth: // Checkbox
     case PM_IndicatorHeight:
-        return 20;
-    case PM_CheckBoxLabelSpacing:
-        return 8;
     case PM_ExclusiveIndicatorWidth: // Radio button
     case PM_ExclusiveIndicatorHeight:
         return 20;
-    case PM_RadioButtonLabelSpacing:
+    case PM_CheckBoxLabelSpacing: // Checkbox
+    case PM_RadioButtonLabelSpacing: // Radio button
         return 6;
     case PM_ToolBarHandleExtent: // Toolbars
         return 32;
