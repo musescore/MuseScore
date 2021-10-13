@@ -195,118 +195,103 @@ void TieSegment::editDrag(EditData& ed)
 //    compute help points of slur bezier segment
 //---------------------------------------------------------
 
-void TieSegment::computeBezier(QPointF p6o)
+void TieSegment::computeBezier(QPointF shoulderOffset)
       {
-      qreal _spatium  = spatium();
-      qreal shoulderW;              // height as fraction of slur-length
+      qreal _spatium = spatium();
+      qreal shoulderW; // height as fraction of slur-length
       qreal shoulderH;
 
-      //
-      // pp1      start of slur
-      // pp2      end of slur
-      // pp3      bezier 1
-      // pp4      bezier 2
-      // pp5      drag
-      // pp6      shoulder
-      //
-      QPointF pp1 = ups(Grip::START).p + ups(Grip::START).off;
-      QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off;
+      QPointF tieStart = ups(Grip::START).p + ups(Grip::START).off;
+      QPointF tieEnd = ups(Grip::END).p   + ups(Grip::END).off;
 
-      QPointF p2 = pp2 - pp1;       // normalize to zero
-      if (p2.x() == 0.0) {
+      QPointF tieEndNormalized = tieEnd - tieStart; // normalize to zero
+      if (tieEndNormalized.x() == 0.0) {
             qDebug("zero tie");
             return;
             }
 
-      qreal sinb = atan(p2.y() / p2.x());
+      qreal tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
       QTransform t;
-      t.rotateRadians(-sinb);
-      p2  = t.map(p2);
-      p6o = t.map(p6o);
+      t.rotateRadians(-tieAngle);  // rotate so that we are working with horizontal ties regardless of endpoint height difference
+      tieEndNormalized = t.map(tieEndNormalized);  // apply that rotation
+      shoulderOffset = t.map(shoulderOffset);  // also apply to shoulderOffset
 
-      double smallH = 0.38;
-      qreal d   = p2.x() / _spatium;
-      shoulderH = d * 0.4 * smallH;
-      shoulderH = qBound(0.4, shoulderH, 1.3);
-      shoulderH *= _spatium;
+      double smallH = 0.38; // I don't know what this means currently
+      qreal tieWidthInSp = tieEndNormalized.x() / _spatium;
+      shoulderH = tieWidthInSp * 0.4 * smallH;  // magic math?
+      shoulderH = qBound(shoulderHeightMin, shoulderH, shoulderHeightMax);
+      shoulderH *= _spatium;  // shoulderH is now canvas units
       shoulderW = .6;
 
-      shoulderH -= p6o.y();
+      shoulderH -= shoulderOffset.y();
 
       if (!tie()->up())
             shoulderH = -shoulderH;
 
-      qreal c    = p2.x();
-      qreal c1   = (c - c * shoulderW) * .5 + p6o.x();
-      qreal c2   = c1 + c * shoulderW       + p6o.x();
+      qreal tieWidth = tieEndNormalized.x();
+      qreal bezier1X = (tieWidth - tieWidth * shoulderW) * .5 + shoulderOffset.x();
+      qreal bezier2X = bezier1X + tieWidth * shoulderW + shoulderOffset.x();
 
-      QPointF p5 = QPointF(c * .5, 0.0);
+      QPointF tieDrag = QPointF(tieWidth * .5, 0.0);
 
-      QPointF p3(c1, -shoulderH);
-      QPointF p4(c2, -shoulderH);
+      QPointF bezier1(bezier1X, -shoulderH);
+      QPointF bezier2(bezier2X, -shoulderH);
 
       qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
       if (staff())
             w *= staff()->mag(tie()->tick());
-      QPointF th(0.0, w);    // thickness of slur
+      QPointF tieThickness(0.0, w);
 
-      QPointF p3o = p6o + t.map(ups(Grip::BEZIER1).off);
-      QPointF p4o = p6o + t.map(ups(Grip::BEZIER2).off);
+      QPointF bezier1Offset = shoulderOffset + t.map(ups(Grip::BEZIER1).off);
+      QPointF bezier2Offset = shoulderOffset + t.map(ups(Grip::BEZIER2).off);
 
-      if(!p6o.isNull()) {
-            QPointF p6i = t.inverted().map(p6o);
-            ups(Grip::BEZIER1).off += p6i ;
-            ups(Grip::BEZIER2).off += p6i;
+      if (!shoulderOffset.isNull()) {
+            QPointF invertedShoulder = t.inverted().map(shoulderOffset);
+            ups(Grip::BEZIER1).off += invertedShoulder;
+            ups(Grip::BEZIER2).off += invertedShoulder;
             }
 
       //-----------------------------------calculate p6
-      QPointF pp3  = p3 + p3o;
-      QPointF pp4  = p4 + p4o;
-      QPointF ppp4 = pp4 - pp3;
+      QPointF bezier1Final = bezier1 + bezier1Offset;
+      QPointF bezier2Final = bezier2 + bezier2Offset;
+      QPointF bezierNormalized = bezier2Final - bezier1Final;
 
-      qreal r2 = atan(ppp4.y() / ppp4.x());
+      qreal bezierAngle = atan(bezierNormalized.y() / bezierNormalized.x());  // in case bezier1 and bezier2 are not horizontal
       t.reset();
-      t.rotateRadians(-r2);
-      QPointF p6  = QPointF(t.map(ppp4).x() * .5, 0.0);
+      t.rotateRadians(-bezierAngle);
+      QPointF tieShoulder = QPointF(t.map(bezierNormalized).x() * .5, 0.0);
 
-      t.rotateRadians(2 * r2);
-      p6 = t.map(p6) + pp3 - p6o;
+      t.rotateRadians(2 * bezierAngle);
+      tieShoulder = t.map(tieShoulder) + bezier1Final - shoulderOffset;
       //-----------------------------------
 
       path = QPainterPath();
       path.moveTo(QPointF());
-      path.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
+      path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
       if (tie()->lineType() == 0)
-            path.cubicTo(p4 +p4o + th, p3 + p3o + th, QPointF());
+            path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, QPointF());
 
-      th = QPointF(0.0, 3.0 * w);
+      tieThickness  = QPointF(0.0, 3.0 * w);
       shapePath = QPainterPath();
       shapePath.moveTo(QPointF());
-      shapePath.cubicTo(p3 + p3o - th, p4 + p4o - th, p2);
-      shapePath.cubicTo(p4 +p4o + th, p3 + p3o + th, QPointF());
+      shapePath.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
+      shapePath.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, QPointF());
 
       // translate back
-      double y = pp1.y();
+      double y = tieStart.y();
       const double offsetFactor = 0.2;
       if (staff()->isTabStaff(slurTie()->tick()))
           y += (_spatium * (slurTie()->up() ? -offsetFactor : offsetFactor));
       t.reset();
-      t.translate(pp1.x(), y);
-      t.rotateRadians(sinb);
-      path                  = t.map(path);
-      shapePath             = t.map(shapePath);
-      ups(Grip::BEZIER1).p  = t.map(p3);
-      ups(Grip::BEZIER2).p  = t.map(p4);
-      ups(Grip::END).p      = t.map(p2) - ups(Grip::END).off;
-      ups(Grip::DRAG).p     = t.map(p5);
-      ups(Grip::SHOULDER).p = t.map(p6);
-
-//      QPointF staffOffset;
-//      if (system() && track() >= 0)
-//            staffOffset = QPointF(0.0, -system()->staff(staffIdx())->y());
-
-//      path.translate(staffOffset);
-//      shapePath.translate(staffOffset);
+      t.translate(tieStart.x(), y);
+      t.rotateRadians(tieAngle);
+      path = t.map(path);
+      shapePath = t.map(shapePath);
+      ups(Grip::BEZIER1).p = t.map(bezier1);
+      ups(Grip::BEZIER2).p = t.map(bezier2);
+      ups(Grip::END).p = t.map(tieEndNormalized) - ups(Grip::END).off;
+      ups(Grip::DRAG).p = t.map(tieDrag);
+      ups(Grip::SHOULDER).p = t.map(tieShoulder);
 
       _shape.clear();
       QPointF start;
@@ -314,13 +299,13 @@ void TieSegment::computeBezier(QPointF p6o)
 
       qreal minH = qAbs(3.0 * w);
       int nbShapes = 15;
-      const CubicBezier b(pp1, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
+      const CubicBezier b(tieStart, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
       for (int i = 1; i <= nbShapes; i++) {
             const QPointF point = b.pointAtPercent(i/float(nbShapes));
             QRectF re = QRectF(start, point).normalized();
             if (re.height() < minH) {
-                  d = (minH - re.height()) * .5;
-                  re.adjust(0.0, -d, 0.0, d);
+                  tieWidthInSp = (minH - re.height()) * .5;
+                  re.adjust(0.0, -tieWidthInSp, 0.0, tieWidthInSp);
                   }
             _shape.add(re);
             start = point;
@@ -328,79 +313,197 @@ void TieSegment::computeBezier(QPointF p6o)
       }
 
 //---------------------------------------------------------
-//   layout
+//   layoutSegment
+//    adjust the y-position of the tie. this is called before adjustX()
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
 void TieSegment::layoutSegment(const QPointF& p1, const QPointF& p2)
       {
+      autoAdjustOffset = QPointF();
+      shoulderHeightMin = 0.4;
+      shoulderHeightMax = 1.3;
+
       setPos(QPointF());
       ups(Grip::START).p = p1;
-      ups(Grip::END).p   = p2;
+      ups(Grip::END).p = p2;
       
       //Adjust Y pos to staff type offset before other calculations
       if (staffType())
             rypos() += staffType()->yoffset().val() * spatium();
 
-      computeBezier();
+      if (isNudged() || isEdited())
+            return;
 
-      QRectF bbox = path.boundingRect();
+      QRectF bbox;
+      if (p1.y() == p2.y()) {
+            // for horizontal ties we can estimate the bbox using simple math instead of having to call
+            // computeBezier() which uses a whole lot of trigonometry to draw the entire tie
+            bbox.setX(p1.x());
+            bbox.setWidth(p2.x() - p1.x());
+
+            // The following is ripped from computeBezier()
+            // TODO: refactor this into its own method
+            qreal shoulderHeight = bbox.width() * 0.4 * 0.38;
+            shoulderHeight = qBound(shoulderHeightMin * spatium(), shoulderHeight, shoulderHeightMax * spatium());
+            //////////
+            qreal actualHeight = 2 * (shoulderHeight + styleP(Sid::SlurMidWidth)) / 3;
+
+            bbox.setY(p1.y() - (slurTie()->up() ? actualHeight : 0));
+            bbox.setHeight(actualHeight);
+            }
+      else {
+            computeBezier();
+            bbox = path.boundingRect();
+            }
+
+      // instead of the above if-else, the more "accurate" way to do this is:
+      // computeBezier();
+      // bbox = path.boundingRect();
+
+      Tie* t = toTie(slurTie());
+      qreal sp = spatium();
 
       // adjust position to avoid staff line if necessary
       Staff* st          = staff();
-      bool reverseAdjust = false;
+
+      bool collideAbove = false;
+      bool collideBelow = false;
 
       if (slurTie()->isTie() && st && !st->isTabStaff(slurTie()->tick())) {
             // multinote chords with ties need special handling
             // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
-            Tie* t    = toTie(slurTie());
             Note* sn  = t->startNote();
             t->setTick(t->startNote()->tick());
             Chord* sc = sn ? sn->chord() : 0;
-
-            // normally, the adjustment moves ties according to their direction (eg, up if tie is up)
-            // but we will reverse this for notes within chords when appropriate
-            // for two-note chords, it looks better to have notes on spaces tied outside the lines
-
-            if (sc) {
-                  size_t notes = sc->notes().size();
-                  bool onLine = !(sn->line() & 1);
-                  if ((onLine && notes > 1) || (!onLine && notes > 2))
-                        reverseAdjust = true;
-                  }
-            }
-      qreal sp          = spatium();
-      qreal minDistance = 0.5;
-      autoAdjustOffset  = QPointF();
-      if (bbox.height() < minDistance * 2 * sp && st && !st->isTabStaff(slurTie()->tick())) {
-            // slur/tie is fairly flat
-            bool up       = slurTie()->up();
-            qreal ld      = st->lineDistance(tick()) * sp;
-            qreal topY    = bbox.top() / ld;
-            qreal bottomY = bbox.bottom() / ld;
-            int lineY     = up ? qRound(topY) : qRound(bottomY);
-            if (lineY >= 0 && lineY < st->lines(tick()) * st->lineDistance(tick())) {
-                  // on staff
-                  if (qAbs(topY - lineY) < minDistance && qAbs(bottomY - lineY) < minDistance) {
-                        // too close to line
-                        if (!isNudged() && !isEdited()) {
-                              // user has not nudged or edited
-                              qreal offY;
-                              if (up != reverseAdjust)      // exclusive or
-                                    offY = (lineY - minDistance) - topY;
-                              else
-                                    offY = (lineY + minDistance) - bottomY;
-                              setAutoAdjust(0.0, offY * sp);
-                              }
+            if (sc && sc->notes().size() > 1) {
+                  for (Note* note : sc->notes()) {
+                        if (note == sn || !note->tieFor())
+                              continue;
+                        if (note->line() == sn->line() - 1 && t->up() == note->tieFor()->up())
+                              collideAbove = true;
+                        if (note->line() == sn->line() + 1 && t->up() == note->tieFor()->up())
+                              collideBelow = true;
                         }
                   }
             }
+
+      if (st && !st->isTabStaff(slurTie()->tick())) {
+            qreal ld = st->lineDistance(tick()) * sp;
+            qreal staffLineOffset = 0.125; // sp
+            staffLineOffset += (styleP(Sid::staffLineWidth) / 2) / ld;
+            bool up = slurTie()->up();
+            qreal tieWidth = (styleP(Sid::SlurMidWidth)) / ld;
+            qreal topY = bbox.top() / ld;
+            qreal bottomY = bbox.bottom() / ld;
+            qreal endpointY = up ? bottomY : topY;
+            if (endpointY > 0 && endpointY < (st->lines(tick()) - 1) * st->lineDistance(tick())) {
+                  // tie endpoints are inside the staff and may require adjustment
+                  std::vector<qreal> endpointAnchors;
+                  for (int i = 0; i < st->lines(tick()); ++i) {
+                        endpointAnchors.push_back((qreal)i - staffLineOffset);
+                        endpointAnchors.push_back((qreal)i + staffLineOffset);
+                        }
+
+                  size_t endpointAnchorIndex = 0;
+                  qreal extraAdjust = 0;
+                  if (!tie()->isInside()) {
+                        // Find the nearest endpoint anchor
+                        for (size_t i = 0; i < endpointAnchors.size(); i++) {
+                              if (qAbs(endpointAnchors[i] - endpointY) <= qAbs(endpointAnchors[endpointAnchorIndex] - endpointY))
+                                    endpointAnchorIndex = i;
+                              else
+                                    break;
+                              }
+
+                        qreal currentOffset = endpointAnchors[endpointAnchorIndex] - endpointY;
+                        topY += currentOffset;
+                        bottomY += currentOffset;
+                        // Adjust for tie apogee colliding with staff lines
+                        qreal insideTieTop = up ? topY : (bottomY - tieWidth);
+                        qreal insideTieBottom = up ? (topY + tieWidth) : bottomY;
+                        qreal tieTopWithMargin = insideTieTop - staffLineOffset;
+                        qreal tieBottomWithMargin = insideTieBottom + staffLineOffset;
+                        if ((tieTopWithMargin < 0 && tieBottomWithMargin > 0) || (int)tieTopWithMargin != (int)tieBottomWithMargin) {
+                              qreal oldAnchorY = endpointAnchors[endpointAnchorIndex];
+                              if (up) {
+                                    endpointAnchorIndex--;
+                                    tieBottomWithMargin += endpointAnchors[endpointAnchorIndex] - oldAnchorY; // update position of tie bottom
+                                    if (endpointAnchorIndex & 1) {  // endpoints just below a line can be adjusted downwards
+                                          extraAdjust = ((int)(tieBottomWithMargin + 1) - tieBottomWithMargin); // how far the inside of the tie is from the staff line
+                                          extraAdjust = qMax(extraAdjust, 0.0); // ensure downward adjustment
+
+                                          // clamp endpoints to at least 0.5sp of staff line
+                                          qreal endpointDistanceFromUpperLine = (endpointAnchors[endpointAnchorIndex] + extraAdjust) - (int)endpointY;
+                                          if (endpointDistanceFromUpperLine < 0.5) {
+                                                extraAdjust += 0.5 - endpointDistanceFromUpperLine;
+                                                shoulderHeightMin = 3 * (0.5 + (tieWidth / 2) + (staffLineOffset / 2)) / 2;
+                                                }
+                                          }
+                                    }
+                              else { // tie is down
+                                    endpointAnchorIndex++;
+                                    tieTopWithMargin += endpointAnchors[endpointAnchorIndex] - oldAnchorY; // update position of tie top
+                                    if (!(endpointAnchorIndex & 1)) { // endpoint just above a line can be adjusted upwards
+                                          extraAdjust = ((int)tieTopWithMargin - tieTopWithMargin);
+                                          extraAdjust = qMin(extraAdjust, 0.0);
+
+                                          // clamp endpoints to at least 0.5sp of staff line
+                                          qreal endpointDistanceFromLowerLine = (int)(endpointY + 1)
+                                                      - (endpointAnchors[endpointAnchorIndex] + extraAdjust);
+                                          if (endpointDistanceFromLowerLine < 0.5) {
+                                                // add enough to extraAdjust so that it becomes endpointY + 0.25
+                                                extraAdjust -= 0.5 - endpointDistanceFromLowerLine; //((int)endpointAnchors[endpointAnchorIndex] + 0.5) - (endpointAnchors[endpointAnchorIndex]);
+                                                shoulderHeightMin = 3 * (0.5 + (tieWidth / 2) + (staffLineOffset / 2)) / 2;
+                                                }
+                                          }
+                                    }
+                              }
+                        }
+                  else { // inside-tie
+                        endpointAnchorIndex = tie()->startNote()->line() + (tie()->up() ? 0 : 1);
+                        if ((up && endpointAnchorIndex & 1)
+                           || (!up && !(endpointAnchorIndex & 1))) {
+                              // tie endpoint is right below the line, so let's adjust the height so that the top clears the line
+                              shoulderHeightMin = 3 * (staffLineOffset + (tieWidth / 2)) / 2;
+                              }
+                        else {
+                              qreal insideTieTop = up ? topY : (bottomY - tieWidth);
+                              qreal insideTieBottom = up ? (topY + tieWidth) : bottomY;
+                              qreal tieTopWithMargin = insideTieTop;// -0.125;// -staffLineOffset;
+                              qreal tieBottomWithMargin = insideTieBottom;// +0.125;// +staffLineOffset;
+                              if ((tieTopWithMargin < 0 && tieBottomWithMargin > 0) || (int)tieTopWithMargin != (int)tieBottomWithMargin) {
+                                    //shoulderHeightMin = 3 * (staffLineOffset + (tieWidth / 2)) / 2;
+                                    shoulderHeightMax = 1 - staffLineOffset - (tieWidth / 2);
+                                    }
+                              }
+                        if ((up && collideBelow) || (!up && collideAbove))
+                              shoulderHeightMin = 3 * (staffLineOffset + (tieWidth / 2)) / 2;
+                        if ((up && collideAbove) || (!up && collideBelow))
+                              shoulderHeightMax = 1 - staffLineOffset - (tieWidth / 2);
+                        }
+
+                  qreal currentOffset = endpointAnchors[endpointAnchorIndex] - endpointY;
+                  setAutoAdjust(QPointF(0, (currentOffset + extraAdjust) * ld));
+                  }
+            }
+      }
+
+//---------------------------------------------------------
+//   finalizeSegment
+//    compute the bezier and adjust the bbox for the curve
+//---------------------------------------------------------
+
+void TieSegment::finalizeSegment()
+      {
+      computeBezier();
       setbbox(path.boundingRect());
       }
 
 void TieSegment::adjustX()
       {
       qreal offsetMargin = spatium() * 0.25;
+      qreal collisionYMargin = spatium() * 0.25;
       Note* sn = tie()->startNote();
       Note* en = tie()->endNote();
       Chord* sc = sn ? sn->chord() : nullptr;
@@ -408,8 +511,11 @@ void TieSegment::adjustX()
 
       qreal xo;
 
+      if (isNudged() || isEdited())
+            return;
+
       // ADJUST LEFT GRIP -----------
-      if (sc && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN)) {
+      if (sc && ((spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN))) {
             // grips are in system coordinates, normalize to note position
             QPointF p1 = ups(Grip::START).p + QPointF(system()->pos().x() - sn->canvasX() + sn->headWidth(), 0);
             xo = 0;
@@ -430,7 +536,7 @@ void TieSegment::adjustX()
                               qreal hookHeight = chord->hook()->bbox().height();
                               // turn the hook upside down for downstems
                               qreal hookY = chord->hook()->pos().y() - (chord->up() ? 0 : hookHeight);
-                              if (p1.y() > hookY - offsetMargin && p1.y() < hookY + hookHeight + offsetMargin)
+                              if (p1.y() > hookY - collisionYMargin  && p1.y() < hookY + hookHeight + collisionYMargin )
                                     xo = qMax(xo, chord->hook()->x() + chord->hook()->width() + chordOffset);
                               }
 
@@ -438,7 +544,7 @@ void TieSegment::adjustX()
                         if (chord->stem() && chord->stem()->visible()) {
                               qreal stemLen = chord->stem()->bbox().height();
                               qreal stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
-                              if (p1.y() > stemY - offsetMargin && p1.y() < stemY + stemLen + offsetMargin)
+                              if (p1.y() > stemY - collisionYMargin  && p1.y() < stemY + stemLen + collisionYMargin )
                                     xo = qMax(xo, chord->stem()->x() + chord->stem()->width() + chordOffset);
                               }
 
@@ -474,7 +580,7 @@ void TieSegment::adjustX()
             }
 
       // ADJUST RIGHT GRIP ----------
-      if (sc && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END)) {
+      if (sc && ((spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END))) {
             // grips are in system coordinates, normalize to note position
             QPointF p2 = ups(Grip::END).p + QPointF(system()->pos().x() - en->canvasX(), 0);
             xo = 0;
@@ -500,7 +606,7 @@ void TieSegment::adjustX()
                               // adjust for stems
                               qreal stemLen = chord->stem()->bbox().height();
                               qreal stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
-                              if (p2.y() > stemY - offsetMargin && p2.y() < stemY + stemLen + offsetMargin)
+                              if (p2.y() > stemY - collisionYMargin  && p2.y() < stemY + stemLen + collisionYMargin )
                                     xo = qMin(xo, chord->stem()->x() - chordOffset);
                               }
 
@@ -519,7 +625,7 @@ void TieSegment::adjustX()
                               // adjust for shifted notes (such as intervals of unison or second)
                               qreal noteTop = note->y() + note->bbox().top();
                               qreal noteHeight = note->headHeight();
-                              if (p2.y() >= noteTop - offsetMargin && p2.y() <= noteTop + noteHeight + offsetMargin)
+                              if (p2.y() >= noteTop - collisionYMargin  && p2.y() <= noteTop + noteHeight + collisionYMargin )
                                     xo = qMin(xo, note->x() - chordOffset);
                               }
                         }
@@ -527,9 +633,6 @@ void TieSegment::adjustX()
             xo -= offsetMargin;
             ups(Grip::END).p += QPointF(xo, 0);
             }
-
-      computeBezier(); // we need to recompute because the grips have changed
-      setbbox(path.boundingRect());
       }
 
 //---------------------------------------------------------
@@ -853,6 +956,7 @@ TieSegment* Tie::layoutFor(System* system)
             SlurPos sPos;
             slurPos(&sPos);
             segment->layoutSegment(sPos.p1, sPos.p2);
+            segment->finalizeSegment();
             return segment;
             }
       calculateDirection();
@@ -873,10 +977,11 @@ TieSegment* Tie::layoutFor(System* system)
       fixupSegments(n);
       TieSegment* segment = segmentAt(0);
       segment->setSystem(system); // Needed to populate System.spannerSegments
-      segment->layoutSegment(sPos.p1, sPos.p2);
+      segment->layoutSegment(sPos.p1, sPos.p2); // adjust vertically
       segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
       segment->adjustX(); // adjust horizontally for inside-style ties
 
+      segment->finalizeSegment(); // compute bezier and set bbox
       return segment;
       }
 
@@ -907,6 +1012,7 @@ TieSegment* Tie::layoutBack(System* system)
       segment->layoutSegment(QPointF(x, sPos.p2.y()), sPos.p2);
       segment->setSpannerSegmentType(SpannerSegmentType::END);
       segment->adjustX();
+      segment->finalizeSegment();
       return segment;
       }
 
