@@ -249,14 +249,12 @@ void Tuplet::layout()
     // find first and last chord of tuplet
     // (tuplets can be nested)
     //
-    bool nested = false;
     const DurationElement* cr1 = _elements.front();
     while (cr1->isTuplet()) {
         const Tuplet* t = toTuplet(cr1);
         if (t->elements().empty()) {
             break;
         }
-        nested = true;
         cr1 = t->elements().front();
     }
     const DurationElement* cr2 = _elements.back();
@@ -265,7 +263,6 @@ void Tuplet::layout()
         if (t->elements().empty()) {
             break;
         }
-        nested = true;
         cr2 = t->elements().back();
     }
 
@@ -310,8 +307,7 @@ void Tuplet::layout()
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
         // account for staff move when adjusting bracket to avoid staff
         // but don't attempt adjustment unless both endpoints are in same staff
-        // and not a nested tuplet
-        if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove() && !tuplet() && !nested) {
+        if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
             move = toChordRest(cr1)->staffMove();
             if (move == 1) {
                 setStaffIdx(cr1->vStaffIdx());
