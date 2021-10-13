@@ -215,12 +215,11 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     }
 
     if (!open) {
-        constexpr bool UNLOAD_CONTENT = true;
-        dock->close(UNLOAD_CONTENT);
+        dock->close();
         return;
     }
 
-    DockPanelView* panel = dynamic_cast<DockPanel*>(dock);
+    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
     if (!panel) {
         dock->open();
         return;
@@ -295,15 +294,6 @@ void DockPageView::setStatusBar(DockStatusBarView* statusBar)
 
     m_statusBar = statusBar;
     emit statusBarChanged(statusBar);
-}
-
-void DockPageView::close()
-{
-    TRACEFUNC;
-
-    for (DockBase* dock : allDocks()) {
-        dock->close();
-    }
 }
 
 void DockPageView::componentComplete()

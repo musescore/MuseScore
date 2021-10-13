@@ -54,7 +54,6 @@ public:
     explicit DockPageView(QQuickItem* parent = nullptr);
 
     void init();
-    void close();
 
     QString uri() const;
 

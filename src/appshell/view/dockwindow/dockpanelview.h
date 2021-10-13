@@ -50,7 +50,7 @@ public:
     QObject* navigationSection() const;
     ui::AbstractMenuModel* contextMenuModel() const;
 
-    void addPanelAsTab(const DockPanel* tab);
+    void addPanelAsTab(DockPanelView* tab);
     void setCurrentTabIndex(int index);
 
 public slots:

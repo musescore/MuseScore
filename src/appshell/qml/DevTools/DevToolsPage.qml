@@ -67,6 +67,7 @@ DockPage {
 
             objectName: "devtoolsPanel"
 
+            width: maximumWidth
             minimumWidth: 200
             maximumWidth: 292
 
