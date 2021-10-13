@@ -67,6 +67,7 @@ DockPage {
         DockPanel {
             objectName: "homeMenu"
 
+            width: maximumWidth
             minimumWidth: 76
             maximumWidth: 292
 

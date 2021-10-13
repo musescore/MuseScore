@@ -232,16 +232,17 @@ void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
     emit contextMenuModelChanged();
 }
 
-void DockPanel::addPanelAsTab(const DockPanel* tab)
+void DockPanelView::addPanelAsTab(DockPanelView* tab)
 {
     IF_ASSERT_FAILED(tab && dockWidget()) {
         return;
     }
 
     dockWidget()->addDockWidgetAsTab(tab->dockWidget());
+    tab->setVisible(true);
 }
 
-void DockPanel::setCurrentTabIndex(int index)
+void DockPanelView::setCurrentTabIndex(int index)
 {
     IF_ASSERT_FAILED(dockWidget()) {
         return;
