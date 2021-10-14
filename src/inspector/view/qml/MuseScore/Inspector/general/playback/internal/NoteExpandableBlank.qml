@@ -84,8 +84,9 @@ ExpandableBlank {
             }
         }
 
-        CheckBox {
+        CheckBoxPropertyView {
             id: overrideDynamicsSection
+
             navigation.name: "Override dynamics"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
@@ -93,11 +94,7 @@ ExpandableBlank {
             navigation.enabled: root.navigation.enabled && root.enabled
 
             text: qsTrc("inspector", "Override dynamics")
-
-            isIndeterminate: root.model ? root.model.overrideDynamics.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.overrideDynamics.value : false
-
-            onClicked: { root.model.overrideDynamics.value = !checked }
+            propertyItem: root.model ? root.model.overrideDynamics : null
         }
     }
 }

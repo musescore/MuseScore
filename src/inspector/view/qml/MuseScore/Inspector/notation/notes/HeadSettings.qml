@@ -45,17 +45,13 @@ FocusableItem {
 
         spacing: 12
 
-        CheckBox {
-            isIndeterminate: root.model ? root.model.isHeadHidden.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.isHeadHidden.value : false
+        CheckBoxPropertyView {
             text: qsTrc("inspector", "Hide notehead")
+            propertyItem: root.model ? root.model.isHeadHidden : null
 
             navigation.name: "HideNoteHeadBox"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-            navigation.enabled: root.enabled
-
-            onClicked: { root.model.isHeadHidden.value = !checked }
         }
 
         NoteheadGroupSelector {

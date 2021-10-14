@@ -99,7 +99,9 @@ FocusableItem {
 
             StyledTextLabel {
                 id: markerTypeLabel
+                width: parent.width
                 text: qsTrc("inspector", "Marker type")
+                horizontalAlignment: Text.AlignLeft
             }
 
             RadioButtonGroup {

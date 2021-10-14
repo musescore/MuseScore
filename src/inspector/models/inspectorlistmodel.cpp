@@ -43,8 +43,6 @@ inline uint qHash(AbstractInspectorModel::InspectorSectionType key)
 InspectorListModel::InspectorListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_roleNames.insert(InspectorDataRole, "inspectorData");
-
     m_repository = new ElementRepositoryService(this);
 
     subscribeOnSelectionChanges();
@@ -52,7 +50,7 @@ InspectorListModel::InspectorListModel(QObject* parent)
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList
+    static const QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList
         = { AbstractInspectorModel::InspectorSectionType::SECTION_GENERAL };
 
     removeUnusedModels(selectedElementKeySet, persistentSectionList);
@@ -73,7 +71,7 @@ void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& sel
 
 void InspectorListModel::buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet)
 {
-    static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList {
+    static const QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList {
         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
@@ -107,9 +105,9 @@ int InspectorListModel::rowCount(const QModelIndex&) const
     return m_modelList.count();
 }
 
-QVariant InspectorListModel::data(const QModelIndex& index, int) const
+QVariant InspectorListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty()) {
+    if (!index.isValid() || index.row() >= rowCount() || m_modelList.isEmpty() || role != InspectorSectionModelRole) {
         return QVariant();
     }
 
@@ -122,7 +120,9 @@ QVariant InspectorListModel::data(const QModelIndex& index, int) const
 
 QHash<int, QByteArray> InspectorListModel::roleNames() const
 {
-    return m_roleNames;
+    return {
+        { InspectorSectionModelRole, "inspectorSectionModel" }
+    };
 }
 
 int InspectorListModel::columnCount(const QModelIndex&) const

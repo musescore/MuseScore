@@ -138,21 +138,18 @@ FocusableItem {
             navigationRowStart: startingFretNumber.navigationRowEnd + 1
         }
 
-        CheckBox {
+        CheckBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            isIndeterminate: root.model ? root.model.isNutVisible.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.isNutVisible.value : false
             text: qsTrc("inspector", "Show nut")
+            propertyItem: root.model ? root.model.isNutVisible : false
 
             navigation.name: "MultipleDotsCheckBox"
             navigation.panel: root.navigationPanel
             navigation.row: placementSection.navigationRowEnd + 2
             navigation.enabled: root.enabled
-
-            onClicked: { root.model.isNutVisible.value = !checked }
         }
     }
 }

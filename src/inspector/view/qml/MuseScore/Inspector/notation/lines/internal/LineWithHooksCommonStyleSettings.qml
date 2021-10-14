@@ -45,40 +45,22 @@ Column {
 
         spacing: 6
 
-        CheckBox {
-            id: showLineCheckBox
-
-            isIndeterminate: root.model && root.model.isLineVisible.isUndefined
-            checked: root.model && !isIndeterminate && root.model.isLineVisible.value
-            visible: root.model && root.model.isLineVisible.isVisible
-
+        CheckBoxPropertyView {
             text: qsTrc("inspector", "Show line")
+            propertyItem: root.model ? root.model.isLineVisible : null
 
             navigation.name: "ShowLineCheckBox"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-            navigation.enabled: root.enabled && visible
-
-            onClicked: {
-                root.model.isLineVisible.value = !checked
-            }
         }
 
-        CheckBox {
-            isIndeterminate: root.model && root.model.allowDiagonal.isUndefined
-            checked: root.model && !isIndeterminate && root.model.allowDiagonal.value
-            visible: root.model && root.model.allowDiagonal.isVisible
-
+        CheckBoxPropertyView {
             text: qsTrc("inspector", "Allow diagonal")
+            propertyItem: root.model ? root.model.allowDiagonal : null
 
             navigation.name: "AllowDiagonalCheckBox"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 2
-            navigation.enabled: root.enabled && visible
-
-            onClicked: {
-                root.model.allowDiagonal.value = !checked
-            }
         }
     }
 

@@ -45,7 +45,9 @@ Column {
         spacing: 8
 
         StyledTextLabel {
+            width: parent.width
             text: qsTrc("inspector", "Arrange")
+            horizontalAlignment: Text.AlignLeft
         }
 
         Item {

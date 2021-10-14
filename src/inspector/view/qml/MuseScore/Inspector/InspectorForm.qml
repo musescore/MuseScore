@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQml.Models 2.3
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
@@ -49,26 +48,9 @@ Rectangle {
         }
     }
 
-    InspectorListModel {
-        id: inspectorListModel
-    }
-
-    StyledScrollBar {
-        id: scrollBar
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-
-        visible: flickableArea.contentHeight > flickableArea.height
-        z: 1
-    }
-
     Flickable {
         id: flickableArea
-
         anchors.fill: parent
-        anchors.margins: 12
 
         function ensureContentVisible(invisibleContentHeight) {
             if (flickableArea.contentY + invisibleContentHeight > 0) {
@@ -83,29 +65,31 @@ Rectangle {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 1000
 
-        contentHeight: contentItem.childrenRect.height
+        contentHeight: contentColumn.childrenRect.height + 2 * contentColumn.anchors.margins
 
         Behavior on contentY {
             NumberAnimation { duration: 250 }
         }
 
-        ScrollBar.vertical: scrollBar
+        ScrollBar.vertical: StyledScrollBar {}
 
         Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            id: contentColumn
+            anchors.fill: parent
+            anchors.margins: 12
 
+            height: childrenRect.height
             spacing: 6
 
             Repeater {
                 id: inspectorRepeater
-
-                model: inspectorListModel
+                model: InspectorListModel {}
 
                 delegate: ExpandableBlank {
                     id: expandableDelegate
 
-                    property var contentHeight: implicitHeight
+                    required property int index
+                    required property var inspectorSectionModel // Comes from inspectorListModel
 
                     NavigationPanel {
                         id: navPanel
@@ -114,20 +98,20 @@ Rectangle {
                         direction: NavigationPanel.Vertical
                         accessible.name: expandableDelegate.title
                         enabled: root.visible
-                        order: model.index + 2
+                        order: expandableDelegate.index + 2
                     }
 
                     navigation.panel: navPanel
                     navigation.row: 0
 
-                    function viewBySectionType() {
-                        flickableArea.contentY = 0
+                    title: inspectorSectionModel.title
 
-                        switch (inspectorData.sectionType) {
+                    contentItemComponent: {
+                        switch (inspectorSectionModel.sectionType) {
                         case Inspector.SECTION_GENERAL: return generalInspector
                         case Inspector.SECTION_TEXT: return textInspector
                         case Inspector.SECTION_NOTATION:
-                            if (inspectorData.isMultiModel()) {
+                            if (inspectorSectionModel.isMultiModel()) {
                                 return notationInspectorMultiElements
                             } else {
                                 return notationInspectorSingleElement
@@ -137,17 +121,11 @@ Rectangle {
                         }
                     }
 
-                    contentItemComponent: viewBySectionType()
-
-                    Component.onCompleted: {
-                        title = inspectorData.title
-                    }
-
                     Component {
                         id: generalInspector
 
                         GeneralInspectorView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
@@ -162,7 +140,7 @@ Rectangle {
                         id: textInspector
 
                         TextInspectorView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
@@ -177,7 +155,7 @@ Rectangle {
                         id: notationInspectorMultiElements
 
                         NotationMultiElementView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                             anchorItem: root
@@ -192,7 +170,7 @@ Rectangle {
                         id: notationInspectorSingleElement
 
                         NotationSingleElementView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                         }
@@ -202,7 +180,7 @@ Rectangle {
                         id: scoreInspector
 
                         ScoreDisplayInspectorView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                         }
@@ -212,7 +190,7 @@ Rectangle {
                         id: scoreAppearanceInspector
 
                         ScoreAppearanceInspectorView {
-                            model: inspectorData
+                            model: expandableDelegate.inspectorSectionModel
                             navigationPanel: navPanel
                             navigationRowStart: expandableDelegate.navigation.row + 1
                         }

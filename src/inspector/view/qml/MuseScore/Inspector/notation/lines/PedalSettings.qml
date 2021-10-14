@@ -47,8 +47,7 @@ Column {
 
     CheckBox {
         id: showPedalSymbol
-        checked: root.model && root.model.pedalSymbolVisible
-
+        width: parent.width
         text: qsTrc("inspector", "Show pedal symbol")
 
         navigation.name: "ShowPedalSymbolCheckBox"
@@ -56,6 +55,7 @@ Column {
         navigation.row: root.navigationRowStart
         navigation.enabled: root.enabled
 
+        checked: root.model && root.model.pedalSymbolVisible
         onClicked: {
             root.model.pedalSymbolVisible = !checked
         }
@@ -76,22 +76,16 @@ Column {
         navigationRowStart: root.navigationRowStart + 1
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: showLineCheckBox
-        isIndeterminate: root.model && root.model.isLineVisible.isUndefined
-        checked: root.model && !isIndeterminate && root.model.isLineVisible.value
         visible: root.model && root.model.isChangingLineVisibilityAllowed
 
         text: qsTrc("inspector", "Show line with rosette")
+        propertyItem: root.model ? root.model.isLineVisible : null
 
         navigation.name: "ShowLineWithRosetteCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: lineTypeSectuion.navigationRowEnd + 1
-        navigation.enabled: root.enabled && visible
-
-        onClicked: {
-            root.model.isLineVisible.value = !checked
-        }
     }
 
     SeparatorLine { anchors.margins: -10 }
