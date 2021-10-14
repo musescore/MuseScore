@@ -77,7 +77,7 @@ ExpandableBlank {
             minValue: 0
         }
 
-        CheckBox {
+        CheckBoxPropertyView {
             id: singleNoteCheckBox
 
             navigation.name: "Use single note dynamics"
@@ -87,12 +87,7 @@ ExpandableBlank {
             navigation.enabled: root.navigation.enabled && root.enabled
 
             text: qsTrc("inspector", "Use single note dynamics")
-
-            checked: root.model && root.model.useSingleNoteDynamics.value
-
-            onClicked: {
-                root.model.useSingleNoteDynamics.value = !checked
-            }
+            propertyItem: root.model ? root.model.useSingleNoteDynamics : null
         }
 
         DropdownPropertyView {

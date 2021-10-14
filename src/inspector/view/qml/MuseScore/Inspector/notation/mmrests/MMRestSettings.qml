@@ -66,12 +66,9 @@ Column {
                 navigationRowStart: root.navigationRowStart + 1
                 navigationRowEnd: numberVisibilityCheckBox.navigation.row
 
-                CheckBox {
+                CheckBoxPropertyView {
                     id: numberVisibilityCheckBox
-
-                    isIndeterminate: root.model ? root.model.isNumberVisible.isUndefined : false
-                    checked: root.model && !isIndeterminate ? root.model.isNumberVisible.value : false
-                    onClicked: { root.model.isNumberVisible.value = !checked }
+                    propertyItem: root.model ? root.model.isNumberVisible : null
 
                     navigation.name: "NumberVisibilityCheckBox"
                     navigation.panel: root.navigationPanel

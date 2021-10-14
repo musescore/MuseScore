@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -51,69 +50,56 @@ InspectorSectionView {
             rowSpacing: 12
             columnSpacing: 4
 
-            CheckBox {
+            CheckBoxPropertyView {
                 Layout.fillWidth: true
                 Layout.maximumWidth: parent.width / 2
 
-                navigation.panel: root.navigationPanel
                 navigation.name: "Visible"
+                navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(1)
 
                 text: qsTrc("inspector", "Visible")
-
-                isIndeterminate: model ? model.isVisible.isUndefined : false
-                checked: model && !model.isVisible.isUndefined ? model.isVisible.value : false
-
-                onClicked: { model.isVisible.value = !checked }
+                propertyItem: root.model ? root.model.isVisible : null
+                isIndeterminate: enabled && propertyItem && propertyItem.isUndefined
             }
 
-            CheckBox {
+            CheckBoxPropertyView {
                 Layout.fillWidth: true
                 Layout.maximumWidth: parent.width / 2
 
-                navigation.panel: root.navigationPanel
                 navigation.name: "Cue size"
+                navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(2)
 
                 text: qsTrc("inspector", "Cue size")
-
-                enabled: model ? model.isSmall.isEnabled : false
-                isIndeterminate: model && enabled ? model.isSmall.isUndefined : false
-                checked: model && !model.isSmall.isUndefined ? model.isSmall.value : false
-
-                onClicked: { model.isSmall.value = !checked }
+                propertyItem: root.model ? root.model.isSmall : null
+                isIndeterminate: enabled && propertyItem && propertyItem.isUndefined
             }
 
-            CheckBox {
+            CheckBoxPropertyView {
                 Layout.fillWidth: true
                 Layout.maximumWidth: parent.width / 2
 
-                navigation.panel: root.navigationPanel
                 navigation.name: "Auto-place"
+                navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(3)
 
                 text: qsTrc("inspector", "Auto-place")
-                isIndeterminate: model ? model.isAutoPlaceAllowed.isUndefined : false
-                checked: model && !model.isAutoPlaceAllowed.isUndefined ? model.isAutoPlaceAllowed.value : false
-
-                onClicked: { model.isAutoPlaceAllowed.value = !checked }
+                propertyItem: root.model ? root.model.isAutoPlaceAllowed : null
+                isIndeterminate: enabled && propertyItem && propertyItem.isUndefined
             }
 
-            CheckBox {
+            CheckBoxPropertyView {
                 Layout.fillWidth: true
                 Layout.maximumWidth: parent.width / 2
 
-                navigation.panel: root.navigationPanel
                 navigation.name: "Play"
+                navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRow(4)
 
                 text: qsTrc("inspector", "Play")
-
-                enabled: model ? model.isPlayable.isEnabled : false
-                isIndeterminate: model && enabled ? model.isPlayable.isUndefined : false
-                checked: model && !model.isPlayable.isUndefined && enabled ? model.isPlayable.value : false
-
-                onClicked: { model.isPlayable.value = !checked }
+                propertyItem: root.model ? root.model.isPlayable : null
+                isIndeterminate: enabled && propertyItem && propertyItem.isUndefined
             }
         }
 

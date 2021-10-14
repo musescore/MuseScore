@@ -49,7 +49,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        CheckBox {
+        CheckBoxPropertyView {
             id: matchStaffSize
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
@@ -60,11 +60,8 @@ Column {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
 
-            isIndeterminate: root.model ? root.model.isSizeSpatiumDependent.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.isSizeSpatiumDependent.value : false
             text: qsTrc("inspector", "Match staff size")
-
-            onClicked: { root.model.isSizeSpatiumDependent.value = !checked }
+            propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
         }
 
         RadioButtonGroup {

@@ -71,15 +71,12 @@ Column {
         navigationRowStart: playUntil.navigationRowEnd + 1
     }
 
-    CheckBox {
-        isIndeterminate: root.model ? root.model.hasToPlayRepeats.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.hasToPlayRepeats.value : false
+    CheckBoxPropertyView {
         text: qsTrc("inspector", "Play repeats")
+        propertyItem: root.model ? root.model.hasToPlayRepeats : null
 
         navigation.name: "PlayRepeats"
         navigation.panel: root.navigationPanel
         navigation.row: continueAt.navigationRowEnd + 1
-
-        onClicked: { root.model.hasToPlayRepeats.value = !checked }
     }
 }
