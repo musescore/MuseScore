@@ -285,14 +285,8 @@ MenuItem AppMenuModel::toolsItem() const
 
 MenuItem AppMenuModel::helpItem() const
 {
-    MenuItemList toursItems {
-        makeMenuItem("show-tours"), // need implement
-        makeMenuItem("reset-tours") // need implement
-    };
-
     MenuItemList helpItems {
         makeMenuItem("online-handbook"),
-        makeMenu(qtrc("appshell", "&Tours"), toursItems),
         makeSeparator(),
         makeMenuItem("about"),
         makeMenuItem("about-qt"),

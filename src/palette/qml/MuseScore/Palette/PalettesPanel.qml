@@ -111,15 +111,4 @@ Rectangle {
 
         visible: !searchHint.visible
     }
-
-    Rectangle {
-        // Shadow overlay for Tours. The usual overlay doesn't cover palettes
-        // as they reside in a window container above the main MuseScore window.
-        visible: paletteRootModel.needShowShadowOverlay
-        anchors.fill: parent
-        z: 1000
-
-        color: ui.theme.strokeColor
-        opacity: 0.5
-    }
 }
