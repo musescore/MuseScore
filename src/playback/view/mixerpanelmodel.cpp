@@ -40,6 +40,12 @@ void MixerPanelModel::load()
 {
     TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
 
+    if (m_currentTrackSequenceId == sequenceId) {
+        return;
+    }
+
+    m_currentTrackSequenceId = sequenceId;
+
     playback()->tracks()->trackIdList(sequenceId)
     .onResolve(this, [this, sequenceId](const TrackIdList& trackIdList) {
         loadItems(sequenceId, trackIdList);
@@ -47,14 +53,6 @@ void MixerPanelModel::load()
     .onReject(this, [sequenceId](int errCode, std::string text) {
         LOGE() << "unable to find track sequence:" << sequenceId << ", error code: " << errCode
                << ", " << text;
-    });
-
-    playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
-        addItem(sequenceId, trackId);
-    });
-
-    playback()->tracks()->trackRemoved().onReceive(this, [this](const TrackSequenceId /*sequenceId*/, const TrackId trackId) {
-        removeItem(trackId);
     });
 }
 
@@ -95,6 +93,14 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
     sortItems();
 
     endResetModel();
+
+    playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
+        addItem(sequenceId, trackId);
+    });
+
+    playback()->tracks()->trackRemoved().onReceive(this, [this](const TrackSequenceId /*sequenceId*/, const TrackId trackId) {
+        removeItem(trackId);
+    });
 }
 
 void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId)
