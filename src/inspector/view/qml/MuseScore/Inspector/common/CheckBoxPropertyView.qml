@@ -35,7 +35,7 @@ CheckBox {
     enabled: propertyItem && propertyItem.isEnabled
 
     isIndeterminate: propertyItem && propertyItem.isUndefined
-    checked: !isIndeterminate && propertyItem && propertyItem.value
+    checked: !isIndeterminate && propertyItem && Boolean(propertyItem.value)
     onClicked: {
         if (propertyItem) {
             propertyItem.value = !checked
