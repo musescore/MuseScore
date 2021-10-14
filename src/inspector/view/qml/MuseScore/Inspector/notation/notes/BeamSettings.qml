@@ -74,7 +74,7 @@ FocusableItem {
             Column {
                 id: featheringControlsColumn
 
-                spacing: 12
+                spacing: 8
 
                 height: implicitHeight
                 width: parent.width
@@ -84,7 +84,9 @@ FocusableItem {
 
                 StyledTextLabel {
                     id: featheredBeamsLabel
+                    width: parent.width
                     text: qsTrc("inspector", "Feathered beams")
+                    horizontalAlignment: Text.AlignLeft
                 }
 
                 RadioButtonGroup {
