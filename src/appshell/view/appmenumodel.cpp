@@ -103,6 +103,13 @@ void AppMenuModel::setupConnections()
     });
 }
 
+MenuItem AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
+{
+    MenuItem item = makeMenuItem(actionCode);
+    item.role = menuRole;
+    return item;
+}
+
 MenuItem AppMenuModel::fileItem() const
 {
     MenuItemList recentScoresList = recentScores();
@@ -132,7 +139,7 @@ MenuItem AppMenuModel::fileItem() const
         makeSeparator(),
         makeMenuItem("print"), // need implement
         makeSeparator(),
-        makeMenuItem("quit")
+        makeMenuItem("quit", MenuItemRole::QuitRole)
     };
 
     return makeMenu(qtrc("appshell", "&File"), fileItems);
@@ -156,7 +163,7 @@ MenuItem AppMenuModel::editItem() const
         makeMenuItem("select-section"),
         makeMenuItem("find"),
         makeSeparator(),
-        makeMenuItem("preference-dialog")
+        makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
     };
 
     return makeMenu(qtrc("appshell", "&Edit"), editItems);
@@ -288,8 +295,8 @@ MenuItem AppMenuModel::helpItem() const
     MenuItemList helpItems {
         makeMenuItem("online-handbook"),
         makeSeparator(),
-        makeMenuItem("about"),
-        makeMenuItem("about-qt"),
+        makeMenuItem("about", MenuItemRole::AboutRole),
+        makeMenuItem("about-qt", MenuItemRole::AboutQtRole),
         makeMenuItem("about-musicxml")
     };
 
