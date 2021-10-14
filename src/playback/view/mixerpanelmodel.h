@@ -66,6 +66,7 @@ private:
     MixerChannelItem* buildMasterChannelItem();
 
     QList<MixerChannelItem*> m_mixerChannelList;
+    audio::TrackSequenceId m_currentTrackSequenceId = -1;
 };
 }
 
