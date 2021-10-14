@@ -12,6 +12,7 @@ class VstComponentHandler : public IComponentHandler
     DECLARE_FUNKNOWN_METHODS
 public:
     VstComponentHandler() = default;
+    virtual ~VstComponentHandler() = default;
 
     async::Channel<PluginParamId, PluginParamValue> pluginParamChanged() const;
     async::Notification pluginParamsChanged() const;
