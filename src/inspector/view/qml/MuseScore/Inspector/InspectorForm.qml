@@ -121,6 +121,10 @@ Rectangle {
                         }
                     }
 
+                    onContentItemComponentChanged: {
+                        flickableArea.returnToBounds()
+                    }
+
                     Component {
                         id: generalInspector
 
