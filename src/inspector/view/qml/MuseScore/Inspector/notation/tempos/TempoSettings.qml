@@ -44,18 +44,14 @@ Column {
         followWrittenTempoCheckbox.navigation.requestActive()
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: followWrittenTempoCheckbox
-
-        isIndeterminate: root.model ? root.model.isDefaultTempoForced.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.isDefaultTempoForced.value : false
         text: qsTrc("inspector", "Follow written tempo")
+        propertyItem: root.model ? root.model.isDefaultTempoForced : null
 
         navigation.name: "FollowCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-
-        onClicked: { root.model.isDefaultTempoForced.value = !checked }
     }
 
     SpinBoxPropertyView {

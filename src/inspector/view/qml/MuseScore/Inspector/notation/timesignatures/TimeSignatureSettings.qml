@@ -110,16 +110,13 @@ Column {
         }
     }
 
-    CheckBox {
-        isIndeterminate: root.model ? root.model.shouldShowCourtesy.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.shouldShowCourtesy.value : false
+    CheckBoxPropertyView {
         text: qsTrc("inspector", "Show courtesy time signature on previous system")
+        propertyItem: root.model ? root.model.shouldShowCourtesy : null
 
         navigation.name: "ShowCourtesyCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: scaleSection.navigationRowEnd + 1
-
-        onClicked: { root.model.shouldShowCourtesy.value = !checked }
     }
 
     FlatButton {

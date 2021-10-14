@@ -56,6 +56,7 @@ Column {
 
     CheckBox {
         id: snapToGridCheckbox
+        width: parent.width
 
         navigation.name: "Snap to grid"
         navigation.panel: root.navigationPanel

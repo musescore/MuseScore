@@ -54,20 +54,14 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: showTextCheckBox
-        isIndeterminate: root.model && root.model.showText.isUndefined
-        checked: root.model && !isIndeterminate && root.model.showText.value
-
         text: qsTrc("inspector", "Show text")
+        propertyItem: root.model ? root.model.showText : null
 
         navigation.name: "ShowTextCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: lineSection.navigationRowEnd + 1
-
-        onClicked: {
-            root.model.showText.value = !checked
-        }
     }
 
     TextSection {

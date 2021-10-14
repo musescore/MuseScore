@@ -52,6 +52,7 @@ FocusableItem {
         spacing: 12
 
         CheckBox {
+            width: parent.width
             isIndeterminate: root.stemModel && root.beamModel ? root.stemModel.isStemHidden.isUndefined || root.beamModel.isBeamHidden.isUndefined : false
             checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
             text: qsTrc("inspector", "Hide stem (also hides beam)")

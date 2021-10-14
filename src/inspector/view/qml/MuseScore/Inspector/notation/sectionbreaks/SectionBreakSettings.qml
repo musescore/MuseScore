@@ -58,28 +58,22 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: startWithLongInstrNames
-        isIndeterminate: root.model ? root.model.shouldStartWithLongInstrNames.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.shouldStartWithLongInstrNames.value : false
         text: qsTrc("inspector", "Start new section with long instrument names")
+        propertyItem: root.model ? root.model.shouldStartWithLongInstrNames : null
 
         navigation.name: "StartWithLong"
         navigation.panel: root.navigationPanel
         navigation.row: pauseBeforStartsSection.navigationRowEnd + 1
-
-        onClicked: { root.model.shouldStartWithLongInstrNames.value = !checked }
     }
 
-    CheckBox {
-        isIndeterminate: root.model ? root.model.shouldResetBarNums.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.shouldResetBarNums.value : false
+    CheckBoxPropertyView {
         text: qsTrc("inspector", "Reset bar numbers for new section")
+        propertyItem: root.model ? root.model.shouldResetBarNums : null
 
         navigation.name: "ResetBarNumbers"
         navigation.panel: root.navigationPanel
         navigation.row: startWithLongInstrNames.navigation.row + 1
-
-        onClicked: { root.model.shouldResetBarNums.value = !checked }
     }
 }
