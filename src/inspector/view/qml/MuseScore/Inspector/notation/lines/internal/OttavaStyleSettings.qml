@@ -57,20 +57,14 @@ FocusableItem {
             navigationEnabled: root.enabled
         }
 
-        CheckBox {
+        CheckBoxPropertyView {
             id: showNumbersOnlyCheckBox
-            isIndeterminate: root.model ? root.model.showNumbersOnly.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.showNumbersOnly.value : false
             text: qsTrc("inspector", "Show numbers only")
+            propertyItem: root.model ? root.model.showNumbersOnly : null
 
             navigation.name: "ShowNumbersOnly"
             navigation.panel: root.navigationPanel
             navigation.row: typeSection.navigationRowEnd + 1
-            navigation.enabled: root.enabled
-
-            onClicked: {
-                root.model.showNumbersOnly.value = !checked
-            }
         }
 
         SeparatorLine { anchors.margins: -10 }

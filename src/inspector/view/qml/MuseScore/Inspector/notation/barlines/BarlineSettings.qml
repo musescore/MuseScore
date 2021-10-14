@@ -86,23 +86,16 @@ Column {
         ]
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: spanToNextStaffCheckBox
-
-        isIndeterminate: root.barlineSettingsModel ? root.barlineSettingsModel.isSpanToNextStaff.isUndefined : false
-        checked: root.barlineSettingsModel && !isIndeterminate ? root.barlineSettingsModel.isSpanToNextStaff.value : false
-        text: qsTrc("inspector", "Span to next staff")
 
         navigation.name: "SpanToStaffCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: repeatStyleSection.navigationRowEnd + 1
         navigation.enabled: root.enabled
 
-        onClicked: {
-            if (root.barlineSettingsModel) {
-                root.barlineSettingsModel.isSpanToNextStaff.value = !checked
-            }
-        }
+        text: qsTrc("inspector", "Span to next staff")
+        propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.isSpanToNextStaff : null
     }
 
     SeparatorLine {
@@ -173,7 +166,9 @@ Column {
 
         StyledTextLabel {
             id: spanPresetsLabel
+            width: parent.width
             text: qsTrc("inspector", "Span presets")
+            horizontalAlignment: Text.AlignLeft
         }
 
         RowLayout {

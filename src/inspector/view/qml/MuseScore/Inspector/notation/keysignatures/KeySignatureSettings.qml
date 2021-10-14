@@ -43,17 +43,14 @@ Column {
         showCourtesyKeySignature.navigation.requestActive()
     }
 
-    CheckBox {
+    CheckBoxPropertyView {
         id: showCourtesyKeySignature
-        isIndeterminate: root.model ? root.model.hasToShowCourtesy.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.hasToShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy key signature on previous system")
+        propertyItem: root.model ? root.model.hasToShowCourtesy : null
 
         navigation.name: "ShowCourtesyKeySignature"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
-
-        onClicked: { root.model.hasToShowCourtesy.value = !checked }
     }
 
     DropdownPropertyView {

@@ -151,7 +151,6 @@ StyledPopupView {
             navigation.row: 21 // after small staff CheckBox
 
             text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
-            wrapMode: Text.WordWrap
 
             checked: settingsModel.cutawayEnabled
 

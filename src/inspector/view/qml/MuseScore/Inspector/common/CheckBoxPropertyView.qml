@@ -21,37 +21,24 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-import "../../common"
-
-Column {
+CheckBox {
     id: root
 
-    property QtObject model: null
+    required property PropertyItem propertyItem
 
-    property NavigationPanel navigationPanel: null
-    property int navigationRowStart: 1
+    width: parent.width
 
-    objectName: "ClefSettings"
+    visible: propertyItem && propertyItem.isVisible
+    enabled: propertyItem && propertyItem.isEnabled
 
-    spacing: 12
-
-    function focusOnFirst() {
-        showCourtesyClef.navigation.requestActive()
-    }
-
-    CheckBoxPropertyView {
-        id: showCourtesyClef
-
-        navigation.name: "ShowCourtesyClefCheckBox"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart
-        navigation.enabled: root.enabled
-
-        text: qsTrc("inspector", "Show courtesy clef on previous system")
-        propertyItem: root.model ? root.model.shouldShowCourtesy : null
+    isIndeterminate: propertyItem && propertyItem.isUndefined
+    checked: !isIndeterminate && propertyItem && propertyItem.value
+    onClicked: {
+        if (propertyItem) {
+            propertyItem.value = !checked
+        }
     }
 }

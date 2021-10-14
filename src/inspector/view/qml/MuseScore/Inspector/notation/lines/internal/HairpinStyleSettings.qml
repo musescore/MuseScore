@@ -50,38 +50,30 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            CheckBox {
+            CheckBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                isIndeterminate: root.model ? root.model.isNienteCircleVisible.isUndefined : false
-                checked: root.model && !isIndeterminate ? root.model.isNienteCircleVisible.value : false
                 text: qsTrc("inspector", "Niente circle")
+                propertyItem: root.model ? root.model.isNienteCircleVisible : null
 
                 navigation.name: "NienteCircleCheckBox"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1
-                navigation.enabled: root.enabled
-
-                onClicked: { root.model.isNienteCircleVisible.value = !checked }
             }
 
-            CheckBox {
+            CheckBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                isIndeterminate: root.model ? root.model.allowDiagonal.isUndefined : false
-                checked: root.model && !isIndeterminate ? root.model.allowDiagonal.value : false
                 text: qsTrc("inspector", "Allow diagonal")
+                propertyItem: root.model ? root.model.allowDiagonal : null
 
                 navigation.name: "AllowDiagonalCheckBox"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 2
-                navigation.enabled: root.enabled
-
-                onClicked: { root.model.allowDiagonal.value = !checked }
             }
         }
 

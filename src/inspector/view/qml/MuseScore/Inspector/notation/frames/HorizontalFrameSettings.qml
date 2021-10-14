@@ -72,16 +72,13 @@ Column {
 
     SeparatorLine { anchors.margins: -10 }
 
-    CheckBox {
-        isIndeterminate: root.model ? root.model.shouldDisplayKeysAndBrackets.isUndefined : false
-        checked: root.model && !isIndeterminate ? root.model.shouldDisplayKeysAndBrackets.value : false
+    CheckBoxPropertyView {
         text: qsTrc("inspector", "Display key, brackets and braces")
+        propertyItem: root.model ? root.model.shouldDisplayKeysAndBrackets : null
 
         navigation.name: "DisplayKeysAndBracketsCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: horizontalGapsSection.navigationRowEnd + 1
         navigation.enabled: root.enabled
-
-        onClicked: { root.model.shouldDisplayKeysAndBrackets.value = !checked }
     }
 }

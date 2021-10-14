@@ -53,8 +53,7 @@ signals:
 
 private:
     enum RoleNames {
-        InspectorDataRole = Qt::UserRole + 1,
-        InspectorTitleRole
+        InspectorSectionModelRole = Qt::UserRole + 1
     };
 
     void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
@@ -73,7 +72,6 @@ private:
 
     void subscribeOnSelectionChanges();
 
-    QHash<int, QByteArray> m_roleNames;
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
