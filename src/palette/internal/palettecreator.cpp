@@ -279,9 +279,8 @@ PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
         }
     }
 
-    sp->appendActionIcon(ActionIconType::BRACKETS, "add-brackets");
     sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
-    sp->appendActionIcon(ActionIconType::BRACES, "add-braces");
+    sp->appendActionIcon(ActionIconType::BRACKETS, "add-brackets");
 
     return sp;
 }
