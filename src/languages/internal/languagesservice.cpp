@@ -41,8 +41,7 @@ static const QString DEFAULT_LANGUAGE("system");
 
 static const QStringList languageFileTypes = {
     "mscore",
-    "instruments",
-    "tours"
+    "instruments"
 };
 
 namespace mu::languages {

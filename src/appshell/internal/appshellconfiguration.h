@@ -74,9 +74,6 @@ public:
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
 
-    bool needShowTours() const override;
-    void setNeedShowTours(bool show) override;
-
     void startEditSettings() override;
     void applySettings() override;
     void rollbackSettings() override;

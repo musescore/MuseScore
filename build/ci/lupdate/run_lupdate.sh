@@ -30,9 +30,6 @@ OBSOLETE=-no-obsolete # '-noobsolete' in older QT versions
 lupdate ${OBSOLETE} mscore.pro
 ./build/gen-instruments-projectfile ./share/instruments > instruments.pro
 lupdate ${OBSOLETE} instruments.pro
-./build/gen-tours-projectfile ./share/tours > tours.pro
-lupdate ${OBSOLETE} tours.pro
 
 rm mscore.pro
 rm instruments.pro
-rm tours.pro

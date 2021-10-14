@@ -58,8 +58,7 @@ private:
     enum PanelType {
         Unknown,
         SplashScreen,
-        Navigator,
-        Tours
+        Navigator
     };
 
     struct Panel
