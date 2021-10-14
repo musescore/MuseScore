@@ -220,3 +220,13 @@ bool UriQuery::contains(const std::string& key) const
 {
     return m_params.count(key) > 0;
 }
+
+bool UriQuery::operator==(const UriQuery& query) const
+{
+    return m_uri == query.m_uri && m_params == query.m_params;
+}
+
+bool UriQuery::operator!=(const UriQuery& query) const
+{
+    return !(*this == query);
+}

@@ -55,6 +55,9 @@ public:
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
+    virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
+
+    virtual void raise(const UriQuery& uri) = 0;
 
     virtual void close(const Uri& uri) = 0;
 

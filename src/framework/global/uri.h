@@ -77,6 +77,9 @@ public:
 
     std::string toString() const;
 
+    bool operator==(const UriQuery& query) const;
+    bool operator!=(const UriQuery& query) const;
+
 private:
 
     void parceParams(const std::string& str, Params& out) const;
