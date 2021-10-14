@@ -22,7 +22,7 @@
 
 #ifndef MU_PLAYBACK_MIXERPANELMODEL_H
 #define MU_PLAYBACK_MIXERPANELMODEL_H
-
+ 
 #include <QAbstractListModel>
 #include <QList>
 
