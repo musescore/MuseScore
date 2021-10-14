@@ -68,9 +68,6 @@ public:
     virtual bool needShowSplashScreen() const = 0;
     virtual void setNeedShowSplashScreen(bool show) = 0;
 
-    virtual bool needShowTours() const = 0;
-    virtual void setNeedShowTours(bool show) = 0;
-
     virtual void startEditSettings() = 0;
     virtual void applySettings() = 0;
     virtual void rollbackSettings() = 0;
