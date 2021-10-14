@@ -34,7 +34,6 @@ public:
         BRACKET_TYPE_NONE = 0,
         BRACKET_TYPE_PARENTHESIS,
         BRACKET_TYPE_SQUARE,
-        BRACKET_TYPE_ROUND,
     };
 
     Q_ENUM(BracketType)
