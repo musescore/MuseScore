@@ -61,7 +61,7 @@ enum class AccidentalBracket : char {
     NONE,
     PARENTHESIS,
     BRACKET,
-    BRACE,
+    BRACE, //! Deprecated; removed from the UI and kept here only for compatibility purposes
 };
 
 //---------------------------------------------------------

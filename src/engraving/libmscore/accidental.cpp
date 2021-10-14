@@ -543,9 +543,8 @@ bool Accidental::acceptDrop(EditData& data) const
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
-        return type == ActionIconType::BRACKETS
-               || type == ActionIconType::PARENTHESES
-               || type == ActionIconType::BRACES;
+        return type == ActionIconType::PARENTHESES
+               || type == ActionIconType::BRACKETS;
     }
 
     return false;
@@ -561,14 +560,11 @@ EngravingItem* Accidental::drop(EditData& data)
     switch (e->type()) {
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
-        case ActionIconType::BRACKETS:
-            undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
-            break;
         case ActionIconType::PARENTHESES:
             undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS), PropertyFlags::NOSTYLE);
             break;
-        case ActionIconType::BRACES:
-            undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACE), PropertyFlags::NOSTYLE);
+        case ActionIconType::BRACKETS:
+            undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::BRACKET), PropertyFlags::NOSTYLE);
             break;
         default:
             qDebug("unknown icon type");
