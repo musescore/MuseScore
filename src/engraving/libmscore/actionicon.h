@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ICON_H__
-#define __ICON_H__
+#ifndef MU_LIBMSCORE_ACTIONICON_H
+#define MU_LIBMSCORE_ACTIONICON_H
 
 #include "engravingitem.h"
 
@@ -54,9 +54,8 @@ enum class ActionIconType {
     FFRAME,
     MEASURE,
 
-    BRACKETS,
     PARENTHESES,
-    BRACES,
+    BRACKETS,
 };
 
 //! Dummy element, used for drag&drop
@@ -93,5 +92,6 @@ private:
     char16_t m_icon = 0;
     qreal m_extent { 40 };
 };
-}     // namespace Ms
-#endif
+}
+
+#endif // MU_LIBMSCORE_ACTIONICON_H
