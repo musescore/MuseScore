@@ -39,6 +39,7 @@ public:
 
     virtual void show(QPoint p) = 0;
     virtual void hide() = 0;
+    virtual void raise() = 0;
     virtual void setPosition(QPoint p) = 0;
 
     virtual QWindow* qWindow() const = 0;

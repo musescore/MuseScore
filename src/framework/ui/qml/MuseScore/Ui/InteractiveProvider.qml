@@ -63,7 +63,7 @@ Item {
 
                 var dialogObj = createDialog(dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
-                data.setValue("objectID", dialogObj.object.objectID)
+                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (dialogObj.ret.errcode > 0) {
                     return
@@ -81,7 +81,7 @@ Item {
             var dialog = data.data()
             var dialogObj = createDialog("internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectID", dialogObj.object.objectID)
+            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
@@ -90,11 +90,17 @@ Item {
             dialogObj.object.exec()
         }
 
-        function onFireClose(objectID) {
-            for(var i = 0; i < root.topParent.children.length; ++i) {
-                if (root.topParent.children[i].objectID === objectID) {
-                    root.topParent.children[i].hide()
-                }
+        function onFireClose(objectId) {
+            var obj = root.findObject(objectId)
+            if (obj) {
+                obj.hide()
+            }
+        }
+
+        function onFireRaise(objectId) {
+            var obj = root.findObject(objectId)
+            if (obj) {
+                obj.raise()
             }
         }
     }
@@ -107,7 +113,7 @@ Item {
         }
 
         var obj = comp.createObject(root.topParent, params)
-        obj.objectID = root.provider.objectID(obj)
+        obj.objectId = root.provider.objectId(obj)
 
         var ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
 
@@ -116,12 +122,20 @@ Item {
         }
 
         obj.closed.connect(function() {
-            root.provider.onPopupClose(obj.objectID, obj.ret ? obj.ret : {errcode: 0})
+            root.provider.onPopupClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
 
-        root.provider.onOpen(ContainerType.QmlDialog, obj.objectID)
+        root.provider.onOpen(ContainerType.QmlDialog, obj.objectId)
 
         return { "ret": ret, "object" : obj }
+    }
+
+    function findObject(objectId) {
+        for (var i = 0; i < root.topParent.children.length; ++i) {
+            if (root.topParent.children[i].objectId === objectId) {
+                return root.topParent.children[i]
+            }
+        }
     }
 }
