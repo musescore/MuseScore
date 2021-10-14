@@ -168,6 +168,7 @@ Column {
             id: spanPresetsLabel
             width: parent.width
             text: qsTrc("inspector", "Span presets")
+            horizontalAlignment: Text.AlignLeft
         }
 
         RowLayout {
