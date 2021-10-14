@@ -1126,9 +1126,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
 //    if (noteEntryMode()) {
 //        moveCursor();
 //    }
-//    if (triggerSpannerDropApplyTour) {
-//        TourHandler::startTour("spanner-drop-apply");
-//    }
     if (accepted) {
         notifyAboutDropChanged();
     }
@@ -1172,10 +1169,6 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
     if (sel.isNone()) {
         return false;
     }
-
-//--    if (element->isSpanner()) {
-//--        TourHandler::startTour("spanner-drop-apply");
-//--    }
 
 //#ifdef MSCORE_UNSTABLE
 //    if (ScriptRecorder* rec = adapter()->getScriptRecorder()) {

@@ -47,7 +47,6 @@ static const std::string UTM_MEDIUM_MENU("menu");
 
 static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
-static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startup/showTours");
 
 void AppShellConfiguration::init()
 {
@@ -184,16 +183,6 @@ bool AppShellConfiguration::needShowSplashScreen() const
 void AppShellConfiguration::setNeedShowSplashScreen(bool show)
 {
     settings()->setSharedValue(SPLASH_SCREEN_VISIBLE_KEY, Val(show));
-}
-
-bool AppShellConfiguration::needShowTours() const
-{
-    return settings()->value(TOURS_VISIBLE_KEY).toBool();
-}
-
-void AppShellConfiguration::setNeedShowTours(bool show)
-{
-    settings()->setSharedValue(TOURS_VISIBLE_KEY, Val(show));
 }
 
 void AppShellConfiguration::startEditSettings()

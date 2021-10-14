@@ -92,10 +92,7 @@ for lang_code, languageName in langCodeNameDict.items():
     updateInstruments = processTsFile("instruments", lang_code, data)
     translationChanged = updateInstruments or translationChanged
 
-    updateTours = processTsFile("tours", lang_code, data)
-    translationChanged = updateTours or translationChanged
-
-    if (updateMscore or updateInstruments or updateTours):
+    if (updateMscore or updateInstruments):
         #create a zip file, compute size, hash, add it to json and save to s3
         zipName = 'locale_' + lang_code + '.zip'
         zipPath = outputDir + zipName
@@ -104,8 +101,6 @@ for lang_code, languageName in langCodeNameDict.items():
         myzip.write(qmFilePath, 'mscore_' + lang_code + ".qm")
         qmFilePath = outputDir + 'instruments_' + lang_code + ".qm"
         myzip.write(qmFilePath, 'instruments_' + lang_code + ".qm")
-        qmFilePath = outputDir + 'tours_' + lang_code + ".qm"
-        myzip.write(qmFilePath, 'tours_' + lang_code + ".qm")
         myzip.close()
 
         # get zip file size
