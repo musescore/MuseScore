@@ -50,6 +50,9 @@ public:
     QObject* navigationSection() const;
     ui::AbstractMenuModel* contextMenuModel() const;
 
+    void addPanelAsTab(DockPanelView* tab);
+    void setCurrentTabIndex(int index);
+
 public slots:
     void setTabifyPanel(DockPanelView* panel);
     void setNavigationSection(QObject* newNavigation);

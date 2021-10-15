@@ -113,6 +113,7 @@ Rectangle {
         width: parent.width
 
         visible: tabs.count > 1
+        clip: true
 
         color: ui.theme.backgroundSecondaryColor
 
@@ -143,7 +144,6 @@ Rectangle {
 
             orientation: Qt.Horizontal
             interactive: false
-            clip: true
             spacing: 0
 
             currentIndex: tabsPanel.currentIndex
