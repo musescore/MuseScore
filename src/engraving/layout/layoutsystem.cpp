@@ -784,21 +784,30 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     // layout tuplets
     //-------------------------------------------------------------
 
+    std::map<int, Fraction> skipTo;
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
-            ChordRest* cr = toChordRest(e);
-            if (!LayoutTuplets::isTopTuplet(cr)) {
+            int track = e->track();
+            if (skipTo.count(track) && e->tick() < skipTo[track]) {
+                continue; // don't lay out tuplets for this voice that have already been done
+            }
+            // find the top tuplet for this segment
+            DurationElement* de = toChordRest(e);
+            if (!de->tuplet()) {
                 continue;
             }
-            DurationElement* de = cr;
-            while (de->tuplet() && de->tuplet()->elements().front() == de) {
-                Tuplet* t = de->tuplet();
-                t->layout();
-                de = t;
+            while (de->tuplet()) {
+                de = de->tuplet();
             }
+            LayoutTuplets::layout(de); // recursively lay out all tuplets covered by this tuplet
+
+            // don't layout any tuplets covered by this top level tuplet for this voice--
+            // they've already been laid out by layoutTuplet().
+            skipTo[track] = de->tick() + de->ticks();
+            break;
         }
     }
 
