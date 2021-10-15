@@ -41,7 +41,7 @@ InspectorSectionView {
         columnSpacing: 4
 
         Repeater {
-            model: root.model ? root.model.models() : []
+            model: root.model ? root.model.models : []
 
             delegate: PopupViewButton {
                 id: button

@@ -35,6 +35,10 @@ BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRe
     setTitle(qtrc("inspector", "Barline"));
     setIcon(ui::IconCode::Code::SECTION_BREAK);
 
-    addModel(new BarlineSettingsModel(this, repository));
-    addModel(new StaffSettingsModel(this, repository));
+    QList<AbstractInspectorModel*> models {
+        new BarlineSettingsModel(this, repository),
+        new StaffSettingsModel(this, repository)
+    };
+
+    setModels(models);
 }

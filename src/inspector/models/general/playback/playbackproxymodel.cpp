@@ -34,18 +34,22 @@ using namespace mu::inspector;
 PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorProxyModel(parent, repository)
 {
-    addModel(new NotePlaybackModel(this, repository));
-    addModel(new ArpeggioPlaybackModel(this, repository));
-    addModel(new FermataPlaybackModel(this, repository));
-    addModel(new BreathPlaybackModel(this, repository));
-    addModel(new GlissandoPlaybackModel(this, repository));
-    addModel(new DynamicPlaybackModel(this, repository));
-    addModel(new HairpinPlaybackModel(this, repository));
+    QList<AbstractInspectorModel*> models {
+        new NotePlaybackModel(this, repository),
+        new ArpeggioPlaybackModel(this, repository),
+        new FermataPlaybackModel(this, repository),
+        new BreathPlaybackModel(this, repository),
+        new GlissandoPlaybackModel(this, repository),
+        new DynamicPlaybackModel(this, repository),
+        new HairpinPlaybackModel(this, repository)
+    };
+
+    setModels(models);
 }
 
 bool PlaybackProxyModel::hasGeneralSettings() const
 {
-    static const QList<InspectorModelType> generalGroup {
+    static const InspectorModelTypeSet generalGroup {
         InspectorModelType::TYPE_NOTE,
         InspectorModelType::TYPE_ARPEGGIO,
         InspectorModelType::TYPE_FERMATA,
@@ -58,7 +62,7 @@ bool PlaybackProxyModel::hasGeneralSettings() const
 
 bool PlaybackProxyModel::hasDynamicsSettings() const
 {
-    static const QList<InspectorModelType> dynamicsGroup {
+    static const InspectorModelTypeSet dynamicsGroup {
         InspectorModelType::TYPE_DYNAMIC,
         InspectorModelType::TYPE_HAIRPIN
     };
@@ -66,7 +70,7 @@ bool PlaybackProxyModel::hasDynamicsSettings() const
     return !isGropEmpty(dynamicsGroup);
 }
 
-bool PlaybackProxyModel::isGropEmpty(const QList<InspectorModelType>& group) const
+bool PlaybackProxyModel::isGropEmpty(const InspectorModelTypeSet& group) const
 {
     for (const AbstractInspectorModel* model : modelList()) {
         if (group.contains(model->modelType()) && !model->isEmpty()) {

@@ -29,73 +29,16 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
                                                        const ElementKeySet& elementKeySet)
     : AbstractInspectorProxyModel(parent, repository)
 {
+    connect(this, &AbstractInspectorProxyModel::modelsChanged, [this]() {
+        auto models = modelList();
+
+        if (models.size() == 1) {
+            setTitle(models.first()->title());
+        } else {
+            setTitle(qtrc("inspector", "Notation"));
+        }
+    });
+
     setSectionType(InspectorSectionType::SECTION_NOTATION);
-
-    QList<AbstractInspectorModel::InspectorModelType> modelTypes = this->modelTypes(elementKeySet);
-
-    if (modelTypes.count() == 1) {
-        auto model = inspectorModelCreator()->newInspectorModel(modelTypes.first(), parent, repository);
-        setTitle(model->title());
-        addModel(model);
-    } else {
-        setTitle(qtrc("inspector", "Notation"));
-        for (const ElementKey& elementKey : elementKeySet) {
-            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementKey);
-            if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
-                continue;
-            }
-
-            addModel(inspectorModelCreator()->newInspectorModel(modelType, parent, repository));
-        }
-    }
-}
-
-bool NotationSettingsProxyModel::isElementSupported(const ElementKey& elementKey) const
-{
-    return AbstractInspectorModel::notationElementModelType(elementKey) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-}
-
-QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const ElementKeySet& elementKeySet)
-const
-{
-    static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {
-        AbstractInspectorModel::InspectorModelType::TYPE_NOTE,
-        AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD,
-        AbstractInspectorModel::InspectorModelType::TYPE_STEM,
-        AbstractInspectorModel::InspectorModelType::TYPE_HOOK,
-        AbstractInspectorModel::InspectorModelType::TYPE_BEAM
-    };
-
-    QList<AbstractInspectorModel::InspectorModelType> types;
-
-    AbstractInspectorModel::InspectorModelType noteModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-    for (const ElementKey& elementKey : elementKeySet) {
-        AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementKey);
-        if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
-            continue;
-        }
-
-        if (types.contains(modelType)) {
-            continue;
-        }
-
-        if (!types.isEmpty() && notePartTypes.contains(modelType)) { // if element is a part of the note
-            if (noteModelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) { // if element is the first element of the parts of the note
-                types << modelType;
-                continue;
-            }
-
-            if (noteModelType == modelType) { // if such model has already been added
-                continue;
-            }
-
-            // if the element is another part of the note, then there will be one note model
-            types.removeAll(noteModelType);
-            modelType = AbstractInspectorModel::InspectorModelType::TYPE_NOTE;
-        }
-
-        types << modelType;
-    }
-
-    return types;
+    updateModels(elementKeySet);
 }

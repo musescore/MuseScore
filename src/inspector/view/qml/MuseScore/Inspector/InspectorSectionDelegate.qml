@@ -66,7 +66,7 @@ ExpandableBlank {
         case Inspector.SECTION_GENERAL: return generalSection
         case Inspector.SECTION_TEXT: return textSection
         case Inspector.SECTION_NOTATION:
-            if (sectionModel.isMultiModel()) {
+            if (sectionModel.isMultiModel) {
                 return notationMultiElementsSection
             } else {
                 return notationSingleElementSection

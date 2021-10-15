@@ -39,7 +39,7 @@ public:
     bool hasDynamicsSettings() const;
 
 private:
-    bool isGropEmpty(const QList<InspectorModelType>& group) const;
+    bool isGropEmpty(const InspectorModelTypeSet& group) const;
 };
 }
 

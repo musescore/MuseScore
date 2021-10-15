@@ -23,6 +23,7 @@
 #define MU_INSPECTOR_ABSTRACTINSPECTORPROXYMODEL_H
 
 #include "models/abstractinspectormodel.h"
+#include "models/iinspectormodelcreator.h"
 
 #include <QHash>
 
@@ -31,17 +32,26 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(InspectorModelType preferedSubModelType READ preferedSubModelType CONSTANT)
+    Q_PROPERTY(bool isMultiModel READ isMultiModel NOTIFY modelsChanged)
+    Q_PROPERTY(QVariantList models READ models NOTIFY modelsChanged)
+    Q_PROPERTY(QObject * firstModel READ firstModel NOTIFY modelsChanged)
+
+    Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
+
+    INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
 
 public:
-    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository,
-                                         InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
+    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
-    Q_INVOKABLE QVariantList models();
+    bool isMultiModel() const;
+    QVariantList models() const;
+    QObject* firstModel() const;
 
-    Q_INVOKABLE bool isMultiModel() const;
-    Q_INVOKABLE QObject* firstModel();
+    InspectorModelType defaultSubModelType() const;
+
+    Q_INVOKABLE QObject* modelByType(InspectorModelType type) const;
+
+    QList<AbstractInspectorModel*> modelList() const;
 
     void createProperties() override {}
     void loadProperties() override {}
@@ -51,17 +61,21 @@ public:
     void requestResetToDefaults() override;
     bool isEmpty() const override;
 
-    virtual bool isElementSupported(const ElementKey&) const { return false; }
+    void updateModels(const ElementKeySet& newElementKeySet);
 
-    InspectorModelType preferedSubModelType() const;
+public slots:
+    void setDefaultSubModelType(InspectorModelType modelType);
+
+signals:
+    void modelsChanged();
+    void defaultSubModelTypeChanged();
 
 protected:
-    void addModel(AbstractInspectorModel* model);
-    QList<AbstractInspectorModel*> modelList() const;
+    void setModels(const QList<AbstractInspectorModel*>& models);
 
 private:
-    QHash<int, AbstractInspectorModel*> m_modelsHash;
-    InspectorModelType m_preferedSubModelType = InspectorModelType::TYPE_UNDEFINED;
+    QHash<InspectorModelType, AbstractInspectorModel*> m_modelsHash;
+    InspectorModelType m_defaultSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
 }
 
