@@ -106,7 +106,6 @@ public:
         TYPE_IMAGE,
         TYPE_CHORD_SYMBOL,
         TYPE_BRACKET,
-        TYPE_BRACE,
         TYPE_TIME_SIGNATURE,
         TYPE_MMREST,
         TYPE_BEND,
