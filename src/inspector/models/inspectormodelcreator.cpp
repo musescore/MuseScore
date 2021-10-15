@@ -57,7 +57,6 @@
 #include "notation/images/imagesettingsmodel.h"
 #include "notation/chordsymbols/chordsymbolsettingsmodel.h"
 #include "notation/brackets/bracketsettingsmodel.h"
-#include "notation/brackets/bracesettingsmodel.h"
 #include "notation/timesignatures/timesignaturesettingsmodel.h"
 #include "notation/mmrests/mmrestsettingsmodel.h"
 #include "notation/bends/bendsettingsmodel.h"
@@ -147,8 +146,6 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new ChordSymbolSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BRACKET:
         return new BracketSettingsModel(parent, repository);
-    case InspectorModelType::TYPE_BRACE:
-        return new BraceSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TIME_SIGNATURE:
         return new TimeSignatureSettingsModel(parent, repository);
     case InspectorModelType::TYPE_MMREST:
