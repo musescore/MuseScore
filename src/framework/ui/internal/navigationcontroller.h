@@ -31,7 +31,7 @@
 #include "actions/actionable.h"
 #include "async/asyncable.h"
 #include "global/iinteractive.h"
-#include "imainwindow.h"
+#include "../imainwindow.h"
 
 namespace mu::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
