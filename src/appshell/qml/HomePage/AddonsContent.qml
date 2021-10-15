@@ -44,7 +44,7 @@ FocusScope {
     NavigationSection {
         id: navSec
         name: "Add-ons"
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: 3
         onActiveChanged: {
             if (active) {
@@ -81,6 +81,7 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "AddonsSearch"
+            enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
             accessible.name: qsTrc("appshell", "Add-ons")
@@ -194,6 +195,7 @@ FocusScope {
         NavigationPanel {
             id: navTabPanel
             name: "AddonsTabs"
+            enabled: bar.enabled && bar.visible
             section: navSec
             order: 2
             accessible.name: qsTrc("appshell", "Add-ons tabs")

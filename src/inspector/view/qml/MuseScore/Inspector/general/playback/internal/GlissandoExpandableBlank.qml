@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
 ExpandableBlank {
@@ -40,9 +42,9 @@ ExpandableBlank {
     contentItemComponent: DropdownPropertyView {
         width: root.width
 
+        navigationName: "Glissando Style"
         navigationPanel: root.navigation.panel
         navigationRowStart: root.navigation.row + 1
-        navigationEnabled: root.navigation.enabled && root.enabled
 
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null

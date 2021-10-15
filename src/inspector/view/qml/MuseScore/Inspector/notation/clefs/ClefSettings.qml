@@ -49,7 +49,6 @@ Column {
         navigation.name: "ShowCourtesyClefCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
-        navigation.enabled: root.enabled
 
         text: qsTrc("inspector", "Show courtesy clef on previous system")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null

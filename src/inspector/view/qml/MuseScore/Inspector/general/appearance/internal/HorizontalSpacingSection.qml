@@ -51,6 +51,7 @@ Item {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
+        navigationName: "Leading"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
 
@@ -66,6 +67,7 @@ Item {
         anchors.leftMargin: 4
         anchors.right: parent.right
 
+        navigationName: "Bar width"
         navigationPanel: root.navigationPanel
         navigationRowStart: leadingValue.navigationRowEnd + 1
 

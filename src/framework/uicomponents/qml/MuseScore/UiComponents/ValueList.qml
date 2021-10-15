@@ -116,10 +116,10 @@ Item {
         property NavigationPanel headerNavigation: NavigationPanel {
             name: "ValueListHeaderPanel"
             section: root.navigationSection
+            enabled: root.enabled && root.visible
             direction: NavigationPanel.Horizontal
             order: root.navigationOrderStart
             accessible.name: qsTrc("uicomponents", "Value list header panel")
-            enabled: root.visible
 
             onActiveChanged: {
                 if (active) {
@@ -187,10 +187,10 @@ Item {
         property NavigationPanel navigation: NavigationPanel {
             name: "ValueListPanel"
             section: root.navigationSection
+            enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
             order: root.navigationOrderStart + 1
             accessible.name: qsTrc("uicomponents", "Value list panel")
-            enabled: root.visible
 
             onActiveChanged: {
                 if (active) {

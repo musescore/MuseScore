@@ -33,6 +33,7 @@ TabView {
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "TabViewPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
 
         onActiveChanged: {

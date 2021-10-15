@@ -93,7 +93,7 @@ Column {
             id: topNoteSection
             propertyItem: root.model ? root.model.topTpc : null
             titleText: qsTrc("inspector", "Top note")
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
@@ -109,7 +109,7 @@ Column {
             id: topOctaveSection
             propertyItem: root.model ? root.model.topOctave : null
             showTitle: true // Show empty label for correct alignment
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
@@ -133,7 +133,7 @@ Column {
             id: bottomNoteSection
             propertyItem: root.model ? root.model.bottomTpc : null
             titleText: qsTrc("inspector", "Bottom note")
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
@@ -149,7 +149,7 @@ Column {
             id: bottomOctaveSection
             propertyItem: root.model ? root.model.bottomOctave : null
             showTitle: true // Show empty label for correct alignment
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
@@ -205,7 +205,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: showItem.navigation.row + 1
-                navigationEnabled: visible && showItem.isExpanded
 
                 model: [
                     { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO, title: qsTrc("inspector", "Auto") },
@@ -220,7 +219,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: directionSection.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
 
             NoteheadTypeSelector {
@@ -229,7 +227,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadGroup.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
 
             SpinBoxPropertyView {
@@ -247,7 +244,6 @@ Column {
 
                 navigationPanel: root.navigationPanel
                 navigationRowStart: noteheadType.navigationRowEnd + 1
-                navigationEnabled: visible && showItem.isExpanded
             }
         }
     }

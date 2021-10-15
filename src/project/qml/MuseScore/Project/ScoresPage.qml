@@ -41,7 +41,7 @@ FocusScope {
     NavigationSection {
         id: navSec
         name: "RecentScores"
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: 3
         onActiveChanged: {
             if (navSec.active) {

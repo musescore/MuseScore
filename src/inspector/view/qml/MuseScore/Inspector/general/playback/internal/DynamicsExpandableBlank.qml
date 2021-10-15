@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 ExpandableBlank {
@@ -53,9 +54,9 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
+            navigationName: "Dynamic Applies to"
             navigationPanel: root.navigation.panel
             navigationRowStart: root.navigation.row + 1
-            navigationEnabled: root.navigation.enabled && root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
@@ -74,9 +75,9 @@ ExpandableBlank {
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
+                navigationName: "Velocity"
                 navigationPanel: root.navigation.panel
                 navigationRowStart: appliesToSection.navigationRowEnd + 1
-                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
@@ -93,9 +94,9 @@ ExpandableBlank {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
+                navigationName: "Velocity change"
                 navigationPanel: root.navigation.panel
                 navigationRowStart: velocitySection.navigationRowEnd + 1
-                navigationEnabled: root.navigation.enabled && root.enabled
 
                 titleText: qsTrc("inspector", "Velocity change")
                 propertyItem: root.model ? root.model.velocityChange : null
@@ -112,9 +113,9 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Change speed")
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
+            navigationName: "Change speed Menu"
             navigationPanel: root.navigation.panel
             navigationRowStart: velocityChangeSection.navigationRowEnd + 1
-            navigationEnabled: root.navigation.enabled && root.enabled
 
             model: [
                 { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },

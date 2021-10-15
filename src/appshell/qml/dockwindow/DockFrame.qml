@@ -65,6 +65,7 @@ Rectangle {
     NavigationPanel {
         id: navPanel
         name: root.objectName+"PanelTabs"
+        enabled: root.enabled && root.visible
         section: frameModel.navigationSection
         order: 1
 

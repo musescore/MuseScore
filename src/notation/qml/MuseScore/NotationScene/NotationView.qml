@@ -68,7 +68,7 @@ FocusScope {
             navigationSection: navSec
         }
 
-        SeparatorLine {}
+        SeparatorLine { visible: tabPanel.visible }
 
         SplitView {
             id: splitView
@@ -94,6 +94,7 @@ FocusScope {
                         id: navPanel
                         name: "ScoreView"
                         section: navSec
+                        enabled: notationView.enabled && notationView.visible
                         direction: NavigationPanel.Both
                         order: 2
                     }
@@ -101,6 +102,7 @@ FocusScope {
                     NavigationControl {
                         id: fakeNavCtrl
                         name: "Score"
+                        enabled: notationView.enabled && notationView.visible
 
                         panel: navPanel
                         order: 1

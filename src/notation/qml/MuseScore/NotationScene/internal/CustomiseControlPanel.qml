@@ -41,9 +41,10 @@ RowLayout {
     signal moveSelectionDownRequested()
 
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "CostomiseControlPanel"
+        name: "CustomiseControlPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("notation", "Costomise control")
+        accessible.name: qsTrc("notation", "Customise control")
         onActiveChanged: {
             if (active) {
                 root.forceActiveFocus()

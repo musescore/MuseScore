@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -53,7 +52,6 @@ Column {
         navigation.name: "ShowPedalSymbolCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
-        navigation.enabled: root.enabled
 
         checked: root.model && root.model.pedalSymbolVisible
         onClicked: {

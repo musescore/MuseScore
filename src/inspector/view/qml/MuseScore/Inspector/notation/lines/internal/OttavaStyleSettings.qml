@@ -54,7 +54,6 @@ FocusableItem {
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
-            navigationEnabled: root.enabled
         }
 
         CheckBoxPropertyView {

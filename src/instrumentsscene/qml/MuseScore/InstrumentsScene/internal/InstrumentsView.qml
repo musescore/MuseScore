@@ -53,7 +53,7 @@ Item {
         id: navPanel
         name: "InstrumentsView"
         direction: NavigationPanel.Vertical
-        enabled: root.visible
+        enabled: root.enabled && root.visible
 
         onNavigationEvent: {
             if (event.type === NavigationEvent.AboutActive) {

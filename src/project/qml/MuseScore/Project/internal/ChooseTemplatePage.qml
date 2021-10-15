@@ -116,7 +116,7 @@ Item {
                 id: navZoomPanel
                 name: "ZoomPanel"
                 direction: NavigationPanel.Vertical
-                enabled: root.visible
+                enabled: root.enabled && root.visible
                 section: root.navigationSection
                 order: 4
             }

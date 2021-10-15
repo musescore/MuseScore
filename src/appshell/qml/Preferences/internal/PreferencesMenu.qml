@@ -33,6 +33,7 @@ Item {
 
     property NavigationPanel navigation: NavigationPanel {
         name: "PreferencesMenuPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {
@@ -115,7 +116,6 @@ Item {
             navigation.panel: root.navigation
             navigation.row: navigationRow
             navigation.column: navigationColumn
-            navigation.enabled: enabled
             navigation.accessible.name: title
             navigation.accessible.role: MUAccessible.ListItem
             navigation.onActiveChanged: {

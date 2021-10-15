@@ -21,7 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.Playback 1.0
 import MuseScore.UiComponents 1.0
@@ -112,7 +112,6 @@ Rectangle {
                             navigation.panel: navPanel
                             navigation.name: modelData.title
                             navigation.order: modelData.index
-                            navigation.enabled: playbackModel.isPlayAllowed
 
                             onClicked: {
                                 if (menuLoader.isMenuOpened || hasSubitems) {

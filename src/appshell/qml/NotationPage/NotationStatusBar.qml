@@ -39,14 +39,14 @@ Rectangle {
     NavigationSection {
         id: navSec
         name: "NotationStatusBar"
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: 7
     }
 
     NavigationPanel {
         id: navPanel
         name: "NotationStatusBar"
-        enabled: root.visible
+        enabled: root.enabled && root.visible
         order: 0
         direction: NavigationPanel.Horizontal
         section: navSec

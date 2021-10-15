@@ -31,17 +31,26 @@ Column {
 
     property PropertyItem propertyItem: null
 
+    property string navigationName: "InspectorPropertyView"
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: menuButton.navigation.row
-    property bool navigationEnabled: true
+
+    // Normally, this is just the reset or menu button (navigationRowStart + 0),
+    // and one control (navigationRowStart + 1)
+    property int navigationRowEnd: navigationRowStart + 1
 
     property alias titleText: titleLabel.text
     property alias showTitle: titleLabel.visible
-    property alias showMenuButton: menuButton.visible
+    property alias showButton: buttonLoader.visible
 
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
     readonly property bool isModified: propertyItem ? propertyItem.isModified : false
+
+    function requestActiveFocus() {
+        if (buttonLoader.item && buttonLoader.item.navigation) {
+            buttonLoader.item.navigation.requestActive()
+        }
+    }
 
     enabled: propertyItem && propertyItem.isEnabled
     visible: propertyItem && propertyItem.isVisible
@@ -49,6 +58,13 @@ Column {
     width: parent.width
 
     spacing: 8
+
+    //! NOTE Overridden in instances and specializations of InspectorPropertyView
+    function focusOnFirst() {
+        if (buttonLoader.item && buttonLoader.item.navigation) {
+            buttonLoader.item.navigation.requestActive()
+        }
+    }
 
     RowLayout {
         id: contentRow
@@ -68,43 +84,75 @@ Column {
             horizontalAlignment: Text.AlignLeft
         }
 
-        MenuButton {
-            id: menuButton
+        Loader {
+            id: buttonLoader
 
-            height: 20
-            width: height
+            width: 20
+            height: width
 
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
-            navigation.enabled: root.enabled && root.navigationEnabled && visible
-            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
+            active: visible
+            sourceComponent: root.isStyled ? menuButtonComponent : resetButtonComponent
 
-            menuModel: {
-                var result = []
+            Component {
+                id: resetButtonComponent
 
-                result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, id: "reset" })
+                FlatButton {
+                    anchors.fill: parent
 
-                if (root.isStyled) {
-                    if (root.isModified) {
-                        result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
-                    } else {
-                        result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
+                    navigation.name: root.navigationName + " Reset Button"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: root.navigationRowStart
+                    navigation.accessible.name: qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
+
+                    icon: IconCode.UNDO
+                    toolTipTitle: qsTrc("inspector", "Reset")
+                    transparent: true
+                    enabled: root.isModified
+
+                    onClicked: {
+                        root.propertyItem.resetToDefault()
                     }
                 }
-
-                return result
             }
 
-            menuAlign: Qt.AlignHCenter
+            Component {
+                id: menuButtonComponent
 
-            onHandleMenuItem: function(itemId) {
-                switch (itemId) {
-                case "reset":
-                    root.propertyItem.resetToDefault()
-                    break
-                case "save":
-                    root.propertyItem.applyToStyle()
-                    break
+                MenuButton {
+                    id: menuButton
+                    anchors.fill: parent
+
+                    navigation.name: root.navigationName + " Menu Button"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: root.navigationRowStart
+                    navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
+
+                    menuModel: {
+                        var result = []
+
+                        result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.UNDO, id: "reset" })
+
+                        if (root.isModified) {
+                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
+                        } else {
+                            result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
+                        }
+
+                        return result
+                    }
+
+                    menuAlign: Qt.AlignHCenter
+
+                    onHandleMenuItem: function(itemId) {
+                        switch (itemId) {
+                        case "reset":
+                            root.propertyItem.resetToDefault()
+                            break
+                        case "save":
+                            root.propertyItem.applyToStyle()
+                            break
+                        }
+                    }
                 }
             }
         }

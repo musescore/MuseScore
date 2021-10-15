@@ -67,7 +67,6 @@ FocusableItem {
                 navigation.name: "BarreModeCheckBox"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1
-                navigation.enabled: root.enabled
 
                 onClicked: { root.model.isBarreModeOn = !checked }
             }
@@ -86,7 +85,6 @@ FocusableItem {
                 navigation.name: "MultipleDotsCheckBox"
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 2
-                navigation.enabled: root.enabled
 
                 onClicked: { root.model.isMultipleDotsModeOn = !checked }
             }
@@ -126,7 +124,6 @@ FocusableItem {
                     navigation.name: "LineStyleGroup"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.navigationRowStart + 3 + index
-                    navigation.enabled: root.enabled
                     navigation.accessible.name: markerTypeLabel.text + " " + modelData["titleRole"]
 
                     onToggled: {

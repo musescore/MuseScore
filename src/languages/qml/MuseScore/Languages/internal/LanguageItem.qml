@@ -55,6 +55,7 @@ Rectangle {
     NavigationControl {
         id: navCtrl
         name: root.title
+        enabled: root.enabled && root.visible
         accessible.role: MUAccessible.ListItem
         accessible.name: root.title + " " + root.statusTitle
 

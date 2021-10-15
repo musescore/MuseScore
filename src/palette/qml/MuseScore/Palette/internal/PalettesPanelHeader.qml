@@ -57,6 +57,7 @@ Item {
     NavigationPanel {
         id: navPanel
         name: "PalettesHeader"
+        enabled: root.enabled && root.visible
         onActiveChanged: {
             if (active) {
                 root.forceActiveFocus()

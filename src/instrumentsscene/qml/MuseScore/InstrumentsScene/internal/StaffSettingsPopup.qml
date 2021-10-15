@@ -107,7 +107,6 @@ StyledPopupView {
 
                     navigation.panel: root.navigationPanel
                     navigation.row: model.index + 2 //! NOTE after staffTypesComboBox
-                    navigation.enabled: !settingsModel.isMainScore
 
                     text: modelData.title
                     checked: modelData.visible
