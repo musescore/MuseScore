@@ -88,6 +88,7 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "LearnSearch"
+            enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
             accessible.name: qsTrc("learn", "Learn")
@@ -152,6 +153,7 @@ FocusScope {
         NavigationPanel {
             id: navTabPanel
             name: "LearnTabs"
+            enabled: bar.enabled && bar.visible
             section: navSec
             order: 2
             accessible.name: qsTrc("learn", "Learn tabs")

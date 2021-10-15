@@ -52,6 +52,7 @@ Column {
         minValue: 0
         step: 0.5
 
+        navigationName: "Height"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }

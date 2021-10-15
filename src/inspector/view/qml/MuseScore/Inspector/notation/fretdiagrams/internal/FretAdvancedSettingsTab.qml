@@ -65,6 +65,7 @@ FocusableItem {
                 maxValue: 300
                 minValue: 1
 
+                navigationName: "Scale"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: root.navigationRowStart
             }
@@ -83,6 +84,7 @@ FocusableItem {
                 maxValue: 12
                 minValue: 4
 
+                navigationName: "Strings"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: scaleSection.navigationRowEnd + 1
             }
@@ -106,6 +108,7 @@ FocusableItem {
                 maxValue: 6
                 minValue: 3
 
+                navigationName: "VisibleFrets"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: stringsSection.navigationRowEnd + 1
             }
@@ -124,6 +127,7 @@ FocusableItem {
                 maxValue: 12
                 minValue: 1
 
+                navigationName: "StartingFretNumber"
                 navigationPanel: root.navigationPanel
                 navigationRowStart: visibleFrets.navigationRowEnd + 1
             }
@@ -149,7 +153,6 @@ FocusableItem {
             navigation.name: "MultipleDotsCheckBox"
             navigation.panel: root.navigationPanel
             navigation.row: placementSection.navigationRowEnd + 2
-            navigation.enabled: root.enabled
         }
     }
 }

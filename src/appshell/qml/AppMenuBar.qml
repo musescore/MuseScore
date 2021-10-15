@@ -26,6 +26,8 @@ import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 ListView {
+    id: root
+
     property alias navigation: navPanel
 
     height: contentItem.childrenRect.height

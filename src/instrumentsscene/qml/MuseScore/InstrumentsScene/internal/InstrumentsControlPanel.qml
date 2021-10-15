@@ -53,6 +53,7 @@ RowLayout {
     NavigationPanel {
         id: keynavSub
         name: "InstrumentsHeader"
+        enabled: root.enabled && root.visible
     }
 
     FlatButton {

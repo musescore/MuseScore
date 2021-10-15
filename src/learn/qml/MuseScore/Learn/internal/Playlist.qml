@@ -39,6 +39,8 @@ FocusScope {
 
     NavigationPanel {
         id: navPanel
+        name: "Playlist"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
     }
 

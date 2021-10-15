@@ -35,7 +35,7 @@ Row {
         name: titleLabel.text
         direction: NavigationPanel.Horizontal
         accessible.name: titleLabel.text
-        enabled: root.visible
+        enabled: root.enabled && root.visible
 
         onActiveChanged: {
             if (active) {

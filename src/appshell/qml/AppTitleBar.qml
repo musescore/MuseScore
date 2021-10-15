@@ -40,6 +40,7 @@ Rectangle {
     NavigationSection {
         id: navSec
         name: "AppTitleBar"
+        enabled: root.enabled && root.visible
         order: 0
 
         onActiveChanged: {
@@ -90,6 +91,7 @@ Rectangle {
             NavigationPanel {
                 id: navAppControlPanel
                 name: "AppControl"
+                enabled: systemButtons.enabled && systemButtons.visible
                 section: navSec
                 order: 1
                 accessible.name: qsTrc("appshell", "App control")

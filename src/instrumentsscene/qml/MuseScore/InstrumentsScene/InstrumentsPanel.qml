@@ -65,7 +65,7 @@ Item {
     QtObject {
         id: prv
 
-        property var currentItemNavigationName: ""
+        property string currentItemNavigationName: ""
     }
 
     ColumnLayout {
@@ -85,7 +85,6 @@ Item {
             Layout.rightMargin: contentColumn.sideMargin
 
             navigation.section: root.navigationSection
-            navigation.enabled: root.visible
             navigation.order: 2
 
             isMovingUpAvailable: instrumentsTreeModel.isMovingUpAvailable
@@ -168,7 +167,7 @@ Item {
                     name: "InstrumentsTree"
                     section: root.navigationSection
                     direction: NavigationPanel.Both
-                    enabled: root.visible
+                    enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
                     order: 3
 
                     onNavigationEvent: {

@@ -40,7 +40,7 @@ Item {
         id: prv
 
         readonly property int sideMargin: 36
-        property var currentItemNavigationName: ""
+        property string currentItemNavigationName: ""
     }
 
     Column {
@@ -82,6 +82,7 @@ Item {
 
         property NavigationPanel navigationPanel: NavigationPanel {
             name: "PartsView"
+            enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
             accessible.name: qsTrc("notation", "Parts view")
             onActiveChanged: {

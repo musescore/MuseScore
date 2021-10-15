@@ -95,9 +95,9 @@ Rectangle {
                         id: navPanel
                         name: expandableDelegate.title
                         section: root.navigationSection
+                        enabled: expandableDelegate.enabled && expandableDelegate.visible
                         direction: NavigationPanel.Vertical
                         accessible.name: expandableDelegate.title
-                        enabled: root.visible
                         order: expandableDelegate.index + 2
                     }
 

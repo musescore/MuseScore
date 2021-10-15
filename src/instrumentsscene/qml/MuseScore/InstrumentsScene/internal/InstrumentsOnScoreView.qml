@@ -72,7 +72,7 @@ Item {
         id: navPanel
         name: "InstrumentsOnScoreView"
         direction: NavigationPanel.Both
-        enabled: root.visible
+        enabled: root.enabled && root.visible
     }
 
     StyledTextLabel {

@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -32,7 +31,7 @@ InspectorPropertyView {
     property alias radioButtonGroup: radioButtonGroupItem
     property alias model: radioButtonGroupItem.model
 
-    navigationRowEnd: navigationRowStart + radioButtonGroupItem.count + 1 /*menu button*/
+    navigationRowEnd: navigationRowStart /* Menu button */ + radioButtonGroupItem.count /* FlatRadioButtons */
 
     function focusOnFirst() {
         radioButtonGroupItem.itemAtIndex(0).navigation.requestActive()
@@ -45,10 +44,9 @@ InspectorPropertyView {
         text: modelData["text"] ?? ""
         iconCode: modelData["iconCode"] ?? IconCode.NONE
 
-        navigation.name: root.titleText + "Value " + index
+        navigation.name: root.navigationName + " Value " + index
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1 + index
-        navigation.enabled: root.enabled && root.navigationEnabled && root.visible
         navigation.accessible.name: root.titleText + " " + (Boolean(text) ? text : modelData["title"])
 
         checked: root.propertyItem && !root.propertyItem.isUndefined

@@ -81,6 +81,7 @@ Column {
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
 
+            navigationName: "Thickness"
             navigationPanel: root.navigationPanel
             navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
         }
@@ -94,6 +95,7 @@ Column {
             titleText: qsTrc("inspector", "Hook height")
             propertyItem: root.hookHeight
 
+            navigationName: "HookHeight"
             navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
         }

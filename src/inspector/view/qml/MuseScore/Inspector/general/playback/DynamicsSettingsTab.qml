@@ -49,8 +49,7 @@ Item {
         DynamicsExpandableBlank {
             id: dynamicSection
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + 1
-            navigation.enabled: root.enabled && enabled
+            navigation.row: root.navigationRowStart
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_DYNAMIC) : null
         }
@@ -58,7 +57,6 @@ Item {
         HairpinsExpandableBlank {
             navigation.panel: root.navigationPanel
             navigation.row: dynamicSection.navigationRowEnd + 1
-            navigation.enabled: root.enabled && enabled
 
             model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_HAIRPIN) : null
         }

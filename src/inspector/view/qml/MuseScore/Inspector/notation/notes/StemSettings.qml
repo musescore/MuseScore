@@ -60,7 +60,6 @@ FocusableItem {
             navigation.name: "HideStemCheckBox"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
-            navigation.enabled: root.enabled
 
             onClicked: {
                 var isHidden = !checked
@@ -75,9 +74,9 @@ FocusableItem {
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
+            navigationName: "StemDirectionGroup"
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2
-            navigationEnabled: root.enabled
 
             model: [
                 { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO, title: qsTrc("inspector", "Auto") },
@@ -104,8 +103,8 @@ FocusableItem {
                 width: parent.width
                 height: 70
 
-                property int navigationRowStart: stemDirectionGroup.navigationRowEnd + 1
-                property int navigationRowEnd: navigationRowStart + count
+                readonly property int navigationRowStart: stemDirectionGroup.navigationRowEnd + 1
+                readonly property int navigationRowEnd: navigationRowStart + count
 
                 model: [
                     { iconCode: IconCode.NOTEFLAGS_TRADITIONAL, text: qsTrc("inspector", "Traditional", "Note flags"), value: false },
@@ -118,7 +117,6 @@ FocusableItem {
                     navigation.name: "FlagStyleGroup"
                     navigation.panel: root.navigationPanel
                     navigation.row: flagStyleGroup.navigationRowStart + index
-                    navigation.enabled: root.enabled
                     navigation.accessible.name: flagStyleLabel.text + " " + modelData.text
 
                     Column {
@@ -182,9 +180,9 @@ FocusableItem {
                         minValue: 0.01
                         step: 0.01
 
+                        navigationName: "Thickness"
                         navigationPanel: root.navigationPanel
                         navigationRowStart: showItem.navigation.row + 1
-                        navigationEnabled: visible && showItem.isExpanded
                     }
 
                     SpinBoxPropertyView {
@@ -199,9 +197,9 @@ FocusableItem {
                         maxValue: 10
                         minValue: -10
 
+                        navigationName: "Length"
                         navigationPanel: root.navigationPanel
                         navigationRowStart: thicknessView.navigationRowEnd + 1
-                        navigationEnabled: visible && showItem.isExpanded
                     }
                 }
 
@@ -211,9 +209,9 @@ FocusableItem {
                     horizontalOffset: root.stemModel ? root.stemModel.horizontalOffset : null
                     verticalOffset: root.stemModel ? root.stemModel.verticalOffset : null
 
+                    navigationName: "StemOffset"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: lengthView.navigationRowEnd + 1
-                    navigationEnabled: visible && showItem.isExpanded
                 }
 
                 OffsetSection {
@@ -221,9 +219,9 @@ FocusableItem {
                     horizontalOffset: root.hookModel ? root.hookModel.horizontalOffset : null
                     verticalOffset: root.hookModel ? root.hookModel.verticalOffset : null
 
+                    navigationName: "FlagOffset"
                     navigationPanel: root.navigationPanel
                     navigationRowStart: stemOffsetSection.navigationRowEnd + 1
-                    navigationEnabled: visible && showItem.isExpanded
                 }
             }
         }

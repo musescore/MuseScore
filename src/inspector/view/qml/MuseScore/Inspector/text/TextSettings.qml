@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -106,6 +104,7 @@ Column {
         titleText: qsTrc("inspector", "Frame")
         propertyItem: root.model ? root.model.frameType : null
 
+        navigationName: "FrameMenu"
         navigationPanel: root.navigationPanel
         navigationRowStart: subscriptOptionsButtonList.navigationRowEnd + 1
 
@@ -126,6 +125,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
+            navigationName: "BorderColorMenu"
             navigationPanel: root.navigationPanel
             navigationRowStart: frameSection.navigationRowEnd + 1
 
@@ -142,6 +142,7 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
+            navigationName: "HighlightColorMenu"
             navigationPanel: root.navigationPanel
             navigationRowStart: borderColorSection.navigationRowEnd + 1
 
@@ -163,6 +164,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
+            navigationName: "Thickness"
             navigationPanel: root.navigationPanel
             navigationRowStart: highlightColorSection.navigationRowEnd + 1
 
@@ -183,6 +185,7 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
+            navigationName: "Margin"
             navigationPanel: root.navigationPanel
             navigationRowStart: thicknessSection.navigationRowEnd + 1
 
@@ -204,6 +207,7 @@ Column {
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
+        navigationName: "Corner radius"
         navigationPanel: root.navigationPanel
         navigationRowStart: marginSection.navigationRowEnd + 1
 
@@ -225,6 +229,7 @@ Column {
         titleText: qsTrc("inspector", "Text style")
         propertyItem: root.model ? root.model.textType : null
 
+        navigationName: "Text style"
         navigationPanel: root.navigationPanel
         navigationRowStart: cornerRadiusSection.navigationRowEnd + 1
 

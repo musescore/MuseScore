@@ -57,6 +57,7 @@ Column {
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
 
+        navigationName: "Mode"
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 2
 

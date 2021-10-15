@@ -83,7 +83,6 @@ Rectangle {
             navigation.panel: keynavSub
             navigation.name: model.title
             navigation.order: model.index
-            navigation.enabled: model.enabled
 
             transparent: true
             orientation: Qt.Horizontal

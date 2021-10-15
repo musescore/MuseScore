@@ -39,6 +39,7 @@ Item {
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PartsControlPanel"
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("notation", "Parts control")
         onActiveChanged: {
