@@ -81,6 +81,8 @@ public:
     qreal width() const override;
     qreal height() const override;
 
+    PointF canvasPos() const override;
+
     PointF toLogical(const QPoint& point) const override;
 
     Q_INVOKABLE void moveCanvas(int dx, int dy) override;
