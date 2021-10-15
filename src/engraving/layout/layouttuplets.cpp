@@ -27,6 +27,31 @@
 using namespace mu::engraving;
 using namespace Ms;
 
+/// <summary>
+/// Recursively calls layout() on any nested tuplets and then the tuplet itself
+/// </summary>
+/// <param name="de">Start element of the tuplet</param>
+void LayoutTuplets::layout(DurationElement* de)
+{
+    Tuplet* t = reinterpret_cast<Tuplet*>(de);
+    if (!t) {
+        return;
+    }
+    // t is top level tuplet
+    // loop through elements of that tuplet
+    for (DurationElement* d : t->elements()) {
+        if (d == de) {
+            continue;
+        }
+        // if element is tuplet, layoutTuplet(that tuplet)
+        if (d->isTuplet()) {
+            layout(d);
+        }
+    }
+    // layout t
+    t->layout();
+}
+
 bool LayoutTuplets::isTopTuplet(ChordRest* cr)
 {
     Tuplet* t = cr->tuplet();
