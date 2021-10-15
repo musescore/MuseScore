@@ -222,7 +222,7 @@ Column {
         maxValue: 5
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     DropdownPropertyView {
         id: textStyleSection

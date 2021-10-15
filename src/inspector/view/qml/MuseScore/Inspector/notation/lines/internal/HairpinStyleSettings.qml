@@ -87,7 +87,7 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart + 3
         }
 
-        SeparatorLine { anchors.margins: -10 }
+        SeparatorLine { anchors.margins: -12 }
 
         Item {
             height: childrenRect.height

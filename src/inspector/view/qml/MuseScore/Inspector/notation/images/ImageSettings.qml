@@ -104,7 +104,7 @@ Column {
         }
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     CheckBoxPropertyView {
         text: qsTrc("inspector", "Scale to frame size")

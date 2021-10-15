@@ -65,7 +65,7 @@ FocusableItem {
             navigationRowStart: beginningTextSection.navigationRowEnd + 1
         }
 
-        SeparatorLine { anchors.margins: -10 }
+        SeparatorLine { anchors.margins: -12 }
 
         TextSection {
             id: continiousTextSection
@@ -85,7 +85,7 @@ FocusableItem {
             navigationRowStart: continiousTextSection.navigationRowEnd + 1
         }
 
-        SeparatorLine { anchors.margins: -10; visible: endTextSection.visible }
+        SeparatorLine { anchors.margins: -12; visible: endTextSection.visible }
 
         TextSection {
             id: endTextSection

@@ -51,7 +51,7 @@ Column {
         navigationRowStart: root.navigationRowStart + 1
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     HorizontalMarginsSection {
         id: horizontalMarginsSection

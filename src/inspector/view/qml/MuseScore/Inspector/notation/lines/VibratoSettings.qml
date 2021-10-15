@@ -54,7 +54,7 @@ Column {
         navigationRowStart: root.navigationRowStart
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     PlacementSection {
         propertyItem: root.model ? root.model.placement : null
