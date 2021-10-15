@@ -52,7 +52,7 @@ Column {
         navigationRowStart: 0
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     VerticalSpacingSection {
         id: verticalSpacingSection
@@ -63,7 +63,7 @@ Column {
         navigationRowStart: horizontalSpacingSection.navigationRowEnd + 1
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     AppearanceOffsetSection {
         id: offsetSection
@@ -88,7 +88,7 @@ Column {
         }
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     ArrangeSection {
         id: arrangeSection
@@ -109,7 +109,7 @@ Column {
         }
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     ColorSection {
         propertyItem: root.model ? root.model.color : null

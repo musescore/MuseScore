@@ -66,7 +66,7 @@ FocusableItem {
             navigation.row: typeSection.navigationRowEnd + 1
         }
 
-        SeparatorLine { anchors.margins: -10 }
+        SeparatorLine { anchors.margins: -12 }
 
         LineWithHooksCommonStyleSettings {
             model: root.model
