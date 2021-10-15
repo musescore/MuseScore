@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>qml/MuseScore/Inspector/general/GeneralInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/InspectorForm.qml</file>
+        <file>qml/MuseScore/Inspector/InspectorSectionDelegate.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationMultiElementView.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/StemSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/NoteSettings.qml</file>
