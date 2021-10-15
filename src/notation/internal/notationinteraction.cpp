@@ -2048,10 +2048,14 @@ bool NotationInteraction::isTextEditingStarted() const
     return m_textEditData.element && m_textEditData.element->isTextBase();
 }
 
+bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
+{
+    return element && element->isEditable() && (element->isTextBase() || element->isTBox());
+}
+
 void NotationInteraction::startEditText(EngravingItem* element, const PointF& cursorPos)
 {
-    if (!element || !element->isEditable() || !element->isTextBase()) {
-        qDebug("The element cannot be edited");
+    if (!element) {
         return;
     }
 
@@ -2066,13 +2070,13 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
     } else {
         m_textEditData.clearData();
 
-        m_textEditData.element = element;
-
-        if (m_textEditData.element->isTBox()) {
-            m_textEditData.element = toTBox(m_textEditData.element)->text();
+        if (element->isTBox()) {
+            m_textEditData.element = toTBox(element)->text();
+        } else {
+            m_textEditData.element = element;
         }
 
-        element->startEdit(m_textEditData);
+        m_textEditData.element->startEdit(m_textEditData);
     }
 
     notifyAboutTextEditingStarted();

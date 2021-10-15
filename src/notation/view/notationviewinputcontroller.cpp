@@ -519,11 +519,7 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
     EngravingItem* element = viewInteraction()->selection()->element();
 
-    if (!element) {
-        return;
-    }
-
-    if (element->isTextBase()) {
+    if (viewInteraction()->textEditingAllowed(element)) {
         viewInteraction()->startEditText(element, m_view->toLogical(event->pos()));
     }
 }
