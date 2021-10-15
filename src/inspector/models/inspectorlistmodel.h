@@ -39,6 +39,8 @@ class InspectorListModel : public QAbstractListModel, public mu::async::Asyncabl
 
     INJECT(inspector, context::IGlobalContext, context)
 
+    Q_PROPERTY(int count READ rowCount NOTIFY modelChanged)
+
 public:
     explicit InspectorListModel(QObject* parent = nullptr);
 
