@@ -37,7 +37,6 @@ public:
     explicit BracketSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     void createProperties() override;
-    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
