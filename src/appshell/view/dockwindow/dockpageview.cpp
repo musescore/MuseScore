@@ -214,12 +214,40 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
-    if (open) {
-        dock->open();
-    } else {
-        constexpr bool UNLOAD_CONTENT = true;
-        dock->close(UNLOAD_CONTENT);
+    if (!open) {
+        dock->close();
+        return;
     }
+
+    DockPanelView* panel = dynamic_cast<DockPanelView*>(dock);
+    if (!panel) {
+        dock->open();
+        return;
+    }
+
+    DockPanelView* destinationPanel = findPanelForTab(panel);
+    if (destinationPanel) {
+        destinationPanel->addPanelAsTab(panel);
+    } else {
+        panel->open();
+    }
+}
+
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+{
+    for (DockPanelView* panel : panels()) {
+        if (panel->tabifyPanel() != tab) {
+            continue;
+        }
+
+        if (panel->isOpen()) {
+            return panel;
+        }
+
+        return findPanelForTab(panel);
+    }
+
+    return nullptr;
 }
 
 bool DockPageView::isDockFloating(const QString& dockName) const
@@ -266,15 +294,6 @@ void DockPageView::setStatusBar(DockStatusBarView* statusBar)
 
     m_statusBar = statusBar;
     emit statusBarChanged(statusBar);
-}
-
-void DockPageView::close()
-{
-    TRACEFUNC;
-
-    for (DockBase* dock : allDocks()) {
-        dock->close();
-    }
 }
 
 void DockPageView::componentComplete()

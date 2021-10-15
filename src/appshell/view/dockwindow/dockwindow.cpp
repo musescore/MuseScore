@@ -24,8 +24,8 @@
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
-#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
+#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
 #include "dockcentralview.h"
 #include "dockpageview.h"
@@ -129,7 +129,7 @@ void DockWindow::loadPage(const QString& uri)
     DockPageView* currentPage = this->currentPage();
     if (currentPage) {
         savePageState(currentPage->objectName());
-        currentPage->close();
+        KDDockWidgets::DockRegistry::self()->clear();
     }
 
     loadPageContent(newPage);
@@ -139,10 +139,6 @@ void DockWindow::loadPage(const QString& uri)
     QStringList allDockNames;
 
     for (DockBase* dock : newPage->allDocks()) {
-        if (!dock->isVisible()) {
-            dock->close();
-        }
-
         allDockNames << dock->objectName();
     }
 
@@ -264,24 +260,18 @@ void DockWindow::loadPageContent(const DockPageView* page)
     }
 
     addDock(m_mainToolBarDockingHolder, KDDockWidgets::Location_OnTop);
-    m_mainToolBarDockingHolder->close();
 
     unitePanelsToTabs(page);
 }
 
 void DockWindow::unitePanelsToTabs(const DockPageView* page)
 {
-    for (const DockPanelView* panel : page->panels()) {
-        const DockPanelView* tab = panel->tabifyPanel();
-        if (!tab) {
-            continue;
-        }
+    for (DockPanelView* panel : page->panels()) {
+        DockPanelView* tab = panel->tabifyPanel();
 
-        panel->dockWidget()->addDockWidgetAsTab(tab->dockWidget());
-
-        KDDockWidgets::Frame* frame = panel->dockWidget()->frame();
-        if (frame) {
-            frame->setCurrentTabIndex(0);
+        if (tab && tab->isVisible()) {
+            panel->addPanelAsTab(tab);
+            panel->setCurrentTabIndex(0);
         }
     }
 }
@@ -388,7 +378,13 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
     }
 
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
-    m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, dock->preferredSize());
+
+    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
+                            : KDDockWidgets::InitialVisibilityOption::StartHidden;
+
+    KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
+
+    m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, options);
 }
 
 DockPageView* DockWindow::pageByUri(const QString& uri) const

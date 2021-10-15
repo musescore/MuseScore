@@ -218,17 +218,14 @@ void DockBase::open()
     setVisible(true);
 }
 
-void DockBase::close(bool unloadContent)
+void DockBase::close()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
 
     m_dockWidget->forceClose();
-
-    if (unloadContent) {
-        setVisible(false);
-    }
+    setVisible(false);
 }
 
 DockBase::DockLocation DockBase::location() const
