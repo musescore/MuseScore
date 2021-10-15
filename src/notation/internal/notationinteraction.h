@@ -117,6 +117,7 @@ public:
 
     // Text edit
     bool isTextEditingStarted() const override;
+    bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const PointF& cursorPos) override;
     void editText(QKeyEvent* event) override;
     void endEditText() override;

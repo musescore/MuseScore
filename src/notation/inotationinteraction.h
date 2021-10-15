@@ -107,6 +107,7 @@ public:
 
     // Text edit
     virtual bool isTextEditingStarted() const = 0;
+    virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const PointF& elementPos) = 0;
     virtual void editText(QKeyEvent* event) = 0;
     virtual void endEditText() = 0;
