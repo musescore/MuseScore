@@ -93,7 +93,7 @@ Column {
             id: topNoteSection
             propertyItem: root.model ? root.model.topTpc : null
             titleText: qsTrc("inspector", "Top note")
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
@@ -109,7 +109,7 @@ Column {
             id: topOctaveSection
             propertyItem: root.model ? root.model.topOctave : null
             showTitle: true // Show empty label for correct alignment
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
@@ -133,7 +133,7 @@ Column {
             id: bottomNoteSection
             propertyItem: root.model ? root.model.bottomTpc : null
             titleText: qsTrc("inspector", "Bottom note")
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
@@ -149,7 +149,7 @@ Column {
             id: bottomOctaveSection
             propertyItem: root.model ? root.model.bottomOctave : null
             showTitle: true // Show empty label for correct alignment
-            showMenuButton: false
+            showButton: false
 
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
