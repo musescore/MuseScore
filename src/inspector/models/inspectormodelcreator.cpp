@@ -67,22 +67,20 @@
 
 using namespace mu::inspector;
 
-using InspectorModelType = AbstractInspectorModel::InspectorModelType;
-
-AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelType modelType, QObject* parent,
                                                                  IElementRepositoryService* repository) const
 {
     switch (modelType) {
     case InspectorModelType::TYPE_NOTE:
         return new NoteSettingsProxyModel(parent, repository);
-    case InspectorModelType::TYPE_BEAM:
-        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_BEAM);
     case InspectorModelType::TYPE_NOTEHEAD:
-        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_NOTEHEAD);
+        return new NoteheadSettingsModel(parent, repository);
     case InspectorModelType::TYPE_STEM:
-        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_STEM);
+        return new StemSettingsModel(parent, repository);
     case InspectorModelType::TYPE_HOOK:
-        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_HOOK);
+        return new HookSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_BEAM:
+        return new BeamSettingsModel(parent, repository);
     case InspectorModelType::TYPE_FERMATA:
         return new FermataSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEMPO:
