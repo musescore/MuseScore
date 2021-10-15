@@ -31,12 +31,14 @@
 #include "actions/actionable.h"
 #include "async/asyncable.h"
 #include "global/iinteractive.h"
+#include "imainwindow.h"
 
 namespace mu::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     NavigationController() = default;
@@ -69,7 +71,27 @@ public:
 
 private:
 
+    enum class NavigationType {
+        NextSection,
+        PrevSection,
+        PrevSectionActiveLastPanel,
+        NextPanel,
+        PrevPanel,
+        Left,
+        Right,
+        Up,
+        Down,
+        Escape,
+        TriggerControl,
+        FirstControl,
+        LastControl,
+        NextRowControl,
+        PrevRowControl
+    };
+
     bool eventFilter(QObject* watched, QEvent* event) override;
+
+    void navigateTo(NavigationType type);
 
     void goToNextSection();
     void goToPrevSection(bool isActivateLastPanel = false);
