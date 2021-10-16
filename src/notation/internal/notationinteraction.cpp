@@ -2430,6 +2430,8 @@ void NotationInteraction::deleteSelection()
     }
     apply();
 
+    resetGripEdit();
+
     notifyAboutSelectionChanged();
     notifyAboutNotationChanged();
 }
