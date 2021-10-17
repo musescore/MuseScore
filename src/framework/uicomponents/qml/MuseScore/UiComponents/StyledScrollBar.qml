@@ -22,8 +22,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
-
 ScrollBar {
     id: root
 
@@ -31,11 +29,14 @@ ScrollBar {
     property alias border: handle.border
 
     property real thickness: 8
+    property real minimumSizeInPixels: 30
 
+    readonly property bool isVertical: orientation === Qt.Vertical && root.policy !== ScrollBar.AlwaysOff
     readonly property real isScrollbarNeeded: size > 0.0 && size < 1.0
 
     visible: isScrollbarNeeded
     padding: 4
+    minimumSize: minimumSizeInPixels / (isVertical ? height : width)
 
     contentItem: Rectangle {
         id: handle
