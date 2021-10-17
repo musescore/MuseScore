@@ -164,7 +164,7 @@ Channel<TrackSequenceId, PlaybackStatus> PlayerHandler::playbackStatusChanged() 
 Notification PlayerHandler::playbackDurationTimedOut() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    
+
     return m_playbackDurationTimedOut;
 }
 
