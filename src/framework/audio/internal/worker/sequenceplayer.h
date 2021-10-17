@@ -47,6 +47,7 @@ public:
 
     async::Channel<msecs_t> playbackPositionMSecs() const override;
     async::Channel<PlaybackStatus> playbackStatusChanged() const override;
+    async::Notification playbackDurationTimedOut() const override;
 
 private:
     TracksMap tracks() const;

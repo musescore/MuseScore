@@ -161,6 +161,13 @@ Channel<TrackSequenceId, PlaybackStatus> PlayerHandler::playbackStatusChanged() 
     return m_playbackStatusChanged;
 }
 
+Notification PlayerHandler::playbackDurationTimedOut() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    
+    return m_playbackDurationTimedOut;
+}
+
 ITrackSequencePtr PlayerHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -191,5 +198,9 @@ void PlayerHandler::ensureSubscriptions(const ITrackSequencePtr s) const
 
     s->player()->playbackStatusChanged().onReceive(this, [this, sequenceId](const PlaybackStatus newStatus) {
         m_playbackStatusChanged.send(sequenceId, newStatus);
+    });
+
+    s->player()->playbackDurationTimedOut().onNotify(this, [this] {
+        m_playbackDurationTimedOut.notify();
     });
 }

@@ -47,6 +47,7 @@ public:
 
     async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const override;
     async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const override;
+    async::Notification playbackDurationTimedOut() const override;
 
 private:
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
@@ -56,6 +57,7 @@ private:
 
     mutable async::Channel<TrackSequenceId, msecs_t> m_playbackPositionMsecsChanged;
     mutable async::Channel<TrackSequenceId, PlaybackStatus> m_playbackStatusChanged;
+    mutable async::Notification m_playbackDurationTimedOut;
 };
 }
 

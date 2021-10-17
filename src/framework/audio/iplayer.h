@@ -48,6 +48,7 @@ public:
 
     virtual async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const = 0;
     virtual async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual async::Notification playbackDurationTimedOut() const = 0;
 };
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;

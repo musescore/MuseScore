@@ -46,6 +46,7 @@ public:
 
     virtual async::Channel<msecs_t> playbackPositionMSecs() const = 0;
     virtual async::Channel<PlaybackStatus> playbackStatusChanged() const = 0;
+    virtual async::Notification playbackDurationTimedOut() const = 0;
 };
 using ISequencePlayerPtr = std::shared_ptr<ISequencePlayer>;
 }

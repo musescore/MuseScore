@@ -636,6 +636,10 @@ void PlaybackController::setupSequencePlayer()
 
         m_currentPlaybackStatus = status;
     });
+
+    playback()->player()->playbackDurationTimedOut().onNotify(this, [this] {
+        stop();
+    });
 }
 
 bool PlaybackController::actionChecked(const ActionCode& actionCode) const

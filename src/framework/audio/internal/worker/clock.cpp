@@ -51,6 +51,7 @@ void Clock::forward(const msecs_t nextMsecs)
 
     if (newTime > m_timeDuration) {
         pause();
+        m_durationTimedOut.notify();
         return;
     }
 
@@ -134,4 +135,9 @@ async::Notification Clock::seekOccurred() const
 async::Channel<PlaybackStatus> Clock::statusChanged() const
 {
     return m_status.ch;
+}
+
+async::Notification Clock::durationTimedOut() const
+{
+    return m_durationTimedOut;
 }

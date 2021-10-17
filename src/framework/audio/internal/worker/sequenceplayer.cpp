@@ -130,6 +130,13 @@ Channel<PlaybackStatus> SequencePlayer::playbackStatusChanged() const
     return m_clock->statusChanged();
 }
 
+async::Notification SequencePlayer::playbackDurationTimedOut() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_clock->durationTimedOut();
+}
+
 TracksMap SequencePlayer::tracks() const
 {
     IF_ASSERT_FAILED(m_getTracks) {

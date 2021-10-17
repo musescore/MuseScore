@@ -52,6 +52,7 @@ public:
     async::Channel<msecs_t> timeChanged() const override;
     async::Notification seekOccurred() const override;
     async::Channel<PlaybackStatus> statusChanged() const override;
+    async::Notification durationTimedOut() const override;
 
 private:
 
@@ -63,6 +64,7 @@ private:
 
     async::Channel<msecs_t> m_timeChanged;
     async::Notification m_seekOccurred;
+    async::Notification m_durationTimedOut;
 };
 }
 

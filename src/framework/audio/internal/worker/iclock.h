@@ -57,6 +57,7 @@ public:
     virtual async::Channel<msecs_t> timeChanged() const = 0;
     virtual async::Notification seekOccurred() const = 0;
     virtual async::Channel<PlaybackStatus> statusChanged() const = 0;
+    virtual async::Notification durationTimedOut() const = 0;
 };
 
 using IClockPtr = std::shared_ptr<IClock>;
