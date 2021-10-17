@@ -283,7 +283,7 @@ Item {
                     ScrollBar.vertical: StyledScrollBar {
                         anchors.right: parent.right
                         anchors.rightMargin: 4
-                        width: 6
+                        thickness: 6
                     }
 
                     delegate: DropdownItem {

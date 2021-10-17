@@ -57,7 +57,7 @@ Item {
         color: "black"
         border.color: "white"
         border.width: 1
-        radius: 5
+        radius: root.thickness / 2
         opacity: 0.0
         visible: false
 
@@ -66,22 +66,16 @@ Item {
 
             function onPositionChanged() {
                 handle.active = true
-                resetActiveTimer.restart()
-            }
-        }
-
-        Timer {
-            id: resetActiveTimer
-
-            onTriggered: {
-                handle.active = Qt.binding( function() { return mouseArea.containsMouse || mouseArea.pressed } )
+                Qt.callLater(function() {
+                    handle.active = Qt.binding( function() { return mouseArea.containsMouse || mouseArea.pressed } )
+                })
             }
         }
 
         states: [
             State {
                 name: "active"
-                when: handle.active
+                when: handle.active && root.isScrollbarNeeded
 
                 PropertyChanges {
                     target: handle
@@ -95,6 +89,8 @@ Item {
             from: "active"
 
             SequentialAnimation {
+                PauseAnimation { duration: 200 }
+
                 NumberAnimation {
                     target: handle
                     property: "opacity"
