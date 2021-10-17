@@ -72,9 +72,7 @@ RadioButtonGroup {
         }
     }
 
-    ScrollBar.vertical: StyledScrollBar {
-        policy: ScrollBar.AsNeeded
-    }
+    ScrollBar.vertical: StyledScrollBar {}
 
     Connections {
         target: root.model

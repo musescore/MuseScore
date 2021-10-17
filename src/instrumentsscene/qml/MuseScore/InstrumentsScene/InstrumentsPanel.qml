@@ -136,11 +136,7 @@ Item {
             boundsBehavior: Flickable.StopAtBounds
             interactive: height < contentHeight
 
-            ScrollBar.vertical: StyledScrollBar {
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-            }
+            ScrollBar.vertical: StyledScrollBar {}
 
             TreeView {
                 id: instrumentsTreeView

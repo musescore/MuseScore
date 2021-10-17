@@ -98,12 +98,7 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-        }
+        ScrollBar.vertical: StyledScrollBar {}
 
         Connections {
             target: root.model

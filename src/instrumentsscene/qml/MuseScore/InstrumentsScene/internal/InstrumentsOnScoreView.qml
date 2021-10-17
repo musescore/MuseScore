@@ -150,11 +150,7 @@ Item {
         boundsBehavior: ListView.StopAtBounds
         clip: true
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-        }
+        ScrollBar.vertical: StyledScrollBar {}
 
         model: instrumentsOnScore
 
