@@ -79,7 +79,6 @@ GridView {
         anchors.top: root.top
         anchors.bottom: root.bottom
         anchors.right: parent.right
-        anchors.rightMargin: 16
 
         visible: root.contentHeight > root.height
         z: 1

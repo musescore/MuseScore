@@ -35,7 +35,7 @@ ScrollBar {
     readonly property real isScrollbarNeeded: size > 0.0 && size < 1.0
 
     visible: isScrollbarNeeded
-    padding: 0
+    padding: 4
 
     contentItem: Rectangle {
         id: handle

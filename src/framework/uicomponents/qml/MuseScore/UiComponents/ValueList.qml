@@ -199,10 +199,7 @@ Item {
             }
         }
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-        }
+        ScrollBar.vertical: StyledScrollBar {}
 
         delegate: Item {
             //! NOTE: Added to prevent components clipping when navigating

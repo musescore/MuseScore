@@ -61,21 +61,8 @@ Rectangle {
         contentHeight: contentColumn.height
         interactive: height < contentHeight || width < contentWidth
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-
-            policy: ScrollBar.AlwaysOn
-        }
-
-        ScrollBar.horizontal: StyledScrollBar {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottomMargin: 8
-        }
+        ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
+        ScrollBar.horizontal: StyledScrollBar {}
 
         NavigationPanel {
             id: navPanel

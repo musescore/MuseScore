@@ -43,10 +43,10 @@ Item {
     property real minimumSize: 30 / (isVertical ? height : width)
 
     property real thickness: 10
+    property real padding: 4
 
     signal moved(real newPosition)
 
-    anchors.margins: 4
     visible: isScrollbarNeeded
 
     Rectangle {
@@ -115,12 +115,14 @@ Item {
         property real moveStartOffset: 0.0
 
         //! Converts a visual position to the logical position, compensating for minimumSize
-        function toLogical(position) {
+        function toLogical(clickPos) {
+            let correctedClickPos = clickPos - root.padding
+
             if (root.minimumSize > root.size) {
-                return position * (1.0 - root.size) / (1.0 - root.minimumSize)
+                correctedClickPos *= (1.0 - root.size) / (1.0 - root.minimumSize)
             }
 
-            return position
+            return correctedClickPos / availableTrackLength
         }
 
         onPressed: function(mouse) {
@@ -128,14 +130,13 @@ Item {
             let start = root.isVertical ? handle.y : handle.x
             let handleSize = root.isVertical ? handle.height : handle.width
             let end = start + handleSize
-            let total = root.isVertical ? root.height : root.width
 
             if (clickPos < start || clickPos > end) {
                 // TODO: when currently in overscroll mode and then clicking outside the scrollbar,
                 // the notation position flickers.
-                moveStartOffset = Math.max(root.size, toLogical(minimumSize)) / 2
+                moveStartOffset = Math.max(root.size, minimumSize * (1.0 - root.size) / (1.0 - root.minimumSize)) / 2
             } else {
-                moveStartOffset = toLogical(clickPos) / total - root.position
+                moveStartOffset = toLogical(clickPos) - root.position
             }
 
             onPositionChanged(mouse)
@@ -147,8 +148,7 @@ Item {
             }
 
             let clickPos = root.isVertical ? mouse.y : mouse.x
-            let total = root.isVertical ? root.height : root.width
-            root.moved(toLogical(clickPos) / total - moveStartOffset)
+            root.moved(toLogical(clickPos) - moveStartOffset)
         }
 
         onReleased: function(mouse) {
@@ -157,26 +157,28 @@ Item {
         }
     }
 
-    function calculatedPosition(total) {
-        if (root.size < root.minimumSize) {
-            return clampedPosition / (1.0 - size) * (1.0 - minimumSize) * total
-        }
+    readonly property real availableTrackLength:
+        (isVertical ? height : width) - 2 * padding
 
-        return clampedPosition * total
+    readonly property real handlePosition: {
+        let visualPosition = root.size < root.minimumSize
+            ? clampedPosition / (1.0 - size) * (1.0 - minimumSize)
+            : clampedPosition
+
+        return visualPosition * availableTrackLength + root.padding
     }
 
-    function calculatedSize(total) {
-        return Math.max(root.size, root.minimumSize) * total
-    }
+    readonly property real handleSize:
+        Math.max(root.size, root.minimumSize) * availableTrackLength
 
     states: [
         State {
             name: "horizontal"
-            when: isScrollbarNeeded && !root.isVertical
+            when: root.isScrollbarNeeded && !root.isVertical
 
             PropertyChanges {
                 target: root
-                height: root.thickness
+                height: root.thickness + 2 * root.padding
             }
 
             AnchorChanges {
@@ -188,19 +190,20 @@ Item {
 
             PropertyChanges {
                 target: handle
-                x: calculatedPosition(root.width)
-                width: calculatedSize(root.width)
-                height: root.height
+                x: root.handlePosition
+                y: root.padding
+                width: root.handleSize
+                height: root.thickness
             }
         },
 
         State {
             name: "vertical"
-            when: isScrollbarNeeded && root.isVertical
+            when: root.isScrollbarNeeded && root.isVertical
 
             PropertyChanges {
                 target: root
-                width: root.thickness
+                width: root.thickness + 2 * root.padding
             }
 
             AnchorChanges {
@@ -212,9 +215,10 @@ Item {
 
             PropertyChanges {
                 target: handle
-                y: calculatedPosition(root.height)
-                width: root.width
-                height: calculatedSize(root.height)
+                x: root.padding
+                y: root.handlePosition
+                width: root.thickness
+                height: root.handleSize
             }
         }
     ]
