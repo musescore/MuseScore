@@ -22,8 +22,6 @@
 #ifndef MU_NOTATION_INOTATIONPLAYBACK_H
 #define MU_NOTATION_INOTATIONPLAYBACK_H
 
-#include <QRect>
-
 #include "retval.h"
 #include "midi/miditypes.h"
 
@@ -41,7 +39,7 @@ public:
     virtual float tickToSec(midi::tick_t tick) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
 
-    virtual QRect playbackCursorRectByTick(midi::tick_t tick) const = 0;
+    virtual RectF playbackCursorRectByTick(midi::tick_t tick) const = 0;
 
     virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 

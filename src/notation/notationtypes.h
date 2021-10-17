@@ -464,8 +464,8 @@ struct LoopBoundaries
     int loopInTick = 0;
     int loopOutTick = 0;
 
-    QRect loopInRect = {};
-    QRect loopOutRect = {};
+    RectF loopInRect = {};
+    RectF loopOutRect = {};
 
     bool visible = false;
 

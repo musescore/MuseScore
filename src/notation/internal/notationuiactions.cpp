@@ -44,7 +44,7 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Esc")
              ),
-    UiAction("put-note", // args: QPoint pos, bool replace, bool insert
+    UiAction("put-note", // args: PointF pos, bool replace, bool insert
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Put note")
              ),

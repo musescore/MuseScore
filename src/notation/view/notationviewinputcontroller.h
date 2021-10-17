@@ -48,20 +48,21 @@ public:
     virtual PointF canvasPos() const = 0;
 
     //! Returns true if the canvas has been moved
-    virtual bool moveCanvas(int dx, int dy) = 0;
+    virtual bool moveCanvas(qreal dx, qreal dy) = 0;
 
-    virtual void moveCanvasHorizontal(int dx) = 0;
-    virtual void moveCanvasVertical(int dy) = 0;
+    virtual void moveCanvasHorizontal(qreal dx) = 0;
+    virtual void moveCanvasVertical(qreal dy) = 0;
 
     virtual qreal currentScaling() const = 0;
-    virtual void setScaling(qreal scaling, const QPoint& pos) = 0;
+    virtual void setScaling(qreal scaling, const QPointF& pos) = 0;
 
-    virtual PointF toLogical(const QPoint& p) const = 0;
+    virtual PointF toLogical(const PointF& p) const = 0;
+    virtual PointF toLogical(const QPointF& p) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
@@ -115,8 +116,8 @@ private:
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    QPoint findZoomFocusPoint() const;
-    void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
+    QPointF findZoomFocusPoint() const;
+    void setZoom(int zoomPercentage, const QPointF& pos = QPointF());
 
     void setViewMode(const ViewMode& viewMode);
 

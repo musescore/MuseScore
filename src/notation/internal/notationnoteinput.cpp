@@ -204,10 +204,10 @@ void NotationNoteInput::padNote(const Pad& pad)
     notifyAboutStateChanged();
 }
 
-void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
+void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
     startEdit();
-    score()->putNote(PointF::fromQPointF(pos), replace, insert);
+    score()->putNote(pos, replace, insert);
     apply();
 
     notifyNoteAddedChanged();
@@ -273,21 +273,21 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
     notifyAboutStateChanged();
 }
 
-QRectF NotationNoteInput::cursorRect() const
+mu::RectF NotationNoteInput::cursorRect() const
 {
     if (!isNoteInputMode()) {
-        return QRectF();
+        return {};
     }
 
-    Ms::InputState& inputState = score()->inputState();
+    const Ms::InputState& inputState = score()->inputState();
     Ms::Segment* segment = inputState.segment();
     if (!segment) {
-        return QRectF();
+        return {};
     }
 
     Ms::System* system = segment->measure()->system();
     if (!system) {
-        return QRectF();
+        return {};
     }
 
     int track = inputState.track() == -1 ? 0 : inputState.track();
@@ -295,7 +295,7 @@ QRectF NotationNoteInput::cursorRect() const
 
     Staff* staff = score()->staff(staffIdx);
     if (!staff) {
-        return QRectF();
+        return {};
     }
 
     constexpr int sideMargin = 4;
@@ -329,7 +329,7 @@ QRectF NotationNoteInput::cursorRect() const
         result.translate(system->page()->pos());
     }
 
-    return result.toQRectF();
+    return result;
 }
 
 void NotationNoteInput::addSlur(Ms::Slur* slur)

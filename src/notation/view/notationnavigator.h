@@ -49,12 +49,12 @@ public:
     NotationNavigator(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void setCursorRect(const QRect& rect);
+    Q_INVOKABLE void setCursorRect(const QRectF& rect);
 
     int orientation() const;
 
 signals:
-    void moveNotationRequested(int dx, int dy);
+    void moveNotationRequested(qreal dx, qreal dy);
     void orientationChanged();
 
 private:
@@ -76,14 +76,13 @@ private:
     void paintCursor(QPainter* painter);
     void paintPageNumbers(QPainter* painter);
 
-    void moveCanvasToRect(const QRect& viewRect);
+    void moveCanvasToRect(const RectF& viewRect);
 
     bool isVerticalOrientation() const;
 
-    QRectF notationContentRect() const;
     PageList pages() const;
 
-    QRect m_cursorRect;
+    RectF m_cursorRect;
     PointF m_startMove;
 };
 }

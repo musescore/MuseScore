@@ -122,22 +122,22 @@ tick_t NotationPlayback::secToTick(float sec) const
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
+RectF NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
 {
     if (!score()) {
-        return QRect();
+        return {};
     }
 
     Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score()->tick2measureMM(tick);
     if (!measure) {
-        return QRect();
+        return {};
     }
 
     Ms::System* system = measure->system();
     if (!system) {
-        return QRect();
+        return {};
     }
 
     qreal x = 0.0;
@@ -174,7 +174,7 @@ QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     }
 
     if (!s) {
-        return QRect();
+        return {};
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -199,7 +199,7 @@ QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     x -= _spatium;
     y -= 3 * _spatium;
 
-    return QRect(x, y, w, h);
+    return RectF(x, y, w, h);
 }
 
 RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const EngravingItem* element) const
@@ -296,7 +296,7 @@ void NotationPlayback::setLoopBoundariesVisible(bool visible)
     m_loopBoundaries.set(m_loopBoundaries.val);
 }
 
-QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
+RectF NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
 {
     Fraction tick = Fraction::fromTicks(_tick);
 
@@ -307,7 +307,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
 
     Measure* measure = score()->tick2measureMM(tick);
     if (measure == nullptr) {
-        return QRect();
+        return RectF();
     }
 
     qreal x = 0.0;
@@ -339,12 +339,12 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     }
 
     if (s == nullptr) {
-        return QRect();
+        return RectF();
     }
 
     Ms::System* system = measure->system();
     if (system == nullptr || system->page() == nullptr || system->staves()->empty()) {
-        return QRect();
+        return RectF();
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -373,7 +373,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
         x = x - _spatium * .5;
     }
 
-    return QRect(x, y, width, height);
+    return RectF(x, y, width, height);
 }
 
 mu::ValCh<LoopBoundaries> NotationPlayback::loopBoundaries() const

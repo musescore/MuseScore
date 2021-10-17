@@ -68,7 +68,7 @@ void TemplatePaintView::adjustCanvas()
         return;
     }
 
-    setScaling(scaling, QPoint());
+    setScaling(scaling, QPointF());
     moveCanvasToCenter();
 }
 
@@ -77,7 +77,7 @@ qreal TemplatePaintView::resolveDefaultScaling() const
     //! NOTE: this value was found experimentally
     constexpr qreal PROPORTION_FACTOR = 1.2;
 
-    QRectF notationRect = notationContentRect();
+    RectF notationRect = notationContentRect();
 
     qreal widthScaling = width() * guiScaling() / notationRect.width() / PROPORTION_FACTOR;
     qreal heightScaling = height() * guiScaling() / notationRect.height() / PROPORTION_FACTOR;
