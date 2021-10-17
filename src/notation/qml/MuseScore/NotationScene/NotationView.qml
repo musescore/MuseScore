@@ -82,7 +82,7 @@ FocusScope {
                 color: notationView.backgroundColor
             }
 
-            NotationZoomPinchArea {
+            NotationScrollAndZoomArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
@@ -137,64 +137,6 @@ FocusScope {
 
                     onViewportChanged: {
                         notationNavigator.setCursorRect(viewport)
-                    }
-
-                    onHorizontalScrollChanged: {
-                        if (!horizontalScrollBar.pressed) {
-                            horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
-                        }
-                    }
-
-                    onVerticalScrollChanged: {
-                        if (!verticalScrollBar.pressed) {
-                            verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
-                        }
-                    }
-
-                    StyledScrollBar {
-                        id: verticalScrollBar
-
-                        anchors.top: parent.top
-                        anchors.bottom: parent.bottom
-                        anchors.right: parent.right
-                        anchors.margins: prv.scrollbarMargin
-
-                        orientation: Qt.Vertical
-
-                        color: "black"
-                        border.width: 1
-                        border.color: "white"
-
-                        size: notationView.verticalScrollSize
-
-                        onPositionChanged: {
-                            if (pressed) {
-                                notationView.scrollVertical(position)
-                            }
-                        }
-                    }
-
-                    StyledScrollBar {
-                        id: horizontalScrollBar
-
-                        anchors.bottom: parent.bottom
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.margins: prv.scrollbarMargin
-
-                        orientation: Qt.Horizontal
-
-                        color: "black"
-                        border.width: 1
-                        border.color: "white"
-
-                        size: notationView.horizontalScrollSize
-
-                        onPositionChanged: {
-                            if (pressed) {
-                                notationView.scrollHorizontal(position)
-                            }
-                        }
                     }
 
                     StyledMenuLoader {

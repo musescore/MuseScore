@@ -1,0 +1,225 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+import QtQuick 2.15
+
+Item {
+    id: root
+
+    required property int orientation
+    readonly property bool isVertical: orientation === Qt.Vertical
+
+    //! Width/height of the handle as a fraction of the total width/height
+    required property real size
+
+    readonly property bool isScrollbarNeeded: root.size > 0 && root.size < 1
+
+    //! Position of the left/top of the handle as a fraction of the total width/height
+    //! May be negative or more than 1, indicating overscroll
+    required property real position
+
+    readonly property real clampedPosition: Math.max(0, Math.min(position, 1 - size))
+
+    //! Minimum handle size as a fraction of the total width/height
+    property real minimumSizeInPixels: 30
+    property real minimumSize: 30 / (isVertical ? height : width)
+
+    property real thickness: 10
+
+    signal moved(real newPosition)
+
+    anchors.margins: 4
+    visible: isScrollbarNeeded
+
+    Rectangle {
+        id: handle
+
+        property bool active: false
+
+        color: "black"
+        border.color: "white"
+        border.width: 1
+        radius: 5
+        opacity: 0.0
+        visible: false
+
+        Connections {
+            target: root
+
+            function onPositionChanged() {
+                handle.active = true
+                resetActiveTimer.restart()
+            }
+        }
+
+        Timer {
+            id: resetActiveTimer
+
+            onTriggered: {
+                handle.active = Qt.binding( function() { return mouseArea.containsMouse || mouseArea.pressed } )
+            }
+        }
+
+        states: [
+            State {
+                name: "active"
+                when: handle.active
+
+                PropertyChanges {
+                    target: handle
+                    visible: true
+                    opacity: mouseArea.pressed ? 0.7 : 0.3
+                }
+            }
+        ]
+
+        transitions: Transition {
+            from: "active"
+
+            SequentialAnimation {
+                NumberAnimation {
+                    target: handle
+                    property: "opacity"
+                    duration: 100
+                    to: 0.0
+                }
+
+                PropertyAction {
+                    target: handle
+                    property: "visible"
+                }
+            }
+        }
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: root
+        enabled: root.isScrollbarNeeded
+        hoverEnabled: true
+
+        property real moveStartOffset: 0.0
+
+        //! Converts a visual position to the logical position, compensating for minimumSize
+        function toLogical(position) {
+            if (root.minimumSize > root.size) {
+                return position * (1.0 - root.size) / (1.0 - root.minimumSize)
+            }
+
+            return position
+        }
+
+        onPressed: function(mouse) {
+            let clickPos = root.isVertical ? mouse.y : mouse.x
+            let start = root.isVertical ? handle.y : handle.x
+            let handleSize = root.isVertical ? handle.height : handle.width
+            let end = start + handleSize
+            let total = root.isVertical ? root.height : root.width
+
+            if (clickPos < start || clickPos > end) {
+                // TODO: when currently in overscroll mode and then clicking outside the scrollbar,
+                // the notation position flickers.
+                moveStartOffset = Math.max(root.size, toLogical(minimumSize)) / 2
+            } else {
+                moveStartOffset = toLogical(clickPos) / total - root.position
+            }
+
+            onPositionChanged(mouse)
+        }
+
+        onPositionChanged: function(mouse) {
+            if (!pressed) {
+                return
+            }
+
+            let clickPos = root.isVertical ? mouse.y : mouse.x
+            let total = root.isVertical ? root.height : root.width
+            root.moved(toLogical(clickPos) / total - moveStartOffset)
+        }
+
+        onReleased: function(mouse) {
+            onPositionChanged(mouse)
+            moveStartOffset = 0.0
+        }
+    }
+
+    function calculatedPosition(total) {
+        if (root.size < root.minimumSize) {
+            return clampedPosition / (1.0 - size) * (1.0 - minimumSize) * total
+        }
+
+        return clampedPosition * total
+    }
+
+    function calculatedSize(total) {
+        return Math.max(root.size, root.minimumSize) * total
+    }
+
+    states: [
+        State {
+            name: "horizontal"
+            when: isScrollbarNeeded && !root.isVertical
+
+            PropertyChanges {
+                target: root
+                height: root.thickness
+            }
+
+            AnchorChanges {
+                target: root
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+            }
+
+            PropertyChanges {
+                target: handle
+                x: calculatedPosition(root.width)
+                width: calculatedSize(root.width)
+                height: root.height
+            }
+        },
+
+        State {
+            name: "vertical"
+            when: isScrollbarNeeded && root.isVertical
+
+            PropertyChanges {
+                target: root
+                width: root.thickness
+            }
+
+            AnchorChanges {
+                target: root
+                anchors.bottom: parent.bottom
+                anchors.top: parent.top
+                anchors.right: parent.right
+            }
+
+            PropertyChanges {
+                target: handle
+                y: calculatedPosition(root.height)
+                width: root.width
+                height: calculatedSize(root.height)
+            }
+        }
+    ]
+}
