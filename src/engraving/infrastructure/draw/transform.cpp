@@ -25,6 +25,8 @@
 #include "painterpath.h"
 
 namespace mu {
+static constexpr double NEAR_CLIP = 0.000001;
+
 Transform::Transform(double h11, double h12, double h21, double h22, double dx, double dy)
     : m_affine(h11, h12, h21, h22, dx, dy), m_dirty(TransformationType::Shear)
 {
@@ -354,6 +356,75 @@ LineF Transform::map(const LineF& l) const
     return LineF(x1, y1, x2, y2);
 }
 
+static inline bool needsPerspectiveClipping(const RectF& rect, const Transform& transform)
+{
+    const qreal wx = qMin(transform.m13() * rect.left(), transform.m13() * rect.right());
+    const qreal wy = qMin(transform.m23() * rect.top(), transform.m23() * rect.bottom());
+
+    return wx + wy + transform.m33() < NEAR_CLIP;
+}
+
+RectF Transform::map(const RectF& rect) const
+{
+    TransformationType t = inline_type();
+    if (t <= TransformationType::Translate) {
+        return rect.translated(m_affine.m_dx, m_affine.m_dy);
+    }
+
+    if (t <= TransformationType::Scale) {
+        qreal x = m_affine.m_11 * rect.x() + m_affine.m_dx;
+        qreal y = m_affine.m_22 * rect.y() + m_affine.m_dy;
+        qreal w = m_affine.m_11 * rect.width();
+        qreal h = m_affine.m_22 * rect.height();
+        if (w < 0) {
+            w = -w;
+            x -= w;
+        }
+        if (h < 0) {
+            h = -h;
+            y -= h;
+        }
+        return RectF(x, y, w, h);
+    } else if (t < TransformationType::Project || !needsPerspectiveClipping(rect, *this)) {
+        qreal x = rect.x(), y = rect.y();
+        mapElement(x, y, t);
+        qreal xmin = x;
+        qreal ymin = y;
+        qreal xmax = x;
+        qreal ymax = y;
+
+        x = rect.x() + rect.width();
+        y = rect.y();
+        mapElement(x, y, t);
+        xmin = qMin(xmin, x);
+        ymin = qMin(ymin, y);
+        xmax = qMax(xmax, x);
+        ymax = qMax(ymax, y);
+
+        x = rect.x() + rect.width();
+        y = rect.y() + rect.height();
+        mapElement(x, y, t);
+        xmin = qMin(xmin, x);
+        ymin = qMin(ymin, y);
+        xmax = qMax(xmax, x);
+        ymax = qMax(ymax, y);
+
+        x = rect.x();
+        y = rect.y() + rect.height();
+        mapElement(x, y, t);
+        xmin = qMin(xmin, x);
+        ymin = qMin(ymin, y);
+        xmax = qMax(xmax, x);
+        ymax = qMax(ymax, y);
+
+        return RectF(xmin, ymin, xmax - xmin, ymax - ymin);
+    } else {
+        PainterPath path;
+        path.addRect(rect);
+        return map(path).boundingRect();
+    }
+}
+
 PainterPath Transform::map(const PainterPath& path) const
 {
     TransformationType t = inline_type();
@@ -673,39 +744,36 @@ Transform Transform::inverted() const
 
 void Transform::mapElement(double& nx, double& ny, TransformationType t) const
 {
-    constexpr double nearClip = 0.000001;
-    do {
-        double FX_ = nx;
-        double FY_ = ny;
-        switch (t) {
-        case TransformationType::None:
-            nx = FX_;
-            ny = FY_;
-            break;
-        case TransformationType::Translate:
-            nx = FX_ + m_affine.m_dx;
-            ny = FY_ + m_affine.m_dy;
-            break;
-        case TransformationType::Scale:
-            nx = m_affine.m_11 * FX_ + m_affine.m_dx;
-            ny = m_affine.m_22 * FY_ + m_affine.m_dy;
-            break;
-        case TransformationType::Rotate:
-        case TransformationType::Shear:
-        case TransformationType::Project:
-            nx = m_affine.m_11 * FX_ + m_affine.m_21 * FY_ + m_affine.m_dx;
-            ny = m_affine.m_12 * FX_ + m_affine.m_22 * FY_ + m_affine.m_dy;
-            if (t == TransformationType::Project) {
-                double w = (m_13 * FX_ + m_23 * FY_ + m_33);
-                if (w < nearClip) {
-                    w = nearClip;
-                }
-                w = 1. / w;
-                nx *= w;
-                ny *= w;
+    double FX_ = nx;
+    double FY_ = ny;
+    switch (t) {
+    case TransformationType::None:
+        nx = FX_;
+        ny = FY_;
+        break;
+    case TransformationType::Translate:
+        nx = FX_ + m_affine.m_dx;
+        ny = FY_ + m_affine.m_dy;
+        break;
+    case TransformationType::Scale:
+        nx = m_affine.m_11 * FX_ + m_affine.m_dx;
+        ny = m_affine.m_22 * FY_ + m_affine.m_dy;
+        break;
+    case TransformationType::Rotate:
+    case TransformationType::Shear:
+    case TransformationType::Project:
+        nx = m_affine.m_11 * FX_ + m_affine.m_21 * FY_ + m_affine.m_dx;
+        ny = m_affine.m_12 * FX_ + m_affine.m_22 * FY_ + m_affine.m_dy;
+        if (t == TransformationType::Project) {
+            double w = (m_13 * FX_ + m_23 * FY_ + m_33);
+            if (w < NEAR_CLIP) {
+                w = NEAR_CLIP;
             }
+            w = 1. / w;
+            nx *= w;
+            ny *= w;
         }
-    } while (0);
+    }
 }
 
 #ifndef NO_QT_SUPPORT

@@ -65,6 +65,7 @@ public:
 
     PointF map(const PointF& p) const;
     LineF map(const LineF& l) const;
+    RectF map(const RectF& rect) const;
     PainterPath map(const PainterPath& path) const;
 
     const Matrix& toAffine() const { return m_affine; }

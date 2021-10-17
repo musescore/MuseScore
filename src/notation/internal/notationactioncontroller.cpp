@@ -21,8 +21,6 @@
  */
 #include "notationactioncontroller.h"
 
-#include <QPoint>
-
 #include "log.h"
 #include "notationtypes.h"
 
@@ -534,7 +532,7 @@ void NotationActionController::putNote(const actions::ActionData& data)
         return;
     }
 
-    QPoint pos = data.arg<QPoint>(0);
+    PointF pos = data.arg<PointF>(0);
     bool replace = data.arg<bool>(1);
     bool insert = data.arg<bool>(2);
 

@@ -47,7 +47,7 @@ public:
 
     std::vector<Note*> notes(NoteFilter filter) const override;
 
-    QRectF canvasBoundingRect() const override;
+    RectF canvasBoundingRect() const override;
 
     INotationSelectionRangePtr range() const override;
 

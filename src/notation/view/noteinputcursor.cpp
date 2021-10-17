@@ -29,14 +29,14 @@ void NoteInputCursor::paint(mu::draw::Painter* painter)
         return;
     }
 
-    QRectF cursorRect = rect();
+    RectF cursorRect = rect();
     QColor cursorRectColor = cursorColor();
-    painter->fillRect(RectF::fromQRectF(cursorRect), cursorRectColor);
+    painter->fillRect(cursorRect, cursorRectColor);
 
     constexpr int leftLineWidth = 3;
-    QRectF leftLine = QRectF(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
+    RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
     QColor lineColor = fillColor();
-    painter->fillRect(RectF::fromQRectF(leftLine), lineColor);
+    painter->fillRect(leftLine, lineColor);
 }
 
 INotationNoteInputPtr NoteInputCursor::currentNoteInput() const
@@ -64,11 +64,11 @@ bool NoteInputCursor::isNoteInputMode() const
     return noteInput->isNoteInputMode();
 }
 
-QRectF NoteInputCursor::rect() const
+mu::RectF NoteInputCursor::rect() const
 {
     auto noteInput = currentNoteInput();
     if (!noteInput) {
-        return QRectF();
+        return {};
     }
 
     return noteInput->cursorRect();
