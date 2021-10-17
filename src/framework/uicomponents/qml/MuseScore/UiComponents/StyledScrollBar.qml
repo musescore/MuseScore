@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 
@@ -30,42 +30,63 @@ ScrollBar {
     property alias color: handle.color
     property alias border: handle.border
 
-    width: orientation === Qt.Vertical ? 10 : 0
-    height: orientation === Qt.Horizontal ? 10 : 0
+    property real thickness: 8
 
-    visible: size !== 0 && size !== 1
+    readonly property real isScrollbarNeeded: size > 0.0 && size < 1.0
+
+    visible: isScrollbarNeeded
     padding: 0
 
     contentItem: Rectangle {
         id: handle
 
-        radius: 5
+        implicitWidth: root.thickness
+        implicitHeight: root.thickness
+
+        radius: root.thickness / 2
         color: ui.theme.fontPrimaryColor
-        opacity: root.pressed ? 0.7 : 0.3
-        visible: root.active
+        opacity: 0.0
+        visible: false
+
+        states: [
+            State {
+                name: "active"
+                when: root.policy === ScrollBar.AlwaysOn || (root.active && root.isScrollbarNeeded)
+
+                PropertyChanges {
+                    target: handle
+                    visible: true
+                    opacity: root.pressed ? 0.7 : 0.3
+                }
+            }
+        ]
+
+        transitions: Transition {
+            from: "active"
+
+            SequentialAnimation {
+                PauseAnimation { duration: 200 }
+
+                NumberAnimation {
+                    target: handle
+                    property: "opacity"
+                    duration: 100
+                    to: 0.0
+                }
+
+                PropertyAction {
+                    target: handle
+                    property: "visible"
+                }
+            }
+        }
     }
 
     function setPosition(position) {
         root.position = position
-
-        if (root.policy === ScrollBar.AlwaysOn) {
-            return
-        }
-
         root.active = true
-
-        if (!resetActiveTimer.running) {
-            resetActiveTimer.stop()
-        }
-
-        resetActiveTimer.start()
-    }
-
-    Timer {
-        id: resetActiveTimer
-
-        onTriggered: {
+        Qt.callLater(function() {
             root.active = Qt.binding( function() { return root.hovered || root.pressed } )
-        }
+        })
     }
 }
