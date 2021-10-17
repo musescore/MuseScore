@@ -30,7 +30,7 @@ Item {
     //! Width/height of the handle as a fraction of the total width/height
     required property real size
 
-    readonly property bool isScrollbarNeeded: root.size > 0 && root.size < 1
+    readonly property bool isScrollbarNeeded: size > 0.0 && size < 1.0
 
     //! Position of the left/top of the handle as a fraction of the total width/height
     //! May be negative or more than 1, indicating overscroll
@@ -39,8 +39,8 @@ Item {
     readonly property real clampedPosition: Math.max(0, Math.min(position, 1 - size))
 
     //! Minimum handle size as a fraction of the total width/height
+    property real minimumSize: minimumSizeInPixels / (isVertical ? height : width)
     property real minimumSizeInPixels: 30
-    property real minimumSize: 30 / (isVertical ? height : width)
 
     property real thickness: 10
     property real padding: 4
