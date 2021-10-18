@@ -72,17 +72,21 @@ void NotationNavigator::rescale()
 
     const Page* lastPage = pages.back();
 
-    qreal _scale = 0;
+    qreal scaling = 1.0;
 
     if (isVerticalOrientation()) {
         qreal scoreWidth = lastPage->width();
-        _scale = width() * guiScaling() / scoreWidth;
+        scaling = width() * guiScaling() / scoreWidth;
     } else {
         qreal scoreHeight = lastPage->height();
-        _scale = height() * guiScaling() / scoreHeight;
+        scaling = height() * guiScaling() / scoreHeight;
     }
 
-    setScaling(_scale, QPointF());
+    if (qFuzzyIsNull(scaling)) {
+        return;
+    }
+
+    setScaling(scaling, QPointF());
 }
 
 void NotationNavigator::wheelEvent(QWheelEvent*)
