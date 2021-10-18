@@ -353,7 +353,11 @@ void NotationPaintView::paint(QPainter* qp)
     RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
 
-    painter->setWorldTransform(m_matrix);
+    qreal guiScaling = configuration()->guiScaling();
+    Transform guiScalingCompensation;
+    guiScalingCompensation.scale(guiScaling, guiScaling);
+
+    painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
     notation()->paint(painter, toLogical(rect));
 
@@ -408,8 +412,8 @@ PointF NotationPaintView::canvasCenter() const
 {
     RectF canvasRect = m_matrix.map(notationContentRect());
 
-    qreal canvasWidth = canvasRect.width() / guiScaling();
-    qreal canvasHeight = canvasRect.height() / guiScaling();
+    qreal canvasWidth = canvasRect.width();
+    qreal canvasHeight = canvasRect.height();
 
     qreal x = (width() - canvasWidth) / 2;
     qreal y = (height() - canvasHeight) / 2;
@@ -865,10 +869,7 @@ PointF NotationPaintView::canvasPos() const
 
 PointF NotationPaintView::toLogical(const PointF& point) const
 {
-    double scale = guiScaling();
-    PointF scaledPoint(point.x() * scale, point.y() * scale);
-
-    return m_matrix.inverted().map(scaledPoint);
+    return m_matrix.inverted().map(point);
 }
 
 PointF NotationPaintView::toLogical(const QPointF& point) const
@@ -876,19 +877,9 @@ PointF NotationPaintView::toLogical(const QPointF& point) const
     return toLogical(PointF::fromQPointF(point));
 }
 
-double NotationPaintView::guiScaling() const
-{
-    return configuration()->guiScaling();
-}
-
 RectF NotationPaintView::toLogical(const RectF& rect) const
 {
-    double scale = guiScaling();
-
-    RectF scaledRect = rect;
-    scaledRect.setBottomRight(rect.bottomRight() * scale);
-
-    return m_matrix.inverted().map(scaledRect);
+    return m_matrix.inverted().map(rect);
 }
 
 bool NotationPaintView::isInited() const

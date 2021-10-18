@@ -60,7 +60,7 @@ Transform Transform::operator*(const Transform& m) const
         break;
     case TransformationType::Translate:
         t.m_affine.m_dx = m_affine.m_dx + m.m_affine.m_dx;
-        t.m_affine.m_dy += m_affine.m_dy + m.m_affine.m_dy;
+        t.m_affine.m_dy = m_affine.m_dy + m.m_affine.m_dy;
         break;
     case TransformationType::Scale:
     {

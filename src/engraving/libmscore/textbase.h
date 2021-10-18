@@ -323,7 +323,7 @@ public:
     Text& operator=(const Text&) = delete;
 
     virtual void draw(mu::draw::Painter*) const override;
-    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
+    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
     static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text);
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }

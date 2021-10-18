@@ -228,7 +228,7 @@ int NotationViewInputController::currentZoomIndex() const
 
 int NotationViewInputController::currentZoomPercentage() const
 {
-    return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling() / configuration()->guiScaling());
+    return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling());
 }
 
 void NotationViewInputController::setZoom(int zoomPercentage, const QPointF& pos)
@@ -241,7 +241,7 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPointF& pos
         configuration()->setCurrentZoom(correctedZoom);
     }
 
-    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * configuration()->notationScaling() * configuration()->guiScaling();
+    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * configuration()->notationScaling();
     m_view->setScaling(scaling, pos);
 }
 
@@ -286,7 +286,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         double zoomAmount = m_view->currentScaling() * qPow(zoomSpeed, absSteps);
         m_view->setScaling(zoomAmount, event->position());
     } else {
-        qreal correction = configuration()->guiScaling() / m_view->currentScaling();
+        qreal correction = 1.0 / m_view->currentScaling();
         if (keyState & Qt::ShiftModifier) {
             int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
             m_view->moveCanvasHorizontal(abs * correction);

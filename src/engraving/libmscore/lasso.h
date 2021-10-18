@@ -25,8 +25,9 @@
 
 #include "engravingitem.h"
 
-#include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -35,9 +36,10 @@ namespace Ms {
 
 class Lasso : public EngravingItem
 {
-public:
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
 
+public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
 

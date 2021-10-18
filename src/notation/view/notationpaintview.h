@@ -132,7 +132,6 @@ protected:
 
     void moveCanvasToCenter();
     void moveCanvasToPosition(const PointF& logicPos);
-    double guiScaling() const;
 
     RectF notationContentRect() const;
 

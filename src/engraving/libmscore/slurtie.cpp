@@ -394,7 +394,7 @@ void SlurTieSegment::read(XmlReader& e)
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
 {
     using namespace mu::draw;
     PolygonF polygon(7);
