@@ -54,6 +54,7 @@ import "tremolobars"
 import "mmrests"
 import "tremolos"
 import "measurerepeats"
+import "tuplets"
 
 Loader {
     id: root
@@ -117,6 +118,7 @@ Loader {
             case Inspector.TYPE_TREMOLOBAR: return tremoloBarComp
             case Inspector.TYPE_TREMOLO: return tremoloComp
             case Inspector.TYPE_MEASURE_REPEAT: return measureRepeatComp
+            case Inspector.TYPE_TUPLET: return tupletComp
             }
 
             return null
@@ -294,5 +296,10 @@ Loader {
     Component {
         id: measureRepeatComp
         MeasureRepeatSettings { }
+    }
+
+    Component {
+        id: tupletComp
+        TupletSettings {}
     }
 }
