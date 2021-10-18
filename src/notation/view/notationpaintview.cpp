@@ -688,6 +688,10 @@ void NotationPaintView::setScaling(qreal scaling, const QPointF& pos)
 {
     qreal currentScaling = this->currentScaling();
 
+    IF_ASSERT_FAILED(!qFuzzyIsNull(scaling)) {
+        return;
+    }
+
     if (qFuzzyCompare(currentScaling, scaling)) {
         return;
     }
