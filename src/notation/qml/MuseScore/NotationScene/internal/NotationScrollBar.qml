@@ -178,6 +178,7 @@ Item {
 
             PropertyChanges {
                 target: root
+                anchors.rightMargin: root.thickness // avoid clash with vertical scrollbar
                 height: root.thickness + 2 * root.padding
             }
 
@@ -203,6 +204,7 @@ Item {
 
             PropertyChanges {
                 target: root
+                anchors.bottomMargin: root.thickness // avoid clash with horizontal scrollbar
                 width: root.thickness + 2 * root.padding
             }
 
