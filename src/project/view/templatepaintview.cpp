@@ -79,8 +79,8 @@ qreal TemplatePaintView::resolveDefaultScaling() const
 
     RectF notationRect = notationContentRect();
 
-    qreal widthScaling = width() * guiScaling() / notationRect.width() / PROPORTION_FACTOR;
-    qreal heightScaling = height() * guiScaling() / notationRect.height() / PROPORTION_FACTOR;
+    qreal widthScaling = width() / notationRect.width() / PROPORTION_FACTOR;
+    qreal heightScaling = height() / notationRect.height() / PROPORTION_FACTOR;
 
     return std::min(widthScaling, heightScaling);
 }

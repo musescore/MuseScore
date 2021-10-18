@@ -1781,6 +1781,12 @@ void NotationInteraction::resetAnchorLines()
     m_anchorLines.clear();
 }
 
+double NotationInteraction::currentScaling(mu::draw::Painter* painter) const
+{
+    qreal guiScaling = configuration()->guiScaling();
+    return painter->worldTransform().m11() / guiScaling;
+}
+
 void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
 {
     if (m_anchorLines.empty()) {
@@ -1788,13 +1794,13 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    mu::draw::Pen pen(dropAnchorColor, 2.0 / painter->worldTransform().m11(), mu::draw::PenStyle::DotLine);
+    mu::draw::Pen pen(dropAnchorColor, 2.0 / currentScaling(painter), mu::draw::PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
         painter->drawLine(anchor);
 
-        qreal d = 4.0 / painter->worldTransform().m11();
+        qreal d = 4.0 / currentScaling(painter);
         RectF rect(-d, -d, 2 * d, 2 * d);
 
         painter->setBrush(mu::draw::Brush(dropAnchorColor));
@@ -1812,7 +1818,7 @@ void NotationInteraction::drawTextEditMode(draw::Painter* painter)
         return;
     }
 
-    m_textEditData.element->drawEditMode(painter, m_textEditData);
+    m_textEditData.element->drawEditMode(painter, m_textEditData, currentScaling(painter));
 }
 
 void NotationInteraction::drawSelectionRange(draw::Painter* painter)
@@ -1825,7 +1831,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
-    qreal penWidth = 3.0 / painter->worldTransform().m11();
+    qreal penWidth = 3.0 / currentScaling(painter);
 
     Pen pen;
     pen.setColor(selectionColor);
@@ -1854,12 +1860,9 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
     m_gripEditData.grip.resize(m_gripEditData.grips);
 
     constexpr qreal DEFAULT_GRIP_SIZE = 8;
-
-    qreal guiScaling = configuration()->guiScaling();
-
-    qreal gripWidth = DEFAULT_GRIP_SIZE * guiScaling / painter->worldTransform().m11();
-    qreal gripHeight = DEFAULT_GRIP_SIZE * guiScaling / painter->worldTransform().m22();
-    RectF newRect(-gripWidth / 2, -gripHeight / 2, gripWidth, gripHeight);
+    qreal scaling = currentScaling(painter);
+    qreal gripSize = DEFAULT_GRIP_SIZE / scaling;
+    RectF newRect(-gripSize / 2, -gripSize / 2, gripSize, gripSize);
 
     EngravingItem* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
     PointF pageOffset = page ? page->pos() : m_gripEditData.element->pos();
@@ -1869,7 +1872,7 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
     }
 
     m_gripEditData.element->updateGrips(m_gripEditData);
-    m_gripEditData.element->drawEditMode(painter, m_gripEditData);
+    m_gripEditData.element->drawEditMode(painter, m_gripEditData, currentScaling(painter));
 }
 
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)

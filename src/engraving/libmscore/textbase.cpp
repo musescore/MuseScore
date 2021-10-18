@@ -3372,7 +3372,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
 //    draw edit mode decorations
 //---------------------------------------------------------
 
-void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
 {
     using namespace mu::draw;
     PointF pos(canvasPos());
@@ -3424,9 +3424,8 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         p->drawRect(cursor->cursorRect());
     }
 
-    Transform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 2.0 / transform.m11())); // 2 pixel pen size
+    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();

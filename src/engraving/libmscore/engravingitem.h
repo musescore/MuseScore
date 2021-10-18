@@ -576,7 +576,7 @@ public:
 
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
-    virtual void drawEditMode(mu::draw::Painter*, EditData&);
+    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling);
 
     void autoplaceSegmentElement(bool above, bool add);          // helper functions
     void autoplaceMeasureElement(bool above, bool add);

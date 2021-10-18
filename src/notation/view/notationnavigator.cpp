@@ -76,10 +76,10 @@ void NotationNavigator::rescale()
 
     if (isVerticalOrientation()) {
         qreal scoreWidth = lastPage->width();
-        scaling = width() * guiScaling() / scoreWidth;
+        scaling = width() / scoreWidth;
     } else {
         qreal scoreHeight = lastPage->height();
-        scaling = height() * guiScaling() / scoreHeight;
+        scaling = height() / scoreHeight;
     }
 
     if (qFuzzyIsNull(scaling)) {
