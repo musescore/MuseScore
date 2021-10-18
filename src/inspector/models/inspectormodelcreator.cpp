@@ -64,6 +64,7 @@
 #include "notation/tremolobars/tremolobarsettingsmodel.h"
 #include "notation/tremolos/tremolosettingsmodel.h"
 #include "notation/measurerepeats/measurerepeatsettingsmodel.h"
+#include "notation/tuplets/tupletsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -161,6 +162,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new TremoloSettingsModel(parent, repository);
     case InspectorModelType::TYPE_MEASURE_REPEAT:
         return new MeasureRepeatSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_TUPLET:
+        return new TupletSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_DYNAMIC:

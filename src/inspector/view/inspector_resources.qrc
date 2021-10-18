@@ -86,6 +86,7 @@
         <file>qml/MuseScore/Inspector/notation/measurerepeats/MeasureRepeatSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/brackets/BraceSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationSingleElementView.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>

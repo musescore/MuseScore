@@ -151,7 +151,8 @@ static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
     Ms::ElementType::MEASURE_NUMBER,
     Ms::ElementType::REHEARSAL_MARK,
     Ms::ElementType::STICKING,
-    Ms::ElementType::TEMPO_TEXT
+    Ms::ElementType::TEMPO_TEXT,
+    Ms::ElementType::TUPLET
 };
 }
 
