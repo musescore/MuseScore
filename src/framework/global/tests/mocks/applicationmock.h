@@ -19,32 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "application.h"
+#ifndef MU_FRAMEWORK_APPLICATIONMOCK_H
+#define MU_FRAMEWORK_APPLICATIONMOCK_H
 
-#include <QApplication>
+#include <gmock/gmock.h>
 
-using namespace mu::framework;
+#include "framework/global/iapplication.h"
 
-void Application::setRunMode(const RunMode& mode)
+namespace mu::framework {
+class ApplicationMock : public IApplication
 {
-    m_runMode = mode;
+public:
+    MOCK_METHOD(void, setRunMode, (const RunMode&), (override));
+    MOCK_METHOD(RunMode, runMode, (), (const, override));
+    MOCK_METHOD(bool, noGui, (), (const, override));
+
+    MOCK_METHOD(bool, notify, (QObject*, QEvent*), (override));
+};
 }
 
-IApplication::RunMode Application::runMode() const
-{
-    return m_runMode;
-}
-
-bool Application::noGui() const
-{
-    switch (m_runMode) {
-    case RunMode::Editor: return false;
-    case RunMode::Converter: return true;
-    }
-    return false;
-}
-
-bool Application::notify(QObject* object, QEvent* event)
-{
-    return qApp->notify(object, event);
-}
+#endif // MU_FRAMEWORK_APPLICATIONMOCK_H

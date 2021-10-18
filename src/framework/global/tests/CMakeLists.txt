@@ -24,6 +24,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uri_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/val_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logremover_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/applicationmock.h
 )
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
