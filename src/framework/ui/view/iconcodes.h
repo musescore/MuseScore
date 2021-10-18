@@ -321,8 +321,14 @@ public:
         MUTE = 0xF3D5,
         SOLO = 0xF3D6,
 
+        DIMINUENDO = 0xF414,
+        CRESCENDO = 0xF415,
+
         NOTEFLAGS_TRADITIONAL = 0xF420,
         NOTEFLAGS_STRAIGHT = 0xF421,
+
+        TUPLET_NUMBER_WITH_BRACKETS = 0xF422,
+        TUPLET_NUMBER_ONLY = 0xF423,
 
         NONE
     };
