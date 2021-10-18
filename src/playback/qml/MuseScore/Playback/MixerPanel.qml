@@ -61,33 +61,8 @@ Rectangle {
         contentHeight: contentColumn.height
         interactive: height < contentHeight || width < contentWidth
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-            policy: ScrollBar.AlwaysOn
-            active: true
-
-            //!Note Scrollbars attached to Flickable have their properties (like active) being set by Flickable automatically
-            //      So it completely ignores the policy and such other stuff
-            //      In order to set our own behaviour we have to common approaches:
-            //      - 1 - Explicitly override changes from Flickable in according handlers (current approach)
-            //      - 2 - Use non-attached ScrollBars as a child objects to Flickable, but in this case we'll have to re-implement
-            //            communication among them from scratch
-            onActiveChanged: {
-                if (!active) {
-                    active = true
-                }
-            }
-        }
-
-        ScrollBar.horizontal: StyledScrollBar {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottomMargin: 8
-        }
+        ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
+        ScrollBar.horizontal: StyledScrollBar {}
 
         NavigationPanel {
             id: navPanel

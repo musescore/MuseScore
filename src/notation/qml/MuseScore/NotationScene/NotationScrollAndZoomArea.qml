@@ -23,9 +23,10 @@ import QtQuick 2.15
 
 import MuseScore.NotationScene 1.0
 
+import "internal"
+
 PinchArea {
-    default property NotationPaintView notationView: null
-    data: [ notationView ]
+    required default property NotationPaintView notationView
 
     onPinchUpdated: function(pinch) {
         notationView.scale(pinch.scale / pinch.previousScale, pinch.center)
@@ -34,5 +35,31 @@ PinchArea {
     // A macOS feature which allows double-tapping with two fingers to zoom in or out
     onSmartZoom: function(pinch) {
         notationView.scale(pinch.scale === 0 ? 0.5 : 2, pinch.center)
+    }
+
+    children: [ notationView, horizontalScrollBar, verticalScrollBar ]
+
+    NotationScrollBar {
+        id: horizontalScrollBar
+        orientation: Qt.Horizontal
+
+        size: notationView.horizontalScrollbarSize
+        position: notationView.startHorizontalScrollPosition
+
+        onMoved: function(newPosition) {
+            notationView.scrollHorizontal(newPosition)
+        }
+    }
+
+    NotationScrollBar {
+        id: verticalScrollBar
+        orientation: Qt.Vertical
+
+        size: notationView.verticalScrollbarSize
+        position: notationView.startVerticalScrollPosition
+
+        onMoved: function(newPosition) {
+            notationView.scrollVertical(newPosition)
+        }
     }
 }

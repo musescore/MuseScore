@@ -100,7 +100,6 @@ FocusScope {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 16
 
             visible: view.contentHeight > view.height
             z: 1

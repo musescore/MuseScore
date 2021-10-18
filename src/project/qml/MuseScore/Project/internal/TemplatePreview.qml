@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
@@ -51,7 +50,7 @@ Item {
         font: ui.theme.bodyBoldFont
     }
 
-    NotationZoomPinchArea {
+    NotationScrollAndZoomArea {
         anchors.top: title.bottom
         anchors.topMargin: 16
         anchors.bottom: parent.bottom
@@ -61,54 +60,6 @@ Item {
         TemplatePaintView {
             id: templateView
             anchors.fill: parent
-
-            onHorizontalScrollChanged: {
-                if (!horizontalScrollBar.pressed) {
-                    horizontalScrollBar.setPosition(templateView.startHorizontalScrollPosition)
-                }
-            }
-
-            onVerticalScrollChanged: {
-                if (!verticalScrollBar.pressed) {
-                    verticalScrollBar.setPosition(templateView.startVerticalScrollPosition)
-                }
-            }
-
-            StyledScrollBar {
-                id: verticalScrollBar
-
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-                orientation: Qt.Vertical
-
-                position: templateView.startVerticalScrollPosition
-                size: templateView.verticalScrollSize
-
-                onPositionChanged: {
-                    if (pressed) {
-                        templateView.scrollVertical(position)
-                    }
-                }
-            }
-
-            StyledScrollBar {
-                id: horizontalScrollBar
-
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                orientation: Qt.Horizontal
-
-                position: templateView.startHorizontalScrollPosition
-                size: templateView.horizontalScrollSize
-
-                onPositionChanged: {
-                    if (pressed) {
-                        templateView.scrollHorizontal(position)
-                    }
-                }
-            }
         }
     }
 

@@ -435,8 +435,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     PointF logicPos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers keyState = event->modifiers();
 
+    PointF dragDelta = logicPos - m_beginPoint;
     // start some drag operations after a minimum of movement:
-    bool isDrag = (logicPos - m_beginPoint).manhattanLength() > 4;
+    bool isDrag = dragDelta.manhattanLength() > 4;
     if (!isDrag) {
         return;
     }
@@ -474,15 +475,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-    PointF d = logicPos - m_beginPoint;
-    int dx = d.x();
-    int dy = d.y();
-
-    if (dx == 0 && dy == 0) {
-        return;
-    }
-
-    m_view->moveCanvas(dx, dy);
+    m_view->moveCanvas(dragDelta.x(), dragDelta.y());
     m_isCanvasDragged = true;
 }
 
