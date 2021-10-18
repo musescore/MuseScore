@@ -129,15 +129,17 @@ FocusScope {
 
                 visible: bar.canFilterByCategories
 
-                property string selectedCategory: Boolean(currentValue) ? currentValue : ""
+                readonly property string allCategoryValue: "ALL_CATEGORY"
+                property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
 
                 displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+                currentIndex: indexOfValue(allCategoryValue)
 
                 function initModel() {
                     var categories = bar.categories()
                     var result = []
 
-                    result.push({ "text": qsTrc("appshell", "All"), "value": "" })
+                    result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
 
                     for (var i = 0; i < categories.length; ++i) {
                         var category = categories[i]
@@ -261,6 +263,8 @@ FocusScope {
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
 
         ExtensionsPage {
@@ -276,7 +280,7 @@ FocusScope {
             id: languagesComp
 
             navigation.section: navSec
-            navigation.order: 3
+            navigation.order: 8
             search: searchField.searchText
             backgroundColor: root.color
 
