@@ -137,6 +137,13 @@ set(MODULE_LINK
     accessibility
     )
 
+if (OS_IS_LIN)
+# it needed to send a spontaneous event by activating navigation
+set(MODULE_INCLUDE
+    ${Qt5Core_PRIVATE_INCLUDE_DIRS}
+    )
+endif()
+
 if (OS_IS_MAC)
     find_library(AppKit NAMES AppKit)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})

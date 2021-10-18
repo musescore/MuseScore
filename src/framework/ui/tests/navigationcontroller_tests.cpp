@@ -24,16 +24,24 @@
 #include <vector>
 #include <map>
 
+#include <QWindow>
+#include <QKeyEvent>
+
 #include "ui/internal/navigationcontroller.h"
 #include "actions/internal/actionsdispatcher.h"
 
 #include "mocks/navigationmocks.h"
+#include "mocks/mainwindowprovidermock.h"
+#include "global/tests/mocks/applicationmock.h"
 
 #include "log.h"
 
 using ::testing::Return;
 using ::testing::ReturnRef;
 using ::testing::NiceMock;
+using ::testing::_;
+using ::testing::SaveArgPointee;
+using ::testing::DoAll;
 
 using namespace mu;
 using namespace mu::ui;
@@ -45,6 +53,8 @@ public:
     struct Env {
         NavigationController controller;
         std::shared_ptr<actions::IActionsDispatcher> dispatcher;
+        std::shared_ptr<MainWindowProviderMock> mainWindow;
+        std::shared_ptr<framework::ApplicationMock> application;
 
         //! NOTE Garbage and references
         std::vector<INavigation::Index> idxsRefs;
@@ -55,6 +65,12 @@ public:
             controller.setdispatcher(dispatcher);
 
             controller.init();
+
+            mainWindow = std::make_shared<MainWindowProviderMock>();
+            controller.setmainWindow(mainWindow);
+
+            application = std::make_shared<framework::ApplicationMock>();
+            controller.setapplication(application);
 
             idxsRefs.reserve(10000);
         }
@@ -181,6 +197,27 @@ public:
             }
         }
     }
+
+    QEvent expectSendingEventOnNavigation(Env& env)
+    {
+        QEvent event(QEvent::None);
+
+#ifdef Q_OS_LINUX
+        //! For Linux it needs to send spontanous event for canceling reading the name of previous control on accessibility
+        QWindow* window = new QWindow();
+        EXPECT_CALL(*env.mainWindow, qWindow()).WillOnce(Return(window));
+        EXPECT_CALL(*env.application, notify(window, _)).WillOnce(DoAll(SaveArgPointee<1>(&event), Return(true)));
+#endif
+
+        return event;
+    }
+
+    void checkSendingEventOnNavigation(const QEvent& event)
+    {
+#ifdef Q_OS_LINUX
+        EXPECT_TRUE(event.spontaneous());
+#endif
+    }
 };
 
 TEST_F(NavigationControllerTests, FirstActiveOnNextSection)
@@ -204,8 +241,12 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextSection)
     //! CHECK The second section must not be activated
     EXPECT_CALL(*sect2->section, setActive(true)).Times(0);
 
+    QEvent event = expectSendingEventOnNavigation(env);
+
     //! DO Send action `nav-next-section` (usually F6)
     env.dispatcher->dispatch("nav-next-section");
+
+    checkSendingEventOnNavigation(event);
 
     delete sect1;
     delete sect2;
@@ -232,8 +273,12 @@ TEST_F(NavigationControllerTests, FirstActiveOnNextPanel)
     //! CHECK The second section must not be activated
     EXPECT_CALL(*sect2->section, setActive(true)).Times(0);
 
+    QEvent event = expectSendingEventOnNavigation(env);
+
     //! DO Send action `nav-next-section` (usually Tab)
     env.dispatcher->dispatch("nav-next-panel");
+
+    checkSendingEventOnNavigation(event);
 
     delete sect1;
     delete sect2;
@@ -260,8 +305,12 @@ TEST_F(NavigationControllerTests, FirstActiveOnPrevSection)
     //! CHECK The first section must not be activated
     EXPECT_CALL(*sect1->section, setActive(true)).Times(0);
 
+    QEvent event = expectSendingEventOnNavigation(env);
+
     //! DO Send action `nav-next-section` (usually Shift+F6)
     env.dispatcher->dispatch("nav-prev-section");
+
+    checkSendingEventOnNavigation(event);
 
     delete sect1;
     delete sect2;
@@ -288,8 +337,12 @@ TEST_F(NavigationControllerTests, FirstActiveOnPrevPanel)
     //! CHECK The first section must not be activated
     EXPECT_CALL(*sect1->section, setActive(true)).Times(0);
 
+    QEvent event = expectSendingEventOnNavigation(env);
+
     //! DO Send action `nav-next-section` (usually Shift+Tab)
     env.dispatcher->dispatch("nav-prev-panel");
+
+    checkSendingEventOnNavigation(event);
 
     delete sect1;
     delete sect2;

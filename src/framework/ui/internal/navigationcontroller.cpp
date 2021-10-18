@@ -21,10 +21,17 @@
  */
 #include "navigationcontroller.h"
 
-#include <QCoreApplication>
 #include <algorithm>
 #include <limits>
 #include <utility>
+
+#include <QCoreApplication>
+#include <QWindow>
+#include <QKeyEvent>
+
+#ifdef Q_OS_LINUX
+#include <private/qcoreapplication_p.h>
+#endif
 
 #include "diagnostics/diagnosticutils.h"
 #include "async/async.h"
@@ -268,26 +275,26 @@ static T* findByIndex(const std::set<T*>& set, const INavigation::Index& idx)
 
 void NavigationController::init()
 {
-    dispatcher()->reg(this, "nav-next-section", this, &NavigationController::goToNextSection);
-    dispatcher()->reg(this, "nav-prev-section", [this]() { goToPrevSection(false); });
-    dispatcher()->reg(this, "nav-next-panel", this, &NavigationController::goToNextPanel);
-    dispatcher()->reg(this, "nav-prev-panel", this, &NavigationController::goToPrevPanel);
+    dispatcher()->reg(this, "nav-next-section", [this]() { navigateTo(NavigationType::NextSection); });
+    dispatcher()->reg(this, "nav-prev-section", [this]() { navigateTo(NavigationType::PrevSection); });
+    dispatcher()->reg(this, "nav-next-panel", [this]() { navigateTo(NavigationType::NextPanel); });
+    dispatcher()->reg(this, "nav-prev-panel", [this]() { navigateTo(NavigationType::PrevPanel); });
     //! NOTE Same as panel at the moment
-    dispatcher()->reg(this, "nav-next-tab", this, &NavigationController::goToNextPanel);
-    dispatcher()->reg(this, "nav-prev-tab", this, &NavigationController::goToPrevPanel);
+    dispatcher()->reg(this, "nav-next-tab", [this]() { navigateTo(NavigationType::NextPanel); });
+    dispatcher()->reg(this, "nav-prev-tab", [this]() { navigateTo(NavigationType::PrevPanel); });
 
-    dispatcher()->reg(this, "nav-trigger-control", this, &NavigationController::doTriggerControl);
+    dispatcher()->reg(this, "nav-trigger-control", [this]() { navigateTo(NavigationType::TriggerControl); });
 
-    dispatcher()->reg(this, "nav-right", this, &NavigationController::onRight);
-    dispatcher()->reg(this, "nav-left", this, &NavigationController::onLeft);
-    dispatcher()->reg(this, "nav-up", this, &NavigationController::onUp);
-    dispatcher()->reg(this, "nav-down", this, &NavigationController::onDown);
-    dispatcher()->reg(this, "nav-escape", this, &NavigationController::onEscape);
+    dispatcher()->reg(this, "nav-right", [this]() { navigateTo(NavigationType::Right); });
+    dispatcher()->reg(this, "nav-left", [this]() { navigateTo(NavigationType::Left); });
+    dispatcher()->reg(this, "nav-up", [this]() { navigateTo(NavigationType::Up); });
+    dispatcher()->reg(this, "nav-down", [this]() { navigateTo(NavigationType::Down); });
+    dispatcher()->reg(this, "nav-escape", [this]() { navigateTo(NavigationType::Escape); });
 
-    dispatcher()->reg(this, "nav-first-control", this, &NavigationController::goToFirstControl);         // typically Home key
-    dispatcher()->reg(this, "nav-last-control", this, &NavigationController::goToLastControl);           // typically End key
-    dispatcher()->reg(this, "nav-nextrow-control", this, &NavigationController::goToNextRowControl);     // typically PageDown key
-    dispatcher()->reg(this, "nav-prevrow-control", this, &NavigationController::goToPrevRowControl);     // typically PageUp key
+    dispatcher()->reg(this, "nav-first-control", [this]() { navigateTo(NavigationType::FirstControl); });         // typically Home key
+    dispatcher()->reg(this, "nav-last-control", [this]() { navigateTo(NavigationType::LastControl); });           // typically End key
+    dispatcher()->reg(this, "nav-nextrow-control", [this]() { navigateTo(NavigationType::NextRowControl); });     // typically PageDown key
+    dispatcher()->reg(this, "nav-prevrow-control", [this]() { navigateTo(NavigationType::PrevRowControl); });     // typically PageUp key
 
     qApp->installEventFilter(this);
 }
@@ -342,6 +349,64 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
     }
 
     return QObject::eventFilter(watched, event);
+}
+
+void NavigationController::navigateTo(NavigationController::NavigationType type)
+{
+#ifdef Q_OS_LINUX
+    //! HACK: it needs for canceling reading the name of previous control on accessibility
+    QKeyEvent* keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
+    QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
+    application()->notify(mainWindow()->qWindow(), keyEvent);
+#endif
+
+    switch (type) {
+    case NavigationType::NextSection:
+        goToNextSection();
+        break;
+    case NavigationType::PrevSection:
+        goToPrevSection(false);
+        break;
+    case NavigationType::PrevSectionActiveLastPanel:
+        goToPrevSection(true);
+        break;
+    case NavigationType::NextPanel:
+        goToNextPanel();
+        break;
+    case NavigationType::PrevPanel:
+        goToPrevPanel();
+        break;
+    case NavigationType::Left:
+        onLeft();
+        break;
+    case NavigationType::Right:
+        onRight();
+        break;
+    case NavigationType::Up:
+        onUp();
+        break;
+    case NavigationType::Down:
+        onDown();
+        break;
+    case NavigationType::Escape:
+        onEscape();
+        break;
+    case NavigationType::TriggerControl:
+        doTriggerControl();
+        break;
+    case NavigationType::FirstControl:
+        goToFirstControl();
+        break;
+    case NavigationType::LastControl:
+        goToLastControl();
+        break;
+    case NavigationType::NextRowControl:
+        goToNextRowControl();
+        break;
+    case NavigationType::PrevRowControl:
+        goToPrevRowControl();
+        break;
+    }
 }
 
 void NavigationController::resetActive()
