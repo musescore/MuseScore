@@ -181,7 +181,12 @@ const UiActionList ApplicationUiActions::m_actions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Check for updates"),
              QT_TRANSLATE_NOOP("action", "Check for updates")
-             )
+             ),
+    UiAction("manage-plugins",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Manage Plugins"),
+             QT_TRANSLATE_NOOP("action", "Install or remove plugins and change plugin settings")
+             ),
 };
 
 ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller)

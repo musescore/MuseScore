@@ -55,6 +55,7 @@ void AppMenuModel::load()
         addItem(),
         formatItem(),
         toolsItem(),
+        pluginsItem(),
         helpItem(),
 #ifdef BUILD_DIAGNOSTICS
         diagnosticItem()
@@ -288,6 +289,18 @@ MenuItem AppMenuModel::toolsItem() const
     };
 
     return makeMenu(qtrc("appshell", "&Tools"), toolsItems);
+}
+
+MenuItem AppMenuModel::pluginsItem() const
+{
+    MenuItemList pluginsItems {
+        makeMenuItem("manage-plugins"),
+//        makeSeparator(),
+//        makeMenuItem("run-plugin-color-notes"), // need implement
+//        makeMenuItem("run-plugin-hello-qml"), // need implement
+    };
+
+    return makeMenu(qtrc("appshell", "&Plugins"), pluginsItems);
 }
 
 MenuItem AppMenuModel::helpItem() const

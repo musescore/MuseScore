@@ -69,6 +69,7 @@ private:
     void openBugReportPage();
     void openLeaveFeedbackPage();
     void openPreferencesDialog();
+    void openAddonsPlugins();
 
     void revertToFactorySettings();
 

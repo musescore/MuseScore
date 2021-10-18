@@ -48,6 +48,7 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
     dispatcher()->reg(this, "leave-feedback", this, &ApplicationActionController::openLeaveFeedbackPage);
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
+    dispatcher()->reg(this, "manage-plugins", this, &ApplicationActionController::openAddonsPlugins);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 
@@ -140,6 +141,11 @@ void ApplicationActionController::openPreferencesDialog()
     }
 
     interactive()->open("musescore://preferences");
+}
+
+void ApplicationActionController::openAddonsPlugins()
+{
+    interactive()->open("musescore://home?section=add-ons&subSection=plugins");
 }
 
 void ApplicationActionController::revertToFactorySettings()

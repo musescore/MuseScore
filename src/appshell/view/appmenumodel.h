@@ -58,6 +58,7 @@ private:
     ui::MenuItem addItem() const;
     ui::MenuItem formatItem() const;
     ui::MenuItem toolsItem() const;
+    ui::MenuItem pluginsItem() const;
     ui::MenuItem helpItem() const;
     ui::MenuItem diagnosticItem() const;
 
