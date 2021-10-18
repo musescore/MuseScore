@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 
@@ -36,6 +37,8 @@ Item {
 
     property int sideMargin: 46
 
+    property NavigationSection navigationSection: null
+
     function categories() {
         return pluginsModel.categories()
     }
@@ -45,6 +48,12 @@ Item {
 
         onFinished: {
             panel.close()
+
+            if (installedPluginsView.count > 0) {
+                installedPluginsView.focusOnFirst()
+            } else {
+                notInstalledPluginsView.focusOnFirst()
+            }
         }
     }
 
@@ -139,9 +148,13 @@ Item {
 
                 model: pluginsModel
 
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "InstalledPlugins"
+                navigationPanel.order: 4
+
                 onPluginClicked: {
                     prv.selectedPlugin = plugin
-                    panel.open()
+                    panel.open(navigationControl)
                 }
             }
 
@@ -157,9 +170,13 @@ Item {
 
                 model: pluginsModel
 
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "NotInstalledPlugins"
+                navigationPanel.order: 5
+
                 onPluginClicked: {
                     prv.selectedPlugin = Object.assign({}, plugin)
-                    panel.open()
+                    panel.open(navigationControl)
                 }
             }
         }
