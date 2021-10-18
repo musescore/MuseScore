@@ -35,17 +35,15 @@ using IconCode = mu::ui::IconCode::Code;
 HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
     : LineSettingsModel(parent, repository)
 {
-    QString title = qtrc("inspector", "Crescendo");
-    InspectorModelType type = InspectorModelType::TYPE_CRESCENDO;
-
     if (lineType == Diminuendo) {
-        title = qtrc("inspector", "Diminuendo");
-        type = InspectorModelType::TYPE_DIMINUENDO;
+        setModelType(InspectorModelType::TYPE_DIMINUENDO);
+        setTitle(qtrc("inspector", "Diminuendo"));
+        setIcon(ui::IconCode::Code::DIMINUENDO);
+    } else {
+        setModelType(InspectorModelType::TYPE_CRESCENDO);
+        setTitle(qtrc("inspector", "Crescendo"));
+        setIcon(ui::IconCode::Code::CRESCENDO);
     }
-
-    setModelType(type);
-    setTitle(title);
-    setIcon(ui::IconCode::Code::CRESCENDO_LINE);
 
     static const QList<HookTypeInfo> hookTypes {
         { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },

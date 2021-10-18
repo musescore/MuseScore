@@ -61,7 +61,7 @@ Column {
         propertyItem: root.model ? root.model.numberType : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
+        navigationRowStart: directionSection.navigationRowEnd + 1
 
         model: root.model ? root.model.possibleNumberTypes() : null
     }
@@ -72,7 +72,7 @@ Column {
         propertyItem: root.model ? root.model.bracketType : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
+        navigationRowStart: numberTypeSection.navigationRowEnd + 1
 
         model: root.model ? root.model.possibleBracketTypes() : null
     }
@@ -85,7 +85,7 @@ Column {
         propertyItem: root.model ? root.model.lineThickness : null
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
+        navigationRowStart: bracketTypeSection.navigationRowEnd + 1
 
         minValue: 0.1
         maxValue: 1
