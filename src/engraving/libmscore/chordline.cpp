@@ -168,7 +168,7 @@ void ChordLine::read(XmlReader& e)
             int state = 0;
             while (e.readNextStartElement()) {
                 const QStringRef& nextTag(e.name());
-                if (nextTag == "EngravingItem") {
+                if (nextTag == "Element") {
                     int type = e.intAttribute("type");
                     qreal x  = e.doubleAttribute("x");
                     qreal y  = e.doubleAttribute("y");
@@ -231,8 +231,8 @@ void ChordLine::write(XmlWriter& xml) const
         size_t n = path.elementCount();
         xml.startObject("Path");
         for (size_t i = 0; i < n; ++i) {
-            const PainterPath::EngravingItem& e = path.elementAt(i);
-            xml.tagE(QString("EngravingItem type=\"%1\" x=\"%2\" y=\"%3\"")
+            const PainterPath::Element& e = path.elementAt(i);
+            xml.tagE(QString("Element type=\"%1\" x=\"%2\" y=\"%3\"")
                      .arg(int(e.type)).arg(e.x).arg(e.y));
         }
         xml.endObject();
@@ -317,13 +317,13 @@ void ChordLine::editDrag(EditData& ed)
     qreal dx = ed.delta.x() / sp;
     qreal dy = ed.delta.y() / sp;
     for (size_t i = 0; i < n; ++i) {
-        const PainterPath::EngravingItem& e = (_straight ? path.elementAt(1) : path.elementAt(i));
+        const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
         if (_straight) {
             if (i > 0) {
                 break;
             }
             // check the gradient of the line
-            const PainterPath::EngravingItem& startPoint = path.elementAt(0);
+            const PainterPath::Element& startPoint = path.elementAt(0);
             if ((_chordLineType == ChordLineType::FALL && (e.x + dx < startPoint.x || e.y + dy < startPoint.y))
                 || (_chordLineType == ChordLineType::DOIT && (e.x + dx < startPoint.x || e.y + dy > startPoint.y))
                 || (_chordLineType == ChordLineType::SCOOP && (e.x + dx > startPoint.x || e.y + dy < startPoint.y))

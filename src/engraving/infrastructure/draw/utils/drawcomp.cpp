@@ -217,8 +217,8 @@ static bool isEqual(const PainterPath& v1, const PainterPath& v2, double toleran
     }
 
     for (size_t i = 0; i < v1.elementCount(); ++i) {
-        PainterPath::EngravingItem e1 = v1.elementAt(i);
-        PainterPath::EngravingItem e2 = v2.elementAt(i);
+        PainterPath::Element e1 = v1.elementAt(i);
+        PainterPath::Element e2 = v2.elementAt(i);
 
         if (e1.type != e2.type) {
             return false;

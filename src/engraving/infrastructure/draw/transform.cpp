@@ -440,7 +440,7 @@ PainterPath Transform::map(const PainterPath& path) const
     } else {
         // Full xform
         for (size_t i = 0; i < path.elementCount(); ++i) {
-            PainterPath::EngravingItem& e = copy.m_elements[i];
+            PainterPath::Element& e = copy.m_elements[i];
             mapElement(e.x, e.y, t);
         }
     }
