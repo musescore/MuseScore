@@ -76,22 +76,13 @@ ListView {
         }
     }
 
-
     QtObject {
         id: prv
 
         property var currentItemNavigationName: []
     }
 
-    ScrollBar.vertical: StyledScrollBar {
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-
-        visible: root.contentHeight > root.height
-        z: 1
-    }
+    ScrollBar.vertical: StyledScrollBar {}
 
     delegate: ListItemBlank {
         id: itemDelegate

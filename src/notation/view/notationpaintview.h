@@ -58,9 +58,9 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
-    Q_PROPERTY(qreal horizontalScrollSize READ horizontalScrollSize NOTIFY horizontalScrollChanged)
+    Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
-    Q_PROPERTY(qreal verticalScrollSize READ verticalScrollSize NOTIFY verticalScrollChanged)
+    Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QRect viewport READ viewport NOTIFY viewportChanged)
@@ -85,7 +85,7 @@ public:
 
     PointF toLogical(const QPoint& point) const override;
 
-    Q_INVOKABLE void moveCanvas(int dx, int dy) override;
+    Q_INVOKABLE bool moveCanvas(int dx, int dy) override;
     void moveCanvasVertical(int dy) override;
     void moveCanvasHorizontal(int dx) override;
 
@@ -103,9 +103,9 @@ public:
     INotationPlaybackPtr notationPlayback() const override;
 
     qreal startHorizontalScrollPosition() const;
-    qreal horizontalScrollSize() const;
+    qreal horizontalScrollbarSize() const;
     qreal startVerticalScrollPosition() const;
-    qreal verticalScrollSize() const;
+    qreal verticalScrollbarSize() const;
 
     QColor backgroundColor() const;
     QRect viewport() const;
@@ -174,11 +174,11 @@ private:
     void dropEvent(QDropEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
-    QRectF canvasRect() const;
+    void ensureViewportInsideScrollableArea();
 
-    qreal horizontalScrollableAreaSize() const;
+    QRectF scrollableAreaRect() const;
+
     qreal horizontalScrollableSize() const;
-    qreal verticalScrollableAreaSize() const;
     qreal verticalScrollableSize() const;
 
     void adjustCanvasPosition(const QRectF& logicRect);

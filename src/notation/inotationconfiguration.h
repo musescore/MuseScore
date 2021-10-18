@@ -129,6 +129,7 @@ public:
 
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
+    virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
     virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;

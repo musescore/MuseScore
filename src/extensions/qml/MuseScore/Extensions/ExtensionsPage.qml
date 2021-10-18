@@ -112,7 +112,6 @@ Item {
             anchors.top: parent.top
             anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 16
 
             visible: flickable.contentHeight > flickable.height
             z: 1
