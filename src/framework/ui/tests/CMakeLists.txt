@@ -24,6 +24,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mocks/navigationmocks.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/mainwindowprovidermock.h
     )
 
 set(MODULE_TEST_LINK

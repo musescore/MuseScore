@@ -31,6 +31,7 @@
 #include "actions/actionable.h"
 #include "async/asyncable.h"
 #include "global/iinteractive.h"
+#include "global/iapplication.h"
 #include "../imainwindow.h"
 
 namespace mu::ui {
@@ -38,6 +39,7 @@ class NavigationController : public QObject, public INavigationController, publi
 {
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
     INJECT(ui, framework::IInteractive, interactive)
+    INJECT(ui, framework::IApplication, application)
     INJECT(ui, IMainWindow, mainWindow)
 
 public:
