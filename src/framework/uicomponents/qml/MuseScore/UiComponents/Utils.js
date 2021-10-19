@@ -38,3 +38,17 @@ function colorToString(color) {
 
     return text
 }
+
+function ensureContentVisible(flickable, contentRect, margins) {
+    var flicableBottomY = flickable.contentY + flickable.height
+    var contentBottomY = contentRect.y + contentRect.height
+
+    var flicableTopY = flickable.contentY
+    var contentTopY = contentRect.y
+
+    if (flicableBottomY < contentBottomY) {
+        flickable.contentY += contentBottomY - flicableBottomY + margins
+    } else if (flicableTopY > contentTopY) {
+        flickable.contentY -= flicableTopY - contentTopY + margins
+    }
+}

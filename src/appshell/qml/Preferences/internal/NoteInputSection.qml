@@ -48,7 +48,7 @@ BaseSection {
         navigation.row: 0
 
         onClicked: {
-            root.advanceToNextNoteOnKeyReleaseChangeRequested(!checked)
+            root.advanceToNextNoteChangeRequested(!checked)
         }
     }
 
@@ -63,7 +63,7 @@ BaseSection {
         navigation.row: 1
 
         onClicked: {
-            root.colorNotesOusideOfUsablePitchRangeChangeRequested(!checked)
+            root.colorNotesChangeRequested(!checked)
         }
     }
 

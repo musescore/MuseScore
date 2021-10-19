@@ -72,33 +72,14 @@ Rectangle {
         root.closed()
     }
 
-    NavigationPanel {
-        id: navPanel
-        name: root.objectName != "" ? root.objectName : "PopupPanel"
-
+    property NavigationSection navigationSection: NavigationSection {
+        name: root.objectName !== "" ? root.objectName : "PopupPanel"
+        type: NavigationSection.Exclusive
         enabled: root.enabled && root.visible
-        order: {
-            var pctrl = root.navigationParentControl;
-            if (pctrl) {
-                if (pctrl.panel) {
-                    return pctrl.panel.order + 1
-                }
-            }
-            return -1
-        }
-
-        section: {
-            var pctrl = root.navigationParentControl;
-            if (pctrl) {
-                if (pctrl.panel) {
-                    return pctrl.panel.section
-                }
-            }
-            return null
-        }
+        order: 1
 
         onActiveChanged: {
-            if (navPanel.active) {
+            if (active) {
                 root.forceActiveFocus()
             }
         }
@@ -106,6 +87,21 @@ Rectangle {
         onNavigationEvent: {
             if (event.type === NavigationEvent.Escape) {
                 root.close()
+            }
+        }
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: root.objectName != "" ? root.objectName : "PopupPanel"
+
+        enabled: root.visible
+        section: root.navigationSection
+        order: 2
+
+        onActiveChanged: {
+            if (navPanel.active) {
+                root.forceActiveFocus()
             }
         }
     }
@@ -126,6 +122,11 @@ Rectangle {
 
         icon: IconCode.CLOSE_X_ROUNDED
         transparent: true
+
+        navigation.name: "CloseButton"
+        navigation.panel: navPanel
+        navigation.column: 1
+        navigation.accessible.name: qsTrc("general", "Close")
 
         onClicked: {
             close()

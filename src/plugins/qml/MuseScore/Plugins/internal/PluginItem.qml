@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Item {
@@ -32,6 +33,20 @@ Item {
     property bool selected: false
 
     signal clicked()
+
+    property NavigationControl navigation: NavigationControl{
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.name
+        enabled: root.enabled && root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.clicked()
+    }
 
     Image {
         id: thumbnail
@@ -61,6 +76,10 @@ Item {
 
         border.color: ui.theme.fontPrimaryColor
         border.width: root.selected ? 2 : 0
+
+        NavigationFocusBorder {
+            navigationCtrl: root.navigation
+        }
     }
 
     StyledTextLabel {

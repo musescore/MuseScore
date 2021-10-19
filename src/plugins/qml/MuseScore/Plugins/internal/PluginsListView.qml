@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 
@@ -36,12 +37,26 @@ Item {
     property string selectedCategory: ""
     property bool installed: false
 
-    signal pluginClicked(var plugin)
+    property var flickableItem: null
+    property int headerHeight: view.headerItem.height
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PluginsListView"
+        direction: NavigationPanel.Both
+        accessible.name: root.title
+    }
+
+    signal pluginClicked(var plugin, var navigationControl)
+    signal navigationActivated(var itemRect)
 
     height: view.height
 
     function resetSelectedPlugin() {
         view.currentIndex = -1
+    }
+
+    function focusOnFirst() {
+        view.itemAtIndex(0).requestActive()
     }
 
     SortFilterProxyModel {
@@ -69,11 +84,13 @@ Item {
     GridView {
         id: view
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-
         readonly property int sideMargin: 28
 
+        property int rows: Math.max(0, Math.floor(height / cellHeight))
+        property int columns: Math.max(0, Math.floor(width / cellWidth))
+
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.leftMargin: -sideMargin
         anchors.rightMargin: -sideMargin
 
@@ -112,7 +129,12 @@ Item {
             height: view.cellHeight
             width: view.cellWidth
 
+            function requestActive() {
+                _item.navigation.requestActive()
+            }
+
             PluginItem {
+                id: _item
                 anchors.centerIn: parent
 
                 name: model.name
@@ -122,12 +144,21 @@ Item {
                 height: 206
                 width: 296
 
+                navigation.panel: root.navigationPanel
+                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
+                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    var pos = _item.mapToItem(root.flickableItem, 0, 0)
+                    var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
+                    root.navigationActivated(rect)
+                }
+
                 onClicked: {
                     forceActiveFocus()
 
                     view.positionViewAtIndex(index, GridView.Visible)
                     view.currentIndex = index
-                    root.pluginClicked(model)
+                    root.pluginClicked(model, navigation)
                 }
             }
         }

@@ -25,7 +25,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Languages 1.0
 
-Rectangle {
+ListItemBlank {
     id: root
 
     property string title: ""
@@ -34,38 +34,14 @@ Rectangle {
     property real headerWidth: width / 2
     property real sideMargin: 0.0
 
-    property alias navigation: navCtrl
-
-    signal clicked()
-    signal navigationActive()
-
     height: 48
 
-    color: ui.theme.backgroundPrimaryColor
-
-    border.width: navCtrl.active ? 2 : 0
-    border.color: ui.theme.focusColor
+    navigation.accessible.name: root.title + " " + root.statusTitle
 
     function ensureActiveFocus() {
         if (!root.activeFocus) {
             root.forceActiveFocus()
         }
-    }
-
-    NavigationControl {
-        id: navCtrl
-        name: root.title
-        enabled: root.enabled && root.visible
-        accessible.role: MUAccessible.ListItem
-        accessible.name: root.title + " " + root.statusTitle
-
-        onActiveChanged: {
-            if (navCtrl.active) {
-                root.navigationActive()
-            }
-        }
-
-        onTriggered: root.clicked()
     }
 
     Row {

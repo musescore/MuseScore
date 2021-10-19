@@ -152,7 +152,6 @@ Item {
         text: root.displayText
 
         navigation.accessible.role: MUAccessible.ComboBox
-        navigation.accessible.name: root.currentText
 
         background.border.width: ui.theme.borderWidth
         background.border.color: ui.theme.strokeColor

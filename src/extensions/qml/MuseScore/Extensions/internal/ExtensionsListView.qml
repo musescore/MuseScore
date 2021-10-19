@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
@@ -32,14 +33,23 @@ Item {
     property string title: ""
 
     property alias model: filterModel.sourceModel
+    property int count: view.count
 
     property alias filters: filterModel.filters
 
     property string selectedExtensionCode: ""
 
-    property int count: view.count
+    property var flickableItem: null
+    property int headerHeight: view.headerItem.height
 
-    signal clicked(int index, var extension)
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "ExtensionsListView"
+        direction: NavigationPanel.Both
+        accessible.name: root.title
+    }
+
+    signal clicked(int index, var extension, var navigationControl)
+    signal navigationActivated(var itemRect)
 
     SortFilterProxyModel {
         id: filterModel
@@ -49,6 +59,9 @@ Item {
         id: view
 
         readonly property int sideMargin: 24
+
+        property int rows: Math.max(0, Math.floor(height / cellHeight))
+        property int columns: Math.max(0, Math.floor(width / cellWidth))
 
         anchors.left: parent.left
         anchors.leftMargin: -sideMargin
@@ -90,7 +103,12 @@ Item {
             height: view.cellHeight
             width: view.cellWidth
 
+            function requestActive() {
+                _item.navigation.requestActive()
+            }
+
             ExtensionItem {
+                id: _item
                 anchors.centerIn: parent
 
                 height: 224
@@ -103,11 +121,20 @@ Item {
 
                 selected: selectedExtensionCode === model.code
 
+                navigation.panel: root.navigationPanel
+                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
+                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    var pos = mapToItem(root.flickableItem, 0, 0)
+                    var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
+                    root.navigationActivated(rect)
+                }
+
                 onClicked: {
                     forceActiveFocus()
 
                     view.positionViewAtIndex(index, GridView.Visible)
-                    root.clicked(index, model)
+                    root.clicked(index, model, navigation)
                 }
             }
         }

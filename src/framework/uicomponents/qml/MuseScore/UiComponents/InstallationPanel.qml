@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 PopupPanel {
     id: root
 
-    property string title
-    property var additionalInfoModel
-    property string description
-    property string neutralButtonTitle
+    property string title: ""
+    property var additionalInfoModel: undefined
+    property string description: ""
+    property string neutralButtonTitle: ""
 
     property bool installed: false
     property bool hasUpdate: false
+    property bool needRestart: true
 
     signal installRequested()
     signal updateRequested()
@@ -74,6 +76,7 @@ PopupPanel {
     }
 
     content: Column {
+        id: content
         anchors.fill: parent
         anchors.topMargin: 44
         anchors.leftMargin: 68
@@ -82,18 +85,53 @@ PopupPanel {
 
         spacing: 42
 
+        property var mainButton: updateButton.visible ? updateButton : (installButton.visible ? installButton : uninstallButton)
+
         property bool opened: root.visible
         onOpenedChanged: {
             if (opened) {
-                focusOnOpened()
+                Qt.callLater(focusOnOpened)
+            } else {
+                accessibleInfo.focused = false
             }
         }
 
         function focusOnOpened() {
-            if (updateButton.visible) {
-                updateButton.navigation.requestActive()
-            } else {
-                installButton.navigation.requestActive()
+            mainButton.navigation.requestActive()
+            accessibleInfo.focused = true
+        }
+
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: root.objectName != "" ? root.objectName : "PopupPanel"
+
+            enabled: root.visible
+            section: root.navigationSection
+            order: 1
+
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
+            }
+        }
+
+        AccessibleItem {
+            id: accessibleInfo
+            accessibleParent: root.accessible
+            visualItem: root
+            role: MUAccessible.Information
+            name: {
+                var text = root.title + "."
+
+                if (Boolean(root.additionalInfoModel)) {
+                    for (var i = 0; i < root.additionalInfoModel.length; i++) {
+                        text += " " + root.additionalInfoModel[i].title + " " + root.additionalInfoModel[i].value + ". "
+                    }
+                }
+
+                text += root.description + ". " + content.mainButton.text
+
+                return text
             }
         }
 
@@ -103,9 +141,10 @@ PopupPanel {
             spacing: 8
 
             StyledTextLabel {
-                font: ui.theme.headerBoldFont
+                id: titleLabel
 
                 text: Boolean(root.title) ? root.title : ""
+                font: ui.theme.headerBoldFont
             }
 
             Row {
@@ -163,11 +202,11 @@ PopupPanel {
             spacing: 19
 
             FlatButton {
-                id: openFullDescriptionButton
+                id: neutralButton
                 Layout.alignment: Qt.AlignLeft
 
-                navigation.name: "openFullDescription"
-                navigation.panel: root.navigation
+                navigation.name: "NeutralButton"
+                navigation.panel: content.navigationPanel
                 navigation.column: 1
 
                 text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
@@ -188,8 +227,8 @@ PopupPanel {
 
                     visible: root.hasUpdate
 
-                    navigation.name: "Update"
-                    navigation.panel: root.navigation
+                    navigation.name: "UpdateButton"
+                    navigation.panel: content.navigationPanel
                     navigation.column: 2
 
                     text: qsTrc("uicomponents", "Update available")
@@ -201,10 +240,10 @@ PopupPanel {
                 }
 
                 FlatButton {
-                    visible: root.installed || root.hasUpdate
+                    visible: (root.installed || root.hasUpdate) && root.needRestart
 
-                    navigation.name: "Restart"
-                    navigation.panel: root.navigation
+                    navigation.name: "RestartButton"
+                    navigation.panel: content.navigationPanel
                     navigation.column: 3
 
                     text: qsTrc("uicomponents", "Restart")
@@ -220,8 +259,8 @@ PopupPanel {
 
                     visible: !root.installed && !root.hasUpdate
 
-                    navigation.name: "Install"
-                    navigation.panel: root.navigation
+                    navigation.name: "InstallButton"
+                    navigation.panel: content.navigationPanel
                     navigation.column: 4
 
                     text: qsTrc("uicomponents", "Install")
@@ -237,8 +276,8 @@ PopupPanel {
 
                     visible: root.installed || root.hasUpdate
 
-                    navigation.name: "Uninstall"
-                    navigation.panel: root.navigation
+                    navigation.name: "UninstallButton"
+                    navigation.panel: content.navigationPanel
                     navigation.column: 5
 
                     text: qsTrc("uicomponents", "Uninstall")
