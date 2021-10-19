@@ -133,7 +133,7 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
 
-            spacing: 20
+            spacing: 12
 
             ExtensionsListView {
                 id: installedExtensionsView
@@ -174,7 +174,7 @@ Item {
                 }
 
                 onNavigationActivated: {
-                    Utils.ensureContentVisible(flickable, itemRect)
+                    Utils.ensureContentVisible(flickable, itemRect, installedExtensionsView.headerHeight + 16)
                 }
             }
 
@@ -217,7 +217,7 @@ Item {
                 }
 
                 onNavigationActivated: {
-                    Utils.ensureContentVisible(flickable, itemRect, 20)
+                    Utils.ensureContentVisible(flickable, itemRect, notInstalledExtensionsView.headerHeight + 16)
                 }
             }
         }

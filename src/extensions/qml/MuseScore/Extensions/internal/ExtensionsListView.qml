@@ -40,6 +40,7 @@ Item {
     property string selectedExtensionCode: ""
 
     property var flickableItem: null
+    property int headerHeight: view.headerItem.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "ExtensionsListView"

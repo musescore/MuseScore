@@ -38,6 +38,7 @@ Item {
     property bool installed: false
 
     property var flickableItem: null
+    property int headerHeight: view.headerItem.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PluginsListView"

@@ -242,6 +242,7 @@ Item {
         title: Boolean(selectedLanguage) ? selectedLanguage.name : ""
         installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed) : false
         hasUpdate: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.NeedUpdate) : false
+        needRestart: false
         neutralButtonTitle: qsTrc("languages", "Open language preferences")
         background: view
 
@@ -259,10 +260,6 @@ Item {
 
         onUpdateRequested: {
             Qt.callLater(languageListModel.update, selectedLanguage.code)
-        }
-
-        onRestartRequested: {
-            Qt.callLater(languageListModel.restart, selectedLanguage.code)
         }
 
         onNeutralButtonClicked: {

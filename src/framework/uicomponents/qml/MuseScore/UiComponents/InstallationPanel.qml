@@ -35,6 +35,7 @@ PopupPanel {
 
     property bool installed: false
     property bool hasUpdate: false
+    property bool needRestart: true
 
     signal installRequested()
     signal updateRequested()
@@ -239,7 +240,7 @@ PopupPanel {
                 }
 
                 FlatButton {
-                    visible: root.installed || root.hasUpdate
+                    visible: (root.installed || root.hasUpdate) && root.needRestart
 
                     navigation.name: "RestartButton"
                     navigation.panel: content.navigationPanel
