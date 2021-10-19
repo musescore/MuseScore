@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
@@ -38,6 +39,24 @@ Rectangle {
     property bool selected: false
 
     signal clicked(string code)
+
+    property NavigationControl navigation: NavigationControl{
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.name + ". " + root.description
+        enabled: root.enabled && root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.clicked(root.code)
+    }
+
+    NavigationFocusBorder {
+        navigationCtrl: root.navigation
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -144,5 +163,4 @@ Rectangle {
             }
         }
     ]
-
 }

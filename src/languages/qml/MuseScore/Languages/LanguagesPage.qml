@@ -36,14 +36,16 @@ Item {
 
     property int sideMargin: 46
 
-    property alias navigation: navPanel
+    property NavigationSection navigationSection: null
 
     NavigationPanel {
         id: navPanel
         name: "AddonsLanguages"
+        section: root.navigationSection
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Vertical
         accessible.name: qsTrc("languages", "Languages") + navPanel.directionInfo
+        order: 8
     }
 
     QtObject {
@@ -191,12 +193,12 @@ Item {
 
             navigation.panel: navPanel
             navigation.row: 1 + model.index
-            onNavigationActive: view.positionViewAtIndex(model.index, ListView.Contain)
+            navigation.onActiveChanged: view.positionViewAtIndex(model.index, ListView.Contain)
 
             title: model.name
             statusTitle: model.statusTitle
 
-            color: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
+            normalColor: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
 
             headerWidth: header.itemWidth
             sideMargin: root.sideMargin
@@ -240,6 +242,7 @@ Item {
         title: Boolean(selectedLanguage) ? selectedLanguage.name : ""
         installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed) : false
         hasUpdate: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.NeedUpdate) : false
+        needRestart: false
         neutralButtonTitle: qsTrc("languages", "Open language preferences")
         background: view
 
@@ -257,10 +260,6 @@ Item {
 
         onUpdateRequested: {
             Qt.callLater(languageListModel.update, selectedLanguage.code)
-        }
-
-        onRestartRequested: {
-            Qt.callLater(languageListModel.restart, selectedLanguage.code)
         }
 
         onNeutralButtonClicked: {

@@ -73,7 +73,15 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.text
+        accessible.name: {
+            var text = root.text
+
+            if (prv.inProgress) {
+                text = root.progressTitle + " " + root.value + " " + qsTrc("uicomponents", "From") + " " + root.to
+            }
+
+            return text
+        }
         accessible.visualItem: root
 
         onActiveChanged: {
