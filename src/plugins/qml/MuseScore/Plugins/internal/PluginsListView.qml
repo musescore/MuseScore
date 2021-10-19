@@ -80,14 +80,13 @@ Item {
     GridView {
         id: view
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-
         readonly property int sideMargin: 28
 
         property int rows: Math.max(0, Math.floor(height / cellHeight))
         property int columns: Math.max(0, Math.floor(width / cellWidth))
 
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.leftMargin: -sideMargin
         anchors.rightMargin: -sideMargin
 
