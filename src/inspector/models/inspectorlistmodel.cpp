@@ -150,11 +150,11 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
         case AbstractInspectorModel::InspectorSectionType::SECTION_GENERAL:
             m_modelList << new GeneralSettingsModel(this, m_repository);
             break;
-        case AbstractInspectorModel::InspectorSectionType::SECTION_TEXT:
-            m_modelList << new TextSettingsModel(this, m_repository);
-            break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION:
             m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
+            break;
+        case AbstractInspectorModel::InspectorSectionType::SECTION_TEXT:
+            m_modelList << new TextSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY:
             m_modelList << new ScoreSettingsModel(this, m_repository);
@@ -162,7 +162,7 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
         case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE:
             m_modelList << new ScoreAppearanceSettingsModel(this, m_repository);
             break;
-        default:
+        case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;
         }
 
@@ -247,19 +247,16 @@ void InspectorListModel::sortModels()
         return static_cast<int>(first->sectionType()) < static_cast<int>(second->sectionType());
     });
 
-    for (int i = 0; i < m_modelList.count(); ++i) {
-        if (m_modelList.at(i) != sortedModelList.at(i)) {
-            beginMoveRows(QModelIndex(), i, i, QModelIndex(), sortedModelList.indexOf(m_modelList.at(i)));
-        }
-    }
-
-    if (m_modelList == sortedModelList) {
+    if (sortedModelList == m_modelList) {
         return;
     }
 
-    m_modelList = sortedModelList;
-
-    endMoveRows();
+    for (int i = 0; i < m_modelList.count(); ++i) {
+        if (m_modelList[i] != sortedModelList[i]) {
+            m_modelList[i] = sortedModelList[i];
+            emit dataChanged(index(i, 0), index(i, 0));
+        }
+    }
 }
 
 bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const
