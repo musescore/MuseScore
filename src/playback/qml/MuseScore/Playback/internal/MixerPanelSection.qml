@@ -29,7 +29,7 @@ import MuseScore.Playback 1.0
 Loader {
     id: root
 
-    property string headerTitle: undefined
+    property string headerTitle: ""
     property bool headerVisible: true
     property int headerHeight: 22
     property int headerWidth: headerVisible ? 98 : 0
