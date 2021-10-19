@@ -29,34 +29,38 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
-    headerTitle: qsTrc("playback", "Volume")
-
     Item {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
-        TextInputField {
-            id: volumeTextInputField
-
+        Row {
             anchors.horizontalCenter: parent.horizontalCenter
 
-            height: 24
-            width: 46
+            spacing: 6
 
-            textHorizontalAlignment: Qt.AlignHCenter
+            FlatToggleButton {
+                id: muteButton
 
-            validator: DoubleInputValidator {
-                id: doubleInputValidator
-                top: 12.0
-                bottom: -60.0
-                decimal: 1
+                height: 20
+                width: 20
+
+                icon: IconCode.MUTE
+                checked: item.muted
+                onToggled: {
+                    item.muted = !item.muted
+                }
             }
 
-            currentText: Math.round(item.volumeLevel * 10) / 10
+            FlatToggleButton {
+                id: soloButton
 
-            onCurrentTextEdited: {
-                if (item.volumeLevel !== Number(newTextValue)) {
-                    item.volumeLevel = Number(newTextValue)
+                height: 20
+                width: 20
+
+                icon: IconCode.SOLO
+                checked: item.solo
+                onToggled: {
+                    item.solo = !item.solo
                 }
             }
         }
