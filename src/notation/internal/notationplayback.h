@@ -52,7 +52,7 @@ public:
     float tickToSec(midi::tick_t tick) const override;
     midi::tick_t secToTick(float sec) const override;
 
-    QRect playbackCursorRectByTick(midi::tick_t tick) const override;
+    RectF playbackCursorRectByTick(midi::tick_t tick) const override;
 
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
@@ -69,7 +69,7 @@ private:
 
     void addLoopIn(int tick);
     void addLoopOut(int tick);
-    QRect loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
+    RectF loopBoundaryRectByTick(LoopBoundaryType boundaryType, int tick) const;
     void updateLoopBoundaries();
 
     const Ms::TempoText* tempoText(int tick) const;

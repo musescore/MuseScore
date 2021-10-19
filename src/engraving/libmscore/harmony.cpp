@@ -1582,9 +1582,9 @@ void Harmony::draw(mu::draw::Painter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
 {
-    TextBase::drawEditMode(p, ed);
+    TextBase::drawEditMode(p, ed, currentViewScaling);
 
     mu::draw::Color originalColor = color();
     if (_isMisspelled) {

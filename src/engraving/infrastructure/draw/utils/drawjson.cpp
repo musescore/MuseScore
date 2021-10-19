@@ -178,7 +178,7 @@ static QJsonObject toObj(const PainterPath& path)
 
     QJsonArray elsArr;
     for (size_t i = 0; i < path.elementCount(); ++i) {
-        PainterPath::EngravingItem e = path.elementAt(i);
+        PainterPath::Element e = path.elementAt(i);
         elsArr.append(QJsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
     }
     obj["elements"] = elsArr;
@@ -200,7 +200,7 @@ static void fromObj(const QJsonObject& obj, PainterPath& path)
     path.setFillRule(static_cast<PainterPath::FillRule>(obj["fillRule"].toInt()));
 
     QJsonArray elsArr = obj["elements"].toArray();
-    std::vector<PainterPath::EngravingItem> curveEls;
+    std::vector<PainterPath::Element> curveEls;
     for (const QJsonValue& elVal : elsArr) {
         QJsonArray elArr = elVal.toArray();
         IF_ASSERT_FAILED(elArr.size() == 3) {
@@ -222,12 +222,12 @@ static void fromObj(const QJsonObject& obj, PainterPath& path)
             IF_ASSERT_FAILED(curveEls.empty()) {
                 continue;
             }
-            PainterPath::EngravingItem e(x, y, type);
+            PainterPath::Element e(x, y, type);
             curveEls.push_back(std::move(e));
         } break;
         case PainterPath::ElementType::CurveToDataElement: {
             if (curveEls.size() == 1) { // only CurveToElement
-                PainterPath::EngravingItem e(x, y, type);
+                PainterPath::Element e(x, y, type);
                 curveEls.push_back(std::move(e));
                 continue;
             }

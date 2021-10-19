@@ -27,6 +27,8 @@
 #include "notation/inotationstyle.h"
 #include "modularity/ioc.h"
 
+#include "engraving/infrastructure/draw/geometry.h"
+
 namespace mu::notation {
 class LoopMarker
 {
@@ -35,7 +37,7 @@ class LoopMarker
 public:
     LoopMarker(LoopBoundaryType type);
 
-    void setRect(const QRect& rect);
+    void setRect(const RectF& rect);
     void setVisible(bool visible);
     void setStyle(INotationStylePtr style);
 
@@ -43,7 +45,7 @@ public:
 
 private:
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;
-    QRect m_rect;
+    RectF m_rect;
     bool m_visible = false;
     INotationStylePtr m_style;
 };

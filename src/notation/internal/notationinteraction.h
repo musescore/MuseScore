@@ -232,6 +232,7 @@ private:
 
     void setAnchorLines(const std::vector<LineF>& anchorList);
     void resetAnchorLines();
+    double currentScaling(draw::Painter* painter) const;
     void drawAnchorLines(draw::Painter* painter);
     void drawTextEditMode(mu::draw::Painter* painter);
     void drawSelectionRange(mu::draw::Painter* painter);
