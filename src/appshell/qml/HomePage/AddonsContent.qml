@@ -274,6 +274,8 @@ FocusScope {
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
 
         LanguagesPage {

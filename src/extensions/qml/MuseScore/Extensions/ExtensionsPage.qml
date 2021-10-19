@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
@@ -34,6 +35,8 @@ Item {
     property string backgroundColor: ui.theme.backgroundPrimaryColor
 
     property int sideMargin: 46
+
+    property NavigationSection navigationSection: null
 
     Component.onCompleted: {
         extensionListModel.load()
@@ -66,6 +69,12 @@ Item {
 
             prv.selectedExtension = item
             extensionPanel.resetProgress()
+
+            if (installedExtensionsView.count > 0) {
+                installedExtensionsView.focusOnFirst()
+            } else {
+                notInstalledExtensionsView.focusOnFirst()
+            }
         }
     }
 
@@ -127,7 +136,7 @@ Item {
             spacing: 20
 
             ExtensionsListView {
-                id: installedView
+                id: installedExtensionsView
 
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -152,15 +161,19 @@ Item {
                     }
                 ]
 
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "InstalledExtensions"
+                navigationPanel.order: 6
+
                 onClicked: {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
-                    extensionPanel.open()
+                    extensionPanel.open(navigationControl)
                 }
             }
 
             ExtensionsListView {
-                id: notInstalledView
+                id: notInstalledExtensionsView
 
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -185,10 +198,14 @@ Item {
                     }
                 ]
 
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "InstalledExtensions"
+                navigationPanel.order: 7
+
                 onClicked: {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
-                    extensionPanel.open()
+                    extensionPanel.open(navigationControl)
                 }
             }
         }

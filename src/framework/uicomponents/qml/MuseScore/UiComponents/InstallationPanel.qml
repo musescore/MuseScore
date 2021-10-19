@@ -207,13 +207,6 @@ PopupPanel {
                 navigation.name: "NeutralButton"
                 navigation.panel: content.navigationPanel
                 navigation.column: 1
-                navigation.accessible.ignored: true
-                navigation.accessible.name: text
-                navigation.onActiveChanged: {
-                    if (navigation.active) {
-                        navigation.accessible.ignored = false
-                    }
-                }
 
                 text: Boolean(root.neutralButtonTitle) ? root.neutralButtonTitle : ""
 
