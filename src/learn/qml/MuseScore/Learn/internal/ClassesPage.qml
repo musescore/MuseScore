@@ -48,7 +48,16 @@ FocusScope {
         id: navPanel
         name: "Classes"
         enabled: root.enabled && root.visible
-        direction: NavigationPanel.Both
+        direction: NavigationPanel.Horizontal
+
+        onActiveChanged: {
+            if (active) {
+                openMoreInfoButton.navigation.requestActive()
+                accessibleInfo.focused = true
+            } else {
+                accessibleInfo.focused = false
+            }
+        }
     }
 
     Rectangle {
@@ -76,6 +85,22 @@ FocusScope {
             height: childrenRect.height + 72
 
             spacing: 30
+
+            AccessibleItem {
+                id: accessibleInfo
+                accessibleParent: root.navigation.accessible
+                visualItem: authorInfo
+                role: MUAccessible.Information
+                name: {
+                    var template = "%1 %2. %3. %4. %5"
+
+                    return template.arg(root.authorRole)
+                    .arg(root.authorName)
+                    .arg(root.authorPosition)
+                    .arg(root.authorDescription)
+                    .arg(openMoreInfoButton.text)
+                }
+            }
 
             Row {
                 width: parent.width
@@ -151,10 +176,21 @@ FocusScope {
             }
 
             FlatButton {
+                id: openMoreInfoButton
                 orientation: Qt.Horizontal
                 icon: IconCode.OPEN_LINK
                 text: qsTrc("learn", "Open") + " " + root.authorOrganizationName
                 accentButton: true
+
+                navigation.panel: root.navigation
+                navigation.name: "OpenMoreInfoButton"
+                navigation.column: 1
+                navigation.accessible.ignored: true
+                navigation.onActiveChanged: {
+                    if (!navigation.active) {
+                        navigation.accessible.ignored = false
+                    }
+                }
 
                 onClicked: {
                     root.requestOpenOrganizationUrl()
