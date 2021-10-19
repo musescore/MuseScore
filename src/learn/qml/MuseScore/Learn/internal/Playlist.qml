@@ -118,6 +118,11 @@ FocusScope {
                 navigation.panel: navPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
                 navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        view.positionViewAtIndex(index, ListView.Contain)
+                    }
+                }
 
                 title: modelData.title
                 author: modelData.author
