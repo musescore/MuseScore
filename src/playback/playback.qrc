@@ -10,6 +10,8 @@
         <file>qml/MuseScore/Playback/internal/MixerTitleSection.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerSoundSection.qml</file>
         <file>qml/MuseScore/Playback/internal/MixerFxSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerFaderSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml</file>
         <file>qml/MuseScore/Playback/internal/AudioResourceControl.qml</file>
     </qresource>
 </RCC>

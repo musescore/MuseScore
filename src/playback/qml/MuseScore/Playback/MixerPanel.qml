@@ -133,6 +133,26 @@ Rectangle {
                 model: mixerPanelModel
             }
 
+            MixerFaderSection {
+                id: faderSection
+
+                visible: contextMenuModel.faderSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
+
+                model: mixerPanelModel
+            }
+
+            MixerMuteAndSoloSection {
+                id: muteAndSoloSection
+
+                visible: contextMenuModel.muteAndSoloSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
+
+                model: mixerPanelModel
+            }
+
             MixerTitleSection {
                 id: titleSection
 
