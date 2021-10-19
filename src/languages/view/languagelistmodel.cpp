@@ -205,6 +205,11 @@ void LanguageListModel::uninstall(QString code)
     emit finish(language(code));
 }
 
+void LanguageListModel::restart(QString code)
+{
+    NOT_IMPLEMENTED;
+}
+
 void LanguageListModel::openPreferences()
 {
     interactive()->open("musescore://preferences?currentPageId=general");
