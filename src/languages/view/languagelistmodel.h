@@ -57,7 +57,6 @@ public:
     Q_INVOKABLE void install(QString code);
     Q_INVOKABLE void update(QString code);
     Q_INVOKABLE void uninstall(QString code);
-    Q_INVOKABLE void restart(QString code);
 
     Q_INVOKABLE void openPreferences();
 

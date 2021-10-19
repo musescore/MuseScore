@@ -133,7 +133,7 @@ Item {
             id: column
             anchors.fill: parent
 
-            spacing: 42
+            spacing: 12
 
             PluginsListView {
                 id: installedPluginsView
@@ -160,7 +160,7 @@ Item {
                 }
 
                 onNavigationActivated: {
-                    Utils.ensureContentVisible(flickable, itemRect, 40)
+                    Utils.ensureContentVisible(flickable, itemRect, installedPluginsView.headerHeight + 16)
                 }
             }
 
@@ -188,7 +188,7 @@ Item {
                 }
 
                 onNavigationActivated: {
-                    Utils.ensureContentVisible(flickable, itemRect, 40)
+                    Utils.ensureContentVisible(flickable, itemRect, notInstalledPluginsView.headerHeight + 16)
                 }
             }
         }
