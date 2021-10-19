@@ -148,6 +148,8 @@ Item {
 
                 model: pluginsModel
 
+                flickableItem: column
+
                 navigationPanel.section: root.navigationSection
                 navigationPanel.name: "InstalledPlugins"
                 navigationPanel.order: 4
@@ -155,6 +157,10 @@ Item {
                 onPluginClicked: {
                     prv.selectedPlugin = plugin
                     panel.open(navigationControl)
+                }
+
+                onNavigationActivated: {
+                    Utils.ensureContentVisible(flickable, itemRect, 40)
                 }
             }
 
@@ -170,6 +176,8 @@ Item {
 
                 model: pluginsModel
 
+                flickableItem: column
+
                 navigationPanel.section: root.navigationSection
                 navigationPanel.name: "NotInstalledPlugins"
                 navigationPanel.order: 5
@@ -177,6 +185,10 @@ Item {
                 onPluginClicked: {
                     prv.selectedPlugin = Object.assign({}, plugin)
                     panel.open(navigationControl)
+                }
+
+                onNavigationActivated: {
+                    Utils.ensureContentVisible(flickable, itemRect, 40)
                 }
             }
         }

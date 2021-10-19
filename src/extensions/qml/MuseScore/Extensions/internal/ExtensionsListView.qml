@@ -39,6 +39,8 @@ Item {
 
     property string selectedExtensionCode: ""
 
+    property var flickableItem: null
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "ExtensionsListView"
         direction: NavigationPanel.Both
@@ -46,6 +48,7 @@ Item {
     }
 
     signal clicked(int index, var extension, var navigationControl)
+    signal navigationActivated(var itemRect)
 
     SortFilterProxyModel {
         id: filterModel
@@ -120,6 +123,11 @@ Item {
                 navigation.panel: root.navigationPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
                 navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    var pos = mapToItem(root.flickableItem, 0, 0)
+                    var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
+                    root.navigationActivated(rect)
+                }
 
                 onClicked: {
                     forceActiveFocus()
