@@ -153,10 +153,11 @@ FocusScope {
         NavigationPanel {
             id: navTabPanel
             name: "LearnTabs"
-            enabled: bar.enabled && bar.visible
             section: navSec
+            direction: NavigationPanel.Horizontal
             order: 2
             accessible.name: qsTrc("learn", "Learn tabs")
+            enabled: bar.enabled && bar.visible
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
@@ -173,7 +174,7 @@ FocusScope {
 
             navigation.name: "Get started"
             navigation.panel: navTabPanel
-            navigation.order: 1
+            navigation.column: 1
             onNavigationTriggered: bar.currentIndex = 0
         }
 
@@ -185,7 +186,7 @@ FocusScope {
 
             navigation.name: "Advanced"
             navigation.panel: navTabPanel
-            navigation.order: 2
+            navigation.column: 2
             onNavigationTriggered: bar.currentIndex = 1
         }
 
@@ -197,7 +198,7 @@ FocusScope {
 
             navigation.name: "Classes"
             navigation.panel: navTabPanel
-            navigation.order: 3
+            navigation.column: 3
             onNavigationTriggered: bar.currentIndex = 2
         }
     }
@@ -259,7 +260,7 @@ FocusScope {
             authorOrganizationName: author.organizationName
 
             navigation.section: navSec
-            navigation.order: 4
+            navigation.order: 5
             navigation.name: "LearnClasses"
             navigation.accessible.name: qsTrc("learn", "Classes") + navigation.directionInfo
 
