@@ -302,31 +302,6 @@ QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
     return style() ? style()->styleValue(sid) : QVariant();
 }
 
-void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
-{
-    if (isEmpty()) {
-        return;
-    }
-
-    beginCommand();
-
-    for (Ms::EngravingItem* element : m_elementList) {
-        IF_ASSERT_FAILED(element) {
-            continue;
-        }
-
-        for (const Ms::Pid pid : pidList) {
-            element->elementBase()->undoResetProperty(pid);
-        }
-    }
-
-    endCommand();
-    updateNotation();
-
-    emit elementsModified();
-    emit modelReseted();
-}
-
 QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
                                                      const Ms::EngravingItem* element) const
 {

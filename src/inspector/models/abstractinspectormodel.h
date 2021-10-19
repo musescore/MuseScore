@@ -58,8 +58,8 @@ public:
     enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
-        SECTION_TEXT,
         SECTION_NOTATION,
+        SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE
     };
@@ -177,12 +177,11 @@ protected:
     void updateNotation();
     async::Notification currentNotationChanged() const;
 
-    IElementRepositoryService* m_repository;
+    IElementRepositoryService* m_repository = nullptr;
 
     QList<Ms::EngravingItem*> m_elementList;
 
 protected slots:
-    void onResetToDefaults(const QList<Ms::Pid>& pidList);
     void onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue);
     void updateProperties();
 
@@ -190,7 +189,7 @@ private:
     Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
 
     QString m_title;
-    ui::IconCode::Code m_icon;
+    ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     Ms::ElementType m_elementType = Ms::ElementType::INVALID;
