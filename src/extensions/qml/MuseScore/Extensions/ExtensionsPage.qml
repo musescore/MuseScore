@@ -146,6 +146,8 @@ Item {
                 model: extensionListModel
                 visible: count > 0
 
+                flickableItem: extensionsColumn
+
                 selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
                 filters: [
@@ -170,6 +172,10 @@ Item {
 
                     extensionPanel.open(navigationControl)
                 }
+
+                onNavigationActivated: {
+                    Utils.ensureContentVisible(flickable, itemRect)
+                }
             }
 
             ExtensionsListView {
@@ -182,6 +188,8 @@ Item {
 
                 model: extensionListModel
                 visible: count > 0
+
+                flickableItem: extensionsColumn
 
                 selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
@@ -206,6 +214,10 @@ Item {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open(navigationControl)
+                }
+
+                onNavigationActivated: {
+                    Utils.ensureContentVisible(flickable, itemRect, 20)
                 }
             }
         }
