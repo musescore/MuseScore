@@ -44,6 +44,8 @@ class MixerPanelContextMenuModel : public ui::AbstractMenuModel, public actions:
     Q_PROPERTY(bool audioFxSectionVisible READ audioFxSectionVisible NOTIFY audioFxSectionVisibleChanged)
     Q_PROPERTY(bool balanceSectionVisible READ balanceSectionVisible NOTIFY balanceSectionVisibleChanged)
     Q_PROPERTY(bool volumeSectionVisible READ volumeSectionVisible NOTIFY volumeSectionVisibleChanged)
+    Q_PROPERTY(bool faderSectionVisible READ faderSectionVisible NOTIFY faderSectionVisibleChanged)
+    Q_PROPERTY(bool muteAndSoloSectionVisible READ muteAndSoloSectionVisible NOTIFY muteAndSoloSectionVisibleChanged)
     Q_PROPERTY(bool titleSectionVisible READ titleSectionVisible NOTIFY titleSectionVisibleChanged)
 
 public:
@@ -54,6 +56,8 @@ public:
     bool audioFxSectionVisible() const;
     bool balanceSectionVisible() const;
     bool volumeSectionVisible() const;
+    bool faderSectionVisible() const;
+    bool muteAndSoloSectionVisible() const;
     bool titleSectionVisible() const;
 
     Q_INVOKABLE void load() override;
@@ -64,6 +68,8 @@ signals:
     void audioFxSectionVisibleChanged();
     void balanceSectionVisibleChanged();
     void volumeSectionVisibleChanged();
+    void faderSectionVisibleChanged();
+    void muteAndSoloSectionVisibleChanged();
     void titleSectionVisibleChanged();
 
 private:

@@ -38,6 +38,8 @@ static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback
 static const Settings::Key MIXER_AUDIO_FX_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/audioFxSectionVisible");
 static const Settings::Key MIXER_BALANCE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/balanceSectionVisible");
 static const Settings::Key MIXER_VOLUME_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/volumeSectionVisible");
+static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/faderSectionVisible");
+static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
 
 static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
@@ -48,6 +50,8 @@ static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
     case MixerSectionType::AudioFX: return MIXER_AUDIO_FX_SECTION_VISIBLE_KEY;
     case MixerSectionType::Balance: return MIXER_BALANCE_SECTION_VISIBLE_KEY;
     case MixerSectionType::Volume: return MIXER_VOLUME_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Fader: return MIXER_FADER_SECTION_VISIBLE_KEY;
+    case MixerSectionType::MuteAndSolo: return MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY;
     case MixerSectionType::Title: return MIXER_TITLE_SECTION_VISIBLE_KEY;
     case MixerSectionType::Unknown: break;
     }

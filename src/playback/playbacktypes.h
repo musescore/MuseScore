@@ -40,6 +40,8 @@ enum class MixerSectionType {
     AudioFX,
     Balance,
     Volume,
+    Fader,
+    MuteAndSolo,
     Title
 };
 
@@ -51,6 +53,8 @@ inline QList<MixerSectionType> allMixerSectionTypes()
         MixerSectionType::AudioFX,
         MixerSectionType::Balance,
         MixerSectionType::Volume,
+        MixerSectionType::Fader,
+        MixerSectionType::MuteAndSolo,
         MixerSectionType::Title
     };
 
