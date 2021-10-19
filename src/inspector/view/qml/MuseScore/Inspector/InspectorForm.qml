@@ -76,7 +76,7 @@ Rectangle {
             anchors.margins: 12
 
             height: childrenRect.height
-            spacing: 14
+            spacing: 12
 
             Repeater {
                 id: inspectorRepeater
@@ -89,6 +89,12 @@ Rectangle {
                     width: parent.width
 
                     spacing: contentColumn.spacing
+
+                    SeparatorLine {
+                        anchors.margins: -12
+
+                        visible: model.index !== 0
+                    }
 
                     InspectorSectionDelegate {
                         sectionModel: model.inspectorSectionModel
@@ -103,12 +109,6 @@ Rectangle {
                         onEnsureContentVisibleRequested: {
                             flickableArea.ensureContentVisible(invisibleContentHeight)
                         }
-                    }
-
-                    SeparatorLine {
-                        anchors.margins: -12
-
-                        visible: model.index !== inspectorListModel.count - 1
                     }
                 }
             }
