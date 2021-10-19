@@ -95,21 +95,21 @@ std::vector<Note*> NotationSelection::notes(NoteFilter filter) const
     return {};
 }
 
-QRectF NotationSelection::canvasBoundingRect() const
+mu::RectF NotationSelection::canvasBoundingRect() const
 {
     if (isNone()) {
-        return QRectF();
+        return RectF();
     }
 
     Ms::EngravingItem* el = score()->selection().element();
     if (el) {
-        return el->canvasBoundingRect().toQRectF();
+        return el->canvasBoundingRect();
     }
 
     QList<Ms::EngravingItem*> els = score()->selection().elements();
     if (els.isEmpty()) {
         LOGW() << "selection not none, but no elements";
-        return QRectF();
+        return RectF();
     }
 
     RectF rect;
@@ -121,7 +121,7 @@ QRectF NotationSelection::canvasBoundingRect() const
         }
     }
 
-    return rect.toQRectF();
+    return rect;
 }
 
 INotationSelectionRangePtr NotationSelection::range() const

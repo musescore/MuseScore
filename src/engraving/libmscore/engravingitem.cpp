@@ -2034,7 +2034,7 @@ void EditData::addData(ElementEditData* ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void EngravingItem::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void EngravingItem::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
 {
     using namespace mu::draw;
     Pen pen(engravingConfiguration()->defaultColor(), 0.0);

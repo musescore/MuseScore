@@ -31,7 +31,7 @@ LoopMarker::LoopMarker(LoopBoundaryType type)
 {
 }
 
-void LoopMarker::setRect(const QRect& rect)
+void LoopMarker::setRect(const RectF& rect)
 {
     m_rect = rect;
 }

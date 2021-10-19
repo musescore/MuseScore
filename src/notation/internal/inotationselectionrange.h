@@ -23,7 +23,7 @@
 #define MU_NOTATION_INOTATIONSELECTIONRANGE_H
 
 #include <vector>
-#include <QRectF>
+
 #include "../notationtypes.h"
 
 namespace mu::notation {

@@ -111,7 +111,7 @@ class Harmony final : public TextBase
 
     void determineRootBaseSpelling();
     void draw(mu::draw::Painter*) const override;
-    void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
+    void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
     void render(const QString&, qreal&, qreal&);
     void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
                 NoteCaseType noteCase = NoteCaseType::AUTO);

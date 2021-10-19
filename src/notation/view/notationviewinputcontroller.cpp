@@ -140,17 +140,18 @@ void NotationViewInputController::zoomOut()
     setZoom(zoom, findZoomFocusPoint());
 }
 
-QPoint NotationViewInputController::findZoomFocusPoint() const
+QPointF NotationViewInputController::findZoomFocusPoint() const
 {
     INotationSelectionPtr selection = m_view->notationInteraction()->selection();
 
     // No selection: zoom at the center of the view
     if (selection->isNone()) {
-        return QPoint(m_view->width() / 2, m_view->height() / 2);
+        return QPointF(m_view->width() / 2, m_view->height() / 2);
     }
+
     // Selection: zoom at the center of the selection
-    return (selection->canvasBoundingRect().center().toPoint() * m_view->currentScaling())
-           + m_view->canvasPos().toQPoint();
+    return ((selection->canvasBoundingRect().center() * m_view->currentScaling())
+            + m_view->canvasPos()).toQPointF();
 }
 
 void NotationViewInputController::zoomToPageWidth()
@@ -162,7 +163,7 @@ void NotationViewInputController::zoomToPageWidth()
     qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
     qreal scale = m_view->width() / pageWidth / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPoint());
+    setZoom(scale * 100, QPointF());
     m_isZoomInited = true;
 }
 
@@ -180,7 +181,7 @@ void NotationViewInputController::zoomToWholePage()
 
     qreal scale = std::min(pageWidthScale, pageHeightScale) / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPoint());
+    setZoom(scale * 100, QPointF());
     m_isZoomInited = true;
 }
 
@@ -210,7 +211,7 @@ void NotationViewInputController::zoomToTwoPages()
 
     qreal scale = std::min(pageHeightScale, pageWidthScale) / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPoint());
+    setZoom(scale * 100, QPointF());
     m_isZoomInited = true;
 }
 
@@ -227,10 +228,10 @@ int NotationViewInputController::currentZoomIndex() const
 
 int NotationViewInputController::currentZoomPercentage() const
 {
-    return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling() / configuration()->guiScaling());
+    return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling());
 }
 
-void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
+void NotationViewInputController::setZoom(int zoomPercentage, const QPointF& pos)
 {
     int minZoom = m_possibleZoomsPercentage.first();
     int maxZoom = m_possibleZoomsPercentage.last();
@@ -240,7 +241,7 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
         configuration()->setCurrentZoom(correctedZoom);
     }
 
-    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * configuration()->notationScaling() * configuration()->guiScaling();
+    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * configuration()->notationScaling();
     m_view->setScaling(scaling, pos);
 }
 
@@ -267,8 +268,8 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
     if (!pixelsScrolled.isNull()) {
         dx = pixelsScrolled.x();
         dy = pixelsScrolled.y();
-        stepsX = static_cast<qreal>(dx) / static_cast<qreal>(PIXELSSTEPSFACTOR);
-        stepsY = static_cast<qreal>(dy) / static_cast<qreal>(PIXELSSTEPSFACTOR);
+        stepsX = dx / static_cast<qreal>(PIXELSSTEPSFACTOR);
+        stepsY = dy / static_cast<qreal>(PIXELSSTEPSFACTOR);
     } else if (!stepsScrolled.isNull()) {
         dx = (stepsScrolled.x() * qMax(2.0, m_view->width() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
         dy = (stepsScrolled.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
@@ -281,17 +282,17 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
     // Windows touch pad pinches also execute this
     if (keyState & Qt::ControlModifier) {
         double zoomSpeed = qPow(2.0, 1.0 / configuration()->mouseZoomPrecision());
-        int absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
-        double zoomAmount = currentZoomPercentage() * qPow(zoomSpeed, absSteps);
-        int zoom = absSteps > 0 ? qCeil(zoomAmount) : qFloor(zoomAmount);
-        setZoom(zoom, event->position().toPoint());
-    } else if (keyState & Qt::ShiftModifier) {
-        int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
-        PointF d = m_view->toLogical(QPoint(0, abs)) - m_view->toLogical(QPoint(0, 0));
-        m_view->moveCanvasHorizontal(d.y());
+        qreal absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
+        double zoomAmount = m_view->currentScaling() * qPow(zoomSpeed, absSteps);
+        m_view->setScaling(zoomAmount, event->position());
     } else {
-        PointF d = m_view->toLogical(QPoint(dx, dy)) - m_view->toLogical(QPoint(0, 0));
-        m_view->moveCanvas(d.x(), d.y());
+        qreal correction = 1.0 / m_view->currentScaling();
+        if (keyState & Qt::ShiftModifier) {
+            int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
+            m_view->moveCanvasHorizontal(abs * correction);
+        } else {
+            m_view->moveCanvas(dx * correction, dy * correction);
+        }
     }
 }
 
@@ -310,7 +311,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (m_view->isNoteEnterMode()) {
         bool replace = keyState & Qt::ShiftModifier;
         bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("put-note", ActionData::make_arg3<QPoint, bool, bool>(logicPos.toQPoint(), replace, insert));
+        dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
         return;
     }
 

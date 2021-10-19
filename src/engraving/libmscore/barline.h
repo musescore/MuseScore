@@ -86,7 +86,7 @@ class BarLine final : public EngravingItem
     void drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const;
     bool isTop() const;
     bool isBottom() const;
-    void drawEditMode(mu::draw::Painter*, EditData&) override;
+    void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
 
 public:
 

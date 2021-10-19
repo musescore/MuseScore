@@ -63,7 +63,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QRect viewport READ viewport NOTIFY viewportChanged)
+    Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
@@ -83,20 +83,21 @@ public:
 
     PointF canvasPos() const override;
 
-    PointF toLogical(const QPoint& point) const override;
+    PointF toLogical(const PointF& point) const override;
+    PointF toLogical(const QPointF& point) const override;
 
-    Q_INVOKABLE bool moveCanvas(int dx, int dy) override;
-    void moveCanvasVertical(int dy) override;
-    void moveCanvasHorizontal(int dx) override;
+    Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
+    void moveCanvasVertical(qreal dy) override;
+    void moveCanvasHorizontal(qreal dx) override;
 
     qreal currentScaling() const override;
-    void setScaling(qreal scaling, const QPoint& pos) override;
-    Q_INVOKABLE void scale(qreal factor, const QPoint& pos);
+    void setScaling(qreal scaling, const QPointF& pos) override;
+    Q_INVOKABLE void scale(qreal factor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
+    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
 
     INotationInteractionPtr notationInteraction() const override;
@@ -108,10 +109,11 @@ public:
     qreal verticalScrollbarSize() const;
 
     QColor backgroundColor() const;
-    QRect viewport() const;
+    RectF viewport() const;
+    QRectF viewport_property() const;
 
 signals:
-    void showContextMenuRequested(int elementType, const QPoint& pos);
+    void showContextMenuRequested(int elementType, const QPointF& pos);
     void hideContextMenuRequested();
 
     void textEdittingStarted();
@@ -120,7 +122,7 @@ signals:
     void verticalScrollChanged();
 
     void backgroundColorChanged(QColor color);
-    void viewportChanged(QRect viewport);
+    void viewportChanged();
 
     void activeFocusRequested();
 
@@ -129,12 +131,11 @@ protected:
     void setReadonly(bool readonly);
 
     void moveCanvasToCenter();
-    void moveCanvasToPosition(const QPoint& logicPos);
-    double guiScaling() const;
+    void moveCanvasToPosition(const PointF& logicPos);
 
-    QRectF notationContentRect() const;
+    RectF notationContentRect() const;
 
-    RectF toLogical(const QRect& rect) const;
+    RectF toLogical(const RectF& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -176,12 +177,12 @@ private:
 
     void ensureViewportInsideScrollableArea();
 
-    QRectF scrollableAreaRect() const;
+    RectF scrollableAreaRect() const;
 
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    void adjustCanvasPosition(const QRectF& logicRect);
+    void adjustCanvasPosition(const RectF& logicRect);
 
     void onNoteInputChanged();
     void onSelectionChanged();
@@ -192,15 +193,16 @@ private:
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 
     const Page* pointToPage(const PointF& point) const;
-    QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
+    PointF alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const;
 
     void paintBackground(const RectF& rect, draw::Painter* painter);
 
     PointF canvasCenter() const;
-    std::pair<int, int> constraintCanvas(int dx, int dy) const;
+    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
     notation::INotationPtr m_notation;
-    QTransform m_matrix;
+    Transform m_matrix;
+
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;

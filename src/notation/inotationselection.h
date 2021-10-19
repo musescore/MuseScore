@@ -46,7 +46,7 @@ public:
 
     virtual std::vector<Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
 
-    virtual QRectF canvasBoundingRect() const = 0;
+    virtual RectF canvasBoundingRect() const = 0;
 
     virtual INotationSelectionRangePtr range() const = 0;
 };

@@ -801,9 +801,9 @@ void BarLine::draw(mu::draw::Painter* painter) const
 //   drawEditMode
 //---------------------------------------------------------
 
-void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling)
 {
-    EngravingItem::drawEditMode(p, ed);
+    EngravingItem::drawEditMode(p, ed, currentViewScaling);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
     y1 += bed->yoff1;
     y2 += bed->yoff2;
