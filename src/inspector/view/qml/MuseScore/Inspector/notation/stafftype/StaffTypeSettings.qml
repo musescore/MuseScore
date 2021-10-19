@@ -94,7 +94,7 @@ Column {
         }
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     Item {
         height: childrenRect.height
@@ -173,7 +173,7 @@ Column {
         navigationRowStart: invisibleStaffLinesCheckBox.navigation.row + 1
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     DropdownPropertyView {
         id: noteHeadScheme

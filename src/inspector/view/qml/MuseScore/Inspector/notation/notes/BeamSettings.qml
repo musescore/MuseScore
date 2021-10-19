@@ -66,7 +66,7 @@ FocusableItem {
             enabled: root.model ? !root.model.isEmpty : false
 
             SeparatorLine {
-                anchors.margins: -10
+                anchors.margins: -12
                 visible: featheringControlsColumn.visible
             }
 
@@ -171,7 +171,7 @@ FocusableItem {
             }
 
             SeparatorLine {
-                anchors.margins: -10
+                anchors.margins: -12
                 visible: featheringControlsColumn.visible
             }
 
