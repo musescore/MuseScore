@@ -86,7 +86,7 @@ Column {
         navigation.row: lineTypeSectuion.navigationRowEnd + 1
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     LineStyleSection {
         lineStyle: root.model ? root.model.lineStyle : null

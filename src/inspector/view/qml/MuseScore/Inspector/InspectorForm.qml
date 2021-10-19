@@ -26,11 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-import "common"
-import "general"
-import "notation"
-import "text"
-import "score"
+import "."
 
 Rectangle {
     id: root
@@ -75,128 +71,43 @@ Rectangle {
 
         Column {
             id: contentColumn
+
             anchors.fill: parent
             anchors.margins: 12
 
             height: childrenRect.height
-            spacing: 6
+            spacing: 12
 
             Repeater {
                 id: inspectorRepeater
-                model: InspectorListModel {}
 
-                delegate: ExpandableBlank {
-                    id: expandableDelegate
+                model: InspectorListModel {
+                    id: inspectorListModel
+                }
 
-                    required property int index
-                    required property var inspectorSectionModel // Comes from inspectorListModel
+                delegate: Column {
+                    width: parent.width
 
-                    NavigationPanel {
-                        id: navPanel
-                        name: expandableDelegate.title
-                        section: root.navigationSection
-                        enabled: expandableDelegate.enabled && expandableDelegate.visible
-                        direction: NavigationPanel.Vertical
-                        accessible.name: expandableDelegate.title
-                        order: expandableDelegate.index + 2
+                    spacing: contentColumn.spacing
+
+                    SeparatorLine {
+                        anchors.margins: -12
+
+                        visible: model.index !== 0
                     }
 
-                    navigation.panel: navPanel
-                    navigation.row: 0
+                    InspectorSectionDelegate {
+                        sectionModel: model.inspectorSectionModel
+                        index: model.index
+                        anchorItem: root
+                        navigationSection: root.navigationSection
 
-                    title: inspectorSectionModel.title
-
-                    contentItemComponent: {
-                        switch (inspectorSectionModel.sectionType) {
-                        case Inspector.SECTION_GENERAL: return generalInspector
-                        case Inspector.SECTION_TEXT: return textInspector
-                        case Inspector.SECTION_NOTATION:
-                            if (inspectorSectionModel.isMultiModel()) {
-                                return notationInspectorMultiElements
-                            } else {
-                                return notationInspectorSingleElement
-                            }
-                        case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
-                        case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
+                        onReturnToBoundsRequested: {
+                            flickableArea.returnToBounds()
                         }
-                    }
 
-                    onContentItemComponentChanged: {
-                        flickableArea.returnToBounds()
-                    }
-
-                    Component {
-                        id: generalInspector
-
-                        GeneralInspectorView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
-                            anchorItem: root
-
-                            onEnsureContentVisibleRequested: {
-                                flickableArea.ensureContentVisible(-invisibleContentHeight)
-                            }
-                        }
-                    }
-
-                    Component {
-                        id: textInspector
-
-                        TextInspectorView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
-                            anchorItem: root
-
-                            onEnsureContentVisibleRequested: {
-                                flickableArea.ensureContentVisible(-invisibleContentHeight)
-                            }
-                        }
-                    }
-
-                    Component {
-                        id: notationInspectorMultiElements
-
-                        NotationMultiElementView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
-                            anchorItem: root
-
-                            onEnsureContentVisibleRequested: {
-                                flickableArea.ensureContentVisible(-invisibleContentHeight)
-                            }
-                        }
-                    }
-
-                    Component {
-                        id: notationInspectorSingleElement
-
-                        NotationSingleElementView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
-                        }
-                    }
-
-                    Component {
-                        id: scoreInspector
-
-                        ScoreDisplayInspectorView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
-                        }
-                    }
-
-                    Component {
-                        id: scoreAppearanceInspector
-
-                        ScoreAppearanceInspectorView {
-                            model: expandableDelegate.inspectorSectionModel
-                            navigationPanel: navPanel
-                            navigationRowStart: expandableDelegate.navigation.row + 1
+                        onEnsureContentVisibleRequested: {
+                            flickableArea.ensureContentVisible(invisibleContentHeight)
                         }
                     }
                 }

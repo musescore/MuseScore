@@ -75,7 +75,7 @@ Column {
         navigationRowStart: root.navigationRowStart + 3
     }
 
-    SeparatorLine { anchors.margins: -10 }
+    SeparatorLine { anchors.margins: -12 }
 
     LineStyleSection {
         id: lineStyleSection
@@ -87,7 +87,7 @@ Column {
         navigationRowStart: lineTypeSection.navigationRowEnd + 1
     }
 
-    SeparatorLine { anchors.margins: -10; visible: placementSection.visible }
+    SeparatorLine { anchors.margins: -12; visible: placementSection.visible }
 
     PlacementSection {
         id: placementSection

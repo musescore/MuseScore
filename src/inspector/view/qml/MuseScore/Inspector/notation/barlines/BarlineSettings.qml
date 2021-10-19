@@ -99,9 +99,7 @@ Column {
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.isSpanToNextStaff : null
     }
 
-    SeparatorLine {
-        anchors.margins: -10
-    }
+    SeparatorLine { anchors.margins: -12 }
 
     Item {
         height: childrenRect.height

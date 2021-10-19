@@ -56,7 +56,6 @@ FocusScope {
     Column {
         id: contentColumn
 
-        height: childrenRect.height
         width: root.width
 
         spacing: 12
@@ -69,13 +68,8 @@ FocusScope {
             id: contentLoader
 
             property alias yScale: scalingFactor.yScale
-            property int contentHorizontalPadding: 4
 
-            function getContentHeight() {
-                return implicitHeight === 0 ? implicitHeight : implicitHeight + contentHorizontalPadding * 2
-            }
-
-            height: root.isExpanded ? getContentHeight() * yScale : 0
+            height: root.isExpanded ? implicitHeight : 0
             width: root.width
 
             enabled: root.isExpanded
