@@ -96,7 +96,7 @@ QVariantMap LearnPageModel::classesAuthor() const
                                           "and culminating in this Mastering MuseScore School, "
                                           "I have dedicated most of my life to helping as many musicians as I can.");
     author["avatarUrl"] = "qrc:/qml/MuseScore/Learn/resources/marc_sabatella.JPG";
-    author["organizationName"] = qtrc("learn", "Open Mastering MuseScore School");
+    author["organizationName"] = qtrc("learn", "Mastering MuseScore School");
     author["organizationUrl"] = "https://school.masteringmusescore.com/";
 
     return author;
