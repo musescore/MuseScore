@@ -281,12 +281,12 @@ FocusScope {
         LanguagesPage {
             id: languagesComp
 
-            navigation.section: navSec
-            navigation.order: 8
             search: searchField.searchText
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
     }
 }
