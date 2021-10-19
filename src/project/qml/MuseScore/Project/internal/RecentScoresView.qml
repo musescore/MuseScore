@@ -98,6 +98,11 @@ GridView {
             navigation.panel: navPanel
             navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
             navigation.column: model.index - (navigation.row * root.columns)
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    root.positionViewAtIndex(index, ListView.Contain)
+                }
+            }
 
             title: score.title
             thumbnail: score.thumbnail
