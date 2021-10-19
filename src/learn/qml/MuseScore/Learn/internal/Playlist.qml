@@ -91,8 +91,8 @@ FocusScope {
         property int itemWidth: 250
         property int itemHeight: 224
 
-        property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
-        property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
+        property int rows: Math.max(0, Math.floor(height / cellHeight))
+        property int columns: Math.max(0, Math.floor(width / cellWidth))
 
         ScrollBar.vertical: StyledScrollBar {
             parent: root
@@ -116,8 +116,8 @@ FocusScope {
                 height: view.itemHeight
 
                 navigation.panel: navPanel
-                navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
-                navigation.column: model.index - (navigation.row * root.columns)
+                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
+                navigation.column: model.index - (navigation.row * view.columns)
 
                 title: modelData.title
                 author: modelData.author

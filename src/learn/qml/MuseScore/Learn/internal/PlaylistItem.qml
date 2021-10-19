@@ -44,7 +44,7 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.title
+        accessible.name: root.title + ". " + root.author
 
         onActiveChanged: {
             if (active) {
@@ -53,6 +53,10 @@ FocusScope {
         }
 
         onTriggered: root.clicked()
+    }
+
+    NavigationFocusBorder {
+        navigationCtrl: root.navigation
     }
 
     Column {
