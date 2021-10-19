@@ -40,6 +40,8 @@ static QString mixerSectionTitle(MixerSectionType type)
     case MixerSectionType::AudioFX: return mu::qtrc("playback", "Audio FX");
     case MixerSectionType::Balance: return mu::qtrc("playback", "Pan");
     case MixerSectionType::Volume: return mu::qtrc("playback", "Volume");
+    case MixerSectionType::Fader: return mu::qtrc("playback", "Fader");
+    case MixerSectionType::MuteAndSolo: return mu::qtrc("playback", "Mute and solo");
     case MixerSectionType::Title: return mu::qtrc("playback", "Name");
     case MixerSectionType::Unknown: break;
     }
@@ -75,6 +77,16 @@ bool MixerPanelContextMenuModel::balanceSectionVisible() const
 bool MixerPanelContextMenuModel::volumeSectionVisible() const
 {
     return isSectionVisible(MixerSectionType::Volume);
+}
+
+bool MixerPanelContextMenuModel::faderSectionVisible() const
+{
+    return isSectionVisible(MixerSectionType::Fader);
+}
+
+bool MixerPanelContextMenuModel::muteAndSoloSectionVisible() const
+{
+    return isSectionVisible(MixerSectionType::MuteAndSolo);
 }
 
 bool MixerPanelContextMenuModel::titleSectionVisible() const
@@ -146,6 +158,12 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
         break;
     case MixerSectionType::Volume:
         emit volumeSectionVisibleChanged();
+        break;
+    case MixerSectionType::Fader:
+        emit faderSectionVisibleChanged();
+        break;
+    case MixerSectionType::MuteAndSolo:
+        emit muteAndSoloSectionVisibleChanged();
         break;
     case MixerSectionType::Title:
         emit titleSectionVisibleChanged();
