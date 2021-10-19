@@ -31,7 +31,7 @@ Rectangle {
 
     property NavigationSection navigationSection: null
 
-    height: 30
+    height: 26
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 

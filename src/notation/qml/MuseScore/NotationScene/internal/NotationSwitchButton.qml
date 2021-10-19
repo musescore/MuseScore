@@ -32,7 +32,7 @@ FlatRadioButton {
 
     signal closeRequested()
 
-    width: 200 // TODO: Math.min(200, contentItem.implicitWidth)
+    width: Math.min(200, implicitContentWidth)
     radius: 0
 
     checkedColor: ui.theme.backgroundPrimaryColor
@@ -40,14 +40,13 @@ FlatRadioButton {
     RowLayout {
         id: contentRow
         anchors.fill: parent
-        anchors.leftMargin: 12
         spacing: 4
 
         StyledTextLabel {
             Layout.alignment: Qt.AlignLeft
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.fillWidth: root.implicitContentWidth > 200
             Layout.preferredWidth: implicitWidth
+            Layout.leftMargin: 12
 
             horizontalAlignment: Text.AlignLeft
 
@@ -61,7 +60,14 @@ FlatRadioButton {
 
             transparent: true
             icon: IconCode.CLOSE_X_ROUNDED
-            onClicked: root.closeRequested()
+            iconFont {
+                family: ui.theme.iconsFont.family
+                pixelSize: 12
+            }
+
+            onClicked: {
+                root.closeRequested()
+            }
         }
 
         SeparatorLine { orientation: Qt.Vertical }
