@@ -241,7 +241,8 @@ int GuitarPro6::readBit(QByteArray* buffer)
     int byteOffset = ((BITS_IN_BYTE - 1) - (position % BITS_IN_BYTE));
 
     // calculate the bit which we want to read
-    int bit = ((((*buffer)[byteIndex] & 0xff) >> byteOffset) & 0x01);
+    char byte = (byteIndex < buffer->size()) ? (*buffer)[byteIndex] : char(0);
+    int bit = (((byte & 0xff) >> byteOffset) & 0x01);
 
     // increment our current position so we know this bit has been read
     position++;
@@ -523,7 +524,12 @@ void GuitarPro6::readTracks(QDomNode* track)
                 QString ref = currentNode.attributes().namedItem("ref").toAttr().value();
                 auto it     = instrumentMapping.find(ref);
                 if (it != instrumentMapping.end()) {
-                    part->setInstrument(Instrument::fromTemplate(Ms::searchTemplate(it->second)));
+                    InstrumentTemplate* templ = Ms::searchTemplate(it->second);
+                    if (templ) {
+                        part->setInstrument(Instrument::fromTemplate(templ));
+                    } else {
+                        qDebug() << "Not found template for instrument: " << it->second;
+                    }
                 } else {
                     qDebug() << "Unknown instrument: " << ref;
                 }
