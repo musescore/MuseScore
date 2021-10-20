@@ -27,18 +27,20 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "iprojectconfiguration.h"
 
 namespace mu::project {
 class ProjectAutoSaver : public async::Asyncable
 {
     INJECT(project, context::IGlobalContext, globalContext)
+    INJECT(project, IProjectConfiguration, configuration)
+
 public:
     ProjectAutoSaver() = default;
 
     void init();
 
 private:
-
     void onTrySave();
 
     QTimer m_timer;
