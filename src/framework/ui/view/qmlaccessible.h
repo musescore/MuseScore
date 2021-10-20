@@ -58,7 +58,8 @@ public:
         ComboBox,
         ListItem,
         MenuItem,
-        Information
+        Information,
+        Slider
     };
     Q_ENUM(Role)
 };
@@ -71,6 +72,10 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
     Q_PROPERTY(mu::ui::MUAccessible::Role role READ role WRITE setRole NOTIFY roleChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+    Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
+    Q_PROPERTY(QVariant maximumValue READ maximumValue WRITE setMaximumValue NOTIFY maximumValueChanged)
+    Q_PROPERTY(QVariant minimumValue READ minimumValue WRITE setMinimumValue NOTIFY minimumValueChanged)
+    Q_PROPERTY(QVariant stepSize READ stepSize WRITE setStepSize NOTIFY stepSizeChanged)
     Q_PROPERTY(bool ignored READ ignored WRITE setIgnored NOTIFY ignoredChanged)
     Q_PROPERTY(QQuickItem * visualItem READ visualItem WRITE setVisualItem NOTIFY visualItemChanged)
 
@@ -90,6 +95,10 @@ public:
     MUAccessible::Role role() const;
     QString name() const;
     QString description() const;
+    QVariant value() const;
+    QVariant maximumValue() const;
+    QVariant minimumValue() const;
+    QVariant stepSize() const;
     bool ignored() const;
     QQuickItem* visualItem() const;
 
@@ -109,6 +118,10 @@ public:
     IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
+    QVariant accesibleValue() const override;
+    QVariant accesibleMaximumValue() const override;
+    QVariant accesibleMinimumValue() const override;
+    QVariant accesibleValueStepSize() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
@@ -124,6 +137,10 @@ public slots:
     void setRole(MUAccessible::Role role);
     void setName(QString name);
     void setDescription(QString description);
+    void setValue(QVariant value);
+    void setMaximumValue(QVariant maximumValue);
+    void setMinimumValue(QVariant minimumValue);
+    void setStepSize(QVariant stepSize);
     void setIgnored(bool ignored);
     void setVisualItem(QQuickItem* item);
 
@@ -132,6 +149,10 @@ signals:
     void roleChanged(MUAccessible::Role role);
     void nameChanged(QString name);
     void descriptionChanged(QString description);
+    void valueChanged(QVariant value);
+    void maximumValueChanged(QVariant maximumValue);
+    void minimumValueChanged(QVariant minimumValue);
+    void stepSizeChanged(QVariant stepSize);
     void ignoredChanged(bool ignored);
     void visualItemChanged(QQuickItem* item);
     void stateChanged();
@@ -146,6 +167,10 @@ private:
     MUAccessible::Role m_role = MUAccessible::NoRole;
     QString m_name;
     QString m_description;
+    QVariant m_value;
+    QVariant m_maximumValue;
+    QVariant m_minimumValue;
+    QVariant m_stepSize;
     bool m_ignored = false;
     QQuickItem* m_visualItem = nullptr;
     QMap<State, bool> m_state;

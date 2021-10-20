@@ -56,7 +56,7 @@ Item {
         id: extensionListModel
 
         onProgress: {
-            if (prv.selectedExtension.code !== extensionCode) {
+            if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== extensionCode) {
                 return
             }
 
@@ -69,6 +69,7 @@ Item {
 
             prv.selectedExtension = item
             extensionPanel.resetProgress()
+            extensionPanel.close()
 
             if (installedExtensionsView.count > 0) {
                 installedExtensionsView.focusOnFirst()

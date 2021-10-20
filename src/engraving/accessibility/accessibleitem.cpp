@@ -164,6 +164,26 @@ QString AccessibleItem::accessibleDescription() const
     return m_element->accessibleExtraInfo();
 }
 
+QVariant AccessibleItem::accesibleValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleItem::accesibleMaximumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleItem::accesibleMinimumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleItem::accesibleValueStepSize() const
+{
+    return QVariant();
+}
+
 bool AccessibleItem::accessibleState(State st) const
 {
     if (!registered()) {
