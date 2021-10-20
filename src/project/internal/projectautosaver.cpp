@@ -25,13 +25,30 @@
 
 using namespace mu::project;
 
-constexpr int SAVE_INTERVAL_MS(1000 * 60 * 3);
-
 void ProjectAutoSaver::init()
 {
     QObject::connect(&m_timer, &QTimer::timeout, [this]() { onTrySave(); });
     m_timer.setSingleShot(false);
-    m_timer.start(SAVE_INTERVAL_MS);
+    m_timer.setTimerType(Qt::VeryCoarseTimer);
+    m_timer.setInterval(configuration()->autoSaveIntervalMinutes() * 60000);
+
+    if (configuration()->isAutoSaveEnabled()) {
+        m_timer.start();
+    }
+
+    configuration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
+        if (enabled != m_timer.isActive()) {
+            if (enabled) {
+                m_timer.start();
+            } else {
+                m_timer.stop();
+            }
+        }
+    });
+
+    configuration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
+        m_timer.setInterval(minutes * 60000);
+    });
 }
 
 void ProjectAutoSaver::onTrySave()

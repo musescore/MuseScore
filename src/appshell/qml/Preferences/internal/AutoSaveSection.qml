@@ -32,11 +32,11 @@ BaseSection {
 
     navigation.direction: NavigationPanel.Horizontal
 
-    property alias isAutoSave: autoSaveCheckBox.checked
-    property alias autoSavePeriod: autoSavePeriodControl.currentValue
+    property alias isAutoSaveEnabled: autoSaveCheckBox.checked
+    property alias autoSaveInterval: autoSaveIntervalControl.currentValue
 
-    signal autoSaveChanged(bool autoSave)
-    signal periodChanged(int period)
+    signal autoSaveEnabledChanged(bool enabled)
+    signal intervalChanged(int minutes)
 
     Row {
         spacing: 0
@@ -54,17 +54,17 @@ BaseSection {
             navigation.column: 1
 
             onClicked: {
-                root.autoSaveChanged(!checked)
+                root.autoSaveEnabledChanged(!checked)
             }
         }
 
         IncrementalPropertyControl {
-            id: autoSavePeriodControl
+            id: autoSaveIntervalControl
 
             width: 96
             anchors.verticalCenter: parent.verticalCenter
 
-            enabled: root.isAutoSave
+            enabled: root.isAutoSaveEnabled
 
             minValue: 1
             maxValue: 100
@@ -78,7 +78,7 @@ BaseSection {
             navigation.column: 2
 
             onValueEdited: {
-                root.periodChanged(newValue)
+                root.intervalChanged(newValue)
             }
         }
     }

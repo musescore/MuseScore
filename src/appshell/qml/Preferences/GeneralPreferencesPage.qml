@@ -86,18 +86,18 @@ PreferencesPage {
         SeparatorLine { }
 
         AutoSaveSection {
-            isAutoSave: preferencesModel.isAutoSave
-            autoSavePeriod: preferencesModel.autoSavePeriod
+            isAutoSaveEnabled: preferencesModel.isAutoSaveEnabled
+            autoSaveInterval: preferencesModel.autoSaveInterval
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
-            onAutoSaveChanged: {
-                preferencesModel.isAutoSave = autoSave
+            onAutoSaveEnabledChanged: function(enabled) {
+                preferencesModel.isAutoSaveEnabled = enabled
             }
 
-            onPeriodChanged: {
-                preferencesModel.autoSavePeriod = period
+            onIntervalChanged: function(minutes) {
+                preferencesModel.autoSaveInterval = minutes
             }
         }
 
