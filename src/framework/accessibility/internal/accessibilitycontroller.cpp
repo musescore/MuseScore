@@ -195,19 +195,19 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
     QAccessible::State qstate;
     switch (state) {
     case State::Enabled: {
-        qstate.disabled = !arg;
+        qstate.disabled = true;
     } break;
     case State::Active: {
-        qstate.active = arg;
+        qstate.active = true;
     } break;
     case State::Focused: {
-        qstate.focused = arg;
+        qstate.focused = true;
     } break;
     case State::Selected: {
-        qstate.selected = arg;
+        qstate.selected = true;
     } break;
     case State::Checked: {
-        qstate.checked = arg;
+        qstate.checked = true;
     } break;
     default: {
         LOGE() << "not handled state: " << int(state);
