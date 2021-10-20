@@ -18,16 +18,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_subdirectory(bb)
-add_subdirectory(braille)
-add_subdirectory(bww)
-add_subdirectory(capella)
-add_subdirectory(midi)
-add_subdirectory(musedata)
-add_subdirectory(musicxml)
-add_subdirectory(ove)
-add_subdirectory(audioexport)
-add_subdirectory(imagesexport)
+set(MODULE_TEST iex_guitarpro_tests)
 
-#add_subdirectory(guitarpro)
-add_subdirectory(guitarpro_old)
+set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/testbase.h
+    #${CMAKE_CURRENT_LIST_DIR}/tst_guitarpro.cpp Totals: 92 passed, 55 failed
+)
+
+set(MODULE_TEST_LINK
+    libmscore
+    fonts
+    instruments
+    uicomponents
+    system
+    iex_guitarpro
+    )
+
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

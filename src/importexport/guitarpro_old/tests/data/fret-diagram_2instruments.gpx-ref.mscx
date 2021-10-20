@@ -1,0 +1,1031 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.00">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.76389</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>S-Gt</trackName>
+      <Instrument>
+        <longName>Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Acoustic Guitar (Treble Clef)</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.acoustic</instrumentId>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
+        <StringData>
+          <frets>21</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="25"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part>
+      <Staff id="2">
+        <StaffType group="pitched">
+          </StaffType>
+        </Staff>
+      <trackName>N-Gt</trackName>
+      <Instrument>
+        <longName>Guitar</longName>
+        <shortName>Guit.</shortName>
+        <trackName>Guitar (Treble Clef)</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>83</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>83</maxPitchA>
+        <transposeDiatonic>-7</transposeDiatonic>
+        <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>pluck.guitar.nylon-string</instrumentId>
+        <concertClef>G8vb</concertClef>
+        <transposingClef>G</transposingClef>
+        <StringData>
+          <frets>21</frets>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
+          </StringData>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="24"/>
+          <midiPort>0</midiPort>
+          <midiChannel>2</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <lid>0</lid>
+        </VBox>
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          <lid>1</lid>
+          </Clef>
+        <KeySig>
+          <lid>2</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>3</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <FretDiagram>
+          <lid>4</lid>
+          <string no="0">
+            <marker>48</marker>
+            </string>
+          <string no="1">
+            <dot>2</dot>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <marker>48</marker>
+            </string>
+          <string no="4">
+            <marker>88</marker>
+            </string>
+          <string no="5">
+            <marker>88</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>18</root>
+          <name>m</name>
+          <lid>5</lid>
+          </Harmony>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>6</lid>
+          </Dynamic>
+        <Tempo>
+          <tempo>2</tempo>
+          <lid>7</lid>
+          <text><sym>metNoteQuarterUp</sym> = 120</text>
+          </Tempo>
+        <Chord>
+          <lid>8</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>9</lid>
+            <pitch>59</pitch>
+            <tpc>19</tpc>
+            <fret>0</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <FretDiagram>
+          <lid>11</lid>
+          <string no="0">
+            <marker>88</marker>
+            </string>
+          <string no="1">
+            <marker>48</marker>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <dot>2</dot>
+            </string>
+          <string no="4">
+            <dot>1</dot>
+            </string>
+          <string no="5">
+            <marker>48</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>17</root>
+          <name>m</name>
+          <lid>12</lid>
+          </Harmony>
+        <Chord>
+          <lid>13</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>14</lid>
+            <pitch>64</pitch>
+            <tpc>18</tpc>
+            <fret>0</fret>
+            <string>0</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <FretDiagram>
+          <lid>16</lid>
+          <string no="0">
+            <marker>48</marker>
+            </string>
+          <string no="1">
+            <dot>2</dot>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <marker>48</marker>
+            </string>
+          <string no="4">
+            <marker>88</marker>
+            </string>
+          <string no="5">
+            <marker>88</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>18</root>
+          <name>m</name>
+          <lid>17</lid>
+          </Harmony>
+        <Chord>
+          <lid>18</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>19</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            <fret>0</fret>
+            <string>2</string>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure number="1">
+        <Clef>
+          <concertClefType>G</concertClefType>
+          <transposingClefType>G</transposingClefType>
+          <lid>21</lid>
+          </Clef>
+        <KeySig>
+          <lid>22</lid>
+          <accidental>0</accidental>
+          </KeySig>
+        <TimeSig>
+          <lid>23</lid>
+          <sigN>4</sigN>
+          <sigD>4</sigD>
+          </TimeSig>
+        <FretDiagram>
+          <lid>24</lid>
+          <string no="0">
+            <marker>48</marker>
+            </string>
+          <string no="1">
+            <dot>2</dot>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <marker>48</marker>
+            </string>
+          <string no="4">
+            <marker>88</marker>
+            </string>
+          <string no="5">
+            <marker>88</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>18</root>
+          <name>m</name>
+          <lid>25</lid>
+          </Harmony>
+        <Dynamic>
+          <subtype>mf</subtype>
+          <velocity>80</velocity>
+          <lid>26</lid>
+          </Dynamic>
+        <Chord>
+          <lid>27</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>28</lid>
+            <pitch>55</pitch>
+            <tpc>15</tpc>
+            <fret>0</fret>
+            <string>2</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <FretDiagram>
+          <lid>29</lid>
+          <string no="0">
+            <marker>88</marker>
+            </string>
+          <string no="1">
+            <marker>48</marker>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <dot>2</dot>
+            </string>
+          <string no="4">
+            <dot>1</dot>
+            </string>
+          <string no="5">
+            <marker>48</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>17</root>
+          <name>m</name>
+          <lid>30</lid>
+          </Harmony>
+        <Chord>
+          <lid>31</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>32</lid>
+            <pitch>60</pitch>
+            <tpc>14</tpc>
+            <fret>1</fret>
+            <string>1</string>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="3">
+        <FretDiagram>
+          <lid>33</lid>
+          <string no="0">
+            <marker>48</marker>
+            </string>
+          <string no="1">
+            <dot>2</dot>
+            </string>
+          <string no="2">
+            <dot>2</dot>
+            </string>
+          <string no="3">
+            <marker>48</marker>
+            </string>
+          <string no="4">
+            <marker>88</marker>
+            </string>
+          <string no="5">
+            <marker>88</marker>
+            </string>
+          </FretDiagram>
+        <Harmony>
+          <root>18</root>
+          <name>m</name>
+          <lid>34</lid>
+          </Harmony>
+        <Chord>
+          <lid>35</lid>
+          <durationType>whole</durationType>
+          <Note>
+            <lid>36</lid>
+            <pitch>52</pitch>
+            <tpc>18</tpc>
+            <fret>2</fret>
+            <string>3</string>
+            </Note>
+          </Chord>
+        </Measure>
+      </Staff>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>1</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2" col="0"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>1</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Guitar</longName>
+          <shortName>Guit.</shortName>
+          <trackName>Acoustic Guitar (Treble Clef)</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>84</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
+          <instrumentId>pluck.guitar.acoustic</instrumentId>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
+          <StringData>
+            <frets>21</frets>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
+            </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="25"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Guitar</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <lid>1</lid>
+            </Clef>
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>3</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <FretDiagram>
+            <lid>4</lid>
+            <string no="0">
+              <marker>48</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>48</marker>
+              </string>
+            <string no="4">
+              <marker>88</marker>
+              </string>
+            <string no="5">
+              <marker>88</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            <lid>5</lid>
+            </Harmony>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>6</lid>
+            </Dynamic>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>7</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <Chord>
+            <lid>8</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>9</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <FretDiagram>
+            <lid>11</lid>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>48</marker>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <marker>48</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>17</root>
+            <name>m</name>
+            <lid>12</lid>
+            </Harmony>
+          <Chord>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <FretDiagram>
+            <lid>16</lid>
+            <string no="0">
+              <marker>48</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>48</marker>
+              </string>
+            <string no="4">
+              <marker>88</marker>
+              </string>
+            <string no="5">
+              <marker>88</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            <lid>17</lid>
+            </Harmony>
+          <Chord>
+            <lid>18</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>19</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <KeySig>
+            <lid>2</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Chord>
+            <lid>8</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>9</lid>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>0</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Chord>
+            <lid>13</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>14</lid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <Chord>
+            <lid>18</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>19</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>S-Gt</name>
+      </Score>
+    <Score>
+      <LayerTag id="0" tag="default"></LayerTag>
+      <currentLayer>0</currentLayer>
+      <Division>480</Division>
+      <Style>
+        <createMultiMeasureRests>1</createMultiMeasureRests>
+        <Spatium>1.76389</Spatium>
+        </Style>
+      <showInvisible>1</showInvisible>
+      <showUnprintable>1</showUnprintable>
+      <showFrames>1</showFrames>
+      <showMargins>0</showMargins>
+      <Part>
+        <Staff id="1">
+          <linkedTo>2</linkedTo>
+          <StaffType group="pitched">
+            </StaffType>
+          <bracket type="0" span="2" col="0"/>
+          </Staff>
+        <Staff id="2">
+          <linkedTo>2</linkedTo>
+          <StaffType group="tablature">
+            <name>tab6StrCommon</name>
+            <lines>6</lines>
+            <lineDistance>1.5</lineDistance>
+            <timesig>0</timesig>
+            <durations>0</durations>
+            <durationFontName>MuseScore Tab Modern</durationFontName>
+            <durationFontSize>15</durationFontSize>
+            <durationFontY>0</durationFontY>
+            <fretFontName>MuseScore Tab Serif</fretFontName>
+            <fretFontSize>9</fretFontSize>
+            <fretFontY>0</fretFontY>
+            <linesThrough>0</linesThrough>
+            <minimStyle>1</minimStyle>
+            <onLines>1</onLines>
+            <showRests>0</showRests>
+            <stemsDown>1</stemsDown>
+            <stemsThrough>0</stemsThrough>
+            <upsideDown>0</upsideDown>
+            <useNumbers>1</useNumbers>
+            </StaffType>
+          </Staff>
+        <trackName></trackName>
+        <Instrument>
+          <longName>Guitar</longName>
+          <shortName>Guit.</shortName>
+          <trackName>Guitar (Treble Clef)</trackName>
+          <minPitchP>40</minPitchP>
+          <maxPitchP>83</maxPitchP>
+          <minPitchA>40</minPitchA>
+          <maxPitchA>83</maxPitchA>
+          <transposeDiatonic>-7</transposeDiatonic>
+          <transposeChromatic>-12</transposeChromatic>
+          <instrumentId>pluck.guitar.nylon-string</instrumentId>
+          <concertClef>G8vb</concertClef>
+          <transposingClef>G</transposingClef>
+          <StringData>
+            <frets>21</frets>
+            <string>52</string>
+            <string>57</string>
+            <string>62</string>
+            <string>67</string>
+            <string>71</string>
+            <string>76</string>
+            </StringData>
+          <Articulation>
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="staccatissimo">
+            <velocity>100</velocity>
+            <gateTime>33</gateTime>
+            </Articulation>
+          <Articulation name="staccato">
+            <velocity>100</velocity>
+            <gateTime>50</gateTime>
+            </Articulation>
+          <Articulation name="portato">
+            <velocity>100</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="tenuto">
+            <velocity>100</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Articulation name="marcato">
+            <velocity>120</velocity>
+            <gateTime>67</gateTime>
+            </Articulation>
+          <Articulation name="sforzato">
+            <velocity>120</velocity>
+            <gateTime>100</gateTime>
+            </Articulation>
+          <Channel>
+            <program value="24"/>
+            </Channel>
+          </Instrument>
+        </Part>
+      <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <lid>0</lid>
+          <Text>
+            <style>Instrument Name (Part)</style>
+            <text>Guitar</text>
+            </Text>
+          </VBox>
+        <Measure number="1">
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <lid>21</lid>
+            </Clef>
+          <KeySig>
+            <lid>22</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <TimeSig>
+            <lid>23</lid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tempo>
+            <tempo>2</tempo>
+            <lid>7</lid>
+            <text><sym>metNoteQuarterUp</sym> = 120</text>
+            </Tempo>
+          <FretDiagram>
+            <lid>24</lid>
+            <string no="0">
+              <marker>48</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>48</marker>
+              </string>
+            <string no="4">
+              <marker>88</marker>
+              </string>
+            <string no="5">
+              <marker>88</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            <lid>25</lid>
+            </Harmony>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <lid>26</lid>
+            </Dynamic>
+          <Chord>
+            <lid>27</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>28</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <FretDiagram>
+            <lid>29</lid>
+            <string no="0">
+              <marker>88</marker>
+              </string>
+            <string no="1">
+              <marker>48</marker>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <dot>2</dot>
+              </string>
+            <string no="4">
+              <dot>1</dot>
+              </string>
+            <string no="5">
+              <marker>48</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>17</root>
+            <name>m</name>
+            <lid>30</lid>
+            </Harmony>
+          <Chord>
+            <lid>31</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>32</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <FretDiagram>
+            <lid>33</lid>
+            <string no="0">
+              <marker>48</marker>
+              </string>
+            <string no="1">
+              <dot>2</dot>
+              </string>
+            <string no="2">
+              <dot>2</dot>
+              </string>
+            <string no="3">
+              <marker>48</marker>
+              </string>
+            <string no="4">
+              <marker>88</marker>
+              </string>
+            <string no="5">
+              <marker>88</marker>
+              </string>
+            </FretDiagram>
+          <Harmony>
+            <root>18</root>
+            <name>m</name>
+            <lid>34</lid>
+            </Harmony>
+          <Chord>
+            <lid>35</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>36</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <Staff id="2">
+        <Measure number="1">
+          <KeySig>
+            <lid>22</lid>
+            <accidental>0</accidental>
+            </KeySig>
+          <Chord>
+            <lid>27</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>28</lid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="2">
+          <Chord>
+            <lid>31</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>32</lid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              <fret>1</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          </Measure>
+        <Measure number="3">
+          <Chord>
+            <lid>35</lid>
+            <durationType>whole</durationType>
+            <Note>
+              <lid>36</lid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          </Measure>
+        </Staff>
+      <name>N-Gt</name>
+      </Score>
+    </Score>
+  </museScore>
