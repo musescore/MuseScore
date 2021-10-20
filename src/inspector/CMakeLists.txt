@@ -105,8 +105,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracesettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp

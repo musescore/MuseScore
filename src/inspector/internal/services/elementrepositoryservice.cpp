@@ -32,6 +32,8 @@
 #include "layoutbreak.h"
 #include "pedal.h"
 #include "tremolo.h"
+#include "bracket.h"
+#include "bracketItem.h"
 #include "durationtype.h"
 #include "stafftype.h"
 #include "mscore.h"
@@ -73,6 +75,7 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::CLEF: return findPairedClefs();
     case Ms::ElementType::TEXT: return findTexts();
     case Ms::ElementType::TREMOLO: return findTremolos();
+    case Ms::ElementType::BRACKET: return findBrackets();
     case Ms::ElementType::PEDAL:
     case Ms::ElementType::GLISSANDO:
     case Ms::ElementType::VIBRATO:
@@ -356,6 +359,23 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findTremolos() const
             // so only tremolos which can have custom styles make it appear
             if (Ms::toTremolo(element)->customStyleApplicable()) {
                 resultList << element;
+            }
+        }
+    }
+
+    return resultList;
+}
+
+QList<Ms::EngravingItem*> ElementRepositoryService::findBrackets() const
+{
+    QList<Ms::EngravingItem*> resultList;
+
+    for (Ms::EngravingItem* element : m_exposedElementList) {
+        if (element->isBracket()) {
+            const Ms::Bracket* bracket = Ms::toBracket(element);
+
+            if (bracket && bracket->bracketItem()) {
+                resultList << bracket->bracketItem();
             }
         }
     }

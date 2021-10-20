@@ -111,7 +111,6 @@ Loader {
             case Inspector.TYPE_IMAGE: return imageComp
             case Inspector.TYPE_CHORD_SYMBOL: return chordSymbolComp
             case Inspector.TYPE_BRACKET: return bracketComp
-            case Inspector.TYPE_BRACE: return braceComp
             case Inspector.TYPE_TIME_SIGNATURE: return timeSignatureComp
             case Inspector.TYPE_MMREST: return mmRestComp
             case Inspector.TYPE_BEND: return bendComp
@@ -261,11 +260,6 @@ Loader {
     Component {
         id: bracketComp
         BracketSettings { }
-    }
-
-    Component {
-        id: braceComp
-        BraceSettings { }
     }
 
     Component {

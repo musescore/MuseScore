@@ -35,7 +35,7 @@ namespace Ms {
 //   BracketItem
 //---------------------------------------------------------
 
-class BracketItem final : public EngravingObject
+class BracketItem final : public EngravingItem
 {
     BracketType _bracketType { BracketType::NO_BRACKET };
     int _column              { 0 };
@@ -48,15 +48,14 @@ class BracketItem final : public EngravingObject
     BracketItem(EngravingItem* parent, BracketType a, int b);
 
 public:
+    Ms::EngravingItem* clone() const override;
 
     QVariant getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 
-//      bool selected() const              { return _selected;    }
     int bracketSpan() const { return _bracketSpan; }
     BracketType bracketType() const { return _bracketType; }
-//      void setSelected(bool v)           { _selected = v;       }
     void setBracketSpan(int v) { _bracketSpan = v; }
     void setBracketType(BracketType v) { _bracketType = v; }
     Staff* staff() { return _staff; }
