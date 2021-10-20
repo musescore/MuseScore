@@ -58,6 +58,7 @@ private:
     QList<Ms::EngravingItem*> findPairedClefs() const;
     QList<Ms::EngravingItem*> findTexts() const;
     QList<Ms::EngravingItem*> findTremolos() const;
+    QList<Ms::EngravingItem*> findBrackets() const;
     QList<Ms::EngravingItem*> findLines(Ms::ElementType lineType) const;
 
     QList<Ms::EngravingItem*> m_exposedElementList;
