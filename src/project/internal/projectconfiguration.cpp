@@ -39,8 +39,10 @@ static const std::string module_name("project");
 static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
-static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
+static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "project/preferredScoreCreationMode");
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
+static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
+static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -65,6 +67,16 @@ void ProjectConfiguration::init()
 
     Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
+
+    settings()->setDefaultValue(AUTOSAVE_ENABLED_KEY, Val(true));
+    settings()->valueChanged(AUTOSAVE_ENABLED_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_autoSaveEnabledChanged.send(val.toBool());
+    });
+
+    settings()->setDefaultValue(AUTOSAVE_INTERVAL_KEY, Val(3));
+    settings()->valueChanged(AUTOSAVE_INTERVAL_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_autoSaveIntervalChanged.send(val.toInt());
+    });
 }
 
 io::paths ProjectConfiguration::recentProjectPaths() const
@@ -234,4 +246,34 @@ void ProjectConfiguration::setMigrationOptions(const MigrationOptions& opt)
 
     QString json = QJsonDocument(obj).toJson(QJsonDocument::Compact);
     settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
+}
+
+bool ProjectConfiguration::isAutoSaveEnabled() const
+{
+    return settings()->value(AUTOSAVE_ENABLED_KEY).toBool();
+}
+
+void ProjectConfiguration::setAutoSaveEnabled(bool enabled)
+{
+    settings()->setSharedValue(AUTOSAVE_ENABLED_KEY, Val(enabled));
+}
+
+async::Channel<bool> ProjectConfiguration::autoSaveEnabledChanged() const
+{
+    return m_autoSaveEnabledChanged;
+}
+
+int ProjectConfiguration::autoSaveIntervalMinutes() const
+{
+    return settings()->value(AUTOSAVE_INTERVAL_KEY).toInt();
+}
+
+void ProjectConfiguration::setAutoSaveInterval(int minutes)
+{
+    settings()->setSharedValue(AUTOSAVE_INTERVAL_KEY, Val(minutes));
+}
+
+async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
+{
+    return m_autoSaveIntervalChanged;
 }

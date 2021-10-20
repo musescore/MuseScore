@@ -56,6 +56,14 @@ public:
 
     MOCK_METHOD(MigrationOptions, migrationOptions, (), (const, override));
     MOCK_METHOD(void, setMigrationOptions, (const MigrationOptions&), (override));
+
+    MOCK_METHOD(bool, isAutoSaveEnabled, (), (const, override));
+    MOCK_METHOD(void, setAutoSaveEnabled, (bool), (override));
+    MOCK_METHOD(async::Channel<bool>, autoSaveEnabledChanged, (), (const, override));
+
+    MOCK_METHOD(int, autoSaveIntervalMinutes, (), (const, override));
+    MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
+    MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 };
 }
 

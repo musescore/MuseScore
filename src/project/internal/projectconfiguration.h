@@ -71,8 +71,15 @@ public:
     MigrationOptions migrationOptions() const override;
     void setMigrationOptions(const MigrationOptions& opt) override;
 
-private:
+    bool isAutoSaveEnabled() const override;
+    void setAutoSaveEnabled(bool enabled) override;
+    async::Channel<bool> autoSaveEnabledChanged() const override;
 
+    int autoSaveIntervalMinutes() const override;
+    void setAutoSaveInterval(int minutes) override;
+    async::Channel<int> autoSaveIntervalChanged() const override;
+
+private:
     io::paths parsePaths(const mu::Val& value) const;
 
     io::path appTemplatesPath() const;
@@ -80,6 +87,9 @@ private:
     async::Channel<io::paths> m_recentProjectPathsChanged;
     async::Channel<io::path> m_userTemplatesPathChanged;
     async::Channel<io::path> m_userScoresPathChanged;
+
+    async::Channel<bool> m_autoSaveEnabledChanged;
+    async::Channel<int> m_autoSaveIntervalChanged;
 };
 }
 

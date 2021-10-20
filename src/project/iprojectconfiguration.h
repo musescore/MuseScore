@@ -70,6 +70,14 @@ public:
 
     virtual MigrationOptions migrationOptions() const = 0;
     virtual void setMigrationOptions(const MigrationOptions& opt) = 0;
+
+    virtual bool isAutoSaveEnabled() const = 0;
+    virtual void setAutoSaveEnabled(bool enabled) = 0;
+    virtual async::Channel<bool> autoSaveEnabledChanged() const = 0;
+
+    virtual int autoSaveIntervalMinutes() const = 0;
+    virtual void setAutoSaveInterval(int minutes) = 0;
+    virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
 };
 }
 

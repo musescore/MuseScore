@@ -41,6 +41,14 @@ void GeneralPreferencesModel::load()
         emit languagesChanged(languages());
     });
 
+    projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
+        emit autoSaveEnabledChanged(enabled);
+    });
+
+    projectConfiguration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
+        emit autoSaveIntervalChanged(minutes);
+    });
+
     telemetryConfiguration()->isTelemetryAllowed().ch.onReceive(this, [this](bool) {
         emit isTelemetryAllowedChanged(isTelemetryAllowed());
     });
@@ -87,14 +95,14 @@ bool GeneralPreferencesModel::isTelemetryAllowed() const
     return telemetryConfiguration()->isTelemetryAllowed().val;
 }
 
-bool GeneralPreferencesModel::isAutoSave() const
+bool GeneralPreferencesModel::isAutoSaveEnabled() const
 {
-    return false;
+    return projectConfiguration()->isAutoSaveEnabled();
 }
 
-int GeneralPreferencesModel::autoSavePeriod() const
+int GeneralPreferencesModel::autoSaveInterval() const
 {
-    return 0;
+    return projectConfiguration()->autoSaveIntervalMinutes();
 }
 
 bool GeneralPreferencesModel::isOSCRemoteControl() const
@@ -127,16 +135,24 @@ void GeneralPreferencesModel::setIsTelemetryAllowed(bool isTelemetryAllowed)
     emit isTelemetryAllowedChanged(isTelemetryAllowed);
 }
 
-void GeneralPreferencesModel::setIsAutoSave(bool isAutoSave)
+void GeneralPreferencesModel::setAutoSaveEnabled(bool enabled)
 {
-    NOT_IMPLEMENTED;
-    emit isAutoSaveChanged(isAutoSave);
+    if (enabled == isAutoSaveEnabled()) {
+        return;
+    }
+
+    projectConfiguration()->setAutoSaveEnabled(enabled);
+    emit autoSaveEnabledChanged(enabled);
 }
 
-void GeneralPreferencesModel::setAutoSavePeriod(int autoSavePeriod)
+void GeneralPreferencesModel::setAutoSaveInterval(int minutes)
 {
-    NOT_IMPLEMENTED;
-    emit autoSavePeriodChanged(autoSavePeriod);
+    if (minutes == autoSaveInterval()) {
+        return;
+    }
+
+    projectConfiguration()->setAutoSaveInterval(minutes);
+    emit autoSaveIntervalChanged(minutes);
 }
 
 void GeneralPreferencesModel::setIsOSCRemoteControl(bool isOSCRemoteControl)
