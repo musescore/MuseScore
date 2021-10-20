@@ -2955,6 +2955,9 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
     //
     std::vector<Part*> infoParts;
     for (Part* part : score->parts()) {
+        //! HACK Temporary disabled, something not corrected, so crashed
+        continue;
+
         const QString& longName = part->longName();
         if (!longName.isEmpty() && longName[0] == '@') {
             infoParts.push_back(part);
@@ -2986,8 +2989,8 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         }
 
         Excerpt* excerpt = new Excerpt(score);
-        excerpt->setTracks(tracks);
         excerpt->setPartScore(pscore);
+        excerpt->setTracks(tracks);
         pscore->setExcerpt(excerpt);
         excerpt->setTitle(part->partName());
         excerpt->parts().append(part);
