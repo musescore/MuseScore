@@ -95,7 +95,7 @@ void GPConverter::convertGP()
                 continue;
             }
 
-            IF_ASSERT_FAILED(pChannel->channel() == 9) {
+            if (!(pChannel->channel() == 9)) {
                 continue;
             }
 
