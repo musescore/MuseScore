@@ -169,6 +169,11 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         break;
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
+    case IAccessible::Property::Value: {
+        QAccessibleValueChangeEvent ev(it.object, it.item->accesibleValue());
+        sendEvent(&ev);
+        return;
+    }
     }
 
     QAccessibleEvent ev(it.object, etype);
@@ -389,6 +394,26 @@ QString AccessibilityController::accessibleName() const
 QString AccessibilityController::accessibleDescription() const
 {
     return QString();
+}
+
+QVariant AccessibilityController::accesibleValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleMaximumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleMinimumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleValueStepSize() const
+{
+    return QVariant();
 }
 
 bool AccessibilityController::accessibleState(State st) const

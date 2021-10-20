@@ -48,6 +48,10 @@ Item {
         accessible.name: root.title
     }
 
+    function focusOnFirst() {
+        view.itemAtIndex(0).requestActive()
+    }
+
     signal clicked(int index, var extension, var navigationControl)
     signal navigationActivated(var itemRect)
 
