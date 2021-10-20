@@ -31,6 +31,9 @@ Rectangle {
 
     signal activeFocusRequested()
 
+    width: view.width
+    height: view.height
+
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
@@ -57,9 +60,7 @@ Rectangle {
     ListView {
         id: view
 
-        anchors.verticalCenter: parent.verticalCenter
-
-        width: contentWidth
+        width: contentItem.childrenRect.width
         height: contentItem.childrenRect.height
 
         orientation: Qt.Horizontal

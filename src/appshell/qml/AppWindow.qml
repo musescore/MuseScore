@@ -29,6 +29,8 @@ import MuseScore.AppShell 1.0
 ApplicationWindow {
     id: root
 
+    objectName: "ApplicationWindow"
+
     width: 1150
     height: 800
 

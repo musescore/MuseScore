@@ -28,8 +28,8 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
-    width: radioButtonList.contentWidth
-    height: radioButtonList.contentHeight
+    width: radioButtonList.width
+    height: radioButtonList.height
 
     property alias navigation: navCtrl
 
@@ -71,6 +71,9 @@ Item {
         spacing: 0
 
         model: root.items
+
+        width: contentItem.childrenRect.width
+        height: contentItem.childrenRect.height
 
         delegate: GradientTabButton {
             id: radioButtonDelegate

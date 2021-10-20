@@ -59,12 +59,9 @@ DockWindow {
             objectName: "mainToolBar"
             title: qsTrc("appshell", "Main toolbar")
 
-            width: root.width / 2
-            minimumWidth: 304
-
             movable: false
 
-            contentComponent: MainToolBar {
+            MainToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
 
