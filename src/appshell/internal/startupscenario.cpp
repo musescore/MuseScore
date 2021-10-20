@@ -94,6 +94,8 @@ void StartupScenario::run()
 
 std::string StartupScenario::startupPageUri(StartupSessionType sessionType) const
 {
+    return NOTATION_URI;
+
     switch (sessionType) {
     case StartupSessionType::StartEmpty:
     case StartupSessionType::StartWithNewScore:

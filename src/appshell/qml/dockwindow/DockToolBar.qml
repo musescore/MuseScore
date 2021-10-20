@@ -29,83 +29,129 @@ import MuseScore.Dock 1.0
 DockToolBarView {
     id: root
 
-    property Component contentComponent
+    default property alias contentComponent: contentLoader.sourceComponent
+    property alias movable: gripButton.visible
+
+    onOrientationChanged: {
+        contentBackground.printInfo()
+    }
+
+    onFloatingChanged: {
+        contentBackground.printInfo()
+    }
 
     Rectangle {
-        anchors.fill: parent
+        id: contentBackground
+
         color: ui.theme.backgroundPrimaryColor
 
-        Loader {
-            id: loader
-            anchors.fill: parent
-
-            sourceComponent: root.orientation === Qt.Horizontal ? horizontalView : verticalView
-            onLoaded: {
-                root.setDraggableMouseArea(loader.item.gripMouseArea)
-            }
+        function printInfo() {
+            console.debug("------------------------------")
+            console.debug("obj: " + objectName)
+            console.debug("contentSize: " + Qt.size(contentLoader.width, contentLoader.height))
+            console.debug("bakgroundSize: " + Qt.size(contentBackground.width, contentBackground.height))
+            console.debug("------------------------------\n")
         }
-    }
 
-    Component {
-        id: horizontalView
+        Component.onCompleted: {
+            Qt.callLater(printInfo)
+        }
 
-        RowLayout {
-            spacing: 0
+        Item {
+            id: contentRect
 
-            property alias gripMouseArea: gripButton.mouseArea
+            readonly property int margins: 2
+            readonly property int gripButtonWidth: gripButton.visible ? gripButton.width : 0
+            readonly property int gripButtonHeight: gripButton.visible ? gripButton.height : 0
 
             FlatButton {
                 id: gripButton
 
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-                Layout.margins: 2
-
-                mouseArea.objectName: root.objectName + "_toolBarMouseAreaHorizontal"
+                mouseArea.objectName: root.objectName + "_gripButton"
 
                 transparent: true
                 icon: IconCode.TOOLBAR_GRIP
 
-                visible: root.movable
+                Component.onCompleted: {
+                    root.setDraggableMouseArea(mouseArea)
+                }
             }
 
             Loader {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                sourceComponent: root.contentComponent
+                id: contentLoader
             }
         }
     }
 
-    Component {
-        id: verticalView
+    states: [
+        State {
+            name: "HORIZONTAL"
+            when: root.orientation === Qt.Horizontal
 
-        ColumnLayout {
-            spacing: 0
+            PropertyChanges {
+                target: root
 
-            property alias gripMouseArea: gripButton.mouseArea
+                minimumWidth: contentLoader.item ? 2 * contentRect.margins + contentRect.gripButtonWidth + contentLoader.width : 0
+                minimumHeight: contentLoader.item ? 2 * contentRect.margins + contentLoader.height : 0
+            }
 
-            FlatButton {
-                id: gripButton
+            PropertyChanges {
+                target: gripButton
 
-                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-                Layout.margins: 2
+                anchors.left: parent.left
+                anchors.leftMargin: contentRect.margins
+                anchors.top: undefined
 
-                mouseArea.objectName: root.objectName + "_toolBarMouseAreaVertical"
+                x: 0
+                y: (contentBackground.height - gripButton.height) / 2
+            }
 
-                transparent: true
-                icon: IconCode.TOOLBAR_GRIP
+            PropertyChanges {
+                target: contentLoader
+
+                anchors.left: gripButton.visible ? gripButton.right : parent.left
+                anchors.leftMargin: contentRect.margins
+                anchors.top: undefined
+
+                x: 0
+                y: (contentBackground.height - contentLoader.height) / 2
+            }
+        },
+
+        State {
+            name: "VERTICAL"
+            when: root.orientation === Qt.Vertical
+
+            PropertyChanges {
+                target: root
+
+                minimumWidth: contentLoader.item ? 2 * contentRect.margins + contentLoader.width : 0
+                minimumHeight: contentLoader.item ? 2 * contentRect.margins + contentRect.gripButtonHeight + contentLoader.height : 0
+            }
+
+            PropertyChanges {
+                target: gripButton
+
+                anchors.top: parent.top
+                anchors.topMargin: contentRect.margins
+                anchors.left: undefined
+
+                x: (contentBackground.width - gripButton.width) / 2
+                y: 0
+
                 rotation: 90
-
-                visible: root.movable
             }
 
-            Loader {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            PropertyChanges {
+                target: contentLoader
 
-                sourceComponent: root.contentComponent
+                anchors.top: gripButton.bottom
+                anchors.topMargin: contentRect.margins
+                anchors.left: undefined
+
+                x: (contentBackground.width - contentLoader.width) / 2
+                y: 0
             }
         }
-    }
+    ]
 }

@@ -55,9 +55,7 @@ DockPage {
             objectName: root.objectName + "_notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
-            minimumWidth: 198
-
-            contentComponent: NotationToolBar {
+            NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
 
@@ -75,11 +73,7 @@ DockPage {
             objectName: root.objectName + "_playbackToolBar"
             title: qsTrc("appshell", "Playback controls")
 
-            width: root.width / 3
-            minimumWidth: floating ? 526 : 476
-            minimumHeight: floating ? 56 : 48
-
-            contentComponent: PlaybackToolBar {
+            PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 3
 
@@ -93,12 +87,9 @@ DockPage {
             objectName: root.objectName + "_undoRedoToolBar"
             title: qsTrc("appshell", "Undo/redo toolbar")
 
-            minimumWidth: 74
-            maximumWidth: 74
-
             movable: false
 
-            contentComponent: UndoRedoToolBar {
+            UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 4
             }
@@ -109,7 +100,7 @@ DockPage {
         DockToolBar {
             objectName: "publishToolBar"
 
-            contentComponent: PublishToolBar {
+            PublishToolBar {
                 navigation.section: root.publishToolBarKeyNavSec
                 navigation.order: 1
             }

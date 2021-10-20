@@ -30,6 +30,9 @@ Rectangle {
 
     property alias navigation: navPanel
 
+    width: content.width
+    height: content.height
+
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
@@ -48,7 +51,7 @@ Rectangle {
     }
 
     Row {
-        anchors.centerIn: parent
+        id: content
 
         height: childrenRect.height
         spacing: 2

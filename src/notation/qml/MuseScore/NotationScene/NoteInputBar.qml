@@ -37,6 +37,9 @@ Rectangle {
 
     property bool floating: false
 
+    width: gridView.width
+    height: gridView.height
+
     color: ui.theme.backgroundPrimaryColor
 
     QtObject {
@@ -62,7 +65,9 @@ Rectangle {
 
     GridViewSectional {
         id: gridView
-        anchors.fill: parent
+
+        width: contentWidth
+        height: contentHeight
 
         sectionRole: "section"
 
@@ -193,7 +198,7 @@ Rectangle {
         width: gridView.cellWidth
         height: gridView.cellHeight
 
-        icon: IconCode.CONFIGURE
+        icon: IconCode.SETTINGS_COG
         iconFont: ui.theme.toolbarIconsFont
         transparent: true
         navigation.panel: keynavSub
@@ -218,22 +223,21 @@ Rectangle {
             PropertyChanges {
                 target: gridView
                 sectionWidth: 1
-                sectionHeight: root.height
+                sectionHeight: gridView.height
                 rows: 1
                 columns: gridView.noLimit
             }
 
             AnchorChanges {
                 target: customizeButton
-                anchors.right: root.right
-                anchors.verticalCenter: root.verticalCenter
+                anchors.left: gridView.right
             }
         },
         State {
             when: !privatesProperties.isHorizontal
             PropertyChanges {
                 target: gridView
-                sectionWidth: root.width
+                sectionWidth: gridView.width
                 sectionHeight: 1
                 rows: gridView.noLimit
                 columns: 2
@@ -241,8 +245,7 @@ Rectangle {
 
             AnchorChanges {
                 target: customizeButton
-                anchors.bottom: root.bottom
-                anchors.right: root.right
+                anchors.top: gridView.bottom
             }
         }
     ]
