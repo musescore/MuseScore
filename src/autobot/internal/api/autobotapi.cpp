@@ -22,6 +22,7 @@
 #include "autobotapi.h"
 
 #include <QTimer>
+#include <QEventLoop>
 #include <QFileInfo>
 #include <QDir>
 #include <QDateTime>
@@ -35,6 +36,28 @@ using namespace mu::api;
 AutobotApi::AutobotApi(IApiEngine* e)
     : ApiObject(e)
 {
+    autobot()->setStepsInterval(m_intervalMsec);
+}
+
+void AutobotApi::setInterval(int msec)
+{
+    autobot()->setStepsInterval(msec);
+    m_intervalMsec = msec;
+}
+
+void AutobotApi::runTestCase(const QJSValue& testCase)
+{
+    autobot()->runTestCase(testCase);
+}
+
+bool AutobotApi::pauseTestCase()
+{
+    return autobot()->pauseTestCase();
+}
+
+void AutobotApi::abortTestCase()
+{
+    autobot()->abortTestCase();
 }
 
 bool AutobotApi::openProject(const QString& name)
@@ -56,74 +79,6 @@ void AutobotApi::saveProject(const QString& name)
     projectFilesController()->saveProject(filePath);
 }
 
-void AutobotApi::setInterval(int msec)
-{
-    autobot()->setInterval(msec);
-    //m_intervalMsec = msec;
-}
-
-void AutobotApi::runTestCase(const QJSValue& testCase)
-{
-    m_abort = false;
-    m_testCase.testCase = testCase;
-    m_testCase.steps = testCase.property("steps");
-    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
-    m_testCase.currentStepIdx = -1;
-
-    nextStep();
-
-    if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
-        m_testCase.loop.exec();
-    }
-}
-
-void AutobotApi::nextStep()
-{
-    if (m_abort) {
-        m_testCase.loop.quit();
-        return;
-    }
-
-    m_testCase.currentStepIdx += 1;
-
-    if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
-        return;
-    }
-
-    QTimer::singleShot(m_intervalMsec, [this]() {
-        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
-        QJSValue func = step.property("func");
-
-        func.call();
-
-        nextStep();
-
-        m_testCase.finishedCount += 1;
-        if (m_testCase.finishedCount == m_testCase.stepsCount) {
-            m_testCase.loop.quit();
-        }
-    });
-}
-
-void AutobotApi::abort()
-{
-    m_abort = true;
-}
-
-bool AutobotApi::pause()
-{
-    using namespace mu::framework;
-    IInteractive::Result res = interactive()->question("Pause", "Continue?",
-                                                       { IInteractive::Button::Continue, IInteractive::Button::Abort });
-
-    if (res.standardButton() == IInteractive::Button::Abort) {
-        abort();
-        return false;
-    }
-
-    return true;
-}
-
 void AutobotApi::sleep(int msec) const
 {
     if (msec < 0) {
@@ -140,7 +95,7 @@ void AutobotApi::sleep(int msec) const
 void AutobotApi::waitPopup() const
 {
     //! NOTE We could do it smartly, check a current popup actually opened, but or just sleep some time
-    sleep(500);
+    sleep(1000);
 }
 
 void AutobotApi::seeChanges(int msec)

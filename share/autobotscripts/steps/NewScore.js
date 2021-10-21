@@ -25,7 +25,7 @@ function openNewScoreDialog()
     api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
     // wait popup open
     api.autobot.waitPopup()
-    // New become automatically current, so just trigger
+    // New become current automatically, so just trigger
     api.navigation.trigger()
 }
 
