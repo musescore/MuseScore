@@ -32,7 +32,7 @@ static const QString STATUS_FAILED("failed");
 AbFilesModel::AbFilesModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    m_fileIndex = autobot()->currentFileIndex();
+    //m_fileIndex = autobot()->currentFileIndex();
     m_fileIndex.ch.onReceive(this, [this](int idx) {
         int old = m_fileIndex.val;
         m_fileIndex.val = idx;
@@ -40,9 +40,9 @@ AbFilesModel::AbFilesModel(QObject* parent)
         emit dataChanged(index(idx), index(idx));
     });
 
-    autobot()->fileFinished().onReceive(this, [this](const File& f) {
-        updateFile(f);
-    });
+//    autobot()->fileFinished().onReceive(this, [this](const File& f) {
+//        updateFile(f);
+//    });
 
     update();
 }
@@ -83,7 +83,7 @@ void AbFilesModel::update()
 {
     beginResetModel();
 
-    m_files = autobot()->files();
+//    m_files = autobot()->files();
     m_files.notification.onNotify(this, [this]() {
         update();
     });

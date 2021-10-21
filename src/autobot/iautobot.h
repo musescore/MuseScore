@@ -23,12 +23,12 @@
 #define MU_AUTOBOT_IAUTOBOT_H
 
 #include <vector>
+#include <QJSValue>
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
 #include "abtypes.h"
-#include "itestcase.h"
 
 namespace mu::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
@@ -37,28 +37,11 @@ class IAutobot : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAutobot() = default;
 
-    enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
-    };
+    virtual Ret loadScript(const Script& script) = 0;
+    virtual void runTestCase(const QJSValue& testCase) = 0;
 
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
-
-    virtual void setCurrentTestCase(const std::string& name) = 0;
-    virtual const ValCh<ITestCasePtr>& currentTestCase() const = 0;
-
-    virtual void runAllFiles() = 0;
-    virtual void runFile(int fileIndex) = 0;
+    virtual void setInterval(int msec) = 0;
     virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
-
-    virtual const ValNt<Files>& files() const = 0;
-    virtual async::Channel<File> fileFinished() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
-
-    virtual Ret runScript(const Script& script) = 0;
 };
 }
 

@@ -32,8 +32,8 @@
 #include "system/ifilesystem.h"
 #include "ret.h"
 
-#include "../api/iapiengine.h"
-#include "../api/scriptapi.h"
+#include "api/iapiengine.h"
+#include "api/scriptapi.h"
 
 namespace mu::autobot {
 class JsModuleLoader;

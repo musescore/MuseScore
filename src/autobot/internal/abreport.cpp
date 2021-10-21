@@ -58,12 +58,8 @@ static QString formatVal(IAbContext::Key key, const IAbContext::Val& val)
     return QString("undefined: undefined");
 }
 
-mu::Ret AbReport::beginReport(const ITestCasePtr& testCase)
+mu::Ret AbReport::beginReport()
 {
-    IF_ASSERT_FAILED(testCase) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
     io::path reportsPath = configuration()->reportsPath();
     Ret ret = fileSystem()->makePath(reportsPath);
     if (!ret) {
@@ -74,7 +70,7 @@ mu::Ret AbReport::beginReport(const ITestCasePtr& testCase)
         m_file.close();
     }
 
-    QString tcname = QString::fromStdString(testCase->name());
+    QString tcname;// = QString::fromStdString(testCase->name());
     QDateTime now = QDateTime::currentDateTime();
     QString reportPath = reportsPath.toQString()
                          + "/" + tcname
@@ -91,9 +87,9 @@ mu::Ret AbReport::beginReport(const ITestCasePtr& testCase)
     m_stream << "Test: " << tcname << Qt::endl;
     m_stream << "date: " << now.toString("yyyy.MM.dd hh:mm") << Qt::endl;
     m_stream << "steps: ";
-    for (const ITestStepPtr& step : testCase->steps()) {
-        m_stream << step->name() << " ";
-    }
+//    for (const ITestStepPtr& step : testCase->steps()) {
+//        m_stream << step->name() << " ";
+//    }
     m_stream << Qt::endl;
     m_stream << Qt::endl;
 
@@ -111,12 +107,12 @@ void AbReport::endReport()
     m_file.close();
 }
 
-void AbReport::beginFile(const File& file)
+void AbReport::beginFile()
 {
     if (!m_opened) {
         return;
     }
-    m_stream << "File: " << io::filename(file.path).toQString() << Qt::endl;
+    //m_stream << "File: " << io::filename(file.path).toQString() << Qt::endl;
 }
 
 void AbReport::endFile(const IAbContextPtr& ctx)

@@ -58,7 +58,8 @@ void AutobotApi::saveProject(const QString& name)
 
 void AutobotApi::setInterval(int msec)
 {
-    m_intervalMsec = msec;
+    autobot()->setInterval(msec);
+    //m_intervalMsec = msec;
 }
 
 void AutobotApi::runTestCase(const QJSValue& testCase)
