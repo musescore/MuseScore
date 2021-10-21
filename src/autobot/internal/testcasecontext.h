@@ -19,34 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABCONTEXT_H
-#define MU_AUTOBOT_ABCONTEXT_H
+#ifndef MU_AUTOBOT_TESTCASECONTEXT_H
+#define MU_AUTOBOT_TESTCASECONTEXT_H
 
-#include "../iabcontext.h"
+#include "itestcasecontext.h"
 
 namespace mu::autobot {
-struct AbContext : public IAbContext
+struct TestCaseContext : public ITestCaseContext
 {
 public:
-    AbContext() = default;
-
-    const std::vector<StepContext>& steps() const override;
-    const StepContext& step(const std::string& name) const override;
+    TestCaseContext() = default;
 
     void setGlobalVal(const Key& key, const Val& val) override;
     Val globalVal(const Key& key) const override;
 
-    void addStep(const std::string& name) override;
+    const std::vector<StepContext>& steps() const override;
+    const StepContext& step(const QString& name) const override;
+
+    void addStep(const QString& name) override;
     const StepContext& currentStep() const override;
     void setStepVal(const Key& key, const Val& val) override;
-    void setStepRet(const Ret& ret) override;
 
-    Val stepVal(const std::string& stepName, const Key& key) const override;
-    Ret stepRet(const std::string& stepName) const override;
-
+    Val stepVal(const QString& stepName, const Key& key) const override;
     Val findVal(const Key& key) const override;
-
-    Ret completeRet() const override;
 
 private:
 
@@ -54,4 +49,4 @@ private:
     std::vector<StepContext> m_steps;
 };
 }
-#endif // MU_AUTOBOT_ABCONTEXT_H
+#endif // MU_AUTOBOT_TESTCASECONTEXT_H

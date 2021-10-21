@@ -25,31 +25,17 @@
 
 #include "log.h"
 
-#include "abcontext.h"
-
-#include "scriptengine.h"
-
 using namespace mu::autobot;
-
-Autobot::Autobot()
-{
-}
-
-Autobot::~Autobot()
-{
-    delete m_engine;
-}
 
 void Autobot::init()
 {
-    m_engine = new ScriptEngine();
-
     m_runner.stepStarted().onReceive(this, [this](const QString& name) {
+        m_context->addStep(name);
         m_report.beginStep(name);
     });
 
     m_runner.stepFinished().onReceive(this, [this](const QString& name) {
-        m_report.endStep(name);
+        m_report.endStep(name, m_context);
     });
 
     m_runner.allFinished().onReceive(this, [this](bool aborted) {
@@ -61,8 +47,12 @@ mu::Ret Autobot::loadScript(const Script& script)
 {
     LOGD() << script.path;
 
-    m_engine->setScriptPath(script.path);
-    Ret ret = m_engine->call("main");
+    m_context = std::make_shared<TestCaseContext>();
+    m_context->setGlobalVal("script_path", script.path.toQString());
+
+    ScriptEngine engine;
+    engine.setScriptPath(script.path);
+    Ret ret = engine.call("main");
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -97,4 +87,9 @@ bool Autobot::pauseTestCase()
     }
 
     return true;
+}
+
+ITestCaseContextPtr Autobot::context() const
+{
+    return m_context;
 }

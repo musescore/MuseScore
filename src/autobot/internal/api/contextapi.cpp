@@ -28,12 +28,27 @@ ContextApi::ContextApi(IApiEngine* e)
 {
 }
 
-QJSValue ContextApi::value(const QString& key) const
+void ContextApi::setGlobalVal(const QString& key, const QJSValue& val)
 {
-    return m_values.value(key);
+    autobot()->context()->setGlobalVal(key, val);
 }
 
-void ContextApi::setValue(const QString& key, const QJSValue& value)
+QJSValue ContextApi::globalVal(const QString& key) const
 {
-    m_values[key] = value;
+    return autobot()->context()->globalVal(key);
+}
+
+void ContextApi::setStepVal(const QString& key, const QJSValue& val)
+{
+    autobot()->context()->setStepVal(key, val);
+}
+
+QJSValue ContextApi::stepVal(const QString& stepName, const QString& key) const
+{
+    return autobot()->context()->stepVal(stepName, key);
+}
+
+QJSValue ContextApi::findVal(const QString& key) const
+{
+    return autobot()->context()->findVal(key);
 }
