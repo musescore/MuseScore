@@ -19,53 +19,90 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Column {
-    spacing: 60
+    id: root
 
-    Column {
-        spacing: 32
+    spacing: 24
 
-        StyledTextLabel {
-            text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
-            font: ui.theme.headerBoldFont
-        }
+    property NavigationPanel navigationPanel: null
+    property string activeButtonName: ""
 
-        StyledTextLabel {
-            text: qsTrc("cloud", "A MuseScore profile allows you to save & publish your scores on MuseScore.com. It's free.")
-            font: ui.theme.largeBodyFont
-        }
+    function readInfo() {
+        accessibleInfo.focused = true
     }
 
-    ListView {
-        height: contentHeight
-        width: contentWidth
+    function resetFocusOnInfo() {
+        accessibleInfo.focused = false
+    }
 
-        spacing: 32
+    AccessibleItem {
+        id: accessibleInfo
+        accessibleParent: root.navigationPanel.accessible
+        visualItem: root
+        role: MUAccessible.Information
+        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName
+    }
 
-        model: [
-            qsTrc("cloud", "Save your scores to private cloud area"),
-            qsTrc("cloud", "Share links with other musicians, who add comments"),
-            qsTrc("cloud", "Create a portfolio for your music and gain followers"),
-            qsTrc("cloud", "Upload high quality audio for superb score playback")
-        ]
+    StyledTextLabel {
+        id: titleLabel
+        text: qsTrc("cloud", "Get the most out of MuseScore with a free account")
+        font: ui.theme.headerBoldFont
+    }
 
-        delegate: Row {
-            spacing: 38
+    Row {
+        spacing: 48
 
-            Rectangle {
-                width: 9
-                height: width
-                color: ui.theme.accentColor
-                radius: width / 2
-                anchors.verticalCenter: parent.verticalCenter
+        Image {
+            sourceSize: Qt.size(110, 110)
+            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.svg"
+        }
+
+        ListView {
+            id: view
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            height: contentHeight
+            width: contentWidth
+
+            spacing: 6
+
+            property string generalInfo: {
+                var result = ""
+                for (var i = 0; i < count; i++) {
+                    result += model[i] + ". "
+                }
+
+                return result
             }
 
-            StyledTextLabel {
-                text: modelData
-                font: ui.theme.largeBodyFont
+            model: [
+                qsTrc("cloud", "Enjoy free cloud storage for your scores"),
+                qsTrc("cloud", "Get social by following other creators, and liking and commenting on your favourite works"),
+                qsTrc("cloud", "Create a portfolio for your music and share it with millions of users worldwide"),
+                qsTrc("cloud", "Upload high quality audio for superb playback")
+            ]
+
+            delegate: Row {
+                spacing: 16
+
+                Rectangle {
+                    width: 9
+                    height: width
+                    color: ui.theme.accentColor
+                    radius: width / 2
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                StyledTextLabel {
+                    text: modelData
+                    font: ui.theme.largeBodyFont
+                }
             }
         }
     }
