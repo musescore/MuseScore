@@ -19,53 +19,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 
 Column {
-    spacing: 60
+    spacing: 24
 
-    Column {
-        spacing: 32
-
-        StyledTextLabel {
-            text: qsTrc("cloud", "What are the benefits of a MuseScore account?")
-            font: ui.theme.headerBoldFont
-        }
-
-        StyledTextLabel {
-            text: qsTrc("cloud", "A MuseScore profile allows you to save & publish your scores on MuseScore.com. It's free.")
-            font: ui.theme.largeBodyFont
-        }
+    StyledTextLabel {
+        text: qsTrc("cloud", "Get the most out of MuseScore with a free account")
+        font: ui.theme.headerBoldFont
     }
 
-    ListView {
-        height: contentHeight
-        width: contentWidth
+    Row {
+        spacing: 48
 
-        spacing: 32
+        Image {
+            sourceSize: Qt.size(110, 110)
+            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.svg"
+        }
 
-        model: [
-            qsTrc("cloud", "Save your scores to private cloud area"),
-            qsTrc("cloud", "Share links with other musicians, who add comments"),
-            qsTrc("cloud", "Create a portfolio for your music and gain followers"),
-            qsTrc("cloud", "Upload high quality audio for superb score playback")
-        ]
+        ListView {
+            anchors.verticalCenter: parent.verticalCenter
 
-        delegate: Row {
-            spacing: 38
+            height: contentHeight
+            width: contentWidth
 
-            Rectangle {
-                width: 9
-                height: width
-                color: ui.theme.accentColor
-                radius: width / 2
-                anchors.verticalCenter: parent.verticalCenter
-            }
+            spacing: 6
 
-            StyledTextLabel {
-                text: modelData
-                font: ui.theme.largeBodyFont
+            model: [
+                qsTrc("cloud", "Enjoy free cloud storage for your scores"),
+                qsTrc("cloud", "Get social by following other creators, and liking and commenting on your favourite works"),
+                qsTrc("cloud", "Create a portfolio for your music and share it with millions of users worldwide"),
+                qsTrc("cloud", "Upload high quality audio for superb playback")
+            ]
+
+            delegate: Row {
+                spacing: 16
+
+                Rectangle {
+                    width: 9
+                    height: width
+                    color: ui.theme.accentColor
+                    radius: width / 2
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                StyledTextLabel {
+                    text: modelData
+                    font: ui.theme.largeBodyFont
+                }
             }
         }
     }
