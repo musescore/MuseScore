@@ -38,10 +38,11 @@ public:
     virtual ~IAutobot() = default;
 
     virtual Ret loadScript(const Script& script) = 0;
-    virtual void runTestCase(const QJSValue& testCase) = 0;
 
-    virtual void setInterval(int msec) = 0;
-    virtual void stop() = 0;
+    virtual void setStepsInterval(int msec) = 0;
+    virtual void runTestCase(const QJSValue& testCase) = 0;
+    virtual bool pauseTestCase() = 0;
+    virtual void abortTestCase() = 0;
 };
 }
 

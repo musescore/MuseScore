@@ -27,30 +27,55 @@
 
 using namespace mu::autobot;
 
+void AbRunner::setStepsInterval(int msec)
+{
+    m_intervalMsec = msec;
+}
+
 void AbRunner::runTestCase(const QJSValue& testCase)
 {
+    m_abort = false;
+    m_testCase.testCase = testCase;
+    m_testCase.steps = testCase.property("steps");
+    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
+    m_testCase.currentStepIdx = -1;
+
+    nextStep();
+
+    if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
+        m_testCase.loop.exec();
+    }
 }
 
-void AbRunner::nextStep(const IAbContextPtr& ctx)
+void AbRunner::abortTestCase()
 {
+    m_abort = true;
 }
 
-void AbRunner::doFinish(const IAbContextPtr& ctx)
+void AbRunner::nextStep()
 {
-    m_allFinished.send(ctx);
-}
+    if (m_abort) {
+        m_testCase.loop.quit();
+        return;
+    }
 
-mu::async::Channel<IAbContextPtr> AbRunner::stepStarted() const
-{
-    return m_stepStarted;
-}
+    m_testCase.currentStepIdx += 1;
 
-mu::async::Channel<IAbContextPtr> AbRunner::stepFinished() const
-{
-    return m_stepFinished;
-}
+    if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
+        return;
+    }
 
-mu::async::Channel<IAbContextPtr> AbRunner::allFinished() const
-{
-    return m_allFinished;
+    QTimer::singleShot(m_intervalMsec, [this]() {
+        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
+        QJSValue func = step.property("func");
+
+        func.call();
+
+        nextStep();
+
+        m_testCase.finishedCount += 1;
+        if (m_testCase.finishedCount == m_testCase.stepsCount) {
+            m_testCase.loop.quit();
+        }
+    });
 }

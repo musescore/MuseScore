@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
 #include "system/ifilesystem.h"
+#include "iinteractive.h"
 
 #include "scriptengine.h"
 #include "abrunner.h"
@@ -38,19 +39,23 @@ class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
     INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(api, framework::IInteractive, interactive)
 
 public:
     Autobot();
+    ~Autobot();
 
     void init();
 
     Ret loadScript(const Script& script) override;
-    void runTestCase(const QJSValue& testCase) override;
 
-    void stop() override;
+    void setStepsInterval(int msec) override;
+    void runTestCase(const QJSValue& testCase) override;
+    bool pauseTestCase() override;
+    void abortTestCase() override;
 
 private:
-    ScriptEngine engine;
+    ScriptEngine* m_engine = nullptr;
     AbRunner m_runner;
     AbReport m_report;
 };
