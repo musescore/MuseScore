@@ -8,5 +8,6 @@
         <file>qml/MuseScore/Cloud/AccountPage.qml</file>
         <file>qml/MuseScore/Cloud/internal/AccountDetailsPage.qml</file>
         <file>qml/MuseScore/Cloud/internal/AuthorizationPage.qml</file>
+        <file>qml/MuseScore/Cloud/internal/AccountInfo.qml</file>
     </qresource>
 </RCC>

@@ -80,6 +80,8 @@ FocusScope {
             profileUrl: accountModel.accountInfo.profileUrl
             sheetmusicUrl: accountModel.accountInfo.sheetmusicUrl
 
+            navigationSection: navSec
+
             onSignOutRequested: {
                 accountModel.signOut()
             }
