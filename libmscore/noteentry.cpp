@@ -171,7 +171,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             //   We could split the duration at the barline and continue into the next bar, but this would create extra
             //   notes, extra ties, and extra pain. Instead, we simply truncate the duration at the barline.
             Fraction ticks2measureEnd = is.segment()->measure()->ticks() - is.segment()->rtick();
-            duration = is.duration() > ticks2measureEnd ? ticks2measureEnd : is.duration().fraction();
+            duration = is.duration().fraction() > ticks2measureEnd ? ticks2measureEnd : is.duration().fraction();
             }
       else {
             duration = is.duration().fraction();
