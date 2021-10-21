@@ -37,16 +37,10 @@ Rectangle {
 
     property bool floating: false
 
-    width: gridView.width
-    height: gridView.height
+    property int maximumWidth: 0
+    property int maximumHeight: 0
 
     color: ui.theme.backgroundPrimaryColor
-
-    QtObject {
-        id: privatesProperties
-
-        property bool isHorizontal: root.orientation === Qt.Horizontal
-    }
 
     NavigationPanel {
         id: keynavSub
@@ -59,15 +53,36 @@ Rectangle {
         id: noteInputModel
     }
 
+    QtObject {
+        id: prv
+
+        function resolveHorizontalGridViewWidth() {
+            var requiredFreeSpace = gridView.cellWidth * 3 + gridView.rowSpacing * 4
+
+            if (root.maximumWidth - gridView.contentWidth < requiredFreeSpace) {
+                return gridView.contentWidth - requiredFreeSpace
+            }
+
+            return gridView.contentWidth
+        }
+
+        function resolveVerticalGridViewHeight() {
+            var requiredFreeSpace = gridView.cellHeight * 3 + gridView.rowSpacing * 4
+
+            if (root.maximumHeight - gridView.contentHeight < requiredFreeSpace) {
+                return gridView.contentHeight - requiredFreeSpace
+            }
+
+            return gridView.contentHeight
+        }
+    }
+
     Component.onCompleted: {
         noteInputModel.load()
     }
 
     GridViewSectional {
         id: gridView
-
-        width: contentWidth
-        height: contentHeight
 
         sectionRole: "section"
 
@@ -82,7 +97,7 @@ Rectangle {
         model: noteInputModel
 
         sectionDelegate: SeparatorLine {
-            orientation: gridView.isHorizontal ? Qt.Vertical : Qt.Horizontal
+            orientation: gridView.orientation
             visible: itemIndex !== 0
         }
 
@@ -193,7 +208,7 @@ Rectangle {
     FlatButton {
         id: customizeButton
 
-        anchors.margins: 8
+        anchors.margins: 6
 
         width: gridView.cellWidth
         height: gridView.cellHeight
@@ -219,11 +234,20 @@ Rectangle {
 
     states: [
         State {
-            when: privatesProperties.isHorizontal
+            when: gridView.isHorizontal
+
+            PropertyChanges {
+                target: root
+                width: gridView.width
+                height: 48
+            }
+
             PropertyChanges {
                 target: gridView
+                width: prv.resolveHorizontalGridViewWidth()
+                height: root.height
                 sectionWidth: 1
-                sectionHeight: gridView.height
+                sectionHeight: root.height
                 rows: 1
                 columns: gridView.noLimit
             }
@@ -231,13 +255,23 @@ Rectangle {
             AnchorChanges {
                 target: customizeButton
                 anchors.left: gridView.right
+                anchors.verticalCenter: root.verticalCenter
             }
         },
         State {
-            when: !privatesProperties.isHorizontal
+            when: !gridView.isHorizontal
+
+            PropertyChanges {
+                target: root
+                width: 96
+                height: gridView.height
+            }
+
             PropertyChanges {
                 target: gridView
-                sectionWidth: gridView.width
+                width: root.width
+                height: prv.resolveVerticalGridViewHeight()
+                sectionWidth: root.width
                 sectionHeight: 1
                 rows: gridView.noLimit
                 columns: 2
@@ -246,6 +280,7 @@ Rectangle {
             AnchorChanges {
                 target: customizeButton
                 anchors.top: gridView.bottom
+                anchors.right: parent.right
             }
         }
     ]

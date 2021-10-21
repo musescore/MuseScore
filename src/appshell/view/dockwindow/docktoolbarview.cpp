@@ -131,8 +131,6 @@ void DockToolBarView::setOrientation(Qt::Orientation orientation)
 
     m_orientation = orientation;
     emit orientationChanged(orientation);
-
-    applySizeConstraintsByOrientation();
 }
 
 void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
@@ -149,8 +147,6 @@ void DockToolBarView::componentComplete()
 {
     DockBase::componentComplete();
 
-    applySizeConstraintsByOrientation();
-
     m_draggableArea->setDockWidget(dockWidget());
 }
 
@@ -163,21 +159,4 @@ bool DockToolBarView::isOrientationChangingAllowed() const
 {
     return allowedAreas().testFlag(Qt::LeftDockWidgetArea)
            || allowedAreas().testFlag(Qt::RightDockWidgetArea);
-}
-
-void DockToolBarView::applySizeConstraintsByOrientation()
-{
-    if (m_orientation == Qt::Horizontal) {
-        setMinimumWidth(MIN_SIDE_SIZE);
-        setMinimumHeight(MIN_SIDE_SIZE);
-
-        setMaximumWidth(MAX_SIDE_SIZE);
-        setMaximumHeight(MIN_SIDE_SIZE);
-    } else {
-        setMinimumWidth(MIN_SIDE_SIZE);
-        setMinimumHeight(MIN_SIDE_SIZE);
-
-        setMaximumWidth(MIN_SIDE_SIZE);
-        setMaximumHeight(MAX_SIDE_SIZE);
-    }
 }

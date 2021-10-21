@@ -30,6 +30,9 @@ Rectangle {
 
     property alias navigation: navPanel
 
+    width: view.width
+    height: view.height
+
     color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
@@ -47,9 +50,7 @@ Rectangle {
     }
 
     ListView {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 4
+        id: view
 
         height: contentItem.childrenRect.height
         width: contentItem.childrenRect.width

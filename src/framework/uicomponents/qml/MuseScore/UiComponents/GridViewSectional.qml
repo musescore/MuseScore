@@ -91,7 +91,7 @@ Item {
                 Row {
                     spacing: privateProperties.spacingAfterSection
 
-                    height: childrenRect.height
+                    height: root.sectionHeight
 
                     GridViewSection {
                         width: root.sectionWidth
@@ -101,6 +101,8 @@ Item {
                     }
 
                     GridViewDelegate {
+                        anchors.verticalCenter: parent.verticalCenter
+
                         model: Boolean(root.model) ? root.model : null
 
                         itemDelegate: root.itemDelegate
@@ -133,7 +135,7 @@ Item {
                 Column {
                     spacing: privateProperties.spacingAfterSection
 
-                    width: childrenRect.width
+                    width: root.sectionWidth
 
                     GridViewSection {
                         width: root.sectionWidth
@@ -143,6 +145,8 @@ Item {
                     }
 
                     GridViewDelegate {
+                        anchors.horizontalCenter: parent.horizontalCenter
+
                         model: Boolean(root.model) ? root.model : null
 
                         itemDelegate: root.itemDelegate
