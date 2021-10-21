@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
-      <pageWidth>8.26771</pageWidth>
-      <pageHeight>11.6929</pageHeight>
-      <pagePrintableWidth>7.08661</pagePrintableWidth>
-      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
-      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
-      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
-      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
-      <pageOddTopMargin>0.590551</pageOddTopMargin>
-      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
       <chordSymbolAFontSize>10</chordSymbolAFontSize>
       <chordSymbolBFontSize>10</chordSymbolBFontSize>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
@@ -23,7 +14,6 @@
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
       <stringNumberFontSize>10</stringNumberFontSize>
       <partInstrumentFontSize>10</partInstrumentFontSize>
-      <dynamicsFontSize>10</dynamicsFontSize>
       <tempoFontSize>10</tempoFontSize>
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontSize>10</measureNumberFontSize>
@@ -59,14 +49,14 @@
           </StaffType>
         </Staff>
       <trackName>Piano</trackName>
-      <Instrument id="piano">
+      <Instrument id="grand-piano">
         <longName>Piano</longName>
         <trackName>Staff 1</trackName>
         <minPitchP>21</minPitchP>
         <maxPitchP>108</maxPitchP>
         <minPitchA>21</minPitchA>
         <maxPitchA>108</maxPitchA>
-        <instrumentId>keyboard.piano</instrumentId>
+        <instrumentId>keyboard.piano.grand</instrumentId>
         <clef staff="2">F</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
         <Articulation>
@@ -120,12 +110,12 @@
         <height>12.5</height>
         <Text>
           <style>Title</style>
-          <offset x="0" y="-0.0454943"/>
+          <offset x="0" y="-0.0454942"/>
           <text><font size="22"/>Fretboard Diagrams</text>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <offset x="0" y="9.9545"/>
+          <offset x="0" y="9.95449"/>
           <text><font size="16"/>MuseScore testfile</text>
           </Text>
         <Text>

@@ -5481,9 +5481,6 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int s
 static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, int sstaff, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
-        const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
-        // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
-
         for (const EngravingItem* e : seg->annotations()) {
             if (!exp->canWrite(e)) {
                 continue;
@@ -5499,21 +5496,25 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                 if (commonAnnotations(exp, e, sstaff)) {
                     // already handled
                 } else if (e->isHarmony()) {
+                    // harmony without fret diagram, add directly to segment
                     // qDebug("annotations seg %p found harmony %p", seg, e);
-                    exp->harmony(toHarmony(e), fd);
-                    fd = nullptr;           // make sure to write only once ...
-                } else if (e->isFermata() || e->isFiguredBass() || e->isFretDiagram() || e->isJump()) {
+                    exp->harmony(toHarmony(e), 0);
+                } else if (e->isFretDiagram()) {
+                    // the fretdiagram may contain a harmony
+                    const FretDiagram* fd = toFretDiagram(e);
+                    if (fd->harmony()) {
+                        exp->harmony(fd->harmony(), fd);
+                    } else {
+                        qDebug("seg %p found fretboard diagram %p w/o harmony: cannot write",
+                               seg, fd);
+                    }
+                } else if (e->isFermata() || e->isFiguredBass() || e->isJump()) {
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     qDebug("direction type %s at tick %d not implemented",
                            e->name(), seg->tick().ticks());
                 }
             }
-        }
-        if (fd) {
-            // found fd but no harmony, cannot write (MusicXML would be invalid)
-            qDebug("seg %p found fretboard diagram %p w/o harmony: cannot write",
-                   seg, fd);
         }
     }
 }

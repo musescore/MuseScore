@@ -5081,12 +5081,11 @@ FretDiagram* MusicXMLParserPass2::frame()
                 }
             }
             _logger->logDebugInfo(QString("FretDiagram::readMusicXML string %1 fret %2").arg(mxmlString).arg(mxmlFret), &_e);
-
             if (mxmlString > 0) {
                 if (mxmlFret == 0) {
                     fd->setMarker(msString, FretMarkerType::CIRCLE);
                 } else if (msFret > 0 && !barre) {
-                    fd->setDot(msString, msFret - fd->fretOffset(), true);
+                    fd->setDot(msString, msFret, true);
                     fd->setMarker(msString, FretMarkerType::NONE);
                 }
             } else {
@@ -5108,7 +5107,7 @@ FretDiagram* MusicXMLParserPass2::frame()
         }
 
         int endString = bEnds[fret];
-        fd->setBarre(startString, endString, fret - fd->fretOffset());
+        fd->setBarre(startString, endString, fret);
 
         // Reset fret marker of all strings covered by barre
         for (int string = startString; string <= endString; ++string) {
