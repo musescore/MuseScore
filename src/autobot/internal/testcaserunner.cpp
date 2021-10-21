@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -19,25 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "abrunner.h"
+#include "testcaserunner.h"
 
 #include <QTimer>
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::autobot;
 
-void AbRunner::setStepsInterval(int msec)
+void TestCaseRunner::setStepsInterval(int msec)
 {
     m_intervalMsec = msec;
 }
 
-void AbRunner::runTestCase(const QJSValue& testCase)
+void TestCaseRunner::runTestCase(const TestCase& testCase)
 {
     m_abort = false;
     m_testCase.testCase = testCase;
-    m_testCase.steps = testCase.property("steps");
-    m_testCase.stepsCount = m_testCase.steps.property("length").toInt();
+    m_testCase.steps = testCase.steps();
+    m_testCase.stepsCount = m_testCase.steps.count();
     m_testCase.currentStepIdx = -1;
 
     nextStep();
@@ -47,14 +48,30 @@ void AbRunner::runTestCase(const QJSValue& testCase)
     }
 }
 
-void AbRunner::abortTestCase()
+void TestCaseRunner::abortTestCase()
 {
     m_abort = true;
 }
 
-void AbRunner::nextStep()
+async::Channel<QString> TestCaseRunner::stepStarted() const
+{
+    return m_stepStarted;
+}
+
+async::Channel<QString> TestCaseRunner::stepFinished() const
+{
+    return m_stepFinished;
+}
+
+async::Channel<bool> TestCaseRunner::allFinished() const
+{
+    return m_allFinished;
+}
+
+void TestCaseRunner::nextStep()
 {
     if (m_abort) {
+        m_allFinished.send(true);
         m_testCase.loop.quit();
         return;
     }
@@ -66,15 +83,17 @@ void AbRunner::nextStep()
     }
 
     QTimer::singleShot(m_intervalMsec, [this]() {
-        QJSValue step = m_testCase.steps.property(m_testCase.currentStepIdx);
-        QJSValue func = step.property("func");
+        Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
 
-        func.call();
+        m_stepStarted.send(step.name());
+        step.exec();
+        m_stepFinished.send(step.name());
 
         nextStep();
 
         m_testCase.finishedCount += 1;
         if (m_testCase.finishedCount == m_testCase.stepsCount) {
+            m_allFinished.send(false);
             m_testCase.loop.quit();
         }
     });

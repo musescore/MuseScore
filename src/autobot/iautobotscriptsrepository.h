@@ -23,7 +23,7 @@
 #define MU_AUTOBOT_IAUTOBOTSCRIPTSREPOSITORY_H
 
 #include "modularity/imoduleexport.h"
-#include "abtypes.h"
+#include "autobottypes.h"
 #include "retval.h"
 
 namespace mu::autobot {

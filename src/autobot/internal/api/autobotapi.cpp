@@ -32,6 +32,7 @@
 #include "log.h"
 
 using namespace mu::api;
+using namespace mu::autobot;
 
 AutobotApi::AutobotApi(IApiEngine* e)
     : ApiObject(e)
@@ -47,7 +48,8 @@ void AutobotApi::setInterval(int msec)
 
 void AutobotApi::runTestCase(const QJSValue& testCase)
 {
-    autobot()->runTestCase(testCase);
+    TestCase ts(testCase);
+    autobot()->runTestCase(ts);
 }
 
 bool AutobotApi::pauseTestCase()

@@ -332,7 +332,6 @@ MenuItem AppMenuModel::diagnosticItem() const
 
     MenuItemList autobotItems {
         makeMenuItem("autobot-show-scripts"),
-        makeMenuItem("autobot-show-batchtests"),
     };
 
     MenuItemList items {

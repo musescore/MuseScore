@@ -19,31 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABTYPES_H
-#define MU_AUTOBOT_ABTYPES_H
+#ifndef MU_AUTOBOT_TESTCASEREPORT_H
+#define MU_AUTOBOT_TESTCASEREPORT_H
 
-#include <string>
-#include <vector>
+#include <QFile>
+#include <QTextStream>
 
-#include "io/path.h"
-#include "ret.h"
+#include "modularity/ioc.h"
+#include "../iautobotconfiguration.h"
+#include "system/ifilesystem.h"
+
+#include "../autobottypes.h"
+#include "../iabcontext.h"
 
 namespace mu::autobot {
-struct File {
-    io::path path;
-    Ret completeRet; // if undefined - means not tested
-};
-
-using Files = std::vector<File>;
-
-struct Script
+class TestCaseReport
 {
-    io::path path;
-    QString title;
-    QString description;
-};
+    INJECT(autobot, IAutobotConfiguration, configuration)
+    INJECT(autobot, system::IFileSystem, fileSystem)
 
-using Scripts = std::vector<Script>;
+public:
+    TestCaseReport() = default;
+
+    Ret beginReport(const TestCase& testCase);
+    void endReport(bool aborted);
+
+    void beginStep(const QString& name);
+    void endStep(const QString& name);
+
+private:
+
+    QFile m_file;
+    QTextStream m_stream;
+    bool m_opened = false;
+};
 }
 
-#endif // MU_AUTOBOT_AUTOBOTTYPES_H
+#endif // MU_AUTOBOT_TESTCASEREPORT_H
