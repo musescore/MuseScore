@@ -169,6 +169,11 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         break;
     case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
         break;
+    case IAccessible::Property::Value: {
+        QAccessibleValueChangeEvent ev(it.object, it.item->accesibleValue());
+        sendEvent(&ev);
+        return;
+    }
     }
 
     QAccessibleEvent ev(it.object, etype);
@@ -195,19 +200,19 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
     QAccessible::State qstate;
     switch (state) {
     case State::Enabled: {
-        qstate.disabled = !arg;
+        qstate.disabled = true;
     } break;
     case State::Active: {
-        qstate.active = arg;
+        qstate.active = true;
     } break;
     case State::Focused: {
-        qstate.focused = arg;
+        qstate.focused = true;
     } break;
     case State::Selected: {
-        qstate.selected = arg;
+        qstate.selected = true;
     } break;
     case State::Checked: {
-        qstate.checked = arg;
+        qstate.checked = true;
     } break;
     default: {
         LOGE() << "not handled state: " << int(state);
@@ -389,6 +394,26 @@ QString AccessibilityController::accessibleName() const
 QString AccessibilityController::accessibleDescription() const
 {
     return QString();
+}
+
+QVariant AccessibilityController::accesibleValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleMaximumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleMinimumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibilityController::accesibleValueStepSize() const
+{
+    return QVariant();
 }
 
 bool AccessibilityController::accessibleState(State st) const

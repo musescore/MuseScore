@@ -30,7 +30,7 @@
 #include "ui/imainwindow.h"
 
 namespace mu::accessibility {
-class AccessibleItemInterface : public QAccessibleInterface
+class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface
 {
     INJECT(accessibility, ui::IMainWindow, mainWindow)
 
@@ -54,6 +54,12 @@ public:
     QAccessible::Role role() const override;
     QString text(QAccessible::Text) const override;
     void setText(QAccessible::Text, const QString& text) override;
+
+    QVariant currentValue() const override;
+    void setCurrentValue(const QVariant& value) override;
+    QVariant maximumValue() const override;
+    QVariant minimumValue() const override;
+    QVariant minimumStepSize() const override;
 
 protected:
     void* interface_cast(QAccessible::InterfaceType t) override;

@@ -151,6 +151,26 @@ QString AccessibleScore::accessibleDescription() const
     return QString();
 }
 
+QVariant AccessibleScore::accesibleValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleScore::accesibleMaximumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleScore::accesibleMinimumValue() const
+{
+    return QVariant();
+}
+
+QVariant AccessibleScore::accesibleValueStepSize() const
+{
+    return QVariant();
+}
+
 bool AccessibleScore::accessibleState(State st) const
 {
     switch (st) {

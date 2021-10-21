@@ -25,6 +25,7 @@
 #include <utility>
 #include <QString>
 #include <QRect>
+#include <QVariant>
 #include "async/channel.h"
 
 class QWindow;
@@ -50,6 +51,7 @@ public:
         ComboBox,
         ListItem,
         MenuItem,
+        Range,
 
         // Custom roles
         Information, // just text
@@ -71,7 +73,8 @@ public:
         Undefined = 0,
         Parent,
         Name,
-        Description
+        Description,
+        Value
     };
 
     virtual const IAccessible* accessibleParent() const = 0;
@@ -81,6 +84,10 @@ public:
     virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
     virtual QString accessibleDescription() const = 0;
+    virtual QVariant accesibleValue() const = 0;
+    virtual QVariant accesibleMaximumValue() const = 0;
+    virtual QVariant accesibleMinimumValue() const = 0;
+    virtual QVariant accesibleValueStepSize() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
 
