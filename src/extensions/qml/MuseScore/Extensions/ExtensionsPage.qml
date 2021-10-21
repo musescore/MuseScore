@@ -38,6 +38,8 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    clip: true
+
     Component.onCompleted: {
         extensionListModel.load()
     }
@@ -46,6 +48,7 @@ Item {
         id: prv
 
         property var selectedExtension: undefined
+        property var lastNavigatedExtension: undefined
 
         function resetSelectedExtension() {
             selectedExtension = undefined
@@ -56,25 +59,21 @@ Item {
         id: extensionListModel
 
         onProgress: {
-            if (prv.selectedExtension.code !== extensionCode) {
+            if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== extensionCode) {
                 return
             }
 
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
-            if (prv.selectedExtension.code !== item.code) {
+            if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== item.code) {
                 return
             }
 
+            prv.lastNavigatedExtension = null
             prv.selectedExtension = item
             extensionPanel.resetProgress()
-
-            if (installedExtensionsView.count > 0) {
-                installedExtensionsView.focusOnFirst()
-            } else {
-                notInstalledExtensionsView.focusOnFirst()
-            }
+            extensionPanel.close()
         }
     }
 
@@ -170,7 +169,8 @@ Item {
                 onClicked: {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
-                    extensionPanel.open(navigationControl)
+                    extensionPanel.open()
+                    prv.lastNavigatedExtension = navigationControl
                 }
 
                 onNavigationActivated: {
@@ -213,7 +213,8 @@ Item {
                 onClicked: {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
-                    extensionPanel.open(navigationControl)
+                    extensionPanel.open()
+                    prv.lastNavigatedExtension = navigationControl
                 }
 
                 onNavigationActivated: {
@@ -288,6 +289,20 @@ Item {
 
         onClosed: {
             prv.resetSelectedExtension()
+            Qt.callLater(resetNavigationFocus)
+        }
+
+        function resetNavigationFocus() {
+            if (prv.lastNavigatedExtension) {
+                prv.lastNavigatedExtension.requestActive()
+                return
+            }
+
+            if (installedExtensionsView.count > 0) {
+                installedExtensionsView.focusOnFirst()
+            } else {
+                notInstalledExtensionsView.focusOnFirst()
+            }
         }
     }
 }

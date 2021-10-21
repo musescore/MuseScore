@@ -76,13 +76,4 @@ ListItemBlank {
             horizontalAlignment: Text.AlignLeft
         }
     }
-
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            root.ensureActiveFocus()
-            root.clicked()
-        }
-    }
 }

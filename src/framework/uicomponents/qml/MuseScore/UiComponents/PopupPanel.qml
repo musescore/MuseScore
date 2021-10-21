@@ -53,7 +53,10 @@ Rectangle {
     }
 
     function open(navigationCtrl) {
-        root.navigationParentControl = navigationCtrl
+        if (navigationCtrl) {
+            root.navigationParentControl = navigationCtrl
+        }
+
         root.visible = true
         root.opened()
     }
