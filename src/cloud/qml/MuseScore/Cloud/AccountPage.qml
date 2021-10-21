@@ -21,12 +21,25 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.Cloud 1.0
 
 import "internal"
 
 FocusScope {
     id: root
+
+    NavigationSection {
+        id: navSec
+        name: "Account"
+        enabled: root.enabled && root.visible
+        order: 3
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
 
     AccountModel {
         id: accountModel
@@ -46,6 +59,8 @@ FocusScope {
         id: authorizationComp
 
         AuthorizationPage {
+            navigationSection: navSec
+
             onSignInRequested: {
                 accountModel.signIn()
             }

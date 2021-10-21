@@ -22,11 +22,14 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
 FocusScope {
     id: root
+
+    property NavigationSection navigationSection: null
 
     signal createAccountRequested()
     signal signInRequested()
@@ -43,6 +46,23 @@ FocusScope {
         readonly property int buttonWidth: 160
     }
 
+    NavigationPanel {
+        id: navPanel
+        name: "AuthorizationPanel"
+        direction: NavigationPanel.Horizontal
+        section: root.navigationSection
+        accessible.name: pageTitle.text
+
+        onActiveChanged: {
+            if (active) {
+                createNewAccount.navigation.requestActive()
+                description.readInfo()
+            } else {
+                description.resetFocusOnInfo()
+            }
+        }
+    }
+
     StyledTextLabel {
         id: pageTitle
 
@@ -57,10 +77,14 @@ FocusScope {
     }
 
     AccountBenefitsDescription {
+        id: description
         anchors.top: pageTitle.bottom
         anchors.topMargin: 48
         anchors.left: parent.left
         anchors.leftMargin: privateProperties.sideMargin
+
+        navigationPanel: navPanel
+        activeButtonName: createNewAccount.text
     }
 
     Rectangle {
@@ -86,6 +110,10 @@ FocusScope {
                 width: privateProperties.buttonWidth
                 text: qsTrc("cloud", "Learn more")
 
+                navigation.name: "LearnMore"
+                navigation.panel: navPanel
+                navigation.column: 2
+
                 onClicked: {
                     // TODO: implement me
                 }
@@ -100,16 +128,25 @@ FocusScope {
                     width: privateProperties.buttonWidth
                     text: qsTrc("cloud", "Sign in")
 
+                    navigation.name: "SignIn"
+                    navigation.panel: navPanel
+                    navigation.column: 3
+
                     onClicked: {
                         root.signInRequested()
                     }
                 }
 
                 FlatButton {
+                    id: createNewAccount
                     width: privateProperties.buttonWidth
                     text: qsTrc("cloud", "Create new account")
 
                     accentButton: true
+
+                    navigation.name: "CreateNewAccount"
+                    navigation.panel: navPanel
+                    navigation.column: 1
 
                     onClicked: {
                         root.createAccountRequested()
