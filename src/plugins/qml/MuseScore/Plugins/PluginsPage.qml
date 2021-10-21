@@ -39,6 +39,8 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    clip: true
+
     function categories() {
         return pluginsModel.categories()
     }
@@ -47,13 +49,8 @@ Item {
         id: pluginsModel
 
         onFinished: {
+            prv.lastNavigatedExtension = null
             panel.close()
-
-            if (installedPluginsView.count > 0) {
-                installedPluginsView.focusOnFirst()
-            } else {
-                notInstalledPluginsView.focusOnFirst()
-            }
         }
     }
 
@@ -65,6 +62,7 @@ Item {
         id: prv
 
         property var selectedPlugin: undefined
+        property var lastNavigatedExtension: undefined
 
         function resetSelectedPlugin() {
             selectedPlugin = undefined
@@ -156,7 +154,8 @@ Item {
 
                 onPluginClicked: {
                     prv.selectedPlugin = plugin
-                    panel.open(navigationControl)
+                    panel.open()
+                    prv.lastNavigatedExtension = navigationControl
                 }
 
                 onNavigationActivated: {
@@ -184,7 +183,8 @@ Item {
 
                 onPluginClicked: {
                     prv.selectedPlugin = Object.assign({}, plugin)
-                    panel.open(navigationControl)
+                    panel.open()
+                    prv.lastNavigatedExtension = navigationControl
                 }
 
                 onNavigationActivated: {
@@ -255,6 +255,20 @@ Item {
 
         onClosed: {
             prv.resetSelectedPlugin()
+            Qt.callLater(resetNavigationFocus)
+        }
+
+        function resetNavigationFocus() {
+            if (prv.lastNavigatedExtension) {
+                prv.lastNavigatedExtension.requestActive()
+                return
+            }
+
+            if (installedPluginsView.count > 0) {
+                installedPluginsView.focusOnFirst()
+            } else {
+                notInstalledPluginsView.focusOnFirst()
+            }
         }
     }
 }
