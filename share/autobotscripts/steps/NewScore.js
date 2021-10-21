@@ -73,6 +73,8 @@ function chooseRandomInstruments(count, see_msec)
             api.navigation.down()
         }
 
+        api.context.setStepVal("family_" + i, api.navigation.activeControl())
+
         // Got to Instruments
         api.navigation.nextPanel()
         api.autobot.seeChanges(see_msec)
@@ -88,6 +90,8 @@ function chooseRandomInstruments(count, see_msec)
         if (api.navigation.activeControl() === "SearchInstruments") {
             api.navigation.down()
         }
+
+        api.context.setStepVal("instrument_" + i, api.navigation.activeControl())
 
         // Select
         api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")

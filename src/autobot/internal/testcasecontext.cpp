@@ -19,35 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "abcontext.h"
+#include "testcasecontext.h"
 
 #include "log.h"
 
 using namespace mu::autobot;
 
-const std::vector<IAbContext::StepContext>& AbContext::steps() const
+void TestCaseContext::setGlobalVal(const Key& key, const Val& val)
+{
+    m_globalVals[key] = val;
+}
+
+TestCaseContext::Val TestCaseContext::globalVal(const Key& key) const
+{
+    auto it = m_globalVals.find(key);
+    if (it != m_globalVals.end()) {
+        return it->second;
+    }
+    return Val();
+}
+
+const std::vector<TestCaseContext::StepContext>& TestCaseContext::steps() const
 {
     return m_steps;
 }
 
-void AbContext::addStep(const std::string& name)
-{
-    StepContext c;
-    c.name = name;
-    m_steps.push_back(std::move(c));
-}
-
-const IAbContext::StepContext& AbContext::currentStep() const
-{
-    if (!m_steps.empty()) {
-        return m_steps.back();
-    }
-
-    static StepContext dummy;
-    return dummy;
-}
-
-const IAbContext::StepContext& AbContext::step(const std::string& name) const
+const TestCaseContext::StepContext& TestCaseContext::step(const QString& name) const
 {
     // search from back to front
     auto it = std::find_if(m_steps.rbegin(), m_steps.rend(), [name](const StepContext& c) {
@@ -62,21 +59,24 @@ const IAbContext::StepContext& AbContext::step(const std::string& name) const
     return dummy;
 }
 
-void AbContext::setGlobalVal(const Key& key, const Val& val)
+void TestCaseContext::addStep(const QString& name)
 {
-    m_globalVals[key] = val;
+    StepContext c;
+    c.name = name;
+    m_steps.push_back(std::move(c));
 }
 
-IAbContext::Val AbContext::globalVal(const Key& key) const
+const TestCaseContext::StepContext& TestCaseContext::currentStep() const
 {
-    auto it = m_globalVals.find(key);
-    if (it != m_globalVals.end()) {
-        return it->second;
+    if (!m_steps.empty()) {
+        return m_steps.back();
     }
-    return Val();
+
+    static StepContext dummy;
+    return dummy;
 }
 
-void AbContext::setStepVal(const Key& key, const Val& val)
+void TestCaseContext::setStepVal(const Key& key, const Val& val)
 {
     IF_ASSERT_FAILED(!m_steps.empty()) {
         return;
@@ -84,10 +84,10 @@ void AbContext::setStepVal(const Key& key, const Val& val)
     m_steps.back().vals[key] = val;
 }
 
-IAbContext::Val AbContext::stepVal(const std::string& stepName, const Key& key) const
+TestCaseContext::Val TestCaseContext::stepVal(const QString& stepName, const Key& key) const
 {
     const StepContext& s = step(stepName);
-    if (s.name.empty()) {
+    if (s.name.isEmpty()) {
         LOGW() << "step not found, name: " << stepName;
         return Val();
     }
@@ -100,26 +100,7 @@ IAbContext::Val AbContext::stepVal(const std::string& stepName, const Key& key) 
     return Val();
 }
 
-void AbContext::setStepRet(const Ret& ret)
-{
-    IF_ASSERT_FAILED(!m_steps.empty()) {
-        return;
-    }
-    m_steps.back().ret = ret;
-}
-
-mu::Ret AbContext::stepRet(const std::string& stepName) const
-{
-    const StepContext& s = step(stepName);
-    if (s.name.empty()) {
-        LOGW() << "step not found, name: " << stepName;
-        return Ret();
-    }
-
-    return s.ret;
-}
-
-IAbContext::Val AbContext::findVal(const Key& key) const
+TestCaseContext::Val TestCaseContext::findVal(const Key& key) const
 {
     for (int i = m_steps.size() - 1; i >= 0; --i) {
         const StepContext& s = m_steps.at(i);
@@ -130,15 +111,4 @@ IAbContext::Val AbContext::findVal(const Key& key) const
     }
 
     return globalVal(key);
-}
-
-mu::Ret AbContext::completeRet() const
-{
-    for (const StepContext& s : m_steps) {
-        if (!s.ret) {
-            return s.ret;
-        }
-    }
-
-    return make_ret(Ret::Code::Ok);
 }

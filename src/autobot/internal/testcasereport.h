@@ -30,7 +30,7 @@
 #include "system/ifilesystem.h"
 
 #include "../autobottypes.h"
-#include "../iabcontext.h"
+#include "../itestcasecontext.h"
 
 namespace mu::autobot {
 class TestCaseReport
@@ -45,7 +45,7 @@ public:
     void endReport(bool aborted);
 
     void beginStep(const QString& name);
-    void endStep(const QString& name);
+    void endStep(const QString& name, const ITestCaseContextPtr& ctx);
 
 private:
 

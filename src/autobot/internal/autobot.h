@@ -31,6 +31,7 @@
 #include "iinteractive.h"
 
 #include "scriptengine.h"
+#include "testcasecontext.h"
 #include "testcaserunner.h"
 #include "testcasereport.h"
 
@@ -42,8 +43,7 @@ class Autobot : public IAutobot, public async::Asyncable
     INJECT(api, framework::IInteractive, interactive)
 
 public:
-    Autobot();
-    ~Autobot();
+    Autobot() = default;
 
     void init();
 
@@ -54,8 +54,10 @@ public:
     bool pauseTestCase() override;
     void abortTestCase() override;
 
+    ITestCaseContextPtr context() const override;
+
 private:
-    ScriptEngine* m_engine = nullptr;
+    ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
     TestCaseReport m_report;
 };

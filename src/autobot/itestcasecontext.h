@@ -19,74 +19,47 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_IABCONTEXT_H
-#define MU_AUTOBOT_IABCONTEXT_H
+#ifndef MU_AUTOBOT_ITESTCASECONTEXT_H
+#define MU_AUTOBOT_ITESTCASECONTEXT_H
 
 #include <memory>
 #include <vector>
 #include <map>
-#include <any>
+#include <QJSValue>
+#include <QString>
 
 #include "ret.h"
 
 namespace mu::autobot {
-class IAbContext
+class ITestCaseContext
 {
 public:
-    virtual ~IAbContext() = default;
+    virtual ~ITestCaseContext() = default;
 
-    enum class Key {
-        Undefined = 0,
-        FilePath,
-        FileIndex,
-        ViewZoom,
-        CurDrawData,
-        RefDrawData,
-        DiffDrawData
-    };
-
-    using Val = std::any;
+    using Key = QString;
+    using Val = QJSValue;
 
     struct StepContext
     {
-        std::string name;
+        QString name;
         std::map<Key, Val> vals;
-        Ret ret;
     };
 
     virtual const std::vector<StepContext>& steps() const = 0;
-    virtual const StepContext& step(const std::string& name) const = 0;
+    virtual const StepContext& step(const QString& name) const = 0;
 
     virtual void setGlobalVal(const Key& key, const Val& val) = 0;
     virtual Val globalVal(const Key& key) const = 0;
 
     // work with current (last) step
-    virtual void addStep(const std::string& name) = 0;  // become current
+    virtual void addStep(const QString& name) = 0;  // become current
     virtual const StepContext& currentStep() const = 0; // last step
     virtual void setStepVal(const Key& key, const Val& val) = 0;
-    virtual void setStepRet(const Ret& ret) = 0;
 
-    virtual Val stepVal(const std::string& stepName, const Key& key) const = 0;
-    virtual Ret stepRet(const std::string& stepName) const = 0;
-
+    virtual Val stepVal(const QString& stepName, const Key& key) const = 0;
     virtual Val findVal(const Key& key) const = 0;
-
-    virtual Ret completeRet() const = 0;
-
-    // helpful
-    template<typename T>
-    T globalVal(const Key& key) const
-    {
-        return std::any_cast<T>(globalVal(key));
-    }
-
-    template<typename T>
-    T findVal(const Key& key) const
-    {
-        return std::any_cast<T>(findVal(key));
-    }
 };
-using IAbContextPtr = std::shared_ptr<IAbContext>;
+using ITestCaseContextPtr = std::shared_ptr<ITestCaseContext>;
 }
 
-#endif // MU_AUTOBOT_IABCONTEXT_H
+#endif // MU_AUTOBOT_ITESTCASECONTEXT_H
