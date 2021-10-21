@@ -38,6 +38,8 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    clip: true
+
     NavigationPanel {
         id: navPanel
         name: "AddonsLanguages"
