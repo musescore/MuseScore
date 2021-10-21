@@ -28,7 +28,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
-#include "abtypes.h"
+#include "autobottypes.h"
 
 namespace mu::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
@@ -40,7 +40,7 @@ public:
     virtual Ret loadScript(const Script& script) = 0;
 
     virtual void setStepsInterval(int msec) = 0;
-    virtual void runTestCase(const QJSValue& testCase) = 0;
+    virtual void runTestCase(const TestCase& testCase) = 0;
     virtual bool pauseTestCase() = 0;
     virtual void abortTestCase() = 0;
 };

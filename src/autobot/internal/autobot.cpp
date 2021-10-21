@@ -43,6 +43,18 @@ Autobot::~Autobot()
 void Autobot::init()
 {
     m_engine = new ScriptEngine();
+
+    m_runner.stepStarted().onReceive(this, [this](const QString& name) {
+        m_report.beginStep(name);
+    });
+
+    m_runner.stepFinished().onReceive(this, [this](const QString& name) {
+        m_report.endStep(name);
+    });
+
+    m_runner.allFinished().onReceive(this, [this](bool aborted) {
+        m_report.endReport(aborted);
+    });
 }
 
 mu::Ret Autobot::loadScript(const Script& script)
@@ -62,8 +74,9 @@ void Autobot::setStepsInterval(int msec)
     m_runner.setStepsInterval(msec);
 }
 
-void Autobot::runTestCase(const QJSValue& testCase)
+void Autobot::runTestCase(const TestCase& testCase)
 {
+    m_report.beginReport(testCase);
     m_runner.runTestCase(testCase);
 }
 
