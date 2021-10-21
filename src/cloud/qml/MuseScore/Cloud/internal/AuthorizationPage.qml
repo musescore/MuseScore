@@ -56,28 +56,9 @@ FocusScope {
         font: ui.theme.titleBoldFont
     }
 
-    Image {
-        id: logo
-
-        anchors.top: pageTitle.bottom
-        anchors.topMargin: 44
-
-        height: 240
-        width: parent.width
-
-        visible: root.height > 600
-
-        source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo_background.jpeg"
-
-        Image {
-            anchors.centerIn: parent
-            source: "qrc:/qml/MuseScore/Cloud/resources/mu_logo.svg"
-        }
-    }
-
     AccountBenefitsDescription {
-        anchors.top: logo.visible ? logo.bottom : pageTitle.bottom
-        anchors.topMargin: 66
+        anchors.top: pageTitle.bottom
+        anchors.topMargin: 48
         anchors.left: parent.left
         anchors.leftMargin: privateProperties.sideMargin
     }
