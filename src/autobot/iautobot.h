@@ -29,6 +29,7 @@
 #include "retval.h"
 #include "io/path.h"
 #include "autobottypes.h"
+#include "itestcasecontext.h"
 
 namespace mu::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
@@ -43,6 +44,8 @@ public:
     virtual void runTestCase(const TestCase& testCase) = 0;
     virtual bool pauseTestCase() = 0;
     virtual void abortTestCase() = 0;
+
+    virtual ITestCaseContextPtr context() const = 0;
 };
 }
 

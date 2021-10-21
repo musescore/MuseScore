@@ -25,6 +25,8 @@
 
 #include "log.h"
 
+#include "scriptengine.h"
+
 using namespace mu;
 using namespace mu::autobot;
 
@@ -86,7 +88,11 @@ void TestCaseRunner::nextStep()
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
 
         m_stepStarted.send(step.name());
-        step.exec();
+        Ret ret = step.exec();
+        if (!ret) {
+            LOGE() << "failed exec step: " << step.name() << ", err: " << ret.toString();
+        }
+
         m_stepFinished.send(step.name());
 
         nextStep();

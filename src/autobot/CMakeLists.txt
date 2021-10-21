@@ -33,15 +33,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/autobotmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/autobottypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobot.h
-    ${CMAKE_CURRENT_LIST_DIR}/iabcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/itestcasecontext.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotscriptsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/abcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/testcasecontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/testcaserunner.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/testcaserunner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/testcasereport.cpp

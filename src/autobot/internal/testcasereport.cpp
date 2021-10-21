@@ -34,6 +34,11 @@ inline QTextStream& operator<<(QTextStream& s, const std::string& v)
     return s;
 }
 
+static QString formatVal(const ITestCaseContext::Val& val)
+{
+    return val.toString();
+}
+
 mu::Ret TestCaseReport::beginReport(const TestCase& testCase)
 {
     io::path reportsPath = configuration()->reportsPath();
@@ -102,10 +107,15 @@ void TestCaseReport::beginStep(const QString& name)
     m_stream.flush();
 }
 
-void TestCaseReport::endStep(const QString& name)
+void TestCaseReport::endStep(const QString& name, const ITestCaseContextPtr& ctx)
 {
     if (!m_opened) {
         return;
+    }
+
+    const ITestCaseContext::StepContext& step = ctx->currentStep();
+    for (auto it = step.vals.cbegin(); it != step.vals.cend(); ++it) {
+        m_stream << "    " << it->first << ": " << formatVal(it->second) << Qt::endl;
     }
 
     m_stream << "  end step: " << name << Qt::endl;

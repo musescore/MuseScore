@@ -27,18 +27,26 @@
 
 #include "apiobject.h"
 
+#include "modularity/ioc.h"
+#include "autobot/iautobot.h"
+
 namespace mu::api {
 class ContextApi : public ApiObject
 {
+    Q_OBJECT
+
+    INJECT(api, autobot::IAutobot, autobot)
 public:
     explicit ContextApi(IApiEngine* e);
 
-    Q_INVOKABLE QJSValue value(const QString& key) const;
-    Q_INVOKABLE void setValue(const QString& key, const QJSValue& value);
+    Q_INVOKABLE void setGlobalVal(const QString& key, const QJSValue& val);
+    Q_INVOKABLE QJSValue globalVal(const QString& key) const;
 
-private:
+    // work with current (last) step
+    Q_INVOKABLE void setStepVal(const QString& key, const QJSValue& val);
 
-    QHash<QString, QJSValue> m_values;
+    Q_INVOKABLE QJSValue stepVal(const QString& stepName, const QString& key) const;
+    Q_INVOKABLE QJSValue findVal(const QString& key) const;
 };
 }
 

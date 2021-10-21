@@ -53,7 +53,19 @@ struct Step
         : val(jsval) {}
 
     QString name() const { return val.property("name").toString(); }
-    void exec() { val.property("func").call(); }
+    Ret exec()
+    {
+        val.property("func").call();
+
+        if (val.isError()) {
+            QString fileName = val.property("fileName").toString();
+            int line = val.property("lineNumber").toInt();
+            return make_ret(Ret::Code::UnknownError,
+                            QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(val.toString()));
+        }
+
+        return Ret(Ret::Code::Ok);
+    }
 
 private:
     QJSValue val;
