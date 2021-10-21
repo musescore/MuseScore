@@ -21,12 +21,35 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Column {
+    id: root
+
     spacing: 24
 
+    property NavigationPanel navigationPanel: null
+    property string activeButtonName: ""
+
+    function readInfo() {
+        accessibleInfo.focused = true
+    }
+
+    function resetFocusOnInfo() {
+        accessibleInfo.focused = false
+    }
+
+    AccessibleItem {
+        id: accessibleInfo
+        accessibleParent: root.navigationPanel.accessible
+        visualItem: root
+        role: MUAccessible.Information
+        name: titleLabel.text + ". " + view.generalInfo + root.activeButtonName
+    }
+
     StyledTextLabel {
+        id: titleLabel
         text: qsTrc("cloud", "Get the most out of MuseScore with a free account")
         font: ui.theme.headerBoldFont
     }
@@ -40,12 +63,23 @@ Column {
         }
 
         ListView {
+            id: view
+
             anchors.verticalCenter: parent.verticalCenter
 
             height: contentHeight
             width: contentWidth
 
             spacing: 6
+
+            property string generalInfo: {
+                var result = ""
+                for (var i = 0; i < count; i++) {
+                    result += model[i] + ". "
+                }
+
+                return result
+            }
 
             model: [
                 qsTrc("cloud", "Enjoy free cloud storage for your scores"),
