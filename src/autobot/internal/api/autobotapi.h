@@ -30,6 +30,7 @@
 
 #include "modularity/ioc.h"
 #include "project/iprojectfilescontroller.h"
+#include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
 #include "iinteractive.h"
 
@@ -38,6 +39,7 @@ class AutobotApi : public ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
+    INJECT(api, autobot::IAutobot, autobot)
     INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(api, project::IProjectFilesController, projectFilesController)
     INJECT(api, framework::IInteractive, interactive)

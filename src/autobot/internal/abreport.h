@@ -29,7 +29,6 @@
 #include "../iautobotconfiguration.h"
 #include "system/ifilesystem.h"
 
-#include "../itestcase.h"
 #include "../abtypes.h"
 #include "../iabcontext.h"
 
@@ -42,10 +41,10 @@ class AbReport
 public:
     AbReport() = default;
 
-    Ret beginReport(const ITestCasePtr& testCase);
+    Ret beginReport();
     void endReport();
 
-    void beginFile(const File& file);
+    void beginFile();
     void endFile(const IAbContextPtr& ctx);
 
     void beginStep(const IAbContextPtr& ctx);

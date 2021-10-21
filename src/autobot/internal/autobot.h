@@ -29,6 +29,7 @@
 #include "../iautobotconfiguration.h"
 #include "system/ifilesystem.h"
 
+#include "scriptengine.h"
 #include "abrunner.h"
 #include "abreport.h"
 
@@ -43,39 +44,13 @@ public:
 
     void init();
 
-    std::vector<ITestCasePtr> testCases() const override;
-    ITestCasePtr testCase(const std::string& name) const override;
+    Ret loadScript(const Script& script) override;
+    void runTestCase(const QJSValue& testCase) override;
 
-    void setCurrentTestCase(const std::string& name) override;
-    const ValCh<ITestCasePtr>& currentTestCase() const override;
-
-    void runAllFiles() override;
-    void runFile(int fileIndex) override;
     void stop() override;
-    const ValCh<Status>& status() const override;
-
-    const ValNt<Files>& files() const override;
-    async::Channel<File> fileFinished() const override;
-    const ValCh<int>& currentFileIndex() const override;
-
-    Ret runScript(const Script& script) override;
 
 private:
-
-    mu::RetVal<mu::io::paths> filesList() const;
-    void nextFile();
-    void onFileFinished(const IAbContextPtr& ctx);
-    void doStop();
-
-    std::vector<ITestCasePtr> m_testCases;
-    ValCh<ITestCasePtr> m_currentTestCase;
-
-    ValNt<Files> m_files;
-    ValCh<int> m_fileIndex;
-
-    async::Channel<File> m_fileFinished;
-
-    ValCh<Status> m_status;
+    ScriptEngine engine;
     AbRunner m_runner;
     AbReport m_report;
 };
