@@ -36,11 +36,6 @@ using namespace mu::framework;
 using namespace mu::network;
 
 namespace mu::extensions {
-QString analysingStatusTitle()
-{
-    return qtrc("extensions", "Analysing…");
-}
-
 QString downloadingStatusTitle()
 {
     return qtrc("extensions", "Downloading…");
@@ -371,7 +366,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
                                    async::Channel<ExtensionProgress>* progressChannel,
                                    async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
+    progressChannel->send(ExtensionProgress(downloadingStatusTitle(), true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
@@ -379,7 +374,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
         return;
     }
 
-    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
+    progressChannel->send(ExtensionProgress(downloadingStatusTitle(), true));
 
     QString extensionArchivePath = download.val;
 
@@ -400,14 +395,14 @@ void ExtensionsService::th_install(const QString& extensionCode,
 void ExtensionsService::th_update(const QString& extensionCode, async::Channel<ExtensionProgress>* progressChannel,
                                   async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
+    progressChannel->send(ExtensionProgress(downloadingStatusTitle(), true));
 
     RetVal<QString> download = downloadExtension(extensionCode, progressChannel);
     if (!download.ret) {
         finishChannel->send(download.ret);
     }
 
-    progressChannel->send(ExtensionProgress(analysingStatusTitle(), true));
+    progressChannel->send(ExtensionProgress(downloadingStatusTitle(), true));
 
     QString extensionArchivePath = download.val;
 
