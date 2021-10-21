@@ -72,5 +72,5 @@ void AutobotScriptsModel::load()
 void AutobotScriptsModel::runScript(int scriptIndex)
 {
     const Script& script = m_scripts.at(scriptIndex);
-    autobot()->runScript(script);
+    autobot()->loadScript(script);
 }

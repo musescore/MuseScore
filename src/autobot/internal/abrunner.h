@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <memory>
+#include <QJSValue>
 
 #include "async/channel.h"
 #include "async/asyncable.h"
@@ -31,8 +32,6 @@
 #include "io/path.h"
 
 #include "abcontext.h"
-#include "abbasestep.h"
-#include "../itestcase.h"
 
 namespace mu::autobot {
 class AbRunner : public async::Asyncable
@@ -40,26 +39,26 @@ class AbRunner : public async::Asyncable
 public:
     AbRunner() = default;
 
-    void run(const ITestCasePtr& tc, const IAbContextPtr& ctx);
-
-    async::Channel<IAbContextPtr> stepStarted() const;
-    async::Channel<IAbContextPtr> stepFinished() const;
-
-    async::Channel<IAbContextPtr> allFinished() const;
+    void setInterval(int msec);
+    void runTestCase(const QJSValue& testCase);
 
 private:
 
-    void nextStep(const IAbContextPtr& ctx);
-    void doFinish(const IAbContextPtr& ctx);
+    struct TestCase
+    {
+        QJSValue testCase;
+        QJSValue steps;
+        int stepsCount = 0;
+        int currentStepIdx = -1;
+        int finishedCount = 0;
+        QEventLoop loop;
+    };
 
-    int delayToMSec(ITestStep::Delay d) const;
+    void nextStep();
 
-    ITestCasePtr m_testCase;
-    int m_stepIndex = -1;
-
-    async::Channel<IAbContextPtr> m_stepStarted;
-    async::Channel<IAbContextPtr> m_stepFinished;
-    async::Channel<IAbContextPtr> m_allFinished;
+    int m_intervalMsec = 1000;
+    TestCase m_testCase;
+    bool m_abort = false;
 };
 }
 

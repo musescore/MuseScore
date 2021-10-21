@@ -29,7 +29,6 @@
 
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
-#include "view/autobotmodel.h"
 #include "view/autobotscriptsmodel.h"
 
 #include "engraving/infrastructure/draw/painter.h"
@@ -97,7 +96,6 @@ void AutobotModule::resolveImports()
 
 void AutobotModule::registerUiTypes()
 {
-    qmlRegisterType<AutobotModel>("MuseScore.Autobot", 1, 0, "AutobotModel");
     qmlRegisterType<AutobotScriptsModel>("MuseScore.Autobot", 1, 0, "AutobotScriptsModel");
 }
 
