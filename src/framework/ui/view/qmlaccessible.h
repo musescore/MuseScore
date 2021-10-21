@@ -58,8 +58,8 @@ public:
         ComboBox,
         ListItem,
         MenuItem,
-        Information,
-        Slider
+        Range,
+        Information
     };
     Q_ENUM(Role)
 };

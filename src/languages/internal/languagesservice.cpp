@@ -45,11 +45,6 @@ static const QStringList languageFileTypes = {
 };
 
 namespace mu::languages {
-static QString analysingStatusTitle()
-{
-    return qtrc("languages", "Analysing…");
-}
-
 static QString downloadingStatusTitle()
 {
     return qtrc("languages", "Downloading…");
@@ -529,7 +524,7 @@ void LanguagesService::th_refreshLanguages()
 void LanguagesService::th_install(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
                                   async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
+    progressChannel->send(LanguageProgress(downloadingStatusTitle(), true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
@@ -537,7 +532,7 @@ void LanguagesService::th_install(const QString& languageCode, async::Channel<La
         return;
     }
 
-    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
+    progressChannel->send(LanguageProgress(downloadingStatusTitle(), true));
 
     QString languageArchivePath = download.val;
 
@@ -558,14 +553,14 @@ void LanguagesService::th_install(const QString& languageCode, async::Channel<La
 void LanguagesService::th_update(const QString& languageCode, async::Channel<LanguageProgress>* progressChannel,
                                  async::Channel<Ret>* finishChannel)
 {
-    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
+    progressChannel->send(LanguageProgress(downloadingStatusTitle(), true));
 
     RetVal<QString> download = downloadLanguage(languageCode, progressChannel);
     if (!download.ret) {
         finishChannel->send(download.ret);
     }
 
-    progressChannel->send(LanguageProgress(analysingStatusTitle(), true));
+    progressChannel->send(LanguageProgress(downloadingStatusTitle(), true));
 
     QString languageArchivePath = download.val;
 

@@ -178,7 +178,7 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
-    case IAccessible::Role::Slider: {
+    case IAccessible::Role::Range: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
     } break;
@@ -206,7 +206,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
     case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
-    case IAccessible::Role::Slider: return QAccessible::Slider;
+    case IAccessible::Role::Range: return QAccessible::Slider;
     case IAccessible::Role::Information: {
 #ifdef Q_OS_WIN
         return QAccessible::StaticText;
@@ -248,7 +248,7 @@ QVariant AccessibleItemInterface::currentValue() const
     return m_object->item()->accesibleValue();
 }
 
-void AccessibleItemInterface::setCurrentValue(const QVariant& value)
+void AccessibleItemInterface::setCurrentValue(const QVariant&)
 {
     NOT_IMPLEMENTED;
 }
@@ -270,7 +270,8 @@ QVariant AccessibleItemInterface::minimumStepSize() const
 
 void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
 {
-    if (type == QAccessible::InterfaceType::ValueInterface) {
+    QAccessible::Role itemRole = role();
+    if (type == QAccessible::InterfaceType::ValueInterface && itemRole == QAccessible::Slider) {
         return static_cast<QAccessibleValueInterface*>(this);
     }
 

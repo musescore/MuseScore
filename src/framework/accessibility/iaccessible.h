@@ -51,7 +51,7 @@ public:
         ComboBox,
         ListItem,
         MenuItem,
-        Slider,
+        Range,
 
         // Custom roles
         Information, // just text
