@@ -25,6 +25,7 @@
 #include <vector>
 #include <memory>
 #include <QJSValue>
+#include <QEventLoop>
 
 #include "async/channel.h"
 #include "async/asyncable.h"
@@ -39,8 +40,9 @@ class AbRunner : public async::Asyncable
 public:
     AbRunner() = default;
 
-    void setInterval(int msec);
+    void setStepsInterval(int msec);
     void runTestCase(const QJSValue& testCase);
+    void abortTestCase();
 
 private:
 

@@ -35,31 +35,31 @@ Autobot::Autobot()
 {
 }
 
+Autobot::~Autobot()
+{
+    delete m_engine;
+}
+
 void Autobot::init()
 {
-    m_runner.allFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
-        // onFileFinished(ctx);
-    });
-
-    m_runner.stepStarted().onReceive(this, [this](const IAbContextPtr& ctx) {
-        m_report.beginStep(ctx);
-    });
-
-    m_runner.stepFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
-        m_report.endStep(ctx);
-    });
+    m_engine = new ScriptEngine();
 }
 
 mu::Ret Autobot::loadScript(const Script& script)
 {
     LOGD() << script.path;
 
-    m_engine.setScriptPath(script.path);
-    Ret ret = m_engine.call("main");
+    m_engine->setScriptPath(script.path);
+    Ret ret = m_engine->call("main");
     if (!ret) {
         LOGE() << ret.toString();
     }
     return ret;
+}
+
+void Autobot::setStepsInterval(int msec)
+{
+    m_runner.setStepsInterval(msec);
 }
 
 void Autobot::runTestCase(const QJSValue& testCase)
@@ -67,7 +67,21 @@ void Autobot::runTestCase(const QJSValue& testCase)
     m_runner.runTestCase(testCase);
 }
 
-void Autobot::stop()
+void Autobot::abortTestCase()
 {
-    //m_status.set(Status::Stoped);
+    m_runner.abortTestCase();
+}
+
+bool Autobot::pauseTestCase()
+{
+    using namespace mu::framework;
+    IInteractive::Result res = interactive()->question("Pause", "Continue?",
+                                                       { IInteractive::Button::Continue, IInteractive::Button::Abort });
+
+    if (res.standardButton() == IInteractive::Button::Abort) {
+        abortTestCase();
+        return false;
+    }
+
+    return true;
 }
