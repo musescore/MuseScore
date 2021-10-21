@@ -36,6 +36,8 @@ Rectangle {
     property alias navigation: navPanel
     property bool floating: false
 
+    property int maximumHeight: 0
+
     width: content.width
     height: content.height
 
@@ -149,7 +151,12 @@ Rectangle {
             }
 
             SeparatorLine {
+                readonly property int topMargin: (root.height - root.maximumHeight) / 2
+
                 Layout.leftMargin: 12
+                Layout.topMargin: topMargin
+                Layout.bottomMargin: topMargin
+
                 orientation: Qt.Vertical
                 visible: !root.floating
             }
@@ -201,7 +208,7 @@ Rectangle {
         }
 
         StyledSlider {
-            width: playbackActions.width
+            width: playbackActions.width - 12
             visible: root.floating
             value: playbackModel.playPosition
 

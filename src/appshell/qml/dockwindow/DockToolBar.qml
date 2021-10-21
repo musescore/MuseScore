@@ -32,12 +32,14 @@ DockToolBarView {
     default property alias contentComponent: contentLoader.sourceComponent
     property alias movable: gripButton.visible
 
-    onOrientationChanged: {
-        contentBackground.printInfo()
-    }
+    QtObject {
+        id: prv
 
-    onFloatingChanged: {
-        contentBackground.printInfo()
+        readonly property int minimumLength: 48
+        readonly property int maximumLength: 9999999
+        readonly property int margins: 2
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height : 0
     }
 
     Rectangle {
@@ -45,25 +47,7 @@ DockToolBarView {
 
         color: ui.theme.backgroundPrimaryColor
 
-        function printInfo() {
-            console.debug("------------------------------")
-            console.debug("obj: " + objectName)
-            console.debug("contentSize: " + Qt.size(contentLoader.width, contentLoader.height))
-            console.debug("bakgroundSize: " + Qt.size(contentBackground.width, contentBackground.height))
-            console.debug("------------------------------\n")
-        }
-
-        Component.onCompleted: {
-            Qt.callLater(printInfo)
-        }
-
         Item {
-            id: contentRect
-
-            readonly property int margins: 2
-            readonly property int gripButtonWidth: gripButton.visible ? gripButton.width : 0
-            readonly property int gripButtonHeight: gripButton.visible ? gripButton.height : 0
-
             FlatButton {
                 id: gripButton
 
@@ -91,15 +75,18 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                minimumWidth: contentLoader.item ? 2 * contentRect.margins + contentRect.gripButtonWidth + contentLoader.width : 0
-                minimumHeight: contentLoader.item ? 2 * contentRect.margins + contentLoader.height : 0
+                minimumWidth: contentLoader.item ? 2 * prv.margins + prv.gripButtonWidth + contentLoader.width : 0
+                minimumHeight: contentLoader.item ? Math.min(contentLoader.height, maximumHeight) : 0
+
+                maximumWidth: prv.maximumLength
+                maximumHeight: prv.minimumLength
             }
 
             PropertyChanges {
                 target: gripButton
 
                 anchors.left: parent.left
-                anchors.leftMargin: contentRect.margins
+                anchors.leftMargin: prv.margins
                 anchors.top: undefined
 
                 x: 0
@@ -110,7 +97,7 @@ DockToolBarView {
                 target: contentLoader
 
                 anchors.left: gripButton.visible ? gripButton.right : parent.left
-                anchors.leftMargin: contentRect.margins
+                anchors.leftMargin: prv.margins
                 anchors.top: undefined
 
                 x: 0
@@ -125,15 +112,18 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                minimumWidth: contentLoader.item ? 2 * contentRect.margins + contentLoader.width : 0
-                minimumHeight: contentLoader.item ? 2 * contentRect.margins + contentRect.gripButtonHeight + contentLoader.height : 0
+                minimumWidth: contentLoader.item ? contentLoader.width : 0
+                minimumHeight: contentLoader.item ? 2 * prv.margins + prv.gripButtonHeight + contentLoader.height : 0
+
+                maximumWidth: minimumWidth
+                maximumHeight: prv.maximumLength
             }
 
             PropertyChanges {
                 target: gripButton
 
                 anchors.top: parent.top
-                anchors.topMargin: contentRect.margins
+                anchors.topMargin: prv.margins
                 anchors.left: undefined
 
                 x: (contentBackground.width - gripButton.width) / 2
@@ -146,7 +136,7 @@ DockToolBarView {
                 target: contentLoader
 
                 anchors.top: gripButton.bottom
-                anchors.topMargin: contentRect.margins
+                anchors.topMargin: prv.margins
                 anchors.left: undefined
 
                 x: (contentBackground.width - contentLoader.width) / 2

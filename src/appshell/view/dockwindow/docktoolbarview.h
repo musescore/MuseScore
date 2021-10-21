@@ -56,12 +56,9 @@ protected:
 private:
     bool isOrientationChangingAllowed() const;
 
-    void applySizeConstraintsByOrientation();
-
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;
 
-    bool m_movable = true;
     Qt::Orientation m_orientation = Qt::Horizontal;
 };
 }

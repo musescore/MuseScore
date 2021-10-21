@@ -108,6 +108,8 @@ DockPage {
                 navigation.order: 3
 
                 floating: playbackToolBar.floating
+
+                maximumHeight: playbackToolBar.height
             }
         },
 
@@ -135,11 +137,13 @@ DockPage {
 
             NoteInputBar {
                 orientation: noteInputBar.orientation
+                floating: noteInputBar.floating
+
+                maximumWidth: noteInputBar.width
+                maximumHeight: noteInputBar.height
 
                 navigation.section: root.noteInputKeyNavSec
                 navigation.order: 1
-
-                floating: noteInputBar.floating
             }
         }
     ]
