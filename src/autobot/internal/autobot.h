@@ -31,8 +31,8 @@
 #include "iinteractive.h"
 
 #include "scriptengine.h"
-#include "abrunner.h"
-#include "abreport.h"
+#include "testcaserunner.h"
+#include "testcasereport.h"
 
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
@@ -50,14 +50,14 @@ public:
     Ret loadScript(const Script& script) override;
 
     void setStepsInterval(int msec) override;
-    void runTestCase(const QJSValue& testCase) override;
+    void runTestCase(const TestCase& testCase) override;
     bool pauseTestCase() override;
     void abortTestCase() override;
 
 private:
     ScriptEngine* m_engine = nullptr;
-    AbRunner m_runner;
-    AbReport m_report;
+    TestCaseRunner m_runner;
+    TestCaseReport m_report;
 };
 }
 
