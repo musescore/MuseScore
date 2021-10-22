@@ -89,7 +89,7 @@ ExpandableBlank {
             model: root.sectionModel
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
-            anchorItem: root
+            anchorItem: root.anchorItem
 
             onEnsureContentVisibleRequested: {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
@@ -104,7 +104,7 @@ ExpandableBlank {
             model: root.sectionModel
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
-            anchorItem: root
+            anchorItem: root.anchorItem
 
             onEnsureContentVisibleRequested: {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
@@ -119,7 +119,7 @@ ExpandableBlank {
             model: root.sectionModel
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
-            anchorItem: root
+            anchorItem: root.anchorItem
 
             onEnsureContentVisibleRequested: {
                 root.ensureContentVisibleRequested(-invisibleContentHeight)
