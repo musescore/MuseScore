@@ -42,7 +42,12 @@ Item {
 
     property bool resourcePickingActive: false
 
-    property bool hovered: rootMouseArea.containsMouse
+    property bool showAdditionalButtons: rootMouseArea.containsMouse || (navigationPanel ? navigationPanel.active : true)
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 0
+    property int navigationRowEnd: Boolean(selectorLoader.item) ? selectorLoader.item.navigation.row : navigationRowStart
+    property string accessibleName: ""
 
     signal turnedOn()
     signal turnedOff()
@@ -64,12 +69,17 @@ Item {
             Layout.preferredHeight: root.height
             Layout.alignment: Qt.AlignLeft
 
-            active: root.supportsByPassing && (root.hovered || root.resourcePickingActive)
+            active: root.supportsByPassing && (root.showAdditionalButtons || root.resourcePickingActive)
 
             sourceComponent: FlatButton {
                 id: activityButton
 
                 icon: IconCode.BYPASS
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "ActivityButton"
+                navigation.row: root.navigationRowStart + 1
+                navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Bypass")
 
                 backgroundItem: RoundedRectangle {
                     id: activityButtonBackground
@@ -85,6 +95,10 @@ Item {
                     border.width: ui.theme.borderWidth
                     border.color: ui.theme.strokeColor
 
+                    NavigationFocusBorder {
+                        navigationCtrl: activityButton.navigation
+                    }
+
                     states: [
                         State {
                             name: "PRESSED"
@@ -98,7 +112,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: root.hovered
+                            when: rootMouseArea.containsMouse
 
                             PropertyChanges {
                                 target: activityButtonBackground
@@ -139,13 +153,17 @@ Item {
             Layout.minimumWidth: 48
             Layout.preferredHeight: root.height
 
-            active: root.supportsTitle
+            active: root.supportsTitle || root.navigationPanel.active
 
             sourceComponent: FlatButton {
                 id: titleButton
 
                 height: root.height
                 width: titleLoader.width
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "TitleButton"
+                navigation.row: root.navigationRowStart + 2
 
                 backgroundItem: RoundedRectangle {
                     id: titleButtonBackground
@@ -156,6 +174,10 @@ Item {
 
                     border.width: ui.theme.borderWidth
                     border.color: ui.theme.strokeColor
+
+                    NavigationFocusBorder {
+                        navigationCtrl: titleButton.navigation
+                    }
 
                     states: [
                         State {
@@ -170,7 +192,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: root.hovered || root.resourcePickingActive
+                            when: rootMouseArea.containsMouse || root.resourcePickingActive
 
                             PropertyChanges {
                                 target: titleButtonBackground
@@ -209,12 +231,16 @@ Item {
             Layout.preferredHeight: root.height
             Layout.alignment: Qt.AlignRight
 
-            active: (root.hovered || root.resourcePickingActive) && root.supportsMenu
+            active: (root.showAdditionalButtons || root.resourcePickingActive) && root.supportsMenu
 
             sourceComponent: FlatButton {
                 id: menuButton
 
                 icon: IconCode.SMALL_ARROW_DOWN
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "MenuButton"
+                navigation.row: root.navigationRowStart + 3
 
                 backgroundItem: RoundedRectangle {
                     id: menuButtonBackground
@@ -230,6 +256,10 @@ Item {
                     border.width: ui.theme.borderWidth
                     border.color: ui.theme.strokeColor
 
+                    NavigationFocusBorder {
+                        navigationCtrl: menuButton.navigation
+                    }
+
                     states: [
                         State {
                             name: "PRESSED"
@@ -243,7 +273,7 @@ Item {
 
                         State {
                             name: "HOVERED"
-                            when: root.hovered && !root.resourcePickingActive
+                            when: rootMouseArea.containsMouse && !root.resourcePickingActive
 
                             PropertyChanges {
                                 target: menuButtonBackground
