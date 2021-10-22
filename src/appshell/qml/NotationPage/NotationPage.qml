@@ -102,6 +102,7 @@ DockPage {
             floatable: false
             resizable: false
             padding: 0
+            alignment: DockToolBarAlignment.Center
 
             NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -121,6 +122,8 @@ DockPage {
             objectName: pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
 
+            alignment: DockToolBarAlignment.Right
+
             PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 3
@@ -137,6 +140,7 @@ DockPage {
 
             floatable: false
             resizable: false
+            alignment: DockToolBarAlignment.Right
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec

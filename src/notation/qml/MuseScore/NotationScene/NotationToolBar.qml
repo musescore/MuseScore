@@ -60,7 +60,7 @@ Rectangle {
     ListView {
         id: view
 
-        width: contentItem.childrenRect.width
+        width: contentWidth
         height: contentItem.childrenRect.height
 
         orientation: Qt.Horizontal
