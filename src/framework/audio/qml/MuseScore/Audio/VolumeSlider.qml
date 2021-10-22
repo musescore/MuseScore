@@ -23,6 +23,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Slider {
@@ -31,6 +32,8 @@ Slider {
     property real volumeLevel: 0.0
 
     signal volumeLevelMoved(var level)
+
+    property var navigation: navCtrl
 
     height: 140 + prv.handleHeight
     width: 32 + prv.unitsTextWidth
@@ -118,6 +121,33 @@ Slider {
 
         readonly property real handleWidth: 16
         readonly property real handleHeight: 32
+    }
+
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "VolumeSlider"
+        enabled: root.enabled && root.visible
+        order: 1000
+
+        accessible.role: MUAccessible.Range
+        accessible.visualItem: root
+
+        accessible.value: root.value
+        accessible.minimumValue: root.from
+        accessible.maximumValue: root.to
+        accessible.stepSize: 1
+
+        onNavigationEvent: {
+            switch(event.type) {
+            case NavigationEvent.Left:
+                root.decrease()
+                break
+            case NavigationEvent.Right:
+                root.increase()
+                break
+            }
+        }
     }
 
     background: Canvas {
