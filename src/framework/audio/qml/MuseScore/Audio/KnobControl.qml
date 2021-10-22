@@ -23,12 +23,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Dial {
     id: root
 
     property int valueScale: 100
+
+    property var navigation: navCtrl
 
     width: prv.radius * 2
     height: width
@@ -61,6 +64,32 @@ Dial {
         onValueArcColorChanged: { backgroundCanvas.requestPaint() }
         onOuterArcColorChanged: { backgroundCanvas.requestPaint() }
         onInnerArcColorChanged: { backgroundCanvas.requestPaint() }
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "KnobControl"
+        enabled: root.enabled && root.visible
+        order: 1000
+
+        accessible.role: MUAccessible.Range
+        accessible.visualItem: root
+
+        accessible.value: root.value
+        accessible.minimumValue: root.from
+        accessible.maximumValue: root.to
+        accessible.stepSize: 1
+
+        onNavigationEvent: {
+            switch(event.type) {
+            case NavigationEvent.Left:
+                root.decrease()
+                break
+            case NavigationEvent.Right:
+                root.increase()
+                break
+            }
+        }
     }
 
     background: Canvas {
