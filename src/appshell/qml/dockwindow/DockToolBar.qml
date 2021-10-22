@@ -36,8 +36,11 @@ DockToolBarView {
     property int padding: 2
     property int spacing: 2
 
-    minimumWidth: Math.min(content.width, maximumWidth)
-    minimumHeight: Math.min(content.height, maximumHeight)
+    contentWidth: content.width
+    contentHeight: content.height
+
+    minimumWidth: Math.min(contentWidth, maximumWidth)
+    minimumHeight: Math.min(contentHeight, maximumHeight)
 
     QtObject {
         id: prv
@@ -52,6 +55,18 @@ DockToolBarView {
         id: contentBackground
 
         color: ui.theme.backgroundPrimaryColor
+
+        function printInfo() {
+            console.debug("------------------------------")
+            console.debug("obj: " + objectName)
+            console.debug("contentSize: " + Qt.size(contentLoader.width, contentLoader.height))
+            console.debug("bakgroundSize: " + Qt.size(contentBackground.width, contentBackground.height))
+            console.debug("------------------------------\n")
+        }
+
+        Component.onCompleted: {
+            Qt.callLater(printInfo)
+        }
 
         Item {
             id: content

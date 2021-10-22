@@ -34,6 +34,7 @@
 #include "dockstatusbarview.h"
 #include "docktoolbarview.h"
 #include "docktoolbarholder.h"
+#include "dockwindow.h"
 
 #include "log.h"
 
@@ -66,6 +67,10 @@ void DockWindow::componentComplete()
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
+    connect(this, &QQuickItem::widthChanged, this, [this]() {
+        alignToolBars();
+    });
+
     uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
         if (!m_quiting) {
             resetWindowState();
@@ -75,6 +80,15 @@ void DockWindow::componentComplete()
     dockWindowProvider()->init(this);
 
     startupScenario()->run();
+}
+
+void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    for (DockToolBarView* toolBar : topLevelToolBars()) {
+        toolBar->setMinimumWidth(toolBar->contentWidth());
+    }
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 void DockWindow::onQuit()
@@ -132,6 +146,8 @@ void DockWindow::loadPage(const QString& uri)
         KDDockWidgets::DockRegistry::self()->clear();
     }
 
+    m_currentPageUri = uri;
+
     loadPageContent(newPage);
     restorePageState(newPage->objectName());
     initDocks(newPage);
@@ -142,9 +158,7 @@ void DockWindow::loadPage(const QString& uri)
         allDockNames << dock->objectName();
     }
 
-    m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
-
     m_docksOpenStatusChanged.send(allDockNames);
 }
 
@@ -371,6 +385,56 @@ void DockWindow::loadPagePanels(const DockPageView* page)
     }
 }
 
+void DockWindow::alignToolBars()
+{
+    DockToolBarView* lastLeftToolBar = nullptr;
+    DockToolBarView* lastCentralToolBar = nullptr;
+
+    int leftToolBarsWidth = 0;
+    int centralToolBarsWidth = 0;
+    int rightToolBarsWidth = 0;
+
+    for (DockToolBarView* toolBar : topLevelToolBars()) {
+        if (toolBar->floating() || !toolBar->isVisible()) {
+            continue;
+        }
+
+        switch (static_cast<DockToolBarAlignment::Type>(toolBar->alignment())) {
+        case DockToolBarAlignment::Left:
+            lastLeftToolBar = toolBar;
+            leftToolBarsWidth += toolBar->contentWidth();
+            break;
+        case DockToolBarAlignment::Center:
+            lastCentralToolBar = toolBar;
+            centralToolBarsWidth += toolBar->contentWidth();
+            break;
+        case DockToolBarAlignment::Right:
+            rightToolBarsWidth += toolBar->contentWidth();
+            break;
+        }
+    }
+
+    if (!lastLeftToolBar || !lastCentralToolBar) {
+        return;
+    }
+
+    int deltaForLastLeftToolbar = (width() - centralToolBarsWidth) / 2 - leftToolBarsWidth;
+    int deltaForLastCentralToolBar = (width() - centralToolBarsWidth) / 2 - rightToolBarsWidth;
+
+    deltaForLastLeftToolbar = std::max(deltaForLastLeftToolbar, 0);
+    deltaForLastCentralToolBar = std::max(deltaForLastCentralToolBar, 0);
+
+    int freeSpace = width() - (leftToolBarsWidth + centralToolBarsWidth + rightToolBarsWidth);
+
+    if (deltaForLastLeftToolbar + deltaForLastCentralToolBar > freeSpace) {
+        deltaForLastLeftToolbar = 0;
+        deltaForLastCentralToolBar = 0;
+    }
+
+    lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
+    lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+}
+
 void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo)
 {
     IF_ASSERT_FAILED(dock) {
@@ -486,6 +550,25 @@ void DockWindow::initDocks(DockPageView* page)
     if (page) {
         page->init();
     }
+
+    alignToolBars();
+
+    for (DockToolBarView* toolbar : page->mainToolBars()) {
+        connect(toolbar, &DockToolBarView::floatingChanged, this, [this]() {
+            alignToolBars();
+        }, Qt::UniqueConnection);
+    }
+}
+
+QList<DockToolBarView*> DockWindow::topLevelToolBars() const
+{
+    QList<DockToolBarView*> toolBars = m_toolBars.list();
+
+    if (auto page = currentPage()) {
+        toolBars << page->mainToolBars();
+    }
+
+    return toolBars;
 }
 
 DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const

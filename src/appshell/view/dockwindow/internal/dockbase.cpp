@@ -84,6 +84,16 @@ int DockBase::maximumHeight() const
     return m_maximumHeight;
 }
 
+int DockBase::contentWidth() const
+{
+    return m_contentWidth;
+}
+
+int DockBase::contentHeight() const
+{
+    return m_contentHeight;
+}
+
 QSize DockBase::preferredSize() const
 {
     return QSize(width(), height());
@@ -157,6 +167,26 @@ void DockBase::setMaximumHeight(int height)
 
     m_maximumHeight = height;
     emit maximumSizeChanged();
+}
+
+void DockBase::setContentWidth(int width)
+{
+    if (m_contentWidth == width) {
+        return;
+    }
+
+    m_contentWidth = width;
+    emit contentSizeChanged();
+}
+
+void DockBase::setContentHeight(int height)
+{
+    if (m_contentHeight == height) {
+        return;
+    }
+
+    m_contentHeight = height;
+    emit contentSizeChanged();
 }
 
 void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
@@ -252,7 +282,7 @@ void DockBase::componentComplete()
         return;
     }
 
-    QQuickItem* content = childItems().first();
+    QQuickItem* content = children.first();
     IF_ASSERT_FAILED(content) {
         return;
     }
