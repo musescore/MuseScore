@@ -47,6 +47,10 @@ MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, con
     m_rightChannelPressure(MIN_DISPLAYED_DBFS)
 {
     m_inputResourceItem = buildInputResourceItem();
+
+    m_panel = new ui::NavigationPanel(this);
+    m_panel->setDirection(ui::NavigationPanel::Vertical);
+    m_panel->setName("MixerChannelPanel");
 }
 
 MixerChannelItem::~MixerChannelItem()
@@ -97,6 +101,21 @@ bool MixerChannelItem::muted() const
 bool MixerChannelItem::solo() const
 {
     return m_outParams.solo;
+}
+
+mu::ui::NavigationPanel* MixerChannelItem::panel() const
+{
+    return m_panel;
+}
+
+void MixerChannelItem::setPanelOrder(int panelOrder)
+{
+    m_panel->setOrder(panelOrder);
+}
+
+void MixerChannelItem::setPanelSection(mu::ui::INavigationSection* section)
+{
+    m_panel->setSection(section);
 }
 
 void MixerChannelItem::loadInputParams(AudioInputParams&& newParams)
@@ -257,6 +276,16 @@ void MixerChannelItem::setSolo(bool solo)
     emit outputParamsChanged(m_outParams);
     emit soloStateToggled(solo);
     emit soloChanged();
+}
+
+void MixerChannelItem::panel(mu::ui::NavigationPanel* panel)
+{
+    if (m_panel == panel) {
+        return;
+    }
+
+    m_panel = panel;
+    emit panelChanged(m_panel);
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)

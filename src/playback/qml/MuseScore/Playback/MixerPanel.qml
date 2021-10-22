@@ -32,8 +32,9 @@ import "internal"
 Rectangle {
     id: root
 
-    property alias navigation: navPanel
     property alias contextMenuModel: contextMenuModel
+
+    property NavigationSection navigationSection: null
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -64,17 +65,11 @@ Rectangle {
         ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
         ScrollBar.horizontal: StyledScrollBar {}
 
-        NavigationPanel {
-            id: navPanel
-            name: "MixerPanel"
-            enabled: root.enabled && root.visible
-        }
-
         MixerPanelModel {
             id: mixerPanelModel
 
             Component.onCompleted: {
-                mixerPanelModel.load()
+                mixerPanelModel.load(root.navigationSection)
             }
         }
 

@@ -30,6 +30,7 @@
 #include "async/asyncable.h"
 #include "audio/itracks.h"
 #include "audio/iplayback.h"
+#include "ui/view/navigationsection.h"
 
 #include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
@@ -45,7 +46,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void load(const QVariant& navigationSection);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -62,11 +63,14 @@ private:
     void sortItems();
     void clear();
 
-    MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
+    MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId,
+                                            int navigationPanelOrder);
     MixerChannelItem* buildMasterChannelItem();
 
     QList<MixerChannelItem*> m_mixerChannelList;
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
+
+    ui::NavigationSection* m_itemsNavigationSection = nullptr;
 };
 }
 

@@ -32,11 +32,11 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
-        load();
+        load(QVariant::fromValue(m_itemsNavigationSection));
     });
 }
 
-void MixerPanelModel::load()
+void MixerPanelModel::load(const QVariant& navigationSection)
 {
     TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
 
@@ -44,6 +44,7 @@ void MixerPanelModel::load()
         return;
     }
 
+    m_itemsNavigationSection = navigationSection.value<ui::NavigationSection*>();
     m_currentTrackSequenceId = sequenceId;
 
     playback()->tracks()->trackIdList(sequenceId)
@@ -85,8 +86,9 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
     clear();
 
-    for (TrackId trackId : trackIdList) {
-        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
+    for (size_t i = 0; i < trackIdList.size(); i++) {
+        TrackId trackId = trackIdList[i];
+        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId, i));
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
@@ -107,7 +109,7 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 {
     beginResetModel();
 
-    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
+    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId, m_mixerChannelList.size()));
     sortItems();
 
     endResetModel();
@@ -147,9 +149,12 @@ void MixerPanelModel::clear()
     m_mixerChannelList.clear();
 }
 
-MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
+MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId,
+                                                         int navigationPanelOrder)
 {
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
+    item->setPanelOrder(navigationPanelOrder);
+    item->setPanelSection(m_itemsNavigationSection);
 
     playback()->tracks()->inputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioInputParams inParams) {

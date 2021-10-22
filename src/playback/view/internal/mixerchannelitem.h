@@ -29,6 +29,7 @@
 #include "async/asyncable.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
+#include "ui/view/navigationpanel.h"
 
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
@@ -53,6 +54,8 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
 
+    Q_PROPERTY(mu::ui::NavigationPanel* panel READ panel WRITE panel NOTIFY panelChanged)
+
     INJECT(playback, framework::IInteractive, interactive)
 
 public:
@@ -74,6 +77,10 @@ public:
 
     bool muted() const;
     bool solo() const;
+
+    ui::NavigationPanel* panel() const;
+    void setPanelOrder(int panelOrder);
+    void setPanelSection(ui::INavigationSection* section);
 
     void loadInputParams(audio::AudioInputParams&& newParams);
     void loadOutputParams(audio::AudioOutputParams&& newParams);
@@ -99,6 +106,8 @@ public slots:
     void setMutedBySolo(bool isMuted);
     void setSolo(bool solo);
 
+    void panel(ui::NavigationPanel* panel);
+
 signals:
     void titleChanged(QString title);
 
@@ -111,6 +120,8 @@ signals:
     void mutedChanged(bool muted);
     void soloChanged();
     void soloStateToggled(bool solo);
+
+    void panelChanged(ui::NavigationPanel* panel);
 
     void inputParamsChanged(const audio::AudioInputParams& params);
     void outputParamsChanged(const audio::AudioOutputParams& params);
@@ -152,6 +163,8 @@ private:
 
     bool m_mutedBySolo = false;
     bool m_mutedManually = false;
+
+    ui::NavigationPanel* m_panel = nullptr;
 };
 }
 
