@@ -31,7 +31,7 @@ Dial {
 
     property int valueScale: 100
 
-    property var navigation: navCtrl
+    property alias navigation: navCtrl
 
     width: prv.radius * 2
     height: width
@@ -44,6 +44,9 @@ Dial {
     from: -root.valueScale
     to: root.valueScale
     value: 0
+
+    signal increaseRequested()
+    signal decreaseRequested()
 
     QtObject {
         id: prv
@@ -70,7 +73,6 @@ Dial {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "KnobControl"
         enabled: root.enabled && root.visible
-        order: 1000
 
         accessible.role: MUAccessible.Range
         accessible.visualItem: root
@@ -78,15 +80,17 @@ Dial {
         accessible.value: root.value
         accessible.minimumValue: root.from
         accessible.maximumValue: root.to
-        accessible.stepSize: 1
+        accessible.stepSize: root.stepSize
 
         onNavigationEvent: {
             switch(event.type) {
             case NavigationEvent.Left:
-                root.decrease()
+                root.decreaseRequested()
+                event.accepted = true
                 break
             case NavigationEvent.Right:
-                root.increase()
+                root.increaseRequested()
+                event.accepted = true
                 break
             }
         }
@@ -99,6 +103,10 @@ Dial {
         height: width
 
         antialiasing: true
+
+        NavigationFocusBorder {
+            navigationCtrl: navCtrl
+        }
 
         onPaint: {
             var ctx = backgroundCanvas.context

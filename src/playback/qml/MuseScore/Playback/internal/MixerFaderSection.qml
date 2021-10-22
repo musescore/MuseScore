@@ -33,6 +33,10 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
+        Component.onCompleted: {
+            root.navigationRowEnd = root.navigationRowStart + 1 // todo
+        }
+
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -40,9 +44,21 @@ MixerPanelSection {
 
             VolumeSlider {
                 volumeLevel: item.volumeLevel
+                stepSize: 1
+
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart
 
                 onVolumeLevelMoved: {
                     item.volumeLevel = Math.round(level * 10) / 10
+                }
+
+                onIncreaseRequested: {
+                    item.volumeLevel += stepSize
+                }
+
+                onDecreaseRequested: {
+                    item.volumeLevel -= stepSize
                 }
             }
 

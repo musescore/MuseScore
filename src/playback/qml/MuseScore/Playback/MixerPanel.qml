@@ -133,7 +133,7 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: balanceSection.navigationRowEnd + 1
+                navigationRowStart: 10//balanceSection.navigationRowEnd + 1
             }
 
             MixerFaderSection {

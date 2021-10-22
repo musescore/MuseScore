@@ -38,7 +38,12 @@ MixerPanelSection {
 
         spacing: 6
 
+        Component.onCompleted: {
+            root.navigationRowEnd = root.navigationRowStart + (repeater.count * 3) // todo
+        }
+
         Repeater {
+            id: repeater
             anchors.horizontalCenter: parent.horizontalCenter
 
             model: item.outputResourceItemList
@@ -50,6 +55,9 @@ MixerPanelSection {
                 menuAnchorItem: root.rootPanel
                 resourceItemModel: modelData
                 active: modelData.isActive
+
+                navigationPanel: item.panel
+                navigationRowStart: root.navigationRowStart
 
                 onTurnedOn: {
                     modelData.isActive = true

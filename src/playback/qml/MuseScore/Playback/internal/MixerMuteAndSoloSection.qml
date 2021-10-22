@@ -33,6 +33,10 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
+        Component.onCompleted: {
+            root.navigationRowEnd = root.navigationRowStart + 2 // todo
+        }
+
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -46,6 +50,11 @@ MixerPanelSection {
 
                 icon: IconCode.MUTE
                 checked: item.muted
+
+                navigation.name: "MuteButton"
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart
+
                 onToggled: {
                     item.muted = !item.muted
                 }
@@ -59,6 +68,11 @@ MixerPanelSection {
 
                 icon: IconCode.SOLO
                 checked: item.solo
+
+                navigation.name: "SoloButton"
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart + 1
+
                 onToggled: {
                     item.solo = !item.solo
                 }

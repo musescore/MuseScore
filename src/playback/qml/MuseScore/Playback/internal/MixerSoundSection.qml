@@ -30,11 +30,13 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Sound")
 
-    navigationRowEnd: inputResourceControl.navigationRowEnd
-
     Item {
         height: inputResourceControl.height
         width: root.delegateDefaultWidth
+
+        Component.onCompleted: {
+            root.navigationRowEnd = inputResourceControl.navigationRowEnd
+        }
 
         visible: !item.outputOnly
 

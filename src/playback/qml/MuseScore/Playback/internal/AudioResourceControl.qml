@@ -46,7 +46,7 @@ Item {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: Boolean(selectorLoader.item) ? selectorLoader.item.navigation.row : navigationRowStart
+    property int navigationRowEnd: navigationRowStart + 2 // todo Boolean(selectorLoader.item) ? selectorLoader.item.navigation.row : navigationRowStart
     property string accessibleName: ""
 
     signal turnedOn()

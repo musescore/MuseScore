@@ -33,7 +33,7 @@ Slider {
 
     signal volumeLevelMoved(var level)
 
-    property var navigation: navCtrl
+    property alias navigation: navCtrl
 
     height: 140 + prv.handleHeight
     width: 32 + prv.unitsTextWidth
@@ -44,6 +44,9 @@ Slider {
     stepSize: 0.1
     orientation: Qt.Vertical
     wheelEnabled: true
+
+    signal increaseRequested()
+    signal decreaseRequested()
 
     QtObject {
         id: convertor
@@ -123,12 +126,10 @@ Slider {
         readonly property real handleHeight: 32
     }
 
-
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "VolumeSlider"
         enabled: root.enabled && root.visible
-        order: 1000
 
         accessible.role: MUAccessible.Range
         accessible.visualItem: root
@@ -136,15 +137,17 @@ Slider {
         accessible.value: root.value
         accessible.minimumValue: root.from
         accessible.maximumValue: root.to
-        accessible.stepSize: 1
+        accessible.stepSize: root.stepSize
 
         onNavigationEvent: {
             switch(event.type) {
             case NavigationEvent.Left:
-                root.decrease()
+                root.decreaseRequested()
+                event.accepted = true
                 break
             case NavigationEvent.Right:
-                root.increase()
+                root.increaseRequested()
+                event.accepted = true
                 break
             }
         }
@@ -155,6 +158,10 @@ Slider {
 
         height: root.height
         width: root.width
+
+        NavigationFocusBorder {
+            navigationCtrl: navCtrl
+        }
 
         function drawRuler(ctx, originVPos, originHPos, fullStep, smallStep, strokeHeight, strokeWidth) {
             var currentStrokeVPos = 0

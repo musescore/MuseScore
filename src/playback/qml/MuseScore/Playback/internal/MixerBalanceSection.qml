@@ -36,6 +36,10 @@ MixerPanelSection {
         height: contentRow.implicitHeight
         width: root.delegateDefaultWidth
 
+        Component.onCompleted: {
+            root.navigationRowEnd = root.navigationRowStart + 2
+        }
+
         Row {
             id: contentRow
 
@@ -47,9 +51,21 @@ MixerPanelSection {
                 id: balanceKnob
 
                 value: item.balance
+                stepSize: 1
+
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart
 
                 onMoved: {
                     item.balance = value
+                }
+
+                onIncreaseRequested: {
+                    item.balance += stepSize
+                }
+
+                onDecreaseRequested: {
+                    item.balance -= stepSize
                 }
             }
 
@@ -62,6 +78,9 @@ MixerPanelSection {
 
                 height: 24
                 width: 36
+
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart + 1
 
                 validator: IntInputValidator {
                     id: intInputValidator
