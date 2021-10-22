@@ -35,6 +35,10 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
+        Component.onCompleted: {
+            root.navigationRowEnd = root.navigationRowStart + 1
+        }
+
         TextInputField {
             id: volumeTextInputField
 
@@ -44,6 +48,9 @@ MixerPanelSection {
             width: 46
 
             textHorizontalAlignment: Qt.AlignHCenter
+
+            navigation.panel: item.panel
+            navigation.row: root.navigationRowStart
 
             validator: DoubleInputValidator {
                 id: doubleInputValidator
