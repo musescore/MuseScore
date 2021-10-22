@@ -51,23 +51,39 @@ DockPage {
         order: 2
     }
 
+    property NavigationSection keynavTopPanelSec: NavigationSection {
+        name: "NavigationTopPanel"
+        enabled: root.visible
+        order: 3
+    }
+
     property NavigationSection keynavLeftPanelSec: NavigationSection {
         name: "NavigationLeftPanel"
         enabled: root.visible
-        order: 3
+        order: 4
     }
 
     property NavigationSection keynavRightPanelSec: NavigationSection {
         name: "NavigationRightPanel"
         enabled: root.visible
-        order: 5
+        order: 6
+    }
+
+    property NavigationSection keynavBottomPanelSec: NavigationSection {
+        name: "NavigationBottomPanel"
+        enabled: root.visible
+        order: 7
     }
 
     function navigationPanelSec(location) {
-        if (location === DockBase.Right) {
-            return keynavRightPanelSec
+        switch(location) {
+        case DockBase.Top: return keynavTopPanelSec
+        case DockBase.Left: return keynavLeftPanelSec
+        case DockBase.Right: return keynavRightPanelSec
+        case DockBase.Bottom: return keynavBottomPanelSec
         }
-        return keynavLeftPanelSec
+
+        return null
     }
 
     onInited: {
@@ -170,6 +186,8 @@ DockPage {
 
             tabifyPanel: instrumentsPanel
 
+            location: DockBase.Left
+
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
             }
@@ -188,6 +206,8 @@ DockPage {
             maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: inspectorPanel
+
+            location: DockBase.Left
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
@@ -212,6 +232,8 @@ DockPage {
             
             tabifyPanel: selectionFilterPanel
 
+            location: DockBase.Left
+
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
             }
@@ -232,6 +254,8 @@ DockPage {
             // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
+
+            location: DockBase.Left
 
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
@@ -260,7 +284,13 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
+            location: DockBase.Bottom
+
+            navigationSection: root.navigationPanelSec(mixerPanel.location)
+
             MixerPanel {
+                navigationSection: mixerPanel.navigationSection
+
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
                 }
@@ -284,6 +314,8 @@ DockPage {
             // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
+
+            location: DockBase.Bottom
 
             Rectangle {
                 anchors.fill: parent
@@ -312,6 +344,8 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
+            location: DockBase.Bottom
+
             Timeline {}
         },
 
@@ -325,6 +359,8 @@ DockPage {
 
             minimumHeight: 30
             maximumHeight: 30
+
+            location: DockBase.Bottom
 
             DrumsetPanel {}
         }
