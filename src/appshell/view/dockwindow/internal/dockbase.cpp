@@ -55,7 +55,7 @@ public:
 using namespace mu::dock;
 
 DockBase::DockBase(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QQuickItem(parent), m_resizable(true)
 {
 }
 
@@ -97,6 +97,11 @@ Qt::DockWidgetAreas DockBase::allowedAreas() const
 bool DockBase::floating() const
 {
     return m_floating;
+}
+
+bool DockBase::resizable() const
+{
+    return m_resizable;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -182,6 +187,16 @@ void DockBase::setLocation(DockLocation location)
 
     m_location = location;
     emit locationChanged(m_location);
+}
+
+void DockBase::setResizable(bool resizable)
+{
+    if (resizable == m_resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    emit resizableChanged();
 }
 
 DockType DockBase::type() const
@@ -289,6 +304,10 @@ void DockBase::applySizeConstraints()
 
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
+
+    if (!m_resizable) {
+        maximumSize = minimumSize;
+    }
 
     if (auto frame = m_dockWidget->frame()) {
         frame->setMinimumSize(minimumSize);
