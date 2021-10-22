@@ -100,6 +100,7 @@ DockPage {
             title: qsTrc("appshell", "Notation toolbar")
 
             floatable: false
+            resizable: false
             padding: 0
 
             NotationToolBar {
@@ -135,6 +136,7 @@ DockPage {
             title: qsTrc("appshell", "Undo/redo toolbar")
 
             floatable: false
+            resizable: false
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec

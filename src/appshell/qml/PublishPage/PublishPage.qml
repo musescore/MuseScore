@@ -55,6 +55,9 @@ DockPage {
             objectName: root.objectName + "_notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
+            movable: false
+            resizable: false
+
             NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
@@ -88,6 +91,7 @@ DockPage {
             title: qsTrc("appshell", "Undo/redo toolbar")
 
             floatable: false
+            resizable: false
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -99,6 +103,8 @@ DockPage {
     toolBars: [
         DockToolBar {
             objectName: "publishToolBar"
+
+            floatable: false
 
             PublishToolBar {
                 navigation.section: root.publishToolBarKeyNavSec
