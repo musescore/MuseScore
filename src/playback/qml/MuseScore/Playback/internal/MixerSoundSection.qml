@@ -30,6 +30,8 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Sound")
 
+    navigationRowEnd: inputResourceControl.navigationRowEnd
+
     Item {
         height: inputResourceControl.height
         width: root.delegateDefaultWidth
@@ -44,6 +46,9 @@ MixerPanelSection {
             menuAnchorItem: root.rootPanel
             supportsByPassing: false
             resourceItemModel: item.inputResourceItem
+
+            navigationPanel: item.panel
+            navigationRowStart: root.navigationRowStart
 
             onTitleClicked: {
                 if (item.inputResourceItem) {

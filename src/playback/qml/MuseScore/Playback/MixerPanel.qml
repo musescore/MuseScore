@@ -96,6 +96,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 1
             }
 
             MixerFxSection {
@@ -106,6 +108,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: soundSection.navigationRowEnd + 1
             }
 
             MixerBalanceSection {
@@ -116,6 +120,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: fxSection.navigationRowEnd + 1
             }
 
             MixerVolumeSection {
@@ -126,6 +132,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: balanceSection.navigationRowEnd + 1
             }
 
             MixerFaderSection {
@@ -136,6 +144,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: volumeSection.navigationRowEnd + 1
             }
 
             MixerMuteAndSoloSection {
@@ -146,6 +156,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
             }
 
             MixerTitleSection {
@@ -156,6 +168,8 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
             }
         }
     }

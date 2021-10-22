@@ -37,6 +37,9 @@ Loader {
     property var model: undefined
     property var rootPanel: undefined
 
+    property int navigationRowStart: 0
+    property int navigationRowEnd: 0
+
     default property Component delegateComponent
 
     active: visible
