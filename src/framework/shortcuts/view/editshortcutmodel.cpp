@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "translation.h"
+#include "shortcutstypes.h"
 
 using namespace mu::shortcuts;
 
@@ -53,11 +54,15 @@ void EditShortcutModel::clear()
 
 void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 {
-    if (needIgnoreKey(key)) {
+    std::pair<int, Qt::KeyboardModifiers> correctedKeyInput = correctKeyInput(key, modifiers);
+    int newKey = correctedKeyInput.first;
+    int newModifiers = correctedKeyInput.second;
+
+    if (needIgnoreKey(newKey)) {
         return;
     }
 
-    key += modifiers;
+    newKey += newModifiers;
 
     for (int i = 0; i < m_inputedSequence.count(); i++) {
         if (m_inputedSequence[i] == key) {
@@ -67,43 +72,22 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 
     switch (m_inputedSequence.count()) {
     case 0:
-        m_inputedSequence = QKeySequence(key);
+        m_inputedSequence = QKeySequence(newKey);
         break;
     case 1:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], newKey);
         break;
     case 2:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], newKey);
         break;
     case 3:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], m_inputedSequence[2], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], m_inputedSequence[2], newKey);
         break;
     }
 
     validateInputedSequence();
 
     emit inputedSequenceChanged(inputedSequence());
-}
-
-bool EditShortcutModel::needIgnoreKey(int key) const
-{
-    if (key == 0) {
-        return true;
-    }
-
-    static const QSet<Qt::Key> ignoredKeys {
-        Qt::Key_Shift,
-        Qt::Key_Control,
-        Qt::Key_Meta,
-        Qt::Key_Alt,
-        Qt::Key_AltGr,
-        Qt::Key_CapsLock,
-        Qt::Key_NumLock,
-        Qt::Key_ScrollLock,
-        Qt::Key_unknown
-    };
-
-    return ignoredKeys.contains(static_cast<Qt::Key>(key));
 }
 
 void EditShortcutModel::validateInputedSequence()

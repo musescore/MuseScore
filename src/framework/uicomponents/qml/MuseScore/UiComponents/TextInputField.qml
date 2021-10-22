@@ -153,8 +153,23 @@ FocusScope {
 
             text: root.currentText === undefined ? "" : root.currentText
 
+            TextInputFieldModel {
+                id: textInputFieldModel
+            }
+
+            Component.onCompleted: {
+                textInputFieldModel.init()
+            }
+
             Keys.onShortcutOverride: {
-                event.accepted = true
+                if (textInputFieldModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                    event.accepted = true
+                } else {
+                    event.accepted = false
+
+                    root.focus = false
+                    root.textEditingFinished()
+                }
             }
 
             Keys.onPressed: {
@@ -167,6 +182,7 @@ FocusScope {
 
             onActiveFocusChanged: {
                 if (activeFocus) {
+                    navCtrl.requestActive()
                     selectAll()
                 } else {
                     deselect()
@@ -214,6 +230,7 @@ FocusScope {
 
             onClicked: {
                 root.clear()
+                navCtrl.requestActive()
             }
         }
 
