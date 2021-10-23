@@ -29,13 +29,12 @@ using namespace mu::autobot;
 
 void Autobot::init()
 {
-    m_runner.stepStarted().onReceive(this, [this](const QString& name) {
-        m_context->addStep(name);
-        m_report.beginStep(name);
-    });
+    m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus status) {
+        if (status == StepStatus::Started) {
+            m_context->addStep(name);
+        }
 
-    m_runner.stepFinished().onReceive(this, [this](const QString& name) {
-        m_report.endStep(name, m_context);
+        m_report.onStepStatusChanged(name, status, m_context);
     });
 
     m_runner.allFinished().onReceive(this, [this](bool aborted) {

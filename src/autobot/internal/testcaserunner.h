@@ -44,8 +44,8 @@ public:
     void runTestCase(const TestCase& testCase);
     void abortTestCase();
 
-    async::Channel<QString /*name*/> stepStarted() const;
-    async::Channel<QString /*name*/> stepFinished() const;
+    async::Channel<QString /*name*/, StepStatus> stepStatusChanged() const;
+
     async::Channel<bool /*aborted*/> allFinished() const;
 
 private:
@@ -66,8 +66,7 @@ private:
     TestCaseData m_testCase;
     bool m_abort = false;
 
-    async::Channel<QString /*name*/> m_stepStarted;
-    async::Channel<QString /*name*/> m_stepFinished;
+    async::Channel<QString /*name*/, StepStatus> m_stepStatusChanged;
     async::Channel<bool /*aborted*/> m_allFinished;
 };
 }

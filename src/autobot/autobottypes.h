@@ -53,6 +53,7 @@ struct Step
         : val(jsval) {}
 
     QString name() const { return val.property("name").toString(); }
+    bool skip() const { return val.property("skip").toBool(); }
     Ret exec()
     {
         val.property("func").call();
@@ -93,6 +94,13 @@ struct TestCase
 
 private:
     QJSValue val;
+};
+
+enum class StepStatus {
+    Undefined = 0,
+    Started,
+    Finished,
+    Skipped
 };
 }
 

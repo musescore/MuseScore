@@ -21,12 +21,14 @@
 # Scripts
 install(FILES
       NewScore10InstrPutNotesSaveClose.js
+      TC1_CreateSimpleScore.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 
 # Steps
 install(FILES
       steps/NewScore.js
+      steps/NoteInput.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
       )
 
