@@ -55,14 +55,9 @@ void TestCaseRunner::abortTestCase()
     m_abort = true;
 }
 
-async::Channel<QString> TestCaseRunner::stepStarted() const
+async::Channel<QString /*name*/, StepStatus> TestCaseRunner::stepStatusChanged() const
 {
-    return m_stepStarted;
-}
-
-async::Channel<QString> TestCaseRunner::stepFinished() const
-{
-    return m_stepFinished;
+    return m_stepStatusChanged;
 }
 
 async::Channel<bool> TestCaseRunner::allFinished() const
@@ -87,13 +82,18 @@ void TestCaseRunner::nextStep()
     QTimer::singleShot(m_intervalMsec, [this]() {
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
 
-        m_stepStarted.send(step.name());
-        Ret ret = step.exec();
-        if (!ret) {
-            LOGE() << "failed exec step: " << step.name() << ", err: " << ret.toString();
-        }
+        if (step.skip()) {
+            m_stepStatusChanged.send(step.name(), StepStatus::Skipped);
+        } else {
+            m_stepStatusChanged.send(step.name(), StepStatus::Started);
 
-        m_stepFinished.send(step.name());
+            Ret ret = step.exec();
+            if (!ret) {
+                LOGE() << "failed exec step: " << step.name() << ", err: " << ret.toString();
+            }
+
+            m_stepStatusChanged.send(step.name(), StepStatus::Finished);
+        }
 
         nextStep();
 

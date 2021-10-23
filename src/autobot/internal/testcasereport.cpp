@@ -98,25 +98,29 @@ void TestCaseReport::endReport(bool aborted)
     m_file.close();
 }
 
-void TestCaseReport::beginStep(const QString& name)
+void TestCaseReport::onStepStatusChanged(const QString& name, StepStatus status, const ITestCaseContextPtr& ctx)
 {
     if (!m_opened) {
         return;
     }
-    m_stream << "  begin step: " << name << Qt::endl;
+
+    switch (status) {
+    case StepStatus::Undefined: break;
+    case StepStatus::Started: {
+        m_stream << "  started step: " << name << Qt::endl;
+    } break;
+    case StepStatus::Finished: {
+        const ITestCaseContext::StepContext& step = ctx->currentStep();
+        for (auto it = step.vals.cbegin(); it != step.vals.cend(); ++it) {
+            m_stream << "    " << it->first << ": " << formatVal(it->second) << Qt::endl;
+        }
+
+        m_stream << "  finished step: " << name << Qt::endl;
+    } break;
+    case StepStatus::Skipped: {
+        m_stream << "  skipped step: " << name << Qt::endl;
+    } break;
+    }
+
     m_stream.flush();
-}
-
-void TestCaseReport::endStep(const QString& name, const ITestCaseContextPtr& ctx)
-{
-    if (!m_opened) {
-        return;
-    }
-
-    const ITestCaseContext::StepContext& step = ctx->currentStep();
-    for (auto it = step.vals.cbegin(); it != step.vals.cend(); ++it) {
-        m_stream << "    " << it->first << ": " << formatVal(it->second) << Qt::endl;
-    }
-
-    m_stream << "  end step: " << name << Qt::endl;
 }
