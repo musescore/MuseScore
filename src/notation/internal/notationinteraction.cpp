@@ -1413,10 +1413,15 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment);
             }
         } else if (element->isTextBase()) {
+            Ms::Segment* firstSegment = sel.startSegment();
+            int firstStaffIndex = sel.staffStart();
+            int lastStaffIndex = sel.staffEnd();
+
             // A text should only be added at the start of the selection
             // There shouldn't be a text at each note
-            Ms::EngravingItem* item = sel.startSegment()->firstElement(sel.staffStart());
-            applyDropPaletteElement(score, item, element, modifiers);
+            for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
+                applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
+            }
         } else {
             int track1 = sel.staffStart() * Ms::VOICES;
             int track2 = sel.staffEnd() * Ms::VOICES;
