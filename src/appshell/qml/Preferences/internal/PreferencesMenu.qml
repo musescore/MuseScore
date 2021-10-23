@@ -95,7 +95,7 @@ Item {
             }
         }
 
-        itemDelegate: GradientTabButton {
+        itemDelegate: PageTabButton {
             property bool expanded: Boolean(model) ? model.itemRole.expanded : false
             property int navigationRow: styleData.index.row
             property int navigationColumn: styleData.depth
