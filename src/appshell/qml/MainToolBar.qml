@@ -75,7 +75,7 @@ Item {
         width: contentItem.childrenRect.width
         height: contentItem.childrenRect.height
 
-        delegate: GradientTabButton {
+        delegate: PageTabButton {
             id: radioButtonDelegate
 
             ButtonGroup.group: radioButtonList.radioButtonGroup

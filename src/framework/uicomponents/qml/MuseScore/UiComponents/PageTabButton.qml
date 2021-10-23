@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -35,12 +34,12 @@ RadioDelegate {
     property int orientation: Qt.Vertical
     readonly property bool isVertical: orientation === Qt.Vertical
 
-    property var normalStateFont: ui.theme.tabFont
-    property var selectedStateFont: ui.theme.tabBoldFont
+    property var normalStateFont: ui.theme.largeBodyFont
+    property var selectedStateFont: ui.theme.largeBodyBoldFont
 
     property alias navigation: navCtrl
 
-    height: 48
+    height: isVertical ? 36 : 44
 
     spacing: 30
     leftPadding: 0
@@ -67,76 +66,57 @@ RadioDelegate {
         onTriggered: root.toggled()
     }
 
-    background: Item {
+    background: Rectangle {
+        id: backgroundRect
+        anchors.fill: parent
+
+        color: ui.theme.backgroundPrimaryColor
+        opacity: ui.theme.buttonOpacityNormal
+
+        border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
+        border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
+
         Rectangle {
-            id: backgroundRect
-            anchors.fill: parent
-
-            color: ui.theme.backgroundPrimaryColor
-            opacity: ui.theme.buttonOpacityNormal
-
-            border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
-            border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
-        }
-
-        Item {
-            id: backgroundGradientRect
-            anchors.fill: parent
+            id: line
+            color: ui.theme.accentColor
+            visible: false
             anchors.margins: backgroundRect.border.width
 
-            visible: false
+            states: [
+                State {
+                    name: "vertical"
+                    when: root.isVertical
 
-            LinearGradient {
-                anchors.fill: parent
-                start: Qt.point(0, 0)
-                end: root.isVertical ? Qt.point(0, root.height) : Qt.point(root.width, 0)
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "transparent"
+                    AnchorChanges {
+                        target: line
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
                     }
-                    GradientStop {
-                        position: 1.0
-                        color: Utils.colorWithAlpha(ui.theme.accentColor, root.isVertical ? 0.2 : 0.1)
+
+                    PropertyChanges {
+                        target: line
+                        height: 2
+                    }
+                },
+
+                State {
+                    name: "horizontal"
+                    when: !root.isVertical
+
+                    AnchorChanges {
+                        target: line
+                        anchors.top: parent.top
+                        anchors.left: parent.left
+                        anchors.bottom: parent.bottom
+                    }
+
+                    PropertyChanges {
+                        target: line
+                        width: 2
                     }
                 }
-            }
-
-            Rectangle {
-                id: line
-                color: ui.theme.accentColor
-
-                states: [
-                    State {
-                        when: root.isVertical
-                        AnchorChanges {
-                            target: line
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                        }
-
-                        PropertyChanges {
-                            target: line
-                            height: 2
-                        }
-                    },
-                    State {
-                        when: !root.isVertical
-                        AnchorChanges {
-                            target: line
-                            anchors.top: parent.top
-                            anchors.right: parent.right
-                            anchors.bottom: parent.bottom
-                        }
-
-                        PropertyChanges {
-                            target: line
-                            width: 2
-                        }
-                    }
-                ]
-            }
+            ]
         }
     }
 
@@ -199,7 +179,13 @@ RadioDelegate {
             when: root.checked
 
             PropertyChanges {
-                target: backgroundGradientRect
+                target: backgroundRect
+                color: Utils.colorWithAlpha(ui.theme.accentColor, 0.1)
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: line
                 visible: true
             }
 
