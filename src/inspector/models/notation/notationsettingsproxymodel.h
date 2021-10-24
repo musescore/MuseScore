@@ -23,22 +23,14 @@
 #define MU_INSPECTOR_NOTATIONSETTINGSPROXYMODEL_H
 
 #include "models/abstractinspectorproxymodel.h"
-#include "models/iinspectormodelcreator.h"
 
 namespace mu::inspector {
 class NotationSettingsProxyModel : public AbstractInspectorProxyModel
 {
     Q_OBJECT
 
-    INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
-
 public:
     explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, const ElementKeySet& elementKeySet);
-
-    bool isElementSupported(const ElementKey& elementKey) const override;
-
-private:
-    QList<AbstractInspectorModel::InspectorModelType> modelTypes(const ElementKeySet& elementKeySet) const;
 };
 }
 

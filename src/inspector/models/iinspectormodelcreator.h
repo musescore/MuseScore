@@ -34,7 +34,7 @@ class IInspectorModelCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInspectorModelCreator() = default;
 
-    virtual AbstractInspectorModel* newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+    virtual AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent,
                                                       IElementRepositoryService* repository) const = 0;
 };
 }

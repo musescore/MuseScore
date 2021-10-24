@@ -42,7 +42,7 @@ public:
     QList<Ms::EngravingItem*> takeAllElements() const override;
 
 signals:
-    void elementsUpdated() override;
+    void elementsUpdated(const QList<Ms::EngravingItem*>& newRawElementList) override;
 
 private:
     QList<Ms::EngravingItem*> exposeRawElements(const QList<Ms::EngravingItem*>& rawElementList) const;

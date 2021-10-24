@@ -23,18 +23,12 @@
 
 using namespace mu::inspector;
 
-AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository,
-                                                         InspectorModelType preferedSubModelType)
-    : AbstractInspectorModel(parent, repository), m_preferedSubModelType(preferedSubModelType)
+AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository)
+    : AbstractInspectorModel(parent, repository)
 {
 }
 
-QObject* AbstractInspectorProxyModel::modelByType(const InspectorModelType type)
-{
-    return m_modelsHash.value(static_cast<int>(type));
-}
-
-QVariantList AbstractInspectorProxyModel::models()
+QVariantList AbstractInspectorProxyModel::models() const
 {
     QVariantList objects;
 
@@ -45,18 +39,38 @@ QVariantList AbstractInspectorProxyModel::models()
     return objects;
 }
 
-bool AbstractInspectorProxyModel::isMultiModel() const
+QObject* AbstractInspectorProxyModel::modelByType(InspectorModelType type) const
 {
-    return m_modelsHash.count() > 1;
+    return m_modelsHash.value(type);
 }
 
-QObject* AbstractInspectorProxyModel::firstModel()
+QObject* AbstractInspectorProxyModel::firstModel() const
 {
     if (m_modelsHash.empty()) {
         return nullptr;
     }
 
     return m_modelsHash.values().first();
+}
+
+InspectorModelType AbstractInspectorProxyModel::defaultSubModelType() const
+{
+    return m_defaultSubModelType;
+}
+
+void AbstractInspectorProxyModel::setDefaultSubModelType(InspectorModelType modelType)
+{
+    if (m_defaultSubModelType == modelType) {
+        return;
+    }
+
+    m_defaultSubModelType = modelType;
+    emit defaultSubModelTypeChanged();
+}
+
+bool AbstractInspectorProxyModel::isMultiModel() const
+{
+    return m_modelsHash.count() > 1;
 }
 
 void AbstractInspectorProxyModel::requestElements()
@@ -84,22 +98,65 @@ bool AbstractInspectorProxyModel::isEmpty() const
     return true;
 }
 
-AbstractInspectorModel::InspectorModelType AbstractInspectorProxyModel::preferedSubModelType() const
+void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>& models)
 {
-    return m_preferedSubModelType;
-}
+    QList<AbstractInspectorModel*> currentModels = modelList();
 
-void AbstractInspectorProxyModel::addModel(AbstractInspectorModel* model)
-{
-    if (!model) {
-        return;
+    for (AbstractInspectorModel* model : currentModels) {
+        if (models.contains(model)) {
+            continue;
+        }
+
+        auto oldModel = m_modelsHash.take(model->modelType());
+
+        delete oldModel;
+        oldModel = nullptr;
     }
 
-    connect(model, &AbstractInspectorModel::isEmptyChanged, this, [this]() {
-        emit isEmptyChanged();
-    });
+    for (AbstractInspectorModel* model : models) {
+        if (!model) {
+            continue;
+        }
 
-    m_modelsHash.insert(static_cast<int>(model->modelType()), model);
+        InspectorModelType modelType = model->modelType();
+
+        if (m_modelsHash.contains(modelType)) {
+            continue;
+        }
+
+        connect(model, &AbstractInspectorModel::isEmptyChanged, this, [this]() {
+            emit isEmptyChanged();
+        });
+
+        m_modelsHash[modelType] = model;
+    }
+
+    emit modelsChanged();
+}
+
+void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKeySet)
+{
+    QList<AbstractInspectorModel*> models;
+
+    for (const ElementKey& elementKey : newElementKeySet) {
+        InspectorModelType modelType = AbstractInspectorModel::modelTypeByElementKey(elementKey);
+
+        if (modelType == InspectorModelType::TYPE_UNDEFINED) {
+            continue;
+        }
+
+        auto model = dynamic_cast<AbstractInspectorModel*>(modelByType(modelType));
+
+        if (!model) {
+            model = inspectorModelCreator()->newInspectorModel(modelType, this, m_repository);
+        }
+
+        if (model) {
+            models << model;
+        }
+    }
+
+    setModels(models);
 }
 
 QList<AbstractInspectorModel*> AbstractInspectorProxyModel::modelList() const
