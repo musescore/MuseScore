@@ -58,7 +58,7 @@ void ElementRepositoryService::updateElementList(const QList<Ms::EngravingItem*>
     m_exposedElementList = exposeRawElements(newRawElementList);
     m_rawElementList = newRawElementList;
 
-    emit elementsUpdated();
+    emit elementsUpdated(m_rawElementList);
 }
 
 QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType) const

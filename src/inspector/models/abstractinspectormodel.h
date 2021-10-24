@@ -48,7 +48,7 @@ class AbstractInspectorModel : public QObject
     INJECT(inspector, context::IGlobalContext, context)
     INJECT(inspector, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(int icon READ icon CONSTANT)
     Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
@@ -127,11 +127,9 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
-    static QList<InspectorSectionType> sectionTypesByElementKey(const ElementKey& elementKey);
-    static InspectorModelType notationElementModelType(const ElementKey& elementKey);
-
-    static QList<Ms::ElementType> supportedElementTypesBySectionType(InspectorSectionType sectionType);
-    static Ms::ElementType elementTypeByModelType(InspectorModelType modelType);
+    static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
+    static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet);
 
     virtual bool isEmpty() const;
 
@@ -148,6 +146,8 @@ public slots:
     void setModelType(InspectorModelType modelType);
 
 signals:
+    void titleChanged();
+
     void elementsModified();
     void modelReseted();
     void isEmptyChanged();
@@ -193,6 +193,21 @@ private:
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     Ms::ElementType m_elementType = Ms::ElementType::INVALID;
 };
+
+using InspectorModelType = AbstractInspectorModel::InspectorModelType;
+using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
+using InspectorModelTypeSet = QSet<InspectorModelType>;
+using InspectorSectionTypeSet = QSet<InspectorSectionType>;
+
+inline uint qHash(InspectorSectionType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+inline uint qHash(InspectorModelType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
 }
 
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H

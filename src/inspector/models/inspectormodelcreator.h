@@ -28,7 +28,7 @@ namespace mu::inspector {
 class InspectorModelCreator : public IInspectorModelCreator
 {
 public:
-    AbstractInspectorModel* newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+    AbstractInspectorModel* newInspectorModel(InspectorModelType modelType, QObject* parent,
                                               IElementRepositoryService* repository) const override;
 };
 }

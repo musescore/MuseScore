@@ -43,7 +43,7 @@ public:
     virtual QList<Ms::EngravingItem*> takeAllElements() const = 0;
 
 signals:
-    virtual void elementsUpdated() = 0;
+    virtual void elementsUpdated(const QList<Ms::EngravingItem*>& newRawElementList) = 0;
 };
 }
 

@@ -29,17 +29,15 @@
 using namespace mu::inspector;
 using namespace mu::notation;
 
-using InspectorModelType = AbstractInspectorModel::InspectorModelType;
-
 static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
     { Ms::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::STEM, InspectorModelType::TYPE_STEM },
+    { Ms::ElementType::STEM, InspectorModelType::TYPE_NOTE },
     { Ms::ElementType::NOTEDOT, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTEHEAD },
+    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTE },
     { Ms::ElementType::NOTELINE, InspectorModelType::TYPE_NOTE },
     { Ms::ElementType::SHADOW_NOTE, InspectorModelType::TYPE_NOTE },
-    { Ms::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
-    { Ms::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
+    { Ms::ElementType::HOOK, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::BEAM, InspectorModelType::TYPE_NOTE },
     { Ms::ElementType::GLISSANDO, InspectorModelType::TYPE_GLISSANDO },
     { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
     { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
@@ -93,10 +91,7 @@ static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
 };
 
 static QMap<Ms::LayoutBreak::Type, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
-    { Ms::LayoutBreak::Type::PAGE, InspectorModelType::TYPE_UNDEFINED },
-    { Ms::LayoutBreak::Type::LINE, InspectorModelType::TYPE_UNDEFINED },
-    { Ms::LayoutBreak::Type::SECTION, InspectorModelType::TYPE_SECTIONBREAK },
-    { Ms::LayoutBreak::Type::NOBREAK, InspectorModelType::TYPE_UNDEFINED }
+    { Ms::LayoutBreak::Type::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
@@ -108,7 +103,7 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
         return;
     }
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(updateProperties()));
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this, SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 
@@ -127,7 +122,7 @@ int AbstractInspectorModel::icon() const
     return static_cast<int>(m_icon);
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType() const
+InspectorSectionType AbstractInspectorModel::sectionType() const
 {
     return m_sectionType;
 }
@@ -137,61 +132,47 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
-QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sectionTypesByElementKey(const ElementKey& elementKey)
-{
-    QList<AbstractInspectorModel::InspectorSectionType> result;
-    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementKey.type)
-        && (notationElementModelType(elementKey) != InspectorModelType::TYPE_UNDEFINED)) {
-        result << InspectorSectionType::SECTION_NOTATION;
-    }
-
-    if (TEXT_ELEMENT_TYPES.contains(elementKey.type)) {
-        result << InspectorSectionType::SECTION_TEXT;
-    }
-
-    return result;
-}
-
-InspectorModelType AbstractInspectorModel::notationElementModelType(const ElementKey& elementKey)
+InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
     if (elementKey.type == Ms::ElementType::HAIRPIN || elementKey.type == Ms::ElementType::HAIRPIN_SEGMENT) {
-        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype));
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype), InspectorModelType::TYPE_UNDEFINED);
     }
+
     if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
-        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreak::Type>(elementKey.subtype));
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreak::Type>(elementKey.subtype),
+                                                      InspectorModelType::TYPE_UNDEFINED);
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
 }
 
-QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(
-    const AbstractInspectorModel::InspectorSectionType sectionType)
+InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const ElementKeySet& elementKeySet)
 {
-    switch (sectionType) {
-    case InspectorSectionType::SECTION_GENERAL:
-        return { Ms::ElementType::MAXTYPE };
-    case InspectorSectionType::SECTION_NOTATION: {
-        return NOTATION_ELEMENT_MODEL_TYPES.keys();
+    InspectorModelTypeSet types;
+
+    for (const ElementKey& key : elementKeySet) {
+        types << modelTypeByElementKey(key);
     }
-    case InspectorSectionType::SECTION_TEXT: {
-        return TEXT_ELEMENT_TYPES;
-    }
-    default:
-        return QList<Ms::ElementType>();
-    }
+
+    return types;
 }
 
-Ms::ElementType AbstractInspectorModel::elementTypeByModelType(InspectorModelType modelType)
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet)
 {
-    if (modelType == InspectorModelType::TYPE_UNDEFINED) {
-        return Ms::ElementType::INVALID;
+    InspectorSectionTypeSet types;
+
+    for (const ElementKey& key : elementKeySet) {
+        if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(key.type)
+            && (modelTypeByElementKey(key) != InspectorModelType::TYPE_UNDEFINED)) {
+            types << InspectorSectionType::SECTION_NOTATION;
+        }
+
+        if (TEXT_ELEMENT_TYPES.contains(key.type)) {
+            types << InspectorSectionType::SECTION_TEXT;
+        }
     }
 
-    if (NOTATION_ELEMENT_MODEL_TYPES.values().contains(modelType)) {
-        return NOTATION_ELEMENT_MODEL_TYPES.key(modelType);
-    }
-
-    return Ms::ElementType::TEXT;
+    return types;
 }
 
 bool AbstractInspectorModel::isEmpty() const
@@ -206,6 +187,7 @@ void AbstractInspectorModel::setTitle(QString title)
     }
 
     m_title = title;
+    emit titleChanged();
 }
 
 void AbstractInspectorModel::setIcon(mu::ui::IconCode::Code icon)
@@ -213,7 +195,7 @@ void AbstractInspectorModel::setIcon(mu::ui::IconCode::Code icon)
     m_icon = icon;
 }
 
-void AbstractInspectorModel::setSectionType(AbstractInspectorModel::InspectorSectionType sectionType)
+void AbstractInspectorModel::setSectionType(InspectorSectionType sectionType)
 {
     m_sectionType = sectionType;
 }

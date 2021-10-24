@@ -33,7 +33,7 @@ InspectorSectionView {
 
         width: parent.width
 
-        model: root.model ? root.model.firstModel() : null
+        model: root.model ? root.model.firstModel : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart

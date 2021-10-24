@@ -61,14 +61,16 @@ private:
     void buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet);
     void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet);
 
-    void createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList,
-                                   const ElementKeySet& selectedElementKeySet = {});
+    void createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList, const ElementKeySet& selectedElementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet,
-                            const QList<AbstractInspectorModel::InspectorSectionType>& exclusions = QList<AbstractInspectorModel::InspectorSectionType>());
+                            const QList<InspectorSectionType>& exclusions = QList<InspectorSectionType>());
+
+    bool isModelAllowed(const AbstractInspectorModel* model, const InspectorModelTypeSet& allowedModelTypes,
+                        const InspectorSectionTypeSet& allowedSectionTypes) const;
 
     void sortModels();
 
-    bool isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const;
+    AbstractInspectorModel* modelBySectionType(InspectorSectionType sectionType) const;
 
     void subscribeOnSelectionChanges();
 
