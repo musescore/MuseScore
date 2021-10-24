@@ -48,7 +48,7 @@ MuseScore {
       // or, if nothing is selected, in the entire score
 
       function applyToNotesInSelection(func) {
-            var fullScore = !curScore.selection.elements.length
+            var fullScore = !(curScore.selection.elements.length > 1)
             if (fullScore) {
                   cmd("select-all")
                   curScore.startCmd()
