@@ -1559,7 +1559,6 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
 
       qreal _spatium   = spatium();
       QPointF _pagePos(pagePos());
-      qreal beamMinLen = score()->styleP(Sid::beamMinLen) * mag();
 
       if (beamLevels == 4)
             _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance)*4/3);
@@ -1824,12 +1823,12 @@ void Beam::layout2(std::vector<ChordRest*>crl, SpannerSegmentType, int frag)
                               }
                         }
                   else {
-                        // create broken segment
+                        // create broken segment / fractional beams
                         if (cr1->type() == ElementType::REST)
                               continue;
 
                         size_t sizeChordRests = crl.size();
-                        qreal len = beamMinLen;
+                        qreal len = score()->styleP(Sid::beamMinLen) * mag() * c1->staff()->mag(c1);
                         //
                         // find direction (by default, segment points to right)
                         //
