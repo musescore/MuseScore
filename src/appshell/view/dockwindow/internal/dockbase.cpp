@@ -55,7 +55,7 @@ public:
 using namespace mu::dock;
 
 DockBase::DockBase(QQuickItem* parent)
-    : QQuickItem(parent), m_resizable(true)
+    : QQuickItem(parent), m_resizable(true), m_separatorsVisible(true)
 {
 }
 
@@ -112,6 +112,11 @@ bool DockBase::floating() const
 bool DockBase::resizable() const
 {
     return m_resizable;
+}
+
+bool DockBase::separatorsVisible() const
+{
+    return m_separatorsVisible;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -229,6 +234,16 @@ void DockBase::setResizable(bool resizable)
     emit resizableChanged();
 }
 
+void DockBase::setSeparatorsVisible(bool visible)
+{
+    if (visible == m_separatorsVisible) {
+        return;
+    }
+
+    m_separatorsVisible = visible;
+    emit separatorsVisibleChanged();
+}
+
 DockType DockBase::type() const
 {
     return DockType::Undefined;
@@ -298,6 +313,7 @@ void DockBase::componentComplete()
     DockProperties properties;
     properties.type = type();
     properties.allowedAreas = allowedAreas();
+    properties.separatorsVisible = separatorsVisible();
 
     writePropertiesToObject(properties, *m_dockWidget);
 

@@ -34,11 +34,13 @@ class DockSeparator : public QQuickItem, public Layouting::Separator, public Lay
     Q_OBJECT
 
     Q_PROPERTY(bool isVertical READ isVertical NOTIFY isVerticalChanged)
+    Q_PROPERTY(bool isSeparatorVisible READ isSeparatorVisible NOTIFY isSeparatorVisibleChanged)
 
 public:
     explicit DockSeparator(Layouting::Widget* parent = nullptr);
 
     bool isVertical() const;
+    bool isSeparatorVisible() const;
 
     Q_INVOKABLE void onMousePressed();
     Q_INVOKABLE void onMouseMoved(QPointF localPos);
@@ -47,10 +49,15 @@ public:
 
 signals:
     void isVerticalChanged();
+    void isSeparatorVisibleChanged();
 
 private:
+    void initAvailability();
+
     Widget* createRubberBand(Widget* parent) override;
     Widget* asWidget() override;
+
+    bool m_isSeparatorVisible = false;
 };
 }
 

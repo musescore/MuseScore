@@ -56,18 +56,6 @@ DockToolBarView {
 
         color: ui.theme.backgroundPrimaryColor
 
-        function printInfo() {
-            console.debug("------------------------------")
-            console.debug("obj: " + objectName)
-            console.debug("contentSize: " + Qt.size(contentLoader.width, contentLoader.height))
-            console.debug("bakgroundSize: " + Qt.size(contentBackground.width, contentBackground.height))
-            console.debug("------------------------------\n")
-        }
-
-        Component.onCompleted: {
-            Qt.callLater(printInfo)
-        }
-
         Item {
             id: content
 

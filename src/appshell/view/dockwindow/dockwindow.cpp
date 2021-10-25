@@ -68,7 +68,7 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
     connect(this, &QQuickItem::widthChanged, this, [this]() {
-        alignToolBars();
+        alignToolBars(currentPage());
     });
 
     uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
@@ -84,7 +84,9 @@ void DockWindow::componentComplete()
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    for (DockToolBarView* toolBar : topLevelToolBars()) {
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(currentPage());
+
+    for (DockToolBarView* toolBar : topToolBars) {
         toolBar->setMinimumWidth(toolBar->contentWidth());
     }
 
@@ -146,8 +148,6 @@ void DockWindow::loadPage(const QString& uri)
         KDDockWidgets::DockRegistry::self()->clear();
     }
 
-    m_currentPageUri = uri;
-
     loadPageContent(newPage);
     restorePageState(newPage->objectName());
     initDocks(newPage);
@@ -158,7 +158,9 @@ void DockWindow::loadPage(const QString& uri)
         allDockNames << dock->objectName();
     }
 
+    m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
+
     m_docksOpenStatusChanged.send(allDockNames);
 }
 
@@ -385,8 +387,10 @@ void DockWindow::loadPagePanels(const DockPageView* page)
     }
 }
 
-void DockWindow::alignToolBars()
+void DockWindow::alignToolBars(const DockPageView* page)
 {
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(page);
+
     DockToolBarView* lastLeftToolBar = nullptr;
     DockToolBarView* lastCentralToolBar = nullptr;
 
@@ -394,7 +398,7 @@ void DockWindow::alignToolBars()
     int centralToolBarsWidth = 0;
     int rightToolBarsWidth = 0;
 
-    for (DockToolBarView* toolBar : topLevelToolBars()) {
+    for (DockToolBarView* toolBar : topToolBars) {
         if (toolBar->floating() || !toolBar->isVisible()) {
             continue;
         }
@@ -551,20 +555,20 @@ void DockWindow::initDocks(DockPageView* page)
         page->init();
     }
 
-    alignToolBars();
+    alignToolBars(page);
 
     for (DockToolBarView* toolbar : page->mainToolBars()) {
-        connect(toolbar, &DockToolBarView::floatingChanged, this, [this]() {
-            alignToolBars();
+        connect(toolbar, &DockToolBarView::floatingChanged, this, [this, page]() {
+            alignToolBars(page);
         }, Qt::UniqueConnection);
     }
 }
 
-QList<DockToolBarView*> DockWindow::topLevelToolBars() const
+QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) const
 {
     QList<DockToolBarView*> toolBars = m_toolBars.list();
 
-    if (auto page = currentPage()) {
+    if (page) {
         toolBars << page->mainToolBars();
     }
 

@@ -39,6 +39,8 @@ ApplicationWindow {
 
     visible: true
 
+    color: ui.theme.backgroundPrimaryColor
+
     MainWindowTitleProvider {
         id: titleProvider
     }
