@@ -55,7 +55,7 @@ mu::Ret TestCaseReport::beginReport(const TestCase& testCase)
     QDateTime now = QDateTime::currentDateTime();
     QString reportPath = reportsPath.toQString()
                          + "/" + tcname
-                         + "_" + now.toString("yyyyMMddhhmm")
+                         + "_" + now.toString("yyMMddhhmmss")
                          + ".txt";
 
     m_file.setFileName(reportPath);
