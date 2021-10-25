@@ -157,7 +157,7 @@ TrackIdList TrackSequence::trackIdList() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    TrackIdList result(m_tracks.size());
+    TrackIdList result;
 
     for (const auto& pair : m_tracks) {
         result.push_back(pair.first);
