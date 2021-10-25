@@ -42,8 +42,8 @@ public:
 
     virtual void setStepsInterval(int msec) = 0;
     virtual void runTestCase(const TestCase& testCase) = 0;
-    virtual bool pauseTestCase() = 0;
-    virtual void abortTestCase() = 0;
+    virtual bool pause() = 0;
+    virtual void abort() = 0;
 
     virtual ITestCaseContextPtr context() const = 0;
 };

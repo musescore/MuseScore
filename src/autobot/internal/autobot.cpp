@@ -69,19 +69,19 @@ void Autobot::runTestCase(const TestCase& testCase)
     m_runner.runTestCase(testCase);
 }
 
-void Autobot::abortTestCase()
+void Autobot::abort()
 {
     m_runner.abortTestCase();
 }
 
-bool Autobot::pauseTestCase()
+bool Autobot::pause()
 {
     using namespace mu::framework;
     IInteractive::Result res = interactive()->question("Pause", "Continue?",
                                                        { IInteractive::Button::Continue, IInteractive::Button::Abort });
 
     if (res.standardButton() == IInteractive::Button::Abort) {
-        abortTestCase();
+        abort();
         return false;
     }
 

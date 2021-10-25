@@ -118,7 +118,7 @@ Item {
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
 
-            navigation.name: "Choose instruments"
+            navigation.name: "Choose from template"
             navigation.panel: topNavPanel
             navigation.column: 1
             onNavigationTriggered: {

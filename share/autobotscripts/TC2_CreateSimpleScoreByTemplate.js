@@ -27,13 +27,14 @@ function main()
 {
     var testCase = {
         name: "Create Simple Score",
-        description: "Just create a simple two-instrument score, a few notes, play it and save the project",
+        description: "Just create a simple score by template, a few notes, play it and save the project",
         steps: [
             {name: "Open New Score Dialog", func: function() {
                 NewScore.openNewScoreDialog()
             }},
-            {name: "Select Instruments", func: function() {
-                NewScore.сhooseFluteAndPiano()
+            {name: "Choose template", func: function() {
+                NewScore.selectTab("templates")
+                NewScore.chooseTemplate("General", "Grand Staff")
             }},
             {name: "Create score", func: function() {
                 NewScore.done()
