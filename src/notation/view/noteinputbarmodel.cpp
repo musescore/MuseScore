@@ -381,11 +381,22 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
         return INVALID_VOICE;
     }
 
-    for (const EngravingItem* element: selection()->elements()) {
-        return element->voice();
+    std::vector<EngravingItem*> selectedElements = selection()->elements();
+    if (selectedElements.empty()) {
+        return INVALID_VOICE;
     }
 
-    return INVALID_VOICE;
+    int voice = INVALID_VOICE;
+    for (const EngravingItem* element : selection()->elements()) {
+        int elementVoice = element->voice();
+        if (elementVoice != voice && voice != INVALID_VOICE) {
+            return INVALID_VOICE;
+        }
+
+        voice = element->voice();
+    }
+
+    return voice;
 }
 
 std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
