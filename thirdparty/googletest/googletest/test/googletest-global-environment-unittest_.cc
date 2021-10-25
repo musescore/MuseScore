@@ -27,27 +27,32 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// A sample program demonstrating using Google C++ testing framework.
-#ifndef GOOGLETEST_SAMPLES_SAMPLE4_H_
-#define GOOGLETEST_SAMPLES_SAMPLE4_H_
+// Unit test for Google Test global test environments.
+//
+// The program will be invoked from a Python unit test.  Don't run it
+// directly.
 
-// A simple monotonic counter.
-class Counter {
- private:
-  int counter_;
+#include "gtest/gtest.h"
 
+namespace {
+
+// An environment that always fails in its SetUp method.
+class FailingEnvironment final : public ::testing::Environment {
  public:
-  // Creates a counter that starts at 0.
-  Counter() : counter_(0) {}
-
-  // Returns the current counter value, and increments it.
-  int Increment();
-
-  // Returns the current counter value, and decrements it.
-  int Decrement();
-
-  // Prints the current counter value to STDOUT.
-  void Print() const;
+  void SetUp() override { FAIL() << "Canned environment setup error"; }
 };
 
-#endif  // GOOGLETEST_SAMPLES_SAMPLE4_H_
+// Register the environment.
+auto* const g_environment_ =
+    ::testing::AddGlobalTestEnvironment(new FailingEnvironment);
+
+// A test that doesn't actually run.
+TEST(SomeTest, DoesFoo) { FAIL() << "Unexpected call"; }
+
+}  // namespace
+
+int main(int argc, char** argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+
+  return RUN_ALL_TESTS();
+}

@@ -173,7 +173,7 @@ def GetTestExecutablePath(executable_name, build_dir=None):
         'Unable to find the test binary "%s". Please make sure to provide\n'
         'a path to the binary via the --build_dir flag or the BUILD_DIR\n'
         'environment variable.' % path)
-    print >> sys.stderr, message
+    print(message, file=sys.stderr)
     sys.exit(1)
 
   return path
@@ -217,7 +217,6 @@ class Subprocess:
       following attributes:
         terminated_by_signal   True if and only if the child process has been
                                terminated by a signal.
-        signal                 Sygnal that terminated the child process.
         exited                 True if and only if the child process exited
                                normally.
         exit_code              The code with which the child process exited.
@@ -225,7 +224,7 @@ class Subprocess:
                                combined in a string.
     """
 
-    # The subprocess module is the preferrable way of running programs
+    # The subprocess module is the preferable way of running programs
     # since it is available and behaves consistently on all platforms,
     # including Windows. But it is only available starting in python 2.4.
     # In earlier python versions, we revert to the popen2 module, which is
@@ -289,10 +288,9 @@ class Subprocess:
       else:  # os.WIFEXITED(ret_code) should return True here.
         self._return_code = os.WEXITSTATUS(ret_code)
 
-    if self._return_code < 0:
+    if bool(self._return_code & 0x80000000):
       self.terminated_by_signal = True
       self.exited = False
-      self.signal = -self._return_code
     else:
       self.terminated_by_signal = False
       self.exited = True
