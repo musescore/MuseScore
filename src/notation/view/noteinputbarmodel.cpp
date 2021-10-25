@@ -236,7 +236,7 @@ void NoteInputBarModel::updateNoteDotState()
 {
     static const ActionCodeList dotActions = {
         "pad-dot",
-        "pad-dotdot",
+        "pad-dot2",
         "pad-dot3",
         "pad-dot4"
     };

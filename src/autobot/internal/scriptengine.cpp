@@ -195,6 +195,11 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
     return ret;
 }
 
+void ScriptEngine::throwError(const QString& message)
+{
+    m_engine->throwError(message);
+}
+
 RetVal<QByteArray> ScriptEngine::readScriptContent(const io::path& scriptPath) const
 {
     TRACEFUNC;

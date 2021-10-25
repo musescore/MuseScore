@@ -49,9 +49,11 @@ mu::Ret Autobot::loadScript(const Script& script)
     m_context = std::make_shared<TestCaseContext>();
     m_context->setGlobalVal("script_path", script.path.toQString());
 
-    ScriptEngine engine;
-    engine.setScriptPath(script.path);
-    Ret ret = engine.call("main");
+    m_engine = new ScriptEngine();
+    m_engine->setScriptPath(script.path);
+    Ret ret = m_engine->call("main");
+    delete m_engine;
+    m_engine = nullptr;
     if (!ret) {
         LOGE() << ret.toString();
     }
@@ -71,6 +73,9 @@ void Autobot::runTestCase(const TestCase& testCase)
 
 void Autobot::abort()
 {
+    if (m_engine) {
+        m_engine->throwError("abort");
+    }
     m_runner.abortTestCase();
 }
 

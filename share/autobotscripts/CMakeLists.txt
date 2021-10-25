@@ -23,6 +23,7 @@ install(FILES
       NewScore10InstrPutNotesSaveClose.js
       TC1_CreateSimpleScore.js
       TC2_CreateSimpleScoreByTemplate.js
+      TC3_Using_note_input_toolbar.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 

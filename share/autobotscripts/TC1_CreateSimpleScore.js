@@ -33,7 +33,10 @@ function main()
                 NewScore.openNewScoreDialog()
             }},
             {name: "Select Instruments", func: function() {
-                NewScore.сhooseFluteAndPiano()
+                NewScore.selectTab("instruments")
+                NewScore.сhooseInstrument("Woodwinds", "Flute")
+                api.autobot.seeChanges()
+                NewScore.сhooseInstrument("Keyboards", "Piano")
             }},
             {name: "Create score", func: function() {
                 NewScore.done()
