@@ -77,7 +77,7 @@ void AutobotApi::saveProject(const QString& name)
         QDir().mkpath(dir.toQString());
     }
 
-    io::path filePath = dir + "/" + QDateTime::currentDateTime().toString(Qt::ISODate) + "_" + name;
+    io::path filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
     projectFilesController()->saveProject(filePath);
 }
 
