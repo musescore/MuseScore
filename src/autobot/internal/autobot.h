@@ -57,6 +57,7 @@ public:
     ITestCaseContextPtr context() const override;
 
 private:
+    ScriptEngine* m_engine = nullptr;
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
     TestCaseReport m_report;

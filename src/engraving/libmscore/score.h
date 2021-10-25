@@ -154,7 +154,7 @@ enum class Pad : char {
     //--------------------
     REST,
     DOT,
-    DOTDOT,
+    DOT2,
     DOT3,
     DOT4
 };

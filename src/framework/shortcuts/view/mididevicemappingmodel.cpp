@@ -59,7 +59,7 @@ inline ActionCodeList allMidiActions()
         "pad-rest",
         "tie",
         "pad-dot",
-        "pad-dotdot",
+        "pad-dot2",
         "realtime-advance"
     };
 }
