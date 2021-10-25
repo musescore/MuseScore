@@ -31,7 +31,7 @@
 //! NOTE At the moment this is just a concept, not a production-ready system, a lot of work yet.
 
 namespace mu::engraving {
-class AccessibleScore;
+class AccessibleRoot;
 class AccessibleItem : public accessibility::IAccessible
 {
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
@@ -43,11 +43,12 @@ public:
 
     virtual void setup();
 
+    AccessibleRoot* accessibleRoot() const;
+
     const Ms::EngravingItem* element() const;
 
     bool registered() const;
 
-    void setFocus();
     void notifyAboutFocus(bool focused);
 
     // IAccessible
@@ -71,9 +72,7 @@ public:
 
     static bool enabled;
 
-private:
-
-    AccessibleScore* accessibleScore() const;
+protected:
 
     Ms::EngravingItem* m_element = nullptr;
     bool m_registred = false;

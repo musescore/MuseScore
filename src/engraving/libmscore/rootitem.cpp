@@ -22,6 +22,7 @@
 #include "rootitem.h"
 
 #include "score.h"
+#include "../accessibility/accessibleroot.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -43,9 +44,10 @@ compat::DummyElement* RootItem::dummy() const
     return m_dummy;
 }
 
-void RootItem::initDummy()
+void RootItem::init()
 {
     m_dummy->init();
+    setup();
 }
 
 EngravingObject* RootItem::scanParent() const
@@ -61,4 +63,9 @@ EngravingObject* RootItem::scanChild(int n) const
 int RootItem::scanChildCount() const
 {
     return m_score->scanChildCount();
+}
+
+mu::engraving::AccessibleItem* RootItem::createAccessible()
+{
+    return new AccessibleRoot(this);
 }

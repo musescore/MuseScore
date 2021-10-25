@@ -473,7 +473,6 @@ private:
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
     mu::engraving::RootItem* m_rootItem = nullptr;
-    mu::engraving::AccessibleScore* m_accessible = nullptr;
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
 
@@ -1203,7 +1202,6 @@ public:
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
-    mu::engraving::AccessibleScore* accessible() const;
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 
