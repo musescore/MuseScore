@@ -102,9 +102,8 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
     clear();
 
-    for (size_t i = 0; i < trackIdList.size(); i++) {
-        TrackId trackId = trackIdList[i];
-        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId, i));
+    for (const TrackId& trackId : trackIdList) {
+        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
@@ -125,7 +124,7 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 {
     beginResetModel();
 
-    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId, m_mixerChannelList.size()));
+    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     sortItems();
 
     endResetModel();
@@ -157,6 +156,15 @@ void MixerPanelModel::sortItems()
 
         return f->id() < s->id();
     });
+
+    updateItemsPanelsOrder();
+}
+
+void MixerPanelModel::updateItemsPanelsOrder()
+{
+    for (int i = 0; i < m_mixerChannelList.size(); i++) {
+        m_mixerChannelList[i]->setPanelOrder(i);
+    }
 }
 
 void MixerPanelModel::clear()
@@ -165,11 +173,9 @@ void MixerPanelModel::clear()
     m_mixerChannelList.clear();
 }
 
-MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId,
-                                                         int navigationPanelOrder)
+MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
 {
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
-    item->setPanelOrder(navigationPanelOrder);
     item->setPanelSection(m_itemsNavigationSection);
 
     playback()->tracks()->inputParams(sequenceId, trackId)
@@ -254,6 +260,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
 MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
     MixerChannelItem* item = new MixerChannelItem(this, /*trackId*/ -1, /*isMaster*/ true);
+    item->setPanelSection(m_itemsNavigationSection);
 
     item->setTitle(qtrc("playback", "Master"));
 
