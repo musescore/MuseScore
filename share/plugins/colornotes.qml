@@ -45,7 +45,7 @@ MuseScore {
       property string black : "#000000"
 
       // Apply the given function to all notes (elements with pitch) in selection
-      // or, if nothing is selected, in the entire score
+      // or, if nothing, or just signle note is selected, in the entire score
 
       function applyToNotesInSelection(func) {
             var fullScore = !(curScore.selection.elements.length > 1)
