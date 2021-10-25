@@ -55,8 +55,10 @@ DockPage {
             objectName: root.objectName + "_notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
-            movable: false
+            floatable: false
             resizable: false
+            padding: 0
+            separatorsVisible: false
             alignment: DockToolBarAlignment.Center
 
             NotationToolBar {
@@ -77,6 +79,7 @@ DockPage {
             objectName: root.objectName + "_playbackToolBar"
             title: qsTrc("appshell", "Playback controls")
 
+            separatorsVisible: false
             alignment: DockToolBarAlignment.Right
 
             PlaybackToolBar {

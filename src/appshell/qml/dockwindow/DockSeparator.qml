@@ -33,6 +33,8 @@ Rectangle {
 
     readonly property QtObject separatorCpp: parent
 
+    visible: separatorCpp && separatorCpp.isSeparatorVisible
+
     MouseArea {
         anchors.fill: parent
         anchors.margins: -5 //! NOTE: extra space for user convenience

@@ -52,6 +52,7 @@ class DockBase : public QQuickItem
     Q_PROPERTY(DockLocation location READ location WRITE setLocation NOTIFY locationChanged)
 
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(bool separatorsVisible READ separatorsVisible WRITE setSeparatorsVisible NOTIFY separatorsVisibleChanged)
 
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
@@ -91,6 +92,7 @@ public:
     DockLocation location() const;
 
     bool resizable() const;
+    bool separatorsVisible() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -110,6 +112,7 @@ public slots:
     void setLocation(DockLocation location);
 
     void setResizable(bool resizable);
+    void setSeparatorsVisible(bool visible);
 
 signals:
     void titleChanged();
@@ -123,6 +126,7 @@ signals:
     void locationChanged(DockLocation location);
 
     void resizableChanged();
+    void separatorsVisibleChanged();
 
 protected:
     friend class DockWindow;
@@ -153,6 +157,7 @@ private:
     bool m_floating = false;
     DockLocation m_location = DockLocation::Undefined;
     bool m_resizable = false;
+    bool m_separatorsVisible = false;
 };
 }
 
