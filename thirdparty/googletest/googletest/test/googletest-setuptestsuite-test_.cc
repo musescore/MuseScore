@@ -27,35 +27,23 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-//
-// Tests for Google Test itself.  This verifies that the basic constructs of
-// Google Test work.
 
 #include "gtest/gtest.h"
-#include "googletest-param-test-test.h"
 
-using ::testing::Values;
-using ::testing::internal::ParamGenerator;
+class SetupFailTest : public ::testing::Test {
+ protected:
+  static void SetUpTestSuite() {
+    ASSERT_EQ("", "SET_UP_FAIL");
+  }
+};
 
-// Tests that generators defined in a different translation unit
-// are functional. The test using extern_gen_2 is defined
-// in googletest-param-test-test.cc.
-ParamGenerator<int> extern_gen_2 = Values(33);
+TEST_F(SetupFailTest, NoopPassingTest) {}
 
-// Tests that a parameterized test case can be defined in one translation unit
-// and instantiated in another. The test is defined in
-// googletest-param-test-test.cc and ExternalInstantiationTest fixture class is
-// defined in gtest-param-test_test.h.
-INSTANTIATE_TEST_SUITE_P(MultiplesOf33,
-                         ExternalInstantiationTest,
-                         Values(33, 66));
+class TearDownFailTest : public ::testing::Test {
+ protected:
+  static void TearDownTestSuite() {
+    ASSERT_EQ("", "TEAR_DOWN_FAIL");
+  }
+};
 
-// Tests that a parameterized test case can be instantiated
-// in multiple translation units. Another instantiation is defined
-// in googletest-param-test-test.cc and
-// InstantiationInMultipleTranslationUnitsTest fixture is defined in
-// gtest-param-test_test.h
-INSTANTIATE_TEST_SUITE_P(Sequence2,
-                         InstantiationInMultipleTranslationUnitsTest,
-                         Values(42*3, 42*4, 42*5));
-
+TEST_F(TearDownFailTest, NoopPassingTest) {}

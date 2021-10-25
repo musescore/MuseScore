@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
-# Copyright 2017 Google Inc.
-# All Rights Reserved.
+#!/usr/bin/env python
 #
+# Copyright 2019, Google Inc.
+# All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -29,13 +29,26 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#
-# This file should be sourced, and not executed as a standalone script.
-#
+"""Verifies that SetUpTestSuite and TearDownTestSuite errors are noticed."""
 
-# TODO() - we can check if this is being sourced using $BASH_VERSION and $BASH_SOURCE[0] != ${0}.
+import gtest_test_utils
 
-if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
-    if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.9" CC="clang-3.9"; fi
-fi
+COMMAND = gtest_test_utils.GetTestExecutablePath(
+    'googletest-setuptestsuite-test_')
+
+
+class GTestSetUpTestSuiteTest(gtest_test_utils.TestCase):
+
+  def testSetupErrorAndTearDownError(self):
+    p = gtest_test_utils.Subprocess(COMMAND)
+    self.assertNotEqual(p.exit_code, 0, msg=p.output)
+
+    self.assertIn(
+        '[  FAILED  ] SetupFailTest: SetUpTestSuite or TearDownTestSuite\n'
+        '[  FAILED  ] TearDownFailTest: SetUpTestSuite or TearDownTestSuite\n'
+        '\n'
+        ' 2 FAILED TEST SUITES\n',
+        p.output)
+
+if __name__ == '__main__':
+  gtest_test_utils.Main()
