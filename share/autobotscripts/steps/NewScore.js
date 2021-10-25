@@ -20,16 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-function openNewScoreDialog()
+module.exports = {
+openNewScoreDialog: function()
 {
     api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
     // wait popup open
     api.autobot.waitPopup()
     // New become current automatically, so just trigger
     api.navigation.trigger()
-}
+},
 
-function сhooseFluteAndPiano()
+done: function()
+{
+    api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+},
+
+сhooseFluteAndPiano: function()
 {
     // Flute
     api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
@@ -43,15 +49,9 @@ function сhooseFluteAndPiano()
     api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
     api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
     api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+},
 
-    // just for see changes
-    api.autobot.sleep(500)
-
-    // Done
-    api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
-}
-
-function chooseRandomInstruments(count, see_msec)
+chooseRandomInstruments: function(count, see_msec)
 {
     see_msec = see_msec || 50
     api.log.debug("chooseRandomInstruments count: " + count)
@@ -99,10 +99,27 @@ function chooseRandomInstruments(count, see_msec)
 
     // Done
     api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+},
+
+selectTab: function(tab)
+{
+    switch (tab) {
+    case "instruments":
+        api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
+        break;
+    case "templates":
+        api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
+        break;
+    default:
+        api.log.error("unknown tab: " + tab)
+    }
+},
+
+chooseTemplate: function(category, template)
+{
+    api.navigation.goToControl("NewScoreDialog", "Category", category)
+    api.navigation.goToControl("NewScoreDialog", "Template", template)
+}
 }
 
-module.exports = {
-    openNewScoreDialog: openNewScoreDialog,
-    сhooseFluteAndPiano: сhooseFluteAndPiano,
-    chooseRandomInstruments: chooseRandomInstruments
-}
+

@@ -51,8 +51,8 @@ public:
 
     void setStepsInterval(int msec) override;
     void runTestCase(const TestCase& testCase) override;
-    bool pauseTestCase() override;
-    void abortTestCase() override;
+    bool pause() override;
+    void abort() override;
 
     ITestCaseContextPtr context() const override;
 

@@ -52,14 +52,14 @@ void AutobotApi::runTestCase(const QJSValue& testCase)
     autobot()->runTestCase(ts);
 }
 
-bool AutobotApi::pauseTestCase()
+bool AutobotApi::pause()
 {
-    return autobot()->pauseTestCase();
+    return autobot()->pause();
 }
 
-void AutobotApi::abortTestCase()
+void AutobotApi::abort()
 {
-    autobot()->abortTestCase();
+    autobot()->abort();
 }
 
 bool AutobotApi::openProject(const QString& name)
