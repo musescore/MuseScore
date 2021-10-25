@@ -57,6 +57,22 @@ void MixerPanelModel::load(const QVariant& navigationSection)
     });
 }
 
+QVariantMap MixerPanelModel::get(int index)
+{
+    QVariantMap result;
+
+    QHash<int, QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
+}
+
 QVariant MixerPanelModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() || index.row() >= rowCount() || role != ItemRole) {

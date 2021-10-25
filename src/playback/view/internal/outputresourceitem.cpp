@@ -109,6 +109,11 @@ bool OutputResourceItem::isActive() const
     return m_currentFxParams.active;
 }
 
+QString OutputResourceItem::id() const
+{
+    return QString::number(m_currentFxParams.chainOrder);
+}
+
 void OutputResourceItem::setIsActive(bool newIsActive)
 {
     if (m_currentFxParams.active == newIsActive) {

@@ -49,8 +49,14 @@ MixerPanelSection {
 
             textHorizontalAlignment: Qt.AlignHCenter
 
+            navigation.name: "VolumeInputField"
             navigation.panel: item.panel
             navigation.row: root.navigationRowStart
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    root.navigateControlNameChanged(navigation.name)
+                }
+            }
 
             validator: DoubleInputValidator {
                 id: doubleInputValidator

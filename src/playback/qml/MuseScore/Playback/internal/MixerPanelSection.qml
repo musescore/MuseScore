@@ -38,8 +38,11 @@ Loader {
     property var rootPanel: undefined
 
     property int navigationRowStart: 0
+
     property int navigationRowEnd: 0
     default property Component delegateComponent
+
+    signal navigateControlNameChanged(string name)
 
     active: visible
 

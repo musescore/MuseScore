@@ -57,6 +57,10 @@ MixerPanelSection {
                     item.inputResourceItem.requestToLaunchNativeEditorView()
                 }
             }
+
+            onNavigateControlNameChanged: {
+                root.navigateControlNameChanged(name)
+            }
         }
     }
 }

@@ -58,6 +58,7 @@ MixerPanelSection {
 
                 navigationPanel: item.panel
                 navigationRowStart: root.navigationRowStart
+                navigationName: modelData.id
 
                 onTurnedOn: {
                     modelData.isActive = true
@@ -69,6 +70,10 @@ MixerPanelSection {
 
                 onTitleClicked: {
                     modelData.requestToLaunchNativeEditorView()
+                }
+
+                onNavigateControlNameChanged: {
+                    root.navigateControlNameChanged(name)
                 }
             }
         }
