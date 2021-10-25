@@ -757,6 +757,16 @@ bool Palette::applyPaletteElement(Element* element, Qt::KeyboardModifiers modifi
                         score->cmdAddSpanner(spanner, i, startSegment, endSegment);
                         }
                   }
+            else if (element->isTextBase()) {
+                  Ms::Segment* firstSegment = sel.startSegment();
+                  int firstStaffIndex = sel.staffStart();
+                  int lastStaffIndex = sel.staffEnd();
+
+                  // A text should only be added at the start of the selection
+                  // There shouldn't be a text at each element
+                  for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++)
+                        applyDrop(score, viewer, firstSegment->firstElement(staff), element, modifiers);
+                  }
             else {
                   int track1 = sel.staffStart() * VOICES;
                   int track2 = sel.staffEnd() * VOICES;
