@@ -125,7 +125,7 @@
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
 #include "accessibility/accessibleitem.h"
-#include "accessibility/accessiblescore.h"
+#include "accessibility/accessibleroot.h"
 #endif
 
 #include "log.h"
@@ -2567,12 +2567,11 @@ void EngravingItem::setSelected(bool f)
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
         if (m_accessible) {
-            Score* sc = score();
-            AccessibleScore* ascore = sc ? sc->accessible() : nullptr;
-            if (!ascore) {
+            AccessibleRoot* accroot = m_accessible->accessibleRoot();
+            if (!accroot) {
                 return;
             }
-            ascore->setFocusedElement(m_accessible);
+            accroot->setFocusedElement(m_accessible);
         }
     }
 #endif

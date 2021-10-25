@@ -67,8 +67,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.h
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleroot.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
 

@@ -1080,6 +1080,11 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
         return;
     }
 
+    //! NOTE Maybe just one control (or just one enabled control)
+    if (toControl == activeControl) {
+        return;
+    }
+
     if (activeControl) {
         MYLOG() << "current activated control: " << activeControl->name()
                 << ", row: " << activeControl->index().row
