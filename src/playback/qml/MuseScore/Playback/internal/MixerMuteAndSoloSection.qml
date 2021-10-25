@@ -54,6 +54,11 @@ MixerPanelSection {
                 navigation.name: "MuteButton"
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 onToggled: {
                     item.muted = !item.muted
@@ -72,6 +77,11 @@ MixerPanelSection {
                 navigation.name: "SoloButton"
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart + 1
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 onToggled: {
                     item.solo = !item.solo

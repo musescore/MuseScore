@@ -55,6 +55,11 @@ MixerPanelSection {
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 onMoved: {
                     item.balance = value
@@ -81,6 +86,11 @@ MixerPanelSection {
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart + 1
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 validator: IntInputValidator {
                     id: intInputValidator

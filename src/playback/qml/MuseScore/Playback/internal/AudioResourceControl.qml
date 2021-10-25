@@ -47,12 +47,15 @@ Item {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
     property int navigationRowEnd: navigationRowStart + 2 // todo Boolean(selectorLoader.item) ? selectorLoader.item.navigation.row : navigationRowStart
+    property string navigationName: ""
     property string accessibleName: ""
 
     signal turnedOn()
     signal turnedOff()
 
     signal titleClicked()
+
+    signal navigateControlNameChanged(string name)
 
     height: 22
     width: 96
@@ -77,9 +80,14 @@ Item {
                 icon: IconCode.BYPASS
 
                 navigation.panel: root.navigationPanel
-                navigation.name: "ActivityButton"
+                navigation.name: root.navigationName + "ActivityButton"
                 navigation.row: root.navigationRowStart + 1
                 navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Bypass")
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 backgroundItem: RoundedRectangle {
                     id: activityButtonBackground
@@ -162,8 +170,13 @@ Item {
                 width: titleLoader.width
 
                 navigation.panel: root.navigationPanel
-                navigation.name: "TitleButton"
+                navigation.name: root.navigationName + "TitleButton"
                 navigation.row: root.navigationRowStart + 2
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 backgroundItem: RoundedRectangle {
                     id: titleButtonBackground
@@ -239,8 +252,13 @@ Item {
                 icon: IconCode.SMALL_ARROW_DOWN
 
                 navigation.panel: root.navigationPanel
-                navigation.name: "MenuButton"
+                navigation.name: root.navigationName + "MenuButton"
                 navigation.row: root.navigationRowStart + 3
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 backgroundItem: RoundedRectangle {
                     id: menuButtonBackground

@@ -48,6 +48,11 @@ MixerPanelSection {
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlNameChanged(navigation.name)
+                    }
+                }
 
                 onVolumeLevelMoved: {
                     item.volumeLevel = Math.round(level * 10) / 10

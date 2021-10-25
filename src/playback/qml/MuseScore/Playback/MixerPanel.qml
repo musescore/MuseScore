@@ -38,6 +38,12 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    QtObject {
+        id: prv
+
+        property string currentNavigateControlName: ""
+    }
+
     Flickable {
         id: flickable
 
@@ -71,6 +77,21 @@ Rectangle {
             Component.onCompleted: {
                 mixerPanelModel.load(root.navigationSection)
             }
+
+            onModelReset: {
+                Qt.callLater(setupConnections)
+            }
+
+            function setupConnections() {
+                for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
+                    var item = mixerPanelModel.get(i)
+                    item.item.panel.navigationEvent.connect(function(event){
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlName", prv.currentNavigateControlName)
+                        }
+                    })
+                }
+            }
         }
 
         MixerPanelContextMenuModel {
@@ -98,6 +119,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerFxSection {
@@ -110,6 +135,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: soundSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerBalanceSection {
@@ -122,6 +151,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: fxSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerVolumeSection {
@@ -134,6 +167,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: 10//balanceSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerFaderSection {
@@ -146,6 +183,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: volumeSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerMuteAndSoloSection {
@@ -158,6 +199,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
 
             MixerTitleSection {
@@ -170,6 +215,10 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+
+                onNavigateControlNameChanged: {
+                    prv.currentNavigateControlName = name
+                }
             }
         }
     }
