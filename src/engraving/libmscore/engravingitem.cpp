@@ -34,6 +34,9 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "accessibility/accessibleitem.h"
+#include "accessibility/accessibleroot.h"
+
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -123,11 +126,6 @@
 
 #include "config.h"
 
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-#include "accessibility/accessibleitem.h"
-#include "accessibility/accessibleroot.h"
-#endif
-
 #include "log.h"
 #define LOG_PROP() if (0) LOGD()
 
@@ -172,23 +170,18 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     _minDistance   = e._minDistance;
     itemDiscovered = false;
 
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     //! TODO Please don't remove (igor.korsukov@gmail.com)
     //m_accessible = e.m_accessible->clone(this);
-#endif
 }
 
 EngravingItem::~EngravingItem()
 {
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
-#endif
     Score::onElementDestruction(this);
 }
 
 void EngravingItem::setup()
 {
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     static std::list<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE
     };
@@ -199,7 +192,6 @@ void EngravingItem::setup()
             m_accessible->setup();
         }
     }
-#endif
 }
 
 EngravingItem* EngravingItem::parentItem() const
@@ -226,11 +218,7 @@ EngravingItemList EngravingItem::childrenItems() const
 
 mu::engraving::AccessibleItem* EngravingItem::createAccessible()
 {
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     return new mu::engraving::AccessibleItem(this);
-#else
-    return nullptr;
-#endif
 }
 
 //---------------------------------------------------------
@@ -2564,7 +2552,7 @@ bool EngravingItem::selected() const
 void EngravingItem::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+
     if (f) {
         if (m_accessible) {
             AccessibleRoot* accroot = m_accessible->accessibleRoot();
@@ -2574,6 +2562,5 @@ void EngravingItem::setSelected(bool f)
             accroot->setFocusedElement(m_accessible);
         }
     }
-#endif
 }
 }

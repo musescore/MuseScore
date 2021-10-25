@@ -30,8 +30,10 @@
 #include <assert.h>
 #include <QtMath>
 
+#include "translation.h"
 #include "draw/brush.h"
 #include "io/xml.h"
+#include "accessibility/accessiblenote.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -77,11 +79,6 @@
 
 #include "config.h"
 #include "log.h"
-#include "translation.h"
-
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-#include "accessibility/accessiblenote.h"
-#endif
 
 using namespace mu;
 using namespace mu::engraving;
