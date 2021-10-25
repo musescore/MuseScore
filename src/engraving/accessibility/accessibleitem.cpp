@@ -21,7 +21,8 @@
  */
 #include "accessibleitem.h"
 
-#include "accessiblescore.h"
+#include "accessibleroot.h"
+#include "../libmscore/score.h"
 
 #include "log.h"
 
@@ -38,9 +39,9 @@ AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
 
 AccessibleItem::~AccessibleItem()
 {
-    AccessibleScore* ascore = accessibleScore();
+    AccessibleRoot* root = accessibleRoot();
 
-    if (!ascore) {
+    if (!root) {
         return;
     }
 
@@ -49,8 +50,8 @@ AccessibleItem::~AccessibleItem()
         m_registred = false;
     }
 
-    if (ascore->focusedElement() == this) {
-        ascore->setFocusedElement(nullptr);
+    if (root->focusedElement() == this) {
+        root->setFocusedElement(nullptr);
     }
 
     m_element = nullptr;
@@ -75,17 +76,18 @@ void AccessibleItem::setup()
     m_registred = true;
 }
 
-AccessibleScore* AccessibleItem::accessibleScore() const
+AccessibleRoot* AccessibleItem::accessibleRoot() const
 {
     if (!m_element) {
         return nullptr;
     }
 
-    if (!m_element->score()) {
+    Ms::Score* score = m_element->score();
+    if (!score) {
         return nullptr;
     }
 
-    return m_element->score()->accessible();
+    return dynamic_cast<AccessibleRoot*>(score->rootItem()->accessible());
 }
 
 const Ms::EngravingItem* AccessibleItem::element() const
@@ -96,10 +98,6 @@ const Ms::EngravingItem* AccessibleItem::element() const
 bool AccessibleItem::registered() const
 {
     return m_registred;
-}
-
-void AccessibleItem::setFocus()
-{
 }
 
 void AccessibleItem::notifyAboutFocus(bool focused)
@@ -192,7 +190,8 @@ bool AccessibleItem::accessibleState(State st) const
 
     switch (st) {
     case IAccessible::State::Enabled: return true;
-    case IAccessible::State::Focused: return accessibleScore()->focusedElement() == this;
+    case IAccessible::State::Active: return true;
+    case IAccessible::State::Focused: return accessibleRoot()->focusedElement() == this;
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;
@@ -210,7 +209,7 @@ QRect AccessibleItem::accessibleRect() const
     PointF canvasPos = m_element->canvasPos();
     QRect canvasRect = QRectF(canvasPos.toQPointF(), bbox.size().toQSizeF()).toRect();
 
-    return accessibleScore()->toScreenRect(canvasRect);
+    return accessibleRoot()->toScreenRect(canvasRect);
 }
 
 mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const

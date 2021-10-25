@@ -38,7 +38,7 @@ public:
     ~RootItem();
 
     compat::DummyElement* dummy() const;
-    void initDummy();
+    void init();
 
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int n) const override;
@@ -49,6 +49,9 @@ public:
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
 
 private:
+
+    mu::engraving::AccessibleItem* createAccessible() override;
+
     Ms::Score* m_score = nullptr;
     compat::DummyElement* m_dummy = nullptr;
 };

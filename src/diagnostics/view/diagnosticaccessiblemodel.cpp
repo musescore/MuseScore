@@ -226,7 +226,7 @@ void DiagnosticAccessibleModel::onItemChanged(QObject* accessibleObject)
 
     Item* item = findItemForIface(iface, m_rootItem);
     if (!item) {
-        LOGE() << "not found item";
+        LOGE() << "not found item: " << iface->text(QAccessible::Name);
         return;
     }
 

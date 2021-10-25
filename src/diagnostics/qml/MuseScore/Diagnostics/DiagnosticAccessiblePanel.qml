@@ -169,7 +169,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: "row: " + styleData.row + " " + item.formatData(styleData.value)
+                text: item.formatData(styleData.value)
             }
 
             MouseArea {
