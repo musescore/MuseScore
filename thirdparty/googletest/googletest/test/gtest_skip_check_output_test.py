@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
-# Copyright 2017 Google Inc.
-# All Rights Reserved.
+#!/usr/bin/env python
 #
+# Copyright 2019 Google LLC.  All Rights Reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -28,22 +27,33 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""Tests Google Test's gtest skip in environment setup  behavior.
 
-set -eu
+This script invokes gtest_skip_in_environment_setup_test_ and verifies its
+output.
+"""
 
-if [ "${TRAVIS_OS_NAME}" != linux ]; then
-    echo "Not a Linux build; skipping installation"
-    exit 0
-fi
+import re
+
+import gtest_test_utils
+
+# Path to the gtest_skip_in_environment_setup_test binary
+EXE_PATH = gtest_test_utils.GetTestExecutablePath('gtest_skip_test')
+
+OUTPUT = gtest_test_utils.Subprocess([EXE_PATH]).output
 
 
-if [ "${TRAVIS_SUDO}" = "true" ]; then
-    echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | \
-        sudo tee /etc/apt/sources.list.d/bazel.list
-    curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
-    sudo apt-get update && sudo apt-get install -y bazel gcc-4.9 g++-4.9 clang-3.9
-elif [ "${CXX}" = "clang++" ]; then
-    # Use ccache, assuming $HOME/bin is in the path, which is true in the Travis build environment.
-    ln -sf /usr/bin/ccache $HOME/bin/${CXX};
-    ln -sf /usr/bin/ccache $HOME/bin/${CC};
-fi
+# Test.
+class SkipEntireEnvironmentTest(gtest_test_utils.TestCase):
+
+  def testSkipEntireEnvironmentTest(self):
+    self.assertIn('Skipped\nskipping single test\n', OUTPUT)
+    skip_fixture = 'Skipped\nskipping all tests for this fixture\n'
+    self.assertIsNotNone(
+        re.search(skip_fixture + '.*' + skip_fixture, OUTPUT, flags=re.DOTALL),
+        repr(OUTPUT))
+    self.assertNotIn('FAILED', OUTPUT)
+
+
+if __name__ == '__main__':
+  gtest_test_utils.Main()
