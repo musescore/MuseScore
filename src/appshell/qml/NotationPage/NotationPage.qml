@@ -83,7 +83,8 @@ DockPage {
             objectName: "notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
-            movable: false
+            floatable: false
+            padding: 0
 
             NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -117,7 +118,7 @@ DockPage {
             objectName: pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo toolbar")
 
-            movable: false
+            floatable: false
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -134,6 +135,8 @@ DockPage {
             title: qsTrc("appshell", "Note input")
 
             allowedAreas: { Qt.AllDockWidgetAreas }
+
+            minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 96
 
             NoteInputBar {
                 orientation: noteInputBar.orientation
@@ -222,8 +225,7 @@ DockPage {
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             SelectionFilterPanel {
@@ -249,8 +251,7 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             MixerPanel {
@@ -274,8 +275,7 @@ DockPage {
 
             tabifyPanel: timelinePanel
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             Rectangle {
@@ -301,8 +301,7 @@ DockPage {
             minimumHeight: 100
             maximumHeight: 300
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             Timeline {}
