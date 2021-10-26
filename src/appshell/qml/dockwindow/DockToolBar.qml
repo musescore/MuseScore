@@ -30,14 +30,20 @@ DockToolBarView {
     id: root
 
     default property alias contentComponent: contentLoader.sourceComponent
-    property alias movable: gripButton.visible
+
+    property alias floatable: gripButton.visible
+
+    property int padding: 2
+    property int spacing: 2
+
+    minimumWidth: Math.min(content.width, maximumWidth)
+    minimumHeight: Math.min(content.height, maximumHeight)
 
     QtObject {
         id: prv
 
         readonly property int minimumLength: 48
         readonly property int maximumLength: 9999999
-        readonly property int margins: 2
         readonly property int gripButtonWidth: gripButton.visible ? gripButton.width : 0
         readonly property int gripButtonHeight: gripButton.visible ? gripButton.height : 0
     }
@@ -48,6 +54,11 @@ DockToolBarView {
         color: ui.theme.backgroundPrimaryColor
 
         Item {
+            id: content
+
+            width: childrenRect.width
+            height: childrenRect.height
+
             FlatButton {
                 id: gripButton
 
@@ -75,9 +86,6 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                minimumWidth: contentLoader.item ? 2 * prv.margins + prv.gripButtonWidth + contentLoader.width : 0
-                minimumHeight: contentLoader.item ? Math.min(contentLoader.height, maximumHeight) : 0
-
                 maximumWidth: prv.maximumLength
                 maximumHeight: prv.minimumLength
             }
@@ -86,7 +94,7 @@ DockToolBarView {
                 target: gripButton
 
                 anchors.left: parent.left
-                anchors.leftMargin: prv.margins
+                anchors.leftMargin: root.padding
                 anchors.top: undefined
 
                 x: 0
@@ -97,7 +105,7 @@ DockToolBarView {
                 target: contentLoader
 
                 anchors.left: gripButton.visible ? gripButton.right : parent.left
-                anchors.leftMargin: prv.margins
+                anchors.leftMargin: gripButton.visible ? root.spacing : root.padding
                 anchors.top: undefined
 
                 x: 0
@@ -112,10 +120,7 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                minimumWidth: contentLoader.item ? contentLoader.width : 0
-                minimumHeight: contentLoader.item ? 2 * prv.margins + prv.gripButtonHeight + contentLoader.height : 0
-
-                maximumWidth: minimumWidth
+                maximumWidth: content.width
                 maximumHeight: prv.maximumLength
             }
 
@@ -123,7 +128,7 @@ DockToolBarView {
                 target: gripButton
 
                 anchors.top: parent.top
-                anchors.topMargin: prv.margins
+                anchors.topMargin: root.padding
                 anchors.left: undefined
 
                 x: (contentBackground.width - gripButton.width) / 2
@@ -135,8 +140,8 @@ DockToolBarView {
             PropertyChanges {
                 target: contentLoader
 
-                anchors.top: gripButton.bottom
-                anchors.topMargin: prv.margins
+                anchors.top: gripButton.visible ? gripButton.bottom : parent.top
+                anchors.topMargin: gripButton.visible ? root.spacing : root.padding
                 anchors.left: undefined
 
                 x: (contentBackground.width - contentLoader.width) / 2

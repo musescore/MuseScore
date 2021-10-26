@@ -87,7 +87,7 @@ DockPage {
             objectName: root.objectName + "_undoRedoToolBar"
             title: qsTrc("appshell", "Undo/redo toolbar")
 
-            movable: false
+            floatable: false
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec
