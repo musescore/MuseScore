@@ -42,10 +42,6 @@ MixerPanelSection {
 
         spacing: 6
 
-        Component.onCompleted: {
-            root.navigationRowEnd = root.navigationRowStart + (repeater.count * 3) // todo
-        }
-
         Repeater {
             id: repeater
             anchors.horizontalCenter: parent.horizontalCenter
@@ -61,7 +57,7 @@ MixerPanelSection {
                 active: modelData.isActive
 
                 navigationPanel: item.panel
-                navigationRowStart: root.navigationRowStart
+                navigationRowStart: root.navigationRowStart + (model.index * 3)
                 navigationName: modelData.id
                 accessibleName: content.accessibleName
 
@@ -77,8 +73,8 @@ MixerPanelSection {
                     modelData.requestToLaunchNativeEditorView()
                 }
 
-                onNavigateControlNameChanged: {
-                    root.navigateControlNameChanged(name)
+                onNavigateControlIndexChanged: {
+                    root.navigateControlIndexChanged(index)
                 }
             }
         }

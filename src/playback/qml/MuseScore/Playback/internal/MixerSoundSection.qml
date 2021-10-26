@@ -38,10 +38,6 @@ MixerPanelSection {
 
         property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
-        Component.onCompleted: {
-            root.navigationRowEnd = inputResourceControl.navigationRowEnd
-        }
-
         visible: !item.outputOnly
 
         AudioResourceControl {
@@ -63,8 +59,8 @@ MixerPanelSection {
                 }
             }
 
-            onNavigateControlNameChanged: {
-                root.navigateControlNameChanged(name)
+            onNavigateControlIndexChanged: {
+                root.navigateControlIndexChanged(index)
             }
         }
     }

@@ -39,10 +39,6 @@ MixerPanelSection {
 
         property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
-        Component.onCompleted: {
-            root.navigationRowEnd = root.navigationRowStart + 2
-        }
-
         Row {
             id: contentRow
 
@@ -61,7 +57,7 @@ MixerPanelSection {
                 navigation.accessible.name: content.accessibleName
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlNameChanged(navigation.name)
+                        root.navigateControlIndexChanged([navigation.row, navigation.column])
                     }
                 }
 
@@ -93,7 +89,7 @@ MixerPanelSection {
                 navigation.accessible.name: content.accessibleName + " " + currentText
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlNameChanged(navigation.name)
+                        root.navigateControlIndexChanged([navigation.row, navigation.column])
                     }
                 }
 

@@ -46,7 +46,7 @@ Item {
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: navigationRowStart + 2 // todo Boolean(selectorLoader.item) ? selectorLoader.item.navigation.row : navigationRowStart
+    property int navigationRowEnd: navigationRowStart + 2
     property string navigationName: ""
     property string accessibleName: ""
 
@@ -55,7 +55,7 @@ Item {
 
     signal titleClicked()
 
-    signal navigateControlNameChanged(string name)
+    signal navigateControlIndexChanged(var index)
 
     height: 22
     width: 96
@@ -85,7 +85,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + root.title + " " + qsTrc("playback", "Bypass")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlNameChanged(navigation.name)
+                        root.navigateControlIndexChanged([navigation.row, navigation.column])
                     }
                 }
 
@@ -175,7 +175,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + root.title
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlNameChanged(navigation.name)
+                        root.navigateControlIndexChanged([navigation.row, navigation.column])
                     }
                 }
 
@@ -258,7 +258,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Menu")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlNameChanged(navigation.name)
+                        root.navigateControlIndexChanged([navigation.row, navigation.column])
                     }
                 }
 

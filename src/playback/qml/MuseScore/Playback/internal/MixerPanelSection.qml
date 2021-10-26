@@ -38,13 +38,12 @@ Loader {
     property var rootPanel: undefined
 
     property int navigationRowStart: 0
-    property int navigationRowEnd: 0
 
     property bool needReadChannelName: false
 
     default property Component delegateComponent
 
-    signal navigateControlNameChanged(string name)
+    signal navigateControlIndexChanged(var index)
 
     active: visible
 

@@ -41,11 +41,16 @@ Rectangle {
     QtObject {
         id: prv
 
-        property string currentNavigateControlName: ""
+        property var currentNavigateControlIndex: []
         property bool isPanelActivated: false
 
-        onCurrentNavigateControlNameChanged: {
-            prv.isPanelActivated = false
+        function setNavigateControlIndex(index) {
+            if (index[0] !== prv.currentNavigateControlIndex[0] ||
+                    index[1] !== prv.currentNavigateControlIndex[1]) {
+                prv.isPanelActivated = false
+            }
+
+            prv.currentNavigateControlIndex = index
         }
     }
 
@@ -92,7 +97,8 @@ Rectangle {
                     var item = mixerPanelModel.get(i)
                     item.item.panel.navigationEvent.connect(function(event){
                         if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlName", prv.currentNavigateControlName)
+                            event.setData("controlIndex", prv.currentNavigateControlIndex)
+                            event.setData("controlOptional", true)
                             prv.isPanelActivated = true
                         }
                     })
@@ -127,8 +133,8 @@ Rectangle {
                 navigationRowStart: 1
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -141,11 +147,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: soundSection.navigationRowEnd + 1
+                navigationRowStart: 100
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -158,11 +164,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: fxSection.navigationRowEnd + 1
+                navigationRowStart: 200
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -175,11 +181,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: 10//balanceSection.navigationRowEnd + 1
+                navigationRowStart: 300
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -192,11 +198,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: volumeSection.navigationRowEnd + 1
+                navigationRowStart: 400
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -209,11 +215,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+                navigationRowStart: 500
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
 
@@ -226,11 +232,11 @@ Rectangle {
 
                 model: mixerPanelModel
 
-                navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+                navigationRowStart: 600
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlNameChanged: {
-                    prv.currentNavigateControlName = name
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
                 }
             }
         }
