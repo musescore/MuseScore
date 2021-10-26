@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -31,10 +32,12 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Pan")
 
     Item {
-        id: contentWrapper
+        id: content
 
         height: contentRow.implicitHeight
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         Component.onCompleted: {
             root.navigationRowEnd = root.navigationRowStart + 2
@@ -55,6 +58,7 @@ MixerPanelSection {
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart
+                navigation.accessible.name: content.accessibleName
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlNameChanged(navigation.name)
@@ -86,6 +90,7 @@ MixerPanelSection {
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart + 1
+                navigation.accessible.name: content.accessibleName + " " + currentText
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlNameChanged(navigation.name)

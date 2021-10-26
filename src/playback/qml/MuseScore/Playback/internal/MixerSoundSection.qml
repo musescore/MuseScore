@@ -31,8 +31,12 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Sound")
 
     Item {
+        id: content
+
         height: inputResourceControl.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         Component.onCompleted: {
             root.navigationRowEnd = inputResourceControl.navigationRowEnd
@@ -51,6 +55,7 @@ MixerPanelSection {
 
             navigationPanel: item.panel
             navigationRowStart: root.navigationRowStart
+            accessibleName: content.accessibleName
 
             onTitleClicked: {
                 if (item.inputResourceItem) {

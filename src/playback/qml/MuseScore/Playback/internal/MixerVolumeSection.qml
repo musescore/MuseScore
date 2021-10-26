@@ -32,8 +32,12 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Volume")
 
     Item {
+        id: content
+
         height: childrenRect.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         Component.onCompleted: {
             root.navigationRowEnd = root.navigationRowStart + 1
@@ -52,6 +56,7 @@ MixerPanelSection {
             navigation.name: "VolumeInputField"
             navigation.panel: item.panel
             navigation.row: root.navigationRowStart
+            navigation.accessible.name: content.accessibleName + " " + currentText
             navigation.onActiveChanged: {
                 if (navigation.active) {
                     root.navigateControlNameChanged(navigation.name)

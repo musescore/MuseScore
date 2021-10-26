@@ -42,6 +42,11 @@ Rectangle {
         id: prv
 
         property string currentNavigateControlName: ""
+        property bool isPanelActivated: false
+
+        onCurrentNavigateControlNameChanged: {
+            prv.isPanelActivated = false
+        }
     }
 
     Flickable {
@@ -88,6 +93,7 @@ Rectangle {
                     item.item.panel.navigationEvent.connect(function(event){
                         if (event.type === NavigationEvent.AboutActive) {
                             event.setData("controlName", prv.currentNavigateControlName)
+                            prv.isPanelActivated = true
                         }
                     })
                 }
@@ -119,6 +125,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -135,6 +142,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: soundSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -151,6 +159,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: fxSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -167,6 +176,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: 10//balanceSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -183,6 +193,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: volumeSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -199,6 +210,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name
@@ -215,6 +227,7 @@ Rectangle {
                 model: mixerPanelModel
 
                 navigationRowStart: muteAndSoloSection.navigationRowEnd + 1
+                needReadChannelName: prv.isPanelActivated
 
                 onNavigateControlNameChanged: {
                     prv.currentNavigateControlName = name

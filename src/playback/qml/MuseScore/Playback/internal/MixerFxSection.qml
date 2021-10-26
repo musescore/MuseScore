@@ -31,10 +31,14 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Audio Fx")
 
     Column {
+        id: content
+
         y: 0
 
         height: childrenRect.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         spacing: 6
 
@@ -59,6 +63,7 @@ MixerPanelSection {
                 navigationPanel: item.panel
                 navigationRowStart: root.navigationRowStart
                 navigationName: modelData.id
+                accessibleName: content.accessibleName
 
                 onTurnedOn: {
                     modelData.isActive = true

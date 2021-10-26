@@ -30,10 +30,11 @@ Slider {
     id: root
 
     property real volumeLevel: 0.0
-
-    signal volumeLevelMoved(var level)
+    property real readableVolumeLevel: Math.round(root.volumeLevel * 10) / 10
 
     property alias navigation: navCtrl
+
+    signal volumeLevelMoved(var level)
 
     height: 140 + prv.handleHeight
     width: 32 + prv.unitsTextWidth
@@ -134,7 +135,7 @@ Slider {
         accessible.role: MUAccessible.Range
         accessible.visualItem: root
 
-        accessible.value: root.value
+        accessible.value: root.readableVolumeLevel
         accessible.minimumValue: root.from
         accessible.maximumValue: root.to
         accessible.stepSize: root.stepSize
@@ -175,7 +176,7 @@ Slider {
                     division = prv.highAccuracyDivisionPixels
                 }
 
-                if (i == 0) {
+                if (i === 0) {
                     currentStrokeVPos = originVPos
                 } else {
                     currentStrokeVPos += division * smallStep
