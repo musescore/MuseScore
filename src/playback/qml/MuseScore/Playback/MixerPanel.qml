@@ -41,12 +41,13 @@ Rectangle {
     QtObject {
         id: prv
 
-        property var currentNavigateControlIndex: []
+        property var currentNavigateControlIndex: undefined
         property bool isPanelActivated: false
 
         function setNavigateControlIndex(index) {
-            if (index[0] !== prv.currentNavigateControlIndex[0] ||
-                    index[1] !== prv.currentNavigateControlIndex[1]) {
+            if (!Boolean(prv.currentNavigateControlIndex) ||
+                    index.row !== prv.currentNavigateControlIndex.row ||
+                    index.column !== prv.currentNavigateControlIndex.column) {
                 prv.isPanelActivated = false
             }
 
@@ -95,10 +96,13 @@ Rectangle {
             function setupConnections() {
                 for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
                     var item = mixerPanelModel.get(i)
-                    item.item.panel.navigationEvent.connect(function(event){
+                    item.item.panel.navigationEvent.connect(function(event) {
                         if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlIndex", prv.currentNavigateControlIndex)
-                            event.setData("controlOptional", true)
+                            if (Boolean(prv.currentNavigateControlIndex)) {
+                                event.setData("controlIndex", [prv.currentNavigateControlIndex.row, prv.currentNavigateControlIndex.column])
+                                event.setData("controlOptional", true)
+                            }
+
                             prv.isPanelActivated = true
                         }
                     })

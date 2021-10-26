@@ -282,16 +282,6 @@ void MixerChannelItem::setSolo(bool solo)
     emit soloChanged();
 }
 
-void MixerChannelItem::panel(mu::ui::NavigationPanel* panel)
-{
-    if (m_panel == panel) {
-        return;
-    }
-
-    m_panel = panel;
-    emit panelChanged(m_panel);
-}
-
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)
 {
     if (chNum == 0) {

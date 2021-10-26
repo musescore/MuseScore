@@ -57,7 +57,7 @@ MixerPanelSection {
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("playback", "Mute")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlIndexChanged([navigation.row, navigation.column])
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                     }
                 }
 
@@ -81,7 +81,7 @@ MixerPanelSection {
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("payback", "Solo")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlIndexChanged([navigation.row, navigation.column])
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                     }
                 }
 

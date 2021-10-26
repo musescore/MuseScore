@@ -55,7 +55,7 @@ MixerPanelSection {
             navigation.accessible.name: content.accessibleName + " " + currentText
             navigation.onActiveChanged: {
                 if (navigation.active) {
-                    root.navigateControlIndexChanged([navigation.row, navigation.column])
+                    root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                 }
             }
 
