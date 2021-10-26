@@ -21,105 +21,103 @@
  */
 
 module.exports = {
-openNewScoreDialog: function()
-{
-    api.navigation.triggerControl("AppTitleBar", "AppMenuBar", "&File")
-    // wait popup open
-    api.autobot.waitPopup()
-    // New become current automatically, so just trigger
-    api.navigation.trigger()
-},
+    openNewScoreDialog: function()
+    {
+        api.autobot.async(function() {
+            api.navigation.triggerControl("RecentScores", "RecentScores", "New score")
+        })
+    },
 
-done: function()
-{
-    api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
-},
+    done: function()
+    {
+        api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+    },
 
-сhooseFluteAndPiano: function()
-{
-    // Flute
-    api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
-    api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Flute")
-    api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
-
-    // just for see changes
-    api.autobot.sleep(500)
-
-    // Piano
-    api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
-    api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
-    api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
-},
-
-chooseRandomInstruments: function(count, see_msec)
-{
-    see_msec = see_msec || 50
-    api.log.debug("chooseRandomInstruments count: " + count)
-    for (var i = 0; i < count; i++) {
-
-        api.log.debug("chooseRandomInstruments i: " + i)
-        // Go to first family
+    сhooseFluteAndPiano: function()
+    {
+        // Flute
         api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
-
-        // Choose family
-        var familyCount = api.autobot.randomInt(0, 20);
-        api.log.debug("chooseRandomInstruments familyCount: " + familyCount)
-        for (var f = 0; f < familyCount; f++) {
-            api.navigation.down()
-            api.autobot.seeChanges(see_msec)
-        }
-
-        if (api.navigation.activeControl() === "genreBox") {
-            api.navigation.down()
-        }
-
-        api.context.setStepVal("family_" + i, api.navigation.activeControl())
-
-        // Got to Instruments
-        api.navigation.nextPanel()
-        api.autobot.seeChanges(see_msec)
-
-        // Choose instrument
-        var instrCount = api.autobot.randomInt(0, 20);
-        api.log.debug("chooseRandomInstruments instrCount: " + instrCount)
-        for (var j = 0; j < instrCount; j++) {
-            api.navigation.down()
-            api.autobot.seeChanges(see_msec)
-        }
-
-        if (api.navigation.activeControl() === "SearchInstruments") {
-            api.navigation.down()
-        }
-
-        api.context.setStepVal("instrument_" + i, api.navigation.activeControl())
-
-        // Select
+        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Flute")
         api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+
+        // just for see changes
+        api.autobot.sleep(500)
+
+        // Piano
+        api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
+        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
+        api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+    },
+
+    chooseRandomInstruments: function(count, see_msec)
+    {
+        see_msec = see_msec || 50
+        api.log.debug("chooseRandomInstruments count: " + count)
+        for (var i = 0; i < count; i++) {
+
+            api.log.debug("chooseRandomInstruments i: " + i)
+            // Go to first family
+            api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
+
+            // Choose family
+            var familyCount = api.autobot.randomInt(0, 20);
+            api.log.debug("chooseRandomInstruments familyCount: " + familyCount)
+            for (var f = 0; f < familyCount; f++) {
+                api.navigation.down()
+                api.autobot.seeChanges(see_msec)
+            }
+
+            if (api.navigation.activeControl() === "genreBox") {
+                api.navigation.down()
+            }
+
+            api.context.setStepVal("family_" + i, api.navigation.activeControl())
+
+            // Got to Instruments
+            api.navigation.nextPanel()
+            api.autobot.seeChanges(see_msec)
+
+            // Choose instrument
+            var instrCount = api.autobot.randomInt(0, 20);
+            api.log.debug("chooseRandomInstruments instrCount: " + instrCount)
+            for (var j = 0; j < instrCount; j++) {
+                api.navigation.down()
+                api.autobot.seeChanges(see_msec)
+            }
+
+            if (api.navigation.activeControl() === "SearchInstruments") {
+                api.navigation.down()
+            }
+
+            api.context.setStepVal("instrument_" + i, api.navigation.activeControl())
+
+            // Select
+            api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+        }
+
+        // Done
+        api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+    },
+
+    selectTab: function(tab)
+    {
+        switch (tab) {
+        case "instruments":
+            api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
+            break;
+        case "templates":
+            api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
+            break;
+        default:
+            api.log.error("unknown tab: " + tab)
+        }
+    },
+
+    chooseTemplate: function(category, template)
+    {
+        api.navigation.goToControl("NewScoreDialog", "Category", category)
+        api.navigation.goToControl("NewScoreDialog", "Template", template)
     }
-
-    // Done
-    api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
-},
-
-selectTab: function(tab)
-{
-    switch (tab) {
-    case "instruments":
-        api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
-        break;
-    case "templates":
-        api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
-        break;
-    default:
-        api.log.error("unknown tab: " + tab)
-    }
-},
-
-chooseTemplate: function(category, template)
-{
-    api.navigation.goToControl("NewScoreDialog", "Category", category)
-    api.navigation.goToControl("NewScoreDialog", "Template", template)
-}
 }
 
 

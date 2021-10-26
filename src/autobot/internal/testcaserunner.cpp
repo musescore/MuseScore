@@ -81,15 +81,17 @@ void TestCaseRunner::nextStep()
 
     QTimer::singleShot(m_intervalMsec, [this]() {
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
+        QString name = step.name();
+        LOGD() << "step: " << name;
 
         if (step.skip()) {
-            m_stepStatusChanged.send(step.name(), StepStatus::Skipped);
+            m_stepStatusChanged.send(name, StepStatus::Skipped);
         } else {
-            m_stepStatusChanged.send(step.name(), StepStatus::Started);
+            m_stepStatusChanged.send(name, StepStatus::Started);
 
             Ret ret = step.exec();
             if (!ret) {
-                LOGE() << "failed exec step: " << step.name() << ", err: " << ret.toString();
+                LOGE() << "failed exec step: " << name << ", err: " << ret.toString();
             }
 
             m_stepStatusChanged.send(step.name(), StepStatus::Finished);
