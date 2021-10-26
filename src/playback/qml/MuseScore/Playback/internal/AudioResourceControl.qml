@@ -82,7 +82,7 @@ Item {
                 navigation.panel: root.navigationPanel
                 navigation.name: root.navigationName + "ActivityButton"
                 navigation.row: root.navigationRowStart + 1
-                navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Bypass")
+                navigation.accessible.name: root.accessibleName + " " + root.title + " " + qsTrc("playback", "Bypass")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlNameChanged(navigation.name)
@@ -172,6 +172,7 @@ Item {
                 navigation.panel: root.navigationPanel
                 navigation.name: root.navigationName + "TitleButton"
                 navigation.row: root.navigationRowStart + 2
+                navigation.accessible.name: root.accessibleName + " " + root.title
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlNameChanged(navigation.name)
@@ -254,6 +255,7 @@ Item {
                 navigation.panel: root.navigationPanel
                 navigation.name: root.navigationName + "MenuButton"
                 navigation.row: root.navigationRowStart + 3
+                navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Menu")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
                         root.navigateControlNameChanged(navigation.name)

@@ -22,6 +22,8 @@
 
 #include "mixerchannelitem.h"
 
+#include "translation.h"
+
 using namespace mu::playback;
 using namespace mu::audio;
 
@@ -50,7 +52,9 @@ MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, con
 
     m_panel = new ui::NavigationPanel(this);
     m_panel->setDirection(ui::NavigationPanel::Vertical);
-    m_panel->setName("MixerChannelPanel");
+    m_panel->setName("MixerChannelPanel " + QString::number(m_id));
+    m_panel->accessible()->setName(qtrc("playback", "Mixer channel panel") + " " + QString::number(m_id));
+    m_panel->componentComplete();
 }
 
 MixerChannelItem::~MixerChannelItem()
