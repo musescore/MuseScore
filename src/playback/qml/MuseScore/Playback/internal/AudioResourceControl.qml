@@ -85,7 +85,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + root.title + " " + qsTrc("playback", "Bypass")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlIndexChanged([navigation.row, navigation.column])
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                     }
                 }
 
@@ -175,7 +175,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + root.title
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlIndexChanged([navigation.row, navigation.column])
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                     }
                 }
 
@@ -258,7 +258,7 @@ Item {
                 navigation.accessible.name: root.accessibleName + " " + qsTrc("playback", "Menu")
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.navigateControlIndexChanged([navigation.row, navigation.column])
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
                     }
                 }
 

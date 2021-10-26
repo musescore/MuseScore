@@ -57,7 +57,7 @@ MixerPanelSection {
                 active: modelData.isActive
 
                 navigationPanel: item.panel
-                navigationRowStart: root.navigationRowStart + (model.index * 3)
+                navigationRowStart: root.navigationRowStart + (model.index * 3) // NOTE: 3 - because AudioResourceControl have 3 controls
                 navigationName: modelData.id
                 accessibleName: content.accessibleName
 
