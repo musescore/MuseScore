@@ -54,7 +54,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
 
-    Q_PROPERTY(mu::ui::NavigationPanel* panel READ panel WRITE panel NOTIFY panelChanged)
+    Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel WRITE panel NOTIFY panelChanged)
 
     INJECT(playback, framework::IInteractive, interactive)
 
