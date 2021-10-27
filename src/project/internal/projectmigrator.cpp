@@ -54,7 +54,6 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
             return ret;
         }
 
-        migrationOptions.appVersion = Ms::MSCVERSION;
         configuration()->setMigrationOptions(migrationOptions);
     }
 
@@ -63,6 +62,12 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     }
 
     Ret ret = migrateProject(project, migrationOptions);
+    if (!ret) {
+        LOGE() << "failed migration";
+    } else {
+        LOGI() << "success migration";
+    }
+
     return ret;
 }
 
@@ -77,6 +82,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const engraving::E
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
+    out.appVersion = Ms::MSCVERSION;
     out.isApplyMigration = vals.value("isApplyMigration").toBool();
     out.isAskAgain = vals.value("isAskAgain").toBool();
     out.isApplyLeland = vals.value("isApplyLeland").toBool();
@@ -113,7 +119,7 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 
     score->endCmd();
 
-    return make_ret(Ret::Code::Ok);
+    return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
 bool ProjectMigrator::applyLelandStyle(Ms::MasterScore* score)

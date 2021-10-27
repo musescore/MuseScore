@@ -76,6 +76,9 @@ void CommandLineController::parse(const QStringList& args)
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
+    //! NOTE Currently only implemented `full` mode
+    m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
+
     m_parser.process(args);
 }
 
@@ -254,6 +257,25 @@ void CommandLineController::apply()
 
     if (m_parser.isSet("S")) {
         m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
+    }
+
+    if (application()->runMode() == IApplication::RunMode::Converter) {
+        project::MigrationOptions migration;
+        migration.appVersion = Ms::MSCVERSION;
+
+        //! NOTE Don't ask about migration in convert mode
+        migration.isAskAgain = false;
+
+        if (m_parser.isSet("migration")) {
+            QString val = m_parser.value("migration");
+            bool isMigration = (val == "full") ? true : false;
+            migration.isApplyMigration = isMigration;
+            migration.isApplyEdwin = isMigration;
+            migration.isApplyLeland = isMigration;
+        }
+
+        //! NOTE Don't write to settings, just on current session
+        projectConfiguration()->setMigrationOptions(migration, false);
     }
 
     if (application()->runMode() == IApplication::RunMode::Editor) {
