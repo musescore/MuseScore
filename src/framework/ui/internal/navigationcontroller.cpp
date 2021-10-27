@@ -1156,6 +1156,36 @@ bool NavigationController::requestActivateByName(const std::string& sectName, co
     return true;
 }
 
+bool NavigationController::requestActivateByIndex(const std::string& sectName, const std::string& panelName,
+                                                  const INavigation::Index& controlIndex)
+{
+    INavigationSection* section = findByName(m_sections, QString::fromStdString(sectName));
+    if (!section) {
+        LOGE() << "not found section with name: " << sectName;
+        return false;
+    }
+
+    INavigationPanel* panel = findByName(section->panels(), QString::fromStdString(panelName));
+    if (!panel) {
+        LOGE() << "not found panel with name: " << panelName << ", section: " << sectName;
+        return false;
+    }
+
+    INavigationControl* control = findByIndex(panel->controls(), controlIndex);
+    if (!control) {
+        LOGE() << "not found control with index: " << controlIndex.to_string() << ", panel: " << panelName << ", section: " << sectName;
+        std::string has = "has:\n";
+        for (const INavigationControl* c : panel->controls()) {
+            has += c->index().to_string() + "\n";
+        }
+        LOGI() << has;
+        return false;
+    }
+
+    onActiveRequested(section, panel, control, true);
+    return true;
+}
+
 void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl, bool force)
 {
     TRACEFUNC;
