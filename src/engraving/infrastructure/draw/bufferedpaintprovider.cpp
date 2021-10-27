@@ -201,9 +201,6 @@ void BufferedPaintProvider::drawPath(const PainterPath& path)
         mode = DrawMode::Fill;
     } else if (st.brush.style() == BrushStyle::NoBrush) {
         mode = DrawMode::Stroke;
-    } else {
-        LOGW() << "not set pen or brush, path will not draw";
-        return;
     }
     editableData().paths.push_back({ path, st.pen, st.brush, mode });
 }

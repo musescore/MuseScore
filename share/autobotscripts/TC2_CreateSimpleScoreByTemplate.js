@@ -26,7 +26,7 @@ var NoteInput = require("steps/NoteInput.js")
 function main()
 {
     var testCase = {
-        name: "Create Simple Score",
+        name: "Create Score by Template",
         description: "Just create a simple score by template, a few notes, play it and save the project",
         steps: [
             {name: "Open New Score Dialog", func: function() {

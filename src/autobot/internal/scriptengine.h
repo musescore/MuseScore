@@ -55,6 +55,8 @@ public:
     Ret call(const QString& funcName, QJSValue* retVal = nullptr);
     Ret call(const QString& funcName, const CallData& data, QJSValue* retVal = nullptr);
 
+    void throwError(const QString& message);
+
     // js modules
     QJSValue require(const QString& filePath);
     QJSValue exports() const;
