@@ -30,8 +30,12 @@ MixerPanelSection {
     id: root
 
     Item {
+        id: content
+
         height: childrenRect.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -40,9 +44,27 @@ MixerPanelSection {
 
             VolumeSlider {
                 volumeLevel: item.volumeLevel
+                stepSize: 1.0
+
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart
+                navigation.accessible.name: content.accessibleName + " " + readableVolumeLevel
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
+                    }
+                }
 
                 onVolumeLevelMoved: {
                     item.volumeLevel = Math.round(level * 10) / 10
+                }
+
+                onIncreaseRequested: {
+                    item.volumeLevel += stepSize
+                }
+
+                onDecreaseRequested: {
+                    item.volumeLevel -= stepSize
                 }
             }
 

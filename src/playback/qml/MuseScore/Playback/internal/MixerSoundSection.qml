@@ -31,8 +31,12 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Sound")
 
     Item {
+        id: content
+
         height: inputResourceControl.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         visible: !item.outputOnly
 
@@ -45,10 +49,18 @@ MixerPanelSection {
             supportsByPassing: false
             resourceItemModel: item.inputResourceItem
 
+            navigationPanel: item.panel
+            navigationRowStart: root.navigationRowStart
+            accessibleName: content.accessibleName
+
             onTitleClicked: {
                 if (item.inputResourceItem) {
                     item.inputResourceItem.requestToLaunchNativeEditorView()
                 }
+            }
+
+            onNavigateControlIndexChanged: {
+                root.navigateControlIndexChanged(index)
             }
         }
     }

@@ -32,11 +32,11 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
-        load();
+        load(QVariant::fromValue(m_itemsNavigationSection));
     });
 }
 
-void MixerPanelModel::load()
+void MixerPanelModel::load(const QVariant& navigationSection)
 {
     TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
 
@@ -44,6 +44,7 @@ void MixerPanelModel::load()
         return;
     }
 
+    m_itemsNavigationSection = navigationSection.value<ui::NavigationSection*>();
     m_currentTrackSequenceId = sequenceId;
 
     playback()->tracks()->trackIdList(sequenceId)
@@ -54,6 +55,22 @@ void MixerPanelModel::load()
         LOGE() << "unable to find track sequence:" << sequenceId << ", error code: " << errCode
                << ", " << text;
     });
+}
+
+QVariantMap MixerPanelModel::get(int index)
+{
+    QVariantMap result;
+
+    QHash<int, QByteArray> names = roleNames();
+    QHashIterator<int, QByteArray> i(names);
+    while (i.hasNext()) {
+        i.next();
+        QModelIndex idx = this->index(index, 0);
+        QVariant data = idx.data(i.key());
+        result[i.value()] = data;
+    }
+
+    return result;
 }
 
 QVariant MixerPanelModel::data(const QModelIndex& index, int role) const
@@ -85,7 +102,7 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
 
     clear();
 
-    for (TrackId trackId : trackIdList) {
+    for (const TrackId& trackId : trackIdList) {
         m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     }
 
@@ -139,6 +156,15 @@ void MixerPanelModel::sortItems()
 
         return f->id() < s->id();
     });
+
+    updateItemsPanelsOrder();
+}
+
+void MixerPanelModel::updateItemsPanelsOrder()
+{
+    for (int i = 0; i < m_mixerChannelList.size(); i++) {
+        m_mixerChannelList[i]->setPanelOrder(i);
+    }
 }
 
 void MixerPanelModel::clear()
@@ -150,6 +176,7 @@ void MixerPanelModel::clear()
 MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
 {
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
+    item->setPanelSection(m_itemsNavigationSection);
 
     playback()->tracks()->inputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioInputParams inParams) {
@@ -233,6 +260,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
 MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
     MixerChannelItem* item = new MixerChannelItem(this, /*trackId*/ -1, /*isMaster*/ true);
+    item->setPanelSection(m_itemsNavigationSection);
 
     item->setTitle(qtrc("playback", "Master"));
 

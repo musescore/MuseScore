@@ -30,8 +30,12 @@ MixerPanelSection {
     id: root
 
     Item {
+        id: content
+
         height: childrenRect.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -46,6 +50,17 @@ MixerPanelSection {
 
                 icon: IconCode.MUTE
                 checked: item.muted
+
+                navigation.name: "MuteButton"
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart
+                navigation.accessible.name: content.accessibleName + " " + qsTrc("playback", "Mute")
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
+                    }
+                }
+
                 onToggled: {
                     item.muted = !item.muted
                 }
@@ -59,6 +74,17 @@ MixerPanelSection {
 
                 icon: IconCode.SOLO
                 checked: item.solo
+
+                navigation.name: "SoloButton"
+                navigation.panel: item.panel
+                navigation.row: root.navigationRowStart + 1
+                navigation.accessible.name: content.accessibleName + " " + qsTrc("payback", "Solo")
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
+                    }
+                }
+
                 onToggled: {
                     item.solo = !item.solo
                 }

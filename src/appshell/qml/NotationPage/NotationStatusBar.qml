@@ -40,7 +40,7 @@ Rectangle {
         id: navSec
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
-        order: 7
+        order: 8
     }
 
     NavigationPanel {

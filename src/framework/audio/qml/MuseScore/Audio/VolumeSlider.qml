@@ -23,12 +23,16 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Slider {
     id: root
 
     property real volumeLevel: 0.0
+    property real readableVolumeLevel: Math.round(root.volumeLevel * 10) / 10
+
+    property alias navigation: navCtrl
 
     signal volumeLevelMoved(var level)
 
@@ -41,6 +45,9 @@ Slider {
     stepSize: 0.1
     orientation: Qt.Vertical
     wheelEnabled: true
+
+    signal increaseRequested()
+    signal decreaseRequested()
 
     QtObject {
         id: convertor
@@ -120,11 +127,42 @@ Slider {
         readonly property real handleHeight: 32
     }
 
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName != "" ? root.objectName : "VolumeSlider"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.Range
+        accessible.visualItem: root
+
+        accessible.value: root.readableVolumeLevel
+        accessible.minimumValue: root.from
+        accessible.maximumValue: root.to
+        accessible.stepSize: root.stepSize
+
+        onNavigationEvent: {
+            switch(event.type) {
+            case NavigationEvent.Left:
+                root.decreaseRequested()
+                event.accepted = true
+                break
+            case NavigationEvent.Right:
+                root.increaseRequested()
+                event.accepted = true
+                break
+            }
+        }
+    }
+
     background: Canvas {
         id: bgCanvas
 
         height: root.height
         width: root.width
+
+        NavigationFocusBorder {
+            navigationCtrl: navCtrl
+        }
 
         function drawRuler(ctx, originVPos, originHPos, fullStep, smallStep, strokeHeight, strokeWidth) {
             var currentStrokeVPos = 0
@@ -138,7 +176,7 @@ Slider {
                     division = prv.highAccuracyDivisionPixels
                 }
 
-                if (i == 0) {
+                if (i === 0) {
                     currentStrokeVPos = originVPos
                 } else {
                     currentStrokeVPos += division * smallStep

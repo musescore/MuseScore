@@ -32,10 +32,28 @@ import "internal"
 Rectangle {
     id: root
 
-    property alias navigation: navPanel
     property alias contextMenuModel: contextMenuModel
 
+    property NavigationSection navigationSection: null
+
     color: ui.theme.backgroundPrimaryColor
+
+    QtObject {
+        id: prv
+
+        property var currentNavigateControlIndex: undefined
+        property bool isPanelActivated: false
+
+        function setNavigateControlIndex(index) {
+            if (!Boolean(prv.currentNavigateControlIndex) ||
+                    index.row !== prv.currentNavigateControlIndex.row ||
+                    index.column !== prv.currentNavigateControlIndex.column) {
+                prv.isPanelActivated = false
+            }
+
+            prv.currentNavigateControlIndex = index
+        }
+    }
 
     Flickable {
         id: flickable
@@ -64,17 +82,31 @@ Rectangle {
         ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
         ScrollBar.horizontal: StyledScrollBar {}
 
-        NavigationPanel {
-            id: navPanel
-            name: "MixerPanel"
-            enabled: root.enabled && root.visible
-        }
-
         MixerPanelModel {
             id: mixerPanelModel
 
             Component.onCompleted: {
-                mixerPanelModel.load()
+                mixerPanelModel.load(root.navigationSection)
+            }
+
+            onModelReset: {
+                Qt.callLater(setupConnections)
+            }
+
+            function setupConnections() {
+                for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
+                    var item = mixerPanelModel.get(i)
+                    item.item.panel.navigationEvent.connect(function(event) {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            if (Boolean(prv.currentNavigateControlIndex)) {
+                                event.setData("controlIndex", [prv.currentNavigateControlIndex.row, prv.currentNavigateControlIndex.column])
+                                event.setData("controlOptional", true)
+                            }
+
+                            prv.isPanelActivated = true
+                        }
+                    })
+                }
             }
         }
 
@@ -101,6 +133,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 1
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerFxSection {
@@ -111,6 +150,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 100
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerBalanceSection {
@@ -121,6 +167,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 200
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerVolumeSection {
@@ -131,6 +184,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 300
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerFaderSection {
@@ -141,6 +201,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 400
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerMuteAndSoloSection {
@@ -151,6 +218,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 500
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
 
             MixerTitleSection {
@@ -161,6 +235,13 @@ Rectangle {
                 rootPanel: root
 
                 model: mixerPanelModel
+
+                navigationRowStart: 600
+                needReadChannelName: prv.isPanelActivated
+
+                onNavigateControlIndexChanged: {
+                    prv.setNavigateControlIndex(index)
+                }
             }
         }
     }
