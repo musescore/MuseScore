@@ -1418,7 +1418,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             int lastStaffIndex = sel.staffEnd();
 
             // A text should only be added at the start of the selection
-            // There shouldn't be a text at each note
+            // There shouldn't be a text at each element
             for (int staff = firstStaffIndex; staff < lastStaffIndex; staff++) {
                 applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
             }
