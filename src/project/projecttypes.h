@@ -52,6 +52,8 @@ struct MigrationOptions
     // for MU 4.0 (from 3.6)
     bool isApplyLeland = false;
     bool isApplyEdwin = false;
+
+    bool isValid() const { return appVersion != 0; }
 };
 
 enum class SaveMode

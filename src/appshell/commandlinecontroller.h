@@ -34,6 +34,7 @@
 #include "iappshellconfiguration.h"
 #include "internal/istartupscenario.h"
 #include "notation/inotationconfiguration.h"
+#include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
 class CommandLineController
@@ -46,6 +47,7 @@ class CommandLineController
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, IStartupScenario, startupScenario)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
 
 public:
     CommandLineController() = default;

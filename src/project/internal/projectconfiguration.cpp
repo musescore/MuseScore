@@ -220,32 +220,39 @@ void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationM
 
 MigrationOptions ProjectConfiguration::migrationOptions() const
 {
+    if (m_migrationOptions.isValid()) {
+        return m_migrationOptions;
+    }
+
     QString json = settings()->value(MIGRATION_OPTIONS).toQString();
     QJsonObject obj = QJsonDocument::fromJson(json.toUtf8()).object();
 
-    MigrationOptions opt;
-    opt.appVersion = obj.value("appVersion").toInt(0);
-    opt.isApplyMigration = obj.value("isApplyMigration").toBool(false);
-    opt.isAskAgain = obj.value("isAskAgain").toBool(true);
+    m_migrationOptions.appVersion = obj.value("appVersion").toInt(0);
+    m_migrationOptions.isApplyMigration = obj.value("isApplyMigration").toBool(false);
+    m_migrationOptions.isAskAgain = obj.value("isAskAgain").toBool(true);
 
-    opt.isApplyLeland = obj.value("isApplyLeland").toBool(false);
-    opt.isApplyEdwin = obj.value("isApplyEdwin").toBool(false);
+    m_migrationOptions.isApplyLeland = obj.value("isApplyLeland").toBool(false);
+    m_migrationOptions.isApplyEdwin = obj.value("isApplyEdwin").toBool(false);
 
-    return opt;
+    return m_migrationOptions;
 }
 
-void ProjectConfiguration::setMigrationOptions(const MigrationOptions& opt)
+void ProjectConfiguration::setMigrationOptions(const MigrationOptions& opt, bool persistent)
 {
-    QJsonObject obj;
-    obj["appVersion"] = opt.appVersion;
-    obj["isApplyMigration"] = opt.isApplyMigration;
-    obj["isAskAgain"] = opt.isAskAgain;
+    m_migrationOptions = opt;
 
-    obj["isApplyLeland"] = opt.isApplyLeland;
-    obj["isApplyEdwin"] = opt.isApplyEdwin;
+    if (persistent) {
+        QJsonObject obj;
+        obj["appVersion"] = opt.appVersion;
+        obj["isApplyMigration"] = opt.isApplyMigration;
+        obj["isAskAgain"] = opt.isAskAgain;
 
-    QString json = QJsonDocument(obj).toJson(QJsonDocument::Compact);
-    settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
+        obj["isApplyLeland"] = opt.isApplyLeland;
+        obj["isApplyEdwin"] = opt.isApplyEdwin;
+
+        QString json = QJsonDocument(obj).toJson(QJsonDocument::Compact);
+        settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
+    }
 }
 
 bool ProjectConfiguration::isAutoSaveEnabled() const
