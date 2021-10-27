@@ -20,15 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-var palettes = ["Clefs", "Key signatures", "Time signatures"]
-
-//! NOTE Currently, position-based navigation
-function doGoToPalette(name)
+function doGoToPalette(name, addPalette)
 {
-    api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", [10000,0]) // first index
-    var idx = palettes.indexOf(name)
-    for (var i = 0; i < idx; i++) {
-        api.navigation.down()
+    api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)
+    var ok = api.navigation.activeControl() === name
+    if (!ok && addPalette) {
+        api.navigation.triggerControl("NavigationLeftPanel", "PalettesHeader", "AddPalettesBtn")
+        api.autobot.waitPopup()
+        api.navigation.triggerControl("NavigationLeftPanel", "AddPalettesPopup", "Add"+name+"Palette")
+        api.autobot.waitPopup() // wait close
+
+        api.navigation.goToControl("NavigationLeftPanel", "PalettesTree", name)
     }
 }
 
@@ -36,11 +38,11 @@ module.exports = {
 
     goToPalette: function(name)
     {
-        doGoToPalette(name)
+        doGoToPalette(name, true)
     },
 
     togglePalette: function(name) {
-        doGoToPalette(name)
+        doGoToPalette(name, true)
         api.navigation.right()
         api.navigation.trigger()
     }

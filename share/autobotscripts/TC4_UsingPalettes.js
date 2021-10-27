@@ -54,6 +54,50 @@ function applyCellByCell(count, keep_index)
     api.navigation.trigger()
 }
 
+function putNoteAndApplyCell2(palName, mainCount, moreCount)
+{
+    //! FIXME Broken navigation for `More`
+    moreCount = 0
+
+    var count = mainCount + moreCount
+    for (var i = 0; i < count; i++) {
+        //api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        api.shortcuts.activate("C")
+
+        Palette.goToPalette(palName)
+        api.navigation.right()
+
+        var isMoreOpened = false;
+        for (var j = 0; j < (i+1); j++) {
+            api.navigation.down()
+
+            if (j === 11) {
+                // Open More
+                api.navigation.trigger()
+                api.autobot.sleep(100) // fast wait popup
+                isMoreOpened = true
+            }
+        }
+        api.navigation.trigger()
+        if (isMoreOpened) {
+            // Close More
+            api.navigation.escape()
+        }
+
+        seeChanges()
+    }
+}
+
+function putNoteAndApplyCell(count)
+{
+    for (var i = 0; i < count; i++) {
+        api.shortcuts.activate("C")
+        api.navigation.down()
+        api.navigation.trigger()
+        seeChanges()
+    }
+}
+
 function main()
 {
     var testCase = {
@@ -71,7 +115,7 @@ function main()
                 NewScore.сhooseInstrument("Woodwinds", "Flute")
                 NewScore.done()
             }},
-            {name: "Change Clefs", func: function() {
+            {name: "Change Clefs", skip: false, func: function() {
                 //! NOTE First, we need to select the current Clef
                 api.navigation.goToControl("NotationView", "ScoreView", "Score") // The first rest is selected by default.
                 api.shortcuts.activate("Alt+Left") // select Time sig
@@ -83,40 +127,51 @@ function main()
                 seeChanges()
                 applyCellByCell(24, 0) //24
             }},
-            {name: "Change Key signatures", func: function() {
+            {name: "Change Key signatures", skip: false, func: function() {
                 //! NOTE To change Key sig, we need to select the first Chord on score
                 api.navigation.goToControl("NotationView", "ScoreView", "Score")
                 api.shortcuts.activate("Alt+Right") // select Time sig
                 api.shortcuts.activate("Alt+Right") // select Rest
 
-                 //! NOTE Return to Palettes and expand Key signatures
+                //! NOTE Return to Palettes and expand Key signatures
                 Palette.togglePalette("Key signatures")
                 seeChanges()
                 applyCellByCell(16, 1) //16 (14 - no key sig)
             }},
-            {name: "Change Time signatures", func: function() {
+            {name: "Change Time signatures", skip: false, func: function() {
                 Palette.togglePalette("Time signatures")
                 seeChanges()
                 applyCellByCell(17, 2)
-
-                api.autobot.abort()
             }},
-
-            //            {name: "Save", func: function() {
-            //                api.autobot.saveProject("TC3 Using note input toolbar.mscz")
-            //            }},
-            //            {name: "Close", func: function() {
-            //                api.dispatcher.dispatch("file-close")
-            //            }},
-            //            {name: "Home", func: function() {
-            //                // Go Home
-            //                api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
-            //            }},
-            //            {name: "Open last", func: function() {
-            //                api.navigation.goToControl("RecentScores", "RecentScores", "New score")
-            //                api.navigation.right()
-            //                api.navigation.trigger()
-            //            }}
+            {name: "Add Accidentals", skip: false, func: function() {
+                Palette.togglePalette("Accidentals") // open
+                putNoteAndApplyCell(11)
+                Palette.togglePalette("Accidentals") // close
+            }},
+            {name: "Add Articulations", func: function() {
+                Palette.togglePalette("Articulations") // open
+                putNoteAndApplyCell(34)
+                Palette.togglePalette("Articulations") // close
+            }},
+            {name: "Change Noteheads", func: function() {
+                Palette.togglePalette("Noteheads") // open
+                putNoteAndApplyCell(24)
+                Palette.togglePalette("Noteheads") // close
+            }},
+            {name: "Save", func: function() {
+                api.autobot.saveProject("TC3 Using note input toolbar.mscz")
+            }},
+            {name: "Close", func: function() {
+                api.dispatcher.dispatch("file-close")
+            }},
+            {name: "Home", func: function() {
+                api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            }},
+            {name: "Open last", func: function() {
+                api.navigation.goToControl("RecentScores", "RecentScores", "New score")
+                api.navigation.right()
+                api.navigation.trigger()
+            }}
         ]
     };
 

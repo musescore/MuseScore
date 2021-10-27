@@ -69,6 +69,7 @@ StyledPopup {
             width: parent.width
             text: qsTrc("palette", "Create custom palette")
 
+            objectName: "CreateCustomPalette"
             navigation.panel: root.navigation
             navigation.row: 0
 
@@ -137,6 +138,7 @@ StyledPopup {
                         icon: IconCode.PLUS
                         toolTipTitle: qsTrc("palette", "Add %1 palette").arg(model.display)
 
+                        objectName: "Add"+model.display+"Palette"
                         navigation.panel: root.navigation
                         navigation.row: model.index + 1
                         navigation.onActiveChanged: {
