@@ -69,7 +69,7 @@ public:
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
     MigrationOptions migrationOptions() const override;
-    void setMigrationOptions(const MigrationOptions& opt) override;
+    void setMigrationOptions(const MigrationOptions& opt, bool persistent = true) override;
 
     bool isAutoSaveEnabled() const override;
     void setAutoSaveEnabled(bool enabled) override;
@@ -90,6 +90,8 @@ private:
 
     async::Channel<bool> m_autoSaveEnabledChanged;
     async::Channel<int> m_autoSaveIntervalChanged;
+
+    mutable MigrationOptions m_migrationOptions;
 };
 }
 
