@@ -392,13 +392,13 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Edit score properties")
              ),
     UiAction("undo",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Undo"),
              QT_TRANSLATE_NOOP("action", "Undo last change"),
              IconCode::Code::UNDO
              ),
     UiAction("redo",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Redo"),
              QT_TRANSLATE_NOOP("action", "Redo last undo"),
              IconCode::Code::REDO
@@ -1222,7 +1222,7 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Note duration: augmentation dot"),
              IconCode::Code::NOTE_DOTTED
              ),
-    UiAction("pad-dotdot",
+    UiAction("pad-dot2",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Double augmentation dot"),
              QT_TRANSLATE_NOOP("action", "Note duration: double augmentation dot"),
@@ -1663,7 +1663,7 @@ int NotationUiActions::actionDotCount(const ActionCode& actionCode)
 {
     static QMap<actions::ActionCode, int> dots = {
         { "pad-dot", 1 },
-        { "pad-dotdot", 2 },
+        { "pad-dot2", 2 },
         { "pad-dot3", 3 },
         { "pad-dot4", 4 }
     };
@@ -1731,7 +1731,7 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "note-longa", false },
             { "", true },
             { "pad-dot", true },
-            { "pad-dotdot", false },
+            { "pad-dot2", false },
             { "pad-dot3", false },
             { "pad-dot4", false },
             { "pad-rest", true },

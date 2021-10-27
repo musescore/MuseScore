@@ -2915,7 +2915,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             _is.setDots(1);
         }
         break;
-    case Pad::DOTDOT:
+    case Pad::DOT2:
         if ((_is.duration().dots() == 2)
             || (_is.duration() == TDuration::DurationType::V_512TH)
             || (_is.duration() == TDuration::DurationType::V_1024TH)) {
@@ -2959,7 +2959,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                     padToggle(Pad::DOT, ed);
                     break;
                 case 2:
-                    padToggle(Pad::DOTDOT, ed);
+                    padToggle(Pad::DOT2, ed);
                     break;
                 case 3:
                     padToggle(Pad::DOT3, ed);

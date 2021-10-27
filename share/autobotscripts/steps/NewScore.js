@@ -33,19 +33,10 @@ module.exports = {
         api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
     },
 
-    сhooseFluteAndPiano: function()
+    сhooseInstrument: function(family, instrument)
     {
-        // Flute
-        api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
-        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Flute")
-        api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
-
-        // just for see changes
-        api.autobot.sleep(500)
-
-        // Piano
-        api.navigation.goToControl("NewScoreDialog", "FamilyView", "Keyboards")
-        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", "Piano")
+        api.navigation.goToControl("NewScoreDialog", "FamilyView", family)
+        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument)
         api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
     },
 

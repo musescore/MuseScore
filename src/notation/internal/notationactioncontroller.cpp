@@ -62,7 +62,7 @@ void NotationActionController::init()
     registerPadNoteAction("pad-note-512", Pad::NOTE512);
     registerPadNoteAction("pad-note-1024", Pad::NOTE1024);
     registerPadNoteAction("pad-dot", Pad::DOT);
-    registerPadNoteAction("pad-dotdot", Pad::DOTDOT);
+    registerPadNoteAction("pad-dot2", Pad::DOT2);
     registerPadNoteAction("pad-dot3", Pad::DOT3);
     registerPadNoteAction("pad-dot4", Pad::DOT4);
     registerPadNoteAction("pad-rest", Pad::REST);
