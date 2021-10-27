@@ -520,7 +520,7 @@ GridView {
                     paletteView.updateSelection(true);
                 }
             }
-            navigation.onTriggered: paletteCell.clicked()
+            navigation.onTriggered: paletteCell.clicked(null)
 
             Connections {
                 target: paletteView
