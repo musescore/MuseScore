@@ -175,6 +175,6 @@ function main()
         ]
     };
 
-    api.autobot.setInterval(1000)
+    api.autobot.setInterval(500)
     api.autobot.runTestCase(testCase)
 }

@@ -54,7 +54,7 @@ public:
 
     Q_INVOKABLE void sleep(int msec = -1) const;
     Q_INVOKABLE void waitPopup() const;
-    Q_INVOKABLE void seeChanges(int msec = 300);
+    Q_INVOKABLE void seeChanges(int msec = -1);
     Q_INVOKABLE void async(const QJSValue& func, const QJSValueList& args = QJSValueList());
     Q_INVOKABLE int randomInt(int min, int max) const;
 
