@@ -68,7 +68,7 @@ void NotationStyle::resetStyleValue(const StyleId& styleId)
 
 bool NotationStyle::canApplyToAllParts() const
 {
-    return m_getScore->score()->isMaster();
+    return !m_getScore->score()->isMaster(); // In parts only
 }
 
 void NotationStyle::applyToAllParts()
