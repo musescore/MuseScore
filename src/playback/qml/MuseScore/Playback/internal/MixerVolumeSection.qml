@@ -32,8 +32,12 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Volume")
 
     Item {
+        id: content
+
         height: childrenRect.height
         width: root.delegateDefaultWidth
+
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
         TextInputField {
             id: volumeTextInputField
@@ -44,6 +48,16 @@ MixerPanelSection {
             width: 46
 
             textHorizontalAlignment: Qt.AlignHCenter
+
+            navigation.name: "VolumeInputField"
+            navigation.panel: item.panel
+            navigation.row: root.navigationRowStart
+            navigation.accessible.name: content.accessibleName + " " + currentText
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    root.navigateControlIndexChanged({row: navigation.row, column: navigation.column})
+                }
+            }
 
             validator: DoubleInputValidator {
                 id: doubleInputValidator

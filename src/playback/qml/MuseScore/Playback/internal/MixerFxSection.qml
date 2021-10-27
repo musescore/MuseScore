@@ -31,14 +31,19 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Audio Fx")
 
     Column {
+        id: content
+
         y: 0
 
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
+        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+
         spacing: 6
 
         Repeater {
+            id: repeater
             anchors.horizontalCenter: parent.horizontalCenter
 
             model: item.outputResourceItemList
@@ -51,6 +56,11 @@ MixerPanelSection {
                 resourceItemModel: modelData
                 active: modelData.isActive
 
+                navigationPanel: item.panel
+                navigationRowStart: root.navigationRowStart + (model.index * 3) // NOTE: 3 - because AudioResourceControl have 3 controls
+                navigationName: modelData.id
+                accessibleName: content.accessibleName
+
                 onTurnedOn: {
                     modelData.isActive = true
                 }
@@ -61,6 +71,10 @@ MixerPanelSection {
 
                 onTitleClicked: {
                     modelData.requestToLaunchNativeEditorView()
+                }
+
+                onNavigateControlIndexChanged: {
+                    root.navigateControlIndexChanged(index)
                 }
             }
         }

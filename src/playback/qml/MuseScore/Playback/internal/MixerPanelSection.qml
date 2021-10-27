@@ -37,7 +37,13 @@ Loader {
     property var model: undefined
     property var rootPanel: undefined
 
+    property int navigationRowStart: 0
+
+    property bool needReadChannelName: false
+
     default property Component delegateComponent
+
+    signal navigateControlIndexChanged(var index)
 
     active: visible
 

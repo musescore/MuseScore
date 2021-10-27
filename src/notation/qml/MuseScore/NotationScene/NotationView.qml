@@ -39,7 +39,7 @@ FocusScope {
     NavigationSection {
         id: navSec
         name: "NotationView"
-        order: 4
+        order: 5
         enabled: root.visible
     }
 

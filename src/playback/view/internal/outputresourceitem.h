@@ -40,6 +40,7 @@ class OutputResourceItem : public AbstractAudioResourceItem, public async::Async
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString id READ id NOTIFY fxParamsChanged)
     Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
 
     INJECT(playback, audio::IPlayback, playback)
@@ -56,6 +57,8 @@ public:
     bool isBlank() const override;
     bool hasNativeEditorSupport() const override;
     bool isActive() const;
+
+    QString id() const;
 
 public slots:
     void setIsActive(bool newIsActive);
