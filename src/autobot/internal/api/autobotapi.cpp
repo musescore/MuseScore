@@ -52,9 +52,23 @@ void AutobotApi::runTestCase(const QJSValue& testCase)
     autobot()->runTestCase(ts);
 }
 
-bool AutobotApi::pause()
+bool AutobotApi::pause(bool immediately)
 {
-    return autobot()->pause();
+    if (immediately) {
+        using namespace mu::framework;
+        IInteractive::Result res = interactive()->question("Pause", "Continue?",
+                                                           { IInteractive::Button::Continue, IInteractive::Button::Abort });
+
+        if (res.standardButton() == IInteractive::Button::Abort) {
+            abort();
+            return false;
+        }
+
+        return true;
+    }
+
+    autobot()->pause();
+    return true;
 }
 
 void AutobotApi::abort()
@@ -81,20 +95,16 @@ void AutobotApi::saveProject(const QString& name)
     projectFilesController()->saveProject(filePath);
 }
 
-void AutobotApi::sleep(int msec) const
+void AutobotApi::sleep(int msec)
 {
     if (msec < 0) {
         msec = m_intervalMsec;
     }
 
-    QEventLoop loop;
-    QTimer timer;
-    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    timer.start(msec);
-    loop.exec();
+    autobot()->sleep(msec);
 }
 
-void AutobotApi::waitPopup() const
+void AutobotApi::waitPopup()
 {
     //! NOTE We could do it smartly, check a current popup actually opened, but or just sleep some time
     sleep(1500);

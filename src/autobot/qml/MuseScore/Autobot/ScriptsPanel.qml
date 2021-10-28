@@ -70,8 +70,18 @@ Rectangle {
             }
 
             onClicked: {
-                scriptsModel.runScript(indexRole)
+                if (typeRole === "TestCase") {
+                    testCaseRun.run(pathRole)
+                } else {
+                    scriptsModel.runScript(indexRole)
+                }
+
             }
         }
+    }
+
+    TestCaseRunPanel {
+        id: testCaseRun
+        anchors.fill: parent
     }
 }

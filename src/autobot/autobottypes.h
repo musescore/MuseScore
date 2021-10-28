@@ -55,7 +55,7 @@ using Scripts = std::vector<Script>;
 
 // --- TestCase ---
 //! NOTE Scripts with test cases must have a global variable with the name specified in the constant
-constexpr char* TESTCASE_JS_GLOBALNAME("testCase");
+static const char* TESTCASE_JS_GLOBALNAME("testCase");
 
 struct Step
 {
@@ -112,6 +112,7 @@ private:
 enum class StepStatus {
     Undefined = 0,
     Started,
+    Paused,
     Finished,
     Skipped
 };

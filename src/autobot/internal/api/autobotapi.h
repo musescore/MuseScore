@@ -31,6 +31,7 @@
 #include "project/iprojectfilescontroller.h"
 #include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
+#include "iinteractive.h"
 
 namespace mu::api {
 class AutobotApi : public ApiObject, public async::Asyncable
@@ -40,20 +41,21 @@ class AutobotApi : public ApiObject, public async::Asyncable
     INJECT(api, autobot::IAutobot, autobot)
     INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(api, project::IProjectFilesController, projectFilesController)
+    INJECT(api, framework::IInteractive, interactive)
 
 public:
     explicit AutobotApi(IApiEngine* e);
 
     Q_INVOKABLE void setInterval(int msec);
     Q_INVOKABLE void runTestCase(const QJSValue& testCase);
-    Q_INVOKABLE bool pause();
+    Q_INVOKABLE bool pause(bool immediately = false);
     Q_INVOKABLE void abort();
 
     Q_INVOKABLE bool openProject(const QString& name);
     Q_INVOKABLE void saveProject(const QString& name = QString());
 
-    Q_INVOKABLE void sleep(int msec = -1) const;
-    Q_INVOKABLE void waitPopup() const;
+    Q_INVOKABLE void sleep(int msec = -1);
+    Q_INVOKABLE void waitPopup();
     Q_INVOKABLE void seeChanges(int msec = -1);
     Q_INVOKABLE void async(const QJSValue& func, const QJSValueList& args = QJSValueList());
     Q_INVOKABLE int randomInt(int min, int max) const;
