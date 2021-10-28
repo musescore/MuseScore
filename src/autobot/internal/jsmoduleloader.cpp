@@ -103,8 +103,6 @@ QString JsModuleLoader::resolvePath(const QString& basePath, const QString& modu
     TRACEFUNC;
     QString moduleFile = module.endsWith(".js") ? module : (module + ".js");
 
-    LOGD() << "basePath:" << basePath << "module:" << moduleFile;
-
     //! NOTE Check relative path
     io::path path = basePath + "/" + moduleFile;
     bool ok = fileSystem()->exists(path);

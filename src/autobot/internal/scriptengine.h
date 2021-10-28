@@ -52,8 +52,13 @@ public:
     void setScriptPath(const io::path& arg);
     io::path scriptPath() const;
 
+    Ret evaluate();
+
     Ret call(const QString& funcName, QJSValue* retVal = nullptr);
     Ret call(const QString& funcName, const CallData& data, QJSValue* retVal = nullptr);
+
+    void setGlobalProperty(const QString& name, const QJSValue& val);
+    QJSValue globalProperty(const QString& name) const;
 
     void throwError(const QString& message);
 
@@ -65,6 +70,8 @@ public:
     // IApiEngine
     QJSValue newQObject(QObject* o) override;
 
+    static void dump(const QString& name, const QJSValue& val);
+
 private:
 
     ScriptEngine(ScriptEngine* engine);
@@ -73,9 +80,6 @@ private:
     RetVal<QJSValue> evaluateContent(const QByteArray& fileContent, const io::path& filePath);
     Ret jsValueToRet(const QJSValue& val) const;
     Ret doCall(const QString& funcName, const CallData& data, QJSValue* retVal);
-
-    void setGlobalProperty(const QString& name, const QJSValue& val);
-    QJSValue globalProperty(const QString& name) const;
 
     struct FuncData {
         QString funcName;
