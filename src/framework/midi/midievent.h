@@ -133,6 +133,13 @@ struct Event {
         return 0;
     }
 
+    static Event fromRawData(const uint32_t* data, size_t count)
+    {
+        Event e;
+        memcpy(e.m_data.data(), data, std::min(count, e.m_data.size()));
+        return e;
+    }
+
     bool operator ==(const Event& other) const { return m_data == other.m_data; }
     bool operator !=(const Event& other) const { return !operator==(other); }
     operator bool() const {
@@ -442,6 +449,11 @@ struct Event {
             break;
         default: assert(false);
         }
+    }
+
+    const uint32_t* rawData() const
+    {
+        return m_data.data();
     }
 
     /*! return signed value:

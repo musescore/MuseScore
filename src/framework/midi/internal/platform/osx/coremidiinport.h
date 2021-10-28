@@ -45,9 +45,6 @@ public:
 
     async::Channel<tick_t, Event> eventReceived() const override;
 
-    //internal
-    void doProcess(uint32_t message, tick_t timing);
-
 private:
     Ret run();
     void stop();

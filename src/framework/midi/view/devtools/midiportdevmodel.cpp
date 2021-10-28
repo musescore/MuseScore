@@ -186,6 +186,8 @@ void MidiPortDevModel::generateMIDI20()
             e.setData(++data);
         }
 
+        midiOutPort()->sendEvent(e);
+
         QString str = QString::fromStdString(e.to_string());
         QString str2 = "";
 

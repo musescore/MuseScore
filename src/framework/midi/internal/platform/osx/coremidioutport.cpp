@@ -209,22 +209,33 @@ mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
         return make_ret(Err::MidiNotConnected);
     }
 
-    MIDIPacketList packetList;
-    auto events = e.toMIDI10();
-    for (auto& event : events) {
-        uint32_t msg = event.to_MIDI10Package();
+    OSStatus result;
+    MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
+    if (__builtin_available(macOS 11.0, *)) {
+        MIDIEventList eventList;
+        MIDIEventPacket* packet = MIDIEventListInit(&eventList, kMIDIProtocol_2_0);
+        // TODO: Replace '4' with something specific for the type of element?
+        packet = MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4 * sizeof(uint32_t), e.rawData());
 
-        if (!msg) {
-            return make_ret(Err::MidiSendError, "message wasn't converted");
-        }
-
+        result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+    } else {
+        MIDIPacketList packetList;
         MIDIPacket* packet = MIDIPacketListInit(&packetList);
 
-        MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
-        packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+        auto events = e.toMIDI10();
+        for (auto& event : events) {
+            uint32_t msg = event.to_MIDI10Package();
+
+            if (!msg) {
+                return make_ret(Err::MidiSendError, "message wasn't converted");
+            }
+
+            packet = MIDIPacketListAdd(&packetList, sizeof(packetList), packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
+        }
+
+        result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
     }
 
-    OSStatus result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);
     if (result != noErr) {
         LOGE() << "midi send error: " << result;
         return make_ret(Err::MidiSendError, "failed send message. Core error: " + std::to_string(result));
