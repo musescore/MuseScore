@@ -106,11 +106,11 @@ elif [ "$RUN_CMD" == "compare" ]; then
     # Compare
     rm -rf $COMPARE_DIR
     mkdir $COMPARE_DIR
-    PNG_REF_LIST=$(ls $PNG_REF_DIR/*.ref.png)
+    PNG_REF_LIST=$(ls $PNG_REF_DIR/*.png)
     DIFF_NAME_LIST=""
     for PNG_REF_FILE in $PNG_REF_LIST ; do
         png_file_name=$(basename $PNG_REF_FILE)
-        FILE_NAME=${png_file_name%.ref.png}
+        FILE_NAME=${png_file_name%.png}
         PNG_CUR_FILE=$PNG_CUR_DIR/${FILE_NAME}.png
         PNG_DIFF_FILE=$COMPARE_DIR/${FILE_NAME}.diff.png
         
@@ -119,9 +119,10 @@ elif [ "$RUN_CMD" == "compare" ]; then
             if (( $code > 0 )); then
                 echo "Different ref: $PNG_REF_FILE, current: $PNG_CUR_FILE, code: $code"
                 export VTEST_DIFF_FOUND=true
-                DIFF_NAME_LIST+=$FILE_NAME
+                echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
+                DIFF_NAME_LIST+=" "$FILE_NAME
 
-                cp $PNG_REF_FILE $COMPARE_DIR
+                cp $PNG_REF_FILE $COMPARE_DIR/$FILE_NAME.ref.png
                 cp $PNG_CUR_FILE $COMPARE_DIR
             else
                 echo "Equal ref: $PNG_REF_FILE, current: $PNG_CUR_FILE"
