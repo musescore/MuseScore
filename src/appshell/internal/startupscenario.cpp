@@ -68,28 +68,30 @@ void StartupScenario::run()
         return;
     }
 
-    StartupSessionType sessionType;
-    if (!m_sessionType.isEmpty()) {
-        sessionType = sessionTypeTromString(m_sessionType);
-    } else {
-        sessionType = configuration()->startupSessionType();
-    }
+    async::Async::call(nullptr, [this]() {
+        StartupSessionType sessionType;
+        if (!m_sessionType.isEmpty()) {
+            sessionType = sessionTypeTromString(m_sessionType);
+        } else {
+            sessionType = configuration()->startupSessionType();
+        }
 
-    interactive()->open(startupPageUri(sessionType));
+        interactive()->open(startupPageUri(sessionType));
 
-    switch (sessionType) {
-    case StartupSessionType::StartEmpty:
-        break;
-    case StartupSessionType::StartWithNewScore:
-        dispatcher()->dispatch("file-new");
-        break;
-    case StartupSessionType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
-        break;
-    case StartupSessionType::StartWithScore: {
-        openScore(configuration()->startupScorePath());
-    } break;
-    }
+        switch (sessionType) {
+        case StartupSessionType::StartEmpty:
+            break;
+        case StartupSessionType::StartWithNewScore:
+            dispatcher()->dispatch("file-new");
+            break;
+        case StartupSessionType::ContinueLastSession:
+            dispatcher()->dispatch("continue-last-session");
+            break;
+        case StartupSessionType::StartWithScore: {
+            openScore(configuration()->startupScorePath());
+        } break;
+        }
+    });
 }
 
 std::string StartupScenario::startupPageUri(StartupSessionType sessionType) const
