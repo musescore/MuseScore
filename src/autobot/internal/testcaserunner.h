@@ -41,8 +41,10 @@ public:
     TestCaseRunner() = default;
 
     void setStepsInterval(int msec);
-    void runTestCase(const TestCase& testCase);
-    void abortTestCase();
+    void run(const TestCase& testCase);
+    void pause();
+    void unpause(bool isNextStep);
+    void abort();
 
     async::Channel<QString /*name*/, StepStatus> stepStatusChanged() const;
 
@@ -57,6 +59,7 @@ private:
         int stepsCount = 0;
         int currentStepIdx = -1;
         int finishedCount = 0;
+        QString lastStepName;
         QEventLoop loop;
     };
 
@@ -65,6 +68,7 @@ private:
     int m_intervalMsec = 1000;
     TestCaseData m_testCase;
     bool m_abort = false;
+    bool m_paused = false;
 
     async::Channel<QString /*name*/, StepStatus> m_stepStatusChanged;
     async::Channel<bool /*aborted*/> m_allFinished;

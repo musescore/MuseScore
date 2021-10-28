@@ -28,6 +28,7 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
+#include "async/channel.h"
 #include "autobottypes.h"
 #include "itestcasecontext.h"
 
@@ -38,12 +39,26 @@ class IAutobot : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAutobot() = default;
 
-    virtual Ret loadScript(const Script& script) = 0;
+    enum class Status {
+        Undefined = 0,
+        Stopped,
+        Running,
+        Paused
+    };
+
+    virtual Status status() const = 0;
+    virtual async::Channel<Status> statusChanged() const = 0;
+
+    virtual Ret execScript(const io::path& path) = 0;
 
     virtual void setStepsInterval(int msec) = 0;
     virtual void runTestCase(const TestCase& testCase) = 0;
-    virtual bool pause() = 0;
+    virtual void sleep(int msec) = 0;
+    virtual void pause() = 0;
+    virtual void unpause() = 0;
     virtual void abort() = 0;
+
+    virtual async::Channel<QString /*name*/, StepStatus> stepStatusChanged() const = 0;
 
     virtual ITestCaseContextPtr context() const = 0;
 };

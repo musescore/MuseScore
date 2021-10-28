@@ -120,6 +120,8 @@ void TestCaseReport::onStepStatusChanged(const QString& name, StepStatus status,
     case StepStatus::Skipped: {
         m_stream << "  skipped step: " << name << Qt::endl;
     } break;
+    case StepStatus::Paused:
+        return;
     }
 
     m_stream.flush();

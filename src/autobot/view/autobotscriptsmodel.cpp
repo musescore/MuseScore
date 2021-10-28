@@ -38,11 +38,22 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
+    auto typeToString = [](ScriptType t) {
+        switch (t) {
+        case ScriptType::Undefined: return "Undefined";
+        case ScriptType::TestCase: return "TestCase";
+        case ScriptType::Custom: return "Custom";
+        }
+        return "";
+    };
+
     const Script& script = m_scripts.at(index.row());
     switch (role) {
     case rTitle: return script.title;
     case rDescription: return script.description;
+    case rPath: return script.path.toQString();
     case rIndex: return index.row();
+    case rType: return typeToString(script.type);
     }
     return QVariant();
 }
@@ -57,6 +68,8 @@ QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
     static const QHash<int, QByteArray> roles = {
         { rTitle, "titleRole" },
         { rDescription, "descriptionRole" },
+        { rType, "typeRole" },
+        { rPath, "pathRole" },
         { rIndex, "indexRole" },
     };
     return roles;
@@ -74,5 +87,5 @@ void AutobotScriptsModel::load()
 void AutobotScriptsModel::runScript(int scriptIndex)
 {
     const Script& script = m_scripts.at(scriptIndex);
-    autobot()->loadScript(script);
+    autobot()->execScript(script.path);
 }

@@ -35,23 +35,34 @@ void Autobot::init()
         }
 
         m_report.onStepStatusChanged(name, status, m_context);
+        m_stepStatusChanged.send(name, status);
     });
 
     m_runner.allFinished().onReceive(this, [this](bool aborted) {
         m_report.endReport(aborted);
     });
+
+    setStatus(Status::Stopped);
 }
 
-mu::Ret Autobot::loadScript(const Script& script)
+mu::Ret Autobot::execScript(const io::path& path)
 {
-    LOGD() << script.path;
+    LOGD() << path;
+
+    if (status() != Status::Stopped) {
+        abort();
+    }
 
     m_context = std::make_shared<TestCaseContext>();
-    m_context->setGlobalVal("script_path", script.path.toQString());
+    m_context->setGlobalVal("script_path", path.toQString());
 
     m_engine = new ScriptEngine();
-    m_engine->setScriptPath(script.path);
+    m_engine->setScriptPath(path);
+
+    setStatus(Status::Running);
     Ret ret = m_engine->call("main");
+    setStatus(Status::Stopped);
+
     delete m_engine;
     m_engine = nullptr;
     if (!ret) {
@@ -68,32 +79,88 @@ void Autobot::setStepsInterval(int msec)
 void Autobot::runTestCase(const TestCase& testCase)
 {
     m_report.beginReport(testCase);
-    m_runner.runTestCase(testCase);
+    m_runner.run(testCase);
 }
 
 void Autobot::abort()
 {
+    if (status() == Status::Paused) {
+        unpause();
+    }
+
+    setStatus(Status::Stopped);
     if (m_engine) {
         m_engine->throwError("abort");
     }
-    m_runner.abortTestCase();
+    m_runner.abort();
 }
 
-bool Autobot::pause()
+void Autobot::sleep(int msec)
 {
-    using namespace mu::framework;
-    IInteractive::Result res = interactive()->question("Pause", "Continue?",
-                                                       { IInteractive::Button::Continue, IInteractive::Button::Abort });
-
-    if (res.standardButton() == IInteractive::Button::Abort) {
-        abort();
-        return false;
+    //! NOTE If pause state, then we sleep until to unpause
+    //! It's allowing to do pause during step execution
+    if (status() == IAutobot::Status::Paused) {
+        m_sleepLoop.exec();
+        return;
     }
 
-    return true;
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, &m_sleepLoop, &QEventLoop::quit);
+    timer.start(msec);
+    m_sleepLoop.exec();
+}
+
+void Autobot::pause()
+{
+    setStatus(Status::Paused);
+    m_runner.pause();
+}
+
+void Autobot::unpause()
+{
+    bool isNextStep = true;
+
+    //! NOTE If pause did on sleep (during step execution),
+    //! then unpause current step (without perform next step)
+    if (m_sleepLoop.isRunning()) {
+        m_sleepLoop.quit();
+        isNextStep = false;
+    }
+
+    m_runner.unpause(isNextStep);
+    setStatus(Status::Running);
 }
 
 ITestCaseContextPtr Autobot::context() const
 {
     return m_context;
+}
+
+void Autobot::setStatus(Status st)
+{
+    if (m_status == st) {
+        return;
+    }
+
+    if (m_sleepLoop.isRunning()) {
+        m_sleepLoop.quit();
+    }
+
+    m_status = st;
+    m_statusChanged.send(st);
+}
+
+IAutobot::Status Autobot::status() const
+{
+    return m_status;
+}
+
+mu::async::Channel<IAutobot::Status> Autobot::statusChanged() const
+{
+    return m_statusChanged;
+}
+
+mu::async::Channel<QString, StepStatus> Autobot::stepStatusChanged() const
+{
+    return m_stepStatusChanged;
 }
