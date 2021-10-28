@@ -37,9 +37,16 @@ struct File {
 
 using Files = std::vector<File>;
 
+enum class ScriptType {
+    Undefined = 0,
+    TestCase,
+    Custom
+};
+
 struct Script
 {
     io::path path;
+    ScriptType type = ScriptType::Undefined;
     QString title;
     QString description;
 };
@@ -47,6 +54,9 @@ struct Script
 using Scripts = std::vector<Script>;
 
 // --- TestCase ---
+//! NOTE Scripts with test cases must have a global variable with the name specified in the constant
+constexpr char* TESTCASE_JS_GLOBALNAME("testCase");
+
 struct Step
 {
     Step(const QJSValue& jsval = QJSValue())
@@ -89,7 +99,10 @@ struct TestCase
     TestCase(const QJSValue& jsval = QJSValue())
         : val(jsval) {}
 
+    bool isValid() const { return !val.isUndefined() && val.hasProperty("name") && val.hasProperty("steps"); }
+
     QString name() const { return val.property("name").toString(); }
+    QString description() const { return val.property("description").toString(); }
     Steps steps() const { return Steps(val.property("steps")); }
 
 private:

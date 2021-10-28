@@ -21,6 +21,8 @@
  */
 #include "scriptengine.h"
 
+#include <QJSValueIterator>
+
 #include "jsmoduleloader.h"
 
 #include "log.h"
@@ -116,6 +118,36 @@ void ScriptEngine::setExports(const QJSValue& obj)
     setGlobalProperty("exports", obj);
 }
 
+Ret ScriptEngine::evaluate()
+{
+    io::path path = scriptPath();
+
+    IF_ASSERT_FAILED(!path.empty()) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    RetVal<QByteArray> content = readScriptContent(path);
+    if (!content.ret) {
+        return content.ret;
+    }
+
+    const QByteArray& contentData = content.val;
+
+    IF_ASSERT_FAILED(!contentData.isEmpty()) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    if (m_lastEvalScript != contentData) {
+        RetVal<QJSValue> eval = evaluateContent(contentData, path);
+        if (!eval.ret) {
+            return eval.ret;
+        }
+        m_lastEvalScript = contentData;
+    }
+
+    return Ret(Ret::Code::Ok);
+}
+
 Ret ScriptEngine::call(const QString& funcName, QJSValue* retVal)
 {
     CallData data;
@@ -133,50 +165,29 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
 {
     TRACEFUNC;
 
-    io::path _scriptPath = scriptPath();
-
-    IF_ASSERT_FAILED(!_scriptPath.empty()) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
     IF_ASSERT_FAILED(!funcName.isEmpty()) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    RetVal<QByteArray> content = readScriptContent(_scriptPath);
-    if (!content.ret) {
-        return content.ret;
-    }
-
-    QByteArray _scriptContent = content.val;
-
-    IF_ASSERT_FAILED(!_scriptContent.isEmpty()) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    if (m_lastEvalScript != _scriptContent) {
-        RetVal<QJSValue> eval = evaluateContent(_scriptContent, _scriptPath);
-        if (!eval.ret) {
-            return eval.ret;
-        }
-        m_lastEvalScript = _scriptContent;
+    Ret ret = evaluate();
+    if (!ret) {
+        return ret;
     }
 
     if (m_lastCallFunc.funcName != funcName) {
         m_lastCallFunc.func = m_engine->globalObject().property(funcName);
     }
 
-    Ret ret = m_lastCallFunc.func.isCallable();
+    ret = m_lastCallFunc.func.isCallable();
     if (!ret) {
         m_lastCallFunc.funcName.clear();
         ret = make_ret(Ret::Code::UnknownError, QString("not found function: `%1`").arg(funcName));
         LOGE() << "Not found function " << funcName;
+        //dump("globalObject", m_engine->globalObject());
     }
 
     QJSValue value;
     if (ret) {
-        // api()->context()->insert(data.context);
-
         QJSValueList args;
         for (const QString& arg : data.args) {
             args.append(arg);
@@ -184,7 +195,6 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
 
         value = m_lastCallFunc.func.call(args);
 
-        // api()->gc();
         ret = jsValueToRet(value);
     }
 
@@ -193,6 +203,22 @@ Ret ScriptEngine::doCall(const QString& funcName, const CallData& data, QJSValue
     }
 
     return ret;
+}
+
+void ScriptEngine::dump(const QString& name, const QJSValue& val)
+{
+    QStringList props;
+    QJSValueIterator it(val);
+    while (it.next()) {
+        props << it.name();
+    }
+
+    QString str = name + "\n";
+    for (const QString& prop : props) {
+        str += "  " + prop + ": " + val.property(prop).toString() + "\n";
+    }
+
+    LOGD() << str;
 }
 
 void ScriptEngine::throwError(const QString& message)
