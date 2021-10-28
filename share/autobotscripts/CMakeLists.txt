@@ -33,6 +33,7 @@ install(FILES
       steps/NewScore.js
       steps/NoteInput.js
       steps/Palette.js
+      steps/Score.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
       )
 

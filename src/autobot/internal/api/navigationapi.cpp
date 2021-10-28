@@ -29,14 +29,10 @@ using namespace mu::ui;
 NavigationApi::NavigationApi(IApiEngine* e)
     : ApiObject(e)
 {
-    //! NOTE Disable reset on mouse press for testing purpose
-    navigation()->setIsResetOnMousePress(false);
 }
 
 NavigationApi::~NavigationApi()
 {
-    //! NOTE Return default
-    navigation()->setIsResetOnMousePress(true);
 }
 
 void NavigationApi::nextPanel()
