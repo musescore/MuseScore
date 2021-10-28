@@ -94,26 +94,6 @@ async::Notification CoreMidiInPort::devicesChanged() const
     return m_devicesChanged;
 }
 
-static void proccess(const MIDIPacketList* list, void* readProc, void* srcConn)
-{
-    UNUSED(srcConn);
-
-    CoreMidiInPort* self = static_cast<CoreMidiInPort*>(readProc);
-    const MIDIPacket* packet = &list->packet[0];
-
-    for (UInt32 index = 0; index < list->numPackets; index++) {
-        if (packet->length != 0 && packet->length <= 4) {
-            uint32_t message(0);
-            memcpy(&message, packet->data, std::min(sizeof(message), sizeof(char) * packet->length));
-            self->doProcess(message, packet->timeStamp);
-        } else if (packet->length > 4) {
-            LOGW() << "unsupported midi message size " << packet->length << " bytes";
-        }
-
-        packet = MIDIPacketNext(packet);
-    }
-}
-
 void CoreMidiInPort::initCore()
 {
     OSStatus result;
@@ -169,19 +149,52 @@ void CoreMidiInPort::initCore()
     }
 
     QString portName = "MuseScore MIDI input port";
-    // TODO: MIDIInputPortCreate is deprecated according to the documentation.
-    // Need to use MIDIInputPortCreateWithProtocol instead.
-    result = MIDIInputPortCreate(m_core->client, portName.toCFString(), proccess, this, &m_core->inputPort);
+    if (__builtin_available(macOS 11.0, *)) {
+        MIDIReceiveBlock receiveBlock = ^(const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
+            const MIDIEventPacket* packet = eventList->packet;
+            for (UInt32 index = 0; index < eventList->numPackets; index++) {
+                // Handle packet
+                if (packet->wordCount != 0 && packet->wordCount <= 4) {
+                    Event e = Event::fromRawData(packet->words, packet->wordCount);
+                    if (e) {
+                        m_eventReceived.send(packet->timeStamp, e);
+                    }
+                } else if (packet->wordCount > 4) {
+                    LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
+                }
+
+                packet = MIDIEventPacketNext(packet);
+            }
+        };
+
+        result
+            = MIDIInputPortCreateWithProtocol(m_core->client, portName.toCFString(), kMIDIProtocol_2_0, &m_core->inputPort, receiveBlock);
+    } else {
+        MIDIReadBlock readBlock = ^(const MIDIPacketList* packetList, void* /*srcConnRefCon*/)
+        {
+            const MIDIPacket* packet = packetList->packet;
+            for (UInt32 index = 0; index < packetList->numPackets; index++) {
+                if (packet->length != 0 && packet->length <= 4) {
+                    uint32_t message(0);
+                    memcpy(&message, packet->data, std::min(sizeof(message), sizeof(char) * packet->length));
+
+                    auto e = Event::fromMIDI10Package(message).toMIDI20();
+                    if (e) {
+                        m_eventReceived.send(packet->timeStamp, e);
+                    }
+                } else if (packet->length > 4) {
+                    LOGW() << "unsupported midi message size " << packet->length << " bytes";
+                }
+
+                packet = MIDIPacketNext(packet);
+            }
+        };
+
+        result = MIDIInputPortCreateWithBlock(m_core->client, portName.toCFString(), &m_core->inputPort, readBlock);
+    }
+
     IF_ASSERT_FAILED(result == noErr) {
         LOGE() << "failed create midi input port";
-    }
-}
-
-void CoreMidiInPort::doProcess(uint32_t message, tick_t timing)
-{
-    auto e = Event::fromMIDI10Package(message).toMIDI20();
-    if (e) {
-        m_eventReceived.send(timing, e);
     }
 }
 
