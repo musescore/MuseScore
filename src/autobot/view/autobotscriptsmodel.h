@@ -50,8 +50,9 @@ public:
 private:
 
     enum Roles {
-        ScriptTitle = Qt::UserRole + 1,
-        ScriptIndex,
+        rTitle = Qt::UserRole + 1,
+        rDescription,
+        rIndex,
     };
 
     Scripts m_scripts;
