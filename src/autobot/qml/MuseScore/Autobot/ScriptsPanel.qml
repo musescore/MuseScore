@@ -54,30 +54,23 @@ Rectangle {
                 anchors.rightMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
-                text: scriptTitle
+                text: titleRole
             }
 
-//            StyledTextLabel {
-//                anchors.top: titleLabel.bottom
-//                anchors.left: parent.left
-//                anchors.right: parent.right
-//                anchors.topMargin: 2
-//                anchors.leftMargin: 8
-//                anchors.rightMargin: 8
-//                horizontalAlignment: Text.AlignLeft
-//                text: scriptStatus
-//                color: {
-//                    switch (fileStatus) {
-//                    case "none":    return "#666666"
-//                    case "success": return "#009900"
-//                    case "failed":  return "#cc0000"
-//                    }
-//                    return "#666666"
-//                }
-//            }
+            StyledTextLabel {
+                anchors.top: titleLabel.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.topMargin: 2
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                horizontalAlignment: Text.AlignLeft
+                font.pixelSize: titleLabel.font.pixelSize / 1.2
+                text: descriptionRole
+            }
 
             onClicked: {
-                scriptsModel.runScript(scriptIndex)
+                scriptsModel.runScript(indexRole)
             }
         }
     }

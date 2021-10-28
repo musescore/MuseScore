@@ -40,8 +40,9 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
 
     const Script& script = m_scripts.at(index.row());
     switch (role) {
-    case ScriptTitle: return script.title;
-    case ScriptIndex: return index.row();
+    case rTitle: return script.title;
+    case rDescription: return script.description;
+    case rIndex: return index.row();
     }
     return QVariant();
 }
@@ -54,8 +55,9 @@ int AutobotScriptsModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles = {
-        { ScriptTitle, "scriptTitle" },
-        { ScriptIndex, "scriptIndex" },
+        { rTitle, "titleRole" },
+        { rDescription, "descriptionRole" },
+        { rIndex, "indexRole" },
     };
     return roles;
 }
