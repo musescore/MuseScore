@@ -81,6 +81,8 @@ public:
     ValCh<Uri> currentUri() const override;
     std::vector<Uri> stack() const override;
 
+    QWindow* topWindow() const override;
+
     Q_INVOKABLE QString objectId(const QVariant& val) const;
 
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);

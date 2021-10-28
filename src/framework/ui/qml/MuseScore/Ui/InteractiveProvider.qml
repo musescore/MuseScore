@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
+
 import MuseScore.Ui 1.0
 
 Item {
@@ -126,7 +128,7 @@ Item {
             obj.destroy()
         })
 
-        root.provider.onOpen(ContainerType.QmlDialog, obj.objectId)
+        root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
 
         return { "ret": ret, "object" : obj }
     }
