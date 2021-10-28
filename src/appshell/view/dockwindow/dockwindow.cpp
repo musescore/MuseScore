@@ -431,7 +431,7 @@ void DockWindow::alignToolBars(const DockPageView* page)
     int freeSpace = width() - (leftToolBarsWidth + centralToolBarsWidth + rightToolBarsWidth);
 
     if (deltaForLastLeftToolbar + deltaForLastCentralToolBar > freeSpace) {
-        deltaForLastLeftToolbar = 0;
+        deltaForLastLeftToolbar = freeSpace;
         deltaForLastCentralToolBar = 0;
     }
 
