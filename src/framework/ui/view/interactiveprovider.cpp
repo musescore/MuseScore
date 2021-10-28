@@ -513,7 +513,7 @@ void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
         }
     }
 
-    //! NOTE We may not find an object in the stack if it is,
+    //! NOTE We may not find an object in the stack if it's,
     //! for example, a floating dialog (usually diagnostic dialogs)
     if (found) {
         notifyAboutCurrentUriChanged();
