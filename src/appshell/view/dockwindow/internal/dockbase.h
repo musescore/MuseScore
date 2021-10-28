@@ -84,10 +84,10 @@ public:
 public slots:
     void setTitle(const QString& title);
 
-    virtual void setMinimumWidth(int width);
-    virtual void setMinimumHeight(int height);
-    virtual void setMaximumWidth(int width);
-    virtual void setMaximumHeight(int height);
+    void setMinimumWidth(int width);
+    void setMinimumHeight(int height);
+    void setMaximumWidth(int width);
+    void setMaximumHeight(int height);
 
     void setAllowedAreas(Qt::DockWidgetAreas areas);
 
@@ -115,10 +115,9 @@ protected:
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
 private slots:
-    void resize();
+    void applySizeConstraints();
 
 private:
-    void applySizeConstraints();
     void listenFloatingChanges();
 
     void doSetFloating(bool floating);

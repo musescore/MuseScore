@@ -189,11 +189,6 @@ DockType DockBase::type() const
     return DockType::Undefined;
 }
 
-void DockBase::resize()
-{
-    applySizeConstraints();
-}
-
 void DockBase::init()
 {
     applySizeConstraints();
@@ -263,8 +258,20 @@ void DockBase::componentComplete()
 
     listenFloatingChanges();
 
-    connect(this, &DockBase::minimumSizeChanged, this, &DockBase::resize);
-    connect(this, &DockBase::maximumSizeChanged, this, &DockBase::resize);
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
+        if (m_dockWidget) {
+            setWidth(m_dockWidget->width());
+        }
+    });
+
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::heightChanged, this, [this]() {
+        if (m_dockWidget) {
+            setHeight(m_dockWidget->height());
+        }
+    });
+
+    connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
+    connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
 }
 
 void DockBase::applySizeConstraints()
@@ -293,7 +300,10 @@ void DockBase::applySizeConstraints()
 
     if (auto floatingWindow = m_dockWidget->floatingWindow()) {
         QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
+
         floatingWindow->setGeometry(rect);
+        floatingWindow->setMinimumSize(minimumSize);
+        floatingWindow->setMaximumSize(maximumSize);
     }
 }
 
@@ -315,6 +325,7 @@ void DockBase::listenFloatingChanges()
 
         connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
             doSetFloating(!frame->isInMainWindow());
+            applySizeConstraints();
         }, Qt::UniqueConnection);
     });
 }

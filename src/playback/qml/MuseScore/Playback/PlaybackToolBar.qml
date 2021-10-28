@@ -36,6 +36,11 @@ Rectangle {
     property alias navigation: navPanel
     property bool floating: false
 
+    property int maximumHeight: 0
+
+    width: content.width
+    height: content.height
+
     color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
@@ -55,10 +60,11 @@ Rectangle {
     }
 
     Column {
+        id: content
+
         spacing: 14
 
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width
+        width: childrenRect.width
 
         enabled: playbackModel.isPlayAllowed
 
@@ -68,8 +74,8 @@ Rectangle {
             spacing: 0
 
             ListView {
-                Layout.preferredWidth: childrenRect.width
-                Layout.preferredHeight: childrenRect.height
+                Layout.preferredWidth: contentItem.childrenRect.width
+                Layout.preferredHeight: contentItem.childrenRect.height
 
                 contentHeight: root.floating ? 32 : 48
                 spacing: 4
@@ -81,7 +87,6 @@ Rectangle {
 
                 delegate: Loader {
                     id: itemLoader
-                    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
 
                     sourceComponent: Boolean(model.code) || model.subitems.length !== 0 ? menuItemComp : separatorComp
 
@@ -146,7 +151,12 @@ Rectangle {
             }
 
             SeparatorLine {
+                readonly property int topMargin: (root.height - root.maximumHeight) / 2
+
                 Layout.leftMargin: 12
+                Layout.topMargin: topMargin
+                Layout.bottomMargin: topMargin
+
                 orientation: Qt.Vertical
                 visible: !root.floating
             }
@@ -198,7 +208,7 @@ Rectangle {
         }
 
         StyledSlider {
-            width: playbackActions.width
+            width: playbackActions.width - 12
             visible: root.floating
             value: playbackModel.playPosition
 
