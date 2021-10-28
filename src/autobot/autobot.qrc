@@ -9,5 +9,6 @@
         <file>examples/Put Note.js</file>
         <file>examples/Simple Zoom.js</file>
         <file>examples/steps/NewScore.js</file>
+        <file>qml/MuseScore/Autobot/TestCaseRunPanel.qml</file>
     </qresource>
 </RCC>

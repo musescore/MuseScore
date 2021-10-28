@@ -35,7 +35,7 @@ void TestCaseRunner::setStepsInterval(int msec)
     m_intervalMsec = msec;
 }
 
-void TestCaseRunner::runTestCase(const TestCase& testCase)
+void TestCaseRunner::run(const TestCase& testCase)
 {
     m_abort = false;
     m_testCase.testCase = testCase;
@@ -50,7 +50,22 @@ void TestCaseRunner::runTestCase(const TestCase& testCase)
     }
 }
 
-void TestCaseRunner::abortTestCase()
+void TestCaseRunner::pause()
+{
+    m_paused = true;
+    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Paused);
+}
+
+void TestCaseRunner::unpause(bool isNextStep)
+{
+    m_paused = false;
+    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Started);
+    if (isNextStep) {
+        nextStep(false);
+    }
+}
+
+void TestCaseRunner::abort()
 {
     m_abort = true;
 }
@@ -73,6 +88,10 @@ void TestCaseRunner::nextStep(bool byInterval)
         return;
     }
 
+    if (m_paused) {
+        return;
+    }
+
     m_testCase.currentStepIdx += 1;
 
     if (m_testCase.currentStepIdx >= m_testCase.stepsCount) {
@@ -82,11 +101,13 @@ void TestCaseRunner::nextStep(bool byInterval)
     QTimer::singleShot(byInterval ? m_intervalMsec : 0, [this]() {
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
         QString name = step.name();
-        LOGD() << "step: " << name;
+        m_testCase.lastStepName = name;
 
         if (step.skip()) {
+            LOGD() << "step: " << name << " Skipped";
             m_stepStatusChanged.send(name, StepStatus::Skipped);
         } else {
+            LOGD() << "step: " << name << " Started";
             m_stepStatusChanged.send(name, StepStatus::Started);
 
             Ret ret = step.exec();
@@ -94,6 +115,7 @@ void TestCaseRunner::nextStep(bool byInterval)
                 LOGE() << "failed exec step: " << name << ", err: " << ret.toString();
             }
 
+            LOGD() << "step: " << name << " Finished";
             m_stepStatusChanged.send(step.name(), StepStatus::Finished);
         }
 

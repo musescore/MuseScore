@@ -30,6 +30,7 @@
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
 #include "view/autobotscriptsmodel.h"
+#include "view/testcaserunmodel.h"
 
 #include "engraving/infrastructure/draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
@@ -97,6 +98,7 @@ void AutobotModule::resolveImports()
 void AutobotModule::registerUiTypes()
 {
     qmlRegisterType<AutobotScriptsModel>("MuseScore.Autobot", 1, 0, "AutobotScriptsModel");
+    qmlRegisterType<TestCaseRunModel>("MuseScore.Autobot", 1, 0, "TestCaseRunModel");
 }
 
 void AutobotModule::onInit(const framework::IApplication::RunMode&)

@@ -62,12 +62,12 @@ var testCase = {
             seeChanges()
             applyCellByCell(16, 1) //16 (14 - no key sig)
         }},
-        {name: "Change Time signatures", skip: false, func: function() {
+        {name: "Change Time signatures", skip: true, func: function() {
             Palette.togglePalette("Time signatures")
             seeChanges()
             applyCellByCell(17, 2)
         }},
-        {name: "Add Accidentals", skip: false, func: function() {
+        {name: "Add Accidentals", skip: true, func: function() {
             Palette.togglePalette("Accidentals") // open
             putNoteAndApplyCell(11)
             Palette.togglePalette("Accidentals") // close
