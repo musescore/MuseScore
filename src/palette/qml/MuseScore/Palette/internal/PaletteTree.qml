@@ -305,7 +305,7 @@ ListView {
                 visible: !control.Drag.active
                 isSelected: control.selected
 
-                navigation.name: "PaletteTreeItem"
+                navigation.name: model.display
                 navigation.panel: keynavTree
                 navigation.row: control.navigationRow
                 navigation.column: 0

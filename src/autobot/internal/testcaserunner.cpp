@@ -65,7 +65,7 @@ async::Channel<bool> TestCaseRunner::allFinished() const
     return m_allFinished;
 }
 
-void TestCaseRunner::nextStep()
+void TestCaseRunner::nextStep(bool byInterval)
 {
     if (m_abort) {
         m_allFinished.send(true);
@@ -79,7 +79,7 @@ void TestCaseRunner::nextStep()
         return;
     }
 
-    QTimer::singleShot(m_intervalMsec, [this]() {
+    QTimer::singleShot(byInterval ? m_intervalMsec : 0, [this]() {
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
         QString name = step.name();
         LOGD() << "step: " << name;
@@ -97,7 +97,8 @@ void TestCaseRunner::nextStep()
             m_stepStatusChanged.send(step.name(), StepStatus::Finished);
         }
 
-        nextStep();
+        bool withInterval = step.skip() ? false : true;
+        nextStep(withInterval);
 
         m_testCase.finishedCount += 1;
         if (m_testCase.finishedCount == m_testCase.stepsCount) {

@@ -29,6 +29,10 @@ function main()
         name: "Create Score by Template",
         description: "Just create a simple score by template, a few notes, play it and save the project",
         steps: [
+            {name: "Close score (if opened) and go to home to start", func: function() {
+                api.dispatcher.dispatch("file-close")
+                api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            }},
             {name: "Open New Score Dialog", func: function() {
                 NewScore.openNewScoreDialog()
             }},
@@ -67,7 +71,6 @@ function main()
                 api.dispatcher.dispatch("file-close")
             }},
             {name: "Home", func: function() {
-                // Go Home
                 api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
             }},
             {name: "Open last", func: function() {
