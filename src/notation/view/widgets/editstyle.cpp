@@ -1334,7 +1334,8 @@ void EditStyle::on_buttonTogglePagelist_clicked()
 
 void EditStyle::on_resetStylesButton_clicked()
 {
-    NOT_IMPLEMENTED;
+    globalContext()->currentNotation()->style()->resetAllStyleValues();
+    setValues();
 }
 
 //---------------------------------------------------------

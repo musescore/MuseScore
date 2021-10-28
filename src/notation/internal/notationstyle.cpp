@@ -62,7 +62,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newVal
 
 void NotationStyle::resetStyleValue(const StyleId& styleId)
 {
-    m_getScore->score()->resetStyles({ styleId });
+    m_getScore->score()->resetStyleValue(styleId);
     m_styleChanged.notify();
 }
 
@@ -83,6 +83,37 @@ void NotationStyle::applyToAllParts()
         excerpt->partScore()->undo(new Ms::ChangeStyle(excerpt->partScore(), style));
         excerpt->partScore()->update();
     }
+}
+
+void NotationStyle::resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes)
+{
+    static const std::set<StyleId> stylesNotToReset {
+        StyleId::pageWidth,
+        StyleId::pageHeight,
+        StyleId::pagePrintableWidth,
+        StyleId::pageEvenTopMargin,
+        StyleId::pageEvenBottomMargin,
+        StyleId::pageEvenLeftMargin,
+        StyleId::pageOddTopMargin,
+        StyleId::pageOddBottomMargin,
+        StyleId::pageOddLeftMargin,
+        StyleId::pageTwosided,
+        StyleId::spatium,
+        StyleId::concertPitch,
+        StyleId::createMultiMeasureRests
+    };
+
+    int beginIdx = int(StyleId::NOSTYLE) + 1;
+    int endIdx = int(StyleId::STYLES);
+    for (int idx = beginIdx; idx < endIdx; idx++) {
+        StyleId styleId = StyleId(idx);
+        if (stylesNotToReset.find(styleId) == stylesNotToReset.cend() && exceptTheseOnes.find(styleId) == exceptTheseOnes.cend()) {
+            m_getScore->score()->resetStyleValue(styleId);
+        }
+    }
+
+    m_getScore->score()->update();
+    m_styleChanged.notify();
 }
 
 Notification NotationStyle::styleChanged() const
