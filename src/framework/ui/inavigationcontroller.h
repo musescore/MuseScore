@@ -39,7 +39,8 @@ public:
 
     virtual const std::set<INavigationSection*>& sections() const = 0;
 
-    virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& control) = 0;
+    virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) = 0;
+    virtual bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) = 0;
 
     virtual INavigationSection* activeSection() const = 0;
     virtual INavigationPanel* activePanel() const = 0;

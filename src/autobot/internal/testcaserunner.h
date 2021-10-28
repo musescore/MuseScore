@@ -60,7 +60,7 @@ private:
         QEventLoop loop;
     };
 
-    void nextStep();
+    void nextStep(bool byInterval = true);
 
     int m_intervalMsec = 1000;
     TestCaseData m_testCase;

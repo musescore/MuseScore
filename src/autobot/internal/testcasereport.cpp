@@ -47,7 +47,7 @@ mu::Ret TestCaseReport::beginReport(const TestCase& testCase)
         return ret;
     }
 
-    IF_ASSERT_FAILED(!m_file.isOpen()) {
+    if (m_file.isOpen()) {
         m_file.close();
     }
 

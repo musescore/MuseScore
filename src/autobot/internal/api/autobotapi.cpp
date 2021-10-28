@@ -102,6 +102,9 @@ void AutobotApi::waitPopup() const
 
 void AutobotApi::seeChanges(int msec)
 {
+    if (msec < 0) {
+        msec = m_intervalMsec / 2;
+    }
     sleep(msec);
 }
 

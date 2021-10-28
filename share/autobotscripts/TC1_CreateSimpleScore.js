@@ -29,6 +29,10 @@ function main()
         name: "Create Simple Score",
         description: "Just create a simple two-instrument score, a few notes, play it and save the project",
         steps: [
+            {name: "Close score (if opened) and go to home to start", func: function() {
+                api.dispatcher.dispatch("file-close")
+                api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            }},
             {name: "Open New Score Dialog", func: function() {
                 NewScore.openNewScoreDialog()
             }},

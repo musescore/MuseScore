@@ -74,9 +74,26 @@ void NavigationApi::escape()
     dispatcher()->dispatch("nav-escape");
 }
 
-bool NavigationApi::goToControl(const QString& section, const QString& panel, const QString& contol)
+bool NavigationApi::goToControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex)
 {
-    bool ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), contol.toStdString());
+    bool ok = false;
+    if (contolNameOrIndex.isString()) {
+        ok = navigation()->requestActivateByName(section.toStdString(), panel.toStdString(), contolNameOrIndex.toString().toStdString());
+    } else if (contolNameOrIndex.isArray()) {
+        if (contolNameOrIndex.property("length").toInt() == 2) {
+            INavigation::Index idx;
+            idx.row = contolNameOrIndex.property(0).toInt();
+            idx.column = contolNameOrIndex.property(1).toInt();
+            ok = navigation()->requestActivateByIndex(section.toStdString(), panel.toStdString(), idx);
+        } else {
+            LOGE() << "bad argument `control`: " << contolNameOrIndex.toString();
+            ok = false;
+        }
+    } else {
+        LOGE() << "bad argument `control`: " << contolNameOrIndex.toString();
+        ok = false;
+    }
+
     return ok;
 }
 
@@ -85,9 +102,9 @@ void NavigationApi::trigger()
     dispatcher()->dispatch("nav-trigger-control");
 }
 
-bool NavigationApi::triggerControl(const QString& section, const QString& panel, const QString& contol)
+bool NavigationApi::triggerControl(const QString& section, const QString& panel, const QJSValue& contolNameOrIndex)
 {
-    bool ok = goToControl(section, panel, contol);
+    bool ok = goToControl(section, panel, contolNameOrIndex);
     if (ok) {
         trigger();
     }
