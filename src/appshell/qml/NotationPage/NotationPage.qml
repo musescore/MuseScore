@@ -91,7 +91,6 @@ DockPage {
     }
 
     readonly property int defaultPanelWidth: 300
-    readonly property int toolBarHeight: 48
 
     mainToolBars: [
         DockToolBar {
@@ -100,9 +99,10 @@ DockPage {
             objectName: "notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
-            minimumWidth: 198
+            floatable: false
+            padding: 0
 
-            contentComponent: NotationToolBar {
+            NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
 
@@ -120,15 +120,13 @@ DockPage {
             objectName: pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
 
-            width: root.width / 3
-            minimumWidth: floating ? 526 : 452
-            minimumHeight: floating ? 56 : root.toolBarHeight
-
-            contentComponent: PlaybackToolBar {
+            PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 3
 
                 floating: playbackToolBar.floating
+
+                maximumHeight: playbackToolBar.height
             }
         },
 
@@ -136,12 +134,9 @@ DockPage {
             objectName: pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo toolbar")
 
-            minimumWidth: 74
-            maximumWidth: 74
+            floatable: false
 
-            movable: false
-
-            contentComponent: UndoRedoToolBar {
+            UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 4
             }
@@ -155,18 +150,19 @@ DockPage {
             objectName: pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
 
-            horizontalPreferredSize: Qt.size(720, root.toolBarHeight)
-            verticalPreferredSize: Qt.size(root.toolBarHeight, 400)
-
             allowedAreas: { Qt.AllDockWidgetAreas }
 
-            contentComponent: NoteInputBar {
+            minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 96
+
+            NoteInputBar {
                 orientation: noteInputBar.orientation
+                floating: noteInputBar.floating
+
+                maximumWidth: noteInputBar.width
+                maximumHeight: noteInputBar.height
 
                 navigation.section: root.noteInputKeyNavSec
                 navigation.order: 1
-
-                floating: noteInputBar.floating
             }
         }
     ]
@@ -251,8 +247,7 @@ DockPage {
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             location: DockBase.Left
@@ -280,8 +275,7 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             location: DockBase.Bottom
@@ -311,8 +305,7 @@ DockPage {
 
             tabifyPanel: timelinePanel
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             location: DockBase.Bottom
@@ -340,8 +333,7 @@ DockPage {
             minimumHeight: 100
             maximumHeight: 300
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
+            //! NOTE: hidden by default
             visible: false
 
             location: DockBase.Bottom

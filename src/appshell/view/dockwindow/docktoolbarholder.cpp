@@ -28,7 +28,6 @@ DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
     : DockToolBarView(parent)
 {
     setVisible(false);
-    setMovable(false);
 }
 
 void DockToolBarHolder::componentComplete()
@@ -44,6 +43,10 @@ void DockToolBarHolder::componentComplete()
         break;
     case DockLocation::Top:
     case DockLocation::Bottom:
+        setHeight(MIN_SIDE_SIZE);
+        setMinimumHeight(MIN_SIDE_SIZE);
+        setMaximumHeight(MIN_SIDE_SIZE);
+        break;
     case DockLocation::Center:
     case DockLocation::Undefined:
         break;

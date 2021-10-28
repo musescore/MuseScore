@@ -26,7 +26,7 @@ import MuseScore.Dock 1.0
 DockPanelView {
     id: root
 
-    default property alias content : contentLoader.sourceComponent
+    default property alias contentComponent : contentLoader.sourceComponent
 
     Loader {
         id: contentLoader

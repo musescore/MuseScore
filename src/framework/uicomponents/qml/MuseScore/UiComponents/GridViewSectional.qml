@@ -33,6 +33,9 @@ Item {
     property Component sectionDelegate: Item {}
     property Component itemDelegate: Item {}
 
+    property alias contentWidth: loader.width
+    property alias contentHeight: loader.height
+
     property int cellWidth: 0
     property int cellHeight: 0
 
@@ -69,7 +72,8 @@ Item {
     }
 
     Loader {
-        anchors.fill: parent
+        id: loader
+
         sourceComponent: isHorizontal ? horizontalView : verticalView
     }
 
@@ -79,16 +83,17 @@ Item {
         Row {
             spacing: privateProperties.spacingBeforeSection
 
+            height: childrenRect.height
+
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Row {
                     spacing: privateProperties.spacingAfterSection
-                    height: parent.height
+
+                    height: root.sectionHeight
 
                     GridViewSection {
-                        anchors.verticalCenter: parent.verticalCenter
-
                         width: root.sectionWidth
                         height: root.sectionHeight
 
@@ -122,16 +127,17 @@ Item {
         Column {
             spacing: privateProperties.spacingBeforeSection
 
+            width: childrenRect.width
+
             Repeater {
                 model: Boolean(root.model) ? privateProperties.modelSections() : []
 
                 Column {
                     spacing: privateProperties.spacingAfterSection
-                    width: parent.width
+
+                    width: root.sectionWidth
 
                     GridViewSection {
-                        anchors.horizontalCenter: parent.horizontalCenter
-
                         width: root.sectionWidth
                         height: root.sectionHeight
 

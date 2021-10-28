@@ -40,6 +40,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    clip: true
+
     onFrameCppChanged: {
         if (Boolean(frameCpp)) {
             frameCpp.setStackLayout(stackLayout)
