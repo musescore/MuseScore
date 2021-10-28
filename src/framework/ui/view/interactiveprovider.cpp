@@ -499,7 +499,7 @@ void InteractiveProvider::onPopupClose(const QString& objectId, const QVariant& 
 {
     m_retvals[objectId] = toRetVal(jsrv);
 
-    IF_ASSERT_FAILED(m_stack.size() > 1) {
+    IF_ASSERT_FAILED(m_stack.size() >= 1) {
         return;
     }
 
