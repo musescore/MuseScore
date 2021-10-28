@@ -174,6 +174,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.checkable = true;
         state.checked = item->accessibleState(IAccessible::State::Checked);
     } break;
+    case IAccessible::Role::ComboBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     case IAccessible::Role::MenuItem: {
         state.focusable = true;
         state.focused = item->accessibleState(IAccessible::State::Focused);
