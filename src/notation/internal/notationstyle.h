@@ -42,6 +42,8 @@ public:
     bool canApplyToAllParts() const override;
     void applyToAllParts() override;
 
+    void resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes = {}) override;
+
     async::Notification styleChanged() const override;
 
     bool loadStyle(const mu::io::path&, bool allowAnyVersion) override;
