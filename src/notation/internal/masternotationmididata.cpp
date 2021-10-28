@@ -226,7 +226,7 @@ MidiStream MasterNotationMidiData::buildMidiStream(const Ms::Part* part) const
 {
     midi::MidiStream stream;
 
-    IF_ASSERT_FAILED(masterScore()->lastMeasure()) {
+    if (!masterScore()->lastMeasure()) { // score without any measures
         return stream;
     }
 
