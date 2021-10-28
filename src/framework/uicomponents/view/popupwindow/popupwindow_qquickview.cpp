@@ -112,8 +112,6 @@ void PopupWindow_QQuickView::show(QPoint p)
     m_view->setTransientParent(top);
     m_view->show();
 
-    mainWindow()->pushWindow(m_view);
-
     m_view->requestActivate();
     QQuickItem* item = m_view->rootObject();
     m_view->resize(item->implicitWidth(), item->implicitHeight());
@@ -135,7 +133,6 @@ void PopupWindow_QQuickView::setPosition(QPoint p)
 
 void PopupWindow_QQuickView::hide()
 {
-    mainWindow()->popWindow(m_view);
     m_view->hide();
 }
 

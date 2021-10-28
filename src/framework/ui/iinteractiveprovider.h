@@ -28,6 +28,8 @@
 
 #include "iinteractive.h"
 
+class QWindow;
+
 namespace mu::ui {
 class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 {
@@ -63,6 +65,8 @@ public:
 
     virtual ValCh<Uri> currentUri() const = 0;
     virtual std::vector<Uri> stack() const = 0;
+
+    virtual QWindow* topWindow() const = 0;
 };
 }
 

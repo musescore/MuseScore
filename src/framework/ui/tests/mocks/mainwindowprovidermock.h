@@ -32,10 +32,7 @@ class MainWindowProviderMock : public IMainWindow
 public:
 
     MOCK_METHOD(QWindow*, qWindow, (), (const, override));
-
     MOCK_METHOD(QWindow*, topWindow, (), (const, override));
-    MOCK_METHOD(void, pushWindow, (QWindow*), (override));
-    MOCK_METHOD(void, popWindow, (QWindow*), (override));
 
     MOCK_METHOD(void, requestShowOnBack, (), (override));
     MOCK_METHOD(void, requestShowOnFront, (), (override));
