@@ -84,7 +84,7 @@ public:
     Q_INVOKABLE QString objectId(const QVariant& val) const;
 
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);
-    Q_INVOKABLE void onPopupClose(const QString& objectId, const QVariant& rv);
+    Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
 
 signals:
     void fireOpen(QmlLaunchData* data);

@@ -21,8 +21,9 @@
  */
 #include "notationactioncontroller.h"
 
-#include "log.h"
 #include "notationtypes.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::actions;
@@ -37,6 +38,8 @@ static const ActionCode REDO_ACTION_CODE = "redo";
 
 void NotationActionController::init()
 {
+    TRACEFUNC;
+
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     registerAction(ESCAPE_ACTION_CODE, &NotationActionController::resetState, &NotationActionController::isNotationPage);
 
@@ -328,6 +331,8 @@ void NotationActionController::init()
 
 bool NotationActionController::canReceiveAction(const actions::ActionCode& code) const
 {
+    TRACEFUNC;
+
     //! NOTE If the notation is not loaded, we cannot process anything.
     if (!currentNotation()) {
         return false;
@@ -408,6 +413,8 @@ mu::async::Notification NotationActionController::currentNotationStyleChanged() 
 
 void NotationActionController::resetState()
 {
+    TRACEFUNC;
+
     if (playbackController()->isPlaying()) {
         playbackController()->reset();
     }
@@ -444,6 +451,7 @@ void NotationActionController::resetState()
 
 void NotationActionController::toggleNoteInput()
 {
+    TRACEFUNC;
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -458,6 +466,7 @@ void NotationActionController::toggleNoteInput()
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 {
+    TRACEFUNC;
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -475,6 +484,7 @@ void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
 
 void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 {
+    TRACEFUNC;
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -491,6 +501,7 @@ void NotationActionController::addNote(NoteName note, NoteAddingMode addingMode)
 
 void NotationActionController::addText(TextType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -501,6 +512,7 @@ void NotationActionController::addText(TextType type)
 
 void NotationActionController::addFiguredBass()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -511,6 +523,7 @@ void NotationActionController::addFiguredBass()
 
 void NotationActionController::padNote(const Pad& pad)
 {
+    TRACEFUNC;
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -523,6 +536,7 @@ void NotationActionController::padNote(const Pad& pad)
 
 void NotationActionController::putNote(const actions::ActionData& data)
 {
+    TRACEFUNC;
     auto noteInput = currentNotationNoteInput();
     if (!noteInput) {
         return;
@@ -543,6 +557,7 @@ void NotationActionController::putNote(const actions::ActionData& data)
 
 void NotationActionController::toggleVisible()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -553,6 +568,7 @@ void NotationActionController::toggleVisible()
 
 void NotationActionController::toggleAccidental(AccidentalType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -574,6 +590,7 @@ void NotationActionController::toggleAccidental(AccidentalType type)
 
 void NotationActionController::putRestToSelection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -584,6 +601,7 @@ void NotationActionController::putRestToSelection()
 
 void NotationActionController::putRest(DurationType duration)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -594,6 +612,7 @@ void NotationActionController::putRest(DurationType duration)
 
 void NotationActionController::addArticulation(SymbolId articulationSymbolId)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -615,6 +634,7 @@ void NotationActionController::addArticulation(SymbolId articulationSymbolId)
 
 void NotationActionController::putTuplet(int tupletCount)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -637,6 +657,7 @@ void NotationActionController::putTuplet(int tupletCount)
 
 void NotationActionController::addBeamToSelectedChordRests(BeamMode mode)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -647,6 +668,7 @@ void NotationActionController::addBeamToSelectedChordRests(BeamMode mode)
 
 void NotationActionController::addBracketsToSelection(BracketsType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -657,6 +679,7 @@ void NotationActionController::addBracketsToSelection(BracketsType type)
 
 void NotationActionController::moveChordRestToStaff(MoveDirection direction)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -666,6 +689,7 @@ void NotationActionController::moveChordRestToStaff(MoveDirection direction)
 
 void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -731,6 +755,7 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 
 void NotationActionController::moveWithinChord(MoveDirection direction)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -743,6 +768,7 @@ void NotationActionController::moveWithinChord(MoveDirection direction)
 
 void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -755,6 +781,7 @@ void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
 
 void NotationActionController::moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode)
 {
+    TRACEFUNC;
     MoveDirection direction = MoveDirection::Undefined;
     bool quickly = false;
 
@@ -788,6 +815,7 @@ void NotationActionController::moveText(INotationInteractionPtr interaction, con
 
 void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDots)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -798,6 +826,7 @@ void NotationActionController::increaseDecreaseDuration(int steps, bool stepByDo
 
 void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -808,6 +837,7 @@ void NotationActionController::swapVoices(int voiceIndex1, int voiceIndex2)
 
 void NotationActionController::changeVoice(int voiceIndex)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -829,12 +859,14 @@ void NotationActionController::changeVoice(int voiceIndex)
 
 void NotationActionController::cutSelection()
 {
+    TRACEFUNC;
     copySelection();
     deleteSelection();
 }
 
 void NotationActionController::copySelection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -845,6 +877,7 @@ void NotationActionController::copySelection()
 
 void NotationActionController::pasteSelection(PastingType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -856,6 +889,7 @@ void NotationActionController::pasteSelection(PastingType type)
 
 Fraction NotationActionController::resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const
 {
+    TRACEFUNC;
     const Fraction DEFAULT_SCALE(1, 1);
 
     switch (type) {
@@ -879,6 +913,7 @@ Fraction NotationActionController::resolvePastingScale(const INotationInteractio
 
 void NotationActionController::deleteSelection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -889,6 +924,7 @@ void NotationActionController::deleteSelection()
 
 void NotationActionController::swapSelection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -899,6 +935,7 @@ void NotationActionController::swapSelection()
 
 void NotationActionController::flipSelection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -909,6 +946,7 @@ void NotationActionController::flipSelection()
 
 void NotationActionController::addTie()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -928,6 +966,7 @@ void NotationActionController::addTie()
 
 void NotationActionController::chordTie()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -947,6 +986,7 @@ void NotationActionController::chordTie()
 
 void NotationActionController::addSlur()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -966,6 +1006,7 @@ void NotationActionController::addSlur()
 
 void NotationActionController::addInterval(int interval)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -976,6 +1017,7 @@ void NotationActionController::addInterval(int interval)
 
 void NotationActionController::addFret(int fretIndex)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -986,6 +1028,7 @@ void NotationActionController::addFret(int fretIndex)
 
 void NotationActionController::undo()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -995,6 +1038,7 @@ void NotationActionController::undo()
 
 void NotationActionController::redo()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1004,6 +1048,7 @@ void NotationActionController::redo()
 
 void NotationActionController::addChordToSelection(MoveDirection direction)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1019,6 +1064,7 @@ void NotationActionController::addChordToSelection(MoveDirection direction)
 
 void NotationActionController::selectAllSimilarElements()
 {
+    TRACEFUNC;
     auto notationElements = currentNotationElements();
     auto interaction = currentNotationInteraction();
     if (!notationElements || !interaction) {
@@ -1043,6 +1089,7 @@ void NotationActionController::selectAllSimilarElements()
 
 void NotationActionController::selectAllSimilarElementsInStaff()
 {
+    TRACEFUNC;
     auto notationElements = currentNotationElements();
     auto interaction = currentNotationInteraction();
     if (!notationElements || !interaction) {
@@ -1075,6 +1122,7 @@ void NotationActionController::selectAllSimilarElementsInRange()
 
 void NotationActionController::selectSection()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1085,6 +1133,7 @@ void NotationActionController::selectSection()
 
 void NotationActionController::firstElement()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1095,6 +1144,7 @@ void NotationActionController::firstElement()
 
 void NotationActionController::lastElement()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1126,6 +1176,7 @@ void NotationActionController::openSelectionMoreOptions()
 
 void NotationActionController::selectAll()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1136,6 +1187,7 @@ void NotationActionController::selectAll()
 
 void NotationActionController::toggleLayoutBreak(LayoutBreakType breakType)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1146,6 +1198,7 @@ void NotationActionController::toggleLayoutBreak(LayoutBreakType breakType)
 
 void NotationActionController::splitMeasure()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1156,6 +1209,7 @@ void NotationActionController::splitMeasure()
 
 void NotationActionController::joinSelectedMeasures()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1166,6 +1220,7 @@ void NotationActionController::joinSelectedMeasures()
 
 void NotationActionController::insertBoxes(BoxType boxType, int count)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1182,11 +1237,13 @@ void NotationActionController::insertBoxes(BoxType boxType, int count)
 
 void NotationActionController::insertBox(BoxType boxType)
 {
+    TRACEFUNC;
     insertBoxes(boxType, 1);
 }
 
 int NotationActionController::firstSelectedBoxIndex() const
 {
+    TRACEFUNC;
     int result = INVALID_BOX_INDEX;
 
     auto selection = currentNotationSelection();
@@ -1206,6 +1263,7 @@ int NotationActionController::firstSelectedBoxIndex() const
 
 void NotationActionController::appendBoxes(BoxType boxType, int count)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1216,11 +1274,13 @@ void NotationActionController::appendBoxes(BoxType boxType, int count)
 
 void NotationActionController::appendBox(BoxType boxType)
 {
+    TRACEFUNC;
     appendBoxes(boxType, 1);
 }
 
 void NotationActionController::addOttava(OttavaType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1231,6 +1291,7 @@ void NotationActionController::addOttava(OttavaType type)
 
 void NotationActionController::addHairpin(HairpinType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1241,6 +1302,7 @@ void NotationActionController::addHairpin(HairpinType type)
 
 void NotationActionController::addAnchoredNoteLine()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1251,6 +1313,7 @@ void NotationActionController::addAnchoredNoteLine()
 
 void NotationActionController::explodeSelectedStaff()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1261,6 +1324,7 @@ void NotationActionController::explodeSelectedStaff()
 
 void NotationActionController::implodeSelectedStaff()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1271,6 +1335,7 @@ void NotationActionController::implodeSelectedStaff()
 
 void NotationActionController::realizeSelectedChordSymbols()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1281,6 +1346,7 @@ void NotationActionController::realizeSelectedChordSymbols()
 
 void NotationActionController::removeSelectedRange()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1291,6 +1357,7 @@ void NotationActionController::removeSelectedRange()
 
 void NotationActionController::removeEmptyTrailingMeasures()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1301,6 +1368,7 @@ void NotationActionController::removeEmptyTrailingMeasures()
 
 void NotationActionController::fillSelectionWithSlashes()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1311,6 +1379,7 @@ void NotationActionController::fillSelectionWithSlashes()
 
 void NotationActionController::replaceSelectedNotesWithSlashes()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1321,6 +1390,7 @@ void NotationActionController::replaceSelectedNotesWithSlashes()
 
 void NotationActionController::spellPitches()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1331,6 +1401,7 @@ void NotationActionController::spellPitches()
 
 void NotationActionController::regroupNotesAndRests()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1341,6 +1412,7 @@ void NotationActionController::regroupNotesAndRests()
 
 void NotationActionController::resequenceRehearsalMarks()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1351,6 +1423,7 @@ void NotationActionController::resequenceRehearsalMarks()
 
 void NotationActionController::unrollRepeats()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1361,6 +1434,7 @@ void NotationActionController::unrollRepeats()
 
 void NotationActionController::copyLyrics()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1371,6 +1445,7 @@ void NotationActionController::copyLyrics()
 
 void NotationActionController::addGraceNotesToSelectedNotes(GraceNoteType type)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1381,6 +1456,7 @@ void NotationActionController::addGraceNotesToSelectedNotes(GraceNoteType type)
 
 void NotationActionController::changeEnharmonicSpellingBoth()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1391,6 +1467,7 @@ void NotationActionController::changeEnharmonicSpellingBoth()
 
 void NotationActionController::changeEnharmonicSpellingCurrent()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1401,6 +1478,7 @@ void NotationActionController::changeEnharmonicSpellingCurrent()
 
 void NotationActionController::addStretch(qreal value)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1420,6 +1498,7 @@ void NotationActionController::addStretch(qreal value)
 
 void NotationActionController::resetStretch()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1439,6 +1518,7 @@ void NotationActionController::resetStretch()
 
 void NotationActionController::resetTextStyleOverrides()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1449,6 +1529,7 @@ void NotationActionController::resetTextStyleOverrides()
 
 void NotationActionController::resetBeamMode()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1466,6 +1547,7 @@ void NotationActionController::resetBeamMode()
 
 void NotationActionController::resetShapesAndPosition()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1547,6 +1629,7 @@ mu::io::path NotationActionController::selectStyleFile(bool forLoad)
 
 void NotationActionController::loadStyle()
 {
+    TRACEFUNC;
     auto path = selectStyleFile(true);
     if (!path.empty()) {
         QFile f(path.toQString());
@@ -1569,6 +1652,7 @@ void NotationActionController::loadStyle()
 
 void NotationActionController::saveStyle()
 {
+    TRACEFUNC;
     auto path = selectStyleFile(false);
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
@@ -1581,6 +1665,7 @@ void NotationActionController::saveStyle()
 
 FilterElementsOptions NotationActionController::elementsFilterOptions(const EngravingItem* element) const
 {
+    TRACEFUNC;
     FilterElementsOptions options;
     options.elementType = element->type();
 
@@ -1639,6 +1724,7 @@ void NotationActionController::openEditGridSizeDialog()
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1670,6 +1756,7 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
 
 void NotationActionController::toggleConcertPitch()
 {
+    TRACEFUNC;
     INotationStylePtr style = currentNotationStyle();
     if (!style) {
         return;
@@ -1683,6 +1770,7 @@ void NotationActionController::toggleConcertPitch()
 
 void NotationActionController::playSelectedElement(bool playChord)
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1702,6 +1790,7 @@ void NotationActionController::playSelectedElement(bool playChord)
 
 void NotationActionController::startNoteInputIfNeed()
 {
+    TRACEFUNC;
     auto interaction = currentNotationInteraction();
     if (!interaction) {
         return;
@@ -1754,51 +1843,61 @@ bool NotationActionController::isNotEditingText() const
 
 void NotationActionController::nextLyrics()
 {
+    TRACEFUNC;
     currentNotationInteraction()->nextLyrics();
 }
 
 void NotationActionController::previousLyrics()
 {
+    TRACEFUNC;
     currentNotationInteraction()->nextLyrics(true);
 }
 
 void NotationActionController::nextLyricsVerse()
 {
+    TRACEFUNC;
     currentNotationInteraction()->nextLyricsVerse();
 }
 
 void NotationActionController::previousLyricsVerse()
 {
+    TRACEFUNC;
     currentNotationInteraction()->nextLyricsVerse(true);
 }
 
 void NotationActionController::nextSyllable()
 {
+    TRACEFUNC;
     currentNotationInteraction()->nextSyllable();
 }
 
 void NotationActionController::addMelisma()
 {
+    TRACEFUNC;
     currentNotationInteraction()->addMelisma();
 }
 
 void NotationActionController::addLyricsVerse()
 {
+    TRACEFUNC;
     currentNotationInteraction()->addLyricsVerse();
 }
 
 void NotationActionController::toggleBold()
 {
+    TRACEFUNC;
     currentNotationInteraction()->toggleBold();
 }
 
 void NotationActionController::toggleItalic()
 {
+    TRACEFUNC;
     currentNotationInteraction()->toggleItalic();
 }
 
 void NotationActionController::toggleUnderline()
 {
+    TRACEFUNC;
     currentNotationInteraction()->toggleUnderline();
 }
 
