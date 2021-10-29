@@ -21,9 +21,10 @@
  */
 #include "notationpagemodel.h"
 
-#include "log.h"
-
 #include "internal/applicationuiactions.h"
+#include "dockwindow/idockwindow.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -48,10 +49,19 @@ void NotationPageModel::init()
         dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
     }
 
-    updateDrumsetPanelVisibility();
-    globalContext()->currentNotationChanged().onNotify(this, [=]() {
-        updateDrumsetPanelVisibility();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        INotationPtr notation = globalContext()->currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+        noteInput->stateChanged().onNotify(this, [this]() {
+            updateDrumsetPanelVisibility();
+        });
     });
+
+    updateDrumsetPanelVisibility();
 }
 
 QString NotationPageModel::notationToolBarName() const
@@ -133,21 +143,24 @@ void NotationPageModel::toggleDock(const QString& name)
 void NotationPageModel::updateDrumsetPanelVisibility()
 {
     TRACEFUNC;
+    const dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window) {
+        return;
+    }
 
-    auto setDrumsetPanelVisible = [this](bool visible) {
-        dispatcher()->dispatch("set-dock-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, visible));
-    };
-
-    setDrumsetPanelVisible(false);
-
-    INotationPtr notation = globalContext()->currentNotation();
+    const INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return;
     }
 
-    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-    noteInput->stateChanged().onNotify(this, [noteInput, setDrumsetPanelVisible]() {
-        bool visible = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
-        setDrumsetPanelVisible(visible);
-    });
+    const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+
+    bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
+    bool isOpened = window->isDockOpen(DRUMSET_PANEL_NAME);
+
+    if (isNeedOpen == isOpened) {
+        return;
+    }
+
+    dispatcher()->dispatch("set-dock-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, isNeedOpen));
 }
