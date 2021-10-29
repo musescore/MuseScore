@@ -51,9 +51,10 @@ static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::st
     return null;
 }
 
-void ShortcutsRegister::load()
+void ShortcutsRegister::reload(bool onlyDef)
 {
     m_shortcuts.clear();
+    m_defaultShortcuts.clear();
 
     io::path defPath = configuration()->shortcutsAppDataPath();
     io::path userPath = configuration()->shortcutsUserAppDataPath();
@@ -61,16 +62,20 @@ void ShortcutsRegister::load()
     bool ok = readFromFile(m_defaultShortcuts, defPath);
 
     if (ok) {
-        {
+        if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
             mi::ResourceLockGuard(multiInstancesProvider(), "shortcuts");
             ok = readFromFile(m_shortcuts, userPath);
+        } else {
+            ok = false;
         }
+
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
         } else {
             mergeShortcuts(m_shortcuts, m_defaultShortcuts);
         }
+
         ok = true;
     }
 
@@ -295,7 +300,7 @@ mu::Ret ShortcutsRegister::importFromFile(const io::path& filePath)
         return ret;
     }
 
-    load();
+    reload();
 
     return make_ret(Ret::Code::Ok);
 }

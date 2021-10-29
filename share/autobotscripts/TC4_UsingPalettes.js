@@ -23,6 +23,7 @@
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Palette = require("steps/Palette.js")
+var Score = require("steps/Score.js")
 
 var testCase = {
     name: "TC4: Using palettes",
@@ -39,7 +40,7 @@ var testCase = {
             NewScore.сhooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
-        {name: "Change Clefs", skip: false, func: function() {
+        {name: "Change Clefs", skip: true, func: function() {
             //! NOTE First, we need to select the current Clef
             api.navigation.goToControl("NotationView", "ScoreView", "Score") // The first rest is selected by default.
             api.shortcuts.activate("Alt+Left") // select Time sig
@@ -51,7 +52,7 @@ var testCase = {
             seeChanges()
             applyCellByCell(24, 0) //24
         }},
-        {name: "Change Key signatures", skip: false, func: function() {
+        {name: "Change Key signatures", skip: true, func: function() {
             //! NOTE To change Key sig, we need to select the first Chord on score
             api.navigation.goToControl("NotationView", "ScoreView", "Score")
             api.shortcuts.activate("Alt+Right") // select Time sig
@@ -72,15 +73,26 @@ var testCase = {
             putNoteAndApplyCell(11)
             Palette.togglePalette("Accidentals") // close
         }},
-        {name: "Add Articulations", func: function() {
+        {name: "Add Articulations", skip: true, func: function() {
             Palette.togglePalette("Articulations") // open
             putNoteAndApplyCell(34)
             Palette.togglePalette("Articulations") // close
         }},
-        {name: "Change Noteheads", func: function() {
+        {name: "Change Noteheads", skip: true, func: function() {
             Palette.togglePalette("Noteheads") // open
             putNoteAndApplyCell(24)
             Palette.togglePalette("Noteheads") // close
+        }},
+        {name: "Add Lines", skip: false, func: function() {
+            Score.nextChord()
+            Score.appendMeasures(4 * 35)
+            seeChanges()
+
+            Palette.togglePalette("Lines") // open
+            applyLines(35)
+            Palette.togglePalette("Lines") // close
+
+            api.autobot.abort()
         }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC3 Using note input toolbar.mscz")
@@ -141,6 +153,19 @@ function putNoteAndApplyCell(count)
         api.shortcuts.activate("C")
         api.navigation.down()
         api.navigation.trigger()
+        seeChanges()
+    }
+}
+
+function applyLines(count)
+{
+    for (var i = 0; i < count; i++) {
+        api.shortcuts.activate("C")
+        api.navigation.down()
+        api.navigation.trigger()
+        api.shortcuts.activate("C")
+        api.shortcuts.activate("C")
+        api.shortcuts.activate("C")
         seeChanges()
     }
 }

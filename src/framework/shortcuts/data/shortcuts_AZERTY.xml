@@ -767,7 +767,7 @@
     </SC>
   <SC>
     <key>system-break</key>
-    <seq>Return</seq>
+    <seq>Alt+Return</seq>
     </SC>
   <SC>
     <key>page-break</key>

@@ -47,6 +47,9 @@ public:
 
     virtual Ret importFromFile(const io::path& filePath) = 0;
     virtual Ret exportToFile(const io::path& filePath) const = 0;
+
+    // for autobot tests
+    virtual void reload(bool onlyDef = false) = 0;
 };
 }
 
