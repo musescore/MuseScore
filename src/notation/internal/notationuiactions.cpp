@@ -434,7 +434,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Exchange voice 3-4")
              ),
     UiAction("system-break",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Toggle system break"),
              QT_TRANSLATE_NOOP("action", "Toggle 'system break'")
              ),

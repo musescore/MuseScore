@@ -30,6 +30,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "iappshellconfiguration.h"
+#include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
 class NotationPageModel : public QObject, public async::Asyncable, public actions::Actionable
@@ -39,6 +40,7 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
 
