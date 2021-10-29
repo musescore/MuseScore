@@ -3355,7 +3355,6 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 MasterScore* m = score->masterScore();
                 Score* s = m->createScore();
                 ReadStyleHook::setupDefaultStyle(s);
-                s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
 
                 ex->setPartScore(s);
@@ -3431,8 +3430,6 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
             masterScore->revisions()->add(revision);
         }
     }
-
-    masterScore->setEnableVerticalSpread(false);
 
     int id = 1;
     for (LinkedObjects* le : e.linkIds()) {
