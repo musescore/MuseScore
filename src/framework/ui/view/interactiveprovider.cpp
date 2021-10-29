@@ -296,6 +296,11 @@ std::vector<Uri> InteractiveProvider::stack() const
     return uris;
 }
 
+QWindow* InteractiveProvider::topWindow() const
+{
+    return qobject_cast<QWindow*>(m_stack.last().window);
+}
+
 QString InteractiveProvider::objectId(const QVariant& val) const
 {
     static int count(0);
