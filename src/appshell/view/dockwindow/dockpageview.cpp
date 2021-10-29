@@ -23,10 +23,9 @@
 #include "dockpageview.h"
 
 #include "docktoolbarview.h"
-#include "docktoolbarholder.h"
+#include "dockingholderview.h"
 #include "dockcentralview.h"
 #include "dockpanelview.h"
-#include "dockpanelholder.h"
 #include "dockstatusbarview.h"
 
 #include "log.h"
@@ -72,12 +71,12 @@ QQmlListProperty<DockPanelView> DockPageView::panelsProperty()
     return m_panels.property();
 }
 
-QQmlListProperty<DockToolBarHolder> DockPageView::toolBarsDockingHoldersProperty()
+QQmlListProperty<DockingHolderView> DockPageView::toolBarsDockingHoldersProperty()
 {
     return m_toolBarsDockingHolders.property();
 }
 
-QQmlListProperty<DockPanelHolder> DockPageView::panelsDockingHoldersProperty()
+QQmlListProperty<DockingHolderView> DockPageView::panelsDockingHoldersProperty()
 {
     return m_panelsDockingHolders.property();
 }
@@ -89,33 +88,10 @@ QList<DockToolBarView*> DockPageView::mainToolBars() const
 
 QList<DockToolBarView*> DockPageView::toolBars() const
 {
-    //! NOTE: Order is important for correct drawing
-    auto list = m_toolBars.list();
-
-    DockToolBarHolder* leftHolder = toolBarHolderByLocation(DockBase::DockLocation::Left);
-    if (leftHolder) {
-        list.prepend(leftHolder);
-    }
-
-    DockToolBarHolder* rightHolder = toolBarHolderByLocation(DockBase::DockLocation::Right);
-    if (rightHolder) {
-        list.append(rightHolder);
-    }
-
-    DockToolBarHolder* bottomHolder = toolBarHolderByLocation(DockBase::DockLocation::Bottom);
-    if (bottomHolder) {
-        list.prepend(bottomHolder);
-    }
-
-    DockToolBarHolder* topHolder = toolBarHolderByLocation(DockBase::DockLocation::Top);
-    if (topHolder) {
-        list.append(topHolder);
-    }
-
-    return list;
+    return m_toolBars.list();
 }
 
-QList<DockToolBarHolder*> DockPageView::toolBarsHolders() const
+QList<DockingHolderView*> DockPageView::toolBarsHolders() const
 {
     return m_toolBarsDockingHolders.list();
 }
@@ -132,33 +108,10 @@ DockStatusBarView* DockPageView::statusBar() const
 
 QList<DockPanelView*> DockPageView::panels() const
 {
-    //! NOTE: Order is important for correct drawing
-    auto list = m_panels.list();
-
-    DockPanelHolder* leftHolder = panelHolderByLocation(DockBase::DockLocation::Left);
-    if (leftHolder) {
-        list.prepend(leftHolder);
-    }
-
-    DockPanelHolder* rightHolder = panelHolderByLocation(DockBase::DockLocation::Right);
-    if (rightHolder) {
-        list.append(rightHolder);
-    }
-
-    DockPanelHolder* bottomHolder = panelHolderByLocation(DockBase::DockLocation::Bottom);
-    if (bottomHolder) {
-        list.prepend(bottomHolder);
-    }
-
-    DockPanelHolder* topHolder = panelHolderByLocation(DockBase::DockLocation::Top);
-    if (topHolder) {
-        list.append(topHolder);
-    }
-
-    return list;
+    return m_panels.list();
 }
 
-QList<DockPanelHolder*> DockPageView::panelsHolders() const
+QList<DockingHolderView*> DockPageView::panelsHolders() const
 {
     return m_panelsDockingHolders.list();
 }
@@ -174,9 +127,9 @@ DockBase* DockPageView::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockToolBarHolder* DockPageView::toolBarHolderByLocation(DockBase::DockLocation location) const
+DockingHolderView* DockPageView::toolBarHolderByLocation(DockBase::DockLocation location) const
 {
-    for (DockToolBarHolder* holder : m_toolBarsDockingHolders.list()) {
+    for (DockingHolderView* holder : m_toolBarsDockingHolders.list()) {
         if (holder->location() == location) {
             return holder;
         }
@@ -185,9 +138,9 @@ DockToolBarHolder* DockPageView::toolBarHolderByLocation(DockBase::DockLocation 
     return nullptr;
 }
 
-DockPanelHolder* DockPageView::panelHolderByLocation(DockBase::DockLocation location) const
+DockingHolderView* DockPageView::panelHolderByLocation(DockBase::DockLocation location) const
 {
-    for (DockPanelHolder* holder : m_panelsDockingHolders.list()) {
+    for (DockingHolderView* holder : m_panelsDockingHolders.list()) {
         if (holder->location() == location) {
             return holder;
         }

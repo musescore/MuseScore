@@ -20,18 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "dockpanelholder.h"
+#ifndef MU_DOCK_DRAGCONTROLLER_H
+#define MU_DOCK_DRAGCONTROLLER_H
 
-using namespace mu::dock;
+#include "modularity/ioc.h"
+#include "../idockwindowprovider.h"
 
-DockPanelHolder::DockPanelHolder(QQuickItem* parent)
-    : DockPanelView(parent)
+#include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
+
+namespace mu::dock {
+class DragController : public KDDockWidgets::DropIndicatorOverlayInterface
 {
-    setVisible(false);
-    //setMovable(false);
+    INJECT(dock, IDockWindowProvider, dockWindowProvider)
+
+public:
+    explicit DragController(KDDockWidgets::DropArea* dropArea);
+
+    DropLocation hover_impl(QPoint globalPos) override;
+    QPoint posForIndicator(DropLocation) const override;
+
+private:
+    void updateVisibility() override;
+
+    IDockWindow* dockWindow() const;
+};
 }
 
-DockType DockPanelHolder::type() const
-{
-    return DockType::PanelDockingHolder;
-}
+#endif // MU_DOCK_DRAGCONTROLLER_H

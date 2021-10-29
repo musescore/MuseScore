@@ -26,7 +26,7 @@ using namespace mu::dock;
 DockCentralView::DockCentralView(QQuickItem* parent)
     : DockBase(parent)
 {
-    setAllowedAreas(Qt::NoDockWidgetArea);
+    setPersistent(true);
 }
 
 DockType DockCentralView::type() const

@@ -207,4 +207,22 @@ Rectangle {
             return 0
         }
     }
+
+    Rectangle {
+        anchors.fill: parent
+
+        visible: frameModel.selectionVisible
+
+        color: "transparent"
+
+        border.width: 1
+        border.color: ui.theme.accentColor
+
+        Rectangle {
+            anchors.fill: parent
+
+            color: ui.theme.accentColor
+            opacity: 0.3
+        }
+    }
 }

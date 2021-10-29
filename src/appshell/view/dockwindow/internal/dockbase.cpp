@@ -99,14 +99,41 @@ QSize DockBase::preferredSize() const
     return QSize(width(), height());
 }
 
-Qt::DockWidgetAreas DockBase::allowedAreas() const
+DockBase::DockLocation DockBase::location() const
 {
-    return m_allowedAreas;
+    return m_location;
 }
 
-bool DockBase::floating() const
+QVariantList DockBase::dropDestinationsProperty() const
 {
-    return m_floating;
+    return m_dropDestinations;
+}
+
+QList<DropDestination> DockBase::dropDestinations() const
+{
+    QList<DropDestination> result;
+
+    for (const QVariant& obj : m_dropDestinations) {
+        QVariantMap map = obj.toMap();
+
+        DropDestination destination;
+        destination.dock = map["dock"].value<DockBase*>();
+
+        if (map.contains("dropLocation")) {
+            destination.dropLocation = static_cast<DropLocation::Location>(map["dropLocation"].toInt());
+        } else {
+            destination.dropLocation = DropLocation::Left;
+        }
+
+        result << destination;
+    }
+
+    return result;
+}
+
+bool DockBase::persistent() const
+{
+    return m_persistent;
 }
 
 bool DockBase::resizable() const
@@ -117,6 +144,11 @@ bool DockBase::resizable() const
 bool DockBase::separatorsVisible() const
 {
     return m_separatorsVisible;
+}
+
+bool DockBase::floating() const
+{
+    return m_floating;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -194,26 +226,6 @@ void DockBase::setContentHeight(int height)
     emit contentSizeChanged();
 }
 
-void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
-{
-    if (areas == allowedAreas()) {
-        return;
-    }
-
-    m_allowedAreas = areas;
-    emit allowedAreasChanged();
-}
-
-void DockBase::setFloating(bool floating)
-{
-    if (floating == m_floating) {
-        return;
-    }
-
-    m_dockWidget->setFloating(floating);
-    doSetFloating(floating);
-}
-
 void DockBase::setLocation(DockLocation location)
 {
     if (location == m_location) {
@@ -221,7 +233,27 @@ void DockBase::setLocation(DockLocation location)
     }
 
     m_location = location;
-    emit locationChanged(m_location);
+    emit locationChanged();
+}
+
+void DockBase::setDropDestinations(const QVariantList& destinations)
+{
+    if (m_dropDestinations == destinations) {
+        return;
+    }
+
+    m_dropDestinations = destinations;
+    emit dropDestinationsChanged();
+}
+
+void DockBase::setPersistent(bool persistent)
+{
+    if (persistent == m_persistent) {
+        return;
+    }
+
+    m_persistent = persistent;
+    emit persistentChanged();
 }
 
 void DockBase::setResizable(bool resizable)
@@ -242,6 +274,16 @@ void DockBase::setSeparatorsVisible(bool visible)
 
     m_separatorsVisible = visible;
     emit separatorsVisibleChanged();
+}
+
+void DockBase::setFloating(bool floating)
+{
+    if (floating == m_floating) {
+        return;
+    }
+
+    m_dockWidget->setFloating(floating);
+    doSetFloating(floating);
 }
 
 DockType DockBase::type() const
@@ -283,9 +325,14 @@ void DockBase::close()
     setVisible(false);
 }
 
-DockBase::DockLocation DockBase::location() const
+void DockBase::setSelected(bool selected)
 {
-    return m_location;
+    if (selected == m_selected) {
+        return;
+    }
+
+    m_selected = selected;
+    writeProperties();
 }
 
 void DockBase::componentComplete()
@@ -310,13 +357,7 @@ void DockBase::componentComplete()
     m_dockWidget->setWidget(content);
     m_dockWidget->setTitle(m_title);
 
-    DockProperties properties;
-    properties.type = type();
-    properties.allowedAreas = allowedAreas();
-    properties.separatorsVisible = separatorsVisible();
-
-    writePropertiesToObject(properties, *m_dockWidget);
-
+    writeProperties();
     listenFloatingChanges();
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
@@ -393,10 +434,46 @@ void DockBase::listenFloatingChanges()
             applySizeConstraints();
         }, Qt::UniqueConnection);
     });
+
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::isFloatingChanged, this, [this]() {
+        doSetFloating(m_dockWidget->isFloating());
+        applySizeConstraints();
+    });
 }
 
 void DockBase::doSetFloating(bool floating)
 {
     m_floating = floating;
     emit floatingChanged();
+}
+
+void DockBase::writeProperties()
+{
+    if (!m_dockWidget) {
+        return;
+    }
+
+    DockProperties properties;
+    properties.type = type();
+    properties.persistent = persistent();
+    properties.separatorsVisible = separatorsVisible();
+    properties.selected = m_selected;
+
+    writePropertiesToObject(properties, *m_dockWidget);
+}
+
+bool DropDestination::operator==(const DropDestination& dest) const
+{
+    return dock == dest.dock && dropLocation == dest.dropLocation;
+}
+
+bool DropDestination::isValid() const
+{
+    return dock != nullptr;
+}
+
+void DropDestination::clear()
+{
+    dock = nullptr;
+    dropLocation = DropLocation::None;
 }

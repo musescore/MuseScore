@@ -20,42 +20,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "docktoolbarholder.h"
+#include "dockingholderview.h"
 
 using namespace mu::dock;
 
-constexpr int DOCK_TOOLBAR_HOLDER_SIZE = 36;
+constexpr int MIN_LENGTH = 36;
 
-DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
-    : DockToolBarView(parent)
+DockingHolderView::DockingHolderView(QQuickItem* parent)
+    : DockBase(parent)
 {
     setVisible(false);
 }
 
-void DockToolBarHolder::componentComplete()
+void DockingHolderView::componentComplete()
 {
-    DockToolBarView::componentComplete();
-
     switch (location()) {
     case DockLocation::Left:
     case DockLocation::Right:
-        setWidth(DOCK_TOOLBAR_HOLDER_SIZE);
-        setMinimumWidth(DOCK_TOOLBAR_HOLDER_SIZE);
-        setMaximumWidth(DOCK_TOOLBAR_HOLDER_SIZE * 2);
+        setMinimumWidth(MIN_LENGTH);
+        setWidth(MIN_LENGTH);
         break;
     case DockLocation::Top:
     case DockLocation::Bottom:
-        setHeight(DOCK_TOOLBAR_HOLDER_SIZE);
-        setMinimumHeight(DOCK_TOOLBAR_HOLDER_SIZE);
-        setMaximumHeight(DOCK_TOOLBAR_HOLDER_SIZE);
+        setMinimumHeight(MIN_LENGTH);
+        setHeight(MIN_LENGTH);
         break;
     case DockLocation::Center:
     case DockLocation::Undefined:
         break;
     }
+
+    DockBase::componentComplete();
 }
 
-DockType DockToolBarHolder::type() const
+DockType DockingHolderView::type() const
 {
-    return DockType::ToolBarDockingHolder;
+    return DockType::DockingHolder;
 }

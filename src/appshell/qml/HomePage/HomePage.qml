@@ -71,7 +71,7 @@ DockPage {
             minimumWidth: 76
             maximumWidth: 280
 
-            allowedAreas: Qt.NoDockWidgetArea
+            persistent: true
 
             HomeMenu {
                 currentPageName: root.section

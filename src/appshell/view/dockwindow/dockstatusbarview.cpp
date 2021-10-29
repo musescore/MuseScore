@@ -26,8 +26,6 @@ using namespace mu::dock;
 DockStatusBarView::DockStatusBarView(QQuickItem* parent)
     : DockBase(parent)
 {
-    setAllowedAreas(Qt::BottomDockWidgetArea);
-
     constexpr int STATUS_BAR_HEIGHT = 32;
 
     setMinimumHeight(STATUS_BAR_HEIGHT);
