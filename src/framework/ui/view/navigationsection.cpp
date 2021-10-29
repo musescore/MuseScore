@@ -23,6 +23,8 @@
 
 #include <algorithm>
 
+#include <QQuickWindow>
+
 #include "log.h"
 
 using namespace mu::ui;
@@ -69,6 +71,11 @@ mu::async::Channel<INavigation::Index> NavigationSection::indexChanged() const
 bool NavigationSection::enabled() const
 {
     if (!AbstractNavigation::enabled()) {
+        return false;
+    }
+
+    QWindow* sectionWindow = window();
+    if (sectionWindow && (mainWindow()->topWindow() != sectionWindow)) {
         return false;
     }
 
@@ -173,4 +180,16 @@ const std::set<INavigationPanel*>& NavigationSection::panels() const
 mu::async::Notification NavigationSection::panelsListChanged() const
 {
     return m_panelsListChanged;
+}
+
+QWindow* NavigationSection::window() const
+{
+    QQuickItem* parentItem = qobject_cast<QQuickItem*>(parent());
+
+    if (!parentItem) {
+        LOGW() << "Navigation Section must be inside QQuickItem to be able to start navigation in the dialog";
+        return nullptr;
+    }
+
+    return qobject_cast<QWindow*>(parentItem->window());
 }

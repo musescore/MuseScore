@@ -28,9 +28,10 @@
 #include "abstractnavigation.h"
 #include "navigationpanel.h"
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../inavigationcontroller.h"
-#include "async/asyncable.h"
+#include "../imainwindow.h"
 
 namespace mu::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection, public async::Asyncable
@@ -39,6 +40,7 @@ class NavigationSection : public AbstractNavigation, public INavigationSection, 
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
     INJECT(ui, INavigationController, navigationController)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
@@ -84,6 +86,7 @@ signals:
     void typeChanged(QmlType type);
 
 private:
+    QWindow* window() const;
 
     std::set<INavigationPanel*> m_panels;
     async::Notification m_panelsListChanged;

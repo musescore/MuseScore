@@ -43,23 +43,12 @@ QWindow* MainWindowProvider::qWindow() const
 
 QWindow* MainWindowProvider::topWindow() const
 {
-    if (m_windows.isEmpty()) {
-        return qWindow();
+    QWindow* window = interactiveProvider()->topWindow();
+    if (!window) {
+        window = qWindow();
     }
-    return m_windows.top();
-}
 
-void MainWindowProvider::pushWindow(QWindow* w)
-{
-    m_windows.push(w);
-}
-
-void MainWindowProvider::popWindow(QWindow* w)
-{
-    IF_ASSERT_FAILED(m_windows.top() == w) {
-        return;
-    }
-    m_windows.pop();
+    return window;
 }
 
 void MainWindowProvider::setWindow(QWindow* window)
