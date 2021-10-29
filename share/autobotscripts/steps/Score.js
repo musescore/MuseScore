@@ -19,26 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "autobotactionscontroller.h"
 
-#include "uri.h"
+module.exports = {
+    nextChord: function()
+    {
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        api.shortcuts.activate("Right")
+    },
 
-using namespace mu::autobot;
-
-static const mu::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false&floating=true");
-static const mu::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false&floating=true");
-
-void AutobotActionsController::init()
-{
-    dispatcher()->reg(this, "autobot-show-batchtests", [this]() { openUri(SHOW_BATCHTESTS_URI); });
-    dispatcher()->reg(this, "autobot-show-scripts", [this]() { openUri(SHOW_SCRIPTS_URI); });
-}
-
-void AutobotActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
-{
-    if (isSingle && interactive()->isOpened(uri.uri()).val) {
-        return;
+    appendMeasures: function(count)
+    {
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        for (var i = 0; i < count; i++) {
+            api.shortcuts.activate("Ctrl+B")
+            if (i%10 == 0) {
+                api.autobot.sleep(1)
+            }
+        }
     }
-
-    interactive()->open(uri);
 }

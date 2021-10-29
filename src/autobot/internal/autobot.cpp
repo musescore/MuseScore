@@ -45,6 +45,21 @@ void Autobot::init()
     setStatus(Status::Stopped);
 }
 
+void Autobot::affectOnServices()
+{
+    //! NOTE Disable reset on mouse press for testing purpose
+    navigation()->setIsResetOnMousePress(false);
+
+    //! NOTE Only defaults shortcuts
+    shortcutsRegister()->reload(true);
+}
+
+void Autobot::restoreAffectOnServices()
+{
+    navigation()->setIsResetOnMousePress(true);
+    shortcutsRegister()->reload(false);
+}
+
 mu::Ret Autobot::execScript(const io::path& path)
 {
     LOGD() << path;
@@ -52,6 +67,8 @@ mu::Ret Autobot::execScript(const io::path& path)
     if (status() != Status::Stopped) {
         abort();
     }
+
+    affectOnServices();
 
     m_context = std::make_shared<TestCaseContext>();
     m_context->setGlobalVal("script_path", path.toQString());
@@ -68,6 +85,9 @@ mu::Ret Autobot::execScript(const io::path& path)
     if (!ret) {
         LOGE() << ret.toString();
     }
+
+    restoreAffectOnServices();
+
     return ret;
 }
 

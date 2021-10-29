@@ -44,7 +44,7 @@ class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 public:
     ShortcutsRegister() = default;
 
-    void load();
+    void reload(bool onlyDef = false) override;
 
     const ShortcutList& shortcuts() const override;
     Ret setShortcuts(const ShortcutList& shortcuts) override;

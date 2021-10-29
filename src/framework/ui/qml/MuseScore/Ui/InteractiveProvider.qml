@@ -122,7 +122,7 @@ Item {
         }
 
         obj.closed.connect(function() {
-            root.provider.onPopupClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
+            root.provider.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
 

@@ -30,6 +30,8 @@
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
 #include "system/ifilesystem.h"
+#include "ui/inavigationcontroller.h"
+#include "shortcuts/ishortcutsregister.h"
 
 #include "scriptengine.h"
 #include "testcasecontext.h"
@@ -41,6 +43,8 @@ class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
     INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, ui::INavigationController, navigation)
+    INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:
     Autobot() = default;
@@ -64,6 +68,9 @@ public:
     ITestCaseContextPtr context() const override;
 
 private:
+
+    void affectOnServices();
+    void restoreAffectOnServices();
 
     void setStatus(Status st);
 

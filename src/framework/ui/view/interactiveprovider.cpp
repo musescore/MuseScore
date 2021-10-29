@@ -388,7 +388,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         }
         }
 
-        onPopupClose(objectId, status);
+        onClose(objectId, status);
         dialog->deleteLater();
     });
 
@@ -473,6 +473,11 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
         containerType = ContainerType::QmlDialog;
     }
 
+    if (m_openingUriQuery.param("floating").toBool()) {
+        m_openingUriQuery = UriQuery();
+        return;
+    }
+
     ObjectInfo objectInfo;
     objectInfo.uriQuery = m_openingUriQuery;
     objectInfo.objectId = objectId;
@@ -495,22 +500,24 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     m_openingUriQuery = UriQuery();
 }
 
-void InteractiveProvider::onPopupClose(const QString& objectId, const QVariant& jsrv)
+void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
 {
     m_retvals[objectId] = toRetVal(jsrv);
 
-    IF_ASSERT_FAILED(m_stack.size() >= 1) {
-        return;
-    }
-
+    bool found = false;
     for (int i = 0; i < m_stack.size(); ++i) {
         if (m_stack[i].objectId == objectId) {
             m_stack.remove(i);
+            found = true;
             break;
         }
     }
 
-    notifyAboutCurrentUriChanged();
+    //! NOTE We may not find an object in the stack if it's,
+    //! for example, a floating dialog (usually diagnostic dialogs)
+    if (found) {
+        notifyAboutCurrentUriChanged();
+    }
 }
 
 void InteractiveProvider::notifyAboutCurrentUriChanged()
