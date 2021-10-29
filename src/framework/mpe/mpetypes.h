@@ -501,8 +501,8 @@ struct ExpressionCurve : public std::map<duration_percentage_t, dynamic_level_t>
     dynamic_level_t maxAmplitudeLevel() const
     {
         const auto& max = std::max_element(cbegin(), cend(), [](const auto& f, const auto& s) {
-                return f.second < s.second;
-            });
+            return f.second < s.second;
+        });
 
         if (max == cend()) {
             return 0.f;
