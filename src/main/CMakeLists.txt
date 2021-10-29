@@ -149,6 +149,7 @@ set(LINK_LIB ${LINK_LIB}
     shortcuts
     workspace
     audio
+    mpe
     midi
     learn
     notation
