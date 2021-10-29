@@ -51,8 +51,10 @@ public:
 
 private:
 
-    void notifyAboutContextChanged();
+    ui::UiContext resolveCurrentUiContext() const;
+    void notifyAboutContextIfChanged();
 
+    ui::UiContext m_lastUiContext = context::UiCtxUnknown;
     async::Notification m_currentUiContextChanged;
 };
 }
