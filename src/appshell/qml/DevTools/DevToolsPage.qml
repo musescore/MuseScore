@@ -71,7 +71,7 @@ DockPage {
             minimumWidth: 200
             maximumWidth: 280
 
-            allowedAreas: Qt.NoDockWidgetArea
+            persistent: true
 
             Rectangle {
                 anchors.fill: parent

@@ -28,6 +28,10 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 
+namespace KDDockWidgets {
+class Frame;
+}
+
 namespace mu::dock {
 class DockFrameModel : public QObject
 {
@@ -43,6 +47,8 @@ class DockFrameModel : public QObject
     Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
 
+    Q_PROPERTY(bool selectionVisible READ selectionVisible NOTIFY selectionVisibleChanged)
+
 public:
     explicit DockFrameModel(QObject* parent = nullptr);
 
@@ -53,6 +59,8 @@ public:
     QObject* navigationSection() const;
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
+
+    bool selectionVisible() const;
 
     Q_INVOKABLE void handleMenuItem(const QString& itemId) const;
 
@@ -65,6 +73,7 @@ signals:
     void titleBarVisibleChanged(bool visible);
     void navigationSectionChanged();
     void currentDockChanged();
+    void selectionVisibleChanged();
 
 private:
     bool eventFilter(QObject* watched, QEvent* event);
@@ -78,7 +87,7 @@ private:
     QObject* currentNavigationSection() const;
     void updateNavigationSection();
 
-    QQuickItem* m_frame = nullptr;
+    KDDockWidgets::Frame* m_frame = nullptr;
     bool m_titleBarVisible = false;
     QObject* m_navigationSection = nullptr;
 };

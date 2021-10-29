@@ -80,11 +80,9 @@ DockWindow {
         }
     ]
 
-    mainToolBarDockingHolder: DockToolBarHolder {
+    mainToolBarDockingHolder: DockingHolder {
         objectName: root.objectName + "_mainToolBarDockingHolderTop"
         location: DockBase.Top
-
-        Rectangle { color: ui.theme.backgroundPrimaryColor }
     }
 
     pages: [

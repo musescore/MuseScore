@@ -22,7 +22,7 @@
 #ifndef MU_DOCK_IDOCKWINDOW_H
 #define MU_DOCK_IDOCKWINDOW_H
 
-#include "globaltypes.h"
+#include "docktypes.h"
 #include "async/channel.h"
 
 #include <QString>
@@ -35,15 +35,6 @@ class IDockWindow
 public:
     virtual ~IDockWindow() = default;
 
-    enum DockingHolderType {
-        Panel,
-        ToolBar
-    };
-
-    virtual void setToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) = 0;
-    virtual void showDockingHolder(const QPoint& globalPos, DockingHolderType type) = 0;
-    virtual void hideAllDockingHolders() = 0;
-
     virtual bool isDockOpen(const QString& dockName) const = 0;
     virtual void setDockOpen(const QString& dockName, bool open) = 0;
     virtual void toggleDock(const QString& dockName) = 0;
@@ -52,6 +43,9 @@ public:
 
     virtual bool isDockFloating(const QString& dockName) const = 0;
     virtual void toggleDockFloating(const QString& dockName) = 0;
+
+    virtual DropLocation::Location hover(const QString& draggedDockName, const QPoint& globalPos) = 0;
+    virtual void endHover() = 0;
 };
 }
 

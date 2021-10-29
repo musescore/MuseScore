@@ -25,12 +25,14 @@
 #include <QQuickItem>
 
 #include "../docktypes.h"
+#include "uicomponents/view/qmllistproperty.h"
 
 namespace KDDockWidgets {
 class DockWidgetQuick;
 }
 
 namespace mu::dock {
+struct DropDestination;
 class DockBase : public QQuickItem
 {
     Q_OBJECT
@@ -41,18 +43,17 @@ class DockBase : public QQuickItem
     Q_PROPERTY(int minimumHeight READ minimumHeight WRITE setMinimumHeight NOTIFY minimumSizeChanged)
     Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth NOTIFY maximumSizeChanged)
     Q_PROPERTY(int maximumHeight READ maximumHeight WRITE setMaximumHeight NOTIFY maximumSizeChanged)
-
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentSizeChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentSizeChanged)
 
-    Q_PROPERTY(Qt::DockWidgetAreas allowedAreas READ allowedAreas WRITE setAllowedAreas NOTIFY allowedAreasChanged)
-
-    Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
-
     Q_PROPERTY(DockLocation location READ location WRITE setLocation NOTIFY locationChanged)
+    Q_PROPERTY(QVariantList dropDestinations READ dropDestinationsProperty WRITE setDropDestinations NOTIFY dropDestinationsChanged)
 
+    Q_PROPERTY(bool persistent READ persistent WRITE setPersistent NOTIFY persistentChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool separatorsVisible READ separatorsVisible WRITE setSeparatorsVisible NOTIFY separatorsVisibleChanged)
+
+    Q_PROPERTY(bool floating READ floating NOTIFY floatingChanged)
 
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
@@ -73,13 +74,17 @@ public:
     int minimumHeight() const;
     int maximumWidth() const;
     int maximumHeight() const;
-
     int contentWidth() const;
     int contentHeight() const;
-
     QSize preferredSize() const;
 
-    Qt::DockWidgetAreas allowedAreas() const;
+    DockLocation location() const;
+    QVariantList dropDestinationsProperty() const;
+    QList<DropDestination> dropDestinations() const;
+
+    bool persistent() const;
+    bool resizable() const;
+    bool separatorsVisible() const;
 
     bool floating() const;
 
@@ -89,10 +94,7 @@ public:
     void open();
     void close();
 
-    DockLocation location() const;
-
-    bool resizable() const;
-    bool separatorsVisible() const;
+    void setSelected(bool selected);
 
 public slots:
     void setTitle(const QString& title);
@@ -101,39 +103,40 @@ public slots:
     void setMinimumHeight(int height);
     void setMaximumWidth(int width);
     void setMaximumHeight(int height);
-
     void setContentWidth(int width);
     void setContentHeight(int height);
 
-    void setAllowedAreas(Qt::DockWidgetAreas areas);
-
-    void setFloating(bool floating);
-
     void setLocation(DockLocation location);
+    void setDropDestinations(const QVariantList& destinations);
 
+    void setPersistent(bool persistent);
     void setResizable(bool resizable);
     void setSeparatorsVisible(bool visible);
 
+    void setFloating(bool floating);
+
 signals:
     void titleChanged();
+
     void minimumSizeChanged();
     void maximumSizeChanged();
     void contentSizeChanged();
-    void allowedAreasChanged();
 
-    void floatingChanged();
+    void locationChanged();
+    void dropDestinationsChanged();
 
-    void locationChanged(DockLocation location);
-
+    void persistentChanged();
     void resizableChanged();
     void separatorsVisibleChanged();
+
+    void floatingChanged();
 
 protected:
     friend class DockWindow;
 
-    virtual DockType type() const;
-
     void componentComplete() override;
+
+    virtual DockType type() const;
 
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
@@ -144,6 +147,10 @@ private:
     void listenFloatingChanges();
     void doSetFloating(bool floating);
 
+    void writeProperties();
+
+    QString m_title;
+
     int m_minimumWidth = 0;
     int m_minimumHeight = 0;
     int m_maximumWidth = 0;
@@ -151,13 +158,28 @@ private:
     int m_contentWidth = 0;
     int m_contentHeight = 0;
 
-    QString m_title;
-    Qt::DockWidgetAreas m_allowedAreas = Qt::NoDockWidgetArea;
-    KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
-    bool m_floating = false;
     DockLocation m_location = DockLocation::Undefined;
+    QVariantList m_dropDestinations;
+
+    bool m_persistent = false;
     bool m_resizable = false;
     bool m_separatorsVisible = false;
+    bool m_selected = false;
+
+    bool m_floating = false;
+
+    KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
+};
+
+struct DropDestination
+{
+    DockBase* dock = nullptr;
+    DropLocation::Location dropLocation = DropLocation::None;
+
+    bool operator==(const DropDestination& dest) const;
+
+    bool isValid() const;
+    void clear();
 };
 }
 

@@ -127,6 +127,10 @@ DockPage {
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
+            dropDestinations: [
+                { "dock": notationToolBar, "dropLocation": DropLocation.Right }
+            ]
+
             PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 3
@@ -161,10 +165,15 @@ DockPage {
             objectName: pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
 
-            allowedAreas: { Qt.AllDockWidgetAreas }
-
             minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 76
             minimumHeight: floating && orientation === Qt.Vertical ? 720 : 40
+
+            dropDestinations: [
+                root.toolBarTopDropDestination,
+                root.toolBarBottomDropDestination,
+                root.toolBarLeftDropDestination,
+                root.toolBarRightDropDestination
+            ]
 
             NoteInputBar {
                 orientation: noteInputBar.orientation
@@ -196,6 +205,11 @@ DockPage {
 
             location: DockBase.Left
 
+            dropDestinations: [
+                root.panelLeftDropDestination,
+                root.panelRightDropDestination
+            ]
+
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
             }
@@ -216,6 +230,11 @@ DockPage {
             tabifyPanel: inspectorPanel
 
             location: DockBase.Left
+
+            dropDestinations: [
+                root.panelLeftDropDestination,
+                root.panelRightDropDestination
+            ]
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
@@ -242,6 +261,11 @@ DockPage {
 
             location: DockBase.Left
 
+            dropDestinations: [
+                root.panelLeftDropDestination,
+                root.panelRightDropDestination
+            ]
+
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
             }
@@ -264,6 +288,11 @@ DockPage {
 
             location: DockBase.Left
 
+            dropDestinations: [
+                root.panelLeftDropDestination,
+                root.panelRightDropDestination
+            ]
+
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
             }
@@ -279,8 +308,6 @@ DockPage {
             objectName: pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
-            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
-
             height: minimumHeight
             minimumHeight: 260
             maximumHeight: 520
@@ -291,6 +318,11 @@ DockPage {
             visible: false
 
             location: DockBase.Bottom
+
+            dropDestinations: [
+                root.panelTopDropDestination,
+                root.panelBottomDropDestination
+            ]
 
             navigationSection: root.navigationPanelSec(mixerPanel.location)
 
@@ -309,8 +341,6 @@ DockPage {
             objectName: pageModel.pianoPanelName()
             title: qsTrc("appshell", "Piano Roll")
 
-            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
-
             height: 200
             minimumHeight: 100
             maximumHeight: 300
@@ -321,6 +351,11 @@ DockPage {
             visible: false
 
             location: DockBase.Bottom
+
+            dropDestinations: [
+                root.panelTopDropDestination,
+                root.panelBottomDropDestination
+            ]
 
             Rectangle {
                 anchors.fill: parent
@@ -339,8 +374,6 @@ DockPage {
             objectName: pageModel.timelinePanelName()
             title: qsTrc("appshell", "Timeline")
 
-            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
-
             height: 200
             minimumHeight: 100
             maximumHeight: 300
@@ -350,6 +383,11 @@ DockPage {
 
             location: DockBase.Bottom
 
+            dropDestinations: [
+                root.panelTopDropDestination,
+                root.panelBottomDropDestination
+            ]
+
             Timeline {}
         },
 
@@ -358,8 +396,6 @@ DockPage {
 
             objectName: pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset Tools")
-
-            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
             minimumHeight: 30
             maximumHeight: 30

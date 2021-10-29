@@ -20,22 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPANELHOLDER_H
-#define MU_DOCK_DOCKPANELHOLDER_H
+import QtQuick 2.15
 
-#include "dockpanelview.h"
+import MuseScore.Ui 1.0
+import MuseScore.Dock 1.0
 
-namespace mu::dock {
-class DockPanelHolder : public DockPanelView
-{
-    Q_OBJECT
-
-public:
-    explicit DockPanelHolder(QQuickItem* parent = nullptr);
-
-private:
-    DockType type() const override;
-};
+DockingHolderView {
+    Rectangle {
+        color: ui.theme.backgroundPrimaryColor
+    }
 }
-
-#endif // MU_DOCK_DOCKPANELHOLDER_H
