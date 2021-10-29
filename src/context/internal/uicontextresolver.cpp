@@ -36,43 +36,57 @@ static const QString NOTATION_NAVIGATION_SECTION("NotationView");
 void UiContextResolver::init()
 {
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        notifyAboutContextChanged();
+        notifyAboutContextIfChanged();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        notifyAboutContextIfChanged();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                notifyAboutContextIfChanged();
             });
 
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                notifyAboutContextIfChanged();
             });
 
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
-                notifyAboutContextChanged();
+                notifyAboutContextIfChanged();
             });
         }
-        notifyAboutContextChanged();
+        notifyAboutContextIfChanged();
     });
 
     navigationController()->navigationChanged().onNotify(this, [this]() {
-        notifyAboutContextChanged();
+        notifyAboutContextIfChanged();
     });
+
+    m_lastUiContext = resolveCurrentUiContext();
 }
 
-void UiContextResolver::notifyAboutContextChanged()
+void UiContextResolver::notifyAboutContextIfChanged()
 {
     TRACEFUNC;
+
+    UiContext ctx = resolveCurrentUiContext();
+    if (ctx == m_lastUiContext) {
+        return;
+    }
+
+    m_lastUiContext = ctx;
     m_currentUiContextChanged.notify();
 }
 
 UiContext UiContextResolver::currentUiContext() const
+{
+    return m_lastUiContext;
+}
+
+UiContext UiContextResolver::resolveCurrentUiContext() const
 {
     TRACEFUNC;
     Uri currentUri = interactive()->currentUri().val;
