@@ -83,7 +83,7 @@ var testCase = {
             putNoteAndApplyCell(24)
             Palette.togglePalette("Noteheads") // close
         }},
-        {name: "Add Lines", skip: false, func: function() {
+        {name: "Add Lines", skip: true, func: function() {
             Score.nextChord()
             Score.appendMeasures(4 * 35)
             seeChanges()
@@ -91,6 +91,13 @@ var testCase = {
             Palette.togglePalette("Lines") // open
             applyLines(35)
             Palette.togglePalette("Lines") // close
+        }},
+        {name: "Change Barlines", skip: false, func: function() {
+            Score.nextChord()
+
+            Palette.togglePalette("Barlines") // open
+            applyBarlines(15)
+            Palette.togglePalette("Barlines") // close
 
             api.autobot.abort()
         }},
@@ -166,6 +173,17 @@ function applyLines(count)
         api.shortcuts.activate("C")
         api.shortcuts.activate("C")
         api.shortcuts.activate("C")
+        seeChanges()
+    }
+}
+
+function applyBarlines(count)
+{
+    for (var i = 0; i < count; i++) {
+        api.shortcuts.activate("C")
+        api.shortcuts.activate("C")
+        api.navigation.down()
+        api.navigation.trigger()
         seeChanges()
     }
 }
