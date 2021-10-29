@@ -2911,8 +2911,6 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         return Score::FileError::FILE_BAD_FORMAT;
     }
 
-    masterScore->setEnableVerticalSpread(false);
-
     for (Staff* s : masterScore->staves()) {
         int idx   = s->idx();
         int track = idx * VOICES;
@@ -3132,7 +3130,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         if (!excerpt->parts().isEmpty()) {
             masterScore->_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
-            nscore->setEnableVerticalSpread(false);
+            ReadStyleHook::setupDefaultStyle(nscore);
             excerpt->setPartScore(nscore);
             nscore->style().set(Sid::createMultiMeasureRests, true);
             Excerpt::createExcerpt(excerpt);
