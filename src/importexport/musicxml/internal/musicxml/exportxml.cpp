@@ -674,6 +674,10 @@ static QString fontStyleToXML(const FontStyle style, bool allowUnderline = true)
     if (allowUnderline && style & FontStyle::Underline) {
         res += " underline=\"1\"";
     }
+    // at places where underline is not wanted (e.g. fingering, pluck), strike is not wanted too
+    if (allowUnderline && style & FontStyle::Strike) {
+        res += " line-through=\"1\"";
+    }
     return res;
 }
 

@@ -140,6 +140,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
+        f.setStrike(glissando()->fontStyle() & FontStyle::Strike);
         mu::draw::FontMetrics fm(f);
         RectF r = fm.boundingRect(glissando()->text());
 

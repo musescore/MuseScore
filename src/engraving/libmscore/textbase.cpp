@@ -369,7 +369,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         for (int column = startColumn; column < endSelectionColumn; column++) {
             CharFormat format = block->fragment(column) ? block->fragment(column)->format : CharFormat();
 
-            // proper bitwise 'and' to ensure Bold/Italic/Underline only true if true for all fragments
+            // proper bitwise 'and' to ensure Bold/Italic/Underline/Strike only true if true for all fragments
             resultFormat.setStyle(static_cast<FontStyle>(static_cast<int>(resultFormat.style()) & static_cast<int>(format.style())));
 
             if (resultFormat.fontFamily() == "ScoreText") {
@@ -932,7 +932,7 @@ void TextFragment::draw(mu::draw::Painter* p, const TextBase* t) const
 void TextBase::drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text)
 {
     qreal mm = p->worldTransform().m11();
-    if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
+    if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
         p->drawTextWorkaround(f, pos, text);
     } else {
         p->setFont(f);
@@ -957,6 +957,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         m *= subScriptSize;
     }
     font.setUnderline(format.underline());
+    font.setStrike(format.strike());
 
     QString family;
     if (format.fontFamily() == "ScoreText") {
@@ -1542,6 +1543,7 @@ QVariant CharFormat::formatValue(FormatId id) const
     case FormatId::Bold: return bold();
     case FormatId::Italic: return italic();
     case FormatId::Underline: return underline();
+    case FormatId::Strike: return strike();
     case FormatId::Valign: return static_cast<int>(valign());
     case FormatId::FontSize: return fontSize();
     case FormatId::FontFamily: return fontFamily();
@@ -1565,6 +1567,9 @@ void CharFormat::setFormatValue(FormatId id, QVariant data)
         break;
     case FormatId::Underline:
         setUnderline(data.toBool());
+        break;
+    case FormatId::Strike:
+        setStrike(data.toBool());
         break;
     case FormatId::Valign:
         _valign = static_cast<VerticalAlignment>(data.toInt());
@@ -1953,6 +1958,11 @@ bool TextBase::prepareFormat(const QString& token, Ms::CharFormat& format)
         return true;
     } else if (token == "/u") {
         format.setUnderline(false);
+    } else if (token == "s") {
+        format.setStrike(true);
+        return true;
+    } else if (token == "/s") {
+        format.setStrike(false);
     } else if (token == "sub") {
         format.setValign(VerticalAlignment::AlignSubScript);
     } else if (token == "/sub") {
@@ -2174,6 +2184,7 @@ void TextBase::setFontStyle(const FontStyle& val)
     _cursor->setFormat(FormatId::Bold, val & FontStyle::Bold);
     _cursor->setFormat(FormatId::Italic, val & FontStyle::Italic);
     _cursor->setFormat(FormatId::Underline, val & FontStyle::Underline);
+    _cursor->setFormat(FormatId::Strike, val & FontStyle::Strike);
 }
 
 void TextBase::setFamily(const QString& val)
@@ -2207,6 +2218,7 @@ public:
     void pushB() { pushToken("b"); }
     void pushI() { pushToken("i"); }
     void pushU() { pushToken("u"); }
+    void pushS() { pushToken("s"); }
 
     QString popToken()
     {
@@ -2235,6 +2247,7 @@ public:
     void popB() { popToken("b"); }
     void popI() { popToken("i"); }
     void popU() { popToken("u"); }
+    void popS() { popToken("s"); }
 };
 
 //---------------------------------------------------------
@@ -2247,6 +2260,7 @@ void TextBase::genText() const
     bool bold_      = false;
     bool italic_    = false;
     bool underline_ = false;
+    bool strike_    = false;
 
     CharFormat fmt;
     fmt.setFontFamily(propertyDefault(Pid::FONT_FACE).toString());
@@ -2264,6 +2278,9 @@ void TextBase::genText() const
             if (!f.format.underline() && fmt.underline()) {
                 underline_ = true;
             }
+            if (!f.format.strike() && fmt.strike()) {
+                strike_ = true;
+            }
         }
     }
 
@@ -2276,6 +2293,9 @@ void TextBase::genText() const
     }
     if (underline_) {
         xmlNesting.pushU();
+    }
+    if (strike_) {
+        xmlNesting.pushS();
     }
 
     for (const TextBlock& block : _layout) {
@@ -2303,6 +2323,13 @@ void TextBase::genText() const
                     xmlNesting.pushU();
                 } else {
                     xmlNesting.popU();
+                }
+            }
+            if (fmt.strike() != format.strike()) {
+                if (format.strike()) {
+                    xmlNesting.pushS();
+                } else {
+                    xmlNesting.popS();
                 }
             }
 
@@ -2490,6 +2517,16 @@ bool TextBase::readProperties(XmlReader& e)
             setFontStyle(fontStyle() + FontStyle::Underline);
         } else {
             setFontStyle(fontStyle() - FontStyle::Underline);
+        }
+        if (isStyled(Pid::FONT_STYLE)) {
+            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+        }
+    } else if (tag == "strike") {
+        bool val = e.readInt();
+        if (val) {
+            setFontStyle(fontStyle() + FontStyle::Strike);
+        } else {
+            setFontStyle(fontStyle() - FontStyle::Strike);
         }
         if (isStyled(Pid::FONT_STYLE)) {
             setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
@@ -2858,7 +2895,8 @@ bool TextBase::validateText(QString& s)
                 d.append("&amp;");
             }
         } else if (c == '<') {
-            const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>", "sym>", "/sym>", "sub>", "/sub>", "sup>", "/sup>" };
+            const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "s>", "/s>", "font ", "/font>", "sym>", "/sym>", "sub>",
+                               "/sub>", "sup>", "/sup>" };
             QString t = s.mid(i + 1);
             bool found = false;
             for (auto k : ok) {
@@ -2910,6 +2948,9 @@ mu::draw::Font TextBase::font() const
     f.setItalic(italic());
     if (underline()) {
         f.setUnderline(underline());
+    }
+    if (strike()) {
+        f.setStrike(strike());
     }
 
     return f;
@@ -3152,6 +3193,9 @@ QString TextBase::getHtmlStartTag(qreal newSize, qreal& curSize, const QString& 
     if (style & Ms::FontStyle::Underline) {
         s += "<u>";
     }
+    if (style & Ms::FontStyle::Strike) {
+        s += "<s>";
+    }
     if (vAlign == Ms::VerticalAlignment::AlignSubScript) {
         s += "<sub>";
     } else if (vAlign == Ms::VerticalAlignment::AlignSuperScript) {
@@ -3170,6 +3214,9 @@ QString TextBase::getHtmlEndTag(Ms::FontStyle style, Ms::VerticalAlignment vAlig
         s += "</sub>";
     } else if (vAlign == Ms::VerticalAlignment::AlignSuperScript) {
         s += "</sup>";
+    }
+    if (style & Ms::FontStyle::Strike) {
+        s += "</s>";
     }
     if (style & Ms::FontStyle::Underline) {
         s += "</u>";
@@ -3485,6 +3532,7 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
     bool bold_      = false;
     bool italic_    = false;
     bool underline_ = false;
+    bool strike_    = false;
 
     for (const TextBlock& block : _layout) {
         for (const TextFragment& f : block.fragments()) {
@@ -3496,6 +3544,9 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
             }
             if (!f.format.underline() && underline()) {
                 underline_ = true;
+            }
+            if (!f.format.strike() && strike()) {
+                strike_ = true;
             }
         }
     }
@@ -3515,6 +3566,9 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
         }
         if (underline_) {
             xmlNesting.pushU();
+        }
+        if (strike_) {
+            xmlNesting.pushS();
         }
     }
 
@@ -3544,6 +3598,13 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                         xmlNesting.pushU();
                     } else {
                         xmlNesting.popU();
+                    }
+                }
+                if (fmt.strike() != format.strike()) {
+                    if (format.strike()) {
+                        xmlNesting.pushS();
+                    } else {
+                        xmlNesting.popS();
                     }
                 }
             }

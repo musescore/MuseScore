@@ -616,7 +616,12 @@ constexpr Align operator~(Align a)
 //---------------------------------------------------------
 
 enum class FontStyle : char {
-    Undefined = -1, Normal = 0, Bold = 1, Italic = 2, Underline = 4
+    Undefined = -1,
+    Normal = 0,
+    Bold = 1 << 0,
+    Italic = 1 << 1,
+    Underline = 1 << 2,
+    Strike = 1 << 3
 };
 
 constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
