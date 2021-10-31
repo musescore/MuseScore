@@ -24,6 +24,8 @@
 
 using namespace mu::dock;
 
+constexpr int DOCK_TOOLBAR_HOLDER_SIZE = 36;
+
 DockToolBarHolder::DockToolBarHolder(QQuickItem* parent)
     : DockToolBarView(parent)
 {
@@ -37,15 +39,15 @@ void DockToolBarHolder::componentComplete()
     switch (location()) {
     case DockLocation::Left:
     case DockLocation::Right:
-        setWidth(MIN_SIDE_SIZE);
-        setMinimumWidth(MIN_SIDE_SIZE);
-        setMaximumWidth(MIN_SIDE_SIZE * 2);
+        setWidth(DOCK_TOOLBAR_HOLDER_SIZE);
+        setMinimumWidth(DOCK_TOOLBAR_HOLDER_SIZE);
+        setMaximumWidth(DOCK_TOOLBAR_HOLDER_SIZE * 2);
         break;
     case DockLocation::Top:
     case DockLocation::Bottom:
-        setHeight(MIN_SIDE_SIZE);
-        setMinimumHeight(MIN_SIDE_SIZE);
-        setMaximumHeight(MIN_SIDE_SIZE);
+        setHeight(DOCK_TOOLBAR_HOLDER_SIZE);
+        setMinimumHeight(DOCK_TOOLBAR_HOLDER_SIZE);
+        setMaximumHeight(DOCK_TOOLBAR_HOLDER_SIZE);
         break;
     case DockLocation::Center:
     case DockLocation::Undefined:

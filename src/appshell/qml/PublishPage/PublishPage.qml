@@ -57,7 +57,6 @@ DockPage {
 
             floatable: false
             resizable: false
-            padding: 0
             separatorsVisible: false
             alignment: DockToolBarAlignment.Center
 
@@ -87,6 +86,8 @@ DockPage {
                 navigation.order: 3
 
                 floating: playbackToolBar.floating
+
+                maximumHeight: playbackToolBar.height
             }
         },
 

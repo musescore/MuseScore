@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.Playback 1.0
@@ -74,9 +73,11 @@ Rectangle {
             spacing: 0
 
             ListView {
+                id: buttonsListView
                 Layout.preferredWidth: contentItem.childrenRect.width
                 Layout.preferredHeight: contentItem.childrenRect.height
 
+                contentHeight: root.floating ? 30 : root.height // To control height of separators
                 spacing: 4
 
                 model: playbackModel
@@ -86,6 +87,9 @@ Rectangle {
 
                 delegate: FlatButton {
                     id: btn
+
+                    width: 30
+                    height: width
 
                     icon: model.icon
 
@@ -126,7 +130,7 @@ Rectangle {
             SeparatorLine {
                 readonly property int topMargin: (root.height - root.maximumHeight) / 2
 
-                Layout.leftMargin: 12
+                Layout.leftMargin: 6
                 Layout.topMargin: topMargin
                 Layout.bottomMargin: topMargin
 
@@ -134,49 +138,48 @@ Rectangle {
                 visible: !root.floating
             }
 
-            TimeInputField {
-                id: timeField
+            RowLayout {
+                Layout.leftMargin: 12
+                spacing: 18
 
-                Layout.leftMargin: 24
-                Layout.preferredWidth: 60
+                TimeInputField {
+                    id: timeField
 
-                maxTime: playbackModel.maxPlayTime
-                maxMillisecondsNumber: 9
-                time: playbackModel.playTime
+                    maxTime: playbackModel.maxPlayTime
+                    maxMillisecondsNumber: 9
+                    time: playbackModel.playTime
 
-                onTimeEdited: {
-                    playbackModel.playTime = newTime
-                }
-            }
-
-            MeasureAndBeatFields {
-                Layout.leftMargin: 24
-
-                measureNumber: playbackModel.measureNumber
-                maxMeasureNumber: playbackModel.maxMeasureNumber
-                beatNumber: playbackModel.beatNumber
-                maxBeatNumber: playbackModel.maxBeatNumber
-
-                font: timeField.font
-
-                onMeasureNumberEdited: {
-                    playbackModel.measureNumber = newValue
+                    onTimeEdited: function(newTime) {
+                        playbackModel.playTime = newTime
+                    }
                 }
 
-                onBeatNumberEdited: {
-                    playbackModel.beatNumber = newValue
+                MeasureAndBeatFields {
+                    measureNumber: playbackModel.measureNumber
+                    maxMeasureNumber: playbackModel.maxMeasureNumber
+                    beatNumber: playbackModel.beatNumber
+                    maxBeatNumber: playbackModel.maxBeatNumber
+
+                    font: timeField.font
+
+                    onMeasureNumberEdited: function(newValue) {
+                        playbackModel.measureNumber = newValue
+                    }
+
+                    onBeatNumberEdited: function(newValue) {
+                        playbackModel.beatNumber = newValue
+                    }
                 }
-            }
 
-            TempoView {
-                Layout.leftMargin: 24
-                Layout.preferredWidth: 60
+                TempoView {
+                    Layout.preferredWidth: 60
 
-                noteSymbol: playbackModel.tempo.noteSymbol
-                tempoValue: playbackModel.tempo.value
+                    noteSymbol: playbackModel.tempo.noteSymbol
+                    tempoValue: playbackModel.tempo.value
 
-                noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
-                tempoValueFont: timeField.font
+                    noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
+                    tempoValueFont: timeField.font
+                }
             }
         }
 

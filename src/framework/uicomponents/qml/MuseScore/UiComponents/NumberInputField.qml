@@ -136,7 +136,7 @@ FocusScope {
         selectByMouse: false
 
         color: ui.theme.fontPrimaryColor
-        font: ui.theme.tabFont
+        font: ui.theme.largeBodyFont
 
         validator: IntValidator {
             bottom: root.minValue

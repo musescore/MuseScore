@@ -101,7 +101,6 @@ DockPage {
 
             floatable: false
             resizable: false
-            padding: 0
             separatorsVisible: false
             alignment: DockToolBarAlignment.Center
 
@@ -160,7 +159,8 @@ DockPage {
 
             allowedAreas: { Qt.AllDockWidgetAreas }
 
-            minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 96
+            minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 76
+            minimumHeight: floating && orientation === Qt.Vertical ? 720 : 40
 
             NoteInputBar {
                 orientation: noteInputBar.orientation

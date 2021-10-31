@@ -70,9 +70,6 @@ protected:
 
     DockType type() const override;
 
-    static const int MIN_SIDE_SIZE;
-    static const int MAX_SIDE_SIZE;
-
 private:
     bool isOrientationChangingAllowed() const;
 
