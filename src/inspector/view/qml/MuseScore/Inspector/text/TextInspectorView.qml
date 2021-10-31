@@ -95,7 +95,8 @@ InspectorSectionView {
                     model: [
                         { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD, title: qsTrc("inspector", "Bold") },
                         { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC, title: qsTrc("inspector", "Italic") },
-                        { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE, title: qsTrc("inspector", "Underline") }
+                        { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE, title: qsTrc("inspector", "Underline") },
+                        { iconCode: IconCode.TEXT_STRIKE, value: TextTypes.FONT_STYLE_STRIKE, title: qsTrc("inspector", "Strike-through") }
                     ]
 
                     delegate: FlatToggleButton {

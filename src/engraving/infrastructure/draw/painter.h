@@ -150,7 +150,7 @@ public:
     //! in Qt 5.12.x this workaround should be no more necessary if
     //! env variable QT_MAX_CACHED_GLYPH_SIZE is set to 1.
     //! The workaround works badly if the text is at the same time
-    //! bold and underlined.
+    //! bold and underlined or struck out.
     //! (moved from TextBase::drawTextWorkaround)
     void drawTextWorkaround(Font& f, const PointF pos, const QString text);
 

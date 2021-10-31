@@ -35,10 +35,12 @@ public:
     Font(const QString& family = QString());
 
     enum class Style {
-        Undefined   = 0,
+        //Undefined   = -1,
+        Normal      = 0,
         Bold        = 1 << 0,
         Italic      = 1 << 1,
-        Underline   = 1 << 2
+        Underline   = 1 << 2,
+        Strike      = 1 << 3
     };
 
     enum class Hinting {
@@ -75,6 +77,8 @@ public:
     void setItalic(bool arg);
     bool underline() const;
     void setUnderline(bool arg);
+    bool strike() const;
+    void setStrike(bool arg);
 
     void setNoFontMerging(bool arg);
     bool noFontMerging() const;
@@ -95,7 +99,7 @@ private:
     QString m_family;
     qreal m_pointSizeF = -1.0;
     Weight m_weight = Weight::Normal;
-    QFlags<Style> m_style{ Style::Undefined };
+    QFlags<Style> m_style{ Style::Normal };
     bool m_noFontMerging = false;
     Hinting m_hinting = Hinting::PreferDefaultHinting;
 };

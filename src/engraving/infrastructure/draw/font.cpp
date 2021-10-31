@@ -99,6 +99,16 @@ void Font::setUnderline(bool arg)
     m_style.setFlag(Style::Underline, arg);
 }
 
+bool Font::strike() const
+{
+    return m_style.testFlag(Style::Strike);
+}
+
+void Font::setStrike(bool arg)
+{
+    m_style.setFlag(Style::Strike, arg);
+}
+
 void Font::setNoFontMerging(bool arg)
 {
     m_noFontMerging = arg;
@@ -131,6 +141,7 @@ QFont Font::toQFont() const
     qf.setBold(bold());
     qf.setItalic(italic());
     qf.setUnderline(underline());
+    qf.setStrikeOut(strike());
     if (noFontMerging()) {
         qf.setStyleStrategy(QFont::NoFontMerging);
     }
@@ -147,6 +158,7 @@ Font Font::fromQFont(const QFont& qf)
     f.setBold(qf.bold());
     f.setItalic(qf.italic());
     f.setUnderline(qf.underline());
+    f.setStrike(qf.strikeOut());
     if (qf.styleStrategy() == QFont::NoFontMerging) {
         f.setNoFontMerging(true);
     }

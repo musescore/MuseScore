@@ -130,6 +130,7 @@ private:
     void toggleBold();
     void toggleItalic();
     void toggleUnderline();
+    void toggleStrike();
 
     void toggleLayoutBreak(LayoutBreakType breakType);
 

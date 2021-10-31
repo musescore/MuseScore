@@ -207,6 +207,7 @@ public:
     void toggleBold() override;
     void toggleItalic() override;
     void toggleUnderline() override;
+    void toggleStrike() override;
 
 private:
     Ms::Score* score() const;
