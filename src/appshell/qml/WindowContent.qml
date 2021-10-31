@@ -60,7 +60,6 @@ DockWindow {
             title: qsTrc("appshell", "Main toolbar")
 
             floatable: false
-            padding: 0
 
             MainToolBar {
                 navigation.section: root.topToolKeyNavSec

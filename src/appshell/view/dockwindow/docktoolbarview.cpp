@@ -30,9 +30,6 @@
 
 using namespace mu::dock;
 
-const int DockToolBarView::MIN_SIDE_SIZE = 48;
-const int DockToolBarView::MAX_SIDE_SIZE = std::numeric_limits<int>::max();
-
 class DockToolBarView::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
 {
 public:

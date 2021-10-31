@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include "dockstatusbarview.h"
 
 using namespace mu::dock;
@@ -29,7 +28,7 @@ DockStatusBarView::DockStatusBarView(QQuickItem* parent)
 {
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
-    constexpr int STATUS_BAR_HEIGHT = 36;
+    constexpr int STATUS_BAR_HEIGHT = 32;
 
     setMinimumHeight(STATUS_BAR_HEIGHT);
     setMaximumHeight(STATUS_BAR_HEIGHT);

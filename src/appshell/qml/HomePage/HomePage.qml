@@ -69,7 +69,7 @@ DockPage {
 
             width: maximumWidth
             minimumWidth: 76
-            maximumWidth: 292
+            maximumWidth: 280
 
             allowedAreas: Qt.NoDockWidgetArea
 
