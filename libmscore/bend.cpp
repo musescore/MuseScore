@@ -57,6 +57,7 @@ QFont Bend::font(qreal sp) const
       f.setBold(_fontStyle & FontStyle::Bold);
       f.setItalic(_fontStyle & FontStyle::Italic);
       f.setUnderline(_fontStyle & FontStyle::Underline);
+      f.setStrikeOut(_fontStyle & FontStyle::Strike);
       qreal m = _fontSize;
       m *= sp / SPATIUM20;
 

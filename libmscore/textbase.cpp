@@ -765,7 +765,7 @@ void TextFragment::draw(QPainter* p, const TextBase* t) const
 void TextBase::drawTextWorkaround(QPainter* p, QFont& f, const QPointF pos, const QString text)
       {
       qreal mm = p->worldTransform().m11();
-      if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline())) {
+      if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strikeOut())) {
             // workaround for https://musescore.org/en/node/284218
             // and https://musescore.org/en/node/281601
             // only needed for certain artificially emboldened fonts
@@ -849,6 +849,7 @@ QFont TextFragment::font(const TextBase* t) const
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
       font.setUnderline(format.underline() || format.preedit());
+      font.setStrikeOut(format.strike() || format.preedit());
 
       QString family;
       if (format.fontFamily() == "ScoreText") {
@@ -1404,6 +1405,9 @@ void CharFormat::setFormat(FormatId id, QVariant data)
                   break;
             case FormatId::Underline:
                   setUnderline(data.toBool());
+                  break;
+            case FormatId::Strike:
+                  setStrike(data.toBool());
                   break;
             case FormatId::Valign:
                   _valign = static_cast<VerticalAlignment>(data.toInt());
@@ -1963,6 +1967,7 @@ class XmlNesting : public QStack<QString> {
       void pushB() { pushToken("b"); }
       void pushI() { pushToken("i"); }
       void pushU() { pushToken("u"); }
+      void pushS() { pushToken("s"); }
 
       QString popToken() {
             QString s = pop();
@@ -1985,6 +1990,7 @@ class XmlNesting : public QStack<QString> {
       void popB() { popToken("b"); }
       void popI() { popToken("i"); }
       void popU() { popToken("u"); }
+      void popS() { popToken("s"); }
       };
 
 //---------------------------------------------------------
@@ -1997,6 +2003,7 @@ void TextBase::genText() const
       bool bold_      = false;
       bool italic_    = false;
       bool underline_ = false;
+      bool strike_    = false;
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
@@ -2006,6 +2013,8 @@ void TextBase::genText() const
                         italic_ = true;
                   if (!f.format.underline() && underline())
                         underline_ = true;
+                  if (!f.format.strike() && strike())
+                        strike_ = true;
                   }
             }
       CharFormat fmt;
@@ -2022,6 +2031,8 @@ void TextBase::genText() const
             xmlNesting.pushI();
       if (underline_)
             xmlNesting.pushU();
+      if (strike_)
+            xmlNesting.pushS();
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
@@ -2046,6 +2057,12 @@ void TextBase::genText() const
                               xmlNesting.pushU();
                         else
                               xmlNesting.popU();
+                        }
+                  if (fmt.strike() != format.strike()) {
+                        if (format.strike())
+                              xmlNesting.pushS();
+                        else
+                              xmlNesting.popS();
                         }
 
                   if (format.fontSize() != fmt.fontSize())
@@ -2185,28 +2202,24 @@ bool TextBase::readProperties(XmlReader& e)
             setXmlText(e.readXml());
       else if (tag == "bold") {
             bool val = e.readInt();
-            if (val)
-                  _fontStyle = _fontStyle + FontStyle::Bold;
-            else
-                  _fontStyle = _fontStyle - FontStyle::Bold;
+            setBold(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
       else if (tag == "italic") {
             bool val = e.readInt();
-            if (val)
-                  _fontStyle = _fontStyle + FontStyle::Italic;
-            else
-                  _fontStyle = _fontStyle - FontStyle::Italic;
+            setItalic(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
       else if (tag == "underline") {
             bool val = e.readInt();
-            if (val)
-                  _fontStyle = _fontStyle + FontStyle::Underline;
-            else
-                  _fontStyle = _fontStyle - FontStyle::Underline;
+            setUnderline(val);            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
+      else if (tag == "strike") {
+            bool val = e.readInt();
+            setStrike(val);
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
@@ -2446,7 +2459,11 @@ QString TextBase::convertFromHtml(const QString& ss) const
                               s += "<i>";
                         if (font.underline())
                               s += "<u>";
+                        if (font.strikeOut())
+                              s += "<s>";
                         s += f.text().toHtmlEscaped();
+                        if (font.strikeOut())
+                              s += "</s>";
                         if (font.underline())
                               s += "</u>";
                         if (font.italic())
@@ -2674,7 +2691,7 @@ bool TextBase::validateText(QString& s)
                         d.append("&amp;");
                   }
             else if (c == '<') {
-                  const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "font ", "/font>", "sym>", "/sym>", "sub>", "/sub>", "sup>", "/sup>" };
+                  const char* ok[] { "b>", "/b>", "i>", "/i>", "u>", "/u", "s>", "/s>", "font ", "/font>", "sym>", "/sym>", "sub>", "/sub>", "sup>", "/sup>" };
                   QString t = s.mid(i+1);
                   bool found = false;
                   for (auto k : ok) {
@@ -2720,6 +2737,8 @@ QFont TextBase::font() const
       QFont f(_family, m, bold() ? QFont::Bold : QFont::Normal, italic());
       if (underline())
             f.setUnderline(underline());
+      if (strike())
+            f.setStrikeOut(strike());
 
       return f;
       }
@@ -3205,6 +3224,7 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
       bool bold_      = false;
       bool italic_    = false;
       bool underline_ = false;
+      bool strike_    = false;
 
       for (const TextBlock& block : _layout) {
             for (const TextFragment& f : block.fragments()) {
@@ -3214,6 +3234,8 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                         italic_ = true;
                   if (!f.format.underline() && underline())
                         underline_ = true;
+                  if (!f.format.strike() && strike())
+                        strike_ = true;
                   }
             }
       CharFormat fmt;
@@ -3231,6 +3253,8 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                   xmlNesting.pushI();
             if (underline_)
                   xmlNesting.pushU();
+            if (strike_)
+                  xmlNesting.pushS();
             }
 
       for (const TextBlock& block : _layout) {
@@ -3256,6 +3280,12 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
                                     xmlNesting.pushU();
                               else
                                     xmlNesting.popU();
+                              }
+                        if (fmt.strike() != format.strike()) {
+                              if (format.strike())
+                                    xmlNesting.pushS();
+                              else
+                                    xmlNesting.popS();
                               }
                         }
 

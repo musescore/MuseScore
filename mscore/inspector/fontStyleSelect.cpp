@@ -27,10 +27,12 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
       bold->setIcon(*icons[int(Icons::textBold_ICON)]);
       italic->setIcon(*icons[int(Icons::textItalic_ICON)]);
       underline->setIcon(*icons[int(Icons::textUnderline_ICON)]);
+      strike->setIcon(*icons[int(Icons::textStrike_ICON)]);
 
       connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
       connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
       connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+      connect(strike, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
       }
 
 //---------------------------------------------------------
@@ -56,6 +58,8 @@ FontStyle FontStyleSelect::fontStyle() const
             fs = fs + FontStyle::Italic;
       if (underline->isChecked())
             fs = fs + FontStyle::Underline;
+      if (strike->isChecked())
+            fs = fs + FontStyle::Strike;
 
       return fs;
       }
@@ -69,6 +73,7 @@ void FontStyleSelect::setFontStyle(FontStyle fs)
       bold->setChecked(fs & FontStyle::Bold);
       italic->setChecked(fs & FontStyle::Italic);
       underline->setChecked(fs & FontStyle::Underline);
+      strike->setChecked(fs & FontStyle::Strike);
       }
 
 }

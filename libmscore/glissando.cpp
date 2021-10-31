@@ -118,6 +118,7 @@ void GlissandoSegment::draw(QPainter* painter) const
             f.setBold(glissando()->fontStyle() & FontStyle::Bold);
             f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
             f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
+            f.setStrikeOut(glissando()->fontStyle() & FontStyle::Strike);
             QFontMetricsF fm(f, painter->device()); // use the QPaintDevice, otherwise calculations will be done in screen metrics
             QRectF r = fm.boundingRect(glissando()->text());
 

@@ -146,6 +146,7 @@
         <file>data/icons/format-text-subscript.svg</file>
         <file>data/icons/format-text-superscript.svg</file>
         <file>data/icons/format-text-underline.svg</file>
+        <file>data/icons/format-text-strike.svg</file>
         <file>data/icons/list-ordered.svg</file>
         <file>data/icons/list-unordered.svg</file>
         <file>data/icons/format-indent-less.svg</file>

@@ -3776,6 +3776,12 @@ Shortcut Shortcut::_sc[] = {
       {
          MsWidget::SCORE_TAB,
          STATE_TEXT_EDIT,
+         "text-s",
+         QT_TRANSLATE_NOOP("action","Strike-through")
+         },
+      {
+         MsWidget::SCORE_TAB,
+         STATE_TEXT_EDIT,
          "text-word-left",
          QT_TRANSLATE_NOOP("action","Move Word Left"),
          QT_TRANSLATE_NOOP("action","Move word left"),

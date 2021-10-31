@@ -169,7 +169,15 @@ QString convertFromHtml(TextBase* t, const QString& ss)
                               s += "<i>";
                         if (font.underline())
                               s += "<u>";
+#if 0 // should not happen, but won't harm either
+                        if (font.strikeOut())
+                              s += "<s>";
+#endif
                         s += f.text().toHtmlEscaped();
+#if 0 // see above
+                        if (font.strikeOut())
+                              s += "</s>";
+#endif
                         if (font.underline())
                               s += "</u>";
                         if (font.italic())
