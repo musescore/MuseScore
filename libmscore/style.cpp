@@ -2945,17 +2945,18 @@ bool MStyle::readStyleValCompat(XmlReader& e)
 
 //---------------------------------------------------------
 //   readTextStyleValCompat
-//    Handle transition from separate bold, underline and
-//    italic style properties to the single *FontStyle
+//    Handle transition from separate bold, underline, strike
+//    and italic style properties to the single *FontStyle
 //    property set.
 //---------------------------------------------------------
 
 bool MStyle::readTextStyleValCompat(XmlReader& e)
       {
-      static const std::array<std::pair<const char*, FontStyle>, 3> styleNamesEndings {{
+      static const std::array<std::pair<const char*, FontStyle>, 4> styleNamesEndings {{
             { "FontBold",      FontStyle::Bold      },
             { "FontItalic",    FontStyle::Italic    },
-            { "FontUnderline", FontStyle::Underline }
+            { "FontUnderline", FontStyle::Underline },
+            { "FontStrike",    FontStyle::Strike    }
             }};
 
       const QStringRef tag(e.name());

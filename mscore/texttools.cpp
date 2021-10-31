@@ -78,6 +78,9 @@ TextTools::TextTools(QWidget* parent)
       typefaceUnderline = toolbar->addAction(*icons[int(Icons::textUnderline_ICON)], "");
       typefaceUnderline->setCheckable(true);
 
+      typefaceStrike = toolbar->addAction(*icons[int(Icons::textStrike_ICON)], "");
+      typefaceStrike->setCheckable(true);
+
       toolbar->addSeparator();
 
       typefaceSubscript = toolbar->addAction(*icons[int(Icons::textSub_ICON)], "");
@@ -107,6 +110,7 @@ TextTools::TextTools(QWidget* parent)
       connect(typefaceBold,        SIGNAL(triggered(bool)), SLOT(boldClicked(bool)));
       connect(typefaceItalic,      SIGNAL(triggered(bool)), SLOT(italicClicked(bool)));
       connect(typefaceUnderline,   SIGNAL(triggered(bool)), SLOT(underlineClicked(bool)));
+      connect(typefaceStrike,      SIGNAL(triggered(bool)), SLOT(strikeClicked(bool)));
       connect(typefaceSubscript,   SIGNAL(triggered(bool)), SLOT(subscriptClicked(bool)));
       connect(typefaceSuperscript, SIGNAL(triggered(bool)), SLOT(superscriptClicked(bool)));
       connect(showKeyboard,        SIGNAL(toggled(bool)),   SLOT(showKeyboardClicked(bool)));
@@ -124,6 +128,8 @@ void TextTools::retranslate()
       toolbar->setWindowTitle(tr("Text Edit"));
       typefaceBold->setToolTip(tr("Bold"));
       typefaceItalic->setToolTip(tr("Italic"));
+      typefaceUnderline->setToolTip(tr("Underline"));
+      typefaceStrike->setToolTip(tr("Strike-through"));
       typefaceSubscript->setToolTip(tr("Subscript"));
       typefaceSuperscript->setToolTip(tr("Superscript"));
       }
@@ -150,6 +156,7 @@ void TextTools::blockAllSignals(bool val)
       typefaceBold->blockSignals(val);
       typefaceItalic->blockSignals(val);
       typefaceUnderline->blockSignals(val);
+      typefaceStrike->blockSignals(val);
       typefaceSubscript->blockSignals(val);
       typefaceSuperscript->blockSignals(val);
       typefaceFamily->blockSignals(val);
@@ -183,6 +190,7 @@ void TextTools::updateTools(EditData& ed)
       typefaceItalic->setChecked(format->italic());
       typefaceBold->setChecked(format->bold());
       typefaceUnderline->setChecked(format->underline());
+      typefaceStrike->setChecked(format->strike());
       typefaceSubscript->setChecked(format->valign() == VerticalAlignment::AlignSubScript);
       typefaceSuperscript->setChecked(format->valign() == VerticalAlignment::AlignSuperScript);
 
@@ -281,6 +289,29 @@ void TextTools::toggleUnderline()
       {
       typefaceUnderline->toggle();
       underlineClicked(typefaceUnderline->isChecked());
+      }
+
+//---------------------------------------------------------
+//   toggleStrike
+//---------------------------------------------------------
+
+void TextTools::toggleStrike()
+      {
+      typefaceStrike->toggle();
+      strikeClicked(typefaceStrike->isChecked());
+      }
+
+//---------------------------------------------------------
+//   strikeClicked
+//---------------------------------------------------------
+
+void TextTools::strikeClicked(bool val)
+      {
+      IF_ASSERT_FAILED(cursor) {
+            return;
+            }
+      cursor->setFormat(FormatId::Strike, val);
+      updateText();
       }
 
 //---------------------------------------------------------

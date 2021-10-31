@@ -46,7 +46,7 @@ enum class VerticalAlignment : char {
 //---------------------------------------------------------
 
 enum class FormatId : char {
-      Bold, Italic, Underline, Valign, FontSize, FontFamily
+      Bold, Italic, Underline, Strike, Valign, FontSize, FontFamily
       };
 
 //---------------------------------------------------------
@@ -78,9 +78,11 @@ class CharFormat {
       bool bold() const                      { return _style & FontStyle::Bold;       }
       bool italic() const                    { return _style & FontStyle::Italic;     }
       bool underline() const                 { return _style & FontStyle::Underline;  }
+      bool strike() const                    { return _style & FontStyle::Strike;  }
       void setBold(bool val)                 { _style = val ? _style + FontStyle::Bold      : _style - FontStyle::Bold;      }
       void setItalic(bool val)               { _style = val ? _style + FontStyle::Italic    : _style - FontStyle::Italic;    }
       void setUnderline(bool val)            { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
+      void setStrike(bool val)               { _style = val ? _style + FontStyle::Strike    : _style - FontStyle::Strike; }
 
       bool preedit() const                   { return _preedit;     }
       VerticalAlignment valign() const       { return _valign;      }
@@ -396,9 +398,11 @@ class TextBase : public Element {
       bool bold() const                      { return _fontStyle & FontStyle::Bold;       }
       bool italic() const                    { return _fontStyle & FontStyle::Italic;     }
       bool underline() const                 { return _fontStyle & FontStyle::Underline;  }
+      bool strike() const                    { return _fontStyle & FontStyle::Strike;  }
       void setBold(bool val)                 { _fontStyle = val ? _fontStyle + FontStyle::Bold      : _fontStyle - FontStyle::Bold;      }
       void setItalic(bool val)               { _fontStyle = val ? _fontStyle + FontStyle::Italic    : _fontStyle - FontStyle::Italic;    }
       void setUnderline(bool val)            { _fontStyle = val ? _fontStyle + FontStyle::Underline : _fontStyle - FontStyle::Underline; }
+      void setStrike(bool val)               { _fontStyle = val ? _fontStyle + FontStyle::Strike    : _fontStyle - FontStyle::Strike;    }
 
       bool hasCustomFormatting() const;
 

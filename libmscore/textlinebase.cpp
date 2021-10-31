@@ -250,6 +250,7 @@ void TextLineBaseSegment::layout()
                   _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
                   _text->setUnderline(tl->beginFontStyle() & FontStyle::Underline);
+                  _text->setStrike(tl->beginFontStyle() & FontStyle::Strike);
                   break;
             case SpannerSegmentType::MIDDLE:
             case SpannerSegmentType::END:
@@ -261,7 +262,7 @@ void TextLineBaseSegment::layout()
                   _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
                   _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
                   _text->setUnderline(tl->continueFontStyle() & FontStyle::Underline);
-
+                  _text->setStrike(tl->continueFontStyle() & FontStyle::Strike);
                   break;
             }
       _text->setPlacement(Placement::ABOVE);
@@ -277,6 +278,7 @@ void TextLineBaseSegment::layout()
             _endText->setBold(tl->endFontStyle() & FontStyle::Bold);
             _endText->setItalic(tl->endFontStyle() & FontStyle::Italic);
             _endText->setUnderline(tl->endFontStyle() & FontStyle::Underline);
+            _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
             _endText->setPlacement(Placement::ABOVE);
             _endText->setTrack(track());
             _endText->layout();

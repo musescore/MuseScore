@@ -42,7 +42,7 @@ enum class Icons : short { Invalid_ICON = -1,
       noteEntry_ICON, // noteEntrySteptime_ICON, (using normal icon for the time being.)
       noteEntryRepitch_ICON, noteEntryRhythm_ICON, noteEntryRealtimeAuto_ICON, noteEntryRealtimeManual_ICON,
       keys_ICON, tie_ICON,
-      textBold_ICON, textItalic_ICON, textUnderline_ICON,
+      textBold_ICON, textItalic_ICON, textUnderline_ICON, textStrike_ICON,
       textLeft_ICON, textCenter_ICON, textRight_ICON, textTop_ICON, textBottom_ICON, textVCenter_ICON, textBaseline_ICON,
       textSuper_ICON, textSub_ICON,
       fotomode_ICON,

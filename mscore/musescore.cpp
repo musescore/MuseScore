@@ -6520,6 +6520,10 @@ void MuseScore::cmd(QAction* a, const QString& cmd)
             if (_textTools)
                   _textTools->toggleUnderline();
             }
+      else if (cmd == "text-s") {
+            if (_textTools)
+                  _textTools->toggleStrike();
+            }
       else if (cmd == "edit-toolbars")
             showToolbarEditor();
       else if (cmd == "viewmode") {

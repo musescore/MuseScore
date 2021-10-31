@@ -847,6 +847,13 @@ bool Tuplet::readProperties(XmlReader& e)
             if (isStyled(Pid::FONT_STYLE))
                   setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
+      else if (tag == "strike") {
+            bool val = e.readInt();
+            if (_number)
+                  _number->setStrike(val);
+            if (isStyled(Pid::FONT_STYLE))
+                  setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+            }
       else if (tag == "normalNotes")
             _ratio.setDenominator(e.readInt());
       else if (tag == "actualNotes")

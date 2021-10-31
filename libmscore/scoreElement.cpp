@@ -421,6 +421,8 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
                   xml.tag("italic", fs & FontStyle::Italic);
             if ((fs & FontStyle::Underline) != (ds & FontStyle::Underline))
                   xml.tag("underline", fs & FontStyle::Underline);
+            if ((fs & FontStyle::Strike) != (ds & FontStyle::Strike))
+                  xml.tag("strike", fs & FontStyle::Strike);
             return;
             }
 

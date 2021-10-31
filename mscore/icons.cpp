@@ -110,6 +110,7 @@ static const char* iconNames[] = {
       "format-text-bold.svg",
       "format-text-italic.svg",
       "format-text-underline.svg",
+      "format-text-strike.svg",
       "format-justify-left.svg",
       "format-justify-center.svg",
       "format-justify-right.svg",
