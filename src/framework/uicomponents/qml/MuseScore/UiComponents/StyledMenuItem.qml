@@ -282,6 +282,10 @@ ListItemBlank {
         if (isHovered) {
             itemPrv.showSubMenu()
         } else {
+            if (!Boolean(itemPrv.showedSubMenu)) {
+                return
+            }
+
             var mouseGlogalPos = mapToGlobal(Qt.point(mouseX, mouseY))
             var showedSubMenuGlobalPos = itemPrv.showedSubMenu.contentItem.mapToGlobal(0, 0)
 
