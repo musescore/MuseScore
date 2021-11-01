@@ -27,12 +27,12 @@
 #include "accessibleobject.h"
 
 #include "modularity/ioc.h"
-#include "ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
 
 namespace mu::accessibility {
 class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface
 {
-    INJECT(accessibility, ui::IMainWindow, mainWindow)
+    INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
 
 public:
     AccessibleItemInterface(AccessibleObject* object);
