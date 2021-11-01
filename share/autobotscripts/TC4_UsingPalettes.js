@@ -92,12 +92,21 @@ var testCase = {
             applyLines(35)
             Palette.togglePalette("Lines") // close
         }},
-        {name: "Change Barlines", skip: false, func: function() {
+        {name: "Change Barlines", skip: true, func: function() {
             Score.nextChord()
 
             Palette.togglePalette("Barlines") // open
             applyBarlines(15)
             Palette.togglePalette("Barlines") // close
+
+        }},
+        {name: "Add Tempo", skip: false, func: function() {
+            Score.nextChord()
+            Score.appendMeasures(4 * 28)
+
+            Palette.togglePalette("Tempo") // open
+            applyTempo(28)
+            Palette.togglePalette("Tempo") // close
 
             api.autobot.abort()
         }},
@@ -188,4 +197,16 @@ function applyBarlines(count)
     }
 }
 
+function applyTempo(count)
+{
+    for (var i = 0; i < count; i++) {
+        api.shortcuts.activate("C")
+        api.navigation.down()
+        api.navigation.trigger()
+        api.shortcuts.activate("C")
+        api.shortcuts.activate("C")
+        api.shortcuts.activate("C")
+        seeChanges()
+    }
+}
 
