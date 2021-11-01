@@ -55,5 +55,6 @@
         <file>qml/MuseScore/UiComponents/Dropdown.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
         <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
+        <file>qml/MuseScore/UiComponents/MenuMetrics.qml</file>
     </qresource>
 </RCC>
