@@ -33,5 +33,5 @@ add_subdirectory(imagesexport)
 # Old and new
 # The new one is more structured, imports more correctly, more amenable to improvements, but not stable, so it is now disabled.
 
-#add_subdirectory(guitarpro)
-add_subdirectory(guitarpro_old)
+add_subdirectory(guitarpro)
+#add_subdirectory(guitarpro_old)
