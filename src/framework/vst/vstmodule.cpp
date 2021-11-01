@@ -112,3 +112,8 @@ void VSTModule::onInit(const framework::IApplication::RunMode& mode)
 
     s_pluginModulesRepo->init();
 }
+
+void VSTModule::onDeinit()
+{
+    s_pluginModulesRepo->deInit();
+}
