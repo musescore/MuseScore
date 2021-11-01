@@ -46,6 +46,7 @@ public:
     VstModulesRepository() = default;
 
     void init();
+    void deInit();
 
     PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const override;
 
