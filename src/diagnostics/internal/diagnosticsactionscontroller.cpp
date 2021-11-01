@@ -28,10 +28,10 @@
 using namespace mu::diagnostics;
 using namespace mu::accessibility;
 
-static const mu::UriQuery SYSTEN_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false");
-static const mu::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false");
-static const mu::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false");
-static const mu::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false");
+static const mu::UriQuery SYSTEN_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false&floating=true");
+static const mu::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false&floating=true");
+static const mu::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false&floating=true");
+static const mu::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
 
 void DiagnosticsActionsController::init()
 {

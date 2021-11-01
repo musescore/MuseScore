@@ -106,7 +106,7 @@ void PopupWindow_QQuickView::forceActiveFocus()
 
 void PopupWindow_QQuickView::show(QPoint p)
 {
-    QWindow* top = mainWindow()->topWindow();
+    QWindow* top = interactiveProvider()->topWindow();
 
     m_view->setPosition(p);
     m_view->setTransientParent(top);

@@ -252,6 +252,11 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
 
 void ProjectFilesController::saveProject(const io::path& path)
 {
+    if (!currentNotationProject()) {
+        LOGW() << "no current project";
+        return;
+    }
+
     if (!currentNotationProject()->created().val) {
         doSaveScore();
         return;

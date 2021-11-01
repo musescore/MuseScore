@@ -131,7 +131,7 @@ var testCase = {
             Palette.togglePalette("Ornaments") // close
         }},
         {name: "Save", func: function() {
-            api.autobot.saveProject("TC3 Using note input toolbar.mscz")
+            api.autobot.saveProject("TC4_UsingPalettes.mscz")
         }},
         {name: "Close", func: function() {
             api.dispatcher.dispatch("file-close")

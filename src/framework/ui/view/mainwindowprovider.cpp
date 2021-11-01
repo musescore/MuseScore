@@ -41,16 +41,6 @@ QWindow* MainWindowProvider::qWindow() const
     return m_window;
 }
 
-QWindow* MainWindowProvider::topWindow() const
-{
-    QWindow* window = interactiveProvider()->topWindow();
-    if (!window) {
-        window = qWindow();
-    }
-
-    return window;
-}
-
 void MainWindowProvider::setWindow(QWindow* window)
 {
     if (m_window != nullptr) {

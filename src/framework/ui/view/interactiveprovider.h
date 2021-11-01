@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
+#include "../imainwindow.h"
 #include "retval.h"
 
 namespace mu::ui {
@@ -52,6 +53,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
     Q_OBJECT
 
     INJECT(ui, IInteractiveUriRegister, uriRegister)
+    INJECT(ui, IMainWindow, mainWindow)
 
 public:
     explicit InteractiveProvider();
