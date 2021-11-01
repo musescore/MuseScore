@@ -52,3 +52,11 @@ function ensureContentVisible(flickable, contentRect, margins) {
         flickable.contentY -= flicableTopY - contentTopY + margins
     }
 }
+
+function getItem(model, row) {
+    if (Boolean(model.get)) {
+        return model.get(row)
+    }
+
+    return model[row]
+}

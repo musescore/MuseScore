@@ -69,11 +69,8 @@
         <file>qml/dockwindow/DockPanel.qml</file>
         <file>qml/dockwindow/DropIndicators.qml</file>
         <file>qml/dockwindow/DropIndicator.qml</file>
-        <file>qml/AppTitleBar.qml</file>
         <file>qml/AppWindow.qml</file>
         <file>qml/WindowContent.qml</file>
-        <file>qml/AppMenuBar.qml</file>
-        <file>qml/platform/linux/AppTitleBarLinux.qml</file>
         <file>qml/platform/linux/Main.qml</file>
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
@@ -94,5 +91,7 @@
         <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
         <file>qml/Preferences/internal/ScoreViewSection.qml</file>
         <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
+        <file>qml/platform/win/AppTitleBar.qml</file>
+        <file>qml/AppMenuBar.qml</file>
     </qresource>
 </RCC>

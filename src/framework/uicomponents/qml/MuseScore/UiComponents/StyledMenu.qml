@@ -30,7 +30,6 @@ StyledPopupView {
     id: root
 
     property alias model: view.model
-    property int minimumMenuWidth: 178
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
@@ -51,7 +50,7 @@ StyledPopupView {
 
     y: parent.height
 
-    contentWidth: prv.itemWidth
+    contentWidth: menuMetrics.itemWidth
 
     padding: 8
     margins: 0
@@ -90,49 +89,7 @@ StyledPopupView {
     }
 
     onModelChanged: {
-        prv.hasItemsWithIconAndCheckable = false
-        prv.hasItemsWithIconOrCheckable = false
-        prv.hasItemsWithSubmenu = false
-        prv.hasItemsWithShortcut = false
-
-        //! NOTE Policy:
-        //! - if the menu contains checkable items, space for the checkmarks is reserved
-        //! - if the menu contains items with an icon, space for icons is reserved
-        //! - selectable items that don't have an icon are treated as checkable
-        //! - selectable items that do have an icon are treated as non-checkable
-        //! - all selectable items that are selected get an accent color background
-
-        for (let i = 0; i < model.length; i++) {
-            let item = prv.getItem(i)
-            let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
-
-            if (item.checkable && hasIcon) {
-                prv.hasItemsWithIconAndCheckable = true
-                prv.hasItemsWithIconOrCheckable = true
-            } else if (item.checkable || hasIcon || item.selectable) {
-                prv.hasItemsWithIconOrCheckable = true
-            }
-
-            if (Boolean(item.subitems) && item.subitems.length > 0) {
-                prv.hasItemsWithSubmenu = true
-            }
-
-            if (Boolean(item.shortcut)) {
-                prv.hasItemsWithShortcut = true
-            }
-        }
-
-        let leftWidth = 0
-        let rightWidth = 0
-
-        for (let j = 0; j < model.length; j++) {
-            prv.testItem.modelData = prv.getItem(j)
-            leftWidth = Math.max(leftWidth, prv.testItem.calculatedLeftPartWidth())
-            rightWidth = Math.max(rightWidth, prv.testItem.calculatedRightPartWidth())
-        }
-
-        prv.itemLeftPartWidth = leftWidth
-        prv.itemRightPartWidth = rightWidth
+        menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
         //  the height calculation occurs with an error
@@ -140,7 +97,7 @@ StyledPopupView {
         //  Let's manually adjust the height of the content
         var sepCount = 0
         for (let k = 0; k < model.length; k++) {
-            if (!Boolean(prv.getItem(k).title)) {
+            if (!Boolean(Utils.getItem(model, k).title)) {
                 sepCount++
             }
         }
@@ -158,39 +115,17 @@ StyledPopupView {
         root.loaded()
     }
 
+    MenuMetrics {
+        id: menuMetrics
+    }
+
     QtObject {
         id: prv
 
         property var showedSubMenu: null
 
-        property bool hasItemsWithIconAndCheckable: false
-        property bool hasItemsWithIconOrCheckable: false
-        property bool hasItemsWithSubmenu: false
-        property bool hasItemsWithShortcut: false
-
-        property int itemLeftPartWidth: 100
-        property int itemRightPartWidth: 100
-        readonly property int itemWidth:
-            Math.max(itemLeftPartWidth + itemRightPartWidth, root.minimumMenuWidth)
-
         readonly property int separatorHeight: 1
         readonly property int viewVerticalMargin: 4
-
-        property int iconAndCheckMarkMode: {
-            if (prv.hasItemsWithIconAndCheckable) {
-                return StyledMenuItem.ShowBoth
-            } else if (prv.hasItemsWithIconOrCheckable) {
-                return StyledMenuItem.ShowOne
-            }
-            return StyledMenuItem.None
-        }
-
-        property StyledMenuItem testItem: StyledMenuItem {
-            iconAndCheckMarkMode: prv.iconAndCheckMarkMode
-
-            reserveSpaceForShortcutOrSubmenuIndicator:
-                prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
-        }
 
         function focusOnFirstEnabled() {
             for (var i = 0; i < view.count; ++i) {
@@ -214,14 +149,6 @@ StyledPopupView {
             }
             return false
         }
-
-        function getItem(row) {
-            if (Boolean(root.model.get)) {
-                return root.model.get(row)
-            }
-
-            return root.model[row]
-        }
     }
 
     ListView {
@@ -244,7 +171,7 @@ StyledPopupView {
 
             onLoaded: {
                 loader.item.modelData = Qt.binding(() => (itemData))
-                loader.item.width = Qt.binding(() => (prv.itemWidth))
+                loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
             }
 
             Component {
@@ -256,10 +183,10 @@ StyledPopupView {
                     navigation.panel: root.navigationPanel
                     navigation.row: model.index
 
-                    iconAndCheckMarkMode: prv.iconAndCheckMarkMode
+                    iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
 
                     reserveSpaceForShortcutOrSubmenuIndicator:
-                        prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
+                        menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
 
