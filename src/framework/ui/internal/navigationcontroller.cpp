@@ -249,7 +249,7 @@ template<class T>
 static T* findByName(const std::set<T*>& set, const QString& name)
 {
     auto it = std::find_if(set.cbegin(), set.cend(), [name](const T* s) {
-        return s->enabled() && s->name() == name;
+        return s->name() == name && s->enabled();
     });
 
     if (it != set.cend()) {

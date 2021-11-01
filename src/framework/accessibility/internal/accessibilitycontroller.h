@@ -33,6 +33,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
 #include "accessibility/iaccessibilityconfiguration.h"
 
 class QAccessibleInterface;
@@ -48,6 +49,7 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
 {
     INJECT(accessibility, IAccessibilityConfiguration, configuration)
     INJECT(accessibility, ui::IMainWindow, mainWindow)
+    INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
 
 public:
     AccessibilityController() = default;

@@ -298,7 +298,17 @@ std::vector<Uri> InteractiveProvider::stack() const
 
 QWindow* InteractiveProvider::topWindow() const
 {
-    return qobject_cast<QWindow*>(m_stack.last().window);
+    if (m_stack.empty()) {
+        LOGE() << "stack is empty";
+        return mainWindow()->qWindow();
+    }
+
+    const ObjectInfo& last = m_stack.last();
+    if (!last.window) {
+        return mainWindow()->qWindow();
+    }
+
+    return qobject_cast<QWindow*>(last.window);
 }
 
 QString InteractiveProvider::objectId(const QVariant& val) const
@@ -486,7 +496,10 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     ObjectInfo objectInfo;
     objectInfo.uriQuery = m_openingUriQuery;
     objectInfo.objectId = objectId;
-    objectInfo.window = window ? window : qApp->focusWindow();
+    objectInfo.window = window;
+    if (!objectInfo.window) {
+        objectInfo.window = (containerType == ContainerType::PrimaryPage) ? mainWindow()->qWindow() : qApp->focusWindow();
+    }
 
     if (ContainerType::PrimaryPage == containerType) {
         m_stack.clear();
