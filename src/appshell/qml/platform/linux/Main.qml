@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 import "../../"
@@ -28,9 +29,34 @@ import "../../"
 AppWindow {
     id: root
 
+    AppMenuBar {
+        id: appMenuBar
+
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        navigation.section: navSec
+
+        NavigationSection {
+            id: navSec
+            name: "AppMenuBar"
+            order: 0
+
+            onActiveChanged: {
+                if (active) {
+                    appMenuBar.forceActiveFocus()
+                }
+            }
+        }
+    }
+
     WindowContent {
         id: window
 
-        anchors.fill: parent
+        anchors.top: appMenuBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
     }
 }
