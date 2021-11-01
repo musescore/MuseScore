@@ -48,6 +48,15 @@ void VstModulesRepository::init()
     refresh();
 }
 
+void VstModulesRepository::deInit()
+{
+    for (auto& pair : m_modules) {
+        pair.second.reset();
+    }
+
+    PluginContextFactory::instance().setPluginContext(nullptr);
+}
+
 PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId& resourceId) const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
