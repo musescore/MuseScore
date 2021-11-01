@@ -790,6 +790,13 @@ bool NotationPaintView::event(QEvent* ev)
     if (ev->type() == QEvent::Type::ShortcutOverride) {
         shortcutOverride(dynamic_cast<QKeyEvent*>(ev));
     }
+
+    if (ev->type() == QEvent::Type::FocusIn || ev->type() == QEvent::Type::FocusOut) {
+        bool ok = QQuickPaintedItem::event(ev);
+        uiContextResolver()->onNotationViewFocuseChanged(hasFocus());
+        return ok;
+    }
+
     return QQuickPaintedItem::event(ev);
 }
 
