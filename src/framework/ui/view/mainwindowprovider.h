@@ -46,7 +46,6 @@ public:
     explicit MainWindowProvider(QObject* parent = nullptr);
 
     QWindow* qWindow() const override;
-    QWindow* topWindow() const override;
 
     QString filePath() const;
     virtual bool fileModified() const;

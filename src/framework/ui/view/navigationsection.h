@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../inavigationcontroller.h"
-#include "../imainwindow.h"
+#include "../iinteractiveprovider.h"
 
 namespace mu::ui {
 class NavigationSection : public AbstractNavigation, public INavigationSection, public async::Asyncable
@@ -40,7 +40,7 @@ class NavigationSection : public AbstractNavigation, public INavigationSection, 
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
     INJECT(ui, INavigationController, navigationController)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(ui, IInteractiveProvider, interactiveProvider)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
