@@ -34,8 +34,7 @@
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "playback/iplaybackcontroller.h"
-#include "shortcuts/ishortcutsregister.h"
-#include "ui/iuiactionsregister.h"
+#include "ui/iuicontextresolver.h"
 #include "ui/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
@@ -54,8 +53,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, mu::shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(notation, ui::IUiContextResolver, uiContextResolver)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
