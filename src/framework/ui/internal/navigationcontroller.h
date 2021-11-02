@@ -70,6 +70,8 @@ public:
 
     void setIsResetOnMousePress(bool arg) override;
 
+    void dump() const override;
+
     void init();
 
 private:

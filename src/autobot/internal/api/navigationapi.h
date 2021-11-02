@@ -56,6 +56,8 @@ public:
     Q_INVOKABLE QString activeSection() const;
     Q_INVOKABLE QString activePanel() const;
     Q_INVOKABLE QString activeControl() const;
+
+    Q_INVOKABLE void dump() const;
 };
 }
 
