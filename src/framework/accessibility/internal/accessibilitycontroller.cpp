@@ -66,14 +66,6 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
     return nullptr;
 }
 
-static void updateHandlerNoop(QAccessibleEvent*)
-{
-}
-
-static void rootObjectHandlerNoop(QObject*)
-{
-}
-
 void AccessibilityController::init()
 {
     QAccessible::installFactory(muAccessibleFactory);
@@ -84,10 +76,6 @@ void AccessibilityController::init()
 
     QAccessible::installRootObjectHandler(nullptr);
     QAccessible::setRootObject(s_rootObject);
-
-    //! NOTE Disabled any events from Qt
-    QAccessible::installRootObjectHandler(rootObjectHandlerNoop);
-    QAccessible::installUpdateHandler(updateHandlerNoop);
 }
 
 const IAccessible* AccessibilityController::accessibleRoot() const
@@ -238,10 +226,7 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
     MYLOG() << "object: " << obj->item()->accessibleName() << ", event: " << int(ev->type());
 #endif
 
-    QAccessible::installUpdateHandler(0);
     QAccessible::updateAccessibility(ev);
-    //! NOTE Disabled any events from Qt
-    QAccessible::installUpdateHandler(updateHandlerNoop);
 
     m_eventSent.send(ev);
 }
