@@ -36,7 +36,7 @@ namespace mu::mpe {
 // common
 using msecs_t = uint64_t;
 using percentage_t = float; // from 0.0 (0%) to 1.0 (100%)
-constexpr percentage_t PERCENTAGE_PRECISION_STEP = 0.1; // 10%
+constexpr percentage_t PERCENTAGE_PRECISION_STEP = 0.1f; // 10%
 
 // Arrangement
 using timestamp_t = msecs_t;
