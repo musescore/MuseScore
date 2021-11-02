@@ -17,6 +17,7 @@
     <akkoladeDistance>6.5</akkoladeDistance>
     <minSystemDistance>8.5</minSystemDistance>
     <maxSystemDistance>15</maxSystemDistance>
+    <enableVerticalSpread>0</enableVerticalSpread>
     <enableIndentationOnFirstSystem>0</enableIndentationOnFirstSystem>
     <lyricsPlacement>1</lyricsPlacement>
     <lyricsPosAbove x="0" y="-2"/>

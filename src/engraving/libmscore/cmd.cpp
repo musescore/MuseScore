@@ -2153,15 +2153,6 @@ void Score::cmdResetBeamMode()
     }
 }
 
-//---------------------------------------------------------
-//   cmdResetStyle
-//---------------------------------------------------------
-
-void Score::cmdResetAllStyle()
-{
-    resetAllStyle();
-}
-
 void Score::cmdResetTextStyleOverrides()
 {
     static const std::vector<Pid> propertiesToReset {
@@ -4366,7 +4357,6 @@ void Score::cmd(const QString& cmd, EditData& ed)
         { "add-trill",                  [](Score* cs, EditData&) { cs->addArticulation(SymId::ornamentTrill); } },
         { "add-up-bow",                 [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsUpBow); } },
         { "add-down-bow",               [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsDownBow); } },
-        { "reset-style",                [](Score* cs, EditData&) { cs->cmdResetAllStyle(); } },
         { "clef-violin",                [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::G); } },
         { "clef-bass",                  [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::F); } },
         { "sharp2-post",                [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP2); } },

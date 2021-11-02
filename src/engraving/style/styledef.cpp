@@ -65,7 +65,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::maxSystemDistance,       "maxSystemDistance",       Spatium(15.0) },
     { Sid::alignSystemToMargin,     "alignSystemToMargin",     true },
 
-    { Sid::enableVerticalSpread,    "enableVerticalSpread",    false },
+    { Sid::enableVerticalSpread,    "enableVerticalSpread",    true },
     { Sid::spreadSystem,            "spreadSystem",            2.5 },
     { Sid::spreadSquareBracket,     "spreadSquareBracket",     1.2 },
     { Sid::spreadCurlyBracket,      "spreadCurlyBracket",      1.1 },

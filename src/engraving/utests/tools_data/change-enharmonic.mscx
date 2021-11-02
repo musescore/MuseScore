@@ -9,7 +9,6 @@
     <Style>
       <pageWidth>8.27</pageWidth>
       <pageHeight>11.69</pageHeight>
-      <enableVerticalSpread>1</enableVerticalSpread>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
