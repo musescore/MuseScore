@@ -67,10 +67,6 @@ void DockWindow::componentComplete()
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
-    connect(this, &QQuickItem::widthChanged, this, [this]() {
-        alignToolBars(currentPage());
-    });
-
     uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
         if (!m_quiting) {
             resetWindowState();
@@ -84,13 +80,23 @@ void DockWindow::componentComplete()
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
-    QList<DockToolBarView*> topToolBars = topLevelToolBars(currentPage());
+    const DockPageView* page = currentPage();
+    if (!page) {
+        QQuickItem::geometryChanged(newGeometry, oldGeometry);
+        return;
+    }
 
+    //! NOTE: it is important to reset the current minimum width for all top-level toolbars
+    //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
+    //! due to lack of free space
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(page);
     for (DockToolBarView* toolBar : topToolBars) {
         toolBar->setMinimumWidth(toolBar->contentWidth());
     }
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+
+    alignToolBars(page);
 }
 
 void DockWindow::onQuit()
