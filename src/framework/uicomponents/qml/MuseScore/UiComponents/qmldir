@@ -30,7 +30,7 @@ ProgressButton 1.0 ProgressButton.qml
 RoundedRadioButton 1.0 RoundedRadioButton.qml
 InstallationPanel 1.0 InstallationPanel.qml
 StyledScrollBar 1.0 StyledScrollBar.qml
-GradientTabButton 1.0 GradientTabButton.qml
+PageTabButton 1.0 PageTabButton.qml
 GridViewSectional 1.0 GridViewSectional.qml
 ListItemBlank 1.0 ListItemBlank.qml
 StyledSlider 1.0 StyledSlider.qml

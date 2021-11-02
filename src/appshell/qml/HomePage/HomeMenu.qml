@@ -98,7 +98,7 @@ Rectangle {
 
             currentIndex: 0
 
-            delegate: GradientTabButton {
+            delegate: PageTabButton {
                 id: radioButtonDelegate
 
                 width: parent.width

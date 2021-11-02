@@ -532,7 +532,7 @@ int UiConfiguration::iconsFontSize(IconSizeType type) const
 {
     switch (type) {
     case IconSizeType::Regular: return 16;
-    case IconSizeType::Toolbar: return 20;
+    case IconSizeType::Toolbar: return 18;
     }
 
     return 16;

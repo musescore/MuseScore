@@ -53,7 +53,7 @@ FlatButton {
             return qsTrc("project", "No pickup")
         }
 
-        font: ui.theme.tabFont
+        font: ui.theme.largeBodyFont
         text: model.measureCount + qsTrc("project", " measures, \n") + pickupMessage
     }
 

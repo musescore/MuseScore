@@ -755,7 +755,7 @@ Rectangle {
             spacing: 30
 
             Column {
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 1"
 
                     orientation: Qt.Horizontal
@@ -769,7 +769,7 @@ Rectangle {
                     checked: true
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 2"
 
                     width: 200
@@ -777,7 +777,7 @@ Rectangle {
                     orientation: Qt.Horizontal
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 3"
 
                     width: 200
@@ -787,7 +787,7 @@ Rectangle {
             }
 
             Column {
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 1"
 
                     width: 200
@@ -799,13 +799,13 @@ Rectangle {
                     checked: true
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 2"
 
                     width: 200
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 3"
 
                     width: 200
