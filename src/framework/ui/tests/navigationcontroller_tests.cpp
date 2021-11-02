@@ -137,7 +137,7 @@ public:
 
         for (size_t ci = 0; ci < controlsCount; ++ci) {
             INavigation::Index& idx = make_idx(env);
-            idx.column = ci;
+            idx.column = static_cast<int>(ci);
 
             Control* c = make_control(idx);
 
@@ -163,7 +163,7 @@ public:
         Section* s = new Section();
 
         for (size_t pi = 0; pi < panelsCount; ++pi) {
-            Panel* p = make_panel(env, pi, controlsCount);
+            Panel* p = make_panel(env, static_cast<int>(pi), controlsCount);
             s->panels.push_back(p);
             s->ipanels.insert(p->panel);
         }
@@ -198,26 +198,32 @@ public:
         }
     }
 
+#ifdef Q_OS_LINUX
     QEvent expectSendingEventOnNavigation(Env& env)
     {
         QEvent event(QEvent::None);
 
-#ifdef Q_OS_LINUX
         //! For Linux it needs to send spontanous event for canceling reading the name of previous control on accessibility
         QWindow* window = new QWindow();
         EXPECT_CALL(*env.mainWindow, qWindow()).WillOnce(Return(window));
         EXPECT_CALL(*env.application, notify(window, _)).WillOnce(DoAll(SaveArgPointee<1>(&event), Return(true)));
-#endif
 
         return event;
     }
 
     void checkSendingEventOnNavigation(const QEvent& event)
     {
-#ifdef Q_OS_LINUX
         EXPECT_TRUE(event.spontaneous());
-#endif
     }
+
+#else
+    QEvent expectSendingEventOnNavigation(Env&)
+    {
+        return QEvent(QEvent::None);
+    }
+
+    void checkSendingEventOnNavigation(const QEvent&) {}
+#endif
 };
 
 TEST_F(NavigationControllerTests, FirstActiveOnNextSection)

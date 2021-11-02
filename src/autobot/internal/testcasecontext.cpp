@@ -102,7 +102,7 @@ TestCaseContext::Val TestCaseContext::stepVal(const QString& stepName, const Key
 
 TestCaseContext::Val TestCaseContext::findVal(const Key& key) const
 {
-    for (int i = m_steps.size() - 1; i >= 0; --i) {
+    for (size_t i = m_steps.size() - 1; i >= 0; --i) {
         const StepContext& s = m_steps.at(i);
         auto it = s.vals.find(key);
         if (it != s.vals.end()) {
