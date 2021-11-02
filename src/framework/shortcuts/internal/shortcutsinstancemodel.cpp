@@ -30,7 +30,31 @@ ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
 {
 }
 
-void ShortcutsInstanceModel::load()
+void ShortcutsInstanceModel::init()
+{
+    shortcutsRegister()->activeChanged().onNotify(this, [this](){
+        emit activeChanged();
+    });
+
+    loadShortcuts();
+}
+
+QStringList ShortcutsInstanceModel::shortcuts() const
+{
+    return m_shortcuts;
+}
+
+bool ShortcutsInstanceModel::active() const
+{
+    return shortcutsRegister()->active();
+}
+
+void ShortcutsInstanceModel::activate(const QString& key)
+{
+    controller()->activate(key.toStdString());
+}
+
+void ShortcutsInstanceModel::loadShortcuts()
 {
     m_shortcuts.clear();
 
@@ -46,14 +70,4 @@ void ShortcutsInstanceModel::load()
     }
 
     emit shortcutsChanged();
-}
-
-QStringList ShortcutsInstanceModel::shortcuts() const
-{
-    return m_shortcuts;
-}
-
-void ShortcutsInstanceModel::activate(const QString& key)
-{
-    controller()->activate(key.toStdString());
 }

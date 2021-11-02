@@ -45,6 +45,7 @@ using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::ui;
 
+static std::shared_ptr<ShortcutsController> s_shortcutsController = std::make_shared<ShortcutsController>();
 static std::shared_ptr<ShortcutsRegister> s_shortcutsRegister = std::make_shared<ShortcutsRegister>();
 static std::shared_ptr<ShortcutsConfiguration> s_configuration = std::make_shared<ShortcutsConfiguration>();
 static std::shared_ptr<MidiRemote> s_midiRemote = std::make_shared<MidiRemote>();
@@ -62,7 +63,7 @@ std::string ShortcutsModule::moduleName() const
 void ShortcutsModule::registerExports()
 {
     ioc()->registerExport<IShortcutsRegister>(moduleName(), s_shortcutsRegister);
-    ioc()->registerExport<IShortcutsController>(moduleName(), new ShortcutsController());
+    ioc()->registerExport<IShortcutsController>(moduleName(), s_shortcutsController);
     ioc()->registerExport<IMidiRemote>(moduleName(), s_midiRemote);
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), s_configuration);
 }
@@ -90,6 +91,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     }
 
     s_configuration->init();
+    s_shortcutsController->init();
     s_shortcutsRegister->reload();
     s_midiRemote->load();
 

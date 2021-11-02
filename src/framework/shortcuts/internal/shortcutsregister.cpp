@@ -309,3 +309,23 @@ mu::Ret ShortcutsRegister::exportToFile(const io::path& filePath) const
 {
     return writeToFile(m_shortcuts, filePath);
 }
+
+bool ShortcutsRegister::active()
+{
+    return m_isActive;
+}
+
+void ShortcutsRegister::setActive(bool active)
+{
+    if (m_isActive == active) {
+        return;
+    }
+
+    m_isActive = active;
+    m_activeChanged.notify();
+}
+
+Notification ShortcutsRegister::activeChanged() const
+{
+    return m_activeChanged;
+}

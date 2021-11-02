@@ -311,6 +311,20 @@ QWindow* InteractiveProvider::topWindow() const
     return qobject_cast<QWindow*>(last.window);
 }
 
+bool InteractiveProvider::topWindowIsWidget() const
+{
+    if (m_stack.empty()) {
+        return false;
+    }
+
+    const ObjectInfo& last = m_stack.last();
+    if (!last.window) {
+        return false;
+    }
+
+    return last.window->isWidgetType();
+}
+
 QString InteractiveProvider::objectId(const QVariant& val) const
 {
     static int count(0);
