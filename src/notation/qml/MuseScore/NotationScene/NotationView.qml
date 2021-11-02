@@ -112,7 +112,11 @@ FocusScope {
 
                         onActiveChanged: {
                             if (fakeNavCtrl.active) {
+                                notationView.focus = true
+                                notationView.forceActiveFocus()
                                 notationView.selectOnNavigationActive()
+                            } else {
+                                notationView.focus = false
                             }
                         }
                     }

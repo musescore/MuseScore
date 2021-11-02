@@ -36,57 +36,38 @@ static const QString NOTATION_NAVIGATION_SECTION("NotationView");
 void UiContextResolver::init()
 {
     interactive()->currentUri().ch.onReceive(this, [this](const Uri&) {
-        notifyAboutContextIfChanged();
+        notifyAboutContextChanged();
     });
 
     playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        notifyAboutContextIfChanged();
+        notifyAboutContextChanged();
     });
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         auto notation = globalContext()->currentNotation();
         if (notation) {
             notation->interaction()->selectionChanged().onNotify(this, [this]() {
-                notifyAboutContextIfChanged();
+                notifyAboutContextChanged();
             });
 
             notation->interaction()->textEditingStarted().onNotify(this, [this]() {
-                notifyAboutContextIfChanged();
+                notifyAboutContextChanged();
             });
 
             notation->undoStack()->stackChanged().onNotify(this, [this]() {
-                notifyAboutContextIfChanged();
+                notifyAboutContextChanged();
             });
         }
-        notifyAboutContextIfChanged();
+        notifyAboutContextChanged();
     });
-
-    navigationController()->navigationChanged().onNotify(this, [this]() {
-        notifyAboutContextIfChanged();
-    });
-
-    m_lastUiContext = resolveCurrentUiContext();
 }
 
-void UiContextResolver::notifyAboutContextIfChanged()
+void UiContextResolver::notifyAboutContextChanged()
 {
-    TRACEFUNC;
-
-    UiContext ctx = resolveCurrentUiContext();
-    if (ctx == m_lastUiContext) {
-        return;
-    }
-
-    m_lastUiContext = ctx;
     m_currentUiContextChanged.notify();
 }
 
 UiContext UiContextResolver::currentUiContext() const
-{
-    return m_lastUiContext;
-}
-
-UiContext UiContextResolver::resolveCurrentUiContext() const
 {
     TRACEFUNC;
     Uri currentUri = interactive()->currentUri().val;
@@ -107,8 +88,7 @@ UiContext UiContextResolver::resolveCurrentUiContext() const
             return context::UiCtxUnknown;
         }
 
-        ui::INavigationSection* activeSection = navigationController()->activeSection();
-        if (!activeSection || activeSection->name() == NOTATION_NAVIGATION_SECTION) {
+        if (m_notationViewFocusedCounter > 0) {
             return context::UiCtxNotationFocused;
         }
 
@@ -145,4 +125,15 @@ bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
 mu::async::Notification UiContextResolver::currentUiContextChanged() const
 {
     return m_currentUiContextChanged;
+}
+
+void UiContextResolver::onNotationViewFocuseChanged(bool focused)
+{
+    if (focused) {
+        m_notationViewFocusedCounter++;
+    } else {
+        m_notationViewFocusedCounter--;
+    }
+
+    notifyAboutContextChanged();
 }
