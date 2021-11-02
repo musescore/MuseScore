@@ -37,7 +37,7 @@ Rectangle {
 
     property int maximumHeight: 0
 
-    width: floating ? 530 : 452 //content.width
+    width: floating ? 426 : 364 //content.width
     height: content.height
 
     color: ui.theme.backgroundPrimaryColor
