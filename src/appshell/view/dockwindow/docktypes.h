@@ -44,6 +44,12 @@ struct DockProperties
 {
     DockType type = DockType::Undefined;
     Qt::DockWidgetAreas allowedAreas = Qt::NoDockWidgetArea;
+    bool separatorsVisible = false;
+
+    bool isValid() const
+    {
+        return type != DockType::Undefined;
+    }
 };
 
 inline void writePropertiesToObject(const DockProperties& properties, QObject& obj)
@@ -52,6 +58,7 @@ inline void writePropertiesToObject(const DockProperties& properties, QObject& o
     propertiesObj->setObjectName("properties");
     propertiesObj->setProperty("dockType", QVariant::fromValue(static_cast<int>(properties.type)));
     propertiesObj->setProperty("allowedAreas", QVariant::fromValue(static_cast<int>(properties.allowedAreas)));
+    propertiesObj->setProperty("separatorsVisible", properties.separatorsVisible);
 }
 
 inline DockProperties readPropertiesFromObject(const QObject* obj)
@@ -68,6 +75,7 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
     DockProperties result;
     result.type = static_cast<DockType>(properties->property("dockType").toInt());
     result.allowedAreas = static_cast<Qt::DockWidgetAreas>(properties->property("allowedAreas").toInt());
+    result.separatorsVisible = properties->property("separatorsVisible").toBool();
 
     return result;
 }

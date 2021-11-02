@@ -34,6 +34,7 @@
 #include "dockstatusbarview.h"
 #include "docktoolbarview.h"
 #include "docktoolbarholder.h"
+#include "dockwindow.h"
 
 #include "log.h"
 
@@ -75,6 +76,27 @@ void DockWindow::componentComplete()
     dockWindowProvider()->init(this);
 
     startupScenario()->run();
+}
+
+void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    const DockPageView* page = currentPage();
+    if (!page) {
+        QQuickItem::geometryChanged(newGeometry, oldGeometry);
+        return;
+    }
+
+    //! NOTE: it is important to reset the current minimum width for all top-level toolbars
+    //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
+    //! due to lack of free space
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(page);
+    for (DockToolBarView* toolBar : topToolBars) {
+        toolBar->setMinimumWidth(toolBar->contentWidth());
+    }
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+
+    alignToolBars(page);
 }
 
 void DockWindow::onQuit()
@@ -371,6 +393,58 @@ void DockWindow::loadPagePanels(const DockPageView* page)
     }
 }
 
+void DockWindow::alignToolBars(const DockPageView* page)
+{
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(page);
+
+    DockToolBarView* lastLeftToolBar = nullptr;
+    DockToolBarView* lastCentralToolBar = nullptr;
+
+    int leftToolBarsWidth = 0;
+    int centralToolBarsWidth = 0;
+    int rightToolBarsWidth = 0;
+
+    for (DockToolBarView* toolBar : topToolBars) {
+        if (toolBar->floating() || !toolBar->isVisible()) {
+            continue;
+        }
+
+        switch (static_cast<DockToolBarAlignment::Type>(toolBar->alignment())) {
+        case DockToolBarAlignment::Left:
+            lastLeftToolBar = toolBar;
+            leftToolBarsWidth += toolBar->contentWidth();
+            break;
+        case DockToolBarAlignment::Center:
+            lastCentralToolBar = toolBar;
+            centralToolBarsWidth += toolBar->contentWidth();
+            break;
+        case DockToolBarAlignment::Right:
+            rightToolBarsWidth += toolBar->contentWidth();
+            break;
+        }
+    }
+
+    if (!lastLeftToolBar || !lastCentralToolBar) {
+        return;
+    }
+
+    int deltaForLastLeftToolbar = (width() - centralToolBarsWidth) / 2 - leftToolBarsWidth;
+    int deltaForLastCentralToolBar = (width() - centralToolBarsWidth) / 2 - rightToolBarsWidth;
+
+    deltaForLastLeftToolbar = std::max(deltaForLastLeftToolbar, 0);
+    deltaForLastCentralToolBar = std::max(deltaForLastCentralToolBar, 0);
+
+    int freeSpace = width() - (leftToolBarsWidth + centralToolBarsWidth + rightToolBarsWidth);
+
+    if (deltaForLastLeftToolbar + deltaForLastCentralToolBar > freeSpace) {
+        deltaForLastLeftToolbar = freeSpace;
+        deltaForLastCentralToolBar = 0;
+    }
+
+    lastLeftToolBar->setMinimumWidth(lastLeftToolBar->contentWidth() + deltaForLastLeftToolbar);
+    lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
+}
+
 void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo)
 {
     IF_ASSERT_FAILED(dock) {
@@ -486,6 +560,25 @@ void DockWindow::initDocks(DockPageView* page)
     if (page) {
         page->init();
     }
+
+    alignToolBars(page);
+
+    for (DockToolBarView* toolbar : page->mainToolBars()) {
+        connect(toolbar, &DockToolBarView::floatingChanged, this, [this, page]() {
+            alignToolBars(page);
+        }, Qt::UniqueConnection);
+    }
+}
+
+QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) const
+{
+    QList<DockToolBarView*> toolBars = m_toolBars.list();
+
+    if (page) {
+        toolBars << page->mainToolBars();
+    }
+
+    return toolBars;
 }
 
 DockToolBarHolder* DockWindow::resolveToolbarDockingHolder(const QPoint& localPos) const

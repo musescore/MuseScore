@@ -95,6 +95,8 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
     qRegisterMetaType<DropIndicators*>();
+
+    qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
 }
 
 void DockSetup::registerExports()

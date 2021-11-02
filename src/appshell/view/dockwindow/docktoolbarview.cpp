@@ -121,6 +121,11 @@ Qt::Orientation DockToolBarView::orientation() const
     return m_orientation;
 }
 
+int DockToolBarView::alignment() const
+{
+    return m_alignment;
+}
+
 void DockToolBarView::setOrientation(Qt::Orientation orientation)
 {
     bool isChangingAllowed = isOrientationChangingAllowed();
@@ -131,6 +136,16 @@ void DockToolBarView::setOrientation(Qt::Orientation orientation)
 
     m_orientation = orientation;
     emit orientationChanged(orientation);
+}
+
+void DockToolBarView::setAlignment(int alignment)
+{
+    if (alignment == m_alignment) {
+        return;
+    }
+
+    m_alignment = alignment;
+    emit alignmentChanged(alignment);
 }
 
 void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
