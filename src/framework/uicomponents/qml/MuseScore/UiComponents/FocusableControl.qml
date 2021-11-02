@@ -43,6 +43,9 @@ FocusScope {
         }
     }
 
+    Component.onCompleted: navCtrl.enabled = true
+    Component.onDestruction: navCtrl.enabled = false
+
     NavigationControl {
         id: navCtrl
         name: root.objectName

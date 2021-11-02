@@ -28,6 +28,7 @@
 #include <QCoreApplication>
 #include <QWindow>
 #include <QKeyEvent>
+#include <QTextStream>
 
 #ifdef Q_OS_LINUX
 #include <private/qcoreapplication_p.h>
@@ -1239,4 +1240,44 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
     if (isChanged) {
         m_navigationChanged.notify();
     }
+}
+
+inline QTextStream& operator<<(QTextStream& s, const std::string& v)
+{
+    s << v.c_str();
+    return s;
+}
+
+void NavigationController::dump() const
+{
+    QString str;
+    QTextStream stream(&str);
+    stream << "Navigation Dump:" << Qt::endl;
+    for (const INavigationSection* sect : m_sections) {
+        stream << "section: " << sect->name()
+               << ", index: " << sect->index().to_string()
+               << ", enabled: " << sect->enabled()
+               << ", active: " << sect->active()
+               << Qt::endl;
+
+        for (const INavigationPanel* panel : sect->panels()) {
+            stream << "    panel: " << panel->name()
+                   << ", index: " << panel->index().to_string()
+                   << ", enabled: " << panel->enabled()
+                   << ", active: " << panel->active()
+                   << Qt::endl;
+
+            for (const INavigationControl* ctrl : panel->controls()) {
+                stream << "        control: " << ctrl->name()
+                       << ", index: " << ctrl->index().to_string()
+                       << ", enabled: " << ctrl->enabled()
+                       << ", active: " << ctrl->active()
+                       << Qt::endl;
+            }
+        }
+    }
+
+    stream << Qt::endl;
+
+    std::cout << str.toStdString();
 }

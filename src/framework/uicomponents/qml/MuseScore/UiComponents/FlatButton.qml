@@ -85,7 +85,7 @@ FocusScope {
         accessible.visualItem: root
 
         onTriggered: {
-            if (root.isClickOnKeyNavTriggered) {
+            if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {
                 root.clicked(null)
             }
         }

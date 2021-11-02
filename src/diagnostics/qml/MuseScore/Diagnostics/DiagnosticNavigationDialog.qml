@@ -31,6 +31,8 @@ StyledDialogView {
     contentHeight: 900
     contentWidth: 600
 
+    x: 850
+
     //! NOTE It is necessary that it can be determined that this is an object for diagnostics
     contentItem.objectName: panel.objectName
 

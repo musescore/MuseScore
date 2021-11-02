@@ -247,7 +247,7 @@ Item {
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
 
-                                navigation.name: model ? (model.itemRole.title + model.index) : "ItemInstrumentsTree"
+                                navigation.name: model ? model.itemRole.title : "ItemInstrumentsTree"
                                 navigation.panel: instrumentsTreeView.navigationTreePanel
                                 navigation.row: model ? model.index : 0
                                 navigation.onActiveChanged: {

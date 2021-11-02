@@ -64,6 +64,7 @@ private:
     };
 
     void nextStep(bool byInterval = true);
+    void doAbort();
 
     int m_intervalMsec = 1000;
     TestCaseData m_testCase;
