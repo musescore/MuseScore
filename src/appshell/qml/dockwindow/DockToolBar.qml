@@ -33,11 +33,9 @@ DockToolBarView {
 
     property alias floatable: gripButton.visible
 
-    property int padding: 2
-    property int spacing: 2
+    property real gripButtonPadding: 2
 
-    contentWidth: content.width
-    contentHeight: content.height
+    readonly property bool isVertical: orientation === Qt.Vertical
 
     minimumWidth: Math.min(contentWidth, maximumWidth)
     minimumHeight: Math.min(contentHeight, maximumHeight)
@@ -45,49 +43,53 @@ DockToolBarView {
     QtObject {
         id: prv
 
-        readonly property int minimumLength: 48
+        readonly property int minimumLength: 36
         readonly property int maximumLength: 9999999
-        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width : 0
-        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height : 0
+        readonly property int gripButtonWidth:
+            gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
+        readonly property int gripButtonHeight:
+            gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
     }
 
     Rectangle {
         id: contentBackground
+        anchors.fill: parent
 
         color: ui.theme.backgroundPrimaryColor
 
-        Item {
-            id: content
+        FlatButton {
+            id: gripButton
+            width: root.isVertical ? 30 : 24
+            height: root.isVertical ? 24 : 30
 
-            width: childrenRect.width
-            height: childrenRect.height
+            mouseArea.objectName: root.objectName + "_gripButton"
 
-            FlatButton {
-                id: gripButton
-
-                mouseArea.objectName: root.objectName + "_gripButton"
-
-                transparent: true
-                icon: IconCode.TOOLBAR_GRIP
-
-                Component.onCompleted: {
-                    root.setDraggableMouseArea(mouseArea)
-                }
+            transparent: true
+            contentItem: StyledIconLabel {
+                iconCode: IconCode.TOOLBAR_GRIP
+                rotation: root.isVertical ? 90 : 0
             }
 
-            Loader {
-                id: contentLoader
+            Component.onCompleted: {
+                root.setDraggableMouseArea(mouseArea)
             }
+        }
+
+        Loader {
+            id: contentLoader
         }
     }
 
     states: [
         State {
             name: "HORIZONTAL"
-            when: root.orientation === Qt.Horizontal
+            when: !root.isVertical
 
             PropertyChanges {
                 target: root
+
+                contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
+                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight)
 
                 maximumWidth: prv.maximumLength
                 maximumHeight: prv.minimumLength
@@ -96,59 +98,68 @@ DockToolBarView {
             PropertyChanges {
                 target: gripButton
 
-                anchors.left: parent.left
-                anchors.leftMargin: root.padding
-                anchors.top: undefined
+                anchors.leftMargin: root.gripButtonPadding
+            }
 
-                x: 0
-                y: (contentBackground.height - gripButton.height) / 2
+            AnchorChanges {
+                target: gripButton
+
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             PropertyChanges {
                 target: contentLoader
 
-                anchors.left: gripButton.visible ? gripButton.right : parent.left
-                anchors.leftMargin: gripButton.visible ? root.spacing : root.padding
-                anchors.top: undefined
+                anchors.leftMargin: gripButton.visible ? root.gripButtonPadding : 0
+            }
 
-                x: 0
-                y: (contentBackground.height - contentLoader.height) / 2
+            AnchorChanges {
+                target: contentLoader
+
+                anchors.left: gripButton.visible ? gripButton.right : parent.left
+                anchors.verticalCenter: parent.verticalCenter
             }
         },
 
         State {
             name: "VERTICAL"
-            when: root.orientation === Qt.Vertical
+            when: root.isVertical
 
             PropertyChanges {
                 target: root
 
-                maximumWidth: content.width
+                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth)
+                contentHeight: prv.gripButtonHeight + contentLoader.implicitHeight
+
+                maximumWidth: contentWidth
                 maximumHeight: prv.maximumLength
             }
 
             PropertyChanges {
                 target: gripButton
 
+                anchors.topMargin: root.gripButtonPadding
+            }
+
+            AnchorChanges {
+                target: gripButton
+
                 anchors.top: parent.top
-                anchors.topMargin: root.padding
-                anchors.left: undefined
-
-                x: (contentBackground.width - gripButton.width) / 2
-                y: 0
-
-                rotation: 90
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             PropertyChanges {
                 target: contentLoader
 
-                anchors.top: gripButton.visible ? gripButton.bottom : parent.top
-                anchors.topMargin: gripButton.visible ? root.spacing : root.padding
-                anchors.left: undefined
+                anchors.topMargin: gripButton.visible ? root.gripButtonPadding : 0
+            }
 
-                x: (contentBackground.width - contentLoader.width) / 2
-                y: 0
+            AnchorChanges {
+                target: contentLoader
+
+                anchors.top: gripButton.visible ? gripButton.bottom : parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     ]

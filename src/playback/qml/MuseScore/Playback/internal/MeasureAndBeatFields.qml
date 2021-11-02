@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -34,30 +34,23 @@ RowLayout {
     property alias beatNumber: beatNumberField.value
     property alias maxBeatNumber: beatNumberField.maxValue
 
-    property var font: ui.theme.tabFont
+    property var font: ui.theme.largeBodyFont
 
     signal measureNumberEdited(var newValue)
     signal beatNumberEdited(var newValue)
 
     spacing: 4
 
-    Item {
-        Layout.preferredWidth: 20
+    NumberInputField {
+        id: measureNumberField
 
-        NumberInputField {
-            id: measureNumberField
+        minValue: 1
+        addLeadingZeros: false
 
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+        font: root.font
 
-            minValue: 1
-            addLeadingZeros: false
-
-            font: root.font
-
-            onValueEdited: {
-                root.measureNumberEdited(newValue)
-            }
+        onValueEdited: function(newValue) {
+            root.measureNumberEdited(newValue)
         }
     }
 
@@ -66,23 +59,16 @@ RowLayout {
         font: root.font
     }
 
-    Item {
-        Layout.preferredWidth: 10
+    NumberInputField {
+        id: beatNumberField
 
-        NumberInputField {
-            id: beatNumberField
+        minValue: 1
+        addLeadingZeros: false
 
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
+        font: root.font
 
-            minValue: 1
-            addLeadingZeros: false
-
-            font: root.font
-
-            onValueEdited: {
-                root.beatNumberEdited(newValue)
-            }
+        onValueEdited: function(newValue) {
+            root.beatNumberEdited(newValue)
         }
     }
 }

@@ -27,7 +27,7 @@ import MuseScore.Cloud 1.0
 
 import "internal"
 
-GradientTabButton {
+PageTabButton {
     id: root
 
     property string userName: accountModel.accountInfo.userName

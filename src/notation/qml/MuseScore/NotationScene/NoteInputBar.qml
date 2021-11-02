@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick 2.15
 
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
@@ -86,10 +85,10 @@ Rectangle {
 
         sectionRole: "section"
 
-        rowSpacing: 6
-        columnSpacing: 6
+        rowSpacing: 4
+        columnSpacing: 4
 
-        cellWidth: 36
+        cellWidth: 32
         cellHeight: cellWidth
 
         clip: true
@@ -208,7 +207,7 @@ Rectangle {
     FlatButton {
         id: customizeButton
 
-        anchors.margins: 6
+        anchors.margins: 4
 
         width: gridView.cellWidth
         height: gridView.cellHeight
@@ -239,7 +238,7 @@ Rectangle {
             PropertyChanges {
                 target: root
                 width: gridView.width
-                height: 48
+                height: 40
             }
 
             PropertyChanges {
@@ -263,7 +262,7 @@ Rectangle {
 
             PropertyChanges {
                 target: root
-                width: 96
+                width: 76
                 height: gridView.height
             }
 

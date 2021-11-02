@@ -27,7 +27,7 @@
         <file>qml/MuseScore/UiComponents/RoundedRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
         <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
-        <file>qml/MuseScore/UiComponents/GradientTabButton.qml</file>
+        <file>qml/MuseScore/UiComponents/PageTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/GridViewSectional.qml</file>
         <file>qml/MuseScore/UiComponents/ListItemBlank.qml</file>
         <file>qml/MuseScore/UiComponents/StyledSlider.qml</file>

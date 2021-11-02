@@ -30,7 +30,7 @@ Row {
     property date maxTime
     property alias maxMillisecondsNumber: millisecondsField.maxValue
 
-    property var font: ui.theme.tabFont
+    property var font: ui.theme.largeBodyFont
 
     signal timeEdited(var newTime)
 

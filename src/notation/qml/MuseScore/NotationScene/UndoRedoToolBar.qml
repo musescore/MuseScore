@@ -25,15 +25,13 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
-Rectangle {
+Item {
     id: root
 
     property alias navigation: navPanel
 
     width: content.width
     height: content.height
-
-    color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         model.load()
@@ -53,10 +51,18 @@ Rectangle {
     Row {
         id: content
 
+        readonly property int padding: 6
+
+        width: childrenRect.width + 2 * padding
         height: childrenRect.height
-        spacing: 2
+        x: padding
+
+        spacing: 0
 
         FlatButton {
+            width: 30
+            height: width
+
             icon: model.undoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
@@ -76,6 +82,9 @@ Rectangle {
         }
 
         FlatButton {
+            width: 30
+            height: width
+
             icon: model.redoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
