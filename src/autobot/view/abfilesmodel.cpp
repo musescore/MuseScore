@@ -65,7 +65,7 @@ QVariant AbFilesModel::data(const QModelIndex& index, int role) const
 
 int AbFilesModel::rowCount(const QModelIndex&) const
 {
-    return m_files.val.size();
+    return static_cast<int>(m_files.val.size());
 }
 
 QHash<int, QByteArray> AbFilesModel::roleNames() const
@@ -97,7 +97,7 @@ void AbFilesModel::updateFile(const File& f)
         File& cur = m_files.val.at(i);
         if (cur.path == f.path) {
             cur = f;
-            emit dataChanged(index(i), index(i));
+            emit dataChanged(index(static_cast<int>(i)), index(static_cast<int>(i)));
             break;
         }
     }

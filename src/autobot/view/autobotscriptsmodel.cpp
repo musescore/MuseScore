@@ -60,7 +60,7 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
 
 int AutobotScriptsModel::rowCount(const QModelIndex&) const
 {
-    return m_scripts.size();
+    return static_cast<int>(m_scripts.size());
 }
 
 QHash<int, QByteArray> AutobotScriptsModel::roleNames() const

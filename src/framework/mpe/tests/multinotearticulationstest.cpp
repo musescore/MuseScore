@@ -88,7 +88,7 @@ protected:
         DynamicType dynamic = DynamicType::Undefined;
     };
 
-    std::map<int, NoteMetaData> m_initialData;
+    std::map<size_t, NoteMetaData> m_initialData;
 
     ArticulationPattern m_standardPattern;
 };
@@ -105,7 +105,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
     ArticulationMap appliedArticulations = {};
 
     // [WHEN] Notes sequence with given parameters being built
-    std::map<int, NoteEvent> noteEvents;
+    std::map<size_t, NoteEvent> noteEvents;
 
     for (const auto& pair : m_initialData) {
         NoteEvent noteEvent(m_standardPattern,
@@ -146,7 +146,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
  */
 TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
 {
-    std::map<int, ArticulationMap> appliedArticulations;
+    std::map<size_t, ArticulationMap> appliedArticulations;
 
     // [GIVEN] Articulation pattern "Glissando", which instructs a performer to start on the pitch/rhythm
     //         and slide the pitch up/down to land on the next pitch/rhythm
@@ -171,7 +171,7 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     appliedArticulations[1].emplace(ArticulationType::Glissando, glissandoAppliedOnTheSecondNote);
 
     // [WHEN] Notes sequence with given parameters being built
-    std::map<int, NoteEvent> noteEvents;
+    std::map<size_t, NoteEvent> noteEvents;
 
     for (const auto& pair : m_initialData) {
         NoteEvent noteEvent(m_standardPattern,
@@ -192,13 +192,13 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
                   dynamicLevelFromType(DynamicType::f));
     }
 
-    for (int i = 0; i < 2; ++i) {
+    for (size_t i = 0; i < 2; ++i) {
         // [THEN] We expect that pitch curve of the notes 1 and 2 will be using a curve from the glissando pattern
         EXPECT_EQ(noteEvents.at(i).pitchCtx().pitchCurve,
                   glissandoPattern.pitchPattern.pitchOffsetMap);
     }
 
-    for (int i = 2; i < 4; ++i) {
+    for (size_t i = 2; i < 4; ++i) {
         // [THEN] We expect that pitch curve of the notes 3 and 4 will be using a curve from the standard pattern
         EXPECT_EQ(noteEvents.at(i).pitchCtx().pitchCurve,
                   m_standardPattern.pitchPattern.pitchOffsetMap);
@@ -213,13 +213,13 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
  */
 TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
 {
-    std::map<int, ArticulationMap> appliedArticulations;
+    std::map<size_t, ArticulationMap> appliedArticulations;
 
     // [GIVEN] Articulation pattern "Crescendo", which instructs a performer to gradually increase a volume of every note,
     //         using a certain range of dynamics. In our case there will be a crescendo from forte up to fortissimo
 
-    int noteCount = m_initialData.size();
-    int dynamicSegmentsCount = noteCount - 1;
+    size_t noteCount = m_initialData.size();
+    size_t dynamicSegmentsCount = noteCount - 1;
 
     // [GIVEN] The last note is marked by fortissimo dynamic
     m_initialData[noteCount].dynamic = DynamicType::ff;
@@ -228,7 +228,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
 
     ArticulationPatternsScope crescendoScope;
 
-    for (int i = 0; i < noteCount; ++i) {
+    for (size_t i = 0; i < noteCount; ++i) {
         ArticulationPattern crescendoPattern;
         crescendoPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
@@ -237,14 +237,14 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         crescendoScope.emplace(0.25f * i, std::move(crescendoPattern));
     }
 
-    for (int i = 0; i < noteCount; ++i) {
+    for (size_t i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
         ArticulationData crescendoApplied(ArticulationType::Glissando, crescendoScope, 0.25 * i, 0.25 * (i + 1));
         appliedArticulations[i].emplace(ArticulationType::Glissando, crescendoApplied);
     }
 
     // [WHEN] Notes sequence with given parameters being built
-    std::map<int, NoteEvent> noteEvents;
+    std::map<size_t, NoteEvent> noteEvents;
 
     for (const auto& pair : m_initialData) {
         NoteEvent noteEvent(m_standardPattern,
@@ -259,7 +259,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         noteEvents.emplace(pair.first, std::move(noteEvent));
     }
 
-    for (int i = 0; i < noteCount; ++i) {
+    for (size_t i = 0; i < noteCount; ++i) {
         // [THEN] We expect that ExpressionCurve of every note will be adapted to the applied CrescendoPattern
         //        That means that every note will be played louder on 125% than the previous one
         EXPECT_EQ(noteEvents.at(i).expressionCtx().expressionCurve.maxAmplitudeLevel(),
