@@ -38,7 +38,7 @@ Rectangle {
 
     property int maximumHeight: 0
 
-    width: content.width
+    width: floating ? 530 : 452 //content.width
     height: content.height
 
     color: ui.theme.backgroundPrimaryColor
@@ -77,7 +77,6 @@ Rectangle {
                 Layout.preferredWidth: contentItem.childrenRect.width
                 Layout.preferredHeight: contentItem.childrenRect.height
 
-                contentHeight: root.floating ? 32 : 48
                 spacing: 4
 
                 model: playbackModel
@@ -85,66 +84,40 @@ Rectangle {
                 orientation: Qt.Horizontal
                 interactive: false
 
-                delegate: Loader {
-                    id: itemLoader
+                delegate: FlatButton {
+                    id: btn
 
-                    sourceComponent: Boolean(model.code) || model.subitems.length !== 0 ? menuItemComp : separatorComp
+                    icon: model.icon
 
-                    onLoaded: {
-                        itemLoader.item.modelData = model
-                    }
+                    toolTipTitle: model.title
+                    toolTipDescription: model.description
+                    toolTipShortcut: model.shortcut
 
-                    Component {
-                        id: menuItemComp
+                    iconFont: ui.theme.toolbarIconsFont
 
-                        FlatButton {
-                            id: btn
+                    accentButton: model.checked || menuLoader.isMenuOpened
+                    transparent: !accentButton
 
-                            property var modelData
-                            property bool hasSubitems: modelData.subitems.length !== 0
+                    navigation.panel: navPanel
+                    navigation.name: model.title
+                    navigation.order: model.index
 
-                            icon: modelData.icon
-
-                            toolTipTitle: modelData.title
-                            toolTipDescription: modelData.description
-                            toolTipShortcut: modelData.shortcut
-
-                            iconFont: ui.theme.toolbarIconsFont
-
-                            accentButton: modelData.checked || menuLoader.isMenuOpened
-                            transparent: !accentButton
-
-                            navigation.panel: navPanel
-                            navigation.name: modelData.title
-                            navigation.order: modelData.index
-
-                            onClicked: {
-                                if (menuLoader.isMenuOpened || hasSubitems) {
-                                    menuLoader.toggleOpened(modelData.subitems)
-                                    return
-                                }
-
-                                Qt.callLater(playbackModel.handleMenuItem, modelData.id)
-                            }
-
-                            StyledMenuLoader {
-                                id: menuLoader
-
-                                navigation: btn.navigation
-
-                                onHandleMenuItem: {
-                                    playbackModel.handleMenuItem(itemId)
-                                }
-                            }
+                    onClicked: {
+                        if (menuLoader.isMenuOpened || model.subitems.length) {
+                            menuLoader.toggleOpened(model.subitems)
+                            return
                         }
+
+                        Qt.callLater(playbackModel.handleMenuItem, model.id)
                     }
 
-                    Component {
-                        id: separatorComp
+                    StyledMenuLoader {
+                        id: menuLoader
 
-                        SeparatorLine {
-                            property var modelData
-                            orientation: Qt.Vertical
+                        navigation: btn.navigation
+
+                        onHandleMenuItem: {
+                            playbackModel.handleMenuItem(itemId)
                         }
                     }
                 }

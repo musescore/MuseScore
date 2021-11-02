@@ -25,25 +25,45 @@
 
 #include "internal/dockbase.h"
 
+#include <QtGlobal>
+
 namespace mu::dock {
+class DockToolBarAlignment
+{
+    Q_GADGET
+
+public:
+    enum Type {
+        Left,
+        Center,
+        Right
+    };
+
+    Q_ENUM(Type)
+};
+
 class DockToolBarView : public DockBase
 {
     Q_OBJECT
 
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation NOTIFY orientationChanged)
+    Q_PROPERTY(int alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
 
 public:
     explicit DockToolBarView(QQuickItem* parent = nullptr);
 
     Qt::Orientation orientation() const;
+    int alignment() const;
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
 
 public slots:
     void setOrientation(Qt::Orientation orientation);
+    void setAlignment(int alignment);
 
 signals:
     void orientationChanged(Qt::Orientation orientation);
+    void alignmentChanged(int alignment);
 
 protected:
     void componentComplete() override;
@@ -60,6 +80,7 @@ private:
     DraggableArea* m_draggableArea = nullptr;
 
     Qt::Orientation m_orientation = Qt::Horizontal;
+    int m_alignment = static_cast<int>(DockToolBarAlignment::Left);
 };
 }
 

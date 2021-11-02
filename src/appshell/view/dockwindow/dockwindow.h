@@ -106,11 +106,13 @@ private:
     DockPageView* currentPage() const;
 
     void componentComplete() override;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
     void loadPageContent(const DockPageView* page);
     void unitePanelsToTabs(const DockPageView* page);
     void loadPageToolbars(const DockPageView* page);
     void loadPagePanels(const DockPageView* page);
+    void alignToolBars(const DockPageView* page);
 
     void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
 
@@ -126,6 +128,8 @@ private:
     bool restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options = KDDockWidgets::RestoreOptions());
 
     void initDocks(DockPageView* page);
+
+    QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 
     DockToolBarHolder* resolveToolbarDockingHolder(const QPoint& localPos) const;
     void showToolBarDockingHolder(const QPoint& globalPos);

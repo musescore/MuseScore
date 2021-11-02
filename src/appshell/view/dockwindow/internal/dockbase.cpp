@@ -55,7 +55,7 @@ public:
 using namespace mu::dock;
 
 DockBase::DockBase(QQuickItem* parent)
-    : QQuickItem(parent)
+    : QQuickItem(parent), m_resizable(true), m_separatorsVisible(true)
 {
 }
 
@@ -84,6 +84,16 @@ int DockBase::maximumHeight() const
     return m_maximumHeight;
 }
 
+int DockBase::contentWidth() const
+{
+    return m_contentWidth;
+}
+
+int DockBase::contentHeight() const
+{
+    return m_contentHeight;
+}
+
 QSize DockBase::preferredSize() const
 {
     return QSize(width(), height());
@@ -97,6 +107,16 @@ Qt::DockWidgetAreas DockBase::allowedAreas() const
 bool DockBase::floating() const
 {
     return m_floating;
+}
+
+bool DockBase::resizable() const
+{
+    return m_resizable;
+}
+
+bool DockBase::separatorsVisible() const
+{
+    return m_separatorsVisible;
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -154,6 +174,26 @@ void DockBase::setMaximumHeight(int height)
     emit maximumSizeChanged();
 }
 
+void DockBase::setContentWidth(int width)
+{
+    if (m_contentWidth == width) {
+        return;
+    }
+
+    m_contentWidth = width;
+    emit contentSizeChanged();
+}
+
+void DockBase::setContentHeight(int height)
+{
+    if (m_contentHeight == height) {
+        return;
+    }
+
+    m_contentHeight = height;
+    emit contentSizeChanged();
+}
+
 void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
 {
     if (areas == allowedAreas()) {
@@ -182,6 +222,26 @@ void DockBase::setLocation(DockLocation location)
 
     m_location = location;
     emit locationChanged(m_location);
+}
+
+void DockBase::setResizable(bool resizable)
+{
+    if (resizable == m_resizable) {
+        return;
+    }
+
+    m_resizable = resizable;
+    emit resizableChanged();
+}
+
+void DockBase::setSeparatorsVisible(bool visible)
+{
+    if (visible == m_separatorsVisible) {
+        return;
+    }
+
+    m_separatorsVisible = visible;
+    emit separatorsVisibleChanged();
 }
 
 DockType DockBase::type() const
@@ -237,7 +297,7 @@ void DockBase::componentComplete()
         return;
     }
 
-    QQuickItem* content = childItems().first();
+    QQuickItem* content = children.first();
     IF_ASSERT_FAILED(content) {
         return;
     }
@@ -253,6 +313,7 @@ void DockBase::componentComplete()
     DockProperties properties;
     properties.type = type();
     properties.allowedAreas = allowedAreas();
+    properties.separatorsVisible = separatorsVisible();
 
     writePropertiesToObject(properties, *m_dockWidget);
 
@@ -289,6 +350,10 @@ void DockBase::applySizeConstraints()
 
     QSize minimumSize(minWidth, minHeight);
     QSize maximumSize(maxWidth, maxHeight);
+
+    if (!m_resizable) {
+        maximumSize = minimumSize;
+    }
 
     if (auto frame = m_dockWidget->frame()) {
         frame->setMinimumSize(minimumSize);

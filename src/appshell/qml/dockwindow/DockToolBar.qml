@@ -36,8 +36,11 @@ DockToolBarView {
     property int padding: 2
     property int spacing: 2
 
-    minimumWidth: Math.min(content.width, maximumWidth)
-    minimumHeight: Math.min(content.height, maximumHeight)
+    contentWidth: content.width
+    contentHeight: content.height
+
+    minimumWidth: Math.min(contentWidth, maximumWidth)
+    minimumHeight: Math.min(contentHeight, maximumHeight)
 
     QtObject {
         id: prv
