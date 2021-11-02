@@ -3585,6 +3585,11 @@ bool MuseScore::exportAllMediaFiles(const QString& inFilePath, const QString& hi
 
       score->switchToPageMode();
 
+      score->updateCapo();
+      score->update();
+      score->styleChanged();
+      score->doLayout();
+
       //// JSON specification ///////////////////////////
       //jsonForMedia["pngs"] = pngsJsonArray;
       //jsonForMedia["mposXML"] = mposJson;
