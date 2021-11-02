@@ -478,7 +478,6 @@ private:
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
-    void cmdResetAllStyle();
 
     Note* getSelectedNote();
     ChordRest* upStaff(ChordRest* cr);
@@ -886,8 +885,7 @@ public:
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }
 
-    void resetAllStyle();
-    void resetStyles(const QSet<Sid>& stylesToReset);
+    void resetStyleValue(Sid styleToReset);
 
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
