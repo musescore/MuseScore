@@ -22,7 +22,6 @@
 
 #include "docksetup.h"
 
-#include "internal/dropindicators.h"
 #include "internal/dragcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
@@ -93,8 +92,6 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
-
-    qRegisterMetaType<DropIndicators*>();
 
     qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
     qmlRegisterUncreatableType<DropLocation>("MuseScore.Dock", 1, 0, "DropLocation", "Not creatable from QML");
