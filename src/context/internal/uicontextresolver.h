@@ -36,7 +36,6 @@ class UiContextResolver : public IUiContextResolver, public async::Asyncable
     INJECT(context, framework::IInteractive, interactive)
     INJECT(context, playback::IPlaybackController, playbackController)
     INJECT(context, IGlobalContext, globalContext)
-    INJECT(context, ui::INavigationController, navigationController)
 
 public:
     UiContextResolver() = default;
@@ -49,13 +48,13 @@ public:
     bool match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const override;
     bool matchWithCurrent(const ui::UiContext& ctx) const override;
 
+    void onNotationViewFocuseChanged(bool focused) override;
+
 private:
+    void notifyAboutContextChanged();
 
-    ui::UiContext resolveCurrentUiContext() const;
-    void notifyAboutContextIfChanged();
-
-    ui::UiContext m_lastUiContext = context::UiCtxUnknown;
     async::Notification m_currentUiContextChanged;
+    int m_notationViewFocusedCounter = 0;
 };
 }
 
