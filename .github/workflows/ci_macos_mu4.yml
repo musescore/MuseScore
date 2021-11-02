@@ -44,6 +44,8 @@ jobs:
       run: |
         bash ./build/ci/tools/setup_ccache.sh          
     - name: "Configure workflow"
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -96,7 +98,7 @@ jobs:
           DO_PUBLISH='false'
         fi
 
-        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"; fi
+        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Mac${PR_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
