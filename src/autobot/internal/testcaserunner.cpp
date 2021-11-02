@@ -80,11 +80,16 @@ async::Channel<bool> TestCaseRunner::allFinished() const
     return m_allFinished;
 }
 
+void TestCaseRunner::doAbort()
+{
+    m_allFinished.send(true);
+    m_testCase.loop.quit();
+}
+
 void TestCaseRunner::nextStep(bool byInterval)
 {
     if (m_abort) {
-        m_allFinished.send(true);
-        m_testCase.loop.quit();
+        doAbort();
         return;
     }
 
@@ -113,6 +118,9 @@ void TestCaseRunner::nextStep(bool byInterval)
             Ret ret = step.exec();
             if (!ret) {
                 LOGE() << "failed exec step: " << name << ", err: " << ret.toString();
+                m_stepStatusChanged.send(step.name(), StepStatus::Error);
+                doAbort();
+                return;
             }
 
             LOGD() << "step: " << name << " Finished";

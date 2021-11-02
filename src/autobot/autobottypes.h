@@ -66,13 +66,12 @@ struct Step
     bool skip() const { return val.property("skip").toBool(); }
     Ret exec()
     {
-        val.property("func").call();
-
-        if (val.isError()) {
-            QString fileName = val.property("fileName").toString();
-            int line = val.property("lineNumber").toInt();
+        QJSValue jsret = val.property("func").call();
+        if (jsret.isError()) {
+            QString fileName = jsret.property("fileName").toString();
+            int line = jsret.property("lineNumber").toInt();
             return make_ret(Ret::Code::UnknownError,
-                            QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(val.toString()));
+                            QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(jsret.toString()));
         }
 
         return Ret(Ret::Code::Ok);
@@ -114,7 +113,8 @@ enum class StepStatus {
     Started,
     Paused,
     Finished,
-    Skipped
+    Skipped,
+    Error
 };
 }
 

@@ -32,7 +32,7 @@ StyledDialogView {
     contentWidth: 400
     resizable: true
 
-    x: 800
+    x: 850
 
     ScriptsPanel {
         anchors.fill: parent

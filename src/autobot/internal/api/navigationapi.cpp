@@ -124,3 +124,8 @@ QString NavigationApi::activeControl() const
     INavigationControl* c = navigation()->activeControl();
     return c ? c->name() : QString();
 }
+
+void NavigationApi::dump() const
+{
+    navigation()->dump();
+}

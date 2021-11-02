@@ -59,6 +59,7 @@ RowLayout {
     FlatButton {
         Layout.fillWidth: true
 
+        navigation.name: "Add"
         navigation.panel: keynavSub
         navigation.order: 1
 
@@ -74,6 +75,7 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
+        navigation.name: "Up"
         navigation.panel: keynavSub
         navigation.order: 2
         navigation.accessible.name: qsTrc("instruments", "Up")
@@ -90,6 +92,7 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
+        navigation.name: "Down"
         navigation.panel: keynavSub
         navigation.order: 3
         navigation.accessible.name: qsTrc("instruments", "Down")
@@ -106,6 +109,7 @@ RowLayout {
     FlatButton {
         Layout.preferredWidth: width
 
+        navigation.name: "Remove"
         navigation.panel: keynavSub
         navigation.order: 4
         navigation.accessible.name: qsTrc("instruments", "Remove")
