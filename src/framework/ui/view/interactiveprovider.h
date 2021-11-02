@@ -84,6 +84,7 @@ public:
     std::vector<Uri> stack() const override;
 
     QWindow* topWindow() const override;
+    bool topWindowIsWidget() const override;
 
     Q_INVOKABLE QString objectId(const QVariant& val) const;
 

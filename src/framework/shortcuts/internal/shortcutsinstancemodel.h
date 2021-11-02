@@ -26,12 +26,13 @@
 #include <QString>
 #include <QList>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
 
 namespace mu::shortcuts {
-class ShortcutsInstanceModel : public QObject
+class ShortcutsInstanceModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -39,19 +40,24 @@ class ShortcutsInstanceModel : public QObject
     INJECT(shortcuts, IShortcutsController, controller)
 
     Q_PROPERTY(QStringList shortcuts READ shortcuts NOTIFY shortcutsChanged)
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
     explicit ShortcutsInstanceModel(QObject* parent = nullptr);
 
     QStringList shortcuts() const;
+    bool active() const;
 
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void init();
     Q_INVOKABLE void activate(const QString& key);
 
 signals:
     void shortcutsChanged();
+    void activeChanged();
 
 private:
+    void loadShortcuts();
+
     QStringList m_shortcuts;
 };
 }

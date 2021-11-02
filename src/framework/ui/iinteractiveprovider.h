@@ -67,6 +67,7 @@ public:
     virtual std::vector<Uri> stack() const = 0;
 
     virtual QWindow* topWindow() const = 0;
+    virtual bool topWindowIsWidget() const = 0;
 };
 }
 
