@@ -57,6 +57,10 @@ public:
     Ret importFromFile(const io::path& filePath) override;
     Ret exportToFile(const io::path& filePath) const override;
 
+    bool active() override;
+    void setActive(bool active) override;
+    async::Notification activeChanged() const override;
+
 private:
 
     bool readFromFile(ShortcutList& shortcuts, const io::path& path) const;
@@ -71,6 +75,9 @@ private:
     ShortcutList m_shortcuts;
     ShortcutList m_defaultShortcuts;
     async::Notification m_shortcutsChanged;
+
+    bool m_isActive = true;
+    async::Notification m_activeChanged;
 };
 }
 

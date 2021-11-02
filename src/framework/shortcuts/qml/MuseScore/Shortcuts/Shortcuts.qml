@@ -27,7 +27,7 @@ QtObject {
     id: root
 
     Component.onCompleted: {
-        shortcutsModel.load()
+        shortcutsModel.init()
     }
 
     property var objects: []
@@ -49,6 +49,7 @@ QtObject {
         id: shortcutComponent
         Shortcut {
             context: Qt.ApplicationShortcut
+            enabled: shortcutsModel.active
             onActivated: shortcutsModel.activate(sequence)
         }
     }
