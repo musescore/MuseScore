@@ -67,6 +67,7 @@ FocusableItem {
             titleText: qsTrc("inspector", "Dotted note position")
             propertyItem: root.model ? root.model.dotPosition : null
 
+            navigationName: "DottedNote"
             navigationPanel: root.navigationPanel
             navigationRowStart: noteHeadSection.navigationRowEnd + 1
 

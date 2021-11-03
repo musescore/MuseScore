@@ -55,7 +55,7 @@ using Scripts = std::vector<Script>;
 
 // --- TestCase ---
 //! NOTE Scripts with test cases must have a global variable with the name specified in the constant
-static const char* TESTCASE_JS_GLOBALNAME("testCase");
+constexpr const char* TESTCASE_JS_GLOBALNAME = "testCase";
 
 struct Step
 {
@@ -70,8 +70,11 @@ struct Step
         if (jsret.isError()) {
             QString fileName = jsret.property("fileName").toString();
             int line = jsret.property("lineNumber").toInt();
-            return make_ret(Ret::Code::UnknownError,
-                            QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(jsret.toString()));
+            QString err = jsret.toString();
+            if (err == "Error: abort") {
+                return make_ret(Ret::Code::Cancel, QString("script is aborted"));
+            }
+            return make_ret(Ret::Code::UnknownError, QString("File: %1, Exception at line: %2, %3").arg(fileName).arg(line).arg(err));
         }
 
         return Ret(Ret::Code::Ok);
@@ -114,6 +117,7 @@ enum class StepStatus {
     Paused,
     Finished,
     Skipped,
+    Aborted,
     Error
 };
 }

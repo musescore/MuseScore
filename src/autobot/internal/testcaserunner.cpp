@@ -118,7 +118,8 @@ void TestCaseRunner::nextStep(bool byInterval)
             Ret ret = step.exec();
             if (!ret) {
                 LOGE() << "failed exec step: " << name << ", err: " << ret.toString();
-                m_stepStatusChanged.send(step.name(), StepStatus::Error);
+                StepStatus status = static_cast<Ret::Code>(ret.code()) == Ret::Code::Cancel ? StepStatus::Aborted : StepStatus::Error;
+                m_stepStatusChanged.send(step.name(), status);
                 doAbort();
                 return;
             }

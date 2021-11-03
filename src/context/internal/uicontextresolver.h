@@ -36,6 +36,7 @@ class UiContextResolver : public IUiContextResolver, public async::Asyncable
     INJECT(context, framework::IInteractive, interactive)
     INJECT(context, playback::IPlaybackController, playbackController)
     INJECT(context, IGlobalContext, globalContext)
+    INJECT(context, ui::INavigationController, navigationController)
 
 public:
     UiContextResolver() = default;

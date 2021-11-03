@@ -99,7 +99,7 @@ Column {
                 FlatButton {
                     anchors.fill: parent
 
-                    navigation.name: root.navigationName + " Reset Button"
+                    navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.navigationRowStart
                     navigation.accessible.name: qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
