@@ -41,7 +41,7 @@ var testCase = {
         {name: "Turn on note input", func: function() {
             NoteInput.chooseDefaultMode()
         }},
-        {name: "Put 1", func: function() {
+        {name: "Put", func: function() {
             NoteInput.chooseNoteDuration("pad-note-64")
             NoteInput.putNotes("note-c", 16)
             api.autobot.seeChanges()

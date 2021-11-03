@@ -123,6 +123,7 @@ void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepSta
         case StepStatus::Paused: return "Paused";
         case StepStatus::Finished: return "Finished";
         case StepStatus::Skipped: return "Skipped";
+        case StepStatus::Aborted: return "Aborted";
         case StepStatus::Error: return "Error (see log)";
         }
         return "";

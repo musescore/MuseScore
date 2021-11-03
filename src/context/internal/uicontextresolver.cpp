@@ -60,6 +60,10 @@ void UiContextResolver::init()
         }
         notifyAboutContextChanged();
     });
+
+    navigationController()->navigationChanged().onNotify(this, [this]() {
+        notifyAboutContextChanged();
+    });
 }
 
 void UiContextResolver::notifyAboutContextChanged()
@@ -88,8 +92,15 @@ UiContext UiContextResolver::currentUiContext() const
             return context::UiCtxUnknown;
         }
 
-        if (m_notationViewFocusedCounter > 0) {
-            return context::UiCtxNotationFocused;
+        INavigationSection* activeSection = navigationController()->activeSection();
+        if (activeSection) {
+            if (activeSection->name() == NOTATION_NAVIGATION_SECTION) {
+                return context::UiCtxNotationFocused;
+            }
+        } else {
+            if (m_notationViewFocusedCounter > 0) {
+                return context::UiCtxNotationFocused;
+            }
         }
 
         return context::UiCtxNotationOpened;
