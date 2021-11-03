@@ -28,15 +28,15 @@ DockPageView {
 
     property alias central: central.sourceComponent
 
-    property var toolBarLeftDropDestination: { "dock": toolBarLeftDockingHolder, "dropLocation": DropLocation.Top }
-    property var toolBarRightDropDestination: { "dock": toolBarRightDockingHolder, "dropLocation": DropLocation.Top }
-    property var toolBarTopDropDestination: { "dock": toolBarTopDockingHolder, "dropLocation": DropLocation.Left }
-    property var toolBarBottomDropDestination: { "dock": toolBarBottomDockingHolder, "dropLocation": DropLocation.Left }
+    property var toolBarLeftDropDestination: { "dock": toolBarLeftDockingHolder, "dropLocation": Location.Top }
+    property var toolBarRightDropDestination: { "dock": toolBarRightDockingHolder, "dropLocation": Location.Top }
+    property var toolBarTopDropDestination: { "dock": toolBarTopDockingHolder, "dropLocation": Location.Left }
+    property var toolBarBottomDropDestination: { "dock": toolBarBottomDockingHolder, "dropLocation": Location.Left }
 
-    property var panelLeftDropDestination: { "dock": panelLeftDockingHolder, "dropLocation": DropLocation.Top }
-    property var panelRightDropDestination: { "dock": panelRightDockingHolder, "dropLocation": DropLocation.Top }
-    property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": DropLocation.Left }
-    property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": DropLocation.Left }
+    property var panelLeftDropDestination: { "dock": panelLeftDockingHolder, "dropLocation": Location.Top }
+    property var panelRightDropDestination: { "dock": panelRightDockingHolder, "dropLocation": Location.Top }
+    property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": Location.Left }
+    property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": Location.Left }
 
     centralDock: DockCentralView {
         objectName: root.objectName + "_central"
@@ -53,25 +53,25 @@ DockPageView {
             id: toolBarLeftDockingHolder
 
             objectName: root.objectName + "_toolBarsDockingHolderLeft"
-            location: DockBase.Left
+            location: Location.Left
         },
         DockingHolder {
             id: toolBarRightDockingHolder
 
             objectName: root.objectName + "_toolBarsDockingHolderRight"
-            location: DockBase.Right
+            location: Location.Right
         },
         DockingHolder {
             id: toolBarTopDockingHolder
 
             objectName: root.objectName + "_toolBarsDockingHolderTop"
-            location: DockBase.Top
+            location: Location.Top
         },
         DockingHolder {
             id: toolBarBottomDockingHolder
 
             objectName: root.objectName + "_toolBarsDockingHolderBottom"
-            location: DockBase.Bottom
+            location: Location.Bottom
         }
     ]
 
@@ -80,25 +80,25 @@ DockPageView {
             id: panelLeftDockingHolder
 
             objectName: root.objectName + "_panelsDockingHolderLeft"
-            location: DockBase.Left
+            location: Location.Left
         },
         DockingHolder {
             id: panelRightDockingHolder
 
             objectName: root.objectName + "_panelsDockingHolderRight"
-            location: DockBase.Right
+            location: Location.Right
         },
         DockingHolder {
             id: panelTopDockingHolder
 
             objectName: root.objectName + "_panelsDockingHolderTop"
-            location: DockBase.Top
+            location: Location.Top
         },
         DockingHolder {
             id: panelBottomDockingHolder
 
             objectName: root.objectName + "_panelsDockingHolderBottom"
-            location: DockBase.Bottom
+            location: Location.Bottom
         }
     ]
 }

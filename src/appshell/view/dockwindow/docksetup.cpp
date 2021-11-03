@@ -91,10 +91,9 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockCentralView>("MuseScore.Dock", 1, 0, "DockCentralView");
     qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
-    qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
     qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
-    qmlRegisterUncreatableType<DropLocation>("MuseScore.Dock", 1, 0, "DropLocation", "Not creatable from QML");
+    qmlRegisterUncreatableType<DockLocation>("MuseScore.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 
 void DockSetup::registerExports()

@@ -99,9 +99,14 @@ QSize DockBase::preferredSize() const
     return QSize(width(), height());
 }
 
-DockBase::DockLocation DockBase::location() const
+int DockBase::locationProperty() const
 {
     return m_location;
+}
+
+Location DockBase::location() const
+{
+    return static_cast<Location>(m_location);
 }
 
 QVariantList DockBase::dropDestinationsProperty() const
@@ -120,9 +125,9 @@ QList<DropDestination> DockBase::dropDestinations() const
         destination.dock = map["dock"].value<DockBase*>();
 
         if (map.contains("dropLocation")) {
-            destination.dropLocation = static_cast<DropLocation::Location>(map["dropLocation"].toInt());
+            destination.dropLocation = static_cast<Location>(map["dropLocation"].toInt());
         } else {
-            destination.dropLocation = DropLocation::Left;
+            destination.dropLocation = Location::Left;
         }
 
         result << destination;
@@ -226,7 +231,7 @@ void DockBase::setContentHeight(int height)
     emit contentSizeChanged();
 }
 
-void DockBase::setLocation(DockLocation location)
+void DockBase::setLocation(int location)
 {
     if (location == m_location) {
         return;
@@ -283,11 +288,6 @@ void DockBase::setFloating(bool floating)
     }
 
     m_dockWidget->setFloating(floating);
-}
-
-DockType DockBase::type() const
-{
-    return DockType::Undefined;
 }
 
 void DockBase::init()
@@ -463,5 +463,5 @@ bool DropDestination::isValid() const
 void DropDestination::clear()
 {
     dock = nullptr;
-    dropLocation = DropLocation::None;
+    dropLocation = Location::Undefined;
 }

@@ -127,7 +127,7 @@ DockBase* DockPageView::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockingHolderView* DockPageView::toolBarHolderByLocation(DockBase::DockLocation location) const
+DockingHolderView* DockPageView::toolBarHolderByLocation(Location location) const
 {
     for (DockingHolderView* holder : m_toolBarsDockingHolders.list()) {
         if (holder->location() == location) {
@@ -138,7 +138,7 @@ DockingHolderView* DockPageView::toolBarHolderByLocation(DockBase::DockLocation 
     return nullptr;
 }
 
-DockingHolderView* DockPageView::panelHolderByLocation(DockBase::DockLocation location) const
+DockingHolderView* DockPageView::panelHolderByLocation(Location location) const
 {
     for (DockingHolderView* holder : m_panelsDockingHolders.list()) {
         if (holder->location() == location) {

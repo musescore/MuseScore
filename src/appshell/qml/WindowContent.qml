@@ -82,7 +82,7 @@ DockWindow {
 
     mainToolBarDockingHolder: DockingHolder {
         objectName: root.objectName + "_mainToolBarDockingHolderTop"
-        location: DockBase.Top
+        location: Location.Top
     }
 
     pages: [

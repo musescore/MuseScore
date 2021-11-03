@@ -147,7 +147,7 @@ private:
 DockPanelView::DockPanelView(QQuickItem* parent)
     : DockBase(parent), m_menuModel(new DockPanelMenuModel(this))
 {
-    setLocation(DockLocation::Left);
+    setLocation(Location::Left);
 }
 
 DockPanelView::~DockPanelView()
