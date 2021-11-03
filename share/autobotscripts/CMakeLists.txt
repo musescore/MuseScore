@@ -26,6 +26,7 @@ install(FILES
       TC3_UsingNoteInputToolbar.js
       TC4_UsingPalettes.js
       TC5_UsingInstruments.js
+      TC6_UsingInspector_Note.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 
@@ -36,6 +37,7 @@ install(FILES
       steps/Palette.js
       steps/Score.js
       steps/Instruments.js
+      steps/Inspector.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
       )
 

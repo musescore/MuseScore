@@ -27,6 +27,24 @@ module.exports = {
         api.shortcuts.activate("Right")
     },
 
+    prevChord: function()
+    {
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        api.shortcuts.activate("Left")
+    },
+
+    nextMeasure: function()
+    {
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        api.shortcuts.activate("Ctrl+Right")
+    },
+
+    prevMeasure: function()
+    {
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        api.shortcuts.activate("Ctrl+Left")
+    },
+
     appendMeasures: function(count)
     {
         api.navigation.goToControl("NotationView", "ScoreView", "Score")
@@ -36,5 +54,23 @@ module.exports = {
                 api.autobot.sleep(1)
             }
         }
-    }
+    },
+
+    pitchDown: function(count)
+    {
+        count = count ?? 1;
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        for (var i = 0; i < count; ++i) {
+            api.shortcuts.activate("Down")
+        }
+    },
+
+    pitchUp: function(count)
+    {
+        count = count ?? 1;
+        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        for (var i = 0; i < count; ++i) {
+            api.shortcuts.activate("Up")
+        }
+    },
 }
