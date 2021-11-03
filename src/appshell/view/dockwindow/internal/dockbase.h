@@ -133,6 +133,7 @@ signals:
 
 protected:
     friend class DockWindow;
+    friend class DragController;
 
     void componentComplete() override;
 

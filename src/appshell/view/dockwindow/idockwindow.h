@@ -22,7 +22,7 @@
 #ifndef MU_DOCK_IDOCKWINDOW_H
 #define MU_DOCK_IDOCKWINDOW_H
 
-#include "docktypes.h"
+#include "internal/dockbase.h"
 #include "async/channel.h"
 
 #include <QString>
@@ -44,7 +44,7 @@ public:
     virtual bool isDockFloating(const QString& dockName) const = 0;
     virtual void toggleDockFloating(const QString& dockName) = 0;
 
-    virtual DropLocation::Location hover(const QString& draggedDockName, const QPoint& globalPos) = 0;
+    virtual DropDestination hover(const QString& draggedDockName, const QPoint& globalPos) = 0;
     virtual void endHover() = 0;
 };
 }

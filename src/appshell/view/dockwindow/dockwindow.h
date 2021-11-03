@@ -86,7 +86,7 @@ public:
     bool isDockFloating(const QString& dockName) const override;
     void toggleDockFloating(const QString& dockName) override;
 
-    DropLocation::Location hover(const QString& draggedDockName, const QPoint& globalPos) override;
+    DropDestination hover(const QString& draggedDockName, const QPoint& globalPos) override;
     void endHover() override;
 
 public slots:

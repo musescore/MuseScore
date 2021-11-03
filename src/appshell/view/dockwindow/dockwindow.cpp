@@ -212,17 +212,17 @@ void DockWindow::toggleDockFloating(const QString& dockName)
     }
 }
 
-DropLocation::Location DockWindow::hover(const QString& draggedDockName, const QPoint& globalPos)
+DropDestination DockWindow::hover(const QString& draggedDockName, const QPoint& globalPos)
 {
     DockBase* draggedDock = dockByName(draggedDockName);
     if (!draggedDock) {
-        return DropLocation::None;
+        return DropDestination();
     }
 
     QPoint hoveredLocalPos = m_mainWindow->mapFromGlobal(globalPos);
 
     if (isMouseOverDock(hoveredLocalPos, m_currentDropDestination.dock)) {
-        return m_currentDropDestination.dropLocation;
+        return m_currentDropDestination;
     }
 
     DropDestination dropDestination = resolveDropDestination(draggedDock, hoveredLocalPos);
@@ -233,7 +233,7 @@ DropLocation::Location DockWindow::hover(const QString& draggedDockName, const Q
 
     setCurrentDropDestination(draggedDock, dropDestination);
 
-    return m_currentDropDestination.dropLocation;
+    return m_currentDropDestination;
 }
 
 void DockWindow::endHover()
@@ -767,19 +767,17 @@ DockingHolderView* DockWindow::resolveToolbarDockingHolder(const QPoint& localPo
         return nullptr;
     }
 
-    QRect centralFrameGeometry = centralDock->frameGeometry();
-    centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
-
-    QRect mainFrameGeometry = m_mainWindow->rect();
-    if (!mainFrameGeometry.contains(localPos)) {
+    if (!m_mainWindow->contains(localPos)) {
         return nullptr;
     }
 
+    QRect centralFrameGeometry = centralDock->frameGeometry();
+    centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
+
     // TODO: Need to take any panels docked at top into account
-    if (localPos.y() >= centralFrameGeometry.top() - MAX_DISTANCE_TO_HOLDER
-        && localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
-            return page->toolBarHolderByLocation(DockBase::DockLocation::Top);
-        }
+    if (localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
+        return page->toolBarHolderByLocation(DockBase::DockLocation::Top);
+    }
 
     if (localPos.y() >= centralFrameGeometry.bottom() - MAX_DISTANCE_TO_HOLDER) {
         return page->toolBarHolderByLocation(DockBase::DockLocation::Bottom);
@@ -789,7 +787,7 @@ DockingHolderView* DockWindow::resolveToolbarDockingHolder(const QPoint& localPo
         return page->toolBarHolderByLocation(DockBase::DockLocation::Left);
     }
 
-    if (localPos.x() >= mainFrameGeometry.right() - MAX_DISTANCE_TO_HOLDER) {
+    if (localPos.x() >= m_mainWindow->rect().right() - MAX_DISTANCE_TO_HOLDER) {
         return page->toolBarHolderByLocation(DockBase::DockLocation::Right);
     }
 
@@ -815,10 +813,9 @@ DockingHolderView* DockWindow::resolvePanelDockingHolder(const QPoint& localPos)
     QRect centralFrameGeometry = centralDock->frameGeometry();
     centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
 
-    if (localPos.y() >= centralFrameGeometry.top() - MAX_DISTANCE_TO_HOLDER
-        && localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
-            return page->panelHolderByLocation(DockBase::DockLocation::Top);
-        }
+    if (localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
+        return page->panelHolderByLocation(DockBase::DockLocation::Top);
+    }
 
     if (localPos.y() >= centralFrameGeometry.bottom() - MAX_DISTANCE_TO_HOLDER) {
         return page->panelHolderByLocation(DockBase::DockLocation::Bottom);

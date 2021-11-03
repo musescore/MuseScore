@@ -71,8 +71,12 @@ KDDropLocation DragController::hover_impl(QPoint globalPos)
         return DropLocation_None;
     }
 
-    dock::DropLocation::Location location = window->hover(dock->uniqueName(), globalPos);
-    setCurrentDropLocation(dropLocationToKDDockLocation(location));
+    DropDestination destination = window->hover(dock->uniqueName(), globalPos);
+    setCurrentDropLocation(dropLocationToKDDockLocation(destination.dropLocation));
+
+    if (destination.isValid()) {
+        setHoveredFrame(destination.dock->dockWidget()->frame());
+    }
 
     return currentDropLocation();
 }
