@@ -148,7 +148,7 @@ bool DockBase::separatorsVisible() const
 
 bool DockBase::floating() const
 {
-    return m_floating;
+    return m_dockWidget && m_dockWidget->isFloating();
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -278,12 +278,11 @@ void DockBase::setSeparatorsVisible(bool visible)
 
 void DockBase::setFloating(bool floating)
 {
-    if (floating == m_floating) {
+    if (floating == this->floating()) {
         return;
     }
 
     m_dockWidget->setFloating(floating);
-    doSetFloating(floating);
 }
 
 DockType DockBase::type() const
@@ -430,21 +429,10 @@ void DockBase::listenFloatingChanges()
         }
 
         connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
-            doSetFloating(!frame->isInMainWindow());
+            emit floatingChanged();
             applySizeConstraints();
         }, Qt::UniqueConnection);
     });
-
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::isFloatingChanged, this, [this]() {
-        doSetFloating(m_dockWidget->isFloating());
-        applySizeConstraints();
-    });
-}
-
-void DockBase::doSetFloating(bool floating)
-{
-    m_floating = floating;
-    emit floatingChanged();
 }
 
 void DockBase::writeProperties()
