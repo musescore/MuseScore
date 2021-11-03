@@ -72,8 +72,8 @@ public:
     QList<DockBase*> allDocks() const;
 
     DockBase* dockByName(const QString& dockName) const;
-    DockingHolderView* toolBarHolderByLocation(DockBase::DockLocation location) const;
-    DockingHolderView* panelHolderByLocation(DockBase::DockLocation location) const;
+    DockingHolderView* toolBarHolderByLocation(Location location) const;
+    DockingHolderView* panelHolderByLocation(Location location) const;
 
     bool isDockOpen(const QString& dockName) const;
     void toggleDock(const QString& dockName);

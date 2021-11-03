@@ -39,13 +39,13 @@ enum class DockType {
     Central
 };
 
-class DropLocation
+class DockLocation
 {
     Q_GADGET
 
 public:
     enum Location {
-        None,
+        Undefined,
         Left,
         Right,
         Center,
@@ -55,6 +55,8 @@ public:
 
     Q_ENUM(Location)
 };
+
+using Location = DockLocation::Location;
 
 struct DockProperties
 {

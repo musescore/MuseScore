@@ -77,10 +77,10 @@ DockPage {
 
     function navigationPanelSec(location) {
         switch(location) {
-        case DockBase.Top: return keynavTopPanelSec
-        case DockBase.Left: return keynavLeftPanelSec
-        case DockBase.Right: return keynavRightPanelSec
-        case DockBase.Bottom: return keynavBottomPanelSec
+        case Location.Top: return keynavTopPanelSec
+        case Location.Left: return keynavLeftPanelSec
+        case Location.Right: return keynavRightPanelSec
+        case Location.Bottom: return keynavBottomPanelSec
         }
 
         return null
@@ -128,7 +128,7 @@ DockPage {
             contentBottomPadding: 2
 
             dropDestinations: [
-                { "dock": notationToolBar, "dropLocation": DropLocation.Right }
+                { "dock": notationToolBar, "dropLocation": Location.Right }
             ]
 
             PlaybackToolBar {
@@ -203,8 +203,6 @@ DockPage {
 
             tabifyPanel: instrumentsPanel
 
-            location: DockBase.Left
-
             dropDestinations: [
                 root.panelLeftDropDestination,
                 root.panelRightDropDestination
@@ -228,8 +226,6 @@ DockPage {
             maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: inspectorPanel
-
-            location: DockBase.Left
 
             dropDestinations: [
                 root.panelLeftDropDestination,
@@ -259,8 +255,6 @@ DockPage {
             
             tabifyPanel: selectionFilterPanel
 
-            location: DockBase.Left
-
             dropDestinations: [
                 root.panelLeftDropDestination,
                 root.panelRightDropDestination
@@ -285,8 +279,6 @@ DockPage {
 
             //! NOTE: hidden by default
             visible: false
-
-            location: DockBase.Left
 
             dropDestinations: [
                 root.panelLeftDropDestination,
@@ -317,7 +309,7 @@ DockPage {
             //! NOTE: hidden by default
             visible: false
 
-            location: DockBase.Bottom
+            location: Location.Bottom
 
             dropDestinations: [
                 root.panelTopDropDestination,
@@ -350,7 +342,7 @@ DockPage {
             //! NOTE: hidden by default
             visible: false
 
-            location: DockBase.Bottom
+            location: Location.Bottom
 
             dropDestinations: [
                 root.panelTopDropDestination,
@@ -381,7 +373,7 @@ DockPage {
             //! NOTE: hidden by default
             visible: false
 
-            location: DockBase.Bottom
+            location: Location.Bottom
 
             dropDestinations: [
                 root.panelTopDropDestination,
@@ -400,7 +392,7 @@ DockPage {
             minimumHeight: 30
             maximumHeight: 30
 
-            location: DockBase.Bottom
+            location: Location.Bottom
 
             DrumsetPanel {}
         }

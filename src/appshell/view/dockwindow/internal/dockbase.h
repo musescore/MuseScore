@@ -46,7 +46,7 @@ class DockBase : public QQuickItem
     Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentSizeChanged)
     Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentSizeChanged)
 
-    Q_PROPERTY(DockLocation location READ location WRITE setLocation NOTIFY locationChanged)
+    Q_PROPERTY(int location READ locationProperty WRITE setLocation NOTIFY locationChanged)
     Q_PROPERTY(QVariantList dropDestinations READ dropDestinationsProperty WRITE setDropDestinations NOTIFY dropDestinationsChanged)
 
     Q_PROPERTY(bool persistent READ persistent WRITE setPersistent NOTIFY persistentChanged)
@@ -58,16 +58,6 @@ class DockBase : public QQuickItem
 public:
     explicit DockBase(QQuickItem* parent = nullptr);
 
-    enum class DockLocation {
-        Undefined = -1,
-        Left,
-        Right,
-        Center,
-        Top,
-        Bottom
-    };
-    Q_ENUM(DockLocation)
-
     QString title() const;
 
     int minimumWidth() const;
@@ -78,7 +68,9 @@ public:
     int contentHeight() const;
     QSize preferredSize() const;
 
-    DockLocation location() const;
+    int locationProperty() const;
+    Location location() const;
+
     QVariantList dropDestinationsProperty() const;
     QList<DropDestination> dropDestinations() const;
 
@@ -106,7 +98,7 @@ public slots:
     void setContentWidth(int width);
     void setContentHeight(int height);
 
-    void setLocation(DockLocation location);
+    void setLocation(int location);
     void setDropDestinations(const QVariantList& destinations);
 
     void setPersistent(bool persistent);
@@ -135,9 +127,9 @@ protected:
     friend class DockWindow;
     friend class DragController;
 
-    void componentComplete() override;
+    virtual DockType type() const = 0;
 
-    virtual DockType type() const;
+    void componentComplete() override;
 
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
@@ -158,7 +150,7 @@ private:
     int m_contentWidth = 0;
     int m_contentHeight = 0;
 
-    DockLocation m_location = DockLocation::Undefined;
+    int m_location = Location::Undefined;
     QVariantList m_dropDestinations;
 
     bool m_persistent = false;
@@ -172,7 +164,7 @@ private:
 struct DropDestination
 {
     DockBase* dock = nullptr;
-    DropLocation::Location dropLocation = DropLocation::None;
+    Location dropLocation = Location::Undefined;
 
     bool operator==(const DropDestination& dest) const;
 

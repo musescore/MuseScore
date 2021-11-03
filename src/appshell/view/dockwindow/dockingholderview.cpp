@@ -24,7 +24,7 @@
 
 using namespace mu::dock;
 
-constexpr int MIN_LENGTH = 36;
+constexpr int HOLDER_SIZE = 36;
 
 DockingHolderView::DockingHolderView(QQuickItem* parent)
     : DockBase(parent)
@@ -35,18 +35,18 @@ DockingHolderView::DockingHolderView(QQuickItem* parent)
 void DockingHolderView::componentComplete()
 {
     switch (location()) {
-    case DockLocation::Left:
-    case DockLocation::Right:
-        setMinimumWidth(MIN_LENGTH);
-        setWidth(MIN_LENGTH);
+    case Location::Left:
+    case Location::Right:
+        setMinimumWidth(HOLDER_SIZE);
+        setWidth(HOLDER_SIZE);
         break;
-    case DockLocation::Top:
-    case DockLocation::Bottom:
-        setMinimumHeight(MIN_LENGTH);
-        setHeight(MIN_LENGTH);
+    case Location::Top:
+    case Location::Bottom:
+        setMinimumHeight(HOLDER_SIZE);
+        setHeight(HOLDER_SIZE);
         break;
-    case DockLocation::Center:
-    case DockLocation::Undefined:
+    case Location::Center:
+    case Location::Undefined:
         break;
     }
 

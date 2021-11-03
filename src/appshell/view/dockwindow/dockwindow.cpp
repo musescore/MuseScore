@@ -317,22 +317,22 @@ void DockWindow::unitePanelsToTabs(const DockPageView* page)
 void DockWindow::loadPageToolbars(const DockPageView* page)
 {
     QList<DockBase*> leftSideToolbars;
-    if (auto leftHolder = page->toolBarHolderByLocation(DockBase::DockLocation::Left)) {
+    if (auto leftHolder = page->toolBarHolderByLocation(Location::Left)) {
         leftSideToolbars << leftHolder;
     }
 
     QList<DockBase*> rightSideToolbars;
-    if (auto rightHolder = page->toolBarHolderByLocation(DockBase::DockLocation::Right)) {
+    if (auto rightHolder = page->toolBarHolderByLocation(Location::Right)) {
         rightSideToolbars << rightHolder;
     }
 
     QList<DockBase*> topSideToolbars;
-    if (auto topHolder = page->toolBarHolderByLocation(DockBase::DockLocation::Top)) {
+    if (auto topHolder = page->toolBarHolderByLocation(Location::Top)) {
         topSideToolbars << topHolder;
     }
 
     QList<DockBase*> bottomSideToolbars;
-    if (auto bottomHolder = page->toolBarHolderByLocation(DockBase::DockLocation::Bottom)) {
+    if (auto bottomHolder = page->toolBarHolderByLocation(Location::Bottom)) {
         bottomSideToolbars << bottomHolder;
     }
 
@@ -340,20 +340,20 @@ void DockWindow::loadPageToolbars(const DockPageView* page)
 
     for (DockBase* toolBar : pageToolBars) {
         switch (toolBar->location()) {
-        case DockBase::DockLocation::Left:
+        case Location::Left:
             leftSideToolbars << toolBar;
             break;
-        case DockBase::DockLocation::Right:
+        case Location::Right:
             rightSideToolbars << toolBar;
             break;
-        case DockBase::DockLocation::Top:
+        case Location::Top:
             topSideToolbars << toolBar;
             break;
-        case DockBase::DockLocation::Bottom:
+        case Location::Bottom:
             bottomSideToolbars << toolBar;
             break;
-        case DockBase::DockLocation::Center:
-        case DockBase::DockLocation::Undefined:
+        case Location::Center:
+        case Location::Undefined:
             LOGW() << "Error location for toolbar";
             break;
         }
@@ -379,42 +379,42 @@ void DockWindow::loadPageToolbars(const DockPageView* page)
 void DockWindow::loadPagePanels(const DockPageView* page)
 {
     QList<DockBase*> leftSidePanels;
-    if (auto leftHolder = page->panelHolderByLocation(DockBase::DockLocation::Left)) {
+    if (auto leftHolder = page->panelHolderByLocation(Location::Left)) {
         leftSidePanels << leftHolder;
     }
 
     QList<DockBase*> rightSidePanels;
-    if (auto rightHolder = page->panelHolderByLocation(DockBase::DockLocation::Right)) {
+    if (auto rightHolder = page->panelHolderByLocation(Location::Right)) {
         rightSidePanels << rightHolder;
     }
 
     QList<DockBase*> topSidePanels;
-    if (auto topHolder = page->panelHolderByLocation(DockBase::DockLocation::Top)) {
+    if (auto topHolder = page->panelHolderByLocation(Location::Top)) {
         topSidePanels << topHolder;
     }
 
     QList<DockBase*> bottomSidePanels;
-    if (auto bottomHolder = page->panelHolderByLocation(DockBase::DockLocation::Bottom)) {
+    if (auto bottomHolder = page->panelHolderByLocation(Location::Bottom)) {
         bottomSidePanels << bottomHolder;
     }
 
     QList<DockPanelView*> pagePanels = page->panels();
     for (DockPanelView* panel : pagePanels) {
         switch (panel->location()) {
-        case DockBase::DockLocation::Left:
+        case Location::Left:
             leftSidePanels << panel;
             break;
-        case DockBase::DockLocation::Right:
+        case Location::Right:
             rightSidePanels << panel;
             break;
-        case DockBase::DockLocation::Top:
+        case Location::Top:
             topSidePanels << panel;
             break;
-        case DockBase::DockLocation::Bottom:
+        case Location::Bottom:
             bottomSidePanels << panel;
             break;
-        case DockBase::DockLocation::Center:
-        case DockBase::DockLocation::Undefined:
+        case Location::Center:
+        case Location::Undefined:
             break;
         }
     }
@@ -655,16 +655,16 @@ void DockWindow::updateToolBarOrientation(DockToolBarView* draggedToolBar, const
     }
 
     switch (dropDestination.dock->location()) {
-    case DockBase::DockLocation::Left:
-    case DockBase::DockLocation::Right:
+    case Location::Left:
+    case Location::Right:
         orientation = framework::Orientation::Vertical;
         break;
-    case DockBase::DockLocation::Top:
-    case DockBase::DockLocation::Bottom:
+    case Location::Top:
+    case Location::Bottom:
         orientation = framework::Orientation::Horizontal;
         break;
-    case DockBase::DockLocation::Center:
-    case DockBase::DockLocation::Undefined:
+    case Location::Center:
+    case Location::Undefined:
         break;
     }
 
@@ -691,16 +691,16 @@ void DockWindow::setCurrentDropDestination(const DockBase* draggedDock, const Dr
     }
 
     switch (m_currentDropDestination.dock->location()) {
-    case DockBase::DockLocation::Left:
-    case DockBase::DockLocation::Right:
+    case Location::Left:
+    case Location::Right:
         m_currentDropDestination.dock->setMinimumWidth(draggedDock->minimumWidth());
         break;
-    case DockBase::DockLocation::Top:
-    case DockBase::DockLocation::Bottom:
+    case Location::Top:
+    case Location::Bottom:
         m_currentDropDestination.dock->setMinimumHeight(draggedDock->minimumHeight());
         break;
-    case DockBase::DockLocation::Center:
-    case DockBase::DockLocation::Undefined:
+    case Location::Center:
+    case Location::Undefined:
         break;
     }
 
@@ -715,7 +715,7 @@ DropDestination DockWindow::resolveDropDestination(const DockBase* draggedDock, 
         DropDestination destination;
 
         destination.dock = findTabifyPanel(dynamic_cast<const DockPanelView*>(draggedDock), localPos);
-        destination.dropLocation = destination.dock ? DropLocation::Center : DropLocation::None;
+        destination.dropLocation = destination.dock ? Location::Center : Location::Undefined;
 
         if (destination.isValid()) {
             return destination;
@@ -776,19 +776,19 @@ DockingHolderView* DockWindow::resolveToolbarDockingHolder(const QPoint& localPo
 
     // TODO: Need to take any panels docked at top into account
     if (localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
-        return page->toolBarHolderByLocation(DockBase::DockLocation::Top);
+        return page->toolBarHolderByLocation(Location::Top);
     }
 
     if (localPos.y() >= centralFrameGeometry.bottom() - MAX_DISTANCE_TO_HOLDER) {
-        return page->toolBarHolderByLocation(DockBase::DockLocation::Bottom);
+        return page->toolBarHolderByLocation(Location::Bottom);
     }
 
     if (localPos.x() <= MAX_DISTANCE_TO_HOLDER) {
-        return page->toolBarHolderByLocation(DockBase::DockLocation::Left);
+        return page->toolBarHolderByLocation(Location::Left);
     }
 
     if (localPos.x() >= m_mainWindow->rect().right() - MAX_DISTANCE_TO_HOLDER) {
-        return page->toolBarHolderByLocation(DockBase::DockLocation::Right);
+        return page->toolBarHolderByLocation(Location::Right);
     }
 
     return nullptr;
@@ -814,19 +814,19 @@ DockingHolderView* DockWindow::resolvePanelDockingHolder(const QPoint& localPos)
     centralFrameGeometry.moveTopLeft(m_mainWindow->mapFromGlobal(centralDock->mapToGlobal({ centralDock->x(), centralDock->y() })));
 
     if (localPos.y() <= centralFrameGeometry.top() + MAX_DISTANCE_TO_HOLDER) {
-        return page->panelHolderByLocation(DockBase::DockLocation::Top);
+        return page->panelHolderByLocation(Location::Top);
     }
 
     if (localPos.y() >= centralFrameGeometry.bottom() - MAX_DISTANCE_TO_HOLDER) {
-        return page->panelHolderByLocation(DockBase::DockLocation::Bottom);
+        return page->panelHolderByLocation(Location::Bottom);
     }
 
     if (localPos.x() <= MAX_DISTANCE_TO_HOLDER) {
-        return page->panelHolderByLocation(DockBase::DockLocation::Left);
+        return page->panelHolderByLocation(Location::Left);
     }
 
     if (localPos.x() >= centralFrameGeometry.right() - MAX_DISTANCE_TO_HOLDER) {
-        return page->panelHolderByLocation(DockBase::DockLocation::Right);
+        return page->panelHolderByLocation(Location::Right);
     }
 
     return nullptr;

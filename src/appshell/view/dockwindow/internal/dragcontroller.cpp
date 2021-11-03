@@ -41,15 +41,15 @@ static const DockWidget* draggedDock()
     return windowBeingDragged->dockWidgets().first();
 }
 
-static KDDropLocation dropLocationToKDDockLocation(DropLocation::Location location)
+static KDDropLocation dropLocationToKDDockLocation(Location location)
 {
     switch (location) {
-    case DropLocation::None: return KDDropLocation::DropLocation_None;
-    case DropLocation::Left: return KDDropLocation::DropLocation_Left;
-    case DropLocation::Right: return KDDropLocation::DropLocation_Right;
-    case DropLocation::Center: return KDDropLocation::DropLocation_Center;
-    case DropLocation::Top: return KDDropLocation::DropLocation_Top;
-    case DropLocation::Bottom: return KDDropLocation::DropLocation_Bottom;
+    case Location::Undefined: return KDDropLocation::DropLocation_None;
+    case Location::Left: return KDDropLocation::DropLocation_Left;
+    case Location::Right: return KDDropLocation::DropLocation_Right;
+    case Location::Center: return KDDropLocation::DropLocation_Center;
+    case Location::Top: return KDDropLocation::DropLocation_Top;
+    case Location::Bottom: return KDDropLocation::DropLocation_Bottom;
     }
 
     return KDDropLocation::DropLocation_None;
@@ -59,7 +59,6 @@ static KDDropLocation dropLocationToKDDockLocation(DropLocation::Location locati
 DragController::DragController(KDDockWidgets::DropArea* dropArea)
     : KDDockWidgets::DropIndicatorOverlayInterface(dropArea)
 {
-
 }
 
 KDDropLocation DragController::hover_impl(QPoint globalPos)
