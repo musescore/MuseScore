@@ -2675,7 +2675,7 @@ Fraction BasicDurationalObj::ticks() const
         break;
     case TIMESTEP::D256:        len = Fraction(1, 256);
         break;
-    case TIMESTEP::D_BREVE:     len = Fraction(2, 2);
+    case TIMESTEP::D_BREVE:     len = Fraction(2, 1);
         break;
     default:
         qDebug("BasicDurationalObj::ticks: illegal duration value %d", int(t));
