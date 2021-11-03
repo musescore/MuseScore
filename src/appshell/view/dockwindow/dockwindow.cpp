@@ -711,6 +711,17 @@ void DockWindow::setCurrentDropDestination(const DockBase* draggedDock, const Dr
 
 DropDestination DockWindow::resolveDropDestination(const DockBase* draggedDock, const QPoint& localPos) const
 {
+    if (draggedDock->type() == DockType::Panel) {
+        DropDestination destination;
+
+        destination.dock = findTabifyPanel(dynamic_cast<const DockPanelView*>(draggedDock), localPos);
+        destination.dropLocation = destination.dock ? DropLocation::Center : DropLocation::None;
+
+        if (destination.isValid()) {
+            return destination;
+        }
+    }
+
     const DockBase* holder = resolveDockingHolder(draggedDock->type(), localPos);
     QList<DropDestination> destinations = draggedDock->dropDestinations();
 
@@ -724,18 +735,7 @@ DropDestination DockWindow::resolveDropDestination(const DockBase* draggedDock, 
         }
     }
 
-    if (holder) {
-        return DropDestination();
-    }
-
-    DropDestination destination;
-
-    if (auto panel = dynamic_cast<const DockPanelView*>(draggedDock)) {
-        destination.dock = findTabifyPanel(panel, localPos);
-        destination.dropLocation = destination.dock ? DropLocation::Center : DropLocation::None;
-    }
-
-    return destination;
+    return DropDestination();
 }
 
 DockingHolderView* DockWindow::resolveDockingHolder(DockType draggedDockType, const QPoint& localPos) const

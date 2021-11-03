@@ -145,7 +145,6 @@ private slots:
 
 private:
     void listenFloatingChanges();
-    void doSetFloating(bool floating);
 
     void writeProperties();
 
@@ -165,8 +164,6 @@ private:
     bool m_resizable = false;
     bool m_separatorsVisible = false;
     bool m_selected = false;
-
-    bool m_floating = false;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };
