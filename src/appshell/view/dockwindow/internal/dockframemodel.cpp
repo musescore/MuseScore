@@ -120,12 +120,11 @@ void DockFrameModel::listenChangesInFrame()
     connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
         emit tabsChanged();
 
-        auto currentDock = m_frame->currentDockWidget();
-        auto allDocks = m_frame->dockWidgets();
-
-        if (!allDocks.contains(currentDock)) {
+        if (!m_frame->currentDockWidget()) {
             m_frame->setCurrentTabIndex(0);
         }
+
+        auto allDocks = m_frame->dockWidgets();
 
         if (allDocks.size() != 1) {
             setTitleBarVisible(false);
