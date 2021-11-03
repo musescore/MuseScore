@@ -78,7 +78,7 @@ InspectorPropertyView {
                 hint: modelData["hint"] ?? ""
                 background.radius: gridView.cellRadius
 
-                navigation.name: hint
+                navigation.name: "BeamType" + hint
                 navigation.panel: root.navigationPanel
                 navigation.row: root.navigationRowStart + 1 + index
                 navigation.accessible.name: hint

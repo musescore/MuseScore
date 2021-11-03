@@ -43,13 +43,18 @@ FocusScope {
         }
     }
 
-    Component.onCompleted: navCtrl.enabled = true
-    Component.onDestruction: navCtrl.enabled = false
+    //! NOTE ListView can destroy delegates, but not delete objects,
+    // they remain in memory (this is done for optimization, for reusing delegate objects).
+    // In this case, navigation controls also remain in memory and in the navigation tree.
+    // But they should at least be turned off.
+    property bool completed: false
+    Component.onCompleted: root.completed = true
+    Component.onDestruction: root.completed = false
 
     NavigationControl {
         id: navCtrl
         name: root.objectName
-        enabled: root.enabled && root.visible
+        enabled: root.enabled && root.visible && root.completed
 
         onActiveChanged: {
             if (navCtrl.active) {

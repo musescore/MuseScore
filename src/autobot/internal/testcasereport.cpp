@@ -122,6 +122,9 @@ void TestCaseReport::onStepStatusChanged(const QString& name, StepStatus status,
     } break;
     case StepStatus::Paused:
         return;
+    case StepStatus::Aborted: {
+        m_stream << "  abort step: " << name << Qt::endl;
+    } break;
     case StepStatus::Error: {
         m_stream << "  error step: " << name << Qt::endl;
     } break;

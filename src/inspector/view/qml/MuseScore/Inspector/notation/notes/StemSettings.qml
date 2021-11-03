@@ -57,7 +57,7 @@ FocusableItem {
             checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
             text: qsTrc("inspector", "Hide stem (also hides beam)")
 
-            navigation.name: "HideStemCheckBox"
+            navigation.name: "HideStem"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart + 1
 
@@ -74,7 +74,7 @@ FocusableItem {
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
-            navigationName: "StemDirectionGroup"
+            navigationName: "StemDirection"
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 2
 
@@ -114,7 +114,7 @@ FocusableItem {
                 delegate: FlatRadioButton {
                     height: 70
 
-                    navigation.name: "FlagStyleGroup"
+                    navigation.name: "FlagStyle" + modelData.text
                     navigation.panel: root.navigationPanel
                     navigation.row: flagStyleGroup.navigationRowStart + index
                     navigation.accessible.name: flagStyleLabel.text + " " + modelData.text
