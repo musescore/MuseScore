@@ -512,7 +512,7 @@ void TieSegment::layoutSegment(const PointF& p1, const PointF& p2)
                     shoulderHeightMin = 3 * (staffLineOffset + tieWidth) / 2;
                 }
                 if ((up && collideAbove && endpointAnchorIndex > 1)
-                    || (!up && collideBelow && endpointAnchorIndex < (st->lines(tick()) - 1) * 2)) {
+                    || (!up && collideBelow && endpointAnchorIndex < static_cast<size_t>((st->lines(tick()) - 1) * 2))) {
                     shoulderHeightMax = 1 - staffLineOffset - (tieWidth / 2);
                 }
             }
@@ -550,7 +550,7 @@ void TieSegment::adjustX()
     }
 
     // ADJUST LEFT GRIP -----------
-    if (sc && spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
+    if (sc && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN)) {
         // grips are in system coordinates, normalize to note position
         PointF p1 = ups(Grip::START).p + PointF(system()->pos().x() - sn->canvasX() + sn->headWidth(), 0);
         xo = 0;
@@ -621,7 +621,7 @@ void TieSegment::adjustX()
     }
 
     // ADJUST RIGHT GRIP ----------
-    if (ec && spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
+    if (ec && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END)) {
         // grips are in system coordinates, normalize to note position
         PointF p2 = ups(Grip::END).p + PointF(system()->pos().x() - en->canvasX(), 0);
         xo = 0;
