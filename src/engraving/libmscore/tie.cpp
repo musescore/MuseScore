@@ -349,16 +349,32 @@ void TieSegment::computeBezier(PointF shoulderOffset)
 }
 
 //---------------------------------------------------------
-//   layoutSegment
+//   adjustY
 //    adjust the y-position of the tie. this is called before adjustX()
 //    p1, p2  are in System coordinates
 //---------------------------------------------------------
 
-void TieSegment::layoutSegment(const PointF& p1, const PointF& p2)
+void TieSegment::adjustY(const PointF& p1, const PointF& p2)
 {
     autoAdjustOffset = PointF();
+
+    Tie* t = toTie(slurTie());
+    Chord* sc = t->startNote() ? t->startNote()->chord() : 0;
+
+    if (!sc) {
+        return; // don't adjust these ties vertically
+    }
+    qreal sp = spatium();
+    const qreal ld = staff()->lineDistance(sc->tick()) * sp;
+    const qreal lines = staff()->lines(sc->tick());
+    const int line = t->startNote()->line();
     shoulderHeightMin = 0.4;
     shoulderHeightMax = 1.3;
+    qreal tieAdjustSp = 0;
+
+    const qreal staffLineOffset = 0.125 + (styleP(Sid::staffLineWidth) / 2 / ld); // sp
+    const qreal noteHeadOffset = 0.185; // sp
+    bool isUp = t->up();
 
     setPos(PointF());
     ups(Grip::START).p = p1;
@@ -372,9 +388,12 @@ void TieSegment::layoutSegment(const PointF& p1, const PointF& p2)
     if (isNudged() || isEdited()) {
         return;
     }
-
+    if (!t->isInside()) {
+        setAutoAdjust(PointF(0, noteHeadOffset * spatium() * (slurTie()->up() ? -1 : 1)));
+    }
     RectF bbox;
     if (p1.y() == p2.y()) {
+#if 0
         // for horizontal ties we can estimate the bbox using simple math instead of having to call
         // computeBezier() which uses a whole lot of trigonometry to draw the entire tie
         bbox.setX(p1.x());
@@ -385,140 +404,159 @@ void TieSegment::layoutSegment(const PointF& p1, const PointF& p2)
         qreal shoulderHeight = bbox.width() * 0.4 * 0.38;
         shoulderHeight = qBound(shoulderHeightMin * spatium(), shoulderHeight, shoulderHeightMax * spatium());
         //////////
-        qreal actualHeight = 2 * (shoulderHeight + styleP(Sid::SlurMidWidth)) / 3;
+        qreal actualHeight = 3 * (shoulderHeight + styleP(Sid::SlurMidWidth)) / 4;
 
         bbox.setY(p1.y() - (slurTie()->up() ? actualHeight : 0));
         bbox.setHeight(actualHeight);
-    } else {
+#else
+        // more correct, less efficient
         computeBezier();
         bbox = path.boundingRect();
+#endif
+    } else {
+        // don't adjust ties that aren't horizontal, just add offset
+        return;
     }
 
-    // instead of the above if-else, the more "accurate" way to do this is:
-    // computeBezier();
-    // bbox = path.boundingRect();
+    auto spansBarline = [staffLineOffset, lines](qreal a, qreal b) {
+        if (b < a) {
+            qSwap(a, b);
+        }
+        if (b < -staffLineOffset || a > (lines - 1) + staffLineOffset) {
+            return false;
+        }
+        if (a < -staffLineOffset && b > staffLineOffset) {
+            // a and b straddle line zero
+            return true;
+        }
+        if (floor(a - staffLineOffset) != floor(b + staffLineOffset)) {
+            return true;
+        }
+        return false;
+    };
 
-    Tie* t = toTie(slurTie());
-    qreal sp = spatium();
+    qreal endpointYsp = (bbox.y() + (isUp ? bbox.height() : 0)) / ld;
+    qreal tieHeightSp = bbox.height() / ld;
+    qreal tieThicknessSp = (styleP(Sid::SlurMidWidth) + ((styleP(Sid::SlurMidWidth) - styleP(Sid::SlurEndWidth)) / 2)) / ld;
+    qreal tieMidOutsideSp = endpointYsp + (isUp ? -tieHeightSp : tieHeightSp);
+    qreal tieMidInsideSp = tieMidOutsideSp + (isUp ? (tieThicknessSp) : -(tieThicknessSp));
+    if (!t->isInside()) {
+        // OUTSIDE TIES
 
-    // adjust position to avoid staff line if necessary
-    Staff* st          = staff();
-    bool collideAbove = false;
-    bool collideBelow = false;
-    if (slurTie()->isTie() && st && !st->isTabStaff(slurTie()->tick())) {
-        // multinote chords with ties need special handling
-        // otherwise, adjusted tie might crowd an unadjusted tie unnecessarily
-        Note* sn  = t->startNote();
-        t->setTick(t->startNote()->tick());
-        Chord* sc = sn ? sn->chord() : 0;
-        if (sc && sc->notes().size() > 1) {
-            for (Note* note : sc->notes()) {
-                if (note == sn || !note->tieFor()) {
-                    continue;
+        qreal endpointYLineDist = endpointYsp - floor(endpointYsp);
+
+        // ENDPOINTS ////////////////////////////////
+        // If the endpoints are less than staffLineOffset from a line, they need to be adjusted
+        // in the direction of the tie.
+        qreal newAnchor = endpointYsp;
+        bool farAdjust = false;
+        if ((isUp && endpointYsp > -staffLineOffset) || (!isUp && endpointYsp < (lines - 1) + staffLineOffset)) {
+            if (isUp) {
+                if (endpointYLineDist < staffLineOffset) {
+                    newAnchor = floor(endpointYsp) - staffLineOffset;
+                    farAdjust = true;
+                } else if (endpointYLineDist > (1 - staffLineOffset)) {
+                    newAnchor = ceil(endpointYsp) - staffLineOffset;
                 }
-                if (note->line() == sn->line() - 1 && t->up() == note->tieFor()->up()) {
-                    collideAbove = true;
+            } else { // down
+                if (endpointYLineDist < staffLineOffset) {
+                    newAnchor = floor(endpointYsp) + staffLineOffset;
+                } else if (endpointYLineDist > (1 - staffLineOffset)) {
+                    newAnchor = ceil(endpointYsp) + staffLineOffset;
+                    farAdjust = true;
                 }
-                if (note->line() == sn->line() + 1 && t->up() == note->tieFor()->up()) {
-                    collideBelow = true;
+            }
+            tieAdjustSp += newAnchor - endpointYsp;
+            tieMidOutsideSp += tieAdjustSp;
+            tieMidInsideSp += tieAdjustSp;
+
+            // TIE APOGEE ///////////////////////////////
+            // If the middle of the tie conflicts with a staff line, the tie must be adjusted to resolve
+            // that collision.
+            if (farAdjust) {
+                // we've already adjusted the tie pretty far from the notehead, so let's just
+                // constrain the tie height to fit within a single space
+                if (endpointYsp + tieAdjustSp > 0 && endpointYsp + tieAdjustSp < lines - 1) {
+                    shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + (tieThicknessSp / 2))) / 3;
+                }
+            } else {
+                if (spansBarline(tieMidOutsideSp, tieMidInsideSp)) {
+                    newAnchor = tieMidInsideSp;
+                    if (isUp) {
+                        newAnchor = floor(tieMidInsideSp + staffLineOffset) - staffLineOffset;
+                    } else { // down
+                        newAnchor = ceil(tieMidInsideSp - staffLineOffset) + staffLineOffset;
+                    }
+                    tieAdjustSp += newAnchor - tieMidInsideSp;
+                    // we've adjusted the midpoint, but maybe the endpoint is too close to a barline now
+                    qreal newEndpoint = endpointYsp + tieAdjustSp;
+                    newAnchor = newEndpoint;
+                    if (isUp && newEndpoint - floor(newEndpoint + staffLineOffset) < staffLineOffset) {
+                        // clamp endpoint and adjust tie height
+                        newAnchor = floor(newEndpoint + staffLineOffset) + staffLineOffset;
+                        shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        shoulderHeightMax = shoulderHeightMin;
+                    } else if (!isUp && ceil(newEndpoint - staffLineOffset) - newEndpoint < staffLineOffset) {
+                        // clamp endpoint and adjust tie height
+                        newAnchor = ceil(newEndpoint - staffLineOffset) - staffLineOffset;
+                        shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        shoulderHeightMax = shoulderHeightMin;
+                    }
+                    tieAdjustSp += newAnchor - newEndpoint;
                 }
             }
         }
-    }
+        setAutoAdjust(PointF(0, (tieAdjustSp * ld) - (p1.y() - (endpointYsp * ld))));
+    } else {
+        // INSIDE TIES
+        bool collideAbove = false;
+        bool collideBelow = false;
+        Note* sn = tie()->startNote();
+        Chord* sc = sn->chord();
 
-    if (st && !st->isTabStaff(slurTie()->tick())) {
-        qreal ld = st->lineDistance(tick()) * sp;
-        qreal staffLineOffset = 0.125; // sp
-        staffLineOffset += (styleP(Sid::staffLineWidth) / 2) / ld;
-        bool up = slurTie()->up();
-        qreal tieWidth = (styleP(Sid::SlurMidWidth)) / ld;
-        qreal topY = bbox.top() / ld;
-        qreal bottomY = bbox.bottom() / ld;
-        qreal endpointY = up ? bottomY : topY;
-        if (endpointY > 0 && endpointY < (st->lines(tick()) - 1) * st->lineDistance(tick())) {
-            // tie endpoints are inside the staff and may require adjustment
-            std::vector<qreal> endpointAnchors;
-            for (int i = 0; i < st->lines(tick()); ++i) {
-                endpointAnchors.push_back((qreal)i - staffLineOffset);
-                endpointAnchors.push_back((qreal)i + staffLineOffset);
+        // figure out if there are situations where a tie collides with a tie above or below it
+        // in a chord
+        for (Note* note : sc->notes()) {
+            if (note == sn || !note->tieFor()) {
+                continue;
+            }
+            if (note->line() == sn->line() - 1 && t->up() == note->tieFor()->up()) {
+                collideAbove = true;
+            }
+            if (note->line() == sn->line() + 1 && t->up() == note->tieFor()->up()) {
+                collideBelow = true;
+            }
+        }
+        shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
+        // are the endpoints within the staff?
+        if (line > 0 && line < (lines - 1) * 2) {
+            // ENDPOINTS ////////////////////////////////
+            // Each line position in the staff has a set endpoint Y location
+            qreal newAnchor;
+            if (isUp) {
+                newAnchor = floor(line / 2) + ((line & 1) ? staffLineOffset : -staffLineOffset);
+            } else {
+                newAnchor = floor((line + 1) / 2) + ((line & 1) ? -staffLineOffset : staffLineOffset);
             }
 
-            size_t endpointAnchorIndex = 0;
-            qreal extraAdjust = 0;
-            if (!tie()->isInside()) {
-                // Find the nearest endpoint anchor
-                for (size_t i = 0; i < endpointAnchors.size(); i++) {
-                    if (qAbs(endpointAnchors[i] - endpointY) <= qAbs(endpointAnchors[endpointAnchorIndex] - endpointY)) {
-                        endpointAnchorIndex = i;
-                    } else {
-                        break;
-                    }
-                }
-
-                qreal currentOffset = endpointAnchors[endpointAnchorIndex] - endpointY;
-                topY += currentOffset;
-                bottomY += currentOffset;
-                // Adjust for tie apogee colliding with staff lines
-                qreal insideTieTop = up ? topY : (bottomY - tieWidth);
-                qreal insideTieBottom = up ? (topY + tieWidth) : bottomY;
-                qreal tieTopWithMargin = insideTieTop - staffLineOffset;
-                qreal tieBottomWithMargin = insideTieBottom + staffLineOffset;
-                if ((tieTopWithMargin < 0 && tieBottomWithMargin > 0) || (int)tieTopWithMargin != (int)tieBottomWithMargin) {
-                    qreal oldAnchorY = endpointAnchors[endpointAnchorIndex];
-                    if (up) {
-                        endpointAnchorIndex--;
-                        tieBottomWithMargin += endpointAnchors[endpointAnchorIndex] - oldAnchorY; // update position of tie bottom
-                        if (endpointAnchorIndex & 1) {  // endpoints just below a line can be adjusted downwards
-                            extraAdjust = ((int)(tieBottomWithMargin + 1) - tieBottomWithMargin); // how far the inside of the tie is from the staff line
-                            extraAdjust = qMax(extraAdjust, 0.0); // ensure downward adjustment
-
-                            // clamp endpoints to at least 0.5sp of staff line
-                            qreal endpointDistanceFromUpperLine = (endpointAnchors[endpointAnchorIndex] + extraAdjust) - (int)endpointY;
-                            if (endpointDistanceFromUpperLine < 0.5) {
-                                extraAdjust += 0.5 - endpointDistanceFromUpperLine;
-                                shoulderHeightMin = 3 * (0.5 + (tieWidth / 2) + (staffLineOffset / 2)) / 2;
-                            }
-                        }
-                    } else { // tie is down
-                        endpointAnchorIndex++;
-                        tieTopWithMargin += endpointAnchors[endpointAnchorIndex] - oldAnchorY; // update position of tie top
-                        if (!(endpointAnchorIndex & 1)) { // endpoint just above a line can be adjusted upwards
-                            extraAdjust = ((int)tieTopWithMargin - tieTopWithMargin);
-                            extraAdjust = qMin(extraAdjust, 0.0);
-
-                            // clamp endpoints to at least 0.5sp of staff line
-                            qreal endpointDistanceFromLowerLine = (int)(endpointY + 1)
-                                                                  - (endpointAnchors[endpointAnchorIndex] + extraAdjust);
-                            if (endpointDistanceFromLowerLine < 0.5) {
-                                // clamp endpoints to at least 0.5sp of staff line
-                                extraAdjust -= 0.5 - endpointDistanceFromLowerLine;
-                                shoulderHeightMin = 3 * (0.5 + (tieWidth / 2) + (staffLineOffset / 2)) / 2;
-                            }
-                        }
-                    }
-                }
-            } else { // inside-tie
-                endpointAnchorIndex = tie()->startNote()->line() + (tie()->up() ? 0 : 1);
-                if ((up && endpointAnchorIndex & 1)
-                    || (!up && !(endpointAnchorIndex & 1))) {
-                    // tie endpoint is right below the line, so let's adjust the height so that the top clears the line
-                    shoulderHeightMin = 3 * (staffLineOffset + tieWidth) / 2;
-                    shoulderHeightMax = 1 + staffLineOffset;
-                } else {
-                    // avoid collisions with the next line up by constraining maximum
-                    shoulderHeightMax = 1 - (staffLineOffset * 2);
-                }
-                if ((up && collideBelow) || (!up && collideAbove)) {
-                    shoulderHeightMin = 3 * (staffLineOffset + tieWidth) / 2;
-                }
-                if ((up && collideAbove && endpointAnchorIndex > 1)
-                    || (!up && collideBelow && endpointAnchorIndex < static_cast<size_t>((st->lines(tick()) - 1) * 2))) {
-                    shoulderHeightMax = 1 - staffLineOffset - (tieWidth / 2);
-                }
+            // TIE APOGEE ///////////////////////////////
+            // Constrain tie height to avoid staff line collisions
+            if (line & 1) {
+                // tie endpoint is right below the line, so let's adjust the height so that the top clears the line
+                shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+            } else {
+                // avoid collisions with the next line up by constraining maximum
+                shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + tieThicknessSp / 2)) / 3;
+            }
+            if ((isUp && collideBelow) || (!isUp && collideAbove)) {
+                shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+            }
+            if ((isUp && collideAbove && newAnchor > staffLineOffset)
+                || (!isUp && collideBelow && newAnchor < (lines - 1))) {
+                shoulderHeightMax = 4 * (1 - (staffLineOffset * 2) - (tieThicknessSp / 2)) / 3;
             }
 
-            qreal currentOffset = endpointAnchors[endpointAnchorIndex] - endpointY;
-            setAutoAdjust(PointF(0, (currentOffset + extraAdjust) * ld));
+            setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
         }
     }
 }
@@ -534,6 +572,11 @@ void TieSegment::finalizeSegment()
     setbbox(path.boundingRect());
 }
 
+//---------------------------------------------------------
+//   adjustX
+//    adjust the tie endpoints to avoid staff lines. call adjustY() first!
+//---------------------------------------------------------
+
 void TieSegment::adjustX()
 {
     qreal offsetMargin = spatium() * 0.25;
@@ -543,7 +586,7 @@ void TieSegment::adjustX()
     Chord* sc = sn ? sn->chord() : nullptr;
     Chord* ec = en ? en->chord() : nullptr;
 
-    qreal xo;
+    qreal xo = 0;
 
     if (isNudged() || isEdited()) {
         return;
@@ -559,9 +602,12 @@ void TieSegment::adjustX()
             std::vector<Chord*> chords;
             int strack = sc->staffIdx() * VOICES;
             int etrack = sc->staffIdx() * VOICES + VOICES;
+            chords.push_back(sc);
             for (int track = strack; track < etrack; ++track) {
                 if (Chord* ch = sc->measure()->findChord(sc->tick(), track)) {
-                    chords.push_back(ch);
+                    if (ch != sc && !ch->graceNotes().contains(sc)) {
+                        chords.push_back(ch);
+                    }
                 }
             }
 
@@ -615,8 +661,29 @@ void TieSegment::adjustX()
                     }
                 }
             }
+            xo += offsetMargin;
+        } else { // tie is outside
+            if ((slurTie()->up() && sc->up()) || (!slurTie()->up() && !sc->up())) {
+                // outside ties may still require adjustment for hooks
+                if (sc->hook() && sc->hook()->visible()) {
+                    qreal hookHeight = sc->hook()->bbox().height();
+                    // turn the hook upside down for downstems
+                    qreal hookY = sc->hook()->pos().y() - (sc->up() ? 0 : hookHeight);
+                    if (p1.y() > hookY - collisionYMargin && p1.y() < hookY + hookHeight + collisionYMargin) {
+                        qreal tieAttach = sn->outsideTieAttachX(slurTie()->up());
+                        qreal hookOffsetX = sc->hook()->width() - (slurTie()->up() ? 0 : tieAttach);
+                        xo = hookOffsetX + offsetMargin;
+                    }
+                } else if (sc->stem()) {
+                    xo = offsetMargin;
+                }
+            } else if (sn->tieBack()) {
+                xo += spatium() / 6; // 1/3 spatium in either direction, so .33/2
+            } else {
+                xo += spatium() / 8; // tiny offset to the right
+            }
         }
-        xo += offsetMargin;
+        xo *= sc->mag();
         ups(Grip::START).p += PointF(xo, 0);
     }
 
@@ -676,8 +743,18 @@ void TieSegment::adjustX()
                     }
                 }
             }
+            xo -= offsetMargin;
+        } else {
+            // tie is outside
+            if (!tie()->up() && !ec->up() && ec->stem() && ec->stem()->visible()) {
+                xo -= offsetMargin;
+            } else if (en && en->tieFor()) {
+                xo -= spatium() / 6;
+            } else {
+                xo -= spatium() / 8;
+            }
         }
-        xo -= offsetMargin;
+        xo *= ec->mag();
         ups(Grip::END).p += PointF(xo, 0);
     }
 }
@@ -725,18 +802,24 @@ void Tie::slurPos(SlurPos* sp)
     bool useTablature = staff() && staff()->isTabStaff(tick());
     const StaffType* stt = useTablature ? staff()->staffType(tick()) : 0;
     qreal _spatium    = spatium();
-    qreal hw          = startNote()->tabHeadWidth(stt);     // if stt == 0, defaults to headWidth()
+    qreal hw          = startNote()->tabHeadWidth(stt) * mag();     // if stt == 0, defaults to headWidth()
     qreal __up        = _up ? -1.0 : 1.0;
-    // y offset for ties inside chord margins (typically multi-note chords): lined up with note top or bottom margin
-    //    or outside (typically single-note chord): overlaps note and is above/below it
-    // Outside: Tab: uses font size and may be asymmetric placed above/below line (frets ON or ABOVE line)
-    //          Std: assumes notehead is 1 sp high, 1/2 sp above and 1/2 below line; add 1/4 sp to it
-    // Inside:  Tab: 1/2 of Outside offset
-    //          Std: use a fixed percentage of note width
+    /* Inside-style and Outside-style ties
+     Outside ties connect above the notehead, in the middle. Ideally, we'd use opticalcenter for this, but
+     that Smufl anchor is not available for noteheads yet. For this reason, we rely on Note::outsideTieAttachX()
+     which makes its best guess as to where ties should connect.
+
+     As for y connection point, inside-style ties are decided by the space or line the note occupies in TieSegment::adjustY()
+     so we don't need to worry about that. Outside-style ties will be 0.125 spatium from the top or bottom of the notehead.
+     We can parameterize that later, but this describes only a minimum distance from the notehead, it can be changed, again,
+     in TieSegment::adjustY().
+    */
+
+    // TODO: this probably breaks for tab staves!! at the time of writing tab staves are not working
     qreal yOffOutside = useTablature
                         ? (_up ? stt->fretBoxY() : stt->fretBoxY() + stt->fretBoxH()) * magS()
-                        : 0.75 * _spatium * __up;
-    qreal yOffInside  = useTablature ? yOffOutside * 0.5 : hw * .3 * __up;
+                        : 0; // offset for outside notes is determined in adjustY(), so for the moment the tie will be the exact top of the notehead
+    qreal yOffInside = useTablature ? yOffOutside * 0.5 : 0; // same for inside
 
     Chord* sc = startNote()->chord();
     Chord* ec = endNote() ? endNote()->chord() : nullptr;
@@ -753,34 +836,57 @@ void Tie::slurPos(SlurPos* sp)
     // similar code is used in Chord::layoutPitched()
     // to allocate extra space to enforce minTieLength
     // so keep these in sync
-
+    if (sc->notes().size() > 1 || (ec && ec->notes().size() > 1)) {
+        _isInside = true;
+    } else {
+        _isInside = false;
+    }
     sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
 
     //------p1
-    x1 = startNote()->pos().x() + hw;
     y1 = startNote()->pos().y();
-    qreal xo = 0;
-    if (sc->notes().size() > 1 || (ec && ec->notes().size() > 1)) {
-        _isInside = true;
-        xo = 0;  // the offset for these will be decided in TieSegment::adjustX()
+    y2 = endNote() ? endNote()->pos().y() : y1;
+
+    // force tie to be horizontal except for cross-staff or if there is a difference of line (tpc, clef)
+    bool isHorizontal = ec ? startNote()->line() == endNote()->line() && sc->vStaffIdx() == ec->vStaffIdx() : true;
+    y1 += startNote()->bbox().y();
+    if (endNote()) {
+        y2 += endNote()->bbox().y();
+    }
+    if (!up()) {
+        y1 += startNote()->bbox().height();
+        if (endNote()) {
+            y2 += endNote()->bbox().height();
+        }
+    }
+    if (!endNote()) {
+        y2 = y1;
+    }
+    y1 += isInside() ? yOffInside : yOffOutside;
+    y2 += isInside() ? yOffInside : yOffOutside;
+
+    // ensure that horizontal ties remain horizontal
+    if (isHorizontal) {
+        y1 = _up ? qMin(y1, y2) : qMax(y1, y2);
+        y2 = _up ? qMin(y1, y2) : qMax(y1, y2);
+    }
+
+    if (_isInside) {
+        x1 = startNote()->pos().x() + hw;  // the offset for these will be decided in TieSegment::adjustX()
     } else {
-        _isInside = false;
-        if (sc->stem() && sc->up() && _up) {
+        if (sc->stem() && sc->stem()->visible() && sc->up() && _up) {
             // usually, outside ties start in the middle of the notehead, but
             // for up-ties on up-stems, we'll start at the end of the notehead
             // to avoid the stem
-            xo = 0;
+            x1 = startNote()->pos().x() + hw;
         } else {
-            // start in the middle of the notehead for outside notes
-            xo = -(hw / 2);
+            x1 = startNote()->outsideTieAttachX(_up);
         }
     }
-    y1 += isInside() ? yOffInside : yOffOutside;
-    sp->p1 += PointF(x1 + xo, y1);
+
+    sp->p1 += PointF(x1, y1);
 
     //------p2
-    y2 = y1;
-    xo = 0;
     if (!ec) {
         sp->p2 = sp->p1 + PointF(_spatium * 3, 0.0);
         sp->system2 = sp->system1;
@@ -789,26 +895,17 @@ void Tie::slurPos(SlurPos* sp)
     sp->p2 = ec->pos() + ec->segment()->pos() + ec->measure()->pos();
     sp->system2 = ec->measure()->system();
 
-    // force tie to be horizontal except for cross-staff or if there is a difference of line (tpc, clef, tpc)
-    bool horizontal = startNote()->line() == endNote()->line() && sc->vStaffIdx() == ec->vStaffIdx();
-
-    hw = endNote()->tabHeadWidth(stt);
-    x2 = endNote()->x();
-    if (!horizontal) {
-        y2 = endNote()->pos().y() + (isInside() ? yOffInside : yOffOutside);
-    }
     if (isInside()) {
-        xo = 0.0;
+        x2 = endNote()->x();
     } else {
-        if (ec->stem() && !ec->up() && !_up) {
+        if (ec->stem() && ec->stem()->visible() && !ec->up() && !_up) {
             // as before, xo should account for stems that could get in the way
-            xo = 0;
+            x2 = endNote()->x();
         } else {
-            // start in the middle of the notehead for outside notes
-            xo = -(hw / 2);
+            x2 = endNote()->outsideTieAttachX(_up);
         }
     }
-    sp->p2 += PointF(x2 - xo, y2);
+    sp->p2 += PointF(x2, y2);
 
     // adjust for cross-staff
     if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
@@ -992,6 +1089,7 @@ TieSegment* Tie::layoutFor(System* system)
             return 0;
         }
         Chord* c1 = startNote()->chord();
+        setTick(c1->tick());
         if (_slurDirection == Direction::AUTO) {
             if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
                 // in polyphonic passage, ties go on the stem side
@@ -1008,7 +1106,7 @@ TieSegment* Tie::layoutFor(System* system)
         segment->setSystem(startNote()->chord()->segment()->measure()->system());
         SlurPos sPos;
         slurPos(&sPos);
-        segment->layoutSegment(sPos.p1, sPos.p2);
+        segment->adjustY(sPos.p1, sPos.p2);
         segment->finalizeSegment();
         return segment;
     }
@@ -1030,7 +1128,9 @@ TieSegment* Tie::layoutFor(System* system)
     fixupSegments(n);
     TieSegment* segment = segmentAt(0);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
-    segment->layoutSegment(sPos.p1, sPos.p2); // adjust vertically
+    Chord* c1 = startNote()->chord();
+    setTick(c1->tick());
+    segment->adjustY(sPos.p1, sPos.p2); // adjust vertically
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->adjustX(); // adjust horizontally for inside-style ties
     segment->finalizeSegment(); // compute bezier and set bbox
@@ -1062,7 +1162,7 @@ TieSegment* Tie::layoutBack(System* system)
 
     qreal x = system->firstNoteRestSegmentX(true);
 
-    segment->layoutSegment(PointF(x, sPos.p2.y()), sPos.p2);
+    segment->adjustY(PointF(x, sPos.p2.y()), sPos.p2);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
     segment->adjustX();
     segment->finalizeSegment();
