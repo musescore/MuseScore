@@ -376,6 +376,7 @@ public:
     qreal noteheadCenterX() const;
     qreal bboxRightPos() const;
     qreal headBodyWidth() const;
+    qreal outsideTieAttachX(bool up) const;
 
     NoteHead::Scheme headScheme() const { return _headScheme; }
     void updateHeadGroup(const NoteHead::Group headGroup);

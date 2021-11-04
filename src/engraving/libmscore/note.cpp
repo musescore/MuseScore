@@ -1072,6 +1072,57 @@ qreal Note::headBodyWidth() const
     return headWidth() + 2 * bboxXShift();
 }
 
+//---------------------------------------------------------
+//   outsideTieAttachX
+//
+//    returns the X-position for tie attachment for this particular notehead
+//---------------------------------------------------------
+qreal Note::outsideTieAttachX(bool up) const
+{
+    qreal xo;
+
+    // special cases:
+    if (_headGroup == NoteHead::Group::HEAD_SLASH) {
+        // the anchors are really close to the stem attach points
+        xo = up ? symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE).x() : symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW).x();
+        xo += spatium() * 0.13 * (chord()->up() ? mag() : -mag());
+        return x() + xo;
+    }
+    if (_headGroup == NoteHead::Group::HEAD_SLASHED1 || _headGroup == NoteHead::Group::HEAD_SLASHED2) {
+        // just use the very center of the notehead
+        return x() + ((headBodyWidth() / 2) * mag());
+    }
+    /* Noteheads do not have optical centers at this time, but here's the code
+       to future-proof
+    xo = symSmuflAnchor(noteHead(), SmuflAnchorId::opticalCenter).x() * mag();
+    if (xo > 0) {
+        return x() + xo;
+    }
+    */
+    // try for average of cutouts
+    if (up) {
+        qreal xNE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNE).x();
+        qreal xNW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutNW).x();
+        xo = ((xNE + xNW) / 2) * mag();
+        if (xNE < xNW) {
+            // musejazz is busted
+            xo = 0;
+        }
+    } else {
+        qreal xSE = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSE).x();
+        qreal xSW = symSmuflAnchor(noteHead(), SmuflAnchorId::cutOutSW).x();
+        xo = ((xSE + xSW) / 2) * mag();
+        if (xSE < xSW) {
+            xo = 0;
+        }
+    }
+    if (xo > 0) {
+        return x() + xo;
+    }
+    // no cutout, not a slash head, default to middle of notehead
+    return x() + ((headWidth() / 2) * mag());
+}
+
 void Note::updateHeadGroup(const NoteHead::Group headGroup)
 {
     NoteHead::Group group = headGroup;
