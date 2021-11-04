@@ -53,7 +53,7 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustY(const mu::PointF& p1, const mu::PointF& p2);
     void adjustX();
     void finalizeSegment();
 
