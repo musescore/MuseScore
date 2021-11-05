@@ -71,6 +71,11 @@ struct RemoteEvent {
     {
         return type == other.type && value == other.value;
     }
+
+    bool operator !=(const RemoteEvent& other) const
+    {
+        return !operator==(other);
+    }
 };
 
 struct MidiControlsMapping {

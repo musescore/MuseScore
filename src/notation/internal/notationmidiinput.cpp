@@ -52,6 +52,8 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
         for (auto& event : events) {
             onMidiEventReceived(event);
         }
+
+        return;
     }
 
     if (e.opcode() == midi::Event::Opcode::NoteOn || e.opcode() == midi::Event::Opcode::NoteOff) {
