@@ -25,20 +25,20 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 
-Item {
+Column {
     id: root
 
     property alias model: filterModel.sourceModel
     property alias count: view.count
 
-    property string title: ""
+    property alias title: titleLabel.text
 
     property string search: ""
     property string selectedCategory: ""
     property bool installed: false
 
     property var flickableItem: null
-    property int headerHeight: view.headerItem.height
+    property int headerHeight: titleLabel.height + spacing
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "PluginsListView"
@@ -48,8 +48,6 @@ Item {
 
     signal pluginClicked(var plugin, var navigationControl)
     signal navigationActivated(var itemRect)
-
-    height: view.height
 
     function resetSelectedPlugin() {
         view.currentIndex = -1
@@ -81,47 +79,39 @@ Item {
         ]
     }
 
+    StyledTextLabel {
+        id: titleLabel
+        width: parent.width
+        font: ui.theme.tabBoldFont
+        horizontalAlignment: Text.AlignLeft
+    }
+
+    spacing: 24
+
     GridView {
         id: view
 
-        readonly property int sideMargin: 28
-
-        property int rows: Math.max(0, Math.floor(height / cellHeight))
-        property int columns: Math.max(0, Math.floor(width / cellWidth))
+        readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
 
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: -sideMargin
-        anchors.rightMargin: -sideMargin
+        anchors.leftMargin: -spacingBetweenColumns / 2
+        anchors.rightMargin: -spacingBetweenColumns / 2
 
-        height: contentHeight
-
-        header: Item {
-            height: titleLabel.height
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            StyledTextLabel {
-                id: titleLabel
-
-                anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.left: parent.left
-                anchors.leftMargin: view.sideMargin
-
-                text: root.title
-                font: ui.theme.tabBoldFont
-            }
-        }
+        height: contentHeight - spacingBetweenRows
 
         model: filterModel
 
-        clip: true
+        interactive: false
 
-        cellHeight: 254
-        cellWidth: sideMargin + 296 + sideMargin
+        readonly property real spacingBetweenColumns: 56
+        readonly property real spacingBetweenRows: 28
 
-        boundsBehavior: Flickable.StopAtBounds
+        readonly property real actualCellWidth: 250
+        readonly property real actualCellHeight: 176
+
+        cellWidth: actualCellWidth + spacingBetweenColumns
+        cellHeight: actualCellHeight + spacingBetweenRows
 
         delegate: Item {
             id: item
@@ -135,14 +125,16 @@ Item {
 
             PluginItem {
                 id: _item
-                anchors.centerIn: parent
+
+                width: view.actualCellWidth
+                height: view.actualCellHeight
+
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 name: model.name
                 thumbnailUrl: model.thumbnailUrl
-                selected: view.currentIndex == index
-
-                height: 206
-                width: 296
+                selected: view.currentIndex === index
 
                 navigation.panel: root.navigationPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
