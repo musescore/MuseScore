@@ -141,6 +141,7 @@ DockPage {
 
             floatable: false
             resizable: false
+            separatorsVisible: false
             alignment: DockToolBarAlignment.Right
 
             UndoRedoToolBar {
