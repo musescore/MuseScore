@@ -96,7 +96,6 @@ TabButton {
             anchors.right: parent.right
             anchors.rightMargin: sideMargin
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 4
 
             height: 2
 
