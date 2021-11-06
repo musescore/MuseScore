@@ -55,7 +55,7 @@ public:
         Common,
         Cut
     };
-    Q_ENUMS(TimeSignatureType)
+    Q_ENUM(TimeSignatureType)
 
     Q_INVOKABLE void init();
 
