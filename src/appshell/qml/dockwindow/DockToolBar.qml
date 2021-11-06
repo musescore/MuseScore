@@ -35,6 +35,8 @@ DockToolBarView {
 
     property real gripButtonPadding: 2
 
+    property real contentBottomPadding: 0
+
     readonly property bool isVertical: orientation === Qt.Vertical
 
     minimumWidth: Math.min(contentWidth, maximumWidth)
@@ -52,31 +54,36 @@ DockToolBarView {
     }
 
     Rectangle {
-        id: contentBackground
+        id: background
         anchors.fill: parent
-
         color: ui.theme.backgroundPrimaryColor
 
-        FlatButton {
-            id: gripButton
-            width: root.isVertical ? 30 : 24
-            height: root.isVertical ? 24 : 30
+        Item {
+            id: content
+            anchors.fill: parent
+            anchors.bottomMargin: root.contentBottomPadding
 
-            mouseArea.objectName: root.objectName + "_gripButton"
+            FlatButton {
+                id: gripButton
+                width: root.isVertical ? 30 : 24
+                height: root.isVertical ? 24 : 30
 
-            transparent: true
-            contentItem: StyledIconLabel {
-                iconCode: IconCode.TOOLBAR_GRIP
-                rotation: root.isVertical ? 90 : 0
+                mouseArea.objectName: root.objectName + "_gripButton"
+
+                transparent: true
+                contentItem: StyledIconLabel {
+                    iconCode: IconCode.TOOLBAR_GRIP
+                    rotation: root.isVertical ? 90 : 0
+                }
+
+                Component.onCompleted: {
+                    root.setDraggableMouseArea(mouseArea)
+                }
             }
 
-            Component.onCompleted: {
-                root.setDraggableMouseArea(mouseArea)
+            Loader {
+                id: contentLoader
             }
-        }
-
-        Loader {
-            id: contentLoader
         }
     }
 

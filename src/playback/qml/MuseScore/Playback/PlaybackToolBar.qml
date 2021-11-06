@@ -138,6 +138,7 @@ Rectangle {
 
             RowLayout {
                 Layout.leftMargin: 12
+                Layout.rightMargin: root.floating ? 12 : 0
                 spacing: 18
 
                 TimeInputField {

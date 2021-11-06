@@ -75,6 +75,8 @@ Rectangle {
             icon: model.icon
             iconFont: ui.theme.toolbarIconsFont
 
+            height: 30
+
             toolTipTitle: model.title
             toolTipDescription: model.description
             toolTipShortcut: model.shortcut
