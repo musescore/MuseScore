@@ -53,9 +53,12 @@ Item {
 
         readonly property int padding: 6
 
-        width: childrenRect.width + 2 * padding
+        //! NOTE padding - 1 to compensate for the dock separator width.
+        //! The separator is hidden, but the space for it is still allocated.
+        //! That should be solved in KDDW.
+        width: padding - 1 + childrenRect.width + padding
         height: childrenRect.height
-        x: padding
+        x: padding - 1
 
         spacing: 0
 
