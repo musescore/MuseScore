@@ -54,7 +54,7 @@ Item {
         anchors.top: parent.top
 
         width: parent.width
-        height: 142
+        height: 150
 
         fillMode: Image.PreserveAspectCrop
 
