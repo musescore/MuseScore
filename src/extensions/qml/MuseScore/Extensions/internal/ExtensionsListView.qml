@@ -81,7 +81,7 @@ Item {
         cellHeight: 272
         cellWidth: 650
 
-        boundsBehavior: Flickable.StopAtBounds
+        interactive: false
 
         header: Item {
             height: titleLabel.height

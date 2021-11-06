@@ -108,11 +108,11 @@ Item {
         anchors.rightMargin: root.sideMargin
         anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
 
-        clip: true
-
         contentWidth: width
         contentHeight: extensionsColumn.height
-        interactive: height < contentHeight
+
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
             parent: flickable.parent
