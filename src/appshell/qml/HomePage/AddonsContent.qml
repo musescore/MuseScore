@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -89,69 +89,61 @@ FocusScope {
 
         StyledTextLabel {
             id: addonsLabel
+            Layout.fillWidth: true
 
             text: qsTrc("appshell", "Add-ons")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }
 
-        Item {
-            Layout.preferredWidth: topLayout.width - addonsLabel.width - serchAndCategoryLayout.width - topLayout.spacing * 2
-            Layout.fillHeight: true
+        SearchField {
+            id: searchField
+
+            Layout.preferredWidth: 220
+
+            navigation.name: "AddonsSearch"
+            navigation.panel: navSearchPanel
+            navigation.order: 1
+            accessible.name: qsTrc("appshell", "Add-ons search")
+
+            onSearchTextChanged: {
+                categoryComboBox.selectedCategory = ""
+            }
         }
 
-        Row {
-            id: serchAndCategoryLayout
+        Dropdown {
+            id: categoryComboBox
 
-            spacing: 12
+            width: searchField.width
 
-            SearchField {
-                id: searchField
+            navigation.name: "CategoryComboBox"
+            navigation.panel: navSearchPanel
+            navigation.order: 2
 
-                navigation.name: "AddonsSearch"
-                navigation.panel: navSearchPanel
-                navigation.order: 1
-                accessible.name: qsTrc("appshell", "Add-ons search")
+            visible: bar.canFilterByCategories
 
-                onSearchTextChanged: {
-                    categoryComboBox.selectedCategory = ""
+            readonly property string allCategoryValue: "ALL_CATEGORY"
+            property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
+
+            displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+            currentIndex: indexOfValue(allCategoryValue)
+
+            function initModel() {
+                var categories = bar.categories()
+                var result = []
+
+                result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
+
+                for (var i = 0; i < categories.length; ++i) {
+                    var category = categories[i]
+                    result.push({ "text": category, "value": category })
                 }
+
+                model = result
             }
 
-            Dropdown {
-                id: categoryComboBox
-
-                width: searchField.width
-
-                navigation.name: "CategoryComboBox"
-                navigation.panel: navSearchPanel
-                navigation.order: 2
-
-                visible: bar.canFilterByCategories
-
-                readonly property string allCategoryValue: "ALL_CATEGORY"
-                property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
-
-                displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
-                currentIndex: indexOfValue(allCategoryValue)
-
-                function initModel() {
-                    var categories = bar.categories()
-                    var result = []
-
-                    result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
-
-                    for (var i = 0; i < categories.length; ++i) {
-                        var category = categories[i]
-                        result.push({ "text": category, "value": category })
-                    }
-
-                    model = result
-                }
-
-                Component.onCompleted: {
-                    initModel()
-                }
+            Component.onCompleted: {
+                initModel()
             }
         }
     }
@@ -160,7 +152,7 @@ FocusScope {
         id: bar
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 36
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - itemSideMargin
 
