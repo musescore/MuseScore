@@ -1990,10 +1990,11 @@ void MusicXMLParserPass2::scorePartwise()
                   skipLogCurrElem();
             }
       // set last measure barline to normal or MuseScore will generate light-heavy EndBarline
-      // TODO, handle other tracks?
       auto lm = _score->lastMeasure();
-      if (lm && lm->endBarLineType() == BarLineType::NORMAL)
-            lm->setEndBarLineType(BarLineType::NORMAL, 0);
+      if (lm && lm->endBarLineType() == BarLineType::NORMAL) {
+            for (int staff = 0; staff < _score->nstaves(); staff++)
+                  lm->setEndBarLineType(BarLineType::NORMAL, staff * VOICES);
+            }
 
       _score->connectArpeggios();
       _score->fixupLaissezVibrer(); 
