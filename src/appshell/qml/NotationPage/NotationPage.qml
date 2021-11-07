@@ -103,6 +103,7 @@ DockPage {
             resizable: false
             separatorsVisible: false
             alignment: DockToolBarAlignment.Center
+            contentBottomPadding: 2
 
             NotationToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -124,6 +125,7 @@ DockPage {
 
             separatorsVisible: false
             alignment: DockToolBarAlignment.Right
+            contentBottomPadding: 2
 
             PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
@@ -141,7 +143,9 @@ DockPage {
 
             floatable: false
             resizable: false
+            separatorsVisible: false
             alignment: DockToolBarAlignment.Right
+            contentBottomPadding: 2
 
             UndoRedoToolBar {
                 navigation.section: root.topToolKeyNavSec

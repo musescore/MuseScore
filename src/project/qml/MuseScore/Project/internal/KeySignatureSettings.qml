@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -31,7 +31,7 @@ FlatButton {
     id: root
 
     property var model: null
-    property var mode: bar.currentIndex === 0 ? "major" : "minor"
+    readonly property var mode: bar.currentIndex === 0 ? "major" : "minor"
     property string currentValueAccessibleName: title.text
 
     property alias popupAnchorItem: popup.anchorItem
@@ -125,42 +125,22 @@ FlatButton {
                 }
             }
 
-            StackLayout {
-                id: pagesStack
-
+            KeySignatureListView {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
                 Layout.topMargin: 20
 
-                currentIndex: bar.currentIndex
+                model: root.model.keySignatureList()
+                currentSignature: root.model.keySignature
+                mode: root.mode
 
-                KeySignatureListView {
-                    model: root.model.keySignatureList()
-                    currentSignature: root.model.keySignature
-                    mode: "major"
+                navigationPanel.name: "KeySignaturesPanel"
+                navigationPanel.section: popup.navigationSection
+                navigationPanel.order: 2
 
-                    navigationPanel.name: "KeySignatureMajorPanel"
-                    navigationPanel.section: popup.navigationSection
-                    navigationPanel.order: 2
-
-                    onSignatureSelected: {
-                        root.model.keySignature = signature
-                    }
-                }
-
-                KeySignatureListView {
-                    model: root.model.keySignatureList()
-                    currentSignature: root.model.keySignature
-                    mode: "minor"
-
-                    navigationPanel.name: "KeySignatureMinorPanel"
-                    navigationPanel.section: popup.navigationSection
-                    navigationPanel.order: 2
-
-                    onSignatureSelected: {
-                        root.model.keySignature = signature
-                    }
+                onSignatureSelected: function(signature) {
+                    root.model.keySignature = signature
                 }
             }
         }

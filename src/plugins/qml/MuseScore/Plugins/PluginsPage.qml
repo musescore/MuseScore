@@ -108,12 +108,10 @@ Item {
         anchors.bottom: panel.visible ? panel.top : parent.bottom
         anchors.bottomMargin: panel.visible ? 0 : 21
 
-        clip: true
-
         contentWidth: width
-        contentHeight: notInstalledPluginsView.height + installedPluginsView.height
-        interactive: height < contentHeight
+        contentHeight: column.implicitHeight
 
+        clip: true
         boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
@@ -131,7 +129,7 @@ Item {
             id: column
             anchors.fill: parent
 
-            spacing: 12
+            spacing: 24
 
             PluginsListView {
                 id: installedPluginsView
@@ -152,13 +150,13 @@ Item {
                 navigationPanel.name: "InstalledPlugins"
                 navigationPanel.order: 4
 
-                onPluginClicked: {
+                onPluginClicked: function(plugin, navigationControl) {
                     prv.selectedPlugin = plugin
                     panel.open()
                     prv.lastNavigatedExtension = navigationControl
                 }
 
-                onNavigationActivated: {
+                onNavigationActivated: function(itemRect) {
                     Utils.ensureContentVisible(flickable, itemRect, installedPluginsView.headerHeight + 16)
                 }
             }
@@ -181,13 +179,13 @@ Item {
                 navigationPanel.name: "NotInstalledPlugins"
                 navigationPanel.order: 5
 
-                onPluginClicked: {
+                onPluginClicked: function(plugin, navigationControl) {
                     prv.selectedPlugin = Object.assign({}, plugin)
                     panel.open()
                     prv.lastNavigatedExtension = navigationControl
                 }
 
-                onNavigationActivated: {
+                onNavigationActivated: function(itemRect) {
                     Utils.ensureContentVisible(flickable, itemRect, notInstalledPluginsView.headerHeight + 16)
                 }
             }
