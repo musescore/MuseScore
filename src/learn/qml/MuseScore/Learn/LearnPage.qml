@@ -76,6 +76,7 @@ FocusScope {
 
     RowLayout {
         id: topLayout
+
         anchors.top: parent.top
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
@@ -96,15 +97,11 @@ FocusScope {
 
         StyledTextLabel {
             id: learnLabel
+            Layout.fillWidth: true
 
             text: qsTrc("learn", "Learn")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
-        }
-
-        Item {
-            Layout.preferredWidth: topLayout.width - learnLabel.width - searchField.width - topLayout.spacing * 2
-            Layout.fillHeight: true
         }
 
         SearchField {
@@ -127,7 +124,7 @@ FocusScope {
         id: bar
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 36
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - itemSideMargin
 

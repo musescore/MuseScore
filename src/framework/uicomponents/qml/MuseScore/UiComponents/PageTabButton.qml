@@ -45,7 +45,7 @@ RadioDelegate {
     leftPadding: 0
     rightPadding: 0
 
-    //! NONE Disabled default Qt Accessible
+    //! NOTE Disabled default Qt Accessible
     Accessible.ignored: true
 
     NavigationControl {
@@ -120,32 +120,34 @@ RadioDelegate {
         }
     }
 
-    contentItem: Row {
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+    contentItem: Item {
+        anchors.fill: parent
+        anchors.leftMargin: root.leftPadding
+        anchors.rightMargin: root.rightPadding
+        anchors.bottomMargin: root.isVertical ? 2 : 0
 
-        spacing: root.spacing
-        leftPadding: root.leftPadding
-        rightPadding: root.rightPadding
+        implicitWidth: root.leftPadding + contentRow.implicitWidth + root.rightPadding
+        implicitHeight: contentRow.implicitHeight
 
-        Loader {
-            anchors.verticalCenter: parent.verticalCenter
+        Row {
+            id: contentRow
+            anchors.fill: parent
+            spacing: root.spacing
 
-            sourceComponent: root.iconComponent
-            visible: Boolean(root.iconComponent)
-        }
+            Loader {
+                anchors.verticalCenter: parent.verticalCenter
+                sourceComponent: root.iconComponent
+                visible: Boolean(root.iconComponent)
+            }
 
-        StyledTextLabel {
-            id: textLabel
+            StyledTextLabel {
+                id: textLabel
+                anchors.verticalCenter: parent.verticalCenter
 
-            anchors.verticalCenter: parent.verticalCenter
-            width: implicitWidth
-
-            visible: Boolean(root.title)
-
-            horizontalAlignment: Text.AlignLeft
-            font: root.normalStateFont
-            text: root.title
+                horizontalAlignment: Text.AlignLeft
+                font: root.normalStateFont
+                text: root.title
+            }
         }
     }
 

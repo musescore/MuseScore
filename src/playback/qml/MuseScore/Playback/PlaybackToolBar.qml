@@ -37,7 +37,7 @@ Rectangle {
 
     property int maximumHeight: 0
 
-    width: floating ? 426 : 364 //content.width
+    width: content.width
     height: content.height
 
     color: ui.theme.backgroundPrimaryColor
@@ -77,7 +77,7 @@ Rectangle {
                 Layout.preferredWidth: contentItem.childrenRect.width
                 Layout.preferredHeight: contentItem.childrenRect.height
 
-                contentHeight: root.floating ? 30 : root.height // To control height of separators
+                contentHeight: 30
                 spacing: 4
 
                 model: playbackModel
@@ -128,11 +128,9 @@ Rectangle {
             }
 
             SeparatorLine {
-                readonly property int topMargin: (root.height - root.maximumHeight) / 2
-
+                Layout.topMargin: 2
+                Layout.bottomMargin: 2
                 Layout.leftMargin: 6
-                Layout.topMargin: topMargin
-                Layout.bottomMargin: topMargin
 
                 orientation: Qt.Vertical
                 visible: !root.floating
@@ -140,6 +138,7 @@ Rectangle {
 
             RowLayout {
                 Layout.leftMargin: 12
+                Layout.rightMargin: root.floating ? 12 : 0
                 spacing: 18
 
                 TimeInputField {
@@ -172,14 +171,21 @@ Rectangle {
                 }
 
                 TempoView {
-                    Layout.preferredWidth: 60
-
                     noteSymbol: playbackModel.tempo.noteSymbol
                     tempoValue: playbackModel.tempo.value
 
                     noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
                     tempoValueFont: timeField.font
                 }
+            }
+
+            SeparatorLine {
+                Layout.topMargin: 2
+                Layout.bottomMargin: 2
+                Layout.leftMargin: 12
+
+                orientation: Qt.Vertical
+                visible: !root.floating
             }
         }
 

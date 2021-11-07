@@ -72,8 +72,6 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: prv.sideMargin
 
-        height: childrenRect.height
-
         spacing: 12
 
         NavigationPanel {
@@ -86,15 +84,11 @@ FocusScope {
 
         StyledTextLabel {
             id: pageTitle
+            Layout.fillWidth: true
 
             text: qsTrc("project", "Scores")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
-        }
-
-        Item {
-            Layout.preferredWidth: topLayout.width - pageTitle.width - searchField.width - topLayout.spacing * 2
-            Layout.fillHeight: true
         }
 
         SearchField {
@@ -133,7 +127,7 @@ FocusScope {
         id: view
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 74
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - view.sideMargin
         anchors.right: parent.right
