@@ -633,7 +633,6 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         Staff* s = Factory::createStaff(part);
         StaffType stType;
         stType.fretFont();
-        part->insertStaff(s, -1);
         _score->appendStaff(s);
     }
 
@@ -847,10 +846,11 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
     auto lastMeasure = _score->lastMeasure();
 
     auto tick = lastMeasure->tick();
-    Segment* s = lastMeasure->getSegment(SegmentType::Clef, tick);
+    Segment* s = lastMeasure->getSegment(SegmentType::HeaderClef, tick);
     Clef* cl = mu::engraving::Factory::createClef(_score->dummy()->segment());
     cl->setTrack(curTrack);
     cl->setClefType(clef);
+
     s->add(cl);
     _clefs[curTrack] = bar->clef().type;
 }
@@ -909,6 +909,7 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
     }
 
     cr->setDurationType(TDuration(fr));
+    cr->setTicks(fr);
 
     return cr;
 }
