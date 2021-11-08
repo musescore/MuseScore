@@ -156,12 +156,12 @@ bool AutobotScriptsModel::tryRunNextTC()
         }
     }
 
-    m_currentTCIndex = static_cast<int>(currentIndex);
-    if (!(currentIndex < m_scripts.size())) {
+    if (m_currentTCIndex == static_cast<int>(currentIndex)) {
         LOGD() << "no more TC scripts";
         return false;
     }
 
+    m_currentTCIndex = static_cast<int>(currentIndex);
     const Script& tc = m_scripts.at(currentIndex);
     LOGD() << "requireStartTC: " << tc.path;
     emit requireStartTC(tc.path.toQString());
