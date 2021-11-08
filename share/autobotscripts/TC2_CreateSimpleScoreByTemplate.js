@@ -63,7 +63,7 @@ var testCase = {
             api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
         }},
         {name: "Save", func: function() {
-            api.autobot.saveProject("TC1_CreateSimpleScore.mscz")
+            api.autobot.saveProject("TC2_CreateSimpleScoreByTemplate.mscz")
         }},
         {name: "Close", func: function() {
             api.dispatcher.dispatch("file-close")

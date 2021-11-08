@@ -40,6 +40,9 @@ var testCase = {
             NewScore.сhooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
+        {name: "Confirm about all Palettes collapsed", func: function() {
+            api.autobot.confirm("All Palettes should be collapsed")
+        }},
         {name: "Change Clefs", skip: false, func: function() {
             //! NOTE First, we need to select the current Clef
             api.navigation.goToControl("NotationView", "ScoreView", "Score") // The first rest is selected by default.

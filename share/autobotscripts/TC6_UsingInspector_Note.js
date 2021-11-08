@@ -278,9 +278,6 @@ var testCase = {
             api.navigation.goToControl("RecentScores", "RecentScores", "New score")
             api.navigation.right()
             api.navigation.trigger()
-        }},
-        {name: "Open Instruments panel", func: function() {
-            Instruments.openInstrumentsPanel()
         }}
     ]
 };
