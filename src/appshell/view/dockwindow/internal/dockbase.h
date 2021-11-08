@@ -86,7 +86,10 @@ public:
     void open();
     void close();
 
-    void setSelected(bool selected);
+    void showHighlighting(const QRect& highlightingRect);
+    void hideHighlighting();
+
+    QRect frameGeometry() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -156,7 +159,7 @@ private:
     bool m_persistent = false;
     bool m_resizable = false;
     bool m_separatorsVisible = false;
-    bool m_selected = false;
+    QRect m_highlightingRect;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };

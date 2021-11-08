@@ -102,18 +102,17 @@ private slots:
 
 private:
     DockPageView* pageByUri(const QString& uri) const;
-    DockPageView* currentPage() const;
 
     void componentComplete() override;
     void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
     void loadPageContent(const DockPageView* page);
     void unitePanelsToTabs(const DockPageView* page);
-    void loadPageToolbars(const DockPageView* page);
-    void loadPagePanels(const DockPageView* page);
+    void loadSideDocks(const DockPageView* page, DockType type);
+    void loadTopLevelToolBars(const DockPageView* page);
     void alignToolBars(const DockPageView* page);
 
-    void addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo = nullptr);
+    void addDock(DockBase* dock, KDDockWidgets::Location location = KDDockWidgets::Location_OnLeft, const DockBase* relativeTo = nullptr);
 
     void saveGeometry();
     void restoreGeometry();
@@ -136,16 +135,12 @@ private:
 
     DropDestination resolveDropDestination(const DockBase* draggedDock, const QPoint& localPos) const;
     DockingHolderView* resolveDockingHolder(DockType draggedDockType, const QPoint& localPos) const;
-    DockingHolderView* resolveToolbarDockingHolder(const QPoint& localPos) const;
-    DockingHolderView* resolvePanelDockingHolder(const QPoint& localPos) const;
-
-    DockPanelView* findTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const;
-    DockPanelView* findRootPanel(const DockPanelView* panel) const;
-
-    DockBase* dockByName(const QString& dockName) const;
+    DockPanelView* resolveTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const;
+    Location resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const;
+    QRect resolveHighlightingRect(const DropDestination& destination) const;
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
-    QString m_currentPageUri;
+    DockPageView* m_currentPage = nullptr;
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     DockingHolderView* m_mainToolBarDockingHolder = nullptr;
     uicomponents::QmlListProperty<DockPageView> m_pages;

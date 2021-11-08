@@ -63,8 +63,8 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
         }
     }
 
-    if (propertyChangeEvent->propertyName() == "selected") {
-        emit selectionVisibleChanged();
+    if (propertyChangeEvent->propertyName() == "highlightingRect") {
+        emit highlightingVisibleChanged();
     }
 
     return QObject::eventFilter(watched, event);
@@ -189,21 +189,26 @@ QVariant DockFrameModel::currentDockContextMenuModel() const
     return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
 }
 
-bool DockFrameModel::selectionVisible() const
+bool DockFrameModel::highlightingVisible() const
+{
+    return highlightingRect().isValid();
+}
+
+QRect DockFrameModel::highlightingRect() const
 {
     if (!m_frame) {
-        return false;
+        return QRect();
     }
 
     for (auto dock : m_frame->dockWidgets()) {
         DockProperties properties = readPropertiesFromObject(dock);
 
-        if (properties.selected) {
-            return true;
+        if (properties.highlightingRect.isValid()) {
+            return properties.highlightingRect;
         }
     }
 
-    return false;
+    return QRect();
 }
 
 const QObject* DockFrameModel::currentDockObject() const

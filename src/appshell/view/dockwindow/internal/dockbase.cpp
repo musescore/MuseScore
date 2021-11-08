@@ -324,14 +324,28 @@ void DockBase::close()
     setVisible(false);
 }
 
-void DockBase::setSelected(bool selected)
+void DockBase::showHighlighting(const QRect& highlightingRect)
 {
-    if (selected == m_selected) {
+    if (highlightingRect == m_highlightingRect) {
         return;
     }
 
-    m_selected = selected;
+    m_highlightingRect = highlightingRect;
     writeProperties();
+}
+
+void DockBase::hideHighlighting()
+{
+    showHighlighting(QRect());
+}
+
+QRect DockBase::frameGeometry() const
+{
+    if (m_dockWidget && m_dockWidget->isVisible()) {
+        return m_dockWidget->frameGeometry();
+    }
+
+    return QRect();
 }
 
 void DockBase::componentComplete()
@@ -445,7 +459,7 @@ void DockBase::writeProperties()
     properties.type = type();
     properties.persistent = persistent();
     properties.separatorsVisible = separatorsVisible();
-    properties.selected = m_selected;
+    properties.highlightingRect = m_highlightingRect;
 
     writePropertiesToObject(properties, *m_dockWidget);
 }
