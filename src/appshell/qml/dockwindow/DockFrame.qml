@@ -209,9 +209,12 @@ Rectangle {
     }
 
     Rectangle {
-        anchors.fill: parent
+        visible: frameModel.highlightingVisible
 
-        visible: frameModel.selectionVisible
+        x: frameModel.highlightingRect.x
+        y: frameModel.highlightingRect.y
+        width: frameModel.highlightingRect.width
+        height: frameModel.highlightingRect.height
 
         color: "transparent"
 

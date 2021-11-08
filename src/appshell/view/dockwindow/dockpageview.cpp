@@ -127,9 +127,17 @@ DockBase* DockPageView::dockByName(const QString& dockName) const
     return nullptr;
 }
 
-DockingHolderView* DockPageView::toolBarHolderByLocation(Location location) const
+DockingHolderView* DockPageView::holder(DockType type, Location location) const
 {
-    for (DockingHolderView* holder : m_toolBarsDockingHolders.list()) {
+    QList<DockingHolderView*> holders;
+
+    if (type == DockType::ToolBar) {
+        holders = m_toolBarsDockingHolders.list();
+    } else if (type == DockType::Panel) {
+        holders = m_panelsDockingHolders.list();
+    }
+
+    for (DockingHolderView* holder : holders) {
         if (holder->location() == location) {
             return holder;
         }
@@ -138,15 +146,51 @@ DockingHolderView* DockPageView::toolBarHolderByLocation(Location location) cons
     return nullptr;
 }
 
-DockingHolderView* DockPageView::panelHolderByLocation(Location location) const
+QList<DockPanelView*> DockPageView::possibleTabs(const DockPanelView* panel) const
 {
-    for (DockingHolderView* holder : m_panelsDockingHolders.list()) {
-        if (holder->location() == location) {
-            return holder;
+    QList<DockPanelView*> tabs;
+
+    auto isPanelAllowedAsTab = [panel](const DockPanelView* p) {
+        if (!p || p == panel) {
+            return false;
+        }
+
+        return p->isOpen() && !p->floating();
+    };
+
+    DockPanelView* rootPanel = findRootPanel(panel);
+    DockPanelView* nextPanel = rootPanel ? rootPanel->tabifyPanel() : nullptr;
+
+    while (nextPanel) {
+        if (isPanelAllowedAsTab(nextPanel)) {
+            tabs << nextPanel;
+        }
+
+        nextPanel = nextPanel->tabifyPanel();
+    }
+
+    if (!tabs.contains(rootPanel) && isPanelAllowedAsTab(rootPanel)) {
+        tabs.prepend(rootPanel);
+    }
+
+    return tabs;
+}
+
+DockPanelView* DockPageView::findRootPanel(const DockPanelView* panel) const
+{
+    for (DockPanelView* panel_ : panels()) {
+        DockPanelView* tabifyPanel = panel_->tabifyPanel();
+
+        while (tabifyPanel) {
+            if (tabifyPanel == panel) {
+                return panel_;
+            }
+
+            tabifyPanel = tabifyPanel->tabifyPanel();
         }
     }
 
-    return nullptr;
+    return const_cast<DockPanelView*>(panel);
 }
 
 bool DockPageView::isDockOpen(const QString& dockName) const

@@ -47,7 +47,8 @@ class DockFrameModel : public QObject
     Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
     Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
 
-    Q_PROPERTY(bool selectionVisible READ selectionVisible NOTIFY selectionVisibleChanged)
+    Q_PROPERTY(bool highlightingVisible READ highlightingVisible NOTIFY highlightingVisibleChanged)
+    Q_PROPERTY(QRect highlightingRect READ highlightingRect NOTIFY highlightingVisibleChanged)
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);
@@ -60,7 +61,8 @@ public:
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
 
-    bool selectionVisible() const;
+    bool highlightingVisible() const;
+    QRect highlightingRect() const;
 
     Q_INVOKABLE void handleMenuItem(const QString& itemId) const;
 
@@ -73,7 +75,7 @@ signals:
     void titleBarVisibleChanged(bool visible);
     void navigationSectionChanged();
     void currentDockChanged();
-    void selectionVisibleChanged();
+    void highlightingVisibleChanged();
 
 private:
     bool eventFilter(QObject* watched, QEvent* event);

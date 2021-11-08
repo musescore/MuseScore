@@ -64,6 +64,7 @@ struct DockProperties
     bool persistent = false;
     bool separatorsVisible = false;
     bool selected = false;
+    QRect highlightingRect;
 
     bool isValid() const
     {
@@ -82,7 +83,7 @@ inline void writePropertiesToObject(const DockProperties& properties, QObject& o
     propertiesObj->setProperty("dockType", static_cast<int>(properties.type));
     propertiesObj->setProperty("persistent", properties.persistent);
     propertiesObj->setProperty("separatorsVisible", properties.separatorsVisible);
-    propertiesObj->setProperty("selected", properties.selected);
+    propertiesObj->setProperty("highlightingRect", properties.highlightingRect);
 }
 
 inline DockProperties readPropertiesFromObject(const QObject* obj)
@@ -100,7 +101,7 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
     result.type = static_cast<DockType>(properties->property("dockType").toInt());
     result.persistent = properties->property("persistent").toBool();
     result.separatorsVisible = properties->property("separatorsVisible").toBool();
-    result.selected = properties->property("selected").toBool();
+    result.highlightingRect = properties->property("highlightingRect").toRect();
 
     return result;
 }

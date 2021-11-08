@@ -72,8 +72,8 @@ public:
     QList<DockBase*> allDocks() const;
 
     DockBase* dockByName(const QString& dockName) const;
-    DockingHolderView* toolBarHolderByLocation(Location location) const;
-    DockingHolderView* panelHolderByLocation(Location location) const;
+    DockingHolderView* holder(DockType type, Location location) const;
+    QList<DockPanelView*> possibleTabs(const DockPanelView* panel) const;
 
     bool isDockOpen(const QString& dockName) const;
     void toggleDock(const QString& dockName);
@@ -97,6 +97,7 @@ private:
     void componentComplete() override;
 
     DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+    DockPanelView* findRootPanel(const DockPanelView* panel) const;
 
     QString m_uri;
     uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
