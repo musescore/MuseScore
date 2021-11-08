@@ -48,28 +48,12 @@ Item {
         onTriggered: root.clicked()
     }
 
-    Image {
-        id: thumbnail
-
+    Rectangle {
+        id: thumbnailBackground
         anchors.top: parent.top
 
         width: parent.width
         height: 150
-
-        fillMode: Image.PreserveAspectCrop
-
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Rectangle {
-                width: thumbnail.width
-                height: thumbnail.height
-                radius: 10
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.fill: thumbnail
 
         color: "transparent"
         radius: 10
@@ -80,12 +64,30 @@ Item {
         NavigationFocusBorder {
             navigationCtrl: root.navigation
         }
+
+        Image {
+            id: thumbnail
+
+            anchors.fill: parent
+            anchors.margins: 2
+
+            fillMode: Image.PreserveAspectCrop
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: thumbnail.width
+                    height: thumbnail.height
+                    radius: 10
+                }
+            }
+        }
     }
 
     StyledTextLabel {
         id: nameLabel
 
-        anchors.top: thumbnail.bottom
+        anchors.top: thumbnailBackground.bottom
         anchors.topMargin: 16
         anchors.horizontalCenter: parent.horizontalCenter
     }
