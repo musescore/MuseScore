@@ -65,7 +65,6 @@ Rectangle {
         }
 
         onStatusChanged: {
-            console.debug("TestCaseRun onStatusChanged: " + runModel.status + ", path: " + root.path)
             if (runModel.status === "Finished") {
                 Qt.callLater(root.finished)
             }

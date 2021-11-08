@@ -46,9 +46,7 @@ void TestCaseRunner::run(const TestCase& testCase)
     nextStep();
 
     if (m_testCase.currentStepIdx < m_testCase.stepsCount) {
-        LOGD() << "defore m_testCase.loop.exec()";
         m_testCase.loop.exec();
-        LOGD() << "after m_testCase.loop.exec()";
     }
 }
 
