@@ -176,7 +176,7 @@ void InteractiveProvider::raise(const UriQuery& uri)
 
 void InteractiveProvider::close(const Uri& uri)
 {
-    for (const ObjectInfo& objectInfo: m_stack) {
+    for (const ObjectInfo& objectInfo : m_stack) {
         if (objectInfo.uriQuery.uri() != uri) {
             continue;
         }

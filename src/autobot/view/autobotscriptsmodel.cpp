@@ -30,6 +30,18 @@ using namespace mu::autobot;
 AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    autobot()->statusChanged().onReceive(this, [this](const io::path& path, const IAutobot::Status& status) {
+        setStatus(path, status);
+
+        if (status == IAutobot::Status::Error) {
+            stopRunAllTC();
+        }
+    });
+}
+
+AutobotScriptsModel::~AutobotScriptsModel()
+{
+    stopRunAllTC();
 }
 
 QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
@@ -54,6 +66,7 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
     case rPath: return script.path.toQString();
     case rIndex: return index.row();
     case rType: return typeToString(script.type);
+    case rStatus: return IAutobot::statusToString(m_statuses.value(script.path, IAutobot::Status::Undefined));
     }
     return QVariant();
 }
@@ -71,6 +84,7 @@ QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
         { rType, "typeRole" },
         { rPath, "pathRole" },
         { rIndex, "indexRole" },
+        { rStatus, "statusRole" },
     };
     return roles;
 }
@@ -80,12 +94,97 @@ void AutobotScriptsModel::load()
     beginResetModel();
 
     m_scripts = scriptsRepository()->scripts();
+    std::sort(m_scripts.begin(), m_scripts.end(), [](const Script& f, const Script& s) {
+        if (f.type != s.type) {
+            return f.type < s.type;
+        }
+        return f.title < s.title;
+    });
 
     endResetModel();
+}
+
+void AutobotScriptsModel::setStatus(const io::path& path, IAutobot::Status st)
+{
+    m_statuses[path] = st;
+    for (size_t i = 0; i < m_scripts.size(); ++i) {
+        if (m_scripts.at(i).path == path) {
+            emit dataChanged(index(i), index(i), { rStatus });
+            break;
+        }
+    }
 }
 
 void AutobotScriptsModel::runScript(int scriptIndex)
 {
     const Script& script = m_scripts.at(scriptIndex);
     autobot()->execScript(script.path);
+}
+
+void AutobotScriptsModel::runAllTC()
+{
+    //! NOTE Reset all statuses
+    for (const Script& s : m_scripts) {
+        setStatus(s.path, IAutobot::Status::Undefined);
+    }
+
+    m_currentTCIndex = -1;
+
+    setIsRunAllTCMode(true);
+    tryRunNextTC();
+}
+
+bool AutobotScriptsModel::tryRunNextTC()
+{
+    if (!isRunAllTCMode()) {
+        LOGD() << "not is run all TC mode";
+        return false;
+    }
+
+    ++m_currentTCIndex;
+    size_t currentIndex = static_cast<size_t>(m_currentTCIndex);
+    if (!(currentIndex < m_scripts.size())) {
+        LOGD() << "no more scripts";
+        return false;
+    }
+
+    //! NOTE Find next TC
+    for (size_t i = currentIndex; i < m_scripts.size(); ++i) {
+        currentIndex = i;
+        if (m_scripts.at(currentIndex).type == ScriptType::TestCase) {
+            break;
+        }
+    }
+
+    m_currentTCIndex = static_cast<int>(currentIndex);
+    if (!(currentIndex < m_scripts.size())) {
+        LOGD() << "no more TC scripts";
+        return false;
+    }
+
+    const Script& tc = m_scripts.at(currentIndex);
+    LOGD() << "requireStartTC: " << tc.path;
+    emit requireStartTC(tc.path.toQString());
+
+    return true;
+}
+
+void AutobotScriptsModel::stopRunAllTC()
+{
+    setIsRunAllTCMode(false);
+    autobot()->abort();
+}
+
+bool AutobotScriptsModel::isRunAllTCMode() const
+{
+    return m_isRunAllTCMode;
+}
+
+void AutobotScriptsModel::setIsRunAllTCMode(bool arg)
+{
+    if (m_isRunAllTCMode == arg) {
+        return;
+    }
+    m_isRunAllTCMode = arg;
+    emit isRunAllTCModeChanged();
 }

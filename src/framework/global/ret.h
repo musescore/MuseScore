@@ -24,6 +24,8 @@
 #define MU_FRAMEWORK_RET_H
 
 #include <string>
+#include <map>
+#include <any>
 #include <QString>
 
 namespace mu {
@@ -99,6 +101,8 @@ public:
     bool success() const;
     void setText(const std::string& s);
     const std::string& text() const;
+    void setData(const std::string& key, const std::any& val);
+    std::any data(const std::string& key) const;
 
     inline Ret& operator=(int c) { m_code = c; return *this; }
     inline Ret& operator=(bool arg) { m_code = arg ? int(Code::Ok) : int(Code::UnknownError); return *this; }
@@ -112,7 +116,13 @@ public:
 private:
     int m_code = int(Code::Undefined);
     std::string m_text;
+    std::map<std::string, std::any> m_data;
 };
+
+inline mu::Ret make_ok()
+{
+    return Ret(static_cast<int>(Ret::Code::Ok));
+}
 
 inline mu::Ret make_ret(Ret::Code e)
 {

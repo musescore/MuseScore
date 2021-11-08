@@ -28,12 +28,13 @@ using namespace mu::autobot;
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
     : QObject(parent)
 {
-    autobot()->statusChanged().onReceive(this, [this](const IAutobot::Status&) {
+    autobot()->statusChanged().onReceive(this, [this](const io::path&, const IAutobot::Status& st) {
+        LOGD() << "statusChanged: " << int(st);
         emit statusChanged();
     });
 
-    autobot()->stepStatusChanged().onReceive(this, [this](const QString& name, const StepStatus& stepStatus) {
-        updateStep(name, stepStatus);
+    autobot()->stepStatusChanged().onReceive(this, [this](const QString& name, const StepStatus& stepStatus, const Ret& ret) {
+        updateStep(name, stepStatus, ret);
     });
 }
 
@@ -81,8 +82,6 @@ void TestCaseRunModel::perform()
     IAutobot::Status st = autobot()->status();
     switch (st) {
     case IAutobot::Status::Undefined:
-        break;
-    case IAutobot::Status::Stopped:
         autobot()->execScript(m_path);
         break;
     case IAutobot::Status::Running:
@@ -90,6 +89,15 @@ void TestCaseRunModel::perform()
         break;
     case IAutobot::Status::Paused:
         autobot()->unpause();
+        break;
+    case IAutobot::Status::Aborted:
+        autobot()->execScript(m_path);
+        break;
+    case IAutobot::Status::Error:
+        autobot()->execScript(m_path);
+        break;
+    case IAutobot::Status::Finished:
+        autobot()->execScript(m_path);
         break;
     }
 }
@@ -114,7 +122,7 @@ int TestCaseRunModel::stepIndexOf(const QString& name) const
     return -1;
 }
 
-void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepStatus)
+void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepStatus, const Ret& ret)
 {
     auto stepStatusToString = [](const StepStatus& stepStatus) {
         switch (stepStatus) {
@@ -124,7 +132,7 @@ void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepSta
         case StepStatus::Finished: return "Finished";
         case StepStatus::Skipped: return "Skipped";
         case StepStatus::Aborted: return "Aborted";
-        case StepStatus::Error: return "Error (see log)";
+        case StepStatus::Error: return "Error";
         }
         return "";
     };
@@ -137,6 +145,9 @@ void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepSta
 
     StepItem& s = m_steps[idx];
     s.status = stepStatusToString(stepStatus);
+    if (stepStatus == StepStatus::Error) {
+        s.status = std::any_cast<QString>(ret.data("err"));
+    }
 
     emit stepsChanged();
     emit currentStepChanged(idx);
@@ -145,14 +156,7 @@ void TestCaseRunModel::updateStep(const QString& name, const StepStatus& stepSta
 QString TestCaseRunModel::status() const
 {
     IAutobot::Status st = autobot()->status();
-    switch (st) {
-    case IAutobot::Status::Undefined: return "Undefined";
-    case IAutobot::Status::Stopped: return "Stopped";
-    case IAutobot::Status::Running: return "Running";
-    case IAutobot::Status::Paused: return "Paused";
-    }
-
-    return QString();
+    return IAutobot::statusToString(st);
 }
 
 QVariantList TestCaseRunModel::steps() const

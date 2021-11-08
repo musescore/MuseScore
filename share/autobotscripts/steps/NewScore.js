@@ -20,24 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("Navigation.js")
+
 module.exports = {
     openNewScoreDialog: function()
     {
         api.autobot.async(function() {
-            api.navigation.triggerControl("RecentScores", "RecentScores", "New score")
+            Navigation.triggerControl("RecentScores", "RecentScores", "New score")
         })
     },
 
     done: function()
     {
-        api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
+        Navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
     },
 
     сhooseInstrument: function(family, instrument)
     {
-        api.navigation.goToControl("NewScoreDialog", "FamilyView", family)
-        api.navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument)
-        api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+        Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
+        Navigation.goToControl("NewScoreDialog", "FamilyView", family)
+        Navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument)
+        Navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
     },
 
     chooseRandomInstruments: function(count, see_msec)
@@ -94,20 +97,20 @@ module.exports = {
     {
         switch (tab) {
         case "instruments":
-            api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
+            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
             break;
         case "templates":
-            api.navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
+            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose from template")
             break;
         default:
-            api.log.error("unknown tab: " + tab)
+            api.autobot.error("instruments: unknown tab: " + tab)
         }
     },
 
     chooseTemplate: function(category, template)
     {
-        api.navigation.goToControl("NewScoreDialog", "Category", category)
-        api.navigation.goToControl("NewScoreDialog", "Template", template)
+        Navigation.goToControl("NewScoreDialog", "Category", category)
+        Navigation.goToControl("NewScoreDialog", "Template", template)
     }
 }
 

@@ -67,7 +67,7 @@ private:
 
     int stepIndexOf(const QString& name) const;
 
-    void updateStep(const QString& name, const StepStatus& stepStatus);
+    void updateStep(const QString& name, const StepStatus& stepStatus, const Ret& ret);
 
     io::path m_path;
     QVariantMap m_testCase;
