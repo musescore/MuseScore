@@ -90,7 +90,8 @@ public:
         return QVariant::fromValue(*this);
     }
 
-    static double toDouble(const Spatium& v) { return v._val; }
+    double toDouble() { return _val; }
+    static double toDoubleStatic(const Spatium& v) { return v._val; }
 };
 
 inline Spatium operator+(const Spatium& a, const Spatium& b)

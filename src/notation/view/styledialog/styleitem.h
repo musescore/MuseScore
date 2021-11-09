@@ -39,7 +39,7 @@ public:
     explicit StyleItem(QObject* parent, const QVariant& value, const QVariant& defaultValue);
 
     QVariant value() const;
-    void setValue(const QVariant& value); // C++ -> QML
+    bool setValue(const QVariant& value); // C++ -> QML
     void modifyValue(const QVariant& value); // QML -> C++
 
     QVariant defaultValue() const;

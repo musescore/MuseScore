@@ -48,6 +48,11 @@ protected:
 private:
     INotationStylePtr currentNotationStyle() const;
 
+    StyleItem* buildStyleItem(StyleId id);
+
+    QVariant toUiValue(StyleId id, const QVariant& logicalValue) const;
+    QVariant fromUiValue(StyleId id, const QVariant& uiValue) const;
+
     std::unordered_map<StyleId, StyleItem*> m_items;
 };
 }
