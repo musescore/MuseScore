@@ -432,17 +432,21 @@ void DockBase::listenFloatingChanges()
         return;
     }
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this]() {
+    auto frameConn = std::make_shared<QMetaObject::Connection>();
+
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
             return;
         }
+
+        disconnect(*frameConn);
 
         const KDDockWidgets::Frame* frame = m_dockWidget->frame();
         if (!frame) {
             return;
         }
 
-        connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
+        *frameConn = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
             emit floatingChanged();
             applySizeConstraints();
         }, Qt::UniqueConnection);
