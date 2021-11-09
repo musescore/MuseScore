@@ -88,9 +88,6 @@ module.exports = {
             // Select
             api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
         }
-
-        // Done
-        api.navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
     },
 
     selectTab: function(tab)
