@@ -26,11 +26,19 @@ var testCase = {
     name: "TC1.2: Create Simple Score with Random Instruments",
     description: "Just create a simple two-instrument score, a few notes, play it and save the project",
     steps: [
-        {name: "Open Dialog", func: function() {
+        {name: "Close score (if opened) and go to home to start", func: function() {
+            api.dispatcher.dispatch("file-close")
+            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+        }},
+        {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
         }},
         {name: "Select Instruments", func: function() {
+            NewScore.selectTab("instruments")
             NewScore.chooseRandomInstruments(10)
+        }},
+        {name: "Create score", func: function() {
+            NewScore.done()
         }},
         {name: "Note input mode", func: function() {
 

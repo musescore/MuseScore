@@ -141,6 +141,7 @@ bool AutobotScriptsModel::tryRunNextTC()
         return false;
     }
 
+    int prevIndex = m_currentTCIndex;
     ++m_currentTCIndex;
     size_t currentIndex = static_cast<size_t>(m_currentTCIndex);
     if (!(currentIndex < m_scripts.size())) {
@@ -156,7 +157,7 @@ bool AutobotScriptsModel::tryRunNextTC()
         }
     }
 
-    if (m_currentTCIndex == static_cast<int>(currentIndex)) {
+    if (prevIndex == static_cast<int>(currentIndex)) {
         LOGD() << "no more TC scripts";
         return false;
     }
