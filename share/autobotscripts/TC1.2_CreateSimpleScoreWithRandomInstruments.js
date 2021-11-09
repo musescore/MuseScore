@@ -21,57 +21,44 @@
  */
 
 var NewScore = require("steps/NewScore.js")
-var NoteInput = require("steps/NoteInput.js")
 
 var testCase = {
-    name: "TC1: Create Simple Score",
+    name: "TC1.2: Create Simple Score with Random Instruments",
     description: "Just create a simple two-instrument score, a few notes, play it and save the project",
     steps: [
-        {name: "Close score (if opened) and go to home to start", func: function() {
-            api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
-        }},
-        {name: "Open New Score Dialog", func: function() {
+        {name: "Open Dialog", func: function() {
             NewScore.openNewScoreDialog()
         }},
         {name: "Select Instruments", func: function() {
-            NewScore.selectTab("instruments")
-            NewScore.сhooseInstrument("Woodwinds", "Flute")
-            api.autobot.seeChanges()
-            NewScore.сhooseInstrument("Keyboards", "Piano")
+            NewScore.chooseRandomInstruments(10)
         }},
-        {name: "Create score", func: function() {
-            NewScore.done()
+        {name: "Note input mode", func: function() {
+
+            api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
+            api.autobot.waitPopup()
+            // First item become automatically current, so just trigger
+            api.navigation.trigger()
+
+            // Select note
+            api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "pad-note-8")
         }},
-        {name: "Turn on note input", func: function() {
-            NoteInput.chooseDefaultMode()
-            NoteInput.chooseNoteDuration("pad-note-8")
-        }},
-        {name: "Put notes", func: function() {
-            NoteInput.putNote("note-c")
-            NoteInput.putNote("note-d")
-            NoteInput.putNote("note-e")
-            NoteInput.putNote("note-f")
-            NoteInput.putNote("note-g")
-            NoteInput.putNote("note-a")
-            NoteInput.putNote("note-b")
-        }},
-        {name: "Play", func: function() {
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
-        }},
-        {name: "Stop", func: function() {
-            // wait interval + 5 sec
-            api.autobot.sleep(5000)
-            api.navigation.triggerControl("TopTool", "PlaybackToolBar", "Play")
+        {name: "Note input", func: function() {
+            api.dispatcher.dispatch("note-c")
+            api.dispatcher.dispatch("note-d")
+            api.dispatcher.dispatch("note-e")
+            api.dispatcher.dispatch("note-f")
+            api.dispatcher.dispatch("note-g")
+            api.dispatcher.dispatch("note-a")
+            api.dispatcher.dispatch("note-b")
         }},
         {name: "Save", func: function() {
-            api.autobot.saveProject("TC1_CreateSimpleScore.mscz")
+            api.autobot.saveProject("TC1.2_CreateSimpleScoreWithRandomInstruments.mscz")
         }},
         {name: "Close", func: function() {
             api.dispatcher.dispatch("file-close")
+            api.autobot.seeChanges()
         }},
         {name: "Home", func: function() {
-            // Go Home
             api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
         }},
         {name: "Open last", func: function() {

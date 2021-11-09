@@ -20,8 +20,8 @@
 
 # Scripts
 install(FILES
-      NewScore10InstrPutNotesSaveClose.js
-      TC1_CreateSimpleScore.js
+      TC1.1_CreateSimpleScore.js
+      TC1.2_CreateSimpleScoreWithRandomInstruments.js
       TC2_CreateSimpleScoreByTemplate.js
       TC3_UsingNoteInputToolbar.js
       TC4_UsingPalettes.js
