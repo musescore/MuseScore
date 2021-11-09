@@ -609,6 +609,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
                   if (generated())
                         return false;
                   setMode(KeyMode(v.toInt()));
+                  staff()->setKey(tick(), keySigEvent());
                   break;
             default:
                   if (!Element::setProperty(propertyId, v))
