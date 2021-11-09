@@ -45,6 +45,7 @@
 #include "internal/api/navigationapi.h"
 #include "internal/api/contextapi.h"
 #include "internal/api/shortcutsapi.h"
+#include "internal/api/interactiveapi.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -77,6 +78,7 @@ void AutobotModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/BatchTestsDialog.qml");
         ir->registerQmlUri(Uri("musescore://autobot/scripts"), "MuseScore/Autobot/ScriptsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/selectfile"), "MuseScore/Autobot/AutobotSelectFileDialog.qml");
     }
 
     auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -92,6 +94,7 @@ void AutobotModule::resolveImports()
         api->regApiCreator("actions", "api.dispatcher", new ApiCreator<DispatcherApi>());
         api->regApiCreator("ui", "api.navigation", new ApiCreator<NavigationApi>());
         api->regApiCreator("shortcuts", "api.shortcuts", new ApiCreator<ShortcutsApi>());
+        api->regApiCreator("global", "api.interactive", new ApiCreator<InteractiveApi>());
     }
 }
 

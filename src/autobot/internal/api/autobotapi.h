@@ -62,6 +62,9 @@ public:
     Q_INVOKABLE void async(const QJSValue& func, const QJSValueList& args = QJSValueList());
     Q_INVOKABLE int randomInt(int min, int max) const;
 
+    // Interactive
+    Q_INVOKABLE QString selectedFilePath() const;
+
 private:
 
     int m_intervalMsec = 1000;
