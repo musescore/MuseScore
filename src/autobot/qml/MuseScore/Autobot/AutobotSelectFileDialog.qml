@@ -30,9 +30,8 @@ StyledDialogView {
 
     title: "Autobot Select File"
 
-    contentHeight: 600
+    contentHeight: 400
     contentWidth: 400
-    resizable: true
 
     Component.onCompleted: {
         autoClose.start()
@@ -53,7 +52,7 @@ StyledDialogView {
 
     Timer {
         id: autoClose
-        interval: 3000
+        interval: 2000
         onTriggered: root.close()
     }
 }

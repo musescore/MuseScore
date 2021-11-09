@@ -161,7 +161,21 @@ int AutobotApi::randomInt(int min, int max) const
     return val;
 }
 
+int AutobotApi::fileSize(const QString& pathStr) const
+{
+    RetVal<uint64_t> size = fileSystem()->fileSize(io::path(pathStr));
+    if (!size.ret) {
+        LOGD() << "filed get file size, err: " << size.ret.toString();
+    }
+    return size.val;
+}
+
 QString AutobotApi::selectedFilePath() const
 {
     return autobot()->autobotInteractive()->selectedFilePath().toQString();
+}
+
+void AutobotApi::showMainWindowOnFront()
+{
+    mainWindow()->requestShowOnFront();
 }

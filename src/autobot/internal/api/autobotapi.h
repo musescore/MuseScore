@@ -31,7 +31,9 @@
 #include "project/iprojectfilescontroller.h"
 #include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
-#include "iinteractive.h"
+#include "global/iinteractive.h"
+#include "system/ifilesystem.h"
+#include "ui/imainwindow.h"
 
 namespace mu::api {
 class AutobotApi : public ApiObject, public async::Asyncable
@@ -42,6 +44,8 @@ class AutobotApi : public ApiObject, public async::Asyncable
     INJECT(api, autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(api, project::IProjectFilesController, projectFilesController)
     INJECT(api, framework::IInteractive, interactive)
+    INJECT(api, system::IFileSystem, fileSystem)
+    INJECT(api, ui::IMainWindow, mainWindow)
 
 public:
     explicit AutobotApi(IApiEngine* e);
@@ -56,14 +60,19 @@ public:
     Q_INVOKABLE bool openProject(const QString& name);
     Q_INVOKABLE void saveProject(const QString& name = QString());
 
+    // Helpers
     Q_INVOKABLE void sleep(int msec = -1);
     Q_INVOKABLE void waitPopup();
     Q_INVOKABLE void seeChanges(int msec = -1);
     Q_INVOKABLE void async(const QJSValue& func, const QJSValueList& args = QJSValueList());
     Q_INVOKABLE int randomInt(int min, int max) const;
+    Q_INVOKABLE int fileSize(const QString& path) const;
 
     // Interactive
     Q_INVOKABLE QString selectedFilePath() const;
+
+    // Window
+    Q_INVOKABLE void showMainWindowOnFront();
 
 private:
 
