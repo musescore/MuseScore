@@ -23,12 +23,16 @@
 
 #include <QTimer>
 
+#include "modularity/ioc.h"
+
 #include "log.h"
 
 using namespace mu::autobot;
 
 void Autobot::init()
 {
+    m_interactive = std::make_shared<AutobotInteractive>();
+
     m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus stepStatus, const Ret& ret) {
         if (stepStatus == StepStatus::Started) {
             m_context->addStep(name);
@@ -58,12 +62,24 @@ void Autobot::affectOnServices()
 
     //! NOTE Only defaults shortcuts
     shortcutsRegister()->reload(true);
+
+    //! NOTE Change Interactive implementation
+    using namespace mu::framework;
+    auto realInteractive = modularity::ioc()->resolve<IInteractive>("autobot");
+    m_interactive->setRealInteractive(realInteractive);
+    modularity::ioc()->unregisterExport<IInteractive>("autobot");
+    modularity::ioc()->registerExport<IInteractive>("autobot", m_interactive);
 }
 
 void Autobot::restoreAffectOnServices()
 {
     navigation()->setIsResetOnMousePress(true);
     shortcutsRegister()->reload(false);
+
+    using namespace mu::framework;
+    auto realInteractive = m_interactive->realInteractive();
+    modularity::ioc()->unregisterExport<IInteractive>("autobot");
+    modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
 }
 
 void Autobot::execScript(const io::path& path)
