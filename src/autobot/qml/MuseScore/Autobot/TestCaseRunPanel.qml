@@ -28,18 +28,28 @@ Rectangle {
 
     id: root
 
+    property string path: ""
+
+    signal finished()
+
     color: ui.theme.backgroundPrimaryColor
 
     visible: false
 
     function run(path) {
         root.visible = true
+
+        if (root.path === path) {
+            //! NOTE Just show panel with current TC
+            return
+        }
+
+        root.path = path
         runModel.loadInfo(path)
         runModel.perform()
     }
 
-    function abort() {
-        runModel.abort()
+    function close() {
         root.visible = false
     }
 
@@ -52,6 +62,12 @@ Rectangle {
 
         onCurrentStepChanged: {
             stepsView.positionViewAtIndex(stepIndex, ListView.Center)
+        }
+
+        onStatusChanged: {
+            if (runModel.status === "Finished") {
+                Qt.callLater(root.finished)
+            }
         }
     }
 
@@ -68,7 +84,7 @@ Rectangle {
             id: back
             anchors.verticalCenter: parent.verticalCenter
             icon: IconCode.ARROW_LEFT
-            onClicked: root.abort()
+            onClicked: root.close()
         }
 
         FlatButton {

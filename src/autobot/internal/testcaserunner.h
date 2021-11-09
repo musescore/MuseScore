@@ -46,7 +46,7 @@ public:
     void unpause(bool isNextStep);
     void abort();
 
-    async::Channel<QString /*name*/, StepStatus> stepStatusChanged() const;
+    async::Channel<QString /*name*/, StepStatus, Ret> stepStatusChanged() const;
 
     async::Channel<bool /*aborted*/> allFinished() const;
 
@@ -61,6 +61,19 @@ private:
         int finishedCount = 0;
         QString lastStepName;
         QEventLoop loop;
+
+        void reset()
+        {
+            testCase = TestCase();
+            steps = Steps();
+            stepsCount = 0;
+            currentStepIdx = -1;
+            finishedCount = 0;
+            lastStepName.clear();
+            if (loop.isRunning()) {
+                loop.quit();
+            }
+        }
     };
 
     void nextStep(bool byInterval = true);
@@ -71,7 +84,7 @@ private:
     bool m_abort = false;
     bool m_paused = false;
 
-    async::Channel<QString /*name*/, StepStatus> m_stepStatusChanged;
+    async::Channel<QString /*name*/, StepStatus, Ret> m_stepStatusChanged;
     async::Channel<bool /*aborted*/> m_allFinished;
 };
 }

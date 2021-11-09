@@ -41,15 +41,31 @@ public:
 
     enum class Status {
         Undefined = 0,
-        Stopped,
         Running,
-        Paused
+        Paused,
+        Aborted,
+        Error,
+        Finished
     };
 
-    virtual Status status() const = 0;
-    virtual async::Channel<Status> statusChanged() const = 0;
+    static QString statusToString(Status st)
+    {
+        switch (st) {
+        case IAutobot::Status::Undefined: return "";
+        case IAutobot::Status::Running: return "Running";
+        case IAutobot::Status::Paused: return "Paused";
+        case IAutobot::Status::Aborted: return "Aborted";
+        case IAutobot::Status::Error: return "Error";
+        case IAutobot::Status::Finished: return "Finished";
+        }
+        return QString();
+    }
 
-    virtual Ret execScript(const io::path& path) = 0;
+    virtual Status status() const = 0;
+    virtual async::Channel<io::path, Status> statusChanged() const = 0;
+    virtual async::Channel<QString /*name*/, StepStatus, Ret> stepStatusChanged() const = 0;
+
+    virtual void execScript(const io::path& path) = 0;
 
     virtual void setStepsInterval(int msec) = 0;
     virtual void runTestCase(const TestCase& testCase) = 0;
@@ -57,8 +73,7 @@ public:
     virtual void pause() = 0;
     virtual void unpause() = 0;
     virtual void abort() = 0;
-
-    virtual async::Channel<QString /*name*/, StepStatus> stepStatusChanged() const = 0;
+    virtual void error(const QString& msg) = 0;
 
     virtual ITestCaseContextPtr context() const = 0;
 };

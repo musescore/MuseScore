@@ -34,7 +34,8 @@ var testCase = {
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
         }},
-        {name: "Create score", func: function() {
+        {name: "Create score with Flute", func: function() {
+            NewScore.selectTab("instruments")
             NewScore.сhooseInstrument("Woodwinds", "Flute")
             NewScore.done()
         }},
@@ -44,9 +45,11 @@ var testCase = {
         {name: "Open Add Instruments Dialog", func: function() {
             Instruments.openAddInstrumentsDialog()
         }},
-        {name: "Add Instrument", func: function() {
+        {name: "Add Instruments Piano and Flute(2)", func: function() {
             Instruments.сhooseInstrument("Keyboards", "Piano")
+            seeChanges()
             Instruments.сhooseInstrument("Woodwinds", "Flute")
+            seeChanges()
             Instruments.doneAddInstruments()
         }},
         {name: "Hide Flute 2", func: function() {

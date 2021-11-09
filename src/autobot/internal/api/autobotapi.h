@@ -49,7 +49,9 @@ public:
     Q_INVOKABLE void setInterval(int msec);
     Q_INVOKABLE void runTestCase(const QJSValue& testCase);
     Q_INVOKABLE bool pause(bool immediately = false);
+    Q_INVOKABLE bool confirm(const QString& msg);
     Q_INVOKABLE void abort();
+    Q_INVOKABLE void error(const QString& msg);
 
     Q_INVOKABLE bool openProject(const QString& name);
     Q_INVOKABLE void saveProject(const QString& name = QString());
