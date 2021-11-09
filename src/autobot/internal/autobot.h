@@ -85,7 +85,7 @@ private:
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
     TestCaseReport m_report;
-    AutobotInteractivePtr m_interactive = nullptr;
+    AutobotInteractivePtr m_autobotInteractive = nullptr;
 
     QEventLoop m_sleepLoop;
 };

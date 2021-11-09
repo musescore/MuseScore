@@ -31,7 +31,7 @@ using namespace mu::autobot;
 
 void Autobot::init()
 {
-    m_interactive = std::make_shared<AutobotInteractive>();
+    m_autobotInteractive = std::make_shared<AutobotInteractive>();
 
     m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus stepStatus, const Ret& ret) {
         if (stepStatus == StepStatus::Started) {
@@ -66,9 +66,9 @@ void Autobot::affectOnServices()
     //! NOTE Change Interactive implementation
     using namespace mu::framework;
     auto realInteractive = modularity::ioc()->resolve<IInteractive>("autobot");
-    m_interactive->setRealInteractive(realInteractive);
+    m_autobotInteractive->setRealInteractive(realInteractive);
     modularity::ioc()->unregisterExport<IInteractive>("autobot");
-    modularity::ioc()->registerExport<IInteractive>("autobot", m_interactive);
+    modularity::ioc()->registerExport<IInteractive>("autobot", m_autobotInteractive);
 }
 
 void Autobot::restoreAffectOnServices()
@@ -77,7 +77,7 @@ void Autobot::restoreAffectOnServices()
     shortcutsRegister()->reload(false);
 
     using namespace mu::framework;
-    auto realInteractive = m_interactive->realInteractive();
+    auto realInteractive = m_autobotInteractive->realInteractive();
     modularity::ioc()->unregisterExport<IInteractive>("autobot");
     modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
 }
@@ -216,7 +216,7 @@ ITestCaseContextPtr Autobot::context() const
 
 AutobotInteractivePtr Autobot::autobotInteractive() const
 {
-    return m_interactive;
+    return m_autobotInteractive;
 }
 
 void Autobot::setStatus(Status st)

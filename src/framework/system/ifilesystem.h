@@ -41,6 +41,8 @@ public:
 
     virtual Ret makePath(const io::path& path) const = 0;
 
+    virtual RetVal<uint64_t> fileSize(const io::path& path) const = 0;
+
     enum class ScanMode {
         OnlyCurrentDir,
         IncludeSubdirs
