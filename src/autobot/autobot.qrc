@@ -10,5 +10,6 @@
         <file>examples/Simple Zoom.js</file>
         <file>examples/steps/NewScore.js</file>
         <file>qml/MuseScore/Autobot/TestCaseRunPanel.qml</file>
+        <file>qml/MuseScore/Autobot/AutobotSelectFileDialog.qml</file>
     </qresource>
 </RCC>

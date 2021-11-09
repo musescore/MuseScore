@@ -214,6 +214,11 @@ ITestCaseContextPtr Autobot::context() const
     return m_context;
 }
 
+AutobotInteractivePtr Autobot::autobotInteractive() const
+{
+    return m_interactive;
+}
+
 void Autobot::setStatus(Status st)
 {
     if (m_status == st) {

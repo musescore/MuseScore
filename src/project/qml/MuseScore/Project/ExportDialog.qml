@@ -140,7 +140,7 @@ StyledDialogView {
 
                 NavigationPanel {
                     id: rightButtonsNavPanel
-                    name: "Export dialog right buttons"
+                    name: "ExportBottom"
                     section: root.navigationSection
                     order: 4
                     direction: NavigationPanel.Horizontal

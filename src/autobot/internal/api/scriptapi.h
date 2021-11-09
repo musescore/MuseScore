@@ -39,6 +39,7 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
+    Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
 
     INJECT(api, IApiRegister, apiRegister)
 
@@ -51,6 +52,7 @@ public:
     QJSValue navigation() const { return api("api.navigation"); }
     QJSValue context() const { return api("api.context"); }
     QJSValue shortcuts() const { return api("api.shortcuts"); }
+    QJSValue interactive() const { return api("api.interactive"); }
 
 private:
 
