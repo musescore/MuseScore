@@ -168,6 +168,7 @@ struct DropDestination
 {
     DockBase* dock = nullptr;
     Location dropLocation = Location::Undefined;
+    int dropDistance = 0;
 
     bool operator==(const DropDestination& dest) const;
 
