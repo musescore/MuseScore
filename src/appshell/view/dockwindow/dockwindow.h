@@ -137,7 +137,7 @@ private:
     DockingHolderView* resolveDockingHolder(DockType draggedDockType, const QPoint& localPos) const;
     DockPanelView* resolveTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const;
     Location resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const;
-    QRect resolveHighlightingRect(const DropDestination& destination) const;
+    QRect resolveHighlightingRect(const DockBase* draggedDock, const DropDestination& destination) const;
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;

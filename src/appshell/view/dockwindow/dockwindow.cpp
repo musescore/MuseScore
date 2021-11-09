@@ -42,6 +42,33 @@ using namespace mu::async;
 
 static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
 
+static bool isPointAllowedForDrop(const QPoint& point, const DropDestination& dropDestination)
+{
+    QRect dropRect = dropDestination.dock->frameGeometry();
+
+    if (!dropRect.contains(point)) {
+        return false;
+    }
+
+    if (dropDestination.dropDistance == 0) {
+        return true;
+    }
+
+    if (dropDestination.dropLocation == Location::Left) {
+        if (std::abs(dropRect.left() - point.x()) <= dropDestination.dropDistance) {
+            return true;
+        }
+    }
+
+    if (dropDestination.dropLocation == Location::Right) {
+        if (std::abs(dropRect.right() - point.x()) <= dropDestination.dropDistance) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent),
     m_toolBars(this),
@@ -579,8 +606,8 @@ void DockWindow::setCurrentDropDestination(const DockBase* draggedDock, const Dr
         return;
     }
 
-    auto showHighlighting = [this]() {
-        QRect highlightingRect = resolveHighlightingRect(m_currentDropDestination);
+    auto showHighlighting = [this, draggedDock]() {
+        QRect highlightingRect = resolveHighlightingRect(draggedDock, m_currentDropDestination);
         m_currentDropDestination.dock->showHighlighting(highlightingRect);
     };
 
@@ -629,7 +656,7 @@ DropDestination DockWindow::resolveDropDestination(const DockBase* draggedDock, 
             return destination;
         }
 
-        if (isMouseOverDock(localPos, destination.dock)) {
+        if (isPointAllowedForDrop(localPos, destination)) {
             return destination;
         }
     }
@@ -718,7 +745,7 @@ Location DockWindow::resolveDropLocation(const DockBase* hoveredDock, const QPoi
     return Location::Undefined;
 }
 
-QRect DockWindow::resolveHighlightingRect(const DropDestination& destination) const
+QRect DockWindow::resolveHighlightingRect(const DockBase* draggedDock, const DropDestination& destination) const
 {
     if (!destination.isValid()) {
         return QRect();
@@ -731,6 +758,18 @@ QRect DockWindow::resolveHighlightingRect(const DropDestination& destination) co
 
     if (destination.dock->type() == DockType::DockingHolder) {
         return fullFrameHighlightingRect;
+    }
+
+    if (destination.dock->type() == DockType::Central) {
+        int draggedDockWidth = draggedDock->frameGeometry().width();
+
+        if (destination.dropLocation == Location::Left) {
+            return QRect(0, 0, draggedDockWidth, frameHeight);
+        }
+
+        if (destination.dropLocation == Location::Right) {
+            return QRect(frameWidth - draggedDockWidth, 0, draggedDockWidth, frameHeight);
+        }
     }
 
     switch (destination.dropLocation) {

@@ -130,6 +130,10 @@ QList<DropDestination> DockBase::dropDestinations() const
             destination.dropLocation = Location::Left;
         }
 
+        if (map.contains("dropDistance")) {
+            destination.dropDistance = map["dropDistance"].toInt();
+        }
+
         result << destination;
     }
 
@@ -470,7 +474,7 @@ void DockBase::writeProperties()
 
 bool DropDestination::operator==(const DropDestination& dest) const
 {
-    return dock == dest.dock && dropLocation == dest.dropLocation;
+    return dock == dest.dock && dropLocation == dest.dropLocation && dropDistance == dest.dropDistance;
 }
 
 bool DropDestination::isValid() const
@@ -482,4 +486,5 @@ void DropDestination::clear()
 {
     dock = nullptr;
     dropLocation = Location::Undefined;
+    dropDistance = 0;
 }

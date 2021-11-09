@@ -90,7 +90,17 @@ DockPage {
         Qt.callLater(pageModel.init)
     }
 
-    readonly property int defaultPanelWidth: 300
+    readonly property int verticalPanelDefaultWidth: 300
+
+    readonly property var verticalPanelDropDestinations: [
+        { "dock": root.centralDock, "dropLocation": Location.Left, "dropDistance": root.verticalPanelDefaultWidth },
+        { "dock": root.centralDock, "dropLocation": Location.Right, "dropDistance": root.verticalPanelDefaultWidth }
+    ]
+
+    readonly property var horizontalPanelDropDestinations: [
+        root.panelTopDropDestination,
+        root.panelBottomDropDestination
+    ]
 
     mainToolBars: [
         DockToolBar {
@@ -197,16 +207,13 @@ DockPage {
 
             navigationSection: root.navigationPanelSec(palettesPanel.location)
 
-            width: root.defaultPanelWidth
-            minimumWidth: root.defaultPanelWidth
-            maximumWidth: root.defaultPanelWidth
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
 
             tabifyPanel: instrumentsPanel
 
-            dropDestinations: [
-                root.panelLeftDropDestination,
-                root.panelRightDropDestination
-            ]
+            dropDestinations: root.verticalPanelDropDestinations
 
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
@@ -221,16 +228,13 @@ DockPage {
 
             navigationSection: root.navigationPanelSec(instrumentsPanel.location)
 
-            width: root.defaultPanelWidth
-            minimumWidth: root.defaultPanelWidth
-            maximumWidth: root.defaultPanelWidth
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
 
             tabifyPanel: inspectorPanel
 
-            dropDestinations: [
-                root.panelLeftDropDestination,
-                root.panelRightDropDestination
-            ]
+            dropDestinations: root.verticalPanelDropDestinations
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
@@ -249,16 +253,13 @@ DockPage {
 
             navigationSection: root.navigationPanelSec(inspectorPanel.location)
 
-            width: root.defaultPanelWidth
-            minimumWidth: root.defaultPanelWidth
-            maximumWidth: root.defaultPanelWidth
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
             
             tabifyPanel: selectionFilterPanel
 
-            dropDestinations: [
-                root.panelLeftDropDestination,
-                root.panelRightDropDestination
-            ]
+            dropDestinations: root.verticalPanelDropDestinations
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
@@ -273,17 +274,14 @@ DockPage {
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
 
-            width: root.defaultPanelWidth
-            minimumWidth: root.defaultPanelWidth
-            maximumWidth: root.defaultPanelWidth
+            width: root.verticalPanelDefaultWidth
+            minimumWidth: root.verticalPanelDefaultWidth
+            maximumWidth: root.verticalPanelDefaultWidth
 
             //! NOTE: hidden by default
             visible: false
 
-            dropDestinations: [
-                root.panelLeftDropDestination,
-                root.panelRightDropDestination
-            ]
+            dropDestinations: root.verticalPanelDropDestinations
 
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
@@ -311,10 +309,7 @@ DockPage {
 
             location: Location.Bottom
 
-            dropDestinations: [
-                root.panelTopDropDestination,
-                root.panelBottomDropDestination
-            ]
+            dropDestinations: root.horizontalPanelDropDestinations
 
             navigationSection: root.navigationPanelSec(mixerPanel.location)
 
@@ -344,10 +339,7 @@ DockPage {
 
             location: Location.Bottom
 
-            dropDestinations: [
-                root.panelTopDropDestination,
-                root.panelBottomDropDestination
-            ]
+            dropDestinations: root.horizontalPanelDropDestinations
 
             Rectangle {
                 anchors.fill: parent
@@ -375,10 +367,7 @@ DockPage {
 
             location: Location.Bottom
 
-            dropDestinations: [
-                root.panelTopDropDestination,
-                root.panelBottomDropDestination
-            ]
+            dropDestinations: root.horizontalPanelDropDestinations
 
             Timeline {}
         },
