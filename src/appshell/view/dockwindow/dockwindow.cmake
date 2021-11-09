@@ -44,8 +44,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dockcentralview.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dropcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
