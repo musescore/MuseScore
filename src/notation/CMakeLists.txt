@@ -26,9 +26,9 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 find_package(Qt5 COMPONENTS Svg REQUIRED)
 
 include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/view/styledialog/styledialog.cmake)
 
 set(MODULE_SRC
-    ${WIDGETS_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/notationmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/imasternotation.h
@@ -137,6 +137,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
+
+    ${WIDGETS_SRC}
+    ${STYLEDIALOG_SRC}
     )
 
 set(MODULE_UI
