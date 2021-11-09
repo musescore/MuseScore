@@ -128,7 +128,7 @@ signals:
 
 protected:
     friend class DockWindow;
-    friend class DragController;
+    friend class DropController;
 
     virtual DockType type() const = 0;
 

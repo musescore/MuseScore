@@ -22,7 +22,7 @@
 
 #include "docksetup.h"
 
-#include "internal/dragcontroller.h"
+#include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
 #include "internal/dockwindowactionscontroller.h"
@@ -51,7 +51,7 @@ class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
 public:
     KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
     {
-        return new DragController(dropArea);
+        return new DropController(dropArea);
     }
 
     Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override

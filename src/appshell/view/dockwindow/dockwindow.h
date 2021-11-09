@@ -47,7 +47,6 @@ namespace mu::dock {
 class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
-class DockPanelView;
 class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncable
 {
     Q_OBJECT
@@ -86,8 +85,8 @@ public:
     bool isDockFloating(const QString& dockName) const override;
     void toggleDockFloating(const QString& dockName) override;
 
-    DropDestination hover(const QString& draggedDockName, const QPoint& globalPos) override;
-    void endHover() override;
+    DockPageView* currentPage() const override;
+    QQuickItem& asItem() const override;
 
 public slots:
     void setMainToolBarDockingHolder(DockingHolderView* mainToolBarDockingHolder);
@@ -129,22 +128,11 @@ private:
 
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 
-    bool isMouseOverDock(const QPoint& mouseLocalPos, const DockBase* dock) const;
-    void updateToolBarOrientation(DockToolBarView* draggedToolBar, const DropDestination& dropDestination = DropDestination());
-    void setCurrentDropDestination(const DockBase* draggedDock, const DropDestination& dropDestination);
-
-    DropDestination resolveDropDestination(const DockBase* draggedDock, const QPoint& localPos) const;
-    DockingHolderView* resolveDockingHolder(DockType draggedDockType, const QPoint& localPos) const;
-    DockPanelView* resolveTabifyPanel(const DockPanelView* panel, const QPoint& localPos) const;
-    Location resolveDropLocation(const DockBase* hoveredDock, const QPoint& localPos) const;
-    QRect resolveHighlightingRect(const DockBase* draggedDock, const DropDestination& destination) const;
-
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     DockingHolderView* m_mainToolBarDockingHolder = nullptr;
     uicomponents::QmlListProperty<DockPageView> m_pages;
-    DropDestination m_currentDropDestination;
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
     bool m_quiting = false;

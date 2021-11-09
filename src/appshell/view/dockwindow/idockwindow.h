@@ -30,6 +30,7 @@
 class QPoint;
 
 namespace mu::dock {
+class DockPageView;
 class IDockWindow
 {
 public:
@@ -44,8 +45,8 @@ public:
     virtual bool isDockFloating(const QString& dockName) const = 0;
     virtual void toggleDockFloating(const QString& dockName) = 0;
 
-    virtual DropDestination hover(const QString& draggedDockName, const QPoint& globalPos) = 0;
-    virtual void endHover() = 0;
+    virtual DockPageView* currentPage() const = 0;
+    virtual QQuickItem& asItem() const = 0;
 };
 }
 
