@@ -29,20 +29,26 @@ using namespace mu::autobot;
 
 void Autobot::init()
 {
-    m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus status) {
-        if (status == StepStatus::Started) {
+    m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus stepStatus, const Ret& ret) {
+        if (stepStatus == StepStatus::Started) {
             m_context->addStep(name);
         }
 
-        m_report.onStepStatusChanged(name, status, m_context);
-        m_stepStatusChanged.send(name, status);
+        m_report.onStepStatusChanged(name, stepStatus, m_context);
+        m_stepStatusChanged.send(name, stepStatus, ret);
+
+        if (stepStatus == StepStatus::Aborted) {
+            setStatus(Status::Aborted);
+        } else if (stepStatus == StepStatus::Error) {
+            setStatus(Status::Error);
+        }
     });
 
     m_runner.allFinished().onReceive(this, [this](bool aborted) {
         m_report.endReport(aborted);
     });
 
-    setStatus(Status::Stopped);
+    setStatus(Status::Undefined);
 }
 
 void Autobot::affectOnServices()
@@ -60,12 +66,38 @@ void Autobot::restoreAffectOnServices()
     shortcutsRegister()->reload(false);
 }
 
-mu::Ret Autobot::execScript(const io::path& path)
+void Autobot::execScript(const io::path& path)
 {
     LOGD() << path;
 
-    if (status() != Status::Stopped) {
+    if (status() == Status::Running || status() == Status::Paused) {
         abort();
+    }
+
+    //! NOTE If an error occurred during the execution of TestCase and a dialog was opened at that time,
+    //! the TestCase loop does not exit because of the open dialog,
+    //! so we need to close all dialogs in order to complete the execution of the previous script.
+    if (m_engine) {
+        std::vector<Uri> stack = interactive()->stack();
+        if (stack.size() > 1) {
+            const Uri& uri = stack.back();
+            interactive()->close(uri);
+            QTimer::singleShot(1000, [this, path]() {
+                execScript(path);
+            });
+            return;
+        }
+    }
+
+    if (m_engine) {
+        LOGE() << "unknown internal error with prev execScript";
+        delete m_engine;
+        m_engine = nullptr;
+    }
+
+    IF_ASSERT_FAILED(!m_engine) {
+        delete m_engine;
+        m_engine = nullptr;
     }
 
     affectOnServices();
@@ -78,7 +110,11 @@ mu::Ret Autobot::execScript(const io::path& path)
 
     setStatus(Status::Running);
     Ret ret = m_engine->call("main");
-    setStatus(Status::Stopped);
+
+    //! NOTE Also maybe abort or error
+    if (status() == Status::Running) {
+        setStatus(Status::Finished);
+    }
 
     delete m_engine;
     m_engine = nullptr;
@@ -87,8 +123,6 @@ mu::Ret Autobot::execScript(const io::path& path)
     }
 
     restoreAffectOnServices();
-
-    return ret;
 }
 
 void Autobot::setStepsInterval(int msec)
@@ -104,13 +138,21 @@ void Autobot::runTestCase(const TestCase& testCase)
 
 void Autobot::abort()
 {
+    error("abort");
+}
+
+void Autobot::error(const QString& msg)
+{
     if (status() == Status::Paused) {
         unpause();
     }
 
-    setStatus(Status::Stopped);
+    if (status() != Status::Running) {
+        return;
+    }
+
     if (m_engine) {
-        m_engine->throwError("abort");
+        m_engine->throwError(msg);
     }
     m_runner.abort();
 }
@@ -167,7 +209,12 @@ void Autobot::setStatus(Status st)
     }
 
     m_status = st;
-    m_statusChanged.send(st);
+
+    io::path path;
+    if (m_engine) {
+        path = m_engine->scriptPath();
+    }
+    m_statusChanged.send(path, st);
 }
 
 IAutobot::Status Autobot::status() const
@@ -175,12 +222,12 @@ IAutobot::Status Autobot::status() const
     return m_status;
 }
 
-mu::async::Channel<IAutobot::Status> Autobot::statusChanged() const
+mu::async::Channel<mu::io::path, IAutobot::Status> Autobot::statusChanged() const
 {
     return m_statusChanged;
 }
 
-mu::async::Channel<QString, StepStatus> Autobot::stepStatusChanged() const
+mu::async::Channel<QString, StepStatus, mu::Ret> Autobot::stepStatusChanged() const
 {
     return m_stepStatusChanged;
 }

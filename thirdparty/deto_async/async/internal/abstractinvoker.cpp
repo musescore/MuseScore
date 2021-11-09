@@ -13,6 +13,10 @@ AbstractInvoker::AbstractInvoker()
 
 AbstractInvoker::~AbstractInvoker()
 {
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    for (QInvoker* qi : m_qInvokers) {
+        qi->invoker = nullptr;
+    }
 }
 
 void AbstractInvoker::invoke(int type)
@@ -40,8 +44,11 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
         if (c.threadID == threadID) {
             invokeCallback(type, c, data);
         } else {
-            auto functor = [this, type, c, data]() { invokeCallback(type, c, data); };
-            QueuedInvoker::instance()->invoke(c.threadID, functor);
+            QInvoker* qi = new QInvoker(this, type, c, data);
+            QueuedInvoker::instance()->invoke(c.threadID, [qi]() {
+                qi->invoke();
+                delete qi;
+            });
         }
     }
 }
@@ -163,4 +170,16 @@ void AbstractInvoker::disconnectAsync(Asyncable* receiver)
     for (int type : types) {
         removeCallBack(type, receiver);
     }
+}
+
+void AbstractInvoker::addQInvoker(QInvoker* qi)
+{
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    m_qInvokers.push_back(qi);
+}
+
+void AbstractInvoker::removeQInvoker(QInvoker* qi)
+{
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    m_qInvokers.remove(qi);
 }

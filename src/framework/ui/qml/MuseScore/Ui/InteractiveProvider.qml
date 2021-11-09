@@ -30,6 +30,7 @@ Item {
 
     property var topParent: null
     property var provider: ui._interactiveProvider
+    property var objects: ({})
 
     signal requestedDockPage(var uri, var params)
 
@@ -97,6 +98,7 @@ Item {
             if (obj) {
                 obj.hide()
             }
+            root.objects[objectId] = undefined
         }
 
         function onFireRaise(objectId) {
@@ -116,6 +118,7 @@ Item {
 
         var obj = comp.createObject(root.topParent, params)
         obj.objectId = root.provider.objectId(obj)
+        root.objects[obj.objectId] = obj
 
         var ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
 
@@ -134,10 +137,6 @@ Item {
     }
 
     function findObject(objectId) {
-        for (var i = 0; i < root.topParent.children.length; ++i) {
-            if (root.topParent.children[i].objectId === objectId) {
-                return root.topParent.children[i]
-            }
-        }
+        return root.objects[objectId]
     }
 }

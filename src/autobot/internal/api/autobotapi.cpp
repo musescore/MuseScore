@@ -71,9 +71,37 @@ bool AutobotApi::pause(bool immediately)
     return true;
 }
 
+bool AutobotApi::confirm(const QString& msg)
+{
+    using namespace mu::framework;
+    int pauseBtn = int(IInteractive::Button::CustomButton) + 1;
+    IInteractive::Result res = interactive()->question("Confirm", msg.toStdString(), {
+        interactive()->buttonData(IInteractive::Button::Continue),
+        IInteractive::ButtonData(pauseBtn, "Pause"),
+        interactive()->buttonData(IInteractive::Button::Abort)
+    });
+
+    if (res.standardButton() == IInteractive::Button::Abort) {
+        abort();
+        return false;
+    }
+
+    if (res.button() == pauseBtn) {
+        pause();
+        return false;
+    }
+
+    return true;
+}
+
 void AutobotApi::abort()
 {
     autobot()->abort();
+}
+
+void AutobotApi::error(const QString& msg)
+{
+    autobot()->error(msg);
 }
 
 bool AutobotApi::openProject(const QString& name)

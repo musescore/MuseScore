@@ -29,17 +29,56 @@ Rectangle {
 
     AutobotScriptsModel {
         id: scriptsModel
+
+        onRequireStartTC: testCaseRun.run(path)
     }
 
     Component.onCompleted: {
         scriptsModel.load()
     }
 
+    Item {
+        id: topPanel
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 48
+
+        FlatButton {
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            text: scriptsModel.isRunAllTCMode ? "Stop Run All TC" : "Run All TC"
+            onClicked: {
+                if (scriptsModel.isRunAllTCMode) {
+                    scriptsModel.stopRunAllTC()
+                } else {
+                    scriptsModel.runAllTC()
+                }
+            }
+        }
+    }
+
     ListView {
-        anchors.fill: parent
+        anchors.top: topPanel.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
         clip: true
 
         model: scriptsModel
+
+        section.property: "typeRole"
+        section.delegate: Rectangle {
+            width: parent.width
+            height: 24
+            color: ui.theme.backgroundSecondaryColor
+            StyledTextLabel {
+                anchors.fill: parent
+                anchors.margins: 2
+                horizontalAlignment: Qt.AlignLeft
+                text: section
+            }
+        }
 
         delegate: ListItemBlank {
             anchors.left: parent ? parent.left : undefined
@@ -54,7 +93,13 @@ Rectangle {
                 anchors.rightMargin: 8
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
-                text: titleRole
+                text: {
+                    var status = statusRole
+                    if (status !== "") {
+                        status = "[" + status + "] "
+                    }
+                    return status + titleRole
+                }
             }
 
             StyledTextLabel {
@@ -73,6 +118,7 @@ Rectangle {
                 if (typeRole === "TestCase") {
                     testCaseRun.run(pathRole)
                 } else {
+                    scriptsModel.stopRunAllTC()
                     scriptsModel.runScript(indexRole)
                 }
 
@@ -83,5 +129,7 @@ Rectangle {
     TestCaseRunPanel {
         id: testCaseRun
         anchors.fill: parent
+
+        onFinished: scriptsModel.tryRunNextTC()
     }
 }

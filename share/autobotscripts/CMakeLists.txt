@@ -38,6 +38,7 @@ install(FILES
       steps/Score.js
       steps/Instruments.js
       steps/Inspector.js
+      steps/Navigation.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts/steps
       )
 

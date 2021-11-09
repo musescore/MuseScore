@@ -38,10 +38,10 @@ void TestCaseRunner::setStepsInterval(int msec)
 void TestCaseRunner::run(const TestCase& testCase)
 {
     m_abort = false;
+    m_testCase.reset();
     m_testCase.testCase = testCase;
     m_testCase.steps = testCase.steps();
     m_testCase.stepsCount = m_testCase.steps.count();
-    m_testCase.currentStepIdx = -1;
 
     nextStep();
 
@@ -53,13 +53,13 @@ void TestCaseRunner::run(const TestCase& testCase)
 void TestCaseRunner::pause()
 {
     m_paused = true;
-    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Paused);
+    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Paused, make_ok());
 }
 
 void TestCaseRunner::unpause(bool isNextStep)
 {
     m_paused = false;
-    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Started);
+    m_stepStatusChanged.send(m_testCase.lastStepName, StepStatus::Started, make_ok());
     if (isNextStep) {
         nextStep(false);
     }
@@ -70,7 +70,7 @@ void TestCaseRunner::abort()
     m_abort = true;
 }
 
-async::Channel<QString /*name*/, StepStatus> TestCaseRunner::stepStatusChanged() const
+async::Channel<QString, StepStatus, Ret> TestCaseRunner::stepStatusChanged() const
 {
     return m_stepStatusChanged;
 }
@@ -110,22 +110,22 @@ void TestCaseRunner::nextStep(bool byInterval)
 
         if (step.skip()) {
             LOGD() << "step: " << name << " Skipped";
-            m_stepStatusChanged.send(name, StepStatus::Skipped);
+            m_stepStatusChanged.send(name, StepStatus::Skipped, make_ok());
         } else {
             LOGD() << "step: " << name << " Started";
-            m_stepStatusChanged.send(name, StepStatus::Started);
+            m_stepStatusChanged.send(name, StepStatus::Started, make_ok());
 
             Ret ret = step.exec();
             if (!ret) {
                 LOGE() << "failed exec step: " << name << ", err: " << ret.toString();
                 StepStatus status = static_cast<Ret::Code>(ret.code()) == Ret::Code::Cancel ? StepStatus::Aborted : StepStatus::Error;
-                m_stepStatusChanged.send(step.name(), status);
+                m_stepStatusChanged.send(step.name(), status, ret);
                 doAbort();
                 return;
             }
 
             LOGD() << "step: " << name << " Finished";
-            m_stepStatusChanged.send(step.name(), StepStatus::Finished);
+            m_stepStatusChanged.send(step.name(), StepStatus::Finished, make_ok());
         }
 
         bool withInterval = step.skip() ? false : true;

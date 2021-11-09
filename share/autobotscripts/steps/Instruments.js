@@ -20,14 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+var Navigation = require("Navigation.js")
+
 function doOpenInstrumentsPanel()
 {
-    api.navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Instruments")
+    Navigation.triggerControl("NavigationLeftPanel", "PanelTabs", "Instruments")
 }
 
 function doGoToInstrument(name)
 {
-    api.navigation.goToControl("NavigationLeftPanel", "InstrumentsTree", name)
+    Navigation.goToControl("NavigationLeftPanel", "InstrumentsTree", name)
 }
 
 module.exports = {
@@ -36,7 +38,7 @@ module.exports = {
     openAddInstrumentsDialog: function()
     {
         doOpenInstrumentsPanel()
-        api.navigation.goToControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
+        Navigation.goToControl("NavigationLeftPanel", "InstrumentsHeader", "Add")
         api.autobot.seeChanges()
         api.autobot.async(function() {
             api.navigation.trigger()
@@ -45,14 +47,14 @@ module.exports = {
 
     сhooseInstrument: function(family, instrument)
     {
-        api.navigation.goToControl("DialogView", "FamilyView", family)
-        api.navigation.goToControl("DialogView", "InstrumentsView", instrument)
-        api.navigation.trigger()
+        Navigation.goToControl("DialogView", "FamilyView", family)
+        Navigation.goToControl("DialogView", "InstrumentsView", instrument)
+        Navigation.trigger()
     },
 
     doneAddInstruments: function()
     {
-        api.navigation.triggerControl("DialogView", "BottomPanel", "OK")
+        Navigation.triggerControl("DialogView", "BottomPanel", "OK")
     },
 
     goToInstrument: doGoToInstrument,
@@ -60,37 +62,37 @@ module.exports = {
     toggleVisibleInstrument: function(instrument)
     {
         doGoToInstrument(instrument)
-        api.navigation.right()
-        api.navigation.trigger()
+        Navigation.right()
+        Navigation.trigger()
     },
 
     openSettingsInstrument: function(instrument)
     {
         doGoToInstrument(instrument)
-        api.navigation.left()
-        api.navigation.trigger()
+        Navigation.left()
+        Navigation.trigger()
     },
 
     moveDownInstrument: function(instrument)
     {
         doGoToInstrument(instrument)
-        api.navigation.trigger() // select instrument
-        api.navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Down")
+        Navigation.trigger() // select instrument
+        Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Down")
 
     },
 
     moveUpInstrument: function(instrument)
     {
         doGoToInstrument(instrument)
-        api.navigation.trigger() // select instrument
-        api.navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Up")
+        Navigation.trigger() // select instrument
+        Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Up")
 
     },
 
     removeInstrument: function(instrument)
     {
         doGoToInstrument(instrument)
-        api.navigation.trigger() // select instrument
-        api.navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Remove")
+        Navigation.trigger() // select instrument
+        Navigation.triggerControl("NavigationLeftPanel", "InstrumentsHeader", "Remove")
     }
 }
