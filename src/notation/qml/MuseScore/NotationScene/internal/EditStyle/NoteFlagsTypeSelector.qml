@@ -29,14 +29,8 @@ Rectangle {
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
-    signal requestedUseStraightFlags(bool use)
-
-    NoteFlagsTypeSelectorModel {
-        id: selectorModel
-    }
-
-    Component.onCompleted: {
-        selectorModel.load()
+    NotesPageModel {
+        id: notesPageModel
     }
 
     RadioButtonGroup {
@@ -53,7 +47,7 @@ Rectangle {
             width: 106
             height: 70
 
-            checked: modelData.value === selectorModel.useStraightNoteFlags
+            checked: modelData.value === notesPageModel.useStraightNoteFlags.value
 
             Column {
                 anchors.centerIn: parent
@@ -73,7 +67,7 @@ Rectangle {
             }
 
             onToggled: {
-                selectorModel.useStraightNoteFlags = modelData.value
+                notesPageModel.useStraightNoteFlags.value = modelData.value
             }
         }
     }
