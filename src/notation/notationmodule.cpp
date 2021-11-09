@@ -68,6 +68,7 @@
 
 #include "view/styledialog/styleitem.h"
 #include "view/styledialog/notespagemodel.h"
+#include "view/styledialog/beamspagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -181,6 +182,7 @@ void NotationModule::registerUiTypes()
 
     qmlRegisterUncreatableType<StyleItem>("MuseScore.NotationScene", 1, 0, "StyleItem", "Cannot create StyleItem from QML");
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");
+    qmlRegisterType<BeamsPageModel>("MuseScore.NotationScene", 1, 0, "BeamsPageModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

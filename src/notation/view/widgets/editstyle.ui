@@ -6001,58 +6001,8 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="flat">
            <bool>false</bool>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_62">
-             <property name="text">
-              <string>Beam thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>beamWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="beamWidth">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_57">
-             <property name="text">
-              <string>Beam distance (relative to beam thickness):</string>
-             </property>
-             <property name="buddy">
-              <cstring>beamDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="beamMinLen">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_59">
-             <property name="text">
-              <string>Broken beam minimum length:</string>
-             </property>
-             <property name="buddy">
-              <cstring>beamMinLen</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
+          <layout class="QVBoxLayout" name="verticalLayout_25">
+           <item>
             <spacer name="horizontalSpacer_14">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -6064,29 +6014,6 @@ By default, they will be placed such as that their right end are at the same lev
               </size>
              </property>
             </spacer>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="beamDistance">
-             <property name="suffix">
-              <string>%</string>
-             </property>
-             <property name="decimals">
-              <number>1</number>
-             </property>
-             <property name="minimum">
-              <double>20.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>400.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2">
-            <widget class="QCheckBox" name="beamNoSlope">
-             <property name="text">
-              <string>Flatten all beams</string>
-             </property>
-            </widget>
            </item>
           </layout>
          </widget>
@@ -13101,10 +13028,6 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMRNumberEveryXMeasures</tabstop>
   <tabstop>mrNumberSeriesWithParentheses</tabstop>
   <tabstop>resetMRNumberSeriesWithParentheses</tabstop>
-  <tabstop>beamWidth</tabstop>
-  <tabstop>beamDistance</tabstop>
-  <tabstop>beamMinLen</tabstop>
-  <tabstop>beamNoSlope</tabstop>
   <tabstop>scrollArea_tuplets</tabstop>
   <tabstop>tupletDirection</tabstop>
   <tabstop>resetTupletDirection</tabstop>
@@ -13359,7 +13282,6 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
  </tabstops>
- <resources>
-  <include location="../../notationscene.qrc"/>
- </resources>
+ <resources/>
+ <connections/>
 </ui>

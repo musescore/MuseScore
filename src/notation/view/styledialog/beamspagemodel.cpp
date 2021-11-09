@@ -19,49 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "styleitem.h"
+#include "beamspagemodel.h"
 
 using namespace mu::notation;
 
-StyleItem::StyleItem(QObject* parent, const QVariant& value, const QVariant& defaultValue)
-    : QObject(parent), m_value(value), m_defaultValue(defaultValue)
+BeamsPageModel::BeamsPageModel(QObject* parent)
+    : AbstractStyleDialogModel(parent, {
+    StyleId::beamDistance,
+    StyleId::beamWidth,
+    StyleId::beamMinLen,
+    StyleId::beamNoSlope
+})
 {
 }
 
-QVariant StyleItem::value() const
+StyleItem* BeamsPageModel::beamDistance() const
 {
-    return m_value;
+    return styleItem(StyleId::beamDistance);
 }
 
-bool StyleItem::setValue(const QVariant& value)
+StyleItem* BeamsPageModel::beamWidth() const
 {
-    if (value == m_value) {
-        return false;
-    }
-
-    m_value = value;
-    emit valueChanged();
-    return true;
+    return styleItem(StyleId::beamWidth);
 }
 
-void StyleItem::modifyValue(const QVariant& value)
+StyleItem* BeamsPageModel::beamMinLen() const
 {
-    if (setValue(value)) {
-        emit valueModified(value);
-    }
+    return styleItem(StyleId::beamMinLen);
 }
 
-QVariant StyleItem::defaultValue() const
+StyleItem* BeamsPageModel::beamNoSlope() const
 {
-    return m_defaultValue;
-}
-
-bool StyleItem::isDefault() const
-{
-    return m_value == m_defaultValue;
-}
-
-void StyleItem::reset()
-{
-    modifyValue(m_defaultValue);
+    return styleItem(StyleId::beamNoSlope);
 }

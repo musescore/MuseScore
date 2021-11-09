@@ -241,8 +241,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
         { StyleId::timesigBarlineDistance,  false, timesigBarlineDistance,  resetTimesigBarlineDistance },
         { StyleId::staffLineWidth,          false, staffLineWidth,          resetStaffLineWidth },
-        { StyleId::beamWidth,               false, beamWidth,               0 },
-        { StyleId::beamMinLen,              false, beamMinLen,              0 },
 
         { StyleId::hairpinPlacement,        false, hairpinPlacement,        resetHairpinPlacement },
         { StyleId::hairpinPosAbove,         false, hairpinPosAbove,         resetHairpinPosAbove },
@@ -350,8 +348,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::mmRestRangePosAbove,      false, mmRestRangePosAbove,          resetMMRestRangePosAbove },
         { StyleId::mmRestRangePosBelow,      false, mmRestRangePosBelow,          resetMMRestRangePosBelow },
 
-        { StyleId::beamDistance,             true,  beamDistance,                 0 },
-        { StyleId::beamNoSlope,              false, beamNoSlope,                  0 },
         { StyleId::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize },
         { StyleId::smallStaffMag,            true,  smallStaffSize,               resetSmallStaffSize },
         { StyleId::smallNoteMag,             true,  smallNoteSize,                resetSmallNoteSize },
@@ -544,6 +540,18 @@ EditStyle::EditStyle(QWidget* parent)
     noteFlagsTypeSelector->setMinimumSize(224, 70);
     noteFlagsTypeSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector);
+
+    // ====================================================
+    // Notes (QML)
+    // ====================================================
+
+    QQuickWidget* beamsPage = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                               /*parent*/ groupBox_beams);
+    beamsPage->setObjectName("beamsPage_QQuickWidget");
+    beamsPage->setSource(QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml")));
+    beamsPage->setMinimumSize(224, 273);
+    beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_beams->layout()->addWidget(beamsPage);
 
     // ====================================================
     // Figured Bass
