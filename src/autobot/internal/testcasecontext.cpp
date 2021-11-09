@@ -55,8 +55,8 @@ const TestCaseContext::StepContext& TestCaseContext::step(const QString& name) c
         return *it;
     }
 
-    static StepContext dummy;
-    return dummy;
+    static StepContext dummyCtx;
+    return dummyCtx;
 }
 
 void TestCaseContext::addStep(const QString& name)
@@ -72,8 +72,8 @@ const TestCaseContext::StepContext& TestCaseContext::currentStep() const
         return m_steps.back();
     }
 
-    static StepContext dummy;
-    return dummy;
+    static StepContext dummyCtx;
+    return dummyCtx;
 }
 
 void TestCaseContext::setStepVal(const Key& key, const Val& val)

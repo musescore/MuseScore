@@ -134,8 +134,9 @@ void AutobotApi::sleep(int msec)
 
 void AutobotApi::waitPopup()
 {
-    //! NOTE We could do it smartly, check a current popup actually opened, but or just sleep some time
-    sleep(1500);
+    //! NOTE We could do it smartly, check a current popup actually opened,
+    //! but or just sleep some time
+    sleep(2000);
 }
 
 void AutobotApi::seeChanges(int msec)

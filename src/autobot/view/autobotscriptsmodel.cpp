@@ -109,7 +109,7 @@ void AutobotScriptsModel::setStatus(const io::path& path, IAutobot::Status st)
     m_statuses[path] = st;
     for (size_t i = 0; i < m_scripts.size(); ++i) {
         if (m_scripts.at(i).path == path) {
-            emit dataChanged(index(i), index(i), { rStatus });
+            emit dataChanged(index(int(i)), index(int(i)), { rStatus });
             break;
         }
     }

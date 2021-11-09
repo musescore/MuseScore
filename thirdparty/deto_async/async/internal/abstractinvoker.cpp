@@ -15,7 +15,7 @@ AbstractInvoker::~AbstractInvoker()
 {
     std::lock_guard<std::mutex> lock(m_qInvokersMutex);
     for (QInvoker* qi : m_qInvokers) {
-        qi->invoker = nullptr;
+        qi->invalidate();
     }
 }
 
@@ -116,6 +116,16 @@ void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
         c.receiver->disconnectAsync(this);
     }
     callbacks.erase(callbacks.begin() + index);
+
+    {
+        std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+        for (QInvoker* qi : m_qInvokers) {
+            if (qi->call.call == c.call) {
+                qi->invalidate();
+                break;
+            }
+        }
+    }
 
     deleteCall(type, c.call);
 }

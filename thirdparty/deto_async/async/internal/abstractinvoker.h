@@ -92,6 +92,7 @@ protected:
 
     struct QInvoker
     {
+        std::mutex mutex;
         AbstractInvoker* invoker = nullptr;
         int type = -1;
         CallBack call;
@@ -112,9 +113,21 @@ protected:
 
         void invoke()
         {
-            if (invoker) {
-                invoker->invokeCallback(type, call, data);
+            AbstractInvoker* inv = nullptr;
+            {
+                std::lock_guard<std::mutex> lock(mutex);
+                inv = invoker;
             }
+
+            if (inv) {
+                inv->invokeCallback(type, call, data);
+            }
+        }
+
+        void invalidate()
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            invoker = nullptr;
         }
     };
 
