@@ -37,6 +37,7 @@ class TestKeySig : public QObject, public MTest
       void concertPitch();
       void keysig_78216();
       void preferSharpFlat();
+      void keysigMode();
       };
 
 //---------------------------------------------------------
@@ -173,6 +174,22 @@ void TestKeySig::preferSharpFlat()
       score2->endCmd();
       QVERIFY(saveCompareScore(score2, "preferSharpFlat-2-test.mscx", DIR + "preferSharpFlat-2-ref.mscx"));
       delete score2;
+      }
+
+//---------------------------------------------------------
+//   keysigMode
+//---------------------------------------------------------
+
+void TestKeySig::keysigMode()
+      {
+      MasterScore* score = readScore(DIR + "keysigMode.mscx");
+      Measure* m1 = score->firstMeasure();
+      KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
+      ke->setProperty(Pid::KEYSIG_MODE, int(KeyMode::LYDIAN));
+      score->update();
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "keysig03.mscx", DIR + "keysig03-ref.mscx"));
+      delete score;
       }
 
 QTEST_MAIN(TestKeySig)
