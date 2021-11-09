@@ -21,6 +21,8 @@
  */
 #include "autobotinteractive.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::autobot;
 using namespace mu::framework;
@@ -90,7 +92,11 @@ io::path AutobotInteractive::selectOpeningFile(const QString& title, const io::p
 io::path AutobotInteractive::selectSavingFile(const QString& title, const io::path& dir, const QString& filter,
                                               bool confirmOverwrite)
 {
-    return m_real->selectSavingFile(title, dir, filter, confirmOverwrite);
+    // return m_real->selectSavingFile(title, dir, filter, confirmOverwrite);
+    LOGD() << title << " dir:" << dir << ", filter: " << filter << ", confirmOverwrite: " << confirmOverwrite;
+    m_real->open("musescore://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
+    m_selectedFilePath = dir;
+    return m_selectedFilePath;
 }
 
 io::path AutobotInteractive::selectDirectory(const QString& title, const io::path& dir)
@@ -151,4 +157,9 @@ std::vector<Uri> AutobotInteractive::stack() const
 Ret AutobotInteractive::openUrl(const std::string& url) const
 {
     return m_real->openUrl(url);
+}
+
+io::path AutobotInteractive::selectedFilePath() const
+{
+    return m_selectedFilePath;
 }

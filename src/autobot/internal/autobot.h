@@ -69,6 +69,7 @@ public:
     void error(const QString& msg) override;
 
     ITestCaseContextPtr context() const override;
+    AutobotInteractivePtr autobotInteractive() const override;
 
 private:
 
@@ -84,7 +85,7 @@ private:
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
     TestCaseReport m_report;
-    std::shared_ptr<AutobotInteractive> m_interactive = nullptr;
+    AutobotInteractivePtr m_interactive = nullptr;
 
     QEventLoop m_sleepLoop;
 };

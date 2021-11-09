@@ -31,6 +31,7 @@
 #include "async/channel.h"
 #include "autobottypes.h"
 #include "itestcasecontext.h"
+#include "internal/autobotinteractive.h"
 
 namespace mu::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
@@ -76,6 +77,7 @@ public:
     virtual void error(const QString& msg) = 0;
 
     virtual ITestCaseContextPtr context() const = 0;
+    virtual AutobotInteractivePtr autobotInteractive() const = 0;
 };
 }
 

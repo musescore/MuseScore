@@ -85,10 +85,17 @@ public:
 
     Ret openUrl(const std::string& url) const override;
 
+    // AutobotInteractive
+    io::path selectedFilePath() const; // last selected file path
+
 private:
 
     std::shared_ptr<framework::IInteractive> m_real = nullptr;
+
+    io::path m_selectedFilePath;
 };
+
+using AutobotInteractivePtr = std::shared_ptr<AutobotInteractive>;
 }
 
 #endif // MU_AUTOBOT_AUTOBOTINTERACTIVE_H

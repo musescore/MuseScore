@@ -37,7 +37,7 @@ Column {
 
     NavigationPanel {
         id: navPanel
-        name: "ExportOptionsView"
+        name: "ExportOptions"
         enabled: root.visible && root.enabled
         direction: NavigationPanel.Vertical
     }
@@ -147,7 +147,7 @@ Column {
         delegate: RoundedRadioButton {
             text: modelData["text"]
 
-            navigation.name: "ExportUnitType " + text
+            navigation.name: "ExportType_" + text
             navigation.panel: navPanel
             navigation.row: 100000 + model.index
 

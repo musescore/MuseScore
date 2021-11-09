@@ -160,3 +160,8 @@ int AutobotApi::randomInt(int min, int max) const
     int val = rand() % (max - min + 1) + min;
     return val;
 }
+
+QString AutobotApi::selectedFilePath() const
+{
+    return autobot()->autobotInteractive()->selectedFilePath().toQString();
+}
