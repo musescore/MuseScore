@@ -159,6 +159,19 @@ Ret FileSystem::makePath(const io::path& path) const
     return make_ret(Err::NoError);
 }
 
+RetVal<uint64_t> FileSystem::fileSize(const io::path& path) const
+{
+    RetVal<uint64_t> rv;
+    rv.ret = exists(path);
+    if (!rv.ret) {
+        return rv;
+    }
+
+    QFileInfo fi(path.toQString());
+    rv.val = static_cast<uint64_t>(fi.size());
+    return rv;
+}
+
 RetVal<io::paths> FileSystem::scanFiles(const io::path& rootDir, const QStringList& filters, ScanMode mode) const
 {
     RetVal<io::paths> result;
