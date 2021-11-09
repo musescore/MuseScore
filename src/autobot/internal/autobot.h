@@ -38,6 +38,7 @@
 #include "testcasecontext.h"
 #include "testcaserunner.h"
 #include "testcasereport.h"
+#include "autobotinteractive.h"
 
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
@@ -83,6 +84,7 @@ private:
     ITestCaseContextPtr m_context = nullptr;
     TestCaseRunner m_runner;
     TestCaseReport m_report;
+    std::shared_ptr<AutobotInteractive> m_interactive = nullptr;
 
     QEventLoop m_sleepLoop;
 };

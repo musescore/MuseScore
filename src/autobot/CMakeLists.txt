@@ -58,6 +58,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.cpp
@@ -78,6 +81,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotscriptsmodel.cpp
