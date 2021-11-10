@@ -33,7 +33,7 @@ StyleDialogPage {
     }
 
     ItemWithTitle {
-        title: qsTrc("notation", "Beam thickness")
+        title: qsTrc("notation", "Beam distance")
 
         RadioButtonGroup {
             width: 224
@@ -59,7 +59,7 @@ StyleDialogPage {
                     StyledIconLabel {
                         anchors.horizontalCenter: parent.horizontalCenter
                         iconCode: modelData.iconCode
-                        font.pixelSize: 32
+                        font.pixelSize: 28
                     }
 
                     StyledTextLabel {
