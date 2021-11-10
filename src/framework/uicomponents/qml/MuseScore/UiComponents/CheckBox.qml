@@ -28,10 +28,14 @@ FocusScope {
     id: root
 
     property bool checked: false
+    property alias pressed: clickableArea.containsPress
+    property alias hovered: clickableArea.containsMouse
     property bool isIndeterminate: false
 
     property alias text: label.text
     property alias font: label.font
+    property alias backgroundColor: box.color
+    property alias backgroundOpacity: box.opacity
 
     property alias navigation: navCtrl
 

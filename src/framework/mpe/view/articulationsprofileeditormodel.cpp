@@ -30,17 +30,27 @@ using namespace mu::mpe;
 static const QString PROFILE_EXTENSION = "(*.json)";
 
 ArticulationsProfileEditorModel::ArticulationsProfileEditorModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QObject(parent)
 {
+    loadItems();
+
     setProfile(profilesRepository()->createNew());
 }
 
 void ArticulationsProfileEditorModel::requestToOpenProfile()
 {
-    QString filter = qtrc("mpe", "MPE Articulations Profile") + " (*.json)";
-    m_profilePath = interactive()->selectOpeningFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
+    QString filter = qtrc("mpe", "MPE Articulations Profile") + PROFILE_EXTENSION;
+    io::path path = interactive()->selectOpeningFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
+    setCurrentPath(path.toQString());
 
     setProfile(profilesRepository()->loadProfile(m_profilePath));
+}
+
+void ArticulationsProfileEditorModel::requestToCreateProfile()
+{
+    QString filter = qtrc("mpe", "MPE Articulations Profile") + PROFILE_EXTENSION;
+    io::path path = interactive()->selectSavingFile(qtrc("mpe", "Open MPE Articulations Profile"), "", filter);
+    setCurrentPath(path.toQString());
 }
 
 void ArticulationsProfileEditorModel::requestToSaveProfile()
@@ -48,57 +58,173 @@ void ArticulationsProfileEditorModel::requestToSaveProfile()
     QString filter = qtrc("mpe", "MPE Articulations Profile") + " " + PROFILE_EXTENSION;
 
     if (m_profilePath.empty()) {
-        m_profilePath = interactive()->selectSavingFile(qtrc("mpe", "Save MPE Articulations Profile"), "", filter);
+        requestToCreateProfile();
     }
 
-    profilesRepository()->saveProfile(m_profilePath, nullptr);
-}
-
-int ArticulationsProfileEditorModel::rowCount(const QModelIndex&) const
-{
-    return m_items.size();
-}
-
-QVariant ArticulationsProfileEditorModel::data(const QModelIndex& index, int /*role*/) const
-{
-    if (!index.isValid() || index.row() >= rowCount()) {
-        return QVariant();
+    for (const auto& item : m_singleNoteItems) {
+        if (item->isActive()) {
+            m_profile->updatePatterns(item->type(), item->patternData());
+        }
     }
 
-    return QVariant::fromValue(m_items.at(index.row()));
+    for (const auto& item : m_multiNoteItems) {
+        if (item->isActive()) {
+            m_profile->updatePatterns(item->type(), item->patternData());
+        }
+    }
+
+    profilesRepository()->saveProfile(m_profilePath, m_profile);
 }
 
-QHash<int, QByteArray> ArticulationsProfileEditorModel::roleNames() const
+void ArticulationsProfileEditorModel::copyPatternDataFromItem(ArticulationPatternItem* item)
 {
-    static QHash<int, QByteArray> roles = {
-        { PatternsScopeItem, "scopeItem" }
-    };
+    if (!item || !selectedItem()) {
+        return;
+    }
 
-    return roles;
+    m_selectedItem->load(item->patternData());
 }
 
 void ArticulationsProfileEditorModel::setProfile(ArticulationsProfilePtr ptr)
 {
     m_profile = std::move(ptr);
 
-    loadItems();
+    auto load = [this](const QMap<ArticulationType, ArticulationPatternItem*>& items) {
+        for (auto& item : items) {
+            item->setIsActive(m_profile->contains(item->type()));
+            item->load(m_profile->pattern(item->type()));
+        }
+    };
+
+    load(m_singleNoteItems);
+    load(m_multiNoteItems);
+
+    setSelectedItem(m_singleNoteItems.first());
 }
 
 void ArticulationsProfileEditorModel::loadItems()
 {
-    if (!m_profile) {
+    int firstIdx = static_cast<int>(ArticulationType::Standard);
+    int lastIdx = static_cast<int>(ArticulationType::Last);
+
+    for (int i = firstIdx; i < lastIdx; ++i) {
+        ArticulationType type = static_cast<ArticulationType>(i);
+
+        if (isSingleNoteArticulation(type)) {
+            m_singleNoteItems.insert(type, buildItem(type, true /*isSingleNoteType*/));
+        } else {
+            m_multiNoteItems.insert(type, buildItem(type, false /*isSingleNoteType*/));
+        }
+    }
+}
+
+ArticulationPatternItem* ArticulationsProfileEditorModel::buildItem(const ArticulationType type, const bool isSingleNoteType)
+{
+    ArticulationPatternItem* item = new ArticulationPatternItem(this, type, isSingleNoteType);
+
+    connect(item, &ArticulationPatternItem::isSelectedChanged, this, [this, item]() {
+        setSelectedItem(item);
+    });
+
+    return item;
+}
+
+QString ArticulationsProfileEditorModel::currentPath() const
+{
+    return m_profilePath.toQString();
+}
+
+void ArticulationsProfileEditorModel::setCurrentPath(const QString& newCurrentPath)
+{
+    io::path newPath(newCurrentPath);
+
+    if (m_profilePath == newPath) {
+        return;
+    }
+    m_profilePath = newPath;
+    emit currentPathChanged();
+}
+
+ArticulationPatternItem* ArticulationsProfileEditorModel::selectedItem() const
+{
+    return m_selectedItem;
+}
+
+void ArticulationsProfileEditorModel::setSelectedItem(ArticulationPatternItem* newSelectedItem)
+{
+    if (m_selectedItem == newSelectedItem) {
         return;
     }
 
-    beginResetModel();
-
-    if (!m_profile->isValid()) {
-        m_items << new ArticulationPatternsScopeItem(this, ArticulationType::None);
-    } else {
-        for (const auto& pair : m_profile->data()) {
-            m_items << new ArticulationPatternsScopeItem(this, pair.first, pair.second);
-        }
+    if (m_selectedItem) {
+        m_selectedItem->setIsSelected(false);
     }
 
-    endResetModel();
+    newSelectedItem->setIsSelected(true);
+    m_selectedItem = newSelectedItem;
+    emit selectedItemChanged();
+}
+
+QList<ArticulationPatternItem*> ArticulationsProfileEditorModel::singleNoteItems() const
+{
+    QList<ArticulationPatternItem*> result;
+
+    for (const auto& item : m_singleNoteItems) {
+        result << item;
+    }
+
+    return result;
+}
+
+QList<ArticulationPatternItem*> ArticulationsProfileEditorModel::multiNoteItems() const
+{
+    QList<ArticulationPatternItem*> result;
+
+    for (const auto& item : m_multiNoteItems) {
+        result << item;
+    }
+
+    return result;
+}
+
+bool ArticulationsProfileEditorModel::isArrangementVisible() const
+{
+    return m_isArrangementVisible;
+}
+
+void ArticulationsProfileEditorModel::setIsArrangementVisible(bool newIsArrangementVisible)
+{
+    if (m_isArrangementVisible == newIsArrangementVisible) {
+        return;
+    }
+    m_isArrangementVisible = newIsArrangementVisible;
+    emit isArrangementVisibleChanged();
+}
+
+bool ArticulationsProfileEditorModel::isPitchVisible() const
+{
+    return m_isPitchVisible;
+}
+
+void ArticulationsProfileEditorModel::setIsPitchVisible(bool newIsPitchVisible)
+{
+    if (m_isPitchVisible == newIsPitchVisible) {
+        return;
+    }
+    m_isPitchVisible = newIsPitchVisible;
+    emit isPitchVisibleChanged();
+}
+
+bool ArticulationsProfileEditorModel::isExpressionVisible() const
+{
+    return m_isExpressionVisible;
+}
+
+void ArticulationsProfileEditorModel::setIsExpressionVisible(bool newIsExpressionVisible)
+{
+    if (m_isExpressionVisible == newIsExpressionVisible) {
+        return;
+    }
+    m_isExpressionVisible = newIsExpressionVisible;
+    emit isExpressionVisibleChanged();
 }

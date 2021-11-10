@@ -28,7 +28,7 @@
 
 namespace mu::mpe::tests {
 inline ArrangementPattern createArrangementPattern(const duration_percentage_t durationFactor,
-                                                   const msecs_t timestampOffset)
+                                                   const duration_percentage_t timestampOffset)
 {
     ArrangementPattern result;
     result.durationFactor = durationFactor;
@@ -40,10 +40,8 @@ inline PitchPattern createSimplePitchPattern(const pitch_level_t incrementDiff =
 {
     PitchPattern result;
 
-    constexpr int steps = 1.f / PERCENTAGE_PRECISION_STEP;
-
-    for (int i = 0; i < steps; ++i) {
-        result.pitchOffsetMap.emplace(i * PERCENTAGE_PRECISION_STEP, i * incrementDiff);
+    for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
+        result.pitchOffsetMap.insert_or_assign(i * PERCENTAGE_PRECISION_STEP, i * incrementDiff);
     }
 
     return result;
@@ -55,15 +53,13 @@ inline ExpressionPattern createSimpleExpressionPattern(const dynamic_level_t amp
 
     result.maxAmplitudeLevel = amplitudeLevel;
 
-    constexpr int steps = 1.f / PERCENTAGE_PRECISION_STEP;
-
     float amplitudeSqrt = std::sqrt(amplitudeLevel);
 
-    for (int i = 0; i < steps; ++i) {
+    for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
         duration_percentage_t currentPos = i * PERCENTAGE_PRECISION_STEP;
         dynamic_level_t value = amplitudeLevel - std::pow((2 * amplitudeSqrt * currentPos) - amplitudeSqrt, 2);
 
-        result.dynamicOffsetMap.emplace(currentPos, std::max(value, 0.f));
+        result.dynamicOffsetMap.insert_or_assign(currentPos, std::max(value, 0.f));
     }
 
     return result;

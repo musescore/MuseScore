@@ -61,7 +61,7 @@ protected:
 
     DynamicType m_dynamic;
 
-    ArticulationPattern m_standardPattern;
+    ArticulationPatternSegment m_standardPattern;
 };
 
 /**
@@ -102,12 +102,12 @@ TEST_F(SingleNoteArticulationsTest, StandardPattern)
 TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
-    ArticulationPattern staccatoArticulation;
+    ArticulationPatternSegment staccatoArticulation;
     staccatoArticulation.arrangementPattern = createArrangementPattern(0.5 /*duration_factor*/, 0 /*timestamp_offset*/);
     staccatoArticulation.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
     staccatoArticulation.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope scope;
+    ArticulationPattern scope;
     scope.emplace(0.f, staccatoArticulation);
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
@@ -142,13 +142,13 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
 TEST_F(SingleNoteArticulationsTest, AccentPattern)
 {
     // [GIVEN] Articulation pattern "Accent", which instructs a performer to play a note louder (usually on 1 dynamic level)
-    ArticulationPattern accentArticulation;
+    ArticulationPatternSegment accentArticulation;
     accentArticulation.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
     accentArticulation.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
     accentArticulation.expressionPattern = createSimpleExpressionPattern(
         DYNAMIC_LEVEL_STEP /* increasing a note's dynamic on a single level*/);
 
-    ArticulationPatternsScope scope;
+    ArticulationPattern scope;
     scope.emplace(0.f, accentArticulation);
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
@@ -188,21 +188,21 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
 TEST_F(SingleNoteArticulationsTest, PocoTenuto)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
-    ArticulationPattern staccatoPattern;
+    ArticulationPatternSegment staccatoPattern;
     staccatoPattern.arrangementPattern = createArrangementPattern(0.5 /*duration_factor*/, 0 /*timestamp_offset*/);
     staccatoPattern.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
     staccatoPattern.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope staccatoScope;
+    ArticulationPattern staccatoScope;
     staccatoScope.emplace(0.f, staccatoPattern);
 
     // [GIVEN] Articulation pattern "Tenuto", which instructs a performer to play a note for the whole nominal duration
-    ArticulationPattern tenutoPattern;
+    ArticulationPatternSegment tenutoPattern;
     tenutoPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
     tenutoPattern.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
     tenutoPattern.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope tenutoScope;
+    ArticulationPattern tenutoScope;
     tenutoScope.emplace(0.f, tenutoPattern);
 
     ArticulationMap appliedArticulations = {};
@@ -242,7 +242,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
 TEST_F(SingleNoteArticulationsTest, QuickFall)
 {
     // [GIVEN] Articulation pattern "Tenuto", which instructs a performer to play a note for the whole nominal duration
-    ArticulationPattern quickFallPattern;
+    ArticulationPatternSegment quickFallPattern;
     quickFallPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
 
     // Linear decreasing pitch
@@ -250,7 +250,7 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
         = createSimplePitchPattern(-PITCH_LEVEL_STEP / (1.f / PERCENTAGE_PRECISION_STEP) /*increment_pitch_diff*/);
     quickFallPattern.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope quickFallScope;
+    ArticulationPattern quickFallScope;
     quickFallScope.emplace(0.f, quickFallPattern);
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
@@ -284,17 +284,18 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
 {
     // [GIVEN] Articulation pattern "Scoop", which instructs a performer to play ahead of a nominal duration,
     //         starting at a lower pitch, and then placing it on the note being played.
-    msecs_t timestampOffset = 100;
+    duration_percentage_t timestampOffset = -0.25;
+    m_nominalTimestamp = 1000; //msecs
 
-    ArticulationPattern scoopPattern;
+    ArticulationPatternSegment scoopPattern;
     scoopPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, timestampOffset /*timestamp_offset*/);
 
     // Linear increasing pitch
     scoopPattern.pitchPattern
-        = createSimplePitchPattern(PITCH_LEVEL_STEP / (1.f / PERCENTAGE_PRECISION_STEP) /*increment_pitch_diff*/);
+        = createSimplePitchPattern(EXPECTED_SIZE /*increment_pitch_diff*/);
     scoopPattern.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope scope;
+    ArticulationPattern scope;
     scope.emplace(0.f, scoopPattern);
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
@@ -319,5 +320,5 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
 
     // [THEN] We expect that actual timestamp of the note will consider timestamp offset from the articulation pattern
     //        In other words, we'll start to playback a note with pitch offset and then finally land on the note being played
-    EXPECT_EQ(event.arrangementCtx().actualTimestamp, m_nominalTimestamp - timestampOffset);
+    EXPECT_EQ(event.arrangementCtx().actualTimestamp, m_nominalTimestamp + m_nominalDuration * timestampOffset);
 }

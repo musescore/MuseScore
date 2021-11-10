@@ -60,7 +60,7 @@ struct NoteEvent
     {
     }
 
-    explicit NoteEvent(const ArticulationPattern& standardPatterns,
+    explicit NoteEvent(const ArticulationPatternSegment& standardPatterns,
                        const timestamp_t nominalTimestamp,
                        const duration_t nominalDuration,
                        const voice_layer_idx_t voiceIdx,
@@ -112,7 +112,7 @@ private:
             return;
         }
 
-        m_arrangementCtx.actualTimestamp -= ArrangementPattern::averageTimestampOffset(patterns);
+        m_arrangementCtx.actualTimestamp += m_arrangementCtx.nominalDuration * ArrangementPattern::averageTimestampOffset(patterns);
     }
 
     void calculateActualDuration(const ArrangementPatternList& patterns)

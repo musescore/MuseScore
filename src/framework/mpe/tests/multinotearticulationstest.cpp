@@ -90,7 +90,7 @@ protected:
 
     std::map<size_t, NoteMetaData> m_initialData;
 
-    ArticulationPattern m_standardPattern;
+    ArticulationPatternSegment m_standardPattern;
 };
 
 /**
@@ -154,12 +154,12 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     pitch_level_t pitchDiff = pitchLevelDiff(m_initialData[0].pitchClass, m_initialData[0].octave,
                                              m_initialData[1].pitchClass, m_initialData[1].octave);
 
-    ArticulationPattern glissandoPattern;
+    ArticulationPatternSegment glissandoPattern;
     glissandoPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
     glissandoPattern.pitchPattern = createSimplePitchPattern(pitchDiff / (1.f / PERCENTAGE_PRECISION_STEP) /*increment_pitch_diff*/);
     glissandoPattern.expressionPattern = createSimpleExpressionPattern(0.f /* no dynamic changes comparing to the standard one*/);
 
-    ArticulationPatternsScope glissandoScope;
+    ArticulationPattern glissandoScope;
     glissandoScope.emplace(0.f, glissandoPattern);
 
     // [GIVEN] Glissando articulation applied on the first note, occupied range is from 0% to 50% of the entire articulation range
@@ -226,10 +226,10 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
 
     dynamic_level_t dynamicLevelDiff = dynamicLevelFromType(DynamicType::ff) - dynamicLevelFromType(DynamicType::f);
 
-    ArticulationPatternsScope crescendoScope;
+    ArticulationPattern crescendoScope;
 
     for (size_t i = 0; i < noteCount; ++i) {
-        ArticulationPattern crescendoPattern;
+        ArticulationPatternSegment crescendoPattern;
         crescendoPattern.arrangementPattern = createArrangementPattern(1.f /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0.f /*increment_pitch_diff*/);
         crescendoPattern.expressionPattern = createSimpleExpressionPattern(i * (dynamicLevelDiff / dynamicSegmentsCount));

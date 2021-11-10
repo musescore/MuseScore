@@ -27,10 +27,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mpetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iarticulationprofilesrepository.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternsscopeitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternsscopeitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationpatternsegmentitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationpatternsegmentitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationpatternitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationpatternitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.h
 
@@ -40,5 +40,7 @@ set(MODULE_SRC
     )
 
 set(MODULE_QRC mpe.qrc)
+
+set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
