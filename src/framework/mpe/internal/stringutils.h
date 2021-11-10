@@ -39,7 +39,7 @@ static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY
 
 static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAMES = {
     { ArticulationType::Undefined, "Undefined" },
-    { ArticulationType::None, "None" },
+    { ArticulationType::Standard, "Standard" },
     { ArticulationType::Staccato, "Staccato" },
     { ArticulationType::Staccatissimo, "Staccatissimo" },
     { ArticulationType::Tenuto, "Tenuto" },
@@ -172,7 +172,6 @@ inline QString articulationTypeToString(const ArticulationType type)
 
     return search->second;
 }
-
 }
 
 #endif // MU_MPE_STRINGUTILS_H

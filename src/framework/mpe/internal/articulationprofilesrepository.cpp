@@ -158,9 +158,9 @@ QJsonArray ArticulationProfilesRepository::supportedFamiliesToJson(const std::ve
     return result;
 }
 
-ArticulationPatternsScope ArticulationProfilesRepository::patternsScopeFromJson(const QJsonArray& array) const
+ArticulationPattern ArticulationProfilesRepository::patternsScopeFromJson(const QJsonArray& array) const
 {
-    ArticulationPatternsScope result;
+    ArticulationPattern result;
 
     for (const QJsonValue& val : array) {
         QJsonObject patternObj = val.toObject();
@@ -171,7 +171,7 @@ ArticulationPatternsScope ArticulationProfilesRepository::patternsScopeFromJson(
         PitchPattern pitchPattern = pitchPatternFromJson(patternObj.value(PITCH_PATTERN_KEY).toObject());
         ExpressionPattern expressionPattern = expressionPatternFromJson(patternObj.value(EXPRESSION_PATTERN).toObject());
 
-        ArticulationPattern articulation;
+        ArticulationPatternSegment articulation;
         articulation.arrangementPattern = std::move(arrangementPattern);
         articulation.pitchPattern = std::move(pitchPattern);
         articulation.expressionPattern = std::move(expressionPattern);
@@ -182,7 +182,7 @@ ArticulationPatternsScope ArticulationProfilesRepository::patternsScopeFromJson(
     return result;
 }
 
-QJsonArray ArticulationProfilesRepository::patternsScopeToJson(const ArticulationPatternsScope& scope) const
+QJsonArray ArticulationProfilesRepository::patternsScopeToJson(const ArticulationPattern& scope) const
 {
     QJsonArray result;
 

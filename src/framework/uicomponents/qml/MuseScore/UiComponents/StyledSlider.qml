@@ -31,6 +31,7 @@ Slider {
     implicitHeight: vertical ? prv.defaultLength : prv.handleSize
 
     hoverEnabled: true
+    wheelEnabled: true
 
     QtObject {
         id: prv
