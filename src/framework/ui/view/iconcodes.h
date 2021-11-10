@@ -108,6 +108,7 @@ public:
         TEXT_ITALIC = 0xEF40,
         TEXT_UNDERLINE = 0xEF41,
         TEXT_BOLD = 0xEF42,
+        TEXT_STRIKE = 0xF424,
         APPLY_GLOBAL_STYLE = 0xEF43,
         HAIRPIN = 0xEF44,
         ACCIDENTAL_SHARP = 0xEF45,
@@ -333,7 +334,7 @@ public:
         BEAM_DISTANCE_REGULAR = 0xF425,
         BEAM_DISTANCE_WIDE = 0xF426,
 
-        NONE
+        NONE = 0xFFFF
     };
 
     Q_ENUM(Code)

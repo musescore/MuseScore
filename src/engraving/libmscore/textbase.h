@@ -55,7 +55,7 @@ enum class VerticalAlignment : char {
 //---------------------------------------------------------
 
 enum class FormatId : char {
-    Bold, Italic, Underline, Valign, FontSize, FontFamily
+    Bold, Italic, Underline, Strike, Valign, FontSize, FontFamily
 };
 
 //---------------------------------------------------------
@@ -87,9 +87,11 @@ public:
     bool bold() const { return _style & FontStyle::Bold; }
     bool italic() const { return _style & FontStyle::Italic; }
     bool underline() const { return _style & FontStyle::Underline; }
+    bool strike() const { return _style & FontStyle::Strike; }
     void setBold(bool val) { _style = val ? _style + FontStyle::Bold : _style - FontStyle::Bold; }
     void setItalic(bool val) { _style = val ? _style + FontStyle::Italic : _style - FontStyle::Italic; }
     void setUnderline(bool val) { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
+    void setStrike(bool val) { _style = val ? _style + FontStyle::Strike : _style - FontStyle::Strike; }
 
     VerticalAlignment valign() const { return _valign; }
     qreal fontSize() const { return _fontSize; }
@@ -446,11 +448,17 @@ public:
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
     bool underline() const { return fontStyle() & FontStyle::Underline; }
+    bool strike() const { return fontStyle() & FontStyle::Strike; }
     void setBold(bool val) { setFontStyle(val ? fontStyle() + FontStyle::Bold : fontStyle() - FontStyle::Bold); }
     void setItalic(bool val) { setFontStyle(val ? fontStyle() + FontStyle::Italic : fontStyle() - FontStyle::Italic); }
     void setUnderline(bool val)
     {
         setFontStyle(val ? fontStyle() + FontStyle::Underline : fontStyle() - FontStyle::Underline);
+    }
+
+    void setStrike(bool val)
+    {
+        setFontStyle(val ? fontStyle() + FontStyle::Strike : fontStyle() - FontStyle::Strike);
     }
 
     bool hasCustomFormatting() const;

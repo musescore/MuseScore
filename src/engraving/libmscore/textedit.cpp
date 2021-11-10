@@ -869,7 +869,7 @@ void ChangeTextProperties::redo(EditData*)
     if (propertyId == Pid::FONT_STYLE) {
         FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
         TextCursor* tc = cursor().text()->cursor();
-        // user turned on bold/italic/underline for text where it's not set, or turned it off for text where it is set,
+        // user turned on bold/italic/underline/strike for text where it's not set, or turned it off for text where it is set,
         // note this logic only works because the user can only click one at a time
         if ((setStyle& FontStyle::Bold) != (existingStyle & FontStyle::Bold)) {
             tc->setFormat(FormatId::Bold, setStyle & FontStyle::Bold);
@@ -879,6 +879,9 @@ void ChangeTextProperties::redo(EditData*)
         }
         if ((setStyle& FontStyle::Underline) != (existingStyle & FontStyle::Underline)) {
             tc->setFormat(FormatId::Underline, setStyle & FontStyle::Underline);
+        }
+        if ((setStyle& FontStyle::Strike) != (existingStyle & FontStyle::Strike)) {
+            tc->setFormat(FormatId::Strike, setStyle & FontStyle::Strike);
         }
     } else {
         cursor().text()->setProperty(propertyId, propertyVal);

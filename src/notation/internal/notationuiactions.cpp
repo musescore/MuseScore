@@ -1483,6 +1483,12 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              QT_TRANSLATE_NOOP("action", "Underline"),
              QT_TRANSLATE_NOOP("action", "Underline"),
              Checkable::Yes
+             ),
+    UiAction("text-s",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Strike-throuch"),
+             QT_TRANSLATE_NOOP("action", "Strike-through"),
+             Checkable::Yes
              )
 };
 

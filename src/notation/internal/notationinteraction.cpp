@@ -3607,3 +3607,8 @@ void NotationInteraction::toggleUnderline()
 {
     toggleFontStyle(Ms::FontStyle::Underline);
 }
+
+void NotationInteraction::toggleStrike()
+{
+    toggleFontStyle(Ms::FontStyle::Strike);
+}
