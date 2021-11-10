@@ -28,6 +28,16 @@ DockPageView {
 
     property alias central: central.sourceComponent
 
+    property var toolBarLeftDropDestination: { "dock": toolBarLeftDockingHolder, "dropLocation": Location.Top }
+    property var toolBarRightDropDestination: { "dock": toolBarRightDockingHolder, "dropLocation": Location.Top }
+    property var toolBarTopDropDestination: { "dock": toolBarTopDockingHolder, "dropLocation": Location.Left }
+    property var toolBarBottomDropDestination: { "dock": toolBarBottomDockingHolder, "dropLocation": Location.Left }
+
+    property var panelLeftDropDestination: { "dock": panelLeftDockingHolder, "dropLocation": Location.Top }
+    property var panelRightDropDestination: { "dock": panelRightDockingHolder, "dropLocation": Location.Top }
+    property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": Location.Left }
+    property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": Location.Left }
+
     centralDock: DockCentralView {
         objectName: root.objectName + "_central"
 
@@ -39,56 +49,56 @@ DockPageView {
     }
 
     toolBarsDockingHolders: [
-        DockToolBarHolder {
+        DockingHolder {
+            id: toolBarLeftDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderLeft"
-            location: DockBase.Left
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Left
         },
-        DockToolBarHolder {
+        DockingHolder {
+            id: toolBarRightDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderRight"
-            location: DockBase.Right
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Right
         },
-        DockToolBarHolder {
+        DockingHolder {
+            id: toolBarTopDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderTop"
-            location: DockBase.Top
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Top
         },
-        DockToolBarHolder {
-            objectName: root.objectName + "_toolBarsDockingHolderBottom"
-            location: DockBase.Bottom
+        DockingHolder {
+            id: toolBarBottomDockingHolder
 
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            objectName: root.objectName + "_toolBarsDockingHolderBottom"
+            location: Location.Bottom
         }
     ]
 
     panelsDockingHolders: [
-        DockPanelHolder {
+        DockingHolder {
+            id: panelLeftDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderLeft"
-            location: DockBase.Left
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Left
         },
-        DockPanelHolder {
+        DockingHolder {
+            id: panelRightDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderRight"
-            location: DockBase.Right
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Right
         },
-        DockPanelHolder {
+        DockingHolder {
+            id: panelTopDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderTop"
-            location: DockBase.Top
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Top
         },
-        DockPanelHolder {
-            objectName: root.objectName + "_panelsDockingHolderBottom"
-            location: DockBase.Bottom
+        DockingHolder {
+            id: panelBottomDockingHolder
 
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            objectName: root.objectName + "_panelsDockingHolderBottom"
+            location: Location.Bottom
         }
     ]
 }

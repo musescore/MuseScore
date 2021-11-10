@@ -109,8 +109,7 @@ DockToolBarView::DockToolBarView(QQuickItem* parent)
     //! NOTE: parent (MouseArea) will be set later
     m_draggableArea(new DraggableArea())
 {
-    setAllowedAreas(Qt::TopDockWidgetArea);
-    setLocation(DockLocation::Top);
+    setLocation(Location::Top);
 }
 
 Qt::Orientation DockToolBarView::orientation() const
@@ -125,9 +124,7 @@ int DockToolBarView::alignment() const
 
 void DockToolBarView::setOrientation(Qt::Orientation orientation)
 {
-    bool isChangingAllowed = isOrientationChangingAllowed();
-
-    if (orientation == m_orientation || !isChangingAllowed) {
+    if (orientation == m_orientation) {
         return;
     }
 
@@ -165,10 +162,4 @@ void DockToolBarView::componentComplete()
 DockType DockToolBarView::type() const
 {
     return DockType::ToolBar;
-}
-
-bool DockToolBarView::isOrientationChangingAllowed() const
-{
-    return allowedAreas().testFlag(Qt::LeftDockWidgetArea)
-           || allowedAreas().testFlag(Qt::RightDockWidgetArea);
 }

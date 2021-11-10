@@ -33,18 +33,38 @@ inline const char* DOCK_PANEL_PROPERY("dockPanel");
 enum class DockType {
     Undefined = -1,
     Panel,
-    PanelDockingHolder,
     ToolBar,
-    ToolBarDockingHolder,
+    DockingHolder,
     StatusBar,
     Central
 };
 
+class DockLocation
+{
+    Q_GADGET
+
+public:
+    enum Location {
+        Undefined,
+        Left,
+        Right,
+        Center,
+        Top,
+        Bottom
+    };
+
+    Q_ENUM(Location)
+};
+
+using Location = DockLocation::Location;
+
 struct DockProperties
 {
     DockType type = DockType::Undefined;
-    Qt::DockWidgetAreas allowedAreas = Qt::NoDockWidgetArea;
+    bool persistent = false;
     bool separatorsVisible = false;
+    bool selected = false;
+    QRect highlightingRect;
 
     bool isValid() const
     {
@@ -54,11 +74,16 @@ struct DockProperties
 
 inline void writePropertiesToObject(const DockProperties& properties, QObject& obj)
 {
-    QObject* propertiesObj = new QObject(&obj);
-    propertiesObj->setObjectName("properties");
-    propertiesObj->setProperty("dockType", QVariant::fromValue(static_cast<int>(properties.type)));
-    propertiesObj->setProperty("allowedAreas", QVariant::fromValue(static_cast<int>(properties.allowedAreas)));
+    QObject* propertiesObj = obj.findChild<QObject*>("properties");
+    if (!propertiesObj) {
+        propertiesObj = new QObject(&obj);
+        propertiesObj->setObjectName("properties");
+    }
+
+    propertiesObj->setProperty("dockType", static_cast<int>(properties.type));
+    propertiesObj->setProperty("persistent", properties.persistent);
     propertiesObj->setProperty("separatorsVisible", properties.separatorsVisible);
+    propertiesObj->setProperty("highlightingRect", properties.highlightingRect);
 }
 
 inline DockProperties readPropertiesFromObject(const QObject* obj)
@@ -74,8 +99,9 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
 
     DockProperties result;
     result.type = static_cast<DockType>(properties->property("dockType").toInt());
-    result.allowedAreas = static_cast<Qt::DockWidgetAreas>(properties->property("allowedAreas").toInt());
+    result.persistent = properties->property("persistent").toBool();
     result.separatorsVisible = properties->property("separatorsVisible").toBool();
+    result.highlightingRect = properties->property("highlightingRect").toRect();
 
     return result;
 }

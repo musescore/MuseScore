@@ -22,7 +22,7 @@
 
 #include "docksetup.h"
 
-#include "internal/dropindicators.h"
+#include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
 #include "internal/dockwindowactionscontroller.h"
@@ -30,9 +30,9 @@
 
 #include "dockwindow.h"
 #include "dockpanelview.h"
-#include "dockpanelholder.h"
+#include "docktoolbarview.h"
 #include "dockstatusbarview.h"
-#include "docktoolbarholder.h"
+#include "dockingholderview.h"
 #include "dockcentralview.h"
 #include "dockpageview.h"
 
@@ -51,7 +51,7 @@ class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
 public:
     KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
     {
-        return new DropIndicators(dropArea);
+        return new DropController(dropArea);
     }
 
     Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
@@ -85,18 +85,15 @@ void DockSetup::registerQmlTypes()
 {
     qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
     qmlRegisterType<DockPanelView>("MuseScore.Dock", 1, 0, "DockPanelView");
-    qmlRegisterType<DockPanelHolder>("MuseScore.Dock", 1, 0, "DockPanelHolder");
     qmlRegisterType<DockStatusBarView>("MuseScore.Dock", 1, 0, "DockStatusBar");
     qmlRegisterType<DockToolBarView>("MuseScore.Dock", 1, 0, "DockToolBarView");
-    qmlRegisterType<DockToolBarHolder>("MuseScore.Dock", 1, 0, "DockToolBarHolder");
+    qmlRegisterType<DockingHolderView>("MuseScore.Dock", 1, 0, "DockingHolderView");
     qmlRegisterType<DockCentralView>("MuseScore.Dock", 1, 0, "DockCentralView");
     qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
-    qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
-
-    qRegisterMetaType<DropIndicators*>();
 
     qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
+    qmlRegisterUncreatableType<DockLocation>("MuseScore.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 
 void DockSetup::registerExports()
