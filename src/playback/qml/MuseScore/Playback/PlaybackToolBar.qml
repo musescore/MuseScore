@@ -35,8 +35,6 @@ Rectangle {
     property alias navigation: navPanel
     property bool floating: false
 
-    property int maximumHeight: 0
-
     width: floating ? 426 : 364 //content.width
     height: content.height
 
@@ -61,7 +59,7 @@ Rectangle {
     Column {
         id: content
 
-        spacing: 14
+        spacing: 8
 
         width: childrenRect.width
 

@@ -135,7 +135,9 @@ DockPage {
 
             separatorsVisible: false
             alignment: DockToolBarAlignment.Right
-            contentBottomPadding: 2
+
+            contentBottomPadding: floating ? 8 : 2
+            contentTopPadding: floating ? 8 : 0
 
             dropDestinations: [
                 { "dock": notationToolBar, "dropLocation": Location.Right }
@@ -146,8 +148,6 @@ DockPage {
                 navigation.order: 3
 
                 floating: playbackToolBar.floating
-
-                maximumHeight: playbackToolBar.height
             }
         },
 
@@ -174,9 +174,6 @@ DockPage {
 
             objectName: pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
-
-            minimumWidth: floating && orientation === Qt.Horizontal ? 720 : 76
-            minimumHeight: floating && orientation === Qt.Vertical ? 720 : 40
 
             dropDestinations: [
                 root.toolBarTopDropDestination,

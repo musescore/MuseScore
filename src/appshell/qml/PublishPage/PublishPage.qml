@@ -88,8 +88,6 @@ DockPage {
                 navigation.order: 3
 
                 floating: playbackToolBar.floating
-
-                maximumHeight: playbackToolBar.height
             }
         },
 
