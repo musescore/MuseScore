@@ -198,6 +198,7 @@ public:
     virtual void toggleBold() = 0;
     virtual void toggleItalic() = 0;
     virtual void toggleUnderline() = 0;
+    virtual void toggleStrike() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

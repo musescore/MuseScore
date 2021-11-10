@@ -154,6 +154,12 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             if (e.readInt()) {
                 fontStyle = fontStyle + FontStyle::Underline;
             }
+#if 0 // should not happend, but won't harm either
+        } else if (tag == "strike") {
+            if (e.readInt()) {
+                fontStyle = fontStyle + FontStyle::Strike;
+            }
+#endif
         } else if (tag == "align") {
             align = Align(e.readInt());
         } else if (tag == "anchor") {     // obsolete

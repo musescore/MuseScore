@@ -290,6 +290,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
             text->setFamily(f.family());
             text->setItalic(f.italic());
             // text->setUnderline(f.underline());
+            // text->setStrike(f.strikeOut());
             text->setBold(f.bold());
             text->setSize(f.pointSizeF());
 
@@ -1288,6 +1289,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             QFont f(to->font());
             s->setItalic(f.italic());
             // s->setUnderline(f.underline());
+            // s->setStrike(f.strikeOut());
             s->setBold(f.bold());
             s->setSize(f.pointSizeF());
 

@@ -1268,6 +1268,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     QString fontSize   = e.attributes().value("font-size").toString();
     QString fontStyle  = e.attributes().value("font-style").toString();
     QString underline  = e.attributes().value("underline").toString();
+    QString strike     = e.attributes().value("line-through").toString();
     QString fontFamily = e.attributes().value("font-family").toString();
     // TODO: color, enclosure, yoffset in only part of the text, ...
 
@@ -1300,8 +1301,17 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     if (!underline.isEmpty()) {
         bool ok = true;
         int lines = underline.toInt(&ok);
-        if (ok && (lines > 0)) {    // 1,2, or 3 underlines are imported as single underline
+        if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
             importedtext += "<u>";
+        } else {
+            underline = "";
+        }
+    }
+    if (!strike.isEmpty()) {
+        bool ok = true;
+        int lines = strike.toInt(&ok);
+        if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
+            importedtext += "<s>";
         } else {
             underline = "";
         }
@@ -1312,6 +1322,9 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
     } else {
         // <sym> replacement made, should be no need for line break or other conversions
         importedtext += syms;
+    }
+    if (strike != "") {
+        importedtext += "</s>";
     }
     if (underline != "") {
         importedtext += "</u>";

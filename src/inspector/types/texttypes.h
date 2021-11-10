@@ -31,10 +31,12 @@ class TextTypes
 
 public:
     enum class FontStyle {
+        //FONT_STYLE_UNDEFINED = -1,
         FONT_STYLE_NORMAL = 0,
-        FONT_STYLE_BOLD = 1,
-        FONT_STYLE_ITALIC = 2,
-        FONT_STYLE_UNDERLINE = 4
+        FONT_STYLE_BOLD = 1 << 0,
+        FONT_STYLE_ITALIC = 1 << 1,
+        FONT_STYLE_UNDERLINE = 1 << 2,
+        FONT_STYLE_STRIKE = 1 << 3
     };
 
     enum class FontHorizontalAlignment {

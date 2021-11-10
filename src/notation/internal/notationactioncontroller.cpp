@@ -302,6 +302,7 @@ void NotationActionController::init()
     registerTextAction("text-b", &NotationActionController::toggleBold);
     registerTextAction("text-i", &NotationActionController::toggleItalic);
     registerTextAction("text-u", &NotationActionController::toggleUnderline);
+    registerTextAction("text-u", &NotationActionController::toggleStrike);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
@@ -1899,6 +1900,11 @@ void NotationActionController::toggleUnderline()
 {
     TRACEFUNC;
     currentNotationInteraction()->toggleUnderline();
+}
+
+void NotationActionController::toggleStrike()
+{
+    currentNotationInteraction()->toggleStrike();
 }
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
