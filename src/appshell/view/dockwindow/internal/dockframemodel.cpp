@@ -46,6 +46,10 @@ DockFrameModel::DockFrameModel(QObject* parent)
 
 bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
 {
+    if (event->type() != QEvent::DynamicPropertyChange) {
+        return QObject::eventFilter(watched, event);
+    }
+
     auto propertyChangeEvent = dynamic_cast<QDynamicPropertyChangeEvent*>(event);
     if (!propertyChangeEvent) {
         return QObject::eventFilter(watched, event);
@@ -57,6 +61,10 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
         if (watched == currentDockObject()) {
             emit currentDockChanged();
         }
+    }
+
+    if (propertyChangeEvent->propertyName() == "highlightingRect") {
+        emit highlightingVisibleChanged();
     }
 
     return QObject::eventFilter(watched, event);
@@ -71,12 +79,11 @@ QVariantList DockFrameModel::tabs() const
 {
     QVariantList result;
 
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-    if (!frame || frame->hasSingleDockWidget()) {
+    if (!m_frame || m_frame->hasSingleDockWidget()) {
         return result;
     }
 
-    for (const KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
+    for (const KDDockWidgets::DockWidgetBase* dock : m_frame->dockWidgets()) {
         QVariantMap tab;
         tab["title"] = dock->title();
         tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
@@ -98,7 +105,7 @@ void DockFrameModel::setFrame(QQuickItem* frame)
         return;
     }
 
-    m_frame = frame;
+    m_frame = dynamic_cast<KDDockWidgets::Frame*>(frame);
     emit frameChanged(frame);
 
     listenChangesInFrame();
@@ -106,20 +113,18 @@ void DockFrameModel::setFrame(QQuickItem* frame)
 
 void DockFrameModel::listenChangesInFrame()
 {
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-    if (!frame) {
+    if (!m_frame) {
         return;
     }
 
-    connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this, frame]() {
+    connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
         emit tabsChanged();
 
-        auto currentDock = frame->currentDockWidget();
-        auto allDocks = frame->dockWidgets();
-
-        if (!allDocks.contains(currentDock)) {
-            frame->setCurrentTabIndex(0);
+        if (!m_frame->currentDockWidget()) {
+            m_frame->setCurrentTabIndex(0);
         }
+
+        auto allDocks = m_frame->dockWidgets();
 
         if (allDocks.size() != 1) {
             setTitleBarVisible(false);
@@ -127,13 +132,13 @@ void DockFrameModel::listenChangesInFrame()
         }
 
         DockProperties properties = readPropertiesFromObject(allDocks.first());
-        bool visible = (properties.type == DockType::Panel && properties.allowedAreas != Qt::NoDockWidgetArea);
+        bool visible = (properties.type == DockType::Panel) && !properties.persistent;
         setTitleBarVisible(visible);
 
         updateNavigationSection();
     });
 
-    connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
+    connect(m_frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
         updateNavigationSection();
 
         emit currentDockChanged();
@@ -172,9 +177,8 @@ QObject* DockFrameModel::navigationSection() const
 
 QString DockFrameModel::currentDockUniqueName() const
 {
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-    if (frame && frame->currentDockWidget()) {
-        return frame->currentDockWidget()->uniqueName();
+    if (m_frame && m_frame->currentDockWidget()) {
+        return m_frame->currentDockWidget()->uniqueName();
     }
 
     return QString();
@@ -185,10 +189,31 @@ QVariant DockFrameModel::currentDockContextMenuModel() const
     return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
 }
 
+bool DockFrameModel::highlightingVisible() const
+{
+    return highlightingRect().isValid();
+}
+
+QRect DockFrameModel::highlightingRect() const
+{
+    if (!m_frame) {
+        return QRect();
+    }
+
+    for (auto dock : m_frame->dockWidgets()) {
+        DockProperties properties = readPropertiesFromObject(dock);
+
+        if (properties.highlightingRect.isValid()) {
+            return properties.highlightingRect;
+        }
+    }
+
+    return QRect();
+}
+
 const QObject* DockFrameModel::currentDockObject() const
 {
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-    return frame ? frame->currentDockWidget() : nullptr;
+    return m_frame ? m_frame->currentDockWidget() : nullptr;
 }
 
 QVariant DockFrameModel::currentDockProperty(const char* propertyName) const

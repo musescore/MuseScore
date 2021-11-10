@@ -20,22 +20,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPANELHOLDER_H
-#define MU_DOCK_DOCKPANELHOLDER_H
+#include "dockingholderview.h"
 
-#include "dockpanelview.h"
+using namespace mu::dock;
 
-namespace mu::dock {
-class DockPanelHolder : public DockPanelView
+constexpr int HOLDER_SIZE = 36;
+
+DockingHolderView::DockingHolderView(QQuickItem* parent)
+    : DockBase(parent)
 {
-    Q_OBJECT
-
-public:
-    explicit DockPanelHolder(QQuickItem* parent = nullptr);
-
-private:
-    DockType type() const override;
-};
+    setVisible(false);
 }
 
-#endif // MU_DOCK_DOCKPANELHOLDER_H
+void DockingHolderView::componentComplete()
+{
+    switch (location()) {
+    case Location::Left:
+    case Location::Right:
+        setMinimumWidth(HOLDER_SIZE);
+        setWidth(HOLDER_SIZE);
+        break;
+    case Location::Top:
+    case Location::Bottom:
+        setMinimumHeight(HOLDER_SIZE);
+        setHeight(HOLDER_SIZE);
+        break;
+    case Location::Center:
+    case Location::Undefined:
+        break;
+    }
+
+    DockBase::componentComplete();
+}
+
+DockType DockingHolderView::type() const
+{
+    return DockType::DockingHolder;
+}

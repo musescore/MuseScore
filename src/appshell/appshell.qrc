@@ -67,8 +67,7 @@
         <file>qml/dockwindow/DockFloatingWindow.qml</file>
         <file>qml/dockwindow/DockPage.qml</file>
         <file>qml/dockwindow/DockPanel.qml</file>
-        <file>qml/dockwindow/DropIndicators.qml</file>
-        <file>qml/dockwindow/DropIndicator.qml</file>
+        <file>qml/dockwindow/DockingHolder.qml</file>
         <file>qml/AppWindow.qml</file>
         <file>qml/WindowContent.qml</file>
         <file>qml/platform/linux/Main.qml</file>

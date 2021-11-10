@@ -20,24 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTOOLBARHOLDER_H
-#define MU_DOCK_DOCKTOOLBARHOLDER_H
+import QtQuick 2.15
 
-#include "docktoolbarview.h"
+import MuseScore.Ui 1.0
+import MuseScore.Dock 1.0
 
-namespace mu::dock {
-class DockToolBarHolder : public DockToolBarView
-{
-    Q_OBJECT
-
-public:
-    explicit DockToolBarHolder(QQuickItem* parent = nullptr);
-
-private:
-    void componentComplete() override;
-
-    DockType type() const override;
-};
+DockingHolderView {
+    Rectangle {
+        color: ui.theme.backgroundPrimaryColor
+    }
 }
-
-#endif // MU_DOCK_DOCKTOOLBARHOLDER_H

@@ -99,14 +99,50 @@ QSize DockBase::preferredSize() const
     return QSize(width(), height());
 }
 
-Qt::DockWidgetAreas DockBase::allowedAreas() const
+int DockBase::locationProperty() const
 {
-    return m_allowedAreas;
+    return m_location;
 }
 
-bool DockBase::floating() const
+Location DockBase::location() const
 {
-    return m_floating;
+    return static_cast<Location>(m_location);
+}
+
+QVariantList DockBase::dropDestinationsProperty() const
+{
+    return m_dropDestinations;
+}
+
+QList<DropDestination> DockBase::dropDestinations() const
+{
+    QList<DropDestination> result;
+
+    for (const QVariant& obj : m_dropDestinations) {
+        QVariantMap map = obj.toMap();
+
+        DropDestination destination;
+        destination.dock = map["dock"].value<DockBase*>();
+
+        if (map.contains("dropLocation")) {
+            destination.dropLocation = static_cast<Location>(map["dropLocation"].toInt());
+        } else {
+            destination.dropLocation = Location::Left;
+        }
+
+        if (map.contains("dropDistance")) {
+            destination.dropDistance = map["dropDistance"].toInt();
+        }
+
+        result << destination;
+    }
+
+    return result;
+}
+
+bool DockBase::persistent() const
+{
+    return m_persistent;
 }
 
 bool DockBase::resizable() const
@@ -117,6 +153,11 @@ bool DockBase::resizable() const
 bool DockBase::separatorsVisible() const
 {
     return m_separatorsVisible;
+}
+
+bool DockBase::floating() const
+{
+    return m_dockWidget && m_dockWidget->isFloating();
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -194,34 +235,34 @@ void DockBase::setContentHeight(int height)
     emit contentSizeChanged();
 }
 
-void DockBase::setAllowedAreas(Qt::DockWidgetAreas areas)
-{
-    if (areas == allowedAreas()) {
-        return;
-    }
-
-    m_allowedAreas = areas;
-    emit allowedAreasChanged();
-}
-
-void DockBase::setFloating(bool floating)
-{
-    if (floating == m_floating) {
-        return;
-    }
-
-    m_dockWidget->setFloating(floating);
-    doSetFloating(floating);
-}
-
-void DockBase::setLocation(DockLocation location)
+void DockBase::setLocation(int location)
 {
     if (location == m_location) {
         return;
     }
 
     m_location = location;
-    emit locationChanged(m_location);
+    emit locationChanged();
+}
+
+void DockBase::setDropDestinations(const QVariantList& destinations)
+{
+    if (m_dropDestinations == destinations) {
+        return;
+    }
+
+    m_dropDestinations = destinations;
+    emit dropDestinationsChanged();
+}
+
+void DockBase::setPersistent(bool persistent)
+{
+    if (persistent == m_persistent) {
+        return;
+    }
+
+    m_persistent = persistent;
+    emit persistentChanged();
 }
 
 void DockBase::setResizable(bool resizable)
@@ -244,9 +285,13 @@ void DockBase::setSeparatorsVisible(bool visible)
     emit separatorsVisibleChanged();
 }
 
-DockType DockBase::type() const
+void DockBase::setFloating(bool floating)
 {
-    return DockType::Undefined;
+    if (floating == this->floating()) {
+        return;
+    }
+
+    m_dockWidget->setFloating(floating);
 }
 
 void DockBase::init()
@@ -283,9 +328,28 @@ void DockBase::close()
     setVisible(false);
 }
 
-DockBase::DockLocation DockBase::location() const
+void DockBase::showHighlighting(const QRect& highlightingRect)
 {
-    return m_location;
+    if (highlightingRect == m_highlightingRect) {
+        return;
+    }
+
+    m_highlightingRect = highlightingRect;
+    writeProperties();
+}
+
+void DockBase::hideHighlighting()
+{
+    showHighlighting(QRect());
+}
+
+QRect DockBase::frameGeometry() const
+{
+    if (m_dockWidget && m_dockWidget->isVisible()) {
+        return m_dockWidget->frameGeometry();
+    }
+
+    return QRect();
 }
 
 void DockBase::componentComplete()
@@ -310,13 +374,7 @@ void DockBase::componentComplete()
     m_dockWidget->setWidget(content);
     m_dockWidget->setTitle(m_title);
 
-    DockProperties properties;
-    properties.type = type();
-    properties.allowedAreas = allowedAreas();
-    properties.separatorsVisible = separatorsVisible();
-
-    writePropertiesToObject(properties, *m_dockWidget);
-
+    writeProperties();
     listenFloatingChanges();
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
@@ -378,25 +436,55 @@ void DockBase::listenFloatingChanges()
         return;
     }
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this]() {
+    auto frameConn = std::make_shared<QMetaObject::Connection>();
+
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
             return;
         }
+
+        disconnect(*frameConn);
 
         const KDDockWidgets::Frame* frame = m_dockWidget->frame();
         if (!frame) {
             return;
         }
 
-        connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
-            doSetFloating(!frame->isInMainWindow());
+        *frameConn = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
+            emit floatingChanged();
             applySizeConstraints();
         }, Qt::UniqueConnection);
     });
 }
 
-void DockBase::doSetFloating(bool floating)
+void DockBase::writeProperties()
 {
-    m_floating = floating;
-    emit floatingChanged();
+    if (!m_dockWidget) {
+        return;
+    }
+
+    DockProperties properties;
+    properties.type = type();
+    properties.persistent = persistent();
+    properties.separatorsVisible = separatorsVisible();
+    properties.highlightingRect = m_highlightingRect;
+
+    writePropertiesToObject(properties, *m_dockWidget);
+}
+
+bool DropDestination::operator==(const DropDestination& dest) const
+{
+    return dock == dest.dock && dropLocation == dest.dropLocation && dropDistance == dest.dropDistance;
+}
+
+bool DropDestination::isValid() const
+{
+    return dock != nullptr;
+}
+
+void DropDestination::clear()
+{
+    dock = nullptr;
+    dropLocation = Location::Undefined;
+    dropDistance = 0;
 }

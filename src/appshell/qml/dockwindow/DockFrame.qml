@@ -207,4 +207,25 @@ Rectangle {
             return 0
         }
     }
+
+    Rectangle {
+        visible: frameModel.highlightingVisible
+
+        x: frameModel.highlightingRect.x
+        y: frameModel.highlightingRect.y
+        width: frameModel.highlightingRect.width
+        height: frameModel.highlightingRect.height
+
+        color: "transparent"
+
+        border.width: 1
+        border.color: ui.theme.accentColor
+
+        Rectangle {
+            anchors.fill: parent
+
+            color: ui.theme.accentColor
+            opacity: 0.3
+        }
+    }
 }
