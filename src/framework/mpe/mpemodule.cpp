@@ -25,11 +25,19 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 #include "internal/articulationprofilesrepository.h"
 #include "view/articulationsprofileeditormodel.h"
 
+using namespace mu;
+using namespace mu::modularity;
 using namespace mu::mpe;
+
+static void mpe_init_qrc()
+{
+    Q_INIT_RESOURCE(mpe);
+}
 
 static std::shared_ptr<ArticulationProfilesRepository> s_profilesRepository = std::make_shared<ArticulationProfilesRepository>();
 
@@ -40,10 +48,17 @@ std::string MpeModule::moduleName() const
 
 void MpeModule::registerExports()
 {
-    modularity::ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), s_profilesRepository);
+    ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), s_profilesRepository);
 }
 
 void MpeModule::registerUiTypes()
 {
     qmlRegisterType<ArticulationsProfileEditorModel>("MuseScore.Mpe", 1, 0, "ArticulationsProfileEditorModel");
+
+    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(mpe_QML_IMPORT);
+}
+
+void MpeModule::registerResources()
+{
+    mpe_init_qrc();
 }
