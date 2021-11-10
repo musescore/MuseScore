@@ -166,3 +166,16 @@ TEST_F(KeySigTests, preferSharpFlat)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score2, "preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-2-ref.mscx"));
     delete score2;
 }
+
+TEST_F(KeySigTests, keysigMode)
+{
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysigMode.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
+    ke->setProperty(Pid::KEYSIG_MODE, int(KeyMode::DORIAN));
+    score->update();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "keysig03.mscx", KEYSIG_DATA_DIR + "keysig03-ref.mscx"));
+    delete score;
+}
