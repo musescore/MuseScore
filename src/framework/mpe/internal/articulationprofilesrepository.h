@@ -47,8 +47,8 @@ private:
     std::vector<ArticulationFamily> supportedFamiliesFromJson(const QJsonArray& array) const;
     QJsonArray supportedFamiliesToJson(const std::vector<ArticulationFamily>& families) const;
 
-    ArticulationPatternsScope patternsScopeFromJson(const QJsonArray& array) const;
-    QJsonArray patternsScopeToJson(const ArticulationPatternsScope& scope) const;
+    ArticulationPattern patternsScopeFromJson(const QJsonArray& array) const;
+    QJsonArray patternsScopeToJson(const ArticulationPattern& scope) const;
 
     ArrangementPattern arrangementPatternFromJson(const QJsonObject& obj) const;
     QJsonObject arrangementPatternToJson(const ArrangementPattern& pattern) const;

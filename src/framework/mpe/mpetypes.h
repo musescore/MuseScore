@@ -28,15 +28,17 @@
 #include <algorithm>
 #include <unordered_map>
 #include <map>
+#include <set>
 #include <vector>
 
 #include "log.h"
+#include "realfn.h"
 
 namespace mu::mpe {
 // common
 using msecs_t = uint64_t;
 using percentage_t = float; // from 0.0 (0%) to 1.0 (100%)
-constexpr percentage_t PERCENTAGE_PRECISION_STEP = 0.1f; // 10%
+constexpr percentage_t PERCENTAGE_PRECISION_STEP = 0.1; // 10%
 
 // Arrangement
 using timestamp_t = msecs_t;
@@ -67,6 +69,8 @@ using octave_t = uint_fast8_t;
 using pitch_level_t = percentage_t;
 using PitchCurve = std::map<duration_percentage_t, pitch_level_t>;
 
+constexpr size_t EXPECTED_SIZE = (1.f / PERCENTAGE_PRECISION_STEP) + 1;
+
 constexpr octave_t MAX_SUPPORTED_OCTAVE = 12; // 0 - 12
 constexpr pitch_level_t MAX_PITCH_LEVEL = 1.f;
 constexpr pitch_level_t PITCH_LEVEL_STEP = MAX_PITCH_LEVEL / ((MAX_SUPPORTED_OCTAVE + 1) * static_cast<int>(PitchClass::Last));
@@ -95,7 +99,7 @@ enum class ArticulationType {
     Undefined = -1,
 
     // single note articulations
-    None,
+    Standard,
     Staccato,
     Staccatissimo,
     Tenuto,
@@ -196,6 +200,34 @@ enum class ArticulationType {
     Last
 };
 
+inline bool isSingleNoteArticulation(const ArticulationType type)
+{
+    static std::set<ArticulationType> singleNoteTypes = {
+        ArticulationType::Standard, ArticulationType::Staccato, ArticulationType::Staccatissimo,
+        ArticulationType::Tenuto, ArticulationType::Marcato, ArticulationType::Accent,
+        ArticulationType::ShortAccent, ArticulationType::VeryShortFermata, ArticulationType::ShortFermata,
+        ArticulationType::ShortFermataHenze, ArticulationType::Fermata, ArticulationType::LongFermata,
+        ArticulationType::LongFermataHenze, ArticulationType::VeryLongFermata, ArticulationType::LaissezVibrer,
+        ArticulationType::Subito, ArticulationType::FadeIn, ArticulationType::FadeOut,
+        ArticulationType::Harmonic, ArticulationType::Mute, ArticulationType::Open,
+        ArticulationType::Pizzicato, ArticulationType::SnapPizzicato, ArticulationType::RandomPizzicato,
+        ArticulationType::UpBow, ArticulationType::DownBow, ArticulationType::Detache,
+        ArticulationType::Martele, ArticulationType::Jete, ArticulationType::GhostNote,
+        ArticulationType::CrossNote, ArticulationType::CircleNote, ArticulationType::TriangleNote,
+        ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
+        ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
+        ArticulationType::Bend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
+        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow
+    };
+
+    return singleNoteTypes.find(type) != singleNoteTypes.cend();
+}
+
+inline bool isMultiNoteArticulation(const ArticulationType type)
+{
+    return !isSingleNoteArticulation(type);
+}
+
 enum class DynamicType {
     Undefined = -1,
     pppppppp = 0,
@@ -249,15 +281,22 @@ inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
 
 struct ArrangementPattern
 {
+    ArrangementPattern() = default;
+
+    ArrangementPattern(duration_percentage_t _durationFactor, duration_percentage_t _timestampOffset)
+        : durationFactor(_durationFactor), timestampOffset(_timestampOffset)
+    {
+    }
+
     duration_percentage_t durationFactor = 0.f;
-    msecs_t timestampOffset = 0;
+    duration_percentage_t timestampOffset = 0.f;
 
     static duration_percentage_t averageDurationFactor(const std::vector<ArrangementPattern>& patterns)
     {
         duration_percentage_t result = 0.f;
 
         if (patterns.empty()) {
-            return result;
+            return 1.f;
         }
 
         for (const ArrangementPattern& pattern : patterns) {
@@ -269,9 +308,9 @@ struct ArrangementPattern
         return result;
     }
 
-    static msecs_t averageTimestampOffset(const std::vector<ArrangementPattern>& patterns)
+    static duration_percentage_t averageTimestampOffset(const std::vector<ArrangementPattern>& patterns)
     {
-        msecs_t result = 0;
+        duration_percentage_t result = 0.f;
 
         if (patterns.empty()) {
             return result;
@@ -280,14 +319,16 @@ struct ArrangementPattern
         int meaningTimestampOffsetCount = 0;
 
         for (const ArrangementPattern& pattern : patterns) {
-            if (pattern.timestampOffset > 0) {
-                result += pattern.timestampOffset;
-                meaningTimestampOffsetCount++;
+            if (RealIsEqual(pattern.timestampOffset, 0.f)) {
+                continue;
             }
+
+            result += pattern.timestampOffset;
+            meaningTimestampOffsetCount++;
         }
 
         if (meaningTimestampOffsetCount == 0) {
-            return 0;
+            return 0.f;
         }
 
         result /= meaningTimestampOffsetCount;
@@ -302,6 +343,15 @@ struct PitchPattern
 {
     using PitchOffsetMap = std::map<duration_percentage_t, pitch_level_t>;
 
+    PitchPattern() = default;
+
+    PitchPattern(size_t size, percentage_t step, float defaultValue)
+    {
+        for (size_t i = 0; i < size; ++i) {
+            pitchOffsetMap.emplace(step * i, defaultValue);
+        }
+    }
+
     PitchOffsetMap pitchOffsetMap;
 
     static PitchOffsetMap averagePitchOffsetMap(const std::vector<PitchPattern>& patterns)
@@ -312,10 +362,8 @@ struct PitchPattern
             return result;
         }
 
-        constexpr size_t expectedSize = 1.f / PERCENTAGE_PRECISION_STEP;
-
         for (const PitchPattern& pattern : patterns) {
-            IF_ASSERT_FAILED_X(pattern.pitchOffsetMap.size() == expectedSize,
+            IF_ASSERT_FAILED_X(pattern.pitchOffsetMap.size() == EXPECTED_SIZE,
                                "Pitch pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
                 break;
             }
@@ -338,6 +386,15 @@ using PitchPatternList = std::vector<PitchPattern>;
 struct ExpressionPattern
 {
     using DynamicOffsetMap = std::map<duration_percentage_t, dynamic_level_t>;
+
+    ExpressionPattern() = default;
+
+    ExpressionPattern(size_t size, percentage_t step, float defaultValue)
+    {
+        for (size_t i = 0; i < size; ++i) {
+            dynamicOffsetMap.emplace(step * i, defaultValue);
+        }
+    }
 
     dynamic_level_t maxAmplitudeLevel = 0.f;
     duration_percentage_t amplitudeTimeShift = 0.f;
@@ -404,10 +461,8 @@ struct ExpressionPattern
             return result;
         }
 
-        constexpr size_t expectedSize = 1.f / PERCENTAGE_PRECISION_STEP;
-
         for (const ExpressionPattern& pattern : patterns) {
-            IF_ASSERT_FAILED_X(pattern.dynamicOffsetMap.size() == expectedSize,
+            IF_ASSERT_FAILED_X(pattern.dynamicOffsetMap.size() == EXPECTED_SIZE,
                                "Expression pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
                 break;
             }
@@ -427,20 +482,26 @@ struct ExpressionPattern
 
 using ExpressionPatternList = std::vector<ExpressionPattern>;
 
-struct ArticulationPattern
+struct ArticulationPatternSegment
 {
+    ArticulationPatternSegment() = default;
+
+    ArticulationPatternSegment(ArrangementPattern&& arrangement, PitchPattern&& pitch, ExpressionPattern&& expression)
+        : arrangementPattern(arrangement), pitchPattern(pitch), expressionPattern(expression)
+    {}
+
     ArrangementPattern arrangementPattern;
     PitchPattern pitchPattern;
     ExpressionPattern expressionPattern;
 };
 
-using ArticulationPatternsScope = std::map<duration_percentage_t, ArticulationPattern>;
+using ArticulationPattern = std::map<duration_percentage_t, ArticulationPatternSegment>;
 
 struct ArticulationsProfile
 {
     std::vector<ArticulationFamily> supportedFamilies;
 
-    ArticulationPatternsScope patterns(const ArticulationType type) const
+    ArticulationPattern pattern(const ArticulationType type) const
     {
         auto search = m_patterns.find(type);
 
@@ -451,12 +512,12 @@ struct ArticulationsProfile
         return search->second;
     }
 
-    void updatePatterns(const ArticulationType type, const ArticulationPatternsScope& scope)
+    void updatePatterns(const ArticulationType type, const ArticulationPattern& scope)
     {
         m_patterns.insert_or_assign(type, scope);
     }
 
-    const std::unordered_map<ArticulationType, ArticulationPatternsScope>& data() const
+    const std::unordered_map<ArticulationType, ArticulationPattern>& data() const
     {
         return m_patterns;
     }
@@ -472,14 +533,14 @@ struct ArticulationsProfile
     }
 
 private:
-    std::unordered_map<ArticulationType, ArticulationPatternsScope> m_patterns;
+    std::unordered_map<ArticulationType, ArticulationPattern> m_patterns;
 };
 
 using ArticulationsProfilePtr = std::shared_ptr<ArticulationsProfile>;
 
 struct ArticulationData {
     explicit ArticulationData(const ArticulationType _type,
-                              const ArticulationPatternsScope& _patternsScope,
+                              const ArticulationPattern& _patternsScope,
                               const duration_percentage_t _occupiedFrom,
                               const duration_percentage_t _occupiedTo)
         : type(_type),
@@ -500,7 +561,7 @@ struct ArticulationData {
     }
 
     ArticulationType type = ArticulationType::Undefined;
-    ArticulationPattern patterns;
+    ArticulationPatternSegment patterns;
 
     duration_percentage_t occupiedFrom = 0.f;
     duration_percentage_t occupiedTo = 1.f;

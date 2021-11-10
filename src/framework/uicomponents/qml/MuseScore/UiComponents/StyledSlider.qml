@@ -31,6 +31,7 @@ Slider {
     implicitHeight: vertical ? 220 : 4
 
     hoverEnabled: true
+    wheelEnabled: true
 
     background: Item {
         id: mainBackground
