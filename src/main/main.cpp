@@ -57,6 +57,7 @@
 #include "stubs/framework/audio/audiostubmodule.h"
 #endif
 #include "framework/midi/midimodule.h"
+#include "framework/mpe/mpemodule.h"
 
 #include "appshell/appshellmodule.h"
 #include "context/contextmodule.h"
@@ -207,6 +208,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::audio::AudioStubModule());
 #endif
     app.addModule(new mu::midi::MidiModule());
+    app.addModule(new mu::mpe::MpeModule());
 
     app.addModule(new mu::learn::LearnModule());
 

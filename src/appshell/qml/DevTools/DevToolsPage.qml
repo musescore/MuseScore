@@ -27,6 +27,7 @@ import MuseScore.Dock 1.0
 
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
+import MuseScore.Mpe 1.0
 
 import "./Gallery"
 import "./Interactive"
@@ -55,6 +56,7 @@ DockPage {
         case "synth": root.central = synthSettingsComp; break
         case "midiports": root.central = midiPortsComp; break
         case "vst": root.central = vstComponent; break
+        case "mpe": root.central = mpeComponent; break
         case "plugins": root.central = pluginsComp; break
         case "autobot": root.central = autobotComp; break
         case "navigation": root.central = keynavComp; break
@@ -90,6 +92,7 @@ DockPage {
                         { "name": "synth", "title": "Synth" },
                         { "name": "midiports", "title": "MIDI ports" },
                         { "name": "vst", "title": "VST" },
+                        { "name": "mpe", "title": "MPE" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
                         { "name": "navigation", "title": "KeyNav" }
@@ -161,6 +164,14 @@ DockPage {
         //safe if VST is not available
         Loader {
             source: "qrc:/qml/DevTools/VST/VSTTests.qml"
+        }
+    }
+
+    Component {
+        id: mpeComponent
+
+        Loader {
+            source: "qrc:/qml/DevTools/MPE/ArticulationsProfileEditorView.qml"
         }
     }
 

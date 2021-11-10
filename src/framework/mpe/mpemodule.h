@@ -32,6 +32,7 @@ public:
     std::string moduleName() const override;
     void registerExports() override;
     void registerUiTypes() override;
+    void registerResources() override;
 };
 }
 
