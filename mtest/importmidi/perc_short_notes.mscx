@@ -260,11 +260,16 @@
           <velocity>120</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Channel>
+        <Channel name="standard">
           <controller ctrl="0" value="1"/>
           <controller ctrl="32" value="0"/>
           <program value="0"/>
           <controller ctrl="7" value="127"/>
+          </Channel>
+        <Channel name="brush">
+          <controller ctrl="0" value="1"/>
+          <controller ctrl="32" value="0"/>
+          <program value="40"/>
           </Channel>
         </Instrument>
       </Part>
