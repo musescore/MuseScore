@@ -1948,6 +1948,10 @@ static void fixTies(Chord* chord)
     }
     for (Note* note : notes) {
         Note* endNote = chord->findNote(note->pitch());
+        Note* oldNote = note->tieFor()->endNote();
+        if (oldNote) {
+            oldNote->setTieBack(nullptr);
+        }
         note->tieFor()->setEndNote(endNote);
     }
 }
@@ -3359,7 +3363,8 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
 
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
-                readScore206(s, e, ctx);
+                ReadContext exCtx(s);
+                readScore206(s, e, exCtx);
                 ex->setTracks(e.tracks());
                 m->addExcerpt(ex);
             }
