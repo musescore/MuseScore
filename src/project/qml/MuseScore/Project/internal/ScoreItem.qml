@@ -75,6 +75,7 @@ FocusScope {
                 id: loader
 
                 anchors.fill: parent
+                anchors.margins: 2
 
                 property var thumbnail: undefined
 

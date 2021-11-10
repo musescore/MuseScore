@@ -114,6 +114,37 @@ inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
 
     return event;
 }
+
+inline bool needIgnoreKey(int key)
+{
+    if (key == 0) {
+        return true;
+    }
+
+    static const std::set<Qt::Key> ignoredKeys {
+        Qt::Key_Shift,
+        Qt::Key_Control,
+        Qt::Key_Meta,
+        Qt::Key_Alt,
+        Qt::Key_AltGr,
+        Qt::Key_CapsLock,
+        Qt::Key_NumLock,
+        Qt::Key_ScrollLock,
+        Qt::Key_unknown
+    };
+
+    return ignoredKeys.find(static_cast<Qt::Key>(key)) != ignoredKeys.end();
+}
+
+inline std::pair<int, Qt::KeyboardModifiers> correctKeyInput(int key, Qt::KeyboardModifiers modifiers)
+{
+    // replace Backtab with Shift+Tab
+    if (key == Qt::Key_Backtab && modifiers == Qt::ShiftModifier) {
+        key = Qt::Key_Tab;
+    }
+
+    return { key, modifiers };
+}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
