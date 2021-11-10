@@ -58,7 +58,6 @@ signals:
     void inputedSequenceChanged(const QString& sequence);
 
 private:
-    bool needIgnoreKey(int key) const;
     void validateInputedSequence();
 
     QVariantList m_allShortcuts;
