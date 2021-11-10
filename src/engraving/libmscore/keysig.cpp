@@ -694,6 +694,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
             return false;
         }
         setMode(KeyMode(v.toInt()));
+        staff()->setKey(tick(), keySigEvent());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
