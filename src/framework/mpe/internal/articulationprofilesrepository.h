@@ -44,12 +44,6 @@ public:
     async::Channel<io::path> profileChanged() const override;
 
 private:
-    ArticulationFamily articulationFamilyFromString(const QString& str) const;
-    QString articulationFamilyToString(const ArticulationFamily family) const;
-
-    ArticulationType articulationTypeFromString(const QString& str) const;
-    QString articulationTypeToString(const ArticulationType type) const;
-
     std::vector<ArticulationFamily> supportedFamiliesFromJson(const QJsonArray& array) const;
     QJsonArray supportedFamiliesToJson(const std::vector<ArticulationFamily>& families) const;
 

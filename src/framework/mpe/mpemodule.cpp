@@ -22,9 +22,12 @@
 
 #include "mpemodule.h"
 
+#include <QQmlEngine>
+
 #include "modularity/ioc.h"
 
 #include "internal/articulationprofilesrepository.h"
+#include "view/articulationsprofileeditormodel.h"
 
 using namespace mu::mpe;
 
@@ -38,4 +41,9 @@ std::string MpeModule::moduleName() const
 void MpeModule::registerExports()
 {
     modularity::ioc()->registerExport<IArticulationProfilesRepository>(moduleName(), s_profilesRepository);
+}
+
+void MpeModule::registerUiTypes()
+{
+    qmlRegisterType<ArticulationsProfileEditorModel>("MuseScore.Mpe", 1, 0, "ArticulationsProfileEditorModel");
 }

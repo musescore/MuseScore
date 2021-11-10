@@ -29,6 +29,8 @@
 
 #include "log.h"
 
+#include "internal/stringutils.h"
+
 using namespace mu;
 using namespace mu::mpe;
 using namespace mu::async;
@@ -53,102 +55,6 @@ static const QString EXPRESSION_PATTERN = "expressionPattern";
 static const QString MAX_AMPLITUDE_LEVEL_KEY = "maxAmplitudeLevel";
 static const QString AMPLITUDE_TIME_SHIFT = "amplitudeTimeShift";
 static const QString DYNAMIC_OFFSETS_KEY = "dynamicOffsets";
-
-static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY_NAMES = {
-    { ArticulationFamily::Undefined, "Undefined" },
-    { ArticulationFamily::KeyboardsArticulation, "KeyboardsArticulation" },
-    { ArticulationFamily::StringsArticulation, "StringsArticulation" },
-    { ArticulationFamily::WindsArticulation, "WindsArticulation" },
-    { ArticulationFamily::PercussionsArticulation, "PercussionsArticulation" }
-};
-
-static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAMES = {
-    { ArticulationType::Undefined, "Undefined" },
-    { ArticulationType::None, "None" },
-    { ArticulationType::Staccato, "Staccato" },
-    { ArticulationType::Staccatissimo, "Staccatissimo" },
-    { ArticulationType::Tenuto, "Tenuto" },
-    { ArticulationType::Marcato, "Marcato" },
-    { ArticulationType::Accent, "Accent" },
-    { ArticulationType::ShortAccent, "ShortAccent" },
-    { ArticulationType::VeryShortFermata, "VeryShortFermata" },
-    { ArticulationType::ShortFermata, "ShortFermata" },
-    { ArticulationType::ShortFermataHenze, "ShortFermataHenze" },
-    { ArticulationType::Fermata, "Fermata" },
-    { ArticulationType::LongFermata, "LongFermata" },
-    { ArticulationType::LongFermataHenze, "LongFermataHenze" },
-    { ArticulationType::VeryLongFermata, "VeryLongFermata" },
-    { ArticulationType::LaissezVibrer, "LaissezVibrer" },
-    { ArticulationType::Subito, "Subito" },
-    { ArticulationType::FadeIn, "FadeIn" },
-    { ArticulationType::FadeOut, "FadeOut" },
-    { ArticulationType::Harmonic, "Harmonic" },
-    { ArticulationType::Mute, "Mute" },
-    { ArticulationType::Open, "Open" },
-    { ArticulationType::Pizzicato, "Pizzicato" },
-    { ArticulationType::SnapPizzicato, "SnapPizzicato" },
-    { ArticulationType::RandomPizzicato, "RandomPizzicato" },
-    { ArticulationType::UpBow, "UpBow" },
-    { ArticulationType::DownBow, "DownBow" },
-    { ArticulationType::Detache, "Detache" },
-    { ArticulationType::Martele, "Martele" },
-    { ArticulationType::Jete, "Jete" },
-    { ArticulationType::GhostNote, "GhostNote" },
-    { ArticulationType::CrossNote, "CrossNote" },
-    { ArticulationType::CircleNote, "CircleNote" },
-    { ArticulationType::TriangleNote, "TriangleNote" },
-    { ArticulationType::DiamondNote, "DiamondNote" },
-    { ArticulationType::Fall, "Fall" },
-    { ArticulationType::QuickFall, "QuickFall" },
-    { ArticulationType::Doit, "Doit" },
-    { ArticulationType::Plop, "Plop" },
-    { ArticulationType::Scoop, "Scoop" },
-    { ArticulationType::Bend, "Bend" },
-    { ArticulationType::SlideOutDown, "SlideOutDown" },
-    { ArticulationType::SlideOutUp, "SlideOutUp" },
-    { ArticulationType::SlideInAbove, "SlideInAbove" },
-    { ArticulationType::SlideInBelow, "SlideInBelow" },
-    { ArticulationType::Crescendo, "Crescendo" },
-    { ArticulationType::Decrescendo, "Decrescendo" },
-    { ArticulationType::Glissando, "Glissando" },
-    { ArticulationType::Portamento, "Portamento" },
-    { ArticulationType::Legato, "Legato" },
-    { ArticulationType::Pedal, "Pedal" },
-    { ArticulationType::Arpeggio, "Arpeggio" },
-    { ArticulationType::ArpeggioUp, "ArpeggioUp" },
-    { ArticulationType::ArpeggioDown, "ArpeggioDown" },
-    { ArticulationType::ArpeggioBracket, "ArpeggioBracket" },
-    { ArticulationType::ArpeggioStraightUp, "ArpeggioStraightUp" },
-    { ArticulationType::ArpeggioStraightDown, "ArpeggioStraightDown" },
-    { ArticulationType::Vibrato, "Vibrato" },
-    { ArticulationType::WideVibrato, "WideVibrato" },
-    { ArticulationType::MoltoVibrato, "MoltoVibrato" },
-    { ArticulationType::SenzaVibrato, "SenzaVibrato" },
-    { ArticulationType::Tremolo8th, "Tremolo8th" },
-    { ArticulationType::Tremolo16th, "Tremolo16th" },
-    { ArticulationType::Tremolo32nd, "Tremolo32nd" },
-    { ArticulationType::Tremolo64th, "Tremolo64th" },
-    { ArticulationType::ShortTrill, "ShortTrill" },
-    { ArticulationType::Trill, "Trill" },
-    { ArticulationType::Mordent, "Mordent" },
-    { ArticulationType::PrallMordent, "PrallMordent" },
-    { ArticulationType::MordentWithUpperPrefix, "MordentWithUpperPrefix" },
-    { ArticulationType::UpMordent, "UpMordent" },
-    { ArticulationType::DownMordent, "DownMordent" },
-    { ArticulationType::Tremblement, "Tremblement" },
-    { ArticulationType::UpPrall, "UpPrall" },
-    { ArticulationType::PrallUp, "PrallUp" },
-    { ArticulationType::PrallDown, "PrallDown" },
-    { ArticulationType::LinePrall, "LinePrall" },
-    { ArticulationType::Slide, "Slide" },
-    { ArticulationType::Turn, "Turn" },
-    { ArticulationType::InvertedTurn, "InvertedTurn" },
-    { ArticulationType::TurnWithSlash, "TurnWithSlash" },
-    { ArticulationType::Appoggiatura, "Appoggiatura" },
-    { ArticulationType::Acciaccatura, "Acciaccatura" },
-    { ArticulationType::TremoloBar, "TremoloBar" },
-    { ArticulationType::VolumeSwell, "VolumeSwell" }
-};
 
 ArticulationsProfilePtr ArticulationProfilesRepository::createNew() const
 {
@@ -227,54 +133,6 @@ void ArticulationProfilesRepository::saveProfile(const io::path& path, const Art
 Channel<io::path> ArticulationProfilesRepository::profileChanged() const
 {
     return m_profileChanged;
-}
-
-ArticulationFamily ArticulationProfilesRepository::articulationFamilyFromString(const QString& str) const
-{
-    auto search = std::find_if(ARTICULATION_FAMILY_NAMES.begin(), ARTICULATION_FAMILY_NAMES.end(), [str](const auto& pair) {
-        return pair.second == str;
-    });
-
-    if (search == ARTICULATION_FAMILY_NAMES.cend()) {
-        return ArticulationFamily::Undefined;
-    }
-
-    return search->first;
-}
-
-QString ArticulationProfilesRepository::articulationFamilyToString(const ArticulationFamily family) const
-{
-    auto search = ARTICULATION_FAMILY_NAMES.find(family);
-
-    if (search == ARTICULATION_FAMILY_NAMES.cend()) {
-        return QString();
-    }
-
-    return search->second;
-}
-
-ArticulationType ArticulationProfilesRepository::articulationTypeFromString(const QString& str) const
-{
-    auto search = std::find_if(ARTICULATION_TYPE_NAMES.begin(), ARTICULATION_TYPE_NAMES.end(), [str](const auto& pair) {
-        return pair.second == str;
-    });
-
-    if (search == ARTICULATION_TYPE_NAMES.cend()) {
-        return ArticulationType::Undefined;
-    }
-
-    return search->first;
-}
-
-QString ArticulationProfilesRepository::articulationTypeToString(const ArticulationType type) const
-{
-    auto search = ARTICULATION_TYPE_NAMES.find(type);
-
-    if (search == ARTICULATION_TYPE_NAMES.cend()) {
-        return QString();
-    }
-
-    return search->second;
 }
 
 std::vector<ArticulationFamily> ArticulationProfilesRepository::supportedFamiliesFromJson(const QJsonArray& array) const
