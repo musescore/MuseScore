@@ -1,3 +1,5 @@
 <RCC>
-    <qresource prefix="/"/>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Mpe/qmldir</file>
+    </qresource>
 </RCC>
