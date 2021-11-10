@@ -83,6 +83,14 @@ inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const octave_t fOct
 }
 
 // Expression
+enum class ArticulationFamily {
+    Undefined = -1,
+    KeyboardsArticulation,
+    StringsArticulation,
+    WindsArticulation,
+    PercussionsArticulation
+};
+
 enum class ArticulationType {
     Undefined = -1,
 
@@ -125,7 +133,7 @@ enum class ArticulationType {
     CrossNote,
     CircleNote,
     TriangleNote,
-    DiamonNote,
+    DiamondNote,
 
     Fall,
     QuickFall,
@@ -427,6 +435,47 @@ struct ArticulationPattern
 };
 
 using ArticulationPatternsScope = std::map<duration_percentage_t, ArticulationPattern>;
+
+struct ArticulationsProfile
+{
+    std::vector<ArticulationFamily> supportedFamilies;
+
+    ArticulationPatternsScope patterns(const ArticulationType type) const
+    {
+        auto search = m_patterns.find(type);
+
+        if (search == m_patterns.cend()) {
+            return {};
+        }
+
+        return search->second;
+    }
+
+    void updatePatterns(const ArticulationType type, const ArticulationPatternsScope& scope)
+    {
+        m_patterns.insert_or_assign(type, scope);
+    }
+
+    const std::unordered_map<ArticulationType, ArticulationPatternsScope>& data() const
+    {
+        return m_patterns;
+    }
+
+    bool contains(const ArticulationType type) const
+    {
+        return m_patterns.find(type) != m_patterns.cend();
+    }
+
+    bool isValid() const
+    {
+        return !m_patterns.empty();
+    }
+
+private:
+    std::unordered_map<ArticulationType, ArticulationPatternsScope> m_patterns;
+};
+
+using ArticulationsProfilePtr = std::shared_ptr<ArticulationsProfile>;
 
 struct ArticulationData {
     explicit ArticulationData(const ArticulationType _type,
