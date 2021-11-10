@@ -27,6 +27,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mpetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iarticulationprofilesrepository.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternsscopeitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/articulationpatternsscopeitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/stringutils.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/articulationprofilesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/articulationprofilesrepository.h
     )
