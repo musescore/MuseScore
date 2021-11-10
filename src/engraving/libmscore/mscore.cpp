@@ -301,7 +301,7 @@ void MScore::init()
 
 void MScore::registerUiTypes()
 {
-    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble)) {
+    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDoubleStatic)) {
         qFatal("registerConverter Spatium::toDouble failed");
     }
     if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium)) {

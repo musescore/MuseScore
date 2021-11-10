@@ -330,6 +330,9 @@ public:
         TUPLET_NUMBER_WITH_BRACKETS = 0xF422,
         TUPLET_NUMBER_ONLY = 0xF423,
 
+        BEAM_DISTANCE_REGULAR = 0xF425,
+        BEAM_DISTANCE_WIDE = 0xF426,
+
         NONE
     };
 
