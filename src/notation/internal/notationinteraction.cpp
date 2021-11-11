@@ -3217,7 +3217,7 @@ void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
 
     bool newLyrics = false;
     if (!nextLyrics) {
-        nextLyrics = new Ms::Lyrics(cr);
+        nextLyrics = Factory::createLyrics(cr);
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
@@ -3326,9 +3326,9 @@ void NotationInteraction::nextSyllable()
     Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
-        toLyrics = new Ms::Lyrics(nextSegment->element(track));
+        toLyrics = Factory::createLyrics(cr);
         toLyrics->setTrack(track);
-        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setParent(cr);
         toLyrics->setNo(verse);
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
@@ -3402,7 +3402,7 @@ void NotationInteraction::nextLyricsVerse(bool back)
 
     lyrics = cr->lyrics(verse, placement);
     if (!lyrics) {
-        lyrics = new Ms::Lyrics(cr);
+        lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
         lyrics->setNo(verse);
@@ -3509,9 +3509,9 @@ void NotationInteraction::addMelisma()
     Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
-        toLyrics = new Ms::Lyrics(nextSegment->element(track));
+        toLyrics = Factory::createLyrics(cr);
         toLyrics->setTrack(track);
-        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setParent(cr);
         toLyrics->setNo(verse);
         toLyrics->setPlacement(placement);
         toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
@@ -3565,9 +3565,9 @@ void NotationInteraction::addLyricsVerse()
     newVerse = lyrics->no() + 1;
 
     Ms::Lyrics* oldLyrics = lyrics;
-    lyrics = new Ms::Lyrics(oldLyrics->segment()->element(oldLyrics->track()));
+    lyrics = Factory::createLyrics(oldLyrics->chordRest());
     lyrics->setTrack(oldLyrics->track());
-    lyrics->setParent(oldLyrics->segment()->element(oldLyrics->track()));
+    lyrics->setParent(oldLyrics->chordRest());
     lyrics->setPlacement(oldLyrics->placement());
     lyrics->setPropertyFlags(Ms::Pid::PLACEMENT, oldLyrics->propertyFlags(Ms::Pid::PLACEMENT));
     lyrics->setNo(newVerse);

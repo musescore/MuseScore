@@ -100,7 +100,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
     _crossMeasure = cr._crossMeasure;
 
     for (Lyrics* l : cr._lyrics) {          // make deep copy
-        Lyrics* nl = new Lyrics(*l);
+        Lyrics* nl = Factory::copyLyrics(*l);
         if (link) {
             nl->linkTo(l);
         }
@@ -305,7 +305,7 @@ bool ChordRest::readProperties(XmlReader& e)
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
-        EngravingItem* element = new Lyrics(this);
+        EngravingItem* element = Factory::createLyrics(this);
         element->setTrack(e.track());
         element->read(e);
         add(element);

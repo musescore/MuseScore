@@ -19,27 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_API_ACCESSIBILITYAPI_H
+#define MU_API_ACCESSIBILITYAPI_H
 
-#ifndef MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
-#define MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#include "apiobject.h"
 
-#include "modularity/imoduleexport.h"
-#include "iaccessible.h"
+#include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
-namespace mu::accessibility {
-class IAccessibilityController : MODULE_EXPORT_INTERFACE
+namespace mu::api {
+class AccessibilityApi : public ApiObject
 {
-    INTERFACE_ID(IAccessibilityController)
+    Q_OBJECT
+
+    INJECT(api, accessibility::IAccessibilityController, accessibilityController)
+
 public:
-    virtual ~IAccessibilityController() = default;
+    explicit AccessibilityApi(IApiEngine* e);
 
-    virtual void reg(IAccessible* item) = 0;
-    virtual void unreg(IAccessible* item) = 0;
-
-    virtual const IAccessible* accessibleRoot() const = 0;
-
-    virtual const IAccessible* lastFocused() const = 0;
+    Q_INVOKABLE QString currentName() const;
 };
 }
 
-#endif // MU_ACCESSIBILITY_IACCESSIBILITYCONTROLLER_H
+#endif // MU_API_ACCESSIBILITYAPI_H

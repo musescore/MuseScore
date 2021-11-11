@@ -47,6 +47,7 @@
 #include "internal/api/shortcutsapi.h"
 #include "internal/api/interactiveapi.h"
 #include "internal/api/keyboardapi.h"
+#include "internal/api/accessibilityapi.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -97,6 +98,7 @@ void AutobotModule::resolveImports()
         api->regApiCreator("shortcuts", "api.shortcuts", new ApiCreator<ShortcutsApi>());
         api->regApiCreator("global", "api.interactive", new ApiCreator<InteractiveApi>());
         api->regApiCreator("ui", "api.keyboard", new ApiCreator<KeyboardApi>());
+        api->regApiCreator("accessibility", "api.accessibility", new ApiCreator<AccessibilityApi>());
     }
 }
 

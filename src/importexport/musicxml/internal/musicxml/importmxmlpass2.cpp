@@ -5375,7 +5375,7 @@ void MusicXMLParserLyric::skipLogCurrElem()
 
 void MusicXMLParserLyric::parse()
 {
-    std::unique_ptr<Lyrics> lyric { new Lyrics(_score->dummy()) };
+    std::unique_ptr<Lyrics> lyric { Factory::createLyrics(_score->dummy()->chord()) };
     // TODO in addlyrics: l->setTrack(trk);
 
     bool hasExtend = false;

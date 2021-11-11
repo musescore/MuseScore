@@ -649,7 +649,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 auto cr = seg->cr(gpLyrics.lyricTrack);
                 if (cr) {
                     if (str[0] != '-') {
-                        auto lyr = new Lyrics(score->dummy());
+                        auto lyr = Factory::createLyrics(score->dummy()->chord());
 
                         std::string text;
                         auto pos = str.find('-');

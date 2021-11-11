@@ -1257,7 +1257,7 @@ bool GuitarPro1::read(QFile* fp)
                 }
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = new Lyrics(score->dummy());
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     lyrics->setPlainText(readDelphiString());
                 }
                 if (beatBits & BEAT_EFFECTS) {
@@ -1756,7 +1756,7 @@ bool GuitarPro2::read(QFile* fp)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     QString txt = readDelphiString();
-                    lyrics = new Lyrics(score->dummy());
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     lyrics->setPlainText(txt);
                 }
                 if (beatBits & BEAT_EFFECTS) {
@@ -2482,7 +2482,7 @@ bool GuitarPro3::read(QFile* fp)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     QString txt = readDelphiString();
-                    lyrics = new Lyrics(score->dummy());
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     lyrics->setPlainText(txt);
                 }
                 int beatEffects = 0;

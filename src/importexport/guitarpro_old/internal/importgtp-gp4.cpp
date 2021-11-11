@@ -870,7 +870,7 @@ bool GuitarPro4::read(QFile* fp)
 
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = new Lyrics(score->dummy());
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     auto str = readDelphiString();
                     //TODO-ws					str.erase(std::remove_if(str.begin(), str.end(), [](char c){return c == '_'; }), str.end());
                     lyrics->setPlainText(str);
@@ -879,7 +879,7 @@ bool GuitarPro4::read(QFile* fp)
                 if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx + 1) {
                     int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
                     if (index < gpLyrics.lyrics.size()) {
-                        lyrics = new Lyrics(score->dummy());
+                        lyrics = Factory::createLyrics(score->dummy()->chord());
                         lyrics->setPlainText(gpLyrics.lyrics[index]);
                     }
                 }

@@ -2065,7 +2065,7 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
         ovebase::Lyric* oveLyric = static_cast<ovebase::Lyric*>(lyrics[i]);
         int tick = m_mtt->getTick(measure->no(), oveLyric->getTick());
 
-        Lyrics* lyric = new Lyrics(m_score->dummy());
+        Lyrics* lyric = Factory::createLyrics(m_score->dummy()->chord());
         lyric->setNo(oveLyric->getVerse());
         lyric->setPlainText(oveLyric->getLyric());
         lyric->setTrack(track);
