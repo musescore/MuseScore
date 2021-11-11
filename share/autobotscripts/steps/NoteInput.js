@@ -38,6 +38,14 @@ module.exports = {
         api.navigation.trigger()
     },
 
+    turnoffDefaultMode: function()
+    {
+        api.navigation.triggerControl("NoteInputSection", "NoteInputBar", "note-input-steptime")
+        api.autobot.waitPopup()
+        // First item become automatically current, so just trigger
+        api.navigation.trigger()
+    },
+
     // "note-longa", "note-breve",
     // "pad-note-1", "pad-note-2", "pad-note-4", "pad-note-8", "pad-note-16", "pad-note-32", "pad-note-64", "pad-note-128", "pad-note-256", "pad-note-512", "pad-note-1024"
     // "pad-dot", "pad-dotdot", "pad-dot3", "pad-dot4", "pad-rest"

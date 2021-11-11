@@ -83,6 +83,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/interactiveapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/interactiveapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/keyboardapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/api/keyboardapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h
