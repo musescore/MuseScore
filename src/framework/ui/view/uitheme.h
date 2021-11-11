@@ -166,7 +166,7 @@ private:
     void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
     void drawLineEditBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool editing) const;
     void drawIndicatorIcon(QPainter* painter, const QRect& rect, const StyleState& styleState, QStyle::PrimitiveElement element) const;
-    void drawListViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
+    void drawViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
     void drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const;
 
     QFont m_bodyFont;

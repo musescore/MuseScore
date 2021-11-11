@@ -30,8 +30,12 @@
 
 #include "notation/inotationelements.h"
 #include "global/widgetstatestore.h"
+#include "ui/view/iconcodes.h"
+
+static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     : QDialog(parent)
@@ -44,6 +48,9 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     initMeasure();
 
     staves->verticalHeader()->hide();
+
+    nextButton->setText(iconCodeToChar(IconCode::Code::ARROW_RIGHT));
+    previousButton->setText(iconCodeToChar(IconCode::Code::ARROW_LEFT));
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &MeasurePropertiesDialog::bboxClicked);
     connect(nextButton, &QToolButton::clicked, this, &MeasurePropertiesDialog::gotoNextMeasure);
@@ -174,23 +181,37 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
     staves->setRowCount(rows);
     staves->setColumnCount(3);
 
+    auto itemAccessibleText = [](const QTableWidgetItem* item){
+        QString accessibleText = item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+                                 + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
+        return accessibleText;
+    };
+
     for (int staffIdx = 0; staffIdx < rows; ++staffIdx) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("%1").arg(staffIdx + 1));
         staves->setItem(staffIdx, 0, item);
 
-        item = new QTableWidgetItem(tr("visible"));
+        item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->visible(staffIdx) ? Qt::Checked : Qt::Unchecked);
         if (rows == 1) {                  // cannot be invisible if only one row
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Visible"));
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(staffIdx, 1, item);
 
-        item = new QTableWidgetItem(tr("stemless"));
+        item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Stemless"));
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(staffIdx, 2, item);
     }
+
+    connect(staves, &QTableWidget::itemChanged, this, [&itemAccessibleText](QTableWidgetItem* item){
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
+    });
 }
 
 //---------------------------------------------------------
