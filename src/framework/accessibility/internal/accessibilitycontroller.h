@@ -56,13 +56,14 @@ public:
     ~AccessibilityController();
 
     // IAccessibilityController
-    const IAccessible* accessibleRoot() const override;
-
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
+
+    const IAccessible* accessibleRoot() const override;
+    const IAccessible* lastFocused() const override;
     // -----
 
-    // IAccessibility
+    // IAccessibility (root)
     IAccessible* accessibleParent() const override;
 
     size_t accessibleChildCount() const override;
@@ -116,6 +117,7 @@ private:
 
     QList<IAccessible*> m_children;
     async::Channel<QAccessibleEvent*> m_eventSent;
+    IAccessible* m_lastFocused = nullptr;
 
     bool m_inited = false;
 };

@@ -78,11 +78,6 @@ void AccessibilityController::init()
     QAccessible::setRootObject(s_rootObject);
 }
 
-const IAccessible* AccessibilityController::accessibleRoot() const
-{
-    return this;
-}
-
 void AccessibilityController::reg(IAccessible* item)
 {
     if (!m_inited) {
@@ -130,6 +125,10 @@ void AccessibilityController::unreg(IAccessible* aitem)
         return;
     }
 
+    if (m_lastFocused == item.item) {
+        m_lastFocused = nullptr;
+    }
+
     if (m_children.contains(aitem)) {
         m_children.removeOne(aitem);
     }
@@ -138,6 +137,16 @@ void AccessibilityController::unreg(IAccessible* aitem)
     sendEvent(&ev);
 
     delete item.object;
+}
+
+const IAccessible* AccessibilityController::accessibleRoot() const
+{
+    return this;
+}
+
+const IAccessible* AccessibilityController::lastFocused() const
+{
+    return m_lastFocused;
 }
 
 void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property p)
@@ -215,6 +224,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
         if (arg) {
             QAccessibleEvent ev(item.object, QAccessible::Focus);
             sendEvent(&ev);
+            m_lastFocused = item.item;
         }
     }
 }

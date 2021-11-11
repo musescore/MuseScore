@@ -61,6 +61,10 @@ private:
     Syllabic _syllabic;
     LyricsLine* _separator;
 
+    friend class mu::engraving::Factory;
+    Lyrics(ChordRest* parent);
+    Lyrics(const Lyrics&);
+
     bool isMelisma() const;
     void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
@@ -69,8 +73,6 @@ protected:
     bool _even;
 
 public:
-    Lyrics(EngravingItem* parent = 0);
-    Lyrics(const Lyrics&);
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }

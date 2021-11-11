@@ -391,14 +391,13 @@ void MuseData::readNote(Part* part, const QString& s)
     if (!txt.isEmpty()) {
         QStringList sl = txt.split("|");
         int no = 0;
-        foreach (QString w, sl) {
+        for (QString w : sl) {
             w = diacritical(w);
-            Segment* seg = measure->tick2segment(tick);
-            Lyrics* l = new Lyrics(seg);
+            Lyrics* l = Factory::createLyrics(chord);
             l->setPlainText(w);
             l->setNo(no++);
             l->setTrack(gstaff * VOICES);
-            seg->add(l);
+            chord->add(l);
         }
     }
 }

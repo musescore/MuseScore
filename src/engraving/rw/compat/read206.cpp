@@ -1753,7 +1753,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
         }
         e.readNext();
     } else if (tag == "Lyrics") {
-        Lyrics* l = new Lyrics(ch);
+        Lyrics* l = Factory::createLyrics(ch);
         l->setTrack(e.track());
         readLyrics(l, e, ctx);
         ch->add(l);
@@ -1988,7 +1988,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             }
             chord->add(stem);
         } else if (tag == "Lyrics") {
-            Lyrics* lyrics = new Lyrics(chord);
+            Lyrics* lyrics = Factory::createLyrics(chord);
             lyrics->setTrack(e.track());
             readLyrics(lyrics, e, ctx);
             chord->add(lyrics);

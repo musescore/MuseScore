@@ -793,7 +793,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 }
             }
             for (Verse v : o->verse) {
-                Lyrics* l = new Lyrics(chord);
+                Lyrics* l = Factory::createLyrics(chord);
                 l->setTrack(track);
                 l->setPlainText(v.text);
                 if (v.hyphen) {
