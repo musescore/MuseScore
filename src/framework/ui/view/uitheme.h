@@ -139,6 +139,13 @@ signals:
     void themeChanged();
 
 private:
+    struct StyleState {
+        bool enabled = false;
+        bool hovered = false;
+        bool pressed = false;
+        bool focused = false;
+    };
+
     void initThemeValues();
 
     void initUiFonts();
@@ -153,13 +160,13 @@ private:
 
     void notifyAboutThemeChanged();
 
-    void drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
-                              bool flat) const;
-    void drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
-                               bool indeterminate, bool inMenu) const;
-    void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool selected) const;
-    void drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabled, QStyle::PrimitiveElement element) const;
-    void drawListViewItemBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool selected) const;
+    void drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat) const;
+    void drawCheckboxIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool checked, bool indeterminate,
+                               bool inMenu) const;
+    void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
+    void drawLineEditBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool editing) const;
+    void drawIndicatorIcon(QPainter* painter, const QRect& rect, const StyleState& styleState, QStyle::PrimitiveElement element) const;
+    void drawListViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
     void drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const;
 
     QFont m_bodyFont;
