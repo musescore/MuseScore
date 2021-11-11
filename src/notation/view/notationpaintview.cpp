@@ -22,6 +22,7 @@
 #include "notationpaintview.h"
 
 #include <QPainter>
+#include <QWindow>
 
 #include "actions/actiontypes.h"
 #include "stringutils.h"
@@ -737,6 +738,13 @@ void NotationPaintView::wheelEvent(QWheelEvent* event)
     }
 }
 
+void NotationPaintView::forceFocusIn()
+{
+    setFocus(true);
+    emit activeFocusRequested();
+    forceActiveFocus();
+}
+
 void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
     setFocus(true);
@@ -792,6 +800,7 @@ bool NotationPaintView::event(QEvent* ev)
     }
 
     if (ev->type() == QEvent::Type::FocusIn || ev->type() == QEvent::Type::FocusOut) {
+        LOGI() << "-------" << "hasFocus: " << hasFocus();
         bool ok = QQuickPaintedItem::event(ev);
         uiContextResolver()->onNotationViewFocuseChanged(hasFocus());
         return ok;

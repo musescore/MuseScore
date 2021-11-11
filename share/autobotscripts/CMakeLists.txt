@@ -28,6 +28,7 @@ install(FILES
       TC5_UsingInstruments.js
       TC6_UsingInspector_Note.js
       TC7_UsingExport.js
+      TC8_EngravingText.js
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}autobotscripts
       )
 
