@@ -106,6 +106,7 @@ public:
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
 
     // Text edit
+    virtual bool isTextSelected() const = 0;
     virtual bool isTextEditingStarted() const = 0;
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const PointF& elementPos) = 0;

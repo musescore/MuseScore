@@ -105,18 +105,27 @@ var testCase = {
 
             api.keyboard.key("esc")
         }},
-        {name: "Add StaffTexts", func: function() {
+        {name: "Add StaffText", func: function() {
 
-            api.log.debug("currentName: " + api.accessibility.currentName())
-
-
-            for (var i = 0; i < 10; ++i) {
+            //! NOTE Find note E
+            for (var i = 0; i < 99; ++i) {
                 api.shortcuts.activate("Alt+Left")
-                api.log.debug("currentName: " + api.accessibility.currentName())
+                seeChanges()
+                var name = api.accessibility.currentName()
+                api.log.debug("currentName: " + name)
+                if (name.startsWith("Note; Pitch: E5")) {
+                    break;
+                }
             }
 
-            api.autobot.abort()
+            //! NOTE Add StaffText
+            api.shortcuts.activate("Ctrl+T")
+            api.keyboard.text("This is Sparta")
+            api.keyboard.key("esc")
+        }},
+        {name: "Edit StaffText", func: function() {
 
+            api.autobot.abort()
         }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC8_EngravingText.mscz")
