@@ -26,6 +26,7 @@
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
 #include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
+#include "thirdparty/KDDockWidgets/src/Config.h"
 
 #include "dockcentralview.h"
 #include "dockpageview.h"
@@ -332,6 +333,8 @@ void DockWindow::alignToolBars(const DockPageView* page)
     int centralToolBarsWidth = 0;
     int rightToolBarsWidth = 0;
 
+    int separatorThicnkess = KDDockWidgets::Config::self().separatorThickness();
+
     for (DockToolBarView* toolBar : topToolBars) {
         if (toolBar->floating() || !toolBar->isVisible()) {
             continue;
@@ -344,10 +347,10 @@ void DockWindow::alignToolBars(const DockPageView* page)
             break;
         case DockToolBarAlignment::Center:
             lastCentralToolBar = toolBar;
-            centralToolBarsWidth += toolBar->contentWidth();
+            centralToolBarsWidth += (toolBar->contentWidth() + separatorThicnkess);
             break;
         case DockToolBarAlignment::Right:
-            rightToolBarsWidth += toolBar->contentWidth();
+            rightToolBarsWidth += (toolBar->contentWidth() + separatorThicnkess);
             break;
         }
     }
