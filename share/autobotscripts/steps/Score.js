@@ -20,34 +20,43 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+function doFocusIn()
+{
+    api.autobot.showMainWindowOnFront()
+    api.autobot.sleep(100)
+    api.navigation.goToControl("NotationView", "ScoreView", "Score")
+}
+
 module.exports = {
+    focusIn: doFocusIn,
+
     nextChord: function()
     {
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         api.shortcuts.activate("Right")
     },
 
     prevChord: function()
     {
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         api.shortcuts.activate("Left")
     },
 
     nextMeasure: function()
     {
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         api.shortcuts.activate("Ctrl+Right")
     },
 
     prevMeasure: function()
     {
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         api.shortcuts.activate("Ctrl+Left")
     },
 
     appendMeasures: function(count)
     {
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         for (var i = 0; i < count; i++) {
             api.shortcuts.activate("Ctrl+B")
             if (i%10 == 0) {
@@ -59,7 +68,7 @@ module.exports = {
     pitchDown: function(count)
     {
         count = count ?? 1;
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         for (var i = 0; i < count; ++i) {
             api.shortcuts.activate("Down")
         }
@@ -68,7 +77,7 @@ module.exports = {
     pitchUp: function(count)
     {
         count = count ?? 1;
-        api.navigation.goToControl("NotationView", "ScoreView", "Score")
+        doFocusIn()
         for (var i = 0; i < count; ++i) {
             api.shortcuts.activate("Up")
         }

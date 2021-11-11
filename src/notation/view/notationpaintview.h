@@ -35,6 +35,7 @@
 #include "async/asyncable.h"
 #include "playback/iplaybackcontroller.h"
 #include "ui/iuicontextresolver.h"
+#include "ui/imainwindow.h"
 #include "ui/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
@@ -54,6 +55,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, ui::IUiContextResolver, uiContextResolver)
+    INJECT(notation, ui::IMainWindow, mainWindow)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
@@ -75,6 +77,8 @@ public:
     Q_INVOKABLE void zoomOut();
 
     Q_INVOKABLE void selectOnNavigationActive();
+
+    Q_INVOKABLE void forceFocusIn();
 
     qreal width() const override;
     qreal height() const override;
