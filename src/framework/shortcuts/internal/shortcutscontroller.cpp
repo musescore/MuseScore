@@ -28,7 +28,7 @@ using namespace mu::actions;
 
 void ShortcutsController::init()
 {
-    interactiveProvider()->currentUri().ch.onReceive(this, [this](const Uri&){
+    interactiveProvider()->currentUri().ch.onReceive(this, [this](const Uri&) {
         //! NOTE: enable process shortcuts only for non-widget objects
         shortcutsRegister()->setActive(!interactiveProvider()->topWindowIsWidget());
     });
@@ -51,4 +51,9 @@ void ShortcutsController::activate(const std::string& sequence)
 
         dispatcher()->dispatch(sc.action);
     }
+}
+
+bool ShortcutsController::isRegistered(const std::string& sequence) const
+{
+    return shortcutsRegister()->isRegistered(sequence);
 }

@@ -48,24 +48,62 @@ var testCase = {
             api.shortcuts.activate("D")
             api.shortcuts.activate("E")
             api.shortcuts.activate("F")
+            api.shortcuts.activate("E")
+            api.shortcuts.activate("D")
+            api.shortcuts.activate("C")
+            api.shortcuts.activate("B")
+            api.shortcuts.activate("A")
         }},
         {name: "Add Lyrics", func: function() {
             Score.focusIn()
-            for (var i = 0; i < 6; ++i) {
+            for (var i = 0; i < 11; ++i) {
                 Score.prevChord()
             }
+            seeChanges()
+
             api.shortcuts.activate("Ctrl+L")
             api.keyboard.text("la")
             api.keyboard.key(" ")
+            seeChangesFast()
             api.keyboard.text("la")
             api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("la")
+            api.keyboard.key(" ")
+            seeChangesFast()
             api.keyboard.text("tra")
             api.keyboard.key(" ")
-            api.keyboard.text("ly")
+            seeChangesFast()
+            api.keyboard.text("la")
             api.keyboard.key(" ")
-            api.keyboard.text("ly")
+            seeChangesFast()
+            api.keyboard.text("la")
+            api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("tra")
+            api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("la")
+            api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("la")
+            api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("bum")
+            api.keyboard.key(" ")
+            seeChangesFast()
+            api.keyboard.text("bim")
 
-            api.autobot.abort()
+            api.keyboard.key("esc")
+        }},
+        {name: "Remove (change) Lyrics", func: function() {
+            api.keyboard.key("backspace")
+            seeChanges()
+
+            api.shortcuts.activate("Ctrl+L")
+            api.keyboard.text("bum")
+
+            api.keyboard.key("esc")
         }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC8_EngravingText.mscz")
@@ -86,7 +124,11 @@ function seeChanges()
 
 function seeChangesLong()
 {
-    api.autobot.sleep(1000)
+    api.autobot.seeChanges(1000)
 }
 
+function seeChangesFast()
+{
+    api.autobot.seeChanges(250)
+}
 
