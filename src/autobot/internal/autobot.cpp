@@ -154,10 +154,10 @@ void Autobot::runTestCase(const TestCase& testCase)
 
 void Autobot::abort()
 {
-    error("abort");
+    fatal("abort");
 }
 
-void Autobot::error(const QString& msg)
+void Autobot::fatal(const QString& msg)
 {
     if (status() == Status::Paused) {
         unpause();

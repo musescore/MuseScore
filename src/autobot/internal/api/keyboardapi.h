@@ -40,6 +40,7 @@ public:
     explicit KeyboardApi(IApiEngine* e);
 
     Q_INVOKABLE void key(const QString& key);
+    Q_INVOKABLE void repeatKey(const QString& key, int count);
     Q_INVOKABLE void text(const QString& text);
 };
 }

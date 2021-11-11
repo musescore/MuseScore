@@ -52,6 +52,13 @@ void KeyboardApi::key(const QString& key)
     qApp->postEvent(w, releaseEvent);
 }
 
+void KeyboardApi::repeatKey(const QString& k, int count)
+{
+    for (int i = 0; i < count; ++i) {
+        key(k);
+    }
+}
+
 void KeyboardApi::text(const QString& text)
 {
     for (const QChar& ch : text) {
