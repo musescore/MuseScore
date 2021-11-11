@@ -71,7 +71,6 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
     }
 
     filePath->setText(meta.filePath.toQString());
-    filePath->setTextInteractionFlags(Qt::TextSelectableByMouse);
 
     initTags();
 
@@ -102,29 +101,32 @@ ScorePropertiesDialog::ScorePropertiesDialog(const ScorePropertiesDialog& dialog
 ///           QPair<QLineEdit* key, QLineEdit* value>
 //---------------------------------------------------------
 
-QPair<QLineEdit*, QLineEdit*> ScorePropertiesDialog::addTag(const QString& key, const QString& value)
+ScorePropertiesDialog::TagItem ScorePropertiesDialog::addTag(const QString& key, const QString& value)
 {
-    QLineEdit* tagWidget = new QLineEdit(key);
+    QWidget* tagWidget = nullptr;
     QLineEdit* valueWidget = new QLineEdit(value);
 
     connect(valueWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
 
     const int numFlags = scrollAreaLayout->rowCount();
+    QToolButton* deleteButton = nullptr;
 
     if (isStandardTag(key)) {
-        tagWidget->setReadOnly(true);
-        // Make it clear that builtin tags are not editable
-        tagWidget->setStyleSheet("QLineEdit { background: transparent; }");
-        tagWidget->setFrame(false);
-        tagWidget->setFocusPolicy(Qt::NoFocus);
-        tagWidget->setToolTip(qtrc("notation", "This is a builtin tag. Its name cannot be modified."));
+        QLabel* tagLabel = new QLabel(key);
+        tagLabel->setToolTip(qtrc("notation", "This is a builtin tag. Its name cannot be modified."));
+        tagLabel->setBuddy(valueWidget);
+        tagWidget = tagLabel;
     } else {
-        tagWidget->setPlaceholderText(qtrc("notation", "Name"));
+        QLineEdit* tagLineEdit = new QLineEdit(key);
+        tagLineEdit->setPlaceholderText(qtrc("notation", "Name"));
 
-        QToolButton* deleteButton = new QToolButton();
+        deleteButton = new QToolButton();
         deleteButton->setText(iconCodeToChar(IconCode::Code::DELETE_TANK));
+        deleteButton->setAccessibleName(qtrc("notation", "Remove"));
 
-        connect(tagWidget, &QLineEdit::textChanged, this, [this]() { setDirty(); });
+        tagWidget = tagLineEdit;
+
+        connect(tagLineEdit, &QLineEdit::textChanged, this, [this]() { setDirty(); });
         connect(deleteButton, &QToolButton::clicked, this,
                 [this, tagWidget, valueWidget, deleteButton]() {
             setDirty();
@@ -132,14 +134,16 @@ QPair<QLineEdit*, QLineEdit*> ScorePropertiesDialog::addTag(const QString& key, 
             valueWidget->deleteLater();
             deleteButton->deleteLater();
         });
-
-        scrollAreaLayout->addWidget(deleteButton, numFlags, 2);
     }
 
     scrollAreaLayout->addWidget(tagWidget,   numFlags, 0);
     scrollAreaLayout->addWidget(valueWidget, numFlags, 1);
 
-    return QPair<QLineEdit*, QLineEdit*>(tagWidget, valueWidget);
+    if (deleteButton) {
+        scrollAreaLayout->addWidget(deleteButton, numFlags, 2);
+    }
+
+    return { tagWidget, valueWidget, deleteButton };
 }
 
 //---------------------------------------------------------
@@ -150,10 +154,10 @@ QPair<QLineEdit*, QLineEdit*> ScorePropertiesDialog::addTag(const QString& key, 
 
 void ScorePropertiesDialog::newClicked()
 {
-    QPair<QLineEdit*, QLineEdit*> pair = addTag("", "");
+    TagItem tagItem = addTag("", "");
 
-    pair.first->setFocus();
-    pair.second->setPlaceholderText(qtrc("notation", "Value"));
+    tagItem.titleWidget->setFocus();
+    tagItem.valueLineEdit->setPlaceholderText(qtrc("notation", "Value"));
 
     // scroll down to see the newly created tag.
     // ugly workaround because scrolling to maximum doesn't completely scroll
@@ -164,6 +168,7 @@ void ScorePropertiesDialog::newClicked()
     scrollBar->setValue(scrollBar->maximum());
 
     setDirty();
+    updateTabOrders(tagItem);
 }
 
 //---------------------------------------------------------
@@ -340,7 +345,7 @@ void ScorePropertiesDialog::initTags()
 
     ProjectMeta meta = project()->metaInfo();
 
-    addTag(SP_WORK_TITLE_TAG, meta.title);
+    TagItem firstTag = addTag(SP_WORK_TITLE_TAG, meta.title);
     addTag(SP_ARRANGER_TAG, meta.arranger);
     addTag(SP_COMPOSER_TAG, meta.composer);
     addTag(SP_COPYRIGHT_TAG, meta.copyright);
@@ -350,9 +355,14 @@ void ScorePropertiesDialog::initTags()
     addTag(SP_PLATFORM_TAG, meta.platform);
     addTag(SP_SOURCE_TAG, meta.source);
 
+    TagItem lastTag;
     for (const QString& key : meta.additionalTags.keys()) {
-        addTag(key, meta.additionalTags[key].toString());
+        lastTag = addTag(key, meta.additionalTags[key].toString());
     }
+
+    scrollArea->setFocusProxy(firstTag.titleWidget);
+
+    updateTabOrders(lastTag);
 }
 
 void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
@@ -382,4 +392,17 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
     }
 
     project()->setMetaInfo(meta);
+}
+
+void ScorePropertiesDialog::updateTabOrders(const TagItem& lastTagItem)
+{
+    if (lastTagItem.deleteButton) {
+        QWidget::setTabOrder(lastTagItem.deleteButton, newButton);
+    } else {
+        QWidget::setTabOrder(lastTagItem.valueLineEdit, newButton);
+    }
+
+    QWidget::setTabOrder(newButton, okButton);
+    QWidget::setTabOrder(okButton, cancelButton);
+    QWidget::setTabOrder(cancelButton, saveButton);
 }
