@@ -279,6 +279,16 @@ const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode
     return findShortcut(m_defaultShortcuts, actionCode);
 }
 
+bool ShortcutsRegister::isRegistered(const std::string& sequence) const
+{
+    for (const Shortcut& sh : m_shortcuts) {
+        if (sh.sequence == sequence) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence) const
 {
     ShortcutList list;

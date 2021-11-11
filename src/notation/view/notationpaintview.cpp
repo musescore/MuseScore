@@ -800,7 +800,6 @@ bool NotationPaintView::event(QEvent* ev)
     }
 
     if (ev->type() == QEvent::Type::FocusIn || ev->type() == QEvent::Type::FocusOut) {
-        LOGI() << "-------" << "hasFocus: " << hasFocus();
         bool ok = QQuickPaintedItem::event(ev);
         uiContextResolver()->onNotationViewFocuseChanged(hasFocus());
         return ok;
