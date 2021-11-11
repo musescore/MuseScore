@@ -62,6 +62,7 @@ private:
 
     IDockWindow* dockWindow() const;
     DockPageView* currentPage() const;
+    DockBase* draggedDock() const;
 
     DropDestination m_currentDropDestination;
 };
