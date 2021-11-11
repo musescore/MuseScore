@@ -52,6 +52,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "factory.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1018,7 +1020,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             e.skipCurrentElement();
                             continue;
                         }
-                        Lyrics* el = new Lyrics(cr);
+                        Lyrics* el = Factory::createLyrics(cr);
                         el->setTrack(destTrack);
                         el->read(e);
                         el->setTrack(destTrack);

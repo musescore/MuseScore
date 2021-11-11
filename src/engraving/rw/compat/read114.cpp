@@ -1890,7 +1890,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 }
             }
         } else if (tag == "Lyrics") {
-            Lyrics* l = new Lyrics(ctx.dummy()->chord());
+            Lyrics* l = Factory::createLyrics(ctx.dummy()->chord());
             l->setTrack(e.track());
 
             int iEndTick = 0;                 // used for backward compatibility

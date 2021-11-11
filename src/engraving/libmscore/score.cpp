@@ -3750,7 +3750,7 @@ void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
         int track = staffIdx * VOICES + voice;
         ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            Lyrics* l = new Lyrics(cr);
+            Lyrics* l = Factory::createLyrics(cr);
             l->setXmlText(txt);
             l->setTrack(track);
             cr->add(l);

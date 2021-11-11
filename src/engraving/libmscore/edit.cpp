@@ -720,7 +720,7 @@ TextBase* Score::addText(Tid type)
         }
 
         int no = static_cast<int>(chordRest->lyrics().size());
-        Lyrics* lyrics = new Lyrics(chordRest);
+        Lyrics* lyrics = Factory::createLyrics(chordRest);
         lyrics->setTrack(chordRest->track());
         lyrics->setParent(chordRest);
         lyrics->setNo(no);
@@ -3280,7 +3280,7 @@ Lyrics* Score::addLyrics()
     }
 
     int no = int(cr->lyrics().size());
-    Lyrics* lyrics = new Lyrics(cr);
+    Lyrics* lyrics = Factory::createLyrics(cr);
     lyrics->setTrack(cr->track());
     lyrics->setParent(cr);
     lyrics->setNo(no);

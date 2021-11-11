@@ -287,7 +287,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
-    case ElementType::LYRICS:            return new Lyrics(parent);
+    case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
@@ -486,6 +486,9 @@ CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase)
 COPY_ITEM_IMPL(LayoutBreak)
 MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
 
+CREATE_ITEM_IMPL(Lyrics, ElementType::LYRICS, ChordRest)
+COPY_ITEM_IMPL(Lyrics)
+
 CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System)
 COPY_ITEM_IMPL(Measure)
 
@@ -572,7 +575,7 @@ MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
 CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord)
 COPY_ITEM_IMPL(Stem)
 
-Ms::StemSlash* Factory::createStemSlash(Ms::Chord * parent)
+Ms::StemSlash* Factory::createStemSlash(Ms::Chord* parent)
 {
     StemSlash* s = new StemSlash(parent);
     s->setup();
@@ -581,7 +584,7 @@ Ms::StemSlash* Factory::createStemSlash(Ms::Chord * parent)
 
 COPY_ITEM_IMPL(StemSlash)
 
-Ms::System* Factory::createSystem(Ms::Page * parent)
+Ms::System* Factory::createSystem(Ms::Page* parent)
 {
     System* s = new System(parent);
     s->setup();

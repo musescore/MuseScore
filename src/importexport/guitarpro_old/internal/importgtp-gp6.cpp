@@ -975,7 +975,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             if (id != -1) {
                                 auto iter1 = lyrics.find(id);
                                 if (iter1 != lyrics.end()) {
-                                    auto lyr = new Lyrics(score->dummy());
+                                    auto lyr = Factory::createLyrics(score->dummy()->chord());
                                     lyr->setPlainText(iter1->second);
                                     cr->add(lyr);
                                 }
@@ -1725,7 +1725,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
             } else if (currentNode.nodeName() == "Lyrics") {
                 auto lyrNode = currentNode.firstChildElement("Line");
                 auto str     = lyrNode.toElement().text();
-                auto lyr = new Lyrics(score->dummy());
+                auto lyr = Factory::createLyrics(score->dummy()->chord());
                 lyr->setPlainText(str);
                 if (cr) {
                     cr->add(lyr);
@@ -1813,7 +1813,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
     int staffIdx           = 0;
 
     // used to keep track of tuplets
-    std::vector<Tuplet*> tuplets(staves* VOICES);
+    std::vector<Tuplet*> tuplets(staves * VOICES);
     for (int track = 0; track < staves * VOICES; ++track) {
         tuplets[track] = 0;
     }

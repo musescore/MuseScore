@@ -52,7 +52,7 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(EngravingItem* parent)
+Lyrics::Lyrics(ChordRest* parent)
     : TextBase(ElementType::LYRICS, parent, Tid::LYRICS_ODD)
 {
     _even       = false;

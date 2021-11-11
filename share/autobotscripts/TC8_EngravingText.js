@@ -105,6 +105,19 @@ var testCase = {
 
             api.keyboard.key("esc")
         }},
+        {name: "Add StaffTexts", func: function() {
+
+            api.log.debug("currentName: " + api.accessibility.currentName())
+
+
+            for (var i = 0; i < 10; ++i) {
+                api.shortcuts.activate("Alt+Left")
+                api.log.debug("currentName: " + api.accessibility.currentName())
+            }
+
+            api.autobot.abort()
+
+        }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC8_EngravingText.mscz")
         }},

@@ -105,6 +105,9 @@ public:
     static Ms::LayoutBreak* copyLayoutBreak(const Ms::LayoutBreak& src);
     static std::shared_ptr<Ms::LayoutBreak> makeLayoutBreak(Ms::MeasureBase* parent);
 
+    static Ms::Lyrics* createLyrics(Ms::ChordRest* parent);
+    static Ms::Lyrics* copyLyrics(const Ms::Lyrics& src);
+
     static Ms::Measure* createMeasure(Ms::System* parent);
     static Ms::Measure* copyMeasure(const Ms::Measure& src);
 
