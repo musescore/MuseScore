@@ -519,11 +519,11 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         drawIndicatorIcon(painter, option->rect, styleState, element);
     } break;
 
-    // ListView
+    // ViewItem
     case QStyle::PE_PanelItemViewItem: {
         bool selected = option->state & State_Selected;
 
-        drawListViewItemBackground(painter, option->rect, styleState, selected);
+        drawViewItemBackground(painter, option->rect, styleState, selected);
     } break;
 
     // Toolbar
@@ -793,7 +793,7 @@ void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const S
     }
 
     if (styleState.focused) {
-        drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        drawRoundedRect(painter, rect, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
     }
 }
 
@@ -823,7 +823,7 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, const 
     }
 
     if (styleState.focused) {
-        drawRoundedRect(painter, rect, borderRadius, backgroundColor, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        drawRoundedRect(painter, rect, borderRadius, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
     }
 
     if (checked || indeterminate) {
@@ -858,7 +858,7 @@ void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, con
         const qreal focusCircleRadius = outerCircleRadius;
         const QRect focusCircleRect(rect.center() + QPoint(1, 1) - QPoint(focusCircleRadius, focusCircleRadius),
                                     QSize(focusCircleRadius, focusCircleRadius) * 2);
-        drawRoundedRect(painter, focusCircleRect, focusCircleRadius, backgroundColor, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        drawRoundedRect(painter, focusCircleRect, focusCircleRadius, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
 
         outerCircleRadius -= navCtrlBorderWidth();
     }
@@ -882,7 +882,7 @@ void UiTheme::drawLineEditBackground(QPainter* painter, const QRect& rect, const
     backgroundColor.setAlphaF(!styleState.enabled ? itemOpacityDisabled() : (editing ? 1 : (styleState.hovered ? 0.6 : 1)));
 
     if (styleState.focused) {
-        drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        drawRoundedRect(painter, rect, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
     }
 
     QRect editRect = rect.adjusted(navCtrlBorderWidth(), navCtrlBorderWidth(), -navCtrlBorderWidth(), -navCtrlBorderWidth());
@@ -928,7 +928,7 @@ void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, const Styl
     drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth())); //does nothing apparently
 }
 
-void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const
+void UiTheme::drawViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const
 {
     QColor backgroundColor(Qt::transparent);
     if (selected) {
@@ -940,8 +940,6 @@ void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, c
     } else if (styleState.enabled && styleState.hovered) {
         backgroundColor = buttonColor();
         backgroundColor.setAlphaF(buttonOpacityHover());
-    } else {
-        return; // filling a rect with transparent does not make sense
     }
 
     painter->fillRect(rect, backgroundColor);
@@ -951,7 +949,7 @@ void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, c
     }
 
     if (styleState.focused) {
-        drawRoundedRect(painter, rect, 1, backgroundColor, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        drawRoundedRect(painter, rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
     }
 }
 
