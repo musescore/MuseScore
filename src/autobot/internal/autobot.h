@@ -66,7 +66,7 @@ public:
     void pause() override;
     void unpause() override;
     void abort() override;
-    void error(const QString& msg) override;
+    void fatal(const QString& msg) override;
 
     ITestCaseContextPtr context() const override;
     AutobotInteractivePtr autobotInteractive() const override;

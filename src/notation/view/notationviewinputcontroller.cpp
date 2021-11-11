@@ -531,7 +531,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     if (viewInteraction()->isTextEditingStarted()) {
         viewInteraction()->editText(event);
     } else if (viewInteraction()->isTextSelected()) {
-        if (event->key() == Qt::Key_Return) {
+        if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
             viewInteraction()->startEditText(viewInteraction()->selection()->element(), PointF());
             event->accept();
         }

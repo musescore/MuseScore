@@ -74,7 +74,7 @@ public:
     virtual void pause() = 0;
     virtual void unpause() = 0;
     virtual void abort() = 0;
-    virtual void error(const QString& msg) = 0;
+    virtual void fatal(const QString& msg) = 0;
 
     virtual ITestCaseContextPtr context() const = 0;
     virtual AutobotInteractivePtr autobotInteractive() const = 0;
