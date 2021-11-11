@@ -116,6 +116,7 @@ public:
     void moveChordRestToStaff(MoveDirection d) override;
 
     // Text edit
+    bool isTextSelected() const override;
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const PointF& cursorPos) override;

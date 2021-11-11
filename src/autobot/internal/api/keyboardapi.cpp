@@ -40,11 +40,16 @@ void KeyboardApi::key(const QString& key)
     LOGD() << key;
     int code = QKeySequence::fromString(key.toUpper())[0];
 
+    QWindow* w = qApp->focusWindow();
+    if (!w) {
+        w = mainWindow()->qWindow();
+    }
+
     QKeyEvent pressEvent(QEvent::KeyPress, code, Qt::NoModifier, key);
-    qApp->sendEvent(qApp->focusWindow(), &pressEvent);
+    qApp->sendEvent(w, &pressEvent);
 
     QKeyEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, code, Qt::NoModifier, key);
-    qApp->postEvent(qApp->focusWindow(), releaseEvent);
+    qApp->postEvent(w, releaseEvent);
 }
 
 void KeyboardApi::text(const QString& text)
