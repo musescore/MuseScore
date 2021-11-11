@@ -52,6 +52,8 @@ public:
 
     const Shortcut& shortcut(const std::string& actionCode) const override;
     const Shortcut& defaultShortcut(const std::string& actionCode) const override;
+
+    bool isRegistered(const std::string& sequence) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
     Ret importFromFile(const io::path& filePath) override;

@@ -43,6 +43,8 @@ public:
 
     virtual const Shortcut& shortcut(const std::string& actionCode) const = 0;
     virtual const Shortcut& defaultShortcut(const std::string& actionCode) const = 0;
+
+    virtual bool isRegistered(const std::string& sequence) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 
     virtual Ret importFromFile(const io::path& filePath) = 0;

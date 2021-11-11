@@ -24,10 +24,16 @@
 
 #include "apiobject.h"
 
+#include "modularity/ioc.h"
+#include "shortcuts/ishortcutscontroller.h"
+
 namespace mu::api {
 class KeyboardApi : public ApiObject
 {
     Q_OBJECT
+
+    INJECT(api, shortcuts::IShortcutsController, shortcutsController)
+
 public:
     explicit KeyboardApi(IApiEngine* e);
 

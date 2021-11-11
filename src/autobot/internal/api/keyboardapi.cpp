@@ -39,10 +39,12 @@ void KeyboardApi::key(const QString& key)
 {
     LOGD() << key;
     int code = QKeySequence::fromString(key.toUpper())[0];
-    int c = Qt::Key_Space;
 
-    QKeyEvent ev(QEvent::ShortcutOverride, code, Qt::NoModifier, key);
-    qApp->sendEvent(qApp->focusWindow(), &ev);
+    QKeyEvent pressEvent(QEvent::KeyPress, code, Qt::NoModifier, key);
+    qApp->sendEvent(qApp->focusWindow(), &pressEvent);
+
+    QKeyEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, code, Qt::NoModifier, key);
+    qApp->postEvent(qApp->focusWindow(), releaseEvent);
 }
 
 void KeyboardApi::text(const QString& text)
