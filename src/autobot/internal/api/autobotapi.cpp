@@ -101,7 +101,12 @@ void AutobotApi::abort()
 
 void AutobotApi::error(const QString& msg)
 {
-    autobot()->error(msg);
+    autobot()->fatal(msg);
+}
+
+void AutobotApi::fatal(const QString& msg)
+{
+    autobot()->fatal(msg);
 }
 
 bool AutobotApi::openProject(const QString& name)

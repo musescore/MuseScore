@@ -39,14 +39,14 @@ AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
 
 AccessibleItem::~AccessibleItem()
 {
-    if (m_registred && accessibilityController()) {
-        accessibilityController()->unreg(this);
-        m_registred = false;
-    }
-
     AccessibleRoot* root = accessibleRoot();
     if (root && root->focusedElement() == this) {
         root->setFocusedElement(nullptr);
+    }
+
+    if (m_registred && accessibilityController()) {
+        accessibilityController()->unreg(this);
+        m_registred = false;
     }
 
     m_element = nullptr;

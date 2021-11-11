@@ -24,6 +24,7 @@ var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
+var Instruments = require("steps/Instruments.js")
 
 var testCase = {
     name: "TC8: Engraving Text",
@@ -54,7 +55,7 @@ var testCase = {
             api.shortcuts.activate("B")
             api.shortcuts.activate("A")
         }},
-        {name: "Add Lyrics", func: function() {
+        {name: "Add Lyrics", skip: false, func: function() {
             Score.focusIn()
             for (var i = 0; i < 11; ++i) {
                 Score.prevChord()
@@ -94,25 +95,24 @@ var testCase = {
             seeChangesFast()
             api.keyboard.text("bim")
 
-            api.keyboard.key("esc")
+            api.keyboard.key("Esc")
         }},
-        {name: "Remove (change) Lyrics", func: function() {
-            api.keyboard.key("backspace")
+        {name: "Remove (change) Lyrics", skip: false, func: function() {
+            api.keyboard.key("Backspace")
             seeChanges()
 
             api.shortcuts.activate("Ctrl+L")
             api.keyboard.text("bum")
 
-            api.keyboard.key("esc")
+            api.keyboard.key("Esc")
         }},
-        {name: "Add StaffText", func: function() {
+        {name: "Add StaffText", skip: false, func: function() {
 
             //! NOTE Find note E
             for (var i = 0; i < 99; ++i) {
                 api.shortcuts.activate("Alt+Left")
-                seeChanges()
+                seeChangesFast()
                 var name = api.accessibility.currentName()
-                api.log.debug("currentName: " + name)
                 if (name.startsWith("Note; Pitch: E5")) {
                     break;
                 }
@@ -121,11 +121,87 @@ var testCase = {
             //! NOTE Add StaffText
             api.shortcuts.activate("Ctrl+T")
             api.keyboard.text("This is Sparta")
-            api.keyboard.key("esc")
+            api.keyboard.key("Esc") // end edit
         }},
-        {name: "Edit StaffText", func: function() {
+        {name: "Edit StaffText", skip: false, func: function() {
 
-            api.autobot.abort()
+            api.keyboard.key("Return") // begin edit
+            seeChanges()
+            api.keyboard.key("End") // move cursor to end
+            seeChanges()
+            api.keyboard.repeatKey("Backspace", 6) // remove Sparta
+            seeChanges()
+            api.keyboard.text("Flute") // add Flute
+            seeChanges()
+            api.keyboard.key("Esc") // end edit
+        }},
+        {name: "Add Oboe Instrument", func: function() {
+            Instruments.openInstrumentsPanel()
+            Instruments.openAddInstrumentsDialog()
+        }},
+        {name: "Select Oboe Instrument", func: function() {
+            Instruments.сhooseInstrument("Woodwinds", "Oboe")
+            Instruments.doneAddInstruments()
+        }},
+        {name: "Add StaffText to Oboe", func: function() {
+            Score.focusIn()
+
+            //! NOTE Find Note
+            for (var i = 0; i < 9; ++i) {
+                var name = api.accessibility.currentName()
+                if (name.startsWith("Note")) {
+                    break;
+                }
+                api.shortcuts.activate("Alt+Left")
+            }
+
+            item = api.accessibility.currentName()
+            if (!item.startsWith("Note")) {
+                api.autobot.fatal("Current item should be Note")
+            }
+
+            api.shortcuts.activate("Alt+Down")
+            seeChanges()
+
+            api.shortcuts.activate("Ctrl+T")
+            api.keyboard.text("This is Oboe")
+            api.keyboard.key("Esc")
+        }},
+        {name: "Add System Text", func: function() {
+            Score.focusIn()
+            api.shortcuts.activate("Ctrl+Home")
+            //! NOTE Find first Note
+            for (var i = 0; i < 99; ++i) {
+                api.shortcuts.activate("Alt+Right")
+                seeChangesFast()
+                var name = api.accessibility.currentName()
+                if (name.startsWith("Note")) {
+                    break;
+                }
+            }
+            for (var m = 0; m < 6; ++m) {
+                api.shortcuts.activate("Ctrl+Right")
+                seeChangesFast()
+            }
+
+            //! NOTE Add System Text
+            api.shortcuts.activate("Ctrl+Shift+T")
+            api.keyboard.text("This is Flute and Oboe")
+            api.keyboard.key("Esc")
+        }},
+        {name: "Hide/Show Flute", func: function() {
+            Instruments.openInstrumentsPanel()
+            Instruments.toggleVisibleInstrument("Flute")
+            seeChangesLong()
+            seeChangesLong()
+            Instruments.toggleVisibleInstrument("Flute")
+        }},
+        {name: "Hide/Show Oboe", func: function() {
+            Instruments.openInstrumentsPanel()
+            Instruments.toggleVisibleInstrument("Oboe")
+            seeChangesLong()
+            seeChangesLong()
+            Instruments.toggleVisibleInstrument("Oboe")
         }},
         {name: "Save", func: function() {
             api.autobot.saveProject("TC8_EngravingText.mscz")
@@ -151,6 +227,6 @@ function seeChangesLong()
 
 function seeChangesFast()
 {
-    api.autobot.seeChanges(250)
+    api.autobot.seeChanges(200)
 }
 
