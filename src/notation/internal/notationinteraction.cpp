@@ -2056,6 +2056,20 @@ void NotationInteraction::moveText(MoveDirection d, bool quickly)
     notifyAboutDragChanged();
 }
 
+bool NotationInteraction::isTextSelected() const
+{
+    EngravingItem* selectedElement = m_selection->element();
+    if (!selectedElement) {
+        return false;
+    }
+
+    if (!selectedElement->isTextBase()) {
+        return false;
+    }
+
+    return true;
+}
+
 bool NotationInteraction::isTextEditingStarted() const
 {
     return m_textEditData.element && m_textEditData.element->isTextBase();
