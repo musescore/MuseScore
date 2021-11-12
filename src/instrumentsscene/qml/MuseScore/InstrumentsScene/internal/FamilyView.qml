@@ -49,10 +49,23 @@ Item {
         root.groupSelected(0)
     }
 
-    QtObject {
-        id: prv
+    function groupName(index) {
+        var item = groupsView.itemAtIndex(index)
+        if (item) {
+            return item.groupName
+        }
 
-        property var currentItemNavigationIndex: []
+        return undefined
+    }
+
+    function restoreGroupNavigationActive(groupName) {
+        for (var i = 0; i < groupsView.count; ++i) {
+            var item = groupsView.itemAtIndex(i)
+             if (item.groupName === groupName && navigation.active) {
+                 item.navigation.requestActive()
+                 return
+            }
+        }
     }
 
     NavigationPanel {
@@ -63,7 +76,13 @@ Item {
 
         onNavigationEvent: {
             if (event.type === NavigationEvent.AboutActive) {
-                event.setData("controlIndex", prv.currentItemNavigationIndex)
+                for (var i = 0; i < groupsView.count; ++i) {
+                    var item = groupsView.itemAtIndex(i)
+                    if (item.isSelected) {
+                        event.setData("controlIndex", [item.navigation.row, item.navigation.column])
+                        return
+                    }
+                }
             }
         }
     }
@@ -91,7 +110,6 @@ Item {
         navigation.row: 1
 
         onActivated: {
-            prv.currentItemNavigationIndex = [navigation.row, navigation.column]
             root.genreSelected(genreBox.currentIndex)
         }
     }
@@ -113,6 +131,8 @@ Item {
         delegate: ListItemBlank {
             id: item
 
+            property string groupName: modelData
+
             isSelected: groupsView.currentIndex === model.index
 
             navigation.name: modelData
@@ -121,14 +141,7 @@ Item {
             navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
-                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
                 item.clicked(null)
-            }
-
-            onIsSelectedChanged: {
-                if (isSelected && !navigation.active) {
-                    navigation.requestActive()
-                }
             }
 
             StyledTextLabel {
@@ -138,7 +151,7 @@ Item {
 
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                text: modelData
+                text: groupName
             }
 
             onClicked: {
