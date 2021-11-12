@@ -47,10 +47,8 @@ DockToolBarView {
 
         readonly property int minimumLength: 36
         readonly property int maximumLength: 9999999
-        readonly property int gripButtonWidth:
-            gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
-        readonly property int gripButtonHeight:
-            gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
     }
 
     Rectangle {

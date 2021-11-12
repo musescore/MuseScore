@@ -72,10 +72,30 @@ Rectangle {
             width: parent.width
             height: 24
             color: ui.theme.backgroundSecondaryColor
+
+            CheckBox {
+                id: allSelectedCheck
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
+                text: "All"
+                checked: scriptsModel.isAllSelected(section)
+                onClicked: scriptsModel.toggleAllSelect(section)
+
+                Connections {
+                    target: scriptsModel
+                    onIsAllSelectedChanged: {
+                        if (type === section) {
+                            allSelectedCheck.checked = arg
+                        }
+                    }
+                }
+            }
+
             StyledTextLabel {
-                anchors.fill: parent
-                anchors.margins: 2
-                horizontalAlignment: Qt.AlignLeft
+                anchors.left: allSelectedCheck.right
+                anchors.leftMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
                 text: section
             }
         }
@@ -85,13 +105,23 @@ Rectangle {
             anchors.right: parent ? parent.right : undefined
             height: 48
 
+            CheckBox {
+                id: selectedCheck
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                anchors.verticalCenter: parent.verticalCenter
+                checked: selectedRole
+                onClicked: scriptsModel.toggleSelect(indexRole)
+            }
+
             StyledTextLabel {
                 id: titleLabel
-                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.left: selectedCheck.right
                 anchors.right: parent.right
+                anchors.topMargin: 8
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
-                anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignLeft
                 text: {
                     var status = statusRole
@@ -104,7 +134,7 @@ Rectangle {
 
             StyledTextLabel {
                 anchors.top: titleLabel.bottom
-                anchors.left: parent.left
+                anchors.left: selectedCheck.right
                 anchors.right: parent.right
                 anchors.topMargin: 2
                 anchors.leftMargin: 8

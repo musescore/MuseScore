@@ -27,6 +27,27 @@
 
 using namespace mu::autobot;
 
+static QString typeToString(ScriptType t)
+{
+    switch (t) {
+    case ScriptType::Undefined: return "Undefined";
+    case ScriptType::TestCase: return "TestCase";
+    case ScriptType::Custom: return "Custom";
+    }
+    return "";
+}
+
+ScriptType typeFromString(const QString& str)
+{
+    if (str == "TestCase") {
+        return ScriptType::TestCase;
+    }
+    if (str == "Custom") {
+        return ScriptType::Custom;
+    }
+    return ScriptType::Undefined;
+}
+
 AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -50,15 +71,6 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    auto typeToString = [](ScriptType t) {
-        switch (t) {
-        case ScriptType::Undefined: return "Undefined";
-        case ScriptType::TestCase: return "TestCase";
-        case ScriptType::Custom: return "Custom";
-        }
-        return "";
-    };
-
     const Script& script = m_scripts.at(index.row());
     switch (role) {
     case rTitle: return script.title;
@@ -67,6 +79,7 @@ QVariant AutobotScriptsModel::data(const QModelIndex& index, int role) const
     case rIndex: return index.row();
     case rType: return typeToString(script.type);
     case rStatus: return IAutobot::statusToString(m_statuses.value(script.path, IAutobot::Status::Undefined));
+    case rSelected: return m_selected.value(index.row(), true);
     }
     return QVariant();
 }
@@ -85,6 +98,7 @@ QHash<int, QByteArray> AutobotScriptsModel::roleNames() const
         { rPath, "pathRole" },
         { rIndex, "indexRole" },
         { rStatus, "statusRole" },
+        { rSelected, "selectedRole" },
     };
     return roles;
 }
@@ -100,6 +114,11 @@ void AutobotScriptsModel::load()
         }
         return f.title < s.title;
     });
+
+    //! NOTE Select all
+    for (size_t i = 0; i < m_scripts.size(); ++i) {
+        m_selected[int(i)] = true;
+    }
 
     endResetModel();
 }
@@ -152,7 +171,7 @@ bool AutobotScriptsModel::tryRunNextTC()
     //! NOTE Find next TC
     for (size_t i = currentIndex; i < m_scripts.size(); ++i) {
         currentIndex = i;
-        if (m_scripts.at(currentIndex).type == ScriptType::TestCase) {
+        if (m_scripts.at(currentIndex).type == ScriptType::TestCase && m_selected.value(int(currentIndex), true)) {
             break;
         }
     }
@@ -188,4 +207,54 @@ void AutobotScriptsModel::setIsRunAllTCMode(bool arg)
     }
     m_isRunAllTCMode = arg;
     emit isRunAllTCModeChanged();
+}
+
+void AutobotScriptsModel::toggleSelect(int idx)
+{
+    bool isOldAllSel = isAllSelected(m_scripts.at(size_t(idx)).type);
+    m_selected[idx] = !m_selected.value(idx, true);
+    emit dataChanged(index(idx), index(idx), { rSelected });
+
+    bool isAllSel = isAllSelected(m_scripts.at(size_t(idx)).type);
+
+    if (isOldAllSel != isAllSel) {
+        emit isAllSelectedChanged(typeToString(m_scripts.at(size_t(idx)).type), isAllSel);
+    }
+}
+
+void AutobotScriptsModel::toggleAllSelect(const QString& typeStr)
+{
+    ScriptType type = typeFromString(typeStr);
+    bool isAllSel = isAllSelected(type);
+    for (size_t i = 0; i < m_scripts.size(); ++i) {
+        if (m_scripts.at(i).type != type) {
+            continue;
+        }
+
+        m_selected[int(i)] = !isAllSel;
+        emit dataChanged(index(int(i)), index(int(i)), { rSelected });
+    }
+
+    emit isAllSelectedChanged(typeStr, !isAllSel);
+}
+
+bool AutobotScriptsModel::isAllSelected(const QString& typeStr) const
+{
+    ScriptType type = typeFromString(typeStr);
+    return isAllSelected(type);
+}
+
+bool AutobotScriptsModel::isAllSelected(const ScriptType& type) const
+{
+    for (size_t i = 0; i < m_scripts.size(); ++i) {
+        if (m_scripts.at(i).type != type) {
+            continue;
+        }
+
+        if (!m_selected.value(int(i), true)) {
+            return false;
+        }
+    }
+
+    return true;
 }
