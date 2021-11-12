@@ -50,7 +50,7 @@ bool TextInputFieldModel::isShortcutAllowedOverride(int key, Qt::KeyboardModifie
     int newModifiers = correctedKeyInput.second;
 
     if (needIgnoreKey(newKey)) {
-        return false;
+        return true;
     }
 
     QKeySequence keySequence(newModifiers + newKey);
