@@ -43,12 +43,6 @@ Item {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
     }
 
-    QtObject {
-        id: prv
-
-        property var currentItemNavigationIndex: []
-    }
-
     NavigationPanel {
         id: navPanel
         name: "InstrumentsView"
@@ -57,9 +51,13 @@ Item {
 
         onNavigationEvent: {
             if (event.type === NavigationEvent.AboutActive) {
-                event.setData("controlIndex", prv.currentItemNavigationIndex)
-                //! NOTE If we changed family, then control with saved index may not be
-                event.setData("controlOptional", true)
+                for (var i = 0; i < instrumentsView.count; ++i) {
+                    var item = instrumentsView.itemAtIndex(i)
+                    if (item.isSelected) {
+                        event.setData("controlIndex", [item.navigation.row, item.navigation.column])
+                        return
+                    }
+                }
             }
         }
     }
@@ -85,12 +83,6 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: navPanel
         navigation.row: 1
-
-        onFocusChanged: {
-            if (activeFocus) {
-                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
-            }
-        }
 
         onSearchTextChanged: {
             root.instrumentsModel.setSearchText(searchText)
@@ -122,7 +114,6 @@ Item {
             navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
-                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
                 root.instrumentsModel.selectInstrument(model.index)
             }
 
