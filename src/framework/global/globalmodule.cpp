@@ -105,7 +105,7 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     logger->setLevel(haw::logger::Normal);
 #endif
 
-    LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << " ===";
+    LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << ", build number " << BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace haw::profiler;
