@@ -80,7 +80,8 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("print",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Print…"),
-             QT_TRANSLATE_NOOP("action", "Print score/part")
+             QT_TRANSLATE_NOOP("action", "Print score/part"),
+             IconCode::Code::PRINT
              ),
     UiAction("clear-recent",
              mu::context::UiCtxAny,
