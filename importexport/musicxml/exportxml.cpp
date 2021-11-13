@@ -1026,7 +1026,7 @@ static void divideBy(int d)
 
 static void addInteger(int len)
       {
-      if (!integers.contains(len)) {
+      if (len > 0 && !integers.contains(len)) {
             integers.append(len);
             }
       }
@@ -1106,22 +1106,24 @@ void ExportMusicXml::calcDivisions()
                   Measure* m = (Measure*)mb;
 
                   for (int st = strack; st < etrack; ++st) {
-                        // sstaff - xml staff number, counting from 1 for this
-                        // instrument
-                        // special number 0 -> don’t show staff number in
-                        // xml output (because there is only one staff)
-
-                        int sstaff = (staves > 1) ? st - strack + VOICES : 0;
-                        sstaff /= VOICES;
-
                         for (Segment* seg = m->first(); seg; seg = seg->next()) {
+                              for (const Element* e : seg->annotations()) {
+                                    if (e->track() == st && e->type() == ElementType::FIGURED_BASS) {
+                                          const FiguredBass* fb = toFiguredBass(e);
+#ifdef DEBUG_TICK
+                                          qDebug("figuredbass tick %d duration %d", fb->tick().ticks(), fb->ticks().ticks());
+#endif
+                                          addInteger(fb->ticks().ticks());
+                                          }
+                                    }
+
 
                               Element* el = seg->element(st);
                               if (!el)
                                     continue;
 
                               // must ignore start repeat to prevent spurious backup/forward
-                              if (el->type() == ElementType::BAR_LINE && static_cast<BarLine*>(el)->barLineType() == BarLineType::START_REPEAT)
+                              if (el->type() == ElementType::BAR_LINE && toBarLine(el)->barLineType() == BarLineType::START_REPEAT)
                                     continue;
 
                               if (_tick != seg->tick())
@@ -1134,7 +1136,7 @@ void ExportMusicXml::calcDivisions()
                                                 l = l * Fraction(1,2);
                                           }
 #ifdef DEBUG_TICK
-                                    qDebug("chordrest %d", l);
+                                    qDebug("chordrest tick %d duration %d", _tick.ticks(), l.ticks());
 #endif
                                     addInteger(l.ticks());
                                     _tick += l;
