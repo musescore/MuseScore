@@ -6383,7 +6383,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
 
             for (int i = 0; i < 128; ++i) {
                 DrumInstrument di = drumset->drum(i);
-                if (di.notehead != NoteHead::Group::HEAD_INVALID || pitches.contains(i)) {
+                if (di.notehead != NoteHead::Group::HEAD_INVALID || pitches.contains(i + 1)) {
                     midiInstrument(xml, idx + 1, i + 1, part->instrument(), score, i + 1);
                 }
             }
