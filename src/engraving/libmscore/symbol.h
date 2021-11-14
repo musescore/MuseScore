@@ -58,6 +58,8 @@ public:
     SymId sym() const { return _sym; }
     QString symName() const;
 
+    QString accessibleInfo() const override;
+
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
