@@ -70,6 +70,15 @@ QString Symbol::symName() const
 }
 
 //---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Symbol::accessibleInfo() const
+{
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::userNameForSymId(_sym));
+}
+
+//---------------------------------------------------------
 //   layout
 //    height() and width() should return sensible
 //    values when calling this method
