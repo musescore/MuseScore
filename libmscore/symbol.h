@@ -46,6 +46,8 @@ class Symbol : public BSymbol {
       SymId sym() const                  { return _sym;  }
       QString symName() const;
 
+      QString accessibleInfo() const override;
+
       void draw(QPainter*) const override;
       void write(XmlWriter& xml) const override;
       void read(XmlReader&) override;
