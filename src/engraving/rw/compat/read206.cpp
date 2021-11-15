@@ -417,7 +417,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             if (isExcessStyle) {
                 excessPairs[i.sid] = value;
             } else {
-                style->set(i.sid, value);
+                style->set(i.sid, PropertyValue::fromQVariant(value));
             }
         }
 //            else
@@ -3187,7 +3187,7 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "page-layout") {
             readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
-            style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
+            style->set(Sid::concertPitch, bool(e.readInt()));
         } else if (tag == "pedalY") {
             qreal y = e.readDouble();
             style->set(Sid::pedalPosBelow, PointF(0.0, y));
@@ -3204,9 +3204,9 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
             style->set(Sid::ottavaHookBelow, -y);
         } else if (tag == "endBarDistance") {
             double d = e.readDouble();
-            d += style->value(Sid::barWidth).toDouble();
-            d += style->value(Sid::endBarWidth).toDouble();
-            style->set(Sid::endBarDistance, QVariant(d));
+            d += style->value(Sid::barWidth).toReal();
+            d += style->value(Sid::endBarWidth).toReal();
+            style->set(Sid::endBarDistance, d);
         } else if (tag == "ChordList") {
             readChordListHook.read(e);
         } else if (tag == "harmonyY") {
@@ -3282,7 +3282,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "showMargins") {
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toDouble();
+            qreal sp = score->style().value(Sid::spatium).toReal();
             ReadChordListHook clhook(score);
             readStyle206(&score->style(), e, clhook);
             if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz") {

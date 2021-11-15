@@ -45,7 +45,7 @@ QVariant NotationStyle::styleValue(const StyleId& styleId) const
 
 QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
 {
-    return engraving::DefaultStyle::defaultStyle().value(styleId);
+    return engraving::DefaultStyle::defaultStyle().value(styleId).toQVariant();
 }
 
 void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newValue)

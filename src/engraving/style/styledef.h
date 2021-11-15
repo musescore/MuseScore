@@ -25,8 +25,8 @@
 
 #include <array>
 #include <vector>
-#include <QVariant>
 
+#include "property/propertyvalue.h"
 #include "config.h"
 
 namespace Ms {
@@ -1497,14 +1497,14 @@ private:
     struct StyleValue {
         Sid _idx;
         const char* _name;         // xml name for read()/write()
-        QVariant _defaultValue;
+        mu::engraving::PropertyValue _defaultValue;
 
     public:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
-        const char* valueType() const { return _defaultValue.typeName(); }
         const char* name() const { return _name; }
-        const QVariant& defaultValue() const { return _defaultValue; }
+        P_TYPE valueType() const { return _defaultValue.type(); }
+        const mu::engraving::PropertyValue& defaultValue() const { return _defaultValue; }
     };
 
     static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;

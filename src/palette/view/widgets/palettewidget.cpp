@@ -959,7 +959,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         draw::Pen pen(configuration()->elementsColor());
-        pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
+        pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * magS);
         painter.setPen(pen);
 
         ElementPtr el = currentCell->element;

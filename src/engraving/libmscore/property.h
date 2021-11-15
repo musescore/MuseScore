@@ -392,7 +392,8 @@ enum class Pid {
     END
 };
 
-enum class P_TYPE : char {
+enum class P_TYPE {
+    UNDEFINED = 0,
     BOOL,
     INT,
     REAL,

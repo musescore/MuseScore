@@ -3383,7 +3383,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
     if (hasFrame()) {
-        qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toDouble();
+        qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (frameWidth().val() != 0.0) {
             Color fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);

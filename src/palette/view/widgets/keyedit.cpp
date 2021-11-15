@@ -127,7 +127,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     painter.fillRect(background, mu::draw::Color::white);
 
     draw::Pen pen(engravingConfiguration()->defaultColor());
-    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * gpaletteScore->spatium());
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->spatium());
     painter.setPen(pen);
 
     for (int i = 0; i < 5; ++i) {

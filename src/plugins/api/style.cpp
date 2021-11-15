@@ -76,9 +76,9 @@ QVariant MStyle::value(const QString& key) const
         return QVariant();
     }
 
-    const QVariant val = _style->value(sid);
+    const QVariant val = _style->value(sid).toQVariant();
 
-    if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium")) {
+    if (Ms::MStyle::valueType(sid) == P_TYPE::SPATIUM) {
         return val.value<Ms::Spatium>().val();
     }
 
@@ -99,7 +99,7 @@ void MStyle::setValue(const QString& key, QVariant value)
         return;
     }
 
-    if (!strcmp(Ms::MStyle::valueType(sid), "Ms::Spatium")) {
+    if (Ms::MStyle::valueType(sid) == P_TYPE::SPATIUM) {
         value = QVariant::fromValue(Ms::Spatium(value.toReal()));
     }
 
@@ -108,7 +108,7 @@ void MStyle::setValue(const QString& key, QVariant value)
         _score->undoChangeStyleVal(sid, value);
     } else {
         // Style is not bound to a score: change the value directly
-        _style->set(sid, value);
+        _style->set(sid, mu::engraving::PropertyValue::fromQVariant(value));
     }
 }
 } // namespace PluginAPI
