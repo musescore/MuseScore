@@ -30,9 +30,34 @@
 using namespace mu;
 using namespace mu::autobot;
 
-void TestCaseRunner::setStepsInterval(int msec)
+SpeedMode TestCaseRunner::speedMode() const
+{
+    return m_speedMode;
+}
+
+void TestCaseRunner::setSpeedMode(SpeedMode mode)
+{
+    if (m_speedMode == mode) {
+        return;
+    }
+
+    m_speedMode = mode;
+    m_speedModeChanged.send(mode);
+}
+
+async::Channel<SpeedMode> TestCaseRunner::speedModeChanged() const
+{
+    return m_speedModeChanged;
+}
+
+void TestCaseRunner::setDefaultInterval(int msec)
 {
     m_intervalMsec = msec;
+}
+
+int TestCaseRunner::defaultInterval() const
+{
+    return m_intervalMsec;
 }
 
 void TestCaseRunner::run(const TestCase& testCase)
@@ -86,6 +111,18 @@ void TestCaseRunner::doAbort()
     m_testCase.loop.quit();
 }
 
+int TestCaseRunner::intervalMsec() const
+{
+    switch (m_speedMode) {
+    case SpeedMode::Undefined: return m_intervalMsec;
+    case SpeedMode::Default: return m_intervalMsec;
+    case SpeedMode::Fast: return 250;
+    case SpeedMode::Normal: return 1000;
+    case SpeedMode::Slow: return 2000;
+    }
+    return m_intervalMsec;
+}
+
 void TestCaseRunner::nextStep(bool byInterval)
 {
     if (m_abort) {
@@ -103,7 +140,7 @@ void TestCaseRunner::nextStep(bool byInterval)
         return;
     }
 
-    QTimer::singleShot(byInterval ? m_intervalMsec : 0, [this]() {
+    QTimer::singleShot(byInterval ? intervalMsec() : 0, [this]() {
         Step step = m_testCase.steps.step(m_testCase.currentStepIdx);
         QString name = step.name();
         m_testCase.lastStepName = name;

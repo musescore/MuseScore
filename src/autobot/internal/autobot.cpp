@@ -53,6 +53,7 @@ void Autobot::init()
     });
 
     setStatus(Status::Undefined);
+    setSpeedMode(SpeedMode::Default);
 }
 
 void Autobot::affectOnServices()
@@ -141,9 +142,34 @@ void Autobot::execScript(const io::path& path)
     restoreAffectOnServices();
 }
 
-void Autobot::setStepsInterval(int msec)
+SpeedMode Autobot::speedMode() const
 {
-    m_runner.setStepsInterval(msec);
+    return m_runner.speedMode();
+}
+
+void Autobot::setSpeedMode(SpeedMode mode)
+{
+    m_runner.setSpeedMode(mode);
+}
+
+mu::async::Channel<SpeedMode> Autobot::speedModeChanged() const
+{
+    return m_runner.speedModeChanged();
+}
+
+void Autobot::setDefaultIntervalMsec(int msec)
+{
+    m_runner.setDefaultInterval(msec);
+}
+
+int Autobot::defaultIntervalMsec() const
+{
+    return m_runner.defaultInterval();
+}
+
+int Autobot::intervalMsec() const
+{
+    return m_runner.intervalMsec();
 }
 
 void Autobot::runTestCase(const TestCase& testCase)

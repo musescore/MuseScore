@@ -124,6 +124,43 @@ enum class StepStatus {
     Aborted,
     Error
 };
+
+enum class SpeedMode {
+    Undefined = 0,
+    Default,
+    Fast,
+    Normal,
+    Slow
+};
+
+static QString speedModeToString(SpeedMode mode)
+{
+    switch (mode) {
+    case SpeedMode::Undefined: return "";
+    case SpeedMode::Default: return "Default";
+    case SpeedMode::Fast: return "Fast";
+    case SpeedMode::Normal: return "Normal";
+    case SpeedMode::Slow: return "Slow";
+    }
+    return QString();
+}
+
+static SpeedMode speedModeFromString(const QString& str)
+{
+    if (str == "Default") {
+        return SpeedMode::Default;
+    }
+    if (str == "Fast") {
+        return SpeedMode::Fast;
+    }
+    if (str == "Normal") {
+        return SpeedMode::Normal;
+    }
+    if (str == "Slow") {
+        return SpeedMode::Slow;
+    }
+    return SpeedMode::Undefined;
+}
 }
 
 #endif // MU_AUTOBOT_AUTOBOTTYPES_H
