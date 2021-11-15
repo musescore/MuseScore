@@ -41,24 +41,16 @@ bool WidgetNavigationFix::fixNavigationForTableWidget(const WidgetNavigationFix:
             return false;
         }
 
-        auto lastItem = tableWidget->item(tableWidget->rowCount() - 1, tableWidget->columnCount() - 1);
-        if (lastItem == tableWidget->currentItem()) {
-            chain->nextWidget->setFocus();
-            return true;
-        }
-        break;
+        chain->nextWidget->setFocus();
+        return true;
     }
     case Qt::Key_Backtab: {
         if (!chain->prevWidget) {
             return false;
         }
 
-        auto firstItem = tableWidget->item(0, 0);
-        if (firstItem == tableWidget->currentItem()) {
-            chain->prevWidget->setFocus();
-            return true;
-        }
-        break;
+        chain->prevWidget->setFocus();
+        return true;
     }
     default:
         break;
