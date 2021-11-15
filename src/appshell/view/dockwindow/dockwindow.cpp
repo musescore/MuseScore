@@ -41,6 +41,21 @@
 using namespace mu::dock;
 using namespace mu::async;
 
+namespace mu::dock {
+void clearRegistry()
+{
+    TRACEFUNC;
+
+    auto registry = KDDockWidgets::DockRegistry::self();
+
+    registry->clear();
+
+    for (KDDockWidgets::DockWidgetBase* dock : registry->dockwidgets()) {
+        registry->unregisterDockWidget(dock);
+    }
+}
+}
+
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent),
     m_toolBars(this),
@@ -102,13 +117,15 @@ void DockWindow::onQuit()
 
     m_quiting = true;
 
-    saveGeometry();
-
     IF_ASSERT_FAILED(m_currentPage) {
         return;
     }
 
     savePageState(m_currentPage->objectName());
+
+    clearRegistry();
+
+    saveGeometry();
 }
 
 QString DockWindow::currentPageUri() const
@@ -139,6 +156,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     bool isFirstOpening = (m_currentPage == nullptr);
     if (isFirstOpening) {
+        clearRegistry();
         restoreGeometry();
     }
 
@@ -149,7 +167,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     if (m_currentPage) {
         savePageState(m_currentPage->objectName());
-        KDDockWidgets::DockRegistry::self()->clear();
+        clearRegistry();
     }
 
     loadPageContent(newPage);
@@ -387,6 +405,13 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
         return;
     }
 
+    auto registry = KDDockWidgets::DockRegistry::self();
+    auto dockWidget = dock->dockWidget();
+
+    if (!registry->containsDockWidget(dockWidget->uniqueName())) {
+        registry->registerDockWidget(dockWidget);
+    }
+
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
 
     auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
@@ -394,7 +419,7 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
 
     KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
 
-    m_mainWindow->addDockWidget(dock->dockWidget(), location, relativeDock, options);
+    m_mainWindow->addDockWidget(dockWidget, location, relativeDock, options);
 }
 
 DockPageView* DockWindow::pageByUri(const QString& uri) const
