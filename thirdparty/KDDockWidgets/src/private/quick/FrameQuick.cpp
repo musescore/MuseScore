@@ -89,8 +89,15 @@ void FrameQuick::updateConstriants()
 
 void FrameQuick::removeWidget_impl(DockWidgetBase *dw)
 {
+    if (dw->parent() == m_stackLayout) {
+        dw->setParent(nullptr);
+    }
+
     m_tabWidget->removeDockWidget(dw);
-    disconnect(m_connections.take(dw));
+
+    if (m_connections.contains(dw)) {
+        disconnect(m_connections.take(dw));
+    }
 }
 
 int FrameQuick::indexOfDockWidget_impl(const DockWidgetBase *dw)
