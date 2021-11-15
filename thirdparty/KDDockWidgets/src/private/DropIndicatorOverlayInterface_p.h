@@ -27,7 +27,8 @@ class DOCKS_EXPORT DropIndicatorOverlayInterface : public QWidgetAdapter
     Q_PROPERTY(QRect hoveredFrameRect READ hoveredFrameRect NOTIFY hoveredFrameRectChanged)
     Q_PROPERTY(KDDockWidgets::DropIndicatorOverlayInterface::DropLocation currentDropLocation READ currentDropLocation NOTIFY currentDropLocationChanged)
 public:
-    enum DropLocation {
+    enum DropLocation
+    {
         DropLocation_None = 0,
         DropLocation_Left,
         DropLocation_Top,
@@ -50,7 +51,10 @@ public:
     QRect hoveredFrameRect() const;
     bool isHovered() const;
     DropLocation currentDropLocation() const;
-    Frame *hoveredFrame() const { return m_hoveredFrame; }
+    Frame *hoveredFrame() const
+    {
+        return m_hoveredFrame;
+    }
     void setCurrentDropLocation(DropIndicatorOverlayInterface::DropLocation location);
 
     KDDockWidgets::DropIndicatorOverlayInterface::DropLocation hover(QPoint globalPos);

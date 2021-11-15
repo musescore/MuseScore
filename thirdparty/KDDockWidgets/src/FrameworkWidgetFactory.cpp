@@ -10,37 +10,38 @@
 */
 
 #include "FrameworkWidgetFactory.h"
-#include "Frame_p.h"
-#include "TitleBar_p.h"
-#include "multisplitter/Separator_p.h"
-#include "FloatingWindow_p.h"
 #include "Config.h"
-#include "indicators/ClassicIndicators_p.h"
-#include "indicators/NullIndicators_p.h"
-#include "Utils_p.h"
-#include "TabWidget_p.h"
+
+#include "private/Frame_p.h"
+#include "private/TitleBar_p.h"
+#include "private/multisplitter/Separator_p.h"
+#include "private/FloatingWindow_p.h"
+#include "private/indicators/ClassicIndicators_p.h"
+#include "private/indicators/NullIndicators_p.h"
+#include "private/Utils_p.h"
+#include "private/TabWidget_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-# include "widgets/FrameWidget_p.h"
-# include "widgets/TitleBarWidget_p.h"
-# include "widgets/TabBarWidget_p.h"
-# include "widgets/SideBarWidget_p.h"
-# include "widgets/TabWidgetWidget_p.h"
-# include "multisplitter/Separator_qwidget.h"
-# include "widgets/FloatingWindowWidget_p.h"
-# include "indicators/SegmentedIndicators_p.h"
+#include "private/widgets/FrameWidget_p.h"
+#include "private/widgets/TitleBarWidget_p.h"
+#include "private/widgets/TabBarWidget_p.h"
+#include "private/widgets/SideBarWidget_p.h"
+#include "private/widgets/TabWidgetWidget_p.h"
+#include "private/multisplitter/Separator_qwidget.h"
+#include "private/widgets/FloatingWindowWidget_p.h"
+#include "private/indicators/SegmentedIndicators_p.h"
 
-# include <QRubberBand>
-# include <QToolButton>
+#include <QRubberBand>
+#include <QToolButton>
 #else
-# include "DockWidgetQuick.h"
-# include "quick/FrameQuick_p.h"
-# include "quick/TitleBarQuick_p.h"
-# include "quick/TabWidgetQuick_p.h"
-# include "quick/TabBarQuick_p.h"
-# include "quick/FloatingWindowQuick_p.h"
-# include "quick/RubberBandQuick.h"
-# include "multisplitter/Separator_quick.h"
+#include "DockWidgetQuick.h"
+#include "private/quick/FrameQuick_p.h"
+#include "private/quick/TitleBarQuick_p.h"
+#include "private/quick/TabWidgetQuick_p.h"
+#include "private/quick/TabBarQuick_p.h"
+#include "private/quick/FloatingWindowQuick_p.h"
+#include "private/quick/RubberBandQuick.h"
+#include "private/multisplitter/Separator_quick.h"
 #endif
 
 // clazy:excludeall=ctor-missing-parent-argument
@@ -86,12 +87,12 @@ Layouting::Separator *DefaultWidgetFactory::createSeparator(Layouting::Widget *p
 
 FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *parent) const
 {
-    return new FloatingWindowWidget(parent);
+    return new FloatingWindowWidget(QRect(), parent);
 }
 
-FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent) const
+FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent, QRect suggestedGeometry) const
 {
-    return new FloatingWindowWidget(frame, parent);
+    return new FloatingWindowWidget(frame, suggestedGeometry, parent);
 }
 
 DropIndicatorOverlayInterface *DefaultWidgetFactory::createDropIndicatorOverlay(DropArea *dropArea) const
@@ -123,7 +124,7 @@ SideBar *DefaultWidgetFactory::createSideBar(SideBarLocation loc, MainWindowBase
     return new SideBarWidget(loc, parent);
 }
 
-QAbstractButton* DefaultWidgetFactory::createTitleBarButton(QWidget *parent, TitleBarButtonType type) const
+QAbstractButton *DefaultWidgetFactory::createTitleBarButton(QWidget *parent, TitleBarButtonType type) const
 {
     if (!parent) {
         qWarning() << Q_FUNC_INFO << "Parent not provided";
@@ -163,9 +164,9 @@ FloatingWindow *DefaultWidgetFactory::createFloatingWindow(MainWindowBase *paren
     return new FloatingWindowQuick(parent);
 }
 
-FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent) const
+FloatingWindow *DefaultWidgetFactory::createFloatingWindow(Frame *frame, MainWindowBase *parent, QRect suggestedGeometry) const
 {
-    return new FloatingWindowQuick(frame, parent);
+    return new FloatingWindowQuick(frame, suggestedGeometry, parent);
 }
 
 DropIndicatorOverlayInterface *DefaultWidgetFactory::createDropIndicatorOverlay(DropArea *dropArea) const

@@ -71,24 +71,26 @@ public:
     typedef QVector<DockWidgetBase *> List;
 
     ///@brief DockWidget options to pass at construction time
-    enum Option {
+    enum Option
+    {
         Option_None = 0, ///< No option, the default
-        Option_NotClosable = 1, ///< The DockWidget can't be closed on the [x], only programatically
+        Option_NotClosable = 1, ///< The DockWidget can't be closed on the [x], only programmatically
         Option_NotDockable = 2, ///< The DockWidget can't be docked, it's always floating
         Option_DeleteOnClose = 4 ///< Deletes the DockWidget when closed
-
     };
     Q_DECLARE_FLAGS(Options, Option)
     Q_ENUM(Options);
 
     /// @brief Options which will affect LayoutSaver save/restore
-    enum class LayoutSaverOption {
+    enum class LayoutSaverOption
+    {
         None = 0, ///< Just use the defaults
         Skip = 1, ///< The dock widget won't participate in save/restore. Currently only available for floating windows.
     };
     Q_DECLARE_FLAGS(LayoutSaverOptions, LayoutSaverOption)
 
-    enum class IconPlace {
+    enum class IconPlace
+    {
         TitleBar = 1,
         TabBar = 2,
         ToggleAction = 4,
@@ -107,8 +109,8 @@ public:
      * when visible, or stays without a parent when hidden.
      */
     explicit DockWidgetBase(const QString &uniqueName,
-                            Options options = DockWidgetBase::Options(),
-                            LayoutSaverOptions layoutSaverOptions = LayoutSaverOptions());
+                            Options options = KDDockWidgets::DockWidgetBase::Options(),
+                            LayoutSaverOptions layoutSaverOptions = KDDockWidgets::DockWidgetBase::LayoutSaverOptions());
 
     ///@brief destructor
     ~DockWidgetBase() override;
@@ -241,7 +243,7 @@ public:
     /**
      * @brief returns if this dock widget is tabbed into another
      *
-     * Technically a docked DockWidget always lives in a tab widget, but from the user's prespective
+     * Technically a docked DockWidget always lives in a tab widget, but from the user's perspective
      * it's not tabbed when there's only 1 dock widget, as there are no tabs displayed. Unless
      * the frame is using Option_AlwaysShowsTabs, in which case this method will return true regardless
      * if being the single one.
@@ -304,7 +306,7 @@ public:
      * @brief Returns whether this dock widget is open.
      * Equivalent to calling toggleAction().isChecked() or isVisible()
      */
-    bool isOpen() const;
+    Q_INVOKABLE bool isOpen() const;
 
     /**
      * @brief Sets the affinity names. Dock widgets can only dock into dock widgets of the same affinity.
@@ -323,7 +325,7 @@ public:
      *
      * @p names the affinity names
      */
-     void setAffinities(const QStringList &);
+    void setAffinities(const QStringList &);
 
     /// @deprecated @overload
     /// @param name the affinity name
@@ -418,7 +420,7 @@ public:
     /// @brief Returns a dock widget by its name
     /// This is the same name you passed to DockWidget CTOR.
     /// nullptr is returned if the dock widget isn't found.
-    static DockWidgetBase* byName(const QString &uniqueName);
+    static DockWidgetBase *byName(const QString &uniqueName);
 
     /// @brief Returns whether this widget has the LayoutSaverOption::Skip flag
     bool skipsRestore() const;
@@ -448,9 +450,14 @@ public:
     /// only implemented for QtQuick
     void setMDIZ(int z);
 
+    ///@brief Returns whether this dock widget is the main window persistent central widget
+    ///This only applies when using MainWindowOption_HasCentralWidget
+    bool isPersistentCentralDockWidget() const;
+
 Q_SIGNALS:
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     ///@brief signal emitted when the parent changed
+    /// QtQuick already has QQuickItem::parentChanged(), so add it only for QtWidgets here.
     void parentChanged();
 #endif
 

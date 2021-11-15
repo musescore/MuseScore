@@ -53,12 +53,12 @@ class WidgetResizeHandler;
  * FloatingWindow.
  */
 class DOCKS_EXPORT Frame
-        : public LayoutGuestWidget
-        , public FocusScope
+    : public LayoutGuestWidget,
+      public FocusScope
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::TitleBar* titleBar READ titleBar CONSTANT)
-    Q_PROPERTY(KDDockWidgets::TitleBar* actualTitleBar READ actualTitleBar NOTIFY actualTitleBarChanged)
+    Q_PROPERTY(KDDockWidgets::TitleBar *titleBar READ titleBar CONSTANT)
+    Q_PROPERTY(KDDockWidgets::TitleBar *actualTitleBar READ actualTitleBar NOTIFY actualTitleBarChanged)
     Q_PROPERTY(int currentIndex READ currentIndex NOTIFY currentDockWidgetChanged)
     Q_PROPERTY(int userType READ userType CONSTANT)
     Q_PROPERTY(bool isMDI READ isMDI NOTIFY isMDIChanged)
@@ -161,7 +161,16 @@ public:
      *
      * @return whether this widget is the central frame in a main window
      */
-    bool isCentralFrame() const { return m_options & FrameOption_IsCentralFrame; }
+    bool isCentralFrame() const
+    {
+        return m_options & FrameOption_IsCentralFrame;
+    }
+
+    /// @brief Returns whether you can DND dock widgets over this frame and tab into it
+    bool isDockable() const
+    {
+        return !(m_options & FrameOption_NonDockable);
+    }
 
     /**
      * @brief whether the tab widget will always show tabs, even if there's only 1 dock widget
@@ -172,7 +181,10 @@ public:
      *
      * @return whether the tab widget will always show tabs, even if there's only 1 dock widget
      */
-    bool alwaysShowsTabs() const { return m_options & FrameOption_AlwaysShowsTabs; }
+    bool alwaysShowsTabs() const
+    {
+        return m_options & FrameOption_AlwaysShowsTabs;
+    }
 
     /// @brief returns whether the dockwidget @p w is inside this frame
     bool containsDockWidget(DockWidgetBase *w) const;
@@ -198,15 +210,24 @@ public:
     void onCloseEvent(QCloseEvent *e) override;
     int currentTabIndex() const;
 
-    FrameOptions options() const { return m_options; }
+    FrameOptions options() const
+    {
+        return m_options;
+    }
     bool anyNonClosable() const;
     bool anyNonDockable() const;
 
     ///@brief returns whether there's 0 dock widgets. If not persistent then the Frame will delete itself.
-    bool isEmpty() const { return dockWidgetCount() == 0; }
+    bool isEmpty() const
+    {
+        return dockWidgetCount() == 0;
+    }
 
     ///@brief returns whether there's only 1 dock widget.
-    bool hasSingleDockWidget() const { return dockWidgetCount() == 1; }
+    bool hasSingleDockWidget() const
+    {
+        return dockWidgetCount() == 1;
+    }
 
     ///@brief Called when a dock widget child @p w is shown
     void onDockWidgetShown(DockWidgetBase *w);
@@ -357,10 +378,10 @@ private:
 
 }
 
-inline QDebug operator<< (QDebug d, KDDockWidgets::Frame *frame)
+inline QDebug operator<<(QDebug d, KDDockWidgets::Frame *frame)
 {
     if (frame) {
-        d << static_cast<QObject*>(frame);
+        d << static_cast<QObject *>(frame);
         d << "; window=" << frame->window();
         d << "; options=" << frame->options();
         d << "; dockwidgets=" << frame->dockWidgets();

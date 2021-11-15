@@ -33,12 +33,13 @@
 #include <QDir>
 
 #ifdef Q_OS_WIN
-# include <windows.h>
+#include <windows.h>
 #endif
 
 using namespace KDDockWidgets::Debug;
 
-enum Role {
+enum Role
+{
     ObjRole = Qt::UserRole
 };
 
@@ -128,7 +129,7 @@ void ObjectViewer::dumpWindows()
     qDebug() << "Top Level QWidgets:";
     const auto &topLevelWidgets = qApp->topLevelWidgets();
     for (QWidget *w : topLevelWidgets) {
-        if (qobject_cast<QMenu*>(w))
+        if (qobject_cast<QMenu *>(w))
             continue;
 
         qDebug() << "    QWidget=" << w;
@@ -147,7 +148,7 @@ QString ObjectViewer::nameForObj(QObject *o) const
     if (!o->objectName().isEmpty())
         name += QStringLiteral("(%1)").arg(o->objectName());
 
-    if (auto w = qobject_cast<QWidget*>(o)) {
+    if (auto w = qobject_cast<QWidget *>(o)) {
         name += QStringLiteral(" - %1,%2 %3x%4").arg(w->x()).arg(w->y()).arg(w->width()).arg(w->height());
 
         if (w->isWindow())
@@ -164,13 +165,13 @@ void ObjectViewer::add(QObject *obj, QStandardItem *parent)
     if (obj == this || obj == &m_menu || obj == parentWidget() || !obj) // Ignore our stuff
         return;
 
-    if (m_ignoreMenus && qobject_cast<QMenu*>(obj))
+    if (m_ignoreMenus && qobject_cast<QMenu *>(obj))
         return;
 
-    if (m_ignoreShortcuts && qobject_cast<QShortcut*>(obj))
+    if (m_ignoreShortcuts && qobject_cast<QShortcut *>(obj))
         return;
 
-    if (m_ignoreToolBars && qobject_cast<QToolBar*>(obj))
+    if (m_ignoreToolBars && qobject_cast<QToolBar *>(obj))
         return;
 
     connect(obj, &QObject::destroyed, this, &ObjectViewer::remove);
@@ -200,7 +201,7 @@ void ObjectViewer::onSelectionChanged()
 
     if (m_selectedObject) {
         m_selectedObject->removeEventFilter(this);
-        if (auto w = qobject_cast<QWidget*>(m_selectedObject))
+        if (auto w = qobject_cast<QWidget *>(m_selectedObject))
             w->update();
     }
 
@@ -210,7 +211,7 @@ void ObjectViewer::onSelectionChanged()
         printProperties(o);
         m_selectedObject->installEventFilter(this);
         if (m_highlightsWidget) {
-            if (auto w = qobject_cast<QWidget*>(o))
+            if (auto w = qobject_cast<QWidget *>(o))
                 w->update();
         }
     }
@@ -227,7 +228,7 @@ void ObjectViewer::printProperties(QObject *obj) const
         qDebug() << "    " << prop.name() << prop.read(obj);
     }
 
-    if (auto w = qobject_cast<QWidget*>(obj)) {
+    if (auto w = qobject_cast<QWidget *>(obj)) {
         qDebug() << "Is a widget!";
         qDebug() << "Window=" << w->window();
         qDebug() << "flags=" << w->windowFlags();
@@ -241,13 +242,13 @@ QObject *ObjectViewer::selectedObject() const
     if (indexes.isEmpty())
         return nullptr;
     QModelIndex index = indexes.first();
-    QObject *obj = index.data(ObjRole).value<QObject*>();
+    QObject *obj = index.data(ObjRole).value<QObject *>();
     return obj;
 }
 
 QWidget *ObjectViewer::selectedWidget() const
 {
-    return qobject_cast<QWidget*>(selectedObject());
+    return qobject_cast<QWidget *>(selectedObject());
 }
 
 void ObjectViewer::updateItemAppearence(QStandardItem *item)
@@ -266,12 +267,12 @@ void ObjectViewer::updateItemAppearence(QStandardItem *item)
 
 QObject *ObjectViewer::objectForItem(QStandardItem *item) const
 {
-    return item->data(ObjRole).value<QObject*>();
+    return item->data(ObjRole).value<QObject *>();
 }
 
 QWidget *ObjectViewer::widgetForItem(QStandardItem *item) const
 {
-    return qobject_cast<QWidget*>(objectForItem(item));
+    return qobject_cast<QWidget *>(objectForItem(item));
 }
 
 void ObjectViewer::contextMenuEvent(QContextMenuEvent *ev)
@@ -281,7 +282,7 @@ void ObjectViewer::contextMenuEvent(QContextMenuEvent *ev)
 
 bool ObjectViewer::eventFilter(QObject *watched, QEvent *event)
 {
-    auto widget = static_cast<QWidget*>(watched);
+    auto widget = static_cast<QWidget *>(watched);
     if (event->type() == QEvent::Show || event->type() == QEvent::Hide) {
         updateItemAppearence(m_itemMap.value(watched));
         return false;

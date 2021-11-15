@@ -50,11 +50,11 @@ private:
     void remove(QObject *obj);
     void onSelectionChanged();
     void printProperties(QObject *) const;
-    QObject* selectedObject() const;
+    QObject *selectedObject() const;
     QWidget *selectedWidget() const;
-    void updateItemAppearence(QStandardItem*);
-    QObject *objectForItem(QStandardItem*) const;
-    QWidget *widgetForItem(QStandardItem*) const;
+    void updateItemAppearence(QStandardItem *);
+    QObject *objectForItem(QStandardItem *) const;
+    QWidget *widgetForItem(QStandardItem *) const;
 
 #ifdef Q_OS_WIN
     void sendHitTest();
@@ -68,7 +68,7 @@ private:
     bool m_ignoreMenus = true;
     bool m_ignoreShortcuts = true;
     bool m_ignoreToolBars = true;
-    QHash<QObject*, QStandardItem*> m_itemMap;
+    QHash<QObject *, QStandardItem *> m_itemMap;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event) override;

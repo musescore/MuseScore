@@ -27,12 +27,21 @@ class DOCKS_EXPORT NullIndicators : public DropIndicatorOverlayInterface
 public:
     explicit NullIndicators(DropArea *);
     ~NullIndicators() override;
-    DropIndicatorOverlayInterface::DropLocation hover_impl(QPoint) override { return {}; };
+    DropIndicatorOverlayInterface::DropLocation hover_impl(QPoint) override
+    {
+        return {};
+    };
 
-    DropLocation dropLocationForPos(QPoint) const { return {}; }
+    DropLocation dropLocationForPos(QPoint) const
+    {
+        return {};
+    }
 
 protected:
-    QPoint posForIndicator(DropLocation) const override { return {}; }
+    QPoint posForIndicator(DropLocation) const override
+    {
+        return {};
+    }
 };
 
 }

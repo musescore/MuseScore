@@ -30,9 +30,9 @@
 #include <QWindow>
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-# include "DebugWindow_p.h"
+#include "DebugWindow_p.h"
 #else
-# include "quick/QmlTypes.h"
+#include "quick/QmlTypes.h"
 #endif
 
 using namespace KDDockWidgets;
@@ -41,9 +41,9 @@ static void initKDDockWidgetResources()
 {
 #if defined(KDDOCKWIDGETS_STATICLIB) || defined(QT_STATIC)
     Q_INIT_RESOURCE(kddockwidgets_resources);
-# if defined(KDDOCKWIDGETS_QTQUICK)
+#if defined(KDDOCKWIDGETS_QTQUICK)
     Q_INIT_RESOURCE(kddockwidgets_qtquick);
-# endif
+#endif
 #endif
 }
 
@@ -54,12 +54,12 @@ DockRegistry::DockRegistry(QObject *parent)
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
 
-# ifdef DOCKS_DEVELOPER_MODE
+#ifdef DOCKS_DEVELOPER_MODE
     if (qEnvironmentVariableIntValue("KDDOCKWIDGETS_SHOW_DEBUG_WINDOW") == 1) {
         auto dv = new Debug::DebugWindow();
         dv->show();
     }
-# endif
+#endif
 
 #else
     KDDockWidgets::registerQmlTypes();
@@ -84,7 +84,7 @@ void DockRegistry::maybeDelete()
 
 void DockRegistry::onFocusObjectChanged(QObject *obj)
 {
-    auto p = qobject_cast<WidgetType*>(obj);
+    auto p = qobject_cast<WidgetType *>(obj);
     while (p) {
         if (auto frame = qobject_cast<Frame *>(p)) {
             // Special case: The focused widget is inside the frame but not inside the dockwidget.
@@ -191,7 +191,7 @@ bool DockRegistry::isProbablyObscured(QWindow *window, FloatingWindow *exclude) 
             continue;
 
         if (fwWindow->geometry().intersects(geo)) {
-            // fw might be bellow, but we don't have a way to check. So be conservative and return true.
+            // fw might be below, but we don't have a way to check. So be conservative and return true.
             return true;
         }
     }
@@ -202,7 +202,7 @@ bool DockRegistry::isProbablyObscured(QWindow *window, FloatingWindow *exclude) 
     for (MainWindowBase *mw : m_mainWindows) {
         QWindow *mwWindow = mw->window()->windowHandle();
 
-        if (mwWindow != window && !targetIsToolWindow && mwWindow->geometry().intersects(geo)) {
+        if (mwWindow && mwWindow != window && !targetIsToolWindow && mwWindow->geometry().intersects(geo)) {
             // Two main windows that intersect. Return true. If the target is a tool window it will be above, so we don't care.
             return true;
         }
@@ -408,6 +408,8 @@ DockWidgetBase *DockRegistry::dockByName(const QString &name, DockByNameFlags fl
                 m_dockWidgetIdRemapping.insert(name, dw->uniqueName());
             }
             return dw;
+        } else {
+            qWarning() << Q_FUNC_INFO << "Couldn't find dock widget" << name;
         }
     }
 
@@ -557,7 +559,7 @@ const QVector<QWindow *> DockRegistry::floatingQWindows() const
     for (FloatingWindow *fw : m_floatingWindows) {
         if (!fw->beingDeleted()) {
             if (QWindow *window = fw->windowHandle()) {
-                window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick*>(fw)); // Since QWidgetWindow is private API
+                window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick *>(fw)); // Since QWidgetWindow is private API
                 windows.push_back(window);
             } else {
                 qWarning() << Q_FUNC_INFO << "FloatingWindow doesn't have QWindow";
@@ -570,7 +572,7 @@ const QVector<QWindow *> DockRegistry::floatingQWindows() const
 
 bool DockRegistry::hasFloatingWindows() const
 {
-    return std::any_of(m_floatingWindows.begin(), m_floatingWindows.end(), [] (FloatingWindow *fw) {
+    return std::any_of(m_floatingWindows.begin(), m_floatingWindows.end(), [](FloatingWindow *fw) {
         return !fw->beingDeleted();
     });
 }
@@ -637,7 +639,7 @@ QVector<QWindow *> DockRegistry::topLevels(bool excludeFloatingDocks) const
         for (FloatingWindow *fw : m_floatingWindows) {
             if (fw->isVisible()) {
                 if (QWindow *window = fw->windowHandle()) {
-                    window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick*>(fw)); // Since QWidgetWindow is private API
+                    window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick *>(fw)); // Since QWidgetWindow is private API
                     windows << window;
                 } else {
                     qWarning() << Q_FUNC_INFO << "FloatingWindow doesn't have QWindow";
@@ -649,7 +651,7 @@ QVector<QWindow *> DockRegistry::topLevels(bool excludeFloatingDocks) const
     for (MainWindowBase *m : m_mainWindows) {
         if (m->isVisible()) {
             if (QWindow *window = m->window()->windowHandle()) {
-                window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick*>(m));
+                window->setProperty("kddockwidgets_qwidget", QVariant::fromValue<QWidgetOrQuick *>(m));
                 windows << window;
             } else {
                 qWarning() << Q_FUNC_INFO << "MainWindow doesn't have QWindow";
@@ -700,7 +702,7 @@ bool DockRegistry::eventFilter(QObject *watched, QEvent *event)
         m_isProcessingAppQuitEvent = false;
         return true;
     } else if (event->type() == QEvent::Expose) {
-        if (auto windowHandle = qobject_cast<QWindow*>(watched)) {
+        if (auto windowHandle = qobject_cast<QWindow *>(watched)) {
             if (FloatingWindow *fw = floatingWindowForHandle(windowHandle)) {
                 // This floating window was exposed
                 m_floatingWindows.removeOne(fw);
@@ -718,14 +720,14 @@ bool DockRegistry::eventFilter(QObject *watched, QEvent *event)
         if (!(Config::self().flags() & Config::Flag_AutoHideSupport))
             return false;
 
-        if (qobject_cast<Frame*>(watched)) {
+        if (qobject_cast<Frame *>(watched)) {
             // break recursion
             return false;
         }
 
         auto p = watched;
         while (p) {
-            if (auto dw = qobject_cast<DockWidgetBase*>(p))
+            if (auto dw = qobject_cast<DockWidgetBase *>(p))
                 return onDockWidgetPressed(dw, static_cast<QMouseEvent *>(event));
 
             if (auto layoutWidget = qobject_cast<LayoutWidget *>(p)) {

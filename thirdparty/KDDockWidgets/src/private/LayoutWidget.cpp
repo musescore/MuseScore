@@ -9,7 +9,7 @@
   Contact KDAB at <info@kdab.com> for commercial licensing options.
 */
 
-#include "../LayoutSaver_p.h"
+#include "LayoutSaver_p.h"
 #include "Config.h"
 #include "DockWidgetBase_p.h"
 #include "FloatingWindow_p.h"

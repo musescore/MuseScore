@@ -1,4 +1,15 @@
-* v1.4.0 (unreleased)
+* v1.5.0 (unreleased)
+ - Install the Python bindings to "site-packages"
+ - The Python bindings for Qt6 use the "PyKDDockWidgetsQt6" namespace
+ - Co-installable with Qt6
+ - Adds support for non-detachable central widget, MainWindowOption_HasCentralWidget. (#225)
+ - Fix corrupt layout when restoring old JSON
+
+* v1.4.1 (unreleased)
+ -
+
+* v1.4.0 (16 July 2021)
+  - No longer supports Qt versions less than 5.12
   - Experimental MDI support. By using MainWindowMDI you can now have "docked" dock widgets
     which are free to be arbitrarily positioned and even overlapped inside the main window.
   - TitleBar's height is now controlled by sizeHint() instead of hardcoded.
@@ -14,11 +25,21 @@
   - Added MainWindowBase::frameCountChanged()
   - Introduced Config::setDropIndicatorsInhibited(), which allows you to disable support
   for drop indicators while dragging.
+  - Fixed embedding the main window into a non-kddw main window (#204, #168)
+  - Fixed crash with an MFC application
+  - Allows to disable translucency via the KDDW_NO_TRANSLUCENCY env var, useful
+    in case running on weird Window Managers.
+  - Added Flag_ShowButtonsOnTabBarIfTitleBarHidden, which can be used when using Flag_HideTitleBarWhenTabsVisible.
+    The close and float buttons will be shown directly in the tab-bar.
+  - Fixes persistent central frame being invisible after closing all tabs (#220)
+  - Added python bindings for the InitialOption struct (#198)
+  - Generate and install camelcase forwarding headers (public, exported classes)
+  - Build in Release mode by default (in non-developer situations)
 
-* v1.3.1 (unreleased)
+* v1.3.1 (7 June 2021)
   - Improve restoring layout when RestoreOption_RelativeToMainWindow is used (#171)
   - Improved dragging windows across screens in mixed hdpi setups
-  - Fixed Flag_NativeTitleBar not hidding the client title bars when restoring (#170)
+  - Fixed Flag_NativeTitleBar not hiding the client title bars when restoring (#170)
   - Double clicking a native title bar of a Qt::Tool window will now redock the window (#173)
   - Size of FloatingWindow now accounts for the fact that it's using Flag_NativeTitleBar and
     resizes its content accordingly (#174)

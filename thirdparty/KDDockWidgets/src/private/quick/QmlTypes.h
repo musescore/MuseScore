@@ -20,7 +20,7 @@
 #define KD_QMLTYPES_H
 
 namespace KDDockWidgets {
-    void registerQmlTypes();
+void registerQmlTypes();
 }
 
 #endif

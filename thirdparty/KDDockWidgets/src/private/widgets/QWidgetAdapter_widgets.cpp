@@ -19,13 +19,15 @@
  */
 
 #include "QWidgetAdapter.h"
-#include "FloatingWindow_p.h"
+#include "../FloatingWindow_p.h"
+#include "../Utils_p.h"
 #include "Qt5Qt6Compat_p.h"
-#include "Utils_p.h"
 
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QWindow>
+
+#include <QtWidgets/private/qwidget_p.h>
 
 using namespace KDDockWidgets;
 
@@ -40,7 +42,7 @@ QWidgetAdapter::~QWidgetAdapter()
 
 FloatingWindow *QWidgetAdapter::floatingWindow() const
 {
-    if (auto fw = qobject_cast<FloatingWindow*>(window()))
+    if (auto fw = qobject_cast<FloatingWindow *>(window()))
         return fw;
 
     return nullptr;
@@ -99,21 +101,48 @@ void QWidgetAdapter::setSize(QSize size)
     setGeometry(geo);
 }
 
-bool QWidgetAdapter::onResize(QSize) { return false; }
-void QWidgetAdapter::onLayoutRequest() {}
+bool QWidgetAdapter::onResize(QSize)
+{
+    return false;
+}
+void QWidgetAdapter::onLayoutRequest()
+{
+}
 
-void QWidgetAdapter::onMousePress() {}
-void QWidgetAdapter::onMouseMove(QPoint) {}
-void QWidgetAdapter::onMouseRelease() {}
+void QWidgetAdapter::onMousePress()
+{
+}
+void QWidgetAdapter::onMouseMove(QPoint)
+{
+}
+void QWidgetAdapter::onMouseRelease()
+{
+}
 
-void QWidgetAdapter::onCloseEvent(QCloseEvent *) {}
+void QWidgetAdapter::onCloseEvent(QCloseEvent *)
+{
+}
 
 QWidget *KDDockWidgets::Private::widgetForWindow(QWindow *window)
 {
     if (!window)
         return nullptr;
 
-    return window->property("kddockwidgets_qwidget").value<QWidget*>();
+    return window->property("kddockwidgets_qwidget").value<QWidget *>();
+}
+
+void QWidgetAdapter::setNormalGeometry(QRect geo)
+{
+    if (isNormalWindowState(windowState())) {
+        setGeometry(geo);
+    } else {
+        QWidgetPrivate *priv = QWidgetPrivate::get(this);
+        if (priv->extra && priv->extra->topextra) {
+            priv->topData()->normalGeometry = geo;
+        } else {
+            qWarning() << Q_FUNC_INFO << "Failing to set normal geometry";
+        }
+    }
 }
 
 LayoutGuestWidget::~LayoutGuestWidget() = default;

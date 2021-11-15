@@ -13,8 +13,9 @@
 #include "MainWindowQuick_p.h"
 #include "MainWindowMDI.h"
 
-#include "DockRegistry_p.h"
 #include "DockWidgetInstantiator_p.h"
+
+#include "../DockRegistry_p.h"
 
 using namespace KDDockWidgets;
 
@@ -155,9 +156,9 @@ void MainWindowInstantiator::componentComplete()
         return;
     }
 
-     if (DockRegistry::self()->containsMainWindow(m_uniqueName)) {
-         // MainWindow already exists
-         return;
+    if (DockRegistry::self()->containsMainWindow(m_uniqueName)) {
+        // MainWindow already exists
+        return;
     }
 
     if (m_uniqueName.isEmpty()) {

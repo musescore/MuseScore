@@ -116,8 +116,20 @@ int main(int argc, char **argv)
     parser.addOption(closeOnlyCurrentTab);
 
     QCommandLineOption dontCloseBeforeRestore("dont-close-widget-before-restore", //krazy:exclude=spelling
-                                              QCoreApplication::translate("main", "DockWidget #5 wont be closed before a restore. Illustrates LayoutSaverOption::DontCloseBeforeRestore"));
+                                              QCoreApplication::translate("main", "DockWidget #5 won't be closed before a restore. Illustrates LayoutSaverOption::DontCloseBeforeRestore"));
     parser.addOption(dontCloseBeforeRestore);
+
+    QCommandLineOption showButtonsInTabBarIfTitleBarHidden("show-buttons-in-tabbar-if-titlebar-hidden",
+                                                           QCoreApplication::translate("main", "If we're not using title bars we'll still show the close and float button in the tab bar"));
+    parser.addOption(showButtonsInTabBarIfTitleBarHidden);
+
+    QCommandLineOption centralWidget("central-widget",
+                                     QCoreApplication::translate("main", "The main window will have a non-detachable central widget"));
+    parser.addOption(centralWidget);
+
+    QCommandLineOption ctxtMenuOnTabs("allow-switch-tabs-via-menu",
+                                      QCoreApplication::translate("main", "Allow switching tabs via context menu in tabs area"));
+    parser.addOption(ctxtMenuOnTabs);
 
 #if defined(DOCKS_DEVELOPER_MODE)
     parser.addOption(centralFrame);
@@ -160,6 +172,9 @@ int main(int argc, char **argv)
     options = parser.isSet(centralFrame) ? MainWindowOption_HasCentralFrame
                                          : MainWindowOption_None;
 
+    if (parser.isSet(centralWidget))
+        options |= MainWindowOption_HasCentralWidget;
+
     if (parser.isSet(noQtTool))
         internalFlags |= KDDockWidgets::Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows;
 
@@ -187,6 +202,9 @@ int main(int argc, char **argv)
 
     if (parser.isSet(closeOnlyCurrentTab))
         flags |= Config::Flag_CloseOnlyCurrentTab;
+
+    if (parser.isSet(showButtonsInTabBarIfTitleBarHidden))
+        flags |= Config::Flag_ShowButtonsOnTabBarIfTitleBarHidden;
 
     if (parser.isSet(noTitleBars))
         flags |= KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
@@ -222,6 +240,9 @@ int main(int argc, char **argv)
 
     if (parser.isSet(tabsHaveCloseButton))
         flags |= KDDockWidgets::Config::Flag_TabsHaveCloseButton;
+
+    if (parser.isSet(ctxtMenuOnTabs))
+        flags |= KDDockWidgets::Config::Flag_AllowSwitchingTabsViaMenu;
 
 
     if (parser.isSet(doubleClickMaximize))

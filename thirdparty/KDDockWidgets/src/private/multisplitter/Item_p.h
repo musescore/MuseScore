@@ -34,56 +34,63 @@ class Separator;
 class Widget;
 struct LengthOnSide;
 
-enum Side {
+enum Side
+{
     Side1,
     Side2
 };
 Q_ENUM_NS(Side)
 
-enum class GrowthStrategy {
+enum class GrowthStrategy
+{
     BothSidesEqually,
     Side1Only,
     Side2Only
 };
 
-enum class SeparatorOption {
+enum class SeparatorOption
+{
     None = 0,
     LazyResize
 };
 Q_DECLARE_FLAGS(SeparatorOptions, SeparatorOption)
 
-enum class ChildrenResizeStrategy {
+enum class ChildrenResizeStrategy
+{
     Percentage, ///< Resizes the container in a way that all children will keep occupying the same percentage
     Side1SeparatorMove, ///< When resizing a container, it takes/adds space from Side1 children first
     Side2SeparatorMove ///< When resizing a container, it takes/adds space from Side2 children first
 };
 Q_ENUM_NS(ChildrenResizeStrategy)
 
-enum class NeighbourSqueezeStrategy {
+enum class NeighbourSqueezeStrategy
+{
     AllNeighbours, ///< The squeeze is spread between all neighbours, not just immediate ones first
     ImmediateNeighboursFirst ///< The first neighbour takes as much squeeze as it can, only then the next neighbour is squezed, and so forth
 };
 Q_ENUM_NS(NeighbourSqueezeStrategy)
 
-enum LayoutBorderLocation {
+enum LayoutBorderLocation
+{
     LayoutBorderLocation_None = 0,
     LayoutBorderLocation_North = 1,
     LayoutBorderLocation_East = 2,
     LayoutBorderLocation_West = 4,
     LayoutBorderLocation_South = 8,
-    LayoutBorderLocation_All = LayoutBorderLocation_North | LayoutBorderLocation_East |
-                               LayoutBorderLocation_West | LayoutBorderLocation_South,
+    LayoutBorderLocation_All = LayoutBorderLocation_North | LayoutBorderLocation_East | LayoutBorderLocation_West | LayoutBorderLocation_South,
     LayoutBorderLocation_Verticals = LayoutBorderLocation_West | LayoutBorderLocation_East,
     LayoutBorderLocation_Horizontals = LayoutBorderLocation_North | LayoutBorderLocation_South,
 };
 Q_DECLARE_FLAGS(LayoutBorderLocations, LayoutBorderLocation)
 
-inline int pos(QPoint p, Qt::Orientation o) {
+inline int pos(QPoint p, Qt::Orientation o)
+{
     return o == Qt::Vertical ? p.y()
                              : p.x();
 }
 
-inline int length(QSize sz, Qt::Orientation o) {
+inline int length(QSize sz, Qt::Orientation o)
+{
     return o == Qt::Vertical ? sz.height()
                              : sz.width();
 }
@@ -122,11 +129,13 @@ inline QRect mapToRect(const QVariantMap &map)
                  map.value(QStringLiteral("height")).toInt());
 }
 
-struct SizingInfo {
+struct SizingInfo
+{
 
     SizingInfo();
 
-    QSize size() const {
+    QSize size() const
+    {
         return geometry.size();
     }
 
@@ -135,40 +144,49 @@ struct SizingInfo {
         geometry.setSize(sz);
     }
 
-    int length(Qt::Orientation o) const {
+    int length(Qt::Orientation o) const
+    {
         return Layouting::length(size(), o);
     }
 
-    int minLength(Qt::Orientation o) const {
+    int minLength(Qt::Orientation o) const
+    {
         return Layouting::length(minSize, o);
     }
 
-    int maxLengthHint(Qt::Orientation o) const {
+    int maxLengthHint(Qt::Orientation o) const
+    {
         return qMax(minLength(o), Layouting::length(maxSizeHint, o));
     }
 
-    int availableLength(Qt::Orientation o) const {
+    int availableLength(Qt::Orientation o) const
+    {
         return qMax(0, length(o) - minLength(o));
     }
 
-    int missingLength(Qt::Orientation o) const {
-        return qMax(0,  minLength(o) - length(o));
+    int missingLength(Qt::Orientation o) const
+    {
+        return qMax(0, minLength(o) - length(o));
     }
 
-    QPoint pos() const {
+    QPoint pos() const
+    {
         return geometry.topLeft();
     }
 
-    int position(Qt::Orientation o) const {
+    int position(Qt::Orientation o) const
+    {
         return Layouting::pos(pos(), o);
     }
 
-    int edge(Qt::Orientation o) const {
+    int edge(Qt::Orientation o) const
+    {
         return o == Qt::Vertical ? geometry.bottom()
                                  : geometry.right();
     }
 
-    void setLength(int l, Qt::Orientation o) {
+    void setLength(int l, Qt::Orientation o)
+    {
         if (o == Qt::Vertical) {
             geometry.setHeight(l);
         } else {
@@ -176,36 +194,43 @@ struct SizingInfo {
         }
     }
 
-    void incrementLength(int byAmount, Qt::Orientation o) {
+    void incrementLength(int byAmount, Qt::Orientation o)
+    {
         setLength(length(o) + byAmount, o);
     }
 
     void setOppositeLength(int l, Qt::Orientation o);
 
-    void setPos(int p, Qt::Orientation o) {
+    void setPos(int p, Qt::Orientation o)
+    {
         if (o == Qt::Vertical)
             geometry.moveTop(p);
         else
             geometry.moveLeft(p);
     }
 
-    bool isNull() const {
+    bool isNull() const
+    {
         return geometry.isNull();
     }
 
-    void setGeometry(QRect geo) {
+    void setGeometry(QRect geo)
+    {
         geometry = geo;
     }
 
-    int availableToGrow(Qt::Orientation o) const {
+    int availableToGrow(Qt::Orientation o) const
+    {
         return maxLengthHint(o) - length(o);
     }
 
-    int neededToShrink(Qt::Orientation o) const {
+    int neededToShrink(Qt::Orientation o) const
+    {
         return qMax(0, length(o) - maxLengthHint(o));
     }
 
-    bool isPastMax(Qt::Orientation o) const {
+    bool isPastMax(Qt::Orientation o) const
+    {
         return availableToGrow(o) >= 0;
     }
 
@@ -230,7 +255,7 @@ class DOCKS_EXPORT_FOR_UNIT_TESTS Item : public QObject
     Q_PROPERTY(QRect geometry READ geometry NOTIFY geometryChanged)
     Q_PROPERTY(bool isContainer READ isContainer CONSTANT)
 public:
-    typedef QVector<Item*> List;
+    typedef QVector<Item *> List;
 
     explicit Item(Widget *hostWidget, ItemContainer *parent = nullptr);
     ~Item() override;
@@ -278,7 +303,10 @@ public:
     int mapFromRoot(int p, Qt::Orientation) const;
 
     QObject *guestAsQObject() const;
-    Widget *guestWidget() const { return m_guest; }
+    Widget *guestWidget() const
+    {
+        return m_guest;
+    }
     void setGuestWidget(Widget *);
 
     void ref();
@@ -306,9 +334,9 @@ public:
     virtual void dumpLayout(int level = 0);
     virtual void setHostWidget(Widget *);
     virtual QVariantMap toVariantMap() const;
-    virtual void fillFromVariantMap(const QVariantMap &map, const QHash<QString, Widget*> &widgets);
+    virtual void fillFromVariantMap(const QVariantMap &map, const QHash<QString, Widget *> &widgets);
 
-    static Item* createFromVariantMap(Widget *hostWidget, ItemContainer *parent,
+    static Item *createFromVariantMap(Widget *hostWidget, ItemContainer *parent,
                                       const QVariantMap &map, const QHash<QString, Widget *> &widgets);
 
 Q_SIGNALS:
@@ -320,6 +348,7 @@ Q_SIGNALS:
     void visibleChanged(Layouting::Item *thisItem, bool visible);
     void minSizeChanged(Layouting::Item *thisItem);
     void maxSizeChanged(Layouting::Item *thisItem);
+
 protected:
     friend class ::TestMultiSplitter;
     explicit Item(bool isContainer, Widget *hostWidget, ItemContainer *parent);
@@ -382,8 +411,8 @@ public:
     const List childItems() const;
     bool isEmpty() const;
     bool contains(const Item *item) const;
-    Item* itemForObject(const QObject *) const;
-    Item* itemForWidget(const Widget *w) const;
+    Item *itemForObject(const QObject *) const;
+    Item *itemForWidget(const Widget *w) const;
     Item::List visibleChildren(bool includeBeingInserted = false) const;
     Item::List items_recursive() const;
     bool contains_recursive(const Item *item) const;
@@ -445,6 +474,7 @@ public:
     bool isVertical() const;
     bool isHorizontal() const;
     int length() const;
+
 private:
     bool hasOrientation() const;
     int indexOfVisibleChild(const Item *) const;
@@ -530,8 +560,9 @@ private:
 #endif
 
 public:
-    QVector<Layouting::Separator*> separators_recursive() const;
-    QVector<Layouting::Separator*> separators() const;
+    QVector<Layouting::Separator *> separators_recursive() const;
+    QVector<Layouting::Separator *> separators() const;
+
 private:
     void simplify();
     static bool s_inhibitSimplify;

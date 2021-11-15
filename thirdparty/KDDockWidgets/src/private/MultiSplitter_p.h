@@ -80,7 +80,7 @@ public:
     bool deserialize(const LayoutSaver::MultiSplitter &) override;
 
     ///@brief returns the list of separators
-    QVector<Layouting::Separator*> separators() const;
+    QVector<Layouting::Separator *> separators() const;
 
     /// @brief See docs for MainWindowBase::layoutEqually()
     void layoutEqually();
