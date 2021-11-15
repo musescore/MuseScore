@@ -228,7 +228,7 @@ Slider {
                 ctx.textAlign = "end"
             }
 
-            ctx.clearRect(0, 0, bgCanvas.width, bgCanvas.height)
+            ctx.clearRect(0, 0, bgCanvas.height, bgCanvas.width)
             ctx.font = prv.unitTextFont
 
             ctx.fillStyle = Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
