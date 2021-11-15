@@ -122,7 +122,7 @@ Rectangle {
             anchors.rightMargin: 8
             anchors.verticalCenter: parent.verticalCenter
             horizontalAlignment: Text.AlignLeft
-            text: runModel.testCase.name
+            text: runModel.testCase.name ?? ""
         }
 
         StyledTextLabel {
@@ -134,7 +134,7 @@ Rectangle {
             anchors.rightMargin: 8
             horizontalAlignment: Text.AlignLeft
             font.pixelSize: titleLabel.font.pixelSize / 1.2
-            text: runModel.testCase.description
+            text: runModel.testCase.description ?? ""
         }
     }
 

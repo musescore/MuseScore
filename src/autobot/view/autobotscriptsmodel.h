@@ -36,6 +36,7 @@ class AutobotScriptsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isRunAllTCMode READ isRunAllTCMode WRITE setIsRunAllTCMode NOTIFY isRunAllTCModeChanged)
+    Q_PROPERTY(QString speedMode READ speedMode WRITE setSpeedMode NOTIFY speedModeChanged)
 
     INJECT(autobot, IAutobotScriptsRepository, scriptsRepository)
     INJECT(autobot, IAutobot, autobot)
@@ -49,6 +50,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     bool isRunAllTCMode() const;
+    QString speedMode() const;
+    void setSpeedMode(const QString& newSpeedMode);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void runScript(int scriptIndex);
@@ -68,6 +71,7 @@ signals:
     void isRunAllTCModeChanged();
     void requireStartTC(const QString& path);
     void isAllSelectedChanged(const QString& type, bool arg);
+    void speedModeChanged();
 
 private:
 

@@ -56,6 +56,15 @@ Rectangle {
                 }
             }
         }
+
+        Dropdown {
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            model: ["Default", "Fast", "Normal", "Slow"]
+            currentIndex: indexOfValue(scriptsModel.speedMode)
+            onCurrentValueChanged:scriptsModel.speedMode = currentValue
+        }
     }
 
     ListView {
@@ -84,7 +93,7 @@ Rectangle {
 
                 Connections {
                     target: scriptsModel
-                    onIsAllSelectedChanged: {
+                    function onIsAllSelectedChanged() {
                         if (type === section) {
                             allSelectedCheck.checked = arg
                         }
