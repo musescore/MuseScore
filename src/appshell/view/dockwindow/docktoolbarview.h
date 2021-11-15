@@ -57,6 +57,8 @@ public:
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
 
+    void init() override;
+
 public slots:
     void setOrientation(Qt::Orientation orientation);
     void setAlignment(int alignment);

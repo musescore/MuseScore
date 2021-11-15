@@ -154,18 +154,16 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    bool isFirstOpening = (m_currentPage == nullptr);
-    if (isFirstOpening) {
-        clearRegistry();
-        restoreGeometry();
-    }
-
     DockPageView* newPage = pageByUri(uri);
     IF_ASSERT_FAILED(newPage) {
         return;
     }
 
-    if (m_currentPage) {
+    bool isFirstOpening = (m_currentPage == nullptr);
+    if (isFirstOpening) {
+        clearRegistry();
+        restoreGeometry();
+    } else {
         savePageState(m_currentPage->objectName());
         clearRegistry();
     }
