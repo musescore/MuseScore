@@ -136,7 +136,7 @@ protected:
 
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
-private slots:
+protected slots:
     void applySizeConstraints();
 
 private:

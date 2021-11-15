@@ -39,6 +39,9 @@ Rectangle {
     property int maximumWidth: 0
     property int maximumHeight: 0
 
+    width: gridView.isHorizontal ? childrenRect.width : 76
+    height: !gridView.isHorizontal ? childrenRect.height : 40
+
     color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
@@ -56,6 +59,10 @@ Rectangle {
         id: prv
 
         function resolveHorizontalGridViewWidth() {
+            if (root.floating) {
+                return gridView.contentWidth
+            }
+
             var requiredFreeSpace = gridView.cellWidth * 3 + gridView.rowSpacing * 4
 
             if (root.maximumWidth - gridView.contentWidth < requiredFreeSpace) {
@@ -66,6 +73,10 @@ Rectangle {
         }
 
         function resolveVerticalGridViewHeight() {
+            if (root.floating) {
+                return gridView.contentHeight
+            }
+
             var requiredFreeSpace = gridView.cellHeight * 3 + gridView.rowSpacing * 4
 
             if (root.maximumHeight - gridView.contentHeight < requiredFreeSpace) {
@@ -236,12 +247,6 @@ Rectangle {
             when: gridView.isHorizontal
 
             PropertyChanges {
-                target: root
-                width: gridView.width
-                height: 40
-            }
-
-            PropertyChanges {
                 target: gridView
                 width: prv.resolveHorizontalGridViewWidth()
                 height: root.height
@@ -259,12 +264,6 @@ Rectangle {
         },
         State {
             when: !gridView.isHorizontal
-
-            PropertyChanges {
-                target: root
-                width: 76
-                height: gridView.height
-            }
 
             PropertyChanges {
                 target: gridView

@@ -32,7 +32,7 @@ Item {
     readonly property QtObject floatingWindowCpp: parent
     readonly property QtObject titleBarCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.titleBar : null
     readonly property QtObject dropAreaCpp: Boolean(floatingWindowCpp) ? floatingWindowCpp.dropArea : null
-    readonly property int titleBarHeight: 34
+    readonly property int titleBarHeight: 0
     readonly property int margins: 8 // needed for the shadow
 
     anchors.fill: parent

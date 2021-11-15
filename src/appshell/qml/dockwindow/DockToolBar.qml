@@ -33,9 +33,9 @@ DockToolBarView {
 
     property alias floatable: gripButton.visible
 
-    property real gripButtonPadding: 2
-
-    property real contentBottomPadding: 0
+    property int gripButtonPadding: 2
+    property int contentTopPadding: 0
+    property int contentBottomPadding: 0
 
     readonly property bool isVertical: orientation === Qt.Vertical
 
@@ -60,6 +60,7 @@ DockToolBarView {
             id: content
             anchors.fill: parent
             anchors.bottomMargin: root.contentBottomPadding
+            anchors.topMargin: root.contentBottomPadding
 
             FlatButton {
                 id: gripButton
@@ -94,10 +95,10 @@ DockToolBarView {
                 target: root
 
                 contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
-                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight)
+                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + contentBottomPadding + contentTopPadding)
 
                 maximumWidth: prv.maximumLength
-                maximumHeight: prv.minimumLength
+                maximumHeight: floating ? contentHeight : prv.minimumLength
             }
 
             PropertyChanges {
@@ -134,7 +135,7 @@ DockToolBarView {
             PropertyChanges {
                 target: root
 
-                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth)
+                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth + contentBottomPadding + contentTopPadding)
                 contentHeight: prv.gripButtonHeight + contentLoader.implicitHeight
 
                 maximumWidth: contentWidth

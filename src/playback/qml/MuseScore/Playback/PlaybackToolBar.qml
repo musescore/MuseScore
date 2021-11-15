@@ -35,9 +35,7 @@ Rectangle {
     property alias navigation: navPanel
     property bool floating: false
 
-    property int maximumHeight: 0
-
-    width: floating ? 426 : 364 //content.width
+    width: content.width
     height: content.height
 
     color: ui.theme.backgroundPrimaryColor
@@ -61,132 +59,17 @@ Rectangle {
     Column {
         id: content
 
-        spacing: 14
+        spacing: 8
 
         width: childrenRect.width
 
         enabled: playbackModel.isPlayAllowed
 
-        RowLayout {
+        PlaybackToolBarActions {
             id: playbackActions
 
-            spacing: 0
-
-            ListView {
-                id: buttonsListView
-                Layout.preferredWidth: contentItem.childrenRect.width
-                Layout.preferredHeight: contentItem.childrenRect.height
-
-                contentHeight: 30
-                spacing: 4
-
-                model: playbackModel
-
-                orientation: Qt.Horizontal
-                interactive: false
-
-                delegate: FlatButton {
-                    id: btn
-
-                    width: 30
-                    height: width
-
-                    icon: model.icon
-
-                    toolTipTitle: model.title
-                    toolTipDescription: model.description
-                    toolTipShortcut: model.shortcut
-
-                    iconFont: ui.theme.toolbarIconsFont
-
-                    accentButton: model.checked || menuLoader.isMenuOpened
-                    transparent: !accentButton
-
-                    navigation.panel: navPanel
-                    navigation.name: model.title
-                    navigation.order: model.index
-
-                    onClicked: {
-                        if (menuLoader.isMenuOpened || model.subitems.length) {
-                            menuLoader.toggleOpened(model.subitems)
-                            return
-                        }
-
-                        Qt.callLater(playbackModel.handleMenuItem, model.id)
-                    }
-
-                    StyledMenuLoader {
-                        id: menuLoader
-
-                        navigation: btn.navigation
-
-                        onHandleMenuItem: {
-                            playbackModel.handleMenuItem(itemId)
-                        }
-                    }
-                }
-            }
-
-            SeparatorLine {
-                Layout.topMargin: 2
-                Layout.bottomMargin: 2
-                Layout.leftMargin: 6
-
-                orientation: Qt.Vertical
-                visible: !root.floating
-            }
-
-            RowLayout {
-                Layout.leftMargin: 12
-                Layout.rightMargin: root.floating ? 12 : 0
-                spacing: 18
-
-                TimeInputField {
-                    id: timeField
-
-                    maxTime: playbackModel.maxPlayTime
-                    maxMillisecondsNumber: 9
-                    time: playbackModel.playTime
-
-                    onTimeEdited: function(newTime) {
-                        playbackModel.playTime = newTime
-                    }
-                }
-
-                MeasureAndBeatFields {
-                    measureNumber: playbackModel.measureNumber
-                    maxMeasureNumber: playbackModel.maxMeasureNumber
-                    beatNumber: playbackModel.beatNumber
-                    maxBeatNumber: playbackModel.maxBeatNumber
-
-                    font: timeField.font
-
-                    onMeasureNumberEdited: function(newValue) {
-                        playbackModel.measureNumber = newValue
-                    }
-
-                    onBeatNumberEdited: function(newValue) {
-                        playbackModel.beatNumber = newValue
-                    }
-                }
-
-                TempoView {
-                    noteSymbol: playbackModel.tempo.noteSymbol
-                    tempoValue: playbackModel.tempo.value
-
-                    noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
-                    tempoValueFont: timeField.font
-                }
-            }
-
-            SeparatorLine {
-                Layout.topMargin: 2
-                Layout.bottomMargin: 2
-                Layout.leftMargin: 12
-
-                orientation: Qt.Vertical
-                visible: !root.floating
-            }
+            playbackModel: playbackModel
+            floating: root.floating
         }
 
         StyledSlider {

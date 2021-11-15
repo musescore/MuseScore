@@ -41,16 +41,26 @@ RowLayout {
 
     spacing: 4
 
-    NumberInputField {
-        id: measureNumberField
+    Item {
+        //! NOTE: explicit width prevents the content from jumping around
+        // when a score is being played
+        // See: https://github.com/musescore/MuseScore/issues/9633
+        Layout.preferredWidth: 26
 
-        minValue: 1
-        addLeadingZeros: false
+        NumberInputField {
+            id: measureNumberField
 
-        font: root.font
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
 
-        onValueEdited: function(newValue) {
-            root.measureNumberEdited(newValue)
+            minValue: 1
+            addLeadingZeros: false
+
+            font: root.font
+
+            onValueEdited: function(newValue) {
+                root.measureNumberEdited(newValue)
+            }
         }
     }
 
@@ -59,16 +69,26 @@ RowLayout {
         font: root.font
     }
 
-    NumberInputField {
-        id: beatNumberField
+    Item {
+        //! NOTE: explicit width prevents the content from jumping around
+        // when a score is being played
+        // See: https://github.com/musescore/MuseScore/issues/9633
+        Layout.preferredWidth: 26
 
-        minValue: 1
-        addLeadingZeros: false
+        NumberInputField {
+            id: beatNumberField
 
-        font: root.font
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
 
-        onValueEdited: function(newValue) {
-            root.beatNumberEdited(newValue)
+            minValue: 1
+            addLeadingZeros: false
+
+            font: root.font
+
+            onValueEdited: function(newValue) {
+                root.beatNumberEdited(newValue)
+            }
         }
     }
 }
