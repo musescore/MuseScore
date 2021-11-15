@@ -104,11 +104,11 @@ Column {
 
         interactive: false
 
-        readonly property real spacingBetweenColumns: 56
+        readonly property real spacingBetweenColumns: 50
         readonly property real spacingBetweenRows: 28
 
-        readonly property real actualCellWidth: 250
-        readonly property real actualCellHeight: 176
+        readonly property real actualCellWidth: 256
+        readonly property real actualCellHeight: 170
 
         cellWidth: actualCellWidth + spacingBetweenColumns
         cellHeight: actualCellHeight + spacingBetweenRows
