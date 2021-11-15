@@ -40,7 +40,7 @@ MixerPanelSection {
 
         property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
 
-        spacing: 6
+        spacing: 4
 
         Repeater {
             id: repeater

@@ -120,7 +120,7 @@ void DockSetup::setup(QQmlEngine* engine)
 
     KDDockWidgets::Config::self().setInternalFlags(internalFlags);
 
-    KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(70, 30));
+    KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(10, 10));
     KDDockWidgets::Config::self().setSeparatorThickness(1);
 }
 

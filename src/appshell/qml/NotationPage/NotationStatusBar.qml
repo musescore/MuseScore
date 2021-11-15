@@ -80,17 +80,18 @@ Rectangle {
         property int remainingSpace: 999999
 
         anchors.right: parent.right
-        anchors.rightMargin: hiddenControlsMenuButton.visible ? 4 : 12
+        anchors.rightMargin: 4
 
         height: parent.height
 
-        spacing: 10
+        spacing: 4
 
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
             id: workspaceControl
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             text: model.currentWorkspaceAction.title
             transparent: true
@@ -109,6 +110,7 @@ Rectangle {
         ConcertPitchControl {
             id: concertPitchControl
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             text: model.concertPitchAction.title
             icon: model.concertPitchAction.icon
@@ -129,6 +131,7 @@ Rectangle {
         ViewModeControl {
             id: viewModeControl
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
@@ -143,8 +146,8 @@ Rectangle {
 
         ZoomControl {
             id: zoomControl
-
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             enabled: model.zoomEnabled
             currentZoomPercentage: model.currentZoomPercentage
