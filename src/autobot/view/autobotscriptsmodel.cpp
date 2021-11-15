@@ -58,6 +58,10 @@ AutobotScriptsModel::AutobotScriptsModel(QObject* parent)
             stopRunAllTC();
         }
     });
+
+    autobot()->speedModeChanged().onReceive(this, [this](const SpeedMode&) {
+        emit speedModeChanged();
+    });
 }
 
 AutobotScriptsModel::~AutobotScriptsModel()
@@ -257,4 +261,14 @@ bool AutobotScriptsModel::isAllSelected(const ScriptType& type) const
     }
 
     return true;
+}
+
+QString AutobotScriptsModel::speedMode() const
+{
+    return speedModeToString(autobot()->speedMode());
+}
+
+void AutobotScriptsModel::setSpeedMode(const QString& newSpeedMode)
+{
+    autobot()->setSpeedMode(speedModeFromString(newSpeedMode));
 }

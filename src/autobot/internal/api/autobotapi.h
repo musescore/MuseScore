@@ -74,10 +74,6 @@ public:
 
     // Window
     Q_INVOKABLE void showMainWindowOnFront();
-
-private:
-
-    int m_intervalMsec = 1000;
 };
 }
 

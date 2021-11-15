@@ -40,7 +40,14 @@ class TestCaseRunner : public async::Asyncable
 public:
     TestCaseRunner() = default;
 
-    void setStepsInterval(int msec);
+    SpeedMode speedMode() const;
+    void setSpeedMode(SpeedMode mode);
+    async::Channel<SpeedMode> speedModeChanged() const;
+    int defaultInterval() const;
+    void setDefaultInterval(int msec);
+
+    int intervalMsec() const;
+
     void run(const TestCase& testCase);
     void pause();
     void unpause(bool isNextStep);
@@ -86,6 +93,9 @@ private:
 
     async::Channel<QString /*name*/, StepStatus, Ret> m_stepStatusChanged;
     async::Channel<bool /*aborted*/> m_allFinished;
+
+    SpeedMode m_speedMode = SpeedMode::Undefined;
+    async::Channel<SpeedMode> m_speedModeChanged;
 };
 }
 
