@@ -271,6 +271,8 @@ void DockWindow::loadPageContent(const DockPageView* page)
 
 void DockWindow::loadTopLevelToolBars(const DockPageView* page)
 {
+    TRACEFUNC;
+
     QList<DockToolBarView*> allToolBars = m_toolBars.list();
     allToolBars << page->mainToolBars();
 
@@ -297,6 +299,8 @@ void DockWindow::unitePanelsToTabs(const DockPageView* page)
 
 void DockWindow::loadSideDocks(const DockPageView* page, DockType type)
 {
+    TRACEFUNC;
+
     static const QList<Location> possibleLocations {
         Location::Left,
         Location::Right,
@@ -399,6 +403,8 @@ void DockWindow::alignToolBars(const DockPageView* page)
 
 void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(dock) {
         return;
     }
@@ -476,6 +482,8 @@ bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreO
         return true;
     }
 
+    TRACEFUNC;
+
     KDDockWidgets::LayoutSaver layoutSaver(options);
     return layoutSaver.restoreLayout(layout);
 }
@@ -500,6 +508,8 @@ void DockWindow::resetWindowState()
 
 void DockWindow::initDocks(DockPageView* page)
 {
+    TRACEFUNC;
+
     for (DockToolBarView* toolbar : m_toolBars.list()) {
         toolbar->init();
     }

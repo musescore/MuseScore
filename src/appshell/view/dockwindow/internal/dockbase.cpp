@@ -310,6 +310,8 @@ bool DockBase::isOpen() const
 
 void DockBase::open()
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
@@ -320,6 +322,8 @@ void DockBase::open()
 
 void DockBase::close()
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
@@ -354,6 +358,8 @@ QRect DockBase::frameGeometry() const
 
 void DockBase::componentComplete()
 {
+    TRACEFUNC;
+
     QQuickItem::componentComplete();
 
     auto children = childItems();
