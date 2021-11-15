@@ -27,7 +27,9 @@
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"
 #include "iinteractive.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/iuiengine.h"
+#include "ui/view/iconcodes.h"
 
 namespace mu::notation {
 class EditStyle : public QDialog, private Ui::EditStyleBase
@@ -37,6 +39,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(notation, mu::context::IGlobalContext, globalContext)
     INJECT(notation, mu::notation::INotationConfiguration, configuration)
     INJECT(notation, mu::framework::IInteractive, interactive)
+    INJECT(notaiton, mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, mu::ui::IUiEngine, uiEngine)
 
 public:
@@ -59,6 +62,9 @@ private:
     void retranslate();
     void setHeaderFooterToolTip();
     void adjustPagesStackSize(int currentPageIndex);
+
+    template<class T>
+    void setWidgetIcon(T* widget, ui::IconCode::Code code);
 
     /// EditStylePage
     /// This is a type for a pointer to any QWidget that is a member of EditStyle.
