@@ -447,17 +447,14 @@ void DockWindow::restorePageState(const QString& pageName)
     }
 }
 
-bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions)
+bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options)
 {
     if (layout.isEmpty()) {
         return true;
     }
 
-    LOGI() << "TODO: restoring of layout is temporary disabled because it troubles";
-    //KDDockWidgets::LayoutSaver layoutSaver(option);
-    //return layoutSaver.restoreLayout(state);
-
-    return true;
+    KDDockWidgets::LayoutSaver layoutSaver(options);
+    return layoutSaver.restoreLayout(layout);
 }
 
 QByteArray DockWindow::windowState() const
