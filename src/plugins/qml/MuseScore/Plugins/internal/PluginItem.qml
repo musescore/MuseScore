@@ -34,7 +34,7 @@ Item {
 
     signal clicked()
 
-    property NavigationControl navigation: NavigationControl{
+    property NavigationControl navigation: NavigationControl {
         accessible.role: MUAccessible.ListItem
         accessible.name: root.name
         enabled: root.enabled && root.visible
@@ -53,7 +53,7 @@ Item {
         anchors.top: parent.top
 
         width: parent.width
-        height: 150
+        height: 144
 
         color: "transparent"
         radius: 10
@@ -67,9 +67,7 @@ Item {
 
         Image {
             id: thumbnail
-
             anchors.fill: parent
-            anchors.margins: 2
 
             fillMode: Image.PreserveAspectCrop
 
