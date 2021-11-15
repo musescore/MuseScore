@@ -34,20 +34,9 @@ using namespace mu::dock;
 
 static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
 
-using DockWidget = KDDockWidgets::DockWidgetBase;
 using KDDropLocation = KDDockWidgets::DropIndicatorOverlayInterface::DropLocation;
 
 namespace mu::dock {
-static const DockWidget* draggedDock()
-{
-    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
-    if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
-        return nullptr;
-    }
-
-    return windowBeingDragged->dockWidgets().first();
-}
-
 static KDDropLocation dropLocationToKDDockLocation(Location location)
 {
     switch (location) {
@@ -97,15 +86,7 @@ DropController::DropController(KDDockWidgets::DropArea* dropArea)
 
 KDDropLocation DropController::hover_impl(QPoint globalPos)
 {
-    const DockWidget* dock = draggedDock();
-    const DockPageView* page = currentPage();
-
-    if (!page || !dock) {
-        return DropLocation_None;
-    }
-
-    DockBase* draggedDock = page->dockByName(dock->uniqueName());
-
+    DockBase* draggedDock = this->draggedDock();
     if (!draggedDock) {
         return DropLocation_None;
     }
@@ -129,12 +110,25 @@ KDDropLocation DropController::hover_impl(QPoint globalPos)
 
 void DropController::updateVisibility()
 {
-    if (draggedDock()) {
+    auto resetDropLocation = [this]() {
+        setCurrentDropLocation(DropLocation_None);
+        endHover();
+    };
+
+    auto draggedDock = this->draggedDock();
+
+    if (!draggedDock) {
+        resetDropLocation();
         return;
     }
 
-    setCurrentDropLocation(DropLocation_None);
-    endHover();
+    if (!isHovered()) {
+        if (auto toolBar = dynamic_cast<DockToolBarView*>(draggedDock)) {
+            updateToolBarOrientation(toolBar);
+        }
+
+        resetDropLocation();
+    }
 }
 
 QPoint DropController::posForIndicator(KDDropLocation) const
@@ -395,4 +389,17 @@ IDockWindow* DropController::dockWindow() const
 DockPageView* DropController::currentPage() const
 {
     return dockWindow() ? dockWindow()->currentPage() : nullptr;
+}
+
+DockBase* DropController::draggedDock() const
+{
+    auto windowBeingDragged = KDDockWidgets::DragController::instance()->windowBeingDragged();
+    if (!windowBeingDragged || windowBeingDragged->dockWidgets().isEmpty()) {
+        return nullptr;
+    }
+
+    QString dockName = windowBeingDragged->dockWidgets().first()->uniqueName();
+    const DockPageView* page = currentPage();
+
+    return page ? page->dockByName(dockName) : nullptr;
 }
