@@ -186,6 +186,8 @@ void DockToolBarView::init()
 
     if (height() > width()) {
         setOrientation(Qt::Vertical);
+    } else {
+        setOrientation(Qt::Horizontal);
     }
 }
 

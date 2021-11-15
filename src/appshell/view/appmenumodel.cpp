@@ -200,7 +200,9 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("show-pageborders"),
         makeMenuItem("mark-irregular"),
         makeSeparator(),
-        makeMenuItem("fullscreen")
+        makeMenuItem("fullscreen"),
+        makeSeparator(),
+        makeMenuItem("restore-default-layout")
     };
 
     return makeMenu(qtrc("appshell", "&View"), viewItems);

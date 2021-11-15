@@ -47,6 +47,8 @@ public:
 
     virtual DockPageView* currentPage() const = 0;
     virtual QQuickItem& asItem() const = 0;
+
+    virtual void restoreDefaultLayout() = 0;
 };
 }
 
