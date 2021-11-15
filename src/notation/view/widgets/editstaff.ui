@@ -81,6 +81,9 @@
             <property name="text">
              <string>Hide when empty:</string>
             </property>
+            <property name="buddy">
+             <cstring>hideMode</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -288,6 +291,9 @@
             <property name="text">
              <string>Scale:</string>
             </property>
+            <property name="buddy">
+             <cstring>mag</cstring>
+            </property>
            </widget>
           </item>
           <item row="5" column="1">
@@ -392,7 +398,11 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="QLabel" name="instrumentName"/>
+           <widget class="QLabel" name="instrumentName">
+            <property name="buddy">
+             <cstring>changeInstrument</cstring>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QPushButton" name="changeInstrument">
@@ -511,6 +521,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="minPitchASelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -520,6 +533,9 @@
          <widget class="QLabel" name="label_9">
           <property name="text">
            <string notr="true">-</string>
+          </property>
+          <property name="buddy">
+           <cstring>maxPitchA</cstring>
           </property>
          </widget>
         </item>
@@ -535,6 +551,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="maxPitchASelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -575,6 +594,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="minPitchPSelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -584,6 +606,9 @@
          <widget class="QLabel" name="label_10">
           <property name="text">
            <string notr="true">-</string>
+          </property>
+          <property name="buddy">
+           <cstring>maxPitchP</cstring>
           </property>
          </widget>
         </item>
@@ -599,6 +624,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="maxPitchPSelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -858,6 +886,9 @@
              <property name="text">
               <string>Prefer sharps or flats for transposed key signatures:</string>
              </property>
+             <property name="buddy">
+              <cstring>preferSharpFlat</cstring>
+             </property>
             </widget>
            </item>
            <item>
@@ -926,7 +957,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="numOfStrings"/>
+          <widget class="QLabel" name="numOfStrings">
+           <property name="buddy">
+            <cstring>editStringData</cstring>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editStringData">
@@ -977,6 +1012,9 @@
        <property name="toolTip">
         <string>Go to previous staff</string>
        </property>
+       <property name="accessibleName">
+        <string>Go to previous staff</string>
+       </property>
        <property name="text">
         <string notr="true"/>
        </property>
@@ -991,6 +1029,9 @@
         </size>
        </property>
        <property name="toolTip">
+        <string>Go to next staff</string>
+       </property>
+       <property name="accessibleName">
         <string>Go to next staff</string>
        </property>
        <property name="text">
@@ -1043,7 +1084,12 @@
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
+  <tabstop>mergeMatchingRests</tabstop>
+  <tabstop>showIfEmpty</tabstop>
+  <tabstop>isSmallCheckbox</tabstop>
+  <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
+  <tabstop>cutaway</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>
   <tabstop>partName</tabstop>
@@ -1062,7 +1108,6 @@
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
   <tabstop>preferSharpFlat</tabstop>
-  <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
   <tabstop>singleNoteDynamics</tabstop>
   <tabstop>previousButton</tabstop>
