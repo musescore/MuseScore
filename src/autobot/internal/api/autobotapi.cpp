@@ -37,13 +37,11 @@ using namespace mu::autobot;
 AutobotApi::AutobotApi(IApiEngine* e)
     : ApiObject(e)
 {
-    autobot()->setStepsInterval(m_intervalMsec);
 }
 
 void AutobotApi::setInterval(int msec)
 {
-    autobot()->setStepsInterval(msec);
-    m_intervalMsec = msec;
+    autobot()->setDefaultIntervalMsec(msec);
 }
 
 void AutobotApi::runTestCase(const QJSValue& testCase)
@@ -131,7 +129,7 @@ void AutobotApi::saveProject(const QString& name)
 void AutobotApi::sleep(int msec)
 {
     if (msec < 0) {
-        msec = m_intervalMsec;
+        msec = autobot()->intervalMsec();
     }
 
     autobot()->sleep(msec);
@@ -147,7 +145,7 @@ void AutobotApi::waitPopup()
 void AutobotApi::seeChanges(int msec)
 {
     if (msec < 0) {
-        msec = m_intervalMsec / 2;
+        msec = autobot()->intervalMsec() / 2;
     }
     sleep(msec);
 }

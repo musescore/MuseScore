@@ -58,9 +58,14 @@ public:
     async::Channel<io::path, Status> statusChanged() const override;
     async::Channel<QString, StepStatus, Ret> stepStatusChanged() const override;
 
-    void execScript(const io::path& path) override;
+    SpeedMode speedMode() const override;
+    void setSpeedMode(SpeedMode mode) override;
+    async::Channel<SpeedMode> speedModeChanged() const override;
+    void setDefaultIntervalMsec(int msec) override;
+    int defaultIntervalMsec() const;
+    int intervalMsec() const override;
 
-    void setStepsInterval(int msec) override;
+    void execScript(const io::path& path) override;
     void runTestCase(const TestCase& testCase) override;
     void sleep(int msec) override;
     void pause() override;

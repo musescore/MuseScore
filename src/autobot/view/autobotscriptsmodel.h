@@ -36,6 +36,7 @@ class AutobotScriptsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isRunAllTCMode READ isRunAllTCMode WRITE setIsRunAllTCMode NOTIFY isRunAllTCModeChanged)
+    Q_PROPERTY(QString speedMode READ speedMode WRITE setSpeedMode NOTIFY speedModeChanged)
 
     INJECT(autobot, IAutobotScriptsRepository, scriptsRepository)
     INJECT(autobot, IAutobot, autobot)
@@ -49,6 +50,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     bool isRunAllTCMode() const;
+    QString speedMode() const;
+    void setSpeedMode(const QString& newSpeedMode);
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void runScript(int scriptIndex);
@@ -57,12 +60,18 @@ public:
     Q_INVOKABLE bool tryRunNextTC();
     Q_INVOKABLE void stopRunAllTC();
 
+    Q_INVOKABLE void toggleSelect(int index);
+    Q_INVOKABLE void toggleAllSelect(const QString& type);
+    Q_INVOKABLE bool isAllSelected(const QString& type) const;
+
 public slots:
     void setIsRunAllTCMode(bool arg);
 
 signals:
     void isRunAllTCModeChanged();
     void requireStartTC(const QString& path);
+    void isAllSelectedChanged(const QString& type, bool arg);
+    void speedModeChanged();
 
 private:
 
@@ -72,15 +81,18 @@ private:
         rType,
         rPath,
         rIndex,
-        rStatus
+        rStatus,
+        rSelected
     };
 
     void setStatus(const io::path& path, IAutobot::Status st);
+    bool isAllSelected(const ScriptType& type) const;
 
     Scripts m_scripts;
     int m_currentTCIndex = -1;
     bool m_isRunAllTCMode = false;
     QMap<io::path, IAutobot::Status> m_statuses;
+    QMap<int, bool> m_selected;
 };
 }
 
