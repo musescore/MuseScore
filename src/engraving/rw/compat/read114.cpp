@@ -2697,13 +2697,13 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         } else if (tag == "page-layout") {
             readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
-            style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
+            style->set(Sid::concertPitch, bool(e.readInt()));
         } else if (tag == "ChordList") {
             readChordListHook.read(e);
         } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth") {   // obsolete
             e.skipCurrentElement();
         } else if (tag == "systemDistance") {  // obsolete
-            style->set(Sid::minSystemDistance, QVariant(e.readDouble()));
+            style->set(Sid::minSystemDistance, e.readDouble());
         } else if (tag == "stemDir") {
             int voice = e.attribute("voice", "1").toInt() - 1;
             switch (voice) {

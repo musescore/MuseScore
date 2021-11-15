@@ -96,6 +96,7 @@
 #define LOG_UNDO() if (0) LOGD()
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 extern Measure* tick2measure(int tick);
@@ -1807,7 +1808,7 @@ void ChangeStyleVal::flip(EditData*)
 {
     QVariant v = score->styleV(idx);
     if (v != value) {
-        score->style().set(idx, value);
+        score->style().set(idx, PropertyValue::fromQVariant(value));
         switch (idx) {
         case Sid::chordExtensionMag:
         case Sid::chordExtensionAdjust:

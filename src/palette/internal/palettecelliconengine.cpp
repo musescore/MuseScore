@@ -132,7 +132,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
     painter.save();
 
     Pen pen(configuration()->elementsColor());
-    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * spatium);
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * spatium);
     painter.setPen(pen);
 
     constexpr int numStaffLines = 5;

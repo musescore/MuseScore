@@ -891,7 +891,7 @@ public:
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
-    const QVariant& styleV(Sid idx) const { return style().styleV(idx); }
+    QVariant styleV(Sid idx) const { return style().styleV(idx).toQVariant(); }
     Spatium  styleS(Sid idx) const { return style().styleS(idx); }
     qreal styleP(Sid idx) const { return style().styleP(idx); }
     QString styleSt(Sid idx) const { return style().styleSt(idx); }
@@ -899,7 +899,7 @@ public:
     qreal styleD(Sid idx) const { return style().styleD(idx); }
     int styleI(Sid idx) const { return style().styleI(idx); }
 
-    void setStyleValue(Sid sid, QVariant value) { style().set(sid, value); }
+    void setStyleValue(Sid sid, QVariant value) { style().set(sid, mu::engraving::PropertyValue::fromQVariant(value)); }
     QString getTextStyleUserName(Tid tid);
     qreal spatium() const { return styleD(Sid::spatium); }
     void setSpatium(qreal v) { setStyleValue(Sid::spatium, v); }

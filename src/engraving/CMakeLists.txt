@@ -85,6 +85,9 @@ set(MODULE_SRC
 
     ${COMPAT_MIDI_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h
+
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
     ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.cpp

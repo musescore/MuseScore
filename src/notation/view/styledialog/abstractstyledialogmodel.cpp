@@ -65,7 +65,7 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id)
 
 QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const QVariant& logicalValue) const
 {
-    if (!strcmp(Ms::MStyle::valueType(id), "Ms::Spatium")) {
+    if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
         return logicalValue.value<Ms::Spatium>().toDouble();
     }
 
@@ -74,7 +74,7 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const QVariant& logical
 
 QVariant AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
-    if (!strcmp(Ms::MStyle::valueType(id), "Ms::Spatium")) {
+    if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
         return Ms::Spatium(uiValue.toDouble());
     }
 
