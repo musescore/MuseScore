@@ -96,6 +96,9 @@ EditStaff::EditStaff(QWidget* parent)
     WidgetUtils::setWidgetIcon(maxPitchPSelect, IconCode::Code::EDIT);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 EditStaff::EditStaff(const EditStaff& other)
