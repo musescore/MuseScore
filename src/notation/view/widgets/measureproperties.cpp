@@ -31,6 +31,7 @@
 #include "notation/inotationelements.h"
 #include "global/widgetstatestore.h"
 #include "ui/view/iconcodes.h"
+#include "ui/view/widgetnavigationfix.h"
 
 static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
@@ -62,6 +63,11 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     }
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+
+    qApp->installEventFilter(this);
 }
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
@@ -139,6 +145,21 @@ void MeasurePropertiesDialog::gotoPreviousMeasure()
     nextButton->setEnabled(getNextMeasure(m_measure));
     previousButton->setEnabled(getPrevMeasure(m_measure));
     m_notation->notationChanged().notify();
+}
+
+bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent
+            && WidgetNavigationFix::fixNavigationForTableWidget(
+                new WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
+                keyEvent->key())) {
+            return true;
+        }
+    }
+
+    return QDialog::eventFilter(obj, event);
 }
 
 //---------------------------------------------------------
