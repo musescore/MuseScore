@@ -21,8 +21,8 @@ namespace Layouting {
 
 // TODO: Finish rubberband
 class DOCKS_EXPORT_FOR_UNIT_TESTS RubberBand
-        : public QQuickItem
-        , public Layouting::Widget_quick
+    : public QQuickItem,
+      public Layouting::Widget_quick
 {
     Q_OBJECT
 public:

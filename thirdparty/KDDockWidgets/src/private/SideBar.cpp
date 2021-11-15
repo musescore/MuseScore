@@ -70,7 +70,7 @@ void SideBar::onButtonClicked(DockWidgetBase *dw)
 
 void SideBar::onDockWidgetDestroyed(QObject *dw)
 {
-    removeDockWidget(static_cast<DockWidgetBase*>(dw));
+    removeDockWidget(static_cast<DockWidgetBase *>(dw));
 }
 
 void SideBar::updateSize()

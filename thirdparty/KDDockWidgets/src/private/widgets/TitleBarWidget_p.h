@@ -41,7 +41,7 @@ public:
     ~TitleBarWidget() override;
 
     ///@brief getter for the close button
-    QWidget* closeButton() const;
+    QWidget *closeButton() const;
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -52,7 +52,7 @@ protected:
     QSize sizeHint() const override;
 
 #ifdef DOCKS_DEVELOPER_MODE
-     // The following are needed for the unit-tests
+    // The following are needed for the unit-tests
     bool isCloseButtonVisible() const override;
     bool isCloseButtonEnabled() const override;
     bool isFloatButtonVisible() const override;

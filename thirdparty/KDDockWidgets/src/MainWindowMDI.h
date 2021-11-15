@@ -20,9 +20,9 @@
 #define KD_MAINWINDOW_MDI_H
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-# include "MainWindow.h"
+#include "MainWindow.h"
 #else
-# include "private/quick/MainWindowQuick_p.h"
+#include "private/quick/MainWindowQuick_p.h"
 #endif
 
 namespace KDDockWidgets {
@@ -32,7 +32,6 @@ class DOCKS_EXPORT MainWindowMDI : public KDDockWidgets::MDIMainWindowBase
 {
     Q_OBJECT
 public:
-
     ///@brief Constructor. See base class documentation
     explicit MainWindowMDI(const QString &uniqueName, WidgetType *parent = nullptr,
                            Qt::WindowFlags flags = Qt::WindowFlags());

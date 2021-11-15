@@ -80,35 +80,35 @@ public:
     ///       DockWidgets.
     ///@param parent just forward to Frame's constructor
     ///@param options just forward to Frame's constructor
-    virtual Frame* createFrame(QWidgetOrQuick *parent = nullptr, FrameOptions options = FrameOption_None) const = 0;
+    virtual Frame *createFrame(QWidgetOrQuick *parent = nullptr, FrameOptions options = FrameOption_None) const = 0;
 
     ///@brief Called internally by the framework to create a TitleBar
     ///       Override to provide your own TitleBar sub-class. If overridden then
     ///       you also need to override the overload below.
     ///@param frame Just forward to TitleBar's constructor.
-    virtual TitleBar* createTitleBar(Frame *frame) const = 0;
+    virtual TitleBar *createTitleBar(Frame *frame) const = 0;
 
     ///@brief Called internally by the framework to create a TitleBar
     ///       Override to provide your own TitleBar sub-class. If overridden then
     ///       you also need to override the overload above.
     ///@param floatingWindow Just forward to TitleBar's constructor.
-    virtual TitleBar* createTitleBar(FloatingWindow *floatingWindow) const = 0;
+    virtual TitleBar *createTitleBar(FloatingWindow *floatingWindow) const = 0;
 
     ///@brief Called internally by the framework to create a TabWidget
     ///       Override to provide your own TabWidget sub-class.
     ///@param parent Just forward to TabWidget's constructor.
-    virtual TabWidget* createTabWidget(Frame *parent) const = 0;
+    virtual TabWidget *createTabWidget(Frame *parent) const = 0;
 
     ///@brief Called internally by the framework to create a TabBar
     ///       Override to provide your own TabBar sub-class.
     ///@param parent Just forward to TabBar's's constructor.
-    virtual TabBar* createTabBar(TabWidget *parent = nullptr) const = 0;
+    virtual TabBar *createTabBar(TabWidget *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a Separator
     ///       Override to provide your own Separator sub-class. The Separator allows
     ///       the user to resize nested dock widgets.
     ///@param parent Just forward to Separator's constructor.
-    virtual Layouting::Separator* createSeparator(Layouting::Widget *parent = nullptr) const = 0;
+    virtual Layouting::Separator *createSeparator(Layouting::Widget *parent = nullptr) const = 0;
 
     ///@brief Called internally by the framework to create a FloatingWindow
     ///       Override to provide your own FloatingWindow sub-class. If overridden then
@@ -121,7 +121,7 @@ public:
     ///       you also need to override the overloads above.
     ///@param frame Just forward to FloatingWindow's constructor.
     ///@param parent Just forward to FloatingWindow's constructor.
-    virtual FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr) const = 0;
+    virtual FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const = 0;
 
     ///@brief Called internally by the framework to create a DropIndicatorOverlayInterface
     ///       Override to provide your own DropIndicatorOverlayInterface sub-class.
@@ -140,7 +140,7 @@ public:
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     ///@brief Called internally by the framework to create a title bar button
     ///@p parent the button's parent
-    virtual QAbstractButton* createTitleBarButton(QWidget *parent, TitleBarButtonType) const = 0;
+    virtual QAbstractButton *createTitleBarButton(QWidget *parent, TitleBarButtonType) const = 0;
 #else
     virtual QUrl titleBarFilename() const = 0;
     virtual QUrl dockwidgetFilename() const = 0;
@@ -151,6 +151,7 @@ public:
     /// @brief Returns the icon to be used with the specified @p type
     /// @param dpr the device pixel ratio of the button
     virtual QIcon iconForButtonType(TitleBarButtonType type, qreal dpr) const = 0;
+
 private:
     Q_DISABLE_COPY(FrameworkWidgetFactory)
 };
@@ -170,13 +171,13 @@ public:
     TabBar *createTabBar(TabWidget *parent) const override;
     Layouting::Separator *createSeparator(Layouting::Widget *parent = nullptr) const override;
     FloatingWindow *createFloatingWindow(MainWindowBase *parent = nullptr) const override;
-    FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr) const override;
-    DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea*) const override;
+    FloatingWindow *createFloatingWindow(Frame *frame, MainWindowBase *parent = nullptr, QRect suggestedGeometry = {}) const override;
+    DropIndicatorOverlayInterface *createDropIndicatorOverlay(DropArea *) const override;
     QWidgetOrQuick *createRubberBand(QWidgetOrQuick *parent) const override;
     SideBar *createSideBar(SideBarLocation loc, MainWindowBase *parent) const override;
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-    QAbstractButton* createTitleBarButton(QWidget *parent, TitleBarButtonType) const override;
+    QAbstractButton *createTitleBarButton(QWidget *parent, TitleBarButtonType) const override;
 #else
     Q_INVOKABLE QUrl titleBarFilename() const override;
     QUrl dockwidgetFilename() const override;
@@ -187,6 +188,7 @@ public:
     QIcon iconForButtonType(TitleBarButtonType type, qreal dpr) const override;
 
     static DropIndicatorType s_dropIndicatorType;
+
 private:
     Q_DISABLE_COPY(DefaultWidgetFactory)
 };

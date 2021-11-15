@@ -7,6 +7,7 @@ IndentWidth: 4
 SpacesBeforeTrailingComments: 1
 TabWidth: 8
 UseTab: Never
+SortIncludes: false
 ContinuationIndentWidth: 4
 MaxEmptyLinesToKeep: 3
 BreakBeforeBinaryOperators: NonAssignment
@@ -46,7 +47,7 @@ AlignAfterOpenBracket: true
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: true
 BinPackParameters: true
-ColumnLimit: 100
+ColumnLimit: 0
 Cpp11BracedListStyle: false
 DerivePointerBinding: false
 ExperimentalAutoDetectBinPacking: false

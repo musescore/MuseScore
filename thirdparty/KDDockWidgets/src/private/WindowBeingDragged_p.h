@@ -40,13 +40,16 @@ public:
     virtual ~WindowBeingDragged();
     void init();
 
-    FloatingWindow *floatingWindow() const { return m_floatingWindow; }
+    FloatingWindow *floatingWindow() const
+    {
+        return m_floatingWindow;
+    }
 
     ///@brief grabs or releases the mouse
     void grabMouse(bool grab);
 
     /// @brief returns whether this window being dragged contains the specified drop area
-    /// useful since we don't want to drop onto outselves.
+    /// useful since we don't want to drop onto ourselves.
     bool contains(LayoutWidget *) const;
 
     ///@brief returns the affinities of the window being dragged
@@ -62,13 +65,17 @@ public:
     virtual QSize maxSize() const;
 
     /// @brief Returns a pixmap representing this Window. For purposes of QDrag. Wayland only.
-    virtual QPixmap pixmap() const { return {}; }
+    virtual QPixmap pixmap() const
+    {
+        return {};
+    }
 
     /// @brief Returns the list of dock widgets being dragged
-    virtual QVector<DockWidgetBase*> dockWidgets() const;
+    virtual QVector<DockWidgetBase *> dockWidgets() const;
 
     /// @brief Returns the draggable
     Draggable *draggable() const;
+
 protected:
     explicit WindowBeingDragged(Draggable *);
     Q_DISABLE_COPY(WindowBeingDragged)
@@ -88,7 +95,7 @@ public:
     QSize maxSize() const override;
     QPixmap pixmap() const override;
     QStringList affinities() const override;
-    QVector<DockWidgetBase*> dockWidgets() const override;
+    QVector<DockWidgetBase *> dockWidgets() const override;
 
     // These two are set for Wayland only, where we can't make the floating window immediately (no way to position it)
     // So we're dragging either a frame with multiple dock widgets or a single tab, keep them here.

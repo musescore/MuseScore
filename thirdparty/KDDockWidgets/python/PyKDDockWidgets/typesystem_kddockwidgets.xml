@@ -16,7 +16,6 @@
             otherwise shiboken will ignore the function and will fail to create a wrapper -->
         <primitive-type name="DropAreaWithCentralFrame"/>
         <primitive-type name="SideBar"/>
-        <primitive-type name="InitialOption"/>
 
         <!-- Some plublic enum and flags -->
         <enum-type name="Location"/>
@@ -28,6 +27,9 @@
         <enum-type name="DropIndicatorType"/>
         <enum-type name="SideBarLocation"/>
         <enum-type name="TitleBarButtonType"/>
+        <enum-type name="SuggestedGeometryHint" flags="SuggestedGeometryHints" />
+        <enum-type name="CursorPosition" flags="CursorPositions" />
+        <enum-type name="AddingOption" />
 
         <!-- our classes
              For class we can use two types:
@@ -35,6 +37,7 @@
                 value-type: class that can be passed as value for functions
              Here we only use 'object-type' since all our classes are derived from QWidget
          -->
+        <value-type name="InitialOption"/>
         <object-type name="MainWindowBase" />
         <object-type name="MainWindow" />
         <object-type name="DockWidgetBase" >
@@ -42,6 +45,7 @@
                  inside of the object-type -->
             <enum-type name="Option" flags="Options" />
             <enum-type name="IconPlace" flags="IconPlaces" />
+            <enum-type name="LayoutSaverOption" flags="LayoutSaverOptions" />
         </object-type>
 
         <object-type name="DockWidget" />

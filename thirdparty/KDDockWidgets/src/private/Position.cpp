@@ -90,9 +90,10 @@ void Position::removePlaceholders()
 
 void Position::removePlaceholders(const LayoutWidget *ms)
 {
-    m_placeholders.erase(std::remove_if(m_placeholders.begin(), m_placeholders.end(), [ms] (const std::unique_ptr<ItemRef> &itemref) {
+    m_placeholders.erase(std::remove_if(m_placeholders.begin(), m_placeholders.end(), [ms](const std::unique_ptr<ItemRef> &itemref) {
                              return itemref->item->hostWidget() == *ms;
-                         }), m_placeholders.end());
+                         }),
+                         m_placeholders.end());
 }
 
 void Position::removeNonMainWindowPlaceholders()
@@ -112,9 +113,10 @@ void Position::removePlaceholder(Layouting::Item *placeholder)
     if (m_clearing) // reentrancy guard
         return;
 
-    m_placeholders.erase(std::remove_if(m_placeholders.begin(), m_placeholders.end(), [placeholder] (const std::unique_ptr<ItemRef> &itemref) {
+    m_placeholders.erase(std::remove_if(m_placeholders.begin(), m_placeholders.end(), [placeholder](const std::unique_ptr<ItemRef> &itemref) {
                              return itemref->item == placeholder;
-    }), m_placeholders.end());
+                         }),
+                         m_placeholders.end());
 }
 
 void Position::deserialize(const LayoutSaver::Position &lp)
@@ -150,7 +152,7 @@ void Position::deserialize(const LayoutSaver::Position &lp)
             addPlaceholderItem(item);
         } else {
             // Shouldn't happen, maybe even assert
-            qWarning() << Q_FUNC_INFO <<"Couldn't find item index" << itemIndex << "in" << items;
+            qWarning() << Q_FUNC_INFO << "Couldn't find item index" << itemIndex << "in" << items;
         }
     }
 

@@ -37,9 +37,9 @@ namespace Operations {
 Q_NAMESPACE
 enum OperationType {
     OperationType_None = 0,
-    OperationType_CloseViaDockWidgetAPI, ///< Closing programatically via DockWidget::close()
-    OperationType_HideViaDockWidgetAPI,  ///< Hidding programatically via DockWidget::hide()
-    OperationType_ShowViaDockWidgetAPI,  ///< Hidding programatically via DockWidget::show()
+    OperationType_CloseViaDockWidgetAPI, ///< Closing programmatically via DockWidget::close()
+    OperationType_HideViaDockWidgetAPI,  ///< Hiding programmatically via DockWidget::hide()
+    OperationType_ShowViaDockWidgetAPI,  ///< Hiding programmatically via DockWidget::show()
     OperationType_AddDockWidget,         ///< MainWindow::addDockWidget()
     OperationType_AddDockWidgetAsTab,    ///< DockWidget::addDockWidgetAsTab()
     OperationType_SaveLayout, ///< LayoutSaver::saveLayout()

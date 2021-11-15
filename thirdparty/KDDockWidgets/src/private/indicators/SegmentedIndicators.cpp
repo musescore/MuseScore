@@ -10,7 +10,7 @@
 */
 
 #include "SegmentedIndicators_p.h"
-#include "DropArea_p.h"
+#include "../DropArea_p.h"
 #include "Config.h"
 
 #include <QPainter>
@@ -85,31 +85,26 @@ QVector<QPolygon> SegmentedIndicators::segmentsForRect(QRect r, QPolygon &center
 
     const QVector<QPoint> leftPoints = { topLeft, bottomLeft,
                                          QPoint(left, bottom) + QPoint(l, -l),
-                                         topLeft + QPoint(l, l), topLeft
-                                       };
+                                         topLeft + QPoint(l, l), topLeft };
 
     const QVector<QPoint> rightPoints = { topRight, bottomRight,
                                           bottomRight + QPoint(-l, -l),
-                                          topRight + QPoint(-l, l)
-                                        };
+                                          topRight + QPoint(-l, l) };
 
     const QVector<QPoint> topPoints = { topLeft, topRight,
                                         topRight + QPoint(-l, l),
-                                        topLeft + QPoint(l, l)
-                                      };
+                                        topLeft + QPoint(l, l) };
 
     const QVector<QPoint> bottomPoints = { bottomLeft, bottomRight,
                                            bottomRight + QPoint(-l, -l),
-                                           bottomLeft + QPoint(l, -l)
-                                         };
+                                           bottomLeft + QPoint(l, -l) };
 
     {
 
         QPolygon bounds = QVector<QPoint> { topLeft + QPoint(l, l),
                                             topRight + QPoint(-l, l),
                                             bottomRight + QPoint(-l, -l),
-                                            bottomLeft + QPoint(l, -l)
-                                          };
+                                            bottomLeft + QPoint(l, -l) };
         const int maxWidth = bounds.boundingRect().width();
         const QPoint centerPos = bounds.boundingRect().center();
 
@@ -124,13 +119,14 @@ QVector<QPolygon> SegmentedIndicators::segmentsForRect(QRect r, QPolygon &center
         const int centerRectTop = centerPos.y() - indicatorHeight / 2;
 
 
-        center = QVector<QPoint> { { centerRectLeft, centerRectTop },
-                                   { centerRectLeft + tabWidth, centerRectTop },
-                                   { centerRectLeft + tabWidth, centerRectTop + tabHeight },
-                                   { centerRectRight, centerRectTop + tabHeight },
-                                   { centerRectRight, centerRectBottom },
-                                   { centerRectLeft, centerRectBottom },
-                                 };
+        center = QVector<QPoint> {
+            { centerRectLeft, centerRectTop },
+            { centerRectLeft + tabWidth, centerRectTop },
+            { centerRectLeft + tabWidth, centerRectTop + tabHeight },
+            { centerRectRight, centerRectTop + tabHeight },
+            { centerRectRight, centerRectBottom },
+            { centerRectLeft, centerRectBottom },
+        };
     }
 
     return { leftPoints, topPoints, rightPoints, bottomPoints };
@@ -142,15 +138,13 @@ void SegmentedIndicators::updateSegments()
 
     const bool hasMultipleFrames = m_dropArea->visibleCount() > 1;
     const bool needsOutterIndicators = true; // Can't think of a reason not to show them
-    const bool needsInnerIndicators = needsOutterIndicators &&
-                                      hasMultipleFrames &&
-                                      hoveredFrameRect().isValid();
+    const bool needsInnerIndicators = needsOutterIndicators && hasMultipleFrames && hoveredFrameRect().isValid();
 
     QPolygon center;
 
     if (needsInnerIndicators) {
         const bool useOffset = needsOutterIndicators;
-        auto segments = segmentsForRect(hoveredFrameRect(), /*by-ref*/center, useOffset);
+        auto segments = segmentsForRect(hoveredFrameRect(), /*by-ref*/ center, useOffset);
         for (int i = 0; i < 4; ++i)
             m_segments.insert(DropLocation(DropLocation_Left + i), segments[i]);
 
@@ -158,7 +152,7 @@ void SegmentedIndicators::updateSegments()
     }
 
     if (needsOutterIndicators) {
-        auto segments = segmentsForRect(rect(), /*unused*/center);
+        auto segments = segmentsForRect(rect(), /*unused*/ center);
         for (int i = 0; i < 4; ++i)
             m_segments.insert(DropLocation(DropLocation_OutterLeft + i), segments[i]);
     }

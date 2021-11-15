@@ -10,6 +10,7 @@
 */
 
 #include "MyFrameworkWidgetFactory.h"
+#include "MyTitleBar_CSS.h"
 
 #include <kddockwidgets/FrameworkWidgetFactory.h>
 
@@ -89,11 +90,13 @@ MySeparator::~MySeparator() = default;
 
 KDDockWidgets::TitleBar * CustomWidgetFactory::createTitleBar(KDDockWidgets::Frame *frame) const
 {
+    // Feel free to return MyTitleBar_CSS here instead, but just for education purposes!
     return new MyTitleBar(frame);
 }
 
 KDDockWidgets::TitleBar * CustomWidgetFactory::createTitleBar(KDDockWidgets::FloatingWindow *fw) const
 {
+    // Feel free to return MyTitleBar_CSS here instead, but just for education purposes!
     return new MyTitleBar(fw);
 }
 
@@ -101,4 +104,3 @@ Layouting::Separator * CustomWidgetFactory::createSeparator(Layouting::Widget *p
 {
     return new MySeparator(parent);
 }
-

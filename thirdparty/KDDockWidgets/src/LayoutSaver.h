@@ -126,6 +126,7 @@ public:
     struct Placeholder;
     struct ScalingInfo;
     struct ScreenInfo;
+
 private:
     Q_DISABLE_COPY(LayoutSaver)
     friend class ::TestDocks;

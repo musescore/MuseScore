@@ -27,7 +27,7 @@ class Widget;
 class DOCKS_EXPORT Separator
 {
 public:
-    typedef QVector<Separator*> List;
+    typedef QVector<Separator *> List;
 
     virtual ~Separator();
 
@@ -39,13 +39,13 @@ public:
     int position() const;
     QObject *host() const;
 
-    void init(Layouting::ItemBoxContainer*, Qt::Orientation orientation);
+    void init(Layouting::ItemBoxContainer *, Qt::Orientation orientation);
 
     ItemBoxContainer *parentContainer() const;
 
     ///@brief Returns whether we're dragging a separator. Can be useful for the app to stop other work while we're not in the final size
     static bool isResizing();
-    virtual Widget* asWidget() = 0;
+    virtual Widget *asWidget() = 0;
 
     /// @internal Just for the unit-tests.
     /// Returns the total amount of Separator() instances currently alive.
@@ -53,11 +53,16 @@ public:
 
 protected:
     explicit Separator(Widget *hostWidget);
-    virtual Widget* createRubberBand(Widget *parent) { Q_UNUSED(parent); return nullptr; }
+    virtual Widget *createRubberBand(Widget *parent)
+    {
+        Q_UNUSED(parent);
+        return nullptr;
+    }
     void onMousePress();
     void onMouseReleased();
     void onMouseDoubleClick();
     void onMouseMove(QPoint pos);
+
 private:
     friend class Config;
 
@@ -66,7 +71,7 @@ private:
     bool isBeingDragged() const;
     bool usesLazyResize() const;
     static bool s_isResizing;
-    static Separator* s_separatorBeingDragged;
+    static Separator *s_separatorBeingDragged;
     struct Private;
     Private *const d;
 };

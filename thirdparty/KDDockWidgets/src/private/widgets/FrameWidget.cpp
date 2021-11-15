@@ -17,8 +17,8 @@
  */
 
 #include "FrameWidget_p.h"
-#include "TitleBar_p.h"
-#include "TabWidget_p.h"
+#include "../TitleBar_p.h"
+#include "../TabWidget_p.h"
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
 
@@ -35,7 +35,9 @@ class VBoxLayout : public QVBoxLayout //clazy:exclude=missing-qobject-macro
 public:
     explicit VBoxLayout(FrameWidget *parent)
         : QVBoxLayout(parent)
-        , m_frameWidget(parent) {}
+        , m_frameWidget(parent)
+    {
+    }
     ~VBoxLayout() override;
 
     void invalidate() override
@@ -143,7 +145,7 @@ DockWidgetBase *FrameWidget::dockWidgetAt_impl(int index) const
 
 QTabBar *FrameWidget::tabBar() const
 {
-    auto tw = static_cast<QTabWidget*>(m_tabWidget->asWidget());
+    auto tw = static_cast<QTabWidget *>(m_tabWidget->asWidget());
     return tw->tabBar();
 }
 
@@ -174,11 +176,10 @@ void FrameWidget::changeTabIcon(int index, const QIcon &icon)
     m_tabWidget->changeTabIcon(index, icon);
 }
 
-int KDDockWidgets::FrameWidget::nonContentsHeight() const
+int FrameWidget::nonContentsHeight() const
 {
     TitleBar *tb = titleBar();
     QWidget *tabBar = this->tabBar();
 
-    return (tb->isVisible() ? tb->height() : 0) +
-           (tabBar->isVisible() ? tabBar->height() : 0);
+    return (tb->isVisible() ? tb->height() : 0) + (tabBar->isVisible() ? tabBar->height() : 0);
 }

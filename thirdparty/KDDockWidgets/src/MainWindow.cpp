@@ -18,13 +18,14 @@
 
 #include "MainWindow.h"
 #include "Config.h"
-#include "DockRegistry_p.h"
-#include "DropAreaWithCentralFrame_p.h"
-#include "DropArea_p.h"
-#include "Frame_p.h"
 #include "FrameworkWidgetFactory.h"
-#include "Logging_p.h"
-#include "SideBar_p.h"
+
+#include "private/DockRegistry_p.h"
+#include "private/DropAreaWithCentralFrame_p.h"
+#include "private/DropArea_p.h"
+#include "private/Frame_p.h"
+#include "private/Logging_p.h"
+#include "private/SideBar_p.h"
 
 #include <QPainter>
 #include <QScreen>
@@ -60,8 +61,8 @@ public:
     {
         if (m_supportsAutoHide) {
             for (auto location : { SideBarLocation::North, SideBarLocation::East,
-                                   SideBarLocation::West, SideBarLocation::South}) {
-                m_sideBars.insert(location, Config::self().frameworkWidgetFactory()->createSideBar(location, mainWindow) );
+                                   SideBarLocation::West, SideBarLocation::South }) {
+                m_sideBars.insert(location, Config::self().frameworkWidgetFactory()->createSideBar(location, mainWindow));
             }
         }
 
@@ -76,12 +77,14 @@ public:
 
     MainWindow *const q;
     const bool m_supportsAutoHide;
-    QHash<SideBarLocation, SideBar*> m_sideBars;
+    QHash<SideBarLocation, SideBar *> m_sideBars;
     MyCentralWidget *const m_centralWidget;
     QHBoxLayout *const m_layout;
 };
 
-MyCentralWidget::~MyCentralWidget() {}
+MyCentralWidget::~MyCentralWidget()
+{
+}
 
 
 MainWindow::MainWindow(const QString &name, MainWindowOptions options,

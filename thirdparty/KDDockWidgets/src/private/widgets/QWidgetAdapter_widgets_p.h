@@ -35,6 +35,8 @@ inline QWidget *parentWidget(QWidget *widget)
     return widget ? widget->parentWidget() : nullptr;
 }
 
+bool isMinimized(QWindow *widget);
+
 inline bool isMinimized(const QWidget *widget)
 {
     QWindow *window = widget ? widget->window()->windowHandle() : nullptr;
@@ -88,6 +90,11 @@ public:
     void setFlag(Qt::WindowType, bool on = true);
     void setSize(QSize);
 
+    bool isTopLevel() const
+    {
+        return isWindow();
+    }
+
 protected:
     void raiseAndActivate();
     bool event(QEvent *e) override;
@@ -96,6 +103,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void closeEvent(QCloseEvent *) override;
+    virtual void setNormalGeometry(QRect);
 
     virtual bool onResize(QSize newSize);
     virtual void onLayoutRequest();

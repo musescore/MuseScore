@@ -18,7 +18,7 @@
  */
 
 #include "MultiSplitter_p.h"
-#include "../LayoutSaver_p.h"
+#include "LayoutSaver_p.h"
 #include "Config.h"
 #include "DockRegistry_p.h"
 #include "DockWidgetBase.h"
@@ -64,10 +64,10 @@ bool MultiSplitter::validateInputs(QWidgetOrQuick *widget, Location location,
         return false;
     }
 
-    const bool isDockWidget = qobject_cast<DockWidgetBase*>(widget);
+    const bool isDockWidget = qobject_cast<DockWidgetBase *>(widget);
     const bool isStartHidden = option.startsHidden();
 
-    if (!qobject_cast<Frame*>(widget) && !qobject_cast<MultiSplitter*>(widget) && !isDockWidget) {
+    if (!qobject_cast<Frame *>(widget) && !qobject_cast<MultiSplitter *>(widget) && !isDockWidget) {
         qWarning() << "Unknown widget type" << widget;
         return false;
     }
@@ -82,7 +82,7 @@ bool MultiSplitter::validateInputs(QWidgetOrQuick *widget, Location location,
         return false;
     }
 
-    Layouting::Item *item = itemForFrame(qobject_cast<Frame*>(widget));
+    Layouting::Item *item = itemForFrame(qobject_cast<Frame *>(widget));
 
     if (containsItem(item)) {
         qWarning() << "MultiSplitter::addWidget: Already contains" << widget;
@@ -112,7 +112,7 @@ void MultiSplitter::addWidget(QWidgetOrQuick *w, Location location,
                               Frame *relativeToWidget,
                               InitialOption option)
 {
-    auto frame = qobject_cast<Frame*>(w);
+    auto frame = qobject_cast<Frame *>(w);
     if (itemForFrame(frame) != nullptr) {
         // Item already exists, remove it.
         // Changing the frame parent will make the item clean itself up. It turns into a placeholder and is removed by unrefOldPlaceholders
@@ -132,7 +132,7 @@ void MultiSplitter::addWidget(QWidgetOrQuick *w, Location location,
 
     Frame::List frames = framesFrom(w);
     unrefOldPlaceholders(frames);
-    auto dw = qobject_cast<DockWidgetBase*>(w);
+    auto dw = qobject_cast<DockWidgetBase *>(w);
 
     if (frame) {
         newItem = new Layouting::Item(this);
@@ -142,7 +142,7 @@ void MultiSplitter::addWidget(QWidgetOrQuick *w, Location location,
         frame = Config::self().frameworkWidgetFactory()->createFrame();
         newItem->setGuestWidget(frame);
         frame->addWidget(dw, option);
-    } else if (auto ms = qobject_cast<MultiSplitter*>(w)) {
+    } else if (auto ms = qobject_cast<MultiSplitter *>(w)) {
         newItem = ms->m_rootItem;
         newItem->setHostWidget(this);
 
@@ -173,7 +173,7 @@ void MultiSplitter::addMultiSplitter(MultiSplitter *sourceMultiSplitter, Locatio
     addWidget(sourceMultiSplitter, location, relativeTo, option);
 }
 
-QVector<Layouting::Separator*> MultiSplitter::separators() const
+QVector<Layouting::Separator *> MultiSplitter::separators() const
 {
     return m_rootItem->separators_recursive();
 }

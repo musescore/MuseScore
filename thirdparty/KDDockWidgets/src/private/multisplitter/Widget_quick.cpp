@@ -29,7 +29,8 @@ QSize Widget_quick::minSize() const
 QRect Widget_quick::geometry() const
 {
     return QRectF(m_thisWidget->x(), m_thisWidget->y(),
-                  m_thisWidget->width(), m_thisWidget->height()).toRect();
+                  m_thisWidget->width(), m_thisWidget->height())
+        .toRect();
 }
 
 void Widget_quick::setGeometry(QRect rect)
@@ -45,7 +46,7 @@ void Widget_quick::setParent(Widget *parent)
         return;
     }
 
-    if (auto qquickitem = qobject_cast<QQuickItem*>(parent->asQObject())) {
+    if (auto qquickitem = qobject_cast<QQuickItem *>(parent->asQObject())) {
         m_thisWidget->setParent(qquickitem);
         m_thisWidget->setParentItem(qquickitem);
     } else {
@@ -138,7 +139,7 @@ QQuickItem *Widget_quick::createQQuickItem(const QString &filename, QQuickItem *
     }
 
     QQmlComponent component(engine, filename);
-    auto qquickitem = qobject_cast<QQuickItem*>(component.create());
+    auto qquickitem = qobject_cast<QQuickItem *>(component.create());
     if (!qquickitem) {
         qWarning() << Q_FUNC_INFO << component.errorString();
         return nullptr;

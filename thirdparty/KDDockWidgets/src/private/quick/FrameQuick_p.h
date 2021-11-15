@@ -13,7 +13,7 @@
 #ifndef KD_FRAME_QUICK_P_H
 #define KD_FRAME_QUICK_P_H
 
-#include "Frame_p.h"
+#include "../Frame_p.h"
 #include "DockWidgetBase.h"
 #include "TabWidgetQuick_p.h"
 
@@ -29,7 +29,7 @@ class DockWidgetModel;
 class DOCKS_EXPORT FrameQuick : public Frame
 {
     Q_OBJECT
-    Q_PROPERTY(QObject* tabWidget READ tabWidgetObj CONSTANT)
+    Q_PROPERTY(QObject *tabWidget READ tabWidgetObj CONSTANT)
 public:
     explicit FrameQuick(QWidgetAdapter *parent = nullptr, FrameOptions = FrameOption::FrameOption_None,
                         int userType = 0);
