@@ -37,6 +37,7 @@ void DockWindowActionsController::init()
     dispatcher()->reg(this, "set-dock-open", this, &DockWindowActionsController::setDockOpen);
     dispatcher()->reg(this, "toggle-dock", this, &DockWindowActionsController::toggleOpened);
     dispatcher()->reg(this, "toggle-floating", this, &DockWindowActionsController::toggleFloating);
+    dispatcher()->reg(this, "restore-default-layout", this, &DockWindowActionsController::restoreDefaultLayout);
 }
 
 void DockWindowActionsController::setDockOpen(const ActionData& args)
@@ -66,4 +67,9 @@ void DockWindowActionsController::toggleFloating(const ActionData& args)
 IDockWindow* DockWindowActionsController::window() const
 {
     return dockWindowProvider()->window();
+}
+
+void DockWindowActionsController::restoreDefaultLayout()
+{
+    window()->restoreDefaultLayout();
 }

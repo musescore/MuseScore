@@ -28,12 +28,14 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "../idockwindowprovider.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::dock {
 class DockWindowActionsController : public actions::Actionable
 {
     INJECT(dock, IDockWindowProvider, dockWindowProvider)
     INJECT(dock, actions::IActionsDispatcher, dispatcher)
+    INJECT(dock, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();
@@ -42,6 +44,8 @@ private:
     void setDockOpen(const actions::ActionData& args);
     void toggleOpened(const actions::ActionData& args);
     void toggleFloating(const actions::ActionData& args);
+
+    void restoreDefaultLayout();
 
     IDockWindow* window() const;
 };

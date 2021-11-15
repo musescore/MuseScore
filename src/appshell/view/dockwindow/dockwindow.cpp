@@ -234,6 +234,15 @@ QQuickItem& DockWindow::asItem() const
     return *m_mainWindow;
 }
 
+void DockWindow::restoreDefaultLayout()
+{
+    for (const DockPageView* page : m_pages.list()) {
+        uiConfiguration()->setPageState(page->objectName(), QByteArray());
+    }
+
+    uiConfiguration()->setWindowGeometry(QByteArray());
+}
+
 DockingHolderView* DockWindow::mainToolBarDockingHolder() const
 {
     return m_mainToolBarDockingHolder;

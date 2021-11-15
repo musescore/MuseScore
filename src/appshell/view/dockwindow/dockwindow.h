@@ -88,6 +88,8 @@ public:
     DockPageView* currentPage() const override;
     QQuickItem& asItem() const override;
 
+    void restoreDefaultLayout() override;
+
 public slots:
     void setMainToolBarDockingHolder(DockingHolderView* mainToolBarDockingHolder);
 
