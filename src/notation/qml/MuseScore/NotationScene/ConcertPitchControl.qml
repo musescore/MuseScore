@@ -33,9 +33,12 @@ FlatButton {
 
     orientation: Qt.Horizontal
     transparent: true
+    margins: 4
 
     contentItem: Row {
         spacing: 6
+
+        width: implicitWidth + 4 // some extra right padding
 
         CheckBox {
             checked: root.checked
