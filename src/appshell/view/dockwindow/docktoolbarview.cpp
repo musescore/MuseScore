@@ -180,6 +180,15 @@ void DockToolBarView::componentComplete()
     });
 }
 
+void DockToolBarView::init()
+{
+    DockBase::init();
+
+    if (height() > width()) {
+        setOrientation(Qt::Vertical);
+    }
+}
+
 DockType DockToolBarView::type() const
 {
     return DockType::ToolBar;
