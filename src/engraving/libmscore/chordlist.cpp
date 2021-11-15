@@ -1961,10 +1961,10 @@ void ChordList::checkChordList(const MStyle& style)
 {
     // make sure we have a chordlist
     if (!loaded()) {
-        qreal emag = style.value(Sid::chordExtensionMag).toDouble();
-        qreal eadjust = style.value(Sid::chordExtensionAdjust).toDouble();
-        qreal mmag = style.value(Sid::chordModifierMag).toDouble();
-        qreal madjust = style.value(Sid::chordModifierAdjust).toDouble();
+        qreal emag = style.value(Sid::chordExtensionMag).toReal();
+        qreal eadjust = style.value(Sid::chordExtensionAdjust).toReal();
+        qreal mmag = style.value(Sid::chordModifierMag).toReal();
+        qreal madjust = style.value(Sid::chordModifierAdjust).toReal();
         configureAutoAdjust(emag, eadjust, mmag, madjust);
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read("chords.xml");

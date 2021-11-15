@@ -1462,8 +1462,8 @@ static void updateStyles(Score* score,
         score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
     }
     if (dblLyricSize > epsilon) {
-        score->style().set(Sid::lyricsOddFontSize, QVariant(dblLyricSize));
-        score->style().set(Sid::lyricsEvenFontSize, QVariant(dblLyricSize));
+        score->style().set(Sid::lyricsOddFontSize, dblLyricSize);
+        score->style().set(Sid::lyricsEvenFontSize, dblLyricSize);
     }
 }
 

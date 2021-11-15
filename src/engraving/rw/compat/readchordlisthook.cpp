@@ -69,8 +69,8 @@ void ReadChordListHook::validate()
         if (!newChordDescriptionFile.startsWith("chords_") && style.value(Sid::chordStyle).toString() == "std") {
             // should not normally happen,
             // but treat as "old" (114) score just in case
-            style.set(Sid::chordStyle, QVariant(QString("custom")));
-            style.set(Sid::chordsXmlFile, QVariant(true));
+            style.set(Sid::chordStyle, QString("custom"));
+            style.set(Sid::chordsXmlFile, true);
             qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
         if (style.value(Sid::chordStyle).toString() == "custom") {
