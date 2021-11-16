@@ -338,14 +338,9 @@ DockPage {
 
             dropDestinations: root.horizontalPanelDropDestinations
 
-            Rectangle {
-                anchors.fill: parent
-                color: ui.theme.backgroundPrimaryColor
-
-                StyledTextLabel {
-                    anchors.centerIn: parent
-                    text: pianoRollPanel.title
-                }
+            StyledTextLabel {
+                anchors.centerIn: parent
+                text: pianoRollPanel.title
             }
         },
 

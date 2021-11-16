@@ -26,9 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Palette 1.0
 
-Rectangle {
-    color: ui.theme.backgroundPrimaryColor
-
+Item {
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 26

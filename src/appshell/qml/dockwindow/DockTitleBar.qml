@@ -49,7 +49,7 @@ Item {
         anchors.fill: parent
 
         heightWhenVisible: 34
-        color: ui.theme.backgroundPrimaryColor
+        color: "transparent"
 
         visible: parent.visible
 

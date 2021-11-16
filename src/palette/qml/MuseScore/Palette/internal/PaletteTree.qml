@@ -50,8 +50,6 @@ ListView {
     property bool enableAnimations: true
     property int expandDuration: enableAnimations ? 150 : 0 // duration of expand / collapse animations
 
-    property string backgroundColor: "#ffffff"
-
     preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
@@ -301,7 +299,6 @@ ListView {
             }
 
             background: ListItemBlank {
-                background.color: paletteTree.backgroundColor
                 visible: !control.Drag.active
                 isSelected: control.selected
 
@@ -378,7 +375,7 @@ ListView {
                 DelegateModel.inItems = true;
                 DelegateModel.inPersistedItems = false;
 
-                if (dropAction == Qt.MoveAction) {
+                if (dropAction === Qt.MoveAction) {
                     controller.move(
                                 root, rowIndex,
                                 root, destIndex);

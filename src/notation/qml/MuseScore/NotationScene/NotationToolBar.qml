@@ -25,7 +25,7 @@ import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
-Rectangle {
+Item {
     id: root
 
     property alias navigation: keynavSub
@@ -34,8 +34,6 @@ Rectangle {
 
     width: view.width
     height: view.height
-
-    color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         toolbarModel.load()
