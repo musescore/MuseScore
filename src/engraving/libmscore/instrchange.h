@@ -67,7 +67,7 @@ public:
 
     Segment* segment() const { return toSegment(parent()); }
 
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     bool placeMultiple() const override { return false; }
 };

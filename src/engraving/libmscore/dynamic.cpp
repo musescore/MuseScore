@@ -615,7 +615,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Dynamic::propertyDefault(Pid id) const
+PropertyValue Dynamic::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:
@@ -628,7 +628,7 @@ QVariant Dynamic::propertyDefault(Pid id) const
         if (isVelocityChangeAvailable()) {
             return dynList[int(dynamicType())].changeInVelocity;
         } else {
-            return QVariant();
+            return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
         return int(Speed::NORMAL);

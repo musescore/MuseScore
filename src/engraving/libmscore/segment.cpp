@@ -967,7 +967,7 @@ PropertyValue Segment::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Segment::propertyDefault(Pid propertyId) const
+PropertyValue Segment::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LEADING_SPACE:

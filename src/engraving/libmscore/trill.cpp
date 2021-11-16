@@ -531,7 +531,7 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Trill::propertyDefault(Pid propertyId) const
+PropertyValue Trill::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:

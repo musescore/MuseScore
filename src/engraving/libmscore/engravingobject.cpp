@@ -183,28 +183,28 @@ void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingIte
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant EngravingObject::propertyDefault(Pid pid, Tid tid) const
+PropertyValue EngravingObject::propertyDefault(Pid pid, Tid tid) const
 {
     for (const StyledProperty& spp : *textStyle(tid)) {
         if (spp.pid == pid) {
             return styleValue(pid, spp.sid);
         }
     }
-    return QVariant();
+    return PropertyValue();
 }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant EngravingObject::propertyDefault(Pid pid) const
+PropertyValue EngravingObject::propertyDefault(Pid pid) const
 {
     Sid sid = getPropertyStyle(pid);
     if (sid != Sid::NOSTYLE) {
         return styleValue(pid, sid);
     }
     //      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
-    return QVariant();
+    return PropertyValue();
 }
 
 //---------------------------------------------------------
@@ -901,7 +901,7 @@ bool EngravingObject::isTextBase() const
 //   styleValue
 //---------------------------------------------------------
 
-QVariant EngravingObject::styleValue(Pid pid, Sid sid) const
+PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
 {
     switch (propertyType(pid)) {
     case P_TYPE::SP_REAL:

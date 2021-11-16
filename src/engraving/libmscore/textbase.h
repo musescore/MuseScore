@@ -412,7 +412,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
     Pid propertyId(const QStringRef& xmlName) const override;
     Sid getPropertyStyle(Pid) const override;

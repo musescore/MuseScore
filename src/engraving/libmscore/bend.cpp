@@ -460,7 +460,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Bend::propertyDefault(Pid id) const
+PropertyValue Bend::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PLAY:
@@ -468,7 +468,7 @@ QVariant Bend::propertyDefault(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(BendType::BEND);
     case Pid::BEND_CURVE:
-        return QVariant::fromValue(BEND_CURVE);
+        return PropertyValue::fromValue(BEND_CURVE);
     default:
         return EngravingItem::propertyDefault(id);
     }

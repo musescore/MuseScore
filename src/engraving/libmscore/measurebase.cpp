@@ -433,7 +433,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureBase::propertyDefault(Pid propertyId) const
+PropertyValue MeasureBase::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::REPEAT_END:

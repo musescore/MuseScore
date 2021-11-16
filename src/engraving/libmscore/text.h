@@ -36,7 +36,7 @@ public:
 
     Text* clone() const override { return new Text(*this); }
     void read(XmlReader&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     static QString readXmlText(XmlReader& r, Score* score);
 

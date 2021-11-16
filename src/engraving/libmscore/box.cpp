@@ -443,7 +443,7 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Box::propertyDefault(Pid id) const
+PropertyValue Box::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::BOX_HEIGHT:
@@ -757,7 +757,7 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant HBox::propertyDefault(Pid id) const
+PropertyValue HBox::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::CREATE_SYSTEM_HEADER:

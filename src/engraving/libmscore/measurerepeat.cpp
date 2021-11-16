@@ -210,7 +210,7 @@ void MeasureRepeat::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureRepeat::propertyDefault(Pid propertyId) const
+PropertyValue MeasureRepeat::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MEASURE_REPEAT_NUMBER_POS:

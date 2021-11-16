@@ -70,7 +70,7 @@ void Text::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Text::propertyDefault(Pid id) const
+engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

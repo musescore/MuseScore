@@ -267,7 +267,7 @@ QString Fingering::accessibleInfo() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fingering::propertyDefault(Pid id) const
+engraving::PropertyValue Fingering::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:

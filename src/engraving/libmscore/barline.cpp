@@ -1543,7 +1543,7 @@ void BarLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant BarLine::propertyDefault(Pid propertyId) const
+PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BARLINE_TYPE:
@@ -1551,7 +1551,7 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
 //    wrong values on read (as the default may be different on read)
 //                  if (segment() && segment()->measure() && !segment()->measure()->nextMeasure())
 //                        return QVariant::fromValue(BarLineType::END);
-        return QVariant::fromValue(BarLineType::NORMAL);
+        return PropertyValue::fromValue(BarLineType::NORMAL);
 
     case Pid::BARLINE_SPAN:
         return staff() ? staff()->barLineSpan() : false;

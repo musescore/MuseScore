@@ -770,7 +770,7 @@ bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
     return true;
 }
 
-QVariant FiguredBassItem::propertyDefault(Pid id) const
+PropertyValue FiguredBassItem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::FBPREFIX:
@@ -1461,7 +1461,7 @@ bool FiguredBass::setProperty(Pid propertyId, const QVariant& v)
     return TextBase::setProperty(propertyId, v);
 }
 
-QVariant FiguredBass::propertyDefault(Pid id) const
+PropertyValue FiguredBass::propertyDefault(Pid id) const
 {
     return TextBase::propertyDefault(id);
 }

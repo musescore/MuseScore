@@ -3073,13 +3073,13 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextBase::propertyDefault(Pid id) const
+mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
 {
     if (id == Pid::Z) {
         return EngravingItem::propertyDefault(id);
     }
     if (composition()) {
-        QVariant v = parent()->propertyDefault(id);
+        PropertyValue v = parent()->propertyDefault(id);
         if (v.isValid()) {
             return v;
         }
@@ -3088,7 +3088,7 @@ QVariant TextBase::propertyDefault(Pid id) const
     if (sid != Sid::NOSTYLE) {
         return styleValue(id, sid);
     }
-    QVariant v;
+    PropertyValue v;
     switch (id) {
     case Pid::SUB_STYLE:
         v = int(Tid::DEFAULT);

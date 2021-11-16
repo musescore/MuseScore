@@ -655,13 +655,13 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Image::propertyDefault(Pid id) const
+PropertyValue Image::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::AUTOSCALE:
         return defaultAutoScale;
     case Pid::SIZE:
-        return QVariant::fromValue(pixel2size(imageSize()));
+        return PropertyValue::fromValue(pixel2size(imageSize()));
     case Pid::IMAGE_HEIGHT:
         return pixel2size(imageSize()).height();
     case Pid::IMAGE_WIDTH:

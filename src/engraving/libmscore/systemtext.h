@@ -33,7 +33,7 @@ namespace Ms {
 class SystemText final : public StaffTextBase
 {
     void layout() override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
     SystemText(Segment* parent, Tid = Tid::SYSTEM);

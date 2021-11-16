@@ -755,7 +755,7 @@ bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Arpeggio::propertyDefault(Pid propertyId) const
+engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ARP_USER_LEN1:

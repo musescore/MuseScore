@@ -320,11 +320,11 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LayoutBreak::propertyDefault(Pid id) const
+PropertyValue LayoutBreak::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LAYOUT_BREAK:
-        return QVariant();           // LAYOUT_BREAK_LINE;
+        return PropertyValue();           // LAYOUT_BREAK_LINE;
     case Pid::PAUSE:
         return score()->styleD(Sid::SectionPause);
     case Pid::START_WITH_LONG_NAMES:

@@ -126,7 +126,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     const Groups& groups() const { return _groups; }

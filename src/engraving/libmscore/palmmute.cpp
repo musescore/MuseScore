@@ -28,6 +28,7 @@
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle palmMuteStyle {
@@ -173,14 +174,14 @@ LineSegment* PalmMute::createLineSegment(System* parent)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant PalmMute::propertyDefault(Pid propertyId) const
+PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
         return score()->styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
-        return QVariant::fromValue(Align::LEFT | Align::BASELINE);
+        return PropertyValue::fromValue(Align::LEFT | Align::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::palmMuteLineStyle);
@@ -190,7 +191,7 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
 
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF(0, 0));
+        return PropertyValue::fromValue(PointF(0, 0));
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
 //                  return score()->styleV(Sid::palmMuteFontItalic);

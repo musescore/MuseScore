@@ -63,7 +63,7 @@ void StaffText::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffText::propertyDefault(Pid id) const
+engraving::PropertyValue StaffText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

@@ -2782,12 +2782,12 @@ PropertyValue Chord::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Chord::propertyDefault(Pid propertyId) const
+PropertyValue Chord::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::NO_STEM:        return false;
     case Pid::SMALL:          return false;
-    case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(Direction::AUTO);
     case Pid::PLAY: return true;
     default:
         return ChordRest::propertyDefault(propertyId);

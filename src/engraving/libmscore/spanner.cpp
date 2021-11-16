@@ -193,14 +193,14 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SpannerSegment::propertyDefault(Pid pid) const
+PropertyValue SpannerSegment::propertyDefault(Pid pid) const
 {
     if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->propertyDefault(pid);
     }
     switch (pid) {
     case Pid::OFFSET2:
-        return QVariant();
+        return PropertyValue();
     default:
         return EngravingItem::propertyDefault(pid);
     }
@@ -648,7 +648,7 @@ bool Spanner::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Spanner::propertyDefault(Pid propertyId) const
+PropertyValue Spanner::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ANCHOR:

@@ -2269,9 +2269,9 @@ bool Harmony::setProperty(Pid pid, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Harmony::propertyDefault(Pid id) const
+PropertyValue Harmony::propertyDefault(Pid id) const
 {
-    QVariant v;
+    PropertyValue v;
     switch (id) {
     case Pid::HARMONY_TYPE:
         v = int(HarmonyType::STANDARD);
@@ -2292,7 +2292,7 @@ QVariant Harmony::propertyDefault(Pid id) const
     break;
     case Pid::OFFSET:
         if (parent() && parent()->isFretDiagram()) {
-            v = QVariant::fromValue(PointF(0.0, 0.0));
+            v = PropertyValue::fromValue(PointF(0.0, 0.0));
             break;
         }
     // fall-through

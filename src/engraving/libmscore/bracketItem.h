@@ -52,7 +52,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     int bracketSpan() const { return _bracketSpan; }
     BracketType bracketType() const { return _bracketType; }

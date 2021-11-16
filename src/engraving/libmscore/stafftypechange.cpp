@@ -270,7 +270,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::propertyDefault(Pid id) const
+PropertyValue StaffTypeChange::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::STEP_OFFSET:
@@ -300,7 +300,7 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return false;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:

@@ -215,7 +215,7 @@ void MMRest::write(XmlWriter& xml) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MMRest::propertyDefault(Pid propertyId) const
+PropertyValue MMRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:

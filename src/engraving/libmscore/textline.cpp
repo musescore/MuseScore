@@ -292,7 +292,7 @@ Sid TextLine::getPropertyStyle(Pid pid) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLine::propertyDefault(Pid propertyId) const
+engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:

@@ -1506,13 +1506,13 @@ bool SLine::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SLine::propertyDefault(Pid pid) const
+PropertyValue SLine::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::DIAGONAL:
         return false;
     case Pid::COLOR:
-        return QVariant::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
     case Pid::LINE_WIDTH:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

@@ -1218,7 +1218,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     virtual QQueue<MidiInputEvent>* midiInputQueue();
     virtual std::list<MidiInputEvent>* activeMidiPitches();

@@ -260,11 +260,11 @@ bool Spacer::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Spacer::propertyDefault(Pid id) const
+PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return QVariant(0.0);
+        return PropertyValue(0.0);
     default:
         return EngravingItem::propertyDefault(id);
     }
