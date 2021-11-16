@@ -28,17 +28,16 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
-Rectangle {
+Item {
     id: root
 
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
+    //! ---
 
     anchors.fill: parent
-
-    color: ui.theme.backgroundPrimaryColor
 
     clip: true
 

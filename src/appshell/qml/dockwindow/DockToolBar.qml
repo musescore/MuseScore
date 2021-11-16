@@ -51,38 +51,32 @@ DockToolBarView {
         readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
     }
 
-    Rectangle {
-        id: background
+    Item {
+        id: content
         anchors.fill: parent
-        color: ui.theme.backgroundPrimaryColor
+        anchors.topMargin: root.contentTopPadding
+        anchors.bottomMargin: root.contentBottomPadding
 
-        Item {
-            id: content
-            anchors.fill: parent
-            anchors.bottomMargin: root.contentBottomPadding
-            anchors.topMargin: root.contentBottomPadding
+        FlatButton {
+            id: gripButton
+            width: root.isVertical ? 30 : 24
+            height: root.isVertical ? 24 : 30
 
-            FlatButton {
-                id: gripButton
-                width: root.isVertical ? 30 : 24
-                height: root.isVertical ? 24 : 30
+            mouseArea.objectName: root.objectName + "_gripButton"
 
-                mouseArea.objectName: root.objectName + "_gripButton"
-
-                transparent: true
-                contentItem: StyledIconLabel {
-                    iconCode: IconCode.TOOLBAR_GRIP
-                    rotation: root.isVertical ? 90 : 0
-                }
-
-                Component.onCompleted: {
-                    root.setDraggableMouseArea(mouseArea)
-                }
+            transparent: true
+            contentItem: StyledIconLabel {
+                iconCode: IconCode.TOOLBAR_GRIP
+                rotation: root.isVertical ? 90 : 0
             }
 
-            Loader {
-                id: contentLoader
+            Component.onCompleted: {
+                root.setDraggableMouseArea(mouseArea)
             }
+        }
+
+        Loader {
+            id: contentLoader
         }
     }
 

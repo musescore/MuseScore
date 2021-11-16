@@ -29,7 +29,7 @@ import MuseScore.Palette 1.0
 
 import "internal"
 
-Rectangle {
+Item {
     id: root
 
     property NavigationSection navigationSection: null
@@ -44,8 +44,6 @@ Rectangle {
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
     }
-
-    color: ui.theme.backgroundPrimaryColor
 
     PaletteRootModel {
         id: paletteRootModel
@@ -90,7 +88,6 @@ Rectangle {
         id: paletteTree
         clip: true
         paletteProvider: root.paletteProvider
-        backgroundColor: root.color
 
         navigation.section: root.navigationSection
         navigation.order: 5

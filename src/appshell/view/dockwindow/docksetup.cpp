@@ -64,6 +64,11 @@ public:
         return QUrl("qrc:/qml/dockwindow/DockTitleBar.qml");
     }
 
+    QUrl dockwidgetFilename() const override
+    {
+        return QUrl("qrc:/qml/dockwindow/DockWidget.qml");
+    }
+
     QUrl frameFilename() const override
     {
         return QUrl("qrc:/qml/dockwindow/DockFrame.qml");
