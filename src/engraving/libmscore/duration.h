@@ -63,7 +63,7 @@ public:
     Fraction globalTicks() const;
     void setTicks(const Fraction& f) { _duration = f; }
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
 
 protected:

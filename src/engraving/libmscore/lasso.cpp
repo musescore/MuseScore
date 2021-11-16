@@ -25,6 +25,7 @@
 #include "draw/brush.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -143,13 +144,13 @@ bool Lasso::setProperty(Pid propertyId, const QVariant& v)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Lasso::getProperty(Pid propertyId) const
+PropertyValue Lasso::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LASSO_POS:
-        return QVariant::fromValue(bbox().topLeft());
+        return PropertyValue::fromValue(bbox().topLeft());
     case Pid::LASSO_SIZE:
-        return QVariant::fromValue(bbox().size());
+        return PropertyValue::fromValue(bbox().size());
     default:
         break;
     }

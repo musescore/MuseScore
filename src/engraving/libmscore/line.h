@@ -141,9 +141,9 @@ public:
     LineSegment* segmentAt(int n) { return toLineSegment(Spanner::segmentAt(n)); }
     const LineSegment* segmentAt(int n) const { return toLineSegment(Spanner::segmentAt(n)); }
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
 
     friend class LineSegment;
 };

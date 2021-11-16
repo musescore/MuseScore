@@ -192,8 +192,8 @@ void PaletteCellIconEngine::paintPaletteElement(void* data, EngravingItem* eleme
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 
-    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
-    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
+    auto colorBackup = element->getProperty(Pid::COLOR).value<Color>();
+    auto frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
 
     auto color = Color::fromQColor(configuration()->elementsColor());
     element->setProperty(Pid::COLOR, QVariant::fromValue(color));

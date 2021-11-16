@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 const char* scorelineNames[] = {
@@ -423,11 +424,11 @@ QString ChordLine::accessibleInfo() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant ChordLine::getProperty(Pid propertyId) const
+PropertyValue ChordLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PATH:
-        return QVariant::fromValue(path);
+        return PropertyValue::fromValue(path);
     case Pid::CHORD_LINE_TYPE:
         return int(_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:

@@ -38,14 +38,14 @@ using namespace mu::audio;
 namespace  {
 struct ALSAData
 {
-    float* buffer;
-    snd_pcm_t* alsaDeviceHandle;
-    int samples;
-    int channels;
-    bool audioProcessingDone;
-    pthread_t threadHandle;
+    float* buffer = nullptr;
+    snd_pcm_t* alsaDeviceHandle = nullptr;
+    int samples = 0;
+    int channels = 0;
+    bool audioProcessingDone = false;
+    pthread_t threadHandle = 0;
     IAudioDriver::Callback callback;
-    void* userdata;
+    void* userdata = nullptr;
 };
 
 static ALSAData* _alsaData{ nullptr };
@@ -111,8 +111,7 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    _alsaData = new ALSAData;
-    memset(_alsaData, 0, sizeof(ALSAData));
+    _alsaData = new ALSAData();
     _alsaData->samples = spec.samples;
     _alsaData->channels = spec.channels;
     _alsaData->callback = spec.callback;

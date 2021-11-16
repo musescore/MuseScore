@@ -63,7 +63,7 @@ public:
     void read(XmlReader&) override;
     void layout() override;
 
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
 
     qreal baseLine() const override { return 0.0; }

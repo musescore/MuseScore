@@ -41,6 +41,7 @@
 #include "utils.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 LineSegment::LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
@@ -1449,17 +1450,17 @@ void SLine::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SLine::getProperty(Pid id) const
+PropertyValue SLine::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::DIAGONAL:
         return _diagonal;
     case Pid::COLOR:
-        return QVariant::fromValue(_lineColor);
+        return PropertyValue::fromValue(_lineColor);
     case Pid::LINE_WIDTH:
         return _lineWidth;
     case Pid::LINE_STYLE:
-        return QVariant(int(_lineStyle));
+        return PropertyValue(int(_lineStyle));
     case Pid::DASH_LINE_LEN:
         return dashLineLen();
     case Pid::DASH_GAP_LEN:

@@ -30,6 +30,7 @@
 #include "note.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -164,7 +165,7 @@ void TremoloBar::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TremoloBar::getProperty(Pid propertyId) const
+PropertyValue TremoloBar::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -176,7 +177,7 @@ QVariant TremoloBar::getProperty(Pid propertyId) const
     case Pid::TREMOLOBAR_TYPE:
         return static_cast<int>(parseTremoloBarTypeFromCurve(m_points));
     case Pid::TREMOLOBAR_CURVE:
-        return pitchValuesToVariant(m_points);
+        return PropertyValue::fromValue(m_points);
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -233,7 +234,7 @@ QVariant TremoloBar::propertyDefault(Pid pid) const
                 if (propertyType(pid) == P_TYPE::SP_REAL) {
                     return score()->styleP(p.sid);
                 }
-                return score()->styleV(p.sid);
+                return score()->styleV(p.sid).toQVariant();
             }
         }
         return EngravingItem::propertyDefault(pid);

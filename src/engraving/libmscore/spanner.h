@@ -97,35 +97,35 @@ public:
     qreal& rxpos2() { return _p2.rx(); }
     qreal& rypos2() { return _p2.ry(); }
 
-    virtual bool isEditable() const override { return true; }
+    bool isEditable() const override { return true; }
 
     QByteArray mimeData(const mu::PointF& dragOffset) const override;
 
-    virtual void spatiumChanged(qreal ov, qreal nv) override;
+    void spatiumChanged(qreal ov, qreal nv) override;
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid id, const QVariant& v) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const QVariant& v) override;
+    QVariant propertyDefault(Pid id) const override;
     virtual EngravingItem* propertyDelegate(Pid) override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    virtual Sid getPropertyStyle(Pid id) const override;
-    virtual PropertyFlags propertyFlags(Pid id) const override;
-    virtual void resetProperty(Pid id) override;
-    virtual void styleChanged() override;
+    Sid getPropertyStyle(Pid id) const override;
+    PropertyFlags propertyFlags(Pid id) const override;
+    void resetProperty(Pid id) override;
+    void styleChanged() override;
     void reset() override;
 
-    virtual void setSelected(bool f) override;
-    virtual void setVisible(bool f) override;
-    virtual void setColor(const mu::draw::Color& col) override;
+    void setSelected(bool f) override;
+    void setVisible(bool f) override;
+    void setColor(const mu::draw::Color& col) override;
 
-    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    virtual EngravingItem* nextSegmentElement() override;
-    virtual EngravingItem* prevSegmentElement() override;
-    virtual QString accessibleInfo() const override;
-    virtual void triggerLayout() const override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
+    QString accessibleInfo() const override;
+    void triggerLayout() const override;
     void autoplaceSpannerSegment();
 };
 
@@ -241,7 +241,7 @@ public:
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
     QVariant propertyDefault(Pid propertyId) const override;
     virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;

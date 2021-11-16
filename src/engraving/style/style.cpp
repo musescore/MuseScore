@@ -161,6 +161,10 @@ bool MStyle::readProperties(XmlReader& e)
                 c.setAlpha(e.intAttribute("a", 255));
                 set(idx, c);
                 e.readElementText();
+            } else if (P_TYPE::HPLACEMENT == type) {
+                set(idx, Ms::HPlacement(e.readElementText().toInt()));
+            } else if (P_TYPE::HOOK_TYPE == type) {
+                set(idx, Ms::HookType(e.readElementText().toInt()));
             } else {
                 qFatal("unhandled type %d", int(type));
             }

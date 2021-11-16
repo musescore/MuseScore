@@ -4839,7 +4839,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
         map[0xE526] = 'n';
 
         QString dynText = dynTypeName;
-        if (dyn->dynamicType() == Dynamic::Type::OTHER) {
+        if (dyn->dynamicType() == DynamicType::OTHER) {
             dynText = dyn->plainText();
         }
 

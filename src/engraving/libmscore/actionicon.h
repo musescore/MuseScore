@@ -81,7 +81,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
 
 private:

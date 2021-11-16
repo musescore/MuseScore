@@ -410,13 +410,13 @@ public:
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant& v) override;
-    virtual QVariant propertyDefault(Pid id) const override;
-    virtual void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
-    virtual Pid propertyId(const QStringRef& xmlName) const override;
-    virtual Sid getPropertyStyle(Pid) const override;
-    virtual void styleChanged() override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant& v) override;
+    QVariant propertyDefault(Pid id) const override;
+    void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
+    Pid propertyId(const QStringRef& xmlName) const override;
+    Sid getPropertyStyle(Pid) const override;
+    void styleChanged() override;
     void editInsertText(TextCursor*, const QString&);
 
     TextCursor* cursorFromEditData(const EditData&);

@@ -55,7 +55,7 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureNumberBase::getProperty(Pid id) const
+engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::HPLACEMENT:

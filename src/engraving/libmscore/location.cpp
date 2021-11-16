@@ -28,6 +28,7 @@
 #include "mscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static constexpr Location absDefaults = Location::absolute();
@@ -276,7 +277,7 @@ int Location::note(const EngravingItem* e)
 //   Location::getLocationProperty
 //---------------------------------------------------------
 
-QVariant Location::getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end)
+PropertyValue Location::getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end)
 {
     switch (pid) {
     case Pid::LOCATION_STAVES:
@@ -292,7 +293,7 @@ QVariant Location::getLocationProperty(Pid pid, const EngravingItem* start, cons
     case Pid::LOCATION_NOTE:
         return note(start) - note(end);
     default:
-        return QVariant();
+        return PropertyValue();
     }
 }
 

@@ -29,6 +29,7 @@
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -256,7 +257,7 @@ void Marker::undoSetMarkerType(Type t)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Marker::getProperty(Pid propertyId) const
+PropertyValue Marker::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LABEL:

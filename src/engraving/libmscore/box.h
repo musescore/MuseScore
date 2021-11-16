@@ -95,7 +95,7 @@ public:
     void setAutoSizeEnabled(const bool val) { _isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
 
-    virtual QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     virtual bool setProperty(Pid propertyId, const QVariant&) override;
     virtual QVariant propertyDefault(Pid) const override;
     virtual QString accessibleExtraInfo() const override;
@@ -136,7 +136,7 @@ public:
     bool createSystemHeader() const { return _createSystemHeader; }
     void setCreateSystemHeader(bool val) { _createSystemHeader = val; }
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 
@@ -160,7 +160,7 @@ public:
     qreal minHeight() const;
     qreal maxHeight() const;
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     void layout() override;
 
     void startEditDrag(EditData&) override;

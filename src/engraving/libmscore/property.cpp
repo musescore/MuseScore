@@ -894,7 +894,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
     case P_TYPE::CLEF_TYPE:
         return ClefInfo::tag(ClefType(value.toInt()));
     case P_TYPE::DYNAMIC_TYPE:
-        return Dynamic::dynamicTypeName(value.value<Dynamic::Type>());
+        return Dynamic::dynamicTypeName(value.value<DynamicType>());
     case P_TYPE::ALIGN: {
         const Align a = Align(value.toInt());
         const char* h;

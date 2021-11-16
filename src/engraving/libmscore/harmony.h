@@ -226,7 +226,7 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
     QVariant propertyDefault(Pid id) const override;
 };

@@ -266,7 +266,7 @@ public:
     const MStyle* style() const;
     QString mscoreVersion() const;
 
-    virtual QVariant getProperty(Pid) const = 0;
+    virtual mu::engraving::PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;
     virtual QVariant propertyDefault(Pid) const;
     virtual void resetProperty(Pid id);

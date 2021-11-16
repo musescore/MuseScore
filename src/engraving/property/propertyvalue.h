@@ -23,6 +23,7 @@
 #define MU_ENGRAVING_PROPERTYVALUE_H
 
 #include <variant>
+#include <any>
 #include <string>
 
 #include <QVariant>
@@ -30,8 +31,18 @@
 #include "libmscore/property.h"
 #include "libmscore/spatium.h"
 #include "libmscore/types.h"
+#include "libmscore/symid.h"
+#include "libmscore/pitchvalue.h"
+#include "libmscore/fraction.h"
+//#include "libmscore/groups.h" can't be included
 #include "infrastructure/draw/geometry.h"
+#include "infrastructure/draw/painterpath.h"
 #include "infrastructure/draw/color.h"
+
+namespace Ms {
+class Groups;
+class TDuration;
+}
 
 namespace mu::engraving {
 class PropertyValue
@@ -46,9 +57,22 @@ public:
     PropertyValue(const Ms::Spatium& v);
     PropertyValue(const PointF& v);
     PropertyValue(const SizeF& v);
+    PropertyValue(const PainterPath& v);
     PropertyValue(const draw::Color& v);
     PropertyValue(Ms::Align v);
     PropertyValue(Ms::Direction v);
+    PropertyValue(Ms::SymId v);
+    PropertyValue(Ms::BarLineType v);
+    PropertyValue(Ms::HookType v);
+    PropertyValue(Ms::HPlacement v);
+    PropertyValue(Ms::DynamicType v)
+        :   m_type(Ms::P_TYPE::DYNAMIC_TYPE), m_val(v) {}
+    PropertyValue(const Ms::PitchValues& v);
+    PropertyValue(const Ms::Fraction& v);
+    PropertyValue(const QList<int>& v); //endings
+
+    PropertyValue(const Ms::Groups& v);
+    PropertyValue(const Ms::TDuration& v);
 
     bool isValid() const;
 
@@ -62,9 +86,13 @@ public:
         }
 
         const T* pv = std::get_if<T>(&m_val);
-        //! NOTE Temporary removed assert
-        //assert(pv);
-        return pv ? *pv : T();
+
+        assert(pv);
+        if (!pv) {
+            return T();
+        }
+
+        return *pv;
     }
 
     bool toBool() const { return value<bool>(); }
@@ -84,11 +112,28 @@ public:
     //! NOTE compat
     QVariant toQVariant() const;
     static PropertyValue fromQVariant(const QVariant& v);
+    operator QVariant() const {
+        return toQVariant();
+    }
 
 private:
 
+    struct GroupsHolder
+    {
+        GroupsHolder(const Ms::Groups& v);
+        const Ms::Groups& val() const;
+    private:
+        std::any m_val;
+    };
+
     Ms::P_TYPE m_type = Ms::P_TYPE::UNDEFINED;
-    std::variant<bool, int, qreal, QString, Ms::Spatium, PointF, SizeF, draw::Color, Ms::Align, Ms::Direction> m_val;
+    std::variant<bool, int, qreal, QString,
+                 Ms::Spatium,
+                 PointF, SizeF, PainterPath, draw::Color,
+                 Ms::Align, Ms::Direction, Ms::SymId, Ms::BarLineType, Ms::HookType, Ms::HPlacement,
+                 Ms::DynamicType,
+                 Ms::PitchValues, Ms::Fraction, QList<int>
+                 > m_val;
 };
 
 //! NOTE compat

@@ -36,6 +36,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 const char* keyNames[] = {
@@ -656,7 +657,7 @@ void KeySig::undoSetMode(KeyMode v)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant KeySig::getProperty(Pid propertyId) const
+PropertyValue KeySig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::KEY:

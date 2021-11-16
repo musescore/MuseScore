@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -223,7 +224,7 @@ void Spacer::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Spacer::getProperty(Pid propertyId) const
+PropertyValue Spacer::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SPACE:

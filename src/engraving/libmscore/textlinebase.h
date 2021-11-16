@@ -69,14 +69,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   HookType
-//---------------------------------------------------------
-
-enum class HookType : char {
-    NONE, HOOK_90, HOOK_45, HOOK_90T
-};
-
-//---------------------------------------------------------
 //   PlaceText
 //---------------------------------------------------------
 
@@ -126,17 +118,17 @@ protected:
 public:
     TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
-    virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
 
-    virtual void writeProperties(XmlWriter& xml) const override;
-    virtual bool readProperties(XmlReader& node) override;
+    void writeProperties(XmlWriter& xml) const override;
+    bool readProperties(XmlReader& node) override;
 
-    virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual Pid propertyId(const QStringRef& xmlName) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    Pid propertyId(const QStringRef& xmlName) const override;
 };
 }     // namespace Ms
 Q_DECLARE_METATYPE(Ms::HookType);

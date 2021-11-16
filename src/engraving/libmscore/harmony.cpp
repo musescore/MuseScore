@@ -45,6 +45,7 @@
 #include "linkedobjects.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -2206,14 +2207,14 @@ EngravingItem* Harmony::drop(EditData& data)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Harmony::getProperty(Pid pid) const
+PropertyValue Harmony::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::PLAY:
-        return QVariant(_play);
+        return PropertyValue(_play);
         break;
     case Pid::HARMONY_TYPE:
-        return QVariant(int(_harmonyType));
+        return PropertyValue(int(_harmonyType));
         break;
     case Pid::HARMONY_VOICE_LITERAL:
         return _realizedHarmony.literal();

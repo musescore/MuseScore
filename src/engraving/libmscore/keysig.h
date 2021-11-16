@@ -92,7 +92,7 @@ public:
     void setForInstrumentChange(bool forInstrumentChange) { _sig.setForInstrumentChange(forInstrumentChange); }
     bool forInstrumentChange() const { return _sig.forInstrumentChange(); }
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 

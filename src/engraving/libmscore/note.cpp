@@ -2994,7 +2994,7 @@ void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Note::getProperty(Pid propertyId) const
+PropertyValue Note::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PITCH:
@@ -3008,7 +3008,7 @@ QVariant Note::getProperty(Pid propertyId) const
     case Pid::MIRROR_HEAD:
         return int(userMirror());
     case Pid::DOT_POSITION:
-        return QVariant::fromValue<Direction>(userDotPosition());
+        return PropertyValue::fromValue<Direction>(userDotPosition());
     case Pid::HEAD_SCHEME:
         return int(headScheme());
     case Pid::HEAD_GROUP:

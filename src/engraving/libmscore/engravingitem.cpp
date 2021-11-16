@@ -1268,7 +1268,7 @@ bool EngravingItem::autoplace() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant EngravingItem::getProperty(Pid propertyId) const
+PropertyValue EngravingItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TICK:
@@ -1282,13 +1282,13 @@ QVariant EngravingItem::getProperty(Pid propertyId) const
     case Pid::GENERATED:
         return generated();
     case Pid::COLOR:
-        return QVariant::fromValue(color());
+        return PropertyValue::fromValue(color());
     case Pid::VISIBLE:
         return visible();
     case Pid::SELECTED:
         return selected();
     case Pid::OFFSET:
-        return QVariant::fromValue(_offset);
+        return PropertyValue::fromValue(_offset);
     case Pid::MIN_DISTANCE:
         return _minDistance;
     case Pid::PLACEMENT:
@@ -1306,7 +1306,7 @@ QVariant EngravingItem::getProperty(Pid propertyId) const
             return parent()->getProperty(propertyId);
         }
 
-        return QVariant();
+        return PropertyValue();
     }
 }
 

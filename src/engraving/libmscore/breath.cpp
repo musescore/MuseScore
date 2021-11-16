@@ -32,6 +32,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 const std::vector<BreathType> Breath::breathList {
@@ -179,11 +180,11 @@ mu::PointF Breath::pagePos() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Breath::getProperty(Pid propertyId) const
+PropertyValue Breath::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return QVariant::fromValue(_symId);
+        return PropertyValue::fromValue(_symId);
     case Pid::PAUSE:
         return _pause;
     default:

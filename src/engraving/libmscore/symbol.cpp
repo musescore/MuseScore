@@ -35,6 +35,7 @@
 #include "image.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -178,12 +179,11 @@ void Symbol::read(XmlReader& e)
 //---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
-
-QVariant Symbol::getProperty(Pid propertyId) const
+PropertyValue Symbol::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return QVariant::fromValue(_sym);
+        return PropertyValue::fromValue(_sym);
     default:
         break;
     }

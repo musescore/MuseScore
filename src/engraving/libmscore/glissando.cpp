@@ -55,6 +55,7 @@ NICE-TO-HAVE TODO:
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle glissandoElementStyle {
@@ -666,7 +667,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Glissando::getProperty(Pid propertyId) const
+PropertyValue Glissando::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:

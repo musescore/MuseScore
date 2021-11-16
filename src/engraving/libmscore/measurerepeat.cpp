@@ -32,6 +32,7 @@
 #include "system.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle measureRepeatStyle {
@@ -223,7 +224,7 @@ QVariant MeasureRepeat::propertyDefault(Pid propertyId) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureRepeat::getProperty(Pid propertyId) const
+PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SUBTYPE:

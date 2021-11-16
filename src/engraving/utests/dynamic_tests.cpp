@@ -44,7 +44,7 @@ TEST_F(DynamicTests, test1)
     MasterScore* score = compat::ScoreAccess::createMasterScore();
 
     Dynamic* dynamic = new Dynamic(score->dummy()->segment());
-    dynamic->setDynamicType(Dynamic::Type(1));
+    dynamic->setDynamicType(DynamicType(1));
 
     Dynamic* d;
 

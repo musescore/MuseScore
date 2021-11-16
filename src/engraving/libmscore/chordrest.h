@@ -180,10 +180,10 @@ public:
     TDuration crossMeasureDurationType() const { return _crossMeasureTDur; }
     void setCrossMeasureDurationType(TDuration v) { _crossMeasureTDur = v; }
 
-    virtual void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid) const override;
+    void localSpatiumChanged(qreal oldValue, qreal newValue) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
     bool isGrace() const;
     bool isGraceBefore() const;
     bool isGraceAfter() const;

@@ -2796,13 +2796,13 @@ Segment* Measure::searchSegment(qreal x, SegmentType st, int strack, int etrack,
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Measure::getProperty(Pid propertyId) const
+PropertyValue Measure::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TIMESIG_NOMINAL:
-        return QVariant::fromValue(m_timesig);
+        return PropertyValue::fromValue(m_timesig);
     case Pid::TIMESIG_ACTUAL:
-        return QVariant::fromValue(_len);
+        return PropertyValue::fromValue(_len);
     case Pid::MEASURE_NUMBER_MODE:
         return int(measureNumberMode());
     case Pid::BREAK_MMR:

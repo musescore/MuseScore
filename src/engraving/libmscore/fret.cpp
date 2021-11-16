@@ -1349,7 +1349,7 @@ void FretDiagram::writeMusicXML(XmlWriter& xml) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant FretDiagram::getProperty(Pid propertyId) const
+PropertyValue FretDiagram::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MAG:

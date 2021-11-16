@@ -4930,10 +4930,10 @@ void Score::changeSelectedNotesVoice(int voice)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Score::getProperty(Pid /*id*/) const
+PropertyValue Score::getProperty(Pid /*id*/) const
 {
     qDebug("Score::getProperty: unhandled id");
-    return QVariant();
+    return PropertyValue();
 }
 
 //---------------------------------------------------------

@@ -36,6 +36,7 @@
 #include "musescoreCore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //-----------------------------------------------------------------------------
@@ -172,7 +173,7 @@ Dynamic::Dynamic(Segment* parent)
 {
     _velocity    = -1;
     _dynRange    = Range::PART;
-    _dynamicType = Type::OTHER;
+    _dynamicType = DynamicType::OTHER;
     _changeInVelocity = 128;
     _velChangeSpeed = Speed::NORMAL;
     initElementStyle(&dynamicsStyle);
@@ -255,19 +256,19 @@ Fraction Dynamic::velocityChangeLength() const
 bool Dynamic::isVelocityChangeAvailable() const
 {
     switch (dynamicType()) {
-    case Type::FP:
-    case Type::SF:
-    case Type::SFZ:
-    case Type::SFF:
-    case Type::SFFZ:
-    case Type::SFP:
-    case Type::SFPP:
-    case Type::RFZ:
-    case Type::RF:
-    case Type::FZ:
-    case Type::M:
-    case Type::R:
-    case Type::S:
+    case DynamicType::FP:
+    case DynamicType::SF:
+    case DynamicType::SFZ:
+    case DynamicType::SFF:
+    case DynamicType::SFFZ:
+    case DynamicType::SFP:
+    case DynamicType::SFPP:
+    case DynamicType::RFZ:
+    case DynamicType::RF:
+    case DynamicType::FZ:
+    case DynamicType::M:
+    case DynamicType::R:
+    case DynamicType::S:
         return true;
     default:
         return false;
@@ -289,7 +290,7 @@ void Dynamic::write(XmlWriter& xml) const
     writeProperty(xml, Pid::DYNAMIC_RANGE);
     writeProperty(xml, Pid::VELO_CHANGE);
     writeProperty(xml, Pid::VELO_CHANGE_SPEED);
-    TextBase::writeProperties(xml, dynamicType() == Type::OTHER);
+    TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
     xml.endObject();
 }
 
@@ -411,13 +412,13 @@ void Dynamic::setDynamicType(const QString& tag)
     int n = sizeof(dynList) / sizeof(*dynList);
     for (int i = 0; i < n; ++i) {
         if (dynList[i].tag == tag || dynList[i].text == tag) {
-            setDynamicType(Type(i));
+            setDynamicType(DynamicType(i));
             setXmlText(QString::fromUtf8(dynList[i].text));
             return;
         }
     }
     qDebug("setDynamicType: other <%s>", qPrintable(tag));
-    setDynamicType(Type::OTHER);
+    setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }
 
@@ -425,7 +426,7 @@ void Dynamic::setDynamicType(const QString& tag)
 //   dynamicTypeName
 //---------------------------------------------------------
 
-QString Dynamic::dynamicTypeName(Dynamic::Type type)
+QString Dynamic::dynamicTypeName(DynamicType type)
 {
     return dynList[int(type)].tag;
 }
@@ -447,7 +448,7 @@ void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
     if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text)) {
-        _dynamicType = Type::OTHER;
+        _dynamicType = DynamicType::OTHER;
     }
 }
 
@@ -549,11 +550,11 @@ Dynamic::Speed Dynamic::nameToSpeed(QString name)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Dynamic::getProperty(Pid propertyId) const
+PropertyValue Dynamic::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        return QVariant::fromValue(_dynamicType);
+        return PropertyValue::fromValue(_dynamicType);
     case Pid::DYNAMIC_RANGE:
         return int(_dynRange);
     case Pid::VELOCITY:
@@ -564,7 +565,7 @@ QVariant Dynamic::getProperty(Pid propertyId) const
         if (isVelocityChangeAvailable()) {
             return changeInVelocity();
         } else {
-            return QVariant();
+            return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
         return int(_velChangeSpeed);
@@ -581,7 +582,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        _dynamicType = v.value<Dynamic::Type>();
+        _dynamicType = v.value<DynamicType>();
         break;
     case Pid::DYNAMIC_RANGE:
         _dynRange = Range(v.toInt());
@@ -590,7 +591,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
         _velocity = v.toInt();
         break;
     case Pid::SUBTYPE:
-        _dynamicType = Type(v.toInt());
+        _dynamicType = DynamicType(v.toInt());
         break;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
@@ -671,7 +672,7 @@ QString Dynamic::accessibleInfo() const
 {
     QString s;
 
-    if (dynamicType() == Dynamic::Type::OTHER) {
+    if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
         if (s.length() > 20) {
             s.truncate(20);
@@ -691,7 +692,7 @@ QString Dynamic::screenReaderInfo() const
 {
     QString s;
 
-    if (dynamicType() == Dynamic::Type::OTHER) {
+    if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
     } else {
         s = dynamicTypeName();

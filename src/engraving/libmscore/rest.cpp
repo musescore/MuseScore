@@ -1019,7 +1019,7 @@ void Rest::resetProperty(Pid id)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Rest::getProperty(Pid propertyId) const
+PropertyValue Rest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GAP:
