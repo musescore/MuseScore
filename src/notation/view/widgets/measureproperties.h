@@ -53,6 +53,8 @@ private slots:
     void gotoPreviousMeasure();
 
 private:
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
     void initMeasure();
 
     void apply();
