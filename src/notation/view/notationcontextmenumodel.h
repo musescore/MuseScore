@@ -51,6 +51,7 @@ private:
     ui::MenuItemList elementItems() const;
 
     bool isSingleSelection() const;
+    bool isDrumsetStaff() const;
 };
 }
 
