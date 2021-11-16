@@ -26,6 +26,8 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "inotationconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 class QPushButton;
 class QToolButton;
@@ -40,6 +42,8 @@ class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextProperties
     Q_OBJECT
 
     INJECT(Ms, mu::context::IGlobalContext, globalContext)
+    INJECT(Ms, mu::notation::INotationConfiguration, configuration)
+    INJECT(Ms, mu::ui::IUiConfiguration, uiConfiguration)
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);
@@ -62,8 +66,8 @@ private:
 
     StaffTextBase* m_originStaffText = nullptr;
     StaffTextBase* m_staffText = nullptr;
-    QToolButton* m_vb[4][4];
-    QComboBox* m_channelCombo[4];
+    QToolButton* m_vb[VOICES][VOICES];
+    QComboBox* m_channelCombo[VOICES];
     QPushButton* m_stops[4][16];
     int m_curTabIndex = 0;
 };
