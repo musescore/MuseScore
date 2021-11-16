@@ -33,7 +33,7 @@
 
 #include "commonscene/exampleview.h"
 #include "ui/view/musicalsymbolcodes.h"
-#include "global/widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDialog");
 
@@ -120,36 +120,31 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         break;
     }
 
-    // set ID's of other symbols
-    struct ProlatioTable {
-        SymId id;
-        MusicalSymbolCodes::Code icon;
-    };
-
-    //! FIXME
-    static const std::vector<ProlatioTable> prolatioList = {
-//        { SymId::mensuralProlation1,  Icon::timesig_prolatio01_ICON }, // tempus perfectum, prol. perfecta
-//        { SymId::mensuralProlation2,  Icon::timesig_prolatio02_ICON }, // tempus perfectum, prol. imperfecta
-//        { SymId::mensuralProlation3,  Icon::timesig_prolatio03_ICON }, // tempus perfectum, prol. imperfecta, dimin.
-//        { SymId::mensuralProlation4,  Icon::timesig_prolatio04_ICON }, // tempus perfectum, prol. perfecta, dimin.
-//        { SymId::mensuralProlation5,  Icon::timesig_prolatio05_ICON }, // tempus imperf. prol. perfecta
-//        { SymId::mensuralProlation7,  Icon::timesig_prolatio07_ICON }, // tempus imperf., prol. imperfecta, reversed
-//        { SymId::mensuralProlation8,  Icon::timesig_prolatio08_ICON }, // tempus imperf., prol. perfecta, dimin.
-//        { SymId::mensuralProlation10, Icon::timesig_prolatio10_ICON }, // tempus imperf., prol imperfecta, dimin., reversed
-//        { SymId::mensuralProlation11, Icon::timesig_prolatio11_ICON }, // tempus inperf., prol. perfecta, reversed
+    static const SymIdList prolatioList = {
+        SymId::mensuralProlation1,  // tempus perfectum, prol. perfecta
+        SymId::mensuralProlation2,  // tempus perfectum, prol. imperfecta
+        SymId::mensuralProlation3,  // tempus perfectum, prol. imperfecta, dimin.
+        SymId::mensuralProlation4,  // tempus perfectum, prol. perfecta, dimin.
+        SymId::mensuralProlation5,  // tempus imperf. prol. perfecta
+        SymId::mensuralProlation7,  // tempus imperf., prol. imperfecta, reversed
+        SymId::mensuralProlation8,  // tempus imperf., prol. perfecta, dimin.
+        SymId::mensuralProlation10, // tempus imperf., prol imperfecta, dimin., reversed
+        SymId::mensuralProlation11, // tempus inperf., prol. perfecta, reversed
     };
 
     ScoreFont* scoreFont = gpaletteScore->scoreFont();
-    int idx = 0;
 
     otherCombo->clear();
+    otherCombo->setStyleSheet(QString("QComboBox { font-family: \"%1 Text\"; font-size: %2pt; max-height: 30px } ")
+                              .arg(scoreFont->family()).arg(musicalFontSize));
 
-    for (ProlatioTable pt : prolatioList) {
-        const QString& str = scoreFont->toString(pt.id);
+    int idx = 0;
+    for (SymId prolatio : prolatioList) {
+        const QString& str = scoreFont->toString(prolatio);
         if (str.size() > 0) {
-            otherCombo->addItem(musicalSymbolToString(pt.icon), int(pt.id));
-            // if time sig matches this symbol string, set as selected
+            otherCombo->addItem(str, int(prolatio));
 
+            // if time sig matches this symbol string, set as selected
             if (m_editedTimeSig->timeSigType() == TimeSigType::NORMAL && m_editedTimeSig->denominatorString().isEmpty()
                 && m_editedTimeSig->numeratorString() == str) {
                 textButton->setChecked(false);
@@ -166,7 +161,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 
     Groups g = m_editedTimeSig->groups();
     if (g.empty()) {
-        g = Groups::endings(m_editedTimeSig->sig());         // initialize with default
+        g = Groups::endings(m_editedTimeSig->sig()); // initialize with default
     }
     groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
 

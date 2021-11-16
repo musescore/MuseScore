@@ -21,6 +21,9 @@
  */
 #include "specialcharactersdialog.h"
 
+#include <QListWidget>
+#include <QSplitter>
+
 #include "palettewidget.h"
 
 #include "translation.h"
@@ -33,15 +36,13 @@
 #include "engraving/libmscore/score.h"
 #include "engraving/style/style.h"
 
-#include "framework/global/widgetstatestore.h"
-
-#include <QListWidget>
-#include <QSplitter>
+#include "ui/view/widgetstatestore.h"
 
 static const QString SPECIAL_CHARACTERS_DIALOG_NAME("SpecialCharactersDialog");
 
 using namespace mu::notation;
 using namespace mu::palette;
+using namespace mu::ui;
 
 namespace Ms {
 static constexpr SymId commonScoreSymbols[] = {

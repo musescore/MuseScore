@@ -26,13 +26,14 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "libmscore/system.h"
+#include "engraving/libmscore/system.h"
 
 #include "notationtypes.h"
 
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   SelectDialog

@@ -30,7 +30,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 #include "notationerrors.h"
 
@@ -38,6 +38,7 @@
 
 using namespace mu::notation;
 using namespace mu::engraving;
+using namespace mu::ui;
 
 const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
     QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),

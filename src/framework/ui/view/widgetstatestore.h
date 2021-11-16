@@ -19,17 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef WIDGETSTATESTORE_H
-#define WIDGETSTATESTORE_H
+#ifndef MU_UI_WIDGETSTATESTORE_H
+#define MU_UI_WIDGETSTATESTORE_H
 
 class QWidget;
 
+namespace mu::ui {
 class WidgetStateStore
 {
 public:
-
     static void saveGeometry(const QWidget* qw);
     static void restoreGeometry(QWidget* qw);
 };
+}
 
-#endif // WIDGETSTATESTORE_H
+#endif // MU_UI_WIDGETSTATESTORE_H

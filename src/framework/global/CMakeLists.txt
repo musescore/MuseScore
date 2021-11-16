@@ -78,8 +78,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
-    ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.h
     ${CMAKE_CURRENT_LIST_DIR}/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.cpp
