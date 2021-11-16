@@ -80,7 +80,11 @@ MenuItemList NotationContextMenuModel::measureItems() const
 {
     MenuItemList items = elementItems();
     items << makeSeparator();
-    items << makeMenuItem("edit-drumset");
+
+    if (isDrumsetStaff()) {
+        items << makeMenuItem("edit-drumset");
+    }
+
     items << makeMenuItem("staff-properties");
     items << makeSeparator();
     items << makeMenuItem("measure-properties");
@@ -152,4 +156,25 @@ bool NotationContextMenuModel::isSingleSelection() const
 
     auto selection = interaction->selection();
     return selection ? selection->element() != nullptr : false;
+}
+
+bool NotationContextMenuModel::isDrumsetStaff() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    auto interaction = notation->interaction();
+    if (!interaction) {
+        return false;
+    }
+
+    auto hitElementContext = interaction->hitElementContext();
+    if (!hitElementContext.staff) {
+        return false;
+    }
+
+    auto tick = hitElementContext.element ? hitElementContext.element->tick() : Fraction { -1, 1 };
+    return hitElementContext.staff->part()->instrument(tick)->drumset() != nullptr;
 }
