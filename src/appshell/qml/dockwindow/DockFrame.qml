@@ -112,7 +112,7 @@ Item {
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
-        height: 36
+        height: 35
         width: parent.width
 
         visible: tabs.count > 1
