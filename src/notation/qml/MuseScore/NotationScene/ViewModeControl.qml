@@ -34,6 +34,7 @@ FlatButton {
 
     transparent: !menu.isMenuOpened
     accentButton: menu.isMenuOpened
+    margins: 6
 
     visible: Boolean(root.currentViewMode)
 

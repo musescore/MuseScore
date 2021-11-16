@@ -49,6 +49,8 @@ RowLayout {
         icon: IconCode.ZOOM_IN
         iconFont: ui.theme.toolbarIconsFont
 
+        width: height
+        height: 28
         transparent: true
 
         navigation.panel: root.navigationPanel
@@ -66,6 +68,8 @@ RowLayout {
         icon: IconCode.ZOOM_OUT
         iconFont: ui.theme.toolbarIconsFont
 
+        width: height
+        height: 28
         transparent: true
 
         navigation.panel: root.navigationPanel
@@ -109,6 +113,7 @@ RowLayout {
         id: menuButton
         Layout.leftMargin: 4
         Layout.preferredWidth: 20
+        height: 28
 
         icon: IconCode.SMALL_ARROW_DOWN
 
