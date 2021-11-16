@@ -78,6 +78,9 @@ SelectDialog::SelectDialog(QWidget* parent)
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 SelectDialog::SelectDialog(const SelectDialog& other)
