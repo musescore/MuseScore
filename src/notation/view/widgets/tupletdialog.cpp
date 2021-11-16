@@ -43,6 +43,12 @@ TupletDialog::TupletDialog(QWidget* parent)
     connect(buttonBox, &QDialogButtonBox::clicked, this, &TupletDialog::bboxClicked);
 
     defaultToStyleSettings();
+
+    numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
+    bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 TupletDialog::TupletDialog(const TupletDialog& other)

@@ -41,6 +41,9 @@
             <property name="text">
              <string>Ratio:</string>
             </property>
+            <property name="buddy">
+             <cstring>actualNotes</cstring>
+            </property>
            </widget>
           </item>
           <item>
@@ -66,6 +69,9 @@
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>/</string>
+            </property>
+            <property name="buddy">
+             <cstring>normalNotes</cstring>
             </property>
            </widget>
           </item>
@@ -120,7 +126,7 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="formatGroupBox">
        <property name="title">
         <string>Format</string>
        </property>
@@ -141,7 +147,7 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QGroupBox" name="groupBox_3">
+         <widget class="QGroupBox" name="numberGroupBox">
           <property name="title">
            <string>Number</string>
           </property>
@@ -186,7 +192,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_4">
+         <widget class="QGroupBox" name="bracketGroupBox">
           <property name="title">
            <string>Bracket</string>
           </property>

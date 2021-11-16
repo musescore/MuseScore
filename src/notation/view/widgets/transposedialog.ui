@@ -131,6 +131,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QRadioButton" name="upKey">
+              <property name="accessibleName">
+               <string>Up</string>
+              </property>
               <property name="text">
                <string>Up</string>
               </property>
@@ -138,6 +141,9 @@
             </item>
             <item row="2" column="0">
              <widget class="QRadioButton" name="downKey">
+              <property name="accessibleName">
+               <string>Down</string>
+              </property>
               <property name="text">
                <string>Down</string>
               </property>
@@ -145,6 +151,9 @@
             </item>
             <item row="0" column="0">
              <widget class="QRadioButton" name="closestKey">
+              <property name="accessibleName">
+               <string>Closest</string>
+              </property>
               <property name="text">
                <string>Closest</string>
               </property>
@@ -158,6 +167,9 @@
          </item>
          <item>
           <widget class="mu::uicomponents::RadioButtonGroupBox" name="transposeByInterval">
+           <property name="toolTip">
+            <string>Transpose by Interval</string>
+           </property>
            <property name="title">
             <string>By Interval</string>
            </property>
@@ -179,6 +191,9 @@
             </property>
             <item row="0" column="0">
              <widget class="QRadioButton" name="upInterval">
+              <property name="accessibleName">
+               <string>Up</string>
+              </property>
               <property name="text">
                <string>Up</string>
               </property>
@@ -189,6 +204,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QComboBox" name="intervalList">
+              <property name="accessibleName">
+               <string>Interval type</string>
+              </property>
               <item>
                <property name="text">
                 <string>Perfect Unison</string>
@@ -323,6 +341,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QRadioButton" name="downInterval">
+              <property name="accessibleName">
+               <string>Down</string>
+              </property>
               <property name="text">
                <string>Down</string>
               </property>
@@ -367,6 +388,9 @@
          </property>
          <item row="0" column="0">
           <widget class="QRadioButton" name="upDiatonic">
+           <property name="accessibleName">
+            <string>Up</string>
+           </property>
            <property name="text">
             <string>Up</string>
            </property>
@@ -377,6 +401,9 @@
          </item>
          <item row="0" column="1">
           <widget class="QComboBox" name="degreeList">
+           <property name="accessibleName">
+            <string>Degree type</string>
+           </property>
            <item>
             <property name="text">
              <string>Second</string>
@@ -411,6 +438,9 @@
          </item>
          <item row="1" column="0">
           <widget class="QRadioButton" name="downDiatonic">
+           <property name="accessibleName">
+            <string>Down</string>
+           </property>
            <property name="text">
             <string>Down</string>
            </property>
@@ -418,6 +448,9 @@
          </item>
          <item row="2" column="0">
           <widget class="QCheckBox" name="keepDegreeAlterations">
+           <property name="accessibleName">
+            <string>Keep degree alterations</string>
+           </property>
            <property name="text">
             <string>Keep degree alterations</string>
            </property>
