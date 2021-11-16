@@ -198,6 +198,7 @@ public:
         GRADUATION_CAP = 0xF19D,
 
         SCORE = 0xF319,
+        CLEF_TREBLE = 0xF31A,
 
         AUTO_TEXT = 0xF329,
         NOTE_HEAD_EIGHTH = 0xF33A,
