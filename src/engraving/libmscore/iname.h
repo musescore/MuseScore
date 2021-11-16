@@ -65,7 +65,7 @@ public:
 
     Fraction playTick() const override;
     bool isEditable() const override { return false; }
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 };

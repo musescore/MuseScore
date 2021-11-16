@@ -52,7 +52,7 @@ public:
 
     Ms::EngravingItem* clone() const override;
 
-    QVariant getProperty(Ms::Pid) const override { return QVariant(); }
+    mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
 
 private:

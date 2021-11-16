@@ -1466,11 +1466,11 @@ void BarLine::remove(EngravingItem* e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant BarLine::getProperty(Pid id) const
+PropertyValue BarLine::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::BARLINE_TYPE:
-        return QVariant::fromValue(_barLineType);
+        return PropertyValue::fromValue(_barLineType);
     case Pid::BARLINE_SPAN:
         return spanStaff();
     case Pid::BARLINE_SPAN_FROM:

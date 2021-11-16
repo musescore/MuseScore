@@ -35,6 +35,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -398,7 +399,7 @@ void Bend::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Bend::getProperty(Pid id) const
+PropertyValue Bend::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::FONT_FACE:
@@ -414,7 +415,7 @@ QVariant Bend::getProperty(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(parseBendTypeFromCurve());
     case Pid::BEND_CURVE:
-        return pitchValuesToVariant(m_points);
+        return PropertyValue::fromValue(m_points);
     default:
         return EngravingItem::getProperty(id);
     }

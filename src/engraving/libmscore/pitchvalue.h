@@ -53,6 +53,8 @@ struct PitchValue {
     }
 };
 
+using PitchValues = QList<PitchValue>;
+
 inline QVariant pitchValuesToVariant(const QList<PitchValue>& values)
 {
     QVariantList result;

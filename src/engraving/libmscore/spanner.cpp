@@ -36,6 +36,7 @@
 #include "musescoreCore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //-----------------------------------------------------------------------------
@@ -155,7 +156,7 @@ EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SpannerSegment::getProperty(Pid pid) const
+engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 {
     if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->getProperty(pid);
@@ -577,7 +578,7 @@ void Spanner::setScore(Score* s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Spanner::getProperty(Pid propertyId) const
+PropertyValue Spanner::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SPANNER_TICK:

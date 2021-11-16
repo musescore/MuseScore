@@ -36,6 +36,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle timesigStyle {
@@ -456,7 +457,7 @@ void TimeSig::setSSig(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TimeSig::getProperty(Pid propertyId) const
+PropertyValue TimeSig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
@@ -466,13 +467,13 @@ QVariant TimeSig::getProperty(Pid propertyId) const
     case Pid::DENOMINATOR_STRING:
         return denominatorString();
     case Pid::GROUPS:
-        return QVariant::fromValue(groups());
+        return PropertyValue::fromValue(groups());
     case Pid::TIMESIG:
-        return QVariant::fromValue(_sig);
+        return PropertyValue::fromValue(_sig);
     case Pid::TIMESIG_GLOBAL:
-        return QVariant::fromValue(globalSig());
+        return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
-        return QVariant::fromValue(stretch());
+        return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
         return int(_timeSigType);
     case Pid::SCALE:
@@ -550,7 +551,7 @@ QVariant TimeSig::propertyDefault(Pid id) const
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return score()->styleV(Sid::timesigScale);
+        return score()->styleV(Sid::timesigScale).toQVariant();
     default:
         return EngravingItem::propertyDefault(id);
     }

@@ -309,11 +309,11 @@ QVector<mu::LineF> Articulation::dragAnchorLines() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Articulation::getProperty(Pid propertyId) const
+PropertyValue Articulation::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SYMBOL:              return QVariant::fromValue(_symId);
-    case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
+    case Pid::SYMBOL:              return PropertyValue::fromValue(_symId);
+    case Pid::DIRECTION:           return PropertyValue::fromValue<Direction>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
     case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
     case Pid::PLAY:                return bool(playArticulation());

@@ -34,9 +34,7 @@
 #include "score.h"
 
 using namespace mu;
-
-// trying to do without it
-//#include <QQmlEngine>
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -683,7 +681,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 //   PROPERTY METHODS
 //---------------------------------------------------------
 
-QVariant FiguredBassItem::getProperty(Pid propertyId) const
+PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::FBPREFIX:
@@ -1452,7 +1450,7 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 //   PROPERTY METHODS
 //---------------------------------------------------------
 
-QVariant FiguredBass::getProperty(Pid propertyId) const
+PropertyValue FiguredBass::getProperty(Pid propertyId) const
 {
     return TextBase::getProperty(propertyId);
 }

@@ -2969,7 +2969,7 @@ mu::draw::FontMetrics TextBase::fontMetrics() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextBase::getProperty(Pid propertyId) const
+PropertyValue TextBase::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SUB_STYLE:
@@ -2991,11 +2991,11 @@ QVariant TextBase::getProperty(Pid propertyId) const
     case Pid::FRAME_ROUND:
         return frameRound();
     case Pid::FRAME_FG_COLOR:
-        return QVariant::fromValue(frameColor());
+        return PropertyValue::fromValue(frameColor());
     case Pid::FRAME_BG_COLOR:
-        return QVariant::fromValue(bgColor());
+        return PropertyValue::fromValue(bgColor());
     case Pid::ALIGN:
-        return QVariant::fromValue(align());
+        return PropertyValue::fromValue(align());
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:

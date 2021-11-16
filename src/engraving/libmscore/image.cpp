@@ -35,6 +35,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -586,13 +587,13 @@ void Image::layout()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Image::getProperty(Pid propertyId) const
+PropertyValue Image::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::AUTOSCALE:
         return autoScale();
     case Pid::SIZE:
-        return QVariant::fromValue(size());
+        return PropertyValue::fromValue(size());
     case Pid::IMAGE_HEIGHT:
         return imageHeight();
     case Pid::IMAGE_WIDTH:

@@ -56,6 +56,7 @@ enum class SmuflAnchorId;
 class StaffType;
 class XmlReader;
 class XmlWriter;
+class MuseScoreView;
 
 //---------------------------------------------------------
 //   Grip
@@ -528,14 +529,14 @@ public:
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
 
-    virtual QVariant getProperty(Pid) const override;
-    virtual bool setProperty(Pid, const QVariant&) override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const QVariant&) override;
+    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
-    virtual QVariant propertyDefault(Pid) const override;
-    virtual Pid propertyId(const QStringRef& xmlName) const override;
-    virtual QString propertyUserValue(Pid) const override;
-    virtual EngravingItem* propertyDelegate(Pid) { return 0; }    // return Spanner for SpannerSegment for some properties
+    QVariant propertyDefault(Pid) const override;
+    Pid propertyId(const QStringRef& xmlName) const override;
+    QString propertyUserValue(Pid) const override;
+    virtual EngravingItem* propertyDelegate(Pid) { return 0; }     // return Spanner for SpannerSegment for some properties
 
     bool custom(Pid) const;
     virtual bool isUserModified() const;
@@ -610,14 +611,14 @@ enum class EditDataType : signed char {
 
 struct PropertyData {
     Pid id;
-    QVariant data;
+    mu::engraving::PropertyValue data;
     PropertyFlags f;
 };
 
 class ElementEditData
 {
 public:
-    EngravingItem* e;
+    EngravingItem* e = nullptr;
     QList<PropertyData> propertyData;
     mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 

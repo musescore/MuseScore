@@ -21,6 +21,8 @@
  */
 #include "propertyvalue.h"
 
+#include "libmscore/groups.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -69,6 +71,11 @@ PropertyValue::PropertyValue(const SizeF& v)
 {
 }
 
+PropertyValue::PropertyValue(const PainterPath& v)
+    : m_type(Ms::P_TYPE::PATH), m_val(v)
+{
+}
+
 PropertyValue::PropertyValue(const draw::Color& v)
     : m_type(Ms::P_TYPE::COLOR), m_val(v)
 {
@@ -81,6 +88,53 @@ PropertyValue::PropertyValue(Ms::Align v)
 
 PropertyValue::PropertyValue(Ms::Direction v)
     : m_type(Ms::P_TYPE::DIRECTION), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(Ms::SymId v)
+    : m_type(Ms::P_TYPE::SYMID), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(Ms::BarLineType v)
+    : m_type(Ms::P_TYPE::BARLINE_TYPE), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(Ms::HookType v)
+    : m_type(Ms::P_TYPE::HOOK_TYPE), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(Ms::HPlacement v)
+    : m_type(Ms::P_TYPE::HPLACEMENT), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(const Ms::PitchValues& v)
+    : m_type(Ms::P_TYPE::PITCH_VALUES), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(const Ms::Groups& v)
+    : m_type(Ms::P_TYPE::GROUPS)
+{
+    NOT_IMPLEMENTED;
+}
+
+PropertyValue::PropertyValue(const Ms::TDuration& v)
+    : m_type(Ms::P_TYPE::TDURATION)
+{
+    NOT_IMPLEMENTED;
+}
+
+PropertyValue::PropertyValue(const Ms::Fraction& v)
+    : m_type(Ms::P_TYPE::FRACTION), m_val(v)
+{
+}
+
+PropertyValue::PropertyValue(const QList<int>& v)
+    : m_type(Ms::P_TYPE::INT_LIST), m_val(v)
 {
 }
 
@@ -171,7 +225,20 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v)
     if (strcmp(type, "bool") == 0) {
         return PropertyValue(v.value<bool>());
     }
+    if (strcmp(type, "Ms::Fraction") == 0) {
+        return PropertyValue(v.value<Ms::Fraction>());
+    }
     LOGE() << "unhandle type: " << type;
     UNREACHABLE;
     return PropertyValue();
+}
+
+PropertyValue::GroupsHolder::GroupsHolder(const Ms::Groups& v)
+    : m_val(v)
+{
+}
+
+const Ms::Groups& PropertyValue::GroupsHolder::val() const
+{
+    return std::any_cast<const Ms::Groups&>(m_val);
 }

@@ -42,6 +42,7 @@
 #include "changeMap.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -742,7 +743,7 @@ void Hairpin::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Hairpin::getProperty(Pid id) const
+PropertyValue Hairpin::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::HAIRPIN_CIRCLEDTIP:

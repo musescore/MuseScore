@@ -78,7 +78,7 @@ public:
     bool sizeIsSpatium() const { return _sizeIsSpatium; }
     void setSizeIsSpatium(bool val) { _sizeIsSpatium = val; }
 
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 

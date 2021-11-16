@@ -951,7 +951,7 @@ void Segment::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Segment::getProperty(Pid propertyId) const
+PropertyValue Segment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TICK:

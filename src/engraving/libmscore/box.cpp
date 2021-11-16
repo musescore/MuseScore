@@ -371,7 +371,7 @@ RectF Box::contentRect() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Box::getProperty(Pid propertyId) const
+PropertyValue Box::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BOX_HEIGHT:
@@ -726,7 +726,7 @@ bool HBox::readProperties(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant HBox::getProperty(Pid propertyId) const
+PropertyValue HBox::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::CREATE_SYSTEM_HEADER:
@@ -794,7 +794,7 @@ qreal VBox::maxHeight() const
     return point(Spatium(30));
 }
 
-QVariant VBox::getProperty(Pid propertyId) const
+PropertyValue VBox::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BOX_AUTOSIZE:

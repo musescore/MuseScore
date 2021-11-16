@@ -1537,7 +1537,7 @@ bool Staff::isTop() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Staff::getProperty(Pid id) const
+PropertyValue Staff::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SMALL:
@@ -1547,7 +1547,7 @@ QVariant Staff::getProperty(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return staffType(Fraction(0, 1))->invisible();
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(staffType(Fraction(0, 1))->color());
+        return PropertyValue::fromValue(staffType(Fraction(0, 1))->color());
     case Pid::PLAYBACK_VOICE1:
         return playbackVoice(0);
     case Pid::PLAYBACK_VOICE2:
@@ -1568,7 +1568,7 @@ QVariant Staff::getProperty(Pid id) const
         return false;
     default:
         qDebug("unhandled id <%s>", propertyName(id));
-        return QVariant();
+        return PropertyValue();
     }
 }
 

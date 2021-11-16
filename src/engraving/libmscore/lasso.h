@@ -50,7 +50,7 @@ public:
     void editDrag(EditData&) override;
     void endDrag(EditData&) override {}
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
 
     int gripsCount() const override { return 8; }

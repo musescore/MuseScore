@@ -29,6 +29,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -118,7 +119,7 @@ Fraction InstrumentName::playTick() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant InstrumentName::getProperty(Pid id) const
+PropertyValue InstrumentName::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:

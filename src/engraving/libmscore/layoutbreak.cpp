@@ -27,6 +27,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -264,7 +265,7 @@ EngravingItem* LayoutBreak::drop(EditData& data)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant LayoutBreak::getProperty(Pid propertyId) const
+PropertyValue LayoutBreak::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:

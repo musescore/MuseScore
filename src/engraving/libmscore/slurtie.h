@@ -108,22 +108,22 @@ public:
     virtual void spatiumChanged(qreal, qreal) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
-    virtual void startEditDrag(EditData& ed) override;
-    virtual void endEditDrag(EditData& ed) override;
-    virtual void editDrag(EditData&) override;
+    void startEditDrag(EditData& ed) override;
+    void endEditDrag(EditData& ed) override;
+    void editDrag(EditData&) override;
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
-    virtual void reset() override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
+    void reset() override;
+    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
     void move(const mu::PointF& s) override;
-    virtual bool isEditable() const override { return true; }
+    bool isEditable() const override { return true; }
 
     void setSlurOffset(Grip i, const mu::PointF& val) { _ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return _ups[int(i)]; }
     UP& ups(Grip i) { return _ups[int(i)]; }
-    virtual Shape shape() const override { return _shape; }
+    Shape shape() const override { return _shape; }
 
     EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return int(Grip::GRIPS); }
@@ -169,7 +169,7 @@ public:
     virtual void layout2(const mu::PointF, int, struct UP&) {}
     virtual bool contains(const mu::PointF&) const { return false; }    // not selectable
 
-    virtual void read(XmlReader&) override;
+    void read(XmlReader&) override;
 
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
@@ -181,9 +181,9 @@ public:
     virtual void slurPos(SlurPos*) = 0;
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
 };
 }
 

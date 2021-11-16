@@ -294,7 +294,7 @@ public:
     void setPlaybackCount(int val) { m_playbackCount = val; }
     mu::RectF staffabbox(int staffIdx) const;
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 

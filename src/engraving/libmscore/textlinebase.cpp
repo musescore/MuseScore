@@ -606,17 +606,17 @@ Pid TextLineBase::propertyId(const QStringRef& name) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextLineBase::getProperty(Pid id) const
+PropertyValue TextLineBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::BEGIN_TEXT:
         return beginText();
     case Pid::BEGIN_TEXT_ALIGN:
-        return QVariant::fromValue(beginTextAlign());
+        return PropertyValue::fromValue(beginTextAlign());
     case Pid::CONTINUE_TEXT_ALIGN:
-        return QVariant::fromValue(continueTextAlign());
+        return PropertyValue::fromValue(continueTextAlign());
     case Pid::END_TEXT_ALIGN:
-        return QVariant::fromValue(endTextAlign());
+        return PropertyValue::fromValue(endTextAlign());
     case Pid::BEGIN_TEXT_PLACE:
         return int(_beginTextPlace);
     case Pid::BEGIN_HOOK_TYPE:

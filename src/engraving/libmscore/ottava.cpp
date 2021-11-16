@@ -35,6 +35,7 @@
 #include "musescoreCore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -352,7 +353,7 @@ bool Ottava::readProperties(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Ottava::getProperty(Pid propertyId) const
+PropertyValue Ottava::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::OTTAVA_TYPE:

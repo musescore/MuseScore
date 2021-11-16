@@ -45,7 +45,7 @@ public:
     int scanChildCount() const override;
 
     Ms::EngravingItem* clone() const override { return nullptr; }
-    QVariant getProperty(Ms::Pid) const override { return QVariant(); }
+    mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
 
 private:

@@ -26,6 +26,7 @@
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -55,7 +56,7 @@ MMRestRange::MMRestRange(const MMRestRange& other)
     initElementStyle(&mmRestRangeStyle);
 }
 
-QVariant MMRestRange::getProperty(Pid id) const
+PropertyValue MMRestRange::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:

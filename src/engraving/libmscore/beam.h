@@ -43,8 +43,6 @@ enum class SpannerSegmentType;
 
 struct BeamFragment;
 
-typedef QPair<qreal, qreal> BeamPos;
-
 //---------------------------------------------------------
 //   @@ Beam
 //---------------------------------------------------------
@@ -170,12 +168,12 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    Ms::BeamPos beamPos() const;
-    void setBeamPos(const Ms::BeamPos& bp);
+    mu::PointF beamPos() const;
+    void setBeamPos(const mu::PointF& bp);
 
     qreal beamDist() const { return _beamDist; }
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 

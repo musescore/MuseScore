@@ -536,7 +536,7 @@ public:
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
     QString propertyUserValue(Pid) const override;

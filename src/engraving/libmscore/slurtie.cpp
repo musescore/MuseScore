@@ -36,6 +36,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -231,7 +232,7 @@ void SlurTieSegment::editDrag(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::getProperty(Pid propertyId) const
+engraving::PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
@@ -520,13 +521,13 @@ void SlurTie::undoSetSlurDirection(Direction d)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTie::getProperty(Pid propertyId) const
+PropertyValue SlurTie::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
         return lineType();
     case Pid::SLUR_DIRECTION:
-        return QVariant::fromValue<Direction>(slurDirection());
+        return PropertyValue::fromValue<Direction>(slurDirection());
     default:
         return Spanner::getProperty(propertyId);
     }

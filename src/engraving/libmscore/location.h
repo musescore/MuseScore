@@ -23,9 +23,10 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
-#include "fraction.h"
-
 #include <climits>
+
+#include "fraction.h"
+#include "property/propertyvalue.h"
 
 namespace Ms {
 class EngravingItem;
@@ -94,7 +95,7 @@ public:
     void fillPositionForElement(const EngravingItem* e, bool absfrac = true);
     static Location forElement(const EngravingItem* e, bool absfrac = true);
     static Location positionForElement(const EngravingItem* e, bool absfrac = true);
-    static QVariant getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end);
+    static mu::engraving::PropertyValue getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end);
 
     bool operator==(const Location& other) const;
     bool operator!=(const Location& other) const { return !(*this == other); }

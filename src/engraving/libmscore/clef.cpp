@@ -521,7 +521,7 @@ Clef* Clef::otherClef()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Clef::getProperty(Pid propertyId) const
+PropertyValue Clef::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::CLEF_TYPE_CONCERT:     return int(_clefTypes._concertClef);

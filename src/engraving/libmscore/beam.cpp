@@ -258,7 +258,7 @@ void Beam::draw(mu::draw::Painter* painter) const
 
 bool Beam::isNoSlope() const
 {
-    return _userModified[0] && qFuzzyCompare(beamPos().first, beamPos().second);
+    return _userModified[0] && qFuzzyCompare(beamPos().x(), beamPos().y());
 }
 
 //---------------------------------------------------------
@@ -267,17 +267,17 @@ bool Beam::isNoSlope() const
 
 void Beam::alignBeamPosition()
 {
-    BeamPos currentBeamPos = beamPos();
+    PointF currentBeamPos = beamPos();
 
-    qreal currentY1 = currentBeamPos.first;
-    qreal currentY2 = currentBeamPos.second;
+    qreal currentY1 = currentBeamPos.x();
+    qreal currentY2 = currentBeamPos.y();
 
     qreal maxValue = qMax(qAbs(currentY1), qAbs(currentY2));
 
     if (qFuzzyCompare(qAbs(currentY1), maxValue)) {
-        setBeamPos(qMakePair(currentY1, currentY1));
+        setBeamPos(PointF(currentY1, currentY1));
     } else {
-        setBeamPos(qMakePair(currentY2, currentY2));
+        setBeamPos(PointF(currentY2, currentY2));
     }
 }
 
@@ -2423,22 +2423,22 @@ EngravingItem* Beam::drop(EditData& data)
 //   beamPos
 //---------------------------------------------------------
 
-BeamPos Beam::beamPos() const
+PointF Beam::beamPos() const
 {
     if (fragments.empty()) {
-        return BeamPos(0.0, 0.0);
+        return PointF(0.0, 0.0);
     }
     BeamFragment* f = fragments.back();
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     qreal _spatium = spatium();
-    return BeamPos(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
+    return PointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
 
 //---------------------------------------------------------
 //   setBeamPos
 //---------------------------------------------------------
 
-void Beam::setBeamPos(const BeamPos& bp)
+void Beam::setBeamPos(const PointF& bp)
 {
     if (fragments.empty()) {
         fragments.append(new BeamFragment);
@@ -2448,8 +2448,8 @@ void Beam::setBeamPos(const BeamPos& bp)
     _userModified[idx] = true;
     setGenerated(false);
     qreal _spatium = spatium();
-    f->py1[idx] = bp.first * _spatium;
-    f->py2[idx] = bp.second * _spatium;
+    f->py1[idx] = bp.x() * _spatium;
+    f->py2[idx] = bp.y() * _spatium;
 }
 
 //---------------------------------------------------------
@@ -2476,15 +2476,15 @@ void Beam::setUserModified(bool val)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Beam::getProperty(Pid propertyId) const
+PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(beamDirection());
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(beamDirection());
     case Pid::DISTRIBUTE:     return distribute();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
     case Pid::USER_MODIFIED:  return userModified();
-    case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
+    case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return isNoSlope();
     default:
         return EngravingItem::getProperty(propertyId);
@@ -2515,7 +2515,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::BEAM_POS:
         if (userModified()) {
-            setBeamPos(v.value<BeamPos>());
+            setBeamPos(v.value<PointF>());
         }
         break;
     case Pid::BEAM_NO_SLOPE:

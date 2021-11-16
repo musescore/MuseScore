@@ -76,6 +76,9 @@ public:
 
     PainterPath() = default;
 
+    bool operator ==(const PainterPath& other) const { return other.m_elements == m_elements; }
+    bool operator !=(const PainterPath& other) const { return !operator ==(other); }
+
     void moveTo(const PointF& p);
     inline void moveTo(double x, double y) { moveTo(PointF(x, y)); }
     void lineTo(const PointF& p);

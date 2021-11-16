@@ -591,7 +591,7 @@ void Accidental::undoSetSmall(bool val)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Accidental::getProperty(Pid propertyId) const
+engraving::PropertyValue Accidental::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
