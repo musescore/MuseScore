@@ -49,7 +49,7 @@ XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
 ECHO "Finished copy dependencies"
 
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
-SET "QT_DIR=C:\Qt\5.15.1"
+SET "QT_DIR=C:\Qt\5.15.2"
 SET "PATH=%QT_DIR%\msvc2019_64\bin;%JACK_DIR%;%PATH%"
 
 :: At the moment not compiling yet.
