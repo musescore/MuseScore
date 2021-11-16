@@ -67,13 +67,10 @@ signals:
     void orientationChanged(Qt::Orientation orientation);
     void alignmentChanged(int alignment);
 
-protected:
+private:
     void componentComplete() override;
 
     DockType type() const override;
-
-private:
-    bool isOrientationChangingAllowed() const;
 
     class DraggableArea;
     DraggableArea* m_draggableArea = nullptr;
