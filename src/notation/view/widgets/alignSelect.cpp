@@ -24,7 +24,7 @@
 
 #include <QButtonGroup>
 
-#include "ui/view/iconcodes.h"
+#include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -45,13 +45,13 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-    alignLeft->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_LEFT));
-    alignRight->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_RIGHT));
-    alignHCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_CENTER));
-    alignVCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_MIDDLE));
-    alignTop->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_ABOVE));
-    alignBaseline->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_BASELINE));
-    alignBottom->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_UNDER));
+    WidgetUtils::setWidgetIcon(alignLeft, IconCode::Code::TEXT_ALIGN_LEFT);
+    WidgetUtils::setWidgetIcon(alignRight, IconCode::Code::TEXT_ALIGN_RIGHT);
+    WidgetUtils::setWidgetIcon(alignHCenter, IconCode::Code::TEXT_ALIGN_CENTER);
+    WidgetUtils::setWidgetIcon(alignVCenter, IconCode::Code::TEXT_ALIGN_MIDDLE);
+    WidgetUtils::setWidgetIcon(alignTop, IconCode::Code::TEXT_ALIGN_ABOVE);
+    WidgetUtils::setWidgetIcon(alignBaseline, IconCode::Code::TEXT_ALIGN_BASELINE);
+    WidgetUtils::setWidgetIcon(alignBottom, IconCode::Code::TEXT_ALIGN_UNDER);
 
     connect(g1, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
             this, &AlignSelect::_alignChanged);

@@ -21,22 +21,24 @@
  */
 
 #include "measureproperties.h"
-#include "libmscore/measure.h"
-#include "libmscore/sig.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/undo.h"
-#include "libmscore/range.h"
+
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/measure.h"
+#include "engraving/libmscore/measurerepeat.h"
+#include "engraving/libmscore/range.h"
+#include "engraving/libmscore/sig.h"
+#include "engraving/libmscore/undo.h"
 
 #include "notation/inotationelements.h"
-#include "global/widgetstatestore.h"
-#include "ui/view/iconcodes.h"
-#include "ui/view/widgetnavigationfix.h"
 
-static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
+#include "ui/view/widgetnavigationfix.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
+
+static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     : QDialog(parent)
@@ -61,6 +63,9 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
         horizontalLayout_2->removeWidget(nextButton);
         horizontalLayout_2->insertWidget(0, nextButton);
     }
+
+    WidgetUtils::setWidgetIcon(previousButton, IconCode::Code::ARROW_LEFT);
+    WidgetUtils::setWidgetIcon(nextButton, IconCode::Code::ARROW_RIGHT);
 
     WidgetStateStore::restoreGeometry(this);
 

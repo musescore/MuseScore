@@ -30,11 +30,12 @@
 #include "internal/palettecreator.h"
 
 #include "smuflranges.h"
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 #include "translation.h"
 
 using namespace mu::palette;
+using namespace mu::ui;
 using namespace Ms;
 
 //---------------------------------------------------------

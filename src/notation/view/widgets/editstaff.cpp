@@ -39,8 +39,8 @@
 
 #include "translation.h"
 
-#include "ui/view/iconcodes.h"
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
 
 #include "log.h"
 
@@ -88,12 +88,12 @@ EditStaff::EditStaff(QWidget* parent)
     connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this, &EditStaff::lineDistanceChanged);
 
-    nextButton->setText(GO_DOWN_ICON);
-    previousButton->setText(GO_UP_ICON);
-    minPitchASelect->setText(EDIT_ICON);
-    maxPitchASelect->setText(EDIT_ICON);
-    minPitchPSelect->setText(EDIT_ICON);
-    maxPitchPSelect->setText(EDIT_ICON);
+    WidgetUtils::setWidgetIcon(nextButton, IconCode::Code::ARROW_DOWN);
+    WidgetUtils::setWidgetIcon(previousButton, IconCode::Code::ARROW_UP);
+    WidgetUtils::setWidgetIcon(minPitchASelect, IconCode::Code::EDIT);
+    WidgetUtils::setWidgetIcon(maxPitchASelect, IconCode::Code::EDIT);
+    WidgetUtils::setWidgetIcon(minPitchPSelect, IconCode::Code::EDIT);
+    WidgetUtils::setWidgetIcon(maxPitchPSelect, IconCode::Code::EDIT);
 
     WidgetStateStore::restoreGeometry(this);
 }

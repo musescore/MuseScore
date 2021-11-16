@@ -12719,7 +12719,7 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QPushButton" name="buttonTogglePagelist">
        <property name="maximumSize">
         <size>
-         <width>20</width>
+         <width>30</width>
          <height>16777215</height>
         </size>
        </property>

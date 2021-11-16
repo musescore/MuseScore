@@ -23,6 +23,7 @@
 #define MU_NOTATION_EDITSTYLE_H
 
 #include "ui_editstyle.h"
+
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "inotationconfiguration.h"

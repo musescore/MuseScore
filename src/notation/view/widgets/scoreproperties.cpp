@@ -24,8 +24,9 @@
 
 #include <QScrollBar>
 
-#include "framework/global/widgetstatestore.h"
-#include "ui/view/iconcodes.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 #include "translation.h"
 
 using namespace mu::notation;
@@ -83,7 +84,7 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
         revealButton->setEnabled(false);
     }
 
-    revealButton->setText(iconCodeToChar(IconCode::Code::OPEN_FILE));
+    WidgetUtils::setWidgetIcon(revealButton, IconCode::Code::OPEN_FILE);
     connect(revealButton, &QPushButton::clicked, this, &ScorePropertiesDialog::openFileLocation);
 
     WidgetStateStore::restoreGeometry(this);
@@ -121,7 +122,7 @@ ScorePropertiesDialog::TagItem ScorePropertiesDialog::addTag(const QString& key,
         tagLineEdit->setPlaceholderText(qtrc("notation", "Name"));
 
         deleteButton = new QToolButton();
-        deleteButton->setText(iconCodeToChar(IconCode::Code::DELETE_TANK));
+        WidgetUtils::setWidgetIcon(deleteButton, IconCode::Code::DELETE_TANK);
         deleteButton->setAccessibleName(qtrc("notation", "Remove"));
 
         tagWidget = tagLineEdit;
