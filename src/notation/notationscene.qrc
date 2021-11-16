@@ -19,8 +19,6 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml</file>
         <file>view/resources/data/std_sample.mscx</file>
         <file>view/resources/data/tab_sample.mscx</file>
-        <file>view/resources/icons/go-next.svg</file>
-        <file>view/resources/icons/go-previous.svg</file>
         <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>

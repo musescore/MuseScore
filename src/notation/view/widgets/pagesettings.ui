@@ -287,6 +287,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Left</string>
+          </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
           </property>
@@ -300,6 +303,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Right</string>
+          </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
           </property>
@@ -312,6 +318,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Bottom</string>
           </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
@@ -342,6 +351,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Top</string>
+          </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
           </property>
@@ -364,6 +376,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Right</string>
+          </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
           </property>
@@ -377,6 +392,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="accessibleName">
+           <string>Bottom</string>
+          </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
           </property>
@@ -389,6 +407,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Left</string>
           </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
@@ -418,6 +439,9 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="accessibleName">
+           <string>Top</string>
           </property>
           <property name="maximum">
            <double>2000.000000000000000</double>
@@ -474,6 +498,7 @@
   <tabstop>evenPageRightMargin</tabstop>
   <tabstop>evenPageBottomMargin</tabstop>
   <tabstop>pageOffsetEntry</tabstop>
+  <tabstop>resetPageStyleButton</tabstop>
   <tabstop>buttonApplyToAllParts</tabstop>
  </tabstops>
  <resources/>
