@@ -30,16 +30,20 @@
 #include "alignSelect.h"
 #include "colorlabel.h"
 #include "fontStyleSelect.h"
-#include "framework/global/widgetstatestore.h"
-#include "libmscore/figuredbass.h"
-#include "libmscore/scorefont.h"
-#include "libmscore/symnames.h"
-#include "libmscore/realizedharmony.h"
 #include "offsetSelect.h"
+
+#include "engraving/libmscore/figuredbass.h"
+#include "engraving/libmscore/scorefont.h"
+#include "engraving/libmscore/symnames.h"
+#include "engraving/libmscore/realizedharmony.h"
+
 #include "settings.h"
-#include "translation.h"
-#include "ui/view/iconcodes.h"
+
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -63,17 +67,6 @@ static void fillDirectionComboBox(QComboBox* comboBox)
     comboBox->addItem(Ms::toUserString(Ms::Direction::DOWN), QVariant::fromValue<Ms::Direction>(Ms::Direction::DOWN));
 }
 
-template<class T>
-void EditStyle::setWidgetIcon(T* widget, IconCode::Code code)
-{
-    QChar icon = iconCodeToChar(code);
-    QString styleSheet = QString("font-family: %1; font-size: %2")
-                         .arg(QString::fromStdString(uiConfiguration()->iconsFontFamily()))
-                         .arg(uiConfiguration()->iconsFontSize(IconSizeType::Regular));
-    widget->setStyleSheet(styleSheet);
-    widget->setText(icon);
-}
-
 //---------------------------------------------------------
 //   EditStyle
 //---------------------------------------------------------
@@ -87,7 +80,7 @@ EditStyle::EditStyle(QWidget* parent)
     setModal(true);
 
     buttonApplyToAllParts = buttonBox->addButton(tr("Apply to all Parts"), QDialogButtonBox::ApplyRole);
-    setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
+    WidgetUtils::setWidgetIcon(buttonTogglePagelist, IconCode::Code::ARROW_RIGHT);
 
     // ====================================================
     // Button Groups
@@ -612,7 +605,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(chordsXmlFile,         &QCheckBox::toggled,         this, &EditStyle::setChordStyle);
     connect(chordDescriptionFile,  &QLineEdit::editingFinished, [=]() { setChordStyle(true); });
 
-    setWidgetIcon(chordDescriptionFileButton, IconCode::Code::OPEN_FILE);
+    WidgetUtils::setWidgetIcon(chordDescriptionFileButton, IconCode::Code::OPEN_FILE);
 
     connect(swingOff,       &QRadioButton::toggled, this, &EditStyle::setSwingParams);
     connect(swingEighth,    &QRadioButton::toggled, this, &EditStyle::setSwingParams);
@@ -644,7 +637,7 @@ EditStyle::EditStyle(QWidget* parent)
         }
 
         if (sw.reset) {
-            setWidgetIcon(sw.reset, IconCode::Code::UNDO);
+            WidgetUtils::setWidgetIcon(sw.reset, IconCode::Code::UNDO);
             connect(sw.reset, &QToolButton::clicked, resetSignalMapper, mapFunction);
             resetSignalMapper->setMapping(sw.reset, static_cast<int>(sw.idx));
         }
@@ -695,13 +688,13 @@ EditStyle::EditStyle(QWidget* parent)
     textStyleFrameType->addItem(tr("Rectangle"), int(Ms::FrameType::SQUARE));
     textStyleFrameType->addItem(tr("Circle"), int(Ms::FrameType::CIRCLE));
 
-    setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleName, IconCode::Code::UNDO);
     connect(resetTextStyleName, &QToolButton::clicked, this, &EditStyle::resetUserStyleName);
     connect(styleName, &QLineEdit::textEdited, this, &EditStyle::editUserStyleName);
     connect(styleName, &QLineEdit::editingFinished, this, &EditStyle::endEditUserStyleName);
 
     // font face
-    setWidgetIcon(resetTextStyleFontFace, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFontFace, IconCode::Code::UNDO);
     connect(resetTextStyleFontFace, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FONT_FACE);
     });
@@ -710,7 +703,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // font size
-    setWidgetIcon(resetTextStyleFontSize, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFontSize, IconCode::Code::UNDO);
     connect(resetTextStyleFontSize, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FONT_SIZE);
     });
@@ -719,7 +712,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // line spacing
-    setWidgetIcon(resetTextStyleLineSpacing, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleLineSpacing, IconCode::Code::UNDO);
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::TEXT_LINE_SPACING);
     });
@@ -728,7 +721,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // font style
-    setWidgetIcon(resetTextStyleFontStyle, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFontStyle, IconCode::Code::UNDO);
     connect(resetTextStyleFontStyle, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FONT_STYLE);
     });
@@ -737,7 +730,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // align
-    setWidgetIcon(resetTextStyleAlign, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleAlign, IconCode::Code::UNDO);
     connect(resetTextStyleAlign, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::ALIGN);
     });
@@ -746,7 +739,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // offset
-    setWidgetIcon(resetTextStyleOffset, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleOffset, IconCode::Code::UNDO);
     connect(resetTextStyleOffset, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::OFFSET);
     });
@@ -755,7 +748,7 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     // spatium dependent
-    setWidgetIcon(resetTextStyleSpatiumDependent, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleSpatiumDependent, IconCode::Code::UNDO);
     connect(resetTextStyleSpatiumDependent, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
     });
@@ -763,7 +756,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::SIZE_SPATIUM_DEPENDENT, textStyleSpatiumDependent->isChecked());
     });
 
-    setWidgetIcon(resetTextStyleFrameType, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFrameType, IconCode::Code::UNDO);
     connect(resetTextStyleFrameType, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_TYPE);
     });
@@ -771,7 +764,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_TYPE, textStyleFrameType->currentIndex());
     });
 
-    setWidgetIcon(resetTextStyleFramePadding, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFramePadding, IconCode::Code::UNDO);
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_PADDING);
     });
@@ -779,7 +772,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_PADDING, textStyleFramePadding->value());
     });
 
-    setWidgetIcon(resetTextStyleFrameBorder, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFrameBorder, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_WIDTH);
     });
@@ -787,7 +780,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_WIDTH, textStyleFrameBorder->value());
     });
 
-    setWidgetIcon(resetTextStyleFrameBorderRadius, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFrameBorderRadius, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_ROUND);
     });
@@ -795,7 +788,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_ROUND, textStyleFrameBorderRadius->value());
     });
 
-    setWidgetIcon(resetTextStyleFrameForeground, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFrameForeground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameForeground, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_FG_COLOR);
     });
@@ -803,7 +796,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_FG_COLOR, textStyleFrameForeground->color());
     });
 
-    setWidgetIcon(resetTextStyleFrameBackground, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleFrameBackground, IconCode::Code::UNDO);
     connect(resetTextStyleFrameBackground, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::FRAME_BG_COLOR);
     });
@@ -811,7 +804,7 @@ EditStyle::EditStyle(QWidget* parent)
         textStyleValueChanged(Ms::Pid::FRAME_BG_COLOR, textStyleFrameBackground->color());
     });
 
-    setWidgetIcon(resetTextStyleColor, IconCode::Code::UNDO);
+    WidgetUtils::setWidgetIcon(resetTextStyleColor, IconCode::Code::UNDO);
     connect(resetTextStyleColor, &QToolButton::clicked, [=]() {
         resetTextStyle(Ms::Pid::COLOR);
     });
@@ -1339,7 +1332,7 @@ void EditStyle::on_buttonTogglePagelist_clicked()
     bool isVis = !pageList->isVisible();   // toggle it
 
     pageList->setVisible(isVis);
-    setWidgetIcon(buttonTogglePagelist, isVis ? IconCode::Code::ARROW_RIGHT : IconCode::Code::ARROW_LEFT);
+    WidgetUtils::setWidgetIcon(buttonTogglePagelist, isVis ? IconCode::Code::ARROW_RIGHT : IconCode::Code::ARROW_LEFT);
 }
 
 //---------------------------------------------------------

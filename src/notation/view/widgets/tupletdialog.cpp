@@ -21,11 +21,12 @@
  */
 #include "tupletdialog.h"
 
-#include "libmscore/tuplet.h"
+#include "engraving/libmscore/tuplet.h"
 
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   TupletDialog

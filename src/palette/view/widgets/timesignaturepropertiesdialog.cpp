@@ -33,7 +33,7 @@
 
 #include "commonscene/exampleview.h"
 #include "ui/view/musicalsymbolcodes.h"
-#include "global/widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDialog");
 

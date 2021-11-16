@@ -22,7 +22,7 @@
 
 #include "fontStyleSelect.h"
 
-#include "ui/view/iconcodes.h"
+#include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -32,10 +32,10 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-    bold->setText(iconCodeToChar(IconCode::Code::TEXT_BOLD));
-    italic->setText(iconCodeToChar(IconCode::Code::TEXT_ITALIC));
-    underline->setText(iconCodeToChar(IconCode::Code::TEXT_UNDERLINE));
-    strike->setText(iconCodeToChar(IconCode::Code::TEXT_STRIKE));
+    WidgetUtils::setWidgetIcon(bold, IconCode::Code::TEXT_BOLD);
+    WidgetUtils::setWidgetIcon(italic, IconCode::Code::TEXT_ITALIC);
+    WidgetUtils::setWidgetIcon(underline, IconCode::Code::TEXT_UNDERLINE);
+    WidgetUtils::setWidgetIcon(strike, IconCode::Code::TEXT_STRIKE);
 
     connect(bold, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
     connect(italic, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);

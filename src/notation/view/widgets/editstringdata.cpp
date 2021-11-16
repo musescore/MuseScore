@@ -22,9 +22,11 @@
 
 #include "editstringdata.h"
 #include "editpitch.h"
-#include "widgetstatestore.h"
+
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   EditStringData

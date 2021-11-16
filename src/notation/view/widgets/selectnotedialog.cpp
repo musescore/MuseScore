@@ -25,18 +25,20 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "libmscore/select.h"
 #include "selectnotedialog.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/system.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/chord.h"
-#include "libmscore/segment.h"
-#include "libmscore/note.h"
 
-#include "widgetstatestore.h"
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/engravingitem.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/note.h"
+#include "engraving/libmscore/segment.h"
+#include "engraving/libmscore/select.h"
+#include "engraving/libmscore/system.h"
+
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   SelectDialog
