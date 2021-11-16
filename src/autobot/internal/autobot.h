@@ -62,7 +62,7 @@ public:
     void setSpeedMode(SpeedMode mode) override;
     async::Channel<SpeedMode> speedModeChanged() const override;
     void setDefaultIntervalMsec(int msec) override;
-    int defaultIntervalMsec() const;
+    int defaultIntervalMsec() const override;
     int intervalMsec() const override;
 
     void execScript(const io::path& path) override;

@@ -133,7 +133,7 @@ enum class SpeedMode {
     Slow
 };
 
-static QString speedModeToString(SpeedMode mode)
+inline QString speedModeToString(SpeedMode mode)
 {
     switch (mode) {
     case SpeedMode::Undefined: return "";
@@ -145,7 +145,7 @@ static QString speedModeToString(SpeedMode mode)
     return QString();
 }
 
-static SpeedMode speedModeFromString(const QString& str)
+inline SpeedMode speedModeFromString(const QString& str)
 {
     if (str == "Default") {
         return SpeedMode::Default;
