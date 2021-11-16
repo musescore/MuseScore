@@ -1352,7 +1352,7 @@ void EditStyle::on_resetStylesButton_clicked()
 void EditStyle::unhandledType(const StyleWidget sw)
 {
     Ms::P_TYPE type = Ms::MStyle::valueType(sw.idx);
-    qFatal("%s <%s>: widget: %s\n", type, Ms::MStyle::valueName(sw.idx), sw.widget->metaObject()->className());
+    qFatal("%d <%s>: widget: %s\n", type, Ms::MStyle::valueName(sw.idx), sw.widget->metaObject()->className());
 }
 
 //---------------------------------------------------------
