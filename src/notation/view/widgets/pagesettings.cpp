@@ -23,15 +23,16 @@
 
 #include <QPageSize>
 
+#include "engraving/libmscore/page.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/mscore.h"
+#include "engraving/libmscore/excerpt.h"
 #include "engraving/style/pagestyle.h"
 
-#include "widgetstatestore.h"
-#include "libmscore/page.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/mscore.h"
-#include "libmscore/excerpt.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 using namespace Ms;
 
 PageSettings::PageSettings(QWidget* parent)

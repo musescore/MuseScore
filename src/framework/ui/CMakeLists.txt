@@ -124,6 +124,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/focuslistener.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetnavigationfix.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetnavigationfix.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

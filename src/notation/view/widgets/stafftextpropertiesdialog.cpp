@@ -21,17 +21,18 @@
  */
 #include "stafftextpropertiesdialog.h"
 
+#include <QSignalMapper>
+
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/stafftext.h"
 #include "engraving/libmscore/system.h"
 #include "engraving/libmscore/staff.h"
 #include "engraving/libmscore/segment.h"
 
-#include "framework/global/widgetstatestore.h"
-
-#include <QSignalMapper>
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 static const QString STAFF_TEXT_PROPERTIES_DIALOG_NAME("StaffTextPropertiesDialog");
 

@@ -22,9 +22,10 @@
 
 #include "transposedialog.h"
 
-#include "framework/global/widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   TransposeDialog

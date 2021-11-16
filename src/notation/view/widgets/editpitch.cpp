@@ -20,9 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "editpitch.h"
-#include "widgetstatestore.h"
+
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   EditPitch
