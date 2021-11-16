@@ -33,6 +33,7 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QVariant>
+
 #include <math.h>
 
 #include "log.h"
@@ -768,9 +769,7 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
 
 void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat) const
 {
-    QColor backgroundColor(accentButton ? accentColor()
-                           : flat ? Qt::transparent
-                           : buttonColor());
+    QColor backgroundColor(accentButton ? accentColor() : buttonColor());
 
     backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
                               : styleState.pressed ? buttonOpacityHit()
