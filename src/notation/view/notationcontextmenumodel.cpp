@@ -130,7 +130,26 @@ MenuItemList NotationContextMenuModel::selectItems() const
 MenuItemList NotationContextMenuModel::elementItems() const
 {
     MenuItemList items = defaultCopyPasteItems();
-    items << makeMenu(qtrc("notation", "Select"), selectItems());
+
+    if (isSingleSelection()) {
+        items << makeMenu(qtrc("notation", "Select"), selectItems());
+    }
 
     return items;
+}
+
+bool NotationContextMenuModel::isSingleSelection() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    auto interaction = notation->interaction();
+    if (!interaction) {
+        return false;
+    }
+
+    auto selection = interaction->selection();
+    return selection ? selection->element() != nullptr : false;
 }

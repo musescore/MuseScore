@@ -22,6 +22,9 @@
 #ifndef MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
 #define MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 #include "ui/view/abstractmenumodel.h"
 #include "notation/notationtypes.h"
 
@@ -29,6 +32,8 @@ namespace mu::notation {
 class NotationContextMenuModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
+
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     Q_INVOKABLE void loadItems(int elementType);
@@ -44,6 +49,8 @@ private:
     ui::MenuItemList timeSignatureItems() const;
     ui::MenuItemList selectItems() const;
     ui::MenuItemList elementItems() const;
+
+    bool isSingleSelection() const;
 };
 }
 
