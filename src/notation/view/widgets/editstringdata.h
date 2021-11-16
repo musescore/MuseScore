@@ -34,13 +34,6 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase
 {
     Q_OBJECT
 
-    int* _frets;
-    bool _modified;
-    QList<Ms::instrString>* _strings;           // pointer to original string list
-    QList<Ms::instrString> _stringsLoc;         // local working copy of string list
-
-    virtual void hideEvent(QHideEvent*);
-
 public:
     EditStringData(QWidget* parent, QList<Ms::instrString>* strings, int* frets);
     ~EditStringData();
@@ -49,11 +42,22 @@ protected:
     QString midiCodeToStr(int midiCode);
 
 private slots:
-    void accept();
+    void accept() override;
     void deleteStringClicked();
     void editStringClicked();
     void listItemClicked(QTableWidgetItem* item);
     void newStringClicked();
+
+private:
+    virtual void hideEvent(QHideEvent*) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
+    QString openColumnAccessibleText(const QTableWidgetItem* item) const;
+
+    int* _frets = nullptr;
+    bool _modified = false;
+    QList<Ms::instrString>* _strings;           // pointer to original string list
+    QList<Ms::instrString> _stringsLoc;         // local working copy of string list
 };
 }
 
