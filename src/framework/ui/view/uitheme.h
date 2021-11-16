@@ -160,7 +160,8 @@ private:
 
     void notifyAboutThemeChanged();
 
-    void drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat) const;
+    void drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
+                              const QColor& defaultBackground) const;
     void drawCheckboxIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool checked, bool indeterminate,
                                bool inMenu) const;
     void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;

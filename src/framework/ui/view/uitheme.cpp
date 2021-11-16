@@ -483,7 +483,10 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
         const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
 
-        drawButtonBackground(painter, option->rect, styleState, accentButton, flat);
+        QColor paletteColor = widget->palette().color(QPalette::Button);
+        const QColor background = paletteColor.isValid() ? paletteColor : buttonColor();
+
+        drawButtonBackground(painter, option->rect, styleState, accentButton, flat, background);
     } break;
 
     // Checkboxes
@@ -767,9 +770,12 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
 // QStyle elements drawing
 // ====================================================
 
-void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat) const
+void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
+                                   const QColor& defaultBackground) const
 {
-    QColor backgroundColor(accentButton ? accentColor() : buttonColor());
+    QColor backgroundColor(accentButton ? accentColor()
+                           : flat ? Qt::transparent
+                           : defaultBackground);
 
     backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
                               : styleState.pressed ? buttonOpacityHit()
