@@ -58,6 +58,9 @@ TransposeDialog::TransposeDialog(QWidget* parent)
     connect(this, &TransposeDialog::accepted, this, &TransposeDialog::apply);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 TransposeDialog::TransposeDialog(const TransposeDialog& dialog)
