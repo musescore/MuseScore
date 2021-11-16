@@ -31,6 +31,11 @@
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 namespace mu::dock {
+static QSize adjustSizeByContraints(const QSize& size, const QSize& min, const QSize& max)
+{
+    return size.expandedTo(min).boundedTo(max);
+}
+
 class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
 {
 public:
@@ -297,6 +302,8 @@ void DockBase::setFloating(bool floating)
 void DockBase::init()
 {
     applySizeConstraints();
+
+    emit floatingChanged();
 }
 
 bool DockBase::isOpen() const
@@ -427,12 +434,18 @@ void DockBase::applySizeConstraints()
     m_dockWidget->setMinimumSize(minimumSize);
     m_dockWidget->setMaximumSize(maximumSize);
 
-    if (auto floatingWindow = m_dockWidget->floatingWindow()) {
-        QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
+    if (auto window = m_dockWidget->floatingWindow()) {
+        window->setMinimumSize(minimumSize);
+        window->setMaximumSize(maximumSize);
 
-        floatingWindow->setGeometry(rect);
-        floatingWindow->setMinimumSize(minimumSize);
-        floatingWindow->setMaximumSize(maximumSize);
+        QSize winSize = adjustSizeByContraints(window->frameGeometry().size(), minimumSize, maximumSize);
+        QRect winRect(window->dragRect().topLeft(), winSize);
+
+        window->setGeometry(winRect);
+
+        if (auto layout = window->layoutWidget()) {
+            layout->setLayoutSize(winSize);
+        }
     }
 }
 
