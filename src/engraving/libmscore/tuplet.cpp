@@ -1110,11 +1110,11 @@ Fraction Tuplet::elementsDuration()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Tuplet::getProperty(Pid propertyId) const
+PropertyValue Tuplet::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return QVariant::fromValue<Direction>(_direction);
+        return PropertyValue::fromValue<Direction>(_direction);
     case Pid::NUMBER_TYPE:
         return int(_numberType);
     case Pid::BRACKET_TYPE:
@@ -1134,7 +1134,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
     case Pid::FONT_STYLE:
     case Pid::ALIGN:
     case Pid::SIZE_SPATIUM_DEPENDENT:
-        return _number ? _number->getProperty(propertyId) : QVariant();
+        return _number ? _number->getProperty(propertyId) : PropertyValue();
     default:
         break;
     }

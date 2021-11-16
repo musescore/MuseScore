@@ -891,7 +891,7 @@ public:
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
-    QVariant styleV(Sid idx) const { return style().styleV(idx).toQVariant(); }
+    const mu::engraving::PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
     Spatium  styleS(Sid idx) const { return style().styleS(idx); }
     qreal styleP(Sid idx) const { return style().styleP(idx); }
     QString styleSt(Sid idx) const { return style().styleSt(idx); }
@@ -899,7 +899,7 @@ public:
     qreal styleD(Sid idx) const { return style().styleD(idx); }
     int styleI(Sid idx) const { return style().styleI(idx); }
 
-    void setStyleValue(Sid sid, QVariant value) { style().set(sid, mu::engraving::PropertyValue::fromQVariant(value)); }
+    void setStyleValue(Sid sid, const mu::engraving::PropertyValue& value) { style().set(sid, value); }
     QString getTextStyleUserName(Tid tid);
     qreal spatium() const { return styleD(Sid::spatium); }
     void setSpatium(qreal v) { setStyleValue(Sid::spatium, v); }
@@ -1216,9 +1216,9 @@ public:
 
     void switchToPageMode();
 
-    virtual QVariant getProperty(Pid) const override;
-    virtual bool setProperty(Pid, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const QVariant&) override;
+    QVariant propertyDefault(Pid) const override;
 
     virtual QQueue<MidiInputEvent>* midiInputQueue();
     virtual std::list<MidiInputEvent>* activeMidiPitches();

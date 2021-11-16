@@ -39,39 +39,7 @@ class Segment;
 
 class Dynamic final : public TextBase
 {
-    Q_GADGET
 public:
-    enum class Type : char {
-        OTHER,
-        PPPPPP,
-        PPPPP,
-        PPPP,
-        PPP,
-        PP,
-        P,
-        MP,
-        MF,
-        F,
-        FF,
-        FFF,
-        FFFF,
-        FFFFF,
-        FFFFFF,
-        FP,
-        SF,
-        SFZ,
-        SFF,
-        SFFZ,
-        SFP,
-        SFPP,
-        RFZ,
-        RF,
-        FZ,
-        M,
-        R,
-        S,
-        Z
-    };
 
     enum class Range : char {
         STAFF, PART, SYSTEM
@@ -86,10 +54,8 @@ public:
         const char* name;
     };
 
-    Q_ENUM(Type);
-
 private:
-    Type _dynamicType;
+    DynamicType _dynamicType;
 
     mutable mu::PointF dragOffset;
     int _velocity;       // associated midi velocity 0-127
@@ -107,11 +73,11 @@ public:
     Segment* segment() const { return (Segment*)parent(); }
     Measure* measure() const { return (Measure*)parent()->parent(); }
 
-    void setDynamicType(Type val) { _dynamicType = val; }
+    void setDynamicType(DynamicType val) { _dynamicType = val; }
     void setDynamicType(const QString&);
-    static QString dynamicTypeName(Dynamic::Type type);
+    static QString dynamicTypeName(DynamicType type);
     QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
-    Type dynamicType() const { return _dynamicType; }
+    DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
     QString subtypeName() const override { return dynamicTypeName(); }
 
@@ -140,7 +106,7 @@ public:
     static QString speedToName(Speed speed);
     static Speed nameToSpeed(QString name);
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool     setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
     Pid propertyId(const QStringRef& xmlName) const override;

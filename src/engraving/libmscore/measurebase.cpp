@@ -378,7 +378,7 @@ MeasureBase* Score::last()  const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureBase::getProperty(Pid id) const
+PropertyValue MeasureBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::REPEAT_END:

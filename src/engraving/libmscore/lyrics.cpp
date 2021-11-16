@@ -38,6 +38,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -547,7 +548,7 @@ void Lyrics::removeFromScore()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Lyrics::getProperty(Pid propertyId) const
+PropertyValue Lyrics::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYLLABIC:

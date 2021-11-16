@@ -156,7 +156,7 @@ public:
     int color() const { return _color; }
     void setColor(int value) { _color = value; }
 
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
 
     int lyricCount() const;

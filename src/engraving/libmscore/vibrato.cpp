@@ -37,6 +37,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -347,7 +348,7 @@ Sid Vibrato::getPropertyStyle(Pid pid) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Vibrato::getProperty(Pid propertyId) const
+PropertyValue Vibrato::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:

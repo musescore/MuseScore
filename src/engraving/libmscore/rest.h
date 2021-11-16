@@ -97,7 +97,7 @@ public:
     QVariant propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
 
     EngravingItem* nextElement() override;

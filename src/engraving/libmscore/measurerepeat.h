@@ -65,7 +65,7 @@ public:
 
     QVariant propertyDefault(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
 
     mu::RectF numberRect() const override;
     Shape shape() const override;

@@ -40,16 +40,16 @@ public:
     MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, Tid = Tid::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid id, const QVariant& val) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const QVariant& val) override;
+    QVariant propertyDefault(Pid id) const override;
 
-    virtual bool readProperties(XmlReader&) override;
+    bool readProperties(XmlReader&) override;
 
-    virtual void layout() override;
+    void layout() override;
     Measure* measure() const { return toMeasure(parent()); }
 
-    virtual bool isEditable() const override { return false; }   // The measure numbers' text should not be editable
+    bool isEditable() const override { return false; }    // The measure numbers' text should not be editable
 };
 }     // namespace Ms
 

@@ -533,17 +533,17 @@ void Part::setPlainShortName(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Part::getProperty(Pid id) const
+PropertyValue Part::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::VISIBLE:
-        return QVariant(_show);
+        return PropertyValue(_show);
     case Pid::USE_DRUMSET:
         return instrument()->useDrumset();
     case Pid::PREFER_SHARP_FLAT:
         return int(preferSharpFlat());
     default:
-        return QVariant();
+        return PropertyValue();
     }
 }
 

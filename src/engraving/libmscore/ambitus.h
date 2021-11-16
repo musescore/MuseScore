@@ -112,7 +112,7 @@ public:
     QString   accessibleInfo() const override;
 
     // properties
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 

@@ -28,6 +28,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -151,7 +152,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::getProperty(Pid propertyId) const
+PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::STEP_OFFSET:
@@ -181,7 +182,7 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
     case Pid::STAFF_INVISIBLE:
         return _staffType->invisible();
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(_staffType->color());
+        return PropertyValue::fromValue(_staffType->color());
     case Pid::STAFF_YOFFSET:
         return _staffType->yoffset();
     default:

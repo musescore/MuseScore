@@ -98,7 +98,7 @@ public:
 
     Segment* segment() const { return (Segment*)parent(); }
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;

@@ -30,6 +30,7 @@
 #include "property.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -143,11 +144,11 @@ void DurationElement::writeTupletEnd(XmlWriter& xml) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant DurationElement::getProperty(Pid propertyId) const
+PropertyValue DurationElement::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DURATION:
-        return QVariant::fromValue(_duration);
+        return PropertyValue::fromValue(_duration);
     default:
         return EngravingItem::getProperty(propertyId);
     }

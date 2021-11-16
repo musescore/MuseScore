@@ -32,6 +32,7 @@
 #include "utils.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle mmRestStyle {
@@ -230,7 +231,7 @@ QVariant MMRest::propertyDefault(Pid propertyId) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MMRest::getProperty(Pid propertyId) const
+PropertyValue MMRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:

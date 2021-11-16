@@ -2766,12 +2766,12 @@ void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Chord::getProperty(Pid propertyId) const
+PropertyValue Chord::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::NO_STEM:        return noStem();
     case Pid::SMALL:          return isSmall();
-    case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     default:
         return ChordRest::getProperty(propertyId);

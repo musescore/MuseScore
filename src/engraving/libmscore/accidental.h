@@ -138,7 +138,7 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;

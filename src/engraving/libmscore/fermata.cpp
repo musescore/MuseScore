@@ -34,6 +34,7 @@
 #include "symnames.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -259,11 +260,11 @@ QVector<mu::LineF> Fermata::dragAnchorLines() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Fermata::getProperty(Pid propertyId) const
+PropertyValue Fermata::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return QVariant::fromValue(_symId);
+        return PropertyValue::fromValue(_symId);
     case Pid::TIME_STRETCH:
         return timeStretch();
     case Pid::PLAY:

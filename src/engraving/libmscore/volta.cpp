@@ -36,6 +36,7 @@
 #include "text.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle voltaStyle {
@@ -266,11 +267,11 @@ int Volta::lastEnding() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Volta::getProperty(Pid propertyId) const
+PropertyValue Volta::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
-        return QVariant::fromValue(endings());
+        return PropertyValue::fromValue(endings());
     default:
         break;
     }

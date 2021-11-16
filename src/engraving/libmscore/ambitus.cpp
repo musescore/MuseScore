@@ -683,7 +683,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Ambitus::getProperty(Pid propertyId) const
+PropertyValue Ambitus::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::HEAD_GROUP:

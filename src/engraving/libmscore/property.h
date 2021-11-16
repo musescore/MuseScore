@@ -434,12 +434,15 @@ enum class P_TYPE {
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
     CHANGE_SPEED,       // enum class Dynamic::Speed
     CLEF_TYPE,          // enum class ClefType
-    DYNAMIC_TYPE,       // enum class Dynamic::Type
+    DYNAMIC_TYPE,       // enum class DynamicType
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
 
     PATH,               // mu::PainterPath
     HEAD_SCHEME,        // enum class NoteHead::Scheme
+
+    PITCH_VALUES,
+    HOOK_TYPE
 };
 
 extern QVariant readProperty(Pid type, XmlReader& e);

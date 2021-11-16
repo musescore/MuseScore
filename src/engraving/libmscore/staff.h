@@ -292,7 +292,7 @@ public:
     void undoSetColor(const mu::draw::Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 

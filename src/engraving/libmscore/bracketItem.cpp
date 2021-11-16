@@ -43,7 +43,7 @@ EngravingItem* BracketItem::clone() const
     return new BracketItem(*this);
 }
 
-QVariant BracketItem::getProperty(Pid id) const
+mu::engraving::PropertyValue BracketItem::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:

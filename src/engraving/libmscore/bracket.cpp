@@ -458,9 +458,9 @@ bool Bracket::edit(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Bracket::getProperty(Pid id) const
+PropertyValue Bracket::getProperty(Pid id) const
 {
-    QVariant v = EngravingItem::getProperty(id);
+    PropertyValue v = EngravingItem::getProperty(id);
     if (!v.isValid()) {
         v = _bi->getProperty(id);
     }

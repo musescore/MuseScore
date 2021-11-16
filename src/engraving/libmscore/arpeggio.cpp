@@ -700,7 +700,7 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Arpeggio::getProperty(Pid propertyId) const
+engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ARPEGGIO_TYPE:

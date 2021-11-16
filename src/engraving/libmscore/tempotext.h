@@ -78,7 +78,7 @@ public:
     static QString duration2tempoTextString(const TDuration dur);
     static QString duration2userName(const TDuration t);
 
-    QVariant getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;

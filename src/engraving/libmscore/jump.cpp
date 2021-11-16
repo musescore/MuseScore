@@ -29,6 +29,7 @@
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -189,7 +190,7 @@ void Jump::undoSetContinueAt(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Jump::getProperty(Pid propertyId) const
+PropertyValue Jump::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::JUMP_TO:

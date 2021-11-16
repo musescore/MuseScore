@@ -483,7 +483,7 @@ QString Trill::trillTypeUserName() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Trill::getProperty(Pid propertyId) const
+PropertyValue Trill::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:

@@ -217,7 +217,7 @@ public:
     QString           normalizedText() const;
     QString           displayText() const { return _displayText; }
 
-    QVariant  getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
     bool      setProperty(Pid propertyId, const QVariant&) override;
     QVariant  propertyDefault(Pid) const override;
 };
@@ -326,7 +326,7 @@ public:
     qreal             additionalContLineX(qreal pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
-    QVariant  getProperty(Pid propertyId) const override;
+    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
     bool      setProperty(Pid propertyId, const QVariant&) override;
     QVariant  propertyDefault(Pid) const override;
 

@@ -41,6 +41,7 @@
 #include "symid.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -711,7 +712,7 @@ bool Tremolo::customStyleApplicable() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Tremolo::getProperty(Pid propertyId) const
+PropertyValue Tremolo::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:

@@ -35,6 +35,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 #define MIN_TEMPO 5.0 / 60
@@ -392,7 +393,7 @@ void TempoText::undoSetFollowText(bool v)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TempoText::getProperty(Pid propertyId) const
+PropertyValue TempoText::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEMPO:

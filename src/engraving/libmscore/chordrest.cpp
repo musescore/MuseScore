@@ -892,13 +892,13 @@ void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant ChordRest::getProperty(Pid propertyId) const
+PropertyValue ChordRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SMALL:      return QVariant(isSmall());
+    case Pid::SMALL:      return PropertyValue::fromValue(isSmall());
     case Pid::BEAM_MODE:  return int(beamMode());
     case Pid::STAFF_MOVE: return staffMove();
-    case Pid::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
+    case Pid::DURATION_TYPE: return PropertyValue::fromValue(actualDurationType());
     default:               return DurationElement::getProperty(propertyId);
     }
 }

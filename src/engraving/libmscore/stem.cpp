@@ -40,6 +40,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 using namespace Ms;
 
 static const ElementStyle stemStyle {
@@ -306,7 +307,7 @@ EngravingItem* Stem::drop(EditData& data)
     return 0;
 }
 
-QVariant Stem::getProperty(Pid propertyId) const
+PropertyValue Stem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
@@ -314,7 +315,7 @@ QVariant Stem::getProperty(Pid propertyId) const
     case Pid::USER_LEN:
         return userLength();
     case Pid::STEM_DIRECTION:
-        return QVariant::fromValue<Direction>(chord()->stemDirection());
+        return PropertyValue::fromValue<Direction>(chord()->stemDirection());
     default:
         return EngravingItem::getProperty(propertyId);
     }

@@ -108,7 +108,7 @@ void ActionIcon::draw(mu::draw::Painter* painter) const
     painter->drawText(boundingBox(), Qt::AlignCenter, QChar(m_icon));
 }
 
-QVariant ActionIcon::getProperty(Pid pid) const
+engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::ACTION:
