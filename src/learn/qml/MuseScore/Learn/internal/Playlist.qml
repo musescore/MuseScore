@@ -87,9 +87,9 @@ FocusScope {
         cellHeight: itemMargin + itemHeight + itemMargin
         cellWidth: itemMargin + itemWidth + itemMargin
 
-        property int itemMargin: 24
-        property int itemWidth: 250
-        property int itemHeight: 224
+        property int itemMargin: 25
+        property int itemWidth: 256
+        property int itemHeight: 218
 
         property int rows: Math.max(0, Math.floor(height / cellHeight))
         property int columns: Math.max(0, Math.floor(width / cellWidth))
