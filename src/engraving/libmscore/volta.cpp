@@ -302,11 +302,11 @@ bool Volta::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Volta::propertyDefault(Pid propertyId) const
+PropertyValue Volta::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
-        return QVariant::fromValue(QList<int>());
+        return PropertyValue::fromValue(QList<int>());
     case Pid::ANCHOR:
         return int(VOLTA_ANCHOR);
     case Pid::BEGIN_HOOK_TYPE:

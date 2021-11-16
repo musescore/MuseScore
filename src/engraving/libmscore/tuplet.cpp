@@ -1195,7 +1195,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Tuplet::propertyDefault(Pid id) const
+PropertyValue Tuplet::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:
@@ -1222,7 +1222,7 @@ QVariant Tuplet::propertyDefault(Pid id) const
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
     {
-        QVariant v = EngravingObject::propertyDefault(id, Tid::DEFAULT);
+        PropertyValue v = EngravingObject::propertyDefault(id, Tid::DEFAULT);
         if (v.isValid()) {
             return v;
         }

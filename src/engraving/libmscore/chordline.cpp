@@ -466,7 +466,7 @@ bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ChordLine::propertyDefault(Pid pid) const
+PropertyValue ChordLine::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::CHORD_LINE_STRAIGHT:

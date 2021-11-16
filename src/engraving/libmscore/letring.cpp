@@ -28,6 +28,7 @@
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle letRingStyle {
@@ -152,14 +153,14 @@ LineSegment* LetRing::createLineSegment(System* parent)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LetRing::propertyDefault(Pid propertyId) const
+PropertyValue LetRing::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
         return score()->styleV(Sid::letRingLineWidth);
 
     case Pid::ALIGN:
-        return QVariant::fromValue(Align::LEFT | Align::BASELINE);
+        return PropertyValue::fromValue(Align::LEFT | Align::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::letRingLineStyle);
@@ -169,7 +170,7 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
 
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF(0, 0));
+        return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
         return score()->styleV(Sid::letRingFontStyle);

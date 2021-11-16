@@ -42,7 +42,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const QVariant& val) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     bool readProperties(XmlReader&) override;
 

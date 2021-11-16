@@ -73,7 +73,7 @@ public:
     void initStyle();
 
     LineSegment* createLineSegment(System* parent) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
 };
 }     // namespace Ms

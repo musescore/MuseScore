@@ -238,7 +238,7 @@ void InstrumentChange::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentChange::propertyDefault(Pid propertyId) const
+engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SUB_STYLE:

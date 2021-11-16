@@ -340,13 +340,13 @@ bool Stem::setProperty(Pid propertyId, const QVariant& v)
     return true;
 }
 
-QVariant Stem::propertyDefault(Pid id) const
+PropertyValue Stem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::USER_LEN:
         return 0.0;
     case Pid::STEM_DIRECTION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<Direction>(Direction::AUTO);
     default:
         return EngravingItem::propertyDefault(id);
     }

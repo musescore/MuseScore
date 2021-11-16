@@ -3133,7 +3133,7 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Note::propertyDefault(Pid propertyId) const
+PropertyValue Note::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GHOST:
@@ -3142,7 +3142,7 @@ QVariant Note::propertyDefault(Pid propertyId) const
     case Pid::MIRROR_HEAD:
         return int(MScore::DirectionH::AUTO);
     case Pid::DOT_POSITION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<Direction>(Direction::AUTO);
     case Pid::HEAD_SCHEME:
         return int(NoteHead::Scheme::HEAD_AUTO);
     case Pid::HEAD_GROUP:
@@ -3168,7 +3168,7 @@ QVariant Note::propertyDefault(Pid propertyId) const
         return getProperty(Pid::TPC1);
     case Pid::PITCH:
     case Pid::TPC1:
-        return QVariant();
+        return PropertyValue();
     default:
         break;
     }

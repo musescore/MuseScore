@@ -220,7 +220,7 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Breath::propertyDefault(Pid id) const
+PropertyValue Breath::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PAUSE:

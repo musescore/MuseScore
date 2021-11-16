@@ -561,7 +561,7 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Clef::propertyDefault(Pid id) const
+PropertyValue Clef::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::CLEF_TYPE_CONCERT:     return int(ClefType::INVALID);

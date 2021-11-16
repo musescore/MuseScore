@@ -2852,12 +2852,12 @@ bool Measure::setProperty(Pid propertyId, const QVariant& value)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Measure::propertyDefault(Pid propertyId) const
+PropertyValue Measure::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TIMESIG_NOMINAL:
     case Pid::TIMESIG_ACTUAL:
-        return QVariant();
+        return PropertyValue();
     case Pid::MEASURE_NUMBER_MODE:
         return int(MeasureNumberMode::AUTO);
     case Pid::BREAK_MMR:

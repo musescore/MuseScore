@@ -434,7 +434,7 @@ bool TempoText::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TempoText::propertyDefault(Pid id) const
+PropertyValue TempoText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

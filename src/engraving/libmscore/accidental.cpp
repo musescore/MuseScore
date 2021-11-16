@@ -32,6 +32,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -591,7 +592,7 @@ void Accidental::undoSetSmall(bool val)
 //   getProperty
 //---------------------------------------------------------
 
-engraving::PropertyValue Accidental::getProperty(Pid propertyId) const
+PropertyValue Accidental::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
@@ -607,7 +608,7 @@ engraving::PropertyValue Accidental::getProperty(Pid propertyId) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Accidental::propertyDefault(Pid propertyId) const
+PropertyValue Accidental::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ACCIDENTAL_TYPE:    return int(AccidentalType::NONE);

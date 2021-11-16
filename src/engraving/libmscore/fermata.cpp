@@ -315,7 +315,7 @@ bool Fermata::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fermata::propertyDefault(Pid propertyId) const
+PropertyValue Fermata::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:

@@ -391,7 +391,7 @@ bool Vibrato::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Vibrato::propertyDefault(Pid propertyId) const
+PropertyValue Vibrato::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VIBRATO_TYPE:

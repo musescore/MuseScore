@@ -2538,16 +2538,16 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Beam::propertyDefault(Pid id) const
+PropertyValue Beam::propertyDefault(Pid id) const
 {
     switch (id) {
 //            case Pid::SUB_STYLE:      return int(Tid::BEAM);
-    case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(Direction::AUTO);
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(Direction::AUTO);
     case Pid::DISTRIBUTE:     return false;
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::USER_MODIFIED:  return false;
-    case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
+    case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     default:                  return EngravingItem::propertyDefault(id);
     }
 }

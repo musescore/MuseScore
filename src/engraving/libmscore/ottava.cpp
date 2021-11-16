@@ -410,11 +410,11 @@ bool Ottava::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Ottava::propertyDefault(Pid pid) const
+PropertyValue Ottava::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::OTTAVA_TYPE:
-        return QVariant();
+        return PropertyValue();
     case Pid::END_HOOK_TYPE:
         return int(HookType::HOOK_90);
     case Pid::LINE_VISIBLE:
@@ -422,7 +422,7 @@ QVariant Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF());
+        return PropertyValue::fromValue(PointF());
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:

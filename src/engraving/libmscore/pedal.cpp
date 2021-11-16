@@ -187,7 +187,7 @@ LineSegment* Pedal::createLineSegment(System* parent)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Pedal::propertyDefault(Pid propertyId) const
+engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:

@@ -535,7 +535,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TimeSig::propertyDefault(Pid id) const
+PropertyValue TimeSig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SHOW_COURTESY:
@@ -545,13 +545,13 @@ QVariant TimeSig::propertyDefault(Pid id) const
     case Pid::DENOMINATOR_STRING:
         return QString();
     case Pid::TIMESIG:
-        return QVariant::fromValue(Fraction(4, 4));
+        return PropertyValue::fromValue(Fraction(4, 4));
     case Pid::TIMESIG_GLOBAL:
-        return QVariant::fromValue(Fraction(1, 1));
+        return PropertyValue::fromValue(Fraction(1, 1));
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
-        return score()->styleV(Sid::timesigScale).toQVariant();
+        return score()->styleV(Sid::timesigScale);
     default:
         return EngravingItem::propertyDefault(id);
     }

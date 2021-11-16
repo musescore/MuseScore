@@ -64,7 +64,7 @@ public:
 //      virtual void write(XmlWriter& xml) const override;
     LineSegment* createLineSegment(System* parent) override;
 
-    QVariant propertyDefault(Pid propertyId) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;
 };
 }     // namespace Ms
