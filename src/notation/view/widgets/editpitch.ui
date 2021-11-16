@@ -740,10 +740,6 @@
       <property name="text">
        <string>G 4</string>
       </property>
-      <property name="icon">
-       <iconset resource="musescore.qrc">
-        <normaloff>:/data/icons/clef.svg</normaloff>:/data/icons/clef.svg</iconset>
-      </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
       </property>
@@ -837,10 +833,6 @@
      <item row="6" column="5">
       <property name="text">
        <string>F 3</string>
-      </property>
-      <property name="icon">
-       <iconset resource="musescore.qrc">
-        <normaloff>:/data/icons/clef-bass.svg</normaloff>:/data/icons/clef-bass.svg</iconset>
       </property>
       <property name="flags">
        <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -1356,9 +1348,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="musescore.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

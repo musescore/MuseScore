@@ -160,6 +160,9 @@ EditStaffType::EditStaffType(QWidget* parent)
     addToTemplates->setVisible(false);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
