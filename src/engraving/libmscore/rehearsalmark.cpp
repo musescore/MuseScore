@@ -95,7 +95,7 @@ void RehearsalMark::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant RehearsalMark::propertyDefault(Pid id) const
+engraving::PropertyValue RehearsalMark::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

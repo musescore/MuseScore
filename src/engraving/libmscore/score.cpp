@@ -4951,9 +4951,9 @@ bool Score::setProperty(Pid /*id*/, const QVariant& /*v*/)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Score::propertyDefault(Pid /*id*/) const
+PropertyValue Score::propertyDefault(Pid /*id*/) const
 {
-    return QVariant();
+    return PropertyValue();
 }
 
 void Score::resetStyleValue(Sid styleToReset)

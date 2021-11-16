@@ -712,7 +712,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant KeySig::propertyDefault(Pid id) const
+PropertyValue KeySig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::KEY:

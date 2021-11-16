@@ -1394,7 +1394,7 @@ void EngravingItem::undoChangeProperty(Pid pid, const QVariant& val, PropertyFla
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant EngravingItem::propertyDefault(Pid pid) const
+PropertyValue EngravingItem::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::GENERATED:
@@ -1402,9 +1402,9 @@ QVariant EngravingItem::propertyDefault(Pid pid) const
     case Pid::VISIBLE:
         return true;
     case Pid::COLOR:
-        return QVariant::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
     case Pid::PLACEMENT: {
-        QVariant v = EngravingObject::propertyDefault(pid);
+        PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
@@ -1413,14 +1413,14 @@ QVariant EngravingItem::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        QVariant v = EngravingObject::propertyDefault(pid);
+        PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
-        return QVariant::fromValue(PointF());
+        return PropertyValue::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
-        QVariant v = EngravingObject::propertyDefault(pid);
+        PropertyValue v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {
             return v;
         }
@@ -1431,7 +1431,7 @@ QVariant EngravingItem::propertyDefault(Pid pid) const
     case Pid::Z:
         return int(type()) * 100;
     default: {
-        QVariant v = EngravingObject::propertyDefault(pid);
+        PropertyValue v = EngravingObject::propertyDefault(pid);
 
         if (v.isValid()) {
             return v;
@@ -1441,7 +1441,7 @@ QVariant EngravingItem::propertyDefault(Pid pid) const
             return parent()->propertyDefault(pid);
         }
 
-        return QVariant();
+        return PropertyValue();
     }
     }
 }

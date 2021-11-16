@@ -217,7 +217,7 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TremoloBar::propertyDefault(Pid pid) const
+PropertyValue TremoloBar::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::MAG:
@@ -227,14 +227,14 @@ QVariant TremoloBar::propertyDefault(Pid pid) const
     case Pid::TREMOLOBAR_TYPE:
         return static_cast<int>(TremoloBarType::DIP);
     case Pid::TREMOLOBAR_CURVE:
-        return QVariant::fromValue(DIP_CURVE);
+        return PropertyValue::fromValue(DIP_CURVE);
     default:
         for (const StyledProperty& p : *styledProperties()) {
             if (p.pid == pid) {
                 if (propertyType(pid) == P_TYPE::SP_REAL) {
                     return score()->styleP(p.sid);
                 }
-                return score()->styleV(p.sid).toQVariant();
+                return score()->styleV(p.sid);
             }
         }
         return EngravingItem::propertyDefault(pid);

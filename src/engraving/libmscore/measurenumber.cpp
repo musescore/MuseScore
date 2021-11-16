@@ -63,7 +63,7 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureNumber::propertyDefault(Pid id) const
+engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

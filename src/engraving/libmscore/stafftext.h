@@ -35,7 +35,7 @@ namespace Ms {
 
 class StaffText final : public StaffTextBase
 {
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
     StaffText(Segment* parent = 0, Tid = Tid::STAFF);

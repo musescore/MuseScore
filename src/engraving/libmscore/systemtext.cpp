@@ -48,7 +48,7 @@ SystemText::SystemText(Segment* parent, Tid tid)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SystemText::propertyDefault(Pid id) const
+engraving::PropertyValue SystemText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

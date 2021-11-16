@@ -241,7 +241,7 @@ bool Jump::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Jump::propertyDefault(Pid propertyId) const
+PropertyValue Jump::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::JUMP_TO:

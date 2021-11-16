@@ -96,9 +96,10 @@ public:
     void copyValues(Box* origin);
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid) const override;
-    virtual QString accessibleExtraInfo() const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+
+    QString accessibleExtraInfo() const override;
 
     // TODO: add a grip for moving the entire box
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
@@ -138,7 +139,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 };

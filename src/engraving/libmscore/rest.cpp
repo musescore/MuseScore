@@ -995,7 +995,7 @@ void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Rest::propertyDefault(Pid propertyId) const
+PropertyValue Rest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GAP:

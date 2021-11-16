@@ -609,7 +609,7 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Lyrics::propertyDefault(Pid id) const
+PropertyValue Lyrics::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

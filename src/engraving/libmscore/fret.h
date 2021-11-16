@@ -257,7 +257,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return _userMag; }
     void setUserMag(qreal m) { _userMag = m; }

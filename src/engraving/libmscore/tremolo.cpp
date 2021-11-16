@@ -751,7 +751,7 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Tremolo::propertyDefault(Pid propertyId) const
+PropertyValue Tremolo::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_STYLE:

@@ -284,7 +284,7 @@ bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::propertyDefault(Pid id) const
+PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LINE_TYPE:
@@ -557,13 +557,13 @@ bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTie::propertyDefault(Pid id) const
+PropertyValue SlurTie::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LINE_TYPE:
         return 0;
     case Pid::SLUR_DIRECTION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<Direction>(Direction::AUTO);
     default:
         return Spanner::propertyDefault(id);
     }

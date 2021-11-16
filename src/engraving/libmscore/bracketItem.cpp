@@ -76,7 +76,7 @@ bool BracketItem::setProperty(Pid id, const QVariant& v)
     return true;
 }
 
-QVariant BracketItem::propertyDefault(Pid id) const
+engraving::PropertyValue BracketItem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:

@@ -1651,7 +1651,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Staff::propertyDefault(Pid id) const
+PropertyValue Staff::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SMALL:
@@ -1659,7 +1659,7 @@ QVariant Staff::propertyDefault(Pid id) const
     case Pid::MAG:
         return 1.0;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(engravingConfiguration()->defaultColor());
+        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
     case Pid::PLAYBACK_VOICE1:
     case Pid::PLAYBACK_VOICE2:
     case Pid::PLAYBACK_VOICE3:
@@ -1674,7 +1674,7 @@ QVariant Staff::propertyDefault(Pid id) const
         return qreal(0.0);
     default:
         qDebug("unhandled id <%s>", propertyName(id));
-        return QVariant();
+        return PropertyValue();
     }
 }
 

@@ -39,7 +39,7 @@ public:
 
     Segment* segment() const { return (Segment*)parent(); }
     void layout() override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }     // namespace Ms
 #endif

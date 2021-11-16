@@ -268,9 +268,9 @@ public:
 
     virtual mu::engraving::PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;
-    virtual QVariant propertyDefault(Pid) const;
+    virtual mu::engraving::PropertyValue propertyDefault(Pid) const;
     virtual void resetProperty(Pid id);
-    QVariant propertyDefault(Pid pid, Tid tid) const;
+    mu::engraving::PropertyValue propertyDefault(Pid pid, Tid tid) const;
     virtual bool sizeIsSpatiumDependent() const { return true; }
     virtual bool offsetIsSpatiumDependent() const { return true; }
 
@@ -285,7 +285,7 @@ public:
     virtual PropertyFlags* propertyFlagsList() const { return _propertyFlagsList; }
     virtual PropertyFlags propertyFlags(Pid) const;
     bool isStyled(Pid pid) const;
-    QVariant styleValue(Pid, Sid) const;
+    mu::engraving::PropertyValue styleValue(Pid, Sid) const;
 
     void setPropertyFlags(Pid, PropertyFlags);
 

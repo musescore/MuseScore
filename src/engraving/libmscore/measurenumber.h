@@ -38,7 +38,7 @@ public:
 
     virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }
 
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }     // namespace Ms
 

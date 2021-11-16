@@ -355,11 +355,11 @@ bool Articulation::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Articulation::propertyDefault(Pid propertyId) const
+PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<Direction>(Direction::AUTO);
 
     case Pid::ORNAMENT_STYLE:
         //return int(score()->style()->ornamentStyle(_ornamentStyle));

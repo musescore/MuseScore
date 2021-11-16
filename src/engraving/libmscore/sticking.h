@@ -33,7 +33,7 @@ namespace Ms {
 
 class Sticking final : public TextBase
 {
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
     Sticking(Segment* parent);

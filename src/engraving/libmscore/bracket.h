@@ -113,7 +113,7 @@ public:
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;

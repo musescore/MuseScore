@@ -79,7 +79,7 @@ bool MMRestRange::setProperty(Pid id, const QVariant& val)
     }
 }
 
-QVariant MMRestRange::propertyDefault(Pid id) const
+PropertyValue MMRestRange::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

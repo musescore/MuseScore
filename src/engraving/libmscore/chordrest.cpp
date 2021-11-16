@@ -937,7 +937,7 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ChordRest::propertyDefault(Pid propertyId) const
+PropertyValue ChordRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SMALL:

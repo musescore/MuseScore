@@ -809,7 +809,7 @@ bool Hairpin::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Hairpin::propertyDefault(Pid id) const
+PropertyValue Hairpin::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::HAIRPIN_CIRCLEDTIP:
@@ -853,7 +853,7 @@ QVariant Hairpin::propertyDefault(Pid id) const
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF());
+        return PropertyValue::fromValue(PointF());
 
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:

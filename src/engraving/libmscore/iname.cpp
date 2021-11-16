@@ -155,7 +155,7 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentName::propertyDefault(Pid id) const
+PropertyValue InstrumentName::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:

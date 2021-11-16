@@ -94,7 +94,7 @@ public:
     qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
     bool setProperty(Pid propertyId, const QVariant& v) override;
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;

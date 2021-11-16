@@ -1411,11 +1411,11 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant FretDiagram::propertyDefault(Pid pid) const
+PropertyValue FretDiagram::propertyDefault(Pid pid) const
 {
     // We shouldn't style the fret offset
     if (pid == Pid::FRET_OFFSET) {
-        return QVariant(0);
+        return PropertyValue(0);
     }
 
     for (const StyledProperty& p : *styledProperties()) {

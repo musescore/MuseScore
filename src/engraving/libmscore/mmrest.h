@@ -51,7 +51,7 @@ public:
 
     void write(XmlWriter&) const override;
 
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const QVariant&) override;
     mu::engraving::PropertyValue getProperty(Pid) const override;
 

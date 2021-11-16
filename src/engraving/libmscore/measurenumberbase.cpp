@@ -27,6 +27,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -86,7 +87,7 @@ bool MeasureNumberBase::setProperty(Pid id, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureNumberBase::propertyDefault(Pid id) const
+PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SUB_STYLE:

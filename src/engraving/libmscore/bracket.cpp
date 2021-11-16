@@ -480,12 +480,12 @@ bool Bracket::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Bracket::propertyDefault(Pid id) const
+PropertyValue Bracket::propertyDefault(Pid id) const
 {
     if (id == Pid::BRACKET_COLUMN) {
         return 0;
     }
-    QVariant v = EngravingItem::propertyDefault(id);
+    PropertyValue v = EngravingItem::propertyDefault(id);
     if (!v.isValid()) {
         v = _bi->propertyDefault(id);
     }
