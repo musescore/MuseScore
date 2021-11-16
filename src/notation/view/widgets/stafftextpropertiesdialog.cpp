@@ -22,6 +22,7 @@
 #include "stafftextpropertiesdialog.h"
 
 #include <QSignalMapper>
+#include <QToolButton>
 
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/stafftext.h"
@@ -122,7 +123,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     // setup "switch channel"
     //---------------------------------------------------
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < VOICES; ++i) {
         initChannelCombo(m_channelCombo[i], m_staffText);
     }
 
@@ -154,11 +155,34 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             break;
         }
     }
+
+    for (int i = 0; i < VOICES; ++i) {
+        auto channel = m_channelCombo[i];
+        channel->setAccessibleName(channelLabel->text() + channel->currentText());
+    }
+
+    QColor voiceUncheckedColor = QColor(uiConfiguration()->currentTheme().values[BUTTON_COLOR].toString());
+    QList<QColor> voicesColors;
+    for (int voice = 0; voice < VOICES; ++voice) {
+        voicesColors << configuration()->selectionColor(voice);
+    }
+
     QSignalMapper* mapper = new QSignalMapper(this);
-    for (int row = 0; row < 4; ++row) {
-        for (int col = 0; col < 4; ++col) {
-            connect(m_vb[col][row], &QToolButton::clicked, mapper, QOverload<>::of(&QSignalMapper::map));
-            mapper->setMapping(m_vb[col][row], (col << 8) + row);
+    for (int row = 0; row < VOICES; ++row) {
+        for (int col = 0; col < VOICES; ++col) {
+            auto button = m_vb[col][row];
+
+            mapper->setMapping(button, (col << 8) + row);
+            button->setAccessibleName(voiceLabel->text() + button->text());
+
+            connect(button, SIGNAL(clicked()), mapper, SLOT(map()));
+
+            connect(button, &QToolButton::toggled, this, [=](){
+                QColor color = button->isChecked() ? voicesColors[col] : voiceUncheckedColor;
+                QPalette palette;
+                palette.setColor(QPalette::Button, color);
+                button->setPalette(palette);
+            });
         }
     }
 
@@ -373,7 +397,7 @@ void StaffTextPropertiesDialog::voiceButtonClicked(int val)
 {
     int ccol = val >> 8;
     int crow = val & 0xff;
-    for (int row = 0; row < 4; ++row) {
+    for (int row = 0; row < VOICES; ++row) {
         if (row == crow) {
             continue;
         }
