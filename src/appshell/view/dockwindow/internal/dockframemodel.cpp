@@ -99,6 +99,11 @@ bool DockFrameModel::titleBarVisible() const
     return m_titleBarVisible;
 }
 
+bool DockFrameModel::isHorizontalPanel() const
+{
+    return m_isHorizontalPanel;
+}
+
 void DockFrameModel::setFrame(QQuickItem* frame)
 {
     if (frame == m_frame) {
@@ -125,14 +130,17 @@ void DockFrameModel::listenChangesInFrame()
         }
 
         auto allDocks = m_frame->dockWidgets();
-
-        if (allDocks.size() != 1) {
+        if (allDocks.isEmpty()) {
             setTitleBarVisible(false);
             return;
         }
 
         DockProperties properties = readPropertiesFromObject(allDocks.first());
-        bool visible = (properties.type == DockType::Panel) && !properties.persistent;
+        bool isHorizontalPanel = (properties.type == DockType::Panel)
+                                 && (properties.location == Location::Top || properties.location == Location::Bottom);
+        setIsHorizontalPanel(isHorizontalPanel);
+
+        bool visible = (allDocks.size() == 1) && (properties.type == DockType::Panel) && !properties.persistent;
         setTitleBarVisible(visible);
 
         updateNavigationSection();
@@ -153,6 +161,16 @@ void DockFrameModel::setTitleBarVisible(bool visible)
 
     m_titleBarVisible = visible;
     emit titleBarVisibleChanged(visible);
+}
+
+void DockFrameModel::setIsHorizontalPanel(bool is)
+{
+    if (is == m_isHorizontalPanel) {
+        return;
+    }
+
+    m_isHorizontalPanel = is;
+    emit isHorizontalPanelChanged();
 }
 
 QObject* DockFrameModel::currentNavigationSection() const
