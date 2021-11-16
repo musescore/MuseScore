@@ -54,17 +54,34 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     m_note = dynamic_cast<Ms::Note*>(globalContext()->currentNotation()->interaction()->selection()->element());
 
     notehead->setText(Ms::NoteHead::group2userName(m_note->headGroup()));
+    sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
+
     pitch->setText(m_note->tpcUserName());
+    samePitch->setAccessibleName(samePitch->text() + pitch->text());
+
     string->setText(QString::number(m_note->string() + 1));
+    sameString->setAccessibleName(sameString->text() + string->text());
+
     type->setText(m_note->noteTypeUserName());
+    sameType->setAccessibleName(sameType->text() + type->text());
+
     durationType->setText(tr("%1 Note").arg(m_note->chord()->durationType().durationTypeUserName()));
+    sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
+
     durationTicks->setText(m_note->chord()->durationUserName());
+    sameDurationTicks->setAccessibleName(sameDurationTicks->text() + durationTicks->text());
+
     name->setText(tpc2name(m_note->tpc(), Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO, false));
+    sameName->setAccessibleName(sameName->text() + name->text());
+
     inSelection->setEnabled(m_note->score()->selection().isRange());
 
     connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectNoteDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 SelectNoteDialog::SelectNoteDialog(const SelectNoteDialog& other)
