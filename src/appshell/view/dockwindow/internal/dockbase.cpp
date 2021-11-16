@@ -465,6 +465,7 @@ void DockBase::writeProperties()
 
     DockProperties properties;
     properties.type = type();
+    properties.location = location();
     properties.persistent = persistent();
     properties.separatorsVisible = separatorsVisible();
     properties.highlightingRect = m_highlightingRect;

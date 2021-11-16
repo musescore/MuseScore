@@ -86,8 +86,9 @@ Item {
 
         contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
+        isHorizontalPanel: frameModel.isHorizontalPanel
 
-        onHandleContextMenuItemRequested: {
+        onHandleContextMenuItemRequested: function(itemId) {
             frameModel.handleMenuItem(itemId)
         }
     }
