@@ -26,6 +26,8 @@
 #include <QVariant>
 #include <QString>
 
+#include "property/propertyvalue.h"
+
 namespace Ms {
 class XmlReader;
 
@@ -392,61 +394,8 @@ enum class Pid {
     END
 };
 
-enum class P_TYPE {
-    UNDEFINED = 0,
-    BOOL,
-    INT,
-    REAL,
-    SPATIUM,
-    SP_REAL,            // real (point) value saved in (score) spatium units
-    FRACTION,
-    POINT,
-    POINT_SP,           // point units, value saved in (score) spatium units
-    POINT_MM,
-    POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
-    SIZE,
-    SIZE_MM,
-    STRING,
-    SCALE,
-    COLOR,
-    DIRECTION,        // enum class Direction
-    DIRECTION_H,      // enum class MScore::DirectionH
-    ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
-    TDURATION,
-    LAYOUT_BREAK,
-    VALUE_TYPE,
-    BEAM_MODE,
-    PLACEMENT,        // ABOVE or BELOW
-    HPLACEMENT,       // LEFT, CENTER or RIGHT
-    TEXT_PLACE,
-    TEMPO,
-    GROUPS,
-    SYMID,
-    INT_LIST,
-    GLISS_STYLE,
-    BARLINE_TYPE,
-    HEAD_TYPE,          // enum class Notehead::Type
-    HEAD_GROUP,         // enum class Notehead::Group
-    ZERO_INT,           // displayed with offset +1
-    FONT,
-    SUB_STYLE,
-    ALIGN,
-    CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-    CHANGE_SPEED,       // enum class Dynamic::Speed
-    CLEF_TYPE,          // enum class ClefType
-    DYNAMIC_TYPE,       // enum class DynamicType
-    KEYMODE,            // enum class KeyMode
-    ORIENTATION,        // enum class Orientation
-
-    PATH,               // mu::PainterPath
-    HEAD_SCHEME,        // enum class NoteHead::Scheme
-
-    PITCH_VALUES,
-    HOOK_TYPE
-};
-
-extern QVariant readProperty(Pid type, XmlReader& e);
-extern QVariant propertyFromString(Pid type, QString value);
+extern mu::engraving::PropertyValue readProperty(Pid type, XmlReader& e);
+extern mu::engraving::PropertyValue propertyFromString(Pid type, QString value);
 extern QString propertyToString(Pid, QVariant value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);

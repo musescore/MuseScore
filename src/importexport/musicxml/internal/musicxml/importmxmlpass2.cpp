@@ -5439,7 +5439,7 @@ void MusicXMLParserLyric::parse()
     //qDebug("formatted lyric '%s'", qPrintable(formattedText));
     lyric->setXmlText(formattedText);
     if (lyricColor != QColor::Invalid) {
-        lyric->setProperty(Pid::COLOR, QVariant::fromValue(mu::draw::Color::fromQColor(lyricColor)));
+        lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 

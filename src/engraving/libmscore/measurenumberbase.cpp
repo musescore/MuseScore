@@ -70,7 +70,7 @@ engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureNumberBase::setProperty(Pid id, const QVariant& val)
+bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::HPLACEMENT:

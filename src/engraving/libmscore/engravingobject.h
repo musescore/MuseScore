@@ -267,7 +267,7 @@ public:
     QString mscoreVersion() const;
 
     virtual mu::engraving::PropertyValue getProperty(Pid) const = 0;
-    virtual bool setProperty(Pid, const QVariant&) = 0;
+    virtual bool setProperty(Pid, const mu::engraving::PropertyValue&) = 0;
     virtual mu::engraving::PropertyValue propertyDefault(Pid) const;
     virtual void resetProperty(Pid id);
     mu::engraving::PropertyValue propertyDefault(Pid pid, Tid tid) const;
@@ -298,8 +298,8 @@ public:
 
     virtual void styleChanged();
 
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps);
-    void undoChangeProperty(Pid id, const QVariant&);
+    virtual void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps);
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&);
     void undoResetProperty(Pid id);
 
     void undoPushProperty(Pid);

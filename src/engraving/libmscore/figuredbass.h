@@ -218,7 +218,7 @@ public:
     QString           displayText() const { return _displayText; }
 
     mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
-    bool      setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue  propertyDefault(Pid) const override;
 };
 
@@ -327,7 +327,7 @@ public:
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
     mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
-    bool      setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue  propertyDefault(Pid) const override;
 
     void appendItem(FiguredBassItem* item) { items.push_back(item); }

@@ -411,9 +411,9 @@ public:
     mu::draw::FontMetrics fontMetrics() const;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
-    void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& v, PropertyFlags ps) override;
     Pid propertyId(const QStringRef& xmlName) const override;
     Sid getPropertyStyle(Pid) const override;
     void styleChanged() override;

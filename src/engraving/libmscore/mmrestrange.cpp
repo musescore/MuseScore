@@ -66,7 +66,7 @@ PropertyValue MMRestRange::getProperty(Pid id) const
     }
 }
 
-bool MMRestRange::setProperty(Pid id, const QVariant& val)
+bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:

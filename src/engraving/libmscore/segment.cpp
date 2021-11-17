@@ -981,7 +981,7 @@ PropertyValue Segment::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Segment::setProperty(Pid propertyId, const QVariant& v)
+bool Segment::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::TICK:

@@ -3009,7 +3009,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextBase::setProperty(Pid pid, const QVariant& v)
+bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
 {
     if (textInvalid) {
         genText();
@@ -3650,7 +3650,7 @@ QString TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) 
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void TextBase::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (ps == PropertyFlags::STYLED && v == propertyDefault(id)) {
         // this is a reset

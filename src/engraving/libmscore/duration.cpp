@@ -158,7 +158,7 @@ PropertyValue DurationElement::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
+bool DurationElement::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DURATION: {

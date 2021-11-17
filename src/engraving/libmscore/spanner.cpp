@@ -173,7 +173,7 @@ engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
+bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 {
     if (EngravingItem* e = propertyDelegate(pid)) {
         return e->setProperty(pid, v);
@@ -266,7 +266,7 @@ void SpannerSegment::reset()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void SpannerSegment::undoChangeProperty(Pid pid, const PropertyValue& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
@@ -609,7 +609,7 @@ PropertyValue Spanner::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Spanner::setProperty(Pid propertyId, const QVariant& v)
+bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPANNER_TICK:
@@ -1611,7 +1611,7 @@ void SpannerSegment::autoplaceSpannerSegment()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Spanner::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::PLACEMENT) {
         EngravingObject::undoChangeProperty(id, v, ps);

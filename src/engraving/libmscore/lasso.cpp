@@ -121,7 +121,7 @@ std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Lasso::setProperty(Pid propertyId, const QVariant& v)
+bool Lasso::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LASSO_POS:

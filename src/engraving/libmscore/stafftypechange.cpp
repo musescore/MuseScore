@@ -194,7 +194,7 @@ PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
+bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::STEP_OFFSET:

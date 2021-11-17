@@ -123,7 +123,7 @@ void Ottava::setPlacement(Placement p)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void OttavaSegment::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY) {
         EngravingObject::undoChangeProperty(id, v, ps);
@@ -132,7 +132,7 @@ void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags 
     }
 }
 
-void Ottava::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Ottava::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY) {
         TextLineBase::undoChangeProperty(id, v, ps);
@@ -375,7 +375,7 @@ PropertyValue Ottava::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Ottava::setProperty(Pid propertyId, const QVariant& val)
+bool Ottava::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::OTTAVA_TYPE:

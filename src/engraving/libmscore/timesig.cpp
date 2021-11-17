@@ -487,7 +487,7 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
+bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
@@ -503,7 +503,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
         setDenominatorString(v.toString());
         break;
     case Pid::GROUPS:
-        setGroups(v.value<Groups>());
+        setGroups(v.toGroups());
         break;
     case Pid::TIMESIG:
         setSig(v.value<Fraction>());
@@ -518,7 +518,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
         _timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = SizeF::fromVariant(v);
+        _scale = v.value<SizeF>();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {

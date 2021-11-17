@@ -1474,7 +1474,7 @@ PropertyValue SLine::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SLine::setProperty(Pid id, const QVariant& v)
+bool SLine::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::DIAGONAL:

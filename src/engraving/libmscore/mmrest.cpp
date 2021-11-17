@@ -247,7 +247,7 @@ PropertyValue MMRest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MMRest::setProperty(Pid propertyId, const QVariant& v)
+bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:

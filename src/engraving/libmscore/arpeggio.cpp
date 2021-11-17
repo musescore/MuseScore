@@ -723,7 +723,7 @@ engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
+bool Arpeggio::setProperty(Pid propertyId, const engraving::PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::ARPEGGIO_TYPE:

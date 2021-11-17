@@ -74,7 +74,7 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     EngravingItem* nextSegmentElement() override;

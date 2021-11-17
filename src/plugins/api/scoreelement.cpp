@@ -27,6 +27,8 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingobject.h"
 
+using namespace mu::engraving;
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -137,9 +139,9 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
     if (_ownership == Ownership::SCORE) {
-        e->undoChangeProperty(pid, val, newFlags);
+        e->undoChangeProperty(pid, PropertyValue::fromQVariant(val), newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
-        e->setProperty(pid, val);
+        e->setProperty(pid, PropertyValue::fromQVariant(val));
         e->setPropertyFlags(pid, newFlags);
     }
 }

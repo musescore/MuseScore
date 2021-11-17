@@ -1033,7 +1033,7 @@ PropertyValue Rest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Rest::setProperty(Pid propertyId, const QVariant& v)
+bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::GAP:
@@ -1067,7 +1067,7 @@ bool Rest::setProperty(Pid propertyId, const QVariant& v)
 void Rest::undoChangeDotsVisible(bool v)
 {
     for (NoteDot* dot : m_dots) {
-        dot->undoChangeProperty(Pid::VISIBLE, QVariant(v));
+        dot->undoChangeProperty(Pid::VISIBLE, v);
     }
 }
 

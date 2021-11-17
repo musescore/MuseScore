@@ -41,7 +41,7 @@ public:
     MeasureNumberBase(const MeasureNumberBase& other);
 
     mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const QVariant& val) override;
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& val) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     bool readProperties(XmlReader&) override;

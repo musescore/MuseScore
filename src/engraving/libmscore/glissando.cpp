@@ -700,7 +700,7 @@ PropertyValue Glissando::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Glissando::setProperty(Pid propertyId, const QVariant& v)
+bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:

@@ -119,7 +119,7 @@ engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
     return EngravingItem::getProperty(pid);
 }
 
-bool ActionIcon::setProperty(Pid pid, const QVariant& v)
+bool ActionIcon::setProperty(Pid pid, const engraving::PropertyValue& v)
 {
     switch (pid) {
     case Pid::ACTION:

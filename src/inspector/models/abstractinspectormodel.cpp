@@ -28,6 +28,7 @@
 
 using namespace mu::inspector;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
     { Ms::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
@@ -228,7 +229,7 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
         convertedValue = valueToElementUnits(pid, newValue, element);
 
-        element->undoChangeProperty(pid, convertedValue, ps);
+        element->undoChangeProperty(pid, PropertyValue::fromQVariant(convertedValue), ps);
     }
 
     updateNotation();

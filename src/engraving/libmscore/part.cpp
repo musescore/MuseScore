@@ -551,7 +551,7 @@ PropertyValue Part::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Part::setProperty(Pid id, const QVariant& property)
+bool Part::setProperty(Pid id, const PropertyValue& property)
 {
     switch (id) {
     case Pid::VISIBLE:

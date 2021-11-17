@@ -278,7 +278,7 @@ PropertyValue Fermata::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Fermata::setProperty(Pid propertyId, const QVariant& v)
+bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:

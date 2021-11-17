@@ -1114,17 +1114,17 @@ class ChangeProperty : public UndoCommand
 protected:
     EngravingObject* element;
     Pid id;
-    QVariant property;
+    mu::engraving::PropertyValue property;
     PropertyFlags flags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeProperty(EngravingObject* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeProperty(EngravingObject* e, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : element(e), id(i), property(v), flags(ps) {}
     Pid getId() const { return id; }
     EngravingObject* getElement() const { return element; }
-    QVariant data() const { return property; }
+    mu::engraving::PropertyValue data() const { return property; }
     UNDO_NAME("ChangeProperty")
 
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
@@ -1145,7 +1145,7 @@ class ChangeBracketProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeBracketProperty(Staff* s, int l, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeBracketProperty(Staff* s, int l, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
     UNDO_NAME("ChangeBracketProperty")
 };
@@ -1159,7 +1159,7 @@ class ChangeTextLineProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeTextLineProperty(EngravingObject* e, QVariant v)
+    ChangeTextLineProperty(EngravingObject* e, mu::engraving::PropertyValue v)
         : ChangeProperty(e, Pid::SYSTEM_FLAG, v, PropertyFlags::NOSTYLE) {}
     UNDO_NAME("ChangeTextLineProperty")
 };

@@ -62,7 +62,7 @@ public:
     void setPoints(const QList<PitchValue>& p) { m_points = p; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return m_userMag; }

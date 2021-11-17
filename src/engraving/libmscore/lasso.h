@@ -49,7 +49,7 @@ public:
     void endDrag(EditData&) override {}
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
 
     int gripsCount() const override { return 8; }
     Grip initialEditModeGrip() const override { return Grip(7); }

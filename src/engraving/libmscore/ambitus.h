@@ -113,7 +113,7 @@ public:
 
     // properties
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     EngravingItem* nextSegmentElement() override;

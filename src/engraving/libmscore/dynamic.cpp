@@ -578,7 +578,7 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
+bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:

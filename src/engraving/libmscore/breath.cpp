@@ -196,7 +196,7 @@ PropertyValue Breath::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Breath::setProperty(Pid propertyId, const QVariant& v)
+bool Breath::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:

@@ -1376,7 +1376,7 @@ PropertyValue FretDiagram::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
+bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::MAG:
