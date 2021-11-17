@@ -134,6 +134,11 @@ Color EngravingConfiguration::formattingMarksColor() const
     return "#A0A0A4";
 }
 
+double EngravingConfiguration::guiScaling() const
+{
+    return uiConfiguration()->guiScaling();
+}
+
 Color EngravingConfiguration::selectionColor(int voice) const
 {
     return voiceColorKeys[voice].color;

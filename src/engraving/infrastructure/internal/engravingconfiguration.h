@@ -25,10 +25,13 @@
 #include "../iengravingconfiguration.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
+    INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
+
 public:
     EngravingConfiguration() = default;
 
@@ -48,6 +51,8 @@ public:
     draw::Color criticalColor() const override;
     draw::Color criticalSelectedColor() const override;
     draw::Color formattingMarksColor() const override;
+
+    double guiScaling() const override;
 
     draw::Color selectionColor(int voiceIndex = 0) const override;
     void setSelectionColor(int voiceIndex, draw::Color color) override;

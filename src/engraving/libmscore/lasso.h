@@ -27,7 +27,6 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
-#include "ui/iuiconfiguration.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -37,7 +36,6 @@ namespace Ms {
 class Lasso : public EngravingItem
 {
     INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
 
 public:
     Lasso(Score*);
