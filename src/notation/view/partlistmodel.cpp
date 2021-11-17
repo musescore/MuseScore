@@ -279,6 +279,8 @@ void PartListModel::openSelectedParts()
         return;
     }
 
+    std::sort(rows.begin(), rows.end());
+
     ExcerptNotationList newExcerpts;
     for (int index : rows) {
         newExcerpts.push_back(m_excerpts[index]);
@@ -286,6 +288,9 @@ void PartListModel::openSelectedParts()
 
     masterNotation()->addExcerpts(newExcerpts);
 
+    for (int index : rows) {
+        m_excerpts[index]->notation()->setOpened(true);
+    }
     context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
 }
 
