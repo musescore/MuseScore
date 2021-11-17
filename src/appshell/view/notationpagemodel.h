@@ -72,6 +72,8 @@ signals:
     void isNavigatorVisibleChanged();
 
 private:
+    void onNotationChanged();
+
     void toggleDock(const QString& name);
 
     void updateDrumsetPanelVisibility();

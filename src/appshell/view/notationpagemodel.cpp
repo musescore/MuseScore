@@ -50,17 +50,10 @@ void NotationPageModel::init()
     }
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        INotationPtr notation = globalContext()->currentNotation();
-        if (!notation) {
-            return;
-        }
-
-        INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
-        noteInput->stateChanged().onNotify(this, [this]() {
-            updateDrumsetPanelVisibility();
-        });
+        onNotationChanged();
     });
 
+    onNotationChanged();
     updateDrumsetPanelVisibility();
 }
 
@@ -127,6 +120,19 @@ QString NotationPageModel::drumsetPanelName() const
 QString NotationPageModel::statusBarName() const
 {
     return NOTATION_STATUSBAR_NAME;
+}
+
+void NotationPageModel::onNotationChanged()
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    noteInput->stateChanged().onNotify(this, [this]() {
+        updateDrumsetPanelVisibility();
+    });
 }
 
 void NotationPageModel::toggleDock(const QString& name)
