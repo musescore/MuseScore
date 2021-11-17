@@ -73,14 +73,11 @@ Item {
         }
     }
 
-    TabBar {
+    StyledTabBar {
         id: bar
 
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-
-        contentHeight: 28
-        spacing: 0
 
         property var currentItemNavigationIndex: []
 
@@ -100,8 +97,6 @@ Item {
         StyledTabButton {
             id: chooseInstrumentsBtn
             text: qsTrc("project", "Choose instruments")
-            sideMargin: 22
-            isCurrent: bar.currentIndex === 0
 
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
@@ -115,8 +110,6 @@ Item {
         StyledTabButton {
             id: chooseFromTemplateBtn
             text: qsTrc("project", "Choose from template")
-            sideMargin: 22
-            isCurrent: bar.currentIndex === 1
 
             navigation.name: "Choose from template"
             navigation.panel: topNavPanel
@@ -142,7 +135,7 @@ Item {
         id: pagesStack
 
         anchors.top: bar.bottom
-        anchors.topMargin: 24
+        anchors.topMargin: 20
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom

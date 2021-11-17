@@ -56,11 +56,10 @@ FlatButton {
     StyledPopupView {
         id: popup
 
-        padding: 8
         margins: 20
 
-        contentWidth: 688
-        contentHeight: 242
+        contentWidth: 684
+        contentHeight: 236
 
         navigationParentControl: root.navigation
 
@@ -70,15 +69,12 @@ FlatButton {
 
         ColumnLayout {
             id: content
-
             anchors.fill: parent
+            spacing: 20
 
-            TabBar {
+            StyledTabBar {
                 id: bar
-
                 Layout.alignment: Qt.AlignHCenter
-
-                implicitHeight: 28
 
                 property NavigationPanel navigationPanel: NavigationPanel {
                     name: "KeySignatureTabPanel"
@@ -98,8 +94,6 @@ FlatButton {
                 StyledTabButton {
                     id: majorTab
                     text: qsTrc("project", "Major")
-                    sideMargin: 22
-                    isCurrent: bar.currentIndex === 0
 
                     navigation.name: "MajorTab"
                     navigation.panel: bar.navigationPanel
@@ -112,8 +106,6 @@ FlatButton {
 
                 StyledTabButton {
                     text: qsTrc("appshell", "Minor")
-                    sideMargin: 22
-                    isCurrent: bar.currentIndex === 1
 
                     navigation.name: "MinorTab"
                     navigation.panel: bar.navigationPanel
@@ -128,8 +120,6 @@ FlatButton {
             KeySignatureListView {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-
-                Layout.topMargin: 20
 
                 model: root.model.keySignatureList()
                 currentSignature: root.model.keySignature

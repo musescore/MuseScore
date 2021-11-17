@@ -62,7 +62,6 @@ FlatButton {
     StyledPopupView {
         id: popup
 
-        padding: 8
         margins: 36
 
         contentWidth: 200

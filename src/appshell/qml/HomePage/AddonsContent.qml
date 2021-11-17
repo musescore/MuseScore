@@ -148,19 +148,15 @@ FocusScope {
         }
     }
 
-    TabBar {
+    StyledTabBar {
         id: bar
 
         anchors.top: topLayout.bottom
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - itemSideMargin
-
-        contentHeight: 32
-        spacing: 0
+        anchors.leftMargin: prv.sideMargin
 
         property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
-        readonly property int itemSideMargin: 22
 
         function categories() {
             var result = []
@@ -203,9 +199,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
 
             navigation.name: "Plugins"
             navigation.panel: navTabPanel
@@ -215,9 +208,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Extensions"
             navigation.panel: navTabPanel
@@ -227,9 +217,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Languages"
             navigation.panel: navTabPanel

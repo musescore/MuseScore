@@ -43,164 +43,170 @@ StyledDialogView {
         id: newScoreModel
     }
 
-    ColumnLayout {
-        id: content
-
+    Item {
+        id: popupsAnchorItem
         anchors.fill: parent
+        anchors.margins: 8
+    }
+
+    StackLayout {
+        id: pagesStack
+
+        anchors.top: parent.top
+        anchors.topMargin: 12
+        anchors.left: parent.left
         anchors.leftMargin: 12
+        anchors.right: parent.right
         anchors.rightMargin: 12
-        anchors.topMargin: 16
-        anchors.bottomMargin: 16
+        anchors.bottom: footer.top
+        anchors.bottomMargin: 20
 
-        spacing: 40
+        ChooseInstrumentsAndTemplatesPage {
+            id: chooseInstrumentsAndTemplatePage
 
-        StackLayout {
-            id: pagesStack
+            navigationSection: root.navigationSection
 
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            ChooseInstrumentsAndTemplatesPage {
-                id: chooseInstrumentsAndTemplatePage
-
-                navigationSection: root.navigationSection
-
-                Component.onCompleted: {
-                    preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
-                }
-            }
-
-            ScoreInfoPage {
-                id: scoreInfoPage
-
-                navigationSection: root.navigationSection
-                popupsAnchorItem: content
-            }
-
-            onCurrentIndexChanged: {
-                switch(currentIndex) {
-                case 0:
-                    chooseInstrumentsAndTemplatePage.focusOnSelected()
-                    break
-                case 1:
-                    scoreInfoPage.focusOnFirst()
-                    break
-                }
+            Component.onCompleted: {
+                preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
             }
         }
 
-        RowLayout {
-            id: footer
+        ScoreInfoPage {
+            id: scoreInfoPage
 
-            spacing: 12
+            navigationSection: root.navigationSection
+            popupsAnchorItem: popupsAnchorItem
+        }
 
-            readonly property int buttonHeight: 30
-            readonly property int buttonWidth: 132
-
-            NavigationPanel {
-                id: navBottomPanel
-
-                name: "BottomPanel"
-                section: root.navigationSection
-                order: 100
-                direction: NavigationPanel.Horizontal
+        onCurrentIndexChanged: {
+            switch(currentIndex) {
+            case 0:
+                chooseInstrumentsAndTemplatePage.focusOnSelected()
+                break
+            case 1:
+                scoreInfoPage.focusOnFirst()
+                break
             }
+        }
+    }
 
-            StyledTextLabel {
-                id: descriptionLabel
-                text: pagesStack.currentIndex === 0
-                      ? chooseInstrumentsAndTemplatePage.description
-                      : ""
+    RowLayout {
+        id: footer
 
-                height: footer.buttonHeight
-                Layout.fillWidth: true
-                Layout.leftMargin: 12
+        anchors.left: parent.left
+        anchors.leftMargin: 24
+        anchors.right: parent.right
+        anchors.rightMargin: 16
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 16
 
-                font: ui.theme.bodyFont
-                opacity: 0.7
-                horizontalAlignment: Text.AlignLeft
-                wrapMode: Text.Wrap
+        spacing: 12
+
+        readonly property int buttonHeight: 30
+        readonly property int buttonWidth: 132
+
+        NavigationPanel {
+            id: navBottomPanel
+
+            name: "BottomPanel"
+            section: root.navigationSection
+            order: 100
+            direction: NavigationPanel.Horizontal
+        }
+
+        StyledTextLabel {
+            id: descriptionLabel
+            text: pagesStack.currentIndex === 0
+                  ? chooseInstrumentsAndTemplatePage.description
+                  : ""
+
+            height: footer.buttonHeight
+            Layout.fillWidth: true
+
+            font: ui.theme.bodyFont
+            opacity: 0.7
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
+        }
+
+        FlatButton {
+            height: footer.buttonHeight
+            width: footer.buttonWidth
+
+            navigation.name: "Cancel"
+            navigation.panel: navBottomPanel
+            navigation.column: 1
+
+            text: qsTrc("global", "Cancel")
+
+            onClicked: {
+                root.reject()
             }
+        }
 
-            FlatButton {
-                height: footer.buttonHeight
-                width: footer.buttonWidth
+        FlatButton {
+            height: footer.buttonHeight
+            width: footer.buttonWidth
 
-                navigation.name: "Cancel"
-                navigation.panel: navBottomPanel
-                navigation.column: 1
+            navigation.name: "Back"
+            navigation.panel: navBottomPanel
+            navigation.column: 2
 
-                text: qsTrc("global", "Cancel")
+            visible: pagesStack.currentIndex > 0
 
-                onClicked: {
-                    root.reject()
+            text: qsTrc("project", "Back")
+
+            onClicked: {
+                pagesStack.currentIndex--
+            }
+        }
+
+        FlatButton {
+            height: footer.buttonHeight
+            width: footer.buttonWidth
+
+            navigation.name: "Next"
+            navigation.panel: navBottomPanel
+            navigation.column: 3
+
+            visible: pagesStack.currentIndex < pagesStack.count - 1
+            enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+            text: qsTrc("project", "Next")
+
+            onClicked: {
+                pagesStack.currentIndex++
+            }
+        }
+
+        FlatButton {
+            height: footer.buttonHeight
+            width: footer.buttonWidth
+
+            navigation.name: "Done"
+            navigation.panel: navBottomPanel
+            navigation.column: 4
+
+            enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+            text: qsTrc("project", "Done")
+
+            onClicked: {
+                var result = {}
+
+                var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
+                for (var key in instrumentsAndTemplatePageResult) {
+                    result[key] = instrumentsAndTemplatePageResult[key]
                 }
-            }
 
-            FlatButton {
-                height: footer.buttonHeight
-                width: footer.buttonWidth
-
-                navigation.name: "Back"
-                navigation.panel: navBottomPanel
-                navigation.column: 2
-
-                visible: pagesStack.currentIndex > 0
-
-                text: qsTrc("project", "Back")
-
-                onClicked: {
-                    pagesStack.currentIndex--
+                var scoreInfoPageResult = scoreInfoPage.result()
+                for (key in scoreInfoPageResult) {
+                    result[key] = scoreInfoPageResult[key]
                 }
-            }
 
-            FlatButton {
-                height: footer.buttonHeight
-                width: footer.buttonWidth
-
-                navigation.name: "Next"
-                navigation.panel: navBottomPanel
-                navigation.column: 3
-
-                visible: pagesStack.currentIndex < pagesStack.count - 1
-                enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                text: qsTrc("project", "Next")
-
-                onClicked: {
-                    pagesStack.currentIndex++
-                }
-            }
-
-            FlatButton {
-                height: footer.buttonHeight
-                width: footer.buttonWidth
-
-                navigation.name: "Done"
-                navigation.panel: navBottomPanel
-                navigation.column: 4
-
-                enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                text: qsTrc("project", "Done")
-
-                onClicked: {
-                    var result = {}
-
-                    var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
-                    for (var key in instrumentsAndTemplatePageResult) {
-                        result[key] = instrumentsAndTemplatePageResult[key]
-                    }
-
-                    var scoreInfoPageResult = scoreInfoPage.result()
-                    for (key in scoreInfoPageResult) {
-                        result[key] = scoreInfoPageResult[key]
-                    }
-
-                    if (newScoreModel.createScore(result)) {
-                        root.isDoActiveParentOnClose = false
-                        root.accept()
-                    }
+                if (newScoreModel.createScore(result)) {
+                    root.isDoActiveParentOnClose = false
+                    root.accept()
                 }
             }
         }
