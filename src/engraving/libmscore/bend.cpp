@@ -425,7 +425,7 @@ PropertyValue Bend::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Bend::setProperty(Pid id, const QVariant& v)
+bool Bend::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::FONT_FACE:

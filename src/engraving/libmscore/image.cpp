@@ -613,7 +613,7 @@ PropertyValue Image::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Image::setProperty(Pid propertyId, const QVariant& v)
+bool Image::setProperty(Pid propertyId, const PropertyValue& v)
 {
     bool rv = true;
     score()->addRefresh(canvasBoundingRect());

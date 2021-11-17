@@ -232,7 +232,7 @@ void EngravingObject::initElementStyle(const ElementStyle* ss)
 
 void EngravingObject::resetProperty(Pid pid)
 {
-    QVariant v = propertyDefault(pid);
+    PropertyValue v = propertyDefault(pid);
     if (v.isValid()) {
         setProperty(pid, v);
         PropertyFlags p = propertyFlags(pid);
@@ -269,7 +269,7 @@ bool EngravingObject::isStyled(Pid pid) const
 //   changeProperty
 //---------------------------------------------------------
 
-static void changeProperty(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
+static void changeProperty(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
         if (e->isBracketItem()) {
@@ -285,7 +285,7 @@ static void changeProperty(EngravingObject* e, Pid t, const QVariant& st, Proper
 //   changeProperties
 //---------------------------------------------------------
 
-static void changeProperties(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
+static void changeProperties(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (propertyLink(t)) {
         for (EngravingObject* ee : e->linkList()) {
@@ -300,12 +300,12 @@ static void changeProperties(EngravingObject* e, Pid t, const QVariant& st, Prop
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void EngravingObject::undoChangeProperty(Pid id, const QVariant& v)
+void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v)
 {
     undoChangeProperty(id, v, propertyFlags(id));
 }
 
-void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
@@ -350,7 +350,7 @@ void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlag
     }
     changeProperties(this, id, v, ps);
     if (id != Pid::GENERATED) {
-        changeProperties(this, Pid::GENERATED, QVariant(false), PropertyFlags::NOSTYLE);
+        changeProperties(this, Pid::GENERATED, false, PropertyFlags::NOSTYLE);
     }
 }
 
@@ -360,7 +360,7 @@ void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlag
 
 void EngravingObject::undoPushProperty(Pid id)
 {
-    QVariant val = getProperty(id);
+    PropertyValue val = getProperty(id);
     score()->undoStack()->push1(new ChangeProperty(this, id, val));
 }
 
@@ -370,7 +370,7 @@ void EngravingObject::undoPushProperty(Pid id)
 
 void EngravingObject::readProperty(XmlReader& e, Pid id)
 {
-    QVariant v = Ms::readProperty(id, e);
+    PropertyValue v = Ms::readProperty(id, e);
     switch (propertyType(id)) {
     case P_TYPE::SP_REAL:
         v = v.toReal() * score()->spatium();

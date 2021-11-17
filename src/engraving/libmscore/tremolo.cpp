@@ -729,7 +729,7 @@ PropertyValue Tremolo::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
+bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:

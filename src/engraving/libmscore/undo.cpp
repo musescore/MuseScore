@@ -2365,7 +2365,7 @@ void ChangeProperty::flip(EditData*)
 {
     LOG_UNDO() << element->name() << int(id) << "(" << propertyName(id) << ")" << element->getProperty(id) << "->" << property;
 
-    QVariant v       = element->getProperty(id);
+    PropertyValue v       = element->getProperty(id);
     PropertyFlags ps = element->propertyFlags(id);
 
     element->setProperty(id, property);

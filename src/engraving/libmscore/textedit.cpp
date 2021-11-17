@@ -30,6 +30,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -844,7 +845,7 @@ void ChangeTextProperties::restoreSelection()
     tc.text()->cursor()->setColumn(tc.column());
 }
 
-ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const QVariant& propVal)
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const PropertyValue& propVal)
     : TextEditUndoCommand(*tc)
 {
     propertyId = propId;

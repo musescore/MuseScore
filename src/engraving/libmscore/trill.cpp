@@ -502,7 +502,7 @@ PropertyValue Trill::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Trill::setProperty(Pid propertyId, const QVariant& val)
+bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:

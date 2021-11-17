@@ -321,7 +321,7 @@ PropertyValue Stem::getProperty(Pid propertyId) const
     }
 }
 
-bool Stem::setProperty(Pid propertyId, const QVariant& v)
+bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:

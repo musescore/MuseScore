@@ -291,7 +291,7 @@ void TempoText::endEdit(EditData& ed)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void TempoText::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::TEMPO_FOLLOW_TEXT) {
         EngravingObject::undoChangeProperty(id, v, ps);
@@ -328,7 +328,7 @@ void TempoText::updateTempo()
             if (sl.size() == 2) {
                 qreal nt = qreal(sl[1].toDouble()) * pa.f;
                 if (nt != _tempo) {
-                    undoChangeProperty(Pid::TEMPO, QVariant(qreal(sl[1].toDouble()) * pa.f), propertyFlags(Pid::TEMPO));
+                    undoChangeProperty(Pid::TEMPO, PropertyValue(qreal(sl[1].toDouble()) * pa.f), propertyFlags(Pid::TEMPO));
                     _relative = 1.0;
                     _isRelative = false;
                     updateScore();
@@ -409,7 +409,7 @@ PropertyValue TempoText::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TempoText::setProperty(Pid propertyId, const QVariant& v)
+bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::TEMPO:

@@ -771,7 +771,7 @@ PropertyValue Hairpin::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Hairpin::setProperty(Pid id, const QVariant& v)
+bool Hairpin::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::HAIRPIN_CIRCLEDTIP:

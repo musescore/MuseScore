@@ -45,7 +45,7 @@ class TempoText final : public TextBase
     void updateScore();
     void updateTempo();
     void endEdit(EditData&) override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
 public:
     TempoText(Segment* parent);
@@ -79,7 +79,7 @@ public:
     static QString duration2userName(const TDuration t);
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     QString accessibleInfo() const override;
 };

@@ -25,10 +25,11 @@
 #include <variant>
 #include <any>
 #include <string>
+#include <memory>
 
 #include <QVariant>
 
-#include "libmscore/property.h"
+//#include "libmscore/property.h"
 #include "libmscore/spatium.h"
 #include "libmscore/types.h"
 #include "libmscore/symid.h"
@@ -42,6 +43,59 @@
 namespace Ms {
 class Groups;
 class TDuration;
+
+enum class P_TYPE {
+    UNDEFINED = 0,
+    BOOL,
+    INT,
+    REAL,
+    SPATIUM,
+    SP_REAL,            // real (point) value saved in (score) spatium units
+    FRACTION,
+    POINT,
+    POINT_SP,           // point units, value saved in (score) spatium units
+    POINT_MM,
+    POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
+    SIZE,
+    SIZE_MM,
+    STRING,
+    SCALE,
+    COLOR,
+    DIRECTION,        // enum class Direction
+    DIRECTION_H,      // enum class MScore::DirectionH
+    ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
+    TDURATION,
+    LAYOUT_BREAK,
+    VALUE_TYPE,
+    BEAM_MODE,
+    PLACEMENT,        // ABOVE or BELOW
+    HPLACEMENT,       // LEFT, CENTER or RIGHT
+    TEXT_PLACE,
+    TEMPO,
+    GROUPS,
+    SYMID,
+    INT_LIST,
+    GLISS_STYLE,
+    BARLINE_TYPE,
+    HEAD_TYPE,          // enum class Notehead::Type
+    HEAD_GROUP,         // enum class Notehead::Group
+    ZERO_INT,           // displayed with offset +1
+    FONT,
+    SUB_STYLE,
+    ALIGN,
+    CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
+    CHANGE_SPEED,       // enum class Dynamic::Speed
+    CLEF_TYPE,          // enum class ClefType
+    DYNAMIC_TYPE,       // enum class DynamicType
+    KEYMODE,            // enum class KeyMode
+    ORIENTATION,        // enum class Orientation
+
+    PATH,               // mu::PainterPath
+    HEAD_SCHEME,        // enum class NoteHead::Scheme
+
+    PITCH_VALUES,
+    HOOK_TYPE
+};
 }
 
 namespace mu::engraving {
@@ -66,7 +120,7 @@ public:
     PropertyValue(Ms::HookType v);
     PropertyValue(Ms::HPlacement v);
     PropertyValue(Ms::DynamicType v)
-        :   m_type(Ms::P_TYPE::DYNAMIC_TYPE), m_val(v) {}
+        : m_type(Ms::P_TYPE::DYNAMIC_TYPE), m_val(v) {}
     PropertyValue(const Ms::PitchValues& v);
     PropertyValue(const Ms::Fraction& v);
     PropertyValue(const QList<int>& v); //endings
@@ -85,25 +139,31 @@ public:
             return T();
         }
 
-        const T* pv = std::get_if<T>(&m_val);
+//        const T* pv = std::get_if<T>(&m_val);
+//        assert(pv);
+//        return pv ? *pv : T();
 
-        assert(pv);
-        if (!pv) {
+        try {
+            return std::any_cast<T>(m_val);
+        }
+        catch (const std::bad_any_cast&) {
             return T();
         }
-
-        return *pv;
     }
 
     bool toBool() const { return value<bool>(); }
     int toInt() const { return value<int>(); }
     qreal toReal() const { return value<qreal>(); }
+    double toDouble() const { return value<double>(); }
     QString toString() const { return value<QString>(); }
     Ms::Spatium toSpatium() const { return value<Ms::Spatium>(); }
     Ms::Align toAlign() const { return value<Ms::Align>(); }
     Ms::Direction toDirection() const { return value<Ms::Direction>(); }
 
-    inline bool operator ==(const PropertyValue& v) const { return m_type == v.m_type && m_val == v.m_val; }
+    const Ms::Groups& toGroups() const;
+    const Ms::TDuration& toTDuration() const;
+
+    inline bool operator ==(const PropertyValue& v) const { return m_type == v.m_type /* && m_val == v.m_val*/; }
     inline bool operator !=(const PropertyValue& v) const { return !this->operator ==(v); }
 
     template<typename T>
@@ -117,23 +177,19 @@ public:
     }
 
 private:
-
-    struct GroupsHolder
-    {
-        GroupsHolder(const Ms::Groups& v);
-        const Ms::Groups& val() const;
-    private:
-        std::any m_val;
-    };
-
     Ms::P_TYPE m_type = Ms::P_TYPE::UNDEFINED;
-    std::variant<bool, int, qreal, QString,
-                 Ms::Spatium,
-                 PointF, SizeF, PainterPath, draw::Color,
-                 Ms::Align, Ms::Direction, Ms::SymId, Ms::BarLineType, Ms::HookType, Ms::HPlacement,
-                 Ms::DynamicType,
-                 Ms::PitchValues, Ms::Fraction, QList<int>
-                 > m_val;
+//    std::variant<bool, int, qreal, QString,
+//                 Ms::Spatium,
+//                 PointF, SizeF, PainterPath, draw::Color,
+//                 Ms::Align, Ms::Direction, Ms::SymId, Ms::BarLineType, Ms::HookType, Ms::HPlacement,
+//                 Ms::DynamicType,
+//                 Ms::PitchValues, Ms::Fraction, QList<int>
+//                 > m_val;
+
+    std::any m_val;
+
+    //! NOTE Temporary solution for some types
+    std::any m_any;
 };
 
 //! NOTE compat

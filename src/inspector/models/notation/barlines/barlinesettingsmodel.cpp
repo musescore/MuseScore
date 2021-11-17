@@ -26,6 +26,7 @@
 #include "barline.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -131,9 +132,9 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
         Ms::Staff* staff = barline->staff();
 
         if (std::find(staves.cbegin(), staves.cend(), staff) == staves.cend()) {
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN, PropertyValue::fromQVariant(m_isSpanToNextStaff->value()));
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_FROM, PropertyValue::fromQVariant(m_spanFrom->value()));
+            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_TO, PropertyValue::fromQVariant(m_spanTo->value()));
             staves.push_back(staff);
         }
 

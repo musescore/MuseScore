@@ -306,7 +306,7 @@ void LyricsLine::removeUnmanaged()
 //   setProperty
 //---------------------------------------------------------
 
-bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
+bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPANNER_TICKS:

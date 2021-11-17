@@ -400,7 +400,7 @@ PropertyValue MeasureBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureBase::setProperty(Pid id, const QVariant& value)
+bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
 {
     switch (id) {
     case Pid::REPEAT_END:

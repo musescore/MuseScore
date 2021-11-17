@@ -154,7 +154,7 @@ public:
     qreal pause() const;
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     void clearElements();

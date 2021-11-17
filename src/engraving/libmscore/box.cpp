@@ -401,7 +401,7 @@ PropertyValue Box::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Box::setProperty(Pid propertyId, const QVariant& v)
+bool Box::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     switch (propertyId) {
@@ -740,7 +740,7 @@ PropertyValue HBox::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool HBox::setProperty(Pid propertyId, const QVariant& v)
+bool HBox::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::CREATE_SYSTEM_HEADER:

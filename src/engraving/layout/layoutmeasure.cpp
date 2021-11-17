@@ -116,7 +116,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
                     if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
                         // change directly when generating mmrests, do not change underlying measures or follow links
                         score->undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
-                                                       QVariant::fromValue(lastMeasureEndBarline->barLineType()),
+                                                       PropertyValue::fromValue(lastMeasureEndBarline->barLineType()),
                                                        PropertyFlags::NOSTYLE));
                         score->undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                     }

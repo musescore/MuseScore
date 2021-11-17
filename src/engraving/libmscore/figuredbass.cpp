@@ -707,7 +707,7 @@ PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
     }
 }
 
-bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
+bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     int val = v.toInt();
@@ -1455,7 +1455,7 @@ PropertyValue FiguredBass::getProperty(Pid propertyId) const
     return TextBase::getProperty(propertyId);
 }
 
-bool FiguredBass::setProperty(Pid propertyId, const QVariant& v)
+bool FiguredBass::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     return TextBase::setProperty(propertyId, v);

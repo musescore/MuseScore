@@ -150,7 +150,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                         }
                     } else {
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
-                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(lbl, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
                         // set generated flag before and after so it sticks on type change and also works on undo/redo
                         lscore->undo(new ChangeProperty(lbl, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
                         if (lbl != sbl && !generated && !lbl->links()) {
@@ -166,7 +166,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             for (EngravingItem* e : segment1->elist()) {
                 if (e) {
                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                    e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
+                    e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
                     // set generated flag before and after so it sticks on type change and also works on undo/redo
                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                 }
@@ -1489,7 +1489,7 @@ PropertyValue BarLine::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool BarLine::setProperty(Pid id, const QVariant& v)
+bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::BARLINE_TYPE:
@@ -1519,7 +1519,7 @@ bool BarLine::setProperty(Pid id, const QVariant& v)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void BarLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
         const BarLine* bl = this;

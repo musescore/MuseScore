@@ -471,7 +471,7 @@ PropertyValue Bracket::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Bracket::setProperty(Pid id, const QVariant& v)
+bool Bracket::setProperty(Pid id, const PropertyValue& v)
 {
     return _bi->setProperty(id, v);
 }
@@ -496,10 +496,10 @@ PropertyValue Bracket::propertyDefault(Pid id) const
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::COLOR) {
-        setColor(v.value<mu::draw::Color>());
+        setColor(v.value<draw::Color>());
     }
 
     // brackets do not survive layout() and therefore cannot be on

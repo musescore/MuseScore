@@ -235,7 +235,7 @@ Shape TextLineBaseSegment::shape() const
     return shape;
 }
 
-bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
+bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {
         mu::draw::Color color = v.value<mu::draw::Color>();
@@ -670,7 +670,7 @@ PropertyValue TextLineBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLineBase::setProperty(Pid id, const QVariant& v)
+bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::BEGIN_TEXT_PLACE:

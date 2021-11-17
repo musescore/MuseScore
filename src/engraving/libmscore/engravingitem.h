@@ -530,8 +530,8 @@ public:
     bool addToSkyline() const { return !(_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;

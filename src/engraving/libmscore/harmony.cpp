@@ -2234,7 +2234,7 @@ PropertyValue Harmony::getProperty(Pid pid) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Harmony::setProperty(Pid pid, const QVariant& v)
+bool Harmony::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::PLAY:

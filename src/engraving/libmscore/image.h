@@ -79,7 +79,7 @@ public:
     void setSizeIsSpatium(bool val) { _sizeIsSpatium = val; }
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     mu::SizeF imageSize() const;

@@ -537,7 +537,7 @@ PropertyValue Clef::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Clef::setProperty(Pid propertyId, const QVariant& v)
+bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::CLEF_TYPE_CONCERT:

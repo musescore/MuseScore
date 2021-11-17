@@ -443,7 +443,7 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
+bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PATH:

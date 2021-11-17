@@ -330,7 +330,7 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLine::setProperty(Pid id, const QVariant& v)
+bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
 {
     switch (id) {
     case Pid::PLACEMENT:
@@ -347,7 +347,7 @@ bool TextLine::setProperty(Pid id, const QVariant& v)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void TextLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::SYSTEM_FLAG) {
         score()->undo(new ChangeTextLineProperty(this, v));

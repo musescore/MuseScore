@@ -3602,7 +3602,8 @@ void NotationInteraction::toggleFontStyle(Ms::FontStyle style)
     Ms::TextBase* text = toTextBase(m_textEditData.element);
     int currentStyle = text->getProperty(Ms::Pid::FONT_STYLE).toInt();
     score()->startCmd();
-    text->undoChangeProperty(Ms::Pid::FONT_STYLE, QVariant::fromValue(currentStyle ^ static_cast<int>(style)), Ms::PropertyFlags::UNSTYLED);
+    text->undoChangeProperty(Ms::Pid::FONT_STYLE, PropertyValue::fromValue(
+                                 currentStyle ^ static_cast<int>(style)), Ms::PropertyFlags::UNSTYLED);
     score()->endCmd();
     notifyAboutTextEditingChanged();
 }

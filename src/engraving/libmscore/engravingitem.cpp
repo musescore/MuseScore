@@ -1314,7 +1314,7 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool EngravingItem::setProperty(Pid propertyId, const QVariant& v)
+bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::TRACK:
@@ -1327,15 +1327,8 @@ bool EngravingItem::setProperty(Pid propertyId, const QVariant& v)
         setGenerated(v.toBool());
         break;
     case Pid::COLOR:
-    {
-        if (v.isValid()) {
-            IF_ASSERT_FAILED(v.canConvert<mu::draw::Color>())
-            {
-            }
-        }
         setColor(v.value<mu::draw::Color>());
         break;
-    }
     case Pid::VISIBLE:
         setVisible(v.toBool());
         break;
@@ -1379,7 +1372,7 @@ bool EngravingItem::setProperty(Pid propertyId, const QVariant& v)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void EngravingItem::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void EngravingItem::undoChangeProperty(Pid pid, const PropertyValue& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
@@ -1588,7 +1581,7 @@ const MeasureBase* EngravingItem::findMeasureBase() const
 
 void EngravingItem::undoSetColor(const mu::draw::Color& c)
 {
-    undoChangeProperty(Pid::COLOR, QVariant::fromValue(c));
+    undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(c));
 }
 
 //---------------------------------------------------------
@@ -2341,7 +2334,7 @@ qreal EngravingItem::rebaseOffset(bool nox)
         bool flipped = above ? r.top() > staffHeight : r.bottom() < 0.0;
         if (flipped && !multi) {
             off.ry() += above ? -staffHeight : staffHeight;
-            undoChangeProperty(Pid::OFFSET, QVariant::fromValue(off + p));
+            undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
             _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
             rypos() += above ? staffHeight : -staffHeight;
             PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
@@ -2356,7 +2349,7 @@ qreal EngravingItem::rebaseOffset(bool nox)
     }
 
     if (offsetChanged() == OffsetChange::ABSOLUTE_OFFSET) {
-        undoChangeProperty(Pid::OFFSET, QVariant::fromValue(off + p));
+        undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
         _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;                 //saveChangedValue;
         // allow autoplace to manage min distance even when not needed
         undoResetProperty(Pid::MIN_DISTANCE);

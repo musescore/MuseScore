@@ -566,7 +566,7 @@ PropertyValue Lyrics::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
+bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
@@ -653,7 +653,7 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::VERSE && no() != v.toInt()) {
         for (Lyrics* l : chordRest()->lyrics()) {

@@ -39,6 +39,7 @@ static QString TIME_SIGNATURE_PROPERTIES_DIALOG_NAME("TimeSignaturePropertiesDia
 
 using namespace mu::ui;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -238,7 +239,7 @@ void TimeSignaturePropertiesDialog::accept()
     m_originTimeSig->undoChangeProperty(Pid::SHOW_COURTESY, m_editedTimeSig->showCourtesySig());
     m_originTimeSig->undoChangeProperty(Pid::NUMERATOR_STRING, m_editedTimeSig->numeratorString());
     m_originTimeSig->undoChangeProperty(Pid::DENOMINATOR_STRING, m_editedTimeSig->denominatorString());
-    m_originTimeSig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue<Groups>(g));
+    m_originTimeSig->undoChangeProperty(Pid::GROUPS, PropertyValue::fromValue<Groups>(g));
 
     if (m_editedTimeSig->sig() != m_originTimeSig->sig()) {
         notation->interaction()->addTimeSignature(m_originTimeSig->measure(), m_originTimeSig->staffIdx(), m_editedTimeSig);

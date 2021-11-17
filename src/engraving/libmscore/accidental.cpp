@@ -624,7 +624,7 @@ PropertyValue Accidental::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Accidental::setProperty(Pid propertyId, const QVariant& v)
+bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::ACCIDENTAL_TYPE:

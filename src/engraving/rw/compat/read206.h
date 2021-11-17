@@ -59,7 +59,7 @@ public:
 
     static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
-    static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, QVariant> >& excessStyles);
+    static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, PropertyValue> >& excessStyles);
     static void readTextLine206(Ms::XmlReader& e, const ReadContext& ctx, Ms::TextLineBase* tlb);
     static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
     static void readHairpin206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Hairpin* h);
