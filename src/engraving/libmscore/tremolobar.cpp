@@ -169,7 +169,7 @@ PropertyValue TremoloBar::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return lineWidth();
+        return lineWidth().val();
     case Pid::MAG:
         return userMag();
     case Pid::PLAY:
@@ -191,7 +191,7 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.value<Spatium>());
+        setLineWidth(Spatium(v.value<qreal>()));
         break;
     case Pid::MAG:
         setUserMag(v.toDouble());
