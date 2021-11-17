@@ -222,21 +222,21 @@ else()
 endif()
 
 #Generate C/C++ CamelCase forwarding headers (only public includes)
-include(ECMGenerateHeaders)
-ecm_generate_headers(camelcase_HEADERS
-  ORIGINAL
-    CAMELCASE
-  HEADER_NAMES
-    Config
-    DockWidget
-    DockWidgetBase
-    FocusScope
-    FrameworkWidgetFactory,DefaultWidgetFactory
-    LayoutSaver
-    MainWindow
-    MainWindowBase
-    MainWindowMDI
-)
+#include(ECMGenerateHeaders)
+#ecm_generate_headers(camelcase_HEADERS
+#  ORIGINAL
+#    CAMELCASE
+#  HEADER_NAMES
+#    Config
+#    DockWidget
+#    DockWidgetBase
+#    FocusScope
+#    FrameworkWidgetFactory,DefaultWidgetFactory
+#    LayoutSaver
+#    MainWindow
+#    MainWindowBase
+#    MainWindowMDI
+#)
 
 set(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/kddockwidgets_resources.qrc)
 
