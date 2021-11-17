@@ -24,7 +24,7 @@
 
 #include <iterator>
 
-#include "internal/stringutils.h"
+#include "internal/articulationstringutils.h"
 
 using namespace mu::mpe;
 

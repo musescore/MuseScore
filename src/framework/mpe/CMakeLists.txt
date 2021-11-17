@@ -34,7 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/articulationsprofileeditormodel.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/stringutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/articulationstringutils.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/articulationprofilesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/articulationprofilesrepository.h
     )
