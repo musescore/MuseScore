@@ -91,6 +91,9 @@
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
+         <property name="buddy">
+          <cstring>name</cstring>
+         </property>
         </widget>
        </item>
        <item row="0" column="1">
@@ -107,6 +110,9 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+         <property name="buddy">
+          <cstring>noteHead</cstring>
          </property>
         </widget>
        </item>
@@ -130,6 +136,9 @@
             <property name="text">
              <string>Quarter note</string>
             </property>
+            <property name="buddy">
+             <cstring>quarterCmb</cstring>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -139,6 +148,9 @@
            <widget class="QLabel" name="halfLbl">
             <property name="text">
              <string>Half note</string>
+            </property>
+            <property name="buddy">
+             <cstring>halfCmb</cstring>
             </property>
            </widget>
           </item>
@@ -150,6 +162,9 @@
             <property name="text">
              <string>Whole note</string>
             </property>
+            <property name="buddy">
+             <cstring>wholeCmb</cstring>
+            </property>
            </widget>
           </item>
           <item row="2" column="1">
@@ -159,6 +174,9 @@
            <widget class="QLabel" name="doubleWholeLbl">
             <property name="text">
              <string>Double whole note</string>
+            </property>
+            <property name="buddy">
+             <cstring>doubleWholeCmb</cstring>
             </property>
            </widget>
           </item>
@@ -222,6 +240,9 @@
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
+             <property name="buddy">
+              <cstring>voice</cstring>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -262,6 +283,9 @@
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
+             <property name="buddy">
+              <cstring>staffLine</cstring>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -284,6 +308,9 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buddy">
+              <cstring>shortcut</cstring>
              </property>
             </widget>
            </item>
@@ -344,6 +371,9 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buddy">
+              <cstring>stemDirection</cstring>
              </property>
             </widget>
            </item>
