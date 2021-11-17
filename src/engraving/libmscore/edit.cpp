@@ -4421,7 +4421,7 @@ void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& 
 //   undoChangeStyleVal
 //---------------------------------------------------------
 
-void Score::undoChangeStyleVal(Sid idx, const QVariant& v)
+void Score::undoChangeStyleVal(Sid idx, const PropertyValue& v)
 {
     undo(new ChangeStyleVal(this, idx, v));
 }

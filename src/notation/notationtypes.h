@@ -59,6 +59,7 @@ namespace mu::notation {
 using Page = Ms::Page;
 using EngravingItem = Ms::EngravingItem;
 using ElementType = Ms::ElementType;
+using PropertyValue = engraving::PropertyValue;
 using Note = Ms::Note;
 using Measure = Ms::Measure;
 using DurationType = Ms::TDuration::DurationType;

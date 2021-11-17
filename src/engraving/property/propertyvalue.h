@@ -40,36 +40,50 @@
 #include "infrastructure/draw/painterpath.h"
 #include "infrastructure/draw/color.h"
 
+#include "framework/global/logstream.h"
+
 namespace Ms {
 class Groups;
 class TDuration;
 
 enum class P_TYPE {
     UNDEFINED = 0,
+    // base
     BOOL,
     INT,
     REAL,
-    SPATIUM,
-    SP_REAL,            // real (point) value saved in (score) spatium units
-    FRACTION,
+    STRING,
+    // geometry
     POINT,
+    SIZE,
+    PATH,               // mu::PainterPath
+    SCALE,
+    SPATIUM,
+
+    SIZE_MM,
     POINT_SP,           // point units, value saved in (score) spatium units
     POINT_MM,
     POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
-    SIZE,
-    SIZE_MM,
-    STRING,
-    SCALE,
+    SP_REAL,            // real (point) value saved in (score) spatium units
+
+    // draw
     COLOR,
+    FONT,
+    ALIGN,
+    PLACEMENT,        // ABOVE or BELOW
+    HPLACEMENT,       // LEFT, CENTER or RIGHT
     DIRECTION,        // enum class Direction
     DIRECTION_H,      // enum class MScore::DirectionH
+
+    // time
+    FRACTION,
+
     ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
     TDURATION,
     LAYOUT_BREAK,
     VALUE_TYPE,
     BEAM_MODE,
-    PLACEMENT,        // ABOVE or BELOW
-    HPLACEMENT,       // LEFT, CENTER or RIGHT
+
     TEXT_PLACE,
     TEMPO,
     GROUPS,
@@ -80,9 +94,9 @@ enum class P_TYPE {
     HEAD_TYPE,          // enum class Notehead::Type
     HEAD_GROUP,         // enum class Notehead::Group
     ZERO_INT,           // displayed with offset +1
-    FONT,
+
     SUB_STYLE,
-    ALIGN,
+
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
     CHANGE_SPEED,       // enum class Dynamic::Speed
     CLEF_TYPE,          // enum class ClefType
@@ -90,7 +104,6 @@ enum class P_TYPE {
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
 
-    PATH,               // mu::PainterPath
     HEAD_SCHEME,        // enum class NoteHead::Scheme
 
     PITCH_VALUES,
@@ -103,15 +116,17 @@ class PropertyValue
 {
 public:
     PropertyValue();
+    // base
     PropertyValue(bool v);
     PropertyValue(int v);
     PropertyValue(qreal v);
     PropertyValue(const char* v);
     PropertyValue(const QString& v);
-    PropertyValue(const Ms::Spatium& v);
+    // geometry
     PropertyValue(const PointF& v);
     PropertyValue(const SizeF& v);
     PropertyValue(const PainterPath& v);
+
     PropertyValue(const draw::Color& v);
     PropertyValue(Ms::Align v);
     PropertyValue(Ms::Direction v);
@@ -121,6 +136,7 @@ public:
     PropertyValue(Ms::HPlacement v);
     PropertyValue(Ms::DynamicType v)
         : m_type(Ms::P_TYPE::DYNAMIC_TYPE), m_val(v) {}
+    PropertyValue(const Ms::Spatium& v);
     PropertyValue(const Ms::PitchValues& v);
     PropertyValue(const Ms::Fraction& v);
     PropertyValue(const QList<int>& v); //endings
@@ -172,9 +188,6 @@ public:
     //! NOTE compat
     QVariant toQVariant() const;
     static PropertyValue fromQVariant(const QVariant& v);
-    operator QVariant() const {
-        return toQVariant();
-    }
 
 private:
     Ms::P_TYPE m_type = Ms::P_TYPE::UNDEFINED;
@@ -191,12 +204,12 @@ private:
     //! NOTE Temporary solution for some types
     std::any m_any;
 };
+}
 
-//! NOTE compat
-inline bool operator ==(const PropertyValue& v1, const QVariant& v2) { return v1 == PropertyValue::fromQVariant(v2); }
-inline bool operator !=(const PropertyValue& v1, const QVariant& v2) { return !operator ==(v1, v2); }
-inline bool operator ==(const QVariant& v1, const PropertyValue& v2) { return PropertyValue::fromQVariant(v1) == v2; }
-inline bool operator !=(const QVariant& v1, const PropertyValue& v2) { return !operator ==(v1, v2); }
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::PropertyValue&)
+{
+    s << "property(not implemented log output)";
+    return s;
 }
 
 #endif // MU_ENGRAVING_PROPERTYVALUE_H

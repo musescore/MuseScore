@@ -447,7 +447,7 @@ bool Bend::setProperty(Pid id, const PropertyValue& v)
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
         break;
     case Pid::BEND_CURVE:
-        setPoints(pitchValuesFromVariant(v));
+        setPoints(v.value<PitchValues>());
         break;
     default:
         return EngravingItem::setProperty(id, v);

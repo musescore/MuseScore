@@ -27,6 +27,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -185,9 +186,9 @@ void XmlWriter::netag(const char* s)
 //   tag
 //---------------------------------------------------------
 
-void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
+void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
 {
-    if (data == defaultData) {
+    if (data == def) {
         return;
     }
     const char* name = propertyName(id);
@@ -197,9 +198,203 @@ void XmlWriter::tag(Pid id, QVariant data, QVariant defaultData)
 
     const QString writableVal(propertyToString(id, data, /* mscx */ true));
     if (writableVal.isEmpty()) {
-        tag(name, data);
+        tagProperty(QString(name), data);
     } else {
-        tag(name, QVariant(writableVal));
+        tagProperty(QString(name), PropertyValue(writableVal));
+    }
+}
+
+void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyValue& data)
+{
+    QString ename(name.split(' ')[0]);
+
+    putLevel();
+
+    switch (data.type()) {
+    case P_TYPE::UNDEFINED:
+        UNREACHABLE;
+        break;
+    // base
+    case P_TYPE::BOOL:
+        *this << "<" << name << ">";
+        *this << int(data.value<bool>());
+        *this << "</" << ename << ">\n";
+        break;
+    case P_TYPE::INT:
+        *this << "<" << name << ">";
+        *this << data.value<int>();
+        *this << "</" << ename << ">\n";
+        break;
+    case P_TYPE::REAL:
+        *this << "<" << name << ">";
+        *this << data.value<qreal>();
+        *this << "</" << ename << ">\n";
+        break;
+    case P_TYPE::STRING:
+        *this << "<" << name << ">";
+        *this << xmlString(data.value<QString>());
+        *this << "</" << ename << ">\n";
+        break;
+    // geometry
+    case P_TYPE::POINT: {
+        PointF p = data.value<PointF>();
+        *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+    }
+    break;
+    case P_TYPE::SIZE: {
+        SizeF s = data.value<SizeF>();
+        *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
+    }
+    break;
+    case P_TYPE::PATH:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::SCALE:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::SPATIUM:
+        *this << "<" << name << ">";
+        *this << data.value<Spatium>().val();
+        *this << "</" << ename << ">\n";
+        break;
+
+    case P_TYPE::SIZE_MM:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::POINT_SP:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::POINT_MM:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::POINT_SP_MM:
+        UNREACHABLE; //! TODO
+        break;
+    case P_TYPE::SP_REAL:
+        UNREACHABLE; //! TODO
+        break;
+
+    // draw
+    case P_TYPE::COLOR: {
+        draw::Color color(data.value<draw::Color>());
+        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
+            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
+    }
+    break;
+    case P_TYPE::FONT: {
+        UNREACHABLE; //! TODO
+        break;
+    }
+    case P_TYPE::ALIGN: {
+        Align a = data.value<Align>();
+        const char* h;
+        if (a & Align::HCENTER) {
+            h = "center";
+        } else if (a & Align::RIGHT) {
+            h = "right";
+        } else {
+            h = "left";
+        }
+        const char* v;
+        if (a & Align::BOTTOM) {
+            v = "bottom";
+        } else if (a & Align::VCENTER) {
+            v = "center";
+        } else if (a & Align::BASELINE) {
+            v = "baseline";
+        } else {
+            v = "top";
+        }
+        *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h, v);
+    }
+    break;
+    case P_TYPE::PLACEMENT: {
+        *this << "<" << name << ">";
+        switch (data.value<Placement>()) {
+        case Placement::ABOVE:
+            *this << "above";
+            break;
+        case Placement::BELOW:
+            *this << "below";
+            break;
+        }
+        *this << "</" << ename << ">\n";
+    }
+    break;
+    case P_TYPE::HPLACEMENT: {
+        *this << "<" << name << ">";
+        switch (data.value<HPlacement>()) {
+        case HPlacement::LEFT:
+            *this << "left";
+            break;
+        case HPlacement::CENTER:
+            *this << "center";
+            break;
+        case HPlacement::RIGHT:
+            *this << "right";
+            break;
+        }
+        *this << "</" << ename << ">\n";
+    }
+    break;
+    case P_TYPE::DIRECTION: {
+        switch (data.value<Direction>()) {
+        case Direction::AUTO:
+            *this << "auto";
+            break;
+        case Direction::UP:
+            *this << "up";
+            break;
+        case Direction::DOWN:
+            *this << "down";
+            break;
+        }
+    }
+    break;
+    case P_TYPE::DIRECTION_H: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    // time
+    case P_TYPE::FRACTION: {
+        const Fraction& f = data.value<Fraction>();
+        *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
+    }
+    break;
+    default: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+//    case P_TYPE::ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
+//    case P_TYPE::TDURATION,
+//    case P_TYPE::LAYOUT_BREAK,
+//    case P_TYPE::VALUE_TYPE,
+//    case P_TYPE::BEAM_MODE,
+
+//    case P_TYPE::TEXT_PLACE,
+//    case P_TYPE::TEMPO,
+//    case P_TYPE::GROUPS,
+//    case P_TYPE::SYMID,
+//    case P_TYPE::INT_LIST,
+//    case P_TYPE::GLISS_STYLE,
+//    case P_TYPE::BARLINE_TYPE,
+//    case P_TYPE::HEAD_TYPE,          // enum class Notehead::Type
+//    case P_TYPE::HEAD_GROUP,         // enum class Notehead::Group
+//    case P_TYPE::ZERO_INT,           // displayed with offset +1
+
+//    case P_TYPE::SUB_STYLE,
+
+//    case P_TYPE::CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
+//    case P_TYPE::CHANGE_SPEED,       // enum class Dynamic::Speed
+//    case P_TYPE::CLEF_TYPE,          // enum class ClefType
+//    case P_TYPE::DYNAMIC_TYPE,       // enum class DynamicType
+//    case P_TYPE::KEYMODE,            // enum class KeyMode
+//    case P_TYPE::ORIENTATION,        // enum class Orientation
+
+//    case P_TYPE::HEAD_SCHEME,        // enum class NoteHead::Scheme
+
+//    case P_TYPE::PITCH_VALUES,
+//    case P_TYPE::HOOK_TYPE
     }
 }
 
@@ -246,8 +441,9 @@ void XmlWriter::tag(const QString& name, QVariant data)
         break;
     case QVariant::Color:
     {
-        //! NOTE Shouldn't be, because we use mu::draw::Color
-        UNREACHABLE;
+        QColor color(data.value<QColor>());
+        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
+            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
     break;
     case QVariant::Rect:

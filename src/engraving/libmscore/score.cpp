@@ -4959,7 +4959,7 @@ PropertyValue Score::propertyDefault(Pid /*id*/) const
 void Score::resetStyleValue(Sid styleToReset)
 {
     const MStyle& defStyle = DefaultStyle::defaultStyle();
-    undo(new ChangeStyleVal(this, styleToReset, defStyle.value(styleToReset).toQVariant()));
+    undo(new ChangeStyleVal(this, styleToReset, defStyle.value(styleToReset)));
 }
 
 //---------------------------------------------------------

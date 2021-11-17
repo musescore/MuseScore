@@ -1653,12 +1653,12 @@ void EditStyle::setSwingParams(bool checked)
 
 QVariant EditStyle::styleValue(StyleId id) const
 {
-    return globalContext()->currentNotation()->style()->styleValue(id);
+    return globalContext()->currentNotation()->style()->styleValue(id).toQVariant();
 }
 
 QVariant EditStyle::defaultStyleValue(StyleId id) const
 {
-    return globalContext()->currentNotation()->style()->defaultStyleValue(id);
+    return globalContext()->currentNotation()->style()->defaultStyleValue(id).toQVariant();
 }
 
 bool EditStyle::hasDefaultStyleValue(StyleId id) const
@@ -1668,7 +1668,7 @@ bool EditStyle::hasDefaultStyleValue(StyleId id) const
 
 void EditStyle::setStyleValue(StyleId id, const QVariant& value)
 {
-    globalContext()->currentNotation()->style()->setStyleValue(id, value);
+    globalContext()->currentNotation()->style()->setStyleValue(id, PropertyValue::fromQVariant(value));
 }
 
 //---------------------------------------------------------

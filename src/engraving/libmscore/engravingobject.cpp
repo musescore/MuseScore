@@ -416,13 +416,13 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
     if (isStyled(pid)) {
         return;
     }
-    QVariant p = getProperty(pid);
+    PropertyValue p = getProperty(pid);
     if (!p.isValid()) {
         qDebug("%s invalid property %d <%s>", name(), int(pid), propertyName(pid));
         return;
     }
     PropertyFlags f = propertyFlags(pid);
-    QVariant d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : QVariant();
+    PropertyValue d = (f != PropertyFlags::STYLED) ? propertyDefault(pid) : PropertyValue();
 
     if (pid == Pid::FONT_STYLE) {
         FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
@@ -447,8 +447,8 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
         if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = QVariant(f1 / score()->spatium());
-        d = QVariant();
+        p = PropertyValue(f1 / score()->spatium());
+        d = PropertyValue();
     } else if (propertyType(pid) == P_TYPE::POINT_SP) {
         PointF p1 = p.value<PointF>();
         if (d.isValid()) {
@@ -457,8 +457,8 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
                 return;
             }
         }
-        p = QVariant(p1 / score()->spatium());
-        d = QVariant();
+        p = PropertyValue(p1 / score()->spatium());
+        d = PropertyValue();
     } else if (propertyType(pid) == P_TYPE::POINT_SP_MM) {
         PointF p1 = p.value<PointF>();
         if (d.isValid()) {
@@ -468,8 +468,8 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
             }
         }
         qreal q = offsetIsSpatiumDependent() ? score()->spatium() : DPMM;
-        p = QVariant(p1 / q);
-        d = QVariant();
+        p = PropertyValue(p1 / q);
+        d = PropertyValue();
     }
     xml.tag(pid, p, d);
 }
@@ -489,7 +489,7 @@ Pid EngravingObject::propertyId(const QStringRef& xmlName) const
 
 QString EngravingObject::propertyUserValue(Pid id) const
 {
-    QVariant val = getProperty(id);
+    PropertyValue val = getProperty(id);
     switch (propertyType(id)) {
     case P_TYPE::POINT_SP:
     {
