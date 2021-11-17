@@ -698,10 +698,10 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         _endHookHeight = v.value<Spatium>();
         break;
     case Pid::BEGIN_HOOK_TYPE:
-        _beginHookType = HookType(v.toInt());
+        _beginHookType = v.value<HookType>();
         break;
     case Pid::END_HOOK_TYPE:
-        _endHookType = HookType(v.toInt());
+        _endHookType = v.value<HookType>();
         break;
     case Pid::BEGIN_TEXT:
         setBeginText(v.toString());

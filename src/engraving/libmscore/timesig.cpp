@@ -539,7 +539,7 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SHOW_COURTESY:
-        return true;
+        return 1;
     case Pid::NUMERATOR_STRING:
         return QString();
     case Pid::DENOMINATOR_STRING:

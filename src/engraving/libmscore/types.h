@@ -704,6 +704,15 @@ enum class DynamicType : char {
     Z
 };
 
+//---------------------------------------------------------
+//   AccidentalRole
+//---------------------------------------------------------
+
+enum class AccidentalRole : char {
+    AUTO,                 // layout created accidental
+    USER                  // user created accidental
+};
+
 #ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType);
 Q_ENUM_NS(Direction);

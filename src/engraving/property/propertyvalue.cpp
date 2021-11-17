@@ -21,6 +21,8 @@
  */
 #include "propertyvalue.h"
 
+#include "realfn.h"
+
 #include "libmscore/groups.h"
 
 #include "log.h"
@@ -156,87 +158,156 @@ Ms::P_TYPE PropertyValue::type() const
     return m_type;
 }
 
+bool PropertyValue::operator ==(const PropertyValue& v) const
+{
+    //! HACK Temporary hack for bool comparisons (maybe one type is bool and another type is int)
+    if (v.m_type == Ms::P_TYPE::BOOL || m_type == Ms::P_TYPE::BOOL) {
+        return v.value<bool>() == value<bool>();
+    }
+
+    //! HACK Temporary hack for Spatium comparisons (maybe one type is Spatium and another type is real)
+    if (v.m_type == Ms::P_TYPE::SPATIUM || m_type == Ms::P_TYPE::SPATIUM) {
+        return RealIsEqual(v.value<qreal>(), value<qreal>());
+    }
+
+    //! HACK Temporary hack for Fraction comparisons
+    if (v.m_type == Ms::P_TYPE::FRACTION) {
+        assert(m_type == Ms::P_TYPE::FRACTION);
+        return v.value<Ms::Fraction>().identical(value<Ms::Fraction>());
+    }
+
+    //! HACK Temporary hack for TDURATION comparisons
+    if (v.m_type == Ms::P_TYPE::TDURATION) {
+        assert(m_type == Ms::P_TYPE::TDURATION);
+        return v.toTDuration() == toTDuration();
+    }
+
+    //! HACK Temporary hack for GROUPS comparisons
+    if (v.m_type == Ms::P_TYPE::GROUPS) {
+        assert(m_type == Ms::P_TYPE::GROUPS);
+        return v.toGroups() == toGroups();
+    }
+
+    if (v.m_type == Ms::P_TYPE::REAL) {
+        assert(m_type == Ms::P_TYPE::REAL);
+        return RealIsEqual(v.value<qreal>(), value<qreal>());
+    }
+
+    return v.m_type == m_type && v.m_val == m_val;
+}
+
 QVariant PropertyValue::toQVariant() const
 {
-//    if (const bool* pv = std::get_if<bool>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const int* pv = std::get_if<int>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const qreal* pv = std::get_if<qreal>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const QString* pv = std::get_if<QString>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const Ms::Spatium* pv = std::get_if<Ms::Spatium>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const PointF* pv = std::get_if<PointF>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const SizeF* pv = std::get_if<SizeF>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const draw::Color* pv = std::get_if<draw::Color>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const Ms::Align* pv = std::get_if<Ms::Align>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
-//    if (const Ms::Direction* pv = std::get_if<Ms::Direction>(&m_val)) {
-//        return QVariant::fromValue(*pv);
-//    }
+    switch (m_type) {
+    case Ms::P_TYPE::UNDEFINED: return QVariant();
+    // base
+    case Ms::P_TYPE::BOOL:      return value<bool>();
+    case Ms::P_TYPE::INT:       return value<int>();
+    case Ms::P_TYPE::REAL:      return value<qreal>();
+    case Ms::P_TYPE::STRING:    return value<QString>();
+    // geometry
+    case Ms::P_TYPE::POINT:     return value<PointF>().toQPointF();
+    case Ms::P_TYPE::SIZE:      return value<SizeF>().toQSizeF();
+    case Ms::P_TYPE::PATH: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::SCALE: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::SPATIUM:   return value<Ms::Spatium>().val();
+    case Ms::P_TYPE::SIZE_MM: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::POINT_SP: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::POINT_MM: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::POINT_SP_MM: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::SP_REAL: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    // draw
+    case Ms::P_TYPE::COLOR:     return value<draw::Color>().toQColor();
+    case Ms::P_TYPE::FONT: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    case Ms::P_TYPE::ALIGN:      return QVariant::fromValue(value<Ms::Align>());
+    case Ms::P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
+    case Ms::P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
+    case Ms::P_TYPE::DIRECTION:  return value<SizeF>().toQSizeF();
+    case Ms::P_TYPE::DIRECTION_H: {
+        UNREACHABLE; //! TODO
+    }
+    break;
+    // time
+    case Ms::P_TYPE::FRACTION:  return QVariant::fromValue(value<Ms::Fraction>());
+
+    default:
+        UNREACHABLE; //! TODO
+    }
     return QVariant();
 }
 
 PropertyValue PropertyValue::fromQVariant(const QVariant& v)
 {
-    const char* type = v.typeName();
-    if (strcmp(type, "Ms::Spatium") == 0) {
-        return PropertyValue(v.value<Ms::Spatium>());
+    switch (v.type()) {
+    case QVariant::Invalid:     return PropertyValue();
+    case QVariant::Bool:        return PropertyValue(v.toBool());
+    case QVariant::Int:         return PropertyValue(v.toInt());
+    case QVariant::UInt:        return PropertyValue(v.toInt());
+    case QVariant::LongLong:    return PropertyValue(v.toInt());
+    case QVariant::ULongLong:   return PropertyValue(v.toInt());
+    case QVariant::Double:      return PropertyValue(v.toReal());
+    case QVariant::Char:        return PropertyValue(v.toInt());
+    case QVariant::String:      return PropertyValue(v.toString());
+    case QVariant::Size:        return PropertyValue(SizeF::fromQSizeF(QSizeF(v.toSize())));
+    case QVariant::SizeF:       return PropertyValue(SizeF::fromQSizeF(v.toSizeF()));
+    case QVariant::Point:       return PropertyValue(PointF::fromQPointF(QPointF(v.toPoint())));
+    case QVariant::PointF:      return PropertyValue(PointF::fromQPointF(v.toPointF()));
+    case QVariant::Color:       return PropertyValue(draw::Color::fromQColor(v.value<QColor>()));
+    case QVariant::UserType: {
+        const char* type = v.typeName();
+        if (strcmp(type, "Ms::Spatium") == 0) {
+            return PropertyValue(v.value<Ms::Spatium>());
+        }
+        if (strcmp(type, "Ms::Direction") == 0) {
+            return PropertyValue(v.value<Ms::Direction>());
+        }
+        if (strcmp(type, "Ms::Align") == 0) {
+            return PropertyValue(v.value<Ms::Align>());
+        }
+        if (strcmp(type, "mu::draw::Color") == 0) {
+            return PropertyValue(v.value<draw::Color>());
+        }
+        if (strcmp(type, "mu::SizeF") == 0) {
+            return PropertyValue(v.value<mu::SizeF>());
+        }
+        if (strcmp(type, "mu::PointF") == 0) {
+            return PropertyValue(v.value<PointF>());
+        }
+        if (strcmp(type, "Ms::Fraction") == 0) {
+            return PropertyValue(v.value<Ms::Fraction>());
+        }
+        LOGE() << "unhandle type: " << type;
+        UNREACHABLE;
     }
-    if (strcmp(type, "Ms::Direction") == 0) {
-        return PropertyValue(v.value<Ms::Direction>());
+    break;
+    default:
+        break;
     }
-    if (strcmp(type, "Ms::Align") == 0) {
-        return PropertyValue(v.value<Ms::Align>());
-    }
-    if (strcmp(type, "mu::draw::Color") == 0) {
-        return PropertyValue(v.value<draw::Color>());
-    }
-    if (strcmp(type, "mu::SizeF") == 0) {
-        return PropertyValue(v.value<mu::SizeF>());
-    }
-    if (strcmp(type, "mu::PointF") == 0) {
-        return PropertyValue(v.value<PointF>());
-    }
-    if (strcmp(type, "Ms::Spatium") == 0) {
-        return PropertyValue(v.value<Ms::Spatium>());
-    }
-    if (strcmp(type, "QString") == 0) {
-        return PropertyValue(v.value<QString>());
-    }
-    if (strcmp(type, "qreal") == 0) {
-        return PropertyValue(v.value<qreal>());
-    }
-    if (strcmp(type, "double") == 0) {
-        return PropertyValue(qreal(v.value<double>()));
-    }
-    if (strcmp(type, "float") == 0) {
-        return PropertyValue(qreal(v.value<float>()));
-    }
-    if (strcmp(type, "int") == 0) {
-        return PropertyValue(v.value<int>());
-    }
-    if (strcmp(type, "bool") == 0) {
-        return PropertyValue(v.value<bool>());
-    }
-    if (strcmp(type, "Ms::Fraction") == 0) {
-        return PropertyValue(v.value<Ms::Fraction>());
-    }
-    LOGE() << "unhandle type: " << type;
+
     UNREACHABLE;
     return PropertyValue();
 }
