@@ -120,18 +120,13 @@ FocusScope {
         }
     }
 
-    TabBar {
+    StyledTabBar {
         id: bar
 
         anchors.top: topLayout.bottom
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
         anchors.leftMargin: prv.sideMargin - itemSideMargin
-
-        contentHeight: 32
-        spacing: 0
-
-        readonly property int itemSideMargin: 22
 
         function pageIndex(pageName) {
             switch (pageName) {
@@ -165,9 +160,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Get started")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
 
             navigation.name: "Get started"
             navigation.panel: navTabPanel
@@ -177,9 +169,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Advanced"
             navigation.panel: navTabPanel
@@ -189,9 +178,6 @@ FocusScope {
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Classes"
             navigation.panel: navTabPanel
