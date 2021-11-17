@@ -35,6 +35,7 @@ Item {
 
     property alias contextMenuModel: contextMenuButton.menuModel
     property alias heightWhenVisible: titleBar.heightWhenVisible
+    property bool isHorizontalPanel: false
 
     signal handleContextMenuItemRequested(string itemId)
 
@@ -48,34 +49,50 @@ Item {
 
         anchors.fill: parent
 
-        heightWhenVisible: 34
-        color: ui.theme.backgroundPrimaryColor
+        heightWhenVisible: titleBarContent.implicitHeight
+        color: "transparent"
 
         visible: parent.visible
 
-        RowLayout {
+        Column {
+            id: titleBarContent
+
             anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
 
-            StyledTextLabel {
-                id: titleLabel
+            spacing: 0
 
-                Layout.fillWidth: true
-                Layout.leftMargin: 12
+            RowLayout {
+                width: parent.width
+                height: 34
 
-                horizontalAlignment: Qt.AlignLeft
+                StyledTextLabel {
+                    id: titleLabel
+                    Layout.fillWidth: true
 
-                font: ui.theme.bodyBoldFont
-                text: titleBar.title
+                    text: titleBar.title
+                    font: ui.theme.bodyBoldFont
+                    horizontalAlignment: Qt.AlignLeft
+                }
+
+                MenuButton {
+                    id: contextMenuButton
+
+                    width: 20
+                    height: width
+
+                    onHandleMenuItem: function(itemId) {
+                        root.handleContextMenuItemRequested(itemId)
+                    }
+                }
             }
 
-            MenuButton {
-                id: contextMenuButton
-
-                Layout.margins: 2
-
-                onHandleMenuItem: function(itemId) {
-                    root.handleContextMenuItemRequested(itemId)
-                }
+            SeparatorLine {
+                id: bottomSeparator
+                orientation: Qt.Horizontal
+                anchors.margins: -12
+                visible: root.isHorizontalPanel
             }
         }
     }

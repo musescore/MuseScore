@@ -26,7 +26,5 @@ import MuseScore.Ui 1.0
 import MuseScore.Dock 1.0
 
 DockingHolderView {
-    Rectangle {
-        color: ui.theme.backgroundPrimaryColor
-    }
+    Item {}
 }

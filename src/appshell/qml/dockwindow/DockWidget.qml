@@ -22,6 +22,15 @@
 
 import QtQuick 2.15
 
-import MuseScore.NotationScene 1.0
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-TimelineView {}
+Item {
+    id: root
+
+    //! NOTE: please, don't rename those properties because they are used in c++
+    readonly property QtObject dockWidgetCpp: parent
+    //! ---
+
+    anchors.fill: parent
+}
