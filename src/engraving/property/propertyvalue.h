@@ -62,7 +62,8 @@ public:
         }
 
         const T* pv = std::get_if<T>(&m_val);
-        assert(pv);
+        //! NOTE Temporary removed assert
+        //assert(pv);
         return pv ? *pv : T();
     }
 
