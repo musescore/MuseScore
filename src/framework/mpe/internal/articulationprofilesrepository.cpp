@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-#include "internal/stringutils.h"
+#include "internal/articulationstringutils.h"
 
 using namespace mu;
 using namespace mu::mpe;
