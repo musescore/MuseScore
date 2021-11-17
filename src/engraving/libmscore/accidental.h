@@ -45,15 +45,6 @@ class Note;
 enum class AccidentalVal : signed char;
 
 //---------------------------------------------------------
-//   AccidentalRole
-//---------------------------------------------------------
-
-enum class AccidentalRole : char {
-    AUTO,                 // layout created accidental
-    USER                  // user created accidental
-};
-
-//---------------------------------------------------------
 //   AccidentalBracket
 //---------------------------------------------------------
 
