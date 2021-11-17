@@ -100,7 +100,7 @@ Slider {
         readonly property int fullValueRangeLength: Math.abs(root.from) + Math.abs(root.to)
 
         readonly property real unitsTextWidth: 12
-        readonly property color unitTextColor: ui.theme.fontPrimaryColor
+        readonly property color unitTextColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.8)
         readonly property string unitTextFont: {
             var pxSize = String('8px')
             var family = String('\'' + ui.theme.bodyFont.family + '\'')
@@ -197,11 +197,13 @@ Slider {
                                  prv.longStrokeHeight,
                                  prv.longStrokeWidth)
 
+                    let textHPos = originHPos - prv.longStrokeWidth - prv.strokeHorizontalMargin
+
                     ctx.save()
 
                     ctx.rotate(Math.PI/2)
                     ctx.fillStyle = prv.unitTextColor
-                    ctx.fillText(textByDbValue(root.from + i), prv.unitsTextWidth + prv.unitsTextWidth/2, -currentStrokeVPos + 2)
+                    ctx.fillText(textByDbValue(root.from + i), textHPos, -currentStrokeVPos + 2)
 
                     ctx.restore()
                 }
