@@ -47,7 +47,7 @@ void Lasso::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     painter->setBrush(Brush(engravingConfiguration()->lassoColor()));
     // always 2 pixel width
-    qreal w = 2.0 / painter->worldTransform().m11() * uiConfiguration()->guiScaling();
+    qreal w = 2.0 / painter->worldTransform().m11() * engravingConfiguration()->guiScaling();
     painter->setPen(Pen(engravingConfiguration()->selectionColor(), w));
     painter->drawRect(bbox());
 }
