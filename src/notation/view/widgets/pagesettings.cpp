@@ -147,7 +147,7 @@ bool PageSettings::styleValueBool(StyleId styleId) const
     return globalContext()->currentNotation()->style()->styleValue(styleId).toBool();
 }
 
-void PageSettings::setStyleValue(StyleId styleId, const QVariant& newValue) const
+void PageSettings::setStyleValue(StyleId styleId, const PropertyValue& newValue) const
 {
     globalContext()->currentNotation()->style()->setStyleValue(styleId, newValue);
 }

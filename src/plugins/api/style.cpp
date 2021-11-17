@@ -105,7 +105,7 @@ void MStyle::setValue(const QString& key, QVariant value)
 
     if (_score) {
         // Style belongs to actual score: change style value in undoable way
-        _score->undoChangeStyleVal(sid, value);
+        _score->undoChangeStyleVal(sid, mu::engraving::PropertyValue::fromQVariant(value));
     } else {
         // Style is not bound to a score: change the value directly
         _style->set(sid, mu::engraving::PropertyValue::fromQVariant(value));

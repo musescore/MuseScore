@@ -125,10 +125,10 @@ bool Lasso::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LASSO_POS:
-        bbox().moveTo(PointF::fromVariant(v));
+        bbox().moveTo(v.value<PointF>());
         break;
     case Pid::LASSO_SIZE:
-        bbox().setSize(SizeF::fromVariant(v));
+        bbox().setSize(v.value<SizeF>());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {

@@ -417,7 +417,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             if (isExcessStyle) {
                 excessPairs[i.sid] = value;
             } else {
-                style->set(i.sid, PropertyValue::fromQVariant(value));
+                style->set(i.sid, value);
             }
         }
 //            else

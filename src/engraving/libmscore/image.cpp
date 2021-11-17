@@ -622,7 +622,7 @@ bool Image::setProperty(Pid propertyId, const PropertyValue& v)
         setAutoScale(v.toBool());
         break;
     case Pid::SIZE:
-        setSize(SizeF::fromVariant(v));
+        setSize(v.value<SizeF>());
         break;
     case Pid::IMAGE_HEIGHT:
         updateImageHeight(v.toDouble());

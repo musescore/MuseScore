@@ -681,7 +681,7 @@ public:
     void undoAddBracket(Staff* staff, int level, BracketType type, int span);
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
-    void undoChangeStyleVal(Sid idx, const QVariant& v);
+    void undoChangeStyleVal(Sid idx, const mu::engraving::PropertyValue& v);
     void undoChangePageNumberOffset(int po);
 
     void updateInstrumentChangeTranspositions(Ms::KeySigEvent& key, Ms::Staff* staff, const Ms::Fraction& tick);

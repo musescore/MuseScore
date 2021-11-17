@@ -50,8 +50,8 @@ private:
 
     StyleItem* buildStyleItem(StyleId id);
 
-    QVariant toUiValue(StyleId id, const QVariant& logicalValue) const;
-    QVariant fromUiValue(StyleId id, const QVariant& uiValue) const;
+    QVariant toUiValue(StyleId id, const PropertyValue& logicalValue) const;
+    PropertyValue fromUiValue(StyleId id, const QVariant& uiValue) const;
 
     std::unordered_map<StyleId, StyleItem*> m_items;
 };

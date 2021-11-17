@@ -24,7 +24,7 @@
 #define __GROUPS__
 
 #include "fraction.h"
-#include "mscore.h"
+//#include "mscore.h"
 #include "durationtype.h"
 #include "beam.h"
 

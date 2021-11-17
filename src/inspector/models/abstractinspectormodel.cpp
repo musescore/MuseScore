@@ -273,16 +273,17 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 
 void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
 {
-    if (style() && style()->styleValue(sid) != newValue) {
+    PropertyValue newVal = PropertyValue::fromQVariant(newValue);
+    if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
-        style()->setStyleValue(sid, newValue);
+        style()->setStyleValue(sid, newVal);
         endCommand();
     }
 }
 
 QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
 {
-    return style() ? style()->styleValue(sid) : QVariant();
+    return style() ? style()->styleValue(sid).toQVariant() : QVariant();
 }
 
 QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
@@ -339,38 +340,40 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
     }
 }
 
-QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value,
+QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const PropertyValue& value,
                                                        const Ms::EngravingItem* element) const
 {
-    switch (Ms::propertyType(pid)) {
+    UNUSED(pid);
+
+    switch (value.type()) {
     case Ms::P_TYPE::POINT_SP:
-        return value.value<PointF>() / element->spatium();
+        return value.value<PointF>().toQPointF() / element->spatium();
 
     case Ms::P_TYPE::POINT_SP_MM: {
         if (element->sizeIsSpatiumDependent()) {
-            return value.value<PointF>() / element->spatium();
+            return value.value<PointF>().toQPointF() / element->spatium();
         } else {
-            return value.value<PointF>() / Ms::DPMM;
+            return value.value<PointF>().toQPointF() / Ms::DPMM;
         }
     }
 
     case Ms::P_TYPE::SP_REAL:
-        return value.toDouble() / element->spatium();
+        return value.toReal() / element->spatium();
 
     case Ms::P_TYPE::SPATIUM:
         return value.value<Ms::Spatium>().val();
 
     case Ms::P_TYPE::TEMPO:
-        return value.toDouble() * 60.0;
+        return value.toReal() * 60.0;
 
     case Ms::P_TYPE::ZERO_INT:
         return value.toInt() + 1;
 
     case Ms::P_TYPE::POINT_MM:
-        return value.value<PointF>() / Ms::DPMM;
+        return value.value<PointF>().toQPointF() / Ms::DPMM;
 
     case Ms::P_TYPE::SIZE_MM:
-        return value.value<SizeF>() / Ms::DPMM;
+        return value.value<SizeF>().toQSizeF() / Ms::DPMM;
 
     case Ms::P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());
@@ -387,7 +390,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     case Ms::P_TYPE::COLOR:
         return value.value<mu::draw::Color>().toQColor();
     default:
-        return value;
+        return value.toQVariant();
     }
 }
 

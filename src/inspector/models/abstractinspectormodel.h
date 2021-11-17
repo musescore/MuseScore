@@ -163,7 +163,7 @@ protected:
     bool isNotationExisting() const;
 
     QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
-    QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
+    QVariant valueFromElementUnits(const Ms::Pid& pid, const engraving::PropertyValue& value, const Ms::EngravingItem* element) const;
 
     notation::INotationStylePtr style() const;
     void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);

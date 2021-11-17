@@ -51,11 +51,6 @@ qreal MStyle::pvalue(Sid idx) const
     return m_precomputedValues[size_t(idx)];
 }
 
-void MStyle::set(Sid idx, const mu::PointF& v)
-{
-    set(idx, PropertyValue(v));
-}
-
 void MStyle::set(const Sid t, const PropertyValue& val)
 {
     const size_t idx = size_t(t);

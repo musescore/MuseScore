@@ -63,20 +63,20 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id)
     return item;
 }
 
-QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const QVariant& logicalValue) const
+QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& logicalValue) const
 {
     if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
         return logicalValue.value<Ms::Spatium>().toDouble();
     }
 
-    return logicalValue;
+    return logicalValue.toQVariant();
 }
 
-QVariant AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
+PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
     if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
         return Ms::Spatium(uiValue.toDouble());
     }
 
-    return uiValue;
+    return PropertyValue::fromQVariant(uiValue);
 }

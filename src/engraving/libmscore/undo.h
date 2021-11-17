@@ -769,12 +769,12 @@ class ChangeStyleVal : public UndoCommand
 {
     Score* score;
     Sid idx;
-    QVariant value;
+    mu::engraving::PropertyValue value;
 
     void flip(EditData*) override;
 
 public:
-    ChangeStyleVal(Score* s, Sid i, const QVariant& v)
+    ChangeStyleVal(Score* s, Sid i, const mu::engraving::PropertyValue& v)
         : score(s), idx(i), value(v) {}
     UNDO_NAME("ChangeStyleVal")
 };
