@@ -19,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import MuseScore.Audio 1.0
-import QtQuick.Controls 2.15
 
 Canvas {
     id: root
@@ -52,7 +51,7 @@ Canvas {
         readonly property real divisionPixels: (prv.indicatorHeight - prv.overloadHeight) / fullValueRangeLength
 
         readonly property real unitsTextWidth: 12
-        readonly property color unitTextColor: ui.theme.fontPrimaryColor
+        readonly property color unitTextColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.8)
         readonly property string unitTextFont: {
             var pxSize = String('8px')
             var family = String('\'' + ui.theme.bodyFont.family + '\'')
@@ -105,11 +104,13 @@ Canvas {
                              prv.longStrokeHeight,
                              prv.longStrokeWidth)
 
+                let textHPos = originHPos + prv.longStrokeWidth + prv.strokeHorizontalMargin
+
                 ctx.save()
 
                 ctx.rotate(Math.PI/2)
                 ctx.fillStyle = prv.unitTextColor
-                ctx.fillText(prv.fullValueRangeLength - i, prv.unitsTextWidth + prv.unitsTextWidth/2, -currentStrokeVPos + 2)
+                ctx.fillText(prv.fullValueRangeLength - i, textHPos, -currentStrokeVPos + 2)
 
                 ctx.restore()
             }
