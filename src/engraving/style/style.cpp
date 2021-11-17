@@ -162,7 +162,7 @@ bool MStyle::readProperties(XmlReader& e)
                 set(idx, c);
                 e.readElementText();
             } else {
-                qFatal("unhandled type %d", type);
+                qFatal("unhandled type %d", int(type));
             }
             return true;
         }
