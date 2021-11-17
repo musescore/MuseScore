@@ -24,8 +24,8 @@ using namespace KDDockWidgets;
 
 SideBarWidget::SideBarWidget(SideBarLocation location, MainWindowBase *parent)
     : SideBar(location, parent)
-    , m_layout(isVertical() ? static_cast<QBoxLayout*>(new QVBoxLayout(this))
-                            : static_cast<QBoxLayout*>(new QHBoxLayout(this))) // ternary operator requires static_cast
+    , m_layout(isVertical() ? static_cast<QBoxLayout *>(new QVBoxLayout(this))
+                            : static_cast<QBoxLayout *>(new QHBoxLayout(this))) // ternary operator requires static_cast
 {
     m_layout->setSpacing(1);
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -37,7 +37,7 @@ void SideBarWidget::addDockWidget_Impl(DockWidgetBase *dw)
     auto button = createButton(dw, this);
     button->setText(dw->title());
     connect(dw, &DockWidgetBase::titleChanged, button, &SideBarButton::setText);
-    connect(dw, &DockWidgetBase::isOverlayedChanged, button, [button]{
+    connect(dw, &DockWidgetBase::isOverlayedChanged, button, [button] {
         button->update();
     });
     connect(dw, &DockWidgetBase::removedFromSideBar, button, &QObject::deleteLater);
@@ -103,8 +103,8 @@ void SideBarButton::paintEvent(QPaintEvent *)
         QPen pen(isHovered ? palette().color(QPalette::Highlight) : palette().color(QPalette::Highlight).darker());
         pen.setWidth(isHovered ? 2 : 1);
         p.setPen(pen);
-        p.drawLine(3, r.bottom() - 1, r.width() - 3*2, r.bottom() - 1);
-     }
+        p.drawLine(3, r.bottom() - 1, r.width() - 3 * 2, r.bottom() - 1);
+    }
 
     QPainter p(this);
     if (isVertical()) {

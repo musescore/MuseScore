@@ -127,7 +127,7 @@ public:
     /// @brief Returns the current dock widget
     DockWidgetBase *currentDockWidget() const;
 
-    virtual bool insertDockWidget(int index, DockWidgetBase *, const QIcon&, const QString &title) = 0;
+    virtual bool insertDockWidget(int index, DockWidgetBase *, const QIcon &, const QString &title) = 0;
 
     virtual void setTabBarAutoHide(bool) = 0;
 
@@ -166,7 +166,7 @@ public:
     /**
      * @brief Returns the tab bar
      */
-    virtual TabBar* tabBar() const = 0;
+    virtual TabBar *tabBar() const = 0;
 
     /**
      * @brief Returns this class as a QWidget (if using QtWidgets) or QQuickItem
@@ -184,7 +184,7 @@ public:
     /// @reimp
     bool isMDI() const override;
 
-//Q_SIGNALS: // Not a OQbject
+    //Q_SIGNALS: // Not a OQbject
     virtual void currentTabChanged(int index) = 0;
     virtual void currentDockWidgetChanged(KDDockWidgets::DockWidgetBase *) = 0;
     virtual void countChanged() {};

@@ -36,8 +36,8 @@ class DockWidget;
 class TabWidget;
 
 class DOCKS_EXPORT TabBarWidget
-        : public QTabBar
-        , public TabBar
+    : public QTabBar,
+      public TabBar
 {
     Q_OBJECT
 public:

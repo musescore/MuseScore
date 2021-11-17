@@ -11,7 +11,7 @@
 
 #include "DockWidgetInstantiator_p.h"
 #include "DockWidgetQuick.h"
-#include "DockRegistry_p.h"
+#include "../DockRegistry_p.h"
 
 using namespace KDDockWidgets;
 
@@ -56,6 +56,7 @@ void DockWidgetInstantiator::setTitle(const QString &title)
 {
     if (m_dockWidget)
         m_dockWidget->setTitle(title);
+    m_title = title;
 }
 
 bool DockWidgetInstantiator::isFocused() const
@@ -72,6 +73,7 @@ void DockWidgetInstantiator::setFloating(bool is)
 {
     if (m_dockWidget)
         m_dockWidget->setFloating(is);
+    m_isFloating = is;
 }
 
 void DockWidgetInstantiator::addDockWidgetAsTab(DockWidgetInstantiator *other,
@@ -177,7 +179,7 @@ void DockWidgetInstantiator::componentComplete()
         return;
     }
 
-    m_dockWidget = new DockWidgetQuick(m_uniqueName);
+    m_dockWidget = new DockWidgetQuick(m_uniqueName, {}, {}, qmlEngine(this));
 
     connect(m_dockWidget, &DockWidgetQuick::titleChanged, this,
             &DockWidgetInstantiator::titleChanged);
@@ -211,6 +213,11 @@ void DockWidgetInstantiator::componentComplete()
         m_dockWidget->setWidget(m_sourceFilename);
     }
 
+    if (!m_title.isEmpty())
+        m_dockWidget->setTitle(m_title);
+
+    if (m_isFloating.has_value())
+        m_dockWidget->setFloating(m_isFloating.value());
 
     Q_EMIT dockWidgetChanged();
 }

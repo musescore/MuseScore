@@ -29,10 +29,10 @@ Rectangle {
     readonly property bool floatButtonVisible: titleBarCpp && titleBarCpp.floatButtonVisible
     readonly property bool closeButtonEnabled: titleBarCpp && titleBarCpp.closeButtonEnabled
 
-    // So the tests can send mouse events programatically
+    // So the tests can send mouse events programmatically
     readonly property QtObject mouseAreaForTests: dragMouseArea
 
-    /// The hight the title bar should have when visible. Override in your component with another value
+    /// The height the title bar should have when visible. Override in your component with another value
     /// Don't set 'hight' directly in the overridden component
     property int heightWhenVisible: 30
 

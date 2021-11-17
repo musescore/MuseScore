@@ -26,8 +26,7 @@
  * It's used so we can restore layouts.
  * It's a private implementation detail.
  */
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 
 class FloatingWindow;
 class Frame;
@@ -42,8 +41,8 @@ class DOCKS_EXPORT DockRegistry : public QObject
     Q_PROPERTY(
         KDDockWidgets::Frame *frameInMDIResize READ frameInMDIResize NOTIFY frameInMDIResizeChanged)
 public:
-
-    enum class DockByNameFlag {
+    enum class DockByNameFlag
+    {
         None = 0,
         ConsultRemapping = 1,
         CreateIfNotFound = 2 ///< Creates the dock widget via the user's widget factory in case it doesn't exist
@@ -73,7 +72,7 @@ public:
     Q_INVOKABLE bool containsMainWindow(const QString &uniqueName) const;
 
     Q_INVOKABLE KDDockWidgets::DockWidgetBase *dockByName(const QString &,
-                                                          DockByNameFlags = {}) const;
+                                                          KDDockWidgets::DockRegistry::DockByNameFlags = {}) const;
     Q_INVOKABLE KDDockWidgets::MainWindowBase *mainWindowByName(const QString &) const;
     Q_INVOKABLE KDDockWidgets::MainWindowMDI *mdiMainWindowByName(const QString &) const;
 
@@ -101,14 +100,14 @@ public:
     const QVector<LayoutWidget *> layouts() const;
 
     ///@brief returns a list of all Frame instances
-    const QList<Frame*> frames() const;
+    const QList<Frame *> frames() const;
 
     ///@brief returns all FloatingWindow instances. Not necessarily all floating dock widgets,
     /// As there might be DockWidgets which weren't morphed yet.
-    const QVector<FloatingWindow*> floatingWindows(bool includeBeingDeleted = false) const;
+    const QVector<FloatingWindow *> floatingWindows(bool includeBeingDeleted = false) const;
 
     ///@brief overload that returns list of QWindow. This is more friendly for supporting both QtWidgets and QtQuick
-    const QVector<QWindow*> floatingQWindows() const;
+    const QVector<QWindow *> floatingQWindows() const;
 
     ///@brief returns whether if there's at least one floating window
     Q_INVOKABLE bool hasFloatingWindows() const;
@@ -139,7 +138,7 @@ public:
     /// Every returned widget is either a FloatingWindow, MainWindow, or something that contains a MainWindow.
     ///
     /// If @p excludeFloatingDocks is true then FloatingWindow won't be returned
-    QVector<QWindow*> topLevels(bool excludeFloatingDocks = false) const;
+    QVector<QWindow *> topLevels(bool excludeFloatingDocks = false) const;
 
     /**
      * @brief Closes all dock widgets, and destroys all FloatingWindows
@@ -240,6 +239,7 @@ Q_SIGNALS:
 
 protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
     friend class FocusScope;
     explicit DockRegistry(QObject *parent = nullptr);
@@ -251,8 +251,8 @@ private:
     bool m_isProcessingAppQuitEvent = false;
     DockWidgetBase::List m_dockWidgets;
     MainWindowBase::List m_mainWindows;
-    QList<Frame*> m_frames;
-    QVector<FloatingWindow*> m_floatingWindows;
+    QList<Frame *> m_frames;
+    QVector<FloatingWindow *> m_floatingWindows;
     QVector<LayoutWidget *> m_layouts;
     QPointer<DockWidgetBase> m_focusedDockWidget;
 

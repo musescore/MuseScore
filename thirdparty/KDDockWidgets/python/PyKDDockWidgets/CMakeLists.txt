@@ -16,6 +16,8 @@ set(PyKDDockWidgets_SRC
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_dockwidgetbase_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_dockwidget_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_dockwidget_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_initialoption_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_initialoption_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_mainwindowbase_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_mainwindowbase_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets/kddockwidgets_mainwindow_wrapper.cpp
@@ -46,9 +48,10 @@ set(PyKDDockWidgets_target_include_directories
 # Libraries that will be necessary to link the target, this will used in the command 'target_link_libraries'
 set(PyKDDockWidgets_target_link_libraries
     KDAB::kddockwidgets
-    Qt${QT_MAJOR_VERSION}::Core
-    Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::Widgets
+    Qt${Qt_VERSION_MAJOR}::Core
+    Qt${Qt_VERSION_MAJOR}::Gui
+    Qt${Qt_VERSION_MAJOR}::Widgets
+    ${Python3_LIBRARIES}
 )
 
 # changes on these files should trigger a new generation
@@ -78,4 +81,19 @@ create_python_bindings(
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/__init__.py.cmake ${CMAKE_CURRENT_BINARY_DIR}/__init__.py @ONLY)
 
 # install
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/__init__.py DESTINATION ${${PROJECT_NAME}_PYTHON_BINDINGS_INSTALL_PREFIX}/PyKDDockWidgets)
+install(
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/__init__.py
+    $<TARGET_FILE:KDAB::kddockwidgets>
+  DESTINATION
+    ${${PROJECT_NAME}_PYTHON_BINDINGS_INSTALL_PREFIX}
+)
+if(NOT WIN32)
+  install(
+    FILES
+        $<TARGET_LINKER_FILE:KDAB::kddockwidgets>
+        $<TARGET_SONAME_FILE:KDAB::kddockwidgets>
+    DESTINATION
+        ${${PROJECT_NAME}_PYTHON_BINDINGS_INSTALL_PREFIX}
+  )
+endif()

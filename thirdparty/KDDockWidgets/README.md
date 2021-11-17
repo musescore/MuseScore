@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/KDAB/KDDockWidgets.svg?branch=master)](https://travis-ci.com/KDAB/KDDockWidgets)
+
 KDDockWidgets
 =============
 `KDDockWidgets` is a Qt dock widget library written by KDAB, suitable for replacing
@@ -69,10 +71,6 @@ Screen capture
 ![Screen capture](./screencap.gif?raw=true "The docking system in action")
 
 
-Roadmap
-========
-  - QtQuick support
-
 Trying out the examples
 =======================
 A full demo that showcases most of the features lives in [examples/dockwidgets](examples/dockwidgets).
@@ -108,16 +106,22 @@ You can change the installation location by passing the option `-DCMAKE_INSTALL_
 
 Using
 =====
-From your CMake project, add
+From your CMake Qt5 project, add
 
 ```
     find_package(KDDockWidgets CONFIG)
 ```
 
+or for Qt6
+
+```
+    find_package(KDDockWidgets-qt6 CONFIG)
+```
+
 and link to the imported target `KDAB::kddockwidgets`.
 That's all you need to do (the imported target also brings in the include directories)
 
-You may also need to modify the `CMAKE_MODULE_PATH` environment variable depending
+You may also need to modify the `CMAKE_PREFIX_PATH` environment variable depending
 on where you installed KDDockWidgets.
 
 
@@ -142,12 +146,24 @@ your application whenever updating KDDW.
 
 Supported Qt versions and toolchains
 =====================================
-KDDockWidgets requires Qt >= 5.9 (or >=5.12 if Python bindings are enabled).
-The QtQuick support will require Qt >= 5.15.
-Qt 6 is supported.
+KDDockWidgets requires Qt5 >= 5.12 or Qt6 >= 6.1.
+The QtQuick support requires Qt5 >= 5.15 or Qt6 >= 6.1.
+
 
 Regarding compilers, whatever toolchain is able to build Qt 5.9 should also be
 fine. Note however that MSVC 2013 isn't supported anymore due to compiler crashes.
+
+
+Styling
+========
+
+Almost all private widgets used by KDDW can be derived by the user to give them
+a custom look. That's done by providing your own FrameworkWidgetFactory. Run
+"kddockwidgets_example -p" to see that in action.
+
+Qt StyleSheets are not, and will not, be supported. See the comments in
+`examples/dockwidgets/MyTitleBar_CSS.h` for why. You can however use some minimal
+CSS, as shown in that example, just don't report bugs about it.
 
 
 Licensing

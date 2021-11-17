@@ -17,24 +17,23 @@
  */
 
 #include "Config.h"
-#include "multisplitter/MultiSplitterConfig.h"
-#include "multisplitter/Widget.h"
-#include "DockRegistry_p.h"
+#include "private/multisplitter/MultiSplitterConfig.h"
+#include "private/multisplitter/Widget.h"
+#include "private/DockRegistry_p.h"
+#include "private/Utils_p.h"
+#include "private/DragController_p.h"
 #include "FrameworkWidgetFactory.h"
-#include "Utils_p.h"
-#include "DragController_p.h"
 
 #include <QDebug>
 #include <QOperatingSystemVersion>
 
 #ifdef KDDOCKWIDGETS_QTQUICK
-# include "quick/Helpers_p.h"
-# include <QQmlEngine>
-# include <QQmlContext>
+#include "private/quick/Helpers_p.h"
+#include <QQmlEngine>
+#include <QQmlContext>
 #endif
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 
 class Config::Private
 {
@@ -80,7 +79,7 @@ Config::Config()
     Layouting::Config::self().setSeparatorFactoryFunc(separatorCreator);
 }
 
-Config& Config::self()
+Config &Config::self()
 {
     static Config config;
     return config;
@@ -99,7 +98,7 @@ Config::Flags Config::flags() const
 void Config::setFlags(Flags f)
 {
     auto dr = DockRegistry::self();
-    if (!dr->isEmpty(/*excludeBeingDeleted=*/ true)) {
+    if (!dr->isEmpty(/*excludeBeingDeleted=*/true)) {
         qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow"
                    << "; These are already created: " << dr->mainWindowsNames()
                    << dr->dockWidgetNames() << dr->floatingWindows();
@@ -153,7 +152,7 @@ int Config::separatorThickness() const
 
 void Config::setSeparatorThickness(int value)
 {
-    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/ true)) {
+    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/true)) {
         qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
         return;
     }
@@ -183,7 +182,7 @@ TabbingAllowedFunc Config::tabbingAllowedFunc() const
 
 void Config::setAbsoluteWidgetMinSize(QSize size)
 {
-    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/ false)) {
+    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/false)) {
         qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
         return;
     }
@@ -198,7 +197,7 @@ QSize Config::absoluteWidgetMinSize() const
 
 void Config::setAbsoluteWidgetMaxSize(QSize size)
 {
-    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/ false)) {
+    if (!DockRegistry::self()->isEmpty(/*excludeBeingDeleted=*/false)) {
         qWarning() << Q_FUNC_INFO << "Only use this function at startup before creating any DockWidget or MainWindow";
         return;
     }
@@ -304,6 +303,11 @@ void Config::Private::fixFlags()
     if (m_flags & Flag_DontUseUtilityFloatingWindows) {
         m_internalFlags |= InternalFlag_DontUseParentForFloatingWindows;
         m_internalFlags |= InternalFlag_DontUseQtToolWindowsForFloatingWindows;
+    }
+
+    if (m_flags & Flag_ShowButtonsOnTabBarIfTitleBarHidden) {
+        // Flag_ShowButtonsOnTabBarIfTitleBarHidden doesn't make sense if used alone
+        m_flags |= Flag_HideTitleBarWhenTabsVisible;
     }
 }
 

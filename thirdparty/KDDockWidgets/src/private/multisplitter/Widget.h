@@ -30,12 +30,13 @@ class QWidget;
 QT_END_NAMESPACE
 
 #ifdef QT_WIDGETS_LIB
-# include <QSizePolicy>
-# else
+#include <QSizePolicy>
+#else
 class QSizePolicy
 {
 public:
-    enum Policy {
+    enum Policy
+    {
         Fixed,
         Preferred,
         Maximum
@@ -47,11 +48,13 @@ public:
     {
     }
 
-    Policy verticalPolicy() const {
+    Policy verticalPolicy() const
+    {
         return vertical;
     }
 
-    Policy horizontalPolicy() const {
+    Policy horizontalPolicy() const
+    {
         return horizontal;
     }
 
@@ -80,19 +83,23 @@ public:
 
     virtual void setLayoutItem(Item *) = 0;
 
-    // Not strickly necessary, but it's nice conveniance for kddw which is widget based.
-    virtual QWidget *asQWidget() const {
+    // Not strickly necessary, but it's nice convenience for kddw which is widget based.
+    virtual QWidget *asQWidget() const
+    {
         Q_ASSERT(false); // Only wanted for QtWidgets. All other should not call this.
         return nullptr;
     }
 
-    virtual QSize sizeHint() const { return {}; }
+    virtual QSize sizeHint() const
+    {
+        return {};
+    }
     virtual QSize minSize() const = 0;
     virtual QSize maxSizeHint() const = 0;
     virtual QRect geometry() const = 0;
     virtual void setGeometry(QRect) = 0;
     virtual void setParent(Widget *) = 0;
-    virtual QDebug& dumpDebug(QDebug&) const = 0;
+    virtual QDebug &dumpDebug(QDebug &) const = 0;
     virtual bool isVisible() const = 0;
     virtual void setVisible(bool) const = 0;
     virtual void move(int x, int y) = 0;
@@ -104,33 +111,44 @@ public:
     virtual void hide() = 0;
     virtual void update() = 0;
 
-    QSize size() const {
+    QSize size() const
+    {
         return geometry().size();
     }
 
-    QRect rect() const {
+    QRect rect() const
+    {
         return QRect(QPoint(0, 0), size());
     }
 
-    QObject *asQObject() const { return m_thisObj; }
-    QObject *parent() const { return m_thisObj->parent(); }
+    QObject *asQObject() const
+    {
+        return m_thisObj;
+    }
+    QObject *parent() const
+    {
+        return m_thisObj->parent();
+    }
 
-    int x() const {
+    int x() const
+    {
         return geometry().x();
     }
 
-    int y() const {
+    int y() const
+    {
         return geometry().y();
     }
 
-    bool operator==(const QObject *obj) const {
+    bool operator==(const QObject *obj) const
+    {
         return obj == m_thisObj;
     }
 
     ///@brief returns an id for corelation purposes for saving layouts
     QString id() const;
 
-    template <typename T>
+    template<typename T>
     static QSize widgetMinSize(const T *w)
     {
         const int minW = w->minimumWidth() > 0 ? w->minimumWidth()
@@ -142,7 +160,7 @@ public:
         return QSize(minW, minH).expandedTo(Item::hardcodedMinimumSize);
     }
 
-    template <typename T>
+    template<typename T>
     static QSize widgetMaxSize(const T *w)
     {
         // The max size is usually QWidget::maximumSize(), but we also honour the QSizePolicy::Fixed+sizeHint() case
@@ -175,7 +193,7 @@ private:
 inline bool operator==(const Widget *w, const QObject &obj)
 {
     //if (!w && !obj)
-        //return true;
+    //return true;
 
     return w && w->operator==(&obj);
 }

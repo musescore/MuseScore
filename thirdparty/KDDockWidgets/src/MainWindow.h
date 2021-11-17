@@ -33,7 +33,7 @@ class DOCKS_EXPORT MainWindow : public MainWindowBase
 {
     Q_OBJECT
 public:
-    typedef QVector<MainWindow*> List;
+    typedef QVector<MainWindow *> List;
 
     ///@brief Constructor. Use it as you would use QMainWindow.
     ///@param uniqueName Mandatory name that should be unique between all MainWindow instances.
@@ -54,6 +54,7 @@ protected:
     void resizeEvent(QResizeEvent *) override;
     QMargins centerWidgetMargins() const override;
     QRect centralAreaGeometry() const override;
+
 private:
     using QMainWindow::setCentralWidget;
     void setCentralWidget(QWidget *); // overridden just to make it private

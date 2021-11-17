@@ -37,6 +37,7 @@ public:
     bool isVertical() const;
     void paintEvent(QPaintEvent *) override;
     QSize sizeHint() const override;
+
 private:
     SideBarWidget *const m_sideBar;
     const QPointer<DockWidgetBase> m_dockWidget;

@@ -1458,7 +1458,7 @@ void TestMultiSplitter::tst_resizeViaSeparator3()
     ItemBoxContainer::insertItemRelativeTo(item3, item1, Location_OnRight);
     ItemBoxContainer::insertItemRelativeTo(item4, item1, Location_OnBottom);
 
-    // Make some room, so each item has enough space to shrink without hitting constriants
+    // Make some room, so each item has enough space to shrink without hitting constraints
     root->setSize_recursive(QSize(1000, 4000));
 
     // Our horizontal separator
@@ -1774,7 +1774,7 @@ void TestMultiSplitter::tst_requestEqualSize()
 
         {
             // Let's put the separator further right manually, then try again:
-            // (Can't use ItemBoxContainer::requstSeparatorMove() as it respects max-size constriants
+            // (Can't use ItemBoxContainer::requstSeparatorMove() as it respects max-size constraints
             item1->m_sizingInfo.incrementLength(20, Qt::Horizontal);
             item2->m_sizingInfo.incrementLength(-20, Qt::Horizontal);
             root->positionItems();

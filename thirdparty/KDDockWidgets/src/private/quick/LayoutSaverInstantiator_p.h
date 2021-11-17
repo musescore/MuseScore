@@ -28,8 +28,8 @@ namespace KDDockWidgets {
  * For C++, just use KDDockWidgets::LayoutSaver directly
  */
 class DOCKS_EXPORT LayoutSaverInstantiator
-    : public QObject
-    , public LayoutSaver
+    : public QObject,
+      public LayoutSaver
 {
     Q_OBJECT
 public:

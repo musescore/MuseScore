@@ -37,7 +37,7 @@ struct WindowBeingDragged;
 /**
  * @brief A MultiSplitter with support for drop indicators when hovering over.
  */
-class DOCKS_EXPORT_FOR_UNIT_TESTS DropArea : public MultiSplitter
+class DOCKS_EXPORT DropArea : public MultiSplitter
 {
     Q_OBJECT
 public:
@@ -51,7 +51,10 @@ public:
     Frame::List frames() const;
 
     Layouting::Item *centralFrame() const;
-    DropIndicatorOverlayInterface *dropIndicatorOverlay() const { return m_dropIndicatorOverlay; }
+    DropIndicatorOverlayInterface *dropIndicatorOverlay() const
+    {
+        return m_dropIndicatorOverlay;
+    }
     void addDockWidget(DockWidgetBase *, KDDockWidgets::Location location,
                        DockWidgetBase *relativeTo, InitialOption = {});
 
@@ -63,6 +66,7 @@ public:
 
     QStringList affinities() const;
     void layoutParentContainerEqually(DockWidgetBase *);
+
 private:
     Q_DISABLE_COPY(DropArea)
     friend class Frame;
@@ -71,7 +75,7 @@ private:
     friend class AnimatedIndicators;
     friend class FloatingWindow;
 
-    template <typename T>
+    template<typename T>
     bool validateAffinity(T *, Frame *acceptingFrame = nullptr) const;
     bool drop(WindowBeingDragged *draggedWindow, Frame *acceptingFrame, DropIndicatorOverlayInterface::DropLocation);
     bool drop(QWidgetOrQuick *droppedwindow, KDDockWidgets::Location location, Frame *relativeTo);

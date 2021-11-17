@@ -10,14 +10,15 @@
 */
 
 #include "TitleBarWidget_p.h"
-#include "DragController_p.h"
-#include "Frame_p.h"
-#include "FloatingWindow_p.h"
-#include "Logging_p.h"
-#include "WindowBeingDragged_p.h"
+#include "../DragController_p.h"
+#include "../Frame_p.h"
+#include "../FloatingWindow_p.h"
+#include "../Logging_p.h"
+#include "../WindowBeingDragged_p.h"
+#include "../Utils_p.h"
+#include "../DockRegistry_p.h"
+
 #include "FrameworkWidgetFactory.h"
-#include "Utils_p.h"
-#include "DockRegistry_p.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -26,7 +27,9 @@
 
 using namespace KDDockWidgets;
 
-Button::~Button() {}
+Button::~Button()
+{
+}
 
 void Button::paintEvent(QPaintEvent *)
 {
@@ -53,13 +56,13 @@ void Button::paintEvent(QPaintEvent *)
     if (!iconSizes.isEmpty()) {
         opt.iconSize = iconSizes.constFirst();
 
-    const qreal logicalFactor = logicalDpiX() / 96.0;
+        const qreal logicalFactor = logicalDpiX() / 96.0;
 
-    // On Linux there's dozens of window managers and ways of setting the scaling.
-    // Some window managers will just change the font dpi (which affects logical dpi), while
-    // others will only change the device pixel ratio. Take care of both cases.
-    // macOS is easier, as it never changes logical DPI.
-    // On Windows, with AA_EnableHighDpiScaling, logical DPI is always 96 and physical is manipulated instead.
+        // On Linux there's dozens of window managers and ways of setting the scaling.
+        // Some window managers will just change the font dpi (which affects logical dpi), while
+        // others will only change the device pixel ratio. Take care of both cases.
+        // macOS is easier, as it never changes logical DPI.
+        // On Windows, with AA_EnableHighDpiScaling, logical DPI is always 96 and physical is manipulated instead.
 #if defined(Q_OS_LINUX)
         const qreal dpr = devicePixelRatioF();
         const qreal combinedFactor = logicalFactor * dpr;
@@ -67,12 +70,12 @@ void Button::paintEvent(QPaintEvent *)
         if (scalingFactorIsSupported(combinedFactor)) // Older Qt has rendering bugs with fractional factors
             opt.iconSize = opt.iconSize * combinedFactor;
 #elif defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // Probably Windows could use the same code path as Linux, but I'm seeing too thick icons on Windows...
-    if (!QGuiApplication::testAttribute(Qt::AA_EnableHighDpiScaling)
-        && scalingFactorIsSupported(logicalFactor)) // Older Qt has rendering bugs with fractional factors
-        opt.iconSize = opt.iconSize * logicalFactor;
+        // Probably Windows could use the same code path as Linux, but I'm seeing too thick icons on Windows...
+        if (!QGuiApplication::testAttribute(Qt::AA_EnableHighDpiScaling)
+            && scalingFactorIsSupported(logicalFactor)) // Older Qt has rendering bugs with fractional factors
+            opt.iconSize = opt.iconSize * logicalFactor;
 #else
-    Q_UNUSED(logicalFactor);
+        Q_UNUSED(logicalFactor);
 #endif
     }
 
@@ -148,7 +151,7 @@ void TitleBarWidget::init()
         if (icon().isNull()) {
             m_dockWidgetIcon->setPixmap(QPixmap());
         } else {
-            const QPixmap pix = icon().pixmap(QSize(28,28));
+            const QPixmap pix = icon().pixmap(QSize(28, 28));
             m_dockWidgetIcon->setPixmap(pix);
         }
         update();
@@ -162,7 +165,7 @@ void TitleBarWidget::init()
     m_floatButton->setVisible(floatButtonVisible());
     m_floatButton->setToolTip(floatButtonToolTip());
 
-    connect(DockRegistry::self(), &DockRegistry::windowChangedScreen, this, [this] (QWindow *w) {
+    connect(DockRegistry::self(), &DockRegistry::windowChangedScreen, this, [this](QWindow *w) {
         if (w == window()->windowHandle())
             updateMargins();
     });
@@ -190,7 +193,7 @@ QSize TitleBarWidget::sizeHint() const
 QRect TitleBarWidget::iconRect() const
 {
     if (icon().isNull()) {
-        return QRect(0,0, 0,0);
+        return QRect(0, 0, 0, 0);
     } else {
         return QRect(3, 3, 30, 30);
     }
@@ -233,6 +236,8 @@ void TitleBarWidget::paintEvent(QPaintEvent *)
     QPainter p(this);
 
     QStyleOptionDockWidget titleOpt;
+    titleOpt.initFrom(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &titleOpt, &p, this);
     titleOpt.title = title();
     titleOpt.rect = iconRect().isEmpty() ? rect().adjusted(2, 0, -buttonAreaWidth(), 0)
                                          : rect().adjusted(iconRect().right(), 0, -buttonAreaWidth(), 0);
@@ -272,12 +277,12 @@ void TitleBarWidget::updateMaximizeButton()
 {
     if (auto fw = floatingWindow()) {
         auto factory = Config::self().frameworkWidgetFactory();
-        const TitleBarButtonType iconType = fw->isMaximized() ? TitleBarButtonType::Normal
-                                                              : TitleBarButtonType::Maximize;
+        const TitleBarButtonType iconType = fw->isMaximizedOverride() ? TitleBarButtonType::Normal
+                                                                      : TitleBarButtonType::Maximize;
         m_maximizeButton->setIcon(factory->iconForButtonType(iconType, devicePixelRatioF()));
 
         m_maximizeButton->setVisible(supportsMaximizeButton());
-        m_maximizeButton->setToolTip(fw->isMaximized() ? tr("Restore") : tr("Maximize"));
+        m_maximizeButton->setToolTip(fw->isMaximizedOverride() ? tr("Restore") : tr("Maximize"));
     } else {
         m_maximizeButton->setVisible(false);
     }

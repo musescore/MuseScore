@@ -24,8 +24,8 @@ class DOCKS_EXPORT TitleBarQuick : public TitleBar
 {
     Q_OBJECT
     // These properties is just for the unit-tests
-    Q_PROPERTY(QQuickItem* titleBarQmlItem READ titleBarQmlItem WRITE setTitleBarQmlItem NOTIFY titleBarQmlItemChanged)
-    Q_PROPERTY(QQuickItem* titleBarMouseArea READ titleBarMouseArea CONSTANT)
+    Q_PROPERTY(QQuickItem *titleBarQmlItem READ titleBarQmlItem WRITE setTitleBarQmlItem NOTIFY titleBarQmlItemChanged)
+    Q_PROPERTY(QQuickItem *titleBarMouseArea READ titleBarMouseArea CONSTANT)
 public:
     explicit TitleBarQuick(Frame *parent);
     explicit TitleBarQuick(FloatingWindow *parent);

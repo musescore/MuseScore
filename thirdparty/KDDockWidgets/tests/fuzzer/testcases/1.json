@@ -118,7 +118,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-4-[hidden]",
+            "comment": "Hiding DockWidget-4-[hidden]",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },

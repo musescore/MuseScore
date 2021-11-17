@@ -19,15 +19,9 @@
 #  Build static versions of the libraries
 #  Default=false
 #
-# -DKDDockWidgets_UNINSTALL=[true|false]
-#  Setup the uninstall target.
-#  You may want to disable the uninstall target when you are using KDDockWidgets
-#  as a submodule directly and have a custom uninstall target of your own.
-#  Default=true
-#
 # -DKDDockWidgets_TESTS=[true|false]
 #  Build the test harness.
-#  Currently does nothing unless you also set KDDockWidgets_DEVELOPER_MODE=True
+#  Currently ignored (except for Python bindings) unless KDDockWidgets_DEVELOPER_MODE=True.
 #  Default=false
 #
 # -DKDDockWidgets_EXAMPLES=[true|false]
@@ -38,55 +32,51 @@
 #  Build the API documentation. Enables the 'docs' build target.
 #  Default=false
 #
-# -DKDDockWidgets_DEVELOPER_MODE=[true|false]
-#  Configure the build for a developer setup.
-#  Enables some features that are not geared towards end-users.
-#  Forces the test harness to be built.
-#  Default=false
-#
 # -DKDDockWidgets_QTQUICK=[true|false]
-#  Build for QtQuick instead of QtWidgets. Experimental!
+#  Build for QtQuick instead of QtWidgets.
 #  Default=false
 #
 # -DKDDockWidgets_PYTHON_BINDINGS=[true|false]
 #  Build/Generate python bindings.  Always false for Debug builds
 #  (If your shiboken or pyside is installed in a non-standard locations
-#  try passing the SHIBOKEN_CUSTOM_PREFIX and PYSIDE2_CUSTOM_PREFIX variables.)
+#  try passing the SHIBOKEN_CUSTOM_PREFIX and PYSIDE_CUSTOM_PREFIX variables.)
 #  Default=false
 #
 # -DKDDockWidgets_PYTHON_BINDINGS_INSTALL_PREFIX=[path]
 #  Set an alternative install path for Python bindings
 #  Default=CMAKE_INSTALL_PREFIX
 
+# ## DO NOT USE IF YOU ARE AN END-USER.  FOR THE DEVELOPERS ONLY!!
+## Special CMake Options for Developers
+#
+# -DKDDockWidgets_DEVELOPER_MODE=[true|false]
+#  Configure the build for a developer setup.
+#  Enables some features that are not geared towards end-users.
+#  Forces the test harness to be built.
+#  Default=false
+#
+# -DKDDockWidgets_WERROR=[true|false]
+#  Compile with the -Werror gcc/clang option (always true for developer-mode)
+#  Default=false
+#
+# -DKDDockWidgets_LINTER=[true|false]
+#  Build the layout linter.
+#  Ignored unless KDDockWidgets_DEVELOPER_MODE=True
+#  Default=true
+#
+# -DKDDockWidgets_FUZZER=[true|false]
+#  Build the fuzzer.
+#  Ignored unless KDDockWidgets_DEVELOPER_MODE=True
+#  Default=true
+
 cmake_minimum_required(VERSION 3.7)
-if(POLICY CMP0020)
-  cmake_policy(SET CMP0020 NEW)
-endif()
-if(POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif()
 
-# Just to fix warnings with --warn-uninitialized
-if(NOT DEFINED USE_DEFAULT_INSTALL_LOCATION)
-  set(USE_DEFAULT_INSTALL_LOCATION FALSE)
-endif()
-if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "")
-endif()
-if(NOT DEFINED SHIBOKEN_CUSTOM_PREFIX) #look for shiboken in a custom location
-  set(SHIBOKEN_CUSTOM_PREFIX "")
-endif()
-if(NOT DEFINED PYSIDE2_CUSTOM_PREFIX) #look for pyside in a custom location
-  set(PYSIDE2_CUSTOM_PREFIX "")
-endif()
-
-# Allow using a non-KDAB install location
-set(KDAB_INSTALL True)
-if(NOT ${USE_DEFAULT_INSTALL_LOCATION})
+# Allow using a non-KDAB install location.
+set(KDAB_INSTALL True CACHE INTERNAL "Install to default KDAB Location")
+if(DEFINED CMAKE_INSTALL_PREFIX)
   if(NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL "")
-    set(KDAB_INSTALL False)
+    set(KDAB_INSTALL False CACHE INTERNAL "Install to non-KDAB Location")
   endif()
-  set(USE_DEFAULT_INSTALL_LOCATION ${KDAB_INSTALL} CACHE INTERNAL "Install to default KDAB Location" FORCE)
 endif()
 
 if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
@@ -100,31 +90,68 @@ endif()
 
 set(${PROJECT_NAME}_VERSION_MAJOR 1)
 set(${PROJECT_NAME}_VERSION_MINOR 4)
-set(${PROJECT_NAME}_VERSION_PATCH 0)
+set(${PROJECT_NAME}_VERSION_PATCH 95)
 set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH})
 set(PROJECT_VERSION ${${PROJECT_NAME}_VERSION}) #PROJECT_VERSION is needed by some ECM modules
-set(${PROJECT_NAME}_SOVERSION "1.4")
+set(${PROJECT_NAME}_SOVERSION "1.5")
 
 include(FeatureSummary)
 
 option(${PROJECT_NAME}_QT6 "Build against Qt 6" OFF)
 option(${PROJECT_NAME}_DEVELOPER_MODE "Developer Mode" OFF)
 option(${PROJECT_NAME}_PYTHON_BINDINGS "Build python bindings" OFF)
-
-if(${PROJECT_NAME}_PYTHON_BINDINGS AND (CMAKE_BUILD_TYPE MATCHES "^[Dd]eb" OR ${PROJECT_NAME}_STATIC))
-  message(FATAL_ERROR "** Python Bindings are disabled in debug or static builds.")
-endif()
-
-option(${PROJECT_NAME}_UNINSTALL "Enable the uninstall target" ON)
+option(${PROJECT_NAME}_QTQUICK "Build for QtQuick instead of QtWidgets" OFF)
+option(${PROJECT_NAME}_STATIC "Build statically" OFF)
 option(${PROJECT_NAME}_TESTS "Build the tests" OFF)
 option(${PROJECT_NAME}_EXAMPLES "Build the examples" ON)
 option(${PROJECT_NAME}_DOCS "Build the API documentation" OFF)
 option(${PROJECT_NAME}_WERROR "Use -Werror (will be true for developer-mode unconditionally)" OFF)
+option(${PROJECT_NAME}_X11EXTRAS "On Linux, link against QtX11Extras so we can detect if the compositor supports transparency. Not applicable to other platforms or Qt6." ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/ECM/modules")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/KDAB/modules")
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/Python")
+
+# Set a default build type if none was specified
+set(default_build_type "Release")
+if(EXISTS "${CMAKE_SOURCE_DIR}/.git" OR ${PROJECT_NAME}_DEVELOPER_MODE)
+  set(default_build_type "Debug")
+endif()
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to ${default_build_type} as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+if(${PROJECT_NAME}_QT6)
+  set(Qt_VERSION_MAJOR 6)
+  set(QT_MIN_VERSION "6.0.0")
+  find_package(Qt6Widgets ${QT_MIN_VERSION} REQUIRED)
+  find_package(Qt6Test ${QT_MIN_VERSION} REQUIRED)
+  set(${PROJECT_NAME}_LIBRARY_QTID "-qt6")
+else()
+  set(Qt_VERSION_MAJOR 5)
+  set(QT_MIN_VERSION "5.12")
+  find_package(Qt5Widgets ${QT_MIN_VERSION} REQUIRED)
+  find_package(Qt5Test ${QT_MIN_VERSION} REQUIRED)
+  set(${PROJECT_NAME}_LIBRARY_QTID "")
+endif()
+include(KDQtInstallPaths) #to set QT_INSTALL_FOO variables
+
+set(${PROJECT_NAME}_DEPS "widgets")
+if(${PROJECT_NAME}_QTQUICK)
+  find_package(Qt${Qt_VERSION_MAJOR}Quick)
+  find_package(Qt${Qt_VERSION_MAJOR}QuickControls2)
+  add_definitions(-DKDDOCKWIDGETS_QTQUICK)
+  set(${PROJECT_NAME}_DEPS "${${PROJECT_NAME}_DEPS} quick quickcontrols2")
+else()
+  add_definitions(-DKDDOCKWIDGETS_QTWIDGETS)
+endif()
+
+if(NOT WIN32 AND NOT APPLE AND NOT EMSCRIPTEN AND NOT ${PROJECT_NAME}_QT6 AND ${PROJECT_NAME}_X11EXTRAS)
+  set(${PROJECT_NAME}_DEPS "${${PROJECT_NAME}_DEPS} x11extras")
+endif()
 
 #Always build the test harness in developer-mode
 if(${PROJECT_NAME}_DEVELOPER_MODE)
@@ -133,28 +160,24 @@ if(${PROJECT_NAME}_DEVELOPER_MODE)
   include(ECMEnableSanitizers)
 endif()
 
-option(${PROJECT_NAME}_QTQUICK "Build for QtQuick instead of QtWidgets" OFF)
-
-if(${PROJECT_NAME}_QT6)
-  find_package(Qt6Widgets REQUIRED)
-  find_package(Qt6Test REQUIRED)
-  set(QT_MAJOR_VERSION 6)
-  set(KDDockWidgets_LIBRARY_QTID "-qt6")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  set(IS_CLANG_BUILD TRUE)
 else()
-  find_package(Qt5Widgets 5.9 REQUIRED)
-  find_package(Qt5Test 5.9 REQUIRED)
-  set(QT_MAJOR_VERSION 5)
-  set(KDDockWidgets_LIBRARY_QTID "")
+  set(IS_CLANG_BUILD FALSE)
+endif()
+
+if(${PROJECT_NAME}_QTQUICK)
+  set(CMAKE_CXX_STANDARD 17)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-# setup default install locations
-include(InstallLocation)
-include(KDQtInstallPaths) #to set QT_INSTALL_FOO variables
+# Default to hidden visibility for symbols
+set(CMAKE_C_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 macro(set_compiler_flags targetName)
   if(${PROJECT_NAME}_DEVELOPER_MODE)
@@ -170,25 +193,31 @@ macro(set_compiler_flags targetName)
   endif()
 
   # Enable -Werror
-  if(NOT MSVC AND ${PROJECT_NAME}_WERROR)
-    target_compile_options(${targetName} PRIVATE -Werror -Wno-error=deprecated-declarations)
+  if(${PROJECT_NAME}_WERROR AND (NOT MSVC OR IS_CLANG_BUILD)) # clang-cl accepts these too
+    target_compile_options(${targetName} PRIVATE -Werror -Wundef -Wno-error=deprecated-declarations)
   endif()
-
 endmacro()
 
-set(${PROJECT_NAME}_DEPS "widgets")
+if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND NOT APPLE) OR
+  (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT APPLE) OR
+  (CMAKE_CXX_COMPILER_ID STREQUAL "Intel" AND NOT WIN32))
+  # Linker warnings should be treated as errors
+  set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--fatal-warnings ${CMAKE_SHARED_LINKER_FLAGS}")
+  set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--fatal-warnings ${CMAKE_MODULE_LINKER_FLAGS}")
 
-if(${PROJECT_NAME}_QTQUICK)
-  find_package(Qt${QT_MAJOR_VERSION}Quick)
-  find_package(Qt${QT_MAJOR_VERSION}QuickControls2)
-  add_definitions(-DKDDOCKWIDGETS_QTQUICK)
-  set(${PROJECT_NAME}_DEPS "${${PROJECT_NAME}_DEPS} quick quickcontrols2")
-else()
-  add_definitions(-DKDDOCKWIDGETS_QTWIDGETS)
-endif()
+  string(TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" compileflags)
+  if("${CMAKE_CXX_FLAGS} ${${compileflags}}" MATCHES "-fsanitize")
+    set(sanitizers_enabled TRUE)
+  else()
+    set(sanitizers_enabled FALSE)
+  endif()
 
-if(NOT WIN32 AND NOT APPLE AND NOT EMSCRIPTEN AND NOT ${PROJECT_NAME}_QT6)
-  set(${PROJECT_NAME}_DEPS "${${PROJECT_NAME}_DEPS} x11extras")
+  # cannot enable this for clang + sanitizers
+  if(NOT sanitizers_enabled OR NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # Do not allow undefined symbols, even in non-symbolic shared libraries
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
+    set(CMAKE_MODULE_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_MODULE_LINKER_FLAGS}")
+  endif()
 endif()
 
 if(${PROJECT_NAME}_STATIC)
@@ -197,36 +226,65 @@ else()
   set(${PROJECT_NAME}_LIBRARY_MODE "SHARED")
 endif()
 
-if(USE_DEFAULT_INSTALL_LOCATION)
+if(KDAB_INSTALL)
   if(UNIX)
-    set(CMAKE_INSTALL_PREFIX "/usr/local/KDAB/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+    set(CMAKE_INSTALL_PREFIX "/usr/local/KDAB/${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}" CACHE INTERNAL "Install to default KDAB Location")
   elseif(WIN32)
-    set(CMAKE_INSTALL_PREFIX "C:\\KDAB\\${PROJECT_NAME}-${${PROJECT_NAME}_VERSION}")
+    set(CMAKE_INSTALL_PREFIX "C:\\KDAB\\${PROJECT_NAME}-$$VERSION" CACHE INTERNAL "Install to default KDAB Location")
   endif()
 endif()
 
+# setup default install locations
+include(InstallLocation)
+
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+  set(${PROJECT_NAME}_IS_ROOT_PROJECT TRUE)
+
+  message(STATUS "Building ${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} in ${CMAKE_BUILD_TYPE} mode. Installing to ${CMAKE_INSTALL_PREFIX}")
+
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lib")
+
+  install(FILES LICENSE.txt README.md DESTINATION ${INSTALL_DOC_DIR})
+  install(DIRECTORY LICENSES DESTINATION ${INSTALL_DOC_DIR})
+
+  # Generate .pri file for qmake users
+  #TODO: ECM does not support Qt6 yet
+  if(Qt_VERSION_MAJOR EQUAL 5 AND
+    CMAKE_VERSION VERSION_GREATER "3.11.99" AND NOT CMAKE_CONFIGURATION_TYPES) # Not working with VS generator or older cmake versions
+    include(ECMGeneratePriFile)
+    set(PROJECT_VERSION_STRING ${${PROJECT_NAME}_VERSION})
+    ecm_generate_pri_file(BASE_NAME KDDockWidgets
+      LIB_NAME kddockwidgets
+      DEPS ${${PROJECT_NAME}_DEPS}
+      FILENAME_VAR pri_filename
+      INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+    install(FILES ${pri_filename} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
+  endif()
+else()
+  #Always disable tests, examples, docs when used as a submodule
+  set(${PROJECT_NAME}_IS_ROOT_PROJECT FALSE)
+  set(${PROJECT_NAME}_TESTS FALSE)
+  set(${PROJECT_NAME}_EXAMPLES FALSE)
+  set(${PROJECT_NAME}_DOCS FALSE)
+endif()
+
+if(${PROJECT_NAME}_TESTS)
+  enable_testing()
+endif()
+
 add_subdirectory(src)
+
+if(${PROJECT_NAME}_PYTHON_BINDINGS)
+  if(CMAKE_BUILD_TYPE MATCHES "^[Dd]eb" OR ${PROJECT_NAME}_STATIC)
+    message(FATAL_ERROR "** Python Bindings are disabled in debug or static builds.")
+  endif()
+endif()
 if(${PROJECT_NAME}_PYTHON_BINDINGS)
   add_subdirectory(python)
 endif()
-
-# Generate .pri file for qmake users
-if(CMAKE_VERSION VERSION_GREATER "3.11.99" AND NOT CMAKE_CONFIGURATION_TYPES) # Not working with VS generator or older cmake versions
-  include(ECMGeneratePriFile)
-  set(PROJECT_VERSION_STRING ${${PROJECT_NAME}_VERSION})
-  ecm_generate_pri_file(BASE_NAME KDDockWidgets
-    LIB_NAME kddockwidgets
-    DEPS ${${PROJECT_NAME}_DEPS}
-    FILENAME_VAR pri_filename
-    INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}
-  )
-  install(FILES ${pri_filename} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
-else()
-  message(WARNING "Unable to generate the pri file for qmake users. Try updating CMake.")
-endif()
-
-install(FILES LICENSE.txt README.md DESTINATION ${INSTALL_DOC_DIR})
-install(DIRECTORY LICENSES DESTINATION ${INSTALL_DOC_DIR})
 
 if(${PROJECT_NAME}_EXAMPLES)
   if(${PROJECT_NAME}_QTQUICK)
@@ -240,10 +298,8 @@ if(${PROJECT_NAME}_EXAMPLES)
   endif()
 endif()
 
-if(${PROJECT_NAME}_DEVELOPER_MODE)
-
-  if(${PROJECT_NAME}_TESTS)
-    enable_testing()
+if(${PROJECT_NAME}_TESTS)
+  if(${PROJECT_NAME}_DEVELOPER_MODE)
     add_subdirectory(tests)
 
     # Require Qt5.15.1 or higher to run the tests_launcher tests on Mac
@@ -282,14 +338,11 @@ endif()
 
 if(${PROJECT_NAME}_DOCS)
   add_subdirectory(docs) # needs to go last, in case there are build source files
-#don't create the dummy docs target as it can conflict when used as a submodule
-#else()
-#  add_custom_target(docs
-#    COMMAND ${CMAKE_COMMAND} -E echo "Sorry, there is no docs target since KDDockWidgets_DOCS=OFF."
-#    "Re-run cmake with the -DKDDockWidgets_DOCS=True option if you want to generate the documentation.")
 endif()
 
-if(${PROJECT_NAME}_UNINSTALL)
-    # Add uninstall target
-    include(ECMUninstallTarget)
+if(${PROJECT_NAME}_IS_ROOT_PROJECT)
+   # Add uninstall target (not for submodules since parent projects typically have uninstall too)
+  include(ECMUninstallTarget)
 endif()
+
+#feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

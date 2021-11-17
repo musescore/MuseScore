@@ -53,7 +53,11 @@ public:
      * Because simply inheriting from Draggable doesn't mean you can click anywhere to drag.
      * @param p is the point where the mouse press occurred
      */
-    virtual bool isPositionDraggable(QPoint p) const { Q_UNUSED(p) return true; }
+    virtual bool isPositionDraggable(QPoint p) const
+    {
+        Q_UNUSED(p)
+        return true;
+    }
 
     /**
      * @brief Returns whether a mouse move can start a drag or not.
@@ -91,11 +95,14 @@ public:
      * the equivalent point in window's coordinate system,
      * and returns the mapped coordinate.
      *
-     * TODO: Probably a good idea to to override this for TitleBar too. Since titlebar's 0,0
+     * TODO: Probably a good idea to override this for TitleBar too. Since titlebar's 0,0
      * is approx equal to the floating window's 0,0 the discrepancy isn't noticeable, but it can
      * be if there's more window margins
      */
-    virtual QPoint mapToWindow(QPoint pos) const { return pos; }
+    virtual QPoint mapToWindow(QPoint pos) const
+    {
+        return pos;
+    }
 
 private:
     class Private;

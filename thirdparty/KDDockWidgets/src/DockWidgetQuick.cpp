@@ -10,10 +10,11 @@
 */
 
 #include "DockWidgetQuick.h"
-#include "DockWidgetBase_p.h"
 #include "FrameworkWidgetFactory.h"
-#include "private/quick/FrameQuick_p.h"
+
 #include "private/TitleBar_p.h"
+#include "private/DockWidgetBase_p.h"
+#include "private/quick/FrameQuick_p.h"
 
 #include <Config.h>
 #include <QQuickItem>
@@ -31,10 +32,11 @@ using namespace KDDockWidgets;
 class DockWidgetQuick::Private
 {
 public:
-    Private(DockWidgetQuick *dw)
+    Private(DockWidgetQuick *dw, QQmlEngine *qmlengine)
         : q(dw)
-        , m_visualItem(q->createItem(Config::self().qmlEngine(),
+        , m_visualItem(q->createItem(qmlengine,
                                      Config::self().frameworkWidgetFactory()->dockwidgetFilename().toString()))
+        , m_qmlEngine(qmlengine)
     {
         Q_ASSERT(m_visualItem);
         m_visualItem->setParent(q);
@@ -43,11 +45,13 @@ public:
 
     DockWidgetBase *const q;
     QQuickItem *const m_visualItem;
+    QQmlEngine *const m_qmlEngine;
 };
 
-DockWidgetQuick::DockWidgetQuick(const QString &name, Options options, LayoutSaverOptions layoutSaverOptions)
+DockWidgetQuick::DockWidgetQuick(const QString &name, Options options,
+                                 LayoutSaverOptions layoutSaverOptions, QQmlEngine *engine)
     : DockWidgetBase(name, options, layoutSaverOptions)
-    , d(new Private(this))
+    , d(new Private(this, engine ? engine : Config::self().qmlEngine()))
 {
     // To mimic what QtWidgets does when creating a new QWidget.
     setVisible(false);
@@ -60,7 +64,7 @@ DockWidgetQuick::~DockWidgetQuick()
 
 void DockWidgetQuick::setWidget(const QString &qmlFilename)
 {
-    QQuickItem *guest = createItem(Config::self().qmlEngine(), qmlFilename);
+    QQuickItem *guest = createItem(d->m_qmlEngine, qmlFilename);
     if (!guest)
         return;
 
@@ -100,7 +104,7 @@ bool DockWidgetQuick::event(QEvent *e)
     } else if (e->type() == QEvent::Hide) {
         onHidden(e->spontaneous());
     } else if (e->type() == QEvent::Close) {
-        onCloseEvent(static_cast<QCloseEvent*>(e));
+        onCloseEvent(static_cast<QCloseEvent *>(e));
     }
 
     return DockWidgetBase::event(e);

@@ -51,6 +51,13 @@ ApplicationWindow {
             }
 
             Action {
+                text: qsTr("Toggle widget #6")
+                onTriggered: {
+                    toggleDockWidget(dock6);
+                }
+            }
+
+            Action {
                 text: qsTr("Close All")
                 onTriggered: {
                    _kddwDockRegistry.clear();
@@ -95,12 +102,26 @@ ApplicationWindow {
             }
         }
 
+        KDDW.DockWidget {
+            id: dock6
+            uniqueName: "dock6"
+            Rectangle {
+                color: "black"
+            }
+        }
+
         Component.onCompleted: {
             // Add dock4 to the Bottom location
             addDockWidget(dock4, KDDW.KDDockWidgets.Location_OnBottom);
 
             // Add dock5 to the left of dock4
             addDockWidget(dock5, KDDW.KDDockWidgets.Location_OnRight, dock4);
+
+            // Adds dock6 but specifies a preferred initial size and it starts hidden
+            // When toggled it will be shown on the desired dock location.
+            // See MainWindowInstantiator_p.h for the API
+            addDockWidget(dock6, KDDW.KDDockWidgets.Location_OnLeft, null,
+                                 Qt.size(500, 100), KDDW.KDDockWidgets.StartHidden);
         }
     }
 
@@ -109,7 +130,7 @@ ApplicationWindow {
     }
 
     function toggleDockWidget(dw) {
-        if (dw.dockWidget.visible) {
+        if (dw.dockWidget.isOpen()) {
             dw.dockWidget.close();
         } else {
             dw.dockWidget.show();

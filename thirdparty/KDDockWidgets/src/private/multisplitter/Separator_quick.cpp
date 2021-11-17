@@ -20,7 +20,7 @@
 using namespace Layouting;
 
 SeparatorQuick::SeparatorQuick(Layouting::Widget *parent)
-    : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject()))
+    : QQuickItem(qobject_cast<QQuickItem *>(parent->asQObject()))
     , Separator(parent)
     , Layouting::Widget_quick(this)
 {

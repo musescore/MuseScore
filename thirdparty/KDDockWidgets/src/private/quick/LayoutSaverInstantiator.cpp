@@ -25,12 +25,10 @@ LayoutSaverInstantiator::LayoutSaverInstantiator(QObject *parent)
     : QObject(parent)
     , LayoutSaver()
 {
-
 }
 
 LayoutSaverInstantiator::~LayoutSaverInstantiator()
 {
-
 }
 
 bool LayoutSaverInstantiator::saveToFile(const QString &jsonFilename)

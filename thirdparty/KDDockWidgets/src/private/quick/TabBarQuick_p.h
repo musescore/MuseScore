@@ -20,7 +20,7 @@
 #ifndef KD_TABBAR_QUICK_P_H
 #define KD_TABBAR_QUICK_P_H
 
-#include "TabWidget_p.h"
+#include "../TabWidget_p.h"
 
 
 namespace KDDockWidgets {
@@ -29,8 +29,8 @@ class DockWidget;
 class TabWidget;
 
 class DOCKS_EXPORT TabBarQuick
-        : public QWidgetAdapter
-        , public TabBar
+    : public QWidgetAdapter,
+      public TabBar
 {
     Q_OBJECT
     Q_PROPERTY(QQuickItem *tabBarQmlItem READ tabBarQmlItem WRITE setTabBarQmlItem NOTIFY tabBarQmlItemChanged)
@@ -51,11 +51,11 @@ Q_SIGNALS:
 
 protected:
     bool event(QEvent *ev) override;
+
 private:
     QQuickItem *tabAt(int index) const;
     QQuickItem *listView() const;
     QPointer<QQuickItem> m_tabBarQmlItem;
-
 };
 }
 

@@ -59,7 +59,7 @@ void Widget_qwidget::setParent(Widget *parent)
         return;
     }
 
-    if (auto qwidget = qobject_cast<QWidget*>(parent->asQObject())) {
+    if (auto qwidget = qobject_cast<QWidget *>(parent->asQObject())) {
         m_thisWidget->setParent(qwidget);
     } else {
         qWarning() << Q_FUNC_INFO << "parent is not a widget, you have a bug" << parent->asQObject();

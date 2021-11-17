@@ -121,7 +121,7 @@
     },
     "operations": [
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -209,7 +209,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },
@@ -234,7 +234,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },
@@ -285,14 +285,14 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },
@@ -307,7 +307,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -347,7 +347,7 @@
             "type": 1
         },
         {
-            "comment": "Hidding DockWidget-4",
+            "comment": "Hiding DockWidget-4",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },
@@ -399,7 +399,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -465,14 +465,14 @@
             "type": 1
         },
         {
-            "comment": "Hidding DockWidget-4",
+            "comment": "Hiding DockWidget-4",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
@@ -487,7 +487,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-5",
+            "comment": "Hiding DockWidget-5",
             "params": {
                 "dockWidgetName": "DockWidget-5"
             },
@@ -591,14 +591,14 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -633,7 +633,7 @@
             "type": 3
         },
         {
-            "comment": "Hidding DockWidget-4",
+            "comment": "Hiding DockWidget-4",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },
@@ -647,7 +647,7 @@
             "type": 3
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -668,7 +668,7 @@
             "type": 1
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -717,7 +717,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -731,7 +731,7 @@
             "type": 3
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -748,7 +748,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
@@ -803,7 +803,7 @@
             "type": 3
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -893,7 +893,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
@@ -914,7 +914,7 @@
             "type": 1
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -976,7 +976,7 @@
             "type": 1
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -1074,14 +1074,14 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-4",
+            "comment": "Hiding DockWidget-4",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
@@ -1110,7 +1110,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
@@ -1144,7 +1144,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-4",
+            "comment": "Hiding DockWidget-4",
             "params": {
                 "dockWidgetName": "DockWidget-4"
             },
@@ -1191,35 +1191,35 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-5",
+            "comment": "Hiding DockWidget-5",
             "params": {
                 "dockWidgetName": "DockWidget-5"
             },

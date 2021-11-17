@@ -36,7 +36,10 @@ public:
     Qt::Orientation orientation() const;
 
     /// @brief returns if this side bar has vertical orientation
-    bool isVertical() const { return m_orientation == Qt::Vertical; }
+    bool isVertical() const
+    {
+        return m_orientation == Qt::Vertical;
+    }
 
     /// @brief returns whether there's no dock widgets
     bool isEmpty() const;
