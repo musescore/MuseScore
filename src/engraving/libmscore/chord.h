@@ -133,7 +133,7 @@ public:
     EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;
-    void setStemDirection(Direction d) { _stemDirection = d; }
+    void setStemDirection(Direction d);
     Direction stemDirection() const { return _stemDirection; }
 
     LedgerLine* ledgerLines() { return _ledgerLines; }
