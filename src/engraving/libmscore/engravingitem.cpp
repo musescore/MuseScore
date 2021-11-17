@@ -1912,9 +1912,9 @@ bool EngravingItem::prevGrip(EditData& ed) const
 bool EngravingItem::isUserModified() const
 {
     for (const StyledProperty& spp : *styledProperties()) {
-        Pid pid               = spp.pid;
-        QVariant val          = getProperty(pid);
-        QVariant defaultValue = propertyDefault(pid);
+        Pid pid = spp.pid;
+        PropertyValue val = getProperty(pid);
+        PropertyValue defaultValue = propertyDefault(pid);
 
         if (propertyType(pid) == P_TYPE::SP_REAL) {
             if (qAbs(val.toReal() - defaultValue.toReal()) > 0.0001) {        // we don’t care spatium diffs that small

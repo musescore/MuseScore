@@ -57,7 +57,7 @@ private:
     Ms::Score* score() const;
     double styleValueDouble(StyleId styleId) const;
     bool styleValueBool(StyleId styleId) const;
-    void setStyleValue(StyleId styleId, const QVariant& newValue) const;
+    void setStyleValue(StyleId styleId, const PropertyValue& newValue) const;
 
     bool mmUnit = false;
     bool _changeFlag = false;

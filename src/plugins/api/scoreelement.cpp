@@ -27,6 +27,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingobject.h"
 
+using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
@@ -82,15 +83,15 @@ QVariant ScoreElement::get(Ms::Pid pid) const
     if (!e) {
         return QVariant();
     }
-    const QVariant val = e->getProperty(pid);
-    switch (propertyType(pid)) {
+    const PropertyValue val = e->getProperty(pid);
+    switch (val.type()) {
     case P_TYPE::FRACTION: {
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
     }
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:
-        return val.toPointF() / spatium();
+        return val.value<PointF>().toQPointF() / spatium();
     case P_TYPE::SP_REAL:
         return val.toReal() / spatium();
     case P_TYPE::SPATIUM:
@@ -98,7 +99,7 @@ QVariant ScoreElement::get(Ms::Pid pid) const
     default:
         break;
     }
-    return val;
+    return val.toQVariant();
 }
 
 //---------------------------------------------------------

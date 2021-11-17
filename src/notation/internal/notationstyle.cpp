@@ -38,17 +38,17 @@ NotationStyle::NotationStyle(IGetScore* getScore, INotationUndoStackPtr undoStac
 {
 }
 
-QVariant NotationStyle::styleValue(const StyleId& styleId) const
+PropertyValue NotationStyle::styleValue(const StyleId& styleId) const
 {
     return m_getScore->score()->styleV(styleId);
 }
 
-QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
+PropertyValue NotationStyle::defaultStyleValue(const StyleId& styleId) const
 {
-    return engraving::DefaultStyle::defaultStyle().value(styleId).toQVariant();
+    return engraving::DefaultStyle::defaultStyle().value(styleId);
 }
 
-void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newValue)
+void NotationStyle::setStyleValue(const StyleId& styleId, const PropertyValue& newValue)
 {
     if (styleId == StyleId::concertPitch) {
         m_getScore->score()->cmdConcertPitchChanged(newValue.toBool());

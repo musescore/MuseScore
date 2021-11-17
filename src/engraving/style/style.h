@@ -63,7 +63,6 @@ public:
     qreal pvalue(Sid idx) const;
 
     void set(Sid idx, const mu::engraving::PropertyValue& v);
-    void set(Sid idx, const mu::PointF& v);
 
     bool isDefault(Sid idx) const;
     void setDefaultStyleVersion(const int defaultsVersion);

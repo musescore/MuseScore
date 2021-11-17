@@ -1806,9 +1806,9 @@ void ChangeStyle::undo(EditData* ed)
 
 void ChangeStyleVal::flip(EditData*)
 {
-    QVariant v = score->styleV(idx);
+    PropertyValue v = score->styleV(idx);
     if (v != value) {
-        score->style().set(idx, PropertyValue::fromQVariant(value));
+        score->style().set(idx, value);
         switch (idx) {
         case Sid::chordExtensionMag:
         case Sid::chordExtensionAdjust:

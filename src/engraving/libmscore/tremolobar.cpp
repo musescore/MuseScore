@@ -204,7 +204,7 @@ bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));
         break;
     case Pid::TREMOLOBAR_CURVE:
-        setPoints(pitchValuesFromVariant(v));
+        setPoints(v.value<PitchValues>());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

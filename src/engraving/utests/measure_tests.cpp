@@ -505,20 +505,20 @@ TEST_F(MeasureTests, measureNumbers)
 
     // Place measure numbers below
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, QVariant(int(Placement::BELOW))));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, int(Placement::BELOW)));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, QVariant(int(HPlacement::CENTER))));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, int(HPlacement::CENTER)));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));
 
     // show on first system too
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(true)));
+    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, true));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-3.mscx", MEASURE_DATA_DIR + "measurenumber-3-ref.mscx"));
@@ -527,7 +527,7 @@ TEST_F(MeasureTests, measureNumbers)
     score->startCmd();
     // to know wheter measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, QVariant(false)));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, false));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-4.mscx", MEASURE_DATA_DIR + "measurenumber-4-ref.mscx"));
@@ -536,14 +536,14 @@ TEST_F(MeasureTests, measureNumbers)
     // because they are still placed at regular intervals.
     // Instead of being at 1-6-11-16-21, etc. They should be at 5-10-15-20-25, etc.
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(false)));
+    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, false));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-5.mscx", MEASURE_DATA_DIR + "measurenumber-5-ref.mscx"));
 
     // show at every measure (except fist)
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, QVariant(1)));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, 1));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-6.mscx", MEASURE_DATA_DIR + "measurenumber-6-ref.mscx"));
@@ -552,7 +552,7 @@ TEST_F(MeasureTests, measureNumbers)
     score->startCmd();
     // to know wheter measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, QVariant(false)));
+    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, false));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-7.mscx", MEASURE_DATA_DIR + "measurenumber-7-ref.mscx"));

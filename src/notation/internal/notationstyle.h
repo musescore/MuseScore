@@ -34,9 +34,9 @@ class NotationStyle : public INotationStyle
 public:
     NotationStyle(IGetScore* getScore, INotationUndoStackPtr);
 
-    QVariant styleValue(const StyleId& styleId) const override;
-    QVariant defaultStyleValue(const StyleId& styleId) const override;
-    void setStyleValue(const StyleId& styleId, const QVariant& newValue) override;
+    PropertyValue styleValue(const StyleId& styleId) const override;
+    PropertyValue defaultStyleValue(const StyleId& styleId) const override;
+    void setStyleValue(const StyleId& styleId, const PropertyValue& newValue) override;
     void resetStyleValue(const StyleId& styleId) override;
 
     bool canApplyToAllParts() const override;

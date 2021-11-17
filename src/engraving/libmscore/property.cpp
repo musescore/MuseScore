@@ -732,9 +732,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
 //    Originally extracted from XmlWriter
 //---------------------------------------------------------
 
-QString propertyToString(Pid id, QVariant value, bool mscx)
+QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
 {
-    if (value == QVariant()) {
+    if (!value.isValid()) {
         return QString();
     }
 
@@ -944,13 +944,11 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
 
     default: {
         switch (value.type()) {
-        case QVariant::Bool:
-        case QVariant::Char:
-        case QVariant::Int:
-        case QVariant::UInt:
+        case P_TYPE::BOOL:
+        case P_TYPE::INT:
             return QString::number(value.toInt());
-        case QVariant::Double:
-            return QString::number(value.value<double>());
+        case P_TYPE::REAL:
+            return QString::number(value.value<qreal>());
         default:
             break;
         }
@@ -961,21 +959,20 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
         // String representation for properties that are written
         // to MSCX in other way (e.g. as XML tag properties).
         switch (value.type()) {
-        case QVariant::PointF: {
+        case P_TYPE::POINT: {
             const PointF p(value.value<PointF>());
             return QString("%1;%2").arg(QString::number(p.x()), QString::number(p.y()));
         }
-        case QVariant::SizeF: {
+        case P_TYPE::SIZE: {
             const SizeF s(value.value<SizeF>());
             return QString("%1x%2").arg(QString::number(s.width()), QString::number(s.height()));
+        }
+        case P_TYPE::STRING: {
+            return value.toString();
         }
         // TODO: support QVariant::Rect and QVariant::RectF?
         default:
             break;
-        }
-
-        if (value.canConvert<QString>()) {
-            return value.toString();
         }
     }
 
