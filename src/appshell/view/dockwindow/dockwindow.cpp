@@ -86,6 +86,9 @@ void DockWindow::componentComplete()
         }
     });
 
+    clearRegistry();
+    restoreGeometry();
+
     dockWindowProvider()->init(this);
 
     startupScenario()->run();
@@ -154,18 +157,14 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
+    if (m_currentPage) {
+        savePageState(m_currentPage->objectName());
+        clearRegistry();
+    }
+
     DockPageView* newPage = pageByUri(uri);
     IF_ASSERT_FAILED(newPage) {
         return;
-    }
-
-    bool isFirstOpening = (m_currentPage == nullptr);
-    if (isFirstOpening) {
-        clearRegistry();
-        restoreGeometry();
-    } else {
-        savePageState(m_currentPage->objectName());
-        clearRegistry();
     }
 
     loadPageContent(newPage);
