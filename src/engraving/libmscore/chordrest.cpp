@@ -907,7 +907,7 @@ PropertyValue ChordRest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
+bool ChordRest::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SMALL:
@@ -924,7 +924,7 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
         measure()->checkMultiVoices(staffIdx());
         break;
     case Pid::DURATION_TYPE:
-        setDurationType(v.value<TDuration>());
+        setDurationType(v.toTDuration());
         break;
     default:
         return DurationElement::setProperty(propertyId, v);

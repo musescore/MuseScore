@@ -66,7 +66,7 @@ private:
     Lyrics(const Lyrics&);
 
     bool isMelisma() const;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
 protected:
     int _no;                  ///< row index
@@ -110,7 +110,7 @@ public:
     void paste(EditData& ed, const QString& txt) override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 
@@ -138,7 +138,7 @@ public:
     Lyrics* nextLyrics() const { return _nextLyrics; }
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
-    bool setProperty(Pid propertyId, const QVariant& v) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
     SpannerSegment* layoutSystem(System*) override;
 };
 

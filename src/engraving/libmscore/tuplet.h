@@ -148,7 +148,7 @@ public:
     void setVisible(bool f) override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     Shape shape() const override;

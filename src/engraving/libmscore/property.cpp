@@ -43,6 +43,7 @@
 #include "fret.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -456,126 +457,126 @@ QString propertyUserName(Pid id)
 //    propertyFromString
 //---------------------------------------------------------
 
-QVariant propertyFromString(Pid id, QString value)
+PropertyValue propertyFromString(Pid id, QString value)
 {
     switch (propertyType(id)) {
     case P_TYPE::BOOL:
-        return QVariant(bool(value.toInt()));
+        return PropertyValue(bool(value.toInt()));
     case P_TYPE::ZERO_INT:
     case P_TYPE::INT:
-        return QVariant(value.toInt());
+        return PropertyValue(value.toInt());
     case P_TYPE::REAL:
     case P_TYPE::SPATIUM:
     case P_TYPE::SP_REAL:
     case P_TYPE::TEMPO:
-        return QVariant(value.toDouble());
+        return PropertyValue(value.toDouble());
     case P_TYPE::FRACTION:
         return Fraction::fromString(value);
     case P_TYPE::COLOR:
         // not used by MSCX
-        return QVariant::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
+        return PropertyValue::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
     case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM: {
         // not used by MSCX
         const int i = value.indexOf(';');
-        return QVariant::fromValue(PointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
+        return PropertyValue::fromValue(PointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
     case P_TYPE::SCALE:
     case P_TYPE::SIZE: {
         // not used by MSCX
         const int i = value.indexOf('x');
-        return QVariant::fromValue(SizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
+        return PropertyValue::fromValue(SizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
     case P_TYPE::FONT:
     case P_TYPE::STRING:
         return value;
     case P_TYPE::GLISS_STYLE: {
         if (value == "whitekeys") {
-            return QVariant(int(GlissandoStyle::WHITE_KEYS));
+            return PropertyValue(int(GlissandoStyle::WHITE_KEYS));
         } else if (value == "blackkeys") {
-            return QVariant(int(GlissandoStyle::BLACK_KEYS));
+            return PropertyValue(int(GlissandoStyle::BLACK_KEYS));
         } else if (value == "diatonic") {
-            return QVariant(int(GlissandoStyle::DIATONIC));
+            return PropertyValue(int(GlissandoStyle::DIATONIC));
         } else if (value == "portamento") {
-            return QVariant(int(GlissandoStyle::PORTAMENTO));
+            return PropertyValue(int(GlissandoStyle::PORTAMENTO));
         } else {       // e.g., normally "Chromatic"
-            return QVariant(int(GlissandoStyle::CHROMATIC));
+            return PropertyValue(int(GlissandoStyle::CHROMATIC));
         }
     }
     break;
     case P_TYPE::ORNAMENT_STYLE: {
         if (value == "baroque") {
-            return QVariant(int(MScore::OrnamentStyle::BAROQUE));
+            return PropertyValue(int(MScore::OrnamentStyle::BAROQUE));
         }
-        return QVariant(int(MScore::OrnamentStyle::DEFAULT));
+        return PropertyValue(int(MScore::OrnamentStyle::DEFAULT));
     }
 
     case P_TYPE::DIRECTION:
-        return QVariant::fromValue<Direction>(toDirection(value));
+        return PropertyValue::fromValue<Direction>(toDirection(value));
 
     case P_TYPE::DIRECTION_H:
     {
         if (value == "left" || value == "1") {
-            return QVariant(int(MScore::DirectionH::LEFT));
+            return PropertyValue(int(MScore::DirectionH::LEFT));
         } else if (value == "right" || value == "2") {
-            return QVariant(int(MScore::DirectionH::RIGHT));
+            return PropertyValue(int(MScore::DirectionH::RIGHT));
         } else if (value == "auto") {
-            return QVariant(int(MScore::DirectionH::AUTO));
+            return PropertyValue(int(MScore::DirectionH::AUTO));
         }
     }
     break;
     case P_TYPE::LAYOUT_BREAK: {
         if (value == "line") {
-            return QVariant(int(LayoutBreak::Type::LINE));
+            return PropertyValue(int(LayoutBreak::Type::LINE));
         }
         if (value == "page") {
-            return QVariant(int(LayoutBreak::Type::PAGE));
+            return PropertyValue(int(LayoutBreak::Type::PAGE));
         }
         if (value == "section") {
-            return QVariant(int(LayoutBreak::Type::SECTION));
+            return PropertyValue(int(LayoutBreak::Type::SECTION));
         }
         if (value == "nobreak") {
-            return QVariant(int(LayoutBreak::Type::NOBREAK));
+            return PropertyValue(int(LayoutBreak::Type::NOBREAK));
         }
         qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
     }
     break;
     case P_TYPE::VALUE_TYPE: {
         if (value == "offset") {
-            return QVariant(int(Note::ValueType::OFFSET_VAL));
+            return PropertyValue(int(Note::ValueType::OFFSET_VAL));
         } else if (value == "user") {
-            return QVariant(int(Note::ValueType::USER_VAL));
+            return PropertyValue(int(Note::ValueType::USER_VAL));
         }
     }
     break;
     case P_TYPE::PLACEMENT: {
         if (value == "above") {
-            return QVariant(int(Placement::ABOVE));
+            return PropertyValue(int(Placement::ABOVE));
         } else if (value == "below") {
-            return QVariant(int(Placement::BELOW));
+            return PropertyValue(int(Placement::BELOW));
         }
     }
     break;
     case P_TYPE::HPLACEMENT: {
         if (value == "left") {
-            return QVariant(int(HPlacement::LEFT));
+            return PropertyValue(int(HPlacement::LEFT));
         } else if (value == "center") {
-            return QVariant(int(HPlacement::CENTER));
+            return PropertyValue(int(HPlacement::CENTER));
         } else if (value == "right") {
-            return QVariant(int(HPlacement::RIGHT));
+            return PropertyValue(int(HPlacement::RIGHT));
         }
     }
     break;
     case P_TYPE::TEXT_PLACE: {
         if (value == "auto") {
-            return QVariant(int(PlaceText::AUTO));
+            return PropertyValue(int(PlaceText::AUTO));
         } else if (value == "above") {
-            return QVariant(int(PlaceText::ABOVE));
+            return PropertyValue(int(PlaceText::ABOVE));
         } else if (value == "below") {
-            return QVariant(int(PlaceText::BELOW));
+            return PropertyValue(int(PlaceText::BELOW));
         } else if (value == "left") {
-            return QVariant(int(PlaceText::LEFT));
+            return PropertyValue(int(PlaceText::LEFT));
         }
     }
     break;
@@ -583,39 +584,39 @@ QVariant propertyFromString(Pid id, QString value)
         bool ok;
         const int ct = value.toInt(&ok);
         if (ok) {
-            return QVariant(ct);
+            return PropertyValue(ct);
         } else {
             BarLineType t = BarLine::barLineType(value);
-            return QVariant::fromValue(t);
+            return PropertyValue::fromValue(t);
         }
     }
     break;
     case P_TYPE::BEAM_MODE:
-        return QVariant(int(0));
+        return PropertyValue(int(0));
 
     case P_TYPE::GROUPS:
         // unsupported
-        return QVariant();
+        return PropertyValue();
     case P_TYPE::SYMID:
-        return QVariant::fromValue(SymNames::symIdByName(value));
+        return PropertyValue::fromValue(SymNames::symIdByName(value));
     case P_TYPE::HEAD_SCHEME:
-        return QVariant::fromValue(NoteHead::name2scheme(value));
+        return PropertyValue::fromValue(int(NoteHead::name2scheme(value)));
     case P_TYPE::HEAD_GROUP:
-        return QVariant::fromValue(NoteHead::name2group(value));
+        return PropertyValue::fromValue(int(NoteHead::name2group(value)));
     case P_TYPE::HEAD_TYPE:
-        return QVariant::fromValue(NoteHead::name2type(value));
+        return PropertyValue::fromValue(int(NoteHead::name2type(value)));
     case P_TYPE::POINT_MM:                      // not supported
     case P_TYPE::TDURATION:
     case P_TYPE::SIZE_MM:
     case P_TYPE::INT_LIST:
-        return QVariant();
+        return PropertyValue();
     case P_TYPE::SUB_STYLE:
         return int(textStyleFromName(value));
     case P_TYPE::ALIGN: {
         QStringList sl = value.split(',');
         if (sl.size() != 2) {
             qDebug("bad align text <%s>", qPrintable(value));
-            return QVariant();
+            return PropertyValue();
         }
         Align align = Align::LEFT;
         if (sl[0] == "center") {
@@ -625,7 +626,7 @@ QVariant propertyFromString(Pid id, QString value)
         } else if (sl[0] == "left") {
         } else {
             qDebug("bad align text <%s>", qPrintable(sl[0]));
-            return QVariant();
+            return PropertyValue();
         }
         if (sl[1] == "center") {
             align = align | Align::VCENTER;
@@ -636,56 +637,56 @@ QVariant propertyFromString(Pid id, QString value)
         } else if (sl[1] == "top") {
         } else {
             qDebug("bad align text <%s>", qPrintable(sl[1]));
-            return QVariant();
+            return PropertyValue();
         }
         return int(align);
     }
     case P_TYPE::CHANGE_METHOD:
-        return QVariant(int(ChangeMap::nameToChangeMethod(value)));
+        return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
     case P_TYPE::ORIENTATION:
         if (value == "vertical") {
-            return QVariant(int(Orientation::VERTICAL));
+            return PropertyValue(int(Orientation::VERTICAL));
         } else if (value == "horizontal") {
-            return QVariant(int(Orientation::HORIZONTAL));
+            return PropertyValue(int(Orientation::HORIZONTAL));
         }
         break;
     default:
         break;
     }
-    return QVariant();
+    return PropertyValue();
 }
 
 //---------------------------------------------------------
 //    readProperty
 //---------------------------------------------------------
 
-QVariant readProperty(Pid id, XmlReader& e)
+PropertyValue readProperty(Pid id, XmlReader& e)
 {
     switch (propertyType(id)) {
     case P_TYPE::BOOL:
-        return QVariant(bool(e.readInt()));
+        return PropertyValue(bool(e.readInt()));
     case P_TYPE::ZERO_INT:
     case P_TYPE::INT:
-        return QVariant(e.readInt());
+        return PropertyValue(e.readInt());
     case P_TYPE::REAL:
     case P_TYPE::SPATIUM:
     case P_TYPE::SP_REAL:
     case P_TYPE::TEMPO:
-        return QVariant(e.readDouble());
+        return PropertyValue(e.readDouble());
     case P_TYPE::FRACTION:
-        return QVariant::fromValue(e.readFraction());
+        return PropertyValue::fromValue(e.readFraction());
     case P_TYPE::COLOR:
-        return QVariant::fromValue(e.readColor());
+        return PropertyValue::fromValue(e.readColor());
     case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:
-        return QVariant::fromValue(e.readPoint());
+        return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
     case P_TYPE::SIZE:
-        return QVariant::fromValue(e.readSize());
+        return PropertyValue::fromValue(e.readSize());
     case P_TYPE::FONT:
     case P_TYPE::STRING:
-        return QVariant(e.readElementText());
+        return PropertyValue(e.readElementText());
     case P_TYPE::GLISS_STYLE:
     case P_TYPE::ORNAMENT_STYLE:
     case P_TYPE::DIRECTION:
@@ -706,24 +707,24 @@ QVariant readProperty(Pid id, XmlReader& e)
         return propertyFromString(id, e.readElementText());
 
     case P_TYPE::BEAM_MODE:
-        return QVariant(int(0));
+        return PropertyValue(int(0));
 
     case P_TYPE::GROUPS:
     {
         Groups g;
         g.read(e);
-        return QVariant::fromValue(g);
+        return PropertyValue::fromValue(g);
     }
     case P_TYPE::POINT_MM:                      // not supported
     case P_TYPE::TDURATION:
     case P_TYPE::SIZE_MM:
     case P_TYPE::INT_LIST:
-        return QVariant();
+        return PropertyValue();
     default:
         qFatal("unhandled PID type");
         break;
     }
-    return QVariant();
+    return PropertyValue();
 }
 
 //---------------------------------------------------------

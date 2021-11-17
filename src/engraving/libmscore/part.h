@@ -157,7 +157,7 @@ public:
     void setColor(int value) { _color = value; }
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
 
     int lyricCount() const;
     int harmonyCount() const;

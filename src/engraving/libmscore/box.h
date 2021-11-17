@@ -96,7 +96,7 @@ public:
     void copyValues(Box* origin);
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     QString accessibleExtraInfo() const override;
@@ -138,7 +138,7 @@ public:
     void setCreateSystemHeader(bool val) { _createSystemHeader = val; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;

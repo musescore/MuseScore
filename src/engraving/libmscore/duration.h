@@ -64,7 +64,7 @@ public:
     void setTicks(const Fraction& f) { _duration = f; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
 
 protected:
     DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);

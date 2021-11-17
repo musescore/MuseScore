@@ -133,7 +133,7 @@ PropertyValue InstrumentName::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool InstrumentName::setProperty(Pid id, const QVariant& v)
+bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
 {
     bool rv = true;
     switch (id) {

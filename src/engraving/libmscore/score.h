@@ -672,8 +672,8 @@ public:
     void undoChangeUserMirror(Note*, MScore::DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false);
-    bool undoPropertyChanged(EngravingItem* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
-    void undoPropertyChanged(EngravingObject*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    bool undoPropertyChanged(EngravingItem* e, Pid t, const mu::engraving::PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    void undoPropertyChanged(EngravingObject*, Pid, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
@@ -1217,7 +1217,7 @@ public:
     void switchToPageMode();
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     virtual QQueue<MidiInputEvent>* midiInputQueue();

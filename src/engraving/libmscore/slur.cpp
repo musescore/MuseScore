@@ -41,6 +41,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
@@ -133,7 +134,7 @@ bool SlurSegment::edit(EditData& ed)
     Slur* sl = slur();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
         sl->layout();
         return true;
     }

@@ -57,7 +57,7 @@ mu::engraving::PropertyValue BracketItem::getProperty(Pid id) const
     }
 }
 
-bool BracketItem::setProperty(Pid id, const QVariant& v)
+bool BracketItem::setProperty(Pid id, const engraving::PropertyValue& v)
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:

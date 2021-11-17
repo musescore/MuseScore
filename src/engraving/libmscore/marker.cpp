@@ -274,7 +274,7 @@ PropertyValue Marker::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Marker::setProperty(Pid propertyId, const QVariant& v)
+bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LABEL:

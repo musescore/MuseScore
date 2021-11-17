@@ -187,7 +187,7 @@ PropertyValue TremoloBar::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
+bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:

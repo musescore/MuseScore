@@ -287,7 +287,7 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
+bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:

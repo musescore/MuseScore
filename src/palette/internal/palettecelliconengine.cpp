@@ -196,13 +196,13 @@ void PaletteCellIconEngine::paintPaletteElement(void* data, EngravingItem* eleme
     auto frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
 
     auto color = Color::fromQColor(configuration()->elementsColor());
-    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
+    element->setProperty(Pid::COLOR, color);
+    element->setProperty(Pid::FRAME_FG_COLOR, color);
 
     element->draw(painter);
 
-    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
+    element->setProperty(Pid::COLOR, colorBackup);
+    element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
 
     painter->restore();
 }

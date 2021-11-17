@@ -1576,7 +1576,7 @@ PropertyValue Staff::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Staff::setProperty(Pid id, const QVariant& v)
+bool Staff::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::SMALL: {

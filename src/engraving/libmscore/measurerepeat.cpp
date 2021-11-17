@@ -240,7 +240,7 @@ PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureRepeat::setProperty(Pid propertyId, const QVariant& v)
+bool MeasureRepeat::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SUBTYPE:

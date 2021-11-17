@@ -326,7 +326,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Articulation::setProperty(Pid propertyId, const QVariant& v)
+bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:

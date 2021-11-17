@@ -1911,16 +1911,16 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (rests == 1 && chords == 0) {
             // if measure value didn't change, stick to whole measure rest
             if (m_timesig == nf) {
-                rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(nf * stretch));
-                rest->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
+                rest->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue<Fraction>(nf * stretch));
+                rest->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                 // set the existing rest to the first value of the duration list
                 for (EngravingObject* e : rest->linkList()) {
-                    e->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
-                    e->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
+                    e->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue<Fraction>(durList[0].fraction()));
+                    e->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue<TDuration>(durList[0]));
                 }
 
                 // add rests for any other duration list value
@@ -2820,7 +2820,7 @@ PropertyValue Measure::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Measure::setProperty(Pid propertyId, const QVariant& value)
+bool Measure::setProperty(Pid propertyId, const PropertyValue& value)
 {
     switch (propertyId) {
     case Pid::TIMESIG_NOMINAL:
@@ -3538,7 +3538,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
                 } else {
                     if (bl->barLineType() != t) {
                         if (force) {
-                            bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(t));
+                            bl->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(t));
                             bl->setGenerated(true);
                         }
                     }

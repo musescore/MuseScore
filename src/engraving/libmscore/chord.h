@@ -242,7 +242,7 @@ public:
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     void reset() override;
@@ -262,8 +262,8 @@ public:
     QString accessibleExtraInfo() const override;
 
     Shape shape() const override;
-    void undoChangeProperty(Pid id, const QVariant& newValue);
-    void undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue, PropertyFlags ps) override;
 };
 }     // namespace Ms
 #endif

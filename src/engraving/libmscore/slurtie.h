@@ -113,10 +113,10 @@ public:
     void editDrag(EditData&) override;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     void reset() override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
     void move(const mu::PointF& s) override;
     bool isEditable() const override { return true; }
 
@@ -182,7 +182,7 @@ public:
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }

@@ -226,17 +226,17 @@ TEST_F(NoteTests, note)
     delete n;
 
     // dot position
-    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::UP)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::UP)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(Direction::UP));
     delete n;
 
-    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::DOWN)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::DOWN)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(Direction::DOWN));
     delete n;
 
-    note->setProperty(Pid::DOT_POSITION, QVariant::fromValue(Direction(Direction::AUTO)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::AUTO)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
     EXPECT_EQ(int(n->userDotPosition()), int(Direction::AUTO));
     delete n;

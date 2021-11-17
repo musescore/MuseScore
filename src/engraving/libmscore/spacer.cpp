@@ -238,7 +238,7 @@ PropertyValue Spacer::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Spacer::setProperty(Pid propertyId, const QVariant& v)
+bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:

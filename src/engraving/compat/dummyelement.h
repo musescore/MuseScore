@@ -53,7 +53,7 @@ public:
     Ms::EngravingItem* clone() const override;
 
     mu::engraving::PropertyValue getProperty(Ms::Pid) const override { return mu::engraving::PropertyValue(); }
-    bool setProperty(Ms::Pid, const QVariant&) override { return false; }
+    bool setProperty(Ms::Pid, const mu::engraving::PropertyValue&) override { return false; }
 
 private:
     RootItem* m_root = nullptr;

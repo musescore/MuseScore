@@ -96,7 +96,7 @@ public:
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
 

@@ -675,7 +675,7 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool KeySig::setProperty(Pid propertyId, const QVariant& v)
+bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::KEY:

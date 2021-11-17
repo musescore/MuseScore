@@ -255,7 +255,7 @@ engraving::PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
+bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
@@ -318,7 +318,7 @@ void SlurTieSegment::reset()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
@@ -514,7 +514,7 @@ void SlurTie::undoSetLineType(int t)
 
 void SlurTie::undoSetSlurDirection(Direction d)
 {
-    undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(d));
+    undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<Direction>(d));
 }
 
 //---------------------------------------------------------
@@ -537,7 +537,7 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
+bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:

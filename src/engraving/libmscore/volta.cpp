@@ -282,7 +282,7 @@ PropertyValue Volta::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Volta::setProperty(Pid propertyId, const QVariant& val)
+bool Volta::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:

@@ -194,7 +194,7 @@ PropertyValue Symbol::getProperty(Pid propertyId) const
 //   Symbol::setProperty
 //---------------------------------------------------------
 
-bool Symbol::setProperty(Pid propertyId, const QVariant& v)
+bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:

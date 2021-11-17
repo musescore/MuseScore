@@ -2522,8 +2522,8 @@ void Note::setTrack(int val)
 void Note::reset()
 {
     undoChangeProperty(Pid::OFFSET, PointF());
-    chord()->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(PointF()));
-    chord()->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+    chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
+    chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
 }
 
 //---------------------------------------------------------
@@ -2755,7 +2755,7 @@ void Note::editDrag(EditData& editData)
     } else if (ch->notes().size() == 1) {
         // if the chord contains only this note, then move the whole chord
         // including stem, flag etc.
-        ch->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(ch->offset() + offset() + editData.evtDelta));
+        ch->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(ch->offset() + offset() + editData.evtDelta));
         setOffset(PointF());
     } else {
         setOffset(offset() + editData.evtDelta);
@@ -3045,7 +3045,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Note::setProperty(Pid propertyId, const QVariant& v)
+bool Note::setProperty(Pid propertyId, const PropertyValue& v)
 {
     Measure* m = chord() ? chord()->measure() : nullptr;
     switch (propertyId) {

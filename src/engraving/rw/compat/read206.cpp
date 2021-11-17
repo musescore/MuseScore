@@ -106,9 +106,9 @@ static void readText206(XmlReader& e, const ReadContext& ctx, TextBase* t, Engra
 //    to the default value for that sid.
 //---------------------------------------------------------
 
-static std::map<QString, std::map<Sid, QVariant> > excessTextStyles206;
+static std::map<QString, std::map<Sid, PropertyValue> > excessTextStyles206;
 
-void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant> >& excessStyles)
+void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, PropertyValue> >& excessStyles)
 {
     QString family = "FreeSerif";
     double size = 10;
@@ -334,7 +334,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         }
     }
 
-    std::map<Sid, QVariant> excessPairs;
+    std::map<Sid, PropertyValue> excessPairs;
     const TextStyle* ts;
     if (isExcessStyle) {
         ts = textStyle("User-1");
@@ -342,7 +342,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         ts = textStyle(ss);
     }
     for (const auto& i : *ts) {
-        QVariant value;
+        PropertyValue value;
         if (i.sid == Sid::NOSTYLE) {
             break;
         }
@@ -378,10 +378,10 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             value = paddingWidth;
             break;
         case Pid::FRAME_FG_COLOR:
-            value = QVariant::fromValue(frameColor);
+            value = PropertyValue::fromValue(frameColor);
             break;
         case Pid::FRAME_BG_COLOR:
-            value = QVariant::fromValue(backgroundColor);
+            value = PropertyValue::fromValue(backgroundColor);
             break;
         case Pid::SIZE_SPATIUM_DEPENDENT:
             value = sizeIsSpatiumDependent;
@@ -390,14 +390,14 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         case Pid::CONTINUE_TEXT_ALIGN:
         case Pid::END_TEXT_ALIGN:
         case Pid::ALIGN:
-            value = QVariant::fromValue(align);
+            value = PropertyValue::fromValue(align);
             break;
         case Pid::SYSTEM_FLAG:
             value = systemFlag;
             break;
         case Pid::BEGIN_HOOK_HEIGHT:
         case Pid::END_HOOK_HEIGHT:
-            value = QVariant();
+            value = PropertyValue();
             break;
         case Pid::PLACEMENT:
             if (placementValid) {
@@ -1179,7 +1179,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             // due to the limit on the number of user styles possible.
             // Use User-1, since it has all the possible user style pids
             t->initTid(Tid::DEFAULT);
-            std::map<Sid, QVariant> styleVals = excessTextStyles206[s];
+            std::map<Sid, PropertyValue> styleVals = excessTextStyles206[s];
             for (const StyledProperty& p : *textStyle("User-1")) {
                 if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end()) {
                     t->setProperty(p.pid, styleVals[p.sid]);
@@ -1553,9 +1553,9 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
     } else if (tag == "actualNotes") {
         de->setProperty(Pid::ACTUAL_NOTES, e.readInt());
     } else if (tag == "p1") {
-        de->setProperty(Pid::P1, QVariant::fromValue(e.readPoint() * ctx.spatium()));
+        de->setProperty(Pid::P1, PropertyValue::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "p2") {
-        de->setProperty(Pid::P2, QVariant::fromValue(e.readPoint() * ctx.spatium()));
+        de->setProperty(Pid::P2, PropertyValue::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "baseNote") {
         de->setBaseLen(TDuration(e.readElementText()));
     } else if (tag == "Number") {

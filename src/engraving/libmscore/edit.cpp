@@ -827,7 +827,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                         continue;
                     }
                     if (cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
-                        cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(ns));
+                        cr->undoChangeProperty(Pid::DURATION, ns);
                     } else {
                         return false;
                     }
@@ -1031,7 +1031,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                     for (Measure* m = fm1; m; m = m->nextMeasure()) {
                         ChordRest* cr = m->findChordRest(m->tick(), staffIdx * VOICES);
                         if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
-                            cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(fr));
+                            cr->undoChangeProperty(Pid::DURATION, fr);
                         } else {
                             break;
                         }
@@ -1042,7 +1042,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                         break;
                     }
                     Fraction fr(ns);
-                    m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(fr));
+                    m->undoChangeProperty(Pid::TIMESIG_NOMINAL, fr);
                 }
                 return false;
             }
@@ -1212,9 +1212,9 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
             Measure* lm = (lmTick != Fraction(-1, 1)) ? score->tick2measure(lmTick) : nullptr;
             for (Measure* m = mf; m != lm; m = m->nextMeasure()) {
                 bool changeActual = m->ticks() == m->timesig();
-                m->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
+                m->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
                 if (changeActual) {
-                    m->undoChangeProperty(Pid::TIMESIG_ACTUAL, QVariant::fromValue(ns));
+                    m->undoChangeProperty(Pid::TIMESIG_ACTUAL, ns);
                 }
             }
             std::pair<int, int> staffIdxRange = getStaffIdxRange(score);
@@ -1224,12 +1224,12 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                     continue;
                 }
                 nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
-                nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
                 nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
                 nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                 nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
-                nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
-                nsig->undoChangeProperty(Pid::GROUPS, QVariant::fromValue(ts->groups()));
+                nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
+                nsig->undoChangeProperty(Pid::GROUPS, ts->groups());
                 nsig->setSelected(false);
                 nsig->setDropTarget(0);
             }
@@ -1243,7 +1243,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
         //
         if (mf == mScore->firstMeasure() && mf->nextMeasure() && (mf->ticks() != mf->timesig())) {
             // handle upbeat
-            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, QVariant::fromValue(ns));
+            mf->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
             Measure* m = mf->nextMeasure();
             Segment* s = m->findSegment(SegmentType::TimeSig, m->tick());
             mf = s ? 0 : mf->nextMeasure();
@@ -1299,14 +1299,14 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                 } else {
                     nsig->undoChangeProperty(Pid::SHOW_COURTESY, ts->showCourtesySig());
                     nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG, QVariant::fromValue(ts->sig()));
+                    nsig->undoChangeProperty(Pid::TIMESIG, ts->sig());
                     nsig->undoChangeProperty(Pid::NUMERATOR_STRING, ts->numeratorString());
                     nsig->undoChangeProperty(Pid::DENOMINATOR_STRING, ts->denominatorString());
 
                     // HACK do it twice to accommodate undo
                     nsig->undoChangeProperty(Pid::TIMESIG_TYPE, int(ts->timeSigType()));
-                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, QVariant::fromValue(ts->stretch()));
-                    nsig->undoChangeProperty(Pid::GROUPS,  QVariant::fromValue(ts->groups()));
+                    nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
+                    nsig->undoChangeProperty(Pid::GROUPS, ts->groups());
                     nsig->setSelected(false);
                     nsig->setDropTarget(0);                 // DEBUG
                 }
@@ -1380,7 +1380,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                     // fix measure rest duration
                     ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
                     if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
-                        cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(nm->stretchedLen(staff(i))));
+                        cr->undoChangeProperty(Pid::DURATION, nm->stretchedLen(staff(i)));
                     }
                     //cr->setTicks(nm->stretchedLen(staff(i)));
                 }
@@ -2059,7 +2059,7 @@ void Score::cmdFlip()
             } else {
                 flipOnce(chord, [chord]() {
                     Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
-                    chord->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                    chord->undoChangeProperty(Pid::STEM_DIRECTION, dir);
                 });
             }
         }
@@ -2068,13 +2068,13 @@ void Score::cmdFlip()
             auto beam = toBeam(e);
             flipOnce(beam, [beam]() {
                 Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
-                beam->undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(dir));
+                beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
             });
         } else if (e->isSlurTieSegment()) {
             auto slurTieSegment = toSlurTieSegment(e)->slurTie();
             flipOnce(slurTieSegment, [slurTieSegment]() {
                 Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
-                slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
+                slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
             });
         } else if (e->isArticulation()) {
             auto artic = toArticulation(e);
@@ -2107,12 +2107,12 @@ void Score::cmdFlip()
             auto tuplet = toTuplet(e);
             flipOnce(tuplet, [tuplet]() {
                 Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                tuplet->undoChangeProperty(Pid::DIRECTION, QVariant::fromValue<Direction>(dir), PropertyFlags::UNSTYLED);
+                tuplet->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<Direction>(dir), PropertyFlags::UNSTYLED);
             });
         } else if (e->isNoteDot() && e->parent()->isNote()) {
             Note* note = toNote(e->parent());
             Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-            note->undoChangeProperty(Pid::DOT_POSITION, QVariant::fromValue<Direction>(d));
+            note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<Direction>(d));
         } else if (e->isTempoText()
                    || e->isSystemText()
                    || e->isJump()
@@ -2456,7 +2456,7 @@ void Score::deleteItem(EngravingItem* el)
                     }
                 }
             } else {
-                bl->undoChangeProperty(Pid::BARLINE_TYPE, QVariant::fromValue(BarLineType::NORMAL));
+                bl->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(BarLineType::NORMAL));
             }
         }
     }
@@ -4379,7 +4379,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
 //    return true if an property was actually changed
 //---------------------------------------------------------
 
-bool Score::undoPropertyChanged(EngravingItem* e, Pid t, const QVariant& st, PropertyFlags ps)
+bool Score::undoPropertyChanged(EngravingItem* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     bool changed = false;
 
@@ -4410,7 +4410,7 @@ bool Score::undoPropertyChanged(EngravingItem* e, Pid t, const QVariant& st, Pro
     return changed;
 }
 
-void Score::undoPropertyChanged(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
+void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
         undoStack()->push1(new ChangeProperty(e, t, st, ps));
@@ -4815,8 +4815,8 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
         if (!ncr) {
             continue;
         }
-        ncr->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue(d));
-        ncr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(d.fraction()));
+        ncr->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue(d));
+        ncr->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue(d.fraction()));
     }
 }
 

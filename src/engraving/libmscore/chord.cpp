@@ -2713,7 +2713,7 @@ void Chord::setColor(const mu::draw::Color& color)
     ChordRest::setColor(color);
 
     for (Note* note : _notes) {
-        note->undoChangeProperty(Pid::COLOR, QVariant::fromValue(color));
+        note->undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(color));
     }
 }
 
@@ -2798,7 +2798,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Chord::setProperty(Pid propertyId, const QVariant& v)
+bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::NO_STEM:
@@ -2866,7 +2866,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
 void Chord::reset()
 {
-    undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
     undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
     score()->createPlayEvents(this);
     ChordRest::reset();
@@ -2895,7 +2895,7 @@ void Chord::setSlash(bool flag, bool stemless)
         // restore to normal
         undoChangeProperty(Pid::NO_STEM, false);
         undoChangeProperty(Pid::SMALL, false);
-        undoChangeProperty(Pid::OFFSET, QVariant::fromValue(PointF()));
+        undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
         for (Note* n : _notes) {
             n->undoChangeProperty(Pid::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
             n->undoChangeProperty(Pid::FIXED, false);
@@ -2906,7 +2906,7 @@ void Chord::setSlash(bool flag, bool stemless)
                 const Drumset* ds = part()->instrument(tick())->drumset();
                 int pitch = n->pitch();
                 if (ds && ds->isValid(pitch)) {
-                    undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(ds->stemDirection(pitch)));
+                    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(ds->stemDirection(pitch)));
                     n->undoChangeProperty(Pid::HEAD_GROUP, int(ds->noteHead(pitch)));
                 }
             }
@@ -2915,7 +2915,7 @@ void Chord::setSlash(bool flag, bool stemless)
     }
 
     // set stem to auto (mostly important for rhythmic notation on drum staves)
-    undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
 
     // make stemless if asked
     if (stemless) {
@@ -3510,7 +3510,7 @@ Shape Chord::shape() const
     return shape;
 }
 
-void Chord::undoChangeProperty(Pid id, const QVariant& newValue)
+void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue)
 {
     undoChangeProperty(id, newValue, propertyFlags(id));
 }
@@ -3519,7 +3519,7 @@ void Chord::undoChangeProperty(Pid id, const QVariant& newValue)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Chord::undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps)
+void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
 {
     if (id == Pid::VISIBLE) {
         processSiblings([=](EngravingItem* element) {

@@ -717,7 +717,7 @@ PropertyValue Ambitus::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
+bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::HEAD_GROUP:

@@ -1145,7 +1145,7 @@ PropertyValue Tuplet::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
+bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DIRECTION:

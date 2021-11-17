@@ -174,7 +174,7 @@ public:
     qreal beamDist() const { return _beamDist; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     bool isGrace() const { return _isGrace; }    // for debugger

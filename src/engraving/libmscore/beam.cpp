@@ -2343,10 +2343,10 @@ void Beam::reset()
         undoChangeProperty(Pid::GROW_RIGHT, 1.0);
     }
     if (userModified()) {
-        undoChangeProperty(Pid::BEAM_POS, QVariant::fromValue(beamPos()));
+        undoChangeProperty(Pid::BEAM_POS, PropertyValue::fromValue(beamPos()));
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
-    undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
     resetProperty(Pid::BEAM_NO_SLOPE);
     setGenerated(true);
 }
@@ -2495,7 +2495,7 @@ PropertyValue Beam::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Beam::setProperty(Pid propertyId, const QVariant& v)
+bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::STEM_DIRECTION:

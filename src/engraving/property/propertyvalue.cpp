@@ -117,15 +117,23 @@ PropertyValue::PropertyValue(const Ms::PitchValues& v)
 }
 
 PropertyValue::PropertyValue(const Ms::Groups& v)
-    : m_type(Ms::P_TYPE::GROUPS)
+    : m_type(Ms::P_TYPE::GROUPS), m_any(v)
 {
-    NOT_IMPLEMENTED;
+}
+
+const Ms::Groups& PropertyValue::toGroups() const
+{
+    return std::any_cast<const Ms::Groups&>(m_any);
 }
 
 PropertyValue::PropertyValue(const Ms::TDuration& v)
-    : m_type(Ms::P_TYPE::TDURATION)
+    : m_type(Ms::P_TYPE::TDURATION), m_any(v)
 {
-    NOT_IMPLEMENTED;
+}
+
+const Ms::TDuration& PropertyValue::toTDuration() const
+{
+    return std::any_cast<const Ms::TDuration&>(m_any);
 }
 
 PropertyValue::PropertyValue(const Ms::Fraction& v)
@@ -150,36 +158,36 @@ Ms::P_TYPE PropertyValue::type() const
 
 QVariant PropertyValue::toQVariant() const
 {
-    if (const bool* pv = std::get_if<bool>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const int* pv = std::get_if<int>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const qreal* pv = std::get_if<qreal>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const QString* pv = std::get_if<QString>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const Ms::Spatium* pv = std::get_if<Ms::Spatium>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const PointF* pv = std::get_if<PointF>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const SizeF* pv = std::get_if<SizeF>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const draw::Color* pv = std::get_if<draw::Color>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const Ms::Align* pv = std::get_if<Ms::Align>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
-    if (const Ms::Direction* pv = std::get_if<Ms::Direction>(&m_val)) {
-        return QVariant::fromValue(*pv);
-    }
+//    if (const bool* pv = std::get_if<bool>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const int* pv = std::get_if<int>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const qreal* pv = std::get_if<qreal>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const QString* pv = std::get_if<QString>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const Ms::Spatium* pv = std::get_if<Ms::Spatium>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const PointF* pv = std::get_if<PointF>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const SizeF* pv = std::get_if<SizeF>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const draw::Color* pv = std::get_if<draw::Color>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const Ms::Align* pv = std::get_if<Ms::Align>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
+//    if (const Ms::Direction* pv = std::get_if<Ms::Direction>(&m_val)) {
+//        return QVariant::fromValue(*pv);
+//    }
     return QVariant();
 }
 
@@ -231,14 +239,4 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v)
     LOGE() << "unhandle type: " << type;
     UNREACHABLE;
     return PropertyValue();
-}
-
-PropertyValue::GroupsHolder::GroupsHolder(const Ms::Groups& v)
-    : m_val(v)
-{
-}
-
-const Ms::Groups& PropertyValue::GroupsHolder::val() const
-{
-    return std::any_cast<const Ms::Groups&>(m_val);
 }

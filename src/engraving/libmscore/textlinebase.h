@@ -54,18 +54,18 @@ public:
     ~TextLineBaseSegment();
 
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
-    virtual void draw(mu::draw::Painter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
-    virtual void layout() override;
-    virtual void setSelected(bool f) override;
+    void layout() override;
+    void setSelected(bool f) override;
 
-    virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    virtual EngravingItem* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
-    virtual Shape shape() const override;
+    Shape shape() const override;
 
-    virtual bool setProperty(Pid id, const QVariant& v) override;
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
 };
 
 //---------------------------------------------------------
@@ -127,7 +127,7 @@ public:
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
     mu::engraving::PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
 }     // namespace Ms

@@ -4940,7 +4940,7 @@ PropertyValue Score::getProperty(Pid /*id*/) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Score::setProperty(Pid /*id*/, const QVariant& /*v*/)
+bool Score::setProperty(Pid /*id*/, const PropertyValue& /*v*/)
 {
     qDebug("Score::setProperty: unhandled id");
     setLayoutAll();

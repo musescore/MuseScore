@@ -64,7 +64,7 @@ public:
     void layout() override;
 
     mu::engraving::PropertyValue getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
 
     qreal baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)parent(); }
