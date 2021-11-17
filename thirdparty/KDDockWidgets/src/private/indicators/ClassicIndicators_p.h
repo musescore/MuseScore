@@ -46,11 +46,14 @@ Q_SIGNALS:
     void innerIndicatorsVisibleChanged();
     void outterIndicatorsVisibleChanged();
     void tabIndicatorVisibleChanged();
+
 private:
     friend class KDDockWidgets::Indicator;
     friend class KDDockWidgets::IndicatorWindow;
+    bool rubberBandIsTopLevel() const;
     void updateIndicatorsVisibility(bool visible);
     void raiseIndicators();
+    QRect geometryForRubberband(QRect localRect) const;
     void setDropLocation(DropLocation);
     void updateWindowPosition();
 

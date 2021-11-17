@@ -21,9 +21,9 @@
 namespace Layouting {
 
 class DOCKS_EXPORT SeparatorQuick
-        : public QQuickItem
-        , public Layouting::Separator
-        , public Layouting::Widget_quick
+    : public QQuickItem,
+      public Layouting::Separator,
+      public Layouting::Widget_quick
 {
     Q_OBJECT
     Q_PROPERTY(bool isVertical READ isVertical NOTIFY isVerticalChanged)
@@ -33,7 +33,7 @@ public:
     bool isVertical() const;
 
 protected:
-    Widget* createRubberBand(Widget *parent) override;
+    Widget *createRubberBand(Widget *parent) override;
     Widget *asWidget() override;
 
 public:

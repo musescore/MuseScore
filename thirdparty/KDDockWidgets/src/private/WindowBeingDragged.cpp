@@ -17,8 +17,8 @@
 #include "Utils_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-# include "widgets/TabBarWidget_p.h"
-# include "widgets/TabWidgetWidget_p.h"
+#include "widgets/TabBarWidget_p.h"
+#include "widgets/TabWidgetWidget_p.h"
 #endif
 
 #include <QPixmap>
@@ -26,7 +26,7 @@
 
 using namespace KDDockWidgets;
 
-static Draggable* bestDraggable(Draggable *draggable)
+static Draggable *bestDraggable(Draggable *draggable)
 {
     if (!draggable)
         return nullptr;
@@ -34,11 +34,11 @@ static Draggable* bestDraggable(Draggable *draggable)
     // When de detach a title bar it will get hidden and we only the title bar of the FloatingWindow is visible
     /// Apparently that causes problems with grabbing the mouse, so instead use a visible draggable.
     // grabbing mouse on an hidden window works usually, it's some edge case on Windows with MFC.
-    if (auto titleBar = qobject_cast<TitleBar*>(draggable->asWidget())) {
+    if (auto titleBar = qobject_cast<TitleBar *>(draggable->asWidget())) {
         if (titleBar->isVisible())
             return draggable;
 
-        auto fw = qobject_cast<FloatingWindow*>(titleBar->window());
+        auto fw = qobject_cast<FloatingWindow *>(titleBar->window());
         if (!fw) // defensive, doesn't happen
             return draggable;
 
@@ -161,7 +161,7 @@ bool WindowBeingDragged::contains(LayoutWidget *layoutWidget) const
     if (m_floatingWindow)
         return m_floatingWindow->layoutWidget() == layoutWidget;
 
-    if (auto fw = qobject_cast<FloatingWindow*>(m_draggableWidget->window())) {
+    if (auto fw = qobject_cast<FloatingWindow *>(m_draggableWidget->window())) {
         // We're not dragging via the floating window itself, but via the tab bar. Still might represent floating window though.
         return fw->layoutWidget() == layoutWidget && fw->hasSingleFrame();
     }
@@ -192,23 +192,23 @@ WindowBeingDraggedWayland::WindowBeingDraggedWayland(Draggable *draggable)
         return;
     }
 
-    if (auto tb = qobject_cast<TitleBar*>(draggable->asWidget())) {
+    if (auto tb = qobject_cast<TitleBar *>(draggable->asWidget())) {
         if (auto fw = tb->floatingWindow()) {
             // case #1: we're dragging the whole floating window by its titlebar
             m_floatingWindow = fw;
         } else if (Frame *frame = tb->frame()) {
             m_frame = frame;
         } else {
-            qWarning() << Q_FUNC_INFO <<"Shouldn't happen. TitleBar of what ?";
+            qWarning() << Q_FUNC_INFO << "Shouldn't happen. TitleBar of what ?";
         }
-    } else if (auto fw = qobject_cast<FloatingWindow*>(draggable->asWidget())) {
+    } else if (auto fw = qobject_cast<FloatingWindow *>(draggable->asWidget())) {
         // case #2: the floating window itself is the draggable, happens on platforms that support
         // native dragging. Not the case for Wayland. But adding this case for completeness.
         m_floatingWindow = fw;
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-    } else if (auto tbw = qobject_cast<TabBarWidget*>(draggable->asWidget())) {
+    } else if (auto tbw = qobject_cast<TabBarWidget *>(draggable->asWidget())) {
         m_dockWidget = tbw->currentDockWidget();
-    } else if (auto tw = qobject_cast<TabWidgetWidget*>(draggable->asWidget())) {
+    } else if (auto tw = qobject_cast<TabWidgetWidget *>(draggable->asWidget())) {
         m_frame = tw->frame();
 #endif
     } else {

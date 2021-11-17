@@ -10,9 +10,10 @@
 */
 
 #include "TabWidgetQuick_p.h"
-#include "Frame_p.h"
 #include "Config.h"
 #include "FrameworkWidgetFactory.h"
+
+#include "../Frame_p.h"
 
 #include <QDebug>
 #include <QScopedValueRollback>
@@ -25,8 +26,15 @@ TabWidgetQuick::TabWidgetQuick(Frame *parent)
     , m_dockWidgetModel(new DockWidgetModel(this))
     , m_tabBar(Config::self().frameworkWidgetFactory()->createTabBar(this))
 {
-    connect(m_dockWidgetModel, &DockWidgetModel::countChanged,
-            this, &TabWidgetQuick::countChanged);
+    connect(m_dockWidgetModel, &DockWidgetModel::countChanged, this,
+            [this] {
+                if (m_currentDockWidget && indexOfDockWidget(m_currentDockWidget) == -1) {
+                    // The current dock widget was removed, set the first one as current
+                    if (numDockWidgets() > 0)
+                        setCurrentDockWidget(0);
+                }
+
+                Q_EMIT countChanged(); });
 }
 
 TabBar *TabWidgetQuick::tabBar() const
@@ -104,7 +112,13 @@ int TabWidgetQuick::currentIndex() const
     if (!m_currentDockWidget)
         return -1;
 
-    return indexOfDockWidget(m_currentDockWidget);
+    const int index = indexOfDockWidget(m_currentDockWidget);
+
+    if (index == -1)
+        qWarning() << Q_FUNC_INFO << "Unexpected null index for" << m_currentDockWidget << this
+                   << "; count=" << m_dockWidgetModel->count();
+
+    return index;
 }
 
 DockWidgetModel *TabWidgetQuick::dockWidgetModel() const
@@ -160,7 +174,7 @@ bool DockWidgetModel::contains(DockWidgetBase *dw) const
 
 QHash<int, QByteArray> DockWidgetModel::roleNames() const
 {
-    return { {Role_Title, "title"} };
+    return { { Role_Title, "title" } };
 }
 
 void DockWidgetModel::emitDataChangedFor(DockWidgetBase *dw)
@@ -183,11 +197,11 @@ void DockWidgetModel::remove(DockWidgetBase *dw)
             // can happen if there's reentrancy. Some user code reacting
             // to the signals and call remove for whatever reason.
             qWarning() << Q_FUNC_INFO << "Nothing to remove"
-                       << static_cast<void*>(dw); // Print address only, as it might be deleted already
+                       << static_cast<void *>(dw); // Print address only, as it might be deleted already
         }
     } else {
         const auto connections = m_connections.take(dw);
-        for (QMetaObject::Connection conn : connections)
+        for (const QMetaObject::Connection &conn : connections)
             disconnect(conn);
 
         beginRemoveRows(QModelIndex(), row, row);
@@ -200,7 +214,7 @@ void DockWidgetModel::remove(DockWidgetBase *dw)
 
 int DockWidgetModel::indexOf(const DockWidgetBase *dw)
 {
-    return m_dockWidgets.indexOf(const_cast<DockWidgetBase*>(dw));
+    return m_dockWidgets.indexOf(const_cast<DockWidgetBase *>(dw));
 }
 
 bool DockWidgetModel::insert(DockWidgetBase *dw, int index)

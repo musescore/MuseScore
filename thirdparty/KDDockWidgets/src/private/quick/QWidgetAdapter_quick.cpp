@@ -19,10 +19,11 @@
  */
 
 #include "QWidgetAdapter.h"
-#include "FloatingWindow_p.h"
 #include "MainWindowBase.h"
-#include "DockRegistry_p.h"
-#include "Utils_p.h"
+
+#include "../DockRegistry_p.h"
+#include "../Utils_p.h"
+#include "../FloatingWindow_p.h"
 
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -43,6 +44,7 @@ namespace KDDockWidgets {
  */
 class MouseEventRedirector : public QObject
 {
+    Q_OBJECT
 public:
     explicit MouseEventRedirector(QObject *eventSource, QObject *eventTarget)
         : QObject(eventTarget)
@@ -61,7 +63,7 @@ public:
         s_mouseEventRedirectors.insert(eventSource, this);
     }
 
-    static MouseEventRedirector* redirectorForSource(QObject *eventSource)
+    static MouseEventRedirector *redirectorForSource(QObject *eventSource)
     {
         return s_mouseEventRedirectors.value(eventSource);
     }
@@ -107,7 +109,7 @@ static bool flagsAreTopLevelFlags(Qt::WindowFlags flags)
     return flags & (Qt::Window | Qt::Tool);
 }
 
-static QQuickItem* actualParentItem(QQuickItem *candidateParentItem, Qt::WindowFlags flags)
+static QQuickItem *actualParentItem(QQuickItem *candidateParentItem, Qt::WindowFlags flags)
 {
     // When we have a top-level, such as FloatingWindow, we only want to set QObject parentship
     // and not parentItem.
@@ -153,16 +155,29 @@ void QWidgetAdapter::raiseAndActivate()
 
 void QWidgetAdapter::setWindowOpacity(qreal level)
 {
-     if (QWindow *w = windowHandle())
-         w->setOpacity(level);
+    if (QWindow *w = windowHandle())
+        w->setOpacity(level);
 }
 
-bool QWidgetAdapter::onResize(QSize) { return false; }
-void QWidgetAdapter::onLayoutRequest() {}
-void QWidgetAdapter::onMousePress() {}
-void QWidgetAdapter::onMouseMove(QPoint) {}
-void QWidgetAdapter::onMouseRelease() {}
-void QWidgetAdapter::onCloseEvent(QCloseEvent *) {}
+bool QWidgetAdapter::onResize(QSize)
+{
+    return false;
+}
+void QWidgetAdapter::onLayoutRequest()
+{
+}
+void QWidgetAdapter::onMousePress()
+{
+}
+void QWidgetAdapter::onMouseMove(QPoint)
+{
+}
+void QWidgetAdapter::onMouseRelease()
+{
+}
+void QWidgetAdapter::onCloseEvent(QCloseEvent *)
+{
+}
 
 void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
 {
@@ -242,7 +257,6 @@ QSize QWidgetAdapter::minimumSize() const
 
 QSize QWidgetAdapter::maximumSize() const
 {
-
     if (m_isWrapper) {
         const auto children = childItems();
         if (!children.isEmpty()) {
@@ -265,9 +279,9 @@ WId QWidgetAdapter::winId() const
     return WId(-1);
 }
 
-FloatingWindow * QWidgetAdapter::floatingWindow() const
+FloatingWindow *QWidgetAdapter::floatingWindow() const
 {
-    if (auto fw = qobject_cast<FloatingWindow*>(window()))
+    if (auto fw = qobject_cast<FloatingWindow *>(window()))
         return fw;
 
     return nullptr;
@@ -282,6 +296,27 @@ QRect QWidgetAdapter::geometry() const
     }
 
     return KDDockWidgets::Private::geometry(this);
+}
+
+QRect QWidgetAdapter::normalGeometry() const
+{
+    // TODO: There's no such concept in QWindow, do we need to workaround for QtQuick ?
+    return QWidgetAdapter::geometry();
+}
+
+void QWidgetAdapter::setNormalGeometry(QRect geo)
+{
+    if (!isTopLevel())
+        return;
+
+    if (QWindow *w = windowHandle()) {
+        if (isNormalWindowState(w->windowStates())) {
+            w->setGeometry(geo);
+        } else {
+            // Nothing better at this point, as QWindow doesn't have this concept
+            qDebug() << Q_FUNC_INFO << "TODO";
+        }
+    }
 }
 
 QRect QWidgetAdapter::rect() const
@@ -378,7 +413,7 @@ void QWidgetAdapter::resize(QSize sz)
 
 void QWidgetAdapter::resize(int w, int h)
 {
-    resize({w, h});
+    resize({ w, h });
 }
 
 bool QWidgetAdapter::isWindow() const
@@ -399,6 +434,14 @@ bool QWidgetAdapter::isMaximized() const
 {
     if (QWindow *w = windowHandle())
         return w->windowStates() & Qt::WindowMaximized;
+
+    return false;
+}
+
+bool QWidgetAdapter::isMinimized() const
+{
+    if (QWindow *w = windowHandle())
+        return w->windowStates() & Qt::WindowMinimized;
 
     return false;
 }
@@ -425,8 +468,8 @@ void QWidgetAdapter::showMinimized()
 
 void QWidgetAdapter::showNormal()
 {
-     if (QWindow *w = windowHandle())
-         w->showNormal();
+    if (QWindow *w = windowHandle())
+        w->showNormal();
 }
 
 QQuickView *QWidgetAdapter::quickView() const
@@ -443,7 +486,7 @@ QWidgetAdapter *QWidgetAdapter::window() const
 {
     // We return the top-most QWidgetAdapter
 
-    if (QWidgetAdapter *w = parentWidget(/*includeTransient =*/ false))
+    if (QWidgetAdapter *w = parentWidget(/*includeTransient =*/false))
         return w->window();
 
     return const_cast<QWidgetAdapter *>(this);
@@ -453,7 +496,7 @@ QWidgetAdapter *QWidgetAdapter::parentWidget(bool includeTransient) const
 {
     QQuickItem *p = parentItem();
     while (p) {
-        if (auto qa = qobject_cast<QWidgetAdapter*>(p))
+        if (auto qa = qobject_cast<QWidgetAdapter *>(p))
             return qa;
 
         p = p->parentItem();
@@ -461,7 +504,7 @@ QWidgetAdapter *QWidgetAdapter::parentWidget(bool includeTransient) const
 
     if (includeTransient) {
         if (QQuickView *w = quickView()) {
-            // Here we're mimicing QWidget::parentWidget(), which can return the transient parent of the QWindow.
+            // Here we're mimicking QWidget::parentWidget(), which can return the transient parent of the QWindow.
             MainWindowBase *mw = DockRegistry::self()->mainWindowForHandle(w->transientParent());
             if (mw)
                 return mw;
@@ -482,7 +525,7 @@ QPoint QWidgetAdapter::mapFromGlobal(QPoint pt) const
     return QQuickItem::mapFromGlobal(pt).toPoint();
 }
 
-QPoint QWidgetAdapter::mapTo(const QQuickItem *parent, const QPoint &pos) const
+QPoint QWidgetAdapter::mapTo(const QQuickItem *parent, QPoint pos) const
 {
     if (!parent)
         return {};
@@ -618,7 +661,7 @@ QQuickItem *QWidgetAdapter::createItem(QQmlEngine *engine, const QString &filena
         return nullptr;
     }
 
-    return qobject_cast<QQuickItem*>(obj);
+    return qobject_cast<QQuickItem *>(obj);
 }
 
 void QWidgetAdapter::makeItemFillParent(QQuickItem *item)
@@ -636,7 +679,7 @@ void QWidgetAdapter::makeItemFillParent(QQuickItem *item)
         return;
     }
 
-    QObject *anchors = item->property("anchors").value<QObject*>();
+    QObject *anchors = item->property("anchors").value<QObject *>();
     if (!anchors) {
         qWarning() << Q_FUNC_INFO << "Invalid anchors for" << item;
         return;
@@ -683,14 +726,14 @@ void QWidgetAdapter::setMouseTracking(bool enabled)
 bool QWidgetAdapter::event(QEvent *ev)
 {
     if (ev->type() == QEvent::Close)
-        onCloseEvent(static_cast<QCloseEvent*>(ev));
+        onCloseEvent(static_cast<QCloseEvent *>(ev));
 
     return QQuickItem::event(ev);
 }
 
 bool QWidgetAdapter::eventFilter(QObject *watched, QEvent *ev)
 {
-    if (qobject_cast<QWindow*>(watched)) {
+    if (qobject_cast<QWindow *>(watched)) {
         if (m_mouseTrackingEnabled) {
             switch (ev->type()) {
             case QEvent::MouseMove:
@@ -711,6 +754,15 @@ bool QWidgetAdapter::eventFilter(QObject *watched, QEvent *ev)
     return QQuickItem::eventFilter(watched, ev);
 }
 
+QScreen *QWidgetAdapter::screen() const
+{
+    if (QQuickView *w = quickView()) {
+        return w->screen();
+    }
+
+    return nullptr;
+}
+
 void QWidgetAdapter::setWindowIsBeingDestroyed(bool is)
 {
     m_windowIsBeingDestroyed = is;
@@ -721,12 +773,12 @@ void QWidgetAdapter::create()
     // Nothing to do, for QtQuick ?
 }
 
-QQuickItem* KDDockWidgets::Private::widgetForWindow(QWindow *window)
+QQuickItem *KDDockWidgets::Private::widgetForWindow(QWindow *window)
 {
     if (!window)
         return nullptr;
 
-    return window->property("kddockwidgets_qwidget").value<QQuickItem*>();
+    return window->property("kddockwidgets_qwidget").value<QQuickItem *>();
 }
 
 void QWidgetAdapter::redirectMouseEvents(QObject *source)
@@ -752,3 +804,5 @@ bool QWidgetAdapter::isWrapper() const
 }
 
 LayoutGuestWidget::~LayoutGuestWidget() = default;
+
+#include "QWidgetAdapter_quick.moc"

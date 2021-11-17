@@ -11,12 +11,11 @@
 
 #include "ClassicIndicatorsWindow_p.h"
 #include "ClassicIndicators_p.h"
-#include "Utils_p.h"
+#include "../Utils_p.h"
 
 using namespace KDDockWidgets;
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 
 static QString iconName(DropIndicatorOverlayInterface::DropLocation loc, bool active)
 {
@@ -101,7 +100,7 @@ QString Indicator::iconFileName(bool active) const
                                                          : QStringLiteral(":/img/classic_indicators/opaque/%1.png").arg(name);
 }
 
-static QWidgetAdapter* parentForIndicatorWindow(ClassicIndicators *classicIndicators_)
+static QWidgetAdapter *parentForIndicatorWindow(ClassicIndicators *classicIndicators_)
 {
     // On Wayland it can't be a top-level, as we have no way of positioning it
 
@@ -255,8 +254,8 @@ Indicator::Indicator(ClassicIndicators *classicIndicators, IndicatorWindow *pare
     , q(classicIndicators)
     , m_dropLocation(location)
 {
-    m_image = QImage(iconFileName(/*active=*/ false)).scaled(INDICATOR_WIDTH, INDICATOR_WIDTH);
-    m_imageActive = QImage(iconFileName(/*active=*/ true)).scaled(INDICATOR_WIDTH, INDICATOR_WIDTH);
+    m_image = QImage(iconFileName(/*active=*/false)).scaled(INDICATOR_WIDTH, INDICATOR_WIDTH);
+    m_imageActive = QImage(iconFileName(/*active=*/true)).scaled(INDICATOR_WIDTH, INDICATOR_WIDTH);
     setFixedSize(m_image.size());
     setVisible(true);
 }
@@ -272,7 +271,7 @@ IndicatorWindow::IndicatorWindow(KDDockWidgets::ClassicIndicators *classicIndica
     setFlags(flags() | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint | Qt::Tool);
     setColor(Qt::transparent);
 
-    rootContext()->setContextProperty(QStringLiteral("_window"), QVariant::fromValue<QObject*>(this));
+    rootContext()->setContextProperty(QStringLiteral("_window"), QVariant::fromValue<QObject *>(this));
     setSource(QUrl(QStringLiteral("qrc:/kddockwidgets/private/quick/qml/ClassicIndicatorsOverlay.qml")));
 
 
@@ -369,12 +368,12 @@ QVector<QQuickItem *> IndicatorWindow::indicatorItems() const
     indicators.reserve(9);
 
     QQuickItem *root = rootObject();
-    const QList<QQuickItem*> items = root->childItems();
+    const QList<QQuickItem *> items = root->childItems();
     for (QQuickItem *item : items) {
         if (QString::fromLatin1(item->metaObject()->className()).startsWith(QLatin1String("ClassicIndicator_QMLTYPE"))) {
             indicators.push_back(item);
         } else if (item->objectName() == QLatin1String("innerIndicators")) {
-            const QList<QQuickItem*> innerIndicators = item->childItems();
+            const QList<QQuickItem *> innerIndicators = item->childItems();
             for (QQuickItem *innerItem : innerIndicators) {
                 if (QString::fromLatin1(innerItem->metaObject()->className()).startsWith(QLatin1String("ClassicIndicator_QMLTYPE"))) {
                     indicators.push_back(innerItem);

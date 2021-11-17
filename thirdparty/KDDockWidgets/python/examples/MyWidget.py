@@ -11,7 +11,7 @@
 
 import PyKDDockWidgets
 
-from PySide import QtWidgets, QtGui, QtCore
+from PySide2 import QtWidgets, QtGui, QtCore
 
 class MyWidget(QtWidgets.QWidget):
     s_images = {}

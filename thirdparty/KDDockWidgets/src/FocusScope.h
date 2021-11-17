@@ -22,8 +22,7 @@
 #include "docks_export.h"
 #include "QWidgetAdapter.h"
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 ///@brief Allows to implement a similar functionality to QtQuick's FocusScope item, in QtWidgets
 class DOCKS_EXPORT FocusScope
 {
@@ -41,14 +40,14 @@ public:
     ///@brief Returns the widget that's focused in this scope
     ///The widget itself might not have focus as in QWidget::hasFocus(), but will get actual focus
     ///as soon as this scope is focused.
-    WidgetType* focusedWidget() const;
+    WidgetType *focusedWidget() const;
 
     ///@brief Sets focus on this scope.
     ///
     /// This will call QWidget::focus() on the last QWidget that was focused in this scope.
     void focus(Qt::FocusReason = Qt::OtherFocusReason);
 
-/*Q_SIGNALS:*/
+    /*Q_SIGNALS:*/
 protected:
     ///@brief reimplement in the 1st QObject derived class
     virtual void isFocusedChangedCallback() = 0;

@@ -34,15 +34,15 @@ class MultiSplitter;
 class LayoutWidget;
 
 class DOCKS_EXPORT FloatingWindow
-        : public QWidgetAdapter
-        , public Draggable
+    : public QWidgetAdapter,
+      public Draggable
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::TitleBar* titleBar READ titleBar CONSTANT)
-    Q_PROPERTY(KDDockWidgets::DropArea* dropArea READ dropArea CONSTANT)
+    Q_PROPERTY(KDDockWidgets::TitleBar *titleBar READ titleBar CONSTANT)
+    Q_PROPERTY(KDDockWidgets::DropArea *dropArea READ dropArea CONSTANT)
 public:
-    explicit FloatingWindow(MainWindowBase *parent = nullptr);
-    explicit FloatingWindow(Frame *frame, MainWindowBase *parent = nullptr);
+    explicit FloatingWindow(QRect suggestedGeometry, MainWindowBase *parent = nullptr);
+    explicit FloatingWindow(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
     ~FloatingWindow() override;
 
     bool deserialize(const LayoutSaver::FloatingWindow &);
@@ -53,14 +53,18 @@ public:
     DockWidgetBase *singleDockWidget() const override;
     bool isWindow() const override;
 
-    const QVector<DockWidgetBase*> dockWidgets() const;
+    const QVector<DockWidgetBase *> dockWidgets() const;
     const Frame::List frames() const;
-    DropArea *dropArea() const { return m_dropArea; }
+    DropArea *dropArea() const
+    {
+        return m_dropArea;
+    }
 
     int userType() const;
 
 #ifdef Q_OS_WIN
-    void setLastHitTest(int hitTest) {
+    void setLastHitTest(int hitTest)
+    {
         m_lastHitTest = hitTest;
     }
 #endif
@@ -69,7 +73,10 @@ public:
      *
      * This TitleBar is hidden if we're using a native title bar.
      */
-    TitleBar *titleBar() const { return m_titleBar; }
+    TitleBar *titleBar() const
+    {
+        return m_titleBar;
+    }
 
     /**
      * @brief Equivalent to setGeometry(), but the value might be adjusted.
@@ -102,7 +109,7 @@ public:
     bool hasSingleDockWidget() const;
 
     /// @brief If this floating window has only one Frame, it's returned, otherwise nullptr
-    Frame* singleFrame() const;
+    Frame *singleFrame() const;
 
     /**
      * @brief Returns whether a deleteLater has already been issued
@@ -169,6 +176,40 @@ public:
     ///@brief Returns the contents margins
     QMargins contentMargins() const;
 
+    ///@brief Allows the user to override QWindow::isMaximized()
+    /// Needed to workaround window managers that don't support maximizing/minimizing Qt::Tool windows.
+    /// By default this just calls QWindow::isMaximized()
+    /// @sa QTBUG-95478
+    virtual bool isMaximizedOverride() const;
+
+    ///@brief Allows the user to override QWindow::isMinimized()
+    /// Needed to workaround window managers that don't support maximizing/minimizing Qt::Tool windows.
+    /// By default this just calls QWindow::isMinimized()
+    /// @sa QTBUG-95478
+    virtual bool isMinimizedOverride() const;
+
+    ///@brief By default equivalent to QWindow::showMaximized()
+    /// But allows the user to override it and workaround exotic window manager bugs
+    /// @sa QTBUG-95478
+    virtual void showMaximized();
+
+    ///@brief By default equivalent to QWindow::showNormal()
+    /// But allows the user to override it and workaround exotic window manager bugs
+    /// @sa QTBUG-95478
+    virtual void showNormal();
+
+    ///@brief By default equivalent to QWindow::showMinimized()
+    /// But allows the user to override it and workaround exotic window manager bugs
+    /// @sa QTBUG-95478
+    virtual void showMinimized();
+
+    ///@brief By default equivalent to QWidget::normalGeometry()
+    /// Derived classes can implement something different here, to workaround window manager issues with Qt::Tool
+    /// Also useful for QtQuick to eventually preserve normal geometry upon save/restore of a maximized window. As
+    /// QWindow has no notion of normal geometry, so we need to implement it here.
+    /// @sa QTBUG-95478
+    virtual QRect normalGeometry() const;
+
     ///@brief Allows the user app to specify which window flags to use, instead of KDDWs default ones
     ///Bugs caused by this won't be supported, as the amount of combinations that could go wrong can
     ///be open ended
@@ -178,6 +219,7 @@ Q_SIGNALS:
     void activatedChanged();
     void numFramesChanged();
     void windowStateChanged(QWindowStateChangeEvent *);
+
 protected:
     void maybeCreateResizeHandler();
 
@@ -190,6 +232,7 @@ protected:
 
     QPointer<DropArea> m_dropArea;
     TitleBar *const m_titleBar;
+
 private:
     Q_DISABLE_COPY(FloatingWindow)
     QSize maxSizeHint() const;
@@ -202,6 +245,7 @@ private:
     bool m_updatingTitleBarVisibility = false;
     QMetaObject::Connection m_layoutDestroyedConnection;
     QAbstractNativeEventFilter *m_nchittestFilter = nullptr;
+    Qt::WindowState windowStateOverride() const;
 #ifdef Q_OS_WIN
     int m_lastHitTest = 0;
 #endif

@@ -57,20 +57,21 @@ static bool shouldBlacklistWarning(const QString &msg, const QString &category)
     if (category == QLatin1String("qt.qpa.xcb"))
         return true;
 
-    return msg.contains(QLatin1String("QSocketNotifier: Invalid socket")) ||
-           msg.contains(QLatin1String("QWindowsWindow::setGeometry")) ||
-           msg.contains(QLatin1String("This plugin does not support")) ||
-           msg.contains(QLatin1String("Note that Qt no longer ships fonts")) ||
-           msg.contains(QLatin1String("Another dock KDDockWidgets::DockWidget")) ||
-           msg.contains(QLatin1String("There's multiple MainWindows, not sure what to do about parenting")) ||
-           msg.contains(QLatin1String("Testing::")) ||
-           msg.contains(QLatin1String("outside any known screen, using primary screen"))
+    return msg.contains(QLatin1String("QSocketNotifier: Invalid socket"))
+        || msg.contains(QLatin1String("QWindowsWindow::setGeometry"))
+        || msg.contains(QLatin1String("This plugin does not support"))
+        || msg.contains(QLatin1String("Note that Qt no longer ships fonts"))
+        || msg.contains(QLatin1String("Another dock KDDockWidgets::DockWidget"))
+        || msg.contains(QLatin1String("There's multiple MainWindows, not sure what to do about parenting"))
+        || msg.contains(QLatin1String("Testing::"))
+        || msg.contains(QLatin1String("outside any known screen, using primary screen"))
+        || msg.contains(QLatin1String("Populating font family aliases took"))
 #ifdef KDDOCKWIDGETS_QTQUICK
-            // TODO: Fix later, not important right now
-            || msg.contains(QLatin1String("Binding loop detected for property"))
-            || msg.contains(QLatin1String("Implement me"))
+    // TODO: Fix later, not important right now
+    || msg.contains(QLatin1String("Binding loop detected for property"))
+        || msg.contains(QLatin1String("Implement me"))
 #endif
-            ;
+        ;
 }
 
 static void fatalWarningsMessageHandler(QtMsgType t, const QMessageLogContext &context, const QString &msg)

@@ -21,9 +21,7 @@
 #include <QDebug>
 #include <QString>
 #include <QTextEdit>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QRandomGenerator>
-#endif
 
 #include <QApplication>
 
@@ -34,12 +32,7 @@
 
 static MyWidget *newMyWidget()
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    const int randomNumber = qrand() % 100 + 1;
-#else
     const int randomNumber = QRandomGenerator::global()->bounded(0, 100) + 1;
-#endif
-
     if (randomNumber < 50) {
         if (randomNumber < 33) {
             return new MyWidget1();
@@ -62,15 +55,10 @@ MyMainWindow::MyMainWindow(const QString &uniqueName, KDDockWidgets::MainWindowO
     , m_maxSizeForDockWidget8(maxSizeForDockWidget8)
     , m_dockwidget5DoesntCloseBeforeRestore(dockwidget5DoesntCloseBeforeRestore)
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    qsrand(time(nullptr));
-#endif
-
-    // qApp->installEventFilter(this);
     auto menubar = menuBar();
-    auto fileMenu = new QMenu(QStringLiteral("File"));
-    m_toggleMenu = new QMenu(QStringLiteral("Toggle"));
-    auto miscMenu = new QMenu(QStringLiteral("Misc"));
+    auto fileMenu = new QMenu(QStringLiteral("File"), this);
+    m_toggleMenu = new QMenu(QStringLiteral("Toggle"), this);
+    auto miscMenu = new QMenu(QStringLiteral("Misc"), this);
 
     menubar->addMenu(fileMenu);
     menubar->addMenu(m_toggleMenu);
@@ -127,6 +115,10 @@ MyMainWindow::MyMainWindow(const QString &uniqueName, KDDockWidgets::MainWindowO
 
     setAffinities({ affinityName });
     createDockWidgets();
+
+    if (options & KDDockWidgets::MainWindowOption_HasCentralWidget) {
+        setPersistentCentralWidget(new MyWidget1());
+    }
 }
 
 MyMainWindow::~MyMainWindow()

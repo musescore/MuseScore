@@ -91,6 +91,9 @@ private Q_SLOTS:
     void tst_restoreEmpty();
     void tst_restoreCentralFrame();
     void tst_restoreMaximizedState();
+    void tst_restoreFloatingMaximizedState();
+    void tst_restoreFloatingMinimizedState();
+    void tst_restoreNonExistingDockWidget();
     void tst_shutdown();
     void tst_closeDockWidgets();
     void tst_layoutEqually();
@@ -104,6 +107,7 @@ private Q_SLOTS:
     void tst_restoreNestedAndTabbed();
     void tst_restoreCrash();
     void tst_restoreSideBySide();
+    void tst_restoreWithCentralFrameWithTabs();
     void tst_restoreWithPlaceholder();
     void tst_restoreWithAffinity();
     void tst_marginsAfterRestore();
@@ -148,6 +152,8 @@ private Q_SLOTS:
     void tst_placeholderCount();
     void tst_availableLengthForOrientation();
     void tst_closeShowWhenNoCentralFrame();
+    void tst_closeTabOfCentralFrame();
+    void tst_centralFrame245();
     void tst_setAsCurrentTab();
     void tst_placeholderDisappearsOnReadd();
     void tst_placeholdersAreRemovedProperly();
@@ -232,9 +238,13 @@ private Q_SLOTS:
     void tst_deleteOnClose();
     void tst_toggleAction();
     void tst_redocksToPreviousTabIndex();
+    void tst_toggleTabbed();
+    void tst_toggleTabbed2();
+    void tst_resizePropagatesEvenly();
 
     void tst_addMDIDockWidget();
     void tst_redockToMDIRestoresPosition();
+    void tst_persistentCentralWidget();
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     // TODO: Port these to QtQuick

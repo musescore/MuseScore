@@ -18,12 +18,12 @@
 #include <QGuiApplication>
 
 #ifdef Q_OS_WIN
-# include <windows.h>
+#include <windows.h>
 #endif
 
 using namespace Layouting;
 
-Separator* Separator::s_separatorBeingDragged = nullptr;
+Separator *Separator::s_separatorBeingDragged = nullptr;
 
 /// @brief internal counter just for unit-tests
 static int s_numSeparators = 0;
@@ -33,7 +33,9 @@ struct Separator::Private
     // Only set when anchor is moved through mouse. Side1 if going towards left or top, Side2 otherwise.
 
     Private(Widget *host)
-        : m_hostWidget(host) {}
+        : m_hostWidget(host)
+    {
+    }
 
     Qt::Orientation orientation = Qt::Horizontal;
     QRect geometry;
@@ -127,8 +129,7 @@ void Separator::onMouseMove(QPoint pos)
     const int minPos = d->parentContainer->minPosForSeparator_global(this);
     const int maxPos = d->parentContainer->maxPosForSeparator_global(this);
 
-    if ((positionToGoTo > maxPos && position() <= positionToGoTo) ||
-        (positionToGoTo < minPos && position() >= positionToGoTo)) {
+    if ((positionToGoTo > maxPos && position() <= positionToGoTo) || (positionToGoTo < minPos && position() >= positionToGoTo)) {
         // if current pos is 100, and max is 80, we do allow going to 90.
         // Would continue to violate, but only by 10, so allow.
 

@@ -12,7 +12,7 @@
 #ifndef KD_INDICATORS_CLASSICINDICATORS_WINDOW_P_H
 #define KD_INDICATORS_CLASSICINDICATORS_WINDOW_P_H
 
-#include "DropIndicatorOverlayInterface_p.h"
+#include "../DropIndicatorOverlayInterface_p.h"
 #include "ClassicIndicators_p.h"
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
@@ -34,6 +34,7 @@ public:
     DropIndicatorOverlayInterface::DropLocation hover(QPoint globalPos);
     void updatePositions();
     QPoint posForIndicator(DropIndicatorOverlayInterface::DropLocation) const;
+
 private:
     void updateIndicatorVisibility();
     void resizeEvent(QResizeEvent *ev) override;
@@ -82,26 +83,26 @@ public:
 
 #include <QQuickView>
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 class ClassicIndicators;
 
 class IndicatorWindow : public QQuickView
 {
     Q_OBJECT
-    Q_PROPERTY(KDDockWidgets::ClassicIndicators* classicIndicators READ classicIndicators CONSTANT)
+    Q_PROPERTY(KDDockWidgets::ClassicIndicators *classicIndicators READ classicIndicators CONSTANT)
 public:
     explicit IndicatorWindow(ClassicIndicators *);
     DropIndicatorOverlayInterface::DropLocation hover(QPoint);
     void updatePositions();
     QPoint posForIndicator(DropIndicatorOverlayInterface::DropLocation) const;
     Q_INVOKABLE QString iconName(int loc, bool active) const;
-    KDDockWidgets::ClassicIndicators* classicIndicators() const;
-    QQuickItem* indicatorForLocation(DropIndicatorOverlayInterface::DropLocation loc) const;
+    KDDockWidgets::ClassicIndicators *classicIndicators() const;
+    QQuickItem *indicatorForLocation(DropIndicatorOverlayInterface::DropLocation loc) const;
+
 private:
     DropIndicatorOverlayInterface::DropLocation locationForIndicator(const QQuickItem *) const;
     QQuickItem *indicatorForPos(QPoint) const;
-    QVector<QQuickItem*> indicatorItems() const;
+    QVector<QQuickItem *> indicatorItems() const;
     ClassicIndicators *const m_classicIndicators;
 };
 }

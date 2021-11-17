@@ -9,10 +9,30 @@
 # Contact KDAB at <info@kdab.com> for commercial licensing options.
 #
 
+# dot should come with Doxygen find_package(Doxygen)
+if(DOXYGEN_DOT_EXECUTABLE)
+  set(HAVE_DOT "YES")
+else()
+  set(HAVE_DOT "NO")
+  message(STATUS "Unable to provide inheritance diagrams for the API documentation. To fix, install the graphviz project from https://www.graphviz.org")
+endif()
+
+# qhelpgenerator
+find_program(QHELPGEN_EXECUTABLE qhelpgenerator
+  HINTS ${QT_INSTALL_BINS}
+)
+if(QHELPGEN_EXECUTABLE)
+  set(HAVE_QHELPGEN "YES")
+else()
+  set(HAVE_QHELPGEN "NO")
+  message(STATUS "Unable to generate the API documentation in qch format. To fix, install the qthelpgenerator program which comes with Qt.")
+endif()
+
 find_file(QDOC_QTCORE_TAG qtcore.tags
   HINTS ${QT_INSTALL_DOCS}/qtcore
   HINTS ${QT_INSTALL_DATA}/doc/qtcore
 )
+set(QDOC_TAG_DIR "<QDOC_TAG_DIR_not_found>")
 if(QDOC_QTCORE_TAG)
   get_filename_component(QDOC_TAG_DIR ${QDOC_QTCORE_TAG} DIRECTORY)
   get_filename_component(QDOC_TAG_DIR ${QDOC_TAG_DIR} DIRECTORY)
@@ -33,6 +53,7 @@ add_custom_command(
   #handle a bug in doxygen where image files referred to in markdown are not copied the output
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/../../screencap.gif ${DOXYGEN_OUTPUT_DIR}/html
   #copy some files by-hand that are referred to by the markdown README
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/README-bindings.md ${DOXYGEN_OUTPUT_DIR}/html
   COMMAND ${CMAKE_COMMAND} -E make_directory ${DOXYGEN_OUTPUT_DIR}/html/LICENSES
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/LICENSES/GPL-2.0-only.txt ${DOXYGEN_OUTPUT_DIR}/html/LICENSES
   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/LICENSES/GPL-3.0-only.txt ${DOXYGEN_OUTPUT_DIR}/html/LICENSES
@@ -45,4 +66,6 @@ add_custom_command(
 add_custom_target(kddockwidgets-api.qch ALL DEPENDS ${DOXYGEN_OUTPUT_DIR}/qch/kddockwidgets-api.qch)
 add_custom_target(docs DEPENDS kddockwidgets-api.qch)
 
-install(FILES ${DOXYGEN_OUTPUT_DIR}/qch/kddockwidgets-api.qch DESTINATION ${INSTALL_DOC_DIR})
+set(QCH_INSTALL_DIR ${INSTALL_DOC_DIR} CACHE STRING "Install location of Qt Assistant help files.")
+install(FILES ${DOXYGEN_OUTPUT_DIR}/qch/kddockwidgets-api.qch DESTINATION ${QCH_INSTALL_DIR})
+install(FILES ${DOXYGEN_OUTPUT_DIR}/kddockwidgets.tags DESTINATION ${INSTALL_DOC_DIR})

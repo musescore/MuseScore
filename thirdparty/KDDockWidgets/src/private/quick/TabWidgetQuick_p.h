@@ -19,7 +19,7 @@
 #ifndef KDTABWIDGETQUICK_P_H
 #define KDTABWIDGETQUICK_P_H
 
-#include "TabWidget_p.h"
+#include "../TabWidget_p.h"
 #include "QWidgetAdapter_quick_p.h"
 
 #include <QQuickItem>
@@ -32,12 +32,12 @@ class TabBar;
 class DockWidgetModel;
 
 class DOCKS_EXPORT TabWidgetQuick
-    : public QWidgetAdapter
-    , public TabWidget
+    : public QWidgetAdapter,
+      public TabWidget
 {
     Q_OBJECT
-    Q_PROPERTY(DockWidgetModel* dockWidgetModel READ dockWidgetModel CONSTANT)
-    Q_PROPERTY(QObject* tabBar READ tabBarObj CONSTANT)
+    Q_PROPERTY(DockWidgetModel *dockWidgetModel READ dockWidgetModel CONSTANT)
+    Q_PROPERTY(QObject *tabBar READ tabBarObj CONSTANT)
 
 public:
     explicit TabWidgetQuick(Frame *parent);
@@ -50,12 +50,12 @@ public:
     DockWidgetModel *dockWidgetModel() const;
     DockWidgetBase *dockwidgetAt(int index) const override;
     int currentIndex() const override;
-    bool insertDockWidget(int index, DockWidgetBase *, const QIcon&, const QString &title) override;
+    bool insertDockWidget(int index, DockWidgetBase *, const QIcon &, const QString &title) override;
     Q_INVOKABLE void setCurrentDockWidget(int index) override;
 
     /// @brief Returns the tab bar as a QObject for QML.
     /// As the base class is not a QObject.
-    QObject* tabBarObj() const;
+    QObject *tabBarObj() const;
 
 Q_SIGNALS:
     void currentTabChanged(int index) override;
@@ -79,7 +79,8 @@ class DockWidgetModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    enum Role {
+    enum Role
+    {
         Role_Title = Qt::UserRole
     };
 
@@ -92,14 +93,16 @@ public:
     int indexOf(const DockWidgetBase *);
     bool insert(DockWidgetBase *dw, int index);
     bool contains(DockWidgetBase *dw) const;
+
 protected:
     QHash<int, QByteArray> roleNames() const override;
 Q_SIGNALS:
     void countChanged();
+
 private:
     void emitDataChangedFor(DockWidgetBase *);
     DockWidgetBase::List m_dockWidgets;
-    QHash<DockWidgetBase *, QVector<QMetaObject::Connection> > m_connections; // To make it easy to disconnect from lambdas
+    QHash<DockWidgetBase *, QVector<QMetaObject::Connection>> m_connections; // To make it easy to disconnect from lambdas
     bool m_removeGuard = false;
 };
 

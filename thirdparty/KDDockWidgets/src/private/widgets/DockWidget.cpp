@@ -43,7 +43,7 @@ DockWidget::DockWidget(const QString &name, Options options, LayoutSaverOptions 
     : DockWidgetBase(name, options, layoutSaverOptions)
     , d(new Private(this))
 {
-    connect(this, &DockWidgetBase::widgetChanged, this, [this] (QWidget *w) {
+    connect(this, &DockWidgetBase::widgetChanged, this, [this](QWidget *w) {
         d->layout->addWidget(w);
     });
 }

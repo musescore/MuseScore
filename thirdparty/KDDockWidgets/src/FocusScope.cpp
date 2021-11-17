@@ -17,10 +17,11 @@
  */
 
 #include "FocusScope.h"
-#include "TitleBar_p.h"
-#include "Frame_p.h"
 #include "DockWidgetBase.h"
-#include "DockRegistry_p.h"
+
+#include "private/TitleBar_p.h"
+#include "private/Frame_p.h"
+#include "private/DockRegistry_p.h"
 
 #include <QObject>
 #include <QGuiApplication>
@@ -104,7 +105,7 @@ void FocusScope::focus(Qt::FocusReason reason)
         // very useful.
         d->m_lastFocusedInScope->setFocus(reason);
     } else {
-        if (auto frame = qobject_cast<Frame*>(d->m_thisWidget)) {
+        if (auto frame = qobject_cast<Frame *>(d->m_thisWidget)) {
             if (DockWidgetBase *dw = frame->currentDockWidget()) {
                 if (auto guest = dw->widget()) {
                     if (guest->focusPolicy() != Qt::NoFocus)
@@ -130,14 +131,14 @@ void FocusScope::Private::setIsFocused(bool is)
 
 void FocusScope::Private::onFocusObjectChanged(QObject *obj)
 {
-    auto widget = qobject_cast<WidgetType*>(obj);
+    auto widget = qobject_cast<WidgetType *>(obj);
     if (!widget) {
         setIsFocused(false);
         return;
     }
 
     const bool is = isInFocusScope(widget);
-    if (is && m_lastFocusedInScope != widget && !qobject_cast<TitleBar*>(obj)) {
+    if (is && m_lastFocusedInScope != widget && !qobject_cast<TitleBar *>(obj)) {
         m_lastFocusedInScope = widget;
         setIsFocused(is);
         /* Q_EMIT */ q->focusedWidgetChangedCallback();

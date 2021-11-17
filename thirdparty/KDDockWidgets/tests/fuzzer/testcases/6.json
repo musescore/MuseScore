@@ -90,14 +90,14 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-1",
+            "comment": "Hiding DockWidget-1",
             "params": {
                 "dockWidgetName": "DockWidget-1"
             },
             "type": 2
         },
         {
-            "comment": "Hidding DockWidget-3",
+            "comment": "Hiding DockWidget-3",
             "params": {
                 "dockWidgetName": "DockWidget-3"
             },

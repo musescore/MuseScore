@@ -60,7 +60,7 @@ class DOCKS_EXPORT MainWindowBase : public QMainWindow
     Q_PROPERTY(KDDockWidgets::MainWindowOptions options READ options CONSTANT)
     Q_PROPERTY(bool isMDI READ isMDI CONSTANT)
 public:
-    typedef QVector<MainWindowBase*> List;
+    typedef QVector<MainWindowBase *> List;
     explicit MainWindowBase(const QString &uniqueName, MainWindowOptions options = MainWindowOption_HasCentralFrame,
                             WidgetType *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
@@ -88,6 +88,21 @@ public:
                                    KDDockWidgets::Location location,
                                    KDDockWidgets::DockWidgetBase *relativeTo = nullptr,
                                    KDDockWidgets::InitialOption initialOption = {});
+
+    /**
+     * @brief Sets a persistent central widget. It can't be detached.
+     *
+     * Requires passing MainWindowOption_HasCentralWidget in the CTOR.
+     * This is similar to the central frame concept of MainWindowOption_HasCentralFrame,
+     * with the difference that it won't show a tabs.
+     *
+     * @param widget The QWidget (or QQuickItem if built with QtQuick support) that you
+     * want to set.
+     *
+     * Example: kddockwidgets_example --central-widget
+     */
+    Q_INVOKABLE void setPersistentCentralWidget(QWidgetOrQuick *widget);
+    QWidgetOrQuick *persistentCentralWidget() const;
 
     /**
      * @brief Returns the unique name that was passed via constructor.
@@ -211,8 +226,11 @@ protected:
     void setUniqueName(const QString &uniqueName);
     void onResized(QResizeEvent *); // Because QtQuick doesn't have resizeEvent()
     virtual QMargins centerWidgetMargins() const = 0;
-    virtual SideBar* sideBar(SideBarLocation) const = 0;
-    virtual QRect centralAreaGeometry() const { return {}; }
+    virtual SideBar *sideBar(SideBarLocation) const = 0;
+    virtual QRect centralAreaGeometry() const
+    {
+        return {};
+    }
 
 Q_SIGNALS:
     void uniqueNameChanged();

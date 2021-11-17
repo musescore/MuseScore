@@ -36,8 +36,8 @@ class DOCKS_EXPORT WidgetResizeHandler : public QObject
 {
     Q_OBJECT
 public:
-
-    enum Feature {
+    enum Feature
+    {
         Feature_None = 0,
         Feature_NativeShadow = 1,
         Feature_NativeResize = 2,
@@ -48,11 +48,13 @@ public:
     };
     Q_DECLARE_FLAGS(Features, Feature);
 
-    struct NativeFeatures {
+    struct NativeFeatures
+    {
         NativeFeatures() = default;
 
         NativeFeatures(QRect r)
-            : htCaptionRect(r) {
+            : htCaptionRect(r)
+        {
         }
 
         NativeFeatures(Feature f)
@@ -61,28 +63,34 @@ public:
         }
 
         NativeFeatures(Features f)
-            : features(f) {
+            : features(f)
+        {
         }
 
         QRect htCaptionRect; // in global coordinates
         Features features = Feature_All;
-        bool hasFeatures() const {
+        bool hasFeatures() const
+        {
             return features != Feature_None;
         }
 
-        bool hasShadow() const {
+        bool hasShadow() const
+        {
             return features & Feature_NativeShadow;
         }
 
-        bool hasMaximize() const {
+        bool hasMaximize() const
+        {
             return features & Feature_NativeMaximize;
         }
 
-        bool hasResize() const {
+        bool hasResize() const
+        {
             return features & Feature_NativeResize;
         }
 
-        bool hasDrag() const {
+        bool hasDrag() const
+        {
             return (features & Feature_NativeDrag) && !htCaptionRect.isNull();
         }
     };
@@ -124,13 +132,14 @@ public:
     static int widgetResizeHandlerMargin();
 
     static void setupWindow(QWindow *window);
-    static bool isInterestingNativeEvent(int);
 #ifdef Q_OS_WIN
+    static bool isInterestingNativeEvent(unsigned int);
     static bool handleWindowsNativeEvent(QWindow *w, MSG *msg, Qt5Qt6Compat::qintptr *result, const NativeFeatures &);
     static bool handleWindowsNativeEvent(FloatingWindow *w, const QByteArray &eventType,
                                          void *message, Qt5Qt6Compat::qintptr *result);
 #endif
     static bool s_disableAllHandlers;
+
 protected:
     bool eventFilter(QObject *o, QEvent *e) override;
 
@@ -178,8 +187,8 @@ public:
 #endif // Q_OS_WIN
 
 class DOCKS_EXPORT CustomFrameHelper
-    : public QObject
-    , public QAbstractNativeEventFilter
+    : public QObject,
+      public QAbstractNativeEventFilter
 {
     Q_OBJECT
 public:

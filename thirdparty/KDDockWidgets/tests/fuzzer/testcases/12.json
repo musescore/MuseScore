@@ -284,7 +284,7 @@
             "type": 4
         },
         {
-            "comment": "Hidding DockWidget-5",
+            "comment": "Hiding DockWidget-5",
             "params": {
                 "dockWidgetName": "DockWidget-5"
             },

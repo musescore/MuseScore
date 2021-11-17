@@ -39,6 +39,7 @@ public:
 protected:
     SideBar *sideBar(SideBarLocation) const override;
     QMargins centerWidgetMargins() const override;
+
 private:
     void onMultiSplitterGeometryUpdated();
 };
