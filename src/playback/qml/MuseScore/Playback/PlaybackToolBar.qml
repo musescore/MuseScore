@@ -29,7 +29,7 @@ import MuseScore.CommonScene 1.0
 
 import "internal"
 
-Rectangle {
+Item {
     id: root
 
     property alias navigation: navPanel
@@ -37,8 +37,6 @@ Rectangle {
 
     width: content.width
     height: content.height
-
-    color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
         id: navPanel

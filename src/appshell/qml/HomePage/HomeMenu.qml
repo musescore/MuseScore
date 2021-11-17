@@ -27,14 +27,12 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Cloud 1.0
 
-Rectangle {
+Item {
     id: root
 
     property string currentPageName: ""
 
     signal selected(string name)
-
-    color: ui.theme.backgroundPrimaryColor
 
     NavigationSection {
         id: navSec

@@ -27,7 +27,7 @@ import MuseScore.Ui 1.0
 
 import "internal"
 
-Rectangle {
+Item {
     id: root
 
     property alias orientation: gridView.orientation
@@ -41,8 +41,6 @@ Rectangle {
 
     width: gridView.isHorizontal ? childrenRect.width : 76
     height: !gridView.isHorizontal ? childrenRect.height : 40
-
-    color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
         id: keynavSub

@@ -33,14 +33,20 @@ StyledTabButton {
 
     signal handleContextMenuItemRequested(string itemId)
 
-    height: 36
+    readonly property real actualHeight: 34
+    height: actualHeight + 1 // For separator
     width: implicitWidth
 
-    leftPadding: 10
-    rightPadding: 10
+    readonly property real textPadding: 10
+    readonly property real buttonPadding: 6
+
+    leftPadding: textPadding
+    rightPadding: (contextMenuButton.visible ? buttonPadding : textPadding) + 1 // For separator
+    topPadding: 0
+    bottomPadding: 1 // For separator
 
     contentItem: Row {
-        spacing: 4
+        spacing: root.buttonPadding
 
         StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter
@@ -69,53 +75,57 @@ StyledTabButton {
         }
     }
 
-    background: Rectangle {
-        id: backgroundRect
+    background: Item {
+        Rectangle {
+            id: backgroundRect
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.right: rightSeparator.left
+            anchors.bottom: root.isCurrent ? parent.bottom : bottomSeparator.top
 
-        NavigationFocusBorder{
-            navigationCtrl: root.navigation
-            anchors.margins: 0
+            NavigationFocusBorder{
+                navigationCtrl: root.navigation
+                drawOutsideParent: false
+            }
+
+            color: ui.theme.backgroundSecondaryColor
+            opacity: 1
+
+            states: [
+                State {
+                    name: "HOVERED"
+                    when: root.hovered && !root.isCurrent
+
+                    PropertyChanges {
+                        target: backgroundRect
+                        color: ui.theme.backgroundPrimaryColor
+                        opacity: ui.theme.buttonOpacityHover
+                    }
+                },
+
+                State {
+                    name: "SELECTED"
+                    when: root.isCurrent
+
+                    PropertyChanges {
+                        target: backgroundRect
+                        color: ui.theme.backgroundPrimaryColor
+                    }
+                }
+            ]
         }
 
-        color: ui.theme.backgroundSecondaryColor
-        opacity: 1
-
         SeparatorLine {
+            id: rightSeparator
             anchors.right: parent.right
-
             orientation: Qt.Vertical
         }
 
         SeparatorLine {
+            id: bottomSeparator
             anchors.bottom: parent.bottom
-
             visible: !root.isCurrent
         }
-
-        states: [
-            State {
-                name: "HOVERED"
-                when: root.hovered && !root.isCurrent
-
-                PropertyChanges {
-                    target: backgroundRect
-
-                    opacity: ui.theme.buttonOpacityHover
-                    color: ui.theme.backgroundPrimaryColor
-                }
-            },
-
-            State {
-                name: "SELECTED"
-                when: root.isCurrent
-
-                PropertyChanges {
-                    target: backgroundRect
-
-                    color: ui.theme.backgroundPrimaryColor
-                }
-            }
-        ]
     }
 
     states: []
