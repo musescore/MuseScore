@@ -1503,7 +1503,7 @@ private:
         Sid  styleIdx() const { return _idx; }
         int idx() const { return int(_idx); }
         const char* name() const { return _name; }
-        P_TYPE valueType() const { return _defaultValue.type(); }
+        mu::engraving::P_TYPE valueType() const { return _defaultValue.type(); }
         const mu::engraving::PropertyValue& defaultValue() const { return _defaultValue; }
     };
 

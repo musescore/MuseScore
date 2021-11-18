@@ -60,7 +60,7 @@ void MStyle::set(const Sid t, const PropertyValue& val)
     } else {
         if (StyleDef::styleValues[idx].valueType() == P_TYPE::SPATIUM) {
             qreal _spatium = value(Sid::spatium).toReal();
-            m_precomputedValues[idx] = m_values[idx].toSpatium().val() * _spatium;
+            m_precomputedValues[idx] = m_values[idx].value<Spatium>().val() * _spatium;
         }
     }
 }
@@ -70,7 +70,7 @@ void MStyle::precomputeValues()
     qreal _spatium = value(Sid::spatium).toReal();
     for (const StyleDef::StyleValue& t : StyleDef::styleValues) {
         if (t.valueType() == P_TYPE::SPATIUM) {
-            m_precomputedValues[t.idx()] = value(t.styleIdx()).toSpatium().val() * _spatium;
+            m_precomputedValues[t.idx()] = value(t.styleIdx()).value<Spatium>().val() * _spatium;
         }
     }
 }
@@ -346,7 +346,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         }
         P_TYPE type = st.valueType();
         if (P_TYPE::SPATIUM == type) {
-            xml.tag(st.name(), value(idx).toSpatium().val());
+            xml.tag(st.name(), value(idx).value<Spatium>().val());
         } else if (P_TYPE::DIRECTION == type) {
             xml.tag(st.name(), int(value(idx).toDirection()));
         } else if (P_TYPE::ALIGN == type) {

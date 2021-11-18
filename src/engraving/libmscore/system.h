@@ -29,7 +29,6 @@
 */
 
 #include "engravingitem.h"
-#include "spatium.h"
 #include "symbol.h"
 #include "skyline.h"
 

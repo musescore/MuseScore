@@ -27,6 +27,8 @@
 
 #include "libmscore/masterscore.h"
 
+using namespace mu::engraving;
+
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -76,13 +78,8 @@ QVariant MStyle::value(const QString& key) const
         return QVariant();
     }
 
-    const QVariant val = _style->value(sid).toQVariant();
-
-    if (Ms::MStyle::valueType(sid) == P_TYPE::SPATIUM) {
-        return val.value<Ms::Spatium>().val();
-    }
-
-    return val;
+    const PropertyValue val = _style->value(sid);
+    return val.toQVariant();
 }
 
 //---------------------------------------------------------
@@ -99,16 +96,12 @@ void MStyle::setValue(const QString& key, QVariant value)
         return;
     }
 
-    if (Ms::MStyle::valueType(sid) == P_TYPE::SPATIUM) {
-        value = QVariant::fromValue(Ms::Spatium(value.toReal()));
-    }
-
     if (_score) {
         // Style belongs to actual score: change style value in undoable way
-        _score->undoChangeStyleVal(sid, mu::engraving::PropertyValue::fromQVariant(value));
+        _score->undoChangeStyleVal(sid, PropertyValue::fromQVariant(value, Ms::MStyle::valueType(sid)));
     } else {
         // Style is not bound to a score: change the value directly
-        _style->set(sid, mu::engraving::PropertyValue::fromQVariant(value));
+        _style->set(sid, PropertyValue::fromQVariant(value, Ms::MStyle::valueType(sid)));
     }
 }
 } // namespace PluginAPI

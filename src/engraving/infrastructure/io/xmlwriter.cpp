@@ -465,11 +465,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
     break;
     default: {
         const char* type = data.typeName();
-        if (strcmp(type, "Ms::Spatium") == 0) {
-            *this << "<" << name << ">";
-            *this << data.value<Spatium>().val();
-            *this << "</" << ename << ">\n";
-        } else if (strcmp(type, "mu::PointF") == 0) {
+        if (strcmp(type, "mu::PointF") == 0) {
             PointF p = PointF::fromVariant(data);
             *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
         } else if (strcmp(type, "mu::SizeF") == 0) {

@@ -24,6 +24,7 @@
 #include "engraving/style/style.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 AbstractStyleDialogModel::AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids)
     : QObject(parent)
@@ -65,8 +66,8 @@ StyleItem* AbstractStyleDialogModel::buildStyleItem(StyleId id)
 
 QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& logicalValue) const
 {
-    if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
-        return logicalValue.value<Ms::Spatium>().toDouble();
+    if (Ms::MStyle::valueType(id) == P_TYPE::SPATIUM) {
+        return logicalValue.value<Ms::Spatium>().val();
     }
 
     return logicalValue.toQVariant();
@@ -74,9 +75,9 @@ QVariant AbstractStyleDialogModel::toUiValue(StyleId id, const PropertyValue& lo
 
 PropertyValue AbstractStyleDialogModel::fromUiValue(StyleId id, const QVariant& uiValue) const
 {
-    if (Ms::MStyle::valueType(id) == Ms::P_TYPE::SPATIUM) {
+    if (Ms::MStyle::valueType(id) == P_TYPE::SPATIUM) {
         return Ms::Spatium(uiValue.toDouble());
     }
 
-    return PropertyValue::fromQVariant(uiValue);
+    return PropertyValue::fromQVariant(uiValue, Ms::MStyle::valueType(id));
 }

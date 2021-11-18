@@ -65,7 +65,6 @@
 #include "stemslash.h"
 #include "fraction.h"
 #include "excerpt.h"
-#include "spatium.h"
 #include "barline.h"
 #include "skyline.h"
 #include "scorefont.h"
@@ -234,15 +233,6 @@ QString toUserString(Direction val)
 }
 
 //---------------------------------------------------------
-//   doubleToSpatium
-//---------------------------------------------------------
-
-static Spatium doubleToSpatium(double d)
-{
-    return Spatium(d);
-}
-
-//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -301,15 +291,6 @@ void MScore::init()
 
 void MScore::registerUiTypes()
 {
-    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDoubleStatic)) {
-        qFatal("registerConverter Spatium::toDouble failed");
-    }
-    if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium)) {
-        qFatal("registerConverter doubleToSpatium failed");
-    }
-//      if (!QMetaType::registerComparators<Spatium>())
-//            qFatal("registerComparators for Spatium failed");
-
 #ifdef SCRIPT_INTERFACE
     qRegisterMetaType<Note::ValueType>("ValueType");
 

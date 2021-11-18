@@ -85,6 +85,9 @@ set(MODULE_SRC
 
     ${COMPAT_MIDI_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/types/types.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/spatium.h
+
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h
 

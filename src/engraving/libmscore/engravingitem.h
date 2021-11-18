@@ -25,7 +25,6 @@
 
 #include "engravingobject.h"
 #include "elementgroup.h"
-#include "spatium.h"
 #include "fraction.h"
 #include "mscore.h"
 #include "shape.h"
@@ -38,6 +37,8 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
+
+#include "types/spatium.h"
 
 namespace mu::engraving {
 class Factory;

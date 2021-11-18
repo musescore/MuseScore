@@ -123,6 +123,11 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
 
     std::vector<Ms::EngravingItem*> staves;
 
+    auto undoChangeProperty = [](Ms::EngravingObject* o, Ms::Pid pid, const QVariant& val)
+    {
+        o->undoChangeProperty(pid, PropertyValue::fromQVariant(val, Ms::propertyType(pid)));
+    };
+
     for (Ms::EngravingItem* item : m_elementList) {
         if (!item->isBarLine()) {
             continue;
@@ -132,9 +137,9 @@ void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
         Ms::Staff* staff = barline->staff();
 
         if (std::find(staves.cbegin(), staves.cend(), staff) == staves.cend()) {
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN, PropertyValue::fromQVariant(m_isSpanToNextStaff->value()));
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_FROM, PropertyValue::fromQVariant(m_spanFrom->value()));
-            staff->undoChangeProperty(Ms::Pid::STAFF_BARLINE_SPAN_TO, PropertyValue::fromQVariant(m_spanTo->value()));
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
             staves.push_back(staff);
         }
 
