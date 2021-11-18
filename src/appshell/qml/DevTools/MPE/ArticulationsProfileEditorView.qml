@@ -299,21 +299,20 @@ Rectangle {
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             Layout.preferredWidth: 64
 
-                            currentValue: editorModel ? Math.round(editorModel.selectedItem.currentPatternSegment.positionFrom * 10) / 10 : 0
-                            minValue: 0.0
-                            maxValue: 1.0
-                            decimals: 1
-                            step: 0.1
+                            currentValue: editorModel ? editorModel.selectedItem.currentPatternSegment.positionFrom / 100 : 0
+                            minValue: 0
+                            maxValue: 100
+                            decimals: 0
+                            step: 1
 
-                            validator: DoubleInputValidator {
+                            validator: IntValidator {
                                 top: positionFrom.maxValue
                                 bottom: positionFrom.minValue
-                                decimal: positionFrom.decimals
                             }
 
                             onValueEdited: {
                                 if (editorModel) {
-                                    editorModel.selectedItem.currentPatternSegment.positionFrom = newValue
+                                    editorModel.selectedItem.currentPatternSegment.positionFrom = newValue * 100
                                 }
                             }
                         }
@@ -339,21 +338,20 @@ Rectangle {
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             Layout.preferredWidth: 64
 
-                            currentValue: editorModel ? Math.round(editorModel.selectedItem.currentPatternSegment.positionTo * 10) / 10: 0
-                            minValue: 0.0
-                            maxValue: 1.0
-                            decimals: 1
-                            step: 0.1
+                            currentValue: editorModel ? editorModel.selectedItem.currentPatternSegment.positionTo / 100 : 0
+                            minValue: 0
+                            maxValue: 100
+                            decimals: 0
+                            step: 1
 
-                            validator: DoubleInputValidator {
+                            validator: IntValidator {
                                 top: positionFrom.maxValue
                                 bottom: positionFrom.minValue
-                                decimal: positionFrom.decimals
                             }
 
                             onValueEdited: {
                                 if (editorModel) {
-                                    editorModel.selectedItem.currentPatternSegment.positionTo = newValue
+                                    editorModel.selectedItem.currentPatternSegment.positionTo = newValue * 100
                                 }
                             }
                         }

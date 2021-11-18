@@ -165,7 +165,7 @@ ArticulationPattern ArticulationProfilesRepository::patternsScopeFromJson(const 
     for (const QJsonValue& val : array) {
         QJsonObject patternObj = val.toObject();
 
-        duration_percentage_t position = patternObj.value(PATTERN_POS_KEY).toDouble();
+        duration_percentage_t position = patternObj.value(PATTERN_POS_KEY).toInt();
 
         ArrangementPattern arrangementPattern = arrangementPatternFromJson(patternObj.value(ARRANGEMENT_PATTERN_KEY).toObject());
         PitchPattern pitchPattern = pitchPatternFromJson(patternObj.value(PITCH_PATTERN_KEY).toObject());
@@ -188,7 +188,7 @@ QJsonArray ArticulationProfilesRepository::patternsScopeToJson(const Articulatio
 
     for (const auto& pair : scope) {
         QJsonObject pattern;
-        pattern.insert(PATTERN_POS_KEY, pair.first);
+        pattern.insert(PATTERN_POS_KEY, static_cast<int>(pair.first));
         pattern.insert(ARRANGEMENT_PATTERN_KEY, arrangementPatternToJson(pair.second.arrangementPattern));
         pattern.insert(PITCH_PATTERN_KEY, pitchPatternToJson(pair.second.pitchPattern));
         pattern.insert(EXPRESSION_PATTERN, expressionPatternToJson(pair.second.expressionPattern));
@@ -203,8 +203,8 @@ ArrangementPattern ArticulationProfilesRepository::arrangementPatternFromJson(co
 {
     ArrangementPattern result;
 
-    result.durationFactor = obj.value(DURATION_FACTOR_KEY).toDouble();
-    result.timestampOffset = obj.value(TIMESTAMP_OFFSET_KEY).toDouble();
+    result.durationFactor = obj.value(DURATION_FACTOR_KEY).toInt();
+    result.timestampOffset = obj.value(TIMESTAMP_OFFSET_KEY).toInt();
 
     return result;
 }
@@ -213,7 +213,7 @@ QJsonObject ArticulationProfilesRepository::arrangementPatternToJson(const Arran
 {
     QJsonObject result;
 
-    result.insert(DURATION_FACTOR_KEY, pattern.durationFactor);
+    result.insert(DURATION_FACTOR_KEY, static_cast<int>(pattern.durationFactor));
     result.insert(TIMESTAMP_OFFSET_KEY, static_cast<int>(pattern.timestampOffset));
 
     return result;
@@ -228,8 +228,8 @@ PitchPattern ArticulationProfilesRepository::pitchPatternFromJson(const QJsonObj
     for (const QJsonValue& pitchOffset : offsets) {
         QJsonObject offsetObj = pitchOffset.toObject();
 
-        result.pitchOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toDouble(),
-                                      offsetObj.value(OFFSET_VAL_KEY).toDouble());
+        result.pitchOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toInt(),
+                                      offsetObj.value(OFFSET_VAL_KEY).toInt());
     }
 
     return result;
@@ -243,8 +243,8 @@ QJsonObject ArticulationProfilesRepository::pitchPatternToJson(const PitchPatter
 
     for (const auto& pair : pattern.pitchOffsetMap) {
         QJsonObject offsetObj;
-        offsetObj.insert(OFFSET_POS_KEY, pair.first);
-        offsetObj.insert(OFFSET_VAL_KEY, pair.second);
+        offsetObj.insert(OFFSET_POS_KEY, static_cast<int>(pair.first));
+        offsetObj.insert(OFFSET_VAL_KEY, static_cast<int>(pair.second));
 
         pitchOffsets.append(std::move(offsetObj));
     }
@@ -258,15 +258,12 @@ ExpressionPattern ArticulationProfilesRepository::expressionPatternFromJson(cons
 {
     ExpressionPattern result;
 
-    result.maxAmplitudeLevel = obj.value(MAX_AMPLITUDE_LEVEL_KEY).toDouble();
-    result.amplitudeTimeShift = obj.value(AMPLITUDE_TIME_SHIFT).toDouble();
-
     QJsonArray offsets = obj.value(DYNAMIC_OFFSETS_KEY).toArray();
 
     for (const QJsonValue& offset : offsets) {
         QJsonObject offsetObj = offset.toObject();
-        result.dynamicOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toDouble(),
-                                        offsetObj.value(OFFSET_VAL_KEY).toDouble());
+        result.dynamicOffsetMap.emplace(offsetObj.value(OFFSET_POS_KEY).toInt(),
+                                        offsetObj.value(OFFSET_VAL_KEY).toInt());
     }
 
     return result;
@@ -276,15 +273,12 @@ QJsonObject ArticulationProfilesRepository::expressionPatternToJson(const Expres
 {
     QJsonObject result;
 
-    result.insert(MAX_AMPLITUDE_LEVEL_KEY, pattern.maxAmplitudeLevel);
-    result.insert(AMPLITUDE_TIME_SHIFT, pattern.amplitudeTimeShift);
-
     QJsonArray dynamicOffsets;
 
     for (const auto& pair : pattern.dynamicOffsetMap) {
         QJsonObject offsetObj;
-        offsetObj.insert(OFFSET_POS_KEY, pair.first);
-        offsetObj.insert(OFFSET_VAL_KEY, pair.second);
+        offsetObj.insert(OFFSET_POS_KEY, static_cast<int>(pair.first));
+        offsetObj.insert(OFFSET_VAL_KEY, static_cast<int>(pair.second));
 
         dynamicOffsets.append(std::move(offsetObj));
     }
