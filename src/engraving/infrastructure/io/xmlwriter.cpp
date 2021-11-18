@@ -274,10 +274,6 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
     break;
-    case P_TYPE::FONT_FACE: {
-        UNREACHABLE; //! TODO
-        break;
-    }
     case P_TYPE::ALIGN: {
         Align a = data.value<Align>();
         const char* h;
