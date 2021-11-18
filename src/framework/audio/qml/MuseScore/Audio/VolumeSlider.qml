@@ -87,7 +87,7 @@ Slider {
         id: prv
 
         readonly property real rulerLineWidth: 2
-        readonly property real rulerLineHeight: root.height - prv.handleHeight 
+        readonly property real rulerLineHeight: root.height - prv.handleHeight
 
         // value ranges
         readonly property real lowAccuracyEdge: -12
@@ -246,34 +246,45 @@ Slider {
         }
     }
 
-    handle: Rectangle {
-        id: handleItem
-
+    handle: Item {
         x: root.width - prv.handleWidth
         y: (1 - root.position) * prv.rulerLineHeight
         implicitWidth: prv.handleWidth
         implicitHeight: prv.handleHeight
-        radius: 2
-        color: "white"
+
+        StyledDropShadow {
+            anchors.fill: handleRect
+            source: handleRect
+            color: "#35000000"
+            samples: 9
+            verticalOffset: 2
+        }
 
         Rectangle {
+            id: handleRect
             anchors.fill: parent
             radius: 2
-
-            color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
-            border.color: Qt.rgba(0, 0, 0, 0.7)
-            border.width: 1
+            color: "white"
 
             Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 3
-                anchors.rightMargin: 3
+                anchors.fill: parent
+                radius: 2
 
-                height: 1
-                radius: height / 2
-                color: "#000000"
+                color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
+                border.color: Qt.rgba(0, 0, 0, 0.7)
+                border.width: 1
+
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 3
+                    anchors.rightMargin: 3
+
+                    height: 1
+                    radius: height / 2
+                    color: "#000000"
+                }
             }
         }
     }
