@@ -105,10 +105,10 @@ Column {
         interactive: false
 
         readonly property real spacingBetweenColumns: 50
-        readonly property real spacingBetweenRows: 28
+        readonly property real spacingBetweenRows: 24
 
         readonly property real actualCellWidth: 256
-        readonly property real actualCellHeight: 170
+        readonly property real actualCellHeight: 176
 
         cellWidth: actualCellWidth + spacingBetweenColumns
         cellHeight: actualCellHeight + spacingBetweenRows
@@ -147,9 +147,6 @@ Column {
 
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
-                    view.currentIndex = index
                     root.pluginClicked(model, navigation)
                 }
             }
