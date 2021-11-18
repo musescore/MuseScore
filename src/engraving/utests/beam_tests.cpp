@@ -25,6 +25,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/chord.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -157,5 +158,24 @@ TEST_F(BeamTests, beamCrossMeasure1)
 
     EXPECT_EQ(new_b, b);
 
+    delete score;
+}
+
+//---------------------------------------------------------
+//   beamStemDir
+//   This method tests if a beam's stem direction can be
+//   set with a note other than the first one.
+//---------------------------------------------------------
+TEST_F(BeamTests, beamStemDir)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+    Chord* c2 = toChord(cr->beam()->elements()[1]);
+    c2->setStemDirection(Direction::UP);
+    score->update();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
     delete score;
 }
