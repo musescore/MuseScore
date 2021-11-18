@@ -94,8 +94,6 @@ void PaletteElementEditor::open()
         return;
     }
 
-    QWidget* editor = nullptr;
-
     using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig: {
@@ -103,22 +101,12 @@ void PaletteElementEditor::open()
     }
     break;
     case Type::TimeSig: {
-        TimeDialog* timeEditor = new TimeDialog();
-        timeEditor->showTimePalette(false);
-        connect(timeEditor, &TimeDialog::timeSigAdded, this, &PaletteElementEditor::onElementAdded);
-        editor = timeEditor;
+        interactive()->open("musescore://notation/timesignatures?sync=false&showTimePalette=false");
     }
     break;
     default:
         break;
     }
-
-    if (!editor) {
-        return;
-    }
-
-    editor->setAttribute(Qt::WA_DeleteOnClose);
-    editor->show();
 }
 
 // ========================================================
