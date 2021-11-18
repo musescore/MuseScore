@@ -21,6 +21,7 @@
         <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/SearchField.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledTabBar.qml</file>
         <file>qml/MuseScore/UiComponents/StyledTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/PopupPanel.qml</file>
         <file>qml/MuseScore/UiComponents/ProgressButton.qml</file>

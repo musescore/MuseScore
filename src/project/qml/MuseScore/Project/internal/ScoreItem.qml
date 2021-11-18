@@ -75,7 +75,6 @@ FocusScope {
                 id: loader
 
                 anchors.fill: parent
-                anchors.margins: 2
 
                 property var thumbnail: undefined
 
@@ -98,10 +97,7 @@ FocusScope {
             }
 
             Rectangle {
-                anchors.top: parent.top
-
-                height: parent.height + parent.borderWidth
-                width: parent.width
+                anchors.fill: parent
 
                 color: "transparent"
                 radius: parent.radius

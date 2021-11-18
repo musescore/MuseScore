@@ -32,7 +32,7 @@ import "internal"
 FocusScope {
     id: root
 
-    property var color: ui.theme.backgroundSecondaryColor
+    property alias color: background.color
     property string section: ""
 
     QtObject {
@@ -58,7 +58,7 @@ FocusScope {
             return
         }
 
-        bar.selectPage(root.section)
+        tabBar.selectPage(root.section)
     }
 
     LearnPageModel {
@@ -70,8 +70,9 @@ FocusScope {
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
-        color: root.color
+        color: ui.theme.backgroundSecondaryColor
     }
 
     RowLayout {
@@ -120,18 +121,15 @@ FocusScope {
         }
     }
 
-    TabBar {
-        id: bar
+    StyledTabBar {
+        id: tabBar
 
         anchors.top: topLayout.bottom
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - itemSideMargin
-
-        contentHeight: 32
-        spacing: 0
-
-        readonly property int itemSideMargin: 22
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
 
         function pageIndex(pageName) {
             switch (pageName) {
@@ -154,61 +152,51 @@ FocusScope {
             direction: NavigationPanel.Horizontal
             order: 2
             accessible.name: qsTrc("learn", "Learn tabs")
-            enabled: bar.enabled && bar.visible
+            enabled: tabBar.enabled && tabBar.visible
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", bar.currentItem.navigation.name)
+                    event.setData("controlName", tabBar.currentItem.navigation.name)
                 }
             }
         }
 
         StyledTabButton {
             text: qsTrc("learn", "Get started")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
 
             navigation.name: "Get started"
             navigation.panel: navTabPanel
             navigation.column: 1
-            onNavigationTriggered: bar.currentIndex = 0
+            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Advanced"
             navigation.panel: navTabPanel
             navigation.column: 2
-            onNavigationTriggered: bar.currentIndex = 1
+            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Classes"
             navigation.panel: navTabPanel
             navigation.column: 3
-            onNavigationTriggered: bar.currentIndex = 2
+            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 
     StackLayout {
-        anchors.top: bar.bottom
-        anchors.topMargin: 24
+        anchors.top: tabBar.bottom
+        anchors.topMargin: 28
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 24
 
-        currentIndex: bar.currentIndex
+        currentIndex: tabBar.currentIndex
 
         Playlist {
             id: getStartedComp
@@ -220,6 +208,7 @@ FocusScope {
             navigation.name: "LearnGetStarted"
             navigation.accessible.name: qsTrc("learn", "Get started") + navigation.directionInfo
 
+            backgroundColor: root.color
             sideMargin: prv.sideMargin
 
             onRequestOpenVideo: {
@@ -237,6 +226,7 @@ FocusScope {
             navigation.name: "LearnAdvanced"
             navigation.accessible.name: qsTrc("learn", "Advanced") + navigation.directionInfo
 
+            backgroundColor: root.color
             sideMargin: prv.sideMargin
 
             onRequestOpenVideo: {

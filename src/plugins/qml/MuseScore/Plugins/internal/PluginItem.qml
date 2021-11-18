@@ -48,36 +48,36 @@ Item {
         onTriggered: root.clicked()
     }
 
-    Rectangle {
-        id: thumbnailBackground
+    Image {
+        id: thumbnail
         anchors.top: parent.top
 
         width: parent.width
         height: 144
 
-        color: "transparent"
-        radius: 10
+        fillMode: Image.PreserveAspectCrop
 
-        border.color: ui.theme.fontPrimaryColor
-        border.width: root.selected ? 2 : 0
-
-        NavigationFocusBorder {
-            navigationCtrl: root.navigation
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: thumbnail.width
+                height: thumbnail.height
+                radius: 10
+            }
         }
 
-        Image {
-            id: thumbnail
+        Rectangle {
+            id: borderRect
             anchors.fill: parent
 
-            fillMode: Image.PreserveAspectCrop
+            color: "transparent"
+            radius: 10
 
-            layer.enabled: true
-            layer.effect: OpacityMask {
-                maskSource: Rectangle {
-                    width: thumbnail.width
-                    height: thumbnail.height
-                    radius: 10
-                }
+            border.color: ui.theme.fontPrimaryColor
+            border.width: root.selected ? 2 : 0
+
+            NavigationFocusBorder {
+                navigationCtrl: root.navigation
             }
         }
     }
@@ -85,7 +85,7 @@ Item {
     StyledTextLabel {
         id: nameLabel
 
-        anchors.top: thumbnailBackground.bottom
+        anchors.top: thumbnail.bottom
         anchors.topMargin: 16
         anchors.horizontalCenter: parent.horizontalCenter
     }
@@ -96,7 +96,7 @@ Item {
             when: mouseArea.containsMouse && !mouseArea.pressed
 
             PropertyChanges {
-                target: root
+                target: thumbnail
                 opacity: 0.7
             }
         },
@@ -106,7 +106,7 @@ Item {
             when: mouseArea.pressed
 
             PropertyChanges {
-                target: root
+                target: thumbnail
                 opacity: 0.5
             }
         }

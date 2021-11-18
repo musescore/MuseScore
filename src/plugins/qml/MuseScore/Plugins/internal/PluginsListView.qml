@@ -29,7 +29,7 @@ Column {
     id: root
 
     property alias model: filterModel.sourceModel
-    property alias count: view.count
+    readonly property alias count: view.count
 
     property alias title: titleLabel.text
 
@@ -102,13 +102,15 @@ Column {
 
         model: filterModel
 
+        // We don't want this GridView to be scrollable; it would conflict with the containing Flickable.
         interactive: false
+        highlightFollowsCurrentItem: false // prevent automatic scrolling
 
         readonly property real spacingBetweenColumns: 50
-        readonly property real spacingBetweenRows: 28
+        readonly property real spacingBetweenRows: 24
 
         readonly property real actualCellWidth: 256
-        readonly property real actualCellHeight: 170
+        readonly property real actualCellHeight: 176
 
         cellWidth: actualCellWidth + spacingBetweenColumns
         cellHeight: actualCellHeight + spacingBetweenRows
@@ -147,8 +149,6 @@ Column {
 
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
                     view.currentIndex = index
                     root.pluginClicked(model, navigation)
                 }
