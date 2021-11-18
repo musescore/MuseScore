@@ -46,6 +46,7 @@
 #include "view/widgets/specialcharactersdialog.h"
 #include "view/widgets/editdrumsetdialog.h"
 #include "view/widgets/timesignaturepropertiesdialog.h"
+#include "view/widgets/keyedit.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
@@ -99,6 +100,10 @@ void PaletteModule::resolveImports()
 
         ir->registerUri(Uri("musescore://palette/cellproperties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PaletteCellPropertiesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://notation/keysignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::KeyEditor>("KeySignaturesDialog")));
+
     }
 }
 
