@@ -80,7 +80,9 @@ Column {
 
         model: filterModel
 
+        // We don't want this GridView to be scrollable; it would conflict with the containing Flickable.
         interactive: false
+        highlightFollowsCurrentItem: false // prevent automatic scrolling
 
         readonly property real spacingBetweenColumns: 40
         readonly property real spacingBetweenRows: 24
@@ -128,8 +130,6 @@ Column {
 
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
                     root.clicked(index, model, navigation)
                 }
             }
