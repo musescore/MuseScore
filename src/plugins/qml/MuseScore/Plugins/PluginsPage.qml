@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -33,13 +33,11 @@ Item {
 
     property string search: ""
     property string selectedCategory: ""
-    property string backgroundColor: ui.theme.backgroundPrimaryColor
+    property color backgroundColor: ui.theme.backgroundPrimaryColor
 
     property int sideMargin: 46
 
     property NavigationSection navigationSection: null
-
-    clip: true
 
     function categories() {
         return pluginsModel.categories()
@@ -77,6 +75,8 @@ Item {
     }
 
     Rectangle {
+        id: topGradient
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: flickable.top
@@ -100,16 +100,17 @@ Item {
         id: flickable
 
         anchors.top: parent.top
-        anchors.topMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: root.sideMargin
         anchors.bottom: panel.visible ? panel.top : parent.bottom
-        anchors.bottomMargin: panel.visible ? 0 : 21
 
         contentWidth: width
         contentHeight: column.implicitHeight
+
+        topMargin: topGradient.height
+        bottomMargin: 24
 
         clip: true
         boundsBehavior: Flickable.StopAtBounds
@@ -188,28 +189,6 @@ Item {
                 onNavigationActivated: function(itemRect) {
                     Utils.ensureContentVisible(flickable, itemRect, notInstalledPluginsView.headerHeight + 16)
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: flickable.bottom
-
-        visible: !panel.visible
-
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
             }
         }
     }

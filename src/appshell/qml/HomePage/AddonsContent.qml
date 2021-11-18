@@ -32,7 +32,7 @@ import MuseScore.Plugins 1.0
 FocusScope {
     id: root
 
-    property var color: ui.theme.backgroundSecondaryColor
+    property alias color: background.color
     property string section: ""
 
     QtObject {
@@ -58,12 +58,13 @@ FocusScope {
             return
         }
 
-        bar.selectPage(root.section)
+        tabBar.selectPage(root.section)
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
-        color: root.color
+        color: ui.theme.backgroundSecondaryColor
     }
 
     RowLayout {
@@ -120,7 +121,7 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 2
 
-            visible: bar.canFilterByCategories
+            visible: tabBar.canFilterByCategories
 
             readonly property string allCategoryValue: "ALL_CATEGORY"
             property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
@@ -129,7 +130,7 @@ FocusScope {
             currentIndex: indexOfValue(allCategoryValue)
 
             function initModel() {
-                var categories = bar.categories()
+                var categories = tabBar.categories()
                 var result = []
 
                 result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
@@ -148,24 +149,22 @@ FocusScope {
         }
     }
 
-    TabBar {
-        id: bar
+    StyledTabBar {
+        id: tabBar
 
         anchors.top: topLayout.bottom
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - itemSideMargin
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
 
-        contentHeight: 32
-        spacing: 0
-
-        property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
-        readonly property int itemSideMargin: 22
+        property bool canFilterByCategories: tabBar.currentIndex === 0 || tabBar.currentIndex === 1
 
         function categories() {
             var result = []
 
-            if (bar.currentIndex === 0) {
+            if (tabBar.currentIndex === 0) {
                 result = pluginsComp.categories()
             }
 
@@ -189,63 +188,54 @@ FocusScope {
         NavigationPanel {
             id: navTabPanel
             name: "AddonsTabs"
-            enabled: bar.enabled && bar.visible
+            enabled: tabBar.enabled && tabBar.visible
             section: navSec
             order: 2
             accessible.name: qsTrc("appshell", "Add-ons tabs")
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", bar.currentItem.navigation.name)
+                    event.setData("controlName", tabBar.currentItem.navigation.name)
                 }
             }
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
 
             navigation.name: "Plugins"
             navigation.panel: navTabPanel
             navigation.order: 1
-            onNavigationTriggered: bar.currentIndex = 0
+            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Extensions"
             navigation.panel: navTabPanel
             navigation.order: 2
-            onNavigationTriggered: bar.currentIndex = 1
+            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Languages"
             navigation.panel: navTabPanel
             navigation.order: 3
-            onNavigationTriggered: bar.currentIndex = 2
+            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 
     StackLayout {
-        anchors.top: bar.bottom
-        anchors.topMargin: 24
+        anchors.top: tabBar.bottom
+        anchors.topMargin: 36
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        currentIndex: bar.currentIndex
+        currentIndex: tabBar.currentIndex
 
         PluginsPage {
             id: pluginsComp
@@ -282,4 +272,3 @@ FocusScope {
         }
     }
 }
-

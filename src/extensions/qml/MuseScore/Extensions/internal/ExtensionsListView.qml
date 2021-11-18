@@ -25,22 +25,20 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
-Item {
+Column {
     id: root
 
-    height: view.height
-
-    property string title: ""
+    property alias title: titleLabel.text
 
     property alias model: filterModel.sourceModel
-    property int count: view.count
+    readonly property alias count: view.count
 
     property alias filters: filterModel.filters
 
     property string selectedExtensionCode: ""
 
     property var flickableItem: null
-    property int headerHeight: view.headerItem.height
+    property int headerHeight: titleLabel.height + spacing
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "ExtensionsListView"
@@ -59,47 +57,41 @@ Item {
         id: filterModel
     }
 
+    StyledTextLabel {
+        id: titleLabel
+        width: parent.width
+        font: ui.theme.tabBoldFont
+        horizontalAlignment: Text.AlignLeft
+    }
+
+    spacing: 24
+
     GridView {
         id: view
 
-        readonly property int sideMargin: 24
-
-        property int rows: Math.max(0, Math.floor(height / cellHeight))
-        property int columns: Math.max(0, Math.floor(width / cellWidth))
+        readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
 
         anchors.left: parent.left
-        anchors.leftMargin: -sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: -sideMargin
+        anchors.leftMargin: -spacingBetweenColumns / 2
+        anchors.rightMargin: -spacingBetweenColumns / 2
 
-        height: contentHeight
+        height: contentHeight - spacingBetweenRows
 
         model: filterModel
 
-        clip: true
-
-        cellHeight: 272
-        cellWidth: 650
-
+        // We don't want this GridView to be scrollable; it would conflict with the containing Flickable.
         interactive: false
+        highlightFollowsCurrentItem: false // prevent automatic scrolling
 
-        header: Item {
-            height: titleLabel.height
-            anchors.left: parent.left
-            anchors.right: parent.right
+        readonly property real spacingBetweenColumns: 40
+        readonly property real spacingBetweenRows: 24
 
-            StyledTextLabel {
-                id: titleLabel
+        readonly property real actualCellWidth: 656
+        readonly property real actualCellHeight: 224
 
-                anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.left: parent.left
-                anchors.leftMargin: view.sideMargin
-
-                text: root.title
-                font: ui.theme.tabBoldFont
-            }
-        }
+        cellWidth: actualCellWidth + spacingBetweenColumns
+        cellHeight: actualCellHeight + spacingBetweenRows
 
         delegate: Item {
             id: item
@@ -113,10 +105,12 @@ Item {
 
             ExtensionItem {
                 id: _item
-                anchors.centerIn: parent
 
-                height: 224
-                width: 602
+                width: view.actualCellWidth
+                height: view.actualCellHeight
+
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 code: model.code
                 name: model.name
@@ -136,8 +130,6 @@ Item {
 
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
                     root.clicked(index, model, navigation)
                 }
             }
