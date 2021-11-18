@@ -27,7 +27,7 @@ import MuseScore.Ui 1.0
 Rectangle {
     id: root
 
-    property alias content: loader.sourceComponent
+    property alias content: contentLoader.sourceComponent
     property alias background: effectSource.sourceItem
     property alias canClose: closeButton.visible
 
@@ -44,11 +44,16 @@ Rectangle {
     border.color: ui.theme.strokeColor
 
     radius: 20
+    clip: true
+
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
     anchors.bottomMargin: -radius
 
     function setContentData(data) {
-        if (loader.status === Loader.Ready) {
-            loader.item.setData(data)
+        if (contentLoader.status === Loader.Ready) {
+            contentLoader.item.setData(data)
         }
     }
 
@@ -109,10 +114,36 @@ Rectangle {
         }
     }
 
+    ShaderEffectSource {
+        id: effectSource
+        anchors.fill: root
+
+        height: root.height
+        z: -1
+
+        sourceRect: root.parent.mapToItem(sourceItem, root.x, root.y, root.width, root.height)
+
+        Rectangle {
+            anchors.fill: parent
+
+            color: ui.theme.popupBackgroundColor
+            opacity: 0.75
+            radius: root.radius
+        }
+    }
+
+    FastBlur {
+        anchors.fill: effectSource
+
+        source: effectSource
+        radius: 100
+        transparentBorder: true
+    }
+
     Loader {
-        id: loader
+        id: contentLoader
         anchors.fill: parent
-        z: 1
+        anchors.bottomMargin: -root.anchors.bottomMargin
     }
 
     FlatButton {
@@ -123,6 +154,9 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: 20
 
+        width: 30
+        height: width
+
         icon: IconCode.CLOSE_X_ROUNDED
         transparent: true
 
@@ -132,38 +166,7 @@ Rectangle {
         navigation.accessible.name: qsTrc("general", "Close")
 
         onClicked: {
-            close()
+            root.close()
         }
-    }
-
-    ShaderEffectSource {
-        id: effectSource
-
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.leftMargin: Boolean(sourceItem) ? sourceItem.x : 0
-        anchors.right: parent.right
-        anchors.rightMargin: anchors.leftMargin
-
-        height: root.height
-        z: -1
-
-        sourceRect: Qt.rect(0, root.y, width, height)
-
-        Rectangle {
-            anchors.fill: parent
-
-            color: ui.theme.popupBackgroundColor
-            opacity: 0.75
-        }
-    }
-
-    FastBlur {
-        anchors.fill: effectSource
-        anchors.topMargin: 30
-
-        source: effectSource
-        radius: 100
-        transparentBorder: true
     }
 }
