@@ -401,12 +401,6 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
-    if (dialog->result()) {
-        QMetaType::destroy(widgetMetaTypeId, widgetClassPtr);
-        result.ret = make_ret(Ret::Code::Cancel);
-        return result;
-    }
-
     connect(dialog, &QDialog::finished, [this, objectId, dialog](int code) {
         QVariantMap status;
 
