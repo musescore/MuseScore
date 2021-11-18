@@ -36,12 +36,12 @@ inline ArrangementPattern createArrangementPattern(const duration_percentage_t d
     return result;
 }
 
-inline PitchPattern createSimplePitchPattern(const pitch_level_t incrementDiff = 0.f)
+inline PitchPattern createSimplePitchPattern(const pitch_level_t incrementDiff = 0)
 {
     PitchPattern result;
 
     for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-        result.pitchOffsetMap.insert_or_assign(i * PERCENTAGE_PRECISION_STEP, i * incrementDiff);
+        result.pitchOffsetMap.insert_or_assign(i * TEN_PERCENTS, i * incrementDiff);
     }
 
     return result;
@@ -51,15 +51,13 @@ inline ExpressionPattern createSimpleExpressionPattern(const dynamic_level_t amp
 {
     ExpressionPattern result;
 
-    result.maxAmplitudeLevel = amplitudeLevel;
-
     float amplitudeSqrt = std::sqrt(amplitudeLevel);
 
     for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-        duration_percentage_t currentPos = i * PERCENTAGE_PRECISION_STEP;
-        dynamic_level_t value = amplitudeLevel - std::pow((2 * amplitudeSqrt * currentPos) - amplitudeSqrt, 2);
+        duration_percentage_t currentPos = i * TEN_PERCENTS;
+        dynamic_level_t value = amplitudeLevel - std::pow((2 * (amplitudeSqrt / static_cast<float>(HUNDRED_PERCENTS)) * currentPos) - amplitudeSqrt, 2);
 
-        result.dynamicOffsetMap.insert_or_assign(currentPos, std::max(value, 0.f));
+        result.dynamicOffsetMap.insert_or_assign(currentPos, value);
     }
 
     return result;
