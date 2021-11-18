@@ -257,14 +257,7 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
         *this << data.value<Spatium>().val();
         *this << "</" << ename << ">\n";
         break;
-
-    case P_TYPE::SIZE_MM:
-        UNREACHABLE; //! TODO
-        break;
     case P_TYPE::POINT_SP:
-        UNREACHABLE; //! TODO
-        break;
-    case P_TYPE::POINT_MM:
         UNREACHABLE; //! TODO
         break;
     case P_TYPE::POINT_SP_MM:
@@ -281,7 +274,7 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
     break;
-    case P_TYPE::FONT: {
+    case P_TYPE::FONT_FACE: {
         UNREACHABLE; //! TODO
         break;
     }

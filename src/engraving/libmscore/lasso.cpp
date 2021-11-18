@@ -116,44 +116,4 @@ std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
         PointF(box.left(), box.y() + box.height() * .5)
     };
 }
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Lasso::setProperty(Pid propertyId, const PropertyValue& v)
-{
-    switch (propertyId) {
-    case Pid::LASSO_POS:
-        bbox().moveTo(v.value<PointF>());
-        break;
-    case Pid::LASSO_SIZE:
-        bbox().setSize(v.value<SizeF>());
-        break;
-    default:
-        if (!EngravingItem::setProperty(propertyId, v)) {
-            return false;
-        }
-        break;
-    }
-    score()->setUpdateAll();
-    return true;
-}
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-PropertyValue Lasso::getProperty(Pid propertyId) const
-{
-    switch (propertyId) {
-    case Pid::LASSO_POS:
-        return PropertyValue::fromValue(bbox().topLeft());
-    case Pid::LASSO_SIZE:
-        return PropertyValue::fromValue(bbox().size());
-    default:
-        break;
-    }
-    return EngravingItem::getProperty(propertyId);
-}
 }

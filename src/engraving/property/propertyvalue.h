@@ -59,9 +59,7 @@ enum class P_TYPE {
     SCALE,
     SPATIUM,
 
-    SIZE_MM,
     POINT_SP,           // point units, value saved in (score) spatium units
-    POINT_MM,
     POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     POINT,
     SP_REAL,            // real (point) value saved in (score) spatium units

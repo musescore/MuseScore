@@ -283,8 +283,6 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(lineStyle,               LINE_STYLE)
     API_PROPERTY(lineColor,               COLOR)
     API_PROPERTY(lineWidth,               LINE_WIDTH)
-    API_PROPERTY(lassoPos,                LASSO_POS)
-    API_PROPERTY(lassoSize,               LASSO_SIZE)
     API_PROPERTY(timeStretch,             TIME_STRETCH)
     API_PROPERTY(ornamentStyle,           ORNAMENT_STYLE)
     API_PROPERTY(timesig,                 TIMESIG)
