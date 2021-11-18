@@ -179,7 +179,7 @@ FocusScope {
                 id: openMoreInfoButton
                 orientation: Qt.Horizontal
                 icon: IconCode.OPEN_LINK
-                text: qsTrc("learn", "Open") + " " + root.authorOrganizationName
+                text: qsTrc("learn", "Open %1").arg(root.authorOrganizationName)
                 accentButton: true
 
                 navigation.panel: root.navigation
