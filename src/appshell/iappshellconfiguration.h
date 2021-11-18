@@ -37,6 +37,9 @@ class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAppShellConfiguration() = default;
 
+    virtual bool hasCompletedFirstLaunchSetup() const = 0;
+    virtual void setHasCompletedFirstLaunchSetup(bool has) = 0;
+
     virtual StartupSessionType startupSessionType() const = 0;
     virtual void setStartupSessionType(StartupSessionType type) = 0;
 

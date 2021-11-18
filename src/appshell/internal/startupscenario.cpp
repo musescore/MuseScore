@@ -91,7 +91,16 @@ void StartupScenario::run()
             openScore(configuration()->startupScorePath());
         } break;
         }
+
+        if (!configuration()->hasCompletedFirstLaunchSetup()) {
+            runFirstLaunchSetup();
+        }
     });
+}
+
+void StartupScenario::runFirstLaunchSetup()
+{
+    //configuration()->setHasCompletedFirstLaunchSetup(true);
 }
 
 std::string StartupScenario::startupPageUri(StartupSessionType sessionType) const
