@@ -313,12 +313,6 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
     case Ms::P_TYPE::ZERO_INT:
         return value.toInt() - 1;
 
-    case Ms::P_TYPE::POINT_MM:
-        return value.value<PointF>() * Ms::DPMM;
-
-    case Ms::P_TYPE::SIZE_MM:
-        return value.value<SizeF>() * Ms::DPMM;
-
     case Ms::P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());
 
@@ -368,12 +362,6 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 
     case Ms::P_TYPE::ZERO_INT:
         return value.toInt() + 1;
-
-    case Ms::P_TYPE::POINT_MM:
-        return value.value<PointF>().toQPointF() / Ms::DPMM;
-
-    case Ms::P_TYPE::SIZE_MM:
-        return value.value<SizeF>().toQSizeF() / Ms::DPMM;
 
     case Ms::P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());

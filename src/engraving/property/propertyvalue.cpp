@@ -217,15 +217,7 @@ QVariant PropertyValue::toQVariant() const
     }
     break;
     case Ms::P_TYPE::SPATIUM:   return value<Ms::Spatium>().val();
-    case Ms::P_TYPE::SIZE_MM: {
-        UNREACHABLE; //! TODO
-    }
-    break;
     case Ms::P_TYPE::POINT_SP: {
-        UNREACHABLE; //! TODO
-    }
-    break;
-    case Ms::P_TYPE::POINT_MM: {
         UNREACHABLE; //! TODO
     }
     break;
