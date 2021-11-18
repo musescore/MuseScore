@@ -213,8 +213,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line style") },
     { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "line width") },
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
-    { Pid::LASSO_POS,               false, 0,                       P_TYPE::POINT_MM,       DUMMY_QT_TR_NOOP("propertyName", "lasso position") },
-    { Pid::LASSO_SIZE,              false, 0,                       P_TYPE::SIZE_MM,        DUMMY_QT_TR_NOOP("propertyName", "lasso size") },
     { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "time stretch") },
     { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE, DUMMY_QT_TR_NOOP("propertyName", "ornament style") },
 
@@ -605,9 +603,7 @@ PropertyValue propertyFromString(Pid id, QString value)
         return PropertyValue::fromValue(int(NoteHead::name2group(value)));
     case P_TYPE::HEAD_TYPE:
         return PropertyValue::fromValue(int(NoteHead::name2type(value)));
-    case P_TYPE::POINT_MM:                      // not supported
     case P_TYPE::TDURATION:
-    case P_TYPE::SIZE_MM:
     case P_TYPE::INT_LIST:
         return PropertyValue();
     case P_TYPE::SUB_STYLE:
@@ -715,9 +711,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         g.read(e);
         return PropertyValue::fromValue(g);
     }
-    case P_TYPE::POINT_MM:                      // not supported
     case P_TYPE::TDURATION:
-    case P_TYPE::SIZE_MM:
     case P_TYPE::INT_LIST:
         return PropertyValue();
     default:
@@ -927,10 +921,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         }
         break;
     }
-    case P_TYPE::POINT_MM:
-        qFatal("unknown: POINT_MM");
-    case P_TYPE::SIZE_MM:
-        qFatal("unknown: SIZE_MM");
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
     case P_TYPE::BEAM_MODE:
