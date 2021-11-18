@@ -40,8 +40,8 @@ Item {
     property color pitchLineColor: "#27A341"
     property color expressionLineColor: "#F25555"
 
-    property real durationFactor: root.patternModel ? root.patternModel.durationFactor : 1.0
-    property real timestampShiftFactor: root.patternModel ? root.patternModel.timestampShiftFactor : 0.0
+    property real durationFactor: root.patternModel ? root.patternModel.durationFactor : 1
+    property real timestampShiftFactor: root.patternModel ? root.patternModel.timestampShiftFactor : 0
 
     property int selectedPitchOffsetIndex: root.patternModel ? root.patternModel.selectedPitchOffsetIndex : -1
     property var pitchOffsets: root.patternModel ? root.patternModel.pitchOffsets : []
@@ -57,9 +57,9 @@ Item {
 
         readonly property int displayableSteps: 24 // from -5 to 15, where 10 is 100% of duration
         readonly property real pixelsPerStep: Math.max(root.width, root.height) / prv.displayableSteps
+        readonly property real valuePerStep: root.patternModel ? root.patternModel.singlePercentValue : 1
         readonly property int stepsToFullScale: 10 // amount of steps from 0% to 100% of duration
         readonly property real pixelsToFullScale: prv.stepsToFullScale * prv.pixelsPerStep // amount of steps from 0% to 100% of duration in pixels
-        readonly property real precision: 0.1
 
         readonly property real pointHandleDiameter: 8
 
@@ -73,18 +73,28 @@ Item {
         readonly property real legendY: root.height * 0.05
         readonly property real legendSampleSize: 12
 
+        function coordinateValueToSteps(value) {
+            return value / prv.valuePerStep
+        }
+
+        function stepsToCoordinateValue(steps) {
+            return steps * prv.valuePerStep
+        }
+
         function applyXShiftToCoordindates(curvePoint, xShift, xSpanFactor) {
-            return Qt.point(curvePoint.x * xSpanFactor + xShift, curvePoint.y)
+            return Qt.point(curvePoint.x *
+                            coordinateValueToSteps(xSpanFactor) / 100 +
+                            xShift, curvePoint.y)
         }
 
         function coordinatesToPixels(curvePoint) {
-            return Qt.point(prv.centerX + (curvePoint.x * prv.pixelsToFullScale),
-                            prv.centerY - (curvePoint.y * prv.pixelsToFullScale))
+            return Qt.point(prv.centerX + (prv.coordinateValueToSteps(curvePoint.x) / 100) * prv.pixelsToFullScale,
+                            prv.centerY - (prv.coordinateValueToSteps(curvePoint.y) / 100) * prv.pixelsToFullScale)
         }
 
         function coordinatesFromPixels(pixelsPoint) {
-            return Qt.point((pixelsPoint.x - prv.centerX) / prv.pixelsToFullScale,
-                            (prv.centerY - pixelsPoint.y) / prv.pixelsToFullScale)
+            return Qt.point(prv.stepsToCoordinateValue((pixelsPoint.x - prv.centerX) / prv.pixelsToFullScale),
+                            (prv.stepsToCoordinateValue(prv.centerY - pixelsPoint.y) / prv.pixelsToFullScale))
         }
 
         function legendsList() {
@@ -170,8 +180,8 @@ Item {
             }
 
             for (var i = -prv.stepsToFullScale / 2; i <= prv.stepsToFullScale; ++i) {
-                var textNum = i * prv.precision
-                ctx.fillText(textNum.toFixed(1),
+                var textNum = i * 10 + "%"
+                ctx.fillText(textNum,
                              prv.centerX + (i * prv.pixelsPerStep) - 8,
                              prv.centerY + 24)
             }
@@ -255,10 +265,10 @@ Item {
         }
 
         function drawArrangement(ctx) {
-            var arrangementPoints = [ Qt.point(root.timestampShiftFactor, 0.0), Qt.point(root.timestampShiftFactor + root.durationFactor, 0.0)]
+            var arrangementPoints = [ Qt.point(root.timestampShiftFactor, 0), Qt.point(root.timestampShiftFactor + root.durationFactor, 0)]
 
-            canvas.drawCurve(ctx, arrangementPoints, 0.0, 1.0, 2, root.arrangementLineColor)
-            canvas.drawPointHandlers(ctx, arrangementPoints, 0.0, 1.0, 0, "#FFFFFF", root.arrangementLineColor)
+            canvas.drawCurve(ctx, arrangementPoints, 0, prv.valuePerStep * 100, 2, root.arrangementLineColor)
+            canvas.drawPointHandlers(ctx, arrangementPoints, 0, prv.valuePerStep * 100, 0, "#FFFFFF", root.arrangementLineColor)
         }
 
         function drawPitchCurve(ctx) {

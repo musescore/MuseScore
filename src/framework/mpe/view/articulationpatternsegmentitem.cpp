@@ -25,7 +25,7 @@
 using namespace mu::mpe;
 
 ArticulationPatternSegmentItem::ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment,
-                                                               const float scopePositionFrom, const float scopePositionTo)
+                                                               const int scopePositionFrom, const int scopePositionTo)
     : QObject(parent)
 {
     load(segment, scopePositionFrom, scopePositionTo);
@@ -35,9 +35,9 @@ ArticulationPatternSegment ArticulationPatternSegmentItem::patternSegmentData() 
 {
     ArticulationPatternSegment result;
 
-    auto stdMapFromPoints = [](const QList<QPointF>& points) -> std::map<float, float> {
-        std::map<float, float> result;
-        for (const QPointF& point : points) {
+    auto stdMapFromPoints = [](const QList<QPoint>& points) -> std::map<duration_percentage_t, percentage_t> {
+        std::map<duration_percentage_t, percentage_t> result;
+        for (const QPoint& point : points) {
             result.emplace(point.x(), point.y());
         }
 
@@ -49,21 +49,19 @@ ArticulationPatternSegment ArticulationPatternSegmentItem::patternSegmentData() 
 
     result.pitchPattern.pitchOffsetMap = stdMapFromPoints(pitchOffsets());
 
-    result.expressionPattern.maxAmplitudeLevel = maxAmplitudeLevel();
-    result.expressionPattern.amplitudeTimeShift = timestampShiftFactor();
     result.expressionPattern.dynamicOffsetMap = stdMapFromPoints(dynamicOffsets());
 
     return result;
 }
 
 void ArticulationPatternSegmentItem::load(const ArticulationPatternSegment& segment,
-                                          const float scopePositionFrom,
-                                          const float scopePositionTo)
+                                          const int scopePositionFrom,
+                                          const int scopePositionTo)
 {
-    auto pointsFromStdMap = [](const std::map<float, float>& stdMap) -> QList<QPointF> {
-        QList<QPointF> result;
+    auto pointsFromStdMap = [](const std::map<duration_percentage_t, percentage_t>& stdMap) -> QList<QPoint> {
+        QList<QPoint> result;
         for (const auto& pair : stdMap) {
-            result << QPointF(pair.first, pair.second);
+            result << QPoint(pair.first, pair.second);
         }
 
         return result;
@@ -77,99 +75,69 @@ void ArticulationPatternSegmentItem::load(const ArticulationPatternSegment& segm
 
     setPitchOffsets(pointsFromStdMap(segment.pitchPattern.pitchOffsetMap));
 
-    setMaxAmplitudeLevel(segment.expressionPattern.maxAmplitudeLevel);
-    setAmplitudeTimeShiftFactor(segment.expressionPattern.amplitudeTimeShift);
     setDynamicOffsets(pointsFromStdMap(segment.expressionPattern.dynamicOffsetMap));
 }
 
-float ArticulationPatternSegmentItem::durationFactor() const
+int ArticulationPatternSegmentItem::durationFactor() const
 {
     return m_durationFactor;
 }
 
-void ArticulationPatternSegmentItem::setDurationFactor(float newDurationFactor)
+void ArticulationPatternSegmentItem::setDurationFactor(int newDurationFactor)
 {
-    if (qFuzzyCompare(m_durationFactor, newDurationFactor)) {
+    if (m_durationFactor == newDurationFactor) {
         return;
     }
     m_durationFactor = newDurationFactor;
     emit durationFactorChanged();
 }
 
-float ArticulationPatternSegmentItem::timestampShiftFactor() const
+int ArticulationPatternSegmentItem::timestampShiftFactor() const
 {
     return m_timestampShiftFactor;
 }
 
-void ArticulationPatternSegmentItem::setTimestampShiftFactor(float newTimestampShiftFactor)
+void ArticulationPatternSegmentItem::setTimestampShiftFactor(int newTimestampShiftFactor)
 {
-    if (qFuzzyCompare(m_timestampShiftFactor, newTimestampShiftFactor)) {
+    if (m_timestampShiftFactor == newTimestampShiftFactor) {
         return;
     }
     m_timestampShiftFactor = newTimestampShiftFactor;
     emit timestampShiftFactorChanged();
 }
 
-const QList<QPointF>& ArticulationPatternSegmentItem::pitchOffsets() const
+const QList<QPoint>& ArticulationPatternSegmentItem::pitchOffsets() const
 {
     return m_pitchOffsets;
 }
 
-float ArticulationPatternSegmentItem::maxAmplitudeLevel() const
-{
-    return m_maxAmplitudeLevel;
-}
-
-void ArticulationPatternSegmentItem::setMaxAmplitudeLevel(float newMaxAmplitudeLevel)
-{
-    if (qFuzzyCompare(m_maxAmplitudeLevel, newMaxAmplitudeLevel)) {
-        return;
-    }
-    m_maxAmplitudeLevel = newMaxAmplitudeLevel;
-    emit maxAmplitudeLevelChanged();
-}
-
-float ArticulationPatternSegmentItem::amplitudeTimeShiftFactor() const
-{
-    return m_amplitudeTimeShiftFactor;
-}
-
-void ArticulationPatternSegmentItem::setAmplitudeTimeShiftFactor(float newAmplitudeTimeShiftFactor)
-{
-    if (qFuzzyCompare(m_amplitudeTimeShiftFactor, newAmplitudeTimeShiftFactor)) {
-        return;
-    }
-    m_amplitudeTimeShiftFactor = newAmplitudeTimeShiftFactor;
-    emit amplitudeTimeShiftFactorChanged();
-}
-
-const QList<QPointF>& ArticulationPatternSegmentItem::dynamicOffsets() const
+const QList<QPoint>& ArticulationPatternSegmentItem::dynamicOffsets() const
 {
     return m_dynamicOffsets;
 }
 
-float ArticulationPatternSegmentItem::positionFrom() const
+int ArticulationPatternSegmentItem::positionFrom() const
 {
     return m_scopePositionFrom;
 }
 
-void ArticulationPatternSegmentItem::setPositionFrom(float newScopePositionFrom)
+void ArticulationPatternSegmentItem::setPositionFrom(int newScopePositionFrom)
 {
-    if (qFuzzyCompare(m_scopePositionFrom, newScopePositionFrom)) {
+    if (m_scopePositionFrom == newScopePositionFrom) {
         return;
     }
     m_scopePositionFrom = newScopePositionFrom;
     emit positionFromChanged();
 }
 
-float ArticulationPatternSegmentItem::positionTo() const
+int ArticulationPatternSegmentItem::positionTo() const
 {
     return m_scopePositionTo;
 }
 
-void ArticulationPatternSegmentItem::setPositionTo(float newScopePositionTo)
+void ArticulationPatternSegmentItem::setPositionTo(int newScopePositionTo)
 {
-    if (qFuzzyCompare(m_scopePositionTo, newScopePositionTo)) {
+    if (m_scopePositionTo == newScopePositionTo) {
         return;
     }
     m_scopePositionTo = newScopePositionTo;
@@ -190,16 +158,16 @@ void ArticulationPatternSegmentItem::setSelectedDynamicOffsetIndex(int newSelect
     emit selectedDynamicOffsetIndexChanged();
 }
 
-float ArticulationPatternSegmentItem::dynamicOffsetValueAt(const int index)
+int ArticulationPatternSegmentItem::dynamicOffsetValueAt(const int index)
 {
     if (index >= m_dynamicOffsets.size()) {
-        return 0.f;
+        return 0;
     }
 
     return m_dynamicOffsets.at(index).y();
 }
 
-void ArticulationPatternSegmentItem::updateDynamicOffsetValue(const int index, const float value)
+void ArticulationPatternSegmentItem::updateDynamicOffsetValue(const int index, const int value)
 {
     if (index >= m_dynamicOffsets.size()) {
         return;
@@ -223,16 +191,16 @@ void ArticulationPatternSegmentItem::setSelectedPitchOffsetIndex(int newSelected
     emit selectedPitchOffsetIndexChanged();
 }
 
-float ArticulationPatternSegmentItem::pitchOffsetValueAt(const int index)
+int ArticulationPatternSegmentItem::pitchOffsetValueAt(const int index)
 {
     if (index >= m_pitchOffsets.size()) {
-        return 0.f;
+        return 0;
     }
 
     return m_pitchOffsets.at(index).y();
 }
 
-void ArticulationPatternSegmentItem::updatePitchOffsetValue(const int index, const float value)
+void ArticulationPatternSegmentItem::updatePitchOffsetValue(const int index, const int value)
 {
     if (index >= m_pitchOffsets.size()) {
         return;
@@ -242,7 +210,7 @@ void ArticulationPatternSegmentItem::updatePitchOffsetValue(const int index, con
     emit pitchOffsetsChanged();
 }
 
-void ArticulationPatternSegmentItem::setPitchOffsets(const QList<QPointF>& offsets)
+void ArticulationPatternSegmentItem::setPitchOffsets(const QList<QPoint>& offsets)
 {
     if (m_pitchOffsets == offsets) {
         return;
@@ -252,7 +220,7 @@ void ArticulationPatternSegmentItem::setPitchOffsets(const QList<QPointF>& offse
     emit pitchOffsetsChanged();
 }
 
-void ArticulationPatternSegmentItem::setDynamicOffsets(const QList<QPointF>& offsets)
+void ArticulationPatternSegmentItem::setDynamicOffsets(const QList<QPoint>& offsets)
 {
     if (m_dynamicOffsets == offsets) {
         return;
@@ -260,4 +228,9 @@ void ArticulationPatternSegmentItem::setDynamicOffsets(const QList<QPointF>& off
 
     m_dynamicOffsets = offsets;
     emit dynamicOffsetsChanged();
+}
+
+int ArticulationPatternSegmentItem::singlePercentValue() const
+{
+    return SINGLE_PERCENT;
 }

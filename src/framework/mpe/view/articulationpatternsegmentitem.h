@@ -25,7 +25,7 @@
 
 #include <QObject>
 #include <QList>
-#include <QPointF>
+#include <QPoint>
 
 #include "mpetypes.h"
 
@@ -34,67 +34,62 @@ class ArticulationPatternSegmentItem : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(float positionFrom READ positionFrom WRITE setPositionFrom NOTIFY positionFromChanged)
-    Q_PROPERTY(float positionTo READ positionTo WRITE setPositionTo NOTIFY positionToChanged)
+    Q_PROPERTY(int singlePercentValue READ singlePercentValue CONSTANT)
+
+    Q_PROPERTY(int positionFrom READ positionFrom WRITE setPositionFrom NOTIFY positionFromChanged)
+    Q_PROPERTY(int positionTo READ positionTo WRITE setPositionTo NOTIFY positionToChanged)
 
     // Arrangement
-    Q_PROPERTY(float durationFactor READ durationFactor WRITE setDurationFactor NOTIFY durationFactorChanged)
-    Q_PROPERTY(float timestampShiftFactor READ timestampShiftFactor WRITE setTimestampShiftFactor NOTIFY timestampShiftFactorChanged)
+    Q_PROPERTY(int durationFactor READ durationFactor WRITE setDurationFactor NOTIFY durationFactorChanged)
+    Q_PROPERTY(int timestampShiftFactor READ timestampShiftFactor WRITE setTimestampShiftFactor NOTIFY timestampShiftFactorChanged)
 
     // Pitch
-    Q_PROPERTY(QList<QPointF> pitchOffsets READ pitchOffsets NOTIFY pitchOffsetsChanged)
+    Q_PROPERTY(QList<QPoint> pitchOffsets READ pitchOffsets NOTIFY pitchOffsetsChanged)
     Q_PROPERTY(
         int selectedPitchOffsetIndex READ selectedPitchOffsetIndex WRITE setSelectedPitchOffsetIndex NOTIFY selectedPitchOffsetIndexChanged)
 
     // Expression
-    Q_PROPERTY(float maxAmplitudeLevel READ maxAmplitudeLevel WRITE setMaxAmplitudeLevel NOTIFY maxAmplitudeLevelChanged)
-    Q_PROPERTY(
-        float amplitudeTimeShiftFactor READ amplitudeTimeShiftFactor WRITE setAmplitudeTimeShiftFactor NOTIFY amplitudeTimeShiftFactorChanged)
-    Q_PROPERTY(QList<QPointF> dynamicOffsets READ dynamicOffsets NOTIFY dynamicOffsetsChanged)
+    Q_PROPERTY(QList<QPoint> dynamicOffsets READ dynamicOffsets NOTIFY dynamicOffsetsChanged)
     Q_PROPERTY(
         int selectedDynamicOffsetIndex READ selectedDynamicOffsetIndex WRITE setSelectedDynamicOffsetIndex NOTIFY selectedDynamicOffsetIndexChanged)
 
 public:
-    explicit ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment, const float scopePositionFrom = 0.f,
-                                            const float scopePositionTo = 1.f);
+    explicit ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment, const int scopePositionFrom = 0,
+                                            const int scopePositionTo = HUNDRED_PERCENTS);
 
     ArticulationPatternSegment patternSegmentData() const;
 
-    void load(const ArticulationPatternSegment& segment, const float scopePositionFrom = 0.f, const float scopePositionTo = 1.f);
+    void load(const ArticulationPatternSegment& segment, const int scopePositionFrom = 0, const int scopePositionTo = HUNDRED_PERCENTS);
 
-    float durationFactor() const;
-    void setDurationFactor(float newDurationFactor);
-    float timestampShiftFactor() const;
-    void setTimestampShiftFactor(float newTimestampShiftFactor);
+    int durationFactor() const;
+    void setDurationFactor(int newDurationFactor);
+    int timestampShiftFactor() const;
+    void setTimestampShiftFactor(int newTimestampShiftFactor);
 
-    const QList<QPointF>& pitchOffsets() const;
+    const QList<QPoint>& pitchOffsets() const;
     int selectedPitchOffsetIndex() const;
     void setSelectedPitchOffsetIndex(int newSelectedPitchOffsetIndex);
-    Q_INVOKABLE float pitchOffsetValueAt(const int index);
-    Q_INVOKABLE void updatePitchOffsetValue(const int index, const float value);
+    Q_INVOKABLE int pitchOffsetValueAt(const int index);
+    Q_INVOKABLE void updatePitchOffsetValue(const int index, const int value);
 
-    float maxAmplitudeLevel() const;
-    void setMaxAmplitudeLevel(float newMaxAmplitudeLevel);
-    float amplitudeTimeShiftFactor() const;
-    void setAmplitudeTimeShiftFactor(float newAmplitudeTimeShiftFactor);
-    const QList<QPointF>& dynamicOffsets() const;
+    const QList<QPoint>& dynamicOffsets() const;
     int selectedDynamicOffsetIndex() const;
     void setSelectedDynamicOffsetIndex(int newSelectedDynamicOffsetIndex);
-    Q_INVOKABLE float dynamicOffsetValueAt(const int index);
-    Q_INVOKABLE void updateDynamicOffsetValue(const int index, const float value);
+    Q_INVOKABLE int dynamicOffsetValueAt(const int index);
+    Q_INVOKABLE void updateDynamicOffsetValue(const int index, const int value);
 
-    float positionFrom() const;
-    void setPositionFrom(float newScopePositionFrom);
+    int positionFrom() const;
+    void setPositionFrom(int newScopePositionFrom);
 
-    float positionTo() const;
-    void setPositionTo(float newScopePositionTo);
+    int positionTo() const;
+    void setPositionTo(int newScopePositionTo);
+
+    int singlePercentValue() const;
 
 signals:
     void durationFactorChanged();
     void timestampShiftFactorChanged();
     void pitchOffsetsChanged();
-    void maxAmplitudeLevelChanged();
-    void amplitudeTimeShiftFactorChanged();
     void dynamicOffsetsChanged();
 
     void positionFromChanged();
@@ -104,21 +99,19 @@ signals:
     void selectedPitchOffsetIndexChanged();
 
 private:
-    void setPitchOffsets(const QList<QPointF>& offsets);
-    void setDynamicOffsets(const QList<QPointF>& offsets);
+    void setPitchOffsets(const QList<QPoint>& offsets);
+    void setDynamicOffsets(const QList<QPoint>& offsets);
 
-    float m_scopePositionFrom = 0.f;
-    float m_scopePositionTo = 0.f;
+    int m_scopePositionFrom = 0;
+    int m_scopePositionTo = 0;
 
-    float m_durationFactor = 0.f;
-    float m_timestampShiftFactor = 0.f;
+    int m_durationFactor = 0;
+    int m_timestampShiftFactor = 0;
 
-    QList<QPointF> m_pitchOffsets;
+    QList<QPoint> m_pitchOffsets;
     int m_selectedPitchOffsetIndex = 0;
 
-    float m_maxAmplitudeLevel = 0.f;
-    float m_amplitudeTimeShiftFactor = 0.f;
-    QList<QPointF> m_dynamicOffsets;
+    QList<QPoint> m_dynamicOffsets;
     int m_selectedDynamicOffsetIndex = 0;
 };
 }

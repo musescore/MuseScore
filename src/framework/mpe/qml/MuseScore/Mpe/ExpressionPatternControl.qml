@@ -88,16 +88,18 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: 0.05
+            snapMode: Slider.SnapAlways
 
-            from: 0.0
-            to: 1.0
-            value: root.patternModel ? root.patternModel.dynamicOffsetValueAt(offsetPointIndexSlider.value) : 0.0
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 5 : 0
+
+            from: 0
+            to: root.patternModel ? root.patternModel.singlePercentValue * 100 : 0
+            value: root.patternModel ? root.patternModel.dynamicOffsetValueAt(offsetPointIndexSlider.value) : 0
 
             onMoved: {
                 if (root.patternModel) {
                     root.patternModel.updateDynamicOffsetValue(offsetPointIndexSlider.value,
-                                                               Math.round(offsetPointValueSlider.value * 10) / 10)
+                                                               offsetPointValueSlider.value)
                 }
             }
         }

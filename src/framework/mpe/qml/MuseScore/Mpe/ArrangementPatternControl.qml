@@ -52,15 +52,41 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: 0.1
+            implicitWidth: 120
 
-            from: -0.5
-            to: 1.0
-            value: root.patternModel ? root.patternModel.timestampShiftFactor : 0.0
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 10 : 0
+
+            from: root.patternModel ? root.patternModel.singlePercentValue * -50 : 0
+            to: root.patternModel ? root.patternModel.singlePercentValue * 100 : 0
+            value: root.patternModel ? root.patternModel.timestampShiftFactor : 0
 
             onMoved: {
                 if (root.patternModel) {
                     root.patternModel.timestampShiftFactor = timestampOffsetSlider.value
+                }
+            }
+        }
+
+        IncrementalPropertyControl {
+            id: timestampOffsetInput
+
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.preferredWidth: 64
+
+            currentValue: root.patternModel ? root.patternModel.timestampShiftFactor / 100 : 0
+            minValue: -50
+            maxValue: 50
+            decimals: 0
+            step: 1
+
+            validator: IntInputValidator {
+                top: timestampOffsetInput.maxValue
+                bottom: timestampOffsetInput.minValue
+            }
+
+            onValueEdited: {
+                if (root.patternModel) {
+                    root.patternModel.timestampShiftFactor = newValue * 100
                 }
             }
         }
@@ -86,15 +112,41 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: 0.1
+            implicitWidth: 120
 
-            from: 0.0
-            to: 1.0
-            value: root.patternModel ? root.patternModel.durationFactor : 0.0
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 10 : 0
+
+            from: 0
+            to: root.patternModel ? root.patternModel.singlePercentValue * 300 : 0
+            value: root.patternModel ? root.patternModel.durationFactor : 0
 
             onMoved: {
                 if (root.patternModel) {
                     root.patternModel.durationFactor = durationFactorSlider.value
+                }
+            }
+        }
+
+        IncrementalPropertyControl {
+            id: durationFactorInput
+
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.preferredWidth: 64
+
+            currentValue: root.patternModel ? root.patternModel.durationFactor / 100 : 0
+            minValue: 0
+            maxValue: 300
+            decimals: 0
+            step: 1
+
+            validator: IntInputValidator {
+                top: durationFactorInput.maxValue
+                bottom: durationFactorInput.minValue
+            }
+
+            onValueEdited: {
+                if (root.patternModel) {
+                    root.patternModel.durationFactor = newValue * 100
                 }
             }
         }

@@ -88,11 +88,11 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: 0.01
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 5 : 0
 
-            from: -1.0
-            to: 1.0
-            value: root.patternModel ? root.patternModel.pitchOffsetValueAt(offsetPointIndexSlider.value) : 0.0
+            from: root.patternModel ? root.patternModel.singlePercentValue * -100 : 0
+            to: root.patternModel ? root.patternModel.singlePercentValue * 100 : 0
+            value: root.patternModel ? root.patternModel.pitchOffsetValueAt(offsetPointIndexSlider.value) : 0
 
             onMoved: {
                 if (root.patternModel) {

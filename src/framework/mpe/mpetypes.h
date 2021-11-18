@@ -32,13 +32,19 @@
 #include <vector>
 
 #include "log.h"
-#include "realfn.h"
 
 namespace mu::mpe {
 // common
 using msecs_t = uint64_t;
-using percentage_t = float; // from 0.0 (0%) to 1.0 (100%)
-constexpr percentage_t PERCENTAGE_PRECISION_STEP = 0.1; // 10%
+using percentage_t = int_fast16_t;
+constexpr percentage_t SINGLE_PERCENT = 100;
+constexpr percentage_t HUNDRED_PERCENTS = SINGLE_PERCENT * 100;
+constexpr percentage_t TEN_PERCENTS = SINGLE_PERCENT * 10;
+
+inline float percentageToFactor(const percentage_t percents)
+{
+    return percents / static_cast<float>(HUNDRED_PERCENTS);
+}
 
 // Arrangement
 using timestamp_t = msecs_t;
@@ -69,10 +75,10 @@ using octave_t = uint_fast8_t;
 using pitch_level_t = percentage_t;
 using PitchCurve = std::map<duration_percentage_t, pitch_level_t>;
 
-constexpr size_t EXPECTED_SIZE = (1.f / PERCENTAGE_PRECISION_STEP) + 1;
+constexpr size_t EXPECTED_SIZE = (HUNDRED_PERCENTS / TEN_PERCENTS) + 1;
 
 constexpr octave_t MAX_SUPPORTED_OCTAVE = 12; // 0 - 12
-constexpr pitch_level_t MAX_PITCH_LEVEL = 1.f;
+constexpr pitch_level_t MAX_PITCH_LEVEL = HUNDRED_PERCENTS;
 constexpr pitch_level_t PITCH_LEVEL_STEP = MAX_PITCH_LEVEL / ((MAX_SUPPORTED_OCTAVE + 1) * static_cast<int>(PitchClass::Last));
 
 inline pitch_level_t pitchLevel(const PitchClass pitchClass, const octave_t octave)
@@ -151,8 +157,6 @@ enum class ArticulationType {
     SlideInBelow,
 
     // multi-note articulations
-    Crescendo,
-    Decrescendo,
     Glissando,
     Portamento,
     Legato,
@@ -231,31 +235,29 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
 enum class DynamicType {
     Undefined = -1,
     pppppppp = 0,
-    ppppppp = 1,
-    pppppp = 2,
-    ppppp = 3,
-    pppp = 4,
-    ppp = 5,
-    pp = 6,
-    p = 7,
-    mp = 8,
-    Natural = 9,
-    mf = 10,
-    f = 11,
-    ff = 12,
-    fff = 13,
-    ffff = 14,
-    fffff = 15,
-    ffffff = 16,
-    fffffff = 17,
-    ffffffff = 18,
+    ppppppp = 10 * SINGLE_PERCENT,
+    pppppp = 15 * SINGLE_PERCENT,
+    ppppp = 20 * SINGLE_PERCENT,
+    pppp = 25 * SINGLE_PERCENT,
+    ppp = 30 * SINGLE_PERCENT,
+    pp = 35 * SINGLE_PERCENT,
+    p = 40 * SINGLE_PERCENT,
+    mp = 45 * SINGLE_PERCENT,
+    Natural = 50 * SINGLE_PERCENT,
+    mf = 55 * SINGLE_PERCENT,
+    f = 60 * SINGLE_PERCENT,
+    ff = 65 * SINGLE_PERCENT,
+    fff = 70 * SINGLE_PERCENT,
+    ffff = 75 * SINGLE_PERCENT,
+    fffff = 80 * SINGLE_PERCENT,
+    ffffff = 90 * SINGLE_PERCENT,
+    fffffff = 100 * SINGLE_PERCENT,
     Last
 };
 
 using dynamic_level_t = percentage_t;
-constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = 1.f;
-constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0.f;
-constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = MAX_DYNAMIC_LEVEL / (static_cast<int>(DynamicType::Last) - 1);
+constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENTS;
+constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {
@@ -264,10 +266,10 @@ inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
     }
 
     if (dynamicLevel > MAX_DYNAMIC_LEVEL) {
-        return DynamicType::ffffffff;
+        return DynamicType::fffffff;
     }
 
-    return static_cast<DynamicType>(std::roundf(dynamicLevel / DYNAMIC_LEVEL_STEP));
+    return static_cast<DynamicType>(dynamicLevel);
 }
 
 inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
@@ -276,7 +278,7 @@ inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
         return MIN_DYNAMIC_LEVEL;
     }
 
-    return static_cast<int>(type) * DYNAMIC_LEVEL_STEP;
+    return static_cast<dynamic_level_t>(type);
 }
 
 struct ArrangementPattern
@@ -288,15 +290,15 @@ struct ArrangementPattern
     {
     }
 
-    duration_percentage_t durationFactor = 0.f;
-    duration_percentage_t timestampOffset = 0.f;
+    duration_percentage_t durationFactor = 0;
+    duration_percentage_t timestampOffset = 0;
 
     static duration_percentage_t averageDurationFactor(const std::vector<ArrangementPattern>& patterns)
     {
-        duration_percentage_t result = 0.f;
+        duration_percentage_t result = 0;
 
         if (patterns.empty()) {
-            return 1.f;
+            return HUNDRED_PERCENTS;
         }
 
         for (const ArrangementPattern& pattern : patterns) {
@@ -310,7 +312,7 @@ struct ArrangementPattern
 
     static duration_percentage_t averageTimestampOffset(const std::vector<ArrangementPattern>& patterns)
     {
-        duration_percentage_t result = 0.f;
+        duration_percentage_t result = 0;
 
         if (patterns.empty()) {
             return result;
@@ -319,7 +321,7 @@ struct ArrangementPattern
         int meaningTimestampOffsetCount = 0;
 
         for (const ArrangementPattern& pattern : patterns) {
-            if (RealIsEqual(pattern.timestampOffset, 0.f)) {
+            if (pattern.timestampOffset == 0) {
                 continue;
             }
 
@@ -328,7 +330,7 @@ struct ArrangementPattern
         }
 
         if (meaningTimestampOffsetCount == 0) {
-            return 0.f;
+            return 0;
         }
 
         result /= meaningTimestampOffsetCount;
@@ -345,7 +347,7 @@ struct PitchPattern
 
     PitchPattern() = default;
 
-    PitchPattern(size_t size, percentage_t step, float defaultValue)
+    PitchPattern(size_t size, percentage_t step, pitch_level_t defaultValue)
     {
         for (size_t i = 0; i < size; ++i) {
             pitchOffsetMap.emplace(step * i, defaultValue);
@@ -389,21 +391,31 @@ struct ExpressionPattern
 
     ExpressionPattern() = default;
 
-    ExpressionPattern(size_t size, percentage_t step, float defaultValue)
+    ExpressionPattern(size_t size, percentage_t step, dynamic_level_t defaultValue)
     {
         for (size_t i = 0; i < size; ++i) {
             dynamicOffsetMap.emplace(step * i, defaultValue);
         }
     }
 
-    dynamic_level_t maxAmplitudeLevel = 0.f;
-    duration_percentage_t amplitudeTimeShift = 0.f;
-
     DynamicOffsetMap dynamicOffsetMap;
+
+    dynamic_level_t maxAmplitudeLevel() const
+    {
+        auto maxElement = std::max_element(dynamicOffsetMap.begin(), dynamicOffsetMap.end(), [](const auto& f, const auto& s) {
+                return f.second < s.second;
+            });
+
+        if (maxElement == dynamicOffsetMap.cend()) {
+            return 0;
+        }
+
+        return maxElement->second;
+    }
 
     static dynamic_level_t averageMaxAmplitudeLevel(const std::vector<ExpressionPattern>& patterns)
     {
-        dynamic_level_t result = 0.f;
+        dynamic_level_t result = 0;
 
         if (patterns.empty()) {
             return result;
@@ -412,43 +424,18 @@ struct ExpressionPattern
         int meaningAmplitudeOffsetCount = 0;
 
         for (const ExpressionPattern& pattern : patterns) {
-            if (pattern.maxAmplitudeLevel > 0) {
-                result += pattern.maxAmplitudeLevel;
+            dynamic_level_t maxLevel = pattern.maxAmplitudeLevel();
+            if (maxLevel > 0) {
+                result += maxLevel;
                 meaningAmplitudeOffsetCount++;
             }
         }
 
         if (meaningAmplitudeOffsetCount == 0) {
-            return 0.f;
+            return 0;
         }
 
         result /= meaningAmplitudeOffsetCount;
-
-        return result;
-    }
-
-    static duration_percentage_t averageAmplitudeTimeShift(const std::vector<ExpressionPattern>& patterns)
-    {
-        duration_percentage_t result = 0.f;
-
-        if (patterns.empty()) {
-            return result;
-        }
-
-        int meaningAmplitudeTimeShiftCount = 0;
-
-        for (const ExpressionPattern& pattern : patterns) {
-            if (pattern.amplitudeTimeShift > 0) {
-                result += pattern.amplitudeTimeShift;
-                meaningAmplitudeTimeShiftCount++;
-            }
-        }
-
-        if (meaningAmplitudeTimeShiftCount == 0) {
-            return 0.f;
-        }
-
-        result /= meaningAmplitudeTimeShiftCount;
 
         return result;
     }
@@ -563,8 +550,8 @@ struct ArticulationData {
     ArticulationType type = ArticulationType::Undefined;
     ArticulationPatternSegment patterns;
 
-    duration_percentage_t occupiedFrom = 0.f;
-    duration_percentage_t occupiedTo = 1.f;
+    duration_percentage_t occupiedFrom = 0;
+    duration_percentage_t occupiedTo = HUNDRED_PERCENTS;
 };
 
 struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
@@ -611,11 +598,11 @@ struct ExpressionCurve : public std::map<duration_percentage_t, dynamic_level_t>
     dynamic_level_t maxAmplitudeLevel() const
     {
         const auto& max = std::max_element(cbegin(), cend(), [](const auto& f, const auto& s) {
-            return f.second < s.second;
-        });
+                return f.second < s.second;
+            });
 
         if (max == cend()) {
-            return 0.f;
+            return 0;
         }
 
         return max->second;

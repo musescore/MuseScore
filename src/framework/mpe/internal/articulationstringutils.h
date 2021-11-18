@@ -83,8 +83,6 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::SlideOutUp, "SlideOutUp" },
     { ArticulationType::SlideInAbove, "SlideInAbove" },
     { ArticulationType::SlideInBelow, "SlideInBelow" },
-    { ArticulationType::Crescendo, "Crescendo" },
-    { ArticulationType::Decrescendo, "Decrescendo" },
     { ArticulationType::Glissando, "Glissando" },
     { ArticulationType::Portamento, "Portamento" },
     { ArticulationType::Legato, "Legato" },
