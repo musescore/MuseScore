@@ -46,18 +46,20 @@ StyledDialogView {
 
     ColumnLayout {
         anchors.fill: parent
+        anchors.leftMargin: 24
+        anchors.rightMargin: 24
         spacing: 24
 
-        /*
         PageIndicator {
-            numberOfPages: model.numberOfPages
-            currentPageIndex: model.currentPageIndex
+            Layout.alignment: Qt.AlignCenter
+            count: model.numberOfPages
+            currentIndex: model.currentPageIndex
         }
-        */
 
         Loader {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.topMargin: -8
             source: model.currentPage.url
         }
 
@@ -82,7 +84,7 @@ StyledDialogView {
                 text: model.canFinish ? qsTrc("appshell", "Finish")
                                       : model.canSkip ? qsTrc("appshell", "Skip for now")
                                                       : qsTrc("global", "Next")
-                accentButton: model.canFinish
+                accentButton: !model.canSkip
 
                 onClicked: {
                     if (model.canFinish) {

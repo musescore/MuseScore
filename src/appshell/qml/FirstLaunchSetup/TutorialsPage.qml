@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -29,4 +29,23 @@ import MuseScore.AppShell 1.0
 Page {
     title: qsTrc("appshell", "Video tutorials")
     explanation: qsTrc("appshell", "This is the ‘Learn’ section, where you’ll find tutorials to get you started\n(Video tutorials require an internet connection)")
+
+    titleContentSpacing: 12
+
+    Image {
+        id: image
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+        source: "resources/tutorials_placeholder.png"
+        sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: image.width
+                height: image.height
+                radius: 3
+            }
+        }
+    }
 }
