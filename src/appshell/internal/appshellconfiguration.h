@@ -43,6 +43,9 @@ class AppShellConfiguration : public IAppShellConfiguration, public async::Async
 public:
     void init();
 
+    bool hasCompletedFirstLaunchSetup() const override;
+    void setHasCompletedFirstLaunchSetup(bool has) override;
+
     StartupSessionType startupSessionType() const override;
     void setStartupSessionType(StartupSessionType type) override;
 
