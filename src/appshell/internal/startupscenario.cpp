@@ -27,6 +27,7 @@
 using namespace mu::appshell;
 using namespace mu::actions;
 
+static const std::string FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const std::string HOME_URI("musescore://home");
 static const std::string NOTATION_URI("musescore://notation");
 
@@ -100,7 +101,7 @@ void StartupScenario::run()
 
 void StartupScenario::runFirstLaunchSetup()
 {
-    //configuration()->setHasCompletedFirstLaunchSetup(true);
+    interactive()->open(FIRST_LAUNCH_SETUP_URI);
 }
 
 std::string StartupScenario::startupPageUri(StartupSessionType sessionType) const

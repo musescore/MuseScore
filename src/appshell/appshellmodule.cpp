@@ -106,6 +106,8 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
+        ir->registerUri(Uri("musescore://firstLaunchSetup"),
+                        ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
         ir->registerUri(Uri("musescore://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
     }
 }
