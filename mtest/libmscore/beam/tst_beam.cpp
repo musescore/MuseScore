@@ -15,6 +15,7 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/chordrest.h"
+#include "libmscore/chord.h"
 
 #define DIR QString("libmscore/beam/")
 
@@ -47,6 +48,7 @@ class TestBeam : public QObject, public MTest
       void beamCrossMeasure2() { beam("Beam-CrossM2.mscx"); }
       void beamCrossMeasure3() { beam("Beam-CrossM3.mscx"); }
       void beamCrossMeasure4() { beam("Beam-CrossM4.mscx"); }
+      void beamStemDir();
       };
 
 //---------------------------------------------------------
@@ -94,6 +96,26 @@ void TestBeam::beamCrossMeasure1()
       QCOMPARE(new_b, b);
       delete score;
       }
+
+//---------------------------------------------------------
+//   beamStemDir
+//   This method tests if a beam's stem direction can be
+//   set with a note other than the first one.
+//---------------------------------------------------------
+void TestBeam::beamStemDir()
+      {
+      MasterScore* score = readScore(DIR + "beamStemDir.mscx");
+      QVERIFY(score);
+      Measure* m1 = score->firstMeasure();
+      ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+      Chord* c2 = toChord(cr->beam()->elements()[1]);
+      c2->setStemDirection(Direction::UP);
+      score->update();
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "beamStemDir-01.mscx", DIR + "beamStemDir-01-ref.mscx"));
+      delete score;
+      }
+
 QTEST_MAIN(TestBeam)
 #include "tst_beam.moc"
 

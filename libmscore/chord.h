@@ -106,7 +106,7 @@ class Chord final : public ChordRest {
       bool readProperties(XmlReader&) override;
       Element* drop(EditData&) override;
 
-      void setStemDirection(Direction d) { _stemDirection = d; }
+      void setStemDirection(Direction d);
       Direction stemDirection() const    { return _stemDirection; }
 
       LedgerLine* ledgerLines()                  { return _ledgerLines; }
