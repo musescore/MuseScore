@@ -33,7 +33,6 @@
 #include "libmscore/mscore.h"
 #include "libmscore/page.h"
 #include "libmscore/property.h"
-#include "libmscore/spatium.h"
 #include "libmscore/textlinebase.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/types.h"

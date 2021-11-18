@@ -24,15 +24,16 @@
 #include "property.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
     : QObject(parent), m_isVisible(true)
 {
     m_propertyId = propertyId;
 
-    Ms::P_TYPE propertyType = Ms::propertyType(propertyId);
+    P_TYPE propertyType = Ms::propertyType(propertyId);
 
-    if (propertyType != Ms::P_TYPE::COLOR) {
+    if (propertyType != P_TYPE::COLOR) {
         m_currentValue = 0;
         m_defaultValue = 0;
     }

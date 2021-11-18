@@ -214,8 +214,6 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
     beginCommand();
 
-    QVariant convertedValue;
-
     for (Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
@@ -227,9 +225,8 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
             ps = Ms::PropertyFlags::UNSTYLED;
         }
 
-        convertedValue = valueToElementUnits(pid, newValue, element);
-
-        element->undoChangeProperty(pid, PropertyValue::fromQVariant(convertedValue), ps);
+        PropertyValue propValue = valueToElementUnits(pid, newValue, element);
+        element->undoChangeProperty(pid, propValue, ps);
     }
 
     updateNotation();
@@ -273,7 +270,7 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 
 void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
 {
-    PropertyValue newVal = PropertyValue::fromQVariant(newValue);
+    PropertyValue newVal = PropertyValue::fromQVariant(newValue, Ms::MStyle::valueType(sid));
     if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
         style()->setStyleValue(sid, newVal);
@@ -286,51 +283,51 @@ QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
     return style() ? style()->styleValue(sid).toQVariant() : QVariant();
 }
 
-QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
-                                                     const Ms::EngravingItem* element) const
+PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const
 {
-    switch (Ms::propertyType(pid)) {
-    case Ms::P_TYPE::POINT_SP:
-        return value.value<PointF>() * element->spatium();
+    auto toPoint = [](const QVariant& v) {
+        if (v.type() == QVariant::PointF) {
+            return PointF::fromQPointF(v.value<QPointF>());
+        }
+        return v.value<PointF>();
+    };
 
-    case Ms::P_TYPE::POINT_SP_MM: {
+    P_TYPE type = Ms::propertyType(pid);
+    switch (type) {
+    case P_TYPE::POINT_SP:
+        return toPoint(value) * element->spatium();
+
+    case P_TYPE::POINT_SP_MM: {
         if (element->sizeIsSpatiumDependent()) {
-            return value.value<PointF>() * element->spatium();
+            return toPoint(value) * element->spatium();
         } else {
-            return value.value<PointF>() * Ms::DPMM;
+            return toPoint(value) * Ms::DPMM;
         }
     }
 
-    case Ms::P_TYPE::SP_REAL:
-        return value.toDouble() * element->spatium();
+    case P_TYPE::SP_REAL:
+        return value.toReal() * element->spatium();
 
-    case Ms::P_TYPE::SPATIUM:
-        return value.value<Ms::Spatium>().val();
+    case P_TYPE::SPATIUM:
+        return Spatium(value.toReal());
 
-    case Ms::P_TYPE::TEMPO:
-        return value.toDouble() / 60.0;
+    case P_TYPE::TEMPO:
+        return value.toReal() / 60.0;
 
-    case Ms::P_TYPE::ZERO_INT:
+    case P_TYPE::ZERO_INT:
         return value.toInt() - 1;
 
-    case Ms::P_TYPE::DIRECTION:
-        return static_cast<int>(value.value<Ms::Direction>());
+    case P_TYPE::DIRECTION:
+        return value.value<Ms::Direction>();
 
-    case Ms::P_TYPE::INT_LIST: {
-        QStringList strList;
+    case P_TYPE::INT_LIST:
+        return value.value<QList<int> >();
 
-        for (const int i : value.value<QList<int> >()) {
-            strList << QString("%1").arg(i);
-        }
-
-        return strList.join(",");
-    }
+    case P_TYPE::COLOR:
+        return Color::fromQColor(value.value<QColor>());
 
     default:
-        if (value.type() == QVariant::Type::Color) {
-            return QVariant::fromValue(mu::draw::Color(value.value<QColor>()));
-        }
-        return value;
+        return PropertyValue::fromQVariant(value, type);
     }
 }
 
@@ -340,10 +337,10 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     UNUSED(pid);
 
     switch (value.type()) {
-    case Ms::P_TYPE::POINT_SP:
+    case P_TYPE::POINT_SP:
         return value.value<PointF>().toQPointF() / element->spatium();
 
-    case Ms::P_TYPE::POINT_SP_MM: {
+    case P_TYPE::POINT_SP_MM: {
         if (element->sizeIsSpatiumDependent()) {
             return value.value<PointF>().toQPointF() / element->spatium();
         } else {
@@ -351,22 +348,22 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         }
     }
 
-    case Ms::P_TYPE::SP_REAL:
+    case P_TYPE::SP_REAL:
         return value.toReal() / element->spatium();
 
-    case Ms::P_TYPE::SPATIUM:
+    case P_TYPE::SPATIUM:
         return value.value<Ms::Spatium>().val();
 
-    case Ms::P_TYPE::TEMPO:
+    case P_TYPE::TEMPO:
         return value.toReal() * 60.0;
 
-    case Ms::P_TYPE::ZERO_INT:
+    case P_TYPE::ZERO_INT:
         return value.toInt() + 1;
 
-    case Ms::P_TYPE::DIRECTION:
+    case P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());
 
-    case Ms::P_TYPE::INT_LIST: {
+    case P_TYPE::INT_LIST: {
         QStringList strList;
 
         for (const int i : value.value<QList<int> >()) {
@@ -375,7 +372,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 
         return strList.join(",");
     }
-    case Ms::P_TYPE::COLOR:
+    case P_TYPE::COLOR:
         return value.value<mu::draw::Color>().toQColor();
     default:
         return value.toQVariant();

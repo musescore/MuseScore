@@ -129,9 +129,6 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     case P_TYPE::SP_REAL:
         val = val.toReal() * spatium();
         break;
-    case P_TYPE::SPATIUM:
-        val = QVariant::fromValue(Spatium(val.toReal()));
-        break;
     default:
         break;
     }
@@ -140,9 +137,9 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
     if (_ownership == Ownership::SCORE) {
-        e->undoChangeProperty(pid, PropertyValue::fromQVariant(val), newFlags);
+        e->undoChangeProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)), newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
-        e->setProperty(pid, PropertyValue::fromQVariant(val));
+        e->setProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)));
         e->setPropertyFlags(pid, newFlags);
     }
 }

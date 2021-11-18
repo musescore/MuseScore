@@ -30,7 +30,7 @@
 #include <QSet>
 
 #include "libmscore/types.h"
-#include "libmscore/spatium.h"
+#include "types/spatium.h"
 
 #include "property/propertyvalue.h"
 #include "infrastructure/draw/geometry.h"
@@ -52,12 +52,17 @@ public:
     MStyle() = default;
 
     const mu::engraving::PropertyValue& styleV(Sid idx) const { return value(idx); }
-    Spatium  styleS(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM); return value(idx).toSpatium(); }
-    qreal    styleP(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::SPATIUM); return pvalue(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::STRING); return value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::BOOL); return value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::REAL); return value(idx).toReal(); }
-    int      styleI(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == P_TYPE::INT); return value(idx).toInt(); }
+    Spatium styleS(Sid idx) const
+    {
+        Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM);
+        return value(idx).value<Spatium>();
+    }
+
+    qreal    styleP(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM); return pvalue(idx); }
+    QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::STRING); return value(idx).toString(); }
+    bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::BOOL); return value(idx).toBool(); }
+    qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::REAL); return value(idx).toReal(); }
+    int      styleI(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::INT); return value(idx).toInt(); }
 
     const mu::engraving::PropertyValue& value(Sid idx) const;
     qreal pvalue(Sid idx) const;
@@ -75,7 +80,7 @@ public:
 
     void precomputeValues();
 
-    static P_TYPE valueType(const Sid);
+    static mu::engraving::P_TYPE valueType(const Sid);
     static const char* valueName(const Sid);
     static Sid styleIdx(const QString& name);
 

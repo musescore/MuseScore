@@ -84,13 +84,14 @@ private:
     QPushButton* buttonApplyToAllParts = nullptr;
 
     void unhandledType(const StyleWidget);
-    QVariant getValue(StyleId idx);
+    PropertyValue getValue(StyleId idx);
     void setValues();
 
-    QVariant styleValue(StyleId id) const;
-    QVariant defaultStyleValue(StyleId id) const;
+    PropertyValue styleValue(StyleId id) const;
+    PropertyValue defaultStyleValue(StyleId id) const;
     bool hasDefaultStyleValue(StyleId id) const;
-    void setStyleValue(StyleId id, const QVariant& value);
+    void setStyleQVariantValue(StyleId id, const QVariant& value);
+    void setStyleValue(StyleId id, const PropertyValue& value);
 
     int numberOfPage;
     int pageListMap[50];

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SPATIUM_H__
-#define __SPATIUM_H__
+#ifndef MU_ENGRAVING_SPATIUM_H
+#define MU_ENGRAVING_SPATIUM_H
 
-#include <QVariant>
+#include "realfn.h"
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   Spatium
 //    - a unit of measure
@@ -35,63 +35,58 @@ namespace Ms {
 
 class Spatium
 {
-    qreal _val;
-
 public:
-    constexpr Spatium()
-        : _val(0.0) {}
-    explicit Spatium(qreal v) { _val = v; }
+    Spatium() = default;
+    explicit Spatium(qreal v)
+        : m_val(v) {}
 
-    constexpr qreal val() const { return _val; }
+    constexpr qreal val() const { return m_val; }
 
-    bool operator>(const Spatium& a) const { return _val > a._val; }
-    bool operator<(const Spatium& a) const { return _val < a._val; }
-    bool operator==(const Spatium& a) const { return _val == a._val; }
-    bool operator!=(const Spatium& a) const { return _val != a._val; }
-    bool isZero() const { return _val == 0.0; }
+    bool operator>(const Spatium& a) const { return m_val > a.m_val; }
+    bool operator<(const Spatium& a) const { return m_val < a.m_val; }
+    bool operator==(const Spatium& a) const { return RealIsEqual(m_val, a.m_val); }
+    bool operator!=(const Spatium& a) const { return m_val != a.m_val; }
+    bool isZero() const { return RealIsNull(m_val); }
 
     Spatium& operator+=(const Spatium& a)
     {
-        _val += a._val;
+        m_val += a.m_val;
         return *this;
     }
 
     Spatium& operator-=(const Spatium& a)
     {
-        _val -= a._val;
+        m_val -= a.m_val;
         return *this;
     }
 
     Spatium& operator/=(qreal d)
     {
-        _val /= d;
+        m_val /= d;
         return *this;
     }
 
     qreal operator/(const Spatium& b)
     {
-        return _val / b._val;
+        return m_val / b.m_val;
     }
 
     Spatium& operator*=(int d)
     {
-        _val *= d;
+        m_val *= d;
         return *this;
     }
 
     Spatium& operator*=(qreal d)
     {
-        _val *= d;
+        m_val *= d;
         return *this;
     }
 
-    Spatium operator-() const { return Spatium(-_val); }
-    operator QVariant() const {
-        return QVariant::fromValue(*this);
-    }
+    Spatium operator-() const { return Spatium(-m_val); }
 
-    double toDouble() { return _val; }
-    static double toDoubleStatic(const Spatium& v) { return v._val; }
+private:
+    qreal m_val = 0.0;
 };
 
 inline Spatium operator+(const Spatium& a, const Spatium& b)
@@ -142,8 +137,11 @@ inline Spatium operator*(qreal a, const Spatium& b)
     r *= a;
     return r;
 }
-}     // namespace Ms
+}
 
-Q_DECLARE_METATYPE(Ms::Spatium);
+//! NOTE compat
+namespace Ms {
+using Spatium = mu::engraving::Spatium;
+}
 
-#endif
+#endif //MU_ENGRAVING_SPATIUM_H
