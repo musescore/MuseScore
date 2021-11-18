@@ -159,25 +159,6 @@ void addTitleToScore(Score *score, const QString &string, int textCounter)
       measure->add(text);
       }
 
-// remove slashes in kar format
-
-QString removeSlashes(const QString &text)
-      {
-      QString newText = text;
-      newText = newText.replace("/", "");
-      newText = newText.replace("\\", "");
-      return newText;
-      }
-
-std::string removeSlashes(const std::string &text)
-      {
-      std::string str = text;
-      char chars[] = "/\\";
-      for (unsigned int i = 0; i != strlen(chars); ++i)
-            str.erase(std::remove(str.begin(), str.end(), chars[i]), str.end());
-      return str;
-      }
-
 void addTitleIfAny(const std::multimap<ReducedFraction, std::string> &lyricTrack, Score *score)
       {
       int textCounter = 0;
@@ -214,7 +195,7 @@ void addLyricsToScore(
 
             QString text = MidiCharset::convertToCharset(it->second);
             if (originalTime != ReducedFraction(0, 1) || !isTitlePrefix(text)) { // not title
-                  score->addLyrics(quantizedTime.fraction(), staffAddTo->idx(), removeSlashes(text).toHtmlEscaped());
+                  score->addLyrics(quantizedTime.fraction(), staffAddTo->idx(), text.toHtmlEscaped());
                   }
             }
       }
@@ -307,7 +288,7 @@ QList<std::string> makeLyricsListForUI()
             std::string lyricText;
 
             for (const auto &lyric: trackLyric) {
-                  const auto &text = removeSlashes(lyric.second);
+                  const auto &text = lyric.second;
                   if (isMetaText(text))
                         continue;
                   if (!lyricText.empty())
