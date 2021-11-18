@@ -29,7 +29,7 @@ Column {
     id: root
 
     property alias model: filterModel.sourceModel
-    property alias count: view.count
+    readonly property alias count: view.count
 
     property alias title: titleLabel.text
 
