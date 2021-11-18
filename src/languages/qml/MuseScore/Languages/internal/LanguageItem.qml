@@ -46,14 +46,14 @@ ListItemBlank {
 
     Row {
         anchors.left: parent.left
-        anchors.leftMargin: sideMargin
+        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: sideMargin
+        anchors.rightMargin: root.sideMargin
 
         anchors.verticalCenter: parent.verticalCenter
 
         Row {
-            width: headerWidth
+            width: root.headerWidth
 
             spacing: 12
 
@@ -62,16 +62,16 @@ ListItemBlank {
             }
 
             StyledTextLabel {
-                text: title
+                text: root.title
                 font: ui.theme.largeBodyFont
                 horizontalAlignment: Text.AlignLeft
             }
         }
 
         StyledTextLabel {
-            width: headerWidth
+            width: root.headerWidth
 
-            text: statusTitle
+            text: root.statusTitle
             font: ui.theme.largeBodyFont
             horizontalAlignment: Text.AlignLeft
         }

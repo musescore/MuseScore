@@ -108,7 +108,7 @@ Item {
         property real itemWidth: parent.width / 2
 
         anchors.top: parent.top
-        anchors.topMargin: 16
+        anchors.topMargin: 8
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
@@ -135,26 +135,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: view.top
-
-        height: 56
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.backgroundColor
-            }
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
-    }
-
     ListView {
         id: view
 
@@ -162,14 +142,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: panel.visible ? panel.top : parent.bottom
-
-        header: Rectangle {
-            height: 24
-        }
-
-        footer: Rectangle {
-            height: 32
-        }
 
         model: filterModel
 
@@ -208,26 +180,6 @@ Item {
             onClicked: {
                 prv.selectedLanguage = languageListModel.language(model.code)
                 panel.open(item.navigation)
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: view.bottom
-
-        height: 56
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
             }
         }
     }
