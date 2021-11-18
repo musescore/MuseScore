@@ -69,7 +69,6 @@ enum class P_TYPE {
 
     // draw
     COLOR,          // Color
-    FONT_FACE,
     ALIGN,
     PLACEMENT,        // ABOVE or BELOW
     HPLACEMENT,       // LEFT, CENTER or RIGHT

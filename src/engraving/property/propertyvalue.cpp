@@ -231,10 +231,6 @@ QVariant PropertyValue::toQVariant() const
     break;
     // draw
     case P_TYPE::COLOR:     return value<draw::Color>().toQColor();
-    case P_TYPE::FONT_FACE: {
-        UNREACHABLE; //! TODO
-    }
-    break;
     case P_TYPE::ALIGN:      return QVariant::fromValue(value<Ms::Align>());
     case P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
     case P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
@@ -297,10 +293,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     break;
     // draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
-    case P_TYPE::FONT_FACE: {
-        UNREACHABLE; //! TODO
-    }
-    break;
     case P_TYPE::ALIGN:         return PropertyValue(Ms::Align(v.toInt()));
     case P_TYPE::PLACEMENT:     return PropertyValue(Ms::Placement(v.toInt()));
     case P_TYPE::HPLACEMENT:    return PropertyValue(Ms::HPlacement(v.toInt()));

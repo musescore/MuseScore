@@ -301,7 +301,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },
     { Pid::SUB_STYLE,               false, "style",                 P_TYPE::SUB_STYLE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
-    { Pid::FONT_FACE,               false, "family",                P_TYPE::FONT_FACE,           DUMMY_QT_TR_NOOP("propertyName", "family") },
+    { Pid::FONT_FACE,               false, "family",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "family") },
     { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "size") },
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "font style") },
     { Pid::TEXT_LINE_SPACING,       false, "textLineSpacing",       P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "user line distancing") },
@@ -322,7 +322,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,     DUMMY_QT_TR_NOOP("propertyName", "begin text place") },
     { Pid::BEGIN_HOOK_TYPE,         false, "beginHookType",         P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "begin hook type") },
     { Pid::BEGIN_HOOK_HEIGHT,       false, "beginHookHeight",       P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "begin hook height") },
-    { Pid::BEGIN_FONT_FACE,         false, "beginFontFace",         P_TYPE::FONT_FACE,      DUMMY_QT_TR_NOOP("propertyName", "begin font face") },
+    { Pid::BEGIN_FONT_FACE,         false, "beginFontFace",         P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "begin font face") },
     { Pid::BEGIN_FONT_SIZE,         false, "beginFontSize",         P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "begin font size") },
     { Pid::BEGIN_FONT_STYLE,        false, "beginFontStyle",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "begin font style") },
     { Pid::BEGIN_TEXT_OFFSET,       false, "beginTextOffset",       P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "begin text offset") },
@@ -330,7 +330,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CONTINUE_TEXT,           true,  "continueText",          P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "continue text") },
     { Pid::CONTINUE_TEXT_ALIGN,     false, "continueTextAlign",     P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "continue text align") },
     { Pid::CONTINUE_TEXT_PLACE,     false, "continueTextPlace",     P_TYPE::TEXT_PLACE,     DUMMY_QT_TR_NOOP("propertyName", "continue text place") },
-    { Pid::CONTINUE_FONT_FACE,      false, "continueFontFace",      P_TYPE::FONT_FACE,      DUMMY_QT_TR_NOOP("propertyName", "continue font face") },
+    { Pid::CONTINUE_FONT_FACE,      false, "continueFontFace",      P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "continue font face") },
     { Pid::CONTINUE_FONT_SIZE,      false, "continueFontSize",      P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "continue font size") },
     { Pid::CONTINUE_FONT_STYLE,     false, "continueFontStyle",     P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "continue font style") },
     { Pid::CONTINUE_TEXT_OFFSET,    false, "continueTextOffset",    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "continue text offset") },
@@ -340,7 +340,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_TEXT_PLACE,          false, "endTextPlace",          P_TYPE::TEXT_PLACE,     DUMMY_QT_TR_NOOP("propertyName", "end text place") },
     { Pid::END_HOOK_TYPE,           false, "endHookType",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "end hook type") },
     { Pid::END_HOOK_HEIGHT,         false, "endHookHeight",         P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "end hook height") },
-    { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::FONT_FACE,      DUMMY_QT_TR_NOOP("propertyName", "end font face") },
+    { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "end font face") },
     { Pid::END_FONT_SIZE,           false, "endFontSize",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "end font size") },
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName",  "end font style") },
     { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
@@ -486,7 +486,6 @@ PropertyValue propertyFromString(Pid id, QString value)
         const int i = value.indexOf('x');
         return PropertyValue::fromValue(SizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
-    case P_TYPE::FONT_FACE:
     case P_TYPE::STRING:
         return value;
     case P_TYPE::GLISS_STYLE: {
@@ -680,7 +679,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::SCALE:
     case P_TYPE::SIZE:
         return PropertyValue::fromValue(e.readSize());
-    case P_TYPE::FONT_FACE:
     case P_TYPE::STRING:
         return PropertyValue(e.readElementText());
     case P_TYPE::GLISS_STYLE:
