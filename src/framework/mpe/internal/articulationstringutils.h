@@ -116,7 +116,6 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Slide, "Slide" },
     { ArticulationType::Turn, "Turn" },
     { ArticulationType::InvertedTurn, "InvertedTurn" },
-    { ArticulationType::TurnWithSlash, "TurnWithSlash" },
     { ArticulationType::Appoggiatura, "Appoggiatura" },
     { ArticulationType::Acciaccatura, "Acciaccatura" },
     { ArticulationType::TremoloBar, "TremoloBar" },
