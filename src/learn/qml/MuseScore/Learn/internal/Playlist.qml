@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -31,6 +31,7 @@ FocusScope {
     id: root
 
     property alias playlist: view.model
+    property color backgroundColor: ui.theme.backgroundPrimaryColor
 
     property alias navigation: navPanel
     property int sideMargin: 46
@@ -45,26 +46,20 @@ FocusScope {
     }
 
     Rectangle {
-        id: background
+        id: topGradient
 
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
-    }
-
-    Rectangle {
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: view.top
 
-        width: parent.width
         height: 8
         z: 1
 
         gradient: Gradient {
             GradientStop {
                 position: 0.0
-                color: background.color
+                color: root.backgroundColor
             }
-
             GradientStop {
                 position: 1.0
                 color: "transparent"
@@ -75,24 +70,25 @@ FocusScope {
     GridView {
         id: view
 
+        readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
+
         anchors.fill: parent
-        anchors.leftMargin: root.sideMargin - itemMargin
-        anchors.rightMargin: root.sideMargin - itemMargin
-        anchors.topMargin: -itemMargin
-        anchors.bottomMargin: -itemMargin
+        anchors.leftMargin: root.sideMargin - spacingBetweenColumns / 2
+        anchors.rightMargin: root.sideMargin - spacingBetweenColumns / 2
+
+        topMargin: topGradient.height
 
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
-        cellHeight: itemMargin + itemHeight + itemMargin
-        cellWidth: itemMargin + itemWidth + itemMargin
+        readonly property real spacingBetweenColumns: 50
+        readonly property real spacingBetweenRows: 24
 
-        property int itemMargin: 25
-        property int itemWidth: 256
-        property int itemHeight: 218
+        readonly property real actualCellWidth: 256
+        readonly property real actualCellHeight: 232
 
-        property int rows: Math.max(0, Math.floor(height / cellHeight))
-        property int columns: Math.max(0, Math.floor(width / cellWidth))
+        cellWidth: actualCellWidth + spacingBetweenColumns
+        cellHeight: actualCellHeight + spacingBetweenRows
 
         ScrollBar.vertical: StyledScrollBar {
             parent: root
@@ -110,10 +106,11 @@ FocusScope {
             width: view.cellWidth
 
             PlaylistItem {
-                anchors.centerIn: parent
+                width: view.actualCellWidth
+                height: view.actualCellHeight
 
-                width: view.itemWidth
-                height: view.itemHeight
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 navigation.panel: navPanel
                 navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
