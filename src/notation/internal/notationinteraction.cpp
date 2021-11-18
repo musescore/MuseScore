@@ -2005,7 +2005,7 @@ void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
     }
 
     QList<Note*> el = score()->selection().uniqueNotes();
-    IF_ASSERT_FAILED(!el.isEmpty()) {
+    if (el.isEmpty()) {
         return;
     }
 

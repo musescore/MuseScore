@@ -82,6 +82,24 @@ TimeDialog::TimeDialog(QWidget* parent)
     sp->elementForCellAt(2)->layout();
     sp->setSelected(2);
     paletteChanged(2);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+}
+
+TimeDialog::TimeDialog(const TimeDialog& dialog)
+    : TimeDialog(dialog.parentWidget())
+{
+}
+
+bool TimeDialog::dirty() const
+{
+    return _dirty;
+}
+
+bool TimeDialog::showTimePalette() const
+{
+    return _timePalette->isVisible();
 }
 
 //---------------------------------------------------------
@@ -111,7 +129,7 @@ void TimeDialog::addClicked()
 //   showTimePalette
 //---------------------------------------------------------
 
-void TimeDialog::showTimePalette(bool val)
+void TimeDialog::setShowTimePalette(bool val)
 {
     _timePalette->setVisible(val);
 }
@@ -252,4 +270,9 @@ void TimeDialog::textChanged()
 {
     Fraction sig(zNominal->value(), denominator());
     groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
+}
+
+void TimeDialog::setDirty()
+{
+    _dirty = true;
 }

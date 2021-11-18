@@ -47,6 +47,7 @@
 #include "view/widgets/editdrumsetdialog.h"
 #include "view/widgets/timesignaturepropertiesdialog.h"
 #include "view/widgets/keyedit.h"
+#include "view/widgets/timedialog.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
@@ -104,6 +105,8 @@ void PaletteModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/keysignatures"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::KeyEditor>("KeySignaturesDialog")));
 
+        ir->registerUri(Uri("musescore://notation/timesignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::TimeDialog>("TimeSignaturesDialog")));
     }
 }
 
