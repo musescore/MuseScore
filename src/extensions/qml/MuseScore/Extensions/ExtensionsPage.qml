@@ -78,6 +78,8 @@ Item {
     }
 
     Rectangle {
+        id: topGradient
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: flickable.top
@@ -101,7 +103,6 @@ Item {
         id: flickable
 
         anchors.top: parent.top
-        anchors.topMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
@@ -109,7 +110,10 @@ Item {
         anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
 
         contentWidth: width
-        contentHeight: extensionsColumn.height
+        contentHeight: extensionsColumn.implicitHeight
+
+        topMargin: topGradient.height
+        bottomMargin: 24
 
         clip: true
         boundsBehavior: Flickable.StopAtBounds
@@ -127,23 +131,18 @@ Item {
 
         Column {
             id: extensionsColumn
+            anchors.fill: parent
 
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            spacing: 12
+            spacing: 24
 
             ExtensionsListView {
                 id: installedExtensionsView
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-
+                width: parent.width
                 title: qsTrc("extensions", "Installed")
+                visible: count > 0
 
                 model: extensionListModel
-                visible: count > 0
 
                 flickableItem: extensionsColumn
 
@@ -166,14 +165,14 @@ Item {
                 navigationPanel.name: "InstalledExtensions"
                 navigationPanel.order: 6
 
-                onClicked: {
+                onClicked: function(index, extension, navigationControl) {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                     prv.lastNavigatedExtension = navigationControl
                 }
 
-                onNavigationActivated: {
+                onNavigationActivated: function(itemRect) {
                     Utils.ensureContentVisible(flickable, itemRect, installedExtensionsView.headerHeight + 16)
                 }
             }
@@ -181,13 +180,11 @@ Item {
             ExtensionsListView {
                 id: notInstalledExtensionsView
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-
+                width: parent.width
                 title: qsTrc("extensions", "Not installed")
+                visible: count > 0
 
                 model: extensionListModel
-                visible: count > 0
 
                 flickableItem: extensionsColumn
 
@@ -210,37 +207,16 @@ Item {
                 navigationPanel.name: "InstalledExtensions"
                 navigationPanel.order: 7
 
-                onClicked: {
+                onClicked: function(index, extension, navigationControl) {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
                     prv.lastNavigatedExtension = navigationControl
                 }
 
-                onNavigationActivated: {
+                onNavigationActivated: function(itemRect) {
                     Utils.ensureContentVisible(flickable, itemRect, notInstalledExtensionsView.headerHeight + 16)
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: flickable.bottom
-
-        visible: !extensionPanel.visible
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
             }
         }
     }
