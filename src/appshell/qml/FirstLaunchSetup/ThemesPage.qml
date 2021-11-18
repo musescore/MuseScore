@@ -42,10 +42,10 @@ Page {
 
     ColumnLayout {
         anchors.centerIn: parent
-        spacing: 32
+        spacing: 28
 
         ThemeSamplesList {
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignCenter
 
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
             currentThemeCode: model.currentThemeCode
@@ -57,9 +57,33 @@ Page {
             }
         }
 
+        AccentColorsList {
+            id: accentColorsList
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredHeight: Math.max(implicitHeight, highContrastPreferencesHintLabel.implicitHeight)
+            visible: !model.highContrastEnabled
+
+            colors: model.accentColors
+            currentColorIndex: model.currentAccentColorIndex
+
+            sampleSize: 20
+            spacing: 8
+
+            onAccentColorChangeRequested: function(newColorIndex) {
+                model.currentAccentColorIndex = newColorIndex
+            }
+        }
+
+        StyledTextLabel {
+            id: highContrastPreferencesHintLabel
+            visible: model.highContrastEnabled
+            Layout.fillWidth: true
+            Layout.preferredHeight: Math.max(implicitHeight, accentColorsList.implicitHeight)
+            text: qsTrc("appshell", "Further high contrast settings are available in Preferences.")
+        }
+
         CheckBox {
-            Layout.alignment: Qt.AlignHCenter
-            width: implicitWidth
+            Layout.alignment: Qt.AlignCenter
 
             text: qsTrc("appshell", "Enable high contrast")
             checked: model.highContrastEnabled
