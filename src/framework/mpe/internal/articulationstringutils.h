@@ -45,7 +45,7 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Tenuto, "Tenuto" },
     { ArticulationType::Marcato, "Marcato" },
     { ArticulationType::Accent, "Accent" },
-    { ArticulationType::ShortAccent, "ShortAccent" },
+    { ArticulationType::SoftAccent, "SoftAccent" },
     { ArticulationType::VeryShortFermata, "VeryShortFermata" },
     { ArticulationType::ShortFermata, "ShortFermata" },
     { ArticulationType::ShortFermataHenze, "ShortFermataHenze" },
