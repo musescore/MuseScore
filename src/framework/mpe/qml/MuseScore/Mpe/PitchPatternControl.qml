@@ -88,7 +88,7 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 5 : 0
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue : 0
 
             from: root.patternModel ? root.patternModel.singlePercentValue * -100 : 0
             to: root.patternModel ? root.patternModel.singlePercentValue * 100 : 0
@@ -98,6 +98,27 @@ Column {
                 if (root.patternModel) {
                     root.patternModel.updatePitchOffsetValue(offsetPointIndexSlider.value,
                                                              offsetPointValueSlider.value)
+                }
+            }
+        }
+
+        TextInputField {
+            id: offsetPointValueInput
+
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.preferredWidth: 64
+
+            currentText: offsetPointValueSlider.value / 100
+
+            validator: IntValidator {
+                top: 100
+                bottom: 0
+            }
+
+            onCurrentTextEdited: {
+                if (root.patternModel) {
+                    root.patternModel.updatePitchOffsetValue(offsetPointIndexSlider.value,
+                                                             newTextValue * 100)
                 }
             }
         }
