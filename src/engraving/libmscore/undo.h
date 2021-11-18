@@ -31,7 +31,6 @@
 #include "style/style.h"
 #include "compat/midi/midipatch.h"
 
-#include "spatium.h"
 #include "mscore.h"
 #include "sig.h"
 #include "tempo.h"

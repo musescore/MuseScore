@@ -25,7 +25,6 @@
 
 #include "infrastructure/draw/color.h"
 #include "engravingitem.h"
-#include "spatium.h"
 #include "mscore.h"
 #include "durationtype.h"
 #include "note.h"

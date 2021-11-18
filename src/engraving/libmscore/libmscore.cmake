@@ -265,7 +265,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/spanner.h
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.h
-    ${CMAKE_CURRENT_LIST_DIR}/spatium.h
     ${CMAKE_CURRENT_LIST_DIR}/splitMeasure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.h
