@@ -239,24 +239,31 @@ QVariant PropertyValue::toQVariant() const
     break;
     // draw
     case Ms::P_TYPE::COLOR:     return value<draw::Color>().toQColor();
-    case Ms::P_TYPE::FONT: {
+    case Ms::P_TYPE::FONT_FACE: {
         UNREACHABLE; //! TODO
     }
     break;
     case Ms::P_TYPE::ALIGN:      return QVariant::fromValue(value<Ms::Align>());
     case Ms::P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
     case Ms::P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
-    case Ms::P_TYPE::DIRECTION:  return value<SizeF>().toQSizeF();
+    case Ms::P_TYPE::DIRECTION:  return QVariant::fromValue(value<Ms::Direction>());
     case Ms::P_TYPE::DIRECTION_H: {
         UNREACHABLE; //! TODO
     }
     break;
     // time
     case Ms::P_TYPE::FRACTION:  return QVariant::fromValue(value<Ms::Fraction>());
-
+    case Ms::P_TYPE::TDURATION: return QVariant::fromValue(toTDuration());
+    // other
+    case Ms::P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
+    case Ms::P_TYPE::SYMID:        return static_cast<int>(value<Ms::SymId>());
+    case Ms::P_TYPE::HOOK_TYPE:    return static_cast<int>(value<Ms::HookType>());
+    case Ms::P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
+    case Ms::P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
     default:
         UNREACHABLE; //! TODO
     }
+
     return QVariant();
 }
 

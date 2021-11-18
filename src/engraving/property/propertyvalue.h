@@ -53,7 +53,7 @@ enum class P_TYPE {
     REAL,
     STRING,
     // geometry
-    POINT,
+
     SIZE,
     PATH,               // mu::PainterPath
     SCALE,
@@ -63,11 +63,12 @@ enum class P_TYPE {
     POINT_SP,           // point units, value saved in (score) spatium units
     POINT_MM,
     POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
+    POINT,
     SP_REAL,            // real (point) value saved in (score) spatium units
 
     // draw
     COLOR,
-    FONT,
+    FONT_FACE,
     ALIGN,
     PLACEMENT,        // ABOVE or BELOW
     HPLACEMENT,       // LEFT, CENTER or RIGHT
