@@ -31,14 +31,18 @@ StyledDialogView {
 
     title: qsTrc("appshell", "Getting started")
 
-    contentWidth: 586
-    contentHeight: 424
+    contentWidth: 576
+    contentHeight: 384
 
-    margins: 16
+    margins: 24
 
-//    FirstLaunchSetupModel {
-//        id: setupModel
-//    }
+    FirstLaunchSetupModel {
+        id: model
+    }
+
+    Component.onCompleted: {
+        model.load()
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -46,13 +50,15 @@ StyledDialogView {
 
         /*
         PageIndicator {
-            numberOfPages: 3
-            currentPageIndex: 0
+            numberOfPages: model.numberOfPages
+            currentPageIndex: model.currentPageIndex
         }
         */
 
-        StackLayout {
-            id: stackLayout
+        Loader {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            source: model.currentPage.url
         }
 
         Item {
@@ -63,19 +69,29 @@ StyledDialogView {
                 anchors.left: parent.left
 
                 text: qsTrc("global", "Back")
+                visible: model.canGoBack
 
                 onClicked: {
-
+                    model.currentPageIndex--
                 }
             }
 
             FlatButton {
                 anchors.right: parent.right
 
-                text: qsTrc("global", "Next")
+                text: model.canFinish ? qsTrc("appshell", "Finish")
+                                      : model.canSkip ? qsTrc("appshell", "Skip for now")
+                                                      : qsTrc("global", "Next")
+                accentButton: model.canFinish
 
                 onClicked: {
-                    root.hide()
+                    if (model.canFinish) {
+                        model.finish()
+                        root.hide()
+                        return
+                    }
+
+                    model.currentPageIndex++
                 }
             }
         }

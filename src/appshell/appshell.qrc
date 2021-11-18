@@ -16,7 +16,13 @@
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
+        <file>qml/shared/ThemeSamplesList.qml</file>
+        <file>qml/shared/internal/ThemeSample.qml</file>
         <file>qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml</file>
+        <file>qml/FirstLaunchSetup/Page.qml</file>
+        <file>qml/FirstLaunchSetup/ThemesPage.qml</file>
+        <file>qml/FirstLaunchSetup/PlaybackPage.qml</file>
+        <file>qml/FirstLaunchSetup/TutorialsPage.qml</file>
         <file>qml/Preferences/PreferencesPage.qml</file>
         <file>qml/Preferences/GeneralPreferencesPage.qml</file>
         <file>qml/Preferences/UpdatePreferencesPage.qml</file>
@@ -35,7 +41,6 @@
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
-        <file>qml/Preferences/internal/ThemeSample.qml</file>
         <file>qml/Preferences/internal/ThemesSection.qml</file>
         <file>qml/Preferences/internal/AccentColorsSection.qml</file>
         <file>qml/Preferences/internal/UiFontSection.qml</file>
