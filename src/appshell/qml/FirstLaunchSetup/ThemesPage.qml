@@ -32,6 +32,8 @@ Page {
     title: qsTrc("appshell", "Welcome to MuseScore 4")
     explanation: qsTrc("appshell", "Let's get started by choosing a theme")
 
+    titleContentSpacing: 28
+
     ThemesPageModel {
         id: model
     }
@@ -41,7 +43,8 @@ Page {
     }
 
     ColumnLayout {
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
         spacing: 28
 
         ThemeSamplesList {
@@ -67,7 +70,7 @@ Page {
             currentColorIndex: model.currentAccentColorIndex
 
             sampleSize: 20
-            spacing: 8
+            spacing: 2
 
             onAccentColorChangeRequested: function(newColorIndex) {
                 model.currentAccentColorIndex = newColorIndex

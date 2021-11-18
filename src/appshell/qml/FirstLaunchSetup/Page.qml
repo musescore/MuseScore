@@ -27,10 +27,14 @@ import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 Item {
+    id: root
+
     property alias title: titleLabel.text
     property alias explanation: explanationLabel.text
 
     default property alias content: contentItem.data
+
+    property real titleContentSpacing: 24
 
     anchors.fill: parent
 
@@ -61,7 +65,7 @@ Item {
         id: contentItem
 
         anchors.top: header.bottom
-        anchors.topMargin: 24
+        anchors.topMargin: root.titleContentSpacing
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
