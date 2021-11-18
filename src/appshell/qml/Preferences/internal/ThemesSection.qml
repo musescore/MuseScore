@@ -24,6 +24,8 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
+import "../../shared"
+
 BaseSection {
     id: root
 
@@ -32,8 +34,8 @@ BaseSection {
 
     property bool highContrastEnabled: false
 
-    property alias themes: view.model
-    property string currentThemeCode
+    property alias themes: themeSamplesList.themes
+    property alias currentThemeCode: themeSamplesList.currentThemeCode
 
     property alias accentColors: accentColorsSection.colors
     property alias currentAccentColorIndex: accentColorsSection.currentColorIndex
@@ -63,51 +65,14 @@ BaseSection {
         }
     }
 
-    ListView {
-        id: view
-
+    ThemeSamplesList {
+        id: themeSamplesList
         width: parent.width
-        height: contentHeight
-        contentHeight: 120
+        spacing: root.columnWidth - sampleWidth
+        navigationPanel: root.navigation
 
-        orientation: Qt.Horizontal
-        interactive: false
-
-        spacing: 106
-
-        delegate: Column {
-            width: 112
-            height: 120
-
-            spacing: 16
-
-            ThemeSample {
-                strokeColor: modelData.strokeColor
-                backgroundPrimaryColor: modelData.backgroundPrimaryColor
-                backgroundSecondaryColor: modelData.backgroundSecondaryColor
-                fontPrimaryColor: modelData.fontPrimaryColor
-                buttonColor: modelData.buttonColor
-                accentColor: modelData.accentColor
-
-                onClicked: {
-                    root.themeChangeRequested(modelData.codeKey)
-                }
-            }
-
-            RoundedRadioButton {
-                width: parent.width
-                checked: root.currentThemeCode === modelData.codeKey
-                text: modelData.title
-
-                navigation.name: text
-                navigation.panel: root.navigation
-                navigation.row: 1
-                navigation.column: index
-
-                onToggled: {
-                    root.themeChangeRequested(modelData.codeKey)
-                }
-            }
+        onThemeChangeRequested: function(newThemeCode) {
+            root.themeChangeRequested(newThemeCode)
         }
     }
 
