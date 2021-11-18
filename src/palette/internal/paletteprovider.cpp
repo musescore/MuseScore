@@ -99,10 +99,7 @@ void PaletteElementEditor::open()
     using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig: {
-        KeyEditor* keyEditor = new KeyEditor();
-        keyEditor->showKeyPalette(false);
-        connect(keyEditor, &KeyEditor::keySigAdded, this, &PaletteElementEditor::onElementAdded);
-        editor = keyEditor;
+        interactive()->open("musescore://notation/keysignatures?sync=false&showKeyPalette=false");
     }
     break;
     case Type::TimeSig: {

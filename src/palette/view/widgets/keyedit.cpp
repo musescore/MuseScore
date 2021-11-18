@@ -335,6 +335,14 @@ KeyEditor::KeyEditor(QWidget* parent)
     if (!configuration()->useFactorySettings()) {
         sp->readFromFile(configuration()->keySignaturesDirPath().toQString());
     }
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+}
+
+KeyEditor::KeyEditor(const KeyEditor& widget)
+    : KeyEditor(widget.parentWidget())
+{
 }
 
 //---------------------------------------------------------
@@ -384,9 +392,9 @@ void KeyEditor::clearClicked()
 //   showKeyPalette
 //---------------------------------------------------------
 
-void KeyEditor::showKeyPalette(bool val)
+void KeyEditor::setShowKeyPalette(bool showKeyPalette)
 {
-    _keyPalette->setVisible(val);
+    _keyPalette->setVisible(showKeyPalette);
 }
 
 //---------------------------------------------------------
@@ -398,4 +406,9 @@ void KeyEditor::save()
     QDir dir;
     dir.mkpath(configuration()->keySignaturesDirPath().toQString());
     sp->writeToFile(configuration()->keySignaturesDirPath().toQString());
+}
+
+bool KeyEditor::showKeyPalette() const
+{
+    return _keyPalette->isVisible();
 }
