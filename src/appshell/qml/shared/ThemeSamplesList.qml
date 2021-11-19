@@ -32,7 +32,23 @@ ListView {
     property alias themes: root.model
     property string currentThemeCode
 
-    property NavigationPanel navigationPanel: null
+    currentIndex: model.findIndex((theme) => theme.codeKey === currentThemeCode)
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "ThemeSamplesList"
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Horizontal
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", [navigationRow, navigationColumnStart + root.currentIndex])
+            }
+        }
+    }
+
+    property int navigationRow: -1
+    property int navigationColumnStart: 0
+    readonly property int navigationColumnEnd: navigationColumnStart + count
 
     signal themeChangeRequested(var newThemeCode)
 
@@ -74,8 +90,8 @@ ListView {
 
             navigation.name: text
             navigation.panel: root.navigationPanel
-            navigation.row: 1
-            navigation.column: index
+            navigation.row: root.navigationRow
+            navigation.column: root.navigationColumnStart + model.index
 
             onToggled: {
                 root.themeChangeRequested(modelData.codeKey)

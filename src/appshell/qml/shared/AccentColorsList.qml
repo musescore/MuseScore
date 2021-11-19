@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -31,7 +30,21 @@ RadioButtonGroup {
     property alias colors: root.model
     property alias currentColorIndex: root.currentIndex
 
-    property NavigationPanel navigationPanel: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "AccentColorsList"
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Horizontal
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", [navigationRow, navigationColumnStart + root.currentIndex])
+            }
+        }
+    }
+
+    property int navigationRow: -1
+    property int navigationColumnStart: 0
+    property int navigationColumnEnd: navigationColumnStart + count
 
     property real sampleSize: 30
     readonly property real totalSampleSize: sampleSize + 6
@@ -54,7 +67,8 @@ RadioButtonGroup {
 
         navigation.name: "AccentColourButton"
         navigation.panel: root.navigationPanel
-        navigation.column: model.index
+        navigation.row: root.navigationRow
+        navigation.column: root.navigationColumnStart + model.index
         navigation.accessible.name: Utils.colorToString(accentColor)
 
         onToggled: {

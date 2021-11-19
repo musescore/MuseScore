@@ -69,7 +69,9 @@ BaseSection {
         id: themeSamplesList
         width: parent.width
         spacing: root.columnWidth - sampleWidth
+
         navigationPanel: root.navigation
+        navigationRow: 1
 
         onThemeChangeRequested: function(newThemeCode) {
             root.themeChangeRequested(newThemeCode)

@@ -32,6 +32,8 @@ Item {
     property alias title: titleLabel.text
     property alias explanation: explanationLabel.text
 
+    property NavigationSection navigationSection: null
+
     default property alias content: contentItem.data
 
     property real titleContentSpacing: 24

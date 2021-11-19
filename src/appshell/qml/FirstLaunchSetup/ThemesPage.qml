@@ -48,12 +48,16 @@ Page {
         spacing: 28
 
         ThemeSamplesList {
+            id: themeSamplesList
             Layout.alignment: Qt.AlignCenter
 
             themes: model.highContrastEnabled ? model.highContrastThemes : model.generalThemes
             currentThemeCode: model.currentThemeCode
 
             spacing: 64
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
 
             onThemeChangeRequested: function(newThemeCode) {
                 model.currentThemeCode = newThemeCode
@@ -70,7 +74,10 @@ Page {
             currentColorIndex: model.currentAccentColorIndex
 
             sampleSize: 20
-            spacing: 2
+            spacing: 4
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             onAccentColorChangeRequested: function(newColorIndex) {
                 model.currentAccentColorIndex = newColorIndex
@@ -90,6 +97,17 @@ Page {
 
             text: qsTrc("appshell", "Enable high contrast")
             checked: model.highContrastEnabled
+
+            navigation.name: "EnableHighContrastCheckbox"
+            navigation.order: 1
+            navigation.panel: NavigationPanel {
+                name: "EnableHighContrast"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 3
+                direction: NavigationPanel.Horizontal
+            }
+
             onClicked: {
                 model.highContrastEnabled = !checked
             }
