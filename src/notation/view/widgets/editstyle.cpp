@@ -1498,6 +1498,12 @@ void EditStyle::setValues()
                 }
             }
         } break;
+        case P_TYPE::HPLACEMENT:
+        case P_TYPE::PLACEMENT:
+        case P_TYPE::BARLINE_TYPE:
+        case P_TYPE::HOOK_TYPE:
+        case P_TYPE::DYNAMIC_TYPE:
+        case P_TYPE::ACCIDENTAL_ROLE:
         case P_TYPE::INT: {
             int value = val.toInt();
             if (qobject_cast<QComboBox*>(sw.widget)) {
