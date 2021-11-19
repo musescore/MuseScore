@@ -315,12 +315,13 @@ public:
     void netag(const char* name);
 
     void tag(Pid id, const mu::engraving::PropertyValue& data, const mu::engraving::PropertyValue& def = mu::engraving::PropertyValue());
-    void tagProperty(const QString& name, const mu::engraving::PropertyValue& data);
+    void tagProperty(const char* name, const mu::engraving::PropertyValue& data);
 
     void tag(const char* name, QVariant data, QVariant defaultData = QVariant());
     void tag(const QString&, QVariant data);
     void tag(const char* name, const char* s) { tag(name, QVariant(s)); }
     void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
+    void tag(const char* name, const mu::PointF& s);
 
     void comment(const QString&);
 

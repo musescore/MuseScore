@@ -23,7 +23,6 @@
 #ifndef MU_DRAW_COLOR_H
 #define MU_DRAW_COLOR_H
 
-#include <QVariant>
 #include <QString>
 
 #ifndef NO_QT_SUPPORT
@@ -52,14 +51,12 @@ public:
     Color& operator=(const QColor& other);
 #endif
 
-    //! NOTE Needs for QVariant support
+    bool operator<(const Color& other) const;
+
+    std::string toString() const;
 #ifndef NO_QT_SUPPORT
     QString toQString() const;
 #endif
-    bool operator<(const Color& other) const;
-    //! -----
-
-    std::string toString() const;
 
     void setNamedColor(const std::string& color);
     void setNamedColor(const char* color);
@@ -108,7 +105,5 @@ inline const Color Color::redColor { 255, 0, 0 };
 inline const Color Color::greenColor { 0, 255, 0 };
 inline const Color Color::blueColor { 0, 0, 255 };
 }
-
-Q_DECLARE_METATYPE(mu::draw::Color)
 
 #endif // MU_DRAW_COLOR_H

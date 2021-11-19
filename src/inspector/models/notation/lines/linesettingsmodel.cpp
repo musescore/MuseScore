@@ -63,11 +63,11 @@ void LineSettingsModel::createProperties()
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
         m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
+            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
         });
 
         m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
@@ -75,23 +75,23 @@ void LineSettingsModel::createProperties()
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
         m_continiousTextHorizontalOffset
             = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
+            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
         });
 
         m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid,
                                                                                                  const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(EndText)) {
         m_endText = buildPropertyItem(Ms::Pid::END_TEXT);
         m_endTextHorizontalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_endTextHorizontalOffset->value().toDouble()));
+            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_endTextHorizontalOffset->value().toDouble()));
         });
 
         m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, PointF(m_endTextVerticalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(m_endTextVerticalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 }
@@ -118,26 +118,26 @@ void LineSettingsModel::loadProperties()
 
     loadPropertyItem(m_beginingText);
     loadPropertyItem(m_beginingTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
     loadPropertyItem(m_beginingTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
     loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     loadPropertyItem(m_endText);
     loadPropertyItem(m_endTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
     loadPropertyItem(m_endTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     onUpdateLinePropertiesAvailability();
