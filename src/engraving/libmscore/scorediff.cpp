@@ -1468,6 +1468,14 @@ bool PropertyDiff::sameItem(const BaseDiff& otherBase) const
 //   PropertyDiff::toString
 //---------------------------------------------------------
 
+static QString propertyUserValue(const EngravingObject* o, Pid pid)
+{
+    PropertyValue v = o->getProperty(pid);
+    Q_UNUSED(v);
+    //! TODO Should be implemented (but not via a virtual function) if needed
+    return "not implemented";
+}
+
 QString PropertyDiff::toString() const
 {
     QString ctxDescr = describeContext(ctx[0]);
@@ -1487,8 +1495,8 @@ QString PropertyDiff::toString() const
     }
     default:
     {
-        QString val1 = ctx[0]->propertyUserValue(pid);
-        QString val2 = ctx[1]->propertyUserValue(pid);
+        QString val1 = propertyUserValue(ctx[0], pid);
+        QString val2 = propertyUserValue(ctx[1], pid);
         QString t = QObject::tr("%1: property %2 changed from %3 to %4", "scorediff");
         return t.arg(ctxDescr, propName, val1, val2);
     }

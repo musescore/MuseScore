@@ -650,21 +650,6 @@ Pid Dynamic::propertyId(const QStringRef& name) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Dynamic::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::DYNAMIC_TYPE:
-        return dynamicTypeName();
-    default:
-        break;
-    }
-    return TextBase::propertyUserValue(pid);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

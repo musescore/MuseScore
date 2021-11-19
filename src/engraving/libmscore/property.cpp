@@ -118,8 +118,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BRACKET_TYPE,            false, "bracketType",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "bracket type") },
     { Pid::NORMAL_NOTES,            false, "normalNotes",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "normal notes") },
     { Pid::ACTUAL_NOTES,            false, "actualNotes",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "actual notes") },
-    { Pid::P1,                      false, "p1",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "p1") },
-    { Pid::P2,                      false, "p2",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "p2") },
+    { Pid::P1,                      false, "p1",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "p1") },
+    { Pid::P2,                      false, "p2",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "p2") },
     { Pid::GROW_LEFT,               false, "growLeft",              P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "grow left") },
     { Pid::GROW_RIGHT,              false, "growRight",             P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "grow right") },
 
@@ -223,7 +223,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SPANNER_TICK,            true,  "tick",                  P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "tick") },
     { Pid::SPANNER_TICKS,           true,  "ticks",                 P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "ticks") },
     { Pid::SPANNER_TRACK2,          false, "track2",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "track2") },
-    { Pid::OFFSET2,                 false, "userOff2",              P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "offset2") },
+    { Pid::OFFSET2,                 false, "userOff2",              P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "offset2") },
     { Pid::BREAK_MMR,               false, "breakMultiMeasureRest", P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "breaking multimeasure rest") },
     { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "vertical position of multimeasure rest number") },
     { Pid::MMREST_NUMBER_VISIBLE,   false, "mmRestNumberVisible",   P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "visibility of multimeasure rest number") },
@@ -235,10 +235,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::NO_OFFSET,               true,  "noOffset",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "numbering offset") },
     { Pid::IRREGULAR,               true,  "irregular",             P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "irregular") },
     { Pid::ANCHOR,                  false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
-    { Pid::SLUR_UOFF1,              false, "o1",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "o1") },
-    { Pid::SLUR_UOFF2,              false, "o2",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "o2") },
-    { Pid::SLUR_UOFF3,              false, "o3",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "o3") },
-    { Pid::SLUR_UOFF4,              false, "o4",                    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "o4") },
+    { Pid::SLUR_UOFF1,              false, "o1",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o1") },
+    { Pid::SLUR_UOFF2,              false, "o2",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o2") },
+    { Pid::SLUR_UOFF3,              false, "o3",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o3") },
+    { Pid::SLUR_UOFF4,              false, "o4",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o4") },
     { Pid::STAFF_MOVE,              true,  "staffMove",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "staff move") },
     { Pid::VERSE,                   true,  "no",                    P_TYPE::ZERO_INT,       DUMMY_QT_TR_NOOP("propertyName", "verse") },
 
@@ -325,7 +325,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEGIN_FONT_FACE,         false, "beginFontFace",         P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "begin font face") },
     { Pid::BEGIN_FONT_SIZE,         false, "beginFontSize",         P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "begin font size") },
     { Pid::BEGIN_FONT_STYLE,        false, "beginFontStyle",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "begin font style") },
-    { Pid::BEGIN_TEXT_OFFSET,       false, "beginTextOffset",       P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "begin text offset") },
+    { Pid::BEGIN_TEXT_OFFSET,       false, "beginTextOffset",       P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "begin text offset") },
 
     { Pid::CONTINUE_TEXT,           true,  "continueText",          P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "continue text") },
     { Pid::CONTINUE_TEXT_ALIGN,     false, "continueTextAlign",     P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "continue text align") },
@@ -333,7 +333,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CONTINUE_FONT_FACE,      false, "continueFontFace",      P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "continue font face") },
     { Pid::CONTINUE_FONT_SIZE,      false, "continueFontSize",      P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "continue font size") },
     { Pid::CONTINUE_FONT_STYLE,     false, "continueFontStyle",     P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "continue font style") },
-    { Pid::CONTINUE_TEXT_OFFSET,    false, "continueTextOffset",    P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "continue text offset") },
+    { Pid::CONTINUE_TEXT_OFFSET,    false, "continueTextOffset",    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "continue text offset") },
 
     { Pid::END_TEXT,                true,  "endText",               P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "end text") },
     { Pid::END_TEXT_ALIGN,          false, "endTextAlign",          P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "end text align") },
@@ -343,7 +343,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "end font face") },
     { Pid::END_FONT_SIZE,           false, "endFontSize",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "end font size") },
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName",  "end font style") },
-    { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT_SP,       DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
+    { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
 
     { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "position above") },
 
@@ -473,7 +473,6 @@ PropertyValue propertyFromString(Pid id, QString value)
     case P_TYPE::COLOR:
         // not used by MSCX
         return PropertyValue::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
-    case P_TYPE::POINT_SP:
     case P_TYPE::POINT: {
         // not used by MSCX
         const int i = value.indexOf(';');
@@ -674,7 +673,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readFraction());
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
-    case P_TYPE::POINT_SP:
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:

@@ -1452,20 +1452,6 @@ Pid EngravingItem::propertyId(const QStringRef& name) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString EngravingItem::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::SUBTYPE:
-        return subtypeName();
-    default:
-        return EngravingObject::propertyUserValue(pid);
-    }
-}
-
-//---------------------------------------------------------
 //   custom
 //    check if property is != default
 //---------------------------------------------------------

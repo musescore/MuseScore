@@ -133,7 +133,6 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    QString propertyUserValue(Pid) const override;
 };
 }     // namespace Ms
 #endif
