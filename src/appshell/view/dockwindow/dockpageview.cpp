@@ -56,6 +56,11 @@ QString DockPageView::uri() const
     return m_uri;
 }
 
+void DockPageView::open(const QVariantMap& params)
+{
+    emit openRequested(params);
+}
+
 QQmlListProperty<DockToolBarView> DockPageView::mainToolBarsProperty()
 {
     return m_mainToolBars.property();

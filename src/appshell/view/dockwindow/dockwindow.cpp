@@ -126,11 +126,14 @@ QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
     return m_pages.property();
 }
 
-void DockWindow::loadPage(const QString& uri)
+void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 {
     TRACEFUNC;
 
     if (currentPageUri() == uri) {
+        if (m_currentPage) {
+            m_currentPage->open(params);
+        }
         return;
     }
 
@@ -163,6 +166,8 @@ void DockWindow::loadPage(const QString& uri)
     emit currentPageUriChanged(uri);
 
     m_docksOpenStatusChanged.send(allDockNames);
+
+    newPage->open(params);
 }
 
 bool DockWindow::isDockOpen(const QString& dockName) const
@@ -470,7 +475,7 @@ void DockWindow::resetWindowState()
     /// NOTE: for reset geometry
     m_currentPage = nullptr;
 
-    loadPage(currentPageUriBackup);
+    loadPage(currentPageUriBackup, {});
 }
 
 void DockWindow::initDocks(DockPageView* page)
