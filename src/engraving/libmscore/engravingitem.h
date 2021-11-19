@@ -286,10 +286,10 @@ public:
     void setSizeIsSpatiumDependent(bool v) { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }
     bool offsetIsSpatiumDependent() const override;
 
-    Placement placement() const { return Placement(!flag(ElementFlag::PLACE_ABOVE)); }
-    void setPlacement(Placement val) { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
-    bool placeAbove() const { return placement() == Placement::ABOVE; }
-    bool placeBelow() const { return placement() == Placement::BELOW; }
+    PlacementV placement() const { return PlacementV(!flag(ElementFlag::PLACE_ABOVE)); }
+    void setPlacement(PlacementV val) { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
+    bool placeAbove() const { return placement() == PlacementV::ABOVE; }
+    bool placeBelow() const { return placement() == PlacementV::BELOW; }
     virtual bool placeMultiple() const { return true; }
 
     bool generated() const { return flag(ElementFlag::GENERATED); }

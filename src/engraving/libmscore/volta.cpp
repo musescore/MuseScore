@@ -100,7 +100,7 @@ EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
 Volta::Volta(EngravingItem* parent)
     : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
-    setPlacement(Placement::ABOVE);
+    setPlacement(PlacementV::ABOVE);
     initElementStyle(&voltaStyle);
 
     setBeginTextPlace(PlaceText::BELOW);
@@ -325,7 +325,7 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
         return int(PlaceText::ABOVE);
 
     case Pid::PLACEMENT:
-        return int(Placement::ABOVE);
+        return int(PlacementV::ABOVE);
 
     default:
         return TextLineBase::propertyDefault(propertyId);

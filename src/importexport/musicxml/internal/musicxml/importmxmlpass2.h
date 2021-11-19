@@ -72,7 +72,7 @@ enum class MusicXmlSlash : char {
 struct MusicXmlTupletDesc {
     MusicXmlTupletDesc();
     MxmlStartStop type;
-    Placement placement;
+    PlacementV placement;
     TupletBracketType bracket;
     TupletNumberType shownumber;
 };

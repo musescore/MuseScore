@@ -62,7 +62,7 @@ public:
     QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::STRING); return value(idx).toString(); }
     bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::BOOL); return value(idx).toBool(); }
     qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::REAL); return value(idx).toReal(); }
-    int      styleI(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::INT); return value(idx).toInt(); }
+    int      styleI(Sid idx) const { /* can be int or enum, so no assert */ return value(idx).toInt(); }
 
     const mu::engraving::PropertyValue& value(Sid idx) const;
     Milimetre valueMM(Sid idx) const;

@@ -334,7 +334,7 @@ bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
 {
     switch (id) {
     case Pid::PLACEMENT:
-        setPlacement(Placement(v.toInt()));
+        setPlacement(PlacementV(v.toInt()));
         break;
     default:
         return TextLineBase::setProperty(id, v);

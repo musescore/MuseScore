@@ -44,6 +44,13 @@ enum class Align : char {
 };
 Q_ENUM_NS(Align);
 
+//! NOTE just Placement for compatibility
+enum class Placement {
+    ABOVE = int(mu::engraving::PlacementV::ABOVE),
+    BELOW = int(mu::engraving::PlacementV::BELOW),
+};
+Q_ENUM_NS(Placement);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -52,5 +59,6 @@ class Mops : public QObject
 }
 
 Q_DECLARE_METATYPE(Ms::PluginAPI::Align);
+Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
 
 #endif // MU_PLUGINS_APITYPES_H

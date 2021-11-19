@@ -45,7 +45,7 @@ MeasureNumber::MeasureNumber(Measure* parent, Tid tid)
 {
     initElementStyle(&measureNumberStyle);
 
-    setHPlacement(score()->styleV(Sid::measureNumberHPlacement).value<HPlacement>());
+    setHPlacement(score()->styleV(Sid::measureNumberHPlacement).value<PlacementH>());
 }
 
 //---------------------------------------------------------

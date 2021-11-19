@@ -570,7 +570,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
-        setPlacement(Placement(v.toInt()));
+        setPlacement(PlacementV(v.toInt()));
         break;
     case Pid::SYLLABIC:
         _syllabic = Syllabic(v.toInt());
@@ -660,7 +660,7 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             if (l->no() == v.toInt()) {
                 // verse already exists, swap
                 l->TextBase::undoChangeProperty(id, no(), ps);
-                Placement p = l->placement();
+                PlacementV p = l->placement();
                 l->TextBase::undoChangeProperty(Pid::PLACEMENT, int(placement()), ps);
                 TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);
                 break;

@@ -399,7 +399,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                     el->setTrack(e.track());                // a valid track might be necessary for el->read() to work
                     if (el->isFermata()) {
-                        el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                        el->setPlacement(el->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     }
                     el->read(e);
 
@@ -434,7 +434,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
                     Breath* breath = Factory::createBreath(segment);
                     breath->setTrack(e.track());
-                    breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                    breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
                     breath->read(e);
                     breath->setParent(segment);
                     undoChangeElement(segment->element(e.track()), breath);

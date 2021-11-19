@@ -621,7 +621,7 @@ TextBase* Score::addText(Tid type)
             break;
         }
         textBox = new StaffText(this->dummy()->segment(), Tid::EXPRESSION);
-        textBox->setPlacement(Placement::BELOW);
+        textBox->setPlacement(PlacementV::BELOW);
         textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         chordRest->undoAddAnnotation(textBox);
         break;
@@ -1880,7 +1880,7 @@ void Score::cmdAddOttava(OttavaType type)
             Ottava* ottava = new Ottava(this->dummy());
             ottava->setOttavaType(type);
             if (type == OttavaType::OTTAVA_8VB /*|| type == OttavaType::OTTAVA_15MB || type == OttavaType::OTTAVA_22MB*/) {
-                ottava->setPlacement(Placement::BELOW);
+                ottava->setPlacement(PlacementV::BELOW);
                 ottava->styleChanged();
             }
             ottava->setTrack(cr1->track());
@@ -1903,7 +1903,7 @@ void Score::cmdAddOttava(OttavaType type)
         Ottava* ottava = new Ottava(this->dummy());
         ottava->setOttavaType(type);
         if (type == OttavaType::OTTAVA_8VB /*|| type == OttavaType::OTTAVA_15MB || type == OttavaType::OTTAVA_22MB*/) {
-            ottava->setPlacement(Placement::BELOW);
+            ottava->setPlacement(PlacementV::BELOW);
             ottava->styleChanged();
         }
         ottava->setTrack(cr1->track());
@@ -2139,8 +2139,8 @@ void Score::cmdFlip()
                    || e->isBreath()) {
             e->undoChangeProperty(Pid::AUTOPLACE, true);
             // getProperty() delegates call from spannerSegment to Spanner
-            Placement p = Placement(e->getProperty(Pid::PLACEMENT).toInt());
-            p = (p == Placement::ABOVE) ? Placement::BELOW : Placement::ABOVE;
+            PlacementV p = PlacementV(e->getProperty(Pid::PLACEMENT).toInt());
+            p = (p == PlacementV::ABOVE) ? PlacementV::BELOW : PlacementV::ABOVE;
             // TODO: undoChangeProperty() should probably do this directly
             // see https://musescore.org/en/node/281432
             EngravingItem* ee = e->propertyDelegate(Pid::PLACEMENT);

@@ -238,7 +238,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     // geometry
     case P_TYPE::POINT: {
         PointF p = data.value<PointF>();
-        tag(name, p);
+        tag(name, p, false);
     }
     break;
     case P_TYPE::SIZE: {
@@ -294,29 +294,29 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h, v);
     }
     break;
-    case P_TYPE::PLACEMENT: {
+    case P_TYPE::PLACEMENT_V: {
         *this << "<" << name << ">";
-        switch (data.value<Placement>()) {
-        case Placement::ABOVE:
+        switch (data.value<PlacementV>()) {
+        case PlacementV::ABOVE:
             *this << "above";
             break;
-        case Placement::BELOW:
+        case PlacementV::BELOW:
             *this << "below";
             break;
         }
         *this << "</" << ename << ">\n";
     }
     break;
-    case P_TYPE::HPLACEMENT: {
+    case P_TYPE::PLACEMENT_H: {
         *this << "<" << name << ">";
-        switch (data.value<HPlacement>()) {
-        case HPlacement::LEFT:
+        switch (data.value<PlacementH>()) {
+        case PlacementH::LEFT:
             *this << "left";
             break;
-        case HPlacement::CENTER:
+        case PlacementH::CENTER:
             *this << "center";
             break;
-        case HPlacement::RIGHT:
+        case PlacementH::RIGHT:
             *this << "right";
             break;
         }
@@ -384,8 +384,12 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     }
 }
 
-void XmlWriter::tag(const char* name, const mu::PointF& p)
+void XmlWriter::tag(const char* name, const mu::PointF& p, bool isPutLevel)
 {
+    if (isPutLevel) {
+        putLevel();
+    }
+
     *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
 }
 

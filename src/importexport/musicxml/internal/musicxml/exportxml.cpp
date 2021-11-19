@@ -1852,7 +1852,7 @@ QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
 static void fermata(const Fermata* const a, XmlWriter& xml)
 {
     QString tagName = "fermata";
-    tagName += QString(" type=\"%1\"").arg(a->placement() == Placement::ABOVE ? "upright" : "inverted");
+    tagName += QString(" type=\"%1\"").arg(a->placement() == PlacementV::ABOVE ? "upright" : "inverted");
     tagName += ExportMusicXml::fermataPosition(a);
     tagName += color2xml(a);
     SymId id = a->symId();
@@ -3271,8 +3271,8 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
             technical.tag(xml);
             QString t = MScoreTextToMXML::toPlainText(f->xmlText());
             QString attr;
-            if (!f->isStyled(Pid::PLACEMENT) || f->placement() == Placement::BELOW) {
-                attr = QString(" placement=\"%1\"").arg((f->placement() == Placement::BELOW) ? "below" : "above");
+            if (!f->isStyled(Pid::PLACEMENT) || f->placement() == PlacementV::BELOW) {
+                attr = QString(" placement=\"%1\"").arg((f->placement() == PlacementV::BELOW) ? "below" : "above");
             }
             if (!f->isStyled(Pid::FONT_FACE)) {
                 attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).toString());
@@ -3959,14 +3959,14 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 // actual position info is in the segments
                 // compare the segment's canvas ypos with the staff's center height
                 // if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
-                if (el->placement() == Placement::ABOVE) {
+                if (el->placement() == PlacementV::ABOVE) {
                     tagname += " placement=\"above\"";
                 } else {
                     tagname += " placement=\"below\"";
                 }
             } else if (el->isDynamic()) {
                 tagname += " placement=\"";
-                tagname += el->placement() == Placement::ABOVE ? "above" : "below";
+                tagname += el->placement() == PlacementV::ABOVE ? "above" : "below";
                 tagname += "\"";
             } else {
                 /*
@@ -3975,7 +3975,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                        bb.y(), bb.height());
                  */
                 // if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
-                if (el->placement() == Placement::ABOVE) {
+                if (el->placement() == PlacementV::ABOVE) {
                     tagname += " placement=\"above\"";
                 } else {
                     tagname += " placement=\"below\"";
@@ -4277,7 +4277,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
            qPrintable(text->xmlText()));
     */
     _attr.doAttr(_xml, false);
-    _xml.startObject(QString("direction placement=\"%1\"").arg((text->placement() == Placement::BELOW) ? "below" : "above"));
+    _xml.startObject(QString("direction placement=\"%1\"").arg((text->placement() == PlacementV::BELOW) ? "below" : "above"));
     wordsMetrome(_xml, _score, text, offset);
 
     if (staff) {
@@ -5053,7 +5053,7 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     }
 
     if (sound != "") {
-        xml.startObject(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW) ? "below" : "above"));
+        xml.startObject(QString("direction placement=\"%1\"").arg((jp->placement() == PlacementV::BELOW) ? "below" : "above"));
         xml.startObject("direction-type");
         QString positioning = ExportMusicXml::positioningAttributes(jp);
         if (type != "") {
@@ -5180,7 +5180,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     }
 
     if (sound != "") {
-        xml.startObject(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW) ? "below" : "above"));
+        xml.startObject(QString("direction placement=\"%1\"").arg((m->placement() == PlacementV::BELOW) ? "below" : "above"));
         xml.startObject("direction-type");
         QString positioning = ExportMusicXml::positioningAttributes(m);
         if (type != "") {

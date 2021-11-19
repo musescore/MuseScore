@@ -66,8 +66,8 @@ using Color = draw::Color;              // P_TYPE::COLOR
 ///   `if ((static_cast<char>(align()) & static_cast<char>(Align::VMASK)) == Align::Top) { doSomething(); }`
 ///   Same applies to Align::Left.
 //---------------------------------------------------------
-
-enum class Align : char {               // P_TYPE::ALIGN
+// P_TYPE::ALIGN
+enum class Align : char {
     ///.\{
     LEFT     = 0,
     RIGHT    = 1,
@@ -96,11 +96,23 @@ constexpr Align operator~(Align a)
 {
     return static_cast<Align>(~static_cast<char>(a));
 }
-}
+
+// P_TYPE::PLACEMENT_V
+enum class PlacementV {
+    ABOVE, BELOW
+};
+
+// P_TYPE::PLACEMENT_H
+enum class PlacementH {
+    LEFT, CENTER, RIGHT
+};
+} // mu::engraving
 
 //! NOTE compat
 namespace Ms {
 using Align = mu::engraving::Align;
+using PlacementV = mu::engraving::PlacementV;
+using PlacementH = mu::engraving::PlacementH;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

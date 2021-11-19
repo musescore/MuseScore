@@ -321,7 +321,7 @@ public:
     void tag(const QString&, QVariant data);
     void tag(const char* name, const char* s) { tag(name, QVariant(s)); }
     void tag(const char* name, const QString& s) { tag(name, QVariant(s)); }
-    void tag(const char* name, const mu::PointF& s);
+    void tag(const char* name, const mu::PointF& s, bool isPutLevel = true);
 
     void comment(const QString&);
 

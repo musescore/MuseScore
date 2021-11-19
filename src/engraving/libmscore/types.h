@@ -420,26 +420,6 @@ enum class HarmonyType {
 };
 
 //---------------------------------------------------------
-//   Placement
-//---------------------------------------------------------
-
-enum class Placement {
-    ///.\{
-    ABOVE, BELOW
-    ///\}
-};
-
-//---------------------------------------------------------
-//   HPlacement
-//---------------------------------------------------------
-
-enum class HPlacement {
-    ///.\{
-    LEFT, CENTER, RIGHT
-    ///\}
-};
-
-//---------------------------------------------------------
 //   MMRestRangeBracketType
 //---------------------------------------------------------
 
@@ -677,8 +657,6 @@ Q_ENUM_NS(ElementType);
 Q_ENUM_NS(Direction);
 Q_ENUM_NS(GlissandoType);
 Q_ENUM_NS(GlissandoStyle);
-Q_ENUM_NS(Placement);
-Q_ENUM_NS(HPlacement);
 Q_ENUM_NS(SegmentType);
 Q_ENUM_NS(Tid);
 Q_ENUM_NS(NoteType);
@@ -708,7 +686,6 @@ Q_DECLARE_METATYPE(Ms::PlayEventType);
 
 Q_DECLARE_METATYPE(Ms::AccidentalType);
 
-Q_DECLARE_METATYPE(Ms::HPlacement);
 Q_DECLARE_METATYPE(Ms::DynamicType)
 
 #endif

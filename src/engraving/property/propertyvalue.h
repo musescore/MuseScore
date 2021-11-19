@@ -69,8 +69,8 @@ enum class P_TYPE {
 
     // Layout
     ALIGN,
-    PLACEMENT,        // ABOVE or BELOW
-    HPLACEMENT,       // LEFT, CENTER or RIGHT
+    PLACEMENT_V,       // ABOVE or BELOW
+    PLACEMENT_H,       // LEFT, CENTER or RIGHT
     DIRECTION,        // enum class Direction
     DIRECTION_H,      // enum class MScore::DirectionH
 
@@ -137,9 +137,10 @@ public:
 
     // Layout
     PropertyValue(Align v);
-    PropertyValue(Ms::HPlacement v);
-    PropertyValue(Ms::Placement v)
-        : m_type(P_TYPE::PLACEMENT), m_val(v) {}
+    PropertyValue(PlacementV v)
+        : m_type(P_TYPE::PLACEMENT_V), m_val(v) {}
+    PropertyValue(PlacementH v)
+        : m_type(P_TYPE::PLACEMENT_H), m_val(v) {}
     PropertyValue(Ms::Direction v);
 
     PropertyValue(Ms::SymId v);
@@ -187,8 +188,8 @@ public:
         if constexpr (std::is_same<T, int>::value) {
             switch (m_type) {
             case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
-            case P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
-            case P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
+            case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
+            case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
             case P_TYPE::DIRECTION:  return static_cast<int>(value<Ms::Direction>());
             case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
             case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
@@ -298,7 +299,7 @@ private:
         Color,
 
         // Layout
-        Align, Ms::HPlacement, Ms::Placement, Ms::Direction,
+        Align, PlacementV, PlacementH, Ms::Direction,
 
         // time
         Ms::Fraction,

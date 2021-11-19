@@ -419,7 +419,7 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
             result.insert(articulation->symId());
         }
 
-        result = Ms::flipArticulations(result, Ms::Placement::ABOVE);
+        result = Ms::flipArticulations(result, Ms::PlacementV::ABOVE);
         return Ms::splitArticulations(result);
     };
 
