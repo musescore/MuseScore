@@ -56,6 +56,8 @@ public:
 
     QString uri() const;
 
+    void open(const QVariantMap& params);
+
     QQmlListProperty<DockToolBarView> mainToolBarsProperty();
     QQmlListProperty<DockToolBarView> toolBarsProperty();
     QQmlListProperty<DockingHolderView> toolBarsDockingHoldersProperty();
@@ -89,6 +91,7 @@ public slots:
 
 signals:
     void inited();
+    void openRequested(const QVariantMap& params);
     void uriChanged(const QString& uri);
     void centralDockChanged(DockCentralView* central);
     void statusBarChanged(DockStatusBarView* statusBar);

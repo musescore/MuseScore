@@ -25,7 +25,6 @@ import QtQuick.Window 2.15
 import MuseScore.Ui 1.0
 
 Item {
-
     id: root
 
     property var topParent: null
