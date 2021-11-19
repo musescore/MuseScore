@@ -58,6 +58,7 @@
         <file>qml/Preferences/internal/CommonAudioApiConfiguration.qml</file>
         <file>qml/Preferences/internal/ComboBoxWithTitle.qml</file>
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
+        <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
         <file>qml/DevTools/Autobot/AutobotControl.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
