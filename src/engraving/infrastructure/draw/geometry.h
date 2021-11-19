@@ -138,7 +138,7 @@ inline QPointF operator+(const QPointF& p1, const PointF& p2) { return QPointF(p
 // ====================================
 // PairF
 // ====================================
-class PairF : public std::pair<qreal, qreal>  // P_TYPE::PAIR_REAL
+class PairF : public std::pair<qreal, qreal>
 {
 public:
     PairF() = default;

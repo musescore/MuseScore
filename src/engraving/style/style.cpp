@@ -350,9 +350,9 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         } else if (P_TYPE::DIRECTION == type) {
             xml.tag(st.name(), int(value(idx).toDirection()));
         } else if (P_TYPE::ALIGN == type) {
-            Align a = value(idx).toAlign();
+            Align a = value(idx).value<Align>();
             // Don't write if it's the default value
-            if (optimize && a == Align(st.defaultValue().toInt())) {
+            if (optimize && a == st.defaultValue().value<Align>()) {
                 continue;
             }
             QString horizontal = "left";

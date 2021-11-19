@@ -736,7 +736,7 @@ EditStyle::EditStyle(QWidget* parent)
         resetTextStyle(Ms::Pid::ALIGN);
     });
     connect(textStyleAlign, &AlignSelect::alignChanged, [=]() {
-        textStyleValueChanged(Ms::Pid::ALIGN, QVariant::fromValue(textStyleAlign->align()));
+        textStyleValueChanged(Ms::Pid::ALIGN, QVariant::fromValue(int(textStyleAlign->align())));
     });
 
     // offset
