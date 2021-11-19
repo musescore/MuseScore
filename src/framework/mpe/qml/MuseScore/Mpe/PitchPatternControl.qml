@@ -88,10 +88,12 @@ Column {
 
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            stepSize: root.patternModel ? root.patternModel.singlePercentValue : 0
+            implicitWidth: 120
 
-            from: root.patternModel ? root.patternModel.singlePercentValue * -100 : 0
-            to: root.patternModel ? root.patternModel.singlePercentValue * 100 : 0
+            stepSize: root.patternModel ? root.patternModel.singlePercentValue * 0.1 : 0
+
+            from: root.patternModel ? root.patternModel.singlePercentValue * -50 : 0
+            to: root.patternModel ? root.patternModel.singlePercentValue * 50 : 0
             value: root.patternModel ? root.patternModel.pitchOffsetValueAt(offsetPointIndexSlider.value) : 0
 
             onMoved: {
@@ -110,9 +112,10 @@ Column {
 
             currentText: offsetPointValueSlider.value / 100
 
-            validator: IntValidator {
-                top: 100
-                bottom: 0
+            validator: DoubleInputValidator {
+                top: 50
+                bottom: -50
+                decimal: 1
             }
 
             onCurrentTextEdited: {

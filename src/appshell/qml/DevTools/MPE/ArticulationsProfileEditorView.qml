@@ -207,7 +207,7 @@ Rectangle {
 
                     horizontalAlignment: Qt.AlignLeft
                     font: ui.theme.largeBodyBoldFont
-                    text: qsTrc("mpe", "Display Mode")
+                    text: qsTrc("mpe", "Appearance")
                 }
 
                 Column {
