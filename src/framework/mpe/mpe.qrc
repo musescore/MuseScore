@@ -9,5 +9,6 @@
         <file>qml/MuseScore/Mpe/ArticulationPatternsTab.qml</file>
         <file>qml/MuseScore/Mpe/ArticulationPatternsList.qml</file>
         <file>qml/MuseScore/Mpe/ArticulationPatternSegmentsList.qml</file>
+        <file>resources/general_keyboard_articulations_profile.json</file>
     </qresource>
 </RCC>
