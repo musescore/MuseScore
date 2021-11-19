@@ -506,7 +506,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& ctx)
         m->layout2();
     }
     ctx.page->setPos(0, 0);
-    system->setPos(ctx.page->lm(), ctx.page->tm() + ctx.score()->styleP(Sid::staffUpperBorder));
+    system->setPos(ctx.page->lm(), ctx.page->tm() + ctx.score()->styleMM(Sid::staffUpperBorder));
     ctx.page->setWidth(system->width() + system->pos().x());
     // Set buffer space after the last system to avoid problems with mouse input.
     // Mouse input divides space between systems equally (see Score::searchSystem),

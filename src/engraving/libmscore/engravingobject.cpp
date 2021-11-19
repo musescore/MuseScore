@@ -372,8 +372,8 @@ void EngravingObject::readProperty(XmlReader& e, Pid id)
 {
     PropertyValue v = Ms::readProperty(id, e);
     switch (propertyType(id)) {
-    case P_TYPE::SP_REAL:
-        v = v.toReal() * score()->spatium();
+    case P_TYPE::MILIMETRE: //! NOTE type mm, but stored in xml as spatium
+        v = v.value<Spatium>().toMM(score()->spatium());
         break;
     case P_TYPE::POINT:
         if (offsetIsSpatiumDependent()) {
@@ -440,12 +440,12 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
     }
 
     P_TYPE type = propertyType(pid);
-    if (P_TYPE::SP_REAL == type) {
+    if (P_TYPE::MILIMETRE == type) {
         qreal f1 = p.toReal();
         if (d.isValid() && qAbs(f1 - d.toReal()) < 0.0001) {            // fuzzy compare
             return;
         }
-        p = PropertyValue(f1 / score()->spatium());
+        p = PropertyValue(Spatium::fromMM(f1, score()->spatium()));
         d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();
@@ -869,8 +869,8 @@ bool EngravingObject::isTextBase() const
 PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
 {
     switch (propertyType(pid)) {
-    case P_TYPE::SP_REAL:
-        return score()->styleP(sid);
+    case P_TYPE::MILIMETRE:
+        return score()->styleMM(sid);
     case P_TYPE::POINT: {
         PointF val = score()->styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {

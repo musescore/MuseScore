@@ -191,7 +191,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleP(Sid::pedalLineWidth);              // return point, not spatium
+        return score()->styleMM(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::pedalLineStyle);

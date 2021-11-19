@@ -1902,8 +1902,8 @@ bool EngravingItem::isUserModified() const
         PropertyValue val = getProperty(pid);
         PropertyValue defaultValue = propertyDefault(pid);
 
-        if (propertyType(pid) == P_TYPE::SP_REAL) {
-            if (qAbs(val.toReal() - defaultValue.toReal()) > 0.0001) {        // we don’t care spatium diffs that small
+        if (propertyType(pid) == P_TYPE::MILIMETRE) {
+            if (qAbs(val.value<Milimetre>() - defaultValue.value<Milimetre>()) > 0.0001) {         // we don’t care spatium diffs that small
                 return true;
             }
         } else {
@@ -2273,7 +2273,7 @@ void EngravingItem::endEdit(EditData&)
 
 qreal EngravingItem::styleP(Sid idx) const
 {
-    return score()->styleP(idx);
+    return score()->styleMM(idx);
 }
 
 //---------------------------------------------------------

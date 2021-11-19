@@ -37,11 +37,11 @@ VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* 
     : _fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
 {
     if (_fixedHeight) {
-        _normalisedSpacing = style->styleP(Sid::staffUpperBorder);
+        _normalisedSpacing = style->styleMM(Sid::staffUpperBorder);
         _maxActualSpacing = _normalisedSpacing;
     } else {
         _normalisedSpacing = system->y() + (sysStaff ? sysStaff->bbox().y() : 0.0) - y;
-        _maxActualSpacing = style->styleP(Sid::maxStaffSpread);
+        _maxActualSpacing = style->styleMM(Sid::maxStaffSpread);
 
         Spacer* spacer { staff ? system->upSpacer(staff->idx(), nextSpacer) : nullptr };
 
@@ -77,7 +77,7 @@ void VerticalGapData::addSpaceBetweenSections()
 {
     updateFactor(style->styleD(Sid::spreadSystem));
     if (!(_fixedHeight | _fixedSpacer)) {
-        _maxActualSpacing = style->styleP(Sid::maxSystemSpread) / _factor;
+        _maxActualSpacing = style->styleMM(Sid::maxSystemSpread) / _factor;
     }
 }
 
@@ -89,7 +89,7 @@ void VerticalGapData::addSpaceAroundVBox(bool above)
 {
     _fixedHeight = true;
     _factor = 1.0;
-    _normalisedSpacing = above ? style->styleP(Sid::frameSystemDistance) : style->styleP(Sid::systemFrameDistance);
+    _normalisedSpacing = above ? style->styleMM(Sid::frameSystemDistance) : style->styleMM(Sid::systemFrameDistance);
     _maxActualSpacing = _normalisedSpacing / _factor;
 }
 
@@ -117,7 +117,7 @@ void VerticalGapData::addSpaceAroundCurlyBracket()
 
 void VerticalGapData::insideCurlyBracket()
 {
-    _maxActualSpacing = style->styleP(Sid::maxAkkoladeDistance) / _factor;
+    _maxActualSpacing = style->styleMM(Sid::maxAkkoladeDistance) / _factor;
 }
 
 //---------------------------------------------------------

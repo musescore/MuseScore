@@ -46,7 +46,7 @@ const PropertyValue& MStyle::value(Sid idx) const
     return StyleDef::styleValues[size_t(idx)].defaultValue();
 }
 
-qreal MStyle::pvalue(Sid idx) const
+Milimetre MStyle::valueMM(Sid idx) const
 {
     return m_precomputedValues[size_t(idx)];
 }

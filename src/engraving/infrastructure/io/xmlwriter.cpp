@@ -257,8 +257,11 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
         *this << data.value<Spatium>().val();
         *this << "</" << ename << ">\n";
         break;
-    case P_TYPE::SP_REAL:
-        UNREACHABLE; //! TODO
+    case P_TYPE::MILIMETRE:
+        *this << "<" << name << ">";
+        *this << qreal(data.value<Milimetre>());
+        *this << "</" << ename << ">\n";
+        break;
         break;
 
     // draw

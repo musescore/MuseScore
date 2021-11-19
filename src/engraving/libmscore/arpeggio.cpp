@@ -170,7 +170,7 @@ qreal Arpeggio::calcTop() const
     }
     switch (arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        qreal lineWidth = score()->styleP(Sid::ArpeggioLineWidth);
+        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
         return top - lineWidth / 2.0;
     }
     case ArpeggioType::NORMAL:
@@ -210,7 +210,7 @@ qreal Arpeggio::calcBottom() const
     }
     switch (arpeggioType()) {
     case ArpeggioType::BRACKET: {
-        qreal lineWidth = score()->styleP(Sid::ArpeggioLineWidth);
+        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
         return bottom - top + lineWidth;
     }
     case ArpeggioType::NORMAL:
@@ -314,7 +314,7 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     qreal y1 = _bbox.top();
     qreal y2 = _bbox.bottom();
 
-    qreal lineWidth = score()->styleP(Sid::ArpeggioLineWidth);
+    qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -613,12 +613,12 @@ qreal Arpeggio::insetWidth() const
     case ArpeggioType::UP_STRAIGHT:
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        return (width() - score()->styleP(Sid::ArpeggioLineWidth)) / 2;
+        return (width() - score()->styleMM(Sid::ArpeggioLineWidth)) / 2;
     }
 
     case ArpeggioType::BRACKET:
     {
-        return width() - score()->styleP(Sid::ArpeggioLineWidth) / 2;
+        return width() - score()->styleMM(Sid::ArpeggioLineWidth) / 2;
     }
     }
     return 0.0;
@@ -669,8 +669,8 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
     qreal accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
     qreal accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
 
-    qreal maximumInset = (score()->styleP(Sid::ArpeggioAccidentalDistance)
-                          - score()->styleP(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+    qreal maximumInset = (score()->styleMM(Sid::ArpeggioAccidentalDistance)
+                          - score()->styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
 
     if (accidentalCutOutX > maximumInset) {
         accidentalCutOutX = maximumInset;

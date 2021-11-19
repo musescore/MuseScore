@@ -65,8 +65,8 @@ struct LayoutOptions
 
         firstSystemIndent = style.styleB(Ms::Sid::enableIndentationOnFirstSystem);
 
-        maxFretShiftAbove = style.styleP(Ms::Sid::maxFretShiftAbove);
-        maxFretShiftBelow = style.styleP(Ms::Sid::maxFretShiftBelow);
+        maxFretShiftAbove = style.styleMM(Ms::Sid::maxFretShiftAbove);
+        maxFretShiftBelow = style.styleMM(Ms::Sid::maxFretShiftBelow);
 
         verticalAlignRange = Ms::VerticalAlignRange(style.styleI(Ms::Sid::autoplaceVerticalAlignRange));
     }

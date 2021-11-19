@@ -295,12 +295,12 @@ void Tuplet::layout()
     //
     qreal maxSlope      = score()->styleD(Sid::tupletMaxSlope);
     bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
-    qreal vHeadDistance = score()->styleP(Sid::tupletVHeadDistance);
-    qreal vStemDistance = score()->styleP(Sid::tupletVStemDistance);
-    qreal stemLeft      = score()->styleP(Sid::tupletStemLeftDistance);
-    qreal stemRight     = score()->styleP(Sid::tupletStemRightDistance);
-    qreal noteLeft      = score()->styleP(Sid::tupletNoteLeftDistance);
-    qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
+    qreal vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
+    qreal vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
+    qreal stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance);
+    qreal stemRight     = score()->styleMM(Sid::tupletStemRightDistance);
+    qreal noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance);
+    qreal noteRight     = score()->styleMM(Sid::tupletNoteRightDistance);
 
     int move = 0;
     setStaffIdx(cr1->vStaffIdx());
@@ -317,7 +317,7 @@ void Tuplet::layout()
         }
     }
 
-    qreal l1  =  score()->styleP(Sid::tupletBracketHookHeight);
+    qreal l1  =  score()->styleMM(Sid::tupletBracketHookHeight);
     qreal l2l = vHeadDistance;      // left bracket vertical distance
     qreal l2r = vHeadDistance;      // right bracket vertical distance right
 

@@ -217,13 +217,9 @@ QVariant PropertyValue::toQVariant() const
     }
     break;
     case P_TYPE::SPATIUM:   return value<Spatium>().val();
+    case P_TYPE::MILIMETRE: return qreal(value<Milimetre>());
     case P_TYPE::PAIR_REAL: return QVariant::fromValue(value<PairF>().toQPairF());
 
-        break;
-    case P_TYPE::SP_REAL: {
-        UNREACHABLE; //! TODO
-    }
-    break;
     // draw
     case P_TYPE::COLOR:     return value<draw::Color>().toQColor();
     case P_TYPE::ALIGN:      return QVariant::fromValue(value<Ms::Align>());
@@ -271,12 +267,9 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     break;
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
+    case P_TYPE::MILIMETRE:     return PropertyValue(Milimetre(v.toReal()));
     case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
 
-    case P_TYPE::SP_REAL: {
-        UNREACHABLE; //! TODO
-    }
-    break;
     // draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ALIGN:         return PropertyValue(Ms::Align(v.toInt()));

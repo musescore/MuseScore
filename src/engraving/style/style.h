@@ -30,7 +30,7 @@
 #include <QSet>
 
 #include "libmscore/types.h"
-#include "types/spatium.h"
+#include "types/dimension.h"
 
 #include "property/propertyvalue.h"
 #include "infrastructure/draw/geometry.h"
@@ -58,14 +58,14 @@ public:
         return value(idx).value<Spatium>();
     }
 
-    qreal    styleP(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM); return pvalue(idx); }
+    Milimetre styleMM(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::SPATIUM); return valueMM(idx); }
     QString  styleSt(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::STRING); return value(idx).toString(); }
     bool     styleB(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::BOOL); return value(idx).toBool(); }
     qreal    styleD(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::REAL); return value(idx).toReal(); }
     int      styleI(Sid idx) const { Q_ASSERT(MStyle::valueType(idx) == mu::engraving::P_TYPE::INT); return value(idx).toInt(); }
 
     const mu::engraving::PropertyValue& value(Sid idx) const;
-    qreal pvalue(Sid idx) const;
+    Milimetre valueMM(Sid idx) const;
 
     void set(Sid idx, const mu::engraving::PropertyValue& v);
 
@@ -95,7 +95,7 @@ private:
     bool readTextStyleValCompat(XmlReader&);
 
     std::array<mu::engraving::PropertyValue, size_t(Sid::STYLES)> m_values;
-    std::array<qreal, size_t(Sid::STYLES)> m_precomputedValues;
+    std::array<Milimetre, size_t(Sid::STYLES)> m_precomputedValues;
 };
 }     // namespace Ms
 
