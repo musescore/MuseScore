@@ -30,7 +30,7 @@
 #include "ui/iinteractiveprovider.h"
 
 namespace mu::uicomponents {
-class PopupWindow_QQuickView : public QObject, public IPopupWindow
+class PopupWindow_QQuickView : public IPopupWindow
 {
     Q_OBJECT
 
