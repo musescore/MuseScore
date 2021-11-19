@@ -56,14 +56,14 @@ enum class P_TYPE {
     STRING,         // QString
 
     // geometry
-    POINT,
+    POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
     PATH,               // mu::PainterPath
     SCALE,
     SPATIUM,
+    PAIR_REAL,
 
     POINT_SP,           // point units, value saved in (score) spatium units
-    POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
 
     SP_REAL,            // real (point) value saved in (score) spatium units
 
@@ -128,6 +128,8 @@ public:
     PropertyValue(const SizeF& v);
     PropertyValue(const PainterPath& v);
     PropertyValue(const Spatium& v);
+    PropertyValue(const PairF& v)
+        : m_type(P_TYPE::PAIR_REAL), m_val(v) {}
 
     // draw
     PropertyValue(const draw::Color& v);
@@ -269,7 +271,7 @@ private:
         //base
         bool, int, qreal, QString,
         // geometry
-        PointF, SizeF, PainterPath, Spatium,
+        PointF, SizeF, PainterPath, Spatium, PairF,
         // draw
         draw::Color, Ms::Align, Ms::HPlacement, Ms::Placement, Ms::Direction,
 

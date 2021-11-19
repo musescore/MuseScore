@@ -232,7 +232,7 @@ void SlurTieSegment::editDrag(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-engraving::PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
+PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:

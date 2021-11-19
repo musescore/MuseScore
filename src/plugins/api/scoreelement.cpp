@@ -90,7 +90,7 @@ QVariant ScoreElement::get(Ms::Pid pid) const
         return QVariant::fromValue(wrap(f));
     }
     case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM:
+    case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
     case P_TYPE::SP_REAL:
         return val.toReal() / spatium();
@@ -123,7 +123,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     }
     break;
     case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM:
+    case P_TYPE::POINT:
         val = val.toPointF() * spatium();
         break;
     case P_TYPE::SP_REAL:

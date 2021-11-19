@@ -65,7 +65,7 @@ class TimeSig final : public EngravingItem
     Fraction _stretch;        // localSig / globalSig
     Groups _groups;
 
-    mu::SizeF _scale;
+    mu::ScaleF _scale;
     TimeSigType _timeSigType;
     bool _showCourtesySig;
     bool _largeParentheses;

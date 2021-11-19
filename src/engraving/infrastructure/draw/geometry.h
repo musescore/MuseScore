@@ -136,6 +136,20 @@ inline QPointF operator+(const QPointF& p1, const PointF& p2) { return QPointF(p
 #endif
 
 // ====================================
+// PairF
+// ====================================
+class PairF : public std::pair<qreal, qreal>  // P_TYPE::PAIR_REAL
+{
+public:
+    PairF() = default;
+    PairF(qreal f, qreal s)
+        : std::pair<qreal, qreal>(f, s) {}
+
+    static PairF fromQPairF(const QPair<qreal, qreal>& v) { return PairF(v.first, v.second); }
+    QPair<qreal, qreal> toQPairF() const { return QPair<qreal, qreal>(first, second); }
+};
+
+// ====================================
 // Line
 // ====================================
 template<typename T>
@@ -242,6 +256,7 @@ inline SizeX<T> operator/(const SizeX<T>& s, T c) { Q_ASSERT(!isEqual(c, T())); 
 
 using Size = SizeX<int>;
 using SizeF = SizeX<qreal>;
+using ScaleF = SizeX<qreal>;
 
 // ====================================
 // Rect
