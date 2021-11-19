@@ -125,6 +125,8 @@ public:
     PropertyValue(const SizeF& v);
     PropertyValue(const PainterPath& v);
     PropertyValue(const Spatium& v);
+    PropertyValue(const Milimetre& v)
+        : m_type(P_TYPE::MILIMETRE), m_val(v) {}
     PropertyValue(const PairF& v)
         : m_type(P_TYPE::PAIR_REAL), m_val(v) {}
 
@@ -212,7 +214,7 @@ public:
 
         //! HACK Temporary hack for real to Spatium
         if constexpr (std::is_same<T, Spatium>::value) {
-            if (P_TYPE::MILIMETRE == m_type || P_TYPE::REAL == m_type) {
+            if (P_TYPE::REAL == m_type) {
                 const qreal* pr = std::get_if<qreal>(&m_val);
                 assert(pr);
                 return pr ? Spatium(*pr) : Spatium();
@@ -223,6 +225,24 @@ public:
         if constexpr (std::is_same<T, qreal>::value) {
             if (P_TYPE::SPATIUM == m_type) {
                 const Spatium* ps = std::get_if<Spatium>(&m_val);
+                assert(ps);
+                return ps ? ps->val() : T();
+            }
+        }
+
+        //! HACK Temporary hack for real to Milimetre
+        if constexpr (std::is_same<T, Milimetre>::value) {
+            if (P_TYPE::REAL == m_type) {
+                const qreal* pr = std::get_if<qreal>(&m_val);
+                assert(pr);
+                return pr ? Milimetre(*pr) : Milimetre();
+            }
+        }
+
+        //! HACK Temporary hack for Spatium to real
+        if constexpr (std::is_same<T, qreal>::value) {
+            if (P_TYPE::MILIMETRE == m_type) {
+                const Milimetre* ps = std::get_if<Milimetre>(&m_val);
                 assert(ps);
                 return ps ? ps->val() : T();
             }
@@ -268,7 +288,7 @@ private:
         //base
         bool, int, qreal, QString,
         // geometry
-        PointF, SizeF, PainterPath, Spatium, PairF,
+        PointF, SizeF, PainterPath, Spatium, Milimetre, PairF,
         // draw
         draw::Color, Ms::Align, Ms::HPlacement, Ms::Placement, Ms::Direction,
 
