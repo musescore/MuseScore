@@ -375,9 +375,6 @@ void EngravingObject::readProperty(XmlReader& e, Pid id)
     case P_TYPE::SP_REAL:
         v = v.toReal() * score()->spatium();
         break;
-    case P_TYPE::POINT_SP:
-        v = v.value<PointF>() * score()->spatium();
-        break;
     case P_TYPE::POINT:
         if (offsetIsSpatiumDependent()) {
             v = v.value<PointF>() * score()->spatium();
@@ -450,16 +447,6 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
         }
         p = PropertyValue(f1 / score()->spatium());
         d = PropertyValue();
-    } else if (P_TYPE::POINT_SP == type) {
-        PointF p1 = p.value<PointF>();
-        if (d.isValid()) {
-            PointF p2 = d.value<PointF>();
-            if ((qAbs(p1.x() - p2.x()) < 0.0001) && (qAbs(p1.y() - p2.y()) < 0.0001)) {
-                return;
-            }
-        }
-        p = PropertyValue(p1 / score()->spatium());
-        d = PropertyValue();
     } else if (P_TYPE::POINT == type) {
         PointF p1 = p.value<PointF>();
         if (d.isValid()) {
@@ -482,29 +469,6 @@ void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 Pid EngravingObject::propertyId(const QStringRef& xmlName) const
 {
     return Ms::propertyId(xmlName);
-}
-
-//---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString EngravingObject::propertyUserValue(Pid id) const
-{
-    PropertyValue val = getProperty(id);
-    switch (propertyType(id)) {
-    case P_TYPE::POINT_SP:
-    {
-        PointF p = val.value<PointF>();
-        return QString("(%1, %2)").arg(p.x()).arg(p.y());
-    }
-    case P_TYPE::DIRECTION:
-        return toUserString(val.value<Direction>());
-    case P_TYPE::SYMID:
-        return SymNames::translatedUserNameForSymId(val.value<SymId>());
-    default:
-        break;
-    }
-    return val.toString();
 }
 
 //---------------------------------------------------------
@@ -907,16 +871,6 @@ PropertyValue EngravingObject::styleValue(Pid pid, Sid sid) const
     switch (propertyType(pid)) {
     case P_TYPE::SP_REAL:
         return score()->styleP(sid);
-    case P_TYPE::POINT_SP: {
-        PointF val = score()->styleV(sid).value<PointF>() * score()->spatium();
-        if (isEngravingItem()) {
-            const EngravingItem* e = toEngravingItem(this);
-            if (e->staff() && !e->systemFlag()) {
-                val *= e->staff()->staffMag(e->tick());
-            }
-        }
-        return val;
-    }
     case P_TYPE::POINT: {
         PointF val = score()->styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {

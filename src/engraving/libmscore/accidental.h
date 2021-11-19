@@ -133,7 +133,6 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    QString propertyUserValue(Pid) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);

@@ -63,8 +63,6 @@ enum class P_TYPE {
     SPATIUM,
     PAIR_REAL,
 
-    POINT_SP,           // point units, value saved in (score) spatium units
-
     SP_REAL,            // real (point) value saved in (score) spatium units
 
     // draw

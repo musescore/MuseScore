@@ -659,20 +659,6 @@ Pid Accidental::propertyId(const QStringRef& xmlName) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Accidental::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::ACCIDENTAL_TYPE:
-        return subtypeUserName();
-    default:
-        return EngravingItem::propertyUserValue(pid);
-    }
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

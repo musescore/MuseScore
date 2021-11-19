@@ -294,9 +294,6 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
 
     P_TYPE type = Ms::propertyType(pid);
     switch (type) {
-    case P_TYPE::POINT_SP:
-        return toPoint(value) * element->spatium();
-
     case P_TYPE::POINT: {
         if (element->sizeIsSpatiumDependent()) {
             return toPoint(value) * element->spatium();
@@ -337,9 +334,6 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     UNUSED(pid);
 
     switch (value.type()) {
-    case P_TYPE::POINT_SP:
-        return value.value<PointF>().toQPointF() / element->spatium();
-
     case P_TYPE::POINT: {
         if (element->sizeIsSpatiumDependent()) {
             return value.value<PointF>().toQPointF() / element->spatium();

@@ -774,21 +774,6 @@ Pid Tremolo::propertyId(const QStringRef& name) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Tremolo::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::TREMOLO_TYPE:
-        return subtypeName();
-    default:
-        break;
-    }
-    return EngravingItem::propertyUserValue(pid);
-}
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

@@ -3176,27 +3176,6 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Note::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::PITCH:
-        return tpcUserName();
-    case Pid::TPC1:
-    case Pid::TPC2:
-    {
-        int idx = (pid == Pid::TPC1) ? 0 : 1;
-        int tpc = _tpc[idx];
-        return tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
-    }
-    default:
-        return EngravingItem::propertyUserValue(pid);
-    }
-}
-
-//---------------------------------------------------------
 //   setHeadType
 //---------------------------------------------------------
 

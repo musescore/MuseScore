@@ -89,7 +89,6 @@ QVariant ScoreElement::get(Ms::Pid pid) const
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
     }
-    case P_TYPE::POINT_SP:
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
     case P_TYPE::SP_REAL:
@@ -122,7 +121,6 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
         val = QVariant::fromValue(f->fraction());
     }
     break;
-    case P_TYPE::POINT_SP:
     case P_TYPE::POINT:
         val = val.toPointF() * spatium();
         break;
