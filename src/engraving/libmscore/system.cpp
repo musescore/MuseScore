@@ -259,7 +259,7 @@ void System::adjustStavesNumber(int nstaves)
 
 qreal System::systemNamesWidth()
 {
-    qreal instrumentNameOffset = score()->styleP(Sid::instrumentNameOffset);
+    qreal instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
 
     qreal namesWidth = 0.0;
 
@@ -325,7 +325,7 @@ qreal System::layoutBrackets(const LayoutContext& ctx)
 
     qreal totalBracketWidth = 0.0;
 
-    qreal bd = score()->styleP(Sid::bracketDistance);
+    qreal bd = score()->styleMM(Sid::bracketDistance);
     if (!_brackets.empty()) {
         for (int w : bracketWidth) {
             totalBracketWidth += w + bd;
@@ -361,7 +361,7 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
         return;
     }
 
-    qreal instrumentNameOffset = score()->styleP(Sid::instrumentNameOffset);
+    qreal instrumentNameOffset = score()->styleMM(Sid::instrumentNameOffset);
 
     int nstaves  = _staves.size();
 
@@ -698,7 +698,7 @@ int System::getBracketsColumnsCount()
 
 void System::setBracketsXPosition(const qreal xPosition)
 {
-    qreal bracketDistance = score()->styleP(Sid::bracketDistance);
+    qreal bracketDistance = score()->styleMM(Sid::bracketDistance);
     for (Bracket* b1 : qAsConst(_brackets)) {
         qreal xOffset = 0;
         for (const Bracket* b2 : qAsConst(_brackets)) {
@@ -769,12 +769,12 @@ void System::layout2(const LayoutContext& ctx)
 
     qreal _spatium            = spatium();
     qreal y                   = 0.0;
-    qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
-    qreal staffDistance       = score()->styleP(Sid::staffDistance);
-    qreal akkoladeDistance    = score()->styleP(Sid::akkoladeDistance);
+    qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
+    qreal staffDistance       = score()->styleMM(Sid::staffDistance);
+    qreal akkoladeDistance    = score()->styleMM(Sid::akkoladeDistance);
     if (score()->enableVerticalSpread()) {
-        staffDistance       = score()->styleP(Sid::minStaffSpread);
-        akkoladeDistance    = score()->styleP(Sid::minStaffSpread);
+        staffDistance       = score()->styleMM(Sid::minStaffSpread);
+        akkoladeDistance    = score()->styleMM(Sid::minStaffSpread);
     }
 
     if (visibleStaves.empty()) {
@@ -1411,7 +1411,7 @@ qreal System::minDistance(System* s2) const
         return s2->vbox()->topGap() + vbox()->bottomGap();
     }
 
-    qreal minVerticalDistance = score()->styleP(Sid::minVerticalDistance);
+    qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
     qreal dist = score()->enableVerticalSpread() ? styleP(Sid::minSystemSpread) : styleP(Sid::minSystemDistance);
     int firstStaff;
     int lastStaff;

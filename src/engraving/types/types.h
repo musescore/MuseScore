@@ -26,7 +26,7 @@
 #include "infrastructure/draw/color.h"
 #include "infrastructure/draw/geometry.h"
 #include "infrastructure/draw/painterpath.h"
-#include "spatium.h"
+#include "dimension.h"
 
 #ifndef MU_ENGRAVING_TYPES_H
 #define MU_ENGRAVING_TYPES_H
@@ -47,7 +47,8 @@ using PointF = mu::PointF;              // P_TYPE::POINT
 using SizeF = mu::SizeF;                // P_TYPE::SIZE
 using PainterPath = mu::PainterPath;    // P_TYPE::PATH
 using ScaleF = mu::ScaleF;              // P_TYPE::SCALE
-// Spatium (spatium.h)                  // P_TYPE::SPATIUM
+// Spatium (dimension.h)                // P_TYPE::SPATIUM
+// Milimetre (dimension.h)              // P_TYPE::MILIMETRE
 using PairF = mu::PairF;                // P_TYPE::PAIR_REAL
 
 using Color = draw::Color;

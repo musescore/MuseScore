@@ -61,9 +61,8 @@ enum class P_TYPE {
     PATH,               // mu::PainterPath
     SCALE,
     SPATIUM,
+    MILIMETRE,
     PAIR_REAL,
-
-    SP_REAL,            // real (point) value saved in (score) spatium units
 
     // draw
     COLOR,          // Color
@@ -213,7 +212,7 @@ public:
 
         //! HACK Temporary hack for real to Spatium
         if constexpr (std::is_same<T, Spatium>::value) {
-            if (P_TYPE::SP_REAL == m_type || P_TYPE::REAL == m_type) {
+            if (P_TYPE::MILIMETRE == m_type || P_TYPE::REAL == m_type) {
                 const qreal* pr = std::get_if<qreal>(&m_val);
                 assert(pr);
                 return pr ? Spatium(*pr) : Spatium();

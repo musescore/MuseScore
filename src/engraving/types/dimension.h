@@ -20,19 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SPATIUM_H
-#define MU_ENGRAVING_SPATIUM_H
+#ifndef MU_ENGRAVING_DIMENSION_H
+#define MU_ENGRAVING_DIMENSION_H
 
+#include <QtGlobal>
 #include "realfn.h"
 
 namespace mu::engraving {
+using Milimetre = qreal;
+
 //---------------------------------------------------------
 //   Spatium
 //    - a unit of measure
 //    - the distance between two note lines
 //    - used for many layout items
 //---------------------------------------------------------
-
 class Spatium
 {
 public:
@@ -40,7 +42,10 @@ public:
     explicit Spatium(qreal v)
         : m_val(v) {}
 
-    constexpr qreal val() const { return m_val; }
+    qreal val() const { return m_val; }
+
+    Milimetre toMM(qreal spval) const { return m_val * spval; }
+    static Spatium fromMM(Milimetre mm, qreal spval) { return Spatium(mm / spval); }
 
     bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     bool operator<(const Spatium& a) const { return m_val < a.m_val; }
@@ -142,6 +147,7 @@ inline Spatium operator*(qreal a, const Spatium& b)
 //! NOTE compat
 namespace Ms {
 using Spatium = mu::engraving::Spatium;
+using Milimetre = mu::engraving::Milimetre;
 }
 
-#endif //MU_ENGRAVING_SPATIUM_H
+#endif //MU_ENGRAVING_DIMENSION_H

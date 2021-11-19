@@ -126,8 +126,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BOX_HEIGHT,              false, "height",                P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "height") },
     { Pid::BOX_WIDTH,               false, "width",                 P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "width") },
     { Pid::BOX_AUTOSIZE,            false, "boxAutoSize",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "autosize frame") },
-    { Pid::TOP_GAP,                 false, "topGap",                P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "top gap") },
-    { Pid::BOTTOM_GAP,              false, "bottomGap",             P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "bottom gap") },
+    { Pid::TOP_GAP,                 false, "topGap",                P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "top gap") },
+    { Pid::BOTTOM_GAP,              false, "bottomGap",             P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "bottom gap") },
     { Pid::LEFT_MARGIN,             false, "leftMargin",            P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "left margin") },
     { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "right margin") },
     { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "top margin") },
@@ -149,9 +149,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEAM_POS,                false, 0,                       P_TYPE::PAIR_REAL,      DUMMY_QT_TR_NOOP("propertyName", "beam position") },
     { Pid::BEAM_MODE,               true, "BeamMode",               P_TYPE::BEAM_MODE,      DUMMY_QT_TR_NOOP("propertyName", "beam mode") },
     { Pid::BEAM_NO_SLOPE,           true, "noSlope",                P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "without slope") },
-    { Pid::USER_LEN,                false, "userLen",               P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "length") },
+    { Pid::USER_LEN,                false, "userLen",               P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "length") },
 
-    { Pid::SPACE,                   false, "space",                 P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "space") },
+    { Pid::SPACE,                   false, "space",                 P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,          DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "following text") },
     { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "bracket") },
@@ -211,7 +211,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "diagonal") },
     { Pid::GROUPS,                  false, 0,                       P_TYPE::GROUPS,         DUMMY_QT_TR_NOOP("propertyName", "groups") },
     { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line style") },
-    { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "line width") },
+    { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "line width") },
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
     { Pid::TIME_STRETCH,            true,  "timeStretch",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "time stretch") },
     { Pid::ORNAMENT_STYLE,          true,  "ornamentStyle",         P_TYPE::ORNAMENT_STYLE, DUMMY_QT_TR_NOOP("propertyName", "ornament style") },
@@ -292,7 +292,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "generating time signature") },
     { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "generating key signature") },
     { Pid::STAFF_YOFFSET,           false, "",                      P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "y-offset") },
-    { Pid::STAFF_USERDIST,          false, "distOffset",            P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "distance offset") },
+    { Pid::STAFF_USERDIST,          false, "distOffset",            P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "distance offset") },
     { Pid::STAFF_BARLINE_SPAN,      false, "barLineSpan",           P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "barline span") },
     { Pid::STAFF_BARLINE_SPAN_FROM, false, "barLineSpanFrom",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "barline span from") },
     { Pid::STAFF_BARLINE_SPAN_TO,   false, "barLineSpanTo",         P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "barline span to") },
@@ -345,7 +345,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_FONT_STYLE,          false, "endFontStyle",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName",  "end font style") },
     { Pid::END_TEXT_OFFSET,         false, "endTextOffset",         P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "end text offset") },
 
-    { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "position above") },
+    { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::MILIMETRE,        DUMMY_QT_TR_NOOP("propertyName", "position above") },
 
     { Pid::LOCATION_STAVES,         false, "staves",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "staves distance") },
     { Pid::LOCATION_VOICES,         false, "voices",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "voices distance") },
@@ -465,7 +465,7 @@ PropertyValue propertyFromString(Pid id, QString value)
         return PropertyValue(value.toInt());
     case P_TYPE::REAL:
     case P_TYPE::SPATIUM:
-    case P_TYPE::SP_REAL:
+    case P_TYPE::MILIMETRE:
     case P_TYPE::TEMPO:
         return PropertyValue(value.toDouble());
     case P_TYPE::FRACTION:
@@ -664,9 +664,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::ZERO_INT:
     case P_TYPE::INT:
         return PropertyValue(e.readInt());
+    case P_TYPE::SPATIUM:   return PropertyValue(Spatium(e.readDouble()));
+    case P_TYPE::MILIMETRE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
     case P_TYPE::REAL:
-    case P_TYPE::SPATIUM:
-    case P_TYPE::SP_REAL:
     case P_TYPE::TEMPO:
         return PropertyValue(e.readDouble());
     case P_TYPE::FRACTION:

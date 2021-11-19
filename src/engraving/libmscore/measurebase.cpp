@@ -300,9 +300,9 @@ void MeasureBase::layout()
             qreal x;
             qreal y;
             if (toLayoutBreak(element)->isNoBreak()) {
-                x = width() + score()->styleP(Sid::barWidth) - element->width() * .5;
+                x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
             } else {
-                x = width() + score()->styleP(Sid::barWidth) - element->width()
+                x = width() + score()->styleMM(Sid::barWidth) - element->width()
                     - breakCount * (element->width() + _spatium * .5);
                 breakCount++;
             }

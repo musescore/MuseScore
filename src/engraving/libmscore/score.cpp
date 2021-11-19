@@ -3603,9 +3603,9 @@ void Score::setEnableVerticalSpread(bool val)
 qreal Score::maxSystemDistance() const
 {
     if (enableVerticalSpread()) {
-        return styleP(Sid::maxSystemSpread);
+        return styleMM(Sid::maxSystemSpread);
     } else {
-        return styleP(Sid::maxSystemDistance);
+        return styleMM(Sid::maxSystemDistance);
     }
 }
 

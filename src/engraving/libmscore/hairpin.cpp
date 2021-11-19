@@ -120,7 +120,7 @@ void HairpinSegment::layout()
         Segment* start = hairpin()->startSegment();
         Segment* end = hairpin()->endSegment();
         // Try to fit between adjacent dynamics
-        qreal minDynamicsDistance = score()->styleP(Sid::autoplaceHairpinDynamicsDistance) * staff()->staffMag(tick());
+        qreal minDynamicsDistance = score()->styleMM(Sid::autoplaceHairpinDynamicsDistance) * staff()->staffMag(tick());
         const System* sys = system();
         if (isSingleType() || isBeginType()) {
             if (start && start->system() == sys) {

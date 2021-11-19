@@ -3252,7 +3252,7 @@ void Measure::stretchMeasure(qreal targetWidth)
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
                     // center multimeasure rest
-                    qreal d = score()->styleP(Sid::multiMeasureRestMargin);
+                    qreal d = score()->styleMM(Sid::multiMeasureRestMargin);
                     qreal w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);
@@ -3648,7 +3648,7 @@ qreal Measure::basicWidth() const
 {
     Segment* ls = last();
     qreal w = (ls->x() + ls->width()) * basicStretch();
-    qreal minMeasureWidth = score()->styleP(Sid::minMeasureWidth);
+    qreal minMeasureWidth = score()->styleMM(Sid::minMeasureWidth);
     if (w < minMeasureWidth) {
         w = minMeasureWidth;
     }
@@ -4064,7 +4064,7 @@ void Measure::checkTrailer()
 
 void Measure::setStretchedWidth(qreal w)
 {
-    qreal minWidth = isMMRest() ? score()->styleP(Sid::minMMRestWidth) : score()->styleP(Sid::minMeasureWidth);
+    qreal minWidth = isMMRest() ? score()->styleMM(Sid::minMMRestWidth) : score()->styleMM(Sid::minMeasureWidth);
     if (w < minWidth) {
         w = minWidth;
     }
@@ -4132,7 +4132,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
             MMRest* mmRest = toMMRest(seg->element(staff2track(st)));
             if (mmRest) {
                 mmRest->rxpos() = 0;
-                mmRest->setWidth(score()->styleP(Sid::minMMRestWidth) * mag());
+                mmRest->setWidth(score()->styleMM(Sid::minMMRestWidth) * mag());
                 mmRest->segment()->createShapes();
             }
         }
@@ -4259,19 +4259,19 @@ void Measure::computeMinWidth()
             Segment* seg = toMeasure(pmb)->last();
             // overlap end repeat barline with start repeat barline
             if (seg->isEndBarLineType()) {
-                x -= score()->styleP(Sid::endBarWidth) * mag();
+                x -= score()->styleMM(Sid::endBarWidth) * mag();
             }
         }
     }
 
     if (s->isChordRestType()) {
-        x += score()->styleP(hasAccidental(s) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+        x += score()->styleMM(hasAccidental(s) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
     } else if (s->isClefType() || s->isHeaderClefType()) {
-        x += score()->styleP(Sid::clefLeftMargin);
+        x += score()->styleMM(Sid::clefLeftMargin);
     } else if (s->isKeySigType()) {
-        x = qMax(x, score()->styleP(Sid::keysigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin));
     } else if (s->isTimeSigType()) {
-        x = qMax(x, score()->styleP(Sid::timesigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin));
     }
     x += s->extraLeadingSpace().val() * spatium();
     bool isSystemHeader = s->header();
@@ -4293,13 +4293,13 @@ qreal Measure::computeFirstSegmentXPosition(Segment* segment)
     x = segment->minLeft(ls);
 
     if (segment->isChordRestType()) {
-        x += score()->styleP(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+        x += score()->styleMM(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
     } else if (segment->isClefType() || segment->isHeaderClefType()) {
-        x += score()->styleP(Sid::clefLeftMargin);
+        x += score()->styleMM(Sid::clefLeftMargin);
     } else if (segment->isKeySigType()) {
-        x = qMax(x, score()->styleP(Sid::keysigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin));
     } else if (segment->isTimeSigType()) {
-        x = qMax(x, score()->styleP(Sid::timesigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin));
     }
     x += segment->extraLeadingSpace().val() * spatium();
 
@@ -4476,7 +4476,7 @@ void Measure::stretchMeasureInPracticeMode(qreal targetWidth)
                     //
                     // center multi measure rest
                     //
-                    qreal d = score()->styleP(Sid::multiMeasureRestMargin);
+                    qreal d = score()->styleMM(Sid::multiMeasureRestMargin);
                     qreal w = x2 - x1 - 2 * d;
 
                     mmrest->setWidth(w);

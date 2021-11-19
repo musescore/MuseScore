@@ -441,7 +441,7 @@ void Accidental::layoutSingleGlyphAccidental()
 
 void Accidental::layoutMultiGlyphAccidental()
 {
-    qreal margin = score()->styleP(Sid::bracketedAccidentalPadding);
+    qreal margin = score()->styleMM(Sid::bracketedAccidentalPadding);
     RectF r;
     qreal x = 0.0;
 

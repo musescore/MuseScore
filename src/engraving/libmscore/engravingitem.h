@@ -38,8 +38,6 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
-#include "types/spatium.h"
-
 namespace mu::engraving {
 class Factory;
 class AccessibleItem;

@@ -1593,9 +1593,9 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
         const qreal offset = (beamLevels == 4) ? _beamDist / 2.0 : 0.0;
 
         if (bm.l > 0) {
-            py1 -= _spatium - score()->styleP(Sid::beamWidth) / 4.0 - offset;
+            py1 -= _spatium - score()->styleMM(Sid::beamWidth) / 4.0 - offset;
         } else {
-            py1 += _spatium - score()->styleP(Sid::beamWidth) / 4.0 - offset;
+            py1 += _spatium - score()->styleMM(Sid::beamWidth) / 4.0 - offset;
         }
     }
 }
@@ -1629,9 +1629,9 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
     PointF _pagePos(pagePos());
 
     if (beamLevels == 4) {
-        _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance) * 4 / 3);
+        _beamDist = score()->styleMM(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance) * 4 / 3);
     } else {
-        _beamDist = score()->styleP(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance));
+        _beamDist = score()->styleMM(Sid::beamWidth) * (1 + score()->styleD(Sid::beamDistance));
     }
 
     _beamDist *= mag();
@@ -1905,7 +1905,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                 }
 
                 size_t sizeChordRests = crl.size();
-                qreal len = score()->styleP(Sid::beamMinLen) * mag() * c1->staff()->staffMag(c1);
+                qreal len = score()->styleMM(Sid::beamMinLen) * mag() * c1->staff()->staffMag(c1);
                 //
                 // find direction (by default, segment points to right)
                 //

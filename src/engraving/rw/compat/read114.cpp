@@ -3059,7 +3059,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            qreal y = masterScore->styleP(Sid::staffUpperBorder);
+            qreal y = masterScore->styleMM(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }

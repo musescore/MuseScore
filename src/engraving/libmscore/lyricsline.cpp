@@ -74,7 +74,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
-    setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
+    setLineWidth(score()->styleMM(Sid::lyricsDashLineThickness));
     setAnchor(Spanner::Anchor::SEGMENT);
     _nextLyrics = 0;
 }
@@ -91,7 +91,7 @@ LyricsLine::LyricsLine(const LyricsLine& g)
 
 void LyricsLine::styleChanged()
 {
-    setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
+    setLineWidth(score()->styleMM(Sid::lyricsDashLineThickness));
 }
 
 //---------------------------------------------------------
@@ -102,7 +102,7 @@ void LyricsLine::layout()
 {
     bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
     if (isEndMelisma()) {           // melisma
-        setLineWidth(score()->styleP(Sid::lyricsLineThickness));
+        setLineWidth(score()->styleMM(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
             lyrics()->setTicks(Fraction(0, 1));
@@ -376,7 +376,7 @@ void LyricsLineSegment::layout()
             qreal lyrXp       = lyr->pagePos().x();
             qreal sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleP(Sid::lyricsDashPad);
+            qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleMM(Sid::lyricsDashPad);
             //                    delta from current end pos.| ending padding
             rxpos2()          += offsetX;
         }
@@ -392,7 +392,7 @@ void LyricsLineSegment::layout()
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
         qreal offsetX     = fromX - pos().x();
-        offsetX           += score()->styleP(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
+        offsetX           += score()->styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
         rxpos()           += offsetX;
@@ -428,7 +428,7 @@ void LyricsLineSegment::layout()
     } else {                              // dash(es)
         // set conventional dash Y pos
         rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
-        _dashLength = score()->styleP(Sid::lyricsDashMaxLength) * mag();      // and dash length
+        _dashLength = score()->styleMM(Sid::lyricsDashMaxLength) * mag();      // and dash length
         qreal len         = pos2().x();
         qreal minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
         qreal maxDashDist = score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;

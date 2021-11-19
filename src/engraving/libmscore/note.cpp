@@ -2841,7 +2841,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     } else {
         Measure* measure = seg->measure();
 
-        qreal minDist = score()->styleP(Sid::barNoteDistance);
+        qreal minDist = score()->styleMM(Sid::barNoteDistance);
 
         qreal diff = (ed.pos.x()) - (measure->pageX() + minDist);
 

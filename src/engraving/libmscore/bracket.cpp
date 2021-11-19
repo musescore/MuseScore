@@ -99,19 +99,19 @@ qreal Bracket::width() const
     switch (bracketType()) {
     case BracketType::BRACE:
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
-            w = score()->styleP(Sid::akkoladeWidth) + score()->styleP(Sid::akkoladeBarDistance);
+            w = score()->styleMM(Sid::akkoladeWidth) + score()->styleMM(Sid::akkoladeBarDistance);
         } else {
-            w = (symWidth(_braceSymbol) * _magx) + score()->styleP(Sid::akkoladeBarDistance);
+            w = (symWidth(_braceSymbol) * _magx) + score()->styleMM(Sid::akkoladeBarDistance);
         }
         break;
     case BracketType::NORMAL:
-        w = score()->styleP(Sid::bracketWidth) + score()->styleP(Sid::bracketDistance);
+        w = score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::SQUARE:
-        w = score()->styleP(Sid::staffLineWidth) + spatium() * .5;
+        w = score()->styleMM(Sid::staffLineWidth) + spatium() * .5;
         break;
     case BracketType::LINE:
-        w = 0.67f * score()->styleP(Sid::bracketWidth) + score()->styleP(Sid::bracketDistance);
+        w = 0.67f * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::NO_BRACKET:
     default:
@@ -176,7 +176,7 @@ void Bracket::layout()
     case BracketType::BRACE: {
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             _braceSymbol = SymId::noSym;
-            qreal w = score()->styleP(Sid::akkoladeWidth);
+            qreal w = score()->styleMM(Sid::akkoladeWidth);
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * h2 / 7100
@@ -217,7 +217,7 @@ void Bracket::layout()
     break;
     case BracketType::NORMAL: {
         qreal _spatium = spatium();
-        qreal w = score()->styleP(Sid::bracketWidth) * .5;
+        qreal w = score()->styleMM(Sid::bracketWidth) * .5;
         qreal x = -w;
 
         qreal bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
@@ -232,7 +232,7 @@ void Bracket::layout()
     }
     break;
     case BracketType::SQUARE: {
-        qreal w = score()->styleP(Sid::staffLineWidth) * .5;
+        qreal w = score()->styleMM(Sid::staffLineWidth) * .5;
         qreal x = -w;
         qreal y = -w;
         qreal h = (h2 + w) * 2;
@@ -243,7 +243,7 @@ void Bracket::layout()
     break;
     case BracketType::LINE: {
         qreal _spatium = spatium();
-        qreal w = 0.67 * score()->styleP(Sid::bracketWidth) * .5;
+        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth) * .5;
         qreal x = -w;
         qreal bd = _spatium * .25;
         qreal y = -bd;
@@ -287,7 +287,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::NORMAL: {
         qreal h        = 2 * h2;
         qreal _spatium = spatium();
-        qreal w        = score()->styleP(Sid::bracketWidth);
+        qreal w        = score()->styleMM(Sid::bracketWidth);
         qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -302,7 +302,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::SQUARE: {
         qreal h = 2 * h2;
         qreal _spatium = spatium();
-        qreal w = score()->styleP(Sid::staffLineWidth);
+        qreal w = score()->styleMM(Sid::staffLineWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
@@ -312,10 +312,10 @@ void Bracket::draw(mu::draw::Painter* painter) const
     break;
     case BracketType::LINE: {
         qreal h = 2 * h2;
-        qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
+        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
-        qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
+        qreal bd = score()->styleMM(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;

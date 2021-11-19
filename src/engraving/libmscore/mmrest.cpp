@@ -93,7 +93,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
         x = (m_width - m_symsWidth) * 0.5;
-        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        qreal spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : m_restSyms) {
             y = (sym == SymId::restWhole ? -spatium() : 0);
             drawSymbol(sym, painter, PointF(x, y));
@@ -104,7 +104,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
-        qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
+        qreal hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
         if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
@@ -122,11 +122,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
         }
 
         // draw vertical lines
-        qreal vStrokeThickness = score()->styleP(Sid::mmRestHBarVStrokeThickness);
+        qreal vStrokeThickness = score()->styleMM(Sid::mmRestHBarVStrokeThickness);
         if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
-            qreal halfVStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight) * .5;
+            qreal halfVStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight) * .5;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
             painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
         }
@@ -150,7 +150,7 @@ void MMRest::layout()
         m_symsWidth = 0;
 
         int remaining = m_number;
-        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        qreal spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
         SymId sym;
 
         while (remaining > 0) {
@@ -173,7 +173,7 @@ void MMRest::layout()
         qreal symHeight = symBbox(m_restSyms[0]).height();
         setbbox(RectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
     } else { // H-bar
-        qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
+        qreal vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
         setbbox(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     }
     if (m_numberVisible) {
@@ -271,7 +271,7 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 Shape MMRest::shape() const
 {
     Shape shape;
-    qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
+    qreal vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     if (m_numberVisible) {
         shape.add(numberRect());
