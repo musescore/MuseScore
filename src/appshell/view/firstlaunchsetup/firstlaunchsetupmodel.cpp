@@ -101,6 +101,25 @@ void FirstLaunchSetupModel::setCurrentPageIndex(int index)
     interactive()->open(m_pages.at(m_currentPageIndex).backgroundUri);
 }
 
+bool FirstLaunchSetupModel::askAboutClosingEarly()
+{
+    IInteractive::ButtonDatas buttons {
+        IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
+        IInteractive::ButtonData(IInteractive::Button::Continue, trc("appshell", "Keep going"), /*accentButton*/ true)
+    };
+
+    IInteractive::Result result
+        = interactive()->warning(trc("appshell", "Are you sure you want to cancel?"),
+                                 trc("appshell", "If you choose to cancel, then make "
+                                                 "sure to check out our free playback "
+                                                 "libraries in Home > Audio."),
+                                 buttons,
+                                 int(IInteractive::Button::Cancel),
+                                 IInteractive::Option::WithIcon);
+
+    return result.button() == int(IInteractive::Button::Cancel);
+}
+
 void FirstLaunchSetupModel::finish()
 {
     configuration()->setHasCompletedFirstLaunchSetup(true);
