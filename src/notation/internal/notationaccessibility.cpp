@@ -74,6 +74,9 @@ void NotationAccessibility::updateAccessibilityInfo()
         newAccessibilityInfo = qtrc("notation", "List selection");
     }
 
+    // Simplify whitespace and remove newlines
+    newAccessibilityInfo = newAccessibilityInfo.simplified();
+
     setAccessibilityInfo(newAccessibilityInfo);
 }
 
