@@ -211,7 +211,7 @@ void PopupView::close()
         return;
     }
 
-    m_window->hide();
+    m_window->close();
 }
 
 void PopupView::toggleOpened()
