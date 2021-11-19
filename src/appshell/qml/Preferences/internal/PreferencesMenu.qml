@@ -120,7 +120,6 @@ Item {
             navigation.accessible.role: MUAccessible.ListItem
             navigation.onActiveChanged: {
                 if (navigation.active) {
-                    prv.currentItemNavigationIndex = [navigationRow, navigationColumn]
                     treeView.model.selectRow(styleData.index)
                 }
             }
@@ -148,8 +147,12 @@ Item {
             }
 
             onCheckedChanged: {
-                if (checked && !navigation.active) {
-                    Qt.callLater(navigation.requestActive)
+                if (checked) {
+                    prv.currentItemNavigationIndex = [navigationRow, navigationColumn]
+
+                    if (!navigation.active) {
+                        Qt.callLater(navigation.requestActive)
+                    }
                 }
             }
 
