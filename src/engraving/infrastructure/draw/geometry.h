@@ -25,7 +25,6 @@
 #include <vector>
 #include <cmath>
 #include <QtGlobal>
-#include <QVariant>
 
 #ifndef NO_QT_SUPPORT
 #include <QPointF>
@@ -49,17 +48,6 @@ public:
     inline PointX() = default;
     inline PointX(T x, T y)
         : m_x(x), m_y(y) {}
-
-    operator QVariant() const
-    {
-        return QVariant::fromValue(*this);
-    }
-
-    static PointX<T> fromVariant(const QVariant& v)
-    {
-        Q_ASSERT(v.canConvert<PointX<T> >());
-        return v.value<PointX<T> >();
-    }
 
     inline bool isNull() const { return isEqual(m_x, T()) && isEqual(m_y, T()); }
 
@@ -103,8 +91,6 @@ public:
     }
 
 #ifndef NO_QT_SUPPORT
-    //! NOTE The accepting QPoint(F) constructor is deliberately omitted to avoid implicit conversions.
-    //! This can be especially problematic when using QVariant.
     static PointX<T> fromQPointF(const QPointF& p) { return PointX<T>(p.x(), p.y()); }
     inline QPointF toQPointF() const { return QPointF(m_x, m_y); }
     inline QPoint toQPoint() const { return QPoint(m_x, m_y); }
@@ -184,8 +170,6 @@ public:
     inline LineX<T> translated(const PointX<T>& p) const { return LineX<T>(m_p1 + p, m_p2 + p); }
 
 #ifndef NO_QT_SUPPORT
-    //! NOTE The accepting QLine(F) constructor is deliberately omitted to avoid implicit conversions.
-    //! This can be especially problematic when using QVariant.
     static LineX<T> fromQLineF(const QLineF& l) { return LineX<T>(l.x1(), l.y1(), l.x2(), l.y2()); }
     inline QLineF toQLineF() const { return QLineF(m_p1.toQPointF(), m_p2.toQPointF()); }
 #endif
@@ -209,17 +193,6 @@ public:
     inline SizeX(T w, T h)
         : m_w(w), m_h(h) {}
 
-    operator QVariant() const
-    {
-        return QVariant::fromValue(*this);
-    }
-
-    static SizeX<T> fromVariant(const QVariant& v)
-    {
-        Q_ASSERT(v.canConvert<SizeX<T> >());
-        return v.value<SizeX<T> >();
-    }
-
     inline bool isNull() const { return isEqual(m_w, T()) && isEqual(m_h, T()); }
 
     inline T width() const { return m_w; }
@@ -234,8 +207,6 @@ public:
     inline SizeX<T> transposed() const { return SizeX<T>(m_h, m_w); }
 
 #ifndef NO_QT_SUPPORT
-    //! NOTE The accepting QSize(F) constructor is deliberately omitted to avoid implicit conversions.
-    //! This can be especially problematic when using QVariant.
     static SizeX<T> fromQSizeF(const QSizeF& s) { return SizeX<T>(s.width(), s.height()); }
     inline QSizeF toQSizeF() const { return QSizeF(m_w, m_h); }
 #endif
@@ -272,12 +243,6 @@ public:
         : m_x(topLeft.x()), m_y(topLeft.y()), m_w(bottomRight.x() - topLeft.x()), m_h(bottomRight.y() - topLeft.y()) {}
     inline RectX(const PointX<T>& atopLeft, const SizeX<T>& asize)
         : m_x(atopLeft.x()), m_y(atopLeft.y()), m_w(asize.width()), m_h(asize.height()) {}
-
-    static RectX<T> fromVariant(const QVariant& v)
-    {
-        Q_ASSERT(v.canConvert<RectX<T> >());
-        return v.value<RectX<T> >();
-    }
 
     inline bool isNull() const { return isEqual(m_w, T()) && isEqual(m_h, T()); }
     inline bool isEmpty() const { return m_w <= T() || m_h <= T(); }
@@ -360,8 +325,6 @@ public:
     RectX<T> normalized() const;
 
 #ifndef NO_QT_SUPPORT
-    //! NOTE The accepting QRect(F) constructor is deliberately omitted to avoid implicit conversions.
-    //! This can be especially problematic when using QVariant.
     static RectX<T> fromQRectF(const QRectF& r) { return RectX<T>(r.x(), r.y(), r.width(), r.height()); }
     inline QRectF toQRectF() const { return QRectF(m_x, m_y, m_w, m_h); }
     inline QRect toQRect() const { return QRect(m_x, m_y, m_w, m_h); }
@@ -719,10 +682,5 @@ RectX<T> RectX<T>::normalized() const
     return r;
 }
 }
-
-Q_DECLARE_METATYPE(mu::PointF)
-Q_DECLARE_METATYPE(mu::SizeF)
-Q_DECLARE_METATYPE(mu::RectF)
-Q_DECLARE_METATYPE(mu::Rect)
 
 #endif // MU_GEOMETRY_H

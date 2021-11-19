@@ -319,15 +319,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
         if (strcmp(type, "Ms::Direction") == 0) {
             return PropertyValue(v.value<Ms::Direction>());
         }
-        if (strcmp(type, "mu::draw::Color") == 0) {
-            return PropertyValue(v.value<draw::Color>());
-        }
-        if (strcmp(type, "mu::SizeF") == 0) {
-            return PropertyValue(v.value<mu::SizeF>());
-        }
-        if (strcmp(type, "mu::PointF") == 0) {
-            return PropertyValue(v.value<PointF>());
-        }
         if (strcmp(type, "Ms::Fraction") == 0) {
             return PropertyValue(v.value<Ms::Fraction>());
         }

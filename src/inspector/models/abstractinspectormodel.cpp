@@ -286,10 +286,7 @@ QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
 PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const
 {
     auto toPoint = [](const QVariant& v) {
-        if (v.type() == QVariant::PointF) {
-            return PointF::fromQPointF(v.value<QPointF>());
-        }
-        return v.value<PointF>();
+        return PointF::fromQPointF(v.value<QPointF>());
     };
 
     P_TYPE type = Ms::propertyType(pid);

@@ -3,9 +3,6 @@
 #include <sstream>
 #include <iomanip>
 
-static bool com = QMetaType::registerComparators<mu::draw::Color>();
-static bool con = QMetaType::registerConverter<mu::draw::Color, QString>(&mu::draw::Color::toQString);
-
 namespace mu::draw {
 static constexpr int fromHex(uint c);
 static int hex2int(const char* s, int n);
