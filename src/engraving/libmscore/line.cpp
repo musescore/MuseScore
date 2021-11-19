@@ -177,7 +177,7 @@ QVector<LineF> LineSegment::gripAnchorLines(Grip grip) const
     } else {
         const int stIdx = staffIdx();
         y = system()->staffYpage(stIdx);
-        if (line()->placement() == Placement::BELOW) {
+        if (line()->placement() == PlacementV::BELOW) {
             y += system()->staff(stIdx)->bbox().height();
         }
         // adjust Y to staffType offset

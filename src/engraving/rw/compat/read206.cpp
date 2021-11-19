@@ -124,7 +124,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     mu::draw::Color foregroundColor = mu::draw::Color::black;
     mu::draw::Color backgroundColor = mu::draw::Color::transparent;
 
-    Placement placement = Placement::ABOVE;
+    PlacementV placement = PlacementV::ABOVE;
     bool placementValid = false;
 
     QString name = e.attribute("name");
@@ -244,9 +244,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         } else if (tag == "placement") {
             QString value(e.readElementText());
             if (value == "above") {
-                placement = Placement::ABOVE;
+                placement = PlacementV::ABOVE;
             } else if (value == "below") {
-                placement = Placement::BELOW;
+                placement = PlacementV::BELOW;
             }
             placementValid = true;
         } else if (tag == "lineWidth") {
@@ -892,22 +892,22 @@ static void adjustPlacement(EngravingItem* e)
     qreal staffHeight = e->staff()->height();
     qreal threshold = staffHeight;
     qreal offsetAdjust = 0.0;
-    Placement defaultPlacement = Placement(e->propertyDefault(Pid::PLACEMENT).toInt());
-    Placement newPlacement;
+    PlacementV defaultPlacement = PlacementV(e->propertyDefault(Pid::PLACEMENT).toInt());
+    PlacementV newPlacement;
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
     qreal normalize;
-    if (defaultPlacement == Placement::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+    if (defaultPlacement == PlacementV::BELOW && ee->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
         normalize = staffHeight;
     } else {
         normalize = 0.0;
     }
     qreal ypos = ee->offset().y() + normalize;
     if (ypos >= threshold) {
-        newPlacement = Placement::BELOW;
+        newPlacement = PlacementV::BELOW;
         offsetAdjust -= staffHeight;
     } else {
-        newPlacement = Placement::ABOVE;
+        newPlacement = PlacementV::ABOVE;
     }
 
     // set placement
@@ -922,7 +922,7 @@ static void adjustPlacement(EngravingItem* e)
         for (auto a : spanner->spannerSegments()) {
             // spanner segments share the placement setting of the spanner
             // just adjust offset
-            if (defaultPlacement == Placement::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
+            if (defaultPlacement == PlacementV::BELOW && a->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
                 normalize = staffHeight;
             } else {
                 normalize = 0.0;
@@ -935,9 +935,9 @@ static void adjustPlacement(EngravingItem* e)
             // disable autoplace
             bool disableAutoplace;
             if (yp + a->height() <= 0.0) {
-                disableAutoplace = (newPlacement == Placement::BELOW);
+                disableAutoplace = (newPlacement == PlacementV::BELOW);
             } else if (yp > staffHeight) {
-                disableAutoplace = (newPlacement == Placement::ABOVE);
+                disableAutoplace = (newPlacement == PlacementV::ABOVE);
             } else {
                 disableAutoplace = true;
             }
@@ -1517,7 +1517,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
         //lyrics->ryoffset() -= lyrics->placeBelow() && lyrics->staff() ? lyrics->staff()->height() : 0.0;
         // temporarily set placement to above, since the original offset is relative to top of staff
         // depend on adjustPlacement() to change the placement if appropriate
-        lyrics->setPlacement(Placement::ABOVE);
+        lyrics->setPlacement(PlacementV::ABOVE);
         adjustPlacement(lyrics);
     }
 }
@@ -2207,19 +2207,19 @@ void Read206::readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase
 static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Direction direction)
 {
     if (direction == Direction::UP) {
-        el->setPlacement(Placement::ABOVE);
+        el->setPlacement(PlacementV::ABOVE);
     } else if (direction == Direction::DOWN) {
-        el->setPlacement(Placement::BELOW);
+        el->setPlacement(PlacementV::BELOW);
     } else {
         switch (anchor) {
         case ArticulationAnchor::TOP_STAFF:
         case ArticulationAnchor::TOP_CHORD:
-            el->setPlacement(Placement::ABOVE);
+            el->setPlacement(PlacementV::ABOVE);
             break;
 
         case ArticulationAnchor::BOTTOM_STAFF:
         case ArticulationAnchor::BOTTOM_CHORD:
-            el->setPlacement(Placement::BELOW);
+            el->setPlacement(PlacementV::BELOW);
             break;
 
         case ArticulationAnchor::CHORD:
@@ -2357,7 +2357,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
             el->setProperty(Pid::TIME_STRETCH, timeStretch);
         }
         if (useDefaultPlacement) {
-            el->setPlacement(track & 1 ? Placement::BELOW : Placement::ABOVE);
+            el->setPlacement(track & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
         } else {
             setFermataPlacement(el, anchor, direction);
         }
@@ -2505,7 +2505,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 } else if (t == "Articulation") {
                     EngravingItem* el = Read206::readArticulation(bl, e, ctx);
                     if (el->isFermata()) {
-                        if (el->placement() == Placement::ABOVE) {
+                        if (el->placement() == PlacementV::ABOVE) {
                             fermataAbove = toFermata(el);
                         } else {
                             fermataBelow = toFermata(el);
@@ -2592,7 +2592,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         } else if (tag == "Breath") {
             Breath* breath = Factory::createBreath(ctx.dummy()->segment());
             breath->setTrack(e.track());
-            breath->setPlacement(Placement::ABOVE);
+            breath->setPlacement(PlacementV::ABOVE);
             Fraction tick = e.tick();
             breath->read(e);
             // older scores placed the breath segment right after the chord to which it applies
@@ -3212,10 +3212,10 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "harmonyY") {
             qreal val = -e.readDouble();
             if (val > 0.0) {
-                style->set(Sid::harmonyPlacement, int(Placement::BELOW));
+                style->set(Sid::harmonyPlacement, int(PlacementV::BELOW));
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             } else {
-                style->set(Sid::harmonyPlacement, int(Placement::ABOVE));
+                style->set(Sid::harmonyPlacement, int(PlacementV::ABOVE));
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
         } else {

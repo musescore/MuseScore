@@ -108,11 +108,6 @@ PropertyValue::PropertyValue(Ms::HookType v)
 {
 }
 
-PropertyValue::PropertyValue(Ms::HPlacement v)
-    : m_type(P_TYPE::HPLACEMENT), m_val(v)
-{
-}
-
 PropertyValue::PropertyValue(const Ms::PitchValues& v)
     : m_type(P_TYPE::PITCH_VALUES), m_val(v)
 {
@@ -223,8 +218,8 @@ QVariant PropertyValue::toQVariant() const
     // draw
     case P_TYPE::COLOR:      return value<draw::Color>().toQColor();
     case P_TYPE::ALIGN:      return QVariant::fromValue(int(value<Align>()));
-    case P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
-    case P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
+    case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
+    case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::DIRECTION:  return QVariant::fromValue(value<Ms::Direction>());
     case P_TYPE::DIRECTION_H: {
         UNREACHABLE; //! TODO
@@ -275,8 +270,8 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Layout
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
-    case P_TYPE::PLACEMENT:     return PropertyValue(Ms::Placement(v.toInt()));
-    case P_TYPE::HPLACEMENT:    return PropertyValue(Ms::HPlacement(v.toInt()));
+    case P_TYPE::PLACEMENT_V:     return PropertyValue(PlacementV(v.toInt()));
+    case P_TYPE::PLACEMENT_H:    return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::DIRECTION:     return PropertyValue(Ms::Direction(v.toInt()));
     case P_TYPE::DIRECTION_H: {
         UNREACHABLE; //! TODO

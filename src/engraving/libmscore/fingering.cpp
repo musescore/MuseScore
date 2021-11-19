@@ -54,7 +54,7 @@ static const ElementStyle fingeringStyle {
 Fingering::Fingering(Note* parent, Tid tid, ElementFlags ef)
     : TextBase(ElementType::FINGERING, parent, tid, ef)
 {
-    setPlacement(Placement::ABOVE);
+    setPlacement(PlacementV::ABOVE);
     initElementStyle(&fingeringStyle);
 }
 
@@ -83,11 +83,11 @@ ElementType Fingering::layoutType()
 //   calculatePlacement
 //---------------------------------------------------------
 
-Placement Fingering::calculatePlacement() const
+PlacementV Fingering::calculatePlacement() const
 {
     Note* n = note();
     if (!n) {
-        return Placement::ABOVE;
+        return PlacementV::ABOVE;
     }
     Chord* chord = n->chord();
     Staff* staff = chord->staff();
@@ -95,7 +95,7 @@ Placement Fingering::calculatePlacement() const
     int nstaves  = part->nstaves();
     bool voices  = chord->measure()->hasVoices(staff->idx(), chord->tick(), chord->actualTicks());
     bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
-    return below ? Placement::BELOW : Placement::ABOVE;
+    return below ? PlacementV::BELOW : PlacementV::ABOVE;
 }
 
 //---------------------------------------------------------

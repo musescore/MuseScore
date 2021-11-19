@@ -124,7 +124,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::Placement enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// EngravingItem.ABOVE and EngravingItem.BELOW.
-    DECLARE_API_ENUM(Placement,        placementEnum,          Ms::Placement)
+    DECLARE_API_ENUM(Placement,        placementEnum,          Ms::PluginAPI::Placement)
     /// Contains Ms::GlissandoType enumeration values
     DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      Ms::GlissandoType)             // was probably absent in 2.X
     /// Contains Ms::LayoutBreak::Type enumeration values

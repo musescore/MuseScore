@@ -74,7 +74,7 @@ bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::HPLACEMENT:
-        setHPlacement(HPlacement(val.toInt()));
+        setHPlacement(PlacementH(val.toInt()));
         setLayoutInvalid();
         triggerLayout();
         return true;
@@ -152,7 +152,7 @@ void MeasureNumberBase::layout()
         rypos() = yoff;
     }
 
-    if (hPlacement() == HPlacement::CENTER) {
+    if (hPlacement() == PlacementH::CENTER) {
         // measure numbers should be centered over where there can be notes.
         // This means that header and trailing segments should be ignored,
         // which includes all timesigs, clefs, keysigs, etc.
@@ -193,7 +193,7 @@ void MeasureNumberBase::layout()
         qreal x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
 
         rxpos() = (x1 + x2) * 0.5;
-    } else if (hPlacement() == HPlacement::RIGHT) {
+    } else if (hPlacement() == PlacementH::RIGHT) {
         rxpos() = measure()->width();
     }
 }

@@ -1342,7 +1342,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setMinDistance(v.value<Spatium>());
         break;
     case Pid::PLACEMENT:
-        setPlacement(Placement(v.toInt()));
+        setPlacement(PlacementV(v.toInt()));
         break;
     case Pid::AUTOPLACE:
         setAutoplace(v.toBool());
@@ -1401,7 +1401,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
-        return int(Placement::BELOW);
+        return int(PlacementV::BELOW);
     }
     case Pid::SELECTED:
         return false;
@@ -2149,7 +2149,7 @@ QVector<LineF> EngravingItem::genericDragAnchorLines() const
         System* system = toSegment(parent())->measure()->system();
         const int stIdx = staffIdx();
         yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
-        if (placement() == Placement::BELOW) {
+        if (placement() == PlacementV::BELOW) {
             yp += system ? system->staff(stIdx)->bbox().height() : 0.0;
         }
         //adjust anchor Y positions to staffType offset
@@ -2327,7 +2327,7 @@ qreal EngravingItem::rebaseOffset(bool nox)
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
             }
-            Placement place = above ? Placement::BELOW : Placement::ABOVE;
+            PlacementV place = above ? PlacementV::BELOW : PlacementV::ABOVE;
             e->undoChangeProperty(Pid::PLACEMENT, int(place), pf);
             undoResetProperty(Pid::MIN_DISTANCE);
             return 0.0;

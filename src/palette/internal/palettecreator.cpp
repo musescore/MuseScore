@@ -1009,7 +1009,7 @@ PalettePtr PaletteCreator::newLinesPalette()
     ottava = makeElement<Ottava>(gpaletteScore);
     ottava->setOttavaType(OttavaType::OTTAVA_8VB);
     ottava->setLen(w);
-    ottava->setPlacement(Placement::BELOW);
+    ottava->setPlacement(PlacementV::BELOW);
     ottava->styleChanged();
     sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va bassa"));
 
@@ -1022,7 +1022,7 @@ PalettePtr PaletteCreator::newLinesPalette()
     ottava = makeElement<Ottava>(gpaletteScore);
     ottava->setOttavaType(OttavaType::OTTAVA_15MB);
     ottava->setLen(w);
-    ottava->setPlacement(Placement::BELOW);
+    ottava->setPlacement(PlacementV::BELOW);
     ottava->styleChanged();
     sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma bassa"));
 
@@ -1034,7 +1034,7 @@ PalettePtr PaletteCreator::newLinesPalette()
 
     ottava = makeElement<Ottava>(gpaletteScore);
     ottava->setOttavaType(OttavaType::OTTAVA_22MB);
-    ottava->setPlacement(Placement::BELOW);
+    ottava->setPlacement(PlacementV::BELOW);
     ottava->setLen(w);
     ottava->styleChanged();
     sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma bassa"));
@@ -1241,7 +1241,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     st = makeElement<StaffText>(gpaletteScore);
     st->setTid(Tid::EXPRESSION);
     st->setXmlText(QT_TRANSLATE_NOOP("palette", "Expression"));
-    st->setPlacement(Placement::BELOW);
+    st->setPlacement(PlacementV::BELOW);
     st->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Expression text"))->setElementTranslated(true);
 

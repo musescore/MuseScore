@@ -318,7 +318,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             segment = measure->getSegment(SegmentType::Breath, e.tick());
             Breath* breath = Factory::createBreath(segment);
             breath->setTrack(e.track());
-            breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+            breath->setPlacement(breath->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
             breath->read(e);
             segment->add(breath);
         } else if (tag == "Spanner") {
@@ -451,7 +451,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         } else if (tag == "Fermata") {
             fermata = Factory::createFermata(ctx.dummy());
             fermata->setTrack(e.track());
-            fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+            fermata->setPlacement(fermata->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
             fermata->read(e);
         } else if (tag == "Image") {
             if (MScore::noImages) {

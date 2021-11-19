@@ -186,8 +186,8 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::SINGLE_NOTE_DYNAMICS,    true,  "singleNoteDynamics",    P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "single note dynamics") },
     { Pid::CHANGE_METHOD,           true,  "changeMethod",          P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "change method") }, // the new, more general version of VELO_CHANGE_METHOD
-    { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT,      DUMMY_QT_TR_NOOP("propertyName", "placement") },
-    { Pid::HPLACEMENT,              false, "hplacement",            P_TYPE::HPLACEMENT,     DUMMY_QT_TR_NOOP("propertyName", "horizontal placement") },
+    { Pid::PLACEMENT,               false, "placement",             P_TYPE::PLACEMENT_V,      DUMMY_QT_TR_NOOP("propertyName", "placement") },
+    { Pid::HPLACEMENT,              false, "hplacement",            P_TYPE::PLACEMENT_H,     DUMMY_QT_TR_NOOP("propertyName", "horizontal placement") },
     { Pid::MMREST_RANGE_BRACKET_TYPE, false, "mmrestRangeBracketType", P_TYPE::INT,         DUMMY_QT_TR_NOOP("propertyName", "multimeasure rest range bracket type") },
     { Pid::VELOCITY,                false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::JUMP_TO,                 true,  "jumpTo",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "jump to") },
@@ -548,21 +548,21 @@ PropertyValue propertyFromString(Pid id, QString value)
         }
     }
     break;
-    case P_TYPE::PLACEMENT: {
+    case P_TYPE::PLACEMENT_V: {
         if (value == "above") {
-            return PropertyValue(int(Placement::ABOVE));
+            return PropertyValue(int(PlacementV::ABOVE));
         } else if (value == "below") {
-            return PropertyValue(int(Placement::BELOW));
+            return PropertyValue(int(PlacementV::BELOW));
         }
     }
     break;
-    case P_TYPE::HPLACEMENT: {
+    case P_TYPE::PLACEMENT_H: {
         if (value == "left") {
-            return PropertyValue(int(HPlacement::LEFT));
+            return PropertyValue(int(PlacementH::LEFT));
         } else if (value == "center") {
-            return PropertyValue(int(HPlacement::CENTER));
+            return PropertyValue(int(PlacementH::CENTER));
         } else if (value == "right") {
-            return PropertyValue(int(HPlacement::RIGHT));
+            return PropertyValue(int(PlacementH::RIGHT));
         }
     }
     break;
@@ -687,8 +687,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::DIRECTION_H:
     case P_TYPE::LAYOUT_BREAK:
     case P_TYPE::VALUE_TYPE:
-    case P_TYPE::PLACEMENT:
-    case P_TYPE::HPLACEMENT:
+    case P_TYPE::PLACEMENT_V:
+    case P_TYPE::PLACEMENT_H:
     case P_TYPE::TEXT_PLACE:
     case P_TYPE::BARLINE_TYPE:
     case P_TYPE::SYMID:
@@ -838,21 +838,21 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "user";
         }
         break;
-    case P_TYPE::PLACEMENT:
-        switch (Placement(value.toInt())) {
-        case Placement::ABOVE:
+    case P_TYPE::PLACEMENT_V:
+        switch (PlacementV(value.toInt())) {
+        case PlacementV::ABOVE:
             return "above";
-        case Placement::BELOW:
+        case PlacementV::BELOW:
             return "below";
         }
         break;
-    case P_TYPE::HPLACEMENT:
-        switch (HPlacement(value.toInt())) {
-        case HPlacement::LEFT:
+    case P_TYPE::PLACEMENT_H:
+        switch (PlacementH(value.toInt())) {
+        case PlacementH::LEFT:
             return "left";
-        case HPlacement::CENTER:
+        case PlacementH::CENTER:
             return "center";
-        case HPlacement::RIGHT:
+        case PlacementH::RIGHT:
             return "right";
         }
         break;

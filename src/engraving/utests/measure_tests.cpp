@@ -497,22 +497,22 @@ TEST_F(MeasureTests, measureNumbers)
     MeasureNumber* measureNumber = new MeasureNumber(score->dummy()->measure());
 
     // horizontal placement
-    measureNumber->setHPlacement(HPlacement::CENTER);
+    measureNumber->setHPlacement(PlacementH::CENTER);
     measureNumber->setPropertyFlags(Pid::HPLACEMENT, PropertyFlags::UNSTYLED);
     MeasureNumber* mn = static_cast<MeasureNumber*>(ScoreRW::writeReadElement(measureNumber));
-    EXPECT_EQ(mn->hPlacement(), HPlacement::CENTER);
+    EXPECT_EQ(mn->hPlacement(), PlacementH::CENTER);
     delete mn;
 
     // Place measure numbers below
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, int(Placement::BELOW)));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, int(PlacementV::BELOW)));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, int(HPlacement::CENTER)));
+    score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, int(PlacementH::CENTER)));
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));

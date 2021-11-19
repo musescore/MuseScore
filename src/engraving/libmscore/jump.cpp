@@ -251,7 +251,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
     case Pid::PLAY_REPEATS:
         return false;
     case Pid::PLACEMENT:
-        return int(Placement::ABOVE);
+        return int(PlacementV::ABOVE);
     default:
         break;
     }
