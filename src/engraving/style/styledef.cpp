@@ -164,7 +164,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::ambitusMargin,           "ambitusMargin",           Spatium(0.5) },
 
     { Sid::timesigLeftMargin,       "timesigLeftMargin",       Spatium(0.63) },
-    { Sid::timesigScale,            "timesigScale",            SizeF(1.0, 1.0) },
+    { Sid::timesigScale,            "timesigScale",            ScaleF(1.0, 1.0) },
     { Sid::midClefKeyRightMargin,   "midClefKeyRightMargin",   Spatium(1.0) },
     { Sid::clefKeyRightMargin,      "clefKeyRightMargin",      Spatium(0.8) },
     { Sid::clefKeyDistance,         "clefKeyDistance",         Spatium(1.0) },   // gould: 1 - 1.25

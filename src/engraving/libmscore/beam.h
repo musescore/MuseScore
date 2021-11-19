@@ -168,8 +168,8 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    mu::PointF beamPos() const;
-    void setBeamPos(const mu::PointF& bp);
+    mu::engraving::PairF beamPos() const;
+    void setBeamPos(const mu::engraving::PairF& bp);
 
     qreal beamDist() const { return _beamDist; }
 

@@ -25,6 +25,7 @@
 #include "dataformatter.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -116,7 +117,8 @@ void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
     }
 
     onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true);
-    onPropertyValueChanged(Ms::Pid::BEAM_POS, PointF(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble()));
+    onPropertyValueChanged(Ms::Pid::BEAM_POS,
+                           QVariant::fromValue(QPair<qreal, qreal>(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble())));
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
     m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());

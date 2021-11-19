@@ -260,9 +260,6 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
     case P_TYPE::POINT_SP:
         UNREACHABLE; //! TODO
         break;
-    case P_TYPE::POINT_SP_MM:
-        UNREACHABLE; //! TODO
-        break;
     case P_TYPE::SP_REAL:
         UNREACHABLE; //! TODO
         break;
