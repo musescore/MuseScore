@@ -90,6 +90,17 @@ QString GeneralPreferencesModel::currentLanguageCode() const
     return languagesConfiguration()->currentLanguageCode().val;
 }
 
+QStringList GeneralPreferencesModel::keyboardLayouts() const
+{
+    NOT_IMPLEMENTED;
+    return { "US-QWERTY", "UK-QWERTY", "QWERTZ", "AZERTY" };
+}
+
+QString GeneralPreferencesModel::currentKeyboardLayout() const
+{
+    return shortcutsConfiguration()->currentKeyboardLayout();
+}
+
 bool GeneralPreferencesModel::isTelemetryAllowed() const
 {
     return telemetryConfiguration()->isTelemetryAllowed().val;
@@ -115,7 +126,7 @@ int GeneralPreferencesModel::oscPort() const
     return 0;
 }
 
-void GeneralPreferencesModel::setCurrentLanguageCode(QString currentLanguageCode)
+void GeneralPreferencesModel::setCurrentLanguageCode(const QString& currentLanguageCode)
 {
     if (currentLanguageCode == this->currentLanguageCode()) {
         return;
@@ -123,6 +134,16 @@ void GeneralPreferencesModel::setCurrentLanguageCode(QString currentLanguageCode
 
     languagesConfiguration()->setCurrentLanguageCode(currentLanguageCode);
     emit currentLanguageCodeChanged(currentLanguageCode);
+}
+
+void GeneralPreferencesModel::setCurrentKeyboardLayout(const QString& keyboardLayout)
+{
+    if (keyboardLayout == this->currentKeyboardLayout()) {
+        return;
+    }
+
+    shortcutsConfiguration()->setCurrentKeyboardLayout(keyboardLayout);
+    emit currentKeyboardLayoutChanged();
 }
 
 void GeneralPreferencesModel::setIsTelemetryAllowed(bool isTelemetryAllowed)
