@@ -4269,9 +4269,9 @@ void Measure::computeMinWidth()
     } else if (s->isClefType() || s->isHeaderClefType()) {
         x += score()->styleMM(Sid::clefLeftMargin);
     } else if (s->isKeySigType()) {
-        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin).val());
     } else if (s->isTimeSigType()) {
-        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin).val());
     }
     x += s->extraLeadingSpace().val() * spatium();
     bool isSystemHeader = s->header();
@@ -4297,9 +4297,9 @@ qreal Measure::computeFirstSegmentXPosition(Segment* segment)
     } else if (segment->isClefType() || segment->isHeaderClefType()) {
         x += score()->styleMM(Sid::clefLeftMargin);
     } else if (segment->isKeySigType()) {
-        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::keysigLeftMargin).val());
     } else if (segment->isTimeSigType()) {
-        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin));
+        x = qMax(x, score()->styleMM(Sid::timesigLeftMargin).val());
     }
     x += segment->extraLeadingSpace().val() * spatium();
 

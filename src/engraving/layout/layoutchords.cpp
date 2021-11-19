@@ -443,7 +443,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 dotAdjust = score->styleMM(Sid::dotNoteDistance) + dotWidth;
                 // additional dots
                 if (dots > 1) {
-                    dotAdjust += score->styleMM(Sid::dotDotDistance) * (dots - 1);
+                    dotAdjust += score->styleMM(Sid::dotDotDistance).val() * (dots - 1);
                 }
                 dotAdjust *= mag;
                 // only by amount over threshold
