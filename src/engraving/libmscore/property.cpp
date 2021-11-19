@@ -107,7 +107,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BARLINE_SPAN_TO,         false, "spanToOffset",          P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "span to") },
     { Pid::BARLINE_SHOW_TIPS,       false, "showTips",              P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "show tips") },
 
-    { Pid::OFFSET,                  false, "offset",                P_TYPE::POINT_SP_MM,    DUMMY_QT_TR_NOOP("propertyName", "offset") },
+    { Pid::OFFSET,                  false, "offset",                P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "offset") },
     { Pid::FRET,                    true,  "fret",                  P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fret") },
     { Pid::STRING,                  true,  "string",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "string") },
     { Pid::GHOST,                   true,  "ghost",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "ghost") },
@@ -146,7 +146,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TEXT,                    true,  "text",                  P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "text") },
     { Pid::HTML_TEXT,               false, 0,                       P_TYPE::STRING,         "" },
     { Pid::USER_MODIFIED,           false, 0,                       P_TYPE::BOOL,           "" },
-    { Pid::BEAM_POS,                false, 0,                       P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "beam position") },
+    { Pid::BEAM_POS,                false, 0,                       P_TYPE::PAIR_REAL,      DUMMY_QT_TR_NOOP("propertyName", "beam position") },
     { Pid::BEAM_MODE,               true, "BeamMode",               P_TYPE::BEAM_MODE,      DUMMY_QT_TR_NOOP("propertyName", "beam mode") },
     { Pid::BEAM_NO_SLOPE,           true, "noSlope",                P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "without slope") },
     { Pid::USER_LEN,                false, "userLen",               P_TYPE::SP_REAL,        DUMMY_QT_TR_NOOP("propertyName", "length") },
@@ -473,14 +473,16 @@ PropertyValue propertyFromString(Pid id, QString value)
     case P_TYPE::COLOR:
         // not used by MSCX
         return PropertyValue::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
-    case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM: {
+    case P_TYPE::POINT: {
         // not used by MSCX
         const int i = value.indexOf(';');
         return PropertyValue::fromValue(PointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
     }
-    case P_TYPE::SCALE:
+    case P_TYPE::SCALE: {
+        const int i = value.indexOf('x');
+        return PropertyValue::fromValue(ScaleF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
+    } break;
     case P_TYPE::SIZE: {
         // not used by MSCX
         const int i = value.indexOf('x');
@@ -672,11 +674,11 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readFraction());
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
-    case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM:
+    case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
+        return PropertyValue::fromValue(ScaleF(e.readSize()));
     case P_TYPE::SIZE:
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:

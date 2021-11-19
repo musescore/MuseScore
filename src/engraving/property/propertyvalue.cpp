@@ -207,6 +207,9 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::STRING:    return value<QString>();
     // geometry
     case P_TYPE::POINT:     return value<PointF>().toQPointF();
+    case P_TYPE::POINT_SP: {
+        UNREACHABLE; //! TODO
+    }
     case P_TYPE::SIZE:      return value<SizeF>().toQSizeF();
     case P_TYPE::PATH: {
         UNREACHABLE; //! TODO
@@ -217,14 +220,9 @@ QVariant PropertyValue::toQVariant() const
     }
     break;
     case P_TYPE::SPATIUM:   return value<Spatium>().val();
-    case P_TYPE::POINT_SP: {
-        UNREACHABLE; //! TODO
-    }
-    break;
-    case P_TYPE::POINT_SP_MM: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::PAIR_REAL: return QVariant::fromValue(value<PairF>().toQPairF());
+
+        break;
     case P_TYPE::SP_REAL: {
         UNREACHABLE; //! TODO
     }
@@ -269,24 +267,19 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // geometry
     case P_TYPE::POINT:         return PropertyValue(PointF::fromQPointF(v.value<QPointF>()));
+    case P_TYPE::POINT_SP: {
+        UNREACHABLE; //! TODO
+    }
+    break;
     case P_TYPE::SIZE:          return PropertyValue(SizeF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::PATH: {
         UNREACHABLE; //! TODO
     }
     break;
-    case P_TYPE::SCALE: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
-    case P_TYPE::POINT_SP: {
-        UNREACHABLE; //! TODO
-    }
-    break;
-    case P_TYPE::POINT_SP_MM: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
+
     case P_TYPE::SP_REAL: {
         UNREACHABLE; //! TODO
     }
