@@ -76,17 +76,34 @@ StyledDialogView {
             Layout.fillHeight: true
             Layout.topMargin: -8
             source: model.currentPage.url
+
+            onLoaded: {
+                item.navigationSection = root.navigationSection
+            }
         }
 
         Item {
             Layout.fillWidth: true
             height: childrenRect.height
 
+            NavigationPanel {
+                id: buttonsNavigationPanel
+                name: "Buttons"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 10000 // Higher than pages
+                direction: NavigationPanel.Horizontal
+            }
+
             FlatButton {
                 anchors.left: parent.left
 
                 text: qsTrc("global", "Back")
                 visible: model.canGoBack
+
+                navigation.name: "BackButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.column: 1
 
                 onClicked: {
                     model.currentPageIndex--
@@ -100,6 +117,10 @@ StyledDialogView {
                                       : model.canSkip ? qsTrc("appshell", "Skip for now")
                                                       : qsTrc("global", "Next")
                 accentButton: !model.canSkip
+
+                navigation.name: "NextButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.column: 2
 
                 onClicked: {
                     if (model.canFinish) {

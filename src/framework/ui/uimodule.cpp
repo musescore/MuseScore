@@ -124,7 +124,6 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
     qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
-    qmlRegisterUncreatableType<AbstractNavigation>("MuseScore.Ui", 1, 0, "AbstractNavigation", "Cannot create a AbstractType");
     qmlRegisterUncreatableType<NavigationEvent>("MuseScore.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
     qmlRegisterType<NavigationSection>("MuseScore.Ui", 1, 0, "NavigationSection");
     qmlRegisterType<NavigationPanel>("MuseScore.Ui", 1, 0, "NavigationPanel");
