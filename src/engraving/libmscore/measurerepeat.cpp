@@ -71,7 +71,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
             // for now, using thickness and margin same as mmrests
-            qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
+            qreal hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
             if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
                 Pen pen(painter->pen());
                 pen.setCapStyle(PenCapStyle::FlatCap);
@@ -79,7 +79,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
                 painter->setPen(pen);
 
                 qreal twoMeasuresWidth = 2 * measure()->width();
-                qreal margin = score()->styleP(Sid::multiMeasureRestMargin);
+                qreal margin = score()->styleMM(Sid::multiMeasureRestMargin);
                 qreal xOffset = symBbox(symId()).width() * .5;
                 qreal gapDistance = (symBbox(symId()).width() + spatium()) * .5;
                 painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));

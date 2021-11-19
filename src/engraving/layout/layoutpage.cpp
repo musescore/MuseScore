@@ -100,11 +100,11 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 
 void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
-    const qreal slb = ctx.score()->styleP(Sid::staffLowerBorder);
+    const qreal slb = ctx.score()->styleMM(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
     qreal footerExtension = ctx.page->footerExtension();
     qreal headerExtension = ctx.page->headerExtension();
-    qreal headerFooterPadding = ctx.score()->styleP(Sid::staffHeaderFooterPadding);
+    qreal headerFooterPadding = ctx.score()->styleMM(Sid::staffHeaderFooterPadding);
     qreal endY = ctx.page->height() - ctx.page->bm();
     qreal y = 0.0;
 
@@ -144,7 +144,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                 // to avoid collisions
                 distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
             } else {
-                distance = ctx.score()->styleP(Sid::staffUpperBorder);
+                distance = ctx.score()->styleMM(Sid::staffUpperBorder);
                 bool fixedDistance = false;
                 for (MeasureBase* mb : ctx.curSystem->measures()) {
                     if (mb->isMeasure()) {
@@ -563,9 +563,9 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
     }
     --ngaps;
 
-    qreal spaceRemaining { page->height() - page->bm() - footerPadding - score->styleP(Sid::staffLowerBorder) - yBottom };
+    qreal spaceRemaining { page->height() - page->bm() - footerPadding - score->styleMM(Sid::staffLowerBorder) - yBottom };
     if (nextSpacer) {
-        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleP(Sid::staffLowerBorder));
+        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleMM(Sid::staffLowerBorder));
     }
     if (spaceRemaining <= 0.0) {
         return;
@@ -618,7 +618,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal fo
 
     // If there is still space left, distribute the space of the staves.
     // However, there is a limit on how much space is added per gap.
-    const qreal maxPageFill { score->styleP(Sid::maxPageFillSpread) };
+    const qreal maxPageFill { score->styleMM(Sid::maxPageFillSpread) };
     spaceRemaining = qMin(maxPageFill * vgdl.length(), spaceRemaining);
     pass = 0;
     ngaps = 1;

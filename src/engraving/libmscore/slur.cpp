@@ -76,23 +76,23 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurEndWidth) * mag);
         break;
     case 1:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case 2:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case 3:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     }
     painter->setPen(pen);
@@ -332,7 +332,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     PointF p3(c1, -shoulderH);
     PointF p4(c2, -shoulderH);
 
-    qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+    qreal w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(slur()->tick());
     }

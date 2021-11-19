@@ -280,7 +280,7 @@ void Bend::draw(mu::draw::Painter* painter) const
     qreal y  = -_spatium * .8;
     qreal x2, y2;
 
-    qreal aw = score()->styleP(Sid::bendArrowWidth);
+    qreal aw = score()->styleMM(Sid::bendArrowWidth);
     PolygonF arrowUp;
     arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
     PolygonF arrowDown;

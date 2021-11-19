@@ -440,10 +440,10 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 }
                 qreal dotWidth = segment->symWidth(SymId::augmentationDot);
                 // first dot
-                dotAdjust = score->styleP(Sid::dotNoteDistance) + dotWidth;
+                dotAdjust = score->styleMM(Sid::dotNoteDistance) + dotWidth;
                 // additional dots
                 if (dots > 1) {
-                    dotAdjust += score->styleP(Sid::dotDotDistance) * (dots - 1);
+                    dotAdjust += score->styleMM(Sid::dotDotDistance) * (dots - 1);
                 }
                 dotAdjust *= mag;
                 // only by amount over threshold
@@ -857,7 +857,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         if (stem) {
             overlapMirror = stem->lineWidth();
         } else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE) {
-            overlapMirror = style.styleP(Sid::stemWidth) * chord->mag();
+            overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
         } else {
             overlapMirror = 0.0;
         }
@@ -970,8 +970,8 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
     }
 
     QVector<int> umi;
-    qreal pd  = style.styleP(Sid::accidentalDistance);
-    qreal pnd = style.styleP(Sid::accidentalNoteDistance);
+    qreal pd  = style.styleMM(Sid::accidentalDistance);
+    qreal pnd = style.styleMM(Sid::accidentalNoteDistance);
     qreal colOffset = 0.0;
 
     if (nAcc >= 2 && aclist[nAcc - 1].line - aclist[0].line >= 7) {

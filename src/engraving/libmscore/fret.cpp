@@ -462,8 +462,8 @@ void FretDiagram::layout()
     qreal _spatium  = spatium() * _userMag;
     stringLw        = _spatium * 0.08;
     nutLw           = (_fretOffset || !_showNut) ? stringLw : _spatium * 0.2;
-    stringDist      = score()->styleP(Sid::fretStringSpacing) * _userMag;
-    fretDist        = score()->styleP(Sid::fretFretSpacing) * _userMag;
+    stringDist      = score()->styleMM(Sid::fretStringSpacing) * _userMag;
+    fretDist        = score()->styleMM(Sid::fretFretSpacing) * _userMag;
     markerSize      = stringDist * .8;
 
     qreal w    = stringDist * (_strings - 1) + markerSize;
@@ -1420,8 +1420,8 @@ PropertyValue FretDiagram::propertyDefault(Pid pid) const
 
     for (const StyledProperty& p : *styledProperties()) {
         if (p.pid == pid) {
-            if (propertyType(pid) == P_TYPE::SP_REAL) {
-                return score()->styleP(p.sid);
+            if (propertyType(pid) == P_TYPE::MILIMETRE) {
+                return score()->styleMM(p.sid);
             }
             return score()->styleV(p.sid);
         }

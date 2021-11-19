@@ -2019,7 +2019,7 @@ void EditStyle::textStyleChanged(int row)
             break;
 
         case Ms::Pid::FRAME_ROUND:
-            textStyleFrameBorderRadius->setValue(styleValue(a.sid).toDouble());
+            textStyleFrameBorderRadius->setValue(double(styleValue(a.sid).toInt()));
             resetTextStyleFrameBorderRadius->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 

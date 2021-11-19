@@ -920,7 +920,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 if (cr && cr != toChordRest(startElement())) {
                     x = cr->rightEdge();
                 } else {
-                    x = spatium() - score()->styleP(Sid::minNoteDistance);
+                    x = spatium() - score()->styleMM(Sid::minNoteDistance);
                 }
             } else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine()) {
                 // (for LYRICSLINE, this is hyphen; melisma line is handled above)

@@ -117,7 +117,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     PointF ap(pagePos());
     painter->translate(ap);
-    qreal lw = score()->styleP(Sid::stemWidth);
+    qreal lw = score()->styleMM(Sid::stemWidth);
     Pen pen(engravingConfiguration()->highlightSelectionColor(voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -127,7 +127,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     SymId acc = Accidental::subtype2symbol(score()->inputState().accidentalType());
     if (acc != SymId::noSym) {
         PointF posAcc;
-        posAcc.rx() -= symWidth(acc) + score()->styleP(Sid::accidentalNoteDistance) * mag();
+        posAcc.rx() -= symWidth(acc) + score()->styleMM(Sid::accidentalNoteDistance) * mag();
         drawSymbol(acc, painter, posAcc);
     }
 
@@ -141,8 +141,8 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     PointF posDot;
     if (m_duration.dots() > 0) {
-        qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
-        qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
+        qreal d  = score()->styleMM(Sid::dotNoteDistance) * mag();
+        qreal dd = score()->styleMM(Sid::dotDotDistance) * mag();
         posDot.rx() += (noteheadWidth + d);
 
         if (m_isRest) {
@@ -178,11 +178,11 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     // Draw ledger lines if needed
     if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
-        qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag();
+        qreal extraLen = score()->styleMM(Sid::ledgerLineLength) * mag();
         qreal x1 = -extraLen;
         qreal x2 = noteheadWidth + extraLen;
 
-        lw = score()->styleP(Sid::ledgerLineWidth);
+        lw = score()->styleMM(Sid::ledgerLineWidth);
         pen.setWidthF(lw);
         painter->setPen(pen);
 
@@ -286,8 +286,8 @@ void ShadowNote::layout()
     qreal dotWidth = 0;
     if (m_duration.dots() > 0) {
         qreal noteheadWidth = noteheadBbox.width();
-        qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
-        qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
+        qreal d  = score()->styleMM(Sid::dotNoteDistance) * mag();
+        qreal dd = score()->styleMM(Sid::dotDotDistance) * mag();
         dotWidth = (noteheadWidth + d);
         if (hasFlag() && up) {
             dotWidth = qMax(dotWidth, noteheadWidth + symBbox(flagSym()).right());
@@ -303,7 +303,7 @@ void ShadowNote::layout()
         qreal x = noteheadBbox.x();
         qreal w = noteheadBbox.width();
 
-        qreal stemWidth = score()->styleP(Sid::stemWidth);
+        qreal stemWidth = score()->styleMM(Sid::stemWidth);
         qreal stemLenght = (up ? -3.5 : 3.5) * _spatium;
         qreal stemAnchor = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         newBbox |= RectF(up ? x + w - stemWidth : x,
@@ -322,11 +322,11 @@ void ShadowNote::layout()
 
     // Layout ledger lines if needed
     if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
-        qreal extraLen = score()->styleP(Sid::ledgerLineLength) * mag();
+        qreal extraLen = score()->styleMM(Sid::ledgerLineLength) * mag();
         qreal x = noteheadBbox.x() - extraLen;
         qreal w = noteheadBbox.width() + 2 * extraLen;
 
-        qreal lw = score()->styleP(Sid::ledgerLineWidth);
+        qreal lw = score()->styleMM(Sid::ledgerLineWidth);
 
         InputState ps = score()->inputState();
         RectF r(x, -lw * .5, w, lw);

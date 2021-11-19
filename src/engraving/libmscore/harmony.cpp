@@ -1484,7 +1484,7 @@ PointF Harmony::calculateBoundingRect()
             }
 
             newx = 0.0;
-            newy = ypos - yy - score()->styleP(Sid::harmonyFretDist);
+            newy = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
         } else {
             if (align() & Align::RIGHT) {
                 xx = -bb.x() - bb.width() + cw;

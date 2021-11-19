@@ -44,7 +44,7 @@ static qreal findLyricsMaxY(const MStyle& style, Segment& s, int staffIdx)
         return yMax;
     }
 
-    qreal lyricsMinTopDistance = style.styleP(Sid::lyricsMinTopDistance);
+    qreal lyricsMinTopDistance = style.styleMM(Sid::lyricsMinTopDistance);
 
     for (int voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = s.cr(staffIdx * VOICES + voice);
@@ -84,7 +84,7 @@ static qreal findLyricsMinY(const MStyle& style, Segment& s, int staffIdx)
     if (!s.isChordRestType()) {
         return yMin;
     }
-    qreal lyricsMinTopDistance = style.styleP(Sid::lyricsMinTopDistance);
+    qreal lyricsMinTopDistance = style.styleMM(Sid::lyricsMinTopDistance);
     for (int voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = s.cr(staffIdx * VOICES + voice);
         if (cr && !cr->lyrics().empty()) {
@@ -143,7 +143,7 @@ static void applyLyricsMax(const MStyle& style, Segment& s, int staffIdx, qreal 
     for (int voice = 0; voice < VOICES; ++voice) {
         ChordRest* cr = s.cr(staffIdx * VOICES + voice);
         if (cr && !cr->lyrics().empty()) {
-            qreal lyricsMinBottomDistance = style.styleP(Sid::lyricsMinBottomDistance);
+            qreal lyricsMinBottomDistance = style.styleMM(Sid::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeBelow()) {
                     l->rypos() += yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y();

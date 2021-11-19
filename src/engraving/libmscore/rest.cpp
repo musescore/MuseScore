@@ -396,8 +396,8 @@ void Rest::layout()
 void Rest::layoutDots()
 {
     checkDots();
-    qreal x = symWidth(m_sym) + score()->styleP(Sid::dotNoteDistance) * mag();
-    qreal dx = score()->styleP(Sid::dotDotDistance) * mag();
+    qreal x = symWidth(m_sym) + score()->styleMM(Sid::dotNoteDistance) * mag();
+    qreal dx = score()->styleMM(Sid::dotDotDistance) * mag();
     qreal y = m_dotline * spatium() * .5;
     for (NoteDot* dot : m_dots) {
         dot->layout();
