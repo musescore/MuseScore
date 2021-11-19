@@ -82,7 +82,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
 
     const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
-    image.fill(TRANSPARENT_BACKGROUND ? 0 : Qt::white);
+    image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     double scaling = CANVAS_DPI / Ms::DPI;
     Ms::MScore::pixelRatio = 1.0 / scaling;
