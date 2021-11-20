@@ -2733,7 +2733,7 @@ qreal Chord::dotPosX() const
 //   setStemDirection
 //---------------------------------------------------------
 
-void Chord::setStemDirection(Direction d)
+void Chord::setStemDirection(Direction d, Direction beamDir)
 {
     _stemDirection = d;
     if (beam()) {
@@ -2742,6 +2742,9 @@ void Chord::setStemDirection(Direction d)
             if (c) {
                 c->_stemDirection = d;
             }
+        }
+        if (beamDir == Direction::AUTO) {
+            beam()->setBeamDirection(beamDir);
         }
     }
 }
