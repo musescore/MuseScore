@@ -171,6 +171,7 @@ public:
     virtual std::vector<Uri> stack() const = 0;
 
     virtual Ret openUrl(const std::string& url) const = 0;
+    virtual Ret openUrl(const QUrl& url) const = 0;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }

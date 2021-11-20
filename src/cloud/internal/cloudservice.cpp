@@ -407,7 +407,7 @@ void CloudService::executeRequest(const RequestCallback& requestCallback)
 
 void CloudService::openUrl(const QUrl& url)
 {
-    Ret ret = interactive()->openUrl(url.toString().toStdString());
+    Ret ret = interactive()->openUrl(url);
     if (!ret) {
         LOGE() << ret.toString();
     }

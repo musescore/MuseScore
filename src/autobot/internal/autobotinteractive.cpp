@@ -159,6 +159,11 @@ Ret AutobotInteractive::openUrl(const std::string& url) const
     return m_real->openUrl(url);
 }
 
+Ret AutobotInteractive::openUrl(const QUrl& url) const
+{
+    return m_real->openUrl(url);
+}
+
 io::path AutobotInteractive::selectedFilePath() const
 {
     return m_selectedFilePath;
