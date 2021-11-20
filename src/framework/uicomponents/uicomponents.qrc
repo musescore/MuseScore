@@ -57,5 +57,6 @@
         <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
         <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
         <file>qml/MuseScore/UiComponents/MenuMetrics.qml</file>
+        <file>qml/MuseScore/UiComponents/PageIndicator.qml</file>
     </qresource>
 </RCC>

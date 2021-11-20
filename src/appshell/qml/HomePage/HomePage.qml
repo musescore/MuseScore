@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -40,6 +39,16 @@ DockPage {
 
     objectName: "Home"
     uri: "musescore://home"
+
+    onOpenRequested: function(params) {
+        if (Boolean(params["section"])) {
+            setCurrentCentral(params["section"])
+
+            if (Boolean(params["subSection"])) {
+                subSection = params["subSection"]
+            }
+        }
+    }
 
     onSectionChanged: {
         Qt.callLater(root.setCurrentCentral, section)

@@ -34,6 +34,8 @@
 #include "ui/view/navigationcontrol.h"
 #include "popupwindow/ipopupwindow.h"
 
+class QQuickCloseEvent;
+
 namespace mu::uicomponents {
 class PopupView : public QObject, public QQmlParserStatus
 {
@@ -157,6 +159,7 @@ signals:
 
     void isOpenedChanged();
     void opened();
+    void aboutToClose(QQuickCloseEvent* closeEvent);
     void closed();
 
     void opensUpwardChanged(bool opensUpward);

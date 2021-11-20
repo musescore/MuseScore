@@ -41,8 +41,8 @@ DockWindow {
     property var provider: InteractiveProvider {
         topParent: root
 
-        onRequestedDockPage: {
-            root.loadPage(uri)
+        onRequestedDockPage: function(uri, params) {
+            root.loadPage(uri, params)
         }
     }
 

@@ -30,7 +30,7 @@
 #include "ui/iinteractiveprovider.h"
 
 namespace mu::uicomponents {
-class PopupWindow_QQuickView : public QObject, public IPopupWindow
+class PopupWindow_QQuickView : public IPopupWindow
 {
     Q_OBJECT
 
@@ -45,9 +45,9 @@ public:
     void setContent(QQuickItem* item) override;
 
     void show(QPoint p) override;
+    void close() override;
     void raise() override;
     void setPosition(QPoint p) override;
-    void hide() override;
 
     QWindow* qWindow() const override;
     bool isVisible() const override;

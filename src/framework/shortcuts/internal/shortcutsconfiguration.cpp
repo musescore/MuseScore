@@ -24,6 +24,8 @@
 #include "settings.h"
 #include "io/path.h"
 
+#include "log.h"
+
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
@@ -37,6 +39,19 @@ static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE("shortcuts", "io/
 void ShortcutsConfiguration::init()
 {
     settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
+}
+
+QString ShortcutsConfiguration::currentKeyboardLayout() const
+{
+    NOT_IMPLEMENTED;
+    return "US-QWERTY";
+}
+
+void ShortcutsConfiguration::setCurrentKeyboardLayout(const QString& layout)
+{
+    UNUSED(layout);
+    NOT_IMPLEMENTED;
+    return;
 }
 
 mu::io::path ShortcutsConfiguration::shortcutsUserAppDataPath() const

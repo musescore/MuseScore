@@ -54,13 +54,27 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onLanguageSelected: {
+            onLanguageSelected: function(languageCode) {
                 preferencesModel.currentLanguageCode = languageCode
             }
 
             onUpdateTranslationsRequested: {
                 root.hideRequested()
                 preferencesModel.openUpdateTranslationsPage()
+            }
+        }
+
+        SeparatorLine { }
+
+        KeyboardLayoutsSection {
+            keyboardLayouts: preferencesModel.keyboardLayouts
+            currentKeyboardLayout: preferencesModel.currentKeyboardLayout
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onKeyboardLayoutSelected: function(keyboardLayout) {
+                preferencesModel.currentKeyboardLayout = keyboardLayout
             }
         }
 
@@ -76,9 +90,9 @@ PreferencesPage {
             visible: false
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 2
+            navigation.order: root.navigationOrderStart + 3
 
-            onTelemetryAllowedChanged: {
+            onTelemetryAllowedChanged: function(allowed) {
                 preferencesModel.isTelemetryAllowed = allowed
             }
         }
@@ -90,7 +104,7 @@ PreferencesPage {
             autoSaveInterval: preferencesModel.autoSaveInterval
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 3
+            navigation.order: root.navigationOrderStart + 4
 
             onAutoSaveEnabledChanged: function(enabled) {
                 preferencesModel.isAutoSaveEnabled = enabled
@@ -108,13 +122,13 @@ PreferencesPage {
             oscPort: preferencesModel.oscPort
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 4
+            navigation.order: root.navigationOrderStart + 5
 
-            onRemoteControlChanged: {
+            onRemoteControlChanged: function(control) {
                 preferencesModel.isOSCRemoteControl = control
             }
 
-            onPortChanged: {
+            onPortChanged: function(port) {
                 preferencesModel.oscPort = port
             }
         }

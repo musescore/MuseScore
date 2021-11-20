@@ -1445,7 +1445,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         return as->align();
     } break;
     default: {
-        qFatal("EditStyle::getValue: unhandled type <%s>", type);
+        qFatal("EditStyle::getValue: unhandled type <%d>", type);
     } break;
     }
 

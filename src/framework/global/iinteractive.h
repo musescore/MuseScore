@@ -70,10 +70,15 @@ public:
         int btn = int(Button::CustomButton);
         std::string text;
         bool accent = false;
+
         ButtonData(int btn, const std::string& text)
             : btn(btn), text(text) {}
+        ButtonData(Button btn, const std::string& text)
+            : btn(int(btn)), text(text) {}
         ButtonData(int btn, const std::string& text, bool accent)
             : btn(btn), text(text), accent(accent) {}
+        ButtonData(Button btn, const std::string& text, bool accent)
+            : btn(int(btn)), text(text), accent(accent) {}
     };
     using ButtonDatas = std::vector<ButtonData>;
 

@@ -30,6 +30,7 @@
 #include "global/iinteractive.h"
 #include "languages/ilanguagesconfiguration.h"
 #include "languages/ilanguagesservice.h"
+#include "shortcuts/ishortcutsconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "telemetry/itelemetryconfiguration.h"
 
@@ -41,11 +42,15 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
     INJECT(appshell, languages::ILanguagesService, languagesService)
+    INJECT(appshell, shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, telemetry::ITelemetryConfiguration, telemetryConfiguration)
 
     Q_PROPERTY(QVariantList languages READ languages NOTIFY languagesChanged)
     Q_PROPERTY(QString currentLanguageCode READ currentLanguageCode WRITE setCurrentLanguageCode NOTIFY currentLanguageCodeChanged)
+
+    Q_PROPERTY(QStringList keyboardLayouts READ keyboardLayouts CONSTANT)
+    Q_PROPERTY(QString currentKeyboardLayout READ currentKeyboardLayout WRITE setCurrentKeyboardLayout NOTIFY currentKeyboardLayoutChanged)
 
     Q_PROPERTY(bool isTelemetryAllowed READ isTelemetryAllowed WRITE setIsTelemetryAllowed NOTIFY isTelemetryAllowedChanged)
     Q_PROPERTY(bool isAutoSaveEnabled READ isAutoSaveEnabled WRITE setAutoSaveEnabled NOTIFY autoSaveEnabledChanged)
@@ -62,6 +67,9 @@ public:
     QVariantList languages() const;
     QString currentLanguageCode() const;
 
+    QStringList keyboardLayouts() const;
+    QString currentKeyboardLayout() const;
+
     bool isTelemetryAllowed() const;
     bool isAutoSaveEnabled() const;
     int autoSaveInterval() const;
@@ -69,7 +77,8 @@ public:
     int oscPort() const;
 
 public slots:
-    void setCurrentLanguageCode(QString currentLanguageCode);
+    void setCurrentLanguageCode(const QString& currentLanguageCode);
+    void setCurrentKeyboardLayout(const QString& keyboardLayout);
     void setIsTelemetryAllowed(bool isTelemetryAllowed);
     void setAutoSaveEnabled(bool enabled);
     void setAutoSaveInterval(int minutes);
@@ -79,6 +88,7 @@ public slots:
 signals:
     void languagesChanged(QVariantList languages);
     void currentLanguageCodeChanged(QString currentLanguageCode);
+    void currentKeyboardLayoutChanged();
     void isTelemetryAllowedChanged(bool isTelemetryAllowed);
     void autoSaveEnabledChanged(bool enabled);
     void autoSaveIntervalChanged(int minutes);
