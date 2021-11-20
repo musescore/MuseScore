@@ -27,7 +27,7 @@
 using namespace mu::uicomponents;
 
 PopupWindow_QQuickView::PopupWindow_QQuickView(QObject* parent)
-    : QObject(parent)
+    : IPopupWindow(parent)
 {
     setObjectName("PopupWindow");
 }
@@ -70,6 +70,13 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, std::shared_ptr<ui::IUiCon
         m_view->setFlags(flags);
         m_view->setColor(QColor(Qt::transparent));
     }
+
+    // TODO: Can't use new `connect` syntax because the QQuickView::closing
+    // has a parameter of type QQuickCloseEvent, which is not public, so we
+    // can't include any header for it and it will always be an incomplete
+    // type, which is not allowed for the new `connect` syntax.
+    //connect(m_view, &QQuickWindow::closing, this, &PopupWindow_QQuickView::aboutToClose);
+    connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
 
     m_view->installEventFilter(this);
 }
@@ -121,6 +128,11 @@ void PopupWindow_QQuickView::show(QPoint p)
     });
 }
 
+void PopupWindow_QQuickView::close()
+{
+    m_view->close();
+}
+
 void PopupWindow_QQuickView::raise()
 {
     m_view->raise();
@@ -129,11 +141,6 @@ void PopupWindow_QQuickView::raise()
 void PopupWindow_QQuickView::setPosition(QPoint p)
 {
     m_view->setPosition(p);
-}
-
-void PopupWindow_QQuickView::hide()
-{
-    m_view->hide();
 }
 
 QWindow* PopupWindow_QQuickView::qWindow() const

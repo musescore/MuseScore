@@ -103,6 +103,13 @@ void PopupView::componentComplete()
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
 
+    // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
+    // has a parameter of type QQuickCloseEvent, which is not public, so we
+    // can't include any header for it and it will always be an incomplete
+    // type, which is not allowed for the new `connect` syntax.
+    //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
+    connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
+
     connect(parentItem(), &QQuickItem::visibleChanged, this, [this]() {
         if (!parentItem() || !parentItem()->isVisible()) {
             close();
@@ -204,7 +211,7 @@ void PopupView::close()
         return;
     }
 
-    m_window->hide();
+    m_window->close();
 }
 
 void PopupView::toggleOpened()

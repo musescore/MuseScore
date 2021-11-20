@@ -43,6 +43,8 @@ public:
     void run() override;
 
 private:
+    void runFirstLaunchSetup();
+
     StartupSessionType sessionTypeTromString(const QString& str) const;
     std::string startupPageUri(StartupSessionType sessionType) const;
 

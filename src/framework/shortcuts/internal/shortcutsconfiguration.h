@@ -35,6 +35,9 @@ class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asy
 public:
     void init();
 
+    QString currentKeyboardLayout() const override;
+    void setCurrentKeyboardLayout(const QString& layout) override;
+
     io::path shortcutsUserAppDataPath() const override;
     io::path shortcutsAppDataPath() const override;
 

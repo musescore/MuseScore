@@ -73,7 +73,7 @@ public:
     QQmlListProperty<mu::dock::DockPageView> pagesProperty();
     DockingHolderView* mainToolBarDockingHolder() const;
 
-    Q_INVOKABLE void loadPage(const QString& uri);
+    Q_INVOKABLE void loadPage(const QString& uri, const QVariantMap& params);
 
     //! IDockWindow
     bool isDockOpen(const QString& dockName) const override;

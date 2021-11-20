@@ -34,6 +34,9 @@ class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IShortcutsConfiguration() = default;
 
+    virtual QString currentKeyboardLayout() const = 0;
+    virtual void setCurrentKeyboardLayout(const QString& layout) = 0;
+
     virtual io::path shortcutsUserAppDataPath() const = 0;
     virtual io::path shortcutsAppDataPath() const = 0;
 
