@@ -174,14 +174,14 @@ Playlist LearnService::parsePlaylist(const QJsonDocument& playlistDoc) const
         QJsonObject snippetObj = itemObj.value("snippet").toObject();
 
         PlaylistItem item;
-        item.videoId = itemObj.value("id").toString().toStdString();
+        item.videoId = itemObj.value("id").toString();
 
-        item.title = snippetObj.value("title").toString().toStdString();
-        item.author = snippetObj.value("channelTitle").toString().toStdString();
+        item.title = snippetObj.value("title").toString();
+        item.author = snippetObj.value("channelTitle").toString();
 
         QJsonObject thumbnailsObj = snippetObj.value("thumbnails").toObject();
         QJsonObject thumbnailsMediumObj = thumbnailsObj.value("medium").toObject();
-        item.thumbnailUrl = thumbnailsMediumObj.value("url").toString().toStdString();
+        item.thumbnailUrl = thumbnailsMediumObj.value("url").toString();
 
         QJsonObject contentDetails = itemObj.value("contentDetails").toObject();
         QString durationInIsoFormat = contentDetails["duration"].toString();
