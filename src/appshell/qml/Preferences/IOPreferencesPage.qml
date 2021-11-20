@@ -29,8 +29,6 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     IOPreferencesModel {
         id: ioModel
     }
@@ -40,8 +38,6 @@ PreferencesPage {
     }
 
     Column {
-        id: content
-
         width: parent.width
         spacing: root.sectionsSpacing
 

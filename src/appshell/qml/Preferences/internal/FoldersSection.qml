@@ -37,12 +37,12 @@ BaseSection {
     ListView {
         id: view
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-
+        width: parent.width
         height: contentHeight
 
         spacing: 4
+        interactive: false
+        boundsBehavior: Flickable.StopAtBounds
 
         delegate: RowLayout {
             width: ListView.view.width

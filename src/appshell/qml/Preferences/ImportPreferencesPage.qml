@@ -29,8 +29,6 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     Component.onCompleted: {
         importPreferencesModel.load()
     }
@@ -40,11 +38,7 @@ PreferencesPage {
     }
 
     Column {
-        id: content
-
         width: parent.width
-        height: childrenRect.height
-
         spacing: root.sectionsSpacing
 
         ImportStyleSection {

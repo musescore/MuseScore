@@ -108,22 +108,11 @@ StyledDialogView {
 
             SeparatorLine { orientation: Qt.Vertical }
 
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                color: ui.theme.backgroundSecondaryColor
-
-                StackLayout {
-                    id: stack
-
-                    anchors.fill: parent
-                    anchors.margins: 30
-
-                    currentIndex: {
-                        var keys = Object.keys(root.privatesProperties.pagesObjects)
-                        return keys.indexOf(preferencesModel.currentPageId)
-                    }
+            StackLayout {
+                id: stack
+                currentIndex: {
+                    var keys = Object.keys(root.privatesProperties.pagesObjects)
+                    return keys.indexOf(preferencesModel.currentPageId)
                 }
             }
         }

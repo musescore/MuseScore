@@ -38,7 +38,7 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
         spacing: root.sectionsSpacing
 
         ZoomSection {
