@@ -136,8 +136,10 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym            },
       { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym            },
       { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym            },
-      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            }
+      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            },
 
+      { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+      { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
    },
    {     // up stem
       { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,               SymId::noteheadDoubleWhole  },
@@ -206,8 +208,10 @@ static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteH
       { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym            },
       { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym            },
       { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym            },
-      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            }
+      { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym            },
 
+      { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+      { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
    }
 };
 
@@ -301,6 +305,11 @@ static NoteHeadName noteHeadGroupNames[] = {
       {"g-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "G♭ (Name)") },
       {"h-name",       QT_TRANSLATE_NOOP("noteheadnames",  "H (Name)") },
       {"h-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "H♯ (Name)") },
+
+      // Swiss rudiments
+      {"swiss-rudiments-flam",   QT_TRANSLATE_NOOP("noteheadnames", "Swiss Rudiments Flam")   },
+      {"swiss-rudiments-double", QT_TRANSLATE_NOOP("noteheadnames", "Swiss Rudiments Doublé") },
+
       {"custom",       QT_TRANSLATE_NOOP("noteheadnames",  "Custom") }
       };
 
