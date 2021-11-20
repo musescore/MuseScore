@@ -30,8 +30,6 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     AppearancePreferencesModel {
         id: appearanceModel
     }
@@ -41,13 +39,11 @@ PreferencesPage {
     }
 
     Column {
-        id: content
-
         width: parent.width
         spacing: root.sectionsSpacing
 
         ThemesSection {
-            width: content.width
+            width: parent.width
 
             themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
             currentThemeCode: appearanceModel.currentThemeCode
@@ -88,7 +84,7 @@ PreferencesPage {
         UiColorsSection {
             id: uiColorsSection
 
-            width: content.width
+            width: parent.width
 
             visible: appearanceModel.highContrastEnabled
 
