@@ -207,8 +207,12 @@ std::vector<Uri> Interactive::stack() const
 
 Ret Interactive::openUrl(const std::string& url) const
 {
-    QUrl _url(QString::fromStdString(url));
-    return QDesktopServices::openUrl(_url);
+    return openUrl(QUrl(QString::fromStdString(url)));
+}
+
+Ret Interactive::openUrl(const QUrl& url) const
+{
+    return QDesktopServices::openUrl(url);
 }
 
 IInteractive::ButtonDatas Interactive::buttonDataList(const Buttons& buttons) const
