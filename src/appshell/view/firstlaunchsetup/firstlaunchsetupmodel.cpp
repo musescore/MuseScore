@@ -28,7 +28,7 @@ FirstLaunchSetupModel::FirstLaunchSetupModel(QObject* parent)
 {
     m_pages = {
         Page { "ThemesPage.qml", "musescore://notation" },
-        Page { "PlaybackPage.qml", "musescore://notation", true },
+        Page { "PlaybackPage.qml", "musescore://notation", /*canSkip*/ true },
         Page { "TutorialsPage.qml", "musescore://home?section=learn" }
     };
 }
@@ -117,7 +117,7 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
                                  int(IInteractive::Button::Cancel),
                                  IInteractive::Option::WithIcon);
 
-    return result.button() == int(IInteractive::Button::Cancel);
+    return result.standardButton() == IInteractive::Button::Cancel;
 }
 
 void FirstLaunchSetupModel::finish()
