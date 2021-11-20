@@ -48,19 +48,17 @@ BaseSection {
             width: ListView.view.width
             height: 30
 
-            spacing: 20
+            spacing: root.columnSpacing
 
             StyledTextLabel {
                 id: titleLabel
-
-                Layout.alignment: Qt.AlignLeft
-
+                Layout.preferredWidth: root.columnWidth
                 text: model.title + ":"
+                horizontalAlignment: Text.AlignLeft
             }
 
             FilePicker {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 380
+                Layout.fillWidth: true
 
                 pickerType: FilePicker.PickerType.Directory
                 dialogTitle: qsTrc("appshell", "Choose %1 folder").arg(model.title)
@@ -72,7 +70,7 @@ BaseSection {
                 navigationRowOrderStart: model.index
                 pathFieldTitle: titleLabel.text
 
-                onPathEdited: {
+                onPathEdited: function (newPath) {
                     model.path = newPath
                 }
             }

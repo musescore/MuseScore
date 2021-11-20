@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
@@ -28,7 +27,8 @@ Row {
     id: root
 
     property alias title: titleLabel.text
-    property alias titleWidth: titleLabel.width
+
+    property real columnWidth: 208
 
     property alias currentIndex: comboBox.currentIndex
     property alias currentValue: comboBox.currentValue
@@ -39,20 +39,22 @@ Row {
 
     signal valueEdited(var newValue)
 
-    spacing: 0
+    spacing: 12
 
     StyledTextLabel {
         id: titleLabel
 
+        width: root.columnWidth
         anchors.verticalCenter: parent.verticalCenter
 
         horizontalAlignment: Qt.AlignLeft
+        wrapMode: Text.WordWrap
+        maximumLineCount: 2
     }
 
     Dropdown {
         id: comboBox
-
-        width: 210
+        width: root.columnWidth
 
         navigation.accessible.name: root.title + " " + currentText
 

@@ -45,17 +45,14 @@ PreferencesPage {
         width: parent.width
         spacing: root.sectionsSpacing
 
-        readonly property int firstColumnWidth: 220
-
         AudioApiSection {
             currentAudioApiIndex: ioModel.currentAudioApiIndex
             audioApiList: ioModel.audioApiList()
-            firstColumnWidth: content.firstColumnWidth
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onCurrentAudioApiIndexChangeRequested: {
+            onCurrentAudioApiIndexChangeRequested: function(newIndex) {
                 ioModel.currentAudioApiIndex = newIndex
             }
         }
@@ -67,16 +64,15 @@ PreferencesPage {
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
             inputDevices: ioModel.midiInputDevices
             outputDevices: ioModel.midiOutputDevices
-            firstColumnWidth: content.firstColumnWidth
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onCurrentInputDeviceIndexChangeRequested: {
+            onCurrentInputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiInputDeviceIndex = newIndex
             }
 
-            onCurrentOuputDeviceIndexChangeRequested: {
+            onCurrentOuputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
             }
         }

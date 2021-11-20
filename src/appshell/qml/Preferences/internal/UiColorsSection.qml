@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -42,7 +42,6 @@ BaseSection {
         columns: 2
 
         Repeater {
-
             model: [
                 { textRole: "Accent color:", colorRole: ui.theme.accentColor, typeRole: AppearancePreferencesModel.AccentColor},
                 { textRole: "Text and icons:", colorRole: ui.theme.fontPrimaryColor, typeRole: AppearancePreferencesModel.TextAndIconsColor},

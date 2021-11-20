@@ -40,6 +40,7 @@ BaseSection {
 
     CheckBox {
         id: advanceToNextNoteBox
+        width: parent.width
 
         text: qsTrc("appshell", "Advance to next note on key release (MIDI)")
 
@@ -54,8 +55,8 @@ BaseSection {
 
     CheckBox {
         id: colorNotesBox
+        width: parent.width
 
-        width: 170
         text: qsTrc("appshell", "Colour notes outside of usable pitch range")
 
         navigation.name: "ColorNotesBox"
@@ -72,8 +73,8 @@ BaseSection {
 
         title: qsTrc("appshell", "Delay between notes in automatic real time mode:")
 
-        titleWidth: 173
-        spacing: 46
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
 
         measureUnitsSymbol: qsTrc("appshell", "ms")
 
@@ -81,7 +82,7 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 2
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)
         }
     }

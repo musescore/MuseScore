@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
@@ -51,15 +49,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onDefaultZoomTypeChangeRequested: {
+            onDefaultZoomTypeChangeRequested: function(zoomType) {
                 preferencesModel.setDefaultZoomType(zoomType)
             }
 
-            onDefaultZoomLevelChangeRequested: {
+            onDefaultZoomLevelChangeRequested: function(zoomLevel) {
                 preferencesModel.setDefaultZoomLevel(zoomLevel)
             }
 
-            onMouseZoomPrecisionChangeRequested: {
+            onMouseZoomPrecisionChangeRequested: function(zoomPrecision) {
                 preferencesModel.mouseZoomPrecision = zoomPrecision
             }
         }
@@ -73,11 +71,11 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onOrientationChangeRequested: {
+            onOrientationChangeRequested: function(orientation) {
                 preferencesModel.scrollPagesOrientation = orientation
             }
 
-            onLimitScrollAreaChangeRequested: {
+            onLimitScrollAreaChangeRequested: function(limit) {
                 preferencesModel.limitScrollArea = limit
             }
         }
@@ -90,7 +88,7 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
-            onSelectionProximityChangeRequested: {
+            onSelectionProximityChangeRequested: function(proximity) {
                 preferencesModel.selectionProximity = proximity
             }
         }

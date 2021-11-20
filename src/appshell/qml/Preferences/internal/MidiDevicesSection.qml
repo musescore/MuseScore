@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
@@ -32,8 +31,6 @@ BaseSection {
 
     property alias inputDevices: inputDevicesBox.model
     property alias outputDevices: outputDevicesBox.model
-
-    property int firstColumnWidth: 0
 
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOuputDeviceIndexChangeRequested(int newIndex)
@@ -48,13 +45,13 @@ BaseSection {
             id: inputDevicesBox
 
             title: qsTrc("appshell", "MIDI input:")
-            titleWidth: root.firstColumnWidth
+            columnWidth: root.columnWidth
 
             navigation.name: "MidiInputBox"
             navigation.panel: root.navigation
             navigation.row: 1
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.currentInputDeviceIndexChangeRequested(currentIndex)
             }
         }
@@ -63,13 +60,13 @@ BaseSection {
             id: outputDevicesBox
 
             title: qsTrc("appshell", "MIDI output:")
-            titleWidth: root.firstColumnWidth
+            columnWidth: root.columnWidth
 
             navigation.name: "MidiOutputBox"
             navigation.panel: root.navigation
             navigation.row: 2
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.currentOuputDeviceIndexChangeRequested(currentIndex)
             }
         }

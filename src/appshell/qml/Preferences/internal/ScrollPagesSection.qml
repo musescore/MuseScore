@@ -36,12 +36,13 @@ BaseSection {
     signal limitScrollAreaChangeRequested(bool limit)
 
     Column {
-        spacing: 16
+        width: parent.width
+        spacing: 12
 
         RadioButtonGroup {
             id: radioButtonList
 
-            width: 100
+            width: parent.width
             height: implicitHeight
 
             spacing: 12
@@ -53,13 +54,10 @@ BaseSection {
             ]
 
             delegate: RoundedRadioButton {
-                width: parent.width
                 leftPadding: 0
                 spacing: 6
 
                 property string title: modelData["title"]
-
-                ButtonGroup.group: radioButtonList.radioButtonGroup
 
                 checked: root.orientation === modelData["value"]
 
@@ -81,6 +79,7 @@ BaseSection {
 
         CheckBox {
             id: limitScrollAreaBox
+            width: parent.width
 
             text: qsTrc("appshell", "Limit scroll area to page borders")
 

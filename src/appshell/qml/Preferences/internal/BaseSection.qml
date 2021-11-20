@@ -34,8 +34,8 @@ Column {
     padding: 2
 
     property alias title: titleLabel.text
-    property int columnWidth: 216
-    property alias titleOpacity: titleLabel.opacity
+    property int columnWidth: 208
+    property int columnSpacing: 12
 
     property int navigationOrderStart: 0
     property NavigationPanel navigation: NavigationPanel {

@@ -61,7 +61,7 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onShowMIDIControlsChangeRequested: {
+            onShowMIDIControlsChangeRequested: function(show) {
                 scorePreferencesModel.isShowMIDIControls = show
             }
         }
