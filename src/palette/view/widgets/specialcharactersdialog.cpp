@@ -393,7 +393,7 @@ static constexpr UnicodeRange unicodeRanges[] = {
     { 0x1FA70, 0x1FAFF, QT_TRANSLATE_NOOP("textpalette", "Symbols and Pictographs Extended-A") },
     { 0x1FB00, 0x1FBFF, QT_TRANSLATE_NOOP("textpalette", "Symbols for Legacy Computing") },
     { 0x20000, 0x2A6D6, QT_TRANSLATE_NOOP("textpalette", "CJK Unified Ideographs Extension B") },
-    { 0x2A700, 0x2B734, QT_TRANSLATE_NOOP("textpalette", "SCJK Unified Ideographs Extension C") },
+    { 0x2A700, 0x2B734, QT_TRANSLATE_NOOP("textpalette", "CJK Unified Ideographs Extension C") },
     { 0x2B740, 0x2B81D, QT_TRANSLATE_NOOP("textpalette", "CJK Unified Ideographs Extension D") },
     { 0x2F800, 0x2F81D, QT_TRANSLATE_NOOP("textpalette", "CJK Compatibility Ideographs Supplement") },
     { 0xE0001, 0xE007F, QT_TRANSLATE_NOOP("textpalette", "Tags") },
