@@ -196,7 +196,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym },
         { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym },
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
-        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym }
+        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
+
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
     },
     {    // up stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
@@ -310,7 +313,10 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
         { SymId::noteGWhole,       SymId::noteGHalf,       SymId::noteGBlack,       SymId::noSym },
         { SymId::noteGFlatWhole,   SymId::noteGFlatHalf,   SymId::noteGFlatBlack,   SymId::noSym },
         { SymId::noteHWhole,       SymId::noteHHalf,       SymId::noteHBlack,       SymId::noSym },
-        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym }
+        { SymId::noteHSharpWhole,  SymId::noteHSharpHalf,  SymId::noteHSharpBlack,  SymId::noSym },
+
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfFlam,   SymId::swissRudimentsNoteheadBlackFlam,   SymId::noSym },
+        { SymId::noSym, SymId::swissRudimentsNoteheadHalfDouble, SymId::swissRudimentsNoteheadBlackDouble, SymId::noSym }
     }
 };
 
