@@ -2228,8 +2228,14 @@ std::vector<QPointF> Beam::gripsPositions(const EditData& ed) const
 void Beam::setBeamDirection(Direction d)
       {
       _direction = d;
-      if (d != Direction::AUTO)
+      if (d != Direction::AUTO) {
             _up = d == Direction::UP;
+            if (!_elements.empty()) {
+                  Chord* c = toChord(_elements.first());
+                  if (c)
+                        c->setStemDirection(d, d);
+                  }
+            }
       }
 
 //---------------------------------------------------------
