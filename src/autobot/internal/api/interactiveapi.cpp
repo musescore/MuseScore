@@ -30,5 +30,5 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
 
 void InteractiveApi::openUrl(const QString& url)
 {
-    interactive()->openUrl(url.toStdString());
+    interactive()->openUrl(QUrl(url));
 }

@@ -60,12 +60,12 @@ void LearnPageModel::load()
 
 void LearnPageModel::openVideo(const QString& videoId) const
 {
-    learnService()->openVideo(videoId.toStdString());
+    learnService()->openVideo(videoId);
 }
 
 void LearnPageModel::openUrl(const QString& url) const
 {
-    interactive()->openUrl(url.toStdString());
+    interactive()->openUrl(QUrl(url));
 }
 
 void LearnPageModel::setSearchText(const QString& text)
