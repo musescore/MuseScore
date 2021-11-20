@@ -47,9 +47,7 @@ BaseSection {
     signal ensureContentVisibleRequested(var contentRect)
 
     CheckBox {
-        id: highContrastEnable
-
-        width: 200
+        width: root.columnWidth
 
         text: qsTrc("appshell", "Enable high-contrast")
 
@@ -68,7 +66,7 @@ BaseSection {
     ThemeSamplesList {
         id: themeSamplesList
         width: parent.width
-        spacing: root.columnWidth - sampleWidth
+        spacing: root.columnWidth + root.columnSpacing - sampleWidth
 
         navigationPanel: root.navigation
         navigationRow: 1
@@ -81,7 +79,8 @@ BaseSection {
     AccentColorsSection {
         id: accentColorsSection
 
-        firstColumnWidth: root.columnWidth
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
 
         visible: !root.highContrastEnabled
 

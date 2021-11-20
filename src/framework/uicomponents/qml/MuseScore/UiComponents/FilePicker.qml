@@ -46,17 +46,22 @@ Item {
 
     property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
 
+    property int pathFieldWidth: -1
+    property alias spacing: row.spacing
+
     signal pathEdited(var newPath)
 
-    height: 30
+    width: pathFieldWidth === -1 ? parent.width : (pathFieldWidth + spacing + button.width)
+    implicitHeight: 30
 
     FilePickerModel {
         id: filePickerModel
     }
 
     RowLayout {
+        id: row
         anchors.fill: parent
-        spacing: 8
+        spacing: 12
 
         TextInputField {
             id: pathField
@@ -70,12 +75,13 @@ Item {
             navigation.column: root.navigationColumnOrderStart
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 root.pathEdited(newTextValue)
             }
         }
 
         FlatButton {
+            id: button
             Layout.alignment: Qt.AlignVCenter
             icon: IconCode.OPEN_FILE
 
@@ -84,8 +90,8 @@ Item {
             navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart + 1
-            accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "File choose")
-                                                                            : qsTrc("uicomponents", "Directory choose")
+            accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "Choose file")
+                                                                            : qsTrc("uicomponents", "Choose directory")
 
             onClicked: {
                 var selectedPath

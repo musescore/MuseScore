@@ -49,12 +49,12 @@ BaseSection {
         width: parent.width
 
         delegate: Row {
-            spacing: 0
+            spacing: root.columnSpacing
 
             RoundedRadioButton {
                 anchors.verticalCenter: parent.verticalCenter
 
-                width: 220
+                width: root.columnWidth
 
                 checked: modelData.checked
                 text: modelData.title
@@ -70,7 +70,8 @@ BaseSection {
             }
 
             FilePicker {
-                width: 240
+                pathFieldWidth: root.columnWidth
+                spacing: root.columnSpacing
 
                 dialogTitle: qsTrc("appshell", "Choose starting score")
                 filter: root.scorePathFilter

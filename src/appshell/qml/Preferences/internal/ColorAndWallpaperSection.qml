@@ -45,8 +45,6 @@ BaseSection {
     signal colorChangeRequested(var newColor)
     signal wallpaperPathChangeRequested(var newWallpaperPath)
 
-    titleOpacity: 1.0
-
     GridLayout {
         id: gridSection
 
@@ -54,7 +52,7 @@ BaseSection {
         columns: 2
 
         rowSpacing: 8
-        columnSpacing: 0
+        columnSpacing: root.columnSpacing
 
         RoundedRadioButton {
             id: colorButton
@@ -85,7 +83,7 @@ BaseSection {
             navigation.row: 0
             navigation.column: 1
 
-            onNewColorSelected: {
+            onNewColorSelected: function(newColor) {
                 root.colorChangeRequested(newColor)
             }
         }
@@ -108,8 +106,7 @@ BaseSection {
 
         FilePicker {
             id: wallpaperPicker
-
-            width: 208
+            pathFieldWidth: root.columnWidth
 
             enabled: !root.useColor
 
@@ -117,7 +114,7 @@ BaseSection {
             navigationRowOrderStart: 1
             navigationColumnOrderStart: 1
 
-            onPathEdited: {
+            onPathEdited: function(newPath) {
                 root.wallpaperPathChangeRequested(newPath)
             }
         }

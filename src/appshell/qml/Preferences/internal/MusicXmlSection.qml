@@ -36,48 +36,53 @@ BaseSection {
     signal importBreaksChangeRequested(bool importBreaks)
     signal useDefaultFontChangeRequested(bool use)
 
-    CheckBox {
-        id: importLayoutBox
+    Column {
+        width: parent.width
+        spacing: 12
 
-        width: 208
-        text: qsTrc("appshell", "Import layout")
+        CheckBox {
+            id: importLayoutBox
+            width: parent.width
 
-        navigation.name: "ImportLayoutBox"
-        navigation.panel: root.navigation
-        navigation.row: 0
+            text: qsTrc("appshell", "Import layout")
 
-        onClicked: {
-            root.importLayoutChangeRequested(!checked)
+            navigation.name: "ImportLayoutBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+
+            onClicked: {
+                root.importLayoutChangeRequested(!checked)
+            }
         }
-    }
 
-    CheckBox {
-        id: importBreaksBox
+        CheckBox {
+            id: importBreaksBox
+            width: parent.width
 
-        width: 208
-        text: qsTrc("appshell", "Import system and page breaks")
+            text: qsTrc("appshell", "Import system and page breaks")
 
-        navigation.name: "ImportBreaksBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
+            navigation.name: "ImportBreaksBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
 
-        onClicked: {
-            root.importBreaksChangeRequested(!checked)
+            onClicked: {
+                root.importBreaksChangeRequested(!checked)
+            }
         }
-    }
 
-    CheckBox {
-        id: needUseDefaultFontBox
+        CheckBox {
+            id: needUseDefaultFontBox
+            width: parent.width
 
-        width: 208
-        text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
+            text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
 
-        navigation.name: "UseDefaultFontBox"
-        navigation.panel: root.navigation
-        navigation.row: 2
+            navigation.name: "UseDefaultFontBox"
+            navigation.panel: root.navigation
+            navigation.row: 2
 
-        onClicked: {
-            root.useDefaultFontChangeRequested(!checked)
+            onClicked: {
+                root.useDefaultFontChangeRequested(!checked)
+            }
         }
     }
 }

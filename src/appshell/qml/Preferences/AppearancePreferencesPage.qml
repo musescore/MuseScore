@@ -58,15 +58,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onThemeChangeRequested: {
+            onThemeChangeRequested: function(newThemeCode) {
                 appearanceModel.currentThemeCode = newThemeCode
             }
 
-            onHighContrastChangeRequested: {
+            onHighContrastChangeRequested: function(enabled) {
                 appearanceModel.highContrastEnabled = enabled
             }
 
-            onAccentColorChangeRequested: {
+            onAccentColorChangeRequested: function(newColorIndex) {
                 appearanceModel.currentAccentColorIndex = newColorIndex
             }
 
@@ -76,7 +76,7 @@ PreferencesPage {
                 }
             }
 
-            onEnsureContentVisibleRequested: {
+            onEnsureContentVisibleRequested: function(contentRect) {
                 root.ensureContentVisibleRequested(contentRect)
             }
         }
@@ -96,7 +96,7 @@ PreferencesPage {
             //! NOTE: 3 because ThemesSection have two panels
             navigation.order: root.navigationOrderStart + 3
 
-            onColorChangeRequested: {
+            onColorChangeRequested: function(newColor, propertyType) {
                 appearanceModel.setNewColor(newColor, propertyType)
             }
 
@@ -117,11 +117,11 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
 
-            onFontChangeRequested: {
+            onFontChangeRequested: function(newFontIndex) {
                 appearanceModel.currentFontIndex = newFontIndex
             }
 
-            onBodyTextSizeChangeRequested: {
+            onBodyTextSizeChangeRequested: function(newBodyTextSize) {
                 appearanceModel.bodyTextSize = newBodyTextSize
             }
 
@@ -150,15 +150,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 5
 
-            onUseColorChangeRequested: {
+            onUseColorChangeRequested: function(newValue) {
                 appearanceModel.backgroundUseColor = newValue
             }
 
-            onColorChangeRequested: {
+            onColorChangeRequested: function(newColor) {
                 appearanceModel.backgroundColor = newColor
             }
 
-            onWallpaperPathChangeRequested: {
+            onWallpaperPathChangeRequested: function(newWallpaperPath) {
                 appearanceModel.backgroundWallpaperPath = newWallpaperPath
             }
 
@@ -190,15 +190,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 6
 
-            onUseColorChangeRequested: {
+            onUseColorChangeRequested: function(newValue) {
                 appearanceModel.foregroundUseColor = newValue
             }
 
-            onColorChangeRequested: {
+            onColorChangeRequested: function(newColor) {
                 appearanceModel.foregroundColor = newColor
             }
 
-            onWallpaperPathChangeRequested: {
+            onWallpaperPathChangeRequested: function(newWallpaperPath) {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
 
@@ -227,7 +227,7 @@ PreferencesPage {
                 }
             }
 
-            onScoreInversionEnableChangeRequested: {
+            onScoreInversionEnableChangeRequested: function(enable) {
                 appearanceModel.scoreInversionEnabled = enable
             }
         }

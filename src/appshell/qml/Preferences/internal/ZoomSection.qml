@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -44,13 +43,13 @@ BaseSection {
         spacing: 8
 
         Row {
-            spacing: 12
+            spacing: root.columnSpacing
 
             ComboBoxWithTitle {
                 id: defaultZoomTypesBox
 
                 title: qsTrc("appshell", "Default zoom:")
-                titleWidth: 210
+                columnWidth: root.columnWidth
 
                 control.textRole: "title"
                 control.valueRole: "value"
@@ -62,7 +61,7 @@ BaseSection {
                 navigation.row: 0
                 navigation.column: 0
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     root.defaultZoomTypeChangeRequested(newValue)
                 }
             }
@@ -86,7 +85,7 @@ BaseSection {
                 navigation.row: 0
                 navigation.column: 1
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     root.defaultZoomLevelChangeRequested(newValue)
                 }
             }
@@ -97,7 +96,7 @@ BaseSection {
 
             title: qsTrc("appshell", "Mouse zoom precision:")
 
-            titleWidth: 208
+            columnWidth: root.columnWidth
             control.width: 60
 
             minValue: 1
@@ -108,7 +107,7 @@ BaseSection {
             navigation.row: 1
             navigation.column: 0
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.mouseZoomPrecisionChangeRequested(newValue)
             }
         }
