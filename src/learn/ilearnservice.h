@@ -40,7 +40,7 @@ public:
     virtual Playlist advancedPlaylist() const = 0;
     virtual async::Channel<Playlist> advancedPlaylistChanged() const = 0;
 
-    virtual void openVideo(const std::string& videoId) const = 0;
+    virtual void openVideo(const QString& videoId) const = 0;
 };
 }
 

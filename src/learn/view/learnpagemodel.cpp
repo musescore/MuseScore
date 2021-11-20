@@ -60,12 +60,12 @@ void LearnPageModel::load()
 
 void LearnPageModel::openVideo(const QString& videoId) const
 {
-    learnService()->openVideo(videoId.toStdString());
+    learnService()->openVideo(videoId);
 }
 
 void LearnPageModel::openUrl(const QString& url) const
 {
-    interactive()->openUrl(url.toStdString());
+    interactive()->openUrl(QUrl(url));
 }
 
 void LearnPageModel::setSearchText(const QString& text)
@@ -137,10 +137,10 @@ QVariantList LearnPageModel::playlistToVariantList(const Playlist& playlist) con
 
     for (const PlaylistItem& item : playlist) {
         QVariantMap itemObj;
-        itemObj["videoId"] = QString::fromStdString(item.videoId);
-        itemObj["title"] = QString::fromStdString(item.title);
-        itemObj["author"] =QString::fromStdString(item.author);
-        itemObj["thumbnailUrl"] = QString::fromStdString(item.thumbnailUrl);
+        itemObj["videoId"] = item.videoId;
+        itemObj["title"] = item.title;
+        itemObj["author"] = item.author;
+        itemObj["thumbnailUrl"] = item.thumbnailUrl;
         itemObj["duration"] = formatDuration(item.durationSecs);
 
         result << itemObj;
@@ -154,10 +154,8 @@ Playlist LearnPageModel::filterPlaylistBySearch(const Playlist& playlist) const
     Playlist result;
 
     for (const PlaylistItem& playlistItem : playlist) {
-        QString title = QString::fromStdString(playlistItem.title);
-        QString author = QString::fromStdString(playlistItem.author);
-        if (title.contains(m_searchText, Qt::CaseInsensitive)
-            || author.contains(m_searchText, Qt::CaseInsensitive)) {
+        if (playlistItem.title.contains(m_searchText, Qt::CaseInsensitive)
+            || playlistItem.author.contains(m_searchText, Qt::CaseInsensitive)) {
             result.push_back(playlistItem);
         }
     }

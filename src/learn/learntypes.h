@@ -22,15 +22,15 @@
 #ifndef MU_LEARN_LEARNTYPES_H
 #define MU_LEARN_LEARNTYPES_H
 
-#include <string>
-#include <vector>
+#include <QString>
+#include <QList>
 
 namespace mu::learn {
 struct PlaylistItem {
-    std::string videoId;
-    std::string title;
-    std::string author;
-    std::string thumbnailUrl;
+    QString videoId;
+    QString title;
+    QString author;
+    QString thumbnailUrl;
     int durationSecs = 0;
 
     bool operator==(const PlaylistItem& other) const
@@ -39,7 +39,7 @@ struct PlaylistItem {
     }
 };
 
-using Playlist = std::vector<PlaylistItem>;
+using Playlist = QList<PlaylistItem>;
 }
 
 #endif // MU_LEARN_LEARNTYPES_H
