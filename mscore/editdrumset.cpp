@@ -59,6 +59,8 @@ NoteHead::Group noteHeadNames[] = {
       NoteHead::Group::HEAD_FA,
       NoteHead::Group::HEAD_LA,
       NoteHead::Group::HEAD_TI,
+      NoteHead::Group::HEAD_SWISS_RUDIMENTS_FLAM,
+      NoteHead::Group::HEAD_SWISS_RUDIMENTS_DOUBLE,
       NoteHead::Group::HEAD_CUSTOM
       };
 
@@ -137,7 +139,7 @@ EditDrumset::EditDrumset(const Drumset* ds, QWidget* parent)
       pitchList->setColumnWidth(1, 60);
       pitchList->setColumnWidth(2, 30);
 
-      QStringList validNoteheadRanges = { "Noteheads", "Round and square noteheads", "Slash noteheads", "Shape note noteheads", "Shape note noteheads supplement" };
+      QStringList validNoteheadRanges = { "Noteheads", "Round and square noteheads", "Slash noteheads", "Shape note noteheads", "Shape note noteheads supplement", "Techniques noteheads" };
       QSet<QString> excludeSym = {"noteheadParenthesisLeft", "noteheadParenthesisRight", "noteheadParenthesis", "noteheadNull"};
       QStringList primaryNoteheads = {
             "noteheadXOrnate",
