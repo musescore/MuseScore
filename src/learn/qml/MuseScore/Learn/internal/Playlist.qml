@@ -72,6 +72,7 @@ FocusScope {
 
         readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
 
+        visible: count > 0
         anchors.fill: parent
         anchors.leftMargin: root.sideMargin - spacingBetweenColumns / 2
         anchors.rightMargin: root.sideMargin - spacingBetweenColumns / 2
@@ -130,6 +131,31 @@ FocusScope {
                     root.requestOpenVideo(modelData.videoId)
                 }
             }
+        }
+    }
+
+    Column {
+        id: errorMessageColumn
+        visible: !view.visible
+
+        anchors.top: parent.top
+        anchors.topMargin: topGradient.height + Math.max(parent.height / 4 - height / 2, 0)
+        anchors.left: parent.left
+        anchors.leftMargin: root.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: root.sideMargin
+
+        spacing: 6
+
+        StyledTextLabel {
+            width: parent.width
+            font: ui.theme.tabBoldFont
+            text: qsTrc("learn", "Sorry, but we can’t load these videos right now")
+        }
+
+        StyledTextLabel {
+            width: parent.width
+            text: qsTrc("learn", "Please check your internet connection, or try again later.")
         }
     }
 }
