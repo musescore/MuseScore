@@ -49,6 +49,7 @@ class TestBeam : public QObject, public MTest
       void beamCrossMeasure3() { beam("Beam-CrossM3.mscx"); }
       void beamCrossMeasure4() { beam("Beam-CrossM4.mscx"); }
       void beamStemDir();
+      void flipBeamStemDir();
       };
 
 //---------------------------------------------------------
@@ -116,6 +117,26 @@ void TestBeam::beamStemDir()
       delete score;
       }
 
+//---------------------------------------------------------
+//   flipBeamStemDir
+//   This method tests if a beam's stem direction can be
+//   set with a note after its direction has been set
+//   with the beam's own setBeamDirection method.
+//---------------------------------------------------------
+void TestBeam::flipBeamStemDir()
+      {
+      MasterScore* score = readScore(DIR + "flipBeamStemDir.mscx");
+      QVERIFY(score);
+      Measure* m1 = score->firstMeasure();
+      ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+      Chord* c2 = toChord(cr->beam()->elements()[1]);
+      cr->beam()->setBeamDirection(Direction::UP);
+      c2->setStemDirection(Direction::DOWN);
+      score->update();
+      score->doLayout();
+      QVERIFY(saveCompareScore(score, "flipBeamStemDir-01.mscx", DIR + "flipBeamStemDir-01-ref.mscx"));
+      delete score;
+      }
 QTEST_MAIN(TestBeam)
 #include "tst_beam.moc"
 
