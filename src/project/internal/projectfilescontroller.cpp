@@ -25,6 +25,7 @@
 #include <QFileOpenEvent>
 
 #include "translation.h"
+#include "defer.h"
 #include "notation/notationerrors.h"
 #include "projectconfiguration.h"
 
@@ -125,8 +126,8 @@ Ret ProjectFilesController::openProject(const io::path& projectPath_)
         return make_ret(Ret::Code::Ok);
     }
 
-    //! Step 4. Check, if a any project already opened in the current window,
-    //! then we open new window
+    //! Step 4. Check, if a any project is already open in the current window,
+    //! then create a new instance
     if (globalContext()->currentProject()) {
         QStringList args;
         args << projectPath.toQString();
@@ -183,11 +184,41 @@ bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
     return false;
 }
 
+bool ProjectFilesController::isAnyProjectOpened() const
+{
+    auto project = globalContext()->currentProject();
+    if (project) {
+        return true;
+    }
+    return false;
+}
+
 void ProjectFilesController::newProject()
 {
-    //! Check, if a any project already opened in the current window,
-    //! then we open new window
+    //! NOTE This method is synchronous,
+    //! but inside `multiInstancesProvider` there can be an event loop
+    //! to wait for the responces from other instances, accordingly,
+    //! the events (like user click) can be executed and this method can be called several times,
+    //! before the end of the current call.
+    //! So we ignore all subsequent calls until the current one completes.
+    if (m_isNewProjectProcessing) {
+        return;
+    }
+    m_isNewProjectProcessing = true;
+
+    Defer defer([this]() {
+        m_isNewProjectProcessing = false;
+    });
+
     if (globalContext()->currentProject()) {
+        //! Check, if any project is already open in the current window
+        //! and there is already a created instance without a project, then activate it
+        if (multiInstancesProvider()->isHasAppInstanceWithoutProject()) {
+            multiInstancesProvider()->activateWindowWithoutProject();
+            return;
+        }
+
+        //! Otherwise, we will create a new instance
         QStringList args;
         args << "--session-type" << "start-with-new";
         multiInstancesProvider()->openNewAppInstance(args);
