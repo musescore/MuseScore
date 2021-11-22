@@ -212,6 +212,10 @@ bool ProjectFilesController::closeOpenedProject()
         return true;
     }
 
+    if (playbackController()->isPlaying()) {
+        playbackController()->reset();
+    }
+
     if (project->needSave().val) {
         IInteractive::Button btn = askAboutSavingScore(project->path());
 
