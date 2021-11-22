@@ -260,6 +260,16 @@ QQuickItem& DockWindow::asItem() const
 
 void DockWindow::restoreDefaultLayout()
 {
+    TRACEFUNC;
+
+    clearRegistry();
+
+    if (m_currentPage) {
+        for (DockBase* dock : m_currentPage->allDocks()) {
+            dock->resetToDefault();
+        }
+    }
+
     for (const DockPageView* page : m_pages.list()) {
         uiConfiguration()->setPageState(page->objectName(), QByteArray());
     }

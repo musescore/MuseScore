@@ -369,6 +369,11 @@ QRect DockBase::frameGeometry() const
     return QRect();
 }
 
+void DockBase::resetToDefault()
+{
+    setVisible(m_defaultVisibility);
+}
+
 void DockBase::componentComplete()
 {
     TRACEFUNC;
@@ -410,6 +415,8 @@ void DockBase::componentComplete()
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
+
+    m_defaultVisibility = isVisible();
 }
 
 void DockBase::applySizeConstraints()
