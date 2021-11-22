@@ -39,6 +39,9 @@ MasterNotationMidiData::MasterNotationMidiData(IGetScore* getScore, async::Notif
     notationChanged.onNotify(this, [this]() {
         m_renderRanges.clear();
         m_eventsCache.clear();
+        if (m_midiRenderImpl) {
+            m_midiRenderImpl->setScoreChanged();
+        }
     });
 }
 
