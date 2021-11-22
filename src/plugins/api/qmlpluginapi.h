@@ -36,6 +36,8 @@
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
+#include "apitypes.h"
+
 namespace Ms {
 class EngravingItem;
 class MScore;
@@ -114,7 +116,7 @@ class PluginAPI : public Ms::QmlPlugin
 
     // Should be initialized in qmlpluginapi.cpp
     /// Contains Ms::ElementType enumeration values
-    DECLARE_API_ENUM(EngravingItem,          elementTypeEnum,        Ms::ElementType)
+    DECLARE_API_ENUM(EngravingItem,    elementTypeEnum,        Ms::ElementType)
     /// Contains Ms::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     Ms::AccidentalType)
     /// Contains Ms::Beam::Mode enumeration values
@@ -122,7 +124,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::Placement enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// EngravingItem.ABOVE and EngravingItem.BELOW.
-    DECLARE_API_ENUM(Placement,        placementEnum,          Ms::Placement)
+    DECLARE_API_ENUM(Placement,        placementEnum,          Ms::PluginAPI::Placement)
     /// Contains Ms::GlissandoType enumeration values
     DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      Ms::GlissandoType)             // was probably absent in 2.X
     /// Contains Ms::LayoutBreak::Type enumeration values
@@ -152,7 +154,7 @@ class PluginAPI : public Ms::QmlPlugin
     DECLARE_API_ENUM(Tid,              tidEnum,                Ms::Tid)
     /// Contains Ms::Align enumeration values
     /// \since MuseScore 3.3
-    DECLARE_API_ENUM(Align,            alignEnum,              Ms::Align)
+    DECLARE_API_ENUM(Align,            alignEnum,              Ms::PluginAPI::Align)
     /// Contains Ms::NoteType enumeration values
     /// \since MuseScore 3.2.1
     DECLARE_API_ENUM(NoteType,         noteTypeEnum,           Ms::NoteType)

@@ -25,6 +25,8 @@
 #ifndef __FRACTION_H__
 #define __FRACTION_H__
 
+#include <QVariant>
+
 #include "config.h"
 #include "mscore.h"
 

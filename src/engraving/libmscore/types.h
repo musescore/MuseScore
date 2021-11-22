@@ -420,26 +420,6 @@ enum class HarmonyType {
 };
 
 //---------------------------------------------------------
-//   Placement
-//---------------------------------------------------------
-
-enum class Placement {
-    ///.\{
-    ABOVE, BELOW
-    ///\}
-};
-
-//---------------------------------------------------------
-//   HPlacement
-//---------------------------------------------------------
-
-enum class HPlacement {
-    ///.\{
-    LEFT, CENTER, RIGHT
-    ///\}
-};
-
-//---------------------------------------------------------
 //   MMRestRangeBracketType
 //---------------------------------------------------------
 
@@ -571,47 +551,6 @@ enum class Tid {
 };
 
 //---------------------------------------------------------
-///   Align
-///   Because the Align enum has Top = 0 and Left = 0,
-///   align() & Align::Top will always return false.
-///   @warning Do not use if (align() & Align::Top) { doSomething(); }
-///   because doSomething() will never be executed!
-///   use this instead:
-///   `if ((static_cast<char>(align()) & static_cast<char>(Align::VMASK)) == Align::Top) { doSomething(); }`
-///   Same applies to Align::Left.
-//---------------------------------------------------------
-
-enum class Align : char {
-    ///.\{
-    LEFT     = 0,
-    RIGHT    = 1,
-    HCENTER  = 2,
-    TOP      = 0,
-    BOTTOM   = 4,
-    VCENTER  = 8,
-    BASELINE = 16,
-    CENTER = Align::HCENTER | Align::VCENTER,
-    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
-    VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
-             ///.\}
-};
-
-constexpr Align operator|(Align a1, Align a2)
-{
-    return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
-}
-
-constexpr bool operator&(Align a1, Align a2)
-{
-    return static_cast<char>(a1) & static_cast<char>(a2);
-}
-
-constexpr Align operator~(Align a)
-{
-    return static_cast<Align>(~static_cast<char>(a));
-}
-
-//---------------------------------------------------------
 //   FontStyle
 //---------------------------------------------------------
 
@@ -718,11 +657,8 @@ Q_ENUM_NS(ElementType);
 Q_ENUM_NS(Direction);
 Q_ENUM_NS(GlissandoType);
 Q_ENUM_NS(GlissandoStyle);
-Q_ENUM_NS(Placement);
-Q_ENUM_NS(HPlacement);
 Q_ENUM_NS(SegmentType);
 Q_ENUM_NS(Tid);
-Q_ENUM_NS(Align);
 Q_ENUM_NS(NoteType);
 Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
@@ -742,8 +678,6 @@ extern const char* toString(Direction);
 extern QString toUserString(Direction);
 } // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::Align);
-
 Q_DECLARE_METATYPE(Ms::Direction);
 
 Q_DECLARE_METATYPE(Ms::NoteType);
@@ -752,7 +686,6 @@ Q_DECLARE_METATYPE(Ms::PlayEventType);
 
 Q_DECLARE_METATYPE(Ms::AccidentalType);
 
-Q_DECLARE_METATYPE(Ms::HPlacement);
 Q_DECLARE_METATYPE(Ms::DynamicType)
 
 #endif

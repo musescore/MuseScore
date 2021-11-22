@@ -77,11 +77,11 @@ void BeamSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());

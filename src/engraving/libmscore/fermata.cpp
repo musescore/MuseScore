@@ -53,7 +53,7 @@ static const ElementStyle fermataStyle {
 Fermata::Fermata(EngravingItem* parent)
     : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    setPlacement(Placement::ABOVE);
+    setPlacement(PlacementV::ABOVE);
     _symId         = SymId::noSym;
     _timeStretch   = 1.0;
     setPlay(true);
@@ -285,7 +285,7 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
         setSymId(v.value<SymId>());
         break;
     case Pid::PLACEMENT: {
-        Placement p = Placement(v.toInt());
+        PlacementV p = PlacementV(v.toInt());
         if (p != placement()) {
             QString s = SymNames::nameForSymId(_symId);
             bool up = placeAbove();
@@ -319,7 +319,7 @@ PropertyValue Fermata::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
-        return int(track() & 1 ? Placement::BELOW : Placement::ABOVE);
+        return int(track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
     case Pid::TIME_STRETCH:
         return 1.0;           // articulationList[int(articulationType())].timeStretch;
     case Pid::PLAY:

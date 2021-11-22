@@ -900,11 +900,11 @@ std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds
     return joinArticulations(splittedArticulations);
 }
 
-std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement)
+std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, PlacementV placement)
 {
     std::set<SymId> result;
     switch (placement) {
-    case Placement::ABOVE:
+    case PlacementV::ABOVE:
         for (const SymId& articulationSymbolId: articulationSymbolIds) {
             bool found = false;
             for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {
@@ -920,7 +920,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
             }
         }
         break;
-    case Placement::BELOW:
+    case PlacementV::BELOW:
         for (const SymId& articulationSymbolId: articulationSymbolIds) {
             bool found = false;
             for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {

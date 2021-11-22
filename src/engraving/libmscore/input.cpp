@@ -166,7 +166,7 @@ void InputState::update(Selection& selection)
                 }
 
                 articulationsIds = Ms::splitArticulations(articulationsIds);
-                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
                 for (const SymId& articulationSymbolId: articulationsIds) {
                     if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),
                                   articulationSymbolId) == articulationSymbolIds.end()) {
@@ -180,7 +180,7 @@ void InputState::update(Selection& selection)
                 for (Articulation* artic: n->chord()->articulations()) {
                     articulationsIds.insert(artic->symId());
                 }
-                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
 
                 n1 = n;
             }

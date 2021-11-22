@@ -157,8 +157,8 @@ public:
 
     const std::vector<Lyrics*>& lyrics() const { return _lyrics; }
     std::vector<Lyrics*>& lyrics() { return _lyrics; }
-    Lyrics* lyrics(int verse, Placement) const;
-    int lastVerse(Placement) const;
+    Lyrics* lyrics(int verse, PlacementV) const;
+    int lastVerse(PlacementV) const;
     bool isMelismaEnd() const;
     void setMelismaEnd(bool v);
 

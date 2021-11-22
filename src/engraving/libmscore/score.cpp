@@ -4561,7 +4561,7 @@ QString Score::extractLyrics()
                     if (playCount >= int(cr->lyrics().size())) {
                         continue;
                     }
-                    Lyrics* l = cr->lyrics(playCount, Placement::BELOW);            // TODO: ABOVE
+                    Lyrics* l = cr->lyrics(playCount, PlacementV::BELOW);            // TODO: ABOVE
                     if (!l) {
                         continue;
                     }
@@ -4596,7 +4596,7 @@ QString Score::extractLyrics()
                         if (lyricsNumber >= cr->lyrics().size()) {
                             continue;
                         }
-                        Lyrics* l = cr->lyrics(lyricsNumber, Placement::BELOW);              // TODO
+                        Lyrics* l = cr->lyrics(lyricsNumber, PlacementV::BELOW);              // TODO
                         if (!l) {
                             continue;
                         }

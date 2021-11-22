@@ -198,15 +198,15 @@ void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
 
     const QString writableVal(propertyToString(id, data, /* mscx */ true));
     if (writableVal.isEmpty()) {
-        tagProperty(QString(name), data);
+        tagProperty(name, data);
     } else {
-        tagProperty(QString(name), PropertyValue(writableVal));
+        tagProperty(name, PropertyValue(writableVal));
     }
 }
 
-void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyValue& data)
+void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue& data)
 {
-    QString ename(name.split(' ')[0]);
+    QString ename(QString(name).split(' ')[0]);
 
     putLevel();
 
@@ -238,7 +238,7 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
     // geometry
     case P_TYPE::POINT: {
         PointF p = data.value<PointF>();
-        *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+        tag(name, p, false);
     }
     break;
     case P_TYPE::SIZE: {
@@ -294,29 +294,29 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
         *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h, v);
     }
     break;
-    case P_TYPE::PLACEMENT: {
+    case P_TYPE::PLACEMENT_V: {
         *this << "<" << name << ">";
-        switch (data.value<Placement>()) {
-        case Placement::ABOVE:
+        switch (data.value<PlacementV>()) {
+        case PlacementV::ABOVE:
             *this << "above";
             break;
-        case Placement::BELOW:
+        case PlacementV::BELOW:
             *this << "below";
             break;
         }
         *this << "</" << ename << ">\n";
     }
     break;
-    case P_TYPE::HPLACEMENT: {
+    case P_TYPE::PLACEMENT_H: {
         *this << "<" << name << ">";
-        switch (data.value<HPlacement>()) {
-        case HPlacement::LEFT:
+        switch (data.value<PlacementH>()) {
+        case PlacementH::LEFT:
             *this << "left";
             break;
-        case HPlacement::CENTER:
+        case PlacementH::CENTER:
             *this << "center";
             break;
-        case HPlacement::RIGHT:
+        case PlacementH::RIGHT:
             *this << "right";
             break;
         }
@@ -382,6 +382,15 @@ void XmlWriter::tagProperty(const QString& name, const mu::engraving::PropertyVa
 //    case P_TYPE::PITCH_VALUES,
 //    case P_TYPE::HOOK_TYPE
     }
+}
+
+void XmlWriter::tag(const char* name, const mu::PointF& p, bool isPutLevel)
+{
+    if (isPutLevel) {
+        putLevel();
+    }
+
+    *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
 }
 
 //---------------------------------------------------------
@@ -458,50 +467,11 @@ void XmlWriter::tag(const QString& name, QVariant data)
     break;
     default: {
         const char* type = data.typeName();
-        if (strcmp(type, "mu::PointF") == 0) {
-            PointF p = PointF::fromVariant(data);
-            *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
-        } else if (strcmp(type, "mu::SizeF") == 0) {
-            SizeF s = SizeF::fromVariant(data);
-            *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
-        } else if (strcmp(type, "mu::RectF") == 0) {
-            RectF r = RectF::fromVariant(data);
-            *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-        } else if (strcmp(type, "mu::Rect") == 0) {
-            Rect r = data.value<mu::Rect>();
-            *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-        } else if (strcmp(type, "mu::draw::Color") == 0) {
-            mu::draw::Color color(data.value<mu::draw::Color>());
-            *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-                .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
-        } else if (strcmp(type, "Ms::Fraction") == 0) {
+        if (strcmp(type, "Ms::Fraction") == 0) {
             const Fraction& f = data.value<Fraction>();
             *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
         } else if (strcmp(type, "Ms::Direction") == 0) {
             *this << QString("<%1>%2</%1>\n").arg(name, toString(data.value<Direction>()));
-        } else if (strcmp(type, "Ms::Align") == 0) {
-            // TODO: remove from here? (handled in Ms::propertyWritableValue())
-            Align a = Align(data.toInt());
-            const char* h;
-            if (a & Align::HCENTER) {
-                h = "center";
-            } else if (a & Align::RIGHT) {
-                h = "right";
-            } else {
-                h = "left";
-            }
-            const char* v;
-            if (a & Align::BOTTOM) {
-                v = "bottom";
-            } else if (a & Align::VCENTER) {
-                v = "center";
-            } else if (a & Align::BASELINE) {
-                v = "baseline";
-            } else {
-                v = "top";
-            }
-            *this << QString("<%1>%2,%3</%1>\n").arg(name)
-                .arg(h, v);
         } else {
             qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);
         }

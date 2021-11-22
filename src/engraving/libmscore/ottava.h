@@ -119,7 +119,7 @@ public:
     bool numbersOnly() const { return _numbersOnly; }
     void setNumbersOnly(bool val);
 
-    void setPlacement(Placement);
+    void setPlacement(PlacementV);
 
     LineSegment* createLineSegment(System* parent) override;
     int pitchShift() const;
