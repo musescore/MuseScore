@@ -33,6 +33,7 @@
 
 #include "engraving/accessibility/accessibleitem.h"
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::palette;
@@ -69,6 +70,16 @@ PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, QObject
 {
     id = makeId();
     drawStaff = needsStaff(element);
+}
+
+QAccessibleInterface* PaletteCell::accessibleInterface(QObject* object)
+{
+    PaletteCell* cell = qobject_cast<PaletteCell*>(object);
+    IF_ASSERT_FAILED(cell) {
+        return nullptr;
+    }
+
+    return static_cast<QAccessibleInterface*>(new AccessiblePaletteCellInterface(cell));
 }
 
 QString PaletteCell::makeId()

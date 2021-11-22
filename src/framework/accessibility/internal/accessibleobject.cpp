@@ -22,6 +22,9 @@
 #include "accessibleobject.h"
 
 #include "accessibilitycontroller.h"
+#include "accessibleiteminterface.h"
+
+#include "log.h"
 
 using namespace mu::accessibility;
 
@@ -30,6 +33,16 @@ AccessibleObject::AccessibleObject(IAccessible* item)
 {
     setObjectName("AccessibleObject");
     m_item = item;
+}
+
+QAccessibleInterface* AccessibleObject::accessibleInterface(QObject* object)
+{
+    AccessibleObject* accessibleObject = qobject_cast<AccessibleObject*>(object);
+    IF_ASSERT_FAILED(accessibleObject) {
+        return nullptr;
+    }
+
+    return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(accessibleObject));
 }
 
 void AccessibleObject::setController(std::shared_ptr<AccessibilityController> controller)

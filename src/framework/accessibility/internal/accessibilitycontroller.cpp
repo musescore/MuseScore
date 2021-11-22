@@ -29,9 +29,6 @@
 #include "accessibleiteminterface.h"
 #include "async/async.h"
 
-#include "palette/view/widgets/palettewidget.h" //! TODO
-#include "palette/internal/palettecell.h"
-
 #include "log.h"
 #include "config.h"
 
@@ -50,36 +47,21 @@ AccessibilityController::~AccessibilityController()
     unreg(this);
 }
 
+QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
+{
+    return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+}
+
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
-#ifdef Q_OS_MAC
-    if (classname == QLatin1String("QQuickWindow")) {
-        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
-    }
-#endif
-
-    if (classname == QLatin1String("mu::accessibility::AccessibleObject")) {
-        AccessibleObject* aobj = qobject_cast<AccessibleObject*>(object);
-        IF_ASSERT_FAILED(aobj) {
-            return nullptr;
-        }
-        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(aobj));
+    auto accessibleInterfaceRegister = mu::modularity::ioc()->resolve<IAccessibleInterfaceRegister>("accessibility");
+    if (!accessibleInterfaceRegister) {
+        return nullptr;
     }
 
-    if (classname == QLatin1String("mu::palette::PaletteWidget")) {
-        mu::palette::PaletteWidget* pobj = qobject_cast<mu::palette::PaletteWidget*>(object);
-        IF_ASSERT_FAILED(pobj) {
-            return nullptr;
-        }
-        return static_cast<QAccessibleInterface*>(new mu::palette::AccessiblePaletteWidget(pobj));
-    }
-
-    if (classname == QLatin1String("mu::palette::PaletteCell")) {
-        mu::palette::PaletteCell* aobj = qobject_cast<mu::palette::PaletteCell*>(object);
-        IF_ASSERT_FAILED(aobj) {
-            return nullptr;
-        }
-        return static_cast<QAccessibleInterface*>(new mu::palette::AccessiblePaletteCellInterface(aobj));
+    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname.toStdString());
+    if (interfaceGetter) {
+        return interfaceGetter(object);
     }
 
     return nullptr;

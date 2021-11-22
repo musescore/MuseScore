@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_UI_IACCESSIBLEINTERFACEREGISTER_H
+#define MU_UI_IACCESSIBLEINTERFACEREGISTER_H
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#include "modularity/imoduleexport.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+#include <QAccessibleInterface>
 
 namespace mu::accessibility {
-class AccessibilityModule : public modularity::IModuleSetup
+class IAccessibleInterfaceRegister : MODULE_EXPORT_INTERFACE
 {
-public:
-    std::string moduleName() const override;
+    INTERFACE_ID(IAccessibleInterfaceRegister)
 
-    void registerExports() override;
-    void resolveImports() override;
+public:
+    virtual ~IAccessibleInterfaceRegister() = default;
+
+    using InterfaceGetter = std::function<QAccessibleInterface* (QObject*)>;
+
+    virtual void registerInterfaceGetter(const std::string& className, const InterfaceGetter& interfaceGetter) = 0;
+    virtual InterfaceGetter interfaceGetter(const std::string& className) const = 0;
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#endif // MU_UI_IACCESSIBLEINTERFACEREGISTER_H

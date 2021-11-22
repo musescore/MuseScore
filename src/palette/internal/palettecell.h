@@ -66,23 +66,11 @@ class PaletteCell : public QObject
     Q_OBJECT
     INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
+public:
     explicit PaletteCell(QObject* parent = nullptr);
     PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, QObject* parent = nullptr);
 
-    Ms::ElementPtr element;
-    Ms::ElementPtr untranslatedElement;
-    QString id;
-    QString name; // used for tool tip
-
-    bool drawStaff { false };
-    double xoffset { 0.0 }; // in spatium units of "gscore"
-    double yoffset { 0.0 };
-    qreal mag      { 1.0 };
-    bool readOnly { false };
-
-    bool visible { true };
-    bool custom { false };
-    bool active { false };
+    static QAccessibleInterface* accessibleInterface(QObject* object);
 
     static constexpr const char* mimeDataFormat = "application/musescore/palette/cell";
 
@@ -98,6 +86,21 @@ class PaletteCell : public QObject
 
     static PaletteCellPtr fromMimeData(const QByteArray& data);
     static PaletteCellPtr fromElementMimeData(const QByteArray& data);
+
+    Ms::ElementPtr element;
+    Ms::ElementPtr untranslatedElement;
+    QString id;
+    QString name; // used for tool tip
+
+    bool drawStaff { false };
+    double xoffset { 0.0 }; // in spatium units of "gscore"
+    double yoffset { 0.0 };
+    qreal mag      { 1.0 };
+    bool readOnly { false };
+
+    bool visible { true };
+    bool custom { false };
+    bool active { false };
 
 private:
     static QString makeId();

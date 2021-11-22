@@ -59,6 +59,7 @@
 
 #include "internal/palettecelliconengine.h"
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu;
@@ -90,6 +91,16 @@ void PaletteWidget::setPalette(PalettePtr palette)
     palette->setParent(this);
 
     update();
+}
+
+QAccessibleInterface* PaletteWidget::accessibleInterface(QObject* object)
+{
+    PaletteWidget* widget = qobject_cast<PaletteWidget*>(object);
+    IF_ASSERT_FAILED(widget) {
+        return nullptr;
+    }
+
+    return static_cast<QAccessibleInterface*>(new AccessiblePaletteWidget(widget));
 }
 
 QString PaletteWidget::name() const

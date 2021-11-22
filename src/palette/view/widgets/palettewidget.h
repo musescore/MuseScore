@@ -79,6 +79,8 @@ public:
 
     void setPalette(PalettePtr palette);
 
+    static QAccessibleInterface* accessibleInterface(QObject* object);
+
     QString name() const;
     void setName(const QString& name);
 
