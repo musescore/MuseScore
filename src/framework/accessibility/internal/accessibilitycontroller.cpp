@@ -29,6 +29,9 @@
 #include "accessibleiteminterface.h"
 #include "async/async.h"
 
+#include "palette/view/widgets/palettewidget.h" //! TODO
+#include "palette/internal/palettecell.h"
+
 #include "log.h"
 #include "config.h"
 
@@ -61,6 +64,22 @@ static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObje
             return nullptr;
         }
         return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(aobj));
+    }
+
+    if (classname == QLatin1String("mu::palette::PaletteWidget")) {
+        mu::palette::PaletteWidget* pobj = qobject_cast<mu::palette::PaletteWidget*>(object);
+        IF_ASSERT_FAILED(pobj) {
+            return nullptr;
+        }
+        return static_cast<QAccessibleInterface*>(new mu::palette::AccessiblePaletteWidget(pobj));
+    }
+
+    if (classname == QLatin1String("mu::palette::PaletteCell")) {
+        mu::palette::PaletteCell* aobj = qobject_cast<mu::palette::PaletteCell*>(object);
+        IF_ASSERT_FAILED(aobj) {
+            return nullptr;
+        }
+        return static_cast<QAccessibleInterface*>(new mu::palette::AccessiblePaletteCellInterface(aobj));
     }
 
     return nullptr;

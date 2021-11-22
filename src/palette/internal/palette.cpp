@@ -44,8 +44,8 @@ using namespace mu;
 using namespace mu::palette;
 using namespace Ms;
 
-Palette::Palette(Type t)
-    : m_type(t)
+Palette::Palette(Type t, QObject* parent)
+    : QObject(parent), m_type(t)
 {
     static int id = 0;
     m_id = QString::number(++id);
@@ -90,7 +90,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QStr
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {
@@ -108,7 +108,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
         element->layout();
     }
 
-    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag);
+    PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag, this);
 
     auto cellHandler = cellHandlerByPaletteType(m_type);
     if (cellHandler) {
@@ -257,7 +257,7 @@ bool Palette::read(XmlReader& e)
         } else if (tag == "editable") {
             m_isEditable = e.readBool();
         } else if (tag == "Cell") {
-            PaletteCellPtr cell = std::make_shared<PaletteCell>();
+            PaletteCellPtr cell = std::make_shared<PaletteCell>(this);
             if (!cell->read(e)) {
                 continue;
             }

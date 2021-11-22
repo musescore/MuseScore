@@ -50,7 +50,8 @@ TimeDialog::TimeDialog(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = new PaletteWidget(PaletteCreator::newTimePalette(), this);
+    sp = new PaletteWidget(this);
+    sp->setPalette(PaletteCreator::newTimePalette());
     sp->setReadOnly(false);
     sp->setSelectable(true);
 

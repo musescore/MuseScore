@@ -472,7 +472,10 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
             if (!newCell) {
                 return false;
             }
-            *cell = *newCell;
+            cell->element = newCell->element;
+            cell->untranslatedElement = newCell->untranslatedElement;
+            cell->name = newCell->name;
+            cell->id = newCell->id;
             emit dataChanged(index, index);
             return true;
         };
@@ -505,10 +508,20 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
                 if (!newCell) {
                     return false;
                 }
-                *cell = *newCell;
+
+                cell->element = newCell->element;
+                cell->untranslatedElement = newCell->untranslatedElement;
+                cell->name = newCell->name;
+                cell->id = newCell->id;
             } else if (map.contains(mu::commonscene::MIME_SYMBOL_FORMAT)) {
                 const QByteArray elementMimeData = map[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray();
-                *cell = *PaletteCell::fromElementMimeData(elementMimeData);
+                PaletteCellPtr newCell = PaletteCell::fromElementMimeData(elementMimeData);
+
+                cell->element = newCell->element;
+                cell->untranslatedElement = newCell->untranslatedElement;
+                cell->name = newCell->name;
+                cell->id = newCell->id;
+
                 cell->custom = true;               // mark the updated cell custom
             } else {
                 return false;
@@ -837,7 +850,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            PaletteCellPtr cell = std::make_shared<PaletteCell>();
+            PaletteCellPtr cell = std::make_shared<PaletteCell>(palette);
             palette->insertCell(row, cell);
         }
         endInsertRows();

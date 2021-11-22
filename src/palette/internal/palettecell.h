@@ -24,6 +24,8 @@
 
 #include "libmscore/engravingitem.h"
 
+#include <QAccessibleInterface>
+
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
 
@@ -33,16 +35,39 @@ class XmlWriter;
 }
 
 namespace mu::palette {
-struct PaletteCell;
+class PaletteCell;
 using PaletteCellPtr = std::shared_ptr<PaletteCell>;
 using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 
-struct PaletteCell
+class AccessiblePaletteCellInterface : public QAccessibleInterface
 {
+public:
+    AccessiblePaletteCellInterface(PaletteCell* cell);
+
+    bool isValid() const override;
+    QObject* object() const override;
+    QAccessibleInterface* childAt(int x, int y) const override;
+    QAccessibleInterface* parent() const override;
+    QAccessibleInterface* child(int index) const override;
+    int childCount() const override;
+    int indexOfChild(const QAccessibleInterface*) const override;
+    QString text(QAccessible::Text t) const override;
+    void setText(QAccessible::Text t, const QString& text) override;
+    QRect rect() const override;
+    QAccessible::Role role() const override;
+    QAccessible::State state() const override;
+
+private:
+    PaletteCell* m_cell = nullptr;
+};
+
+class PaletteCell : public QObject
+{
+    Q_OBJECT
     INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
-    explicit PaletteCell();
-    PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0);
+    explicit PaletteCell(QObject* parent = nullptr);
+    PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, QObject* parent = nullptr);
 
     Ms::ElementPtr element;
     Ms::ElementPtr untranslatedElement;
