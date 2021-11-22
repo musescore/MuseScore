@@ -47,7 +47,7 @@ public:
     KeyEditor(QWidget* parent = 0);
     KeyEditor(const KeyEditor& widget);
 
-    bool dirty() const { return _dirty; }
+    bool dirty() const { return m_dirty; }
     void save();
 
     bool showKeyPalette() const;
@@ -58,17 +58,17 @@ public slots:
 private slots:
     void addClicked();
     void clearClicked();
-    void setDirty() { _dirty = true; }
+    void setDirty() { m_dirty = true; }
 
 signals:
     void keySigAdded(const std::shared_ptr<KeySig>);
 
 private:
-    mu::palette::PaletteScrollArea* _keyPalette = nullptr;
-    mu::palette::PaletteWidget* sp = nullptr;
-    mu::palette::PaletteWidget* sp1 = nullptr;
+    mu::palette::PaletteScrollArea* m_keySigArea = nullptr;
+    mu::palette::PaletteWidget* m_keySigPaletteWidget = nullptr;
+    mu::palette::PaletteWidget* m_accidentalsPaletteWidget = nullptr;
 
-    bool _dirty = false;
+    bool m_dirty = false;
 };
 } // namespace Ms
 #endif

@@ -27,6 +27,8 @@
 
 #include "ui_masterpalette.h"
 
+#include "palettewidget.h"
+
 namespace mu::palette {
 class PaletteWidget;
 }
@@ -64,7 +66,7 @@ private slots:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    void addPalette(mu::palette::PaletteWidget* sp);
+    void addPalette(mu::palette::PalettePtr palette);
     void retranslate(bool firstTime = false);
 
     TimeDialog* m_timeDialog = nullptr;

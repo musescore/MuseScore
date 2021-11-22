@@ -45,6 +45,8 @@
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::palette;
@@ -288,52 +290,60 @@ KeyEditor::KeyEditor(QWidget* parent)
     setupUi(this);
     setWindowTitle(mu::qtrc("palette", "Key signatures"));
 
+    QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     // create key signature palette
 
-    QLayout* l = new QVBoxLayout();
-    l->setContentsMargins(0, 0, 0, 0);
-    frame->setLayout(l);
+    QLayout* layout = new QVBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    keySigframe->setLayout(layout);
 
-    sp = new PaletteWidget(PaletteCreator::newKeySigPalette(), this);
-    sp->setReadOnly(false);
+    m_keySigPaletteWidget = new PaletteWidget(this);
+    m_keySigPaletteWidget->setPalette(PaletteCreator::newKeySigPalette());
+    m_keySigPaletteWidget->setReadOnly(false);
 
-    _keyPalette = new PaletteScrollArea(sp);
-    QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    _keyPalette->setSizePolicy(policy);
-    _keyPalette->setRestrictHeight(false);
+    m_keySigArea = new PaletteScrollArea(m_keySigPaletteWidget);
+    m_keySigArea->setSizePolicy(policy);
+    m_keySigArea->setRestrictHeight(false);
+    m_keySigArea->setFocusProxy(m_keySigPaletteWidget);
+    m_keySigArea->setFocusPolicy(Qt::TabFocus);
 
-    l->addWidget(_keyPalette);
+    layout->addWidget(m_keySigArea);
 
     // create accidental palette
 
-    l = new QVBoxLayout();
-    l->setContentsMargins(0, 0, 0, 0);
-    frame_3->setLayout(l);
-    sp1 = new PaletteWidget(PaletteCreator::newAccidentalsPalette(), this);
-    qreal adj = sp1->mag();
-    sp1->setGridSize(sp1->gridWidth() / adj, sp1->gridHeight() / adj);
-    sp1->setMag(1.0);
-    PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
-    QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    accPalette->setSizePolicy(policy1);
-    accPalette->setRestrictHeight(false);
+    layout = new QVBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    accidentalsFrame->setLayout(layout);
 
-    l->addWidget(accPalette);
+    m_accidentalsPaletteWidget = new PaletteWidget(this);
+    m_accidentalsPaletteWidget->setPalette(PaletteCreator::newAccidentalsPalette());
+    qreal adj = m_accidentalsPaletteWidget->mag();
+    m_accidentalsPaletteWidget->setGridSize(m_accidentalsPaletteWidget->gridWidth() / adj, m_accidentalsPaletteWidget->gridHeight() / adj);
+    m_accidentalsPaletteWidget->setMag(1.0);
+
+    PaletteScrollArea* accidentalsPaletteArea = new PaletteScrollArea(m_accidentalsPaletteWidget);
+    accidentalsPaletteArea->setSizePolicy(policy);
+    accidentalsPaletteArea->setRestrictHeight(false);
+    accidentalsPaletteArea->setFocusProxy(m_accidentalsPaletteWidget);
+    accidentalsPaletteArea->setFocusPolicy(Qt::TabFocus);
+
+    layout->addWidget(accidentalsPaletteArea);
 
     connect(addButton, &QPushButton::clicked, this, &KeyEditor::addClicked);
     connect(clearButton, &QPushButton::clicked, this, &KeyEditor::clearClicked);
-    connect(sp, &PaletteWidget::changed, this, &KeyEditor::setDirty);
+    connect(m_keySigPaletteWidget, &PaletteWidget::changed, this, &KeyEditor::setDirty);
 
     //
     // set all "buildin" key signatures to read only
     //
-    int n = sp->actualCellCount();
+    int n = m_keySigPaletteWidget->actualCellCount();
     for (int i = 0; i < n; ++i) {
-        sp->setCellReadOnly(i, true);
+        m_keySigPaletteWidget->setCellReadOnly(i, true);
     }
 
     if (!configuration()->useFactorySettings()) {
-        sp->readFromFile(configuration()->keySignaturesDirPath().toQString());
+        m_keySigPaletteWidget->readFromFile(configuration()->keySignaturesDirPath().toQString());
     }
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
@@ -374,8 +384,8 @@ void KeyEditor::addClicked()
     }
     auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
     ks->setKeySigEvent(e);
-    sp->appendElement(ks, "custom");
-    _dirty = true;
+    m_keySigPaletteWidget->appendElement(ks, "custom");
+    m_dirty = true;
     emit keySigAdded(ks);
 }
 
@@ -394,7 +404,7 @@ void KeyEditor::clearClicked()
 
 void KeyEditor::setShowKeyPalette(bool showKeyPalette)
 {
-    _keyPalette->setVisible(showKeyPalette);
+    m_keySigArea->setVisible(showKeyPalette);
 }
 
 //---------------------------------------------------------
@@ -405,10 +415,10 @@ void KeyEditor::save()
 {
     QDir dir;
     dir.mkpath(configuration()->keySignaturesDirPath().toQString());
-    sp->writeToFile(configuration()->keySignaturesDirPath().toQString());
+    m_keySigPaletteWidget->writeToFile(configuration()->keySignaturesDirPath().toQString());
 }
 
 bool KeyEditor::showKeyPalette() const
 {
-    return _keyPalette->isVisible();
+    return m_keySigArea->isVisible();
 }

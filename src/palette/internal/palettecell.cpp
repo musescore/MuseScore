@@ -31,6 +31,8 @@
 #include "engraving/libmscore/textbase.h"
 #include "engraving/libmscore/factory.h"
 
+#include "engraving/accessibility/accessibleitem.h"
+
 #include "translation.h"
 
 using namespace mu::palette;
@@ -56,13 +58,14 @@ static bool needsStaff(ElementPtr e)
     }
 }
 
-PaletteCell::PaletteCell()
+PaletteCell::PaletteCell(QObject* parent)
+    : QObject(parent)
 {
     id = makeId();
 }
 
-PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag)
-    : element(e), name(_name), mag(_mag)
+PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, QObject* parent)
+    : QObject(parent), element(e), name(_name), mag(_mag)
 {
     id = makeId();
     drawStaff = needsStaff(element);
@@ -283,4 +286,83 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 QByteArray PaletteCell::toMimeData() const
 {
     return Ms::toMimeData(this);
+}
+
+AccessiblePaletteCellInterface::AccessiblePaletteCellInterface(PaletteCell* cell)
+{
+    m_cell = cell;
+}
+
+bool AccessiblePaletteCellInterface::isValid() const
+{
+    return m_cell != nullptr;
+}
+
+QObject* AccessiblePaletteCellInterface::object() const
+{
+    return m_cell;
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::childAt(int, int) const
+{
+    return nullptr;
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::parent() const
+{
+    return QAccessible::queryAccessibleInterface(m_cell->parent()->parent());
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::child(int) const
+{
+    return nullptr;
+}
+
+int AccessiblePaletteCellInterface::childCount() const
+{
+    return 0;
+}
+
+int AccessiblePaletteCellInterface::indexOfChild(const QAccessibleInterface*) const
+{
+    return -1;
+}
+
+QString AccessiblePaletteCellInterface::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Text::Name:
+        return m_cell->element->accessibleInfo();
+    default:
+        break;
+    }
+
+    return QString();
+}
+
+void AccessiblePaletteCellInterface::setText(QAccessible::Text, const QString&)
+{
+}
+
+QRect AccessiblePaletteCellInterface::rect() const
+{
+    return QRect();
+}
+
+QAccessible::Role AccessiblePaletteCellInterface::role() const
+{
+    return QAccessible::ListItem;
+}
+
+QAccessible::State AccessiblePaletteCellInterface::state() const
+{
+    QAccessible::State state;
+    state.invisible = false;
+    state.invalid = false;
+    state.disabled = false;
+
+    state.focusable = true;
+    state.focused = m_cell->element->selected(); // todo
+
+    return state;
 }

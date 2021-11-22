@@ -44,7 +44,7 @@ namespace mu::palette {
 class Palette;
 using PalettePtr = std::shared_ptr<Palette>;
 
-class Palette
+class Palette : public QObject
 {
     Q_GADGET
 
@@ -83,7 +83,7 @@ public:
     };
     Q_ENUM(Type)
 
-    explicit Palette(Type t = Type::Custom);
+    explicit Palette(Type t = Type::Custom, QObject* parent = nullptr);
 
     QString id() const;
 

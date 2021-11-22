@@ -55,6 +55,7 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 #include "engraving/compat/dummyelement.h"
+#include "engraving/accessibility/accessibleitem.h"
 
 #include "internal/palettecelliconengine.h"
 
@@ -67,21 +68,28 @@ using namespace mu::framework;
 using namespace mu::draw;
 using namespace Ms;
 
-PaletteWidget::PaletteWidget(PalettePtr palette, QWidget* parent)
-    : QWidget(parent)
+PaletteWidget::PaletteWidget(QWidget* parent)
+    : QWidget(parent), m_palette(std::make_shared<Palette>())
 {
-    m_palette = palette;
-
-    setObjectName("PaletteWidget_" + name());
-    setMouseTracking(true);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
 
     setReadOnly(false);
+    setMouseTracking(true);
 }
 
-PaletteWidget::PaletteWidget(QWidget* parent)
-    : PaletteWidget(std::make_shared<Palette>(), parent)
+void PaletteWidget::setPalette(PalettePtr palette)
 {
+    if (!palette) {
+        return;
+    }
+
+    m_palette = palette;
+    setObjectName("PaletteWidget_" + name());
+
+    //! NOTE: need for accessibility
+    palette->setParent(this);
+
+    update();
 }
 
 QString PaletteWidget::name() const
@@ -320,7 +328,13 @@ int PaletteWidget::selectedIdx() const
 
 void PaletteWidget::setSelected(int idx)
 {
+    if (m_selectedIdx == idx) {
+        return;
+    }
+
+    int previous = m_selectedIdx;
     m_selectedIdx = idx;
+    emit selectedChanged(idx, previous);
 }
 
 int PaletteWidget::currentIdx() const
@@ -632,6 +646,10 @@ QSize PaletteWidget::sizeHint() const
 
 bool PaletteWidget::event(QEvent* ev)
 {
+    if (!m_palette) {
+        return false;
+    }
+
     int hgridM = gridWidthScaled();
     int vgridM = gridHeightScaled();
     // disable mouse hover when keyboard navigation is enabled
@@ -943,6 +961,10 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         QColor c(configuration()->accentColor());
 
         if (idx == m_selectedIdx) {
+            painter.fillRect(r, QColor(uiConfiguration()->currentTheme().values[ui::FOCUS_COLOR].toString()));
+            int borderWidth = uiConfiguration()->currentTheme().values[ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
+            r.adjust(borderWidth, borderWidth, -borderWidth, -borderWidth);
+
             c.setAlphaF(0.5);
             painter.fillRect(r, c);
         } else if (idx == m_pressedIndex) {
@@ -1090,6 +1112,42 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
     update();
 }
 
+//void PaletteWidget::keyPressEvent(QKeyEvent* event)
+//{
+//    int pressedKey = event->key();
+//    switch (pressedKey) {
+//    case Qt::Key_Right:
+//    case Qt::Key_Left:
+//    case Qt::Key_Up:
+//    case Qt::Key_Down:
+//    {
+//        int idx = selectedIdx();
+//        if (pressedKey == Qt::Key_Left || pressedKey == Qt::Key_Up) {
+//            idx--;
+//        } else {
+//            idx++;
+//        }
+//        if (idx < 0) {
+//            idx = actualCellCount() - 1;
+//        } else if (idx >= actualCellCount()) {
+//            idx = 0;
+//        }
+//        setSelected(idx);
+//        setCurrentIdx(idx);
+//        update();
+//        return;
+//    }
+//    case Qt::Key_Enter:
+//    case Qt::Key_Return:
+//        if (!isApplyingElementsDisabled()) {
+//            applyCurrentElementToScore();
+//        }
+//        break;
+//    default:
+//        break;
+//    }
+//}
+
 // ====================================================
 // Read/write
 // ====================================================
@@ -1166,23 +1224,19 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
         } else if (idx >= p->actualCellCount()) {
             idx = 0;
         }
+
         p->setSelected(idx);
         p->setCurrentIdx(idx);
-        // set widget name to name of selected element
-        // we could set the description, but some screen readers ignore it
-        QString name = p->cellAt(idx)->translatedName();
-        setAccessibleName(name);
-        QAccessibleEvent aev(this, QAccessible::NameChanged);
-        QAccessible::updateAccessibility(&aev);
+
         p->update();
-        break;
+        return;
     }
     case Qt::Key_Enter:
     case Qt::Key_Return:
         if (!p->isApplyingElementsDisabled()) {
             p->applyCurrentElementToScore();
         }
-        break;
+        return;
     default:
         break;
     }
@@ -1199,4 +1253,97 @@ void PaletteScrollArea::resizeEvent(QResizeEvent* re)
     if (m_restrictHeight) {
         setMaximumHeight(h + 6);
     }
+}
+
+#include "log.h"
+
+AccessiblePaletteWidget::AccessiblePaletteWidget(PaletteWidget* palette)
+    : QAccessibleWidget(palette)
+{
+    m_palette = palette;
+
+    connect(m_palette, &PaletteWidget::selectedChanged, this, [this](int index, int previous){
+        LOGD() << "======= clicked " << index;
+
+        PaletteCellPtr curCell = m_palette->cellAt(index);
+        PaletteCellPtr previousCell = m_palette->cellAt(previous);
+
+        if (previousCell) {
+            previousCell->element->setSelected(false);
+
+            QAccessible::State qstate;
+            qstate.active = false;
+            qstate.focused = false;
+            qstate.selected = false;
+
+            QAccessibleEvent ev(previousCell.get(), QAccessible::Focus);
+            QAccessible::updateAccessibility(&ev);
+        }
+
+        if (curCell) {
+            curCell->element->setSelected(true);
+
+            QAccessible::State qstate;
+            qstate.active = true;
+            qstate.focused = true;
+            qstate.selected = true;
+
+            QAccessibleEvent ev(curCell.get(), QAccessible::Focus);
+            QAccessible::updateAccessibility(&ev);
+        }
+    });
+}
+
+QObject* AccessiblePaletteWidget::object() const
+{
+    return m_palette;
+}
+
+QAccessibleInterface* AccessiblePaletteWidget::child(int index) const
+{
+    PaletteCellPtr cell = m_palette->cellAt(index);
+    if (!cell) {
+        return nullptr;
+    }
+
+    return QAccessible::queryAccessibleInterface(cell.get());
+}
+
+int AccessiblePaletteWidget::childCount() const
+{
+    return m_palette->actualCellCount();
+}
+
+int AccessiblePaletteWidget::indexOfChild(const QAccessibleInterface* child) const
+{
+    for (int i = 0; i < childCount(); ++i) {
+        auto childAccessible = QAccessible::queryAccessibleInterface(m_palette->cellAt(i).get());
+        if (childAccessible == child) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+QAccessible::Role AccessiblePaletteWidget::role() const
+{
+    return QAccessible::StaticText;
+}
+
+QAccessible::State AccessiblePaletteWidget::state() const
+{
+    QAccessible::State state = QAccessibleWidget::state();
+    state.selectable = true;
+    state.active = true;
+    state.focusable = true;
+    state.focused = m_palette->hasFocus();
+
+    return state;
+}
+
+QAccessibleInterface* AccessiblePaletteWidget::focusChild() const
+{
+    int selectIndex = m_palette->selectedIdx();
+    return QAccessible::queryAccessibleInterface(m_palette->cellAt(selectIndex).get());
 }
