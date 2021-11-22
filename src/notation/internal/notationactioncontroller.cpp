@@ -1514,7 +1514,7 @@ void NotationActionController::resetStretch()
         return;
     }
 
-    interaction->resetToDefault(ResettableValueType::Stretch);
+    interaction->resetStretch();
 }
 
 void NotationActionController::resetTextStyleOverrides()
@@ -1525,7 +1525,7 @@ void NotationActionController::resetTextStyleOverrides()
         return;
     }
 
-    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
+    interaction->resetTextStyleOverrides();
 }
 
 void NotationActionController::resetBeamMode()
@@ -1542,7 +1542,7 @@ void NotationActionController::resetBeamMode()
     }
 
     if (selection->isNone() || selection->isRange()) {
-        interaction->resetToDefault(ResettableValueType::BeamMode);
+        interaction->resetBeamMode();
     }
 }
 
@@ -1563,7 +1563,7 @@ void NotationActionController::resetShapesAndPosition()
         return;
     }
 
-    interaction->resetToDefault(ResettableValueType::ShapesAndPosition);
+    interaction->resetShapesAndPosition();
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()

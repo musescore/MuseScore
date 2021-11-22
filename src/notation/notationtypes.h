@@ -200,14 +200,6 @@ enum class NoteAddingMode
     InsertChord
 };
 
-enum class ResettableValueType
-{
-    Stretch,
-    BeamMode,
-    ShapesAndPosition,
-    TextStyleOverriders
-};
-
 enum class IntervalType
 {
     Above,
