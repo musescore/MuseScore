@@ -219,3 +219,63 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
                   m_standardPattern.pitchPattern.pitchOffsetMap);
     }
 }
+
+/**
+ * @brief MultiNoteArticulationsTest_CrescendoPattern
+ * @details In this case we're gonna build a very simple note sequence with crescendo articulation applied on
+ *          the top of these notes (from forte to fortissimo). So the actual ExpressionCurve of the notes would be equal
+ *          to the data from the "CrescendoPattern" in Articulation Profile
+ */
+TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
+{
+    std::map<size_t, ArticulationMap> appliedArticulations;
+
+    // [GIVEN] Articulation pattern "Crescendo", which instructs a performer to gradually increase a volume of every note,
+    //         using a certain range of dynamics. In our case there will be a crescendo from forte up to fortissimo
+
+    size_t noteCount = m_initialData.size();
+    size_t dynamicSegmentsCount = noteCount - 1;
+
+    dynamic_level_t dynamicLevelDiff = dynamicLevelFromType(DynamicType::ff) - dynamicLevelFromType(DynamicType::f);
+
+    ArticulationPattern crescendoScope;
+
+    for (size_t i = 0; i <= dynamicSegmentsCount; ++i) {
+        ArticulationPatternSegment crescendoPattern;
+        crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+        crescendoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
+        crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP / dynamicSegmentsCount);
+
+        crescendoScope.emplace(25 * SINGLE_PERCENT * i, std::move(crescendoPattern));
+    }
+
+    for (size_t i = 0; i < noteCount; ++i) {
+        // [GIVEN] Crescendo articulation applied on the note
+        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * SINGLE_PERCENT * i, 25 * SINGLE_PERCENT * (i + 1), 0, dynamicLevelDiff);
+        appliedArticulations[i].emplace(ArticulationType::Crescendo, crescendoApplied);
+    }
+
+    // [WHEN] Notes sequence with given parameters being built
+    std::map<size_t, NoteEvent> noteEvents;
+
+    for (const auto& pair : m_initialData) {
+        NoteEvent noteEvent(pair.second.nominalTimestamp,
+                            pair.second.nominalDuration,
+                            pair.second.voiceIdx,
+                            pair.second.pitchClass,
+                            pair.second.octave,
+                            pair.second.nominalDynamicLevel,
+                            appliedArticulations[pair.first]);
+
+        noteEvents.emplace(pair.first, std::move(noteEvent));
+    }
+
+    for (size_t i = 0; i < noteCount; ++i) {
+        // [THEN] We expect that ExpressionCurve of every note will be adapted to the applied CrescendoPattern
+        //        That means that every note will be played louder on 125% than the previous one
+
+        dynamic_level_t actualResult = dynamicLevelFromType(DynamicType::f) + i * static_cast<float>(dynamicLevelDiff) / dynamicSegmentsCount;
+        EXPECT_EQ(noteEvents.at(i).expressionCtx().expressionCurve.maxAmplitudeLevel(),
+                  actualResult);
+    }
+}
