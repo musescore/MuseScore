@@ -56,6 +56,9 @@
              <property name="text">
               <string>Value:</string>
              </property>
+             <property name="buddy">
+              <cstring>zNominal</cstring>
+             </property>
             </widget>
            </item>
            <item>
@@ -93,6 +96,9 @@
              </property>
              <property name="text">
               <string>/</string>
+             </property>
+             <property name="buddy">
+              <cstring>nNominal</cstring>
              </property>
             </widget>
            </item>
@@ -158,6 +164,9 @@
              <property name="text">
               <string>Text:</string>
              </property>
+             <property name="buddy">
+              <cstring>zText</cstring>
+             </property>
             </widget>
            </item>
            <item>
@@ -189,6 +198,9 @@
              </property>
              <property name="text">
               <string>/</string>
+             </property>
+             <property name="buddy">
+              <cstring>nText</cstring>
              </property>
             </widget>
            </item>
