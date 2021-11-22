@@ -70,8 +70,13 @@ using namespace mu::draw;
 using namespace Ms;
 
 PaletteWidget::PaletteWidget(QWidget* parent)
-    : QWidget(parent), m_palette(std::make_shared<Palette>())
+    : QWidget(parent)
 {
+    m_palette = std::make_shared<Palette>();
+
+    //! NOTE: need for accessibility
+    m_palette->setParent(this);
+
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
 
     setReadOnly(false);
@@ -88,7 +93,7 @@ void PaletteWidget::setPalette(PalettePtr palette)
     setObjectName("PaletteWidget_" + name());
 
     //! NOTE: need for accessibility
-    palette->setParent(this);
+    m_palette->setParent(this);
 
     update();
 }
