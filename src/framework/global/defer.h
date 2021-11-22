@@ -19,27 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
-#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#ifndef MU_GLOBAL_DEFER_H
+#define MU_GLOBAL_DEFER_H
 
-#include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
+#include <functional>
 
-namespace mu::project {
-class IProjectFilesController : MODULE_EXPORT_INTERFACE
+namespace mu {
+struct Defer
 {
-    INTERFACE_ID(IProjectFilesController)
+    Defer(const std::function<void()>& f)
+        : f(f) {}
 
-public:
-    virtual ~IProjectFilesController() = default;
+    ~Defer()
+    {
+        if (f) {
+            f();
+        }
+    }
 
-    virtual Ret openProject(const io::path& path) = 0;
-    virtual bool closeOpenedProject() = 0;
-    virtual bool isProjectOpened(const io::path& path) const = 0;
-    virtual bool isAnyProjectOpened() const = 0;
-    virtual void saveProject(const io::path& path = io::path()) = 0;
+    std::function<void()> f;
 };
 }
 
-#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#endif // MU_GLOBAL_DEFER_H

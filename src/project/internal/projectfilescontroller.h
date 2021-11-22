@@ -60,6 +60,7 @@ public:
     Ret openProject(const io::path& projectPath) override;
     bool closeOpenedProject() override;
     bool isProjectOpened(const io::path& scorePath) const override;
+    bool isAnyProjectOpened() const override;
     void saveProject(const io::path& path = io::path()) override;
 
 private:
@@ -105,6 +106,8 @@ private:
     bool isProjectOpened() const;
     bool isNeedSaveScore() const;
     bool hasSelection() const;
+
+    bool m_isNewProjectProcessing = false;
 };
 }
 

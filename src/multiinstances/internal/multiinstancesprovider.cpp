@@ -23,6 +23,8 @@
 
 #include <QProcess>
 #include <QCoreApplication>
+#include <QTimer>
+#include <QEventLoop>
 
 #include "uri.h"
 #include "settings.h"
@@ -35,6 +37,8 @@ using namespace mu::framework;
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
+static const QString METHOD_IS_WITHOUT_PROJECT("IS_WITHOUT_PROJECT");
+static const QString METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT("METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT");
 
 static const mu::Uri PREFERENCES_URI("musescore://preferences");
 static const QString METHOD_PREFERENCES_IS_OPENED("PREFERENCES_IS_OPENED");
@@ -78,7 +82,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 
 #define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
 
-    // Score opening
+    // Project opening
     if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
@@ -89,6 +93,14 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         io::path scorePath = io::path(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
         if (isOpened) {
+            mainWindow()->requestShowOnFront();
+        }
+    } else if (msg.type == MsgType::Request && msg.method == METHOD_IS_WITHOUT_PROJECT) {
+        bool isAnyOpened = projectFilesController()->isAnyProjectOpened();
+        m_ipcChannel->response(METHOD_IS_WITHOUT_PROJECT, { QString::number(!isAnyOpened) }, msg.srcID);
+    } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT) {
+        bool isAnyOpened = projectFilesController()->isAnyProjectOpened();
+        if (!isAnyOpened) {
             mainWindow()->requestShowOnFront();
         }
     }
@@ -149,11 +161,43 @@ void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPa
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
 }
 
+bool MultiInstancesProvider::isHasAppInstanceWithoutProject() const
+{
+    if (!isInited()) {
+        return false;
+    }
+
+    int ret = 0;
+    m_ipcChannel->syncRequestToAll(METHOD_IS_WITHOUT_PROJECT, {}, [&ret](const QStringList& args) {
+        IF_ASSERT_FAILED(!args.empty()) {
+            return false;
+        }
+        ret = args.at(0).toInt();
+        if (ret) {
+            return true;
+        }
+
+        return false;
+    });
+    return ret;
+}
+
+void MultiInstancesProvider::activateWindowWithoutProject()
+{
+    if (!isInited()) {
+        return;
+    }
+    mainWindow()->requestShowOnBack();
+    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT, {});
+}
+
 bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
 {
     if (!isInited()) {
         return false;
     }
+
+    QList<ID> currentApps = m_ipcChannel->instances();
 
     QString appPath = QCoreApplication::applicationFilePath();
     bool ok = QProcess::startDetached(appPath, args);
@@ -161,7 +205,37 @@ bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
         LOGI() << "success start: " << appPath << ", args: " << args;
     } else {
         LOGE() << "failed start: " << appPath << ", args: " << args;
+        return ok;
     }
+
+    auto sleep = [](int msec) {
+        QTimer timer;
+        QEventLoop loop;
+        QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        timer.start(msec);
+        loop.exec();
+    };
+
+    auto waitNewInstance = [this, sleep, currentApps](int waitMs, int count) {
+        for (int i = 0; i < count; ++i) {
+            sleep(waitMs);
+            QList<ID> apps = m_ipcChannel->instances();
+            for (const ID& id : apps) {
+                if (!currentApps.contains(id)) {
+                    LOGI() << "created new instance with ID: " << id;
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    //! NOTE Waiting for a new instance to be created
+    ok = waitNewInstance(100, 50);
+    if (!ok) {
+        LOGE() << "we didn't wait for registration and response from the new instance";
+    }
+
     return ok;
 }
 
