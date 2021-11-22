@@ -301,6 +301,12 @@ void DockBase::setFloating(bool floating)
 
 void DockBase::init()
 {
+    IF_ASSERT_FAILED(m_dockWidget) {
+        return;
+    }
+
+    setVisible(m_dockWidget->isOpen());
+
     applySizeConstraints();
 
     emit floatingChanged();
