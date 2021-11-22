@@ -155,6 +155,7 @@ enum class ArticulationType {
     SlideOutUp,
     SlideInAbove,
     SlideInBelow,
+    VolumeSwell,
 
     // multi-note articulations
     Crescendo,
@@ -200,7 +201,6 @@ enum class ArticulationType {
     Acciaccatura,
 
     TremoloBar,
-    VolumeSwell,
 
     Last
 };
@@ -222,7 +222,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
         ArticulationType::Bend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
-        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow
+        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell
     };
 
     return singleNoteTypes.find(type) != singleNoteTypes.cend();
@@ -380,9 +380,14 @@ struct ArticulationsProfile
         return search->second;
     }
 
-    void updatePatterns(const ArticulationType type, const ArticulationPattern& scope)
+    void setPattern(const ArticulationType type, const ArticulationPattern& scope)
     {
         m_patterns.insert_or_assign(type, scope);
+    }
+
+    void removePattern(const ArticulationType type)
+    {
+        m_patterns.erase(type);
     }
 
     const std::unordered_map<ArticulationType, ArticulationPattern>& data() const
