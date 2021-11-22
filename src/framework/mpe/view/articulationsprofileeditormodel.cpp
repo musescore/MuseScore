@@ -63,13 +63,17 @@ void ArticulationsProfileEditorModel::requestToSaveProfile()
 
     for (const auto& item : m_singleNoteItems) {
         if (item->isActive()) {
-            m_profile->updatePatterns(item->type(), item->patternData());
+            m_profile->setPattern(item->type(), item->patternData());
+        } else {
+            m_profile->removePattern(item->type());
         }
     }
 
     for (const auto& item : m_multiNoteItems) {
         if (item->isActive()) {
-            m_profile->updatePatterns(item->type(), item->patternData());
+            m_profile->setPattern(item->type(), item->patternData());
+        } else {
+            m_profile->removePattern(item->type());
         }
     }
 
