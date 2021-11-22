@@ -54,6 +54,8 @@ public:
     // Project opening
     bool isProjectAlreadyOpened(const io::path& projectPath) const override;
     void activateWindowWithProject(const io::path& projectPath) override;
+    bool isHasAppInstanceWithoutProject() const override;
+    void activateWindowWithoutProject() override;
     bool openNewAppInstance(const QStringList& args) override;
 
     // Settings
