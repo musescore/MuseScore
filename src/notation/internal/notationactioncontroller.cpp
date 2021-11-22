@@ -1563,7 +1563,7 @@ void NotationActionController::resetShapesAndPosition()
         return;
     }
 
-    interaction->resetToDefault(ResettableValueType::TextStyleOverriders);
+    interaction->resetToDefault(ResettableValueType::ShapesAndPosition);
 }
 
 void NotationActionController::selectMeasuresCountAndInsert()
