@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <QApplication>
 
+#include "defer.h"
 #include "ptrutils.h"
 
 #include "engraving/infrastructure/io/xml.h"
@@ -3144,29 +3145,31 @@ void NotationInteraction::resetBeamMode()
 
 void NotationInteraction::resetShapesAndPosition()
 {
+    auto resetItem = [](EngravingItem* item) {
+        item->reset();
+
+        if (item->isSpanner()) {
+            for (Ms::SpannerSegment* spannerSegment : toSpanner(item)->spannerSegments()) {
+                spannerSegment->reset();
+            }
+        }
+    };
+
     startEdit();
 
+    Defer defer([this] {
+        apply();
+        notifyAboutNotationChanged();
+    });
+
     if (selection()->element()) {
-        clearSelection();
+        resetItem(selection()->element());
         return;
     }
 
-    for (EngravingItem* element : selection()->elements()) {
-        element->reset();
-
-        if (!element->isSpanner()) {
-            continue;
-        }
-
-        Ms::Spanner* spanner = toSpanner(element);
-        for (Ms::SpannerSegment* spannerSegment : spanner->spannerSegments()) {
-            spannerSegment->reset();
-        }
+    for (EngravingItem* item : selection()->elements()) {
+        resetItem(item);
     }
-
-    apply();
-
-    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
