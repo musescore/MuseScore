@@ -87,7 +87,11 @@ void DockWindow::componentComplete()
     });
 
     clearRegistry();
-    restoreGeometry();
+
+    /*! TODO: restoring of the window geometry is temporarily disabled
+     * because it has a lot of problems on Windows
+     * restoreGeometry();
+    */
 
     dockWindowProvider()->init(this);
 
