@@ -32,6 +32,8 @@ class Draggable;
 class FallbackMouseGrabber;
 class MinimalStateMachine;
 
+using ResolveDropAreaFunc = std::function<DropArea*(const QPoint&)>;
+
 class State : public QObject
 {
     Q_OBJECT
@@ -97,6 +99,17 @@ public:
     /// Experimental, internal, not for general use.
     void enableFallbackMouseGrabber();
 
+    /**
+     * @brief Allows the user to override the default algorithm for resolving DropArea
+     * when a window is being dragged
+     */
+    void setResolveDropAreaFunc(ResolveDropAreaFunc func);
+
+    ///@brief Used internally by the framework. Returns the function which was passed to setResolveDropAreaFunc()
+    ///By default it's nullptr.
+    ///@sa setResolveDropAreaFunc().
+    ResolveDropAreaFunc resolveDropAreaFunc() const;
+
 Q_SIGNALS:
     void mousePressed();
     void manhattanLengthMove();
@@ -134,6 +147,7 @@ private:
     bool m_nonClientDrag = false;
     FallbackMouseGrabber *m_fallbackMouseGrabber = nullptr;
     StateInternalMDIDragging *m_stateDraggingMDI = nullptr;
+    ResolveDropAreaFunc m_resolveDropAreaFunc = nullptr;
 };
 
 class StateBase : public State
