@@ -3983,7 +3983,10 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
                 if (measure) {
                     mb = measure->isMMRest() ? measure->mmRestLast() : measure;
                 }
-                allNoBreaks = mb->noBreak();
+
+                if (mb) {
+                    allNoBreaks = mb->noBreak();
+                }
             }
             }
         }
