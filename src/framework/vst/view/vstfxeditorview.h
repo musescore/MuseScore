@@ -69,6 +69,8 @@ private:
     void wrapPluginView();
     void attachView(VstPluginPtr pluginPtr);
 
+    void updateStayOnTopness();
+
     FIDString currentPlatformUiType() const;
 
     VstPluginPtr m_pluginPtr = nullptr;
