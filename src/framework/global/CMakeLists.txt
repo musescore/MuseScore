@@ -84,6 +84,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/defer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
