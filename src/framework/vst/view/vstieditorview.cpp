@@ -39,6 +39,8 @@ VstiEditorView::VstiEditorView(QWidget* parent)
     : QDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow, true);
+    updateStayOnTopness();
+    connect(qApp, &QApplication::applicationStateChanged, this, &VstiEditorView::updateStayOnTopness);
 }
 
 VstiEditorView::VstiEditorView(const VstiEditorView& copy)
@@ -152,4 +154,29 @@ void VstiEditorView::setResourceId(const QString& newResourceId)
     if (m_trackId != -1 && !m_resourceId.isEmpty()) {
         wrapPluginView();
     }
+}
+
+// We want the VST windows to be on top of the main window.
+// But not on top of all other applications when MuseScore isn't active.
+// Qt has no API for this, so we use a hack.
+// When the application becomes active, the VST windows will get the StayOnTop hint.
+// When the application becomes inactive, the hint will be dropped.
+// The nice thing is that it works... (with some ceremony)
+void VstiEditorView::updateStayOnTopness()
+{
+    auto setStayOnTop = [this](bool stay) {
+        bool wasShown = isVisible();
+        bool wasActive = isActiveWindow();
+
+        setWindowFlag(Qt::WindowStaysOnTopHint, stay);
+        if (wasShown) {
+            if (!wasActive) {
+                setAttribute(Qt::WA_ShowWithoutActivating, true);
+            }
+            show();
+            setAttribute(Qt::WA_ShowWithoutActivating, false);
+        }
+    };
+
+    setStayOnTop(qApp->applicationState() == Qt::ApplicationActive);
 }
