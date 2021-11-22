@@ -30,13 +30,16 @@
 #include "globaltypes.h"
 #include "log.h"
 
-using namespace mu::dock;
-
-static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
+#include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
+#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
+#include "thirdparty/KDDockWidgets/src/private/DropAreaWithCentralFrame_p.h"
+#include "thirdparty/KDDockWidgets/src/MainWindowBase.h"
 
 using KDDropLocation = KDDockWidgets::DropIndicatorOverlayInterface::DropLocation;
 
 namespace mu::dock {
+static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
+
 static KDDropLocation dropLocationToKDDockLocation(Location location)
 {
     switch (location) {
@@ -79,9 +82,20 @@ static bool isPointAllowedForDrop(const QPoint& point, const DropDestination& dr
 }
 }
 
+using namespace mu::dock;
+
 DropController::DropController(KDDockWidgets::DropArea* dropArea)
     : KDDockWidgets::DropIndicatorOverlayInterface(dropArea)
 {
+    KDDockWidgets::DragController::instance()->setResolveDropAreaFunc([](const QPoint& globalPos) -> KDDockWidgets::DropArea* {
+        for (auto mainWindow : KDDockWidgets::DockRegistry::self()->mainwindows()) {
+            if (mainWindow->windowGeometry().contains(globalPos)) {
+                return mainWindow->dropArea();
+            }
+        }
+
+        return nullptr;
+    });
 }
 
 KDDropLocation DropController::hover_impl(QPoint globalPos)
