@@ -33,6 +33,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "cloud/iuploadingservice.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "async/asyncable.h"
 
@@ -51,6 +52,7 @@ class ProjectFilesController : public IProjectFilesController, public QObject, p
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project, cloud::IUploadingService, uploadingService)
+    INJECT(project, playback::IPlaybackController, playbackController)
 
 public:
     void init();
