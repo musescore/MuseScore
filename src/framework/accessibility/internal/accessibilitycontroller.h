@@ -34,7 +34,8 @@
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
-#include "accessibility/iaccessibilityconfiguration.h"
+#include "../iaccessibilityconfiguration.h"
+#include "../iaccessibleinterfaceregister.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
@@ -47,13 +48,16 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
-    INJECT(accessibility, IAccessibilityConfiguration, configuration)
     INJECT(accessibility, ui::IMainWindow, mainWindow)
     INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(accessibility, IAccessibilityConfiguration, configuration)
+    INJECT_STATIC(accessibility, IAccessibleInterfaceRegister, accessibleInterfaceRegister)
 
 public:
     AccessibilityController() = default;
     ~AccessibilityController();
+
+    static QAccessibleInterface* accessibleInterface(QObject* object);
 
     // IAccessibilityController
     void reg(IAccessible* item) override;
