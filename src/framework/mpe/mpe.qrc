@@ -12,5 +12,6 @@
         <file>resources/general_keyboard_articulations_profile.json</file>
         <file>resources/general_strings_articulations_profile.json</file>
         <file>resources/general_winds_articulations_profile.json</file>
+        <file>resources/general_percussion_articulations_profile.json</file>
     </qresource>
 </RCC>
