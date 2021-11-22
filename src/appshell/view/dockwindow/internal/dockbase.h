@@ -91,6 +91,8 @@ public:
 
     QRect frameGeometry() const;
 
+    void resetToDefault();
+
 public slots:
     void setTitle(const QString& title);
 
@@ -160,6 +162,8 @@ private:
     bool m_resizable = false;
     bool m_separatorsVisible = false;
     QRect m_highlightingRect;
+
+    bool m_defaultVisibility = false;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };
