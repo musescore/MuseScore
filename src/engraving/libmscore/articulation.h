@@ -77,7 +77,7 @@ std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds
                                     ArticulationsUpdateMode updateMode = ArticulationsUpdateMode::Insert);
 std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds);
 std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds);
-std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement);
+std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, PlacementV placement);
 
 //---------------------------------------------------------
 //   @@ Articulation

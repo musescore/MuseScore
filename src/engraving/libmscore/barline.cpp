@@ -975,7 +975,7 @@ EngravingItem* BarLine::drop(EditData& data)
         score()->undoAddElement(e);
         return e;
     } else if (e->isFermata()) {
-        e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
+        e->setPlacement(track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
         for (EngravingItem* el: segment()->annotations()) {
             if (el->isFermata() && (el->track() == track())) {
                 if (el->subtype() == e->subtype()) {

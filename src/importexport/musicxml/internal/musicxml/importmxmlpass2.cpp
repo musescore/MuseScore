@@ -111,7 +111,7 @@ static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration(
 //---------------------------------------------------------
 
 MusicXmlTupletDesc::MusicXmlTupletDesc()
-    : type(MxmlStartStop::NONE), placement(Placement::BELOW),
+    : type(MxmlStartStop::NONE), placement(PlacementV::BELOW),
     bracket(TupletBracketType::AUTO_BRACKET), shownumber(TupletNumberType::SHOW_NUMBER)
 {
     // nothing
@@ -882,7 +882,7 @@ static void addElemOffset(EngravingItem* el, int track, const QString& placement
         return;
     }
 
-    el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
+    el->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
@@ -1050,7 +1050,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     na->setSymId(articSym);
     na->setTrack(cr->track());
     if (!direction.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
-        na->setPlacement(direction == "inverted" ? Placement::BELOW : Placement::ABOVE);
+        na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
     }
     setElementPropertyFlags(na, Pid::PLACEMENT, direction);
     if (cr->segment() == nullptr && cr->isGrace()) {
@@ -1230,7 +1230,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
                 t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
             if (!placement.isEmpty()) {
-                t->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
+                t->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
                 t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
             }
             note->add(t);
@@ -1252,7 +1252,7 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
 
 static void setSLinePlacement(SLine* sli, const QString placement)
 {
-    sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
+    sli->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 }
 
@@ -2582,7 +2582,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 }
                 t->setXmlText(_rehearsalText);
                 if (!_hasDefaultY) {
-                    t->setPlacement(Placement::ABOVE);            // crude way to force placement TODO improve ?
+                    t->setPlacement(PlacementV::ABOVE);            // crude way to force placement TODO improve ?
                     t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
                 }
             }

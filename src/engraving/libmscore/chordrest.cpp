@@ -427,7 +427,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         b->setPos(PointF());
         // allow breath marks in voice > 1
         b->setTrack(this->track());
-        b->setPlacement(b->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+        b->setPlacement(b->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
         Fraction bt = tick() + actualTicks();
         bt = tick() + actualTicks();
 
@@ -492,7 +492,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
 
     case ElementType::FERMATA:
-        e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
+        e->setPlacement(track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
         for (EngravingItem* el: segment()->annotations()) {
             if (el->isFermata() && (el->track() == track())) {
                 if (el->subtype() == e->subtype()) {
@@ -1379,7 +1379,7 @@ Shape ChordRest::shape() const
 //   lyrics
 //---------------------------------------------------------
 
-Lyrics* ChordRest::lyrics(int no, Placement p) const
+Lyrics* ChordRest::lyrics(int no, PlacementV p) const
 {
     for (Lyrics* l : _lyrics) {
         if (l->placement() == p && l->no() == no) {
@@ -1395,7 +1395,7 @@ Lyrics* ChordRest::lyrics(int no, Placement p) const
 //    return -1 if there are no lyrics;
 //---------------------------------------------------------
 
-int ChordRest::lastVerse(Placement p) const
+int ChordRest::lastVerse(PlacementV p) const
 {
     int lastVerse = -1;
 

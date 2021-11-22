@@ -49,13 +49,13 @@ class TDuration;
 namespace mu::engraving {
 enum class P_TYPE {
     UNDEFINED = 0,
-    // base
+    // Base
     BOOL,           // bool
     INT,            // int
     REAL,           // qreal
     STRING,         // QString
 
-    // geometry
+    // Geometry
     POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
     PATH,               // mu::PainterPath
@@ -64,11 +64,13 @@ enum class P_TYPE {
     MILIMETRE,
     PAIR_REAL,
 
-    // draw
-    COLOR,          // Color
+    // Draw
+    COLOR,            // Color
+
+    // Layout
     ALIGN,
-    PLACEMENT,        // ABOVE or BELOW
-    HPLACEMENT,       // LEFT, CENTER or RIGHT
+    PLACEMENT_V,       // ABOVE or BELOW
+    PLACEMENT_H,       // LEFT, CENTER or RIGHT
     DIRECTION,        // enum class Direction
     DIRECTION_H,      // enum class MScore::DirectionH
 
@@ -113,14 +115,14 @@ class PropertyValue
 public:
     PropertyValue();
 
-    // base
+    // Base
     PropertyValue(bool v);
     PropertyValue(int v);
     PropertyValue(qreal v);
     PropertyValue(const char* v);
     PropertyValue(const QString& v);
 
-    // geometry
+    // Geometry
     PropertyValue(const PointF& v);
     PropertyValue(const SizeF& v);
     PropertyValue(const PainterPath& v);
@@ -130,12 +132,15 @@ public:
     PropertyValue(const PairF& v)
         : m_type(P_TYPE::PAIR_REAL), m_val(v) {}
 
-    // draw
+    // Draw
     PropertyValue(const draw::Color& v);
-    PropertyValue(Ms::Align v);
-    PropertyValue(Ms::HPlacement v);
-    PropertyValue(Ms::Placement v)
-        : m_type(P_TYPE::PLACEMENT), m_val(v) {}
+
+    // Layout
+    PropertyValue(Align v);
+    PropertyValue(PlacementV v)
+        : m_type(P_TYPE::PLACEMENT_V), m_val(v) {}
+    PropertyValue(PlacementH v)
+        : m_type(P_TYPE::PLACEMENT_H), m_val(v) {}
     PropertyValue(Ms::Direction v);
 
     PropertyValue(Ms::SymId v);
@@ -182,9 +187,9 @@ public:
         //! HACK Temporary hack for enum to int
         if constexpr (std::is_same<T, int>::value) {
             switch (m_type) {
-            case P_TYPE::ALIGN:      return static_cast<int>(value<Ms::Align>());
-            case P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
-            case P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
+            case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
+            case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
+            case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
             case P_TYPE::DIRECTION:  return static_cast<int>(value<Ms::Direction>());
             case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
             case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
@@ -266,7 +271,6 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
-    Ms::Align toAlign() const { return value<Ms::Align>(); }
     Ms::Direction toDirection() const { return value<Ms::Direction>(); }
 
     const Ms::Groups& toGroups() const;
@@ -285,12 +289,17 @@ public:
 private:
     P_TYPE m_type = P_TYPE::UNDEFINED;
     std::variant<
-        //base
+        // Base
         bool, int, qreal, QString,
-        // geometry
+
+        // Geometry
         PointF, SizeF, PainterPath, Spatium, Milimetre, PairF,
-        // draw
-        draw::Color, Ms::Align, Ms::HPlacement, Ms::Placement, Ms::Direction,
+
+        // Draw
+        Color,
+
+        // Layout
+        Align, PlacementV, PlacementH, Ms::Direction,
 
         // time
         Ms::Fraction,

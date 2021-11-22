@@ -475,8 +475,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(tr("Above"), int(Ms::Placement::ABOVE));
-        cb->addItem(tr("Below"), int(Ms::Placement::BELOW));
+        cb->addItem(tr("Above"), int(Ms::PlacementV::ABOVE));
+        cb->addItem(tr("Below"), int(Ms::PlacementV::BELOW));
     }
 
     horizontalPlacementComboBoxes = {
@@ -486,9 +486,9 @@ EditStyle::EditStyle(QWidget* parent)
 
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
         cb->clear();
-        cb->addItem(tr("Left"),   int(Ms::HPlacement::LEFT));
-        cb->addItem(tr("Center"), int(Ms::HPlacement::CENTER));
-        cb->addItem(tr("Right"),  int(Ms::HPlacement::RIGHT));
+        cb->addItem(tr("Left"),   int(Ms::PlacementH::LEFT));
+        cb->addItem(tr("Center"), int(Ms::PlacementH::CENTER));
+        cb->addItem(tr("Right"),  int(Ms::PlacementH::RIGHT));
     }
 
     mmRestRangeBracketType->clear();
@@ -736,7 +736,7 @@ EditStyle::EditStyle(QWidget* parent)
         resetTextStyle(Ms::Pid::ALIGN);
     });
     connect(textStyleAlign, &AlignSelect::alignChanged, [=]() {
-        textStyleValueChanged(Ms::Pid::ALIGN, QVariant::fromValue(textStyleAlign->align()));
+        textStyleValueChanged(Ms::Pid::ALIGN, QVariant::fromValue(int(textStyleAlign->align())));
     });
 
     // offset
@@ -1498,8 +1498,8 @@ void EditStyle::setValues()
                 }
             }
         } break;
-        case P_TYPE::HPLACEMENT:
-        case P_TYPE::PLACEMENT:
+        case P_TYPE::PLACEMENT_H:
+        case P_TYPE::PLACEMENT_V:
         case P_TYPE::BARLINE_TYPE:
         case P_TYPE::HOOK_TYPE:
         case P_TYPE::DYNAMIC_TYPE:

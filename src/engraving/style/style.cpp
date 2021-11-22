@@ -156,8 +156,10 @@ bool MStyle::readProperties(XmlReader& e)
                 c.setAlpha(e.intAttribute("a", 255));
                 set(idx, c);
                 e.readElementText();
-            } else if (P_TYPE::HPLACEMENT == type) {
-                set(idx, Ms::HPlacement(e.readElementText().toInt()));
+            } else if (P_TYPE::PLACEMENT_V == type) {
+                set(idx, Ms::PlacementV(e.readElementText().toInt()));
+            } else if (P_TYPE::PLACEMENT_H == type) {
+                set(idx, Ms::PlacementH(e.readElementText().toInt()));
             } else if (P_TYPE::HOOK_TYPE == type) {
                 set(idx, Ms::HookType(e.readElementText().toInt()));
             } else {
@@ -350,9 +352,9 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         } else if (P_TYPE::DIRECTION == type) {
             xml.tag(st.name(), int(value(idx).toDirection()));
         } else if (P_TYPE::ALIGN == type) {
-            Align a = value(idx).toAlign();
+            Align a = value(idx).value<Align>();
             // Don't write if it's the default value
-            if (optimize && a == Align(st.defaultValue().toInt())) {
+            if (optimize && a == st.defaultValue().value<Align>()) {
                 continue;
             }
             QString horizontal = "left";

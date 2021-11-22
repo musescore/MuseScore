@@ -2862,10 +2862,10 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
         score()->undoRemoveElement(artic);
     }
 
-    std::set<SymId> articulationIds = flipArticulations(currentArticulationIds, Placement::ABOVE);
+    std::set<SymId> articulationIds = flipArticulations(currentArticulationIds, PlacementV::ABOVE);
     articulationIds = splitArticulations(articulationIds);
 
-    std::set<SymId> _newArticulationIds = flipArticulations(newArticulationIds, Placement::ABOVE);
+    std::set<SymId> _newArticulationIds = flipArticulations(newArticulationIds, PlacementV::ABOVE);
     _newArticulationIds = splitArticulations(_newArticulationIds);
 
     for (const SymId& articulationId: _newArticulationIds) {

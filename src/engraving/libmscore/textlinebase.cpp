@@ -301,7 +301,7 @@ void TextLineBaseSegment::layout()
         _text->setStrike(tl->continueFontStyle() & FontStyle::Strike);
         break;
     }
-    _text->setPlacement(Placement::ABOVE);
+    _text->setPlacement(PlacementV::ABOVE);
     _text->setTrack(track());
     _text->layout();
 
@@ -315,7 +315,7 @@ void TextLineBaseSegment::layout()
         _endText->setItalic(tl->endFontStyle() & FontStyle::Italic);
         _endText->setUnderline(tl->endFontStyle() & FontStyle::Underline);
         _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
-        _endText->setPlacement(Placement::ABOVE);
+        _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
     } else {

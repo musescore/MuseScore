@@ -1615,7 +1615,7 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
         Chord* chord = note->chord();
 
         std::set<SymbolId> chordArticulations = chord->articulationSymbolIds();
-        chordArticulations = Ms::flipArticulations(chordArticulations, Ms::Placement::ABOVE);
+        chordArticulations = Ms::flipArticulations(chordArticulations, Ms::PlacementV::ABOVE);
         chordArticulations = Ms::splitArticulations(chordArticulations);
 
         if (chordArticulations.find(articulationSymbolId) == chordArticulations.end()) {
@@ -3179,7 +3179,7 @@ void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
     int track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
-    Ms::Placement placement = lyrics->placement();
+    Ms::PlacementV placement = lyrics->placement();
     Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
 
     Ms::Segment* nextSegment = segment;
@@ -3302,7 +3302,7 @@ void NotationInteraction::nextSyllable()
     int track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
-    Ms::Placement placement = lyrics->placement();
+    Ms::PlacementV placement = lyrics->placement();
     Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
 
     // search next chord
@@ -3397,7 +3397,7 @@ void NotationInteraction::nextLyricsVerse(bool back)
     int track = lyrics->track();
     ChordRest* cr = lyrics->chordRest();
     int verse = lyrics->no();
-    Ms::Placement placement = lyrics->placement();
+    Ms::PlacementV placement = lyrics->placement();
     Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
 
     if (back) {
@@ -3448,7 +3448,7 @@ void NotationInteraction::addMelisma()
     int track = lyrics->track();
     Ms::Segment* segment = lyrics->segment();
     int verse = lyrics->no();
-    Ms::Placement placement = lyrics->placement();
+    Ms::PlacementV placement = lyrics->placement();
     Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
 

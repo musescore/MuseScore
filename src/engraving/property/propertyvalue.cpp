@@ -83,7 +83,7 @@ PropertyValue::PropertyValue(const draw::Color& v)
 {
 }
 
-PropertyValue::PropertyValue(Ms::Align v)
+PropertyValue::PropertyValue(Align v)
     : m_type(P_TYPE::ALIGN), m_val(v)
 {
 }
@@ -105,11 +105,6 @@ PropertyValue::PropertyValue(Ms::BarLineType v)
 
 PropertyValue::PropertyValue(Ms::HookType v)
     : m_type(P_TYPE::HOOK_TYPE), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(Ms::HPlacement v)
-    : m_type(P_TYPE::HPLACEMENT), m_val(v)
 {
 }
 
@@ -221,10 +216,10 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PAIR_REAL: return QVariant::fromValue(value<PairF>().toQPairF());
 
     // draw
-    case P_TYPE::COLOR:     return value<draw::Color>().toQColor();
-    case P_TYPE::ALIGN:      return QVariant::fromValue(value<Ms::Align>());
-    case P_TYPE::PLACEMENT:  return static_cast<int>(value<Ms::Placement>());
-    case P_TYPE::HPLACEMENT: return static_cast<int>(value<Ms::HPlacement>());
+    case P_TYPE::COLOR:      return value<draw::Color>().toQColor();
+    case P_TYPE::ALIGN:      return QVariant::fromValue(int(value<Align>()));
+    case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
+    case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::DIRECTION:  return QVariant::fromValue(value<Ms::Direction>());
     case P_TYPE::DIRECTION_H: {
         UNREACHABLE; //! TODO
@@ -252,13 +247,13 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::UNDEFINED:  // try by QVariant type
         break;
 
-    // base
+    // Base
     case P_TYPE::BOOL:          return PropertyValue(v.toBool());
     case P_TYPE::INT:           return PropertyValue(v.toInt());
     case P_TYPE::REAL:          return PropertyValue(v.toReal());
     case P_TYPE::STRING:        return PropertyValue(v.toString());
 
-    // geometry
+    // Geometry
     case P_TYPE::POINT:         return PropertyValue(PointF::fromQPointF(v.value<QPointF>()));
     case P_TYPE::SIZE:          return PropertyValue(SizeF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::PATH: {
@@ -270,11 +265,13 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::MILIMETRE:     return PropertyValue(Milimetre(v.toReal()));
     case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
 
-    // draw
+    // Draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
-    case P_TYPE::ALIGN:         return PropertyValue(Ms::Align(v.toInt()));
-    case P_TYPE::PLACEMENT:     return PropertyValue(Ms::Placement(v.toInt()));
-    case P_TYPE::HPLACEMENT:    return PropertyValue(Ms::HPlacement(v.toInt()));
+
+    // Layout
+    case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
+    case P_TYPE::PLACEMENT_V:     return PropertyValue(PlacementV(v.toInt()));
+    case P_TYPE::PLACEMENT_H:    return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::DIRECTION:     return PropertyValue(Ms::Direction(v.toInt()));
     case P_TYPE::DIRECTION_H: {
         UNREACHABLE; //! TODO
@@ -316,18 +313,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
         const char* type = v.typeName();
         if (strcmp(type, "Ms::Direction") == 0) {
             return PropertyValue(v.value<Ms::Direction>());
-        }
-        if (strcmp(type, "Ms::Align") == 0) {
-            return PropertyValue(v.value<Ms::Align>());
-        }
-        if (strcmp(type, "mu::draw::Color") == 0) {
-            return PropertyValue(v.value<draw::Color>());
-        }
-        if (strcmp(type, "mu::SizeF") == 0) {
-            return PropertyValue(v.value<mu::SizeF>());
-        }
-        if (strcmp(type, "mu::PointF") == 0) {
-            return PropertyValue(v.value<PointF>());
         }
         if (strcmp(type, "Ms::Fraction") == 0) {
             return PropertyValue(v.value<Ms::Fraction>());

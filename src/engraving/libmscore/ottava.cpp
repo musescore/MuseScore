@@ -114,7 +114,7 @@ void Ottava::setNumbersOnly(bool val)
 //   setPlacement
 //---------------------------------------------------------
 
-void Ottava::setPlacement(Placement p)
+void Ottava::setPlacement(PlacementV p)
 {
     TextLineBase::setPlacement(p);
 }
@@ -212,7 +212,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
         return ss[idx + 2];               // CONTINUE_TEXT
     case Pid::END_HOOK_HEIGHT:
         if (isStyled(Pid::PLACEMENT)) {
-            return score()->styleI(ss[idx]) == int(Placement::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
+            return score()->styleI(ss[idx]) == int(PlacementV::ABOVE) ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
         } else {
             return placeAbove() ? Sid::ottavaHookAbove : Sid::ottavaHookBelow;
         }

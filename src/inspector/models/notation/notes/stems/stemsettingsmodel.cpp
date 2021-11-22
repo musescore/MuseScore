@@ -48,11 +48,11 @@ void StemSettingsModel::createProperties()
     m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION);
 
     m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
     m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 
     context()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
@@ -82,11 +82,11 @@ void StemSettingsModel::loadProperties()
     loadPropertyItem(m_stemDirection);
 
     loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 }
 

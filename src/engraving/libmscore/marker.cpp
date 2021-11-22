@@ -305,7 +305,7 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
     case Pid::MARKER_TYPE:
         return int(Type::FINE);
     case Pid::PLACEMENT:
-        return int(Placement::ABOVE);
+        return int(PlacementV::ABOVE);
     default:
         break;
     }

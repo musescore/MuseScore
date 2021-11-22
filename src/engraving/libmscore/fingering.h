@@ -40,7 +40,7 @@ public:
 
     Note* note() const { return toNote(parent()); }
     ElementType layoutType();
-    Placement calculatePlacement() const;
+    PlacementV calculatePlacement() const;
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;

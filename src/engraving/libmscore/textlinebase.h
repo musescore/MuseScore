@@ -29,7 +29,6 @@
 #include "property.h"
 
 namespace Ms {
-enum class Align : char;
 class TextLineBase;
 class EngravingItem;
 class Text;

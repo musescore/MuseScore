@@ -229,7 +229,7 @@ void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score
                             for (Lyrics* l : cr->lyrics()) {
                                 // user adjusted offset can possibly change placement
                                 if (l->offsetChanged() != OffsetChange::NONE) {
-                                    Placement p = l->placement();
+                                    PlacementV p = l->placement();
                                     l->rebaseOffset();
                                     if (l->placement() != p) {
                                         l->undoResetProperty(Pid::AUTOPLACE);

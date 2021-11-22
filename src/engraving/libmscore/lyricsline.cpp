@@ -41,7 +41,7 @@ namespace Ms {
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p)
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, PlacementV p)
 {
     Lyrics* l = 0;
     while ((s = s->next1(SegmentType::ChordRest))) {
