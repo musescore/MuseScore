@@ -94,7 +94,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::pa
     QJsonObject articulationPatterns = rootObj.value(PATTERNS_KEY).toObject();
 
     for (const QString& key : articulationPatterns.keys()) {
-        result->updatePatterns(articulationTypeFromString(key),
+        result->setPattern(articulationTypeFromString(key),
                                patternsScopeFromJson(articulationPatterns.value(key).toArray()));
     }
 
