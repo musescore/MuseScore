@@ -33,6 +33,8 @@
 
 #include "engraving/accessibility/accessibleitem.h"
 
+#include "view/widgets/palettewidget.h"
+
 #include "log.h"
 #include "translation.h"
 
@@ -321,7 +323,12 @@ QAccessibleInterface* AccessiblePaletteCellInterface::childAt(int, int) const
 
 QAccessibleInterface* AccessiblePaletteCellInterface::parent() const
 {
-    return QAccessible::queryAccessibleInterface(m_cell->parent()->parent());
+    auto paletteWidget = parentWidget();
+    if (!paletteWidget) {
+        return nullptr;
+    }
+
+    return QAccessible::queryAccessibleInterface(paletteWidget);
 }
 
 QAccessibleInterface* AccessiblePaletteCellInterface::child(int) const
@@ -373,7 +380,17 @@ QAccessible::State AccessiblePaletteCellInterface::state() const
     state.disabled = false;
 
     state.focusable = true;
-    state.focused = m_cell->element->selected(); // todo
+    state.focused = m_cell->focused;
 
     return state;
+}
+
+QObject* AccessiblePaletteCellInterface::parentWidget() const
+{
+    auto palette = m_cell->parent();
+    if (!palette) {
+        return nullptr;
+    }
+
+    return palette->parent();
 }

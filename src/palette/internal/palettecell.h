@@ -58,6 +58,8 @@ public:
     QAccessible::State state() const override;
 
 private:
+    QObject* parentWidget() const;
+
     PaletteCell* m_cell = nullptr;
 };
 
@@ -101,6 +103,8 @@ public:
     bool visible { true };
     bool custom { false };
     bool active { false };
+
+    bool focused { false };
 
 private:
     static QString makeId();

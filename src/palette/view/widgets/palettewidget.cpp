@@ -976,11 +976,23 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         RectF r = RectF::fromQRectF(rectForCellAt(idx));
         QColor c(configuration()->accentColor());
 
-        if (idx == m_selectedIdx) {
-            painter.fillRect(r, QColor(uiConfiguration()->currentTheme().values[ui::FOCUS_COLOR].toString()));
-            int borderWidth = uiConfiguration()->currentTheme().values[ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
-            r.adjust(borderWidth, borderWidth, -borderWidth, -borderWidth);
+        PaletteCellPtr currentCell = actualCellsList().at(idx);
+        if (!currentCell) {
+            continue;
+        }
 
+        if (currentCell->focused) {
+            painter.setPen(QColor(uiConfiguration()->currentTheme().values[ui::FONT_PRIMARY_COLOR].toString()));
+            painter.setBrush(QColor(Qt::transparent));
+
+            int borderWidth = uiConfiguration()->currentTheme().values[ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
+            qreal border = borderWidth / 2;
+
+            painter.drawRoundedRect(r.adjusted(border, border, -border, -border), borderWidth, borderWidth);
+            r.adjust(borderWidth, borderWidth, -borderWidth, -borderWidth);
+        }
+
+        if (idx == m_selectedIdx) {
             c.setAlphaF(0.5);
             painter.fillRect(r, c);
         } else if (idx == m_pressedIndex) {
@@ -989,11 +1001,6 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         } else if (idx == m_currentIdx) {
             c.setAlphaF(0.2);
             painter.fillRect(r, c);
-        }
-
-        PaletteCellPtr currentCell = actualCellsList().at(idx);
-        if (!currentCell) {
-            continue;
         }
 
         draw::Pen pen(configuration()->elementsColor());
@@ -1128,42 +1135,6 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
     update();
 }
 
-//void PaletteWidget::keyPressEvent(QKeyEvent* event)
-//{
-//    int pressedKey = event->key();
-//    switch (pressedKey) {
-//    case Qt::Key_Right:
-//    case Qt::Key_Left:
-//    case Qt::Key_Up:
-//    case Qt::Key_Down:
-//    {
-//        int idx = selectedIdx();
-//        if (pressedKey == Qt::Key_Left || pressedKey == Qt::Key_Up) {
-//            idx--;
-//        } else {
-//            idx++;
-//        }
-//        if (idx < 0) {
-//            idx = actualCellCount() - 1;
-//        } else if (idx >= actualCellCount()) {
-//            idx = 0;
-//        }
-//        setSelected(idx);
-//        setCurrentIdx(idx);
-//        update();
-//        return;
-//    }
-//    case Qt::Key_Enter:
-//    case Qt::Key_Return:
-//        if (!isApplyingElementsDisabled()) {
-//            applyCurrentElementToScore();
-//        }
-//        break;
-//    default:
-//        break;
-//    }
-//}
-
 // ====================================================
 // Read/write
 // ====================================================
@@ -1285,7 +1256,7 @@ AccessiblePaletteWidget::AccessiblePaletteWidget(PaletteWidget* palette)
         PaletteCellPtr previousCell = m_palette->cellAt(previous);
 
         if (previousCell) {
-            previousCell->element->setSelected(false);
+            previousCell->focused = false;
 
             QAccessible::State qstate;
             qstate.active = false;
@@ -1297,7 +1268,7 @@ AccessiblePaletteWidget::AccessiblePaletteWidget(PaletteWidget* palette)
         }
 
         if (curCell) {
-            curCell->element->setSelected(true);
+            curCell->focused = true;
 
             QAccessible::State qstate;
             qstate.active = true;

@@ -180,8 +180,6 @@ private:
     void paintEvent(QPaintEvent*) override;
     void contextMenuEvent(QContextMenuEvent*) override;
 
-//    void keyPressEvent(QKeyEvent*) override;
-
     qreal paletteScaling() const;
     const std::vector<PaletteCellPtr>& cells() const;
 
