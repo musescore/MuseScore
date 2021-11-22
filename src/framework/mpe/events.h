@@ -24,6 +24,7 @@
 #define MU_MPE_EVENTS_H
 
 #include "mpetypes.h"
+#include "realfn.h"
 
 namespace mu::mpe {
 struct ArrangementContext
@@ -78,13 +79,12 @@ struct NoteEvent
         m_expressionCtx.articulations = articulationsApplied;
         m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
 
-        ArrangementPatternList arrangementPatterns = m_expressionCtx.articulations.arrangementPatterns();
-        calculateActualDuration(arrangementPatterns);
-        calculateActualTimestamp(arrangementPatterns);
+        calculateActualDuration(articulationsApplied);
+        calculateActualTimestamp(articulationsApplied);
 
-        calculatePitchCurve();
+        calculatePitchCurve(articulationsApplied);
 
-        calculateExpressionCurve();
+        calculateExpressionCurve(articulationsApplied);
     }
 
     const ArrangementContext& arrangementCtx() const
@@ -103,57 +103,58 @@ struct NoteEvent
     }
 
 private:
-    void calculateActualTimestamp(const ArrangementPatternList& patterns)
+    void calculateActualTimestamp(const ArticulationMap& articulationsApplied)
     {
         m_arrangementCtx.actualTimestamp = m_arrangementCtx.nominalTimestamp;
 
-        if (patterns.empty()) {
+        if (articulationsApplied.empty()) {
             return;
         }
 
         m_arrangementCtx.actualTimestamp += m_arrangementCtx.nominalDuration
-                                            * percentageToFactor(ArrangementPattern::averageTimestampOffset(patterns));
+                                            * percentageToFactor(articulationsApplied.averageTimestampOffset());
     }
 
-    void calculateActualDuration(const ArrangementPatternList& patterns)
+    void calculateActualDuration(const ArticulationMap& articulationsApplied)
     {
         m_arrangementCtx.actualDuration = m_arrangementCtx.nominalDuration;
 
-        if (patterns.empty()) {
+        if (articulationsApplied.empty()) {
             return;
         }
 
-        m_arrangementCtx.actualDuration *= percentageToFactor(ArrangementPattern::averageDurationFactor(patterns));
+        m_arrangementCtx.actualDuration *= percentageToFactor(articulationsApplied.averageDurationFactor());
     }
 
-    void calculatePitchCurve()
+    void calculatePitchCurve(const ArticulationMap& articulationsApplied)
     {
-        PitchPatternList appliedPatterns = m_expressionCtx.articulations.pitchPatterns();
-        PitchPattern::PitchOffsetMap appliedOffsetMap = PitchPattern::averagePitchOffsetMap(std::move(appliedPatterns));
+        PitchPattern::PitchOffsetMap appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
 
         for (const auto& pair : appliedOffsetMap) {
             m_pitchCtx.pitchCurve.emplace(pair.first, pair.second);
         }
     }
 
-    void calculateExpressionCurve()
+    void calculateExpressionCurve(const ArticulationMap& articulationsApplied)
     {
-        ExpressionPatternList appliedPatterns = m_expressionCtx.articulations.expressionPatterns();
-        ExpressionPattern::DynamicOffsetMap appliedOffsetMap = ExpressionPattern::averageDynamicOffsetMap(appliedPatterns);
+        ExpressionPattern::DynamicOffsetMap appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
 
-        dynamic_level_t articulationDynamicLevel = ExpressionPattern::averageMaxAmplitudeLevel(appliedPatterns);
+        dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
 
-        dynamic_level_t actualDynamicLevel = nominalDynamicLevel + articulationDynamicLevel - dynamicLevelFromType(DynamicType::Natural);
+        constexpr dynamic_level_t naturalDynamicLevel = dynamicLevelFromType(DynamicType::Natural);
 
-        float ratio = articulationDynamicLevel / static_cast<float>(actualDynamicLevel);
+        float dynamicAmplifyFactor = static_cast<float>(articulationDynamicLevel - naturalDynamicLevel) / DYNAMIC_LEVEL_STEP;
+        dynamic_level_t amplificationDiff = dynamicAmplifyFactor * std::max(articulationsApplied.averageDynamicRange(), DYNAMIC_LEVEL_STEP);
+        dynamic_level_t actualDynamicLevel = nominalDynamicLevel + amplificationDiff;
 
-        if (actualDynamicLevel > articulationDynamicLevel) {
+        float ratio = actualDynamicLevel / static_cast<float>(articulationDynamicLevel);
+        if (actualDynamicLevel < articulationDynamicLevel) {
             ratio = 1 / ratio;
         }
 
         for (const auto& pair : appliedOffsetMap) {
-            m_expressionCtx.expressionCurve.emplace(pair.first, pair.second * ratio);
+            m_expressionCtx.expressionCurve.emplace(pair.first, RealRound(pair.second * ratio, 0));
         }
     }
 

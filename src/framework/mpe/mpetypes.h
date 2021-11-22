@@ -157,6 +157,8 @@ enum class ArticulationType {
     SlideInBelow,
 
     // multi-note articulations
+    Crescendo,
+    Decrescendo,
     Glissando,
     Portamento,
     Legato,
@@ -193,7 +195,6 @@ enum class ArticulationType {
     Slide,
     Turn,
     InvertedTurn,
-    TurnWithSlash,
 
     Appoggiatura,
     Acciaccatura,
@@ -232,9 +233,15 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
     return !isSingleNoteArticulation(type);
 }
 
+using dynamic_level_t = percentage_t;
+constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENTS;
+constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
+constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = 5 * SINGLE_PERCENT;
+
 enum class DynamicType {
     Undefined = -1,
-    pppppppp = 0,
+    ppppppppp = MIN_DYNAMIC_LEVEL,
+    pppppppp = 5 * SINGLE_PERCENT,
     ppppppp = 10 * SINGLE_PERCENT,
     pppppp = 15 * SINGLE_PERCENT,
     ppppp = 20 * SINGLE_PERCENT,
@@ -250,29 +257,27 @@ enum class DynamicType {
     fff = 70 * SINGLE_PERCENT,
     ffff = 75 * SINGLE_PERCENT,
     fffff = 80 * SINGLE_PERCENT,
-    ffffff = 90 * SINGLE_PERCENT,
-    fffffff = 100 * SINGLE_PERCENT,
+    ffffff = 85 * SINGLE_PERCENT,
+    fffffff = 90 * SINGLE_PERCENT,
+    ffffffff = 95 * SINGLE_PERCENT,
+    fffffffff = MAX_DYNAMIC_LEVEL,
     Last
 };
-
-using dynamic_level_t = percentage_t;
-constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENTS;
-constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {
     if (dynamicLevel < MIN_DYNAMIC_LEVEL) {
-        return DynamicType::pppppppp;
+        return DynamicType::ppppppppp;
     }
 
     if (dynamicLevel > MAX_DYNAMIC_LEVEL) {
-        return DynamicType::fffffff;
+        return DynamicType::fffffffff;
     }
 
     return static_cast<DynamicType>(dynamicLevel);
 }
 
-inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
+constexpr inline dynamic_level_t dynamicLevelFromType(const DynamicType type)
 {
     if (type == DynamicType::Undefined) {
         return MIN_DYNAMIC_LEVEL;
@@ -292,51 +297,6 @@ struct ArrangementPattern
 
     duration_percentage_t durationFactor = 0;
     duration_percentage_t timestampOffset = 0;
-
-    static duration_percentage_t averageDurationFactor(const std::vector<ArrangementPattern>& patterns)
-    {
-        duration_percentage_t result = 0;
-
-        if (patterns.empty()) {
-            return HUNDRED_PERCENTS;
-        }
-
-        for (const ArrangementPattern& pattern : patterns) {
-            result += pattern.durationFactor;
-        }
-
-        result /= patterns.size();
-
-        return result;
-    }
-
-    static duration_percentage_t averageTimestampOffset(const std::vector<ArrangementPattern>& patterns)
-    {
-        duration_percentage_t result = 0;
-
-        if (patterns.empty()) {
-            return result;
-        }
-
-        int meaningTimestampOffsetCount = 0;
-
-        for (const ArrangementPattern& pattern : patterns) {
-            if (pattern.timestampOffset == 0) {
-                continue;
-            }
-
-            result += pattern.timestampOffset;
-            meaningTimestampOffsetCount++;
-        }
-
-        if (meaningTimestampOffsetCount == 0) {
-            return 0;
-        }
-
-        result /= meaningTimestampOffsetCount;
-
-        return result;
-    }
 };
 
 using ArrangementPatternList = std::vector<ArrangementPattern>;
@@ -355,32 +315,6 @@ struct PitchPattern
     }
 
     PitchOffsetMap pitchOffsetMap;
-
-    static PitchOffsetMap averagePitchOffsetMap(const std::vector<PitchPattern>& patterns)
-    {
-        PitchOffsetMap result;
-
-        if (patterns.empty()) {
-            return result;
-        }
-
-        for (const PitchPattern& pattern : patterns) {
-            IF_ASSERT_FAILED_X(pattern.pitchOffsetMap.size() == EXPECTED_SIZE,
-                               "Pitch pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
-                break;
-            }
-
-            for (const auto& pair : pattern.pitchOffsetMap) {
-                result[pair.first] += pair.second;
-            }
-        }
-
-        for (auto& pair : result) {
-            pair.second /= patterns.size();
-        }
-
-        return result;
-    }
 };
 
 using PitchPatternList = std::vector<PitchPattern>;
@@ -403,67 +337,14 @@ struct ExpressionPattern
     dynamic_level_t maxAmplitudeLevel() const
     {
         auto maxElement = std::max_element(dynamicOffsetMap.begin(), dynamicOffsetMap.end(), [](const auto& f, const auto& s) {
-                return f.second < s.second;
-            });
+            return f.second < s.second;
+        });
 
         if (maxElement == dynamicOffsetMap.cend()) {
             return 0;
         }
 
         return maxElement->second;
-    }
-
-    static dynamic_level_t averageMaxAmplitudeLevel(const std::vector<ExpressionPattern>& patterns)
-    {
-        dynamic_level_t result = 0;
-
-        if (patterns.empty()) {
-            return result;
-        }
-
-        int meaningAmplitudeOffsetCount = 0;
-
-        for (const ExpressionPattern& pattern : patterns) {
-            dynamic_level_t maxLevel = pattern.maxAmplitudeLevel();
-            if (maxLevel > 0) {
-                result += maxLevel;
-                meaningAmplitudeOffsetCount++;
-            }
-        }
-
-        if (meaningAmplitudeOffsetCount == 0) {
-            return 0;
-        }
-
-        result /= meaningAmplitudeOffsetCount;
-
-        return result;
-    }
-
-    static DynamicOffsetMap averageDynamicOffsetMap(const std::vector<ExpressionPattern>& patterns)
-    {
-        DynamicOffsetMap result;
-
-        if (patterns.empty()) {
-            return result;
-        }
-
-        for (const ExpressionPattern& pattern : patterns) {
-            IF_ASSERT_FAILED_X(pattern.dynamicOffsetMap.size() == EXPECTED_SIZE,
-                               "Expression pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
-                break;
-            }
-
-            for (const auto& pair : pattern.dynamicOffsetMap) {
-                result[pair.first] += pair.second;
-            }
-        }
-
-        for (auto& pair : result) {
-            pair.second /= patterns.size();
-        }
-
-        return result;
     }
 };
 
@@ -527,31 +408,40 @@ using ArticulationsProfilePtr = std::shared_ptr<ArticulationsProfile>;
 
 struct ArticulationData {
     explicit ArticulationData(const ArticulationType _type,
-                              const ArticulationPattern& _patternsScope,
+                              const ArticulationPattern& _pattern,
                               const duration_percentage_t _occupiedFrom,
-                              const duration_percentage_t _occupiedTo)
+                              const duration_percentage_t _occupiedTo,
+                              const pitch_level_t overallPitchRange = 0,
+                              const dynamic_level_t overallDynamicRange = 0)
         : type(_type),
-        occupiedFrom(_occupiedFrom),
-        occupiedTo(_occupiedTo)
+          occupiedFrom(_occupiedFrom),
+          occupiedTo(_occupiedTo)
     {
-        if (_patternsScope.empty()) {
+        if (_pattern.empty()) {
             return;
         }
 
-        const auto& lower =_patternsScope.lower_bound(occupiedFrom);
+        float occupiedFactor = percentageToFactor(occupiedTo);
+        pitchChangesRange = overallPitchRange * occupiedFactor;
+        dynamicChangesRange = overallDynamicRange * occupiedFactor;
 
-        if (lower != _patternsScope.cend()) {
-            patterns = lower->second;
+        const auto& lower =_pattern.lower_bound(occupiedFrom);
+
+        if (lower != _pattern.cend()) {
+            patternSegment = lower->second;
         } else {
-            patterns = _patternsScope.begin()->second;
+            patternSegment = _pattern.begin()->second;
         }
     }
 
     ArticulationType type = ArticulationType::Undefined;
-    ArticulationPatternSegment patterns;
+    ArticulationPatternSegment patternSegment;
 
     duration_percentage_t occupiedFrom = 0;
     duration_percentage_t occupiedTo = HUNDRED_PERCENTS;
+
+    pitch_level_t pitchChangesRange = 0;
+    dynamic_level_t dynamicChangesRange = 0;
 };
 
 struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
@@ -562,7 +452,7 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
         patterns.reserve(size());
 
         for (const auto& pair : *this) {
-            patterns.emplace_back(pair.second.patterns.arrangementPattern);
+            patterns.emplace_back(pair.second.patternSegment.arrangementPattern);
         }
 
         return patterns;
@@ -574,7 +464,7 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
         patterns.reserve(size());
 
         for (const auto& pair : *this) {
-            patterns.emplace_back(pair.second.patterns.pitchPattern);
+            patterns.emplace_back(pair.second.patternSegment.pitchPattern);
         }
 
         return patterns;
@@ -586,10 +476,190 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
         patterns.reserve(size());
 
         for (const auto& pair : *this) {
-            patterns.emplace_back(pair.second.patterns.expressionPattern);
+            patterns.emplace_back(pair.second.patternSegment.expressionPattern);
         }
 
         return patterns;
+    }
+
+    duration_percentage_t averageDurationFactor() const
+    {
+        duration_percentage_t result = 0;
+
+        if (empty()) {
+            return HUNDRED_PERCENTS;
+        }
+
+        for (const auto& pair : *this) {
+            result += pair.second.patternSegment.arrangementPattern.durationFactor;
+        }
+
+        result /= size();
+
+        return result;
+    }
+
+    duration_percentage_t averageTimestampOffset() const
+    {
+        duration_percentage_t result = 0;
+
+        if (empty()) {
+            return result;
+        }
+
+        int meaningTimestampOffsetCount = 0;
+
+        for (const auto& pair : *this) {
+            const ArticulationPatternSegment& segment = pair.second.patternSegment;
+            if (segment.arrangementPattern.timestampOffset == 0) {
+                continue;
+            }
+
+            result += segment.arrangementPattern.timestampOffset;
+            meaningTimestampOffsetCount++;
+        }
+
+        if (meaningTimestampOffsetCount == 0) {
+            return 0;
+        }
+
+        result /= meaningTimestampOffsetCount;
+
+        return result;
+    }
+
+    PitchPattern::PitchOffsetMap averagePitchOffsetMap() const
+    {
+        PitchPattern::PitchOffsetMap result;
+
+        if (empty()) {
+            return result;
+        }
+
+        for (const auto& pair : *this) {
+            const ArticulationPatternSegment& segment = pair.second.patternSegment;
+            IF_ASSERT_FAILED_X(segment.pitchPattern.pitchOffsetMap.size() == EXPECTED_SIZE,
+                               "Pitch pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
+                break;
+            }
+
+            for (const auto& pair : segment.pitchPattern.pitchOffsetMap) {
+                result[pair.first] += pair.second;
+            }
+        }
+
+        for (auto& pair : result) {
+            pair.second /= size();
+        }
+
+        return result;
+    }
+
+    pitch_level_t averagePitchRange() const
+    {
+        pitch_level_t result = 0;
+
+        if (empty()) {
+            return result;
+        }
+
+        int meaningPitchRangeCount = 0;
+
+        for (const auto& pair : *this) {
+            if (pair.second.pitchChangesRange > 0) {
+                result += pair.second.pitchChangesRange;
+                meaningPitchRangeCount++;
+            }
+        }
+
+        if (meaningPitchRangeCount == 0) {
+            return 0;
+        }
+
+        result /= meaningPitchRangeCount;
+
+        return result;
+    }
+
+    dynamic_level_t averageMaxAmplitudeLevel() const
+    {
+        dynamic_level_t result = 0;
+
+        if (empty()) {
+            return result;
+        }
+
+        int meaningAmplitudeOffsetCount = 0;
+
+        for (const auto& pair : *this) {
+            const ArticulationPatternSegment& segment = pair.second.patternSegment;
+            dynamic_level_t maxLevel = segment.expressionPattern.maxAmplitudeLevel();
+            if (maxLevel > 0) {
+                result += maxLevel;
+                meaningAmplitudeOffsetCount++;
+            }
+        }
+
+        if (meaningAmplitudeOffsetCount == 0) {
+            return 0;
+        }
+
+        result /= meaningAmplitudeOffsetCount;
+
+        return result;
+    }
+
+    dynamic_level_t averageDynamicRange() const
+    {
+        dynamic_level_t result = 0;
+
+        if (empty()) {
+            return result;
+        }
+
+        int meaningDynamicRangeCount = 0;
+
+        for (const auto& pair : *this) {
+            if (pair.second.dynamicChangesRange > 0) {
+                result += pair.second.dynamicChangesRange;
+                meaningDynamicRangeCount++;
+            }
+        }
+
+        if (meaningDynamicRangeCount == 0) {
+            return 0;
+        }
+
+        result /= meaningDynamicRangeCount;
+
+        return result;
+    }
+
+    ExpressionPattern::DynamicOffsetMap averageDynamicOffsetMap() const
+    {
+        ExpressionPattern::DynamicOffsetMap result;
+
+        if (empty()) {
+            return result;
+        }
+
+        for (const auto& pair : *this) {
+            const ArticulationPatternSegment& segment = pair.second.patternSegment;
+            IF_ASSERT_FAILED_X(segment.expressionPattern.dynamicOffsetMap.size() == EXPECTED_SIZE,
+                               "Expression pattern doesn't suit expected size. There is probably something wrong in Articulation Profile") {
+                break;
+            }
+
+            for (const auto& pair : segment.expressionPattern.dynamicOffsetMap) {
+                result[pair.first] += pair.second;
+            }
+        }
+
+        for (auto& pair : result) {
+            pair.second /= size();
+        }
+
+        return result;
     }
 };
 
@@ -598,8 +668,8 @@ struct ExpressionCurve : public std::map<duration_percentage_t, dynamic_level_t>
     dynamic_level_t maxAmplitudeLevel() const
     {
         const auto& max = std::max_element(cbegin(), cend(), [](const auto& f, const auto& s) {
-                return f.second < s.second;
-            });
+            return f.second < s.second;
+        });
 
         if (max == cend()) {
             return 0;
