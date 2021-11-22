@@ -42,6 +42,27 @@ using namespace mu::dock;
 using namespace mu::async;
 
 namespace mu::dock {
+static const QList<Location> POSSIBLE_LOCATIONS {
+    Location::Left,
+    Location::Right,
+    Location::Top,
+    Location::Bottom
+};
+
+KDDockWidgets::Location locationToKLocation(Location location)
+{
+    switch (location) {
+    case Location::Left: return KDDockWidgets::Location_OnLeft;
+    case Location::Right: return KDDockWidgets::Location_OnRight;
+    case Location::Top: return KDDockWidgets::Location_OnTop;
+    case Location::Bottom: return KDDockWidgets::Location_OnBottom;
+    case Location::Center: break;
+    case Location::Undefined: break;
+    }
+
+    return KDDockWidgets::Location_None;
+}
+
 void clearRegistry()
 {
     TRACEFUNC;
@@ -246,39 +267,20 @@ void DockWindow::restoreDefaultLayout()
     uiConfiguration()->setWindowGeometry(QByteArray());
 }
 
-DockingHolderView* DockWindow::mainToolBarDockingHolder() const
-{
-    return m_mainToolBarDockingHolder;
-}
-
-void DockWindow::setMainToolBarDockingHolder(DockingHolderView* mainToolBarDockingHolder)
-{
-    if (m_mainToolBarDockingHolder == mainToolBarDockingHolder) {
-        return;
-    }
-
-    m_mainToolBarDockingHolder = mainToolBarDockingHolder;
-    emit mainToolBarDockingHolderChanged(m_mainToolBarDockingHolder);
-}
-
 void DockWindow::loadPageContent(const DockPageView* page)
 {
     TRACEFUNC;
 
     addDock(page->centralDock());
 
-    loadSideDocks(page, DockType::Panel);
-    loadSideDocks(page, DockType::ToolBar);
+    loadPanels(page);
+    loadToolBars(page);
 
     if (page->statusBar()) {
-        addDock(page->statusBar(), KDDockWidgets::Location_OnBottom);
+        addDock(page->statusBar(), Location::Bottom);
     }
 
     loadTopLevelToolBars(page);
-
-    addDock(m_mainToolBarDockingHolder, KDDockWidgets::Location_OnTop);
-
-    unitePanelsToTabs(page);
 }
 
 void DockWindow::loadTopLevelToolBars(const DockPageView* page)
@@ -291,71 +293,58 @@ void DockWindow::loadTopLevelToolBars(const DockPageView* page)
     DockToolBarView* prevToolBar = nullptr;
 
     for (DockToolBarView* toolBar : allToolBars) {
-        auto location = prevToolBar ? KDDockWidgets::Location_OnRight : KDDockWidgets::Location_OnTop;
+        auto location = prevToolBar ? Location::Right : Location::Top;
         addDock(toolBar, location, prevToolBar);
         prevToolBar = toolBar;
     }
 }
 
-void DockWindow::unitePanelsToTabs(const DockPageView* page)
+void DockWindow::loadToolBars(const DockPageView* page)
 {
-    for (DockPanelView* panel : page->panels()) {
-        DockPanelView* tab = panel->tabifyPanel();
+    TRACEFUNC;
 
-        if (tab && tab->isVisible()) {
-            panel->addPanelAsTab(tab);
-            panel->setCurrentTabIndex(0);
+    for (DockToolBarView* toolBar : page->toolBars()) {
+        addDock(toolBar, toolBar->location());
+    }
+
+    for (Location location : POSSIBLE_LOCATIONS) {
+        if (auto holder = page->holder(DockType::ToolBar, location)) {
+            addDock(holder, location);
         }
     }
 }
 
-void DockWindow::loadSideDocks(const DockPageView* page, DockType type)
+void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
-    static const QList<Location> possibleLocations {
-        Location::Left,
-        Location::Right,
-        Location::Top,
-        Location::Bottom
+    auto canAddAsTab = [](const DockPanelView* panel, const DockPanelView* destination) {
+        return panel->isVisible() && destination->isOpen() && destination->tabifyPanel() == panel;
     };
 
-    QMap<Location, QList<DockBase*> > sideDocks;
+    auto addPanel = [this, page, canAddAsTab](DockPanelView* panel, Location location) {
+        for (DockPanelView* destinationPanel : page->panels()) {
+            if (canAddAsTab(panel, destinationPanel)) {
+                registerDock(panel);
 
-    for (Location location : possibleLocations) {
-        if (auto holder = page->holder(type, location)) {
-            sideDocks[location] << holder;
+                destinationPanel->addPanelAsTab(panel);
+                destinationPanel->setCurrentTabIndex(0);
+
+                return;
+            }
         }
+
+        addDock(panel, location);
+    };
+
+    for (DockPanelView* panel : page->panels()) {
+        addPanel(panel, panel->location());
     }
 
-    if (type == DockType::ToolBar) {
-        for (DockToolBarView* toolBar : page->toolBars()) {
-            sideDocks[toolBar->location()] << toolBar;
+    for (Location location : POSSIBLE_LOCATIONS) {
+        if (auto holder = page->holder(DockType::Panel, location)) {
+            addDock(holder, location);
         }
-    } else if (type == DockType::Panel) {
-        for (DockPanelView* panel : page->panels()) {
-            sideDocks[panel->location()] << panel;
-        }
-    }
-
-    QList<DockBase*> leftSideDocks = sideDocks[Location::Left];
-    for (int i = leftSideDocks.size() - 1; i >= 0; --i) {
-        addDock(leftSideDocks[i], KDDockWidgets::Location_OnLeft);
-    }
-
-    QList<DockBase*> rightSideDocks = sideDocks[Location::Right];
-    for (int i = 0; i < rightSideDocks.size(); ++i) {
-        addDock(rightSideDocks[i], KDDockWidgets::Location_OnRight);
-    }
-
-    QList<DockBase*> bottomSideDocks = sideDocks[Location::Bottom];
-    for (int i = 0; i < bottomSideDocks.size(); ++i) {
-        addDock(bottomSideDocks[i], KDDockWidgets::Location_OnBottom);
-    }
-
-    QList<DockBase*> topSideDocks = sideDocks[Location::Top];
-    for (int i = topSideDocks.size() - 1; i >= 0; --i) {
-        addDock(topSideDocks[i], KDDockWidgets::Location_OnTop);
     }
 }
 
@@ -413,10 +402,24 @@ void DockWindow::alignToolBars(const DockPageView* page)
     lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
 }
 
-void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const DockBase* relativeTo)
+void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
 {
     TRACEFUNC;
 
+    registerDock(dock);
+
+    KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
+
+    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
+                            : KDDockWidgets::InitialVisibilityOption::StartHidden;
+
+    KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
+
+    m_mainWindow->addDockWidget(dock->dockWidget(), locationToKLocation(location), relativeDock, options);
+}
+
+void DockWindow::registerDock(DockBase* dock)
+{
     IF_ASSERT_FAILED(dock) {
         return;
     }
@@ -427,15 +430,6 @@ void DockWindow::addDock(DockBase* dock, KDDockWidgets::Location location, const
     if (!registry->containsDockWidget(dockWidget->uniqueName())) {
         registry->registerDockWidget(dockWidget);
     }
-
-    KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
-
-    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
-                            : KDDockWidgets::InitialVisibilityOption::StartHidden;
-
-    KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
-
-    m_mainWindow->addDockWidget(dockWidget, location, relativeDock, options);
 }
 
 DockPageView* DockWindow::pageByUri(const QString& uri) const
@@ -482,13 +476,13 @@ void DockWindow::restorePageState(const QString& pageName)
     TRACEFUNC;
 
     /// NOTE: Do not restore geometry
-    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow);
+    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
     }
 }
 
-bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options)
+bool DockWindow::restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow)
 {
     if (layout.isEmpty()) {
         return true;
@@ -496,7 +490,10 @@ bool DockWindow::restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreO
 
     TRACEFUNC;
 
-    KDDockWidgets::LayoutSaver layoutSaver(options);
+    auto option = restoreRelativeToMainWindow ? KDDockWidgets::RestoreOption_RelativeToMainWindow
+                  : KDDockWidgets::RestoreOption_None;
+
+    KDDockWidgets::LayoutSaver layoutSaver(option);
     return layoutSaver.restoreLayout(layout);
 }
 
@@ -525,8 +522,6 @@ void DockWindow::initDocks(DockPageView* page)
     for (DockToolBarView* toolbar : m_toolBars.list()) {
         toolbar->init();
     }
-
-    m_mainToolBarDockingHolder->init();
 
     if (page) {
         page->init();
