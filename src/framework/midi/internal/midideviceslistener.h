@@ -33,7 +33,7 @@ class MidiDevicesListener
 public:
     ~MidiDevicesListener();
 
-    using ActualDevicesCallback = std::function<MidiDeviceList()>;
+    using ActualDevicesCallback = std::function<MidiDeviceList ()>;
 
     void startWithCallback(const ActualDevicesCallback& callback);
 

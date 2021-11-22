@@ -406,14 +406,14 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(code);
         switch (dialogCode) {
-        case QDialog::Rejected: {
-            status["errcode"] = static_cast<int>(Ret::Code::Cancel);
-            break;
-        }
-        case QDialog::Accepted: {
-            status["errcode"] = static_cast<int>(Ret::Code::Ok);
-            break;
-        }
+            case QDialog::Rejected: {
+                status["errcode"] = static_cast<int>(Ret::Code::Cancel);
+                break;
+            }
+            case QDialog::Accepted: {
+                status["errcode"] = static_cast<int>(Ret::Code::Ok);
+                break;
+            }
         }
 
         onClose(objectId, status);

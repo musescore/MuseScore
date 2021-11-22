@@ -1813,7 +1813,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
     int staffIdx           = 0;
 
     // used to keep track of tuplets
-    std::vector<Tuplet*> tuplets(staves* VOICES);
+    std::vector<Tuplet*> tuplets(staves * VOICES);
     for (int track = 0; track < staves * VOICES; ++track) {
         tuplets[track] = 0;
     }

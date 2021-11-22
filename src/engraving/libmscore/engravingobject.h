@@ -188,7 +188,7 @@ class EngravingObject
     void moveToDummy();
 
 protected:
-    const ElementStyle* _elementStyle {& emptyStyle };
+    const ElementStyle* _elementStyle { &emptyStyle };
     PropertyFlags* _propertyFlagsList { 0 };
     LinkedObjects* _links            { 0 };
     virtual int getPropertyFlagsIdx(Pid id) const;

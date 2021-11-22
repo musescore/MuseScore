@@ -2081,21 +2081,21 @@ void Score::cmdFlip()
             flipOnce(artic, [artic]() {
                 ArticulationAnchor articAnchor = artic->anchor();
                 switch (articAnchor) {
-                case ArticulationAnchor::TOP_CHORD:
-                    articAnchor = ArticulationAnchor::BOTTOM_CHORD;
-                    break;
-                case ArticulationAnchor::BOTTOM_CHORD:
-                    articAnchor = ArticulationAnchor::TOP_CHORD;
-                    break;
-                case ArticulationAnchor::CHORD:
-                    articAnchor = artic->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
-                    break;
-                case ArticulationAnchor::TOP_STAFF:
-                    articAnchor = ArticulationAnchor::BOTTOM_STAFF;
-                    break;
-                case ArticulationAnchor::BOTTOM_STAFF:
-                    articAnchor = ArticulationAnchor::TOP_STAFF;
-                    break;
+                    case ArticulationAnchor::TOP_CHORD:
+                        articAnchor = ArticulationAnchor::BOTTOM_CHORD;
+                        break;
+                    case ArticulationAnchor::BOTTOM_CHORD:
+                        articAnchor = ArticulationAnchor::TOP_CHORD;
+                        break;
+                    case ArticulationAnchor::CHORD:
+                        articAnchor = artic->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
+                        break;
+                    case ArticulationAnchor::TOP_STAFF:
+                        articAnchor = ArticulationAnchor::BOTTOM_STAFF;
+                        break;
+                    case ArticulationAnchor::BOTTOM_STAFF:
+                        articAnchor = ArticulationAnchor::TOP_STAFF;
+                        break;
                 }
                 PropertyFlags pf = artic->propertyFlags(Pid::ARTICULATION_ANCHOR);
                 if (pf == PropertyFlags::STYLED) {

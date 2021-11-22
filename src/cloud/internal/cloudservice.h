@@ -92,7 +92,7 @@ private:
     RequestStatus downloadUserInfo();
     RequestStatus doUploadScore(io::Device& scoreSourceDevice, const QString& title, const QUrl& sourceUrl = QUrl());
 
-    using RequestCallback = std::function<RequestStatus()>;
+    using RequestCallback = std::function<RequestStatus ()>;
     void executeRequest(const RequestCallback& requestCallback);
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;

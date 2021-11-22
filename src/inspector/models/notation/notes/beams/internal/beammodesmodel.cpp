@@ -48,19 +48,19 @@ void BeamModesModel::loadProperties()
         Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
 
         switch (durationType.type()) {
-        case Ms::TDuration::DurationType::V_INVALID:
-        case Ms::TDuration::DurationType::V_MEASURE:
-        case Ms::TDuration::DurationType::V_ZERO:
-        case Ms::TDuration::DurationType::V_LONG:
-        case Ms::TDuration::DurationType::V_BREVE:
-        case Ms::TDuration::DurationType::V_WHOLE:
-        case Ms::TDuration::DurationType::V_HALF:
-        case Ms::TDuration::DurationType::V_QUARTER:
-        case Ms::TDuration::DurationType::V_EIGHTH:
-            return false;
+            case Ms::TDuration::DurationType::V_INVALID:
+            case Ms::TDuration::DurationType::V_MEASURE:
+            case Ms::TDuration::DurationType::V_ZERO:
+            case Ms::TDuration::DurationType::V_LONG:
+            case Ms::TDuration::DurationType::V_BREVE:
+            case Ms::TDuration::DurationType::V_WHOLE:
+            case Ms::TDuration::DurationType::V_HALF:
+            case Ms::TDuration::DurationType::V_QUARTER:
+            case Ms::TDuration::DurationType::V_EIGHTH:
+                return false;
 
-        default:
-            return true;
+            default:
+                return true;
         }
     });
 }
