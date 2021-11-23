@@ -29,6 +29,7 @@
 #include <QClipboard>
 #include <QApplication>
 
+#include "defer.h"
 #include "ptrutils.h"
 
 #include "engraving/infrastructure/io/xml.h"
@@ -3020,21 +3021,59 @@ void NotationInteraction::unrollRepeats()
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::resetToDefault(ResettableValueType type)
+void NotationInteraction::resetStretch()
 {
-    switch (type) {
-    case ResettableValueType::Stretch:
-        resetStretch();
-        break;
-    case ResettableValueType::BeamMode:
-        resetBeamMode();
-        break;
-    case ResettableValueType::ShapesAndPosition:
-        resetShapesAndPosition();
-        break;
-    case ResettableValueType::TextStyleOverriders:
-        resetTextStyleOverrides();
-        break;
+    startEdit();
+    score()->resetUserStretch();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetTextStyleOverrides()
+{
+    startEdit();
+    score()->cmdResetTextStyleOverrides();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetBeamMode()
+{
+    startEdit();
+    score()->cmdResetBeamMode();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::resetShapesAndPosition()
+{
+    auto resetItem = [](EngravingItem* item) {
+        item->reset();
+
+        if (item->isSpanner()) {
+            for (Ms::SpannerSegment* spannerSegment : toSpanner(item)->spannerSegments()) {
+                spannerSegment->reset();
+            }
+        }
+    };
+
+    startEdit();
+
+    Defer defer([this] {
+        apply();
+        notifyAboutNotationChanged();
+    });
+
+    if (selection()->element()) {
+        resetItem(selection()->element());
+        return;
+    }
+
+    for (EngravingItem* item : selection()->elements()) {
+        resetItem(item);
     }
 }
 
@@ -3113,60 +3152,6 @@ void NotationInteraction::resetGripEdit()
     m_gripEditData.grip.clear();
 
     resetAnchorLines();
-}
-
-void NotationInteraction::resetStretch()
-{
-    startEdit();
-    score()->resetUserStretch();
-    apply();
-
-    notifyAboutNotationChanged();
-}
-
-void NotationInteraction::resetTextStyleOverrides()
-{
-    startEdit();
-    score()->cmdResetTextStyleOverrides();
-    apply();
-
-    notifyAboutNotationChanged();
-}
-
-void NotationInteraction::resetBeamMode()
-{
-    startEdit();
-    score()->cmdResetBeamMode();
-    apply();
-
-    notifyAboutNotationChanged();
-}
-
-void NotationInteraction::resetShapesAndPosition()
-{
-    startEdit();
-
-    if (selection()->element()) {
-        clearSelection();
-        return;
-    }
-
-    for (EngravingItem* element : selection()->elements()) {
-        element->reset();
-
-        if (!element->isSpanner()) {
-            continue;
-        }
-
-        Ms::Spanner* spanner = toSpanner(element);
-        for (Ms::SpannerSegment* spannerSegment : spanner->spannerSegments()) {
-            spannerSegment->reset();
-        }
-    }
-
-    apply();
-
-    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
