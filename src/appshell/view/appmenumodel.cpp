@@ -318,6 +318,7 @@ MenuItem AppMenuModel::diagnosticItem() const
 {
     MenuItemList systemItems {
         makeMenuItem("diagnostic-show-paths"),
+        makeMenuItem("diagnostic-show-profiler"),
     };
 
     MenuItemList accessibilityItems {

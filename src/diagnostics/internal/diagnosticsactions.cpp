@@ -32,6 +32,10 @@ const UiActionList DiagnosticsActions::m_actions = {
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Show paths…")
              ),
+    UiAction("diagnostic-show-profiler",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show profiler…")
+             ),
     UiAction("diagnostic-show-navigation-tree",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Show navigation tree…")
