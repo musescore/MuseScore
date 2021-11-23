@@ -38,7 +38,10 @@ InspectorListModel::InspectorListModel(QObject* parent)
 {
     m_repository = new ElementRepositoryService(this);
 
-    subscribeOnSelectionChanges();
+    onNotationChanged();
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
 }
 
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet)
@@ -245,33 +248,27 @@ AbstractInspectorModel* InspectorListModel::modelBySectionType(InspectorSectionT
     return nullptr;
 }
 
-void InspectorListModel::subscribeOnSelectionChanges()
+void InspectorListModel::onNotationChanged()
 {
-    if (!context() || !context()->currentNotation()) {
+    INotationPtr notation = context()->currentNotation();
+
+    if (!notation) {
         setElementList(QList<Ms::EngravingItem*>());
+        return;
     }
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        m_notation = context()->currentNotation();
+    auto elements = notation->interaction()->selection()->elements();
+    setElementList(QList(elements.cbegin(), elements.cend()));
 
-        if (!m_notation) {
-            setElementList(QList<Ms::EngravingItem*>());
-            return;
-        }
-
-        auto elements = m_notation->interaction()->selection()->elements();
+    notation->interaction()->selectionChanged().onNotify(this, [this, notation]() {
+        auto elements = notation->interaction()->selection()->elements();
         setElementList(QList(elements.cbegin(), elements.cend()));
+    });
 
-        m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-            auto elements = m_notation->interaction()->selection()->elements();
-            setElementList(QList(elements.cbegin(), elements.cend()));
-        });
-
-        m_notation->interaction()->textEditingChanged().onNotify(this, [this]() {
-            auto element = m_notation->interaction()->selection()->element();
-            if (element != nullptr) {
-                setElementList(QList { element });
-            }
-        });
+    notation->interaction()->textEditingChanged().onNotify(this, [this, notation]() {
+        auto element = notation->interaction()->selection()->element();
+        if (element != nullptr) {
+            setElementList(QList { element });
+        }
     });
 }
