@@ -106,6 +106,9 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
+    void onMasterNotationChanged();
+    void onNotationChanged();
+
     void initPartOrders();
     void onBeforeChangeNotation();
 
