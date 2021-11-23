@@ -23,56 +23,22 @@
 #ifndef MU_VST_VSTIEDITORVIEW_H
 #define MU_VST_VSTIEDITORVIEW_H
 
-#include <QDialog>
-#include <QWidget>
-
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-
-#include "ivstpluginsregister.h"
+#include "abstractvsteditorview.h"
 
 namespace mu::vst {
-class VstiEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
+class VstiEditorView : public AbstractVstEditorView
 {
     Q_OBJECT
 
-    Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
-    Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
-
-    INJECT(vst, IVstPluginsRegister, pluginsRegister)
-
     DECLARE_FUNKNOWN_METHODS
+
 public:
-    VstiEditorView(QWidget* parent = nullptr);
+    explicit VstiEditorView(QWidget* parent = nullptr);
     VstiEditorView(const VstiEditorView& copy);
-    ~VstiEditorView();
-
-    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
-
-    int trackId() const;
-    void setTrackId(int newTrackId);
-
-    const QString& resourceId() const;
-    void setResourceId(const QString& newResourceId);
-
-signals:
-    void trackIdChanged();
-
-    void resourceIdChanged();
 
 private:
-    void wrapPluginView();
-    void attachView(VstPluginPtr pluginPtr);
-
-    void updateStayOnTopness();
-
-    FIDString currentPlatformUiType() const;
-
-    VstPluginPtr m_pluginPtr = nullptr;
-    PluginViewPtr m_view = nullptr;
-
-    audio::TrackId m_trackId = -1;
-    QString m_resourceId;
+    bool isAbleToWrapPlugin() const override;
+    VstPluginPtr getPluginPtr() const override;
 };
 }
 

@@ -63,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstpluginlistmodelexample.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/vstpluginlistmodelexample.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractvsteditorview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/vstieditorview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/vstfxeditorview.cpp

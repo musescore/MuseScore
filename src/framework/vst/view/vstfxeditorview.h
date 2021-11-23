@@ -23,61 +23,31 @@
 #ifndef MU_VST_VSTFXEDITORVIEW_H
 #define MU_VST_VSTFXEDITORVIEW_H
 
-#include <QDialog>
-#include <QWidget>
-
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-
-#include "ivstpluginsregister.h"
+#include "vstieditorview.h"
 
 namespace mu::vst {
-class VstFxEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
+class VstFxEditorView : public AbstractVstEditorView
 {
     Q_OBJECT
 
-    Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
-    Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
     Q_PROPERTY(int chainOrder READ chainOrder WRITE setChainOrder NOTIFY chainOrderChanged)
 
-    INJECT(vst, IVstPluginsRegister, pluginsRegister)
-
     DECLARE_FUNKNOWN_METHODS
+
 public:
-    VstFxEditorView(QWidget* parent = nullptr);
+    explicit VstFxEditorView(QWidget* parent = nullptr);
     VstFxEditorView(const VstFxEditorView& copy);
-    ~VstFxEditorView();
-
-    Steinberg::tresult resizeView(Steinberg::IPlugView* view, Steinberg::ViewRect* newSize) override;
-
-    int trackId() const;
-    void setTrackId(int newTrackId);
-
-    const QString& resourceId() const;
-    void setResourceId(const QString& newResourceId);
 
     int chainOrder() const;
     void setChainOrder(int newChainOrder);
 
 signals:
-    void trackIdChanged();
-    void resourceIdChanged();
     void chainOrderChanged();
 
 private:
-    bool isAbleToWrapPlugin() const;
-    void wrapPluginView();
-    void attachView(VstPluginPtr pluginPtr);
+    bool isAbleToWrapPlugin() const override;
+    VstPluginPtr getPluginPtr() const override;
 
-    void updateStayOnTopness();
-
-    FIDString currentPlatformUiType() const;
-
-    VstPluginPtr m_pluginPtr = nullptr;
-    PluginViewPtr m_view = nullptr;
-
-    audio::TrackId m_trackId = -1;
-    QString m_resourceId;
     audio::AudioFxChainOrder m_chainOrder = -1;
 };
 }
