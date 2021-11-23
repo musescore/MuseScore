@@ -198,13 +198,16 @@ void NotationModule::registerUiTypes()
     }
 }
 
-void NotationModule::onInit(const framework::IApplication::RunMode&)
+void NotationModule::onInit(const framework::IApplication::RunMode& mode)
 {
     s_configuration->init();
     s_instrumentsRepository->init();
     s_actionController->init();
     s_notationUiActions->init();
-    s_midiInputController->init();
+
+    if (mode == framework::IApplication::RunMode::Editor) {
+        s_midiInputController->init();
+    }
 
     Notation::init();
 
