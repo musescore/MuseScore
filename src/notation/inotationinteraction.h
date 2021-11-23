@@ -185,7 +185,10 @@ public:
     virtual void resequenceRehearsalMarks() = 0;
     virtual void unrollRepeats() = 0;
 
-    virtual void resetToDefault(ResettableValueType type) = 0;
+    virtual void resetStretch() = 0;
+    virtual void resetTextStyleOverrides() = 0;
+    virtual void resetBeamMode() = 0;
+    virtual void resetShapesAndPosition() = 0;
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(ScoreConfig config) = 0;

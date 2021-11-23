@@ -193,7 +193,10 @@ public:
     void resequenceRehearsalMarks() override;
     void unrollRepeats() override;
 
-    void resetToDefault(ResettableValueType type) override;
+    void resetStretch() override;
+    void resetTextStyleOverrides() override;
+    void resetBeamMode() override;
+    void resetShapesAndPosition() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(ScoreConfig config) override;
@@ -264,11 +267,6 @@ private:
 
     void updateGripEdit(const std::vector<EngravingItem*>& elements);
     void resetGripEdit();
-
-    void resetStretch();
-    void resetTextStyleOverrides();
-    void resetBeamMode();
-    void resetShapesAndPosition();
 
     struct HitMeasureData
     {
