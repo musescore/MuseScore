@@ -679,6 +679,16 @@ Ambitus::Ranges Ambitus::estimateRanges() const
     return result;
 }
 
+void Ambitus::remove(EngravingItem* e)
+{
+    if (e->type() == ElementType::ACCIDENTAL) {
+        //! NOTE Do nothing (removing _topAccid or _bottomAccid)
+        return;
+    }
+
+    EngravingItem::remove(e);
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

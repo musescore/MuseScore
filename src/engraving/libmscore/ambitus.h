@@ -111,6 +111,8 @@ public:
     bool      readProperties(XmlReader&) override;
     QString   accessibleInfo() const override;
 
+    void remove(EngravingItem*) override;
+
     // properties
     mu::engraving::PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
