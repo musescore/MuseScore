@@ -68,6 +68,8 @@ Item {
 
             playbackModel: playbackModel
             floating: root.floating
+
+            navPanel: root.navigation
         }
 
         StyledSlider {
