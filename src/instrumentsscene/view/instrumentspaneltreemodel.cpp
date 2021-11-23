@@ -52,24 +52,6 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 {
     m_partsNotifyReceiver = std::make_shared<async::Asyncable>();
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
-        m_masterNotation = context()->currentMasterNotation();
-        initPartOrders();
-    });
-
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        m_partsNotifyReceiver->disconnectAll();
-
-        onBeforeChangeNotation();
-        m_notation = context()->currentNotation();
-
-        if (m_notation) {
-            load();
-        } else {
-            clear();
-        }
-    });
-
     m_selectionModel = new ItemMultiSelectionModel(this);
     m_selectionModel->setAllowedModifiers(Qt::ShiftModifier);
 
@@ -81,6 +63,36 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     });
 
     dispatcher()->reg(this, "instruments", this, &InstrumentsPanelTreeModel::addInstruments);
+
+    onMasterNotationChanged();
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+        onMasterNotationChanged();
+    });
+
+    onNotationChanged();
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+}
+
+void InstrumentsPanelTreeModel::onMasterNotationChanged()
+{
+    m_masterNotation = context()->currentMasterNotation();
+    initPartOrders();
+}
+
+void InstrumentsPanelTreeModel::onNotationChanged()
+{
+    m_partsNotifyReceiver->disconnectAll();
+
+    onBeforeChangeNotation();
+    m_notation = context()->currentNotation();
+
+    if (m_notation) {
+        load();
+    } else {
+        clear();
+    }
 }
 
 InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
