@@ -37,9 +37,9 @@ namespace mu::mpe {
 // common
 using msecs_t = uint64_t;
 using percentage_t = int_fast16_t;
-constexpr percentage_t SINGLE_PERCENT = 100;
-constexpr percentage_t HUNDRED_PERCENTS = SINGLE_PERCENT * 100;
-constexpr percentage_t TEN_PERCENTS = SINGLE_PERCENT * 10;
+constexpr percentage_t ONE_PERCENT = 100;
+constexpr percentage_t HUNDRED_PERCENTS = ONE_PERCENT * 100;
+constexpr percentage_t TEN_PERCENTS = ONE_PERCENT * 10;
 
 inline float percentageToFactor(const percentage_t percents)
 {
@@ -236,30 +236,30 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
 using dynamic_level_t = percentage_t;
 constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENTS;
 constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
-constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = 5 * SINGLE_PERCENT;
+constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = 5 * ONE_PERCENT;
 
 enum class DynamicType {
     Undefined = -1,
     ppppppppp = MIN_DYNAMIC_LEVEL,
-    pppppppp = 5 * SINGLE_PERCENT,
-    ppppppp = 10 * SINGLE_PERCENT,
-    pppppp = 15 * SINGLE_PERCENT,
-    ppppp = 20 * SINGLE_PERCENT,
-    pppp = 25 * SINGLE_PERCENT,
-    ppp = 30 * SINGLE_PERCENT,
-    pp = 35 * SINGLE_PERCENT,
-    p = 40 * SINGLE_PERCENT,
-    mp = 45 * SINGLE_PERCENT,
-    Natural = 50 * SINGLE_PERCENT,
-    mf = 55 * SINGLE_PERCENT,
-    f = 60 * SINGLE_PERCENT,
-    ff = 65 * SINGLE_PERCENT,
-    fff = 70 * SINGLE_PERCENT,
-    ffff = 75 * SINGLE_PERCENT,
-    fffff = 80 * SINGLE_PERCENT,
-    ffffff = 85 * SINGLE_PERCENT,
-    fffffff = 90 * SINGLE_PERCENT,
-    ffffffff = 95 * SINGLE_PERCENT,
+    pppppppp = 5 * ONE_PERCENT,
+    ppppppp = 10 * ONE_PERCENT,
+    pppppp = 15 * ONE_PERCENT,
+    ppppp = 20 * ONE_PERCENT,
+    pppp = 25 * ONE_PERCENT,
+    ppp = 30 * ONE_PERCENT,
+    pp = 35 * ONE_PERCENT,
+    p = 40 * ONE_PERCENT,
+    mp = 45 * ONE_PERCENT,
+    Natural = 50 * ONE_PERCENT,
+    mf = 55 * ONE_PERCENT,
+    f = 60 * ONE_PERCENT,
+    ff = 65 * ONE_PERCENT,
+    fff = 70 * ONE_PERCENT,
+    ffff = 75 * ONE_PERCENT,
+    fffff = 80 * ONE_PERCENT,
+    ffffff = 85 * ONE_PERCENT,
+    fffffff = 90 * ONE_PERCENT,
+    ffffffff = 95 * ONE_PERCENT,
     fffffffff = MAX_DYNAMIC_LEVEL,
     Last
 };
