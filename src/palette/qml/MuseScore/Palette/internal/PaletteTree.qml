@@ -318,6 +318,9 @@ ListView {
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
             property bool popupExpanded: palettePopup.isOpened
+            onPopupExpandedChanged: {
+                paletteTree.interactive = !popupExpanded
+            }
 
             function togglePopup(btn) {
                 const expand = !popupExpanded;
