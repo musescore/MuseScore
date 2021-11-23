@@ -161,7 +161,8 @@ int PianoLevelFilterLenWholenote::value(Staff* /*staff*/, Note* note, NoteEvent*
 
 void PianoLevelFilterLenWholenote::setValue(Staff* staff, Note* note, NoteEvent* evt, int value)
       {
-      Fraction noteLen = note->playTicksFraction();
+      Chord* chord = note->chord();
+      Fraction noteLen = chord->ticks();
       Fraction cutLen(-value, 1000);
       Fraction playLen = noteLen - cutLen;
       Fraction evtLenFrac = playLen / noteLen;
