@@ -43,8 +43,6 @@ public:
     void run() override;
 
 private:
-    void doRun();
-
     void runFirstLaunchSetup();
 
     StartupSessionType sessionTypeTromString(const QString& str) const;
