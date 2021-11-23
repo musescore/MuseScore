@@ -77,7 +77,7 @@ Rectangle {
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
-                    { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
+                    { textRole: "PageTabButton", componentRole: pageTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
                     { textRole: "StyledSlider", componentRole: slidersSample },
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
@@ -749,7 +749,7 @@ Rectangle {
     }
 
     Component {
-        id: gradientTabButtonsSample
+        id: pageTabButtonsSample
 
         Row {
             spacing: 30
