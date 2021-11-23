@@ -419,8 +419,8 @@ struct ArticulationData {
                               const pitch_level_t overallPitchRange = 0,
                               const dynamic_level_t overallDynamicRange = 0)
         : type(_type),
-          occupiedFrom(_occupiedFrom),
-          occupiedTo(_occupiedTo)
+        occupiedFrom(_occupiedFrom),
+        occupiedTo(_occupiedTo)
     {
         if (_pattern.empty()) {
             return;

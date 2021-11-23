@@ -95,7 +95,7 @@ ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::pa
 
     for (const QString& key : articulationPatterns.keys()) {
         result->setPattern(articulationTypeFromString(key),
-                               patternsScopeFromJson(articulationPatterns.value(key).toArray()));
+                           patternsScopeFromJson(articulationPatterns.value(key).toArray()));
     }
 
     return result;
