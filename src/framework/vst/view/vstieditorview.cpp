@@ -36,11 +36,8 @@ using namespace Steinberg;
 IMPLEMENT_FUNKNOWN_METHODS(VstiEditorView, IPlugFrame, IPlugFrame::iid)
 
 VstiEditorView::VstiEditorView(QWidget* parent)
-    : QDialog(parent)
+    : AbstractVstEditorView(parent)
 {
-    setAttribute(Qt::WA_NativeWindow, true);
-    updateStayOnTopness();
-    connect(qApp, &QApplication::applicationStateChanged, this, &VstiEditorView::updateStayOnTopness);
 }
 
 VstiEditorView::VstiEditorView(const VstiEditorView& copy)
@@ -48,135 +45,12 @@ VstiEditorView::VstiEditorView(const VstiEditorView& copy)
 {
 }
 
-VstiEditorView::~VstiEditorView()
+bool VstiEditorView::isAbleToWrapPlugin() const
 {
-    if (m_view) {
-        m_view->removed();
-    }
-
-    if (m_pluginPtr) {
-        m_pluginPtr->loadingCompleted().resetOnNotify(this);
-    }
+    return trackId() != -1 && !resourceId().isEmpty();
 }
 
-tresult VstiEditorView::resizeView(IPlugView* view, ViewRect* newSize)
+VstPluginPtr VstiEditorView::getPluginPtr() const
 {
-    setGeometry(QRect(geometry().x(), geometry().y(), newSize->getWidth(), newSize->getHeight()));
-    view->onSize(newSize);
-
-    update();
-
-    return kResultTrue;
-}
-
-void VstiEditorView::wrapPluginView()
-{
-    m_pluginPtr = pluginsRegister()->instrumentPlugin(m_trackId, m_resourceId.toStdString());
-
-    if (!m_pluginPtr) {
-        return;
-    }
-
-    if (m_pluginPtr->isLoaded()) {
-        attachView(m_pluginPtr);
-    } else {
-        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
-            attachView(m_pluginPtr);
-        });
-    }
-}
-
-void VstiEditorView::attachView(VstPluginPtr pluginPtr)
-{
-    m_view = pluginPtr->view();
-
-    if (m_view->isPlatformTypeSupported(currentPlatformUiType()) != Steinberg::kResultTrue) {
-        return;
-    }
-
-    m_view->setFrame(this);
-
-    Steinberg::tresult attached;
-    attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), currentPlatformUiType());
-    if (attached != kResultOk) {
-        LOGE() << "Unable to attach vst fx plugin view to window"
-               << ", resourceId: " << m_resourceId;
-        return;
-    }
-}
-
-FIDString VstiEditorView::currentPlatformUiType() const
-{
-#ifdef Q_OS_MAC
-    return Steinberg::kPlatformTypeNSView;
-#elif defined(Q_OS_IOS)
-    return Steinberg::kPlatformTypeUIView;
-#elif defined(Q_OS_WIN)
-    return Steinberg::kPlatformTypeHWND;
-#else
-    return Steinberg::kPlatformTypeX11EmbedWindowID;
-#endif
-}
-
-int VstiEditorView::trackId() const
-{
-    return m_trackId;
-}
-
-void VstiEditorView::setTrackId(int newTrackId)
-{
-    if (m_trackId == newTrackId) {
-        return;
-    }
-    m_trackId = newTrackId;
-    emit trackIdChanged();
-
-    if (m_trackId != -1 && !m_resourceId.isEmpty()) {
-        wrapPluginView();
-    }
-}
-
-const QString& VstiEditorView::resourceId() const
-{
-    return m_resourceId;
-}
-
-void VstiEditorView::setResourceId(const QString& newResourceId)
-{
-    if (m_resourceId == newResourceId) {
-        return;
-    }
-    m_resourceId = newResourceId;
-    emit resourceIdChanged();
-
-    setWindowTitle(newResourceId);
-
-    if (m_trackId != -1 && !m_resourceId.isEmpty()) {
-        wrapPluginView();
-    }
-}
-
-// We want the VST windows to be on top of the main window.
-// But not on top of all other applications when MuseScore isn't active.
-// Qt has no API for this, so we use a hack.
-// When the application becomes active, the VST windows will get the StayOnTop hint.
-// When the application becomes inactive, the hint will be dropped.
-// The nice thing is that it works... (with some ceremony)
-void VstiEditorView::updateStayOnTopness()
-{
-    auto setStayOnTop = [this](bool stay) {
-        bool wasShown = isVisible();
-        bool wasActive = isActiveWindow();
-
-        setWindowFlag(Qt::WindowStaysOnTopHint, stay);
-        if (wasShown) {
-            if (!wasActive) {
-                setAttribute(Qt::WA_ShowWithoutActivating, true);
-            }
-            show();
-            setAttribute(Qt::WA_ShowWithoutActivating, false);
-        }
-    };
-
-    setStayOnTop(qApp->applicationState() == Qt::ApplicationActive);
+    return pluginsRegister()->instrumentPlugin(trackId(), resourceId().toStdString());
 }
