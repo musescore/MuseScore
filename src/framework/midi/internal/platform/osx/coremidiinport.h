@@ -30,7 +30,7 @@ namespace mu::midi {
 class CoreMidiInPort : public IMidiInPort
 {
 public:
-    CoreMidiInPort() = default;
+    CoreMidiInPort();
     ~CoreMidiInPort() override;
 
     void init();
@@ -52,7 +52,7 @@ private:
     void initCore();
 
     struct Core;
-    std::shared_ptr<Core> m_core;
+    std::unique_ptr<Core> m_core;
     MidiDeviceID m_deviceID;
     async::Notification m_devicesChanged;
 

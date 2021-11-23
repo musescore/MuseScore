@@ -39,6 +39,11 @@ struct mu::midi::CoreMidiOutPort::Core {
     int deviceID = -1;
 };
 
+CoreMidiOutPort::CoreMidiOutPort()
+    : m_core(std::make_unique<Core>())
+{
+}
+
 CoreMidiOutPort::~CoreMidiOutPort()
 {
     if (isConnected()) {
@@ -55,7 +60,6 @@ CoreMidiOutPort::~CoreMidiOutPort()
 
 void CoreMidiOutPort::init()
 {
-    m_core = std::make_shared<Core>();
     initCore();
 }
 

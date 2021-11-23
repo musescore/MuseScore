@@ -38,6 +38,11 @@ struct mu::midi::CoreMidiInPort::Core {
     int deviceID = -1;
 };
 
+CoreMidiInPort::CoreMidiInPort()
+    : m_core(std::make_unique<Core>())
+{
+}
+
 CoreMidiInPort::~CoreMidiInPort()
 {
     if (isConnected()) {
@@ -55,7 +60,6 @@ CoreMidiInPort::~CoreMidiInPort()
 
 void CoreMidiInPort::init()
 {
-    m_core = std::make_shared<Core>();
     initCore();
 }
 
@@ -150,7 +154,7 @@ void CoreMidiInPort::initCore()
 
     QString portName = "MuseScore MIDI input port";
     if (__builtin_available(macOS 11.0, *)) {
-        MIDIReceiveBlock receiveBlock = ^(const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
+        MIDIReceiveBlock receiveBlock = ^ (const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
             const MIDIEventPacket* packet = eventList->packet;
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
                 // Handle packet
@@ -170,7 +174,7 @@ void CoreMidiInPort::initCore()
         result
             = MIDIInputPortCreateWithProtocol(m_core->client, portName.toCFString(), kMIDIProtocol_2_0, &m_core->inputPort, receiveBlock);
     } else {
-        MIDIReadBlock readBlock = ^(const MIDIPacketList* packetList, void* /*srcConnRefCon*/)
+        MIDIReadBlock readBlock = ^ (const MIDIPacketList* packetList, void* /*srcConnRefCon*/)
         {
             const MIDIPacket* packet = packetList->packet;
             for (UInt32 index = 0; index < packetList->numPackets; index++) {
