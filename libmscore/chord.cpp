@@ -2725,6 +2725,26 @@ qreal Chord::dotPosX() const
       }
 
 //---------------------------------------------------------
+//   setStemDirection
+//---------------------------------------------------------
+
+void Chord::setStemDirection(Direction d, Direction beamDir)
+{
+    _stemDirection = d;
+    if (beam()) {
+        for (ChordRest* cr : beam()->elements()) {
+            Chord* c = toChord(cr);
+            if (c) {
+                c->_stemDirection = d;
+            }
+        }
+        if (beamDir == Direction::AUTO) {
+            beam()->setBeamDirection(beamDir);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   localSpatiumChanged
 //---------------------------------------------------------
 
