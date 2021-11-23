@@ -162,7 +162,8 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     ArticulationPatternSegment glissandoPattern;
     glissandoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
     glissandoPattern.pitchPattern = createSimplePitchPattern(pitchDiff / (MAX_PITCH_LEVEL / TEN_PERCENTS) /*increment_pitch_diff*/);
-    glissandoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural) /* no dynamic changes comparing to the natural one*/);
+    glissandoPattern.expressionPattern
+        = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural) /* no dynamic changes comparing to the natural one*/);
 
     ArticulationPattern glissandoScope;
     glissandoScope.emplace(0, glissandoPattern);
@@ -244,14 +245,17 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         ArticulationPatternSegment crescendoPattern;
         crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
-        crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP / dynamicSegmentsCount);
+        crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(
+                                                                               DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP
+                                                                           / dynamicSegmentsCount);
 
         crescendoScope.emplace(25 * SINGLE_PERCENT * i, std::move(crescendoPattern));
     }
 
     for (size_t i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
-        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * SINGLE_PERCENT * i, 25 * SINGLE_PERCENT * (i + 1), 0, dynamicLevelDiff);
+        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * SINGLE_PERCENT * i,
+                                          25 * SINGLE_PERCENT * (i + 1), 0, dynamicLevelDiff);
         appliedArticulations[i].emplace(ArticulationType::Crescendo, crescendoApplied);
     }
 
@@ -274,7 +278,8 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         // [THEN] We expect that ExpressionCurve of every note will be adapted to the applied CrescendoPattern
         //        That means that every note will be played louder on 125% than the previous one
 
-        dynamic_level_t actualResult = dynamicLevelFromType(DynamicType::f) + i * static_cast<float>(dynamicLevelDiff) / dynamicSegmentsCount;
+        dynamic_level_t actualResult = dynamicLevelFromType(DynamicType::f) + i * static_cast<float>(dynamicLevelDiff)
+                                       / dynamicSegmentsCount;
         EXPECT_EQ(noteEvents.at(i).expressionCtx().expressionCurve.maxAmplitudeLevel(),
                   actualResult);
     }
