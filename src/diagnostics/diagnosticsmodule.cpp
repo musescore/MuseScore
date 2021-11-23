@@ -33,6 +33,7 @@
 #include "internal/engravingelementsprovider.h"
 
 #include "view/diagnosticspathsmodel.h"
+#include "view/system/profilerviewmodel.h"
 
 #include "view/keynav/diagnosticnavigationmodel.h"
 #include "view/keynav/abstractkeynavdevitem.h"
@@ -65,6 +66,7 @@ void DiagnosticsModule::resolveImports()
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/system/profiler"), "MuseScore/Diagnostics/DiagnosticProfilerDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore/Diagnostics/EngravingElementsDialog.qml");
@@ -79,6 +81,7 @@ void DiagnosticsModule::resolveImports()
 void DiagnosticsModule::registerUiTypes()
 {
     qmlRegisterType<DiagnosticsPathsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticsPathsModel");
+    qmlRegisterType<ProfilerViewModel>("MuseScore.Diagnostics", 1, 0, "ProfilerViewModel");
 
     qmlRegisterType<DiagnosticNavigationModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticNavigationModel");
     qmlRegisterUncreatableType<AbstractKeyNavDevItem>("MuseScore.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");

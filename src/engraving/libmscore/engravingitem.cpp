@@ -183,7 +183,8 @@ EngravingItem::~EngravingItem()
 void EngravingItem::setup()
 {
     static std::list<ElementType> accessibleDisabled = {
-        ElementType::LEDGER_LINE
+        ElementType::LEDGER_LINE,
+        ElementType::SYSTEM
     };
 
     if (score() && !score()->isPaletteScore()) {
