@@ -94,14 +94,14 @@ QRect PianoItem::boundingRectTicks(NoteEvent* evt)
       Tuplet* tup = chord->tuplet();
       if (tup)
       {
-          Fraction frac = tup->ratio();
-          ticks = ticks * frac.denominator() / frac.numerator();
+            Fraction frac = tup->ratio();
+            ticks = ticks * frac.denominator() / frac.numerator();
       }
 
       int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
       
       int x1 = _note->chord()->tick().ticks()
-          + (evt ? evt->ontime() * ticks / 1000 : 0);
+            + (evt ? evt->ontime() * ticks / 1000 : 0);
       qreal y1 = pitch;
 
       QRect rect;
