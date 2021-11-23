@@ -69,8 +69,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     RectF pageRect = page->abbox();
 
     if (TRIM_MARGIN_SIZE >= 0) {
-        QMarginsF margins(TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
-        pageRect = page->tbbox().toQRectF() + margins;
+        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
     }
 
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();

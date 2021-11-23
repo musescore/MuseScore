@@ -75,12 +75,11 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&destinationDevice);
 
-    const int TRIM_MARGINS_SIZE = configuration()->trimMarginPixelSize();
+    const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
     RectF pageRect = page->abbox();
-    if (TRIM_MARGINS_SIZE >= 0) {
-        QMarginsF margins(TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE);
-        pageRect = RectF::fromQRectF(page->tbbox().toQRectF() + margins);
+    if (TRIM_MARGIN_SIZE >= 0) {
+        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
     }
 
     qreal width = pageRect.width();
@@ -90,7 +89,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     mu::draw::Painter painter(&printer, "svgwriter");
     painter.setAntialiasing(true);
-    if (TRIM_MARGINS_SIZE >= 0) {
+    if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
     }
 
