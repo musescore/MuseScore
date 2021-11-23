@@ -232,5 +232,5 @@ void ArticulationPatternSegmentItem::setDynamicOffsets(const QList<QPoint>& offs
 
 int ArticulationPatternSegmentItem::singlePercentValue() const
 {
-    return SINGLE_PERCENT;
+    return ONE_PERCENT;
 }

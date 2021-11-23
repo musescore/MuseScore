@@ -249,13 +249,13 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
                                                                                DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP
                                                                            / dynamicSegmentsCount);
 
-        crescendoScope.emplace(25 * SINGLE_PERCENT * i, std::move(crescendoPattern));
+        crescendoScope.emplace(25 * ONE_PERCENT * i, std::move(crescendoPattern));
     }
 
     for (size_t i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
-        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * SINGLE_PERCENT * i,
-                                          25 * SINGLE_PERCENT * (i + 1), 0, dynamicLevelDiff);
+        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * ONE_PERCENT * i,
+                                          25 * ONE_PERCENT * (i + 1), 0, dynamicLevelDiff);
         appliedArticulations[i].emplace(ArticulationType::Crescendo, crescendoApplied);
     }
 
