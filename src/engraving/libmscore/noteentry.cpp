@@ -484,7 +484,8 @@ void Score::putNote(const Position& p, bool replace)
         setNoteRest(_is.segment(), _is.track(), nval, _is.duration().fraction(), stemDirection, forceAccidental, _is.articulationIds());
         _is.setAccidentalType(AccidentalType::NONE);
     }
-    if (!st->isTabStaff(cr->tick())) {
+
+    if (cr && !st->isTabStaff(cr->tick())) {
         _is.moveToNextInputPos();
     }
 }
