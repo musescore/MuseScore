@@ -1005,7 +1005,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         int string = stringNum.toInt();
                                         if (slideMap.find({ string, staffIdx }) != slideMap.end()) {
                                             Note* start  = slideMap[{ string, staffIdx }];
-                                            Glissando* s = new Glissando(start);
+                                            Glissando* s = Factory::createGlissando(start);
                                             s->setGlissandoType(GlissandoType::STRAIGHT);
                                             note->chord()->add(s);
                                             s->setAnchor(Spanner::Anchor::NOTE);
