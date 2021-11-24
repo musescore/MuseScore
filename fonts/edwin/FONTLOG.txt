@@ -15,7 +15,18 @@ Edwin is a typeface adapted from the C059 typeface (from URW++ Design and Develo
 Change log
 ----------
 
+23 November 2021 (Martin Keary & Simon Smith) Edwin Version 0.53
+- added U+203F (undertie) and U+2040 (tie)
+- removed "Nr." -> numero sign ligature
+- Updated accidentals (matching Leland Text)
+
+18 February 2021 (Martin Keary & Simon Smith) Edwin Version 0.52
+- Fixed invalid references in lookup tables
+- Added U+02BB ('okina) and U+02BC (modifier letter apostrophe)
+- Added missing extrema points to accidentals
+
 4 January 2021 (Martin Keary & Simon Smith) Edwin Version 0.51
+- Packaged with MuseScore 3.6
 - Added double-flat (U+1D12A) and double-sharp (U+1D12B) accidentals
 
 14 December 2020 (Martin Keary & Simon Smith) Edwin Version 0.5

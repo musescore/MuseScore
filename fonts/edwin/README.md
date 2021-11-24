@@ -1,10 +1,10 @@
 # Edwin font family
 
-This repository contains the **Edwin font family, Version 0.51**.
+This repository contains the **Edwin font family, Version 0.53**.
 
 ## About the fonts
 
-The Edwin font family (Roman, Italic, Bold & Bold Italic), Version 0.51 is available in Type 1, OpenType-CFF format. It is distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
+The Edwin font family (Roman, Italic, Bold & Bold Italic), Version 0.53 is available in Type 1, OpenType-CFF format. It is distributed under the [SIL Open Font License (OFL), Version 1.1](./LICENSE.txt).
 
 ## History
 
