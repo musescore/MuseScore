@@ -6621,6 +6621,7 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
     }
 
     // update measure numbers and cache result
+    _measureNo += m->noOffset();
     _cachedAttributes = " number=";
     if ((_irregularMeasureNo + _measureNo) == 2 && m->irregular()) {
         _cachedAttributes += "\"0\" implicit=\"yes\"";

@@ -159,6 +159,7 @@ private slots:
     void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
     void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
     void measureLength() { mxmlIoTestRef("testMeasureLength"); }
+    void measureNumbers() { mxmlIoTest("testMeasureNumbers"); }
     void measureRepeats1() { mxmlIoTestRef("testMeasureRepeats1"); }
     //void measureRepeats2() { mxmlIoTestRef("testMeasureRepeats2"); } fail libmscore/style.cpp Q_ASSERT(idx == textStyles[int(idx)].tid);
     void measureRepeats3() { mxmlIoTest("testMeasureRepeats3"); }

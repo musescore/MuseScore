@@ -1708,7 +1708,8 @@ void MusicXMLParserPass2::part()
 #endif
 
     // read the measures
-    int nr = 0;   // current measure sequence number
+    int nr = 0; // current measure sequence number (always increments by one for each measure)
+    _measureNumber = 0; // written measure number (doesn't always increment by 1)
     while (_e.readNextStartElement()) {
         if (_e.name() == "measure") {
             Fraction t = _pass1.getMeasureStart(nr);
@@ -2002,8 +2003,10 @@ static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
 
 void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
 {
-    QString number = _e.attributes().value("number").toString();
-    //qDebug("measure %s start", qPrintable(number));
+    bool isNumericMeasureNumber; // "measure numbers" don't have to be actual numbers in MusicXML
+    int parsedMeasureNumber = _e.attributes().value("number").toInt(&isNumericMeasureNumber);
+
+    //qDebug("measure %d start", parsedMeasureNumber);
 
     Measure* measure = findMeasure(_score, time);
     if (!measure) {
@@ -2012,9 +2015,18 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
         return;
     }
 
-    // handle implicit measure
     if (_e.attributes().value("implicit") == "yes") {
+        // Implicit measure: expect measure number to be unchanged.
         measure->setIrregular(true);
+    } else {
+        // Normal measure: expect number to have increased by one.
+        ++_measureNumber;
+    }
+
+    if (isNumericMeasureNumber) {
+        // Actual measure number may differ from expected value.
+        measure->setNoOffset(parsedMeasureNumber - _measureNumber);
+        _measureNumber = parsedMeasureNumber;
     }
 
     // set measure's RepeatFlag to none because musicXML is allowing single measure repeat and no ordering in repeat start and end barlines
