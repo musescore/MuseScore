@@ -63,6 +63,8 @@
 #include "slur.h"
 #include "fingering.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1643,6 +1645,7 @@ void Chord::layout2()
 
 static void updatePercussionNotes(Chord* c, const Drumset* drumset)
 {
+    TRACEFUNC;
     for (Chord* ch : c->graceNotes()) {
         updatePercussionNotes(ch, drumset);
     }
@@ -1654,7 +1657,8 @@ static void updatePercussionNotes(Chord* c, const Drumset* drumset)
             int pitch = note->pitch();
             if (!drumset->isValid(pitch)) {
                 note->setLine(0);
-                qWarning("unmapped drum note %d", pitch);
+                //! NOTE May be called too often
+                //qWarning("unmapped drum note %d", pitch);
             } else if (!note->fixed()) {
                 note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
                 note->setLine(drumset->line(pitch));
