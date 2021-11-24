@@ -428,7 +428,7 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*cu
 SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
     : Spanner(type, parent)
 {
-    _slurDirection = Direction::AUTO;
+    _slurDirection = DirectionV::AUTO;
     _up            = true;
     _lineType      = 0;       // default is solid
 }
@@ -512,9 +512,9 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(Direction d)
+void SlurTie::undoSetSlurDirection(DirectionV d)
 {
-    undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<Direction>(d));
+    undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(d));
 }
 
 //---------------------------------------------------------
@@ -527,7 +527,7 @@ PropertyValue SlurTie::getProperty(Pid propertyId) const
     case Pid::LINE_TYPE:
         return lineType();
     case Pid::SLUR_DIRECTION:
-        return PropertyValue::fromValue<Direction>(slurDirection());
+        return PropertyValue::fromValue<DirectionV>(slurDirection());
     default:
         return Spanner::getProperty(propertyId);
     }
@@ -544,7 +544,7 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
         setLineType(v.toInt());
         break;
     case Pid::SLUR_DIRECTION:
-        setSlurDirection(v.value<Direction>());
+        setSlurDirection(v.value<DirectionV>());
         break;
     default:
         return Spanner::setProperty(propertyId, v);
@@ -563,7 +563,7 @@ PropertyValue SlurTie::propertyDefault(Pid id) const
     case Pid::LINE_TYPE:
         return 0;
     case Pid::SLUR_DIRECTION:
-        return PropertyValue::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:
         return Spanner::propertyDefault(id);
     }

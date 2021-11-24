@@ -394,6 +394,7 @@ enum class Pid {
 
 extern mu::engraving::PropertyValue readProperty(Pid type, XmlReader& e);
 extern mu::engraving::PropertyValue propertyFromString(Pid type, QString value);
+extern mu::engraving::PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value);
 extern QString propertyToString(Pid, const mu::engraving::PropertyValue& value, bool mscx);
 extern mu::engraving::P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);

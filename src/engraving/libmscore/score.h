@@ -130,7 +130,6 @@ enum class SegmentType;
 enum class OttavaType : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
-enum class Direction;
 enum class AccidentalType;
 
 enum class POS : char {
@@ -490,8 +489,8 @@ private:
 
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
-    void cmdMoveRest(Rest*, Direction);
-    void cmdMoveLyrics(Lyrics*, Direction);
+    void cmdMoveRest(Rest*, DirectionV);
+    void cmdMoveLyrics(Lyrics*, DirectionV);
 
     void checkScore();
 
@@ -669,7 +668,7 @@ public:
     void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
     void undoChangeInvisible(EngravingItem*, bool);
     void undoChangeTuning(Note*, qreal);
-    void undoChangeUserMirror(Note*, MScore::DirectionH);
+    void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false);
     bool undoPropertyChanged(EngravingItem* e, Pid t, const mu::engraving::PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
@@ -688,10 +687,10 @@ public:
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
-    Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, Direction stemDirection = Direction::AUTO,
+    Segment* setNoteRest(Segment*, int track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
                          bool forceAccidental = false, const std::set<SymId>& articulationIds = {}, bool rhythmic = false,
                          InputState* externalInputState = nullptr);
-    Segment* setChord(Segment*, int track, Chord* chord, Fraction, Direction stemDirection = Direction::AUTO);
+    Segment* setChord(Segment*, int track, Chord* chord, Fraction, DirectionV stemDirection = DirectionV::AUTO);
     void changeCRlen(ChordRest* cr, const TDuration&);
     void changeCRlen(ChordRest* cr, const Fraction&, bool fillWithRest=true);
     void createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& tick);

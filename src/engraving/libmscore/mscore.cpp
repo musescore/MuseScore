@@ -176,63 +176,6 @@ std::vector<MScoreError> MScore::errorList {
 MsError MScore::_error { MsError::MS_NO_ERROR };
 
 //---------------------------------------------------------
-//   Direction
-//---------------------------------------------------------
-
-Direction toDirection(const QString& s)
-{
-    Direction val;
-    if (s == "up") {
-        val = Direction::UP;
-    } else if (s == "down") {
-        val = Direction::DOWN;
-    } else if (s == "auto") {
-        val = Direction::AUTO;
-    } else {
-        val = Direction(s.toInt());
-    }
-    return val;
-}
-
-//---------------------------------------------------------
-//   Direction::toString
-//---------------------------------------------------------
-
-const char* toString(Direction val)
-{
-    switch (val) {
-    case Direction::AUTO: return "auto";
-    case Direction::UP:   return "up";
-    case Direction::DOWN: return "down";
-    }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    __builtin_unreachable();
-#else
-    // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-    __assume(0);
-#endif
-}
-
-//---------------------------------------------------------
-//   Direction::toUserString
-//---------------------------------------------------------
-
-QString toUserString(Direction val)
-{
-    switch (val) {
-    case Direction::AUTO: return qtrc("Direction", "Auto");
-    case Direction::UP:   return qtrc("Direction", "Up");
-    case Direction::DOWN: return qtrc("Direction", "Down");
-    }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    __builtin_unreachable();
-#else
-    // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-    __assume(0);
-#endif
-}
-
-//---------------------------------------------------------
 //   init
 //---------------------------------------------------------
 
@@ -294,7 +237,7 @@ void MScore::registerUiTypes()
 #ifdef SCRIPT_INTERFACE
     qRegisterMetaType<Note::ValueType>("ValueType");
 
-    qRegisterMetaType<MScore::DirectionH>("DirectionH");
+    qRegisterMetaType<DirectionH>("DirectionH");
     qRegisterMetaType<Spanner::Anchor>("Anchor");
     qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
     qRegisterMetaType<NoteHead::Type>("NoteHeadType");

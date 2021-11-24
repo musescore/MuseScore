@@ -2117,7 +2117,7 @@ EngravingItem* Note::drop(EditData& data)
     {
         Chord* c      = toChord(e);
         Note* n       = c->upNote();
-        Direction dir = c->stemDirection();
+        DirectionV dir = c->stemDirection();
         int t         = track(); // (staff2track(staffIdx()) + n->voice());
         score()->select(0, SelectType::SINGLE, 0);
         NoteVal nval;
@@ -2178,7 +2178,7 @@ void Note::addParentheses()
 //   setDotY
 //---------------------------------------------------------
 
-void Note::setDotY(Direction pos)
+void Note::setDotY(DirectionV pos)
 {
     bool onLine = false;
     qreal y = 0;
@@ -2208,17 +2208,17 @@ void Note::setDotY(Direction pos)
     bool oddVoice = voice() & 1;
     if (onLine) {
         // displace dots by half spatium up or down according to voice
-        if (pos == Direction::AUTO) {
+        if (pos == DirectionV::AUTO) {
             y = oddVoice ? 0.5 : -0.5;
-        } else if (pos == Direction::UP) {
+        } else if (pos == DirectionV::UP) {
             y = -0.5;
         } else {
             y = 0.5;
         }
     } else {
-        if (pos == Direction::UP && !oddVoice) {
+        if (pos == DirectionV::UP && !oddVoice) {
             y -= 1.0;
-        } else if (pos == Direction::DOWN && oddVoice) {
+        } else if (pos == DirectionV::DOWN && oddVoice) {
             y += 1.0;
         }
     }
@@ -2327,7 +2327,7 @@ void Note::layout2()
                 // with TAB's, dot Y is not calculated during layoutChords3(),
                 // as layoutChords3() is not even called for TAB's;
                 // setDotY() actually also manages creation/deletion of NoteDot's
-                setDotY(Direction::AUTO);
+                setDotY(DirectionV::AUTO);
 
                 // use TAB default note-to-dot spacing
                 dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * spatium();
@@ -2389,10 +2389,10 @@ bool Note::dotIsUp() const
     if (_dots.empty()) {
         return true;
     }
-    if (_userDotPosition == Direction::AUTO) {
+    if (_userDotPosition == DirectionV::AUTO) {
         return _dots[0]->y() < spatium() * .1;
     } else {
-        return _userDotPosition == Direction::UP;
+        return _userDotPosition == DirectionV::UP;
     }
 }
 
@@ -2574,7 +2574,7 @@ void Note::reset()
 {
     undoChangeProperty(Pid::OFFSET, PointF());
     chord()->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
-    chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
+    chord()->undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
 }
 
 //---------------------------------------------------------
@@ -3059,7 +3059,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::MIRROR_HEAD:
         return int(userMirror());
     case Pid::DOT_POSITION:
-        return PropertyValue::fromValue<Direction>(userDotPosition());
+        return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
         return int(headScheme());
     case Pid::HEAD_GROUP:
@@ -3117,10 +3117,10 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setSmall(v.toBool());
         break;
     case Pid::MIRROR_HEAD:
-        setUserMirror(MScore::DirectionH(v.toInt()));
+        setUserMirror(DirectionH(v.toInt()));
         break;
     case Pid::DOT_POSITION:
-        setUserDotPosition(v.value<Direction>());
+        setUserDotPosition(v.value<DirectionV>());
         triggerLayout();
         return true;
     case Pid::HEAD_SCHEME:
@@ -3191,9 +3191,9 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::SMALL:
         return false;
     case Pid::MIRROR_HEAD:
-        return int(MScore::DirectionH::AUTO);
+        return int(DirectionH::AUTO);
     case Pid::DOT_POSITION:
-        return PropertyValue::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::HEAD_SCHEME:
         return int(NoteHead::Scheme::HEAD_AUTO);
     case Pid::HEAD_GROUP:

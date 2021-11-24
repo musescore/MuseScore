@@ -134,7 +134,7 @@ bool SlurSegment::edit(EditData& ed)
     Slur* sl = slur();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(sl->up() ? DirectionV::DOWN : DirectionV::UP));
         sl->layout();
         return true;
     }
@@ -1098,13 +1098,13 @@ SpannerSegment* Slur::layoutSystem(System* system)
             setTick2(tick());
         }
         switch (_slurDirection) {
-        case Direction::UP:
+        case DirectionV::UP:
             _up = true;
             break;
-        case Direction::DOWN:
+        case DirectionV::DOWN:
             _up = false;
             break;
-        case Direction::AUTO:
+        case DirectionV::AUTO:
         {
             //
             // assumption:
@@ -1231,13 +1231,13 @@ void Slur::layout()
         setTick2(tick());
     }
     switch (_slurDirection) {
-    case Direction::UP:
+    case DirectionV::UP:
         _up = true;
         break;
-    case Direction::DOWN:
+    case DirectionV::DOWN:
         _up = false;
         break;
-    case Direction::AUTO:
+    case DirectionV::AUTO:
     {
         //
         // assumption:

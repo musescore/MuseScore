@@ -353,7 +353,7 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const QString& instrId,
                                             const NoteHead::Group hg,
                                             const int line,
-                                            const Direction sd)
+                                            const DirectionV sd)
 {
     if (_instruments.contains(id)
         && _instruments[id].contains(instrId)) {

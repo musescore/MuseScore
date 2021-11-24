@@ -1497,7 +1497,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     lastRest = cr;
                 }
                 Fraction restTicks = lastRest->tick() + lastRest->ticks() - curr->tick();
-                seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, Direction::AUTO, false, {}, true);
+                seg = setNoteRest(seg, curr->track(), NoteVal(), restTicks, DirectionV::AUTO, false, {}, true);
             } else if (curr->isChord()) {
                 // combine tied chords
                 Chord* chord = toChord(curr);
@@ -2058,7 +2058,7 @@ void Score::cmdFlip()
                 }
             } else {
                 flipOnce(chord, [chord]() {
-                    Direction dir = chord->up() ? Direction::DOWN : Direction::UP;
+                    DirectionV dir = chord->up() ? DirectionV::DOWN : DirectionV::UP;
                     chord->undoChangeProperty(Pid::STEM_DIRECTION, dir);
                 });
             }
@@ -2067,13 +2067,13 @@ void Score::cmdFlip()
         if (e->isBeam()) {
             auto beam = toBeam(e);
             flipOnce(beam, [beam]() {
-                Direction dir = beam->up() ? Direction::DOWN : Direction::UP;
+                DirectionV dir = beam->up() ? DirectionV::DOWN : DirectionV::UP;
                 beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
             });
         } else if (e->isSlurTieSegment()) {
             auto slurTieSegment = toSlurTieSegment(e)->slurTie();
             flipOnce(slurTieSegment, [slurTieSegment]() {
-                Direction dir = slurTieSegment->up() ? Direction::DOWN : Direction::UP;
+                DirectionV dir = slurTieSegment->up() ? DirectionV::DOWN : DirectionV::UP;
                 slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, dir);
             });
         } else if (e->isArticulation()) {
@@ -2106,13 +2106,13 @@ void Score::cmdFlip()
         } else if (e->isTuplet()) {
             auto tuplet = toTuplet(e);
             flipOnce(tuplet, [tuplet]() {
-                Direction dir = tuplet->isUp() ? Direction::DOWN : Direction::UP;
-                tuplet->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<Direction>(dir), PropertyFlags::UNSTYLED);
+                DirectionV dir = tuplet->isUp() ? DirectionV::DOWN : DirectionV::UP;
+                tuplet->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(dir), PropertyFlags::UNSTYLED);
             });
         } else if (e->isNoteDot() && e->parent()->isNote()) {
             Note* note = toNote(e->parent());
-            Direction d = note->dotIsUp() ? Direction::DOWN : Direction::UP;
-            note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<Direction>(d));
+            DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
+            note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
         } else if (e->isTempoText()
                    || e->isSystemText()
                    || e->isJump()
@@ -3449,7 +3449,8 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
     const int track = is.track();
     NoteVal nval;
     setNoteRest(is.segment(), track, nval,
-                d.fraction(), Direction::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false, externalInputState);
+                d.fraction(), DirectionV::AUTO, /* forceAccidental */ false, is.articulationIds(), /* rhythmic */ false,
+                externalInputState);
     is.moveToNextInputPos();
     if (!is.noteEntryMode() || is.usingNoteEntryMethod(NoteEntryMethod::STEPTIME)) {
         is.setRest(false);  // continue with normal note entry
@@ -5836,7 +5837,7 @@ void Score::undoChangeTuning(Note* n, qreal v)
     n->undoChangeProperty(Pid::TUNING, v);
 }
 
-void Score::undoChangeUserMirror(Note* n, MScore::DirectionH d)
+void Score::undoChangeUserMirror(Note* n, DirectionH d)
 {
     n->undoChangeProperty(Pid::MIRROR_HEAD, int(d));
 }

@@ -311,9 +311,6 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
     case P_TYPE::ZERO_INT:
         return value.toInt() - 1;
 
-    case P_TYPE::DIRECTION:
-        return value.value<Ms::Direction>();
-
     case P_TYPE::INT_LIST:
         return value.value<QList<int> >();
 
@@ -351,8 +348,8 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     case P_TYPE::ZERO_INT:
         return value.toInt() + 1;
 
-    case P_TYPE::DIRECTION:
-        return static_cast<int>(value.value<Ms::Direction>());
+    case P_TYPE::DIRECTION_V:
+        return static_cast<int>(value.value<Ms::DirectionV>());
 
     case P_TYPE::INT_LIST: {
         QStringList strList;

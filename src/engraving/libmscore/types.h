@@ -378,16 +378,6 @@ constexpr bool operator&(NoteType t1, NoteType t2)
 }
 
 //---------------------------------------------------------
-//   Direction
-//---------------------------------------------------------
-
-enum class Direction {
-    ///.\{
-    AUTO, UP, DOWN
-    ///\}
-};
-
-//---------------------------------------------------------
 //   GlissandoType
 //---------------------------------------------------------
 
@@ -654,7 +644,6 @@ enum class AccidentalRole : char {
 
 #ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType);
-Q_ENUM_NS(Direction);
 Q_ENUM_NS(GlissandoType);
 Q_ENUM_NS(GlissandoStyle);
 Q_ENUM_NS(SegmentType);
@@ -672,13 +661,7 @@ class Mops : public QObject
 {
     Q_GADGET
 };
-
-extern Direction toDirection(const QString&);
-extern const char* toString(Direction);
-extern QString toUserString(Direction);
 } // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Direction);
 
 Q_DECLARE_METATYPE(Ms::NoteType);
 

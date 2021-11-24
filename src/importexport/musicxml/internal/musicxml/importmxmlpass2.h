@@ -294,7 +294,7 @@ private:
     void forward(Fraction& dura);
     void backup(Fraction& dura);
     void timeModification(Fraction& timeMod, TDuration& normalType);
-    void stem(Direction& sd, bool& nost);
+    void stem(DirectionV& sd, bool& nost);
     void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text);
     void staffDetails(const QString& partId);
     void staffTuning(StringData* t);

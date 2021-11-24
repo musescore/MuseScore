@@ -211,12 +211,12 @@ void MuseData::readNote(Part* part, const QString& s)
             break;
         }
     }
-    Direction dir = Direction::AUTO;
+    DirectionV dir = DirectionV::AUTO;
     if (s.size() >= 23) {
         if (s[22] == 'u') {
-            dir = Direction::UP;
+            dir = DirectionV::UP;
         } else if (s[22] == 'd') {
-            dir = Direction::DOWN;
+            dir = DirectionV::DOWN;
         }
     }
 

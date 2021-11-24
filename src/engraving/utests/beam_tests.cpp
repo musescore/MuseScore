@@ -151,6 +151,7 @@ TEST_F(BeamTests, beamG)
 //   This method tests if a beam's stem direction can be
 //   set with a note other than the first one.
 //---------------------------------------------------------
+
 // TEST_F(BeamTests, beamStemDir)
 // {
 //     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
@@ -158,7 +159,7 @@ TEST_F(BeamTests, beamG)
 //     Measure* m1 = score->firstMeasure();
 //     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
 //     Chord* c2 = toChord(cr->beam()->elements()[1]);
-//     c2->setStemDirection(Direction::UP);
+//     c2->setStemDirection(DirectionV::UP);
 //     score->update();
 //     score->doLayout();
 //     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
@@ -171,17 +172,18 @@ TEST_F(BeamTests, beamG)
 //   set with a note after its direction has been set
 //   with the beam's own setBeamDirection method.
 //---------------------------------------------------------
-// TEST_F(BeamTests, flipBeamStemDir)
-// {
-//     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
-//     EXPECT_TRUE(score);
-//     Measure* m1 = score->firstMeasure();
-//     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
-//     Chord* c2 = toChord(cr->beam()->elements()[1]);
-//     cr->beam()->setBeamDirection(Direction::UP);
-//     c2->setStemDirection(Direction::DOWN);
-//     score->update();
-//     score->doLayout();
-//     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
-//     delete score;
-// }
+
+//TEST_F(BeamTests, flipBeamStemDir)
+//{
+//    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
+//    EXPECT_TRUE(score);
+//    Measure* m1 = score->firstMeasure();
+//    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+//    Chord* c2 = toChord(cr->beam()->elements()[1]);
+//    cr->beam()->setBeamDirection(DirectionV::UP);
+//    c2->setStemDirection(DirectionV::DOWN);
+//    score->update();
+//    score->doLayout();
+//    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
+//    delete score;
+//}

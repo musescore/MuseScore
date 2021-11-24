@@ -175,7 +175,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     expandVoice(is.segment(), is.track());
 
     // insert note
-    Direction stemDirection = Direction::AUTO;
+    DirectionV stemDirection = DirectionV::AUTO;
     int track               = is.track();
     if (is.drumNote() != -1) {
         nval.pitch        = is.drumNote();
@@ -372,7 +372,7 @@ void Score::putNote(const Position& p, bool replace)
         return;
     }
 
-    Direction stemDirection = Direction::AUTO;
+    DirectionV stemDirection = DirectionV::AUTO;
     bool error;
     NoteVal nval = noteValForPosition(p, _is.accidentalType(), error);
     if (error) {

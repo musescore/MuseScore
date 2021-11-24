@@ -56,13 +56,13 @@ struct DrumInstrument {
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
     int line = 0;               ///< place notehead onto this line
-    Direction stemDirection = Direction::AUTO;
+    DirectionV stemDirection = DirectionV::AUTO;
     int voice = 0;
     char shortcut = '\0';      ///< accelerator key (CDEFGAB)
     QList<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
-    DrumInstrument(const char* s, NoteHead::Group nh, int l, Direction d,
+    DrumInstrument(const char* s, NoteHead::Group nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
         : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
     void addVariant(DrumInstrumentVariant v) { variants.append(v); }
@@ -86,7 +86,7 @@ public:
     SymId noteHeads(int pitch, NoteHead::Type t) const { return _drum[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return _drum[pitch].line; }
     int voice(int pitch) const { return _drum[pitch].voice; }
-    Direction stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
+    DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
     const QString& name(int pitch) const { return _drum[pitch].name; }
     int shortcut(int pitch) const { return _drum[pitch].shortcut; }
     QList<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }

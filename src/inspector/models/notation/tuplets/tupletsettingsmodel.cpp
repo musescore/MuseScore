@@ -72,7 +72,7 @@ PropertyItem* TupletSettingsModel::lineThickness() const
 
 QVariantList TupletSettingsModel::possibleDirectionTypes() const
 {
-    using Type = Ms::Direction;
+    using Type = Ms::DirectionV;
 
     QVariantList types {
         object(Type::AUTO, qtrc("inspector", "Auto")),

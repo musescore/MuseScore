@@ -60,7 +60,7 @@ Articulation::Articulation(ChordRest* parent)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;
-    _direction     = Direction::AUTO;
+    _direction     = DirectionV::AUTO;
     _up            = true;
     _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
@@ -100,7 +100,7 @@ int Articulation::subtype() const
 void Articulation::setUp(bool val)
 {
     _up = val;
-    bool dup = _direction == Direction::AUTO ? val : _direction == Direction::UP;
+    bool dup = _direction == DirectionV::AUTO ? val : _direction == DirectionV::UP;
     QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith(!dup ? "Above" : "Below")) {
         QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
@@ -313,7 +313,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:              return PropertyValue::fromValue(_symId);
-    case Pid::DIRECTION:           return PropertyValue::fromValue<Direction>(direction());
+    case Pid::DIRECTION:           return PropertyValue::fromValue<DirectionV>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
     case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
     case Pid::PLAY:                return bool(playArticulation());
@@ -333,7 +333,7 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
         setSymId(v.value<SymId>());
         break;
     case Pid::DIRECTION:
-        setDirection(v.value<Direction>());
+        setDirection(v.value<DirectionV>());
         break;
     case Pid::ARTICULATION_ANCHOR:
         setAnchor(ArticulationAnchor(v.toInt()));
@@ -359,7 +359,7 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return PropertyValue::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
 
     case Pid::ORNAMENT_STYLE:
         //return int(score()->style()->ornamentStyle(_ornamentStyle));

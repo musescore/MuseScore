@@ -2204,11 +2204,11 @@ void Read206::readTextLine206(XmlReader& e, const ReadContext& ctx, TextLineBase
 //    for backwards compatibility
 //---------------------------------------------------------
 
-static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Direction direction)
+static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, DirectionV direction)
 {
-    if (direction == Direction::UP) {
+    if (direction == DirectionV::UP) {
         el->setPlacement(PlacementV::ABOVE);
-    } else if (direction == Direction::DOWN) {
+    } else if (direction == DirectionV::DOWN) {
         el->setPlacement(PlacementV::BELOW);
     } else {
         switch (anchor) {
@@ -2235,7 +2235,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
     EngravingItem* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
-    Direction direction = Direction::AUTO;
+    DirectionV direction = DirectionV::AUTO;
     int track = parent->track();
     double timeStretch = 0.0;
     bool useDefaultPlacement = true;
@@ -2286,8 +2286,8 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                         if (s == al[i].name) {
                             sym       = al[i].id;
                             bool up   = al[i].up;
-                            direction = up ? Direction::UP : Direction::DOWN;
-                            if ((direction == Direction::DOWN) != (track & 1)) {
+                            direction = up ? DirectionV::UP : DirectionV::DOWN;
+                            if ((direction == DirectionV::DOWN) != (track & 1)) {
                                 useDefaultPlacement = false;
                             }
                             break;
@@ -2331,7 +2331,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                direction = toDirection(e.readElementText());
+                direction = propertyFromString(P_TYPE::DIRECTION_V, e.readElementText()).value<DirectionV>();
             } else {
                 el->readProperties(e);
             }

@@ -45,7 +45,7 @@ enum class TupletBracketType : char;
 class Tuplet final : public DurationElement
 {
     std::vector<DurationElement*> _elements;
-    Direction _direction;
+    DirectionV _direction;
     TupletNumberType _numberType;
     TupletBracketType _bracketType;
     Milimetre _bracketWidth;
@@ -136,8 +136,8 @@ public:
 
     void dump() const override;
 
-    void setDirection(Direction d) { _direction = d; }
-    Direction direction() const { return _direction; }
+    void setDirection(DirectionV d) { _direction = d; }
+    DirectionV direction() const { return _direction; }
     bool isUp() const { return _isUp; }
     bool isSmall() const { return _isSmall; }
     Fraction tick() const override { return _tick; }

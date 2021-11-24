@@ -1689,7 +1689,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 // cr->setVisible(oveNote->getShow());
                 ((Ms::Chord*)cr)->setNoStem(int(container->getNoteType()) <= int(ovebase::NoteType::Note_Whole));
                 if (!setDirection) {
-                    ((Ms::Chord*)cr)->setStemDirection(container->getStemUp() ? Direction::UP : Direction::DOWN);
+                    ((Ms::Chord*)cr)->setStemDirection(container->getStemUp() ? DirectionV::UP : DirectionV::DOWN);
                 }
 
                 // cross staff
@@ -1761,7 +1761,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (oveTuplet != 0) {
                     // set direction
                     tuplet->setDirection(
-                        oveTuplet->getLeftShoulder()->getYOffset() < 0 ? Direction::UP : Direction::DOWN);
+                        oveTuplet->getLeftShoulder()->getYOffset() < 0 ? DirectionV::UP : DirectionV::DOWN);
 
                     if (container->start()->getOffset() == oveTuplet->stop()->getOffset()) {
                         tuplet = 0;
@@ -2016,7 +2016,7 @@ void OveToMScore::convertArticulation(
     }
     case ovebase::ArticulationType::Fermata_Inverted: {
         Articulation* a = Factory::createArticulation(cr);
-        a->setDirection(Direction::DOWN);
+        a->setDirection(DirectionV::DOWN);
         a->setSymId(SymId::fermataBelow);
         cr->add(a);
         break;
@@ -2293,7 +2293,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
                 slurPtr->start()->getMeasure() + slurPtr->stop()->getMeasure(), endContainer->getTick());
 
             Slur* slur = Factory::createSlur(m_score->dummy());
-            slur->setSlurDirection(slurPtr->getShowOnTop() ? Direction::UP : Direction::DOWN);
+            slur->setSlurDirection(slurPtr->getShowOnTop() ? DirectionV::UP : DirectionV::DOWN);
             slur->setTick(Fraction::fromTicks(absStartTick));
             slur->setTick2(Fraction::fromTicks(absEndTick));
             slur->setTrack(track);

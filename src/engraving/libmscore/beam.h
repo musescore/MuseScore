@@ -52,7 +52,7 @@ class Beam final : public EngravingItem
     Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
     QVector<mu::LineF*> _beamSegments;
-    Direction _direction    { Direction::AUTO };
+    DirectionV _direction    { DirectionV::AUTO };
 
     bool _up                { true };
     bool _distribute        { false };                    // equal spacing of elements
@@ -164,8 +164,8 @@ public:
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
 
-    void setBeamDirection(Direction d);
-    Direction beamDirection() const { return _direction; }
+    void setBeamDirection(DirectionV d);
+    DirectionV beamDirection() const { return _direction; }
 
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
