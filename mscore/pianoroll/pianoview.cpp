@@ -94,7 +94,7 @@ QRect PianoItem::boundingRectTicks(NoteEvent* evt)
       if (tup) {
             Fraction frac = tup->ratio();
             ticks = ticks * frac.denominator() / frac.numerator();
-      }
+            }
       int tieLen = _note->playTicks() - ticks;
 
       int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
