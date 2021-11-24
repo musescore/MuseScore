@@ -3295,7 +3295,7 @@ Lyrics* Score::addLyrics()
 
 Hairpin* Score::addHairpin(HairpinType t, const Fraction& tickStart, const Fraction& tickEnd, int track)
 {
-    Hairpin* pin = new Hairpin(this->dummy()->segment());
+    Hairpin* pin = Factory::createHairpin(this->dummy()->segment());
     pin->setHairpinType(t);
     if (t == HairpinType::CRESC_LINE) {
         pin->setBeginText("cresc.");

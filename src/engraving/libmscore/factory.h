@@ -167,6 +167,9 @@ public:
     static Ms::TremoloBar* createTremoloBar(Ms::EngravingItem* parent);
     static std::shared_ptr<Ms::TremoloBar> makeTremoloBar(Ms::EngravingItem* parent);
 
+    static Ms::Hairpin* createHairpin(Ms::Segment* parent);
+    static std::shared_ptr<Ms::Hairpin> makeHairpin(Ms::Segment* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

@@ -1080,7 +1080,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for hairpin identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Hairpin* hp = new Hairpin(score->dummy()->segment());
+                        Hairpin* hp = Factory::createHairpin(score->dummy()->segment());
                         if (wdgo->decresc) {
                             hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
                         } else {

@@ -3168,7 +3168,7 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
     QStringRef niente = _e.attributes().value("niente");
     const auto& spdesc = _pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == "crescendo" || type == "diminuendo") {
-        auto h = spdesc._isStopped ? toHairpin(spdesc._sp) : new Hairpin(_score->dummy()->segment());
+        auto h = spdesc._isStopped ? toHairpin(spdesc._sp) : Factory::createHairpin(_score->dummy()->segment());
         h->setHairpinType(type == "crescendo"
                           ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
         if (niente == "yes") {
@@ -3176,7 +3176,7 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
         }
         starts.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
     } else if (type == "stop") {
-        auto h = spdesc._isStarted ? toHairpin(spdesc._sp) : new Hairpin(_score->dummy()->segment());
+        auto h = spdesc._isStarted ? toHairpin(spdesc._sp) : Factory::createHairpin(_score->dummy()->segment());
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
         }
