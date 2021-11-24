@@ -56,6 +56,8 @@ private:
         InspectorSectionModelRole = Qt::UserRole + 1
     };
 
+    void onNotationChanged();
+
     void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
 
     void buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet);
@@ -72,12 +74,9 @@ private:
 
     AbstractInspectorModel* modelBySectionType(InspectorSectionType sectionType) const;
 
-    void subscribeOnSelectionChanges();
-
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
-    notation::INotationPtr m_notation;
 };
 }
 
