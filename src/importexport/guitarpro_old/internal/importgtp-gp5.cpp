@@ -878,7 +878,7 @@ bool GuitarPro5::read(QFile* fp)
                         if (br) {
                             break;
                         }
-                        Glissando* s = new Glissando(n);
+                        Glissando* s = Factory::createGlissando(n);
                         s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
@@ -1093,7 +1093,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
                 }
             }
             if (!skip) {
-                Glissando* s = new Glissando(start);
+                Glissando* s = Factory::createGlissando(start);
                 s->setAnchor(Spanner::Anchor::NOTE);
                 s->setStartElement(start);
                 s->setTick(start->chord()->segment()->tick());
