@@ -75,14 +75,14 @@ Rectangle {
 
             FlatButton {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Print"
-                onClicked: profModel.print()
+                text: "Clear"
+                onClicked: profModel.clear()
             }
 
             FlatButton {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Clear"
-                onClicked: profModel.clear()
+                text: "Print"
+                onClicked: profModel.print()
             }
         }
     }
