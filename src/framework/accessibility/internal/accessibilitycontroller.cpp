@@ -41,6 +41,7 @@
 using namespace mu::accessibility;
 
 AccessibleObject* s_rootObject = nullptr;
+std::shared_ptr<IQAccessibleInterfaceRegister> accessibleInterfaceRegister = nullptr;
 
 AccessibilityController::~AccessibilityController()
 {
@@ -54,12 +55,11 @@ QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
 
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
-    auto accessibleInterfaceRegister = mu::modularity::ioc()->resolve<IAccessibleInterfaceRegister>("accessibility");
     if (!accessibleInterfaceRegister) {
-        return nullptr;
+        accessibleInterfaceRegister = mu::modularity::ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
 
-    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname.toStdString());
+    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
     if (interfaceGetter) {
         return interfaceGetter(object);
     }

@@ -30,7 +30,7 @@
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
-#include "accessibility/iaccessibleinterfaceregister.h"
+#include "accessibility/iqaccessibleinterfaceregister.h"
 
 #include "internal/paletteconfiguration.h"
 #include "internal/paletteuiactions.h"
@@ -112,7 +112,7 @@ void PaletteModule::resolveImports()
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::TimeDialog>("TimeSignaturesDialog")));
     }
 
-    auto accr = ioc()->resolve<IAccessibleInterfaceRegister>(moduleName());
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
     if (accr) {
         accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
         accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
