@@ -83,7 +83,7 @@ class Chord final : public ChordRest
     QVector<Chord*> _graceNotes;
     int _graceIndex;                     ///< if this is a grace note, index in parent list
 
-    Direction _stemDirection;
+    DirectionV _stemDirection;
     NoteType _noteType;                  ///< mark grace notes: acciaccatura and appoggiatura
     bool _noStem;
     PlayEventType _playEventType;        ///< play events were modified by user
@@ -152,8 +152,8 @@ public:
     EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;
-    void setStemDirection(Direction d, Direction beamDir = Direction::AUTO);
-    Direction stemDirection() const { return _stemDirection; }
+    void setStemDirection(DirectionV d, DirectionV beamDir = DirectionV::AUTO);
+    DirectionV stemDirection() const { return _stemDirection; }
 
     void setIsUiItem(bool val) { _isUiItem = val; }
 

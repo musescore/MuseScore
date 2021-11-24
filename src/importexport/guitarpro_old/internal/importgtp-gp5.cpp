@@ -382,9 +382,9 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             applyBeatEffects(chord, beatEffects % 100);
         } while (beatEffects /= 100);
         if (rr == ARPEGGIO_DOWN) {
-            chord->setStemDirection(Direction::DOWN);
+            chord->setStemDirection(DirectionV::DOWN);
         } else if (rr == ARPEGGIO_UP) {
-            chord->setStemDirection(Direction::UP);
+            chord->setStemDirection(DirectionV::UP);
         }
     }
     int r = readChar();

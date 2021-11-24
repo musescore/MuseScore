@@ -64,8 +64,8 @@ static const ElementStyle beamStyle {
 //---------------------------------------------------------
 //   BeamFragment
 //    position of primary beam
-//    idx 0 - Direction::AUTO or Direction::DOWN
-//        1 - Direction::UP
+//    idx 0 - DirectionV::AUTO or DirectionV::DOWN
+//        1 - DirectionV::UP
 //---------------------------------------------------------
 
 struct BeamFragment {
@@ -297,8 +297,8 @@ void Beam::layout1()
         return;
     }
     if (staff()->isDrumStaff(Fraction(0, 1))) {
-        if (_direction != Direction::AUTO) {
-            _up = _direction == Direction::UP;
+        if (_direction != DirectionV::AUTO) {
+            _up = _direction == DirectionV::UP;
         } else {
             for (ChordRest* cr :qAsConst(_elements)) {
                 if (cr->isChord()) {
@@ -346,8 +346,8 @@ void Beam::layout1()
     //
     // determine beam stem direction
     //
-    if (_direction != Direction::AUTO) {
-        _up = _direction == Direction::UP;
+    if (_direction != DirectionV::AUTO) {
+        _up = _direction == DirectionV::UP;
     } else if (_maxMove > 0) {
         _up = true;
     } else if (_minMove < 0) {
@@ -428,8 +428,8 @@ void Beam::layoutGraceNotes()
         // direction determined only by tab direction
         _up = !staff()->staffType(Fraction(0, 1))->stemsDown();
     } else {
-        if (_direction != Direction::AUTO) {
-            _up = _direction == Direction::UP;
+        if (_direction != DirectionV::AUTO) {
+            _up = _direction == DirectionV::UP;
         } else {
             ChordRest* cr = _elements[0];
             Measure* m = cr->measure();
@@ -1032,7 +1032,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     add8thSpaceSlant(isStartDictator ? startAnchor : endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
-    int fragmentIndex = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     fragments[frag]->py1[fragmentIndex] = startAnchor.y();
     fragments[frag]->py2[fragmentIndex] = endAnchor.y();
     _slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
@@ -1075,7 +1075,7 @@ void Beam::write(XmlWriter& xml) const
     writeProperty(xml, Pid::GROW_LEFT);
     writeProperty(xml, Pid::GROW_RIGHT);
 
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[idx]) {
         qreal _spatium = spatium();
         for (BeamFragment* f : fragments) {
@@ -1126,7 +1126,7 @@ void Beam::read(XmlReader& e)
                 fragments.append(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
-            int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
             _userModified[idx] = true;
             f->py1[idx] = e.readDouble() * _spatium;
         } else if (tag == "y2") {
@@ -1134,12 +1134,12 @@ void Beam::read(XmlReader& e)
                 fragments.append(new BeamFragment);
             }
             BeamFragment* f = fragments.back();
-            int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
             _userModified[idx] = true;
             f->py2[idx] = e.readDouble() * _spatium;
         } else if (tag == "Fragment") {
             BeamFragment* f = new BeamFragment;
-            int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+            int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
             _userModified[idx] = true;
             qreal _spatium1 = spatium();
 
@@ -1181,7 +1181,7 @@ public:
 
 void Beam::editDrag(EditData& ed)
 {
-    int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
     BeamFragment* f = fragments[bed->editFragment];
@@ -1213,7 +1213,7 @@ void Beam::editDrag(EditData& ed)
 
 std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
     BeamFragment* f = fragments[bed->editFragment];
 
@@ -1260,11 +1260,11 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void Beam::setBeamDirection(Direction d)
+void Beam::setBeamDirection(DirectionV d)
 {
     _direction = d;
-    if (d != Direction::AUTO) {
-        _up = d == Direction::UP;
+    if (d != DirectionV::AUTO) {
+        _up = d == DirectionV::UP;
         if (!_elements.empty()) {
             Chord* c = toChord(_elements.first());
             if (c) {
@@ -1304,7 +1304,7 @@ void Beam::reset()
         undoChangeProperty(Pid::BEAM_POS, PropertyValue::fromValue(beamPos()));
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
-    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     resetProperty(Pid::BEAM_NO_SLOPE);
     setGenerated(true);
 }
@@ -1387,7 +1387,7 @@ PairF Beam::beamPos() const
         return PairF(0.0, 0.0);
     }
     BeamFragment* f = fragments.back();
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal _spatium = spatium();
     return PairF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
@@ -1402,7 +1402,7 @@ void Beam::setBeamPos(const PairF& bp)
         fragments.append(new BeamFragment);
     }
     BeamFragment* f = fragments.back();
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     _userModified[idx] = true;
     setGenerated(false);
     qreal _spatium = spatium();
@@ -1416,7 +1416,7 @@ void Beam::setBeamPos(const PairF& bp)
 
 bool Beam::userModified() const
 {
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     return _userModified[idx];
 }
 
@@ -1426,7 +1426,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
 {
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     _userModified[idx] = val;
 }
 
@@ -1437,7 +1437,7 @@ void Beam::setUserModified(bool val)
 PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(beamDirection());
+    case Pid::STEM_DIRECTION: return beamDirection();
     case Pid::DISTRIBUTE:     return distribute();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
@@ -1457,7 +1457,7 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::STEM_DIRECTION:
-        setBeamDirection(v.value<Direction>());
+        setBeamDirection(v.value<DirectionV>());
         break;
     case Pid::DISTRIBUTE:
         setDistribute(v.toBool());
@@ -1495,7 +1495,7 @@ PropertyValue Beam::propertyDefault(Pid id) const
 {
     switch (id) {
 //            case Pid::SUB_STYLE:      return int(Tid::BEAM);
-    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(Direction::AUTO);
+    case Pid::STEM_DIRECTION: return DirectionV::AUTO;
     case Pid::DISTRIBUTE:     return false;
     case Pid::GROW_LEFT:      return 1.0;
     case Pid::GROW_RIGHT:     return 1.0;
@@ -1613,7 +1613,7 @@ ActionIconType Beam::actionIconTypeForBeamMode(Mode mode)
 
 RectF Beam::drag(EditData& ed)
 {
-    int idx  = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx  = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     qreal dy = ed.pos.y() - ed.lastPos.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this));
     BeamFragment* f = fragments[bed->editFragment];
@@ -1656,7 +1656,7 @@ void Beam::initBeamEditData(EditData& ed)
 
     PointF pt(ed.normalizedStartMove - pagePos());
     qreal ydiff = 100000000.0;
-    int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
+    int idx = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     int i = 0;
     for (BeamFragment* f : qAsConst(fragments)) {
         qreal d = fabs(f->py1[idx] - pt.y());

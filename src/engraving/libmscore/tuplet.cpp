@@ -67,7 +67,7 @@ static const ElementStyle tupletStyle {
 Tuplet::Tuplet(Measure* parent)
     : DurationElement(ElementType::TUPLET, parent)
 {
-    _direction    = Direction::AUTO;
+    _direction    = DirectionV::AUTO;
     _numberType   = TupletNumberType::SHOW_NUMBER;
     _bracketType  = TupletBracketType::AUTO_BRACKET;
     _ratio        = Fraction(1, 1);
@@ -226,13 +226,13 @@ void Tuplet::layout()
     //
     // find out main direction
     //
-    if (_direction == Direction::AUTO) {
+    if (_direction == DirectionV::AUTO) {
         int up = 1;
         for (const DurationElement* e : _elements) {
             if (e->isChord()) {
                 const Chord* c = toChord(e);
-                if (c->stemDirection() != Direction::AUTO) {
-                    up += c->stemDirection() == Direction::UP ? 1000 : -1000;
+                if (c->stemDirection() != DirectionV::AUTO) {
+                    up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
                 } else {
                     up += c->up() ? 1 : -1;
                 }
@@ -242,7 +242,7 @@ void Tuplet::layout()
         }
         _isUp = up > 0;
     } else {
-        _isUp = _direction == Direction::UP;
+        _isUp = _direction == DirectionV::UP;
     }
 
     //
@@ -1114,7 +1114,7 @@ PropertyValue Tuplet::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return PropertyValue::fromValue<Direction>(_direction);
+        return PropertyValue::fromValue<DirectionV>(_direction);
     case Pid::NUMBER_TYPE:
         return int(_numberType);
     case Pid::BRACKET_TYPE:
@@ -1149,7 +1149,7 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        setDirection(v.value<Direction>());
+        setDirection(v.value<DirectionV>());
         break;
     case Pid::NUMBER_TYPE:
         setNumberType(TupletNumberType(v.toInt()));

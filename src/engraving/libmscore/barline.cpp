@@ -1318,10 +1318,10 @@ void BarLine::layout()
         e->layout();
         if (e->isArticulation()) {
             Articulation* a  = toArticulation(e);
-            Direction dir    = a->direction();
+            DirectionV dir    = a->direction();
             qreal distance   = 0.5 * spatium();
             qreal x          = width() * .5;
-            if (dir == Direction::DOWN) {
+            if (dir == DirectionV::DOWN) {
                 qreal botY = y2 + distance;
                 a->setPos(PointF(x, botY));
             } else {

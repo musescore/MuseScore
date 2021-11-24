@@ -354,7 +354,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     }
 
     Ms::Beam::Mode bm  = (beamList.at(0) == Bww::BeamType::BM_BEGIN) ? Ms::Beam::Mode::BEGIN : Ms::Beam::Mode::AUTO;
-    Ms::Direction sd = Ms::Direction::AUTO;
+    Ms::DirectionV sd = Ms::DirectionV::AUTO;
 
     // create chord
     Ms::Chord* cr = Factory::createChord(score->dummy()->segment());
@@ -364,13 +364,13 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     if (grace) {
         cr->setNoteType(Ms::NoteType::GRACE32);
         cr->setDurationType(Ms::TDuration::DurationType::V_32ND);
-        sd = Ms::Direction::UP;
+        sd = Ms::DirectionV::UP;
     } else {
         if (durationType.type() == Ms::TDuration::DurationType::V_INVALID) {
             durationType.setType(Ms::TDuration::DurationType::V_QUARTER);
         }
         cr->setDurationType(durationType);
-        sd = Ms::Direction::DOWN;
+        sd = Ms::DirectionV::DOWN;
     }
     cr->setTicks(durationType.fraction());
     cr->setDots(dots);

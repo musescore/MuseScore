@@ -150,7 +150,7 @@ class SlurTie : public Spanner
 protected:
     bool _up;                 // actual direction
 
-    Direction _slurDirection;
+    DirectionV _slurDirection;
     void fixupSegments(unsigned nsegs);
 
 public:
@@ -162,9 +162,9 @@ public:
 
     virtual void reset() override;
 
-    Direction slurDirection() const { return _slurDirection; }
-    void setSlurDirection(Direction d) { _slurDirection = d; }
-    void undoSetSlurDirection(Direction d);
+    DirectionV slurDirection() const { return _slurDirection; }
+    void setSlurDirection(DirectionV d) { _slurDirection = d; }
+    void undoSetSlurDirection(DirectionV d);
 
     virtual void layout2(const mu::PointF, int, struct UP&) {}
     virtual bool contains(const mu::PointF&) const { return false; }    // not selectable

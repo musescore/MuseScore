@@ -323,15 +323,15 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         *this << "</" << ename << ">\n";
     }
     break;
-    case P_TYPE::DIRECTION: {
-        switch (data.value<Direction>()) {
-        case Direction::AUTO:
+    case P_TYPE::DIRECTION_V: {
+        switch (data.value<DirectionV>()) {
+        case DirectionV::AUTO:
             *this << "auto";
             break;
-        case Direction::UP:
+        case DirectionV::UP:
             *this << "up";
             break;
-        case Direction::DOWN:
+        case DirectionV::DOWN:
             *this << "down";
             break;
         }
@@ -470,8 +470,6 @@ void XmlWriter::tag(const QString& name, QVariant data)
         if (strcmp(type, "Ms::Fraction") == 0) {
             const Fraction& f = data.value<Fraction>();
             *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
-        } else if (strcmp(type, "Ms::Direction") == 0) {
-            *this << QString("<%1>%2</%1>\n").arg(name, toString(data.value<Direction>()));
         } else {
             qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);
         }

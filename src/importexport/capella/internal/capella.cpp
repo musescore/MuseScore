@@ -678,10 +678,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             chord->setTrack(track);
             switch (o->stemDir) {
             case ChordObj::StemDir::DOWN:
-                chord->setStemDirection(Direction::DOWN);
+                chord->setStemDirection(DirectionV::DOWN);
                 break;
             case ChordObj::StemDir::UP:
-                chord->setStemDirection(Direction::UP);
+                chord->setStemDirection(DirectionV::UP);
                 break;
             case ChordObj::StemDir::NONE:
                 chord->setNoStem(true);

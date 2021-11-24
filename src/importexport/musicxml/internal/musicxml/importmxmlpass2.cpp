@@ -1809,7 +1809,7 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direction sd, Beam*& beam, bool hasBeamingInfo)
+static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo)
 {
     if (!cr) {
         return;
@@ -4372,7 +4372,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
 // the MusicXML values for each note are simply copied to the defaults
 
 static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& partId, const QString& instrumentId,
-                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const Direction stemDir, const NoteHead::Group headGroup)
+                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const DirectionV stemDir, const NoteHead::Group headGroup)
 {
     // determine staff line based on display-step / -octave and clef type
     const auto clef = c->staff()->clef(noteStartTime);
@@ -4393,12 +4393,12 @@ static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& part
 
     // the drum palette cannot handle stem direction AUTO,
     // overrule if necessary
-    Direction overruledStemDir = stemDir;
-    if (stemDir == Direction::AUTO) {
+    DirectionV overruledStemDir = stemDir;
+    if (stemDir == DirectionV::AUTO) {
         if (line > 4) {
-            overruledStemDir = Direction::DOWN;
+            overruledStemDir = DirectionV::DOWN;
         } else {
-            overruledStemDir = Direction::UP;
+            overruledStemDir = DirectionV::UP;
         }
     }
     // this should be done in pass 1, would make _pass1 const here
@@ -4442,7 +4442,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     int staff = 1;
     QString type;
     QString voice;
-    Direction stemDir = Direction::AUTO;
+    DirectionV stemDir = DirectionV::AUTO;
     bool noStem = false;
     NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
     QColor noteColor = QColor::Invalid;
@@ -5525,9 +5525,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             newSlur->setStartElement(cr);
             const auto pl = notation.attribute("placement");
             if (pl == "above") {
-                newSlur->setSlurDirection(Direction::UP);
+                newSlur->setSlurDirection(DirectionV::UP);
             } else if (pl == "below") {
-                newSlur->setSlurDirection(Direction::DOWN);
+                newSlur->setSlurDirection(DirectionV::DOWN);
             }
             newSlur->setTrack(track);
             newSlur->setTrack2(track);
@@ -5971,9 +5971,9 @@ static void addTie(const Notation& notation, Score* score, Note* note, const int
         tie->setTrack(track);
 
         if (orientation == "over") {
-            tie->setSlurDirection(Direction::UP);
+            tie->setSlurDirection(DirectionV::UP);
         } else if (orientation == "under") {
-            tie->setSlurDirection(Direction::DOWN);
+            tie->setSlurDirection(DirectionV::DOWN);
         } else if (orientation == "auto") {
             // ignore
         } else if (orientation == "") {
@@ -6340,18 +6340,18 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
  Parse the /score-partwise/part/measure/note/stem node.
  */
 
-void MusicXMLParserPass2::stem(Direction& sd, bool& nost)
+void MusicXMLParserPass2::stem(DirectionV& sd, bool& nost)
 {
     // defaults
-    sd = Direction::AUTO;
+    sd = DirectionV::AUTO;
     nost = false;
 
     QString s = _e.readElementText();
 
     if (s == "up") {
-        sd = Direction::UP;
+        sd = DirectionV::UP;
     } else if (s == "down") {
-        sd = Direction::DOWN;
+        sd = DirectionV::DOWN;
     } else if (s == "none") {
         nost = true;
     } else if (s == "double") {

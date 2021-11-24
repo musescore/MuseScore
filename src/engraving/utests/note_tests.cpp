@@ -89,35 +89,35 @@ TEST_F(NoteTests, note)
     delete n;
 
     // mirror
-    note->setUserMirror(MScore::DirectionH::LEFT);
+    note->setUserMirror(DirectionH::LEFT);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::LEFT);
+    EXPECT_EQ(n->userMirror(), DirectionH::LEFT);
     delete n;
 
-    note->setUserMirror(MScore::DirectionH::RIGHT);
+    note->setUserMirror(DirectionH::RIGHT);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::RIGHT);
+    EXPECT_EQ(n->userMirror(), DirectionH::RIGHT);
     delete n;
 
-    note->setUserMirror(MScore::DirectionH::AUTO);
+    note->setUserMirror(DirectionH::AUTO);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::AUTO);
+    EXPECT_EQ(n->userMirror(), DirectionH::AUTO);
     delete n;
 
     // dot position
-    note->setUserDotPosition(Direction::UP);
+    note->setUserDotPosition(DirectionV::UP);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::UP));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::UP));
     delete n;
 
-    note->setUserDotPosition(Direction::DOWN);
+    note->setUserDotPosition(DirectionV::DOWN);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::DOWN));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::DOWN));
     delete n;
 
-    note->setUserDotPosition(Direction::AUTO);
+    note->setUserDotPosition(DirectionV::AUTO);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::AUTO));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::AUTO));
     delete n;
     // headGroup
     for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
@@ -210,35 +210,35 @@ TEST_F(NoteTests, note)
     delete n;
 
     // mirror
-    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::LEFT));
+    note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::LEFT));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::LEFT);
+    EXPECT_EQ(n->userMirror(), DirectionH::LEFT);
     delete n;
 
-    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::RIGHT));
+    note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::RIGHT));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::RIGHT);
+    EXPECT_EQ(n->userMirror(), DirectionH::RIGHT);
     delete n;
 
-    note->setProperty(Pid::MIRROR_HEAD, int(MScore::DirectionH::AUTO));
+    note->setProperty(Pid::MIRROR_HEAD, int(DirectionH::AUTO));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->userMirror(), MScore::DirectionH::AUTO);
+    EXPECT_EQ(n->userMirror(), DirectionH::AUTO);
     delete n;
 
     // dot position
-    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::UP)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::UP)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::UP));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::UP));
     delete n;
 
-    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::DOWN)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::DOWN)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::DOWN));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::DOWN));
     delete n;
 
-    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(Direction(Direction::AUTO)));
+    note->setProperty(Pid::DOT_POSITION, PropertyValue::fromValue(DirectionV(DirectionV::AUTO)));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(int(n->userDotPosition()), int(Direction::AUTO));
+    EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::AUTO));
     delete n;
 
     // headGroup

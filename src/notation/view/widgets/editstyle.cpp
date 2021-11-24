@@ -27,6 +27,8 @@
 #include <QQuickWidget>
 #include <QSignalMapper>
 
+#include "translation.h"
+
 #include "alignSelect.h"
 #include "colorlabel.h"
 #include "fontStyleSelect.h"
@@ -43,8 +45,8 @@
 #include "ui/view/widgetutils.h"
 
 #include "log.h"
-#include "translation.h"
 
+using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::ui;
@@ -60,12 +62,23 @@ static const char* lineStyles[] = {
     QT_TRANSLATE_NOOP("notation", "Dash-dot-dotted")
 };
 
+static QString toUserString(DirectionV val)
+{
+    switch (val) {
+    case DirectionV::AUTO: return qtrc("Direction", "Auto");
+    case DirectionV::UP:   return qtrc("Direction", "Up");
+    case DirectionV::DOWN: return qtrc("Direction", "Down");
+    }
+
+    return QString();
+}
+
 static void fillDirectionComboBox(QComboBox* comboBox)
 {
     comboBox->clear();
-    comboBox->addItem(Ms::toUserString(Ms::Direction::AUTO), QVariant::fromValue<Ms::Direction>(Ms::Direction::AUTO));
-    comboBox->addItem(Ms::toUserString(Ms::Direction::UP),   QVariant::fromValue<Ms::Direction>(Ms::Direction::UP));
-    comboBox->addItem(Ms::toUserString(Ms::Direction::DOWN), QVariant::fromValue<Ms::Direction>(Ms::Direction::DOWN));
+    comboBox->addItem(toUserString(DirectionV::AUTO), static_cast<int>(DirectionV::AUTO));
+    comboBox->addItem(toUserString(DirectionV::UP),   static_cast<int>(DirectionV::UP));
+    comboBox->addItem(toUserString(DirectionV::DOWN), static_cast<int>(DirectionV::DOWN));
 }
 
 //---------------------------------------------------------
@@ -632,7 +645,7 @@ EditStyle::EditStyle(QWidget* parent)
     for (const StyleWidget& sw : styleWidgets) {
         P_TYPE type = Ms::MStyle::valueType(sw.idx);
 
-        if (P_TYPE::DIRECTION == type) {
+        if (P_TYPE::DIRECTION_V == type) {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             fillDirectionComboBox(cb);
         }
@@ -1432,10 +1445,10 @@ PropertyValue EditStyle::getValue(StyleId idx)
             qFatal("unhandled mu::PointF");
         }
     } break;
-    case P_TYPE::DIRECTION: {
+    case P_TYPE::DIRECTION_V: {
         QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
         if (cb) {
-            return Ms::Direction(cb->currentIndex());
+            return Ms::DirectionV(cb->currentIndex());
         } else {
             qFatal("unhandled Direction");
         }
@@ -1543,10 +1556,10 @@ void EditStyle::setValues()
                 unhandledType(sw);
             }
         } break;
-        case P_TYPE::DIRECTION: {
+        case P_TYPE::DIRECTION_V: {
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             if (cb) {
-                cb->setCurrentIndex(int(val.value<Ms::Direction>()));
+                cb->setCurrentIndex(int(val.value<Ms::DirectionV>()));
             } else {
                 unhandledType(sw);
             }

@@ -126,7 +126,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
     } else if (tag == "name") {
         _drum[pitch].name = e.readElementText();
     } else if (tag == "stem") {
-        _drum[pitch].stemDirection = Direction(e.readInt());
+        _drum[pitch].stemDirection = DirectionV(e.readInt());
     } else if (tag == "shortcut") {
         bool isNum;
         QString val(e.readElementText());
@@ -281,64 +281,64 @@ void initDrumset()
         smDrumset->drum(i).line     = 0;
         smDrumset->drum(i).shortcut = 0;
         smDrumset->drum(i).voice    = 0;
-        smDrumset->drum(i).stemDirection = Direction::UP;
+        smDrumset->drum(i).stemDirection = DirectionV::UP;
     }
     smDrumset->drum(35) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Acoustic Bass Drum"), NoteHead::Group::HEAD_NORMAL,   7, Direction::DOWN, 1);
+                                                           "Acoustic Bass Drum"), NoteHead::Group::HEAD_NORMAL,   7, DirectionV::DOWN, 1);
     smDrumset->drum(36) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Bass Drum 1"),        NoteHead::Group::HEAD_NORMAL,   7, Direction::DOWN, 1,
+                                                           "Bass Drum 1"),        NoteHead::Group::HEAD_NORMAL,   7, DirectionV::DOWN, 1,
                                          Qt::Key_B);
     smDrumset->drum(37) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Side Stick"),         NoteHead::Group::HEAD_CROSS,    3, Direction::UP);
+                                                           "Side Stick"),         NoteHead::Group::HEAD_CROSS,    3, DirectionV::UP);
     smDrumset->drum(38) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Acoustic Snare"),     NoteHead::Group::HEAD_NORMAL,   3, Direction::UP, 0,
+                                                           "Acoustic Snare"),     NoteHead::Group::HEAD_NORMAL,   3, DirectionV::UP, 0,
                                          Qt::Key_A);
     smDrumset->drum(40) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Electric Snare"),     NoteHead::Group::HEAD_NORMAL,   3, Direction::UP);
+                                                           "Electric Snare"),     NoteHead::Group::HEAD_NORMAL,   3, DirectionV::UP);
     smDrumset->drum(41) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Floor Tom"),      NoteHead::Group::HEAD_NORMAL,   5, Direction::UP);
+                                                           "Low Floor Tom"),      NoteHead::Group::HEAD_NORMAL,   5, DirectionV::UP);
     smDrumset->drum(42) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Closed Hi-Hat"),      NoteHead::Group::HEAD_CROSS,   -1, Direction::UP, 0,
+                                                           "Closed Hi-Hat"),      NoteHead::Group::HEAD_CROSS,   -1, DirectionV::UP, 0,
                                          Qt::Key_G);
     smDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "High Floor Tom"),     NoteHead::Group::HEAD_NORMAL,   5, Direction::DOWN, 1);
+                                                           "High Floor Tom"),     NoteHead::Group::HEAD_NORMAL,   5, DirectionV::DOWN, 1);
     smDrumset->drum(44) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Pedal Hi-Hat"),       NoteHead::Group::HEAD_CROSS,    9, Direction::DOWN, 1,
+                                                           "Pedal Hi-Hat"),       NoteHead::Group::HEAD_CROSS,    9, DirectionV::DOWN, 1,
                                          Qt::Key_F);
     smDrumset->drum(45) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Tom"),            NoteHead::Group::HEAD_NORMAL,   2, Direction::UP);
+                                                           "Low Tom"),            NoteHead::Group::HEAD_NORMAL,   2, DirectionV::UP);
     smDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Open Hi-Hat"),        NoteHead::Group::HEAD_CROSS,    1, Direction::UP);
+                                                           "Open Hi-Hat"),        NoteHead::Group::HEAD_CROSS,    1, DirectionV::UP);
     smDrumset->drum(47) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low-Mid Tom"),        NoteHead::Group::HEAD_NORMAL,   1, Direction::UP);
+                                                           "Low-Mid Tom"),        NoteHead::Group::HEAD_NORMAL,   1, DirectionV::UP);
     smDrumset->drum(48) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Hi-Mid Tom"),         NoteHead::Group::HEAD_NORMAL,   0, Direction::UP);
+                                                           "Hi-Mid Tom"),         NoteHead::Group::HEAD_NORMAL,   0, DirectionV::UP);
     smDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Crash Cymbal 1"),     NoteHead::Group::HEAD_CROSS,   -2, Direction::UP, 0,
+                                                           "Crash Cymbal 1"),     NoteHead::Group::HEAD_CROSS,   -2, DirectionV::UP, 0,
                                          Qt::Key_C);
     smDrumset->drum(50) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "High Tom"),           NoteHead::Group::HEAD_NORMAL,   0, Direction::UP, 0,
+                                                           "High Tom"),           NoteHead::Group::HEAD_NORMAL,   0, DirectionV::UP, 0,
                                          Qt::Key_E);
     smDrumset->drum(51) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Cymbal 1"),      NoteHead::Group::HEAD_CROSS,    0, Direction::UP, 0,
+                                                           "Ride Cymbal 1"),      NoteHead::Group::HEAD_CROSS,    0, DirectionV::UP, 0,
                                          Qt::Key_D);
     smDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Chinese Cymbal"),     NoteHead::Group::HEAD_CROSS,   -3, Direction::UP);
+                                                           "Chinese Cymbal"),     NoteHead::Group::HEAD_CROSS,   -3, DirectionV::UP);
     smDrumset->drum(53) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Bell"),          NoteHead::Group::HEAD_DIAMOND,  0, Direction::UP);
+                                                           "Ride Bell"),          NoteHead::Group::HEAD_DIAMOND,  0, DirectionV::UP);
     smDrumset->drum(54) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Tambourine"),         NoteHead::Group::HEAD_DIAMOND,  2, Direction::UP);
+                                                           "Tambourine"),         NoteHead::Group::HEAD_DIAMOND,  2, DirectionV::UP);
     smDrumset->drum(55) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Splash Cymbal"),      NoteHead::Group::HEAD_CROSS,   -3, Direction::UP);
+                                                           "Splash Cymbal"),      NoteHead::Group::HEAD_CROSS,   -3, DirectionV::UP);
     smDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Cowbell"),            NoteHead::Group::HEAD_TRIANGLE_DOWN, 1, Direction::UP);
+                                                           "Cowbell"),            NoteHead::Group::HEAD_TRIANGLE_DOWN, 1, DirectionV::UP);
     smDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Crash Cymbal 2"),     NoteHead::Group::HEAD_CROSS,   -3, Direction::UP);
+                                                           "Crash Cymbal 2"),     NoteHead::Group::HEAD_CROSS,   -3, DirectionV::UP);
     smDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Ride Cymbal 2"),      NoteHead::Group::HEAD_CROSS,    2, Direction::UP);
+                                                           "Ride Cymbal 2"),      NoteHead::Group::HEAD_CROSS,    2, DirectionV::UP);
     smDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Open Hi Conga"),      NoteHead::Group::HEAD_CROSS,    4, Direction::UP);
+                                                           "Open Hi Conga"),      NoteHead::Group::HEAD_CROSS,    4, DirectionV::UP);
     smDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset",
-                                                           "Low Conga"),          NoteHead::Group::HEAD_CROSS,    6, Direction::UP);
+                                                           "Low Conga"),          NoteHead::Group::HEAD_CROSS,    6, DirectionV::UP);
 }
 }

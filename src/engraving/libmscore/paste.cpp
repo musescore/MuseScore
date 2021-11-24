@@ -1056,7 +1056,7 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
         segment = m->findSegment(SegmentType::ChordRest, m->tick());
     }
     segment = target->score()->setNoteRest(segment, target->track(),
-                                           with->noteVal(), duration, Direction::AUTO, false, {}, false, &target->score()->inputState());
+                                           with->noteVal(), duration, DirectionV::AUTO, false, {}, false, &target->score()->inputState());
     return toChord(segment->nextChordRest(target->track()))->upNote();
 }
 

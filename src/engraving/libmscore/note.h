@@ -274,8 +274,8 @@ private:
     mutable bool _mark  { false };        // for use in sequencer
     bool _fixed         { false };        // for slash notation
 
-    MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };        ///< user override of mirror
-    Direction _userDotPosition     { Direction::AUTO };                 ///< user override of dot position
+    DirectionH _userMirror { DirectionH::AUTO };        ///< user override of mirror
+    DirectionV _userDotPosition { DirectionV::AUTO };                 ///< user override of dot position
 
     NoteHead::Scheme _headScheme { NoteHead::Scheme::HEAD_AUTO };
     NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
@@ -483,11 +483,11 @@ public:
     int subchannel() const { return _subchannel; }
     void setSubchannel(int val) { _subchannel = val; }
 
-    MScore::DirectionH userMirror() const { return _userMirror; }
-    void setUserMirror(MScore::DirectionH d) { _userMirror = d; }
+    DirectionH userMirror() const { return _userMirror; }
+    void setUserMirror(DirectionH d) { _userMirror = d; }
 
-    Direction userDotPosition() const { return _userDotPosition; }
-    void setUserDotPosition(Direction d) { _userDotPosition = d; }
+    DirectionV userDotPosition() const { return _userDotPosition; }
+    void setUserDotPosition(DirectionV d) { _userDotPosition = d; }
     bool dotIsUp() const;                 // actual dot position
 
     void reset() override;
@@ -544,7 +544,7 @@ public:
     bool mark() const { return _mark; }
     void setMark(bool v) const { _mark = v; }
     void setScore(Score* s) override;
-    void setDotY(Direction);
+    void setDotY(DirectionV);
 
     void addParentheses();
 
