@@ -242,7 +242,7 @@ DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
             continue;
         }
 
-        if (panel->isOpen()) {
+        if (panel->isOpen() && !panel->floating()) {
             return panel;
         }
 
