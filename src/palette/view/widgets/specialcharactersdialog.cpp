@@ -306,7 +306,7 @@ static constexpr UnicodeRange unicodeRanges[] = {
     { 0x10F00, 0x10F2F, QT_TRANSLATE_NOOP("textpalette", "Old Sogdian") },
     { 0x10F30, 0x10F6F, QT_TRANSLATE_NOOP("textpalette", "Sogdian") },
     { 0x10FB0, 0x10FDF, QT_TRANSLATE_NOOP("textpalette", "Chorasmian") },
-    { 0x10FE0, 0x10FFF, QT_TRANSLATE_NOOP("textpalette", "Elymiac") },
+    { 0x10FE0, 0x10FFF, QT_TRANSLATE_NOOP("textpalette", "Elymaic") },
     { 0x11000, 0x1107F, QT_TRANSLATE_NOOP("textpalette", "Brahmi") },
     { 0x11080, 0x110CF, QT_TRANSLATE_NOOP("textpalette", "Kaithi") },
     { 0x110D0, 0x110FF, QT_TRANSLATE_NOOP("textpalette", "Sora Sompeng") },
