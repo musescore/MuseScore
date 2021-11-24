@@ -870,7 +870,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     d->setParent(destCR->segment());
                     undoAddElement(d);
                 } else if (tag == "HairPin") {
-                    Hairpin* h = new Hairpin(this->dummy()->segment());
+                    Hairpin* h = Factory::createHairpin(this->dummy()->segment());
                     h->setTrack(destTrack);
                     h->read(e);
                     h->setTrack(destTrack);

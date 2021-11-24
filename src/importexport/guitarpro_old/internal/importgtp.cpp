@@ -2788,7 +2788,7 @@ void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
 
 void GuitarPro::createCrecDim(int staffIdx, int track, const Fraction& tick, bool crec)
 {
-    hairpins[staffIdx] = new Hairpin(score->dummy()->segment());
+    hairpins[staffIdx] = Factory::createHairpin(score->dummy()->segment());
     if (crec) {
         hairpins[staffIdx]->setHairpinType(HairpinType::CRESC_HAIRPIN);
     } else {

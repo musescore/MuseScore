@@ -935,27 +935,27 @@ PalettePtr PaletteCreator::newLinesPalette()
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
-    auto gabel0 = makeElement<Hairpin>(gpaletteScore);
+    auto gabel0 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel0->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel0->setLen(w);
     sp->appendElement(gabel0, QT_TRANSLATE_NOOP("palette", "Crescendo hairpin"));
 
-    auto gabel1 = makeElement<Hairpin>(gpaletteScore);
+    auto gabel1 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel1->setHairpinType(HairpinType::DECRESC_HAIRPIN);
     gabel1->setLen(w);
     sp->appendElement(gabel1, QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin"));
 
-    auto gabel2 = makeElement<Hairpin>(gpaletteScore);
+    auto gabel2 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel2->setHairpinType(HairpinType::CRESC_LINE);
     gabel2->setLen(w);
     sp->appendElement(gabel2, QT_TRANSLATE_NOOP("palette", "Crescendo line"));
 
-    auto gabel3 = makeElement<Hairpin>(gpaletteScore);
+    auto gabel3 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel3->setHairpinType(HairpinType::DECRESC_LINE);
     gabel3->setLen(w);
     sp->appendElement(gabel3, QT_TRANSLATE_NOOP("palette", "Diminuendo line"));
 
-    auto gabel4 = makeElement<Hairpin>(gpaletteScore);
+    auto gabel4 = Factory::makeHairpin(gpaletteScore->dummy()->segment());
     gabel4->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel4->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel4->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
