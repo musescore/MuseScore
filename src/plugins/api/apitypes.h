@@ -51,6 +51,20 @@ enum class Placement {
 };
 Q_ENUM_NS(Placement);
 
+enum class Direction {
+    AUTO = int(mu::engraving::DirectionV::AUTO),
+    UP   = int(mu::engraving::DirectionV::UP),
+    DOWN = int(mu::engraving::DirectionV::DOWN),
+};
+Q_ENUM_NS(Direction);
+
+enum class DirectionH {
+    AUTO  = int(mu::engraving::DirectionH::AUTO),
+    LEFT  = int(mu::engraving::DirectionH::LEFT),
+    RIGHT = int(mu::engraving::DirectionH::RIGHT),
+};
+Q_ENUM_NS(DirectionH);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -60,5 +74,7 @@ class Mops : public QObject
 
 Q_DECLARE_METATYPE(Ms::PluginAPI::Align);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
+Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
+Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
 
 #endif // MU_PLUGINS_APITYPES_H

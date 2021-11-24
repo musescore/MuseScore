@@ -503,7 +503,7 @@ class Note : public EngravingItem
     Q_PROPERTY(int tpc READ tpc WRITE setTpc)
 //       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
 //       Q_PROPERTY(Ms::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
-//       Q_PROPERTY(Ms::MScore::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
+//       Q_PROPERTY(Ms::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
     /** See PluginAPI::PluginAPI::NoteValueType */
     API_PROPERTY(veloType,                VELO_TYPE)
     API_PROPERTY_T(int, veloOffset,       VELO_OFFSET)

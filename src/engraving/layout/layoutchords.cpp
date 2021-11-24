@@ -570,11 +570,11 @@ qreal LayoutChords::layoutChords2(std::vector<Note*>& notes, bool up)
         chord->rxpos() = 0.0;
 
         // let user mirror property override the default we calculated
-        if (note->userMirror() == MScore::DirectionH::AUTO) {
+        if (note->userMirror() == DirectionH::AUTO) {
             mirror = nmirror;
         } else {
             mirror = note->chord()->up();
-            if (note->userMirror() == MScore::DirectionH::LEFT) {
+            if (note->userMirror() == DirectionH::LEFT) {
                 mirror = !mirror;
             }
         }
@@ -897,7 +897,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
 
         qreal xx = x + note->headBodyWidth() + chord->pos().x();
 
-        Direction dotPosition = note->userDotPosition();
+        DirectionV dotPosition = note->userDotPosition();
         if (chord->dots()) {
             if (chord->up()) {
                 upDotPosX = qMax(upDotPosX, xx);
@@ -905,7 +905,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                 downDotPosX = qMax(downDotPosX, xx);
             }
 
-            if (dotPosition == Direction::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
+            if (dotPosition == DirectionV::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                 // resolve dot conflicts
                 int line = note->line();
                 Note* above = (i < nNotes - 1) ? notes[i + 1] : 0;
@@ -921,14 +921,14 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                 if ((line & 1) == 0) {
                     // line
                     if (intervalAbove == 1 && intervalBelow != 1) {
-                        dotPosition = Direction::DOWN;
+                        dotPosition = DirectionV::DOWN;
                     } else if (intervalBelow == 1 && intervalAbove != 1) {
-                        dotPosition = Direction::UP;
+                        dotPosition = DirectionV::UP;
                     } else if (intervalAbove == 0 && above->chord()->dots()) {
                         // unison
                         if (((above->voice() & 1) == (note->voice() & 1))) {
-                            above->setDotY(Direction::UP);
-                            dotPosition = Direction::DOWN;
+                            above->setDotY(DirectionV::UP);
+                            dotPosition = DirectionV::DOWN;
                         }
                     }
                 } else {
@@ -936,12 +936,12 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
                     if (intervalAbove == 0 && above->chord()->dots()) {
                         // unison
                         if (!(note->voice() & 1)) {
-                            dotPosition = Direction::UP;
+                            dotPosition = DirectionV::UP;
                         } else {
                             if (!(above->voice() & 1)) {
-                                above->setDotY(Direction::UP);
+                                above->setDotY(DirectionV::UP);
                             } else {
-                                dotPosition = Direction::DOWN;
+                                dotPosition = DirectionV::DOWN;
                             }
                         }
                     }

@@ -739,7 +739,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
 //    return segment of last created note/rest
 //---------------------------------------------------------
 
-Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, Direction stemDirection,
+Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction sd, DirectionV stemDirection,
                             bool forceAccidental, const std::set<SymId>& articulationIds, bool rhythmic, InputState* externalInputState)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
@@ -2625,11 +2625,11 @@ void Score::cmdMirrorNoteHead()
             if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
                 e->undoChangeProperty(Pid::GHOST, !note->ghost());
             } else {
-                MScore::DirectionH d = note->userMirror();
-                if (d == MScore::DirectionH::AUTO) {
-                    d = note->chord()->up() ? MScore::DirectionH::RIGHT : MScore::DirectionH::LEFT;
+                DirectionH d = note->userMirror();
+                if (d == DirectionH::AUTO) {
+                    d = note->chord()->up() ? DirectionH::RIGHT : DirectionH::LEFT;
                 } else {
-                    d = d == MScore::DirectionH::LEFT ? MScore::DirectionH::RIGHT : MScore::DirectionH::LEFT;
+                    d = d == DirectionH::LEFT ? DirectionH::RIGHT : DirectionH::LEFT;
                 }
                 undoChangeUserMirror(note, d);
             }
@@ -2755,12 +2755,12 @@ void Score::cmdAddBraces()
 //   cmdMoveRest
 //---------------------------------------------------------
 
-void Score::cmdMoveRest(Rest* rest, Direction dir)
+void Score::cmdMoveRest(Rest* rest, DirectionV dir)
 {
     PointF pos(rest->offset());
-    if (dir == Direction::UP) {
+    if (dir == DirectionV::UP) {
         pos.ry() -= spatium();
-    } else if (dir == Direction::DOWN) {
+    } else if (dir == DirectionV::DOWN) {
         pos.ry() += spatium();
     }
     rest->undoChangeProperty(Pid::OFFSET, pos);
@@ -2770,9 +2770,9 @@ void Score::cmdMoveRest(Rest* rest, Direction dir)
 //   cmdMoveLyrics
 //---------------------------------------------------------
 
-void Score::cmdMoveLyrics(Lyrics* lyrics, Direction dir)
+void Score::cmdMoveLyrics(Lyrics* lyrics, DirectionV dir)
 {
-    int verse = lyrics->no() + (dir == Direction::UP ? -1 : 1);
+    int verse = lyrics->no() + (dir == DirectionV::UP ? -1 : 1);
     if (verse < 0) {
         return;
     }
@@ -3462,7 +3462,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
 //   setChord
 //    return segment of last created chord
 //---------------------------------------------------------
-Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Fraction dur, Direction stemDirection)
+Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Fraction dur, DirectionV stemDirection)
 {
     Q_ASSERT(segment->segmentType() == SegmentType::ChordRest);
 
@@ -3742,11 +3742,11 @@ void Score::cmdPitchUp()
 {
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
-        cmdMoveLyrics(toLyrics(el), Direction::UP);
+        cmdMoveLyrics(toLyrics(el), DirectionV::UP);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
-        cmdMoveRest(toRest(el), Direction::UP);
+        cmdMoveRest(toRest(el), DirectionV::UP);
     } else {
         upDown(true, UpDownMode::CHROMATIC);
     }
@@ -3760,12 +3760,12 @@ void Score::cmdPitchDown()
 {
     EngravingItem* el = selection().element();
     if (el && el->isLyrics()) {
-        cmdMoveLyrics(toLyrics(el), Direction::DOWN);
+        cmdMoveLyrics(toLyrics(el), DirectionV::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
-        cmdMoveRest(toRest(el), Direction::DOWN);
+        cmdMoveRest(toRest(el), DirectionV::DOWN);
     } else {
         upDown(false, UpDownMode::CHROMATIC);
     }

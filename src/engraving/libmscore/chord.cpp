@@ -264,7 +264,7 @@ Chord::Chord(Segment* parent)
     _ledgerLines      = 0;
     _stem             = 0;
     _hook             = 0;
-    _stemDirection    = Direction::AUTO;
+    _stemDirection    = DirectionV::AUTO;
     _arpeggio         = 0;
     _tremolo          = 0;
     _endsGlissando    = false;
@@ -949,9 +949,9 @@ void Chord::computeUp()
         return;
     }
 
-    bool hasCustomStemDirection = _stemDirection != Direction::AUTO;
+    bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
     if (hasCustomStemDirection) {
-        _up = _stemDirection == Direction::UP;
+        _up = _stemDirection == DirectionV::UP;
         return;
     }
 
@@ -968,10 +968,10 @@ void Chord::computeUp()
     }
 
     int staffLineCount = staff()->lines(tick());
-    Direction stemDirection = score()->styleV(Sid::smallStaffStemDirection).value<Direction>();
+    DirectionV stemDirection = score()->styleV(Sid::smallStaffStemDirection).value<DirectionV>();
     int minStaffSizeForAutoStems = score()->styleI(Sid::minStaffSizeForAutoStems);
-    if (staffLineCount < minStaffSizeForAutoStems && stemDirection != Direction::AUTO) {
-        _up = stemDirection == Direction::UP;
+    if (staffLineCount < minStaffSizeForAutoStems && stemDirection != DirectionV::AUTO) {
+        _up = stemDirection == DirectionV::UP;
         return;
     }
 
@@ -2822,7 +2822,7 @@ qreal Chord::dotPosX() const
 //   setStemDirection
 //---------------------------------------------------------
 
-void Chord::setStemDirection(Direction d, Direction beamDir)
+void Chord::setStemDirection(DirectionV d, DirectionV beamDir)
 {
     _stemDirection = d;
     if (beam()) {
@@ -2832,7 +2832,7 @@ void Chord::setStemDirection(Direction d, Direction beamDir)
                 c->_stemDirection = d;
             }
         }
-        if (beamDir == Direction::AUTO) {
+        if (beamDir == DirectionV::AUTO) {
             beam()->setBeamDirection(beamDir);
         }
     }
@@ -2880,7 +2880,7 @@ PropertyValue Chord::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::NO_STEM:        return noStem();
     case Pid::SMALL:          return isSmall();
-    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(stemDirection());
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<DirectionV>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     default:
         return ChordRest::getProperty(propertyId);
@@ -2896,7 +2896,7 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::NO_STEM:        return false;
     case Pid::SMALL:          return false;
-    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<Direction>(Direction::AUTO);
+    case Pid::STEM_DIRECTION: return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::PLAY: return true;
     default:
         return ChordRest::propertyDefault(propertyId);
@@ -2917,7 +2917,7 @@ bool Chord::setProperty(Pid propertyId, const PropertyValue& v)
         setSmall(v.toBool());
         break;
     case Pid::STEM_DIRECTION:
-        setStemDirection(v.value<Direction>());
+        setStemDirection(v.value<DirectionV>());
         break;
     case Pid::PLAY:
         setIsChordPlayable(v.toBool());
@@ -2975,7 +2975,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
 void Chord::reset()
 {
-    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     score()->createPlayEvents(this);
     ChordRest::reset();
 }
@@ -3014,7 +3014,7 @@ void Chord::setSlash(bool flag, bool stemless)
                 const Drumset* ds = part()->instrument(tick())->drumset();
                 int pitch = n->pitch();
                 if (ds && ds->isValid(pitch)) {
-                    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(ds->stemDirection(pitch)));
+                    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(ds->stemDirection(pitch)));
                     n->undoChangeProperty(Pid::HEAD_GROUP, int(ds->noteHead(pitch)));
                 }
             }
@@ -3023,7 +3023,7 @@ void Chord::setSlash(bool flag, bool stemless)
     }
 
     // set stem to auto (mostly important for rhythmic notation on drum staves)
-    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
+    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(DirectionV::AUTO));
 
     // make stemless if asked
     if (stemless) {

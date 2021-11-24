@@ -2944,8 +2944,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD) {
             placement
                 = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
-        } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != Direction::AUTO) {
-            direction = (a->direction() == Direction::DOWN) ? "down" : "up";
+        } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != DirectionV::AUTO) {
+            direction = (a->direction() == DirectionV::DOWN) ? "down" : "up";
         }
         /* For future use if/when implemented font details for articulation
         if (!a->isStyled(Pid::FONT_FACE))

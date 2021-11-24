@@ -59,7 +59,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
         Chord* chord = c.addChord(77, t);
         Fraction tick = chord->rtick();
         chord->setBeamMode(_groups.beamMode(tick.ticks(), t));
-        chord->setStemDirection(Direction::UP);
+        chord->setStemDirection(DirectionV::UP);
         chords->push_back(chord);
     }
 

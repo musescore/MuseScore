@@ -310,7 +310,7 @@ PropertyValue Stem::getProperty(Pid propertyId) const
     case Pid::USER_LEN:
         return userLength();
     case Pid::STEM_DIRECTION:
-        return PropertyValue::fromValue<Direction>(chord()->stemDirection());
+        return PropertyValue::fromValue<DirectionV>(chord()->stemDirection());
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -326,7 +326,7 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
         setUserLength(v.toDouble());
         break;
     case Pid::STEM_DIRECTION:
-        chord()->setStemDirection(v.value<Direction>());
+        chord()->setStemDirection(v.value<DirectionV>());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -341,7 +341,7 @@ PropertyValue Stem::propertyDefault(Pid id) const
     case Pid::USER_LEN:
         return 0.0;
     case Pid::STEM_DIRECTION:
-        return PropertyValue::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:
         return EngravingItem::propertyDefault(id);
     }

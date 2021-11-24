@@ -301,13 +301,9 @@ class MScore
     static bool _verticalOrientation;
 
 public:
-    enum class DirectionH : char {   /**.\{*/
-        AUTO, LEFT, RIGHT                                       /**\}*/
-    };
     enum class OrnamentStyle : char {   /**.\{*/
         DEFAULT, BAROQUE                                          /**\}*/
     };
-    Q_ENUM(DirectionH)
     Q_ENUM(OrnamentStyle)
 
     static MsError _error;

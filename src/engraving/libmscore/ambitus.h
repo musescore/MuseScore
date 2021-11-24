@@ -40,7 +40,7 @@ class Ambitus final : public EngravingItem
 {
     NoteHead::Group _noteHeadGroup;
     NoteHead::Type _noteHeadType;
-    MScore::DirectionH _dir;
+    DirectionH _dir;
     bool _hasLine;
     Spatium _lineWidth;
     Accidental* _topAccid = nullptr;
@@ -75,7 +75,7 @@ public:
     // getters and setters
     NoteHead::Group noteHeadGroup() const { return _noteHeadGroup; }
     NoteHead::Type noteHeadType() const { return _noteHeadType; }
-    MScore::DirectionH direction() const { return _dir; }
+    DirectionH direction() const { return _dir; }
     bool hasLine() const { return _hasLine; }
     Spatium lineWidth() const { return _lineWidth; }
     int topOctave() const { return (_topPitch / 12) - 1; }
@@ -87,7 +87,7 @@ public:
 
     void setNoteHeadGroup(NoteHead::Group val) { _noteHeadGroup = val; }
     void setNoteHeadType(NoteHead::Type val) { _noteHeadType  = val; }
-    void setDirection(MScore::DirectionH val) { _dir = val; }
+    void setDirection(DirectionH val) { _dir = val; }
     void setHasLine(bool val) { _hasLine = val; }
     void setLineWidth(Spatium val) { _lineWidth = val; }
     void setTopPitch(int val);

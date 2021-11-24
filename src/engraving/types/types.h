@@ -106,6 +106,16 @@ enum class PlacementV {
 enum class PlacementH {
     LEFT, CENTER, RIGHT
 };
+
+// P_TYPE::DIRECTION
+enum class DirectionV {
+    AUTO, UP, DOWN
+};
+
+// P_TYPE::DIRECTION_H
+enum class DirectionH : char {
+    AUTO, LEFT, RIGHT
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -113,6 +123,8 @@ namespace Ms {
 using Align = mu::engraving::Align;
 using PlacementV = mu::engraving::PlacementV;
 using PlacementH = mu::engraving::PlacementH;
+using DirectionV = mu::engraving::DirectionV;
+using DirectionH = mu::engraving::DirectionH;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

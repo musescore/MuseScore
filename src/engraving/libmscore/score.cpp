@@ -2903,7 +2903,7 @@ void Score::padToggle(Pad p, const EditData& ed)
         } else {
             for (ChordRest* cr : getSelectedChordRests()) {
                 if (!cr->isRest()) {
-                    setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks(), Direction::AUTO, false,
+                    setNoteRest(cr->segment(), cr->track(), NoteVal(), cr->durationTypeTicks(), DirectionV::AUTO, false,
                                 _is.articulationIds());
                 }
             }
@@ -2971,7 +2971,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                 }
 
                 NoteVal nval;
-                Direction stemDirection = Direction::AUTO;
+                DirectionV stemDirection = DirectionV::AUTO;
                 if (_is.rest()) {
                     // Enter a rest
                     nval = NoteVal();

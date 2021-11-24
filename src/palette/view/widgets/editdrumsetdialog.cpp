@@ -497,7 +497,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
         } else {
             m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
         }
-        m_editedDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+        m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
         previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
     }
     if (current == 0) {
@@ -570,7 +570,7 @@ void EditDrumsetDialog::valueChanged()
 
     m_editedDrumset.drum(pitch).line          = staffLine->value();
     m_editedDrumset.drum(pitch).voice         = voice->currentIndex();
-    m_editedDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+    m_editedDrumset.drum(pitch).stemDirection = DirectionV(stemDirection->currentIndex());
     if (QString(QChar(m_editedDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
         if (shortcut->currentText().isEmpty()) {
             m_editedDrumset.drum(pitch).shortcut = 0;
@@ -596,8 +596,8 @@ void EditDrumsetDialog::updateExample()
     int line      = m_editedDrumset.line(pitch);
     NoteHead::Group nh = m_editedDrumset.noteHead(pitch);
     int v         = m_editedDrumset.voice(pitch);
-    Direction dir = m_editedDrumset.stemDirection(pitch);
-    bool up = (Direction::UP == dir) || (Direction::AUTO == dir && line > 4);
+    DirectionV dir = m_editedDrumset.stemDirection(pitch);
+    bool up = (DirectionV::UP == dir) || (DirectionV::AUTO == dir && line > 4);
     std::shared_ptr<Chord> chord = Factory::makeChord(gpaletteScore->dummy()->segment());
     chord->setDurationType(TDuration::DurationType::V_QUARTER);
     chord->setStemDirection(dir);

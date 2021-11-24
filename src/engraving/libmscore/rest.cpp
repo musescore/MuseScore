@@ -237,7 +237,7 @@ EngravingItem* Rest::drop(EditData& data)
     case ElementType::CHORD: {
         Chord* c = toChord(e);
         Note* n  = c->upNote();
-        Direction dir = c->stemDirection();
+        DirectionV dir = c->stemDirection();
         NoteVal nval;
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();

@@ -90,14 +90,14 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::VELO_OFFSET,             false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
 
-    { Pid::DIRECTION,               false, "direction",             P_TYPE::DIRECTION,      DUMMY_QT_TR_NOOP("propertyName", "direction") },
-    { Pid::STEM_DIRECTION,          false, "StemDirection",         P_TYPE::DIRECTION,      DUMMY_QT_TR_NOOP("propertyName", "stem direction") },
+    { Pid::DIRECTION,               false, "direction",             P_TYPE::DIRECTION_V,      DUMMY_QT_TR_NOOP("propertyName", "direction") },
+    { Pid::STEM_DIRECTION,          false, "StemDirection",         P_TYPE::DIRECTION_V,      DUMMY_QT_TR_NOOP("propertyName", "stem direction") },
     { Pid::NO_STEM,                 false, "noStem",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "no stem") },
-    { Pid::SLUR_DIRECTION,          false, "up",                    P_TYPE::DIRECTION,      DUMMY_QT_TR_NOOP("propertyName", "up") },
+    { Pid::SLUR_DIRECTION,          false, "up",                    P_TYPE::DIRECTION_V,      DUMMY_QT_TR_NOOP("propertyName", "up") },
     { Pid::LEADING_SPACE,           false, "leadingSpace",          P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "leading space") },
     { Pid::DISTRIBUTE,              false, "distribute",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "distributed") },
     { Pid::MIRROR_HEAD,             false, "mirror",                P_TYPE::DIRECTION_H,    DUMMY_QT_TR_NOOP("propertyName", "mirror") },
-    { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION,      DUMMY_QT_TR_NOOP("propertyName", "dot position") },
+    { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION_V,      DUMMY_QT_TR_NOOP("propertyName", "dot position") },
     { Pid::TUNING,                  false, "tuning",                P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "tuning") },
     { Pid::PAUSE,                   true,  "pause",                 P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "pause") },
 
@@ -457,7 +457,12 @@ QString propertyUserName(Pid id)
 
 PropertyValue propertyFromString(Pid id, QString value)
 {
-    switch (propertyType(id)) {
+    return propertyFromString(propertyType(id), value);
+}
+
+PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
+{
+    switch (type) {
     case P_TYPE::BOOL:
         return PropertyValue(bool(value.toInt()));
     case P_TYPE::ZERO_INT:
@@ -510,17 +515,26 @@ PropertyValue propertyFromString(Pid id, QString value)
         return PropertyValue(int(MScore::OrnamentStyle::DEFAULT));
     }
 
-    case P_TYPE::DIRECTION:
-        return PropertyValue::fromValue<Direction>(toDirection(value));
-
+    case P_TYPE::DIRECTION_V: {
+        if (value == "up") {
+            return PropertyValue(DirectionV::UP);
+        } else if (value == "down") {
+            return PropertyValue(DirectionV::DOWN);
+        } else if (value == "auto") {
+            return PropertyValue(DirectionV::AUTO);
+        } else {
+            return PropertyValue(DirectionV(value.toInt()));
+        }
+    }
+    break;
     case P_TYPE::DIRECTION_H:
     {
         if (value == "left" || value == "1") {
-            return PropertyValue(int(MScore::DirectionH::LEFT));
+            return PropertyValue(DirectionH::LEFT);
         } else if (value == "right" || value == "2") {
-            return PropertyValue(int(MScore::DirectionH::RIGHT));
+            return PropertyValue(DirectionH::RIGHT);
         } else if (value == "auto") {
-            return PropertyValue(int(MScore::DirectionH::AUTO));
+            return PropertyValue(DirectionH::AUTO);
         }
     }
     break;
@@ -683,7 +697,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(e.readElementText());
     case P_TYPE::GLISS_STYLE:
     case P_TYPE::ORNAMENT_STYLE:
-    case P_TYPE::DIRECTION:
+    case P_TYPE::DIRECTION_V:
     case P_TYPE::DIRECTION_H:
     case P_TYPE::LAYOUT_BREAK:
     case P_TYPE::VALUE_TYPE:
@@ -756,8 +770,19 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return QString::number(value.value<double>());
     case P_TYPE::SPATIUM:
         return QString::number(value.value<Spatium>().val());
-    case P_TYPE::DIRECTION:
-        return toString(value.value<Direction>());
+    case P_TYPE::DIRECTION_V: {
+        switch (value.value<DirectionV>()) {
+        case DirectionV::AUTO:  return "auto";
+        case DirectionV::UP:    return "up";
+        case DirectionV::DOWN:  return "down";
+        }
+    }
+    case P_TYPE::DIRECTION_H:
+        switch (value.value<DirectionH>()) {
+        case DirectionH::LEFT:  return "left";
+        case DirectionH::RIGHT: return "right";
+        case DirectionH::AUTO:  return "auto";
+        }
     case P_TYPE::STRING:
     case P_TYPE::FRACTION:
         return value.toString();
@@ -806,16 +831,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "portamento";
         case GlissandoStyle::CHROMATIC:
             return "Chromatic";
-        }
-        break;
-    case P_TYPE::DIRECTION_H:
-        switch (MScore::DirectionH(value.toInt())) {
-        case MScore::DirectionH::LEFT:
-            return "left";
-        case MScore::DirectionH::RIGHT:
-            return "right";
-        case MScore::DirectionH::AUTO:
-            return "auto";
         }
         break;
     case P_TYPE::LAYOUT_BREAK:

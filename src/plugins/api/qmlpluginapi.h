@@ -134,11 +134,11 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::Direction enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.UP, MScore.DOWN, MScore.AUTO.
-    DECLARE_API_ENUM(Direction,        directionEnum,          Ms::Direction)
-    /// Contains Ms::MScore::DirectionH enumeration values
+    DECLARE_API_ENUM(Direction,        directionEnum,          Ms::PluginAPI::Direction)
+    /// Contains Ms::DirectionH enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.LEFT, MScore.RIGHT, MScore.AUTO.
-    DECLARE_API_ENUM(DirectionH,       directionHEnum,         Ms::MScore::DirectionH)
+    DECLARE_API_ENUM(DirectionH,       directionHEnum,         Ms::PluginAPI::DirectionH)
     /// Contains Ms::MScore::OrnamentStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.DEFAULT, MScore.BAROQUE.

@@ -88,11 +88,6 @@ PropertyValue::PropertyValue(Align v)
 {
 }
 
-PropertyValue::PropertyValue(Ms::Direction v)
-    : m_type(P_TYPE::DIRECTION), m_val(v)
-{
-}
-
 PropertyValue::PropertyValue(Ms::SymId v)
     : m_type(P_TYPE::SYMID), m_val(v)
 {
@@ -216,15 +211,13 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PAIR_REAL: return QVariant::fromValue(value<PairF>().toQPairF());
 
     // draw
-    case P_TYPE::COLOR:      return value<draw::Color>().toQColor();
-    case P_TYPE::ALIGN:      return QVariant::fromValue(int(value<Align>()));
-    case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
-    case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
-    case P_TYPE::DIRECTION:  return QVariant::fromValue(value<Ms::Direction>());
-    case P_TYPE::DIRECTION_H: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::COLOR:         return value<draw::Color>().toQColor();
+    case P_TYPE::ALIGN:         return QVariant::fromValue(int(value<Align>()));
+    case P_TYPE::PLACEMENT_V:   return static_cast<int>(value<PlacementV>());
+    case P_TYPE::PLACEMENT_H:   return static_cast<int>(value<PlacementH>());
+    case P_TYPE::DIRECTION_V:   return static_cast<int>(value<DirectionV>());
+    case P_TYPE::DIRECTION_H:   return static_cast<int>(value<DirectionH>());
+
     // time
     case P_TYPE::FRACTION:  return QVariant::fromValue(value<Ms::Fraction>());
     case P_TYPE::TDURATION: return QVariant::fromValue(toTDuration());
@@ -270,13 +263,11 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Layout
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
-    case P_TYPE::PLACEMENT_V:     return PropertyValue(PlacementV(v.toInt()));
-    case P_TYPE::PLACEMENT_H:    return PropertyValue(PlacementH(v.toInt()));
-    case P_TYPE::DIRECTION:     return PropertyValue(Ms::Direction(v.toInt()));
-    case P_TYPE::DIRECTION_H: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::PLACEMENT_V:   return PropertyValue(PlacementV(v.toInt()));
+    case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
+    case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
+    case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
+
     // time
     case P_TYPE::FRACTION:      return PropertyValue(v.value<Ms::Fraction>());
     case P_TYPE::TDURATION: {
@@ -311,9 +302,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case QVariant::Color:       return PropertyValue(draw::Color::fromQColor(v.value<QColor>()));
     case QVariant::UserType: {
         const char* type = v.typeName();
-        if (strcmp(type, "Ms::Direction") == 0) {
-            return PropertyValue(v.value<Ms::Direction>());
-        }
         if (strcmp(type, "Ms::Fraction") == 0) {
             return PropertyValue(v.value<Ms::Fraction>());
         }

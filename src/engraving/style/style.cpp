@@ -106,8 +106,8 @@ bool MStyle::readProperties(XmlReader& e)
                 set(idx, bool(e.readElementText().toInt()));
             } else if (P_TYPE::INT == type) {
                 set(idx, e.readElementText().toInt());
-            } else if (P_TYPE::DIRECTION == type) {
-                set(idx, Direction(e.readElementText().toInt()));
+            } else if (P_TYPE::DIRECTION_V == type) {
+                set(idx, DirectionV(e.readElementText().toInt()));
             } else if (P_TYPE::STRING == type) {
                 set(idx, e.readElementText());
             } else if (P_TYPE::ALIGN == type) {
@@ -349,8 +349,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
         P_TYPE type = st.valueType();
         if (P_TYPE::SPATIUM == type) {
             xml.tag(st.name(), value(idx).value<Spatium>().val());
-        } else if (P_TYPE::DIRECTION == type) {
-            xml.tag(st.name(), int(value(idx).toDirection()));
+        } else if (P_TYPE::DIRECTION_V == type) {
+            xml.tag(st.name(), int(value(idx).value<DirectionV>()));
         } else if (P_TYPE::ALIGN == type) {
             Align a = value(idx).value<Align>();
             // Don't write if it's the default value

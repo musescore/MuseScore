@@ -42,7 +42,7 @@ using namespace mu::engraving;
 namespace Ms {
 static const NoteHead::Group NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
 static const NoteHead::Type NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
-static const MScore::DirectionH DIR_DEFAULT     = MScore::DirectionH::AUTO;
+static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
 static const Spatium LINEWIDTH_DEFAULT(0.12);
 static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
@@ -424,7 +424,7 @@ void Ambitus::layout()
     bool collision
         =(_topAccid->ipos().y() + _topAccid->bbox().y() + _topAccid->height()
           > _bottomAccid->ipos().y() + _bottomAccid->bbox().y())
-          && _dir != MScore::DirectionH::RIGHT;
+          && _dir != DirectionH::RIGHT;
     if (collision) {
         // displace bottom accidental (also attempting to 'undercut' flats)
         xAccidOffBottom = xAccidOffTop
@@ -435,14 +435,14 @@ void Ambitus::layout()
     }
 
     switch (_dir) {
-    case MScore::DirectionH::AUTO:                       // noteheads one above the other
+    case DirectionH::AUTO:                       // noteheads one above the other
         // left align noteheads and right align accidentals 'hanging' on the left
         _topPos.setX(0.0);
         _bottomPos.setX(0.0);
         _topAccid->rxpos()       = -xAccidOffTop;
         _bottomAccid->rxpos()    = -xAccidOffBottom;
         break;
-    case MScore::DirectionH::LEFT:                       // top notehead at the left of bottom notehead
+    case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _topPos.setX(0.0);
@@ -450,7 +450,7 @@ void Ambitus::layout()
         _topAccid->rxpos() = -xAccidOffTop;
         _bottomAccid->rxpos() = collision ? -xAccidOffBottom : headWdt - xAccidOffBottom;
         break;
-    case MScore::DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
+    case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _bottomPos.setX(0.0);
@@ -727,7 +727,7 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
         setNoteHeadType(NoteHead::Type(v.toInt()));
         break;
     case Pid::MIRROR_HEAD:
-        setDirection(MScore::DirectionH(v.toInt()));
+        setDirection(DirectionH(v.toInt()));
         break;
     case Pid::GHOST:                         // recycled property = _hasLine
         setHasLine(v.toBool());

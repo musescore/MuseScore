@@ -50,29 +50,29 @@ namespace mu::engraving {
 enum class P_TYPE {
     UNDEFINED = 0,
     // Base
-    BOOL,           // bool
-    INT,            // int
-    REAL,           // qreal
-    STRING,         // QString
+    BOOL,
+    INT,
+    REAL,
+    STRING,
 
     // Geometry
     POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
-    PATH,               // mu::PainterPath
+    PATH,
     SCALE,
     SPATIUM,
     MILIMETRE,
     PAIR_REAL,
 
     // Draw
-    COLOR,            // Color
+    COLOR,
 
     // Layout
     ALIGN,
-    PLACEMENT_V,       // ABOVE or BELOW
-    PLACEMENT_H,       // LEFT, CENTER or RIGHT
-    DIRECTION,        // enum class Direction
-    DIRECTION_H,      // enum class MScore::DirectionH
+    PLACEMENT_V,
+    PLACEMENT_H,
+    DIRECTION_V,
+    DIRECTION_H,
 
     // time
     FRACTION,
@@ -141,7 +141,10 @@ public:
         : m_type(P_TYPE::PLACEMENT_V), m_val(v) {}
     PropertyValue(PlacementH v)
         : m_type(P_TYPE::PLACEMENT_H), m_val(v) {}
-    PropertyValue(Ms::Direction v);
+    PropertyValue(DirectionV v)
+        : m_type(P_TYPE::DIRECTION_V), m_val(v) {}
+    PropertyValue(DirectionH v)
+        : m_type(P_TYPE::DIRECTION_H), m_val(v) {}
 
     PropertyValue(Ms::SymId v);
     PropertyValue(Ms::BarLineType v);
@@ -190,7 +193,8 @@ public:
             case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
             case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
             case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
-            case P_TYPE::DIRECTION:  return static_cast<int>(value<Ms::Direction>());
+            case P_TYPE::DIRECTION_V:  return static_cast<int>(value<DirectionV>());
+            case P_TYPE::DIRECTION_H:  return static_cast<int>(value<DirectionH>());
             case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
             case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
             case P_TYPE::HOOK_TYPE:  return static_cast<int>(value<Ms::HookType>());
@@ -271,7 +275,6 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
-    Ms::Direction toDirection() const { return value<Ms::Direction>(); }
 
     const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;
@@ -299,7 +302,7 @@ private:
         Color,
 
         // Layout
-        Align, PlacementV, PlacementH, Ms::Direction,
+        Align, PlacementV, PlacementH, DirectionV, DirectionH,
 
         // time
         Ms::Fraction,

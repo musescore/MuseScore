@@ -87,7 +87,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 class Articulation final : public EngravingItem
 {
     SymId _symId;
-    Direction _direction;
+    DirectionV _direction;
     QString _channelName;
 
     ArticulationAnchor _anchor;
@@ -142,8 +142,8 @@ public:
 
     bool up() const { return _up; }
     void setUp(bool val);
-    void setDirection(Direction d) { _direction = d; }
-    Direction direction() const { return _direction; }
+    void setDirection(DirectionV d) { _direction = d; }
+    DirectionV direction() const { return _direction; }
 
     ChordRest* chordRest() const;
     Segment* segment() const;

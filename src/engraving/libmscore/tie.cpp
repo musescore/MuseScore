@@ -117,7 +117,7 @@ bool TieSegment::edit(EditData& ed)
     SlurTie* sl = tie();
 
     if (ed.key == Qt::Key_X && !ed.modifiers) {
-        sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
+        sl->setSlurDirection(sl->up() ? DirectionV::DOWN : DirectionV::UP);
         sl->layout();
         return true;
     }
@@ -961,7 +961,7 @@ void Tie::calculateDirection()
     Measure* m1 = c1->measure();
     Measure* m2 = c2->measure();
 
-    if (_slurDirection == Direction::AUTO) {
+    if (_slurDirection == DirectionV::AUTO) {
         std::vector<Note*> notes = c1->notes();
         size_t n = notes.size();
         // if there are multiple voices, the tie direction goes on stem side
@@ -1061,7 +1061,7 @@ void Tie::calculateDirection()
             }
         }
     } else {
-        _up = _slurDirection == Direction::UP ? true : false;
+        _up = _slurDirection == DirectionV::UP ? true : false;
     }
 }
 
@@ -1090,7 +1090,7 @@ TieSegment* Tie::layoutFor(System* system)
         }
         Chord* c1 = startNote()->chord();
         setTick(c1->tick());
-        if (_slurDirection == Direction::AUTO) {
+        if (_slurDirection == DirectionV::AUTO) {
             if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
                 // in polyphonic passage, ties go on the stem side
                 _up = c1->up();
@@ -1098,7 +1098,7 @@ TieSegment* Tie::layoutFor(System* system)
                 _up = !c1->up();
             }
         } else {
-            _up = _slurDirection == Direction::UP ? true : false;
+            _up = _slurDirection == DirectionV::UP ? true : false;
         }
         fixupSegments(1);
         TieSegment* segment = segmentAt(0);

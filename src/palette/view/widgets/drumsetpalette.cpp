@@ -104,11 +104,11 @@ void DrumsetPalette::updateDrumset()
         int line = m_drumset->line(pitch);
         NoteHead::Group noteHead = m_drumset->noteHead(pitch);
         int voice = m_drumset->voice(pitch);
-        Direction dir = m_drumset->stemDirection(pitch);
+        DirectionV dir = m_drumset->stemDirection(pitch);
 
-        if (dir == Direction::UP) {
+        if (dir == DirectionV::UP) {
             up = true;
-        } else if (dir == Direction::DOWN) {
+        } else if (dir == DirectionV::DOWN) {
             up = false;
         } else {
             up = line > 4;
