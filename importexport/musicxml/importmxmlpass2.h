@@ -354,6 +354,7 @@ private:
       Chord* _tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* _figBass;                      ///< Current figured bass element (to attach to next note)
       int _multiMeasureRestCount;
+      int _measureNumber;                         ///< Current measure number as written in the score
       MusicXmlLyricsExtend _extendedLyrics;       ///< Lyrics with "extend" requiring fixup
 
       MusicXmlSlash _measureStyleSlash;           ///< Are we inside a measure to be displayed as slashes?
