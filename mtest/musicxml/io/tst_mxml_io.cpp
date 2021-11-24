@@ -174,6 +174,7 @@ private slots:
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
+      void measureNumbers() { mxmlIoTest("testMeasureNumbers"); }
       // void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
