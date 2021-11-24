@@ -60,10 +60,6 @@ static QString formatPartTitle(const Part* part)
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
-    m_interaction->dropChanged().onNotify(this, [this]() {
-        updatePartTitles();
-    });
-
     m_undoStack->undoNotification().onNotify(this, [this]() {
         m_partChangedNotifier.changed();
     });
@@ -321,6 +317,7 @@ void NotationParts::setPartTransposition(const ID& partId, const Interval& trans
 
 void NotationParts::updatePartTitles()
 {
+    TRACEFUNC;
     for (const Part* part: score()->parts()) {
         setPartName(part->id(), formatPartTitle(part));
     }
