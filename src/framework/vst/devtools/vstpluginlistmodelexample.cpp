@@ -88,7 +88,7 @@ void VstPluginListModelExample::load()
 
 void VstPluginListModelExample::showSynthPluginEditor()
 {
-    QString uri = QString("musescore://vsti/editor?sync=false&trackId=%1&resourceId=%2")
+    QString uri = QString("musescore://vsti/editor?sync=false&floating=true&trackId=%1&resourceId=%2")
                   .arg(m_currentTrackId)
                   .arg(m_currentSynthResource);
 
@@ -97,7 +97,7 @@ void VstPluginListModelExample::showSynthPluginEditor()
 
 void VstPluginListModelExample::showFxPluginEditor()
 {
-    QString uri = QString("musescore://vstfx/editor?sync=false&trackId=%1&resourceId=%2")
+    QString uri = QString("musescore://vstfx/editor?sync=false&floating=true&trackId=%1&resourceId=%2")
                   .arg(m_currentTrackId)
                   .arg(m_currentFxResource);
 
