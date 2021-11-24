@@ -66,8 +66,6 @@ class Rest : public ChordRest {
       bool isGap() const               { return _gap;     }
       virtual void setGap(bool v)      { _gap = v;        }
 
-      void reset() override;
-
       virtual void add(Element*);
       virtual void remove(Element*);
 

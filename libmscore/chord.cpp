@@ -2874,7 +2874,6 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
 void Chord::reset()
       {
       undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
       score()->createPlayEvents(this);
       ChordRest::reset();
       }
