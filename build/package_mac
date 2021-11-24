@@ -2,7 +2,7 @@
 
 APPNAME=mscore
 LONG_NAME="MuseScore"
-LONGER_NAME="MuseScore 3"
+LONGER_NAME="MuseScore 4"
 VERSION=0
 
 while [[ "$#" -gt 0 ]]; do
@@ -15,7 +15,7 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-if [ $VERSION -eq 0 ]; then 
+if [ "$VERSION" = 0 ]; then
     SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE[0]})" && pwd)
     VERSION=$(cmake -P "$SCRIPT_DIR/../config.cmake" | sed -n -e "s/^.*VERSION  *//p")
 fi    
