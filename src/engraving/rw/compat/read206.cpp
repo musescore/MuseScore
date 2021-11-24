@@ -1841,7 +1841,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         // after the whole score is read, Score::connectTies() will look for
         // the suitable initial note
         Note* finalNote = ch->upNote();
-        Glissando* gliss = new Glissando(ctx.dummy());
+        Glissando* gliss = Factory::createGlissando(ctx.dummy());
         gliss->read(e);
         gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(nullptr);

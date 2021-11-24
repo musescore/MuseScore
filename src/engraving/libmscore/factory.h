@@ -170,6 +170,9 @@ public:
     static Ms::Hairpin* createHairpin(Ms::Segment* parent);
     static std::shared_ptr<Ms::Hairpin> makeHairpin(Ms::Segment* parent);
 
+    static Ms::Glissando* createGlissando(Ms::EngravingItem* parent);
+    static std::shared_ptr<Ms::Glissando> makeGlissando(Ms::EngravingItem* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };
