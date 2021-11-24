@@ -615,3 +615,6 @@ MAKE_ITEM_IMPL(Tremolo, Chord)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
+
+CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment)
+MAKE_ITEM_IMPL(Hairpin, Segment)
