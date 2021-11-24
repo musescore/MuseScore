@@ -35,7 +35,7 @@
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
 #include "../iaccessibilityconfiguration.h"
-#include "../iaccessibleinterfaceregister.h"
+#include "../iqaccessibleinterfaceregister.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
@@ -51,7 +51,7 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
     INJECT(accessibility, ui::IMainWindow, mainWindow)
     INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
     INJECT(accessibility, IAccessibilityConfiguration, configuration)
-    INJECT_STATIC(accessibility, IAccessibleInterfaceRegister, accessibleInterfaceRegister)
+    INJECT_STATIC(accessibility, IQAccessibleInterfaceRegister, accessibleInterfaceRegister)
 
 public:
     AccessibilityController() = default;

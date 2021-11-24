@@ -1250,8 +1250,6 @@ AccessiblePaletteWidget::AccessiblePaletteWidget(PaletteWidget* palette)
     m_palette = palette;
 
     connect(m_palette, &PaletteWidget::selectedChanged, this, [this](int index, int previous){
-        LOGD() << "======= clicked " << index;
-
         PaletteCellPtr curCell = m_palette->cellAt(index);
         PaletteCellPtr previousCell = m_palette->cellAt(previous);
 
