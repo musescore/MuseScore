@@ -85,6 +85,7 @@ public:
     void restoreDefaultLayout() override;
 
 signals:
+    void windowLoaded();
     void currentPageUriChanged(const QString& uri);
 
 private slots:
