@@ -363,7 +363,7 @@ void Beam::layout1()
             std::set<int> noteSet(_notes.begin(), _notes.end());
             notes.assign(noteSet.begin(), noteSet.end());
             _up = Chord::computeAutoStemDirection(&notes) > 0;
-            int middleStaffLine = firstNote->staff()->middleLine(firstNote->tick());
+            int middleStaffLine = firstNote->staffType()->middleLine();
             for (uint i = 0; i < _notes.size(); i++) {
                 _notes[i] += middleStaffLine;
             }
