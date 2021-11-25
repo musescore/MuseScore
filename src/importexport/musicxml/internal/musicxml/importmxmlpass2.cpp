@@ -2978,7 +2978,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
     QStringRef lineType = _e.attributes().value("line-type");
     const auto& spdesc = _pass2.getSpanner({ ElementType::TEXTLINE, number });
     if (type == "start") {
-        auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : new TextLine(_score->dummy());
+        auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
         // if (placement == "") placement = "above";  // TODO ? set default
 
         b->setBeginHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
@@ -3004,7 +3004,7 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
         }
         starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == "stop") {
-        auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : new TextLine(_score->dummy());
+        auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
         b->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
         if (lineEnd == "up") {
             b->setEndHookHeight(-1 * b->endHookHeight());
@@ -3027,7 +3027,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
 {
     const auto& spdesc = _pass2.getSpanner({ ElementType::HAIRPIN, number });
     if (type == "start") {
-        auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : new TextLine(_score->dummy());
+        auto b = spdesc._isStopped ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
         // if (placement == "") placement = "above";  // TODO ? set default
 
         // hack: combine with a previous words element
@@ -3045,7 +3045,7 @@ void MusicXMLParserDirection::dashes(const QString& type, const int number,
         // use mxml specific type instead
         starts.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     } else if (type == "stop") {
-        auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : new TextLine(_score->dummy());
+        auto b = spdesc._isStarted ? toTextLine(spdesc._sp) : Factory::createTextLine(_score->dummy());
         stops.append(MusicXmlSpannerDesc(b, ElementType::TEXTLINE, number));
     }
     _e.skipCurrentElement();
@@ -3068,7 +3068,7 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
         if (!(ottavasize == 8 || ottavasize == 15)) {
             _logger->logError(QString("unknown octave-shift size %1").arg(ottavasize), &_e);
         } else {
-            auto o = spdesc._isStopped ? toOttava(spdesc._sp) : new Ottava(_score->dummy());
+            auto o = spdesc._isStopped ? toOttava(spdesc._sp) : Factory::createOttava(_score->dummy());
 
             // if (placement == "") placement = "above";  // TODO ? set default
 
@@ -3088,7 +3088,7 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
             starts.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
         }
     } else if (type == "stop") {
-        auto o = spdesc._isStarted ? toOttava(spdesc._sp) : new Ottava(_score->dummy());
+        auto o = spdesc._isStarted ? toOttava(spdesc._sp) : Factory::createOttava(_score->dummy());
         stops.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
     }
     _e.skipCurrentElement();
@@ -3118,7 +3118,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
     if (line == "yes") {
         const auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
         if (type == "start") {
-            auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
+            auto p = spdesc._isStopped ? toPedal(spdesc._sp) : Factory::createPedal(_score->dummy());
             if (sign == "yes") {
                 p->setBeginText(Pedal::PEDAL_SYMBOL);
             } else {
@@ -3128,7 +3128,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             // if (placement == "") placement = "below";  // TODO ? set default
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "stop") {
-            auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
+            auto p = spdesc._isStarted ? toPedal(spdesc._sp) : Factory::createPedal(_score->dummy());
             stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "change") {
         } else if (type == "continue") {
@@ -3532,7 +3532,7 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure,
                 _logger->logError(QString("unsupported ending number '%1'").arg(number), &_e);
             } else {
                 if (type == "start") {
-                    Volta* volta = new Volta(_score->dummy());
+                    Volta* volta = Factory::createVolta(_score->dummy());
                     volta->setTrack(_pass1.trackForPart(partId));
                     volta->setText(text.isEmpty() ? number : text);
                     // LVIFIX TODO also support endings "1 - 3"
@@ -6015,7 +6015,7 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
             if (trill) {
                 logger->logError(QString("overlapping wavy-line number %1").arg(wavyLineNo + 1), xmlreader);
             } else {
-                trill = new Trill(cr->score()->dummy());
+                trill = Factory::createTrill(cr->score()->dummy());
                 trill->setTrack(trk);
                 if (wavyLineType == "start") {
                     spanners[trill] = QPair<int, int>(tick.ticks(), -1);

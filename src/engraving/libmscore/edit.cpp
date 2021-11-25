@@ -1877,7 +1877,7 @@ void Score::cmdAddOttava(OttavaType type)
             if (cr2 == 0) {
                 cr2 = cr1;
             }
-            Ottava* ottava = new Ottava(this->dummy());
+            Ottava* ottava = Factory::createOttava(this->dummy());
             ottava->setOttavaType(type);
             if (type == OttavaType::OTTAVA_8VB /*|| type == OttavaType::OTTAVA_15MB || type == OttavaType::OTTAVA_22MB*/) {
                 ottava->setPlacement(PlacementV::BELOW);
@@ -1900,7 +1900,7 @@ void Score::cmdAddOttava(OttavaType type)
             cr2 = cr1;
         }
 
-        Ottava* ottava = new Ottava(this->dummy());
+        Ottava* ottava = Factory::createOttava(this->dummy());
         ottava->setOttavaType(type);
         if (type == OttavaType::OTTAVA_8VB /*|| type == OttavaType::OTTAVA_15MB || type == OttavaType::OTTAVA_22MB*/) {
             ottava->setPlacement(PlacementV::BELOW);
