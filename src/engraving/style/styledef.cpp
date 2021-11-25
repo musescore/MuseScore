@@ -195,7 +195,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65) },
     { Sid::noteBarDistance,         "noteBarDistance",         Spatium(1.5) },
     { Sid::measureSpacing,          "measureSpacing",          1.2 },
-    { Sid::measureRepeatNumberPos,  "measureRepeatNumberPos",  Spatium(-1.5) },
+    { Sid::measureRepeatNumberPos,  "measureRepeatNumberPos",  Spatium(-0.5) },
     { Sid::mrNumberSeries,          "mrNumberSeries",          false },
     { Sid::mrNumberEveryXMeasures,  "mrNumberEveryXMeasures",  4 },
     { Sid::mrNumberSeriesWithParentheses, "mrNumberSeriesWithParentheses", true },

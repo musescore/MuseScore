@@ -65,9 +65,9 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     drawSymbol(symId(), painter);
 
     if (track() != -1) { // in score rather than palette
-        qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
-        qreal y = numberPos() * spatium() - staff()->height() * .5;
-        drawSymbols(numberSym(), painter, PointF(x, y));
+        PointF numberPosition = numberRect().topLeft();
+        drawSymbols(numberSym(), painter, numberPosition);
+
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
             // for now, using thickness and margin same as mmrests
@@ -141,12 +141,19 @@ void MeasureRepeat::layout()
         break;
     }
 
+    RectF bbox = symBbox(symId());
+
     if (track() != -1) { // if this is in score rather than a palette cell
-        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
+        // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
+        // We compensate for it, to make sure the symbol is visually centered around the staff line
+        qreal offset = (-bbox.top() - bbox.bottom()) / 2.0;
+
         const StaffType* staffType = this->staffType();
-        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium());
+
+        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
+        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium() + offset);
     }
-    setbbox(symBbox(symId()));
+    setbbox(bbox);
     addbbox(numberRect());
 }
 
@@ -157,12 +164,13 @@ void MeasureRepeat::layout()
 
 RectF MeasureRepeat::numberRect() const
 {
-    if (track() == -1 || numberSym().empty()) { // don't display in palette
+    if (track() == -1 || m_numberSym.empty()) { // don't display in palette
         return RectF();
     }
-    RectF r = symBbox(numberSym());
-    qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
-    qreal y = numberPos() * spatium() - staff()->height() * .5;
+
+    RectF r = symBbox(m_numberSym);
+    qreal x = (symBbox(symId()).width() - symBbox(m_numberSym).width()) * .5;
+    qreal y = -pos().y() + numberPos() * spatium(); // -pos().y(): relative to topmost staff line
     r.translate(PointF(x, y));
     return r;
 }
