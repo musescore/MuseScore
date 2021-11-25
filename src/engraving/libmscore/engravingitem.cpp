@@ -180,7 +180,7 @@ EngravingItem::~EngravingItem()
     Score::onElementDestruction(this);
 }
 
-void EngravingItem::setup()
+void EngravingItem::setupAccessible()
 {
     static std::list<ElementType> accessibleDisabled = {
         ElementType::LEDGER_LINE,
