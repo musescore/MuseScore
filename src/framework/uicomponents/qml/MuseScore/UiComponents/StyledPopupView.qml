@@ -160,10 +160,17 @@ PopupView {
 
                 Connections {
                     target: root
+                    function onOpensUpwardChanged() { arrow.requestPaint() }
+                }
 
-                    function onOpensUpwardChanged() {
-                        arrow.requestPaint()
-                    }
+                Connections {
+                    target: contentBackground
+                    function onColorChanged() { arrow.requestPaint() }
+                }
+
+                Connections {
+                    target: contentBackground.border
+                    function onColorChanged() { arrow.requestPaint() }
                 }
             }
 
