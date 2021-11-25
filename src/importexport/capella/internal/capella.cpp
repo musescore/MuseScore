@@ -1028,7 +1028,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
 
                 if (res) {
-                    Volta* volta = new Volta(score->dummy());
+                    Volta* volta = Factory::createVolta(score->dummy());
                     volta->setTrack(track);
                     volta->setTrack2(track);
                     // TODO also support endings such as "1 - 3"
@@ -1056,7 +1056,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for trill line identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Trill* trill = new Trill(score->dummy());
+                        Trill* trill = Factory::createTrill(score->dummy());
                         trill->setTrack(track);
                         trill->setTrack2(track);
                         trill->setTick(cr1->tick());

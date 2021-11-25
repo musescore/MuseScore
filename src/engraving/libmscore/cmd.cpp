@@ -451,6 +451,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool firstStaffOn
     spanner->eraseSpannerSegments();
 
     undoAddElement(spanner);
+    spanner->setParent(mb);
     select(spanner, SelectType::SINGLE, 0);
 }
 

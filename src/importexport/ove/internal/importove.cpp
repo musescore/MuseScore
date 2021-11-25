@@ -712,7 +712,7 @@ void OveToMScore::convertTrackElements(int track)
 
             if (octave->getOctaveShiftPosition() == ovebase::OctaveShiftPosition::Start) {
                 if (ottava == 0) {
-                    ottava = new Ottava(m_score->dummy());
+                    ottava = Factory::createOttava(m_score->dummy());
                     ottava->setTrack(track * VOICES);
                     ottava->setOttavaType(OctaveShiftTypeToInt(octave->getOctaveShiftType()));
 
@@ -2026,7 +2026,7 @@ void OveToMScore::convertArticulation(
             delete m_pedal;
             m_pedal = 0;
         } else {
-            m_pedal = new Pedal(m_score->dummy());
+            m_pedal = Factory::createPedal(m_score->dummy());
             m_pedal->setTrack(track);
             Segment* seg = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
             m_pedal->setTick(seg->tick());
@@ -2251,7 +2251,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
         int absTick2 = m_mtt->getTick(measure->no() + ending->stop()->getMeasure(), 0);
 
         if (absTick1 < absTick2) {
-            Volta* volta = new Volta(m_score->dummy());
+            Volta* volta = Factory::createVolta(m_score->dummy());
             volta->setTrack(track);
             volta->setTick(Fraction::fromTicks(absTick1));
             volta->setTick2(Fraction::fromTicks(absTick2));

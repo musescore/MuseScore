@@ -649,3 +649,19 @@ MAKE_ITEM_IMPL(Hairpin, Segment)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
+
+CREATE_ITEM_IMPL(Trill, ElementType::TRILL, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Vibrato, ElementType::VIBRATO, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(TextLine, ElementType::TEXTLINE, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Ottava, ElementType::OTTAVA, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(LetRing, ElementType::LET_RING, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Volta, ElementType::VOLTA, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Pedal, ElementType::PEDAL, EngravingItem, setupAccessible)

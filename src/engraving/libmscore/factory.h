@@ -172,6 +172,22 @@ public:
     static Ms::Glissando* createGlissando(Ms::EngravingItem* parent, bool setupAccessible = true);
     static std::shared_ptr<Ms::Glissando> makeGlissando(Ms::EngravingItem* parent);
 
+    static Ms::Trill* createTrill(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Vibrato* createVibrato(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::TextLine* createTextLine(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Ottava* createOttava(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::LetRing* createLetRing(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::PalmMute* createPalmMute(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Volta* createVolta(Ms::EngravingItem* parent, bool setupAccessible = true);
+
+    static Ms::Pedal* createPedal(Ms::EngravingItem* parent, bool setupAccessible = true);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

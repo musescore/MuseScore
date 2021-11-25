@@ -422,7 +422,7 @@ void GuitarPro::addPalmMute(Note* note)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(score->dummy());
+        PalmMute* pm = Factory::createPalmMute(score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -467,7 +467,7 @@ void GuitarPro::addLetRing(Note* note)
         }
     }
     if (!_letRings[track]) {
-        LetRing* lr = new LetRing(score->dummy());
+        LetRing* lr = Factory::createLetRing(score->dummy());
         _letRings[track] = lr;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -516,7 +516,7 @@ void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
         }
     }
     if (!_vibratos[track]) {
-        Vibrato* v = new Vibrato(score->dummy());
+        Vibrato* v = Factory::createVibrato(score->dummy());
         v->setVibratoType(type);
         _vibratos[track] = v;
         Segment* segment = chord->segment();
@@ -1466,7 +1466,7 @@ void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
 void GuitarPro::createOttava(bool hasOttava, int track, ChordRest* cr, QString value)
 {
     if (hasOttava && (ottava.at(track) == 0)) {
-        Ottava* newOttava = new Ottava(score->dummy());
+        Ottava* newOttava = Factory::createOttava(score->dummy());
         newOttava->setTrack(track);
         if (!value.compare("8va")) {
             newOttava->setOttavaType(OttavaType::OTTAVA_8VA);
