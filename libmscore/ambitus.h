@@ -90,6 +90,8 @@ class Ambitus final : public Element {
       bool      readProperties(XmlReader&) override;
       QString   accessibleInfo() const override;
 
+      void remove(Element*) override;
+
       // properties
       QVariant getProperty(Pid ) const;
       bool setProperty(Pid propertyId, const QVariant&);
