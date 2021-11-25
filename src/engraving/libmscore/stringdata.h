@@ -29,7 +29,6 @@ class Note;
 class XmlReader;
 class XmlWriter;
 class Staff;
-class Fraction;
 
 //---------------------------------------------------------
 //   StringData

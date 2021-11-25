@@ -28,9 +28,7 @@
  Definition of class Measure.
 */
 
-#include "infrastructure/draw/color.h"
 #include "measurebase.h"
-#include "fraction.h"
 #include "segmentlist.h"
 
 namespace mu::engraving::rw {

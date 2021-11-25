@@ -143,7 +143,7 @@ bool Score::sanityCheck(const QString& name)
             }
             if (voices[0] != mLen) {
                 QString msg = QObject::tr("Measure %1, staff %2 incomplete. Expected: %3; Found: %4").arg(mNumber).arg(staffIdx + 1).arg(
-                    mLen.print(), voices[0].print());
+                    mLen.toString(), voices[0].toString());
                 LOGE() << msg;
                 error += QString("%1\n").arg(msg);
 #ifndef NDEBUG
@@ -162,7 +162,7 @@ bool Score::sanityCheck(const QString& name)
             for (int v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
                     QString msg = QObject::tr("Measure %1, staff %2, voice %3 too long. Expected: %4; Found: %5").arg(mNumber).arg(
-                        staffIdx + 1).arg(v + 1).arg(mLen.print(), voices[v].print());
+                        staffIdx + 1).arg(v + 1).arg(mLen.toString(), voices[v].toString());
                     LOGE() << msg;
                     error += QString("%1\n").arg(msg);
 #ifndef NDEBUG

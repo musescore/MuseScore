@@ -28,7 +28,7 @@
 #include "importmidi_inner.h"
 #include "libmscore/staff.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 #include "libmscore/duration.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"

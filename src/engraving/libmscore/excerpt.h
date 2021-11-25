@@ -25,7 +25,8 @@
 
 #include <QMultiMap>
 
-#include "fraction.h"
+#include "types/fraction.h"
+#include "mscore.h"
 
 namespace Ms {
 class MasterScore;

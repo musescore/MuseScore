@@ -346,7 +346,7 @@ Fraction MxmlSupport::durationAsFraction(const int divisions, const QDomElement 
         f = Fraction(val, 4 * divisions);     // note divisions = ticks / quarter note
         f.reduce();
     } else {
-        qDebug() << "durationAsFraction tagname error" << f.print();
+        qDebug() << "durationAsFraction tagname error" << f.toString();
     }
     return f;
 }

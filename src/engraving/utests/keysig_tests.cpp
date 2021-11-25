@@ -26,7 +26,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/keysig.h"
 #include "libmscore/undo.h"
-#include "libmscore/fraction.h"
 #include "libmscore/part.h"
 
 #include "utils/scorerw.h"

@@ -105,7 +105,7 @@ void ExportMidi::writeHeader()
             default:
                 n = 2;
                 qDebug("ExportMidi: unknown time signature %s",
-                       qPrintable(ts.print()));
+                       qPrintable(ts.toString()));
                 break;
             }
             data[1] = n;

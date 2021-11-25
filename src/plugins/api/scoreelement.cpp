@@ -118,7 +118,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
             qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
             return;
         }
-        val = QVariant::fromValue(f->fraction());
+        val = f->fraction().toString();
     }
     break;
     case P_TYPE::POINT:

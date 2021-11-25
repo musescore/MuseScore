@@ -23,7 +23,7 @@
 #ifndef __MUSEDATA_H__
 #define __MUSEDATA_H__
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace Ms {
 class Staff;

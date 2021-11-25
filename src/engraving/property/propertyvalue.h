@@ -33,11 +33,7 @@
 #include "libmscore/types.h"
 #include "libmscore/symid.h"
 #include "libmscore/pitchvalue.h"
-#include "libmscore/fraction.h"
-//#include "libmscore/groups.h" can't be included
-#include "infrastructure/draw/geometry.h"
-#include "infrastructure/draw/painterpath.h"
-#include "infrastructure/draw/color.h"
+#include "libmscore/mscore.h"
 
 #include "framework/global/logstream.h"
 
@@ -74,7 +70,7 @@ enum class P_TYPE {
     DIRECTION_V,
     DIRECTION_H,
 
-    // time
+    // Duration
     FRACTION,
 
     ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
@@ -146,6 +142,10 @@ public:
     PropertyValue(DirectionH v)
         : m_type(P_TYPE::DIRECTION_H), m_val(v) {}
 
+    // Duration
+    PropertyValue(const Fraction& v)
+        : m_type(P_TYPE::FRACTION), m_val(v) {}
+
     PropertyValue(Ms::SymId v);
     PropertyValue(Ms::BarLineType v);
     PropertyValue(Ms::HookType v);
@@ -154,7 +154,7 @@ public:
         : m_type(P_TYPE::DYNAMIC_TYPE), m_val(v) {}
 
     PropertyValue(const Ms::PitchValues& v);
-    PropertyValue(const Ms::Fraction& v);
+
     PropertyValue(const QList<int>& v); //endings
     PropertyValue(const Ms::AccidentalRole& v)
         : m_type(P_TYPE::ACCIDENTAL_ROLE), m_val(v) {}
@@ -260,7 +260,7 @@ public:
         //! HACK Temporary hack for Fraction to String
         if constexpr (std::is_same<T, QString>::value) {
             if (P_TYPE::FRACTION == m_type) {
-                const Ms::Fraction* pf = std::get_if<Ms::Fraction>(&m_val);
+                const Fraction* pf = std::get_if<Fraction>(&m_val);
                 assert(pf);
                 return pf ? pf->toString() : T();
             }
@@ -304,8 +304,8 @@ private:
         // Layout
         Align, PlacementV, PlacementH, DirectionV, DirectionH,
 
-        // time
-        Ms::Fraction,
+        // Duration
+        Fraction,
 
         Ms::SymId, Ms::BarLineType, Ms::HookType,
         Ms::DynamicType,

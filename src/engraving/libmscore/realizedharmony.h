@@ -28,7 +28,6 @@
 
 namespace Ms {
 class Harmony;
-class Fraction;
 
 //voicing modes to use
 enum class Voicing : signed char {

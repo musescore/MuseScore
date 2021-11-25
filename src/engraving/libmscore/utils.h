@@ -23,6 +23,8 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include "types/fraction.h"
+
 #include "mscore.h"
 #include "interval.h"
 #include "symid.h"
@@ -50,7 +52,6 @@ class EngravingItem;
 class Note;
 class Tuplet;
 class BarLine;
-class Fraction;
 
 enum class ClefType : signed char;
 

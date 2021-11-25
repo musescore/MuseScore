@@ -25,7 +25,7 @@
 
 #include <QQmlEngine>
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace Ms {
 namespace PluginAPI {

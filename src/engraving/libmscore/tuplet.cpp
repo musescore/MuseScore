@@ -39,6 +39,8 @@
 #include "measure.h"
 #include "system.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -1033,7 +1035,7 @@ void Tuplet::reset()
 void Tuplet::dump() const
 {
     EngravingItem::dump();
-    qDebug("ratio %s", qPrintable(_ratio.print()));
+    LOGD() << "ratio: " << _ratio.toString();
 }
 
 //---------------------------------------------------------

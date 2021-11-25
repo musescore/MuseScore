@@ -28,7 +28,7 @@
  Definition of class MusicXML
 */
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 #include "libmscore/mscore.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/line.h"

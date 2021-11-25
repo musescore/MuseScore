@@ -331,7 +331,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().print()));
+        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -566,7 +566,7 @@ void TimeSigMap::dump() const
     qDebug("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
         qDebug("%6d timesig: %s measure: %d",
-               i->first, qPrintable(i->second.timesig().print()), i->second.bar());
+               i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 

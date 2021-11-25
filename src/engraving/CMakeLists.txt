@@ -85,8 +85,10 @@ set(MODULE_SRC
 
     ${COMPAT_MIDI_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/types/constants.h
     ${CMAKE_CURRENT_LIST_DIR}/types/types.h
     ${CMAKE_CURRENT_LIST_DIR}/types/dimension.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/fraction.h
 
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h

@@ -19,34 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
-#define MU_ENGRAVING_LAYOUTMEASURE_H
 
-#include "layoutoptions.h"
-
-namespace Ms {
-class Score;
-class Measure;
-class MeasureBase;
-}
+#ifndef MU_ENGRAVING_CONSTANTS_H
+#define MU_ENGRAVING_CONSTANTS_H
 
 namespace mu::engraving {
-class LayoutContext;
-class LayoutContext;
-class LayoutMeasure
+struct Constant
 {
-public:
-    LayoutMeasure() = default;
-
-    static void getNextMeasure(const LayoutOptions& options, LayoutContext& lc);
-
-private:
-
-    static void createMMRest(const LayoutOptions& options, Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure,
-                             const Ms::Fraction& len);
-
-    static int adjustMeasureNo(LayoutContext& lc, Ms::MeasureBase* m);
+    constexpr static int division = 480;
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTMEASURE_H
+#endif // MU_ENGRAVING_CONSTANTS_H
