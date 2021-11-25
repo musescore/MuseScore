@@ -98,7 +98,7 @@ namespace {
 
 static unsigned lcm(int a, int b)
 {
-    const int g =  Ms::gcd(a, b);
+    const int g =  mu::engraving::gcd(a, b);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(a, g),

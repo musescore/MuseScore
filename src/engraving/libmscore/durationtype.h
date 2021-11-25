@@ -23,7 +23,6 @@
 #ifndef __DURATIONTYPE_H__
 #define __DURATIONTYPE_H__
 
-#include "fraction.h"
 #include "note.h"
 
 namespace Ms {

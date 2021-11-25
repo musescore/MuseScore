@@ -128,11 +128,6 @@ const Ms::TDuration& PropertyValue::toTDuration() const
     return std::any_cast<const Ms::TDuration&>(m_any);
 }
 
-PropertyValue::PropertyValue(const Ms::Fraction& v)
-    : m_type(P_TYPE::FRACTION), m_val(v)
-{
-}
-
 PropertyValue::PropertyValue(const QList<int>& v)
     : m_type(P_TYPE::INT_LIST), m_val(v)
 {
@@ -163,7 +158,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
     //! HACK Temporary hack for Fraction comparisons
     if (v.m_type == P_TYPE::FRACTION) {
         assert(m_type == P_TYPE::FRACTION);
-        return v.value<Ms::Fraction>().identical(value<Ms::Fraction>());
+        return v.value<Fraction>().identical(value<Fraction>());
     }
 
     //! HACK Temporary hack for TDURATION comparisons
@@ -219,7 +214,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DIRECTION_H:   return static_cast<int>(value<DirectionH>());
 
     // time
-    case P_TYPE::FRACTION:  return QVariant::fromValue(value<Ms::Fraction>());
+    case P_TYPE::FRACTION:  return QVariant::fromValue(value<Fraction>().toString());
     case P_TYPE::TDURATION: return QVariant::fromValue(toTDuration());
     // other
     case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
@@ -269,7 +264,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
 
     // time
-    case P_TYPE::FRACTION:      return PropertyValue(v.value<Ms::Fraction>());
+    case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));
     case P_TYPE::TDURATION: {
         UNREACHABLE; //! TODO
     }
@@ -300,15 +295,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case QVariant::Point:       return PropertyValue(PointF::fromQPointF(QPointF(v.toPoint())));
     case QVariant::PointF:      return PropertyValue(PointF::fromQPointF(v.toPointF()));
     case QVariant::Color:       return PropertyValue(draw::Color::fromQColor(v.value<QColor>()));
-    case QVariant::UserType: {
-        const char* type = v.typeName();
-        if (strcmp(type, "Ms::Fraction") == 0) {
-            return PropertyValue(v.value<Ms::Fraction>());
-        }
-        LOGE() << "unhandle type: " << type;
-        UNREACHABLE;
-    }
-    break;
     default:
         break;
     }

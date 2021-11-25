@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/fraction.h"
-
 #include <QXmlStreamReader>
+
+#include "engraving/types/fraction.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
@@ -123,7 +123,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
     if (_dura.isValid() && calcDura.isValid()) {
         if (_dura != calcDura) {
             errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                       .arg(calcDura.print(), _dura.print());
+                       .arg(calcDura.toString(), _dura.toString());
             //qDebug("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
 
             if (rest && type == "whole" && _dura.isValid()) {

@@ -23,7 +23,6 @@
 #ifndef __RENDERMIDI_H__
 #define __RENDERMIDI_H__
 
-#include "fraction.h"
 #include "measure.h"
 #include "synthesizerstate.h"
 

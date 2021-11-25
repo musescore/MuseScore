@@ -163,7 +163,10 @@ QVariantMap AdditionalInfoModel::timeSignature() const
         break;
     }
 
-    return timeSignatureFraction.toMap();
+    return {
+        { "numerator", timeSignatureFraction.numerator() },
+        { "denominator", timeSignatureFraction.denominator() }
+    };
 }
 
 int AdditionalInfoModel::timeSignatureType() const
@@ -337,7 +340,10 @@ QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) con
 
 QVariantMap AdditionalInfoModel::pickupTimeSignature() const
 {
-    return m_pickupTimeSignature.toMap();
+    return {
+        { "numerator", m_pickupTimeSignature.numerator() },
+        { "denominator", m_pickupTimeSignature.denominator() }
+    };
 }
 
 void AdditionalInfoModel::setPickupTimeSignatureNumerator(int numerator)

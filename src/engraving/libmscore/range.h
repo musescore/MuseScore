@@ -23,7 +23,7 @@
 #ifndef __DURATIONLIST_H__
 #define __DURATIONLIST_H__
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class EngravingItem;

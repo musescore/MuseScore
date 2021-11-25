@@ -63,7 +63,6 @@
 #include "hook.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "fraction.h"
 #include "excerpt.h"
 #include "barline.h"
 #include "skyline.h"
@@ -260,11 +259,6 @@ void MScore::registerUiTypes()
 //      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
 //      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
-    qRegisterMetaType<Fraction>("Fraction");
-
-    if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString)) {
-        qFatal("registerConverter Fraction::toString failed");
-    }
 }
 
 //---------------------------------------------------------

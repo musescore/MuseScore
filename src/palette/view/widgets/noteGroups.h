@@ -24,7 +24,7 @@
 #define __NOTE_GROUPS_H__
 
 #include "ui_note_groups.h"
-#include "libmscore/fraction.h"
+
 #include "libmscore/groups.h"
 
 #include "modularity/ioc.h"

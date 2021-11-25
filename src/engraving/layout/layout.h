@@ -26,7 +26,6 @@
 
 namespace Ms {
 class Score;
-class Fraction;
 class System;
 class Tremolo;
 }

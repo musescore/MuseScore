@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_LAYOUTCONTEXT_H
 #define MU_ENGRAVING_LAYOUTCONTEXT_H
 
-#include "libmscore/fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class Score;

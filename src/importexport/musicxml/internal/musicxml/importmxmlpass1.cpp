@@ -2248,12 +2248,12 @@ void MusicXMLParserPass1::measure(const QString& partId,
         // otherwise, round up
         if ((_divs > 0) && ((mDura - roundDown) < Fraction(1, 4 * _divs))) {
             _logger->logError(QString("rounding down measure duration %1 to %2")
-                              .arg(qPrintable(mDura.print()), qPrintable(roundDown.print())),
+                              .arg(qPrintable(mDura.toString()), qPrintable(roundDown.toString())),
                               &_e);
             correctedLength = roundDown;
         } else {
             _logger->logError(QString("rounding up measure duration %1 to %2")
-                              .arg(qPrintable(mDura.print()), qPrintable(roundUp.print())),
+                              .arg(qPrintable(mDura.toString()), qPrintable(roundUp.toString())),
                               &_e);
             correctedLength = roundUp;
         }
@@ -2501,7 +2501,7 @@ void MusicXMLParserPass1::transpose(const QString& partId, const Fraction& tick)
     if (_parts[partId]._intervals.count(tick) == 0) {
         _parts[partId]._intervals[tick] = interval;
     } else {
-        qDebug("duplicate transpose at tick %s", qPrintable(tick.print()));
+        qDebug("duplicate transpose at tick %s", qPrintable(tick.toString()));
     }
 }
 
@@ -3067,7 +3067,7 @@ MxmlTupletFlags MxmlTupletState::determineTupletAction(const Fraction noteDurati
             || (actualNotes == 1 && normalNotes == 1)) {           // incorrect ??? check scenario incomplete tuplet w/o start
             if (actualNotes > normalNotes && !isTupletFilled(*this, normalType, timeMod)) {
                 missingCurrentDuration = missingTupletDuration(m_duration);
-                qDebug("current tuplet incomplete, missing %s", qPrintable(missingCurrentDuration.print()));
+                qDebug("current tuplet incomplete, missing %s", qPrintable(missingCurrentDuration.toString()));
             }
 
             *this = {};

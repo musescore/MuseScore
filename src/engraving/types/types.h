@@ -27,6 +27,7 @@
 #include "infrastructure/draw/geometry.h"
 #include "infrastructure/draw/painterpath.h"
 #include "dimension.h"
+#include "fraction.h"
 
 #ifndef MU_ENGRAVING_TYPES_H
 #define MU_ENGRAVING_TYPES_H
@@ -36,19 +37,11 @@ namespace mu::engraving {
 // PropertyValue
 // ========================================
 
-// --- Base ---
-// bool (std)                           // P_TYPE::BOOL
-// int  (std)                           // P_TYPE::INT
-// qreal (Qt)                           // P_TYPE::REAL
-// QString (Qt)                         // P_TYPE::STRING
-
 // --- Geometry ---
 using PointF = mu::PointF;              // P_TYPE::POINT
 using SizeF = mu::SizeF;                // P_TYPE::SIZE
 using PainterPath = mu::PainterPath;    // P_TYPE::PATH
 using ScaleF = mu::ScaleF;              // P_TYPE::SCALE
-// Spatium (dimension.h)                // P_TYPE::SPATIUM
-// Milimetre (dimension.h)              // P_TYPE::MILIMETRE
 using PairF = mu::PairF;                // P_TYPE::PAIR_REAL
 
 // --- Draw ---

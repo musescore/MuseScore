@@ -24,7 +24,7 @@
 #define __IMPORTMXMLNOTEDURATION_H__
 
 #include "libmscore/durationtype.h"
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace Ms {
 class MxmlLogger;

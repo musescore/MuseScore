@@ -1352,7 +1352,7 @@ static Rest* addRest(Score*, Measure* m,
     // <?DoletSibelius Two NoteRests in same voice at same position may be an error?>
     // Same issue may result from trying to import incomplete tuplets
     if (s->element(track)) {
-        qDebug("cannot add rest at tick %s (%d) track %d: element already present", qPrintable(tick.print()), tick.ticks(), track); // TODO
+        qDebug("cannot add rest at tick %s (%d) track %d: element already present", qPrintable(tick.toString()), tick.ticks(), track); // TODO
         return nullptr;
     }
 
@@ -1377,10 +1377,10 @@ static void resetTuplets(Tuplets& tuplets)
             const auto missingDuration = missingTupletDuration(actualDuration);
             qDebug("tuplet %p not stopped at end of measure, tick %s duration %s missing %s",
                    tuplet,
-                   qPrintable(tuplet->tick().print()),
-                   qPrintable(actualDuration.print()), qPrintable(missingDuration.print()));
+                   qPrintable(tuplet->tick().toString()),
+                   qPrintable(actualDuration.toString()), qPrintable(missingDuration.toString()));
             if (actualDuration > Fraction(0, 1) && missingDuration > Fraction(0, 1)) {
-                qDebug("add missing %s to previous tuplet", qPrintable(missingDuration.print()));
+                qDebug("add missing %s to previous tuplet", qPrintable(missingDuration.toString()));
                 const auto& firstElement = tuplet->elements().at(0);
                 // appended the rest to the current end of the tuplet (firstElement->tick() + actualDuration)
                 const auto extraRest = addRest(firstElement->score(), firstElement->measure(),
@@ -3194,7 +3194,7 @@ QString MusicXmlExtendedSpannerDesc::toString() const
     QString string;
     QTextStream(&string) << _sp;
     return QString("sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
-           .arg(string, _tick2.print())
+           .arg(string, _tick2.toString())
            .arg(_track2)
            .arg(_isStarted ? "started" : "", _isStopped ? "stopped" : "")
     ;
@@ -4766,7 +4766,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                 }
                 if (tupletAction & MxmlTupletFlag::STOP_CURRENT) {
                     if (missingCurr.isValid() && missingCurr > Fraction(0, 1)) {
-                        qDebug("add missing %s to current tuplet", qPrintable(missingCurr.print()));
+                        qDebug("add missing %s to current tuplet", qPrintable(missingCurr.toString()));
                         const auto track = msTrack + msVoice;
                         const auto extraRest = addRest(_score, measure, noteStartTime + dura, track, msMove,
                                                        TDuration { missingCurr* tuplet->ratio() }, missingCurr);
@@ -4870,7 +4870,7 @@ void MusicXMLParserPass2::duration(Fraction& dura)
     if (elementText.toInt() > 0) {
         dura = calcTicks(elementText, _divs, _logger, &_e);
     } else {
-        _logger->logError(QString("illegal duration %1").arg(dura.print()), &_e);
+        _logger->logError(QString("illegal duration %1").arg(dura.toString()), &_e);
     }
     //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 }

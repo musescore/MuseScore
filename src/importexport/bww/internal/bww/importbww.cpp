@@ -29,8 +29,9 @@
 #include "writer.h"
 #include "parser.h"
 
+#include "engraving/types/fraction.h"
+
 #include "libmscore/factory.h"
-#include "libmscore/fraction.h"
 #include "libmscore/barline.h"
 #include "libmscore/box.h"
 #include "libmscore/chord.h"
@@ -402,9 +403,9 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
         Ms::Fraction nl(tick - currentMeasure->tick());
         currentMeasure->setTicks(nl);
         qDebug() << "MsScWriter::note()"
-                 << "tickBefore:" << tickBefore
-                 << "tick:" << tick
-                 << "nl:" << nl.print()
+                 << "tickBefore:" << tickBefore.toString()
+                 << "tick:" << tick.toString()
+                 << "nl:" << nl.toString()
         ;
     } else {
         currentGraceNotes.append(cr);
