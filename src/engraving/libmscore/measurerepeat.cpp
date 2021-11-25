@@ -105,7 +105,7 @@ void MeasureRepeat::layout()
         setSymId(SymId::repeat1Bar);
         if (score()->styleB(Sid::mrNumberSeries) && track() != -1) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
-            int staffIdx = staff()->idx();
+            int staffIdx = this->staffIdx();
             Measure* m = measure();
             while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
                 placeInSeries++;
@@ -141,8 +141,10 @@ void MeasureRepeat::layout()
         break;
     }
 
-    if (track() != -1) {    // in score rather than palette
-        setPos(0, 2.0 * spatium() + 0.5 * styleP(Sid::staffLineWidth)); // xpos handled by Measure::stretchMeasure()
+    if (track() != -1) { // if this is in score rather than a palette cell
+        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
+        const StaffType* staffType = this->staffType();
+        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium());
     }
     setbbox(symBbox(symId()));
     addbbox(numberRect());
