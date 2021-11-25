@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "qaccessibleinterfaceregister.h"
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#include "log.h"
 
-#include "framework/global/modularity/imodulesetup.h"
+using namespace mu::accessibility;
 
-namespace mu::accessibility {
-class AccessibilityModule : public modularity::IModuleSetup
+void QAccessibleInterfaceRegister::registerInterfaceGetter(const QString& className, const InterfaceGetter& interfaceGetter)
 {
-public:
-    std::string moduleName() const override;
+    IF_ASSERT_FAILED(!m_interfaceHash.contains(className)) {
+        LOGW() << "class name " << className << " already register. Will be rewrite";
+    }
 
-    void registerExports() override;
-    void resolveImports() override;
-};
+    m_interfaceHash[className] = interfaceGetter;
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+IQAccessibleInterfaceRegister::InterfaceGetter QAccessibleInterfaceRegister::interfaceGetter(const QString& className) const
+{
+    if (!m_interfaceHash.contains(className)) {
+        return InterfaceGetter();
+    }
+
+    return m_interfaceHash[className];
+}

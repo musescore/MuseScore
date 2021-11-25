@@ -43,14 +43,17 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showTimePalette READ showTimePalette WRITE setShowTimePalette)
+
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
-    mu::palette::PaletteScrollArea* _timePalette = nullptr;
-    mu::palette::PaletteWidget* sp = nullptr;
-    bool _dirty = false;
+public:
+    TimeDialog(QWidget* parent = 0);
+    TimeDialog(const TimeDialog& dialog);
 
-    int denominator() const;
-    int denominator2Idx(int) const;
+    bool dirty() const;
+    bool showTimePalette() const;
+    void save();
 
 private slots:
     void addClicked();
@@ -58,16 +61,19 @@ private slots:
     void nChanged(int);
     void paletteChanged(int idx);
     void textChanged();
-    void setDirty() { _dirty = true; }
+    void setDirty();
+    void setShowTimePalette(bool val);
 
 signals:
     void timeSigAdded(const std::shared_ptr<TimeSig>);
 
-public:
-    TimeDialog(QWidget* parent = 0);
-    bool dirty() const { return _dirty; }
-    void showTimePalette(bool val);
-    void save();
+private:
+    int denominator() const;
+    int denominator2Idx(int) const;
+
+    mu::palette::PaletteScrollArea* _timePalette = nullptr;
+    mu::palette::PaletteWidget* sp = nullptr;
+    bool _dirty = false;
 };
 }
 

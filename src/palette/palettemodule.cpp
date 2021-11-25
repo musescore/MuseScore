@@ -30,12 +30,14 @@
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
+#include "accessibility/iqaccessibleinterfaceregister.h"
 
 #include "internal/paletteconfiguration.h"
 #include "internal/paletteuiactions.h"
 #include "internal/paletteactionscontroller.h"
 #include "internal/paletteworkspacesetup.h"
 #include "internal/paletteprovider.h"
+#include "internal/palettecell.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
@@ -46,10 +48,13 @@
 #include "view/widgets/specialcharactersdialog.h"
 #include "view/widgets/editdrumsetdialog.h"
 #include "view/widgets/timesignaturepropertiesdialog.h"
+#include "view/widgets/keyedit.h"
+#include "view/widgets/timedialog.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 static std::shared_ptr<Ms::PaletteProvider> s_paletteProvider = std::make_shared<Ms::PaletteProvider>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
@@ -99,6 +104,18 @@ void PaletteModule::resolveImports()
 
         ir->registerUri(Uri("musescore://palette/cellproperties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PaletteCellPropertiesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://notation/keysignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::KeyEditor>("KeySignaturesDialog")));
+
+        ir->registerUri(Uri("musescore://notation/timesignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::TimeDialog>("TimeSignaturesDialog")));
+    }
+
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    if (accr) {
+        accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
+        accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
 }
 

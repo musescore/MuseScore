@@ -31,6 +31,11 @@
 #include "engraving/libmscore/textbase.h"
 #include "engraving/libmscore/factory.h"
 
+#include "engraving/accessibility/accessibleitem.h"
+
+#include "view/widgets/palettewidget.h"
+
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::palette;
@@ -56,16 +61,27 @@ static bool needsStaff(ElementPtr e)
     }
 }
 
-PaletteCell::PaletteCell()
+PaletteCell::PaletteCell(QObject* parent)
+    : QObject(parent)
 {
     id = makeId();
 }
 
-PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag)
-    : element(e), name(_name), mag(_mag)
+PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, QObject* parent)
+    : QObject(parent), element(e), name(_name), mag(_mag)
 {
     id = makeId();
     drawStaff = needsStaff(element);
+}
+
+QAccessibleInterface* PaletteCell::accessibleInterface(QObject* object)
+{
+    PaletteCell* cell = qobject_cast<PaletteCell*>(object);
+    IF_ASSERT_FAILED(cell) {
+        return nullptr;
+    }
+
+    return static_cast<QAccessibleInterface*>(new AccessiblePaletteCellInterface(cell));
 }
 
 QString PaletteCell::makeId()
@@ -283,4 +299,98 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 QByteArray PaletteCell::toMimeData() const
 {
     return Ms::toMimeData(this);
+}
+
+AccessiblePaletteCellInterface::AccessiblePaletteCellInterface(PaletteCell* cell)
+{
+    m_cell = cell;
+}
+
+bool AccessiblePaletteCellInterface::isValid() const
+{
+    return m_cell != nullptr;
+}
+
+QObject* AccessiblePaletteCellInterface::object() const
+{
+    return m_cell;
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::childAt(int, int) const
+{
+    return nullptr;
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::parent() const
+{
+    auto paletteWidget = parentWidget();
+    if (!paletteWidget) {
+        return nullptr;
+    }
+
+    return QAccessible::queryAccessibleInterface(paletteWidget);
+}
+
+QAccessibleInterface* AccessiblePaletteCellInterface::child(int) const
+{
+    return nullptr;
+}
+
+int AccessiblePaletteCellInterface::childCount() const
+{
+    return 0;
+}
+
+int AccessiblePaletteCellInterface::indexOfChild(const QAccessibleInterface*) const
+{
+    return -1;
+}
+
+QString AccessiblePaletteCellInterface::text(QAccessible::Text t) const
+{
+    switch (t) {
+    case QAccessible::Text::Name:
+        return m_cell->element->accessibleInfo();
+    default:
+        break;
+    }
+
+    return QString();
+}
+
+void AccessiblePaletteCellInterface::setText(QAccessible::Text, const QString&)
+{
+}
+
+QRect AccessiblePaletteCellInterface::rect() const
+{
+    return QRect();
+}
+
+QAccessible::Role AccessiblePaletteCellInterface::role() const
+{
+    return QAccessible::ListItem;
+}
+
+QAccessible::State AccessiblePaletteCellInterface::state() const
+{
+    QAccessible::State state;
+    state.invisible = false;
+    state.invalid = false;
+    state.disabled = false;
+
+    state.focusable = true;
+    state.focused = m_cell->focused;
+
+    return state;
+}
+
+QObject* AccessiblePaletteCellInterface::parentWidget() const
+{
+    auto palette = m_cell->parent();
+    if (!palette) {
+        return nullptr;
+    }
+
+    return palette->parent();
 }

@@ -23,6 +23,7 @@
 #define MU_ACCESSIBILITY_ACCESSIBLEOBJECT_H
 
 #include <QObject>
+#include <QAccessibleInterface>
 #include "../iaccessible.h"
 
 namespace mu::accessibility {
@@ -32,6 +33,8 @@ class AccessibleObject : public QObject
     Q_OBJECT
 public:
     explicit AccessibleObject(IAccessible* item);
+
+    static QAccessibleInterface* accessibleInterface(QObject* object);
 
     void setController(std::shared_ptr<AccessibilityController> controller);
     const std::shared_ptr<AccessibilityController>& controller() const;

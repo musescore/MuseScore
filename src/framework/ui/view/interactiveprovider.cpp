@@ -55,7 +55,12 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 
     for (int i = 0; i < m_stack.size(); ++i) {
-        if (m_stack[i].window == newActiveWindow) {
+        bool found = m_stack[i].window == newActiveWindow;
+        if (m_stack[i].window->isWidgetType()) {
+            found = newActiveWindow->objectName() == (m_stack[i].window->objectName() + "Window");
+        }
+
+        if (found) {
             ObjectInfo info = m_stack.takeAt(i);
             m_stack.push(info);
             notifyAboutCurrentUriChanged();
@@ -395,12 +400,6 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     }
 
     fillData(dialog, q);
-
-    if (dialog->result()) {
-        QMetaType::destroy(widgetMetaTypeId, widgetClassPtr);
-        result.ret = make_ret(Ret::Code::Cancel);
-        return result;
-    }
 
     connect(dialog, &QDialog::finished, [this, objectId, dialog](int code) {
         QVariantMap status;

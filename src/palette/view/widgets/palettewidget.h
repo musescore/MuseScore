@@ -24,14 +24,16 @@
 #define MU_PALETTE_PALETTEWIDGET_H
 
 #include <QScrollArea>
+#include <QAccessibleWidget>
 
-#include "internal/palette.h"
+#include "../../internal/palette.h"
 
 #include "engraving/libmscore/engravingitem.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteconfiguration.h"
+#include "../../ipaletteconfiguration.h"
 #include "ui/iuiactionsregister.h"
+#include "ui/iuiconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
@@ -42,6 +44,26 @@ class XmlReader;
 }
 
 namespace mu::palette {
+class PaletteWidget;
+class AccessiblePaletteWidget : public QObject, public QAccessibleWidget
+{
+    Q_OBJECT
+
+public:
+    AccessiblePaletteWidget(PaletteWidget* palette);
+
+    QObject* object() const override;
+    QAccessibleInterface* child(int index) const override;
+    int childCount() const override;
+    int indexOfChild(const QAccessibleInterface* child) const override;
+    QAccessible::Role role() const override;
+    QAccessible::State state() const override;
+    QAccessibleInterface* focusChild() const override;
+
+private:
+    PaletteWidget* m_palette = nullptr;
+};
+
 class PaletteWidget : public QWidget
 {
     Q_OBJECT
@@ -50,10 +72,14 @@ class PaletteWidget : public QWidget
     INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
+    INJECT(palette, ui::IUiConfiguration, uiConfiguration)
 
 public:
     PaletteWidget(QWidget* parent = nullptr);
-    PaletteWidget(PalettePtr palette, QWidget* parent = nullptr);
+
+    void setPalette(PalettePtr palette);
+
+    static QAccessibleInterface* accessibleInterface(QObject* object);
 
     QString name() const;
     void setName(const QString& name);
@@ -135,6 +161,7 @@ public:
 signals:
     void changed();
     void boxClicked(int index);
+    void selectedChanged(int index, int previous);
 
 private:
     bool event(QEvent*) override;
@@ -169,7 +196,7 @@ private:
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
     void applyElementAtIndex(int index, Qt::KeyboardModifiers modifiers = {});
 
-    PalettePtr m_palette;
+    PalettePtr m_palette = nullptr;
 
     std::vector<PaletteCellPtr> m_filteredCells; // used for filter & backup
 

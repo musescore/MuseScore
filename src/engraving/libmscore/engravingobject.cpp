@@ -721,8 +721,8 @@ Score* EngravingObject::score(bool required) const
     }
 
     if (required) {
-        IF_ASSERT_FAILED(sc) {
-        }
+//        IF_ASSERT_FAILED(sc) {
+//        }
     }
 
     return sc;

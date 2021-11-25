@@ -259,7 +259,14 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 
     Q_ASSERT(pitchList->topLevelItemCount() > 0);
     pitchList->setCurrentItem(pitchList->topLevelItem(0));
-    pitchList->setFocus();
+
+    quarterCmb->setAccessibleName(quarterLbl->text() + " " + quarterCmb->currentText());
+    halfCmb->setAccessibleName(halfLbl->text() + " " + halfCmb->currentText());
+    wholeCmb->setAccessibleName(wholeLbl->text() + " " + wholeCmb->currentText());
+    doubleWholeCmb->setAccessibleName(doubleWholeLbl->text() + " " + doubleWholeCmb->currentText());
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 EditDrumsetDialog::EditDrumsetDialog(const EditDrumsetDialog& other)

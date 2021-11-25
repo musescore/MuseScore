@@ -28,6 +28,7 @@
 
 #include "internal/accessibilitycontroller.h"
 #include "internal/accessibilityconfiguration.h"
+#include "internal/qaccessibleinterfaceregister.h"
 
 using namespace mu::accessibility;
 using namespace mu::modularity;
@@ -41,4 +42,16 @@ void AccessibilityModule::registerExports()
 {
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfiguration());
     ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());
+    ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
+}
+
+void AccessibilityModule::resolveImports()
+{
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    if (accr) {
+#ifdef Q_OS_MAC
+        accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
+#endif
+        accr->registerInterfaceGetter("mu::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
+    }
 }

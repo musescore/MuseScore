@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -512,6 +512,11 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     } break;
 
     case QStyle::PE_FrameFocusRect: {
+        bool isTreeWidget = option->styleObject->inherits("QTreeWidget");
+        if (isTreeWidget) {
+            drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        }
+
         //! NOTE: need for removing frame focus recangle
     } break;
 
