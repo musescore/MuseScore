@@ -77,7 +77,7 @@ Column {
             propertyItem: root.dashLineLength
 
             step: 0.1
-            maxValue: 10
+            maxValue: 100
             minValue: 0.1
             decimals: 2
 
@@ -99,7 +99,7 @@ Column {
             propertyItem: root.dashGapLength
 
             step: 0.1
-            maxValue: 10
+            maxValue: 100
             minValue: 0.1
             decimals: 2
 
