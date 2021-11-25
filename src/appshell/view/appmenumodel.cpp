@@ -113,7 +113,7 @@ MenuItem AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuI
 MenuItem AppMenuModel::fileItem() const
 {
     MenuItemList recentScoresList = recentScores();
-    bool openRecentEnabled = true;
+    bool openRecentEnabled = !recentScoresList.isEmpty();
 
     if (!recentScoresList.empty()) {
         recentScoresList = appendClearRecentSection(recentScoresList);
