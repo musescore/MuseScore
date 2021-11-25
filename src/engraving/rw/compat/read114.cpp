@@ -1171,19 +1171,19 @@ static bool readTextLineProperties114(XmlReader& e, const ReadContext& ctx, Text
     const QStringRef& tag(e.name());
 
     if (tag == "beginText") {
-        Text* text = Factory::createTextJustForRead(tl);
+        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
         readText114(e, text, tl);
         tl->setBeginText(text->xmlText());
         tl->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "continueText") {
-        Text* text = Factory::createTextJustForRead(tl);
+        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
         readText114(e, text, tl);
         tl->setContinueText(text->xmlText());
         tl->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "endText") {
-        Text* text = Factory::createTextJustForRead(tl);
+        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
         readText114(e, text, tl);
         tl->setEndText(text->xmlText());
         tl->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
@@ -2558,12 +2558,12 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (tag == "name") {
-            Text* t = Factory::createTextJustForRead(ctx.dummy());
+            Text* t = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
             readText114(e, t, t);
             part->instrument()->setLongName(t->xmlText());
             delete t;
         } else if (tag == "shortName") {
-            Text* t = Factory::createTextJustForRead(ctx.dummy());
+            Text* t = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
             readText114(e, t, t);
             part->instrument()->setShortName(t->xmlText());
             delete t;
@@ -2820,7 +2820,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             compat::PageFormat pf;
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = Factory::createTextJustForRead(masterScore->dummy());
+            Text* text = Factory::createText(masterScore->dummy(), Tid::DEFAULT, false);
             readText114(e, text, text);
             masterScore->setMetaTag("copyright", text->plainText());
             delete text;

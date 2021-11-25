@@ -47,7 +47,7 @@ compat::DummyElement* RootItem::dummy() const
 void RootItem::init()
 {
     m_dummy->init();
-    setup();
+    setupAccessible();
 }
 
 EngravingObject* RootItem::scanParent() const

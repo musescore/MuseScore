@@ -214,10 +214,13 @@ static const ElementName elementNames[] = {
 };
 /* *INDENT-ON* */
 
-EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent)
+EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent, bool setupAccessible)
 {
     EngravingItem* item = doCreateItem(type, parent);
-    item->setup();
+    if (setupAccessible) {
+        item->setupAccessible();
+    }
+
     return item;
 }
 
@@ -349,14 +352,14 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     return 0;
 }
 
-EngravingItem* Factory::createItemByName(const QStringRef& name, EngravingItem* parent)
+EngravingItem* Factory::createItemByName(const QStringRef& name, EngravingItem* parent, bool setupAccessible)
 {
-    ElementType type = name2type(name, true);
+    ElementType type = name2type(name, setupAccessible);
     if (type == ElementType::INVALID) {
         LOGE() << "Invalide type: " << name.toString();
         return 0;
     }
-    return createItem(type, parent);
+    return createItem(type, parent, setupAccessible);
 }
 
 ElementType Factory::name2type(const QStringRef& name, bool silent)
@@ -382,10 +385,10 @@ const char* Factory::userName(Ms::ElementType type)
     return elementNames[int(type)].userName;
 }
 
-#define CREATE_ITEM_IMPL(T, type, P) \
-    T* Factory::create##T(P * parent) \
+#define CREATE_ITEM_IMPL(T, type, P, setupAccessible) \
+    T* Factory::create##T(P * parent, bool setupAccessible) \
     { \
-        EngravingItem* e = createItem(type, parent); \
+        EngravingItem* e = createItem(type, parent, setupAccessible); \
         return to##T(e); \
     } \
 
@@ -402,26 +405,29 @@ const char* Factory::userName(Ms::ElementType type)
         return copy; \
     } \
 
-CREATE_ITEM_IMPL(Accidental, ElementType::ACCIDENTAL, EngravingItem)
+CREATE_ITEM_IMPL(Accidental, ElementType::ACCIDENTAL, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Accidental, EngravingItem)
 
-CREATE_ITEM_IMPL(Ambitus, ElementType::AMBITUS, Segment)
+CREATE_ITEM_IMPL(Ambitus, ElementType::AMBITUS, Segment, setupAccessible)
 MAKE_ITEM_IMPL(Ambitus, Segment)
 
-CREATE_ITEM_IMPL(Arpeggio, ElementType::ARPEGGIO, Chord)
+CREATE_ITEM_IMPL(Arpeggio, ElementType::ARPEGGIO, Chord, setupAccessible)
 MAKE_ITEM_IMPL(Arpeggio, Chord)
 
-CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest)
+CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest, setupAccessible)
 MAKE_ITEM_IMPL(Articulation, ChordRest)
 
-CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment)
+CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment, setupAccessible)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, Segment)
 
-Beam* Factory::createBeam(System * parent)
+Beam* Factory::createBeam(System * parent, bool setupAccessible)
 {
     Beam* b = new Beam(parent);
-    b->setup();
+    if (setupAccessible) {
+        b->setupAccessible();
+    }
+
     return b;
 }
 
@@ -430,10 +436,10 @@ std::shared_ptr<Beam> Factory::makeBeam(System* parent)
     return std::shared_ptr<Beam>(createBeam(parent));
 }
 
-CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note)
+CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note, setupAccessible)
 MAKE_ITEM_IMPL(Bend, Note)
 
-CREATE_ITEM_IMPL(Bracket, ElementType::BRACKET, EngravingItem)
+CREATE_ITEM_IMPL(Bracket, ElementType::BRACKET, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Bracket, EngravingItem)
 
 BracketItem* Factory::createBracketItem(EngravingItem * parent)
@@ -448,10 +454,10 @@ BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, in
     return bi;
 }
 
-CREATE_ITEM_IMPL(Breath, ElementType::BREATH, Segment)
+CREATE_ITEM_IMPL(Breath, ElementType::BREATH, Segment, setupAccessible)
 MAKE_ITEM_IMPL(Breath, Segment)
 
-CREATE_ITEM_IMPL(Chord, ElementType::CHORD, Segment)
+CREATE_ITEM_IMPL(Chord, ElementType::CHORD, Segment, setupAccessible)
 
 Ms::Chord* Factory::copyChord(const Ms::Chord& src, bool link)
 {
@@ -460,39 +466,39 @@ Ms::Chord* Factory::copyChord(const Ms::Chord& src, bool link)
 }
 MAKE_ITEM_IMPL(Chord, Segment)
 
-CREATE_ITEM_IMPL(ChordLine, ElementType::CHORDLINE, Chord)
+CREATE_ITEM_IMPL(ChordLine, ElementType::CHORDLINE, Chord, setupAccessible)
 COPY_ITEM_IMPL(ChordLine)
 MAKE_ITEM_IMPL(ChordLine, Chord)
 
-CREATE_ITEM_IMPL(Clef, ElementType::CLEF, Segment)
+CREATE_ITEM_IMPL(Clef, ElementType::CLEF, Segment, setupAccessible)
 COPY_ITEM_IMPL(Clef)
 MAKE_ITEM_IMPL(Clef, Segment)
 
-CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem)
+CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Fermata, EngravingItem)
 
-CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment)
+CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment, setupAccessible)
 MAKE_ITEM_IMPL(FiguredBass, Segment)
 
-CREATE_ITEM_IMPL(FretDiagram, ElementType::FRET_DIAGRAM, Segment)
+CREATE_ITEM_IMPL(FretDiagram, ElementType::FRET_DIAGRAM, Segment, setupAccessible)
 COPY_ITEM_IMPL(FretDiagram)
 MAKE_ITEM_IMPL(FretDiagram, Segment)
 
-CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment)
+CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, setupAccessible)
 COPY_ITEM_IMPL(KeySig)
 MAKE_ITEM_IMPL(KeySig, Segment)
 
-CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase)
+CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase, setupAccessible)
 COPY_ITEM_IMPL(LayoutBreak)
 MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
 
-CREATE_ITEM_IMPL(Lyrics, ElementType::LYRICS, ChordRest)
+CREATE_ITEM_IMPL(Lyrics, ElementType::LYRICS, ChordRest, setupAccessible)
 COPY_ITEM_IMPL(Lyrics)
 
-CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System)
+CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System, setupAccessible)
 COPY_ITEM_IMPL(Measure)
 
-CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord)
+CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, setupAccessible)
 Note* Factory::copyNote(const Note& src, bool link)
 {
     Note* copy = new Note(src, link);
@@ -500,28 +506,37 @@ Note* Factory::copyNote(const Note& src, bool link)
 }
 MAKE_ITEM_IMPL(Note, Chord)
 
-CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note)
-CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest)
+CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note, setupAccessible)
+CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest, setupAccessible)
 COPY_ITEM_IMPL(NoteDot)
 
-Ms::Page* Factory::createPage(RootItem * parent)
+Ms::Page* Factory::createPage(RootItem * parent, bool setupAccessible)
 {
     Page* page = new Page(parent);
-    page->setup();
+    if (setupAccessible) {
+        page->setupAccessible();
+    }
+
     return page;
 }
 
-Ms::Rest* Factory::createRest(Ms::Segment* parent)
+Ms::Rest* Factory::createRest(Ms::Segment* parent, bool setupAccessible)
 {
     Rest* r = new Rest(parent);
-    r->setup();
+    if (setupAccessible) {
+        r->setupAccessible();
+    }
+
     return r;
 }
 
-Ms::Rest* Factory::createRest(Ms::Segment* parent, const Ms::TDuration& t)
+Ms::Rest* Factory::createRest(Ms::Segment* parent, const Ms::TDuration& t, bool setupAccessible)
 {
     Rest* r = new Rest(parent, t);
-    r->setup();
+    if (setupAccessible) {
+        r->setupAccessible();
+    }
+
     return r;
 }
 
@@ -531,24 +546,30 @@ Ms::Rest* Factory::copyRest(const Ms::Rest& src, bool link)
     return copy;
 }
 
-Ms::Segment* Factory::createSegment(Ms::Measure* parent)
+Ms::Segment* Factory::createSegment(Ms::Measure* parent, bool setupAccessible)
 {
     Segment* s = new Segment(parent);
-    s->setup();
+    if (setupAccessible) {
+        s->setupAccessible();
+    }
+
     return s;
 }
 
-Ms::Segment* Factory::createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t)
+Ms::Segment* Factory::createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t, bool setupAccessible)
 {
     Segment* s = new Segment(parent, type, t);
-    s->setup();
+    if (setupAccessible) {
+        s->setupAccessible();
+    }
+
     return s;
 }
 
-CREATE_ITEM_IMPL(Slur, ElementType::SLUR, EngravingItem)
+CREATE_ITEM_IMPL(Slur, ElementType::SLUR, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Slur, EngravingItem)
 
-CREATE_ITEM_IMPL(Spacer, ElementType::SPACER, Measure)
+CREATE_ITEM_IMPL(Spacer, ElementType::SPACER, Measure, setupAccessible)
 MAKE_ITEM_IMPL(Spacer, Measure)
 
 Staff* Factory::createStaff(Part * parent)
@@ -558,66 +579,73 @@ Staff* Factory::createStaff(Part * parent)
     return staff;
 }
 
-StaffLines* Factory::createStaffLines(Measure* parent)
+StaffLines* Factory::createStaffLines(Measure* parent, bool setupAccessible)
 {
     StaffLines* sl = new StaffLines(parent);
-    sl->setup();
+    if (setupAccessible) {
+        sl->setupAccessible();
+    }
+
     return sl;
 }
 
 COPY_ITEM_IMPL(StaffLines)
 
-CREATE_ITEM_IMPL(StaffState, ElementType::STAFF_STATE, EngravingItem)
+CREATE_ITEM_IMPL(StaffState, ElementType::STAFF_STATE, EngravingItem, setupAccessible)
 
-CREATE_ITEM_IMPL(StaffTypeChange, ElementType::STAFFTYPE_CHANGE, MeasureBase)
+CREATE_ITEM_IMPL(StaffTypeChange, ElementType::STAFFTYPE_CHANGE, MeasureBase, setupAccessible)
 MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
 
-CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord)
+CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord, setupAccessible)
 COPY_ITEM_IMPL(Stem)
 
-Ms::StemSlash* Factory::createStemSlash(Ms::Chord * parent)
+Ms::StemSlash* Factory::createStemSlash(Ms::Chord * parent, bool setupAccessible)
 {
     StemSlash* s = new StemSlash(parent);
-    s->setup();
+    if (setupAccessible) {
+        s->setupAccessible();
+    }
+
     return s;
 }
 
 COPY_ITEM_IMPL(StemSlash)
 
-Ms::System* Factory::createSystem(Ms::Page * parent)
+Ms::System* Factory::createSystem(Ms::Page * parent, bool setupAccessible)
 {
     System* s = new System(parent);
-    s->setup();
+    if (setupAccessible) {
+        s->setupAccessible();
+    }
+
     return s;
 }
 
-Ms::Text* Factory::createText(Ms::EngravingItem* parent, Ms::Tid tid)
+Ms::Text* Factory::createText(Ms::EngravingItem* parent, Ms::Tid tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);
-    t->setup();
-    return t;
-}
+    if (setupAccessible) {
+        t->setupAccessible();
+    }
 
-Ms::Text* Factory::createTextJustForRead(Ms::EngravingItem* parent)
-{
-    return new Text(parent);
+    return t;
 }
 
 COPY_ITEM_IMPL(Text)
 
-CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment)
+CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, setupAccessible)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, Segment)
 
-CREATE_ITEM_IMPL(Tremolo, ElementType::TREMOLO, Chord)
+CREATE_ITEM_IMPL(Tremolo, ElementType::TREMOLO, Chord, setupAccessible)
 COPY_ITEM_IMPL(Tremolo)
 MAKE_ITEM_IMPL(Tremolo, Chord)
 
-CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem)
+CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
 
-CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment)
+CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment, setupAccessible)
 MAKE_ITEM_IMPL(Hairpin, Segment)
 
-CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem)
+CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, setupAccessible)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
