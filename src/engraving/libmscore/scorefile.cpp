@@ -148,7 +148,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     if (pageNumberOffset()) {
         xml.tag("page-offset", pageNumberOffset());
     }
-    xml.tag("Division", MScore::division);
+    xml.tag("Division", Constant::division);
     xml.setCurTrack(-1);
 
     hook.onWriteStyle302(this, xml);

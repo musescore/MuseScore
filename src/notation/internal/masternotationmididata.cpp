@@ -209,7 +209,7 @@ MidiMapping MasterNotationMidiData::buildMidiMapping(const Ms::Part* part) const
 {
     midi::MidiMapping mapping;
 
-    mapping.division = Ms::MScore::division;
+    mapping.division = Ms::Constant::division;
     mapping.tempo = makeTempoMap();
 
     for (auto it = part->instruments()->cbegin(); it != part->instruments()->cend(); ++it) {

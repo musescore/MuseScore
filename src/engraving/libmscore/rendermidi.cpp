@@ -267,7 +267,7 @@ void Score::updateChannel()
 //---------------------------------------------------------
 int toMilliseconds(float tempo, float midiTime)
 {
-    float ticksPerSecond = (float)MScore::division * tempo;
+    float ticksPerSecond = (float)Constant::division * tempo;
     int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
     if (time > 0x7fff) { //maximum possible value
         time = 0x7fff;
@@ -1244,7 +1244,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
             }
 
             int j = 0;
-            int delta = MScore::division / 8;       // 1/8 note
+            int delta = Constant::division / 8;       // 1/8 note
             int lastPointTick = stick;
             while (lastPointTick < etick) {
                 int pitch = (j % 4 < 2) ? spitch : epitch;
@@ -1379,7 +1379,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
 
     // render tremolo with multiple events
     if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
-        int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constant::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -1455,7 +1455,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             events->clear();
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-        int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constant::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -1653,7 +1653,7 @@ int totalTiedNoteTicks(Note* note)
 //   renderNoteArticulation
 // prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
 // body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
-// tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
+// tickspernote, number of ticks, either _16h or _32nd, i.e., Constant::division/4 or Constant::division/8
 // repeatp, true means repeat the body as many times as possible to fill the time slice.
 // sustainp, true means the last note of the body is sustained to fill remaining time slice
 //---------------------------------------------------------
@@ -1686,7 +1686,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 
     Fraction tick = chord->tick();
     qreal tempo = chord->score()->tempo(tick);
-    int ticksPerSecond = tempo * MScore::division;
+    int ticksPerSecond = tempo * Constant::division;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);
     int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
@@ -1883,7 +1883,7 @@ struct OrnamentExcursion {
 std::set<MScore::OrnamentStyle> baroque  = { MScore::OrnamentStyle::BAROQUE };
 std::set<MScore::OrnamentStyle> defstyle = { MScore::OrnamentStyle::DEFAULT };
 std::set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = MScore::division / 4;
+int _16th = Constant::division / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -2045,7 +2045,7 @@ void renderGlissando(NoteEventList* events, Note* notestart)
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
             && glissandoPitchOffsets(spanner, body)) {
-            renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
+            renderNoteArticulation(events, notestart, true, Constant::division, empty, body, false, true, empty, 16, 0);
         }
     }
 }
@@ -2237,7 +2237,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const qreal ticksPerSecond = tempo(tick) * MScore::division;
+    const qreal ticksPerSecond = tempo(tick) * Constant::division;
     const qreal chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms

@@ -351,7 +351,6 @@ public:
     static bool debugMode;
     static bool testMode;
 
-    static int division;
     static int sampleRate;
     static int mtcType;
 

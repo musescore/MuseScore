@@ -536,7 +536,7 @@ std::string NotationConfiguration::notationRevision() const
 
 int NotationConfiguration::notationDivision() const
 {
-    return Ms::MScore::division;
+    return Ms::Constant::division;
 }
 
 ValCh<Orientation> NotationConfiguration::canvasOrientation() const

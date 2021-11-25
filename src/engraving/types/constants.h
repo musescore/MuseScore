@@ -24,10 +24,15 @@
 #define MU_ENGRAVING_CONSTANTS_H
 
 namespace mu::engraving {
-struct Constant
+struct Constants
 {
     constexpr static int division = 480;
 };
+}
+
+//! NOTE compat
+namespace Ms {
+using Constant = mu::engraving::Constants;
 }
 
 #endif // MU_ENGRAVING_CONSTANTS_H

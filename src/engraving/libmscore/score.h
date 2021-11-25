@@ -847,7 +847,7 @@ public:
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
     void cmd(const QString&, EditData&);
-    int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
+    int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
     QString importedFilePath() const { return _importedFilePath; }
