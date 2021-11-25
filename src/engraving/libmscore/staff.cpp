@@ -999,9 +999,9 @@ SwingParameters Staff::swing(const Fraction& tick) const
     QString unit = score()->styleSt(Sid::swingUnit);
     int swingRatio = score()->styleI(Sid::swingRatio);
     if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
-        swingUnit = MScore::division / 2;
+        swingUnit = Constant::division / 2;
     } else if (unit == TDuration(TDuration::DurationType::V_16TH).name()) {
-        swingUnit = MScore::division / 4;
+        swingUnit = Constant::division / 4;
     } else if (unit == TDuration(TDuration::DurationType::V_ZERO).name()) {
         swingUnit = 0;
     }

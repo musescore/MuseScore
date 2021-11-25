@@ -321,7 +321,7 @@ TEST_F(NoteTests, grace)
     Note* note = chord->upNote();
 
     // create
-    score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, MScore::division / 2);
+    score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::division / 2);
     Ms::Chord* gc = chord->graceNotes().first();
     Note* gn = gc->notes().front();
 //      Note* n = static_cast<Note*>(ScoreRW::writeReadElement(gn));

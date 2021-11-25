@@ -217,7 +217,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
     score->connectTies();
     score->relayoutForStyles(); // force relayout if certain style settings are enabled
 
-    score->_fileDivision = MScore::division;
+    score->_fileDivision = Constants::division;
 
     // Make sure every instrument has an instrumentId set.
     for (Part* part : score->parts()) {

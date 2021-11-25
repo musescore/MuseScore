@@ -354,7 +354,7 @@ bool BBFile::read(const QString& name)
                     continue;
                 }
                 Event note(ME_NOTE);
-                note.setOntime((tick.ticks() * MScore::division) / bbDivision);
+                note.setOntime((tick.ticks() * Constant::division) / bbDivision);
                 note.setPitch(a[idx + 5]);
                 note.setVelo(a[idx + 6]);
                 note.setChannel(channel);
@@ -367,7 +367,7 @@ bool BBFile::read(const QString& name)
                     len1 = lastLen;
                 }
                 lastLen = len1;
-                note.setDuration((len1* MScore::division) / bbDivision);
+                note.setDuration((len1* Constant::division) / bbDivision);
                 track->append(note);
             } else if (type == 0xb0 || type == 0xc0) {
                 // ignore controller
@@ -497,7 +497,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
     };
     foreach (const BBChord& c, bb.chords()) {
-        Fraction tick = Fraction(c.beat, 4);          // c.beat  * MScore::division;
+        Fraction tick = Fraction(c.beat, 4);          // c.beat  * Constant::division;
 // qDebug("CHORD %d %d", c.beat, tick);
         Measure* m = score->tick2measure(tick);
         if (m == 0) {
@@ -789,7 +789,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
 
 void BBTrack::quantize(int startTick, int endTick, EventList* dst)
 {
-    int mintick = MScore::division * 64;
+    int mintick = Constant::division * 64;
     iEvent i = _events.begin();
     for (; i != _events.end(); ++i) {
         if (i->ontime() >= startTick) {
@@ -806,26 +806,26 @@ void BBTrack::quantize(int startTick, int endTick, EventList* dst)
             mintick = e.duration();
         }
     }
-    if (mintick <= MScore::division / 16) {        // minimum duration is 1/64
-        mintick = MScore::division / 16;
-    } else if (mintick <= MScore::division / 8) {
-        mintick = MScore::division / 8;
-    } else if (mintick <= MScore::division / 4) {
-        mintick = MScore::division / 4;
-    } else if (mintick <= MScore::division / 2) {
-        mintick = MScore::division / 2;
-    } else if (mintick <= MScore::division) {
-        mintick = MScore::division;
-    } else if (mintick <= MScore::division* 2) {
-        mintick = MScore::division * 2;
-    } else if (mintick <= MScore::division* 4) {
-        mintick = MScore::division * 4;
-    } else if (mintick <= MScore::division* 8) {
-        mintick = MScore::division * 8;
+    if (mintick <= Constant::division / 16) {        // minimum duration is 1/64
+        mintick = Constant::division / 16;
+    } else if (mintick <= Constant::division / 8) {
+        mintick = Constant::division / 8;
+    } else if (mintick <= Constant::division / 4) {
+        mintick = Constant::division / 4;
+    } else if (mintick <= Constant::division / 2) {
+        mintick = Constant::division / 2;
+    } else if (mintick <= Constant::division) {
+        mintick = Constant::division;
+    } else if (mintick <= Constant::division* 2) {
+        mintick = Constant::division * 2;
+    } else if (mintick <= Constant::division* 4) {
+        mintick = Constant::division * 4;
+    } else if (mintick <= Constant::division* 8) {
+        mintick = Constant::division * 8;
     }
     int raster;
-    if (mintick > MScore::division) {
-        raster = MScore::division;
+    if (mintick > Constant::division) {
+        raster = Constant::division;
     } else {
         raster = mintick;
     }
