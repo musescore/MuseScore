@@ -96,7 +96,7 @@ public:
 
     virtual void runPlugin() = 0;
 
-    int division() const { return MScore::division; }
+    int division() const { return Constant::division; }
     int mscoreVersion() const { return Ms::version(); }
     int mscoreMajorVersion() const { return majorVersion(); }
     int mscoreMinorVersion() const { return minorVersion(); }

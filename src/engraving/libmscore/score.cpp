@@ -321,7 +321,7 @@ Score::Score()
 
     _scoreFont = ScoreFont::fontByName("Leland");
 
-    _fileDivision           = MScore::division;
+    _fileDivision           = Constant::division;
     _style  = DefaultStyle::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";

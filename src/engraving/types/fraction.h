@@ -244,11 +244,11 @@ public:
             return -1;
         }
 
-        // MScore::division     - ticks per quarter note
-        // MScore::division * 4 - ticks per whole note
-        // result: rounded (MScore::division * 4 * m_numerator * 1.0 / m_denominator) value
+        // Constant::division     - ticks per quarter note
+        // Constant::division * 4 - ticks per whole note
+        // result: rounded (Constant::division * 4 * m_numerator * 1.0 / m_denominator) value
         const int sgn = (m_numerator < 0) ? -1 : 1;
-        const auto result = sgn * (static_cast<int_least64_t>(sgn * m_numerator) * Constant::division * 4 + (m_denominator / 2))
+        const auto result = sgn * (static_cast<int_least64_t>(sgn * m_numerator) * Constants::division * 4 + (m_denominator / 2))
                             / m_denominator;
         return static_cast<int>(result);
     }
@@ -258,11 +258,11 @@ public:
         if (ticks == -1) {
             return Fraction(-1, 1);        // HACK
         }
-        return Fraction(ticks, Constant::division * 4).reduced();
+        return Fraction(ticks, Constants::division * 4).reduced();
     }
 
     // A very small fraction, corresponds to 1 MIDI tick
-    static Fraction eps() { return Fraction(1, Constant::division * 4); }
+    static Fraction eps() { return Fraction(1, Constants::division * 4); }
 
     QString toString() const { return QString("%1/%2").arg(m_numerator).arg(m_denominator); }
     static Fraction fromString(const QString& str)
@@ -270,14 +270,6 @@ public:
         const int i = str.indexOf('/');
         return (i == -1) ? Fraction(str.toInt(), 1) : Fraction(str.leftRef(i).toInt(), str.midRef(i + 1).toInt());
     }
-
-//    QVariantMap toMap() const
-//    {
-//        return {
-//            { "numerator", numerator() },
-//            { "denominator", denominator() }
-//        };
-//    }
 };
 
 inline Fraction operator*(const Fraction& f, int v) { return Fraction(f) *= v; }

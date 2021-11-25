@@ -66,7 +66,7 @@ void SelectionRangeDeleteTests::verifyNoDelete(MasterScore* score, size_t spanne
 
 static EngravingItem* chordRestAtBeat(Score* score, int beat, int half = 0)
 {
-    int division = MScore::division;
+    int division = Constants::division;
     int tick = beat * division + half * division / 2;
     return score->tick2segment(Fraction::fromTicks(tick), false, SegmentType::ChordRest, false)->element(0);
 }

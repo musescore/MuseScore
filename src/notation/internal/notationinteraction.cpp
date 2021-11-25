@@ -2658,7 +2658,7 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
     }
 
     startEdit();
-    score()->cmdAddGrace(type, Ms::MScore::division / denominator);
+    score()->cmdAddGrace(type, Ms::Constant::division / denominator);
     apply();
 
     notifyAboutNotationChanged();

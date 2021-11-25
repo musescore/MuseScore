@@ -122,7 +122,7 @@ void TempoMap::normalize()
             e->second.tempo = tempo;
         }
         int delta = e->first - tick;
-        time += qreal(delta) / (MScore::division * tempo * _relTempo);
+        time += qreal(delta) / (Constant::division * tempo * _relTempo);
         time += e->second.pause;
         e->second.time = time;
         tick  = e->first;
@@ -292,7 +292,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
     if (sn) {
         *sn = _tempoSN;
     }
-    time += delta / (MScore::division * tempo * _relTempo);
+    time += delta / (Constant::division * tempo * _relTempo);
     return time;
 }
 
@@ -322,7 +322,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
         tempo = e->second.tempo;
     }
     delta = time - delta;
-    tick += lrint(delta * _relTempo * MScore::division * tempo);
+    tick += lrint(delta * _relTempo * Constant::division * tempo);
     if (sn) {
         *sn = _tempoSN;
     }

@@ -3064,7 +3064,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         }
     }
 
-    masterScore->_fileDivision = MScore::division;
+    masterScore->_fileDivision = Constants::division;
 
     //
     //    sanity check for barLineSpan and update ottavas
