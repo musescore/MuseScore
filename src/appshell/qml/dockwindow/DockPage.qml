@@ -26,7 +26,7 @@ import MuseScore.Dock 1.0
 DockPageView {
     id: root
 
-    property alias central: central.sourceComponent
+    property Component central: null
 
     property var toolBarLeftDropDestination: { "dock": toolBarLeftDockingHolder, "dropLocation": Location.Top }
     property var toolBarRightDropDestination: { "dock": toolBarRightDockingHolder, "dropLocation": Location.Top }
@@ -38,13 +38,17 @@ DockPageView {
     property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": Location.Left }
     property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": Location.Left }
 
+    property bool complited: false
+    Component.onCompleted: root.complited = true
+    Component.onDestruction: root.complited = false
+
     centralDock: DockCentralView {
         objectName: root.objectName + "_central"
 
         Loader {
             id: central
-
             anchors.fill: parent
+            sourceComponent: (root.complited && central.visible) ? root.central : null
         }
     }
 

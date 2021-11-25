@@ -49,7 +49,6 @@ public:
 
     //! Returns true if the canvas has been moved
     virtual bool moveCanvas(qreal dx, qreal dy) = 0;
-
     virtual void moveCanvasHorizontal(qreal dx) = 0;
     virtual void moveCanvasVertical(qreal dy) = 0;
 
