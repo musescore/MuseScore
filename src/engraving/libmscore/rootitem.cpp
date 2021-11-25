@@ -30,7 +30,7 @@ using namespace Ms;
 RootItem::RootItem(Score* score)
     : EngravingItem(ElementType::INVALID, score), m_score(score)
 {
-    m_dummy = new compat::DummyElement(m_score);
+    m_dummy = new compat::DummyElement(this);
 }
 
 RootItem::~RootItem()
@@ -46,8 +46,11 @@ compat::DummyElement* RootItem::dummy() const
 
 void RootItem::init()
 {
-    m_dummy->init();
     setupAccessible();
+
+    m_dummy->setParent(this);
+    m_dummy->setupAccessible();
+    m_dummy->init();
 }
 
 EngravingObject* RootItem::scanParent() const

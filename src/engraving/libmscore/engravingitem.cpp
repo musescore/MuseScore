@@ -198,11 +198,10 @@ void EngravingItem::setupAccessible()
 EngravingItem* EngravingItem::parentItem() const
 {
     EngravingObject* p = parent();
-    while (p) {
-        if (p->isEngravingItem()) {
-            return static_cast<EngravingItem*>(p);
-        }
+    if (p && p->isEngravingItem()) {
+        return static_cast<EngravingItem*>(p);
     }
+
     return nullptr;
 }
 

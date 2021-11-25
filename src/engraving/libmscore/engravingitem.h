@@ -208,12 +208,6 @@ class EngravingItem : public EngravingObject
 
     mu::engraving::AccessibleItem* m_accessible = nullptr;
 
-public:
-    enum class EditBehavior {
-        SelectOnly,
-        Edit,
-    };
-
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
@@ -221,12 +215,17 @@ protected:
     friend class mu::engraving::Factory;
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
-    virtual void setupAccessible();
     virtual mu::engraving::AccessibleItem* createAccessible();
 
 public:
+    enum class EditBehavior {
+        SelectOnly,
+        Edit,
+    };
 
     virtual ~EngravingItem();
+
+    virtual void setupAccessible();
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
