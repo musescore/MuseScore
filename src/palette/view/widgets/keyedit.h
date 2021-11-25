@@ -39,26 +39,36 @@ class KeyEditor : public QWidget, Ui::KeyEdit
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool showKeyPalette READ showKeyPalette WRITE setShowKeyPalette)
+
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
-    mu::palette::PaletteScrollArea* _keyPalette = nullptr;
-    mu::palette::PaletteWidget* sp = nullptr;
-    mu::palette::PaletteWidget* sp1 = nullptr;
-    bool _dirty = false;
+public:
+    KeyEditor(QWidget* parent = 0);
+    KeyEditor(const KeyEditor& widget);
+
+    bool dirty() const { return m_dirty; }
+    void save();
+
+    bool showKeyPalette() const;
+
+public slots:
+    void setShowKeyPalette(bool showKeyPalette);
 
 private slots:
     void addClicked();
     void clearClicked();
-    void setDirty() { _dirty = true; }
+    void setDirty() { m_dirty = true; }
 
 signals:
     void keySigAdded(const std::shared_ptr<KeySig>);
 
-public:
-    KeyEditor(QWidget* parent = 0);
-    bool dirty() const { return _dirty; }
-    void showKeyPalette(bool val);
-    void save();
+private:
+    mu::palette::PaletteScrollArea* m_keySigArea = nullptr;
+    mu::palette::PaletteWidget* m_keySigPaletteWidget = nullptr;
+    mu::palette::PaletteWidget* m_accidentalsPaletteWidget = nullptr;
+
+    bool m_dirty = false;
 };
 } // namespace Ms
 #endif

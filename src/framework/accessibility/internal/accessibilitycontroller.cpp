@@ -41,26 +41,27 @@
 using namespace mu::accessibility;
 
 AccessibleObject* s_rootObject = nullptr;
+std::shared_ptr<IQAccessibleInterfaceRegister> accessibleInterfaceRegister = nullptr;
 
 AccessibilityController::~AccessibilityController()
 {
     unreg(this);
 }
 
+QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
+{
+    return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+}
+
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
-#ifdef Q_OS_MAC
-    if (classname == QLatin1String("QQuickWindow")) {
-        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(s_rootObject));
+    if (!accessibleInterfaceRegister) {
+        accessibleInterfaceRegister = mu::modularity::ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
-#endif
 
-    if (classname == QLatin1String("mu::accessibility::AccessibleObject")) {
-        AccessibleObject* aobj = qobject_cast<AccessibleObject*>(object);
-        IF_ASSERT_FAILED(aobj) {
-            return nullptr;
-        }
-        return static_cast<QAccessibleInterface*>(new AccessibleItemInterface(aobj));
+    auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
+    if (interfaceGetter) {
+        return interfaceGetter(object);
     }
 
     return nullptr;

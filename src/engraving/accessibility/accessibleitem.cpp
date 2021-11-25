@@ -186,7 +186,10 @@ bool AccessibleItem::accessibleState(State st) const
     switch (st) {
     case IAccessible::State::Enabled: return true;
     case IAccessible::State::Active: return true;
-    case IAccessible::State::Focused: return accessibleRoot()->focusedElement() == this;
+    case IAccessible::State::Focused: {
+        auto root = accessibleRoot();
+        return root ? root->focusedElement() == this : false;
+    }
     case IAccessible::State::Selected: return m_element->selected();
     default:
         break;

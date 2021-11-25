@@ -91,6 +91,9 @@
        <property name="text">
         <string>Font:</string>
        </property>
+       <property name="buddy">
+        <cstring>fontList</cstring>
+       </property>
       </widget>
      </item>
      <item>

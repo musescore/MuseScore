@@ -409,6 +409,7 @@ Score::~Score()
 
     qDeleteAll(_parts);
     qDeleteAll(_staves);
+    qDeleteAll(_pages);
     _masterScore = 0;
 
     imageStore.clearUnused();

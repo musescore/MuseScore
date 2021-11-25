@@ -45,7 +45,7 @@ extern MasterScore* gpaletteScore;
 
 void SymbolDialog::createSymbolPalette()
 {
-    sp = new PaletteWidget();
+    m_symbolsWidget = new PaletteWidget(this);
     createSymbols();
 }
 
@@ -59,14 +59,14 @@ void SymbolDialog::createSymbols()
     const ScoreFont* f = &ScoreFont::scoreFonts()[currentIndex];
     // init the font if not done yet
     ScoreFont::fontByName(f->name());
-    sp->clear();
+    m_symbolsWidget->clear();
     for (auto name : (*mu::smuflRanges())[range]) {
         SymId id = SymNames::symIdByName(name);
         if (search->text().isEmpty()
             || SymNames::translatedUserNameForSymId(id).contains(search->text(), Qt::CaseInsensitive)) {
             auto s = std::make_shared<Symbol>(gpaletteScore->dummy());
             s->setSym(SymId(id), f);
-            sp->appendElement(s, SymNames::translatedUserNameForSymId(SymId(id)));
+            m_symbolsWidget->appendElement(s, SymNames::translatedUserNameForSymId(SymId(id)));
         }
     }
 }
@@ -91,21 +91,26 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     }
     fontList->setCurrentIndex(currentIndex);
 
-    QLayout* l = new QVBoxLayout();
-    frame->setLayout(l);
+    QLayout* layout = new QVBoxLayout();
+    frame->setLayout(layout);
     createSymbolPalette();
 
-    QScrollArea* sa = new PaletteScrollArea(sp);
-    l->addWidget(sa);
+    QScrollArea* symbolsArea = new PaletteScrollArea(m_symbolsWidget);
+    symbolsArea->setFocusProxy(m_symbolsWidget);
+    symbolsArea->setFocusPolicy(Qt::TabFocus);
+    layout->addWidget(symbolsArea);
 
-    sp->setAcceptDrops(false);
-    sp->setDrawGrid(true);
-    sp->setSelectable(true);
+    m_symbolsWidget->setAcceptDrops(false);
+    m_symbolsWidget->setDrawGrid(true);
+    m_symbolsWidget->setSelectable(true);
 
     connect(systemFlag, &QCheckBox::stateChanged, this, &SymbolDialog::systemFlagChanged);
     connect(fontList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolDialog::systemFontChanged);
 
-    sa->setWidget(sp);
+    symbolsArea->setWidget(m_symbolsWidget);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 //---------------------------------------------------------
@@ -115,8 +120,8 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
 void SymbolDialog::systemFlagChanged(int state)
 {
     bool sysFlag = state == Qt::Checked;
-    for (int i = 0; i < sp->actualCellCount(); ++i) {
-        ElementPtr e = sp->elementForCellAt(i);
+    for (int i = 0; i < m_symbolsWidget->actualCellCount(); ++i) {
+        ElementPtr e = m_symbolsWidget->elementForCellAt(i);
         if (e && e->type() == ElementType::SYMBOL) {
             std::dynamic_pointer_cast<Symbol>(e)->setSystemFlag(sysFlag);
         }

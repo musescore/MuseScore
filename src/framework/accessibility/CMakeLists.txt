@@ -26,6 +26,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaccessible.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccessibilitycontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iaccessibilityconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iqaccessibleinterfaceregister.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilitycontroller.h
@@ -35,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
