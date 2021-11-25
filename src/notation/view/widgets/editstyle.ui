@@ -434,10 +434,6 @@
                    <property name="text">
                     <string notr="true"/>
                    </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -503,10 +499,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -753,10 +745,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
@@ -779,10 +767,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -879,10 +863,6 @@
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="0" column="0">
@@ -951,10 +931,6 @@
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="5" column="2">
@@ -967,10 +943,6 @@
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -1069,10 +1041,6 @@
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="0" column="7">
@@ -1085,10 +1053,6 @@
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -1278,10 +1242,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="3" column="0">
@@ -1319,10 +1279,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -1366,10 +1322,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="5" column="4">
@@ -1393,10 +1345,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="3" column="6">
@@ -1410,10 +1358,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="4" column="6">
@@ -1423,10 +1367,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -1589,10 +1529,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="5" column="6">
@@ -1602,10 +1538,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -1644,10 +1576,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -1728,10 +1656,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
@@ -1761,10 +1685,6 @@
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="1" column="6">
@@ -1777,10 +1697,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -1807,10 +1723,6 @@
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -2036,10 +1948,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="3">
@@ -2104,10 +2012,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -2159,10 +2063,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="3" column="0">
@@ -2213,10 +2113,6 @@
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -2977,10 +2873,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="3">
@@ -3004,10 +2896,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="3">
@@ -3025,10 +2913,6 @@
            </item>
            <item row="1" column="6">
             <widget class="QToolButton" name="resetMeasureNumberHPlacement">
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="4" column="4" rowspan="2" colspan="2">
@@ -3043,10 +2927,6 @@
            </item>
            <item row="0" column="6">
             <widget class="QToolButton" name="resetMeasureNumberVPlacement">
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="4" colspan="2">
@@ -3102,10 +2982,6 @@
           <layout class="QGridLayout" name="gridLayout_48">
            <item row="0" column="2">
             <widget class="QToolButton" name="resetMmRestRangeBracketType">
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -3124,10 +3000,6 @@
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -3178,10 +3050,6 @@
            </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="resetMmRestRangeVPlacement">
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -3196,10 +3064,6 @@
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetMmRestRangeHPlacement">
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="4" column="0">
@@ -3234,10 +3098,6 @@
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -3729,10 +3589,6 @@
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="4" rowspan="2">
@@ -3797,10 +3653,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4013,10 +3865,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="0" column="1">
@@ -4090,10 +3938,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="11" column="1">
@@ -4126,10 +3970,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4201,10 +4041,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="17" column="0">
@@ -4245,10 +4081,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="7" column="0">
@@ -4271,10 +4103,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4319,10 +4147,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="10" column="0">
@@ -4356,10 +4180,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="13" column="2">
@@ -4372,10 +4192,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4430,10 +4246,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="11" column="2">
@@ -4446,10 +4258,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4464,10 +4272,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="21" column="2">
@@ -4481,10 +4285,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="20" column="2">
@@ -4497,10 +4297,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4524,10 +4320,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4569,10 +4361,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="20" column="0">
@@ -4595,10 +4383,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4689,10 +4473,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="5" column="0">
@@ -4722,10 +4502,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -4780,10 +4556,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="9" column="2">
@@ -4796,10 +4568,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4823,10 +4591,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4894,10 +4658,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="0" colspan="2">
@@ -4917,10 +4677,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -4962,10 +4718,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="8" column="2">
@@ -4979,10 +4731,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="6" column="2">
@@ -4995,10 +4743,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5022,10 +4766,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5069,10 +4809,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5500,10 +5236,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="0">
@@ -5543,10 +5275,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="3" colspan="2">
@@ -5560,10 +5288,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5591,10 +5315,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetMMRestHBarThickness">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5632,10 +5352,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="3" column="0">
@@ -5663,10 +5379,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true">…</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="3" column="3">
@@ -5693,10 +5405,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5737,10 +5445,6 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string notr="true">…</string>
                 </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
-                </property>
                </widget>
               </item>
               <item row="0" column="1">
@@ -5770,10 +5474,6 @@ By default, they will be placed such as that their right end are at the same lev
                <widget class="QToolButton" name="resetMMRestOldStyleSpacing">
                 <property name="text">
                  <string notr="true">…</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>data/icons/edit-reset.svg</normaloff>data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -5877,20 +5577,12 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string notr="true">…</string>
                 </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                </property>
                </widget>
               </item>
               <item row="0" column="5">
                <widget class="QToolButton" name="resetMRNumberEveryXMeasures">
                 <property name="text">
                  <string notr="true">…</string>
-                </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                 </property>
                </widget>
               </item>
@@ -5914,10 +5606,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -5953,20 +5641,12 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true">…</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetOneMeasureRepeatShow1">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -6097,10 +5777,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="0">
@@ -6156,10 +5832,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="2" column="1">
@@ -6197,10 +5869,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -6289,10 +5957,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="2">
@@ -6311,10 +5975,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -6395,10 +6055,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -6496,10 +6152,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="1">
@@ -6537,10 +6189,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -6670,10 +6318,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="1" column="2">
@@ -6693,10 +6337,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="0" column="2">
@@ -6715,10 +6355,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -6774,10 +6410,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -7111,10 +6743,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -7127,10 +6755,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7145,10 +6769,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -7162,10 +6782,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="3" column="2">
@@ -7178,10 +6794,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7271,10 +6883,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="5" column="2">
@@ -7294,10 +6902,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="6" column="2">
@@ -7316,10 +6920,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7370,10 +6970,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -7417,10 +7013,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -7450,10 +7042,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -7478,10 +7066,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7567,10 +7151,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7670,10 +7250,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -7703,10 +7279,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -7725,10 +7297,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7811,10 +7379,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="6" column="0">
@@ -7844,10 +7408,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -7876,10 +7436,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -7940,10 +7496,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="3" column="4">
@@ -7973,10 +7525,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="2">
@@ -7995,10 +7543,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8028,10 +7572,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8214,10 +7754,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="3">
@@ -8231,10 +7767,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="4" column="3">
@@ -8247,10 +7779,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8275,10 +7803,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="3">
@@ -8291,10 +7815,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8408,10 +7928,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -8449,10 +7965,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -8475,10 +7987,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8548,10 +8056,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -8589,10 +8093,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -8615,10 +8115,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8665,10 +8161,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -8691,10 +8183,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8826,10 +8314,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -8842,10 +8326,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8875,10 +8355,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -8978,10 +8454,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -8994,10 +8466,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9027,10 +8495,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9097,10 +8561,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Reset 'Articulation size' value</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -9138,10 +8598,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Reset 'Stem distance' value</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -9159,20 +8615,12 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Reset 'Notehead distance' value</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetPropertyDistance">
              <property name="accessibleName">
               <string>Reset 'Articulation distance' value</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9314,10 +8762,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -9333,10 +8777,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9360,10 +8800,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9430,10 +8866,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="0" column="0">
@@ -9489,10 +8921,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -9508,10 +8936,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9574,10 +8998,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9658,10 +9078,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -9674,10 +9090,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9707,10 +9119,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9769,10 +9177,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -9894,10 +9298,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="3" column="0">
@@ -9920,10 +9320,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -9957,10 +9353,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="5" column="1">
@@ -9993,10 +9385,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="6" column="0" colspan="2">
@@ -10016,10 +9404,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10044,10 +9428,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="2" column="0">
@@ -10070,10 +9450,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10162,10 +9538,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="8" column="0" colspan="2">
@@ -10200,10 +9572,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="6" column="1">
@@ -10232,10 +9600,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10279,10 +9643,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="1" column="0">
@@ -10325,10 +9685,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="2" column="2">
@@ -10341,10 +9697,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10359,10 +9711,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="4" column="2">
@@ -10375,10 +9723,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10486,10 +9830,6 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="text">
                   <string notr="true"/>
                  </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                 </property>
                 </widget>
                </item>
                <item row="0" column="1">
@@ -10531,10 +9871,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10581,10 +9917,6 @@ By default, they will be placed such as that their right end are at the same lev
                  </property>
                  <property name="text">
                   <string notr="true"/>
-                 </property>
-                 <property name="icon">
-                  <iconset>
-                   <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                  </property>
                 </widget>
                </item>
@@ -10648,10 +9980,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -10664,10 +9992,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -10706,10 +10030,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="0">
@@ -10742,10 +10062,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -10839,10 +10155,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -10855,10 +10167,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -10882,10 +10190,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -10931,10 +10235,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -11309,10 +10609,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="2" column="0">
@@ -11345,10 +10641,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11383,10 +10675,6 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="text">
                      <string notr="true"/>
                     </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                    </property>
                    </widget>
                   </item>
                   <item row="2" column="5">
@@ -11399,10 +10687,6 @@ By default, they will be placed such as that their right end are at the same lev
                     </property>
                     <property name="text">
                      <string notr="true"/>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11584,10 +10868,6 @@ By default, they will be placed such as that their right end are at the same lev
                           <property name="text">
                            <string notr="true"/>
                           </property>
-                          <property name="icon">
-                           <iconset>
-                            <normaloff>:/data/icons/document-open.svg</normaloff>:/data/icons/document-open.svg</iconset>
-                          </property>
                          </widget>
                         </item>
                         <item row="0" column="1">
@@ -11622,10 +10902,6 @@ By default, they will be placed such as that their right end are at the same lev
                    <widget class="QToolButton" name="resetMaxChordShiftAbove">
                     <property name="text">
                      <string notr="true">…</string>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11692,10 +10968,6 @@ By default, they will be placed such as that their right end are at the same lev
                    <widget class="QToolButton" name="resetMaxChordShiftBelow">
                     <property name="text">
                      <string notr="true">…</string>
-                    </property>
-                    <property name="icon">
-                     <iconset>
-                      <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                     </property>
                    </widget>
                   </item>
@@ -11839,10 +11111,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetMaxFretShiftAbove">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12021,10 +11289,6 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetMaxFretShiftBelow">
              <property name="text">
               <string notr="true">…</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12205,10 +11469,6 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string notr="true"/>
                 </property>
-                <property name="icon">
-                 <iconset>
-                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                </property>
                </widget>
               </item>
               <item row="1" column="0" colspan="3">
@@ -12257,10 +11517,6 @@ By default, they will be placed such as that their right end are at the same lev
                    <property name="text">
                     <string notr="true"/>
                    </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                   </property>
                   </widget>
                  </item>
                  <item row="0" column="2">
@@ -12273,10 +11529,6 @@ By default, they will be placed such as that their right end are at the same lev
                    </property>
                    <property name="text">
                     <string notr="true"/>
-                   </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                    </property>
                   </widget>
                  </item>
@@ -12311,10 +11563,6 @@ By default, they will be placed such as that their right end are at the same lev
                    <property name="text">
                     <string notr="true"/>
                    </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                   </property>
                   </widget>
                  </item>
                  <item row="3" column="1">
@@ -12333,10 +11581,6 @@ By default, they will be placed such as that their right end are at the same lev
                    </property>
                    <property name="text">
                     <string notr="true"/>
-                   </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
                    </property>
                   </widget>
                  </item>
@@ -12374,10 +11618,6 @@ By default, they will be placed such as that their right end are at the same lev
                    <property name="text">
                     <string notr="true"/>
                    </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-                   </property>
                   </widget>
                  </item>
                 </layout>
@@ -12402,10 +11642,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12440,10 +11676,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="9" column="2">
@@ -12456,10 +11688,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12486,10 +11714,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12519,10 +11743,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12554,10 +11774,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="1" column="2">
@@ -12571,10 +11787,6 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string notr="true"/>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
             </widget>
            </item>
            <item row="10" column="2">
@@ -12587,10 +11799,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
@@ -12667,10 +11875,6 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="text">
               <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
             </widget>
            </item>
