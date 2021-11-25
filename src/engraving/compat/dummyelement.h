@@ -43,6 +43,7 @@ public:
 
     void init();
 
+    RootItem* rootItem();
     Ms::Page* page();
     Ms::System* system();
     Ms::Measure* measure();

@@ -30,6 +30,8 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+#include "accessibility/accessibleitem.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
@@ -45,12 +47,32 @@ DummyElement::~DummyElement()
 void DummyElement::init()
 {
     m_root = new RootItem(score());
+    m_root->setParent(parent());
+    m_root->setupAccessible();
+
     m_page = Factory::createPage(m_root);
+    m_page->setParent(parent());
+    m_page->setupAccessible();
+
     m_system = Factory::createSystem(m_page);
+    m_system->setParent(m_page);
+    m_system->setupAccessible();
+
     m_measure = Factory::createMeasure(m_system);
+    m_measure->setParent(m_system);
+    m_measure->setupAccessible();
+
     m_segment = Factory::createSegment(m_measure);
+    m_segment->setParent(m_measure);
+    m_segment->setupAccessible();
+
     m_chord = Factory::createChord(m_segment);
+    m_chord->setParent(m_segment);
+    m_chord->setupAccessible();
+
     m_note = Factory::createNote(m_chord);
+    m_note->setParent(m_chord);
+    m_note->setupAccessible();
 
     setIsDummy(true);
     m_root->setIsDummy(true);
@@ -60,6 +82,11 @@ void DummyElement::init()
     m_segment->setIsDummy(true);
     m_chord->setIsDummy(true);
     m_note->setIsDummy(true);
+}
+
+RootItem* DummyElement::rootItem()
+{
+    return m_root;
 }
 
 Ms::Page* DummyElement::page()
