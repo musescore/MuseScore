@@ -87,11 +87,10 @@ SymId ShadowNote::flagSym() const
 
 bool ShadowNote::computeUp() const
 {
-    Staff* st = staff();
-    const StaffType* tab = st ? st->staffTypeForElement(this) : 0;
-    bool tabStaff = tab && tab->isTabStaff();
+    const StaffType* staffType = this->staffType();
+    bool tabStaff = staffType && staffType->isTabStaff();
 
-    if (tabStaff && (tab->stemless() || !tab->stemThrough())) {
+    if (tabStaff && (staffType->stemless() || !staffType->stemThrough())) {
         // if TAB staff with no stems or stem beside staff
         return true;
     }
@@ -99,7 +98,7 @@ bool ShadowNote::computeUp() const
     if (score()->tick2measure(m_tick)->hasVoices(staffIdx()) || voice() != 0) {
         return !(voice() & 1);
     } else {
-        return m_lineIndex > (st ? st->middleLine(tick()) : 4);
+        return m_lineIndex > (staffType ? staffType->middleLine() : 4);
     }
 }
 

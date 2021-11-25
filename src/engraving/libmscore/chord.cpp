@@ -238,9 +238,10 @@ int Chord::downString() const
 
 std::vector<int> Chord::noteDistances() const
 {
-    Q_ASSERT(staff());
-    bool isTabStaff = staff()->staffTypeForElement(this)->isTabStaff();
-    int staffMiddleLine = staff()->middleLine(tick());
+    const StaffType* staffType = this->staffType();
+    Q_ASSERT(staffType);
+    bool isTabStaff = staffType->isTabStaff();
+    int staffMiddleLine = staffType->middleLine();
     int upStringAmount = 0;
     if (isTabStaff) {
         upStringAmount = upString() * 2;
@@ -3031,27 +3032,29 @@ void Chord::setSlash(bool flag, bool stemless)
         undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
     }
 
+    const StaffType* staffType = this->staffType();
+
     // voice-dependent attributes - line, size, offset, head
     if (track() % VOICES < 2) {
         // use middle line
-        line = staff()->middleLine(tick());
+        line = staffType->middleLine();
     } else {
         // set small
         undoChangeProperty(Pid::SMALL, true);
         // set outside the staff
         qreal y = 0.0;
         if (track() % 2) {
-            line = staff()->bottomLine(tick()) + 1;
+            line = staffType->bottomLine() + 1;
             y    = 0.5 * spatium();
         } else {
             line = -1;
-            if (!staff()->isDrumStaff(tick())) {
+            if (!staffType->isDrumStaff()) {
                 y = -0.5 * spatium();
             }
         }
         // for non-drum staves, add an additional offset
         // for drum staves, no offset, but use normal head
-        if (!staff()->isDrumStaff(tick())) {
+        if (!staffType->isDrumStaff()) {
             // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
             rypos() += y;
         } else {

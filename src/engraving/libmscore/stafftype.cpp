@@ -146,6 +146,16 @@ const char* StaffType::groupName(StaffGroup r)
     return groupNames[(int)r];
 }
 
+int StaffType::middleLine() const
+{
+    return _lines - 1 - _stepOffset;
+}
+
+int StaffType::bottomLine() const
+{
+    return (_lines - 1) * 2;
+}
+
 //---------------------------------------------------------
 //   operator==
 //---------------------------------------------------------
