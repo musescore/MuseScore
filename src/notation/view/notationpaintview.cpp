@@ -28,9 +28,10 @@
 #include "stringutils.h"
 #include "log.h"
 
-using namespace mu::notation;
-using namespace mu::ui;
 using namespace mu;
+using namespace mu::ui;
+using namespace mu::draw;
+using namespace mu::notation;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
@@ -109,6 +110,7 @@ void NotationPaintView::initNavigatorOrientation()
 
 void NotationPaintView::moveCanvasToCenter()
 {
+    TRACEFUNC;
     if (!isInited()) {
         return;
     }
@@ -119,6 +121,7 @@ void NotationPaintView::moveCanvasToCenter()
 
 void NotationPaintView::scrollHorizontal(qreal position)
 {
+    TRACEFUNC;
     qreal scrollStep = position - m_previousHorizontalScrollPosition;
     if (qFuzzyIsNull(scrollStep)) {
         return;
@@ -130,6 +133,7 @@ void NotationPaintView::scrollHorizontal(qreal position)
 
 void NotationPaintView::scrollVertical(qreal position)
 {
+    TRACEFUNC;
     qreal scrollStep = position - m_previousVerticalScrollPosition;
     if (qFuzzyIsNull(scrollStep)) {
         return;
@@ -151,6 +155,7 @@ void NotationPaintView::zoomOut()
 
 void NotationPaintView::selectOnNavigationActive()
 {
+    TRACEFUNC;
     if (!notation()) {
         return;
     }
@@ -193,6 +198,7 @@ void NotationPaintView::onCurrentNotationChanged()
     });
 
     onNoteInputChanged();
+    onSelectionChanged();
 
     INotationInteractionPtr interaction = notationInteraction();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
@@ -228,6 +234,8 @@ void NotationPaintView::onCurrentNotationChanged()
 
 void NotationPaintView::onViewSizeChanged()
 {
+    TRACEFUNC;
+
     if (!notation()) {
         return;
     }
@@ -245,6 +253,7 @@ void NotationPaintView::onViewSizeChanged()
 
 void NotationPaintView::updateLoopMarkers(const LoopBoundaries& boundaries)
 {
+    TRACEFUNC;
     m_loopInMarker->setRect(boundaries.loopInRect);
     m_loopOutMarker->setRect(boundaries.loopOutRect);
 
@@ -307,11 +316,10 @@ void NotationPaintView::onNoteInputChanged()
 
 void NotationPaintView::onSelectionChanged()
 {
+    TRACEFUNC;
     if (notationSelection()->isNone()) {
         return;
     }
-
-    TRACEFUNC;
 
     RectF selectionRect = notationSelection()->canvasBoundingRect();
 
@@ -326,27 +334,29 @@ bool NotationPaintView::isNoteEnterMode() const
 
 void NotationPaintView::showShadowNote(const PointF& pos)
 {
+    TRACEFUNC;
     notationInteraction()->showShadowNote(pos);
     update();
 }
 
 void NotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
 {
+    TRACEFUNC;
     emit showContextMenuRequested(static_cast<int>(elementType), pos);
 }
 
 void NotationPaintView::hideContextMenu()
 {
+    TRACEFUNC;
     emit hideContextMenuRequested();
 }
 
 void NotationPaintView::paint(QPainter* qp)
 {
+    TRACEFUNC;
     if (!isInited()) {
         return;
     }
-
-    TRACEFUNC;
 
     mu::draw::Painter mup(qp, "notationview");
     mu::draw::Painter* painter = &mup;
@@ -370,7 +380,9 @@ void NotationPaintView::paint(QPainter* qp)
 
 void NotationPaintView::onNotationSetup()
 {
-    m_notation = globalContext()->currentNotation();
+    TRACEFUNC;
+    onCurrentNotationChanged();
+    onPlayingChanged();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
@@ -399,6 +411,7 @@ void NotationPaintView::onNotationSetup()
 
 void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
 {
+    TRACEFUNC;
     QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
 
     if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
@@ -411,6 +424,7 @@ void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painte
 
 PointF NotationPaintView::canvasCenter() const
 {
+    TRACEFUNC;
     RectF canvasRect = m_matrix.map(notationContentRect());
 
     qreal canvasWidth = canvasRect.width();
@@ -424,6 +438,7 @@ PointF NotationPaintView::canvasCenter() const
 
 std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) const
 {
+    TRACEFUNC;
     RectF scrollableArea = scrollableAreaRect();
     RectF viewport = this->viewport();
 
@@ -469,6 +484,7 @@ QRectF NotationPaintView::viewport_property() const
 
 RectF NotationPaintView::notationContentRect() const
 {
+    TRACEFUNC;
     if (!notationElements()) {
         return RectF();
     }
@@ -483,6 +499,7 @@ RectF NotationPaintView::notationContentRect() const
 
 RectF NotationPaintView::scrollableAreaRect() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? SCROLL_LIMIT_ON_OFFSET : SCROLL_LIMIT_OFF_OFFSET;
 
@@ -494,6 +511,7 @@ RectF NotationPaintView::scrollableAreaRect() const
 
 qreal NotationPaintView::horizontalScrollableSize() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -512,6 +530,7 @@ qreal NotationPaintView::horizontalScrollableSize() const
 
 qreal NotationPaintView::verticalScrollableSize() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -530,6 +549,7 @@ qreal NotationPaintView::verticalScrollableSize() const
 
 qreal NotationPaintView::horizontalScrollbarSize() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -548,6 +568,7 @@ qreal NotationPaintView::horizontalScrollbarSize() const
 
 qreal NotationPaintView::verticalScrollbarSize() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -566,6 +587,7 @@ qreal NotationPaintView::verticalScrollbarSize() const
 
 qreal NotationPaintView::startHorizontalScrollPosition() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -578,6 +600,7 @@ qreal NotationPaintView::startHorizontalScrollPosition() const
 
 qreal NotationPaintView::startVerticalScrollPosition() const
 {
+    TRACEFUNC;
     RectF viewport = this->viewport();
     RectF contentRect = notationContentRect();
 
@@ -590,6 +613,7 @@ qreal NotationPaintView::startVerticalScrollPosition() const
 
 void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
 {
+    TRACEFUNC;
     RectF viewRect = viewport();
     RectF showRect = logicRect;
 
@@ -638,6 +662,7 @@ void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
 
 void NotationPaintView::ensureViewportInsideScrollableArea()
 {
+    TRACEFUNC;
     auto [dx, dy] = constraintCanvas(0, 0);
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return;
@@ -649,12 +674,14 @@ void NotationPaintView::ensureViewportInsideScrollableArea()
 
 void NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
 {
+    TRACEFUNC;
     PointF viewTopLeft = canvasPos();
     moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
 bool NotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
+    TRACEFUNC;
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return false;
     }
@@ -691,6 +718,7 @@ qreal NotationPaintView::currentScaling() const
 
 void NotationPaintView::setScaling(qreal scaling, const QPointF& pos)
 {
+    TRACEFUNC;
     qreal currentScaling = this->currentScaling();
 
     IF_ASSERT_FAILED(!qFuzzyIsNull(scaling)) {
@@ -711,6 +739,7 @@ void NotationPaintView::setScaling(qreal scaling, const QPointF& pos)
 
 void NotationPaintView::scale(qreal factor, const QPointF& pos)
 {
+    TRACEFUNC;
     if (qFuzzyCompare(factor, 1.0)) {
         return;
     }
@@ -733,6 +762,7 @@ void NotationPaintView::scale(qreal factor, const QPointF& pos)
 
 void NotationPaintView::wheelEvent(QWheelEvent* event)
 {
+    TRACEFUNC;
     if (isInited()) {
         m_inputController->wheelEvent(event);
     }
@@ -740,6 +770,7 @@ void NotationPaintView::wheelEvent(QWheelEvent* event)
 
 void NotationPaintView::forceFocusIn()
 {
+    TRACEFUNC;
     setFocus(true);
     emit activeFocusRequested();
     forceActiveFocus();
@@ -747,9 +778,8 @@ void NotationPaintView::forceFocusIn()
 
 void NotationPaintView::mousePressEvent(QMouseEvent* event)
 {
-    setFocus(true);
-    emit activeFocusRequested();
-    forceActiveFocus();
+    TRACEFUNC;
+    forceFocusIn();
 
     if (isInited()) {
         m_inputController->mousePressEvent(event);
@@ -758,6 +788,7 @@ void NotationPaintView::mousePressEvent(QMouseEvent* event)
 
 void NotationPaintView::mouseMoveEvent(QMouseEvent* event)
 {
+    TRACEFUNC;
     if (isInited()) {
         m_inputController->mouseMoveEvent(event);
     }
@@ -765,7 +796,8 @@ void NotationPaintView::mouseMoveEvent(QMouseEvent* event)
 
 void NotationPaintView::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    forceActiveFocus();
+    TRACEFUNC;
+    forceFocusIn();
 
     if (isInited()) {
         m_inputController->mouseDoubleClickEvent(event);
@@ -908,11 +940,10 @@ bool NotationPaintView::isInited() const
 
 void NotationPaintView::onPlayingChanged()
 {
+    TRACEFUNC;
     if (!notationPlayback()) {
         return;
     }
-
-    TRACEFUNC;
 
     bool isPlaying = playbackController()->isPlaying();
     m_playbackCursor->setVisible(isPlaying);
@@ -928,11 +959,10 @@ void NotationPaintView::onPlayingChanged()
 
 void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
+    TRACEFUNC;
     if (!notationPlayback()) {
         return;
     }
-
-    TRACEFUNC;
 
     RectF cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
     m_playbackCursor->setRect(cursorRect);
@@ -946,6 +976,7 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
 
 const Page* NotationPaintView::pointToPage(const PointF& point) const
 {
+    TRACEFUNC;
     if (!notationElements()) {
         return nullptr;
     }
@@ -966,6 +997,8 @@ const Page* NotationPaintView::pointToPage(const PointF& point) const
 
 PointF NotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const
 {
+    TRACEFUNC;
+
     PointF result = pos;
     const Page* page = pointToPage(showRect.topLeft());
     if (!page) {

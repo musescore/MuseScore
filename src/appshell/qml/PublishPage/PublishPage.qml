@@ -123,7 +123,9 @@ DockPage {
         }
     ]
 
-    central: NotationView {}
+    central: NotationView {
+        name: "PublishNotationView"
+    }
 
     statusBar: DockStatusBar {
         objectName: "publishStatusBar"

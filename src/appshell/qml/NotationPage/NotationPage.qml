@@ -381,6 +381,7 @@ DockPage {
 
     central: NotationView {
         id: notationView
+        name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
 
