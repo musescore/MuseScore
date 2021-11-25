@@ -208,29 +208,31 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
 {
     QString ename(QString(name).split(' ')[0]);
 
-    putLevel();
-
     switch (data.type()) {
     case P_TYPE::UNDEFINED:
         UNREACHABLE;
         break;
     // base
     case P_TYPE::BOOL:
+        putLevel();
         *this << "<" << name << ">";
         *this << int(data.value<bool>());
         *this << "</" << ename << ">\n";
         break;
     case P_TYPE::INT:
+        putLevel();
         *this << "<" << name << ">";
         *this << data.value<int>();
         *this << "</" << ename << ">\n";
         break;
     case P_TYPE::REAL:
+        putLevel();
         *this << "<" << name << ">";
         *this << data.value<qreal>();
         *this << "</" << ename << ">\n";
         break;
     case P_TYPE::STRING:
+        putLevel();
         *this << "<" << name << ">";
         *this << xmlString(data.value<QString>());
         *this << "</" << ename << ">\n";
@@ -238,10 +240,11 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     // geometry
     case P_TYPE::POINT: {
         PointF p = data.value<PointF>();
-        tag(name, p, false);
+        tag(name, p);
     }
     break;
     case P_TYPE::SIZE: {
+        putLevel();
         SizeF s = data.value<SizeF>();
         *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
     }
@@ -253,11 +256,13 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         UNREACHABLE; //! TODO
         break;
     case P_TYPE::SPATIUM:
+        putLevel();
         *this << "<" << name << ">";
         *this << data.value<Spatium>().val();
         *this << "</" << ename << ">\n";
         break;
     case P_TYPE::MILIMETRE:
+        putLevel();
         *this << "<" << name << ">";
         *this << qreal(data.value<Milimetre>());
         *this << "</" << ename << ">\n";
@@ -266,12 +271,14 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
 
     // draw
     case P_TYPE::COLOR: {
-        draw::Color color(data.value<draw::Color>());
+        putLevel();
+        Color color(data.value<draw::Color>());
         *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
     break;
     case P_TYPE::ALIGN: {
+        putLevel();
         Align a = data.value<Align>();
         const char* h;
         if (a & Align::HCENTER) {
@@ -308,6 +315,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     }
     break;
     case P_TYPE::PLACEMENT_H: {
+        putLevel();
         *this << "<" << name << ">";
         switch (data.value<PlacementH>()) {
         case PlacementH::LEFT:
@@ -324,6 +332,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     }
     break;
     case P_TYPE::DIRECTION_V: {
+        putLevel();
         switch (data.value<DirectionV>()) {
         case DirectionV::AUTO:
             *this << "auto";
@@ -344,7 +353,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     // time
     case P_TYPE::FRACTION: {
         const Fraction& f = data.value<Fraction>();
-        *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
+        tag(name, f);
     }
     break;
     default: {
@@ -384,13 +393,20 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     }
 }
 
-void XmlWriter::tag(const char* name, const mu::PointF& p, bool isPutLevel)
+void XmlWriter::tag(const char* name, const mu::PointF& p)
 {
-    if (isPutLevel) {
-        putLevel();
+    putLevel();
+    *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+}
+
+void XmlWriter::tag(const char* name, const Fraction& v, const Fraction& def)
+{
+    if (v == def) {
+        return;
     }
 
-    *this << QString("<%1 x=\"%2\" y=\"%3\"/>\n").arg(name).arg(p.x()).arg(p.y());
+    putLevel();
+    *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(v.numerator()).arg(v.denominator());
 }
 
 //---------------------------------------------------------
@@ -466,13 +482,7 @@ void XmlWriter::tag(const QString& name, QVariant data)
     }
     break;
     default: {
-        const char* type = data.typeName();
-        if (strcmp(type, "Ms::Fraction") == 0) {
-            const Fraction& f = data.value<Fraction>();
-            *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
-        } else {
-            qFatal("XmlWriter::tag: unsupported type %d %s", data.type(), type);
-        }
+        UNREACHABLE;
     }
     break;
     }

@@ -25,7 +25,6 @@
 
 #include <climits>
 
-#include "fraction.h"
 #include "property/propertyvalue.h"
 
 namespace Ms {

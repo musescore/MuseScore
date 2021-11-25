@@ -23,13 +23,12 @@
 #ifndef __MCURSOR_H__
 #define __MCURSOR_H__
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class MasterScore;
 class Score;
 class TDuration;
-class Fraction;
 class TimeSig;
 class Chord;
 enum class Key;

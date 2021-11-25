@@ -23,7 +23,7 @@
 #ifndef __AL_SIG_H__
 #define __AL_SIG_H__
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class XmlWriter;
@@ -125,7 +125,7 @@ public:
 
     bool operator==(const SigEvent& e) const;
     bool valid() const { return _timesig.isValid(); }
-    QString print() const { return _timesig.print(); }
+    QString print() const { return _timesig.toString(); }
     TimeSigFrac timesig() const { return _timesig; }
     TimeSigFrac nominal() const { return _nominal; }
     void setNominal(const Fraction& f) { _nominal = f; }

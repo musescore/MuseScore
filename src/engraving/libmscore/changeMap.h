@@ -25,7 +25,7 @@
 
 #include <QMultiMap>
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 /**
  \file

@@ -25,7 +25,7 @@
 
 #include "engravingobject.h"
 #include "elementgroup.h"
-#include "fraction.h"
+
 #include "mscore.h"
 #include "shape.h"
 #include "sig.h"
@@ -37,6 +37,8 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
+
+#include "types/fraction.h"
 
 namespace mu::engraving {
 class Factory;

@@ -33,7 +33,6 @@
 
 namespace Ms {
 class Chord;
-class Fraction;
 class LetRing;
 class Measure;
 class Note;

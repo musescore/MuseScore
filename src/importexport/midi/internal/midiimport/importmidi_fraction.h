@@ -22,7 +22,7 @@
 #ifndef IMPORTMIDI_FRACTION_H
 #define IMPORTMIDI_FRACTION_H
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace Ms {
 class ReducedFraction

@@ -33,7 +33,6 @@
 
 namespace Ms {
 class Measure;
-class Fraction;
 }
 
 namespace mu::notation {

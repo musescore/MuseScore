@@ -25,7 +25,6 @@
 #include "staff.h"
 #include "chordlist.h"
 #include "harmony.h"
-#include "fraction.h"
 #include "segment.h"
 #include "chordrest.h"
 

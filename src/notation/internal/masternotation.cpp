@@ -165,7 +165,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                     if (!linkedToPrevious) {
                         puRests.clear();
                     }
-                    std::vector<Ms::TDuration> dList = toDurationList(measure->ticks(), false);
+                    std::vector<Ms::TDuration> dList = Ms::toDurationList(measure->ticks(), false);
                     if (!dList.empty()) {
                         Ms::Fraction ltick = tick;
                         int k = 0;

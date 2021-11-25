@@ -30,7 +30,6 @@ class Score;
 class System;
 class Spanner;
 class Chord;
-class Fraction;
 }
 
 namespace mu::engraving {

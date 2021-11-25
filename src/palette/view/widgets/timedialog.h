@@ -24,7 +24,7 @@
 #define __TIMEDIALOG_H__
 
 #include "ui_timedialog.h"
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"

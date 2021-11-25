@@ -69,7 +69,7 @@ QString MusicXmlPart::toString() const
             res += "\n";
         }
         res += QString("measure %1 duration %2 (%3)")
-               .arg(measureNumbers.at(i), measureDurations.at(i).print()).arg(measureDurations.at(i).ticks());
+               .arg(measureNumbers.at(i), measureDurations.at(i).toString()).arg(measureDurations.at(i).ticks());
     }
 
     return res;
@@ -153,7 +153,7 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
         qDebug("instr '%s', tick %s (%d): element already exists",
-               qPrintable(instr), qPrintable(f.print()), f.ticks());
+               qPrintable(instr), qPrintable(f.toString()), f.ticks());
     }
     //(*this)[f] = instr;
 }

@@ -56,7 +56,6 @@
 #include "figuredbass.h"
 #include "fingering.h"
 #include "fret.h"
-#include "fraction.h"
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
