@@ -1100,7 +1100,7 @@ int Staff::channel(const Fraction& tick,  int voice) const
 
 int Staff::middleLine(const Fraction& tick) const
 {
-    return lines(tick) - 1 - staffType(tick)->stepOffset();
+    return staffType(tick)->middleLine();
 }
 
 //---------------------------------------------------------
@@ -1110,7 +1110,7 @@ int Staff::middleLine(const Fraction& tick) const
 
 int Staff::bottomLine(const Fraction& tick) const
 {
-    return (lines(tick) - 1) * 2;
+    return staffType(tick)->bottomLine();
 }
 
 //---------------------------------------------------------
@@ -1183,7 +1183,8 @@ StaffType* Staff::staffType(const Fraction& tick)
 
 const StaffType* Staff::staffTypeForElement(const EngravingItem* e) const
 {
-    if (_staffTypeList.uniqueStaffType()) { // optimize if one staff type spans for the entire staff
+    if (_staffTypeList.uniqueStaffType()) {
+        // if one staff type spans for the entire staff, optimize by omitting a call to `tick()`
         return &_staffTypeList.staffType({ 0, 1 });
     }
     return &_staffTypeList.staffType(e->tick());

@@ -302,6 +302,8 @@ public:
 
     void setLines(int val) { _lines = val; }
     int lines() const { return _lines; }
+    int middleLine() const;
+    int bottomLine() const;
     void setStepOffset(int v) { _stepOffset = v; }
     int stepOffset() const { return _stepOffset; }
     void setLineDistance(const Spatium& val) { _lineDistance = val; }
