@@ -36,6 +36,7 @@
 #include "dockingholderview.h"
 #include "dockwindow.h"
 
+#include "async/async.h"
 #include "log.h"
 
 using namespace mu::dock;
@@ -49,7 +50,7 @@ static const QList<Location> POSSIBLE_LOCATIONS {
     Location::Bottom
 };
 
-KDDockWidgets::Location locationToKLocation(Location location)
+static KDDockWidgets::Location locationToKLocation(Location location)
 {
     switch (location) {
     case Location::Left: return KDDockWidgets::Location_OnLeft;
@@ -63,7 +64,7 @@ KDDockWidgets::Location locationToKLocation(Location location)
     return KDDockWidgets::Location_None;
 }
 
-void clearRegistry()
+static void clearRegistry()
 {
     TRACEFUNC;
 
@@ -116,7 +117,9 @@ void DockWindow::componentComplete()
 
     dockWindowProvider()->init(this);
 
-    startupScenario()->run();
+    Async::call(this, [this]() {
+        startupScenario()->run();
+    });
 }
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -182,7 +185,9 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
-    if (m_currentPage) {
+    bool isFirstOpening = (m_currentPage == nullptr);
+
+    if (!isFirstOpening) {
         savePageState(m_currentPage->objectName());
         clearRegistry();
     }
@@ -200,6 +205,10 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     for (DockBase* dock : newPage->allDocks()) {
         allDockNames << dock->objectName();
+    }
+
+    if (isFirstOpening) {
+        emit windowLoaded();
     }
 
     m_currentPage = newPage;
@@ -430,6 +439,8 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
 
 void DockWindow::registerDock(DockBase* dock)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(dock) {
         return;
     }
