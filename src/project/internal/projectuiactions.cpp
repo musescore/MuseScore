@@ -28,12 +28,14 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Open…"),
-             QT_TRANSLATE_NOOP("action", "Load score from file")
+             QT_TRANSLATE_NOOP("action", "Load score from file"),
+             IconCode::Code::OPEN_FILE
              ),
     UiAction("file-new",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "New…"),
-             QT_TRANSLATE_NOOP("action", "Create new score")
+             QT_TRANSLATE_NOOP("action", "Create new score"),
+             IconCode::Code::NEW_FILE
              ),
     UiAction("file-close",
              mu::context::UiCtxNotationOpened,
@@ -43,7 +45,8 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-save",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Save"),
-             QT_TRANSLATE_NOOP("action", "Save score to file")
+             QT_TRANSLATE_NOOP("action", "Save score to file"),
+             IconCode::Code::SAVE
              ),
     UiAction("file-save-online",
              mu::context::UiCtxNotationOpened,
@@ -75,7 +78,8 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-import-pdf",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Import PDF…"),
-             QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com")
+             QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com"),
+             IconCode::Code::IMPORT
              ),
     UiAction("print",
              mu::context::UiCtxAny,

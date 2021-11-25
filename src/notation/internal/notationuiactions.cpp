@@ -184,7 +184,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("copy",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Copy")
+             QT_TRANSLATE_NOOP("action", "Copy"),
+             IconCode::Code::COPY
              ),
     UiAction("paste",
              mu::context::UiCtxNotationFocused,
@@ -1085,12 +1086,14 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("zoomin",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Zoom in"),
-             QT_TRANSLATE_NOOP("action", "Zoom in")
+             QT_TRANSLATE_NOOP("action", "Zoom in"),
+             IconCode::Code::ZOOM_IN
              ),
     UiAction("zoomout",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Zoom out"),
-             QT_TRANSLATE_NOOP("action", "Zoom out")
+             QT_TRANSLATE_NOOP("action", "Zoom out"),
+             IconCode::Code::ZOOM_OUT
              )
 };
 
