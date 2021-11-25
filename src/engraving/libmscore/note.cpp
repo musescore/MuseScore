@@ -3286,7 +3286,7 @@ QString Note::accessibleInfo() const
         return QString();
     }
 
-    QString duration = chord()->durationUserName();
+    QString duration = !isDummy() ? chord()->durationUserName() : "";
     QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
     QString pitchName;
     QString onofftime;
@@ -3297,18 +3297,23 @@ QString Note::accessibleInfo() const
             onofftime = QObject::tr(" (on %1‰ off %2‰)").arg(on).arg(off);
         }
     }
-    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
-    if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
-    } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
-    } else if (staff()->isTabStaff(tick())) {
-        pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
-    } else {
-        pitchName = tpcUserName(false);
+
+    if (!isDummy()) {
+        const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
+        if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
+            pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
+        } else if (staff()->isDrumStaff(tick()) && drumset) {
+            pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
+        } else if (staff()->isTabStaff(tick())) {
+            pitchName
+                = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
+        } else {
+            pitchName = tpcUserName(false);
+        }
     }
+
     return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime,
-                                                              (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
+                                                              ((!isDummy() && chord()->isGrace()) ? "" : QString("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------
