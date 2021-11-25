@@ -59,6 +59,7 @@ Item {
 
         TemplatePaintView {
             id: templateView
+            objectName: "TemplatePreview"
             anchors.fill: parent
         }
     }

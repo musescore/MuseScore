@@ -28,9 +28,10 @@
 #include "stringutils.h"
 #include "log.h"
 
-using namespace mu::notation;
-using namespace mu::ui;
 using namespace mu;
+using namespace mu::ui;
+using namespace mu::draw;
+using namespace mu::notation;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
@@ -197,6 +198,7 @@ void NotationPaintView::onCurrentNotationChanged()
     });
 
     onNoteInputChanged();
+    onSelectionChanged();
 
     INotationInteractionPtr interaction = notationInteraction();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
@@ -233,6 +235,7 @@ void NotationPaintView::onCurrentNotationChanged()
 void NotationPaintView::onViewSizeChanged()
 {
     TRACEFUNC;
+
     if (!notation()) {
         return;
     }
@@ -378,7 +381,8 @@ void NotationPaintView::paint(QPainter* qp)
 void NotationPaintView::onNotationSetup()
 {
     TRACEFUNC;
-    m_notation = globalContext()->currentNotation();
+    onCurrentNotationChanged();
+    onPlayingChanged();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
