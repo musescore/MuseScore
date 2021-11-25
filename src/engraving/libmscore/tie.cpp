@@ -799,10 +799,10 @@ bool TieSegment::isEdited() const
 
 void Tie::slurPos(SlurPos* sp)
 {
-    bool useTablature = staff() && staff()->isTabStaff(tick());
-    const StaffType* stt = useTablature ? staff()->staffType(tick()) : 0;
-    qreal _spatium    = spatium();
-    qreal hw          = startNote()->tabHeadWidth(stt) * mag();     // if stt == 0, defaults to headWidth()
+    const StaffType* staffType = this->staffType();
+    bool useTablature = staffType->isTabStaff();
+    qreal _spatium = spatium();
+    qreal hw = startNote()->tabHeadWidth(staffType) * mag(); // if staffType == 0, defaults to headWidth()
     /* Inside-style and Outside-style ties
      Outside ties connect above the notehead, in the middle. Ideally, we'd use opticalcenter for this, but
      that Smufl anchor is not available for noteheads yet. For this reason, we rely on Note::outsideTieAttachX()
@@ -816,7 +816,7 @@ void Tie::slurPos(SlurPos* sp)
 
     // TODO: this probably breaks for tab staves!! at the time of writing tab staves are not working
     qreal yOffOutside = useTablature
-                        ? (_up ? stt->fretBoxY() : stt->fretBoxY() + stt->fretBoxH()) * magS()
+                        ? (_up ? staffType->fretBoxY() : staffType->fretBoxY() + staffType->fretBoxH()) * magS()
                         : 0; // offset for outside notes is determined in adjustY(), so for the moment the tie will be the exact top of the notehead
     qreal yOffInside = useTablature ? yOffOutside * 0.5 : 0; // same for inside
 
