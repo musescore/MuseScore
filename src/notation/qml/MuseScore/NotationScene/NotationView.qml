@@ -32,6 +32,8 @@ import "internal"
 FocusScope {
     id: root
 
+    property string name
+
     property alias isNavigatorVisible: notationNavigator.visible
 
     signal textEdittingStarted()
@@ -54,7 +56,6 @@ FocusScope {
 
     Component.onCompleted: {
         notationView.load()
-        notationNavigator.load()
     }
 
     ColumnLayout {
@@ -89,6 +90,8 @@ FocusScope {
                 NotationPaintView {
                     id: notationView
                     anchors.fill: parent
+
+                    objectName: root.name
 
                     NavigationPanel {
                         id: navPanel
@@ -154,18 +157,41 @@ FocusScope {
                 }
             }
 
-            NotationNavigator {
+            Loader {
                 id: notationNavigator
 
-                property bool isVertical: orientation === Qt.Vertical
+                property var orientation: notationNavigator.item ? notationNavigator.item.orientation : Qt.Horizontal
 
                 visible: false
 
                 SplitView.preferredHeight: 100
                 SplitView.preferredWidth: 100
 
-                onMoveNotationRequested: function (dx, dy) {
-                    notationView.moveCanvas(dx, dy)
+                sourceComponent: notationNavigator.visible ? navigatorComp : null
+
+                function setCursorRect(viewport) {
+                    if (notationNavigator.item) {
+                        notationNavigator.item.setCursorRect(viewport)
+                    }
+                }
+            }
+
+            Component {
+                id: navigatorComp
+
+                NotationNavigator {
+
+                    property bool isVertical: orientation === Qt.Vertical
+
+                    objectName: root.name + "Navigator"
+
+                    Component.onCompleted: {
+                        load()
+                    }
+
+                    onMoveNotationRequested: function (dx, dy) {
+                        notationView.moveCanvas(dx, dy)
+                    }
                 }
             }
 
