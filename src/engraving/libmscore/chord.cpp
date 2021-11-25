@@ -2887,7 +2887,6 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 void Chord::reset()
 {
     undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<Direction>(Direction::AUTO));
-    undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
     score()->createPlayEvents(this);
     ChordRest::reset();
 }

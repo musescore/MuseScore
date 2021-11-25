@@ -66,8 +66,6 @@ public:
     bool isGap() const { return m_gap; }
     virtual void setGap(bool v) { m_gap = v; }
 
-    void reset() override;
-
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
 
