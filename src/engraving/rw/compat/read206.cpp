@@ -2023,17 +2023,17 @@ static bool readTextLineProperties(XmlReader& e, const ReadContext& ctx, TextLin
     const QStringRef& tag(e.name());
 
     if (tag == "beginText") {
-        Text* text = Factory::createTextJustForRead(ctx.dummy());
+        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setBeginText(text->xmlText());
         delete text;
     } else if (tag == "continueText") {
-        Text* text = Factory::createTextJustForRead(ctx.dummy());
+        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setContinueText(text->xmlText());
         delete text;
     } else if (tag == "endText") {
-        Text* text = Factory::createTextJustForRead(ctx.dummy());
+        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setEndText(text->xmlText());
         delete text;
@@ -3296,7 +3296,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             }
             score->setScoreFont(ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString()));
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = Factory::createTextJustForRead(score->dummy());
+            Text* text = Factory::createText(score->dummy(), Tid::DEFAULT, false);
             readText206(e, ctx, text, text);
             score->setMetaTag("copyright", text->xmlText());
             delete text;
