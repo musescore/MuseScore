@@ -629,6 +629,16 @@ void Ambitus::updateRange()
             }
       }
 
+void Ambitus::remove(Element* e)
+      {
+      if (e->type() == ElementType::ACCIDENTAL) {
+            //! NOTE Do nothing (removing _topAccid or _bottomAccid)
+            return;
+            }
+
+      Element::remove(e);
+      }
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
