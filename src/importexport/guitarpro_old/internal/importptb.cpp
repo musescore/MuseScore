@@ -595,7 +595,7 @@ void PowerTab::addPalmMute(Chord* chord)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(score->dummy());
+        PalmMute* pm = Factory::createPalmMute(score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
