@@ -863,7 +863,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         e.skipCurrentElement();
                         continue;
                     }
-                    Dynamic* d = new Dynamic(destCR->segment());
+                    Dynamic* d = Factory::createDynamic(destCR->segment());
                     d->setTrack(destTrack);
                     d->read(e);
                     d->setTrack(destTrack);
