@@ -46,6 +46,9 @@ DummyElement::~DummyElement()
 
 void DummyElement::init()
 {
+    setIsDummy(true);
+    setupAccessible();
+
     m_root = new RootItem(score());
     m_root->setParent(explicitParent());
     m_root->setupAccessible();
