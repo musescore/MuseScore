@@ -310,7 +310,7 @@ struct PitchPattern
     PitchPattern(size_t size, percentage_t step, pitch_level_t defaultValue)
     {
         for (size_t i = 0; i < size; ++i) {
-            pitchOffsetMap.emplace(step * i, defaultValue);
+            pitchOffsetMap.emplace(step * static_cast<int>(i), defaultValue);
         }
     }
 
@@ -328,7 +328,7 @@ struct ExpressionPattern
     ExpressionPattern(size_t size, percentage_t step, dynamic_level_t defaultValue)
     {
         for (size_t i = 0; i < size; ++i) {
-            dynamicOffsetMap.emplace(step * i, defaultValue);
+            dynamicOffsetMap.emplace(step * static_cast<int>(i), defaultValue);
         }
     }
 
@@ -499,7 +499,7 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
             result += pair.second.patternSegment.arrangementPattern.durationFactor;
         }
 
-        result /= size();
+        result /= static_cast<int>(size());
 
         return result;
     }
@@ -554,7 +554,7 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
         }
 
         for (auto& pair : result) {
-            pair.second /= size();
+            pair.second /= static_cast<int>(size());
         }
 
         return result;
@@ -661,7 +661,7 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
         }
 
         for (auto& pair : result) {
-            pair.second /= size();
+            pair.second /= static_cast<int>(size());
         }
 
         return result;
