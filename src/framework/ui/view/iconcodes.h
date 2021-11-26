@@ -291,6 +291,8 @@ public:
         NOTE_DOTTED_4 = 0xF397,
 
         COPY = 0xF398,
+        PASTE = 0xF399,
+        CUT = 0xF39A,
 
         NOTE_PLUS = 0xF39D,
         NOTE_TO_RIGHT = 0xF39E,

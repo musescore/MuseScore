@@ -180,7 +180,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("cut",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Cut")
+             QT_TRANSLATE_NOOP("action", "Cut"),
+             IconCode::Code::CUT
              ),
     UiAction("copy",
              mu::context::UiCtxNotationFocused,
@@ -189,7 +190,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("paste",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Paste")
+             QT_TRANSLATE_NOOP("action", "Paste"),
+             IconCode::Code::PASTE
              ),
     UiAction("paste-half",
              mu::context::UiCtxNotationOpened,
