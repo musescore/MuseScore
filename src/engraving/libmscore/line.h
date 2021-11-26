@@ -92,7 +92,7 @@ private:
 
 class SLine : public Spanner
 {
-    qreal _lineWidth;
+    Milimetre _lineWidth;
     mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
     qreal _dashLineLen      { 5.0 };
@@ -122,10 +122,10 @@ public:
     bool diagonal() const { return _diagonal; }
     void setDiagonal(bool v) { _diagonal = v; }
 
-    qreal lineWidth() const { return _lineWidth; }
+    Milimetre lineWidth() const { return _lineWidth; }
     mu::draw::Color lineColor() const { return _lineColor; }
     mu::draw::PenStyle lineStyle() const { return _lineStyle; }
-    void setLineWidth(const qreal& v) { _lineWidth = v; }
+    void setLineWidth(const Milimetre& v) { _lineWidth = v; }
     void setLineColor(const mu::draw::Color& v) { _lineColor = v; }
     void setLineStyle(mu::draw::PenStyle v) { _lineStyle = v; }
 

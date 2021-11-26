@@ -1484,7 +1484,7 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         _lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.toReal();
+        _lineWidth = v.toMilimetre();
         break;
     case Pid::LINE_STYLE:
         _lineStyle = mu::draw::PenStyle(v.toInt());
@@ -1517,7 +1517,7 @@ PropertyValue SLine::propertyDefault(Pid pid) const
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);
         }
-        return 0.15 * spatium();
+        return Milimetre(0.15 * spatium());
     case Pid::LINE_STYLE:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

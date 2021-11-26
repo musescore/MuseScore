@@ -2079,7 +2079,7 @@ void Chord::layoutPitched()
 
     if (dots()) {
         qreal x = dotPosX() + dotNoteDistance
-                  + (dots() - 1) * score()->styleMM(Sid::dotDotDistance) * mag_;
+                  + qreal(dots() - 1) * score()->styleMM(Sid::dotDotDistance) * mag_;
         x += symWidth(SymId::augmentationDot);
         rrr = qMax(rrr, x);
     }

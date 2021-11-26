@@ -169,7 +169,7 @@ public:
     template<typename T>
     T value() const
     {
-        if (P_TYPE::UNDEFINED == m_type) {
+        if (m_type == P_TYPE::UNDEFINED) {
             return T();
         }
 
@@ -275,6 +275,7 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
+    Milimetre toMilimetre() const { return value<Milimetre>(); }
 
     const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;

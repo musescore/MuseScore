@@ -1177,18 +1177,18 @@ qreal BarLine::layoutWidth(Score* score, BarLineType type)
     qreal w { 0.0 };
     switch (type) {
     case BarLineType::DOUBLE:
-        w = (score->styleMM(Sid::doubleBarWidth) * 2)
+        w = (score->styleMM(Sid::doubleBarWidth) * 2.0)
             + score->styleMM(Sid::doubleBarDistance);
         break;
     case BarLineType::DOUBLE_HEAVY:
-        w = (score->styleMM(Sid::endBarWidth) * 2)
+        w = (score->styleMM(Sid::endBarWidth) * 2.0)
             + score->styleMM(Sid::endBarDistance);
         break;
     case BarLineType::END_START_REPEAT:
         w = score->styleMM(Sid::endBarWidth)
-            + (score->styleMM(Sid::barWidth) * 2)
-            + (score->styleMM(Sid::endBarDistance) * 2)
-            + (score->styleMM(Sid::repeatBarlineDotSeparation) * 2)
+            + (score->styleMM(Sid::barWidth) * 2.0)
+            + (score->styleMM(Sid::endBarDistance) * 2.0)
+            + (score->styleMM(Sid::repeatBarlineDotSeparation) * 2.0)
             + (dotwidth * 2);
         break;
     case BarLineType::START_REPEAT:
