@@ -669,3 +669,5 @@ CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, setupAccessibl
 CREATE_ITEM_IMPL(Volta, ElementType::VOLTA, EngravingItem, setupAccessible)
 
 CREATE_ITEM_IMPL(Pedal, ElementType::PEDAL, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Dynamic, ElementType::DYNAMIC, Segment, setupAccessible)

@@ -2377,7 +2377,7 @@ void OveToMScore::convertDynamics(Measure* measure, int part, int staff, int tra
         ovebase::Dynamics* dynamicPtr = static_cast<ovebase::Dynamics*>(dynamics[i]);
         int absTick = m_mtt->getTick(measure->no(), dynamicPtr->getTick());
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
-        Dynamic* dynamic = new Dynamic(s);
+        Dynamic* dynamic = Factory::createDynamic(s);
 
         dynamic->setDynamicType(OveDynamics_To_Dynamics(dynamicPtr->getDynamicsType()));
         dynamic->setTrack(track);
