@@ -770,19 +770,20 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return QString::number(value.value<double>());
     case P_TYPE::SPATIUM:
         return QString::number(value.value<Spatium>().val());
-    case P_TYPE::DIRECTION_V: {
+    case P_TYPE::DIRECTION_V:
         switch (value.value<DirectionV>()) {
         case DirectionV::AUTO:  return "auto";
         case DirectionV::UP:    return "up";
         case DirectionV::DOWN:  return "down";
         }
-    }
+        break;
     case P_TYPE::DIRECTION_H:
         switch (value.value<DirectionH>()) {
         case DirectionH::LEFT:  return "left";
         case DirectionH::RIGHT: return "right";
         case DirectionH::AUTO:  return "auto";
         }
+        break;
     case P_TYPE::STRING:
     case P_TYPE::FRACTION:
         return value.toString();
