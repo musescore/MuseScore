@@ -512,7 +512,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     } break;
 
     case QStyle::PE_FrameFocusRect: {
-        bool isTreeWidget = option->styleObject->inherits("QTreeWidget");
+        bool isTreeWidget = option->styleObject && option->styleObject->inherits("QTreeWidget");
         if (isTreeWidget) {
             drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
         }
