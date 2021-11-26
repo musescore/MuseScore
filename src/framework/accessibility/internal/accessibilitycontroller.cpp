@@ -25,6 +25,11 @@
 #include <QAccessible>
 #include <QWindow>
 
+#ifdef Q_OS_LINUX
+#include <QKeyEvent>
+#include <private/qcoreapplication_p.h>
+#endif
+
 #include "accessibleobject.h"
 #include "accessibleiteminterface.h"
 #include "async/async.h"
@@ -223,6 +228,8 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
     if (state == State::Focused) {
         if (arg) {
+            cancelPreviousReading();
+
             QAccessibleEvent ev(item.object, QAccessible::Focus);
             sendEvent(&ev);
             m_lastFocused = item.item;
@@ -240,6 +247,16 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
     QAccessible::updateAccessibility(ev);
 
     m_eventSent.send(ev);
+}
+
+void AccessibilityController::cancelPreviousReading()
+{
+#ifdef Q_OS_LINUX
+    //! HACK: it needs for canceling reading the name of previous control on accessibility
+    QKeyEvent* keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
+    QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
+    application()->notify(mainWindow()->qWindow(), keyEvent);
+#endif
 }
 
 mu::async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const

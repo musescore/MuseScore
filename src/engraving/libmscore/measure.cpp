@@ -2044,7 +2044,6 @@ void Measure::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             sp->setTrack(l.track());
             sp->setTick(spTick);
             score()->addSpanner(sp);
-//            sp->setParent(sp->startSegment());
         } else if (info->isEnd()) {
             sp->setTrack2(l.track());
             sp->setTick2(spTick);

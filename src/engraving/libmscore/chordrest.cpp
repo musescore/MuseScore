@@ -324,7 +324,6 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
                 }
             } else {
                 score()->addSpanner(spanner);
-//                spanner->setParent(this);
             }
         } else if (info->isEnd()) {
             spanner->setTrack2(l.track());
