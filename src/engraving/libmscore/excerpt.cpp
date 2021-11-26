@@ -518,9 +518,10 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
     if ((s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag())) && s->track() != 0) {
         return;
     }
+
     Spanner* ns = toSpanner(s->linkedClone());
     ns->setScore(score);
-    ns->moveToDummy();
+    ns->resetExplicitParent();
     ns->setTrack(dstTrack);
     ns->setTrack2(dstTrack2);
 

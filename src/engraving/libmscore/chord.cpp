@@ -563,7 +563,7 @@ void Chord::setTremolo(Tremolo* tr)
 
 void Chord::add(EngravingItem* e)
 {
-    if (e->parent() != this) {
+    if (e->explicitParent() != this) {
         e->setParent(this);
     }
     e->setTrack(track());
@@ -1651,7 +1651,7 @@ bool Chord::underBeam() const
     if (_noteType == NoteType::NORMAL) {
         return false;
     }
-    const Chord* cr = toChord(parent());
+    const Chord* cr = toChord(explicitParent());
     Beam* beam = cr->beam();
     if (!beam || !cr->beam()->up()) {
         return false;
@@ -1827,12 +1827,12 @@ mu::PointF Chord::pagePos() const
 {
     if (isGrace()) {
         PointF p(pos());
-        if (parent() == 0) {
+        if (explicitParent() == 0) {
             return p;
         }
         p.rx() = pageX();
 
-        const Chord* pc = static_cast<const Chord*>(parent());
+        const Chord* pc = static_cast<const Chord*>(explicitParent());
         System* system = pc->segment()->system();
         if (!system) {
             return p;
@@ -2812,7 +2812,7 @@ void Chord::setColor(const mu::draw::Color& color)
 
 qreal Chord::dotPosX() const
 {
-    if (parent()) {
+    if (explicitParent()) {
         return segment()->dotPosX(staffIdx());
     }
     return -1000.0;
@@ -3339,7 +3339,7 @@ EngravingItem* Chord::nextElement()
     case ElementType::FINGERING:
     case ElementType::TEXT:
     case ElementType::BEND: {
-        Note* n = toNote(e->parent());
+        Note* n = toNote(e->explicitParent());
         if (n == _notes.front()) {
             if (_arpeggio) {
                 return _arpeggio;

@@ -161,8 +161,8 @@ public:
     Clef* clone() const override { return new Clef(*this); }
     qreal mag() const override;
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

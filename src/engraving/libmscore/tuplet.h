@@ -97,7 +97,7 @@ public:
 
     void setSelected(bool f) override;
 
-    Measure* measure() const override { return toMeasure(parent()); }
+    Measure* measure() const override { return toMeasure(explicitParent()); }
 
     TupletNumberType numberType() const { return _numberType; }
     TupletBracketType bracketType() const { return _bracketType; }

@@ -65,8 +65,8 @@ public:
     //@ sets the key of the key signature
     Q_INVOKABLE void setKey(Key);
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return parent() ? (Measure*)parent()->parent() : nullptr; }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )

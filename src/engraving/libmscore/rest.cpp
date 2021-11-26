@@ -861,7 +861,7 @@ QString Rest::screenReaderInfo() const
 
 void Rest::add(EngravingItem* e)
 {
-    if (e->parent() != this) {
+    if (e->explicitParent() != this) {
         e->setParent(this);
     }
     e->setTrack(track());

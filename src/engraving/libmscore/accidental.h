@@ -114,7 +114,7 @@ public:
     void startEdit(EditData&) override { setGenerated(false); }
 
     SymId symbol() const;
-    Note* note() const { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }
+    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
     AccidentalBracket bracket() const { return _bracket; }
     void setBracket(AccidentalBracket val) { _bracket = val; }

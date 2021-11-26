@@ -157,7 +157,7 @@ void TextBase::endEdit(EditData& ed)
     }
 
     // TBox'es manage their Text themselves and are not removed if text is empty
-    const bool removeTextIfEmpty = !(parent() && parent()->isTBox());
+    const bool removeTextIfEmpty = !(explicitParent() && explicitParent()->isTBox());
 
     if (actualPlainText.isEmpty() && removeTextIfEmpty) {
         qDebug("actual text is empty");

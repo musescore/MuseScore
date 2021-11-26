@@ -94,7 +94,7 @@ void Tremolo::setParent(Chord* ch)
 
 qreal Tremolo::chordMag() const
 {
-    return parent() ? toChord(parent())->chordMag() : 1.0;
+    return explicitParent() ? toChord(explicitParent())->chordMag() : 1.0;
 }
 
 //---------------------------------------------------------
@@ -134,7 +134,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         painter->drawPath(path);
     }
     // for palette
-    if (!parent() && !twoNotes()) {
+    if (!explicitParent() && !twoNotes()) {
         qreal x = 0.0;     // bbox().width() * .25;
         Pen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
         painter->setPen(pen);
@@ -227,7 +227,7 @@ PainterPath Tremolo::basePath() const
     PainterPath ppath;
 
     // first line
-    if (parent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
+    if (explicitParent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
         ppath.addRect(-nw2, 0.0, 2.0 * nw2, lw);
     } else {
         ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
@@ -237,7 +237,7 @@ PainterPath Tremolo::basePath() const
 
     // other lines
     for (int i = 1; i < _lines; i++) {
-        if (parent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL)) {
+        if (explicitParent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL)) {
             ppath.addRect(-nw2, ty, 2.0 * nw2, lw);
         } else {
             ppath.addRect(-w2, ty, 2.0 * w2, lw);
@@ -245,7 +245,7 @@ PainterPath Tremolo::basePath() const
         ty += td;
     }
 
-    if (!parent() || !twoNotes()) {
+    if (!explicitParent() || !twoNotes()) {
         // for the palette or for one-note tremolos
         Transform shearTransform;
         shearTransform.shear(0.0, -(lw / 2.0) / w2);
@@ -261,7 +261,7 @@ PainterPath Tremolo::basePath() const
 
 void Tremolo::computeShape()
 {
-    if (parent() && twoNotes()) {
+    if (explicitParent() && twoNotes()) {
         return;     // cannot compute shape here, should be done at layout stage
     }
     if (isBuzzRoll()) {
@@ -492,7 +492,7 @@ void Tremolo::layout()
 {
     path = basePath();
 
-    _chord1 = toChord(parent());
+    _chord1 = toChord(explicitParent());
     if (!_chord1) {
         // palette
         if (!isBuzzRoll()) {

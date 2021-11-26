@@ -40,8 +40,8 @@ public:
 
     Sticking* clone() const override { return new Sticking(*this); }
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void layout() override;
     void write(XmlWriter& xml) const override;

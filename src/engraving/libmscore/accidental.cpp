@@ -381,7 +381,7 @@ void Accidental::layout()
         return;
     }
 
-    qreal m = parent() ? parentItem()->mag() : 1.0;
+    qreal m = explicitParent() ? parentItem()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

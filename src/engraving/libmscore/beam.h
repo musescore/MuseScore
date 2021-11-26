@@ -139,7 +139,7 @@ public:
 
     void reset() override;
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     void layout1();
     void layoutGraceNotes();

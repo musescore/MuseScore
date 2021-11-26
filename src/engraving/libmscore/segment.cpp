@@ -545,7 +545,7 @@ void Segment::add(EngravingItem* el)
 {
 //      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
 
-    if (el->parent() != this) {
+    if (el->explicitParent() != this) {
         el->setParent(this);
     }
 
@@ -1755,7 +1755,7 @@ EngravingItem* Segment::nextElement(int activeStaff)
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::STICKING: {
         EngravingItem* next = nullptr;
-        if (e->parent() == this) {
+        if (e->explicitParent() == this) {
             next = nextAnnotation(e);
         }
         if (next) {
@@ -1896,7 +1896,7 @@ EngravingItem* Segment::prevElement(int activeStaff)
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::STICKING: {
         EngravingItem* prev = nullptr;
-        if (e->parent() == this) {
+        if (e->explicitParent() == this) {
             prev = prevAnnotation(e);
         }
         if (prev) {

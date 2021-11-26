@@ -660,7 +660,7 @@ void GuitarPro::addDynamic(Note* note, int d)
     }
     Segment* s = nullptr;
     if (note->chord()->isGrace()) {
-        Chord* parent = static_cast<Chord*>(note->chord()->parent());
+        Chord* parent = static_cast<Chord*>(note->chord()->explicitParent());
         s = parent->segment();
     } else {
         s = note->chord()->segment();

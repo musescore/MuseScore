@@ -804,7 +804,7 @@ Note* searchTieNote(Note* note)
     int etrack   = strack + part->staves()->size() * VOICES;
 
     if (chord->isGraceBefore()) {
-        chord = toChord(chord->parent());
+        chord = toChord(chord->explicitParent());
 
         // try to tie to next grace note
 
@@ -828,7 +828,7 @@ Note* searchTieNote(Note* note)
         // grace after
         // we will try to tie to note in next normal chord, below
         // meanwhile, set chord to parent chord so the endTick calculation will make sense
-        chord = toChord(chord->parent());
+        chord = toChord(chord->explicitParent());
     } else {
         // normal chord
         // try to tie to grace note after if present

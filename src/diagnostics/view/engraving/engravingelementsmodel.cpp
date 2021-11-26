@@ -182,21 +182,12 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
         } else {
             name = "Score: " + score->title();
         }
-    } else if (el->isDummy()) {
-        if (el->isType(Ms::ElementType::INVALID)) {
-            name = "Dummy";
-        } else {
-            name = QString("Dummy: ") + el->name();
-        }
     } else {
         name = el->name();
     }
 
     QString info = name + ": ";
     info += "children: " + QString::number(el->children().size());
-    if (!el->isDummy()) {
-        //info += ", treechildren: " + QString::number(el->treeChildCount());
-    }
     info += "\n";
     if (el->isEngravingItem()) {
         const Ms::EngravingItem* item = Ms::toEngravingItem(el);
@@ -260,7 +251,7 @@ void EngravingElementsModel::load(const EngravingObjectList& elements, Item* roo
             continue;
         }
 
-        Ms::EngravingObject* parent = el->parent(true);
+        Ms::EngravingObject* parent = el->parent();
 
         if (parent == root->element()) {
             Item* item = createItem(root);
@@ -336,8 +327,8 @@ void EngravingElementsModel::click1(QModelIndex index)
     const Ms::EngravingObject* parent = el->parent();
     UNUSED(parent);
 
-    const Ms::EngravingObject* parent2 = el->parent(true);
-    UNUSED(parent2);
+    const Ms::EngravingObject* explicitParent = el->explicitParent();
+    UNUSED(explicitParent);
 
     size_t children = el->children().size();
     UNUSED(children);

@@ -150,8 +150,8 @@ public:
     void setElement(int track, EngravingItem* el);
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    Measure* measure() const { return toMeasure(parent()); }
-    System* system() const { return toSystem(parent()->parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
+    System* system() const { return toSystem(explicitParent()->explicitParent()); }
     qreal x() const override { return ipos().x(); }
     void setX(qreal v) { rxpos() = v; }
 

@@ -96,7 +96,7 @@ public:
     void setBottomTpc(int val);
 
     // some utility functions
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
     qreal headWidth() const;
 

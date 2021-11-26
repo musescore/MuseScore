@@ -78,7 +78,7 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 void TremoloBar::layout()
 {
     qreal _spatium = spatium();
-    if (parent()) {
+    if (explicitParent()) {
         setPos(0.0, -_spatium * 3.0);
     } else {
         setPos(PointF());

@@ -357,10 +357,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 int rootTpc, baseTpc;
                 if (mode == TransposeMode::DIATONICALLY) {
                     Fraction tick = Fraction(0, 1);
-                    if (h->parent()->isSegment()) {
-                        tick = toSegment(h->parent())->tick();
-                    } else if (h->parent()->isFretDiagram() && h->parent()->parent()->isSegment()) {
-                        tick = toSegment(h->parent()->parent())->tick();
+                    if (h->explicitParent()->isSegment()) {
+                        tick = toSegment(h->explicitParent())->tick();
+                    } else if (h->explicitParent()->isFretDiagram() && h->explicitParent()->explicitParent()->isSegment()) {
+                        tick = toSegment(h->explicitParent()->explicitParent())->tick();
                     }
                     Key key = !h->staff() ? Key::C : h->staff()->key(tick);
                     rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),

@@ -62,11 +62,17 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
     }
 
     if (type != ElementType::SCORE) {
-        IF_ASSERT_FAILED(parent) {
-        }
+        Q_ASSERT(parent);
     }
 
     doSetParent(parent);
+    if (m_parent) {
+        doSetScore(m_parent->score());
+    }
+
+    if (type == ElementType::SCORE) {
+        m_score = static_cast<Score*>(this);
+    }
 
     if (elementsProvider()) {
         elementsProvider()->reg(this);
@@ -77,8 +83,8 @@ EngravingObject::EngravingObject(const EngravingObject& se)
 {
     m_type = se.m_type;
     doSetParent(se.m_parent);
+    m_score = se.m_score;
     m_isParentExplicitlySet = se.m_isParentExplicitlySet;
-    m_isDummy = se.m_isDummy;
     _elementStyle = se._elementStyle;
     if (_elementStyle) {
         size_t n = _elementStyle->size();
@@ -96,26 +102,18 @@ EngravingObject::EngravingObject(const EngravingObject& se)
 
 EngravingObject::~EngravingObject()
 {
-    for (EngravingObject* c : m_children) {
-        c->m_parent = nullptr;
+    if (m_parent) {
+        m_parent->removeChild(this);
     }
 
-    if (!isDummy() && !isScore()) {
-        Score* sc = score();
-        IF_ASSERT_FAILED(sc) {
-            return;
-        }
-
-        auto dummy = sc->dummy();
-        if (dummy && dummy != this) {
-            for (EngravingObject* c : m_children) {
-                c->m_parent = dummy;
-                c->m_parent->addChild(c);
-            }
+    if (!this->isType(ElementType::ROOT_ITEM)
+        && !this->isType(ElementType::DUMMY)
+        && !this->isType(ElementType::SCORE)) {
+        for (EngravingObject* c : m_children) {
+            c->m_parent = nullptr;
+            c->moveToDummy();
         }
     }
-
-    doSetParent(nullptr);
 
     if (elementsProvider()) {
         elementsProvider()->unreg(this);
@@ -134,6 +132,10 @@ EngravingObject::~EngravingObject()
 void EngravingObject::doSetParent(EngravingObject* p)
 {
     if (m_parent == p) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(p != this) {
         return;
     }
 
@@ -163,6 +165,118 @@ void EngravingObject::doSetParent(EngravingObject* p)
     if (m_parent) {
         m_parent->addChild(this);
     }
+}
+
+void EngravingObject::doSetScore(Score* sc)
+{
+    if (m_score == sc) {
+        return;
+    }
+
+    m_score = sc;
+
+    for (EngravingObject* ch : m_children) {
+        ch->doSetScore(sc);
+    }
+}
+
+void EngravingObject::moveToDummy()
+{
+    Score* sc = score();
+    if (sc) {
+        if (sc->dummy() && sc->dummy() != this) {
+            setParent(sc->dummy());
+        }
+    }
+}
+
+void EngravingObject::setScore(Score* s)
+{
+    doSetScore(s);
+}
+
+void EngravingObject::addChild(EngravingObject* o)
+{
+    IF_ASSERT_FAILED(o != this) {
+        return;
+    }
+
+#ifdef BUILD_DIAGNOSTICS
+    IF_ASSERT_FAILED(std::find(m_children.begin(), m_children.end(), o) == m_children.end()) {
+        return;
+    }
+#endif
+    m_children.push_back(o);
+}
+
+void EngravingObject::removeChild(EngravingObject* o)
+{
+    IF_ASSERT_FAILED(o->m_parent == this) {
+        return;
+    }
+    o->m_parent = nullptr;
+    m_children.remove(o);
+}
+
+EngravingObject* EngravingObject::parent() const
+{
+    return m_parent;
+}
+
+EngravingObject* EngravingObject::explicitParent() const
+{
+    if (!m_isParentExplicitlySet) {
+        return nullptr;
+    }
+    return m_parent;
+}
+
+void EngravingObject::setParent(EngravingObject* p)
+{
+    IF_ASSERT_FAILED(this != p) {
+        return;
+    }
+
+    if (!p) {
+        moveToDummy();
+        return;
+    }
+
+    doSetParent(p);
+    if (m_parent) {
+        doSetScore(m_parent->score());
+    }
+
+    if (p && !p->isType(ElementType::DUMMY)) {
+        m_isParentExplicitlySet = true;
+    } else {
+        m_isParentExplicitlySet = false;
+    }
+}
+
+void EngravingObject::resetExplicitParent()
+{
+    m_isParentExplicitlySet = false;
+}
+
+Score* EngravingObject::score() const
+{
+    return m_score;
+}
+
+MasterScore* EngravingObject::masterScore() const
+{
+    return score()->masterScore();
+}
+
+bool EngravingObject::onSameScore(const EngravingObject* other) const
+{
+    return this->score() == other->score();
+}
+
+const MStyle* EngravingObject::style() const
+{
+    return &score()->style();
 }
 
 //---------------------------------------------------------
@@ -608,139 +722,6 @@ QList<EngravingObject*> EngravingObject::linkList() const
         el.append(const_cast<EngravingObject*>(this));
     }
     return el;
-}
-
-void EngravingObject::setScore(Score* s)
-{
-    _score = s;
-}
-
-void EngravingObject::addChild(EngravingObject* o)
-{
-#ifdef BUILD_DIAGNOSTICS
-    IF_ASSERT_FAILED(std::find(m_children.begin(), m_children.end(), o) == m_children.end()) {
-        return;
-    }
-#endif
-    m_children.push_back(o);
-}
-
-void EngravingObject::removeChild(EngravingObject* o)
-{
-    IF_ASSERT_FAILED(o->m_parent == this) {
-        return;
-    }
-    o->m_parent = nullptr;
-    m_children.remove(o);
-}
-
-EngravingObject* EngravingObject::parent(bool isIncludeDummy) const
-{
-    if (!m_parent) {
-        return nullptr;
-    }
-
-    //! NOTE We need to exclude a dummy for compatibility reasons.
-    if (isIncludeDummy) {
-        return m_parent;
-    }
-
-    if (!m_isParentExplicitlySet) {
-        return nullptr;
-    }
-
-    if (m_parent->isScore()) {
-        return nullptr;
-    }
-
-    if (m_parent->isDummy()) {
-        return nullptr;
-    }
-
-    return m_parent;
-}
-
-void EngravingObject::setParent(EngravingObject* p, bool isExplicitly)
-{
-    IF_ASSERT_FAILED(this != p) {
-        return;
-    }
-
-    if (!p) {
-        moveToDummy();
-        return;
-    }
-
-    doSetParent(p);
-
-    m_isParentExplicitlySet = isExplicitly;
-}
-
-void EngravingObject::moveToDummy()
-{
-    if (isDummy()) {
-        doSetParent(nullptr);
-        return;
-    }
-
-    Score* sc = score();
-    IF_ASSERT_FAILED(sc) {
-        return;
-    }
-
-    if (sc->dummy() != this && sc->dummy()) {
-        setParent(sc->dummy());
-    }
-}
-
-void EngravingObject::setIsDummy(bool arg)
-{
-    m_isDummy = arg;
-}
-
-bool EngravingObject::isDummy() const
-{
-    return m_isDummy;
-}
-
-Score* EngravingObject::score(bool required) const
-{
-    if (_score) {
-        return _score;
-    }
-
-    Score* sc = nullptr;
-    EngravingObject* e = const_cast<EngravingObject*>(this);
-    while (e) {
-        if (e->isScore()) {
-            sc = toScore(e);
-            break;
-        }
-
-        e = e->m_parent;
-    }
-
-    if (required) {
-//        IF_ASSERT_FAILED(sc) {
-//        }
-    }
-
-    return sc;
-}
-
-MasterScore* EngravingObject::masterScore() const
-{
-    return score()->masterScore();
-}
-
-bool EngravingObject::onSameScore(const EngravingObject* other) const
-{
-    return this->score() == other->score();
-}
-
-const MStyle* EngravingObject::style() const
-{
-    return &score()->style();
 }
 
 //---------------------------------------------------------

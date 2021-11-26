@@ -55,8 +55,8 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
 
-    Segment* segment() const { return toSegment(parent()); }
-    Measure* measure() const { return toMeasure(parent()->parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
+    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
     qreal tempo() const { return _tempo; }
     qreal tempoBpm() const;

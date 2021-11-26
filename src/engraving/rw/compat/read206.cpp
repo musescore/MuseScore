@@ -1066,8 +1066,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
             if (sp->isTie()) {
                 note->setTieBack(toTie(sp));
             } else {
-                if (sp->isGlissando() && note->parent() && note->parent()->isChord()) {
-                    toChord(note->parent())->setEndsGlissando(true);
+                if (sp->isGlissando() && note->explicitParent() && note->explicitParent()->isChord()) {
+                    toChord(note->explicitParent())->setEndsGlissando(true);
                 }
                 note->addSpannerBack(sp);
             }
@@ -2963,7 +2963,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
-            beam->moveToDummy();
+            beam->resetExplicitParent();
             e.addBeam(beam);
         } else if (tag == "Segment") {
             if (segment) {

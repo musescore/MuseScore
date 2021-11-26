@@ -79,7 +79,7 @@ void Spacer::layout0()
     path    = PainterPath();
     qreal w = _spatium;
     qreal b = w * .5;
-    qreal h = parent() ? _gap : qMin(_gap, spatium() * 4.0);      // limit length for palette
+    qreal h = explicitParent() ? _gap : qMin(_gap, spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:

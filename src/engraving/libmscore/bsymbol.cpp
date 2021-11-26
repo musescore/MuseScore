@@ -168,7 +168,7 @@ void BSymbol::layout()
     if (staff()) {
         setMag(staff()->staffMag(tick()));
     }
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(.0, .0);
         setPos(.0, .0);
     }
@@ -227,7 +227,7 @@ QVector<mu::LineF> BSymbol::dragAnchorLines() const
 
 mu::PointF BSymbol::pagePos() const
 {
-    if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+    if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
         mu::PointF p(pos());
         System* system = segment()->measure()->system();
         if (system) {
@@ -246,9 +246,9 @@ mu::PointF BSymbol::pagePos() const
 
 mu::PointF BSymbol::canvasPos() const
 {
-    if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+    if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
         mu::PointF p(pos());
-        Segment* s = toSegment(parent());
+        Segment* s = toSegment(explicitParent());
 
         System* system = s->measure()->system();
         if (system) {

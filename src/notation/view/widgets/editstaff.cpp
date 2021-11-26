@@ -438,7 +438,7 @@ void EditStaff::initStaff()
     } else if (element->isMeasure()) {
         tick = Ms::toMeasure(element)->tick();
     } else if (element->isInstrumentName()) {
-        const Ms::System* system = Ms::toSystem(Ms::toInstrumentName(element)->parent());
+        const Ms::System* system = Ms::toSystem(Ms::toInstrumentName(element)->explicitParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
 
         if (measure) {

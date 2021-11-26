@@ -143,6 +143,8 @@ public:
 
     ~Measure();
 
+    void setParent(System* s);
+
     Measure* clone() const override { return new Measure(*this); }
     void setScore(Score* s) override;
     Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
@@ -166,7 +168,7 @@ public:
     void change(EngravingItem* o, EngravingItem* n) override;
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
     bool hasVoices(int staffIdx) const;
     void setHasVoices(int staffIdx, bool v);

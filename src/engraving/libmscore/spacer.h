@@ -60,7 +60,7 @@ class Spacer final : public EngravingItem
 public:
 
     Spacer* clone() const override { return new Spacer(*this); }
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     SpacerType spacerType() const { return _spacerType; }
     void setSpacerType(SpacerType t) { _spacerType = t; }

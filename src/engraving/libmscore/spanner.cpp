@@ -111,7 +111,7 @@ void SpannerSegment::setSystem(System* s)
         if (s) {
             s->add(this);
         } else {
-            moveToDummy();
+            resetExplicitParent();
         }
     }
 }
@@ -484,7 +484,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
         Fraction toTick = fromTick - len;
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point
-                if (parent()) {
+                if (explicitParent()) {
                     parentItem()->remove(this);
                     return;
                 } else {
@@ -505,7 +505,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
     // update properties as required
     if (newTick2 <= newTick1) {                 // if no longer any span: remove it
-        if (parent()) {
+        if (explicitParent()) {
             parentItem()->remove(this);
         }
     } else {                                    // if either TICKS or TICK did change, update property
@@ -710,7 +710,7 @@ void Spanner::computeEndElement()
         if (track2() == -1) {
             setTrack2(track());
         }
-        if (ticks().isZero() && isTextLine() && parent()) {           // special case palette
+        if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
             setTicks(score()->lastSegment()->tick() - _tick);
         }
 
@@ -1553,7 +1553,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const
 
 void SpannerSegment::autoplaceSpannerSegment()
 {
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(PointF());
         return;
     }

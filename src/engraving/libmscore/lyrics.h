@@ -79,9 +79,9 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    Segment* segment() const { return toSegment(parent()->parent()); }
-    Measure* measure() const { return toMeasure(parent()->parent()->parent()); }
-    ChordRest* chordRest() const { return toChordRest(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
+    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
+    ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
     void layout() override;
     void layout2(int);
@@ -134,7 +134,7 @@ public:
     void removeUnmanaged() override;
     void styleChanged() override;
 
-    Lyrics* lyrics() const { return toLyrics(parent()); }
+    Lyrics* lyrics() const { return toLyrics(explicitParent()); }
     Lyrics* nextLyrics() const { return _nextLyrics; }
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }

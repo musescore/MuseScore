@@ -155,7 +155,7 @@ public:
     void removeMeasure(MeasureBase*);
     void removeLastMeasure();
 
-    Page* page() const { return (Page*)parent(); }
+    Page* page() const { return (Page*)explicitParent(); }
 
     void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 

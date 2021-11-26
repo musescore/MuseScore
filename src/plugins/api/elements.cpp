@@ -168,7 +168,7 @@ void Note::remove(Ms::PluginAPI::EngravingItem* wrapped)
     Ms::EngravingItem* s = wrapped->element();
     if (!s) {
         qWarning("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->parent() != note()) {
+    } else if (s->explicitParent() != note()) {
         qWarning("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
@@ -273,7 +273,7 @@ void Chord::remove(Ms::PluginAPI::EngravingItem* wrapped)
     Ms::EngravingItem* s = wrapped->element();
     if (!s) {
         qWarning("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->parent() != chord()) {
+    } else if (s->explicitParent() != chord()) {
         qWarning("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
     } else if (chord()->notes().size() <= 1 && s->type() == ElementType::NOTE) {
         qWarning("PluginAPI::Chord::remove: Removal of final note is not allowed.");

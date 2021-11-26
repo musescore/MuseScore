@@ -462,7 +462,7 @@ bool Score::isPaletteScore() const
 
 void Score::onElementDestruction(EngravingItem* e)
 {
-    Score* score = e->EngravingObject::score(false);
+    Score* score = e->EngravingObject::score();
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
         // No score or the score is already deleted
         return;
@@ -1603,7 +1603,7 @@ void Score::removeElement(EngravingItem* element)
         if (element->isBox() && system->measures().size() == 1) {
             auto i = std::find(page->systems().begin(), page->systems().end(), system);
             page->systems().erase(i);
-            mb->moveToDummy();
+            mb->resetExplicitParent();
             if (page->systems().isEmpty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
@@ -1625,7 +1625,7 @@ void Score::removeElement(EngravingItem* element)
     }
 
     if (et == ElementType::BEAM) {            // beam parent does not survive layout
-        element->moveToDummy();
+        element->resetExplicitParent();
         parent = 0;
     }
 
@@ -2203,7 +2203,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         Spanner* ns = toSpanner(spanner->clone());
         ns->setScore(this);
-        ns->moveToDummy();
+        ns->resetExplicitParent();
         ns->setTick(spanner->tick() - startTick + tickOfAppend);
         ns->setTick2(spanner->tick2() - startTick + tickOfAppend);
         ns->computeStartElement();
