@@ -55,7 +55,7 @@ public:
     const StaffType* staffType() const { return _staffType; }
     void setStaffType(StaffType* st) { _staffType = st; }
 
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;

@@ -181,7 +181,7 @@ public:
     bool              startsWithParenthesis() const;
 
     // specific API
-    const FiguredBass* figuredBass() const { return (FiguredBass*)(parent()); }
+    const FiguredBass* figuredBass() const { return (FiguredBass*)(explicitParent()); }
     bool              parse(QString& text);
 
     // getters / setters
@@ -319,7 +319,7 @@ public:
     bool              onNote() const { return _onNote; }
     size_t            numOfItems() const { return items.size(); }
     void              setOnNote(bool val) { _onNote = val; }
-    Segment* segment() const { return (Segment*)(parent()); }
+    Segment* segment() const { return (Segment*)(explicitParent()); }
     Fraction          ticks() const { return _ticks; }
     void              setTicks(const Fraction& v) { _ticks = v; }
 

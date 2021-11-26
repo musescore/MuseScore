@@ -375,7 +375,7 @@ void BarLine::setParent(Segment* parent)
 PointF BarLine::canvasPos() const
 {
     PointF pos = EngravingItem::canvasPos();
-    if (parent()) {
+    if (explicitParent()) {
         System* system = measure()->system();
         qreal yoff = system ? system->staff(staffIdx())->y() : 0.0;
         pos.ry() += yoff;
@@ -484,7 +484,7 @@ int nextVisibleSpannedStaff(const BarLine* bl)
 void BarLine::getY() const
 {
     qreal _spatium = spatium();
-    if (!parent()) {
+    if (!explicitParent()) {
         // for use in palette
         y1 = _spanFrom * _spatium * .5;
         y2 = (8 - _spanTo) * _spatium * .5;
@@ -547,7 +547,7 @@ void BarLine::drawDots(mu::draw::Painter* painter, qreal x) const
 
     qreal y1l;
     qreal y2l;
-    if (parent() == 0) {      // for use in palette (always Bravura)
+    if (explicitParent() == 0) {      // for use in palette (always Bravura)
         //Bravura shifted repeatDot symbol 0.5sp upper in the font itself (1.272)
         y1l = 1.5 * _spatium;
         y2l = 2.5 * _spatium;

@@ -64,10 +64,30 @@ Ambitus::Ambitus(Segment* parent)
     _topTpc           = Tpc::TPC_INVALID;
     _bottomTpc        = Tpc::TPC_INVALID;
 
-    _topAccid = Factory::createAccidental(parent);
-    _bottomAccid = Factory::createAccidental(parent);
+    _topAccid = Factory::createAccidental(this, false);
+    _bottomAccid = Factory::createAccidental(this, false);
     _topAccid->setParent(this);
     _bottomAccid->setParent(this);
+}
+
+Ambitus::Ambitus(const Ambitus& a)
+    : EngravingItem(a)
+{
+    _noteHeadGroup = a._noteHeadGroup;
+    _noteHeadType = a._noteHeadType;
+    _dir = a._dir;
+    _hasLine = a._hasLine;
+    _lineWidth = a._lineWidth;
+    _topAccid = a._topAccid->clone();
+    _bottomAccid = a._bottomAccid->clone();
+    _topPitch = a._topPitch;
+    _topTpc = a._topTpc;
+    _bottomPitch = a._bottomPitch;
+    _bottomTpc = a._bottomTpc;
+
+    _topPos = a._topPos;
+    _bottomPos = a._bottomPos;
+    _line = a._line;
 }
 
 Ambitus::~Ambitus()
@@ -579,7 +599,7 @@ qreal Ambitus::headWidth() const
 
 mu::PointF Ambitus::pagePos() const
 {
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return pos();
     }
     System* system = segment()->measure()->system();

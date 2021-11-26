@@ -178,11 +178,11 @@ std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const Q
 
 PointF FretDiagram::pagePos() const
 {
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return pos();
     }
-    if (parent()->isSegment()) {
-        Measure* m = toSegment(parent())->measure();
+    if (explicitParent()->isSegment()) {
+        Measure* m = toSegment(explicitParent())->measure();
         System* system = m->system();
         qreal yp = y();
         if (system) {
@@ -496,13 +496,13 @@ void FretDiagram::layout()
 
     bbox().setRect(x, y, w, h);
 
-    if (!parent() || !parent()->isSegment()) {
+    if (!explicitParent() || !explicitParent()->isSegment()) {
         setPos(PointF());
         return;
     }
 
     // We need to get the width of the notehead/rest in order to position the fret diagram correctly
-    Segment* pSeg = toSegment(parent());
+    Segment* pSeg = toSegment(explicitParent());
     qreal noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
         int idx = staff()->idx();
@@ -530,15 +530,15 @@ void FretDiagram::layout()
     autoplaceSegmentElement();
 
     // don't display harmony in palette
-    if (!parent()) {
+    if (!explicitParent()) {
         return;
     }
 
     if (_harmony) {
         _harmony->layout();
     }
-    if (_harmony && _harmony->autoplace() && _harmony->parent()) {
-        Segment* s = toSegment(parent());
+    if (_harmony && _harmony->autoplace() && _harmony->explicitParent()) {
+        Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
         int si = staffIdx();
 
@@ -1240,7 +1240,7 @@ EngravingItem* FretDiagram::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
-        h->setParent(parent());
+        h->setParent(explicitParent());
         h->setTrack(track());
         score()->undoAddElement(h);
     } else {

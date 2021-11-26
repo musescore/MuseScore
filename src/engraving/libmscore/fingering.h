@@ -38,7 +38,7 @@ public:
 
     Fingering* clone() const override { return new Fingering(*this); }
 
-    Note* note() const { return toNote(parent()); }
+    Note* note() const { return toNote(explicitParent()); }
     ElementType layoutType();
     PlacementV calculatePlacement() const;
 

@@ -94,7 +94,7 @@ public:
 
     ~MeasureBase();
 
-    System* system() const { return (System*)parent(); }
+    System* system() const { return (System*)explicitParent(); }
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions

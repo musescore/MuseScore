@@ -37,7 +37,7 @@ public:
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };

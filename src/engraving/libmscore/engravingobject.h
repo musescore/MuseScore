@@ -177,14 +177,15 @@ class EngravingObject
     ElementType m_type = ElementType::INVALID;
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
-    bool m_isDummy = false;
     EngravingObjectList m_children;
 
-    Score* _score = nullptr;
+    Score* m_score = nullptr;
 
     static ElementStyle const emptyStyle;
 
     void doSetParent(EngravingObject* p);
+    void doSetScore(Score* sc);
+    void moveToDummy();
 
 protected:
     const ElementStyle* _elementStyle {& emptyStyle };
@@ -209,45 +210,10 @@ public:
     const char* name() const;
     virtual QString userName() const;
 
-    //! NOTE Before, element tree is made to be done like this
-    //! class ScoreElement
-    //! {
-    //!     Score* _score;
-    //!     ScoreElement(Score* score)...
-    //! }
-    //!
-    //! class EngravingItem : public ScoreElement
-    //! {
-    //!    EngravingItem* _parent;
-    //!    EngravingItem(Score* s) : ScoreElement(s)...
-    //!
-    //!    EngravingItem* parent() const { return _parent; }
-    //!    void setElement(EngravingItem* e) { _parent = e; }
-    //! }
-    //! accordingly:
-    //! * All elements have a ref to score which they are located.
-    //! * The base element (ScoreElement) itself has no parent property
-    //! * The parent of an element could be set or could not be set, so in general, it is impossible to build a tree of elements
-    //! (to solve this problem, a `treeParent` method was added that tries to determine the parent)
-    //! * There was also logic for some elements that if a parent is set, then an element in the tree,
-    //! if not set, then no, but for other elements, it does not matter.
-    //!
-    //! Now the element tree is:
-    //! class ScoreElement
-    //! {
-    //!     ScoreElement* m_parent;
-    //!     ScoreElement(ScoreElement* parent)...
-    //! }
-    //! accordingly:
-    //! * No more score property (score is searched for in the parent tree)
-    //! * All objects must belong to someone
-    //!
-    //! For compatibility purposes, it has been done so that the new structure has the old behavior.
-    EngravingObject* parent(bool isIncludeDummy = false) const;
-    void setParent(EngravingObject* p, bool isExplicitly = true);
-    void moveToDummy();
-    void setIsDummy(bool arg);
-    bool isDummy() const;
+    EngravingObject* parent() const;
+    void setParent(EngravingObject* p);
+    EngravingObject* explicitParent() const;
+    void resetExplicitParent();
 
     const EngravingObjectList& children() const { return m_children; }
 
@@ -260,7 +226,7 @@ public:
 
     // context
     virtual void setScore(Score* s);
-    Score* score(bool required = true) const;
+    Score* score() const;
     MasterScore* masterScore() const;
     bool onSameScore(const EngravingObject* other) const;
     const MStyle* style() const;

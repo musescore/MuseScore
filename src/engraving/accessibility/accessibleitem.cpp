@@ -82,7 +82,7 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
-    RootItem* rootItem = m_element->parent() ? score->rootItem() : score->dummy()->rootItem();
+    RootItem* rootItem = m_element->explicitParent() ? score->rootItem() : score->dummy()->rootItem();
     return dynamic_cast<AccessibleRoot*>(rootItem->accessible());
 }
 
@@ -103,7 +103,7 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
-    Ms::EngravingObject* p = m_element->parent(true);
+    Ms::EngravingObject* p = m_element->parent();
     if (!p || !p->isEngravingItem()) {
         return nullptr;
     }

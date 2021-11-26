@@ -80,7 +80,7 @@ public:
     bool isEndType() const { return spannerSegmentType() == SpannerSegmentType::END; }
 
     void setSystem(System* s);
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     const mu::PointF& userOff2() const { return _offset2; }
     void setUserOff2(const mu::PointF& o) { _offset2 = o; }

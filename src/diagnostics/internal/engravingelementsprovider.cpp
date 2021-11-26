@@ -129,10 +129,6 @@ void EngravingElementsProvider::checkTree(Ms::Score* score)
 
 void EngravingElementsProvider::dumpTree(const Ms::EngravingItem* item, int& level)
 {
-    if (item->isDummy()) {
-        return;
-    }
-
     ++level;
     QString gap;
     gap.fill(' ', level);
@@ -162,11 +158,7 @@ void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int
 
 void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
 {
-    if (obj->isDummy()) {
-        return;
-    }
-
-    Ms::EngravingObject* p1 = obj->parent(true);
+    Ms::EngravingObject* p1 = obj->parent();
     Ms::EngravingObject* p2 = obj->scanParent();
     if (p1 && p2 && p1 != p2) {
         LOGD() << "obj: " << obj->name();

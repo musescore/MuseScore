@@ -83,7 +83,7 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
 
     ChordRest* chordRest() const;
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const;
     System* system() const;
     Page* page() const;

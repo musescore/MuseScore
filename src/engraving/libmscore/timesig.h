@@ -106,8 +106,8 @@ public:
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     bool showCourtesySig() const { return _showCourtesySig; }
     void setShowCourtesySig(bool v) { _showCourtesySig = v; }

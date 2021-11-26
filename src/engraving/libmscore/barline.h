@@ -118,8 +118,8 @@ public:
     EngravingItem* drop(EditData&) override;
     bool isEditable() const override { return true; }
 
-    Segment* segment() const { return toSegment(parent()); }
-    Measure* measure() const { return toMeasure(parent()->parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
+    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
     void setSpanStaff(int val) { _spanStaff = val; }
     void setSpanFrom(int val) { _spanFrom = val; }

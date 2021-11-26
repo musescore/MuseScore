@@ -192,10 +192,10 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
                     m_score->setSelectionChanged(true);
                 }
             }
-            s->moveToDummy();
+            s->resetExplicitParent();
         }
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
-            mb->moveToDummy();
+            mb->resetExplicitParent();
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
@@ -284,7 +284,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
     if (layoutAll) {
         for (System* s : qAsConst(m_score->_systems)) {
             for (SpannerSegment* ss : s->spannerSegments()) {
-                ss->moveToDummy();
+                ss->resetExplicitParent();
             }
         }
         qDeleteAll(m_score->_systems);
@@ -297,7 +297,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         }
 
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
-            mb->moveToDummy();
+            mb->resetExplicitParent();
         }
 
         page = Factory::createPage(m_score->rootItem());
@@ -350,7 +350,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
     while (ctx.curMeasure) {
         qreal ww = 0.0;
         if (ctx.curMeasure->isVBox() || ctx.curMeasure->isTBox()) {
-            ctx.curMeasure->moveToDummy();
+            ctx.curMeasure->resetExplicitParent();
             LayoutMeasure::getNextMeasure(options, ctx);
             continue;
         }
@@ -358,7 +358,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
             if (m->mmRest()) {
-                m->mmRest()->moveToDummy();
+                m->mmRest()->resetExplicitParent();
             }
             if (firstMeasure) {
                 system->layoutSystem(ctx, pos.rx());

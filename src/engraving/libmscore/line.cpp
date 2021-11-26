@@ -902,7 +902,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         }
                     }
                 }
-            } else if (isLyricsLine() && toLyrics(parent())->ticks() > Fraction(0, 1)) {
+            } else if (isLyricsLine() && toLyrics(explicitParent())->ticks() > Fraction(0, 1)) {
                 // melisma line
                 // it is possible CR won't be in correct track
                 // prefer element in current track if available
@@ -926,9 +926,9 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 // (for LYRICSLINE, this is hyphen; melisma line is handled above)
                 // lay out to just before next chordrest on this staff, or barline
                 // tick2 actually tells us the right chordrest to look for
-                if (cr && endElement()->parent() && endElement()->parent()->type() == ElementType::SEGMENT) {
+                if (cr && endElement()->explicitParent() && endElement()->explicitParent()->type() == ElementType::SEGMENT) {
                     qreal x2 = cr->x() /* TODO + cr->space().rw() */;
-                    Segment* currentSeg = toSegment(endElement()->parent());
+                    Segment* currentSeg = toSegment(endElement()->explicitParent());
                     Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
                     if (!seg) {
                         // no end segment found, use measure width
@@ -1063,7 +1063,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         Note* n = toNote(e);
         System* s = n->chord()->segment()->system();
         if (s == 0) {
-            qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->parent()->name());
+            qDebug("no system: %s  start %s chord parent %s\n", name(), n->name(), n->chord()->explicitParent()->name());
             return PointF();
         }
         *sys = s;

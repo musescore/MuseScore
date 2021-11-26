@@ -239,7 +239,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
 
         dragElement = Factory::createItem(type, _score->dummy());
         if (dragElement) {
-            dragElement->moveToDummy();
+            dragElement->resetExplicitParent();
             dragElement->read(e);
             dragElement->layout();
         }

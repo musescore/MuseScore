@@ -54,7 +54,7 @@ public:
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     std::vector<mu::LineF>& getLines() { return lines; }
-    Measure* measure() const { return (Measure*)parent(); }
+    Measure* measure() const { return (Measure*)explicitParent(); }
     qreal y1() const;
     void layoutForWidth(qreal width);
     void layoutPartialWidth(qreal w, qreal wPartial, bool alignLeft);

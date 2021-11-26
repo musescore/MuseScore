@@ -83,7 +83,7 @@ public:
     int span() const { return _bi->bracketSpan(); }
     qreal magx() const { return _magx; }
 
-    System* system() const { return (System*)parent(); }
+    System* system() const { return (System*)explicitParent(); }
 
     Measure* measure() const { return _measure; }
     void setMeasure(Measure* measure) { _measure = measure; }

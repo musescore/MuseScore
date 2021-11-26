@@ -224,7 +224,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
         event->acceptProposedAction();
         dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
-        dragElement->moveToDummy();
+        dragElement->resetExplicitParent();
         dragElement->read(e);
         dragElement->layout();
     } else {

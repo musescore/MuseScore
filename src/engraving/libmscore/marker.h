@@ -65,7 +65,7 @@ public:
 
     int subtype() const override { return int(_markerType); }
 
-    Measure* measure() const { return (Measure*)parent(); }
+    Measure* measure() const { return (Measure*)explicitParent(); }
 
     void layout() override;
     void read(XmlReader&) override;

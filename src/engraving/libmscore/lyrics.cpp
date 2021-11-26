@@ -188,7 +188,7 @@ void Lyrics::remove(EngravingItem* el)
             // be sure each finds a clean context
             LyricsLine* separ = _separator;
             _separator = 0;
-            separ->moveToDummy();
+            separ->resetExplicitParent();
             separ->removeUnmanaged();
         }
     } else {
@@ -232,7 +232,7 @@ bool Lyrics::isMelisma() const
 
 void Lyrics::layout()
 {
-    if (!parent()) {   // palette & clone trick
+    if (!explicitParent()) {   // palette & clone trick
         setPos(PointF());
         TextBase::layout1();
         return;

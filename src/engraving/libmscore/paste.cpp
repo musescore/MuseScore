@@ -442,7 +442,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Beam* beam = Factory::createBeam(this->dummy()->system());
                     beam->setTrack(e.track());
                     beam->read(e);
-                    beam->moveToDummy();
+                    beam->resetExplicitParent();
                     if (startingBeam) {
                         qDebug("The read beam was not used");
                         delete startingBeam;

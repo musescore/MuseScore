@@ -210,7 +210,9 @@ static const ElementName elementNames[] = {
     { ElementType::ACTION_ICON,          "ActionIcon",           QT_TRANSLATE_NOOP("elementName", "Action icon") },
     { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
     { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe embellishment") },
-    { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") }
+    { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") },
+    { ElementType::ROOT_ITEM,            "RootItem",             QT_TRANSLATE_NOOP("elementName", "Root item") },
+    { ElementType::DUMMY,                "Dummy",                QT_TRANSLATE_NOOP("elementName", "Dummy") },
 };
 /* *INDENT-ON* */
 
@@ -346,6 +348,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::SCORE:
     case ElementType::BRACKET_ITEM:
     case ElementType::OSSIA:
+    case ElementType::ROOT_ITEM:
+    case ElementType::DUMMY:
         break;
     }
     qDebug("cannot create type %d <%s>", int(type), Factory::name(type));

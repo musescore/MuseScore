@@ -47,7 +47,7 @@ public:
     StemSlash* clone() const override { return new StemSlash(*this); }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
-    Chord* chord() const { return (Chord*)parent(); }
+    Chord* chord() const { return (Chord*)explicitParent(); }
 };
 }     // namespace Ms
 #endif

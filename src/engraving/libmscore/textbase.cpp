@@ -961,11 +961,11 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     QString family;
     if (format.fontFamily() == "ScoreText") {
-        if (t->parent() && t->isDynamic()) {
+        if (t->explicitParent() && t->isDynamic()) {
             family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
             // to keep desired size ratio (based on 20pt symbol size to 10pt text size)
             m *= 2;
-        } else if (t->parent() && t->isTempoText()) {
+        } else if (t->explicitParent() && t->isTempoText()) {
             family = t->score()->styleSt(Sid::MusicalTextFont);
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
@@ -2006,7 +2006,7 @@ void TextBase::prepareFormat(const QString& token, Ms::TextCursor& cursor)
 void TextBase::layout()
 {
     setPos(PointF());
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(0.0, 0.0);
     }
 //      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
@@ -2047,14 +2047,14 @@ void TextBase::layout1()
     }
     qreal yoff = 0;
     qreal h    = 0;
-    if (parent()) {
+    if (explicitParent()) {
         if (layoutToParentWidth()) {
-            if (parent()->isTBox()) {
+            if (explicitParent()->isTBox()) {
                 // hack: vertical alignment is always TOP
                 _align = Align(((char)_align) & ((char)Align::HMASK)) | Align::TOP;
-            } else if (parent()->isBox()) {
+            } else if (explicitParent()->isBox()) {
                 // consider inner margins of frame
-                Box* b = toBox(parent());
+                Box* b = toBox(explicitParent());
                 yoff = b->topMargin() * DPMM;
 
                 if (b->height() < bb.bottom()) {
@@ -2062,11 +2062,11 @@ void TextBase::layout1()
                 } else {
                     h  = b->height() - yoff - b->bottomMargin() * DPMM;
                 }
-            } else if (parent()->isPage()) {
-                Page* p = toPage(parent());
+            } else if (explicitParent()->isPage()) {
+                Page* p = toPage(explicitParent());
                 h = p->height() - p->tm() - p->bm();
                 yoff = p->tm();
-            } else if (parent()->isMeasure()) {
+            } else if (explicitParent()->isMeasure()) {
             } else {
                 h  = parentItem()->height();
             }
@@ -2561,8 +2561,8 @@ Pid TextBase::propertyId(const QStringRef& name) const
 
 RectF TextBase::pageRectangle() const
 {
-    if (parent() && (parent()->isHBox() || parent()->isVBox() || parent()->isTBox())) {
-        Box* box = toBox(parent());
+    if (explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox() || explicitParent()->isTBox())) {
+        Box* box = toBox(explicitParent());
         RectF r = box->abbox();
         qreal x = r.x() + box->leftMargin() * DPMM;
         qreal y = r.y() + box->topMargin() * DPMM;
@@ -2574,8 +2574,8 @@ RectF TextBase::pageRectangle() const
 
         return RectF(x, y, w, h);
     }
-    if (parent() && parent()->isPage()) {
-        Page* box  = toPage(parent());
+    if (explicitParent() && explicitParent()->isPage()) {
+        Page* box  = toPage(explicitParent());
         RectF r = box->abbox();
         qreal x = r.x() + box->lm();
         qreal y = r.y() + box->tm();
@@ -2639,8 +2639,8 @@ bool TextBase::mousePress(EditData& ed)
 void TextBase::layoutEdit()
 {
     layout();
-    if (parent() && parent()->type() == ElementType::TBOX) {
-        TBox* tbox = toTBox(parent());
+    if (explicitParent() && explicitParent()->type() == ElementType::TBOX) {
+        TBox* tbox = toTBox(explicitParent());
         tbox->layout();
         System* system = tbox->system();
         system->setHeight(tbox->height());
@@ -3079,7 +3079,7 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
         return EngravingItem::propertyDefault(id);
     }
     if (composition()) {
-        PropertyValue v = parent()->propertyDefault(id);
+        PropertyValue v = explicitParent()->propertyDefault(id);
         if (v.isValid()) {
             return v;
         }

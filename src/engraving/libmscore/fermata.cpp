@@ -164,8 +164,8 @@ void Fermata::draw(mu::draw::Painter* painter) const
 
 ChordRest* Fermata::chordRest() const
 {
-    if (parent() && parent()->isChordRest()) {
-        return toChordRest(parent());
+    if (explicitParent() && explicitParent()->isChordRest()) {
+        return toChordRest(explicitParent());
     }
     return 0;
 }
@@ -177,7 +177,7 @@ ChordRest* Fermata::chordRest() const
 Measure* Fermata::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->parent() : 0);
+    return toMeasure(s ? s->explicitParent() : 0);
 }
 
 //---------------------------------------------------------
@@ -187,7 +187,7 @@ Measure* Fermata::measure() const
 System* Fermata::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->parent() : 0);
+    return toSystem(m ? m->explicitParent() : 0);
 }
 
 //---------------------------------------------------------
@@ -197,7 +197,7 @@ System* Fermata::system() const
 Page* Fermata::page() const
 {
     System* s = system();
-    return toPage(s ? s->parent() : 0);
+    return toPage(s ? s->explicitParent() : 0);
 }
 
 //---------------------------------------------------------

@@ -117,7 +117,7 @@ bool MeasureNumberBase::readProperties(XmlReader& xml)
 void MeasureNumberBase::layout()
 {
     setPos(PointF());
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(0.0, 0.0);
     }
 
@@ -126,7 +126,7 @@ void MeasureNumberBase::layout()
     TextBase::layout1();
     // this could be if (!measure()) but it is the same as current and slower
     // See implementation of MeasureNumberBase::measure().
-    if (!parent()) {
+    if (!explicitParent()) {
         return;
     }
 

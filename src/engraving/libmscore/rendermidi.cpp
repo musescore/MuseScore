@@ -363,7 +363,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     int tieLen = 0;
     if (chord->isGrace()) {
         Q_ASSERT(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
-        chord = toChord(chord->parent());
+        chord = toChord(chord->explicitParent());
     }
 
     ticks = chord->actualTicks().ticks();   // ticks of the actual note

@@ -125,7 +125,7 @@ void ChordLine::layout()
     }
 
     qreal _spatium = spatium();
-    if (parent()) {
+    if (explicitParent()) {
         Note* note = chord()->upNote();
         PointF p(note->pos());
         // chordlines to the right of the note

@@ -56,10 +56,10 @@ ChordRest* nextChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
 
     if (cr->isGrace()) {
         Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->parent());
+        Chord* pc = toChord(cr->explicitParent());
 
         if (skipGrace) {
-            cr = toChordRest(cr->parent());
+            cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             QVector<Chord*> cl = pc->graceNotesBefore();
             auto i = std::find(cl.begin(), cl.end(), c);
@@ -136,10 +136,10 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
 
     if (cr->isGrace()) {
         Chord* c  = toChord(cr);
-        Chord* pc = toChord(cr->parent());
+        Chord* pc = toChord(cr->explicitParent());
 
         if (skipGrace) {
-            cr = toChordRest(cr->parent());
+            cr = toChordRest(cr->explicitParent());
         } else if (cr->isGraceBefore()) {
             QVector<Chord*> cl = pc->graceNotesBefore();
             auto i = std::find(cl.begin(), cl.end(), c);

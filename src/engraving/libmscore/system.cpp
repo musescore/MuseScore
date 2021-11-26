@@ -119,12 +119,12 @@ System::~System()
 {
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system() == this) {
-            ss->moveToDummy();
+            ss->resetExplicitParent();
         }
     }
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->moveToDummy();
+            mb->resetExplicitParent();
         }
     }
     qDeleteAll(_staves);
@@ -147,13 +147,13 @@ void System::clear()
 {
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->moveToDummy();
+            mb->resetExplicitParent();
         }
     }
     ml.clear();
     for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
         if (ss->system() == this) {
-            ss->moveToDummy();             // assume parent() is System
+            ss->resetExplicitParent();             // assume parent() is System
         }
     }
     _spannerSegments.clear();
@@ -179,7 +179,7 @@ void System::removeMeasure(MeasureBase* mb)
 {
     ml.erase(std::remove(ml.begin(), ml.end(), mb), ml.end());
     if (mb->system() == this) {
-        mb->moveToDummy();
+        mb->resetExplicitParent();
     }
 }
 
@@ -195,7 +195,7 @@ void System::removeLastMeasure()
     MeasureBase* mb = ml.back();
     ml.pop_back();
     if (mb->system() == this) {
-        mb->moveToDummy();
+        mb->resetExplicitParent();
     }
 }
 

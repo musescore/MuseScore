@@ -26,6 +26,8 @@
 #include "measure.h"
 #include "staff.h"
 
+#include "log.h"
+
 using namespace Ms;
 
 LinkedObjects::LinkedObjects(Score* score)

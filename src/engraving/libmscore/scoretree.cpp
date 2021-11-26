@@ -409,7 +409,7 @@ EngravingObject* ChordRest::scanParent() const
     if (isGrace()) {
         // grace notes do not have a segment of their own
         // their parent is the chord they are attached to
-        return parent();
+        return explicitParent();
     }
     return segment();
 }
@@ -687,8 +687,8 @@ int Note::scanChildCount() const
 
 EngravingObject* Accidental::scanParent() const
 {
-    if (parent() && parent()->isTrillSegment()) {
-        return parent()->scanParent();
+    if (explicitParent() && explicitParent()->isTrillSegment()) {
+        return explicitParent()->scanParent();
     }
     return note();
 }
@@ -948,7 +948,7 @@ int Trill::scanChildCount() const
 
 EngravingObject* TBox::scanParent() const
 {
-    return parent();
+    return explicitParent();
 }
 
 EngravingObject* TBox::scanChild(int idx) const

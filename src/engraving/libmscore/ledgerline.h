@@ -52,7 +52,7 @@ public:
     LedgerLine* clone() const override { return new LedgerLine(*this); }
 
     mu::PointF pagePos() const override;        ///< position in page coordinates
-    Chord* chord() const { return toChord(parent()); }
+    Chord* chord() const { return toChord(explicitParent()); }
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 

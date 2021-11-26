@@ -55,6 +55,7 @@ class Ambitus final : public EngravingItem
 
     friend class mu::engraving::Factory;
     Ambitus(Segment* parent);
+    Ambitus(const Ambitus& a);
 
     void normalize();
 
@@ -96,7 +97,7 @@ public:
     void setBottomTpc(int val);
 
     // some utility functions
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
     qreal headWidth() const;
 

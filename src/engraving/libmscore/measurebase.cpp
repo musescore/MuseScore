@@ -114,7 +114,7 @@ MeasureBase::~MeasureBase()
 
 void MeasureBase::add(EngravingItem* e)
 {
-    if (e->parent() != this) {
+    if (e->explicitParent() != this) {
         e->setParent(this);
     }
 
@@ -322,9 +322,9 @@ void MeasureBase::layout()
 MeasureBase* MeasureBase::top() const
 {
     const MeasureBase* mb = this;
-    while (mb->parent()) {
-        if (mb->parent()->isMeasureBase()) {
-            mb = toMeasureBase(mb->parent());
+    while (mb->explicitParent()) {
+        if (mb->explicitParent()->isMeasureBase()) {
+            mb = toMeasureBase(mb->explicitParent());
         } else {
             break;
         }

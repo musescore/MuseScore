@@ -884,7 +884,7 @@ void TabDurationSymbol::layout()
     qreal xpos, ypos;               // position coords
 
     _beamGrid = TabBeamGrid::NONE;
-    Chord* chord = parent() && parent()->isChord() ? toChord(parent()) : nullptr;
+    Chord* chord = explicitParent() && explicitParent()->isChord() ? toChord(explicitParent()) : nullptr;
     // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (!chord || !chord->isChord()
         || (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID
@@ -897,7 +897,7 @@ void TabDurationSymbol::layout()
         ypos  = _tab->durationFontYOffset();
         ybb   = _tab->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
-        if (parent() && parent()->isRest()) {
+        if (explicitParent() && explicitParent()->isRest()) {
             ybb  += TAB_RESTSYMBDISPL * _spatium;
             ypos += TAB_RESTSYMBDISPL * _spatium;
         }
@@ -945,7 +945,7 @@ void TabDurationSymbol::layout2()
     }
 
     // get 'grid' beam length from page positions of this' chord and previous chord
-    Chord* chord       = toChord(parent());
+    Chord* chord       = toChord(explicitParent());
     ChordRest* prevChord   = prevChordRest(chord, true);
     if (chord == nullptr || prevChord == nullptr) {
         return;
@@ -974,7 +974,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     }
 
     if (_repeat && (_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
-        Chord* chord = toChord(parent());
+        Chord* chord = toChord(explicitParent());
         ChordRest* prevCR = prevChordRest(chord);
         if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
             return;
