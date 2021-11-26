@@ -45,7 +45,7 @@ public:
     bool readProperties(XmlReader&) override;
 
     void layout() override;
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     bool isEditable() const override { return false; }    // The measure numbers' text should not be editable
 

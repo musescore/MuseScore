@@ -1310,7 +1310,7 @@ void Note::removeSpanner(Spanner* l)
 
 void Note::add(EngravingItem* e)
 {
-    if (e->parent() != this) {
+    if (e->explicitParent() != this) {
         e->setParent(this);
     }
     e->setTrack(track());
@@ -1779,8 +1779,8 @@ void Note::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             if (sp->isTie()) {
                 _tieBack = toTie(sp);
             } else {
-                if (sp->isGlissando() && parent() && parent()->isChord()) {
-                    toChord(parent())->setEndsGlissando(true);
+                if (sp->isGlissando() && explicitParent() && explicitParent()->isChord()) {
+                    toChord(explicitParent())->setEndsGlissando(true);
                 }
                 addSpannerBack(sp);
             }
@@ -3282,11 +3282,11 @@ void Note::setScore(Score* s)
 
 QString Note::accessibleInfo() const
 {
-    if (!chord()) {
+    if (!chord() || !staff()) {
         return QString();
     }
 
-    QString duration = !isDummy() ? chord()->durationUserName() : "";
+    QString duration = chord()->durationUserName();
     QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
     QString pitchName;
     QString onofftime;
@@ -3298,22 +3298,20 @@ QString Note::accessibleInfo() const
         }
     }
 
-    if (!isDummy()) {
-        const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
-        if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
-            pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
-        } else if (staff()->isDrumStaff(tick()) && drumset) {
-            pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
-        } else if (staff()->isTabStaff(tick())) {
-            pitchName
-                = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
-        } else {
-            pitchName = tpcUserName(false);
-        }
+    const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
+    if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
+        pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
+    } else if (staff()->isDrumStaff(tick()) && drumset) {
+        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
+    } else if (staff()->isTabStaff(tick())) {
+        pitchName
+            = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
+    } else {
+        pitchName = tpcUserName(false);
     }
 
     return QObject::tr("%1; Pitch: %2; Duration: %3%4%5").arg(noteTypeUserName(), pitchName, duration, onofftime,
-                                                              ((!isDummy() && chord()->isGrace()) ? "" : QString("; %1").arg(voice)));
+                                                              (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
 }
 
 //---------------------------------------------------------

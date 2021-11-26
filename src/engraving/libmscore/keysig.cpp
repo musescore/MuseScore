@@ -333,7 +333,7 @@ void KeySig::draw(mu::draw::Painter* painter) const
     for (const KeySym& ks: _sig.keySymbols()) {
         drawSymbol(ks.sym, painter, PointF(ks.pos.x(), ks.pos.y()));
     }
-    if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
+    if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
         painter->setPen(engravingConfiguration()->formattingMarksColor());
         drawSymbol(SymId::timeSigX, painter, PointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));

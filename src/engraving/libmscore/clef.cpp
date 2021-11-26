@@ -487,14 +487,14 @@ void Clef::undoSetShowCourtesy(bool v)
 Clef* Clef::otherClef()
 {
     // if not in a clef-segment-measure hierarchy, do nothing
-    if (!parent() || !parent()->isSegment()) {
+    if (!explicitParent() || !explicitParent()->isSegment()) {
         return nullptr;
     }
-    Segment* segm = toSegment(parent());
-    if (!segm->parent() || !segm->parent()->isMeasure()) {
+    Segment* segm = toSegment(explicitParent());
+    if (!segm->explicitParent() || !segm->explicitParent()->isMeasure()) {
         return 0;
     }
-    Measure* meas = toMeasure(segm->parent());
+    Measure* meas = toMeasure(segm->explicitParent());
     Measure* otherMeas = nullptr;
     Segment* otherSegm = nullptr;
     Fraction segmTick  = segm->tick();

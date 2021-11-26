@@ -177,7 +177,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     p->translate(text->pos());
     text->draw(p);
     p->translate(-text->pos());
-    text->moveToDummy();
+    text->resetExplicitParent();
 }
 
 //---------------------------------------------------------

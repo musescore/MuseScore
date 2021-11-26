@@ -48,8 +48,8 @@ public:
     void read(XmlReader&) override;
     void layout() override;
 
-    Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
-    Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }
+    Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
+    Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }
     EngravingItem* elementBase() const override;
 
 private:

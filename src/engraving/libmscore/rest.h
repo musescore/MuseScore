@@ -52,7 +52,7 @@ public:
 
     Rest* clone() const override { return new Rest(*this, false); }
     EngravingItem* linkedClone() override { return new Rest(*this, true); }
-    Measure* measure() const override { return parent() ? toMeasure(parent()->parent()) : 0; }
+    Measure* measure() const override { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : 0; }
     qreal mag() const override;
 
     void draw(mu::draw::Painter*) const override;

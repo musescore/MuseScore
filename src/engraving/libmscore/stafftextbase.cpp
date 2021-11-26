@@ -215,11 +215,11 @@ bool StaffTextBase::getAeolusStop(int group, int idx) const
 
 Segment* StaffTextBase::segment() const
 {
-    if (!parent()->isSegment()) {
-        qDebug("parent %s", parent()->name());
+    if (!explicitParent()->isSegment()) {
+        qDebug("parent %s", explicitParent()->name());
         return 0;
     }
-    Segment* s = toSegment(parent());
+    Segment* s = toSegment(explicitParent());
     return s;
 }
 }

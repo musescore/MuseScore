@@ -375,6 +375,11 @@ Measure::~Measure()
     qDeleteAll(m_mstaves);
 }
 
+void Measure::setParent(System* s)
+{
+    MeasureBase::setParent(s);
+}
+
 //---------------------------------------------------------
 //   AcEl
 //---------------------------------------------------------
@@ -709,7 +714,7 @@ void Measure::layoutMMRestRange()
 
 void Measure::layout2()
 {
-    Q_ASSERT(parent());
+    Q_ASSERT(explicitParent());
     Q_ASSERT(score()->nstaves() == int(m_mstaves.size()));
 
     qreal _spatium = spatium();
@@ -908,7 +913,7 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 
 void Measure::add(EngravingItem* e)
 {
-    if (e->parent() != this) {
+    if (e->explicitParent() != this) {
         e->setParent(this);
     }
 
@@ -1040,7 +1045,7 @@ void Measure::add(EngravingItem* e)
 
 void Measure::remove(EngravingItem* e)
 {
-    Q_ASSERT(e->parent() == this);
+    Q_ASSERT(e->explicitParent() == this);
     Q_ASSERT(e->score() == score());
 
     switch (e->type()) {
@@ -3071,7 +3076,7 @@ EngravingItem* Measure::nextElementStaff(int staff)
     }
 
     // handle measure elements
-    if (e->parent() == this) {
+    if (e->explicitParent() == this) {
         auto i = std::find(el().begin(), el().end(), e);
         if (i != el().end()) {
             if (++i != el().end()) {
@@ -3107,7 +3112,7 @@ EngravingItem* Measure::prevElementStaff(int staff)
     }
 
     // handle measure elements
-    if (e->parent() == this) {
+    if (e->explicitParent() == this) {
         auto i = std::find(el().rbegin(), el().rend(), e);
         if (i != el().rend()) {
             if (++i != el().rend()) {

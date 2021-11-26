@@ -65,7 +65,7 @@ public:
 
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return _chordLineType; }
-    Chord* chord() const { return (Chord*)(parent()); }
+    Chord* chord() const { return (Chord*)(explicitParent()); }
     bool isStraight() const { return _straight; }
     void setStraight(bool straight) { _straight =  straight; }
     void setLengthX(qreal length) { _lengthX = length; }

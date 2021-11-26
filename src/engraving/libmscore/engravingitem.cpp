@@ -197,7 +197,7 @@ void EngravingItem::setupAccessible()
 
 EngravingItem* EngravingItem::parentItem() const
 {
-    EngravingObject* p = parent();
+    EngravingObject* p = explicitParent();
     if (p && p->isEngravingItem()) {
         return static_cast<EngravingItem*>(p);
     }
@@ -250,7 +250,7 @@ void EngravingItem::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 qreal EngravingItem::spatium() const
 {
-    if (systemFlag() || (parent() && parentItem()->systemFlag())) {
+    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
         return score()->spatium();
     }
     Staff* s = staff();
@@ -457,11 +457,11 @@ void EngravingItem::setVoice(int v)
 Fraction EngravingItem::tick() const
 {
     const EngravingItem* e = this;
-    while (e->parent()) {
-        if (e->parent()->isSegment()) {
-            return toSegment(e->parent())->tick();
-        } else if (e->parent()->isMeasureBase()) {
-            return toMeasureBase(e->parent())->tick();
+    while (e->explicitParent()) {
+        if (e->explicitParent()->isSegment()) {
+            return toSegment(e->explicitParent())->tick();
+        } else if (e->explicitParent()->isMeasureBase()) {
+            return toMeasureBase(e->explicitParent())->tick();
         }
         e = e->parentItem();
     }
@@ -475,9 +475,9 @@ Fraction EngravingItem::tick() const
 Fraction EngravingItem::rtick() const
 {
     const EngravingItem* e = this;
-    while (e->parent()) {
-        if (e->parent()->isSegment()) {
-            return toSegment(e->parent())->rtick();
+    while (e->explicitParent()) {
+        if (e->explicitParent()->isSegment()) {
+            return toSegment(e->explicitParent())->rtick();
         }
         e = e->parentItem();
     }
@@ -591,23 +591,23 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
 PointF EngravingItem::pagePos() const
 {
     PointF p(pos());
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return p;
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
-        if (parent()->isSegment()) {
-            measure = toSegment(parent())->measure();
-        } else if (parent()->isMeasure()) {           // used in measure number
-            measure = toMeasure(parent());
-        } else if (parent()->isSystem()) {
-            system = toSystem(parent());
-        } else if (parent()->isFretDiagram()) {
+        if (explicitParent()->isSegment()) {
+            measure = toSegment(explicitParent())->measure();
+        } else if (explicitParent()->isMeasure()) {           // used in measure number
+            measure = toMeasure(explicitParent());
+        } else if (explicitParent()->isSystem()) {
+            system = toSystem(explicitParent());
+        } else if (explicitParent()->isFretDiagram()) {
             return p + parentItem()->pagePos();
         } else {
-            qFatal("this %s parent %s\n", name(), parent()->name());
+            qFatal("this %s parent %s\n", name(), explicitParent()->name());
         }
         if (measure) {
             system = measure->system();
@@ -621,7 +621,7 @@ PointF EngravingItem::pagePos() const
         }
         p.rx() = pageX();
     } else {
-        if (parent()->parent()) {
+        if (explicitParent()->explicitParent()) {
             p += parentItem()->pagePos();
         }
     }
@@ -635,27 +635,27 @@ PointF EngravingItem::pagePos() const
 PointF EngravingItem::canvasPos() const
 {
     PointF p(pos());
-    if (parent() == nullptr) {
+    if (explicitParent() == nullptr) {
         return p;
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
-        if (parent()->isSegment()) {
-            measure = toSegment(parent())->measure();
-        } else if (parent()->isMeasure()) {     // used in measure number
-            measure = toMeasure(parent());
+        if (explicitParent()->isSegment()) {
+            measure = toSegment(explicitParent())->measure();
+        } else if (explicitParent()->isMeasure()) {     // used in measure number
+            measure = toMeasure(explicitParent());
         }
         // system = toMeasure(parent())->system();
-        else if (parent()->isSystem()) {
-            system = toSystem(parent());
-        } else if (parent()->isChord()) {       // grace chord
-            measure = toSegment(parent()->parent())->measure();
-        } else if (parent()->isFretDiagram()) {
-            return p + parentItem()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
+        else if (explicitParent()->isSystem()) {
+            system = toSystem(explicitParent());
+        } else if (explicitParent()->isChord()) {       // grace chord
+            measure = toSegment(explicitParent()->explicitParent())->measure();
+        } else if (explicitParent()->isFretDiagram()) {
+            return p + parentItem()->canvasPos() + PointF(toFretDiagram(explicitParent())->centerX(), 0.0);
         } else {
-            qFatal("this %s parent %s\n", name(), parent()->name());
+            qFatal("this %s parent %s\n", name(), explicitParent()->name());
         }
         if (measure) {
             const StaffLines* lines = measure->staffLines(vStaffIdx());
@@ -748,6 +748,7 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         if (MScore::debugMode) {
             xml.tag("lid", _links->lid());
         }
+
         EngravingItem* me = static_cast<EngravingItem*>(_links->mainElement());
         Q_ASSERT(type() == me->type());
         Staff* s = staff();
@@ -1122,7 +1123,7 @@ void EngravingItem::dump() const
            name(), ipos().x(), ipos().y(),
            _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
            abbox().x(), abbox().y(), abbox().width(), abbox().height(),
-           parent());
+           explicitParent());
 }
 
 //---------------------------------------------------------
@@ -1194,7 +1195,7 @@ EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data,
         return nullptr;
     }
 
-    EngravingItem* el = Factory::createItem(type, score->dummy());
+    EngravingItem* el = Factory::createItem(type, score->dummy(), false);
     if (el) {
         el->read(e);
     }
@@ -1302,8 +1303,8 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
     case Pid::SIZE_SPATIUM_DEPENDENT:
         return sizeIsSpatiumDependent();
     default:
-        if (parent()) {
-            return parent()->getProperty(propertyId);
+        if (explicitParent()) {
+            return explicitParent()->getProperty(propertyId);
         }
 
         return PropertyValue();
@@ -1357,8 +1358,8 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setSizeIsSpatiumDependent(v.toBool());
         break;
     default:
-        if (parent()) {
-            return parent()->setProperty(propertyId, v);
+        if (explicitParent()) {
+            return explicitParent()->setProperty(propertyId, v);
         }
 
         LOG_PROP() << name() << " unknown <" << propertyName(propertyId) << ">(" << int(propertyId) << "), data: " << v.toString();
@@ -1430,8 +1431,8 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
             return v;
         }
 
-        if (parent()) {
-            return parent()->propertyDefault(pid);
+        if (explicitParent()) {
+            return explicitParent()->propertyDefault(pid);
         }
 
         return PropertyValue();
@@ -1519,7 +1520,7 @@ Measure* EngravingItem::findMeasure()
 {
     if (isMeasure()) {
         return toMeasure(this);
-    } else if (parent()) {
+    } else if (explicitParent()) {
         return parentItem()->findMeasure();
     } else {
         return 0;
@@ -1544,7 +1545,7 @@ MeasureBase* EngravingItem::findMeasureBase()
 {
     if (isMeasureBase()) {
         return toMeasureBase(this);
-    } else if (parent()) {
+    } else if (explicitParent()) {
         return parentItem()->findMeasureBase();
     } else {
         return 0;
@@ -1926,7 +1927,7 @@ bool EngravingItem::isUserModified() const
 
 void EngravingItem::triggerLayout() const
 {
-    if (parent()) {
+    if (explicitParent()) {
         score()->setLayout(tick(), staffIdx(), this);
     }
 }
@@ -1937,7 +1938,7 @@ void EngravingItem::triggerLayout() const
 
 void EngravingItem::triggerLayoutAll() const
 {
-    if (parent()) {
+    if (explicitParent()) {
         score()->setLayoutAll(staffIdx(), this);
     }
 }
@@ -2145,8 +2146,8 @@ QVector<LineF> EngravingItem::genericDragAnchorLines() const
         xp += e->x();
     }
     qreal yp;
-    if (parent()->isSegment()) {
-        System* system = toSegment(parent())->measure()->system();
+    if (explicitParent()->isSegment()) {
+        System* system = toSegment(explicitParent())->measure()->system();
         const int stIdx = staffIdx();
         yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
         if (placement() == PlacementV::BELOW) {
@@ -2306,7 +2307,7 @@ qreal EngravingItem::rebaseOffset(bool nox)
     }
     //OffsetChange saveChangedValue = _offsetChanged;
 
-    bool staffRelative = staff() && parent() && !(parent()->isNote() || parent()->isRest());
+    bool staffRelative = staff() && explicitParent() && !(explicitParent()->isNote() || explicitParent()->isRest());
     if (staffRelative && propertyFlags(Pid::PLACEMENT) != PropertyFlags::NOSTYLE) {
         // check if flipped
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
@@ -2409,8 +2410,8 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         rebase = rebaseOffset();
     }
 
-    if (autoplace() && parent()) {
-        Segment* s = toSegment(parent());
+    if (autoplace() && explicitParent()) {
+        Segment* s = toSegment(explicitParent());
         Measure* m = s->measure();
 
         qreal sp = score()->spatium();
@@ -2480,8 +2481,8 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
         rebase = rebaseOffset();
     }
 
-    if (autoplace() && parent()) {
-        Measure* m = toMeasure(parent());
+    if (autoplace() && explicitParent()) {
+        Measure* m = toMeasure(explicitParent());
         int si     = staffIdx();
 
         qreal sp = score()->spatium();

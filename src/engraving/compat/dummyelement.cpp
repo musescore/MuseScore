@@ -36,7 +36,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 DummyElement::DummyElement(EngravingObject* parent)
-    : Ms::EngravingItem(Ms::ElementType::INVALID, parent)
+    : Ms::EngravingItem(Ms::ElementType::DUMMY, parent)
 {
 }
 
@@ -47,11 +47,11 @@ DummyElement::~DummyElement()
 void DummyElement::init()
 {
     m_root = new RootItem(score());
-    m_root->setParent(parent());
+    m_root->setParent(explicitParent());
     m_root->setupAccessible();
 
     m_page = Factory::createPage(m_root);
-    m_page->setParent(parent());
+    m_page->setParent(explicitParent());
     m_page->setupAccessible();
 
     m_system = Factory::createSystem(m_page);
@@ -73,15 +73,6 @@ void DummyElement::init()
     m_note = Factory::createNote(m_chord);
     m_note->setParent(m_chord);
     m_note->setupAccessible();
-
-    setIsDummy(true);
-    m_root->setIsDummy(true);
-    m_page->setIsDummy(true);
-    m_system->setIsDummy(true);
-    m_measure->setIsDummy(true);
-    m_segment->setIsDummy(true);
-    m_chord->setIsDummy(true);
-    m_note->setIsDummy(true);
 }
 
 RootItem* DummyElement::rootItem()

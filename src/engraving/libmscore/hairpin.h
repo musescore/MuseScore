@@ -113,7 +113,7 @@ public:
     HairpinType hairpinType() const { return _hairpinType; }
     void setHairpinType(HairpinType val);
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
     LineSegment* createLineSegment(System* parent) override;
 

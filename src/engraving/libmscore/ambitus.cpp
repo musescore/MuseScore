@@ -64,8 +64,8 @@ Ambitus::Ambitus(Segment* parent)
     _topTpc           = Tpc::TPC_INVALID;
     _bottomTpc        = Tpc::TPC_INVALID;
 
-    _topAccid = Factory::createAccidental(parent);
-    _bottomAccid = Factory::createAccidental(parent);
+    _topAccid = Factory::createAccidental(this, false);
+    _bottomAccid = Factory::createAccidental(this, false);
     _topAccid->setParent(this);
     _bottomAccid->setParent(this);
 }
@@ -579,7 +579,7 @@ qreal Ambitus::headWidth() const
 
 mu::PointF Ambitus::pagePos() const
 {
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return pos();
     }
     System* system = segment()->measure()->system();

@@ -53,13 +53,13 @@ void DebugPaint::paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page)
             continue;
         }
 
-        const Ms::EngravingObject* p = el->parent(true);
+        const Ms::EngravingObject* p = el->parent();
         while (p) {
             if (p == page) {
                 children.push_back(Ms::toEngravingItem(el));
                 break;
             }
-            p = p->parent(true);
+            p = p->parent();
         }
     }
 

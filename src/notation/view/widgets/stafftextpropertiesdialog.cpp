@@ -45,7 +45,7 @@ namespace Ms {
 static void initChannelCombo(QComboBox* cb, StaffTextBase* st)
 {
     Part* part = st->staff()->part();
-    Fraction tick = static_cast<Segment*>(st->parent())->tick();
+    Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
     for (const Channel* a : part->instrument(tick)->channel()) {
         QString name = a->name();
         if (a->name().isEmpty()) {
@@ -128,7 +128,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     }
 
     Part* part = m_staffText->staff()->part();
-    Fraction tick = static_cast<Segment*>(st->parent())->tick();
+    Fraction tick = static_cast<Segment*>(st->explicitParent())->tick();
     int n = part->instrument(tick)->channel().size();
     int rows = 0;
     for (int voice = 0; voice < VOICES; ++voice) {
@@ -450,7 +450,7 @@ void StaffTextPropertiesDialog::channelItemChanged(QTreeWidgetItem* item, QTreeW
     Part* part = m_staffText->staff()->part();
 
     int channelIdx      = item->data(0, Qt::UserRole).toInt();
-    Fraction tick = static_cast<Segment*>(m_staffText->parent())->tick();
+    Fraction tick = static_cast<Segment*>(m_staffText->explicitParent())->tick();
     Channel* channel    = part->instrument(tick)->channel(channelIdx);
     QString channelName = channel->name();
 
@@ -504,7 +504,7 @@ void StaffTextPropertiesDialog::saveValues()
         for (int row = 0; row < VOICES; ++row) {
             if (m_vb[voice][row]->isChecked()) {
                 int idx     = m_channelCombo[row]->currentIndex();
-                Fraction instrId = static_cast<Segment*>(m_staffText->parent())->tick();
+                Fraction instrId = static_cast<Segment*>(m_staffText->explicitParent())->tick();
                 m_staffText->setChannelName(voice, part->instrument(instrId)->channel(idx)->name());
                 break;
             }

@@ -83,7 +83,7 @@ public:
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }
     QString arpeggioTypeName() const;
 
-    Chord* chord() const { return (Chord*)parent(); }
+    Chord* chord() const { return (Chord*)explicitParent(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

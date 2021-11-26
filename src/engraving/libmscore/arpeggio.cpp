@@ -165,7 +165,7 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
 qreal Arpeggio::calcTop() const
 {
     qreal top = -_userLen1;
-    if (!parent()) {
+    if (!explicitParent()) {
         return top;
     }
     switch (arpeggioType()) {
@@ -205,7 +205,7 @@ qreal Arpeggio::calcBottom() const
 {
     qreal top = -_userLen1;
     qreal bottom = _height + _userLen2;
-    if (!parent()) {
+    if (!explicitParent()) {
         return bottom;
     }
     switch (arpeggioType()) {
@@ -520,11 +520,11 @@ EngravingItem* Arpeggio::drop(EditData& data)
     case ElementType::ARPEGGIO:
     {
         Arpeggio* a = toArpeggio(e);
-        if (parent()) {
+        if (explicitParent()) {
             score()->undoRemoveElement(this);
         }
         a->setTrack(track());
-        a->setParent(parent());
+        a->setParent(explicitParent());
         score()->undoAddElement(a);
     }
         return e;

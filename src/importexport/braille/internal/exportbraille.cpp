@@ -1614,7 +1614,7 @@ QString ExportBraille::brailleGraceNoteMarking(Chord* chord)
     // TODO: doubling the grace note sign where there are more than 4 grace notes.
     //       the book is not very clear how this doubling is done and how the user
     //       understands where do grace notes end.
-    if (!chord->isGrace() || !chord->parent()->isChord()) {
+    if (!chord->isGrace() || !chord->explicitParent()->isChord()) {
         return QString();
     }
 

@@ -229,8 +229,8 @@ void Articulation::draw(mu::draw::Painter* painter) const
 
 ChordRest* Articulation::chordRest() const
 {
-    if (parent() && parent()->isChordRest()) {
-        return toChordRest(parent());
+    if (explicitParent() && explicitParent()->isChordRest()) {
+        return toChordRest(explicitParent());
     }
     return 0;
 }
@@ -244,11 +244,11 @@ Segment* Articulation::segment() const
 
     Segment* s = 0;
     if (cr->isGrace()) {
-        if (cr->parent()) {
-            s = toSegment(cr->parent()->parent());
+        if (cr->explicitParent()) {
+            s = toSegment(cr->explicitParent()->explicitParent());
         }
     } else {
-        s = toSegment(cr->parent());
+        s = toSegment(cr->explicitParent());
     }
 
     return s;
@@ -257,19 +257,19 @@ Segment* Articulation::segment() const
 Measure* Articulation::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->parent() : 0);
+    return toMeasure(s ? s->explicitParent() : 0);
 }
 
 System* Articulation::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->parent() : 0);
+    return toSystem(m ? m->explicitParent() : 0);
 }
 
 Page* Articulation::page() const
 {
     System* s = system();
-    return toPage(s ? s->parent() : 0);
+    return toPage(s ? s->explicitParent() : 0);
 }
 
 //---------------------------------------------------------
@@ -586,7 +586,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
 {
-    return parent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
+    return explicitParent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
 bool Articulation::isTenuto() const
@@ -681,7 +681,7 @@ void Articulation::doAutoplace()
         rebase = rebaseOffset();
     }
 
-    if (autoplace() && parent()) {
+    if (autoplace() && explicitParent()) {
         Segment* s = segment();
         Measure* m = measure();
         int si     = staffIdx();

@@ -56,7 +56,7 @@ public:
     void setInstrumentNameType(InstrumentNameType v);
     void setInstrumentNameType(const QString& s);
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     SysStaff* sysStaff() const { return _sysStaff; }
     void setSysStaff(SysStaff* s) { _sysStaff = s; }

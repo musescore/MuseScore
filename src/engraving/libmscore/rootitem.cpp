@@ -28,7 +28,7 @@ using namespace mu::engraving;
 using namespace Ms;
 
 RootItem::RootItem(Score* score)
-    : EngravingItem(ElementType::INVALID, score), m_score(score)
+    : EngravingItem(ElementType::ROOT_ITEM, score), m_score(score)
 {
     m_dummy = new compat::DummyElement(this);
 }

@@ -709,7 +709,7 @@ TextBase* Score::addText(Tid type)
         if (element->isNote()) {
             chordRest = toNote(element)->chord();
             if (chordRest->isGrace()) {
-                chordRest = toChordRest(chordRest->parent());
+                chordRest = toChordRest(chordRest->explicitParent());
             }
         } else if (element->isLyrics()) {
             chordRest = toLyrics(element)->chordRest();
@@ -1715,7 +1715,7 @@ void Score::cmdAddTie(bool addToChord)
             // set cursor at position after note
             if (c->isGraceBefore()) {
                 // tie grace note before to main note
-                cr = toChord(c->parent());
+                cr = toChord(c->explicitParent());
                 addToChord = true;
             } else {
                 _is.setSegment(note->chord()->segment());
@@ -2109,8 +2109,8 @@ void Score::cmdFlip()
                 DirectionV dir = tuplet->isUp() ? DirectionV::DOWN : DirectionV::UP;
                 tuplet->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(dir), PropertyFlags::UNSTYLED);
             });
-        } else if (e->isNoteDot() && e->parent()->isNote()) {
-            Note* note = toNote(e->parent());
+        } else if (e->isNoteDot() && e->explicitParent()->isNote()) {
+            Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
         } else if (e->isTempoText()
@@ -2232,7 +2232,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::NOTE:
     {
-        Chord* chord = toChord(el->parent());
+        Chord* chord = toChord(el->explicitParent());
         if (chord->notes().size() > 1) {
             undoRemoveElement(el);
             select(chord->downNote(), SelectType::SINGLE, 0);
@@ -2255,7 +2255,7 @@ void Score::deleteItem(EngravingItem* el)
             rest->setTicks(chord->ticks());
 
             rest->setTrack(el->track());
-            rest->setParent(chord->parent());
+            rest->setParent(chord->explicitParent());
 
             Segment* segment = chord->segment();
             undoAddCR(rest, segment->measure(), segment->tick());
@@ -2294,7 +2294,7 @@ void Score::deleteItem(EngravingItem* el)
         rest->setDurationType(TDuration::DurationType::V_MEASURE);
         rest->setTicks(mr->measure()->stretchedLen(mr->staff()));
         rest->setTrack(mr->track());
-        rest->setParent(mr->parent());
+        rest->setParent(mr->explicitParent());
         Segment* segment = mr->segment();
         undoAddCR(rest, segment->measure(), segment->tick());
 
@@ -2425,8 +2425,8 @@ void Score::deleteItem(EngravingItem* el)
     break;
 
     case ElementType::ACCIDENTAL:
-        if (el->parent()->isNote()) {
-            changeAccidental(toNote(el->parent()), AccidentalType::NONE);
+        if (el->explicitParent()->isNote()) {
+            changeAccidental(toNote(el->explicitParent()), AccidentalType::NONE);
         } else {
             undoRemoveElement(el);
         }
@@ -2527,7 +2527,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::MEASURE_NUMBER:
     {
-        Measure* mea = toMeasure(el->parent());
+        Measure* mea = toMeasure(el->explicitParent());
         switch (mea->measureNumberMode()) {
         // If the user tries to remove an automatically generated measure number,
         // we should force the measure not to show any measure number
@@ -2554,7 +2554,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::REHEARSAL_MARK:
     case ElementType::TEMPO_TEXT:
     {
-        Segment* s = toSegment(el->parent());
+        Segment* s = toSegment(el->explicitParent());
         Measure* m = s->measure();
         if (m->isMMRest()) {
             // propagate to original measure/element
@@ -2598,7 +2598,7 @@ void Score::deleteItem(EngravingItem* el)
         break;
 
     case ElementType::TEXT:
-        if ((el->parent() && el->parent()->isTBox()) || el->isTBox()) {
+        if ((el->explicitParent() && el->explicitParent()->isTBox()) || el->isTBox()) {
             el->undoChangeProperty(Pid::TEXT, QString());
         } else {
             undoRemoveElement(el);
@@ -2633,7 +2633,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::MARKER:
     {
-        Measure* m = toMeasure(el->parent());
+        Measure* m = toMeasure(el->explicitParent());
         if (m->isMMRest()) {
             // find corresponding marker in underlying measure
             bool found = false;
@@ -2662,7 +2662,7 @@ void Score::deleteItem(EngravingItem* el)
 
     case ElementType::JUMP:
     {
-        Measure* m = toMeasure(el->parent());
+        Measure* m = toMeasure(el->explicitParent());
         if (m->isMMRest()) {
             // find corresponding jump in underlying measure
             for (EngravingItem* e : m->mmRestLast()->el()) {
@@ -3072,8 +3072,8 @@ void Score::cmdDeleteSelection()
                             break;
                         }
                     }
-                } else if (e->parent()
-                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest())) {
+                } else if (e->explicitParent()
+                           && (e->explicitParent()->isSegment() || e->explicitParent()->isChord() || e->explicitParent()->isNote() || e->explicitParent()->isRest())) {
                     tick = e->parentItem()->tick();
                 }
                 //else tick < 0
@@ -3269,7 +3269,7 @@ Lyrics* Score::addLyrics()
     if (el->isNote()) {
         cr = toNote(el)->chord();
         if (cr->isGrace()) {
-            cr = toChordRest(cr->parent());
+            cr = toChordRest(cr->explicitParent());
         }
     } else if (el->isLyrics()) {
         cr = toLyrics(el)->chordRest();
@@ -4730,7 +4730,7 @@ static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
     }
 
     Score* score     = nstaff->score();
-    Segment* segment = toSegment(e->parent());
+    Segment* segment = toSegment(e->explicitParent());
     Measure* measure = segment->measure();
     Measure* m       = score->tick2measure(measure->tick());
     Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
@@ -4784,7 +4784,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     }
     Chord* nc = toChord(ne);
     if (c->isGrace()) {
-        Chord* pc = toChord(c->parent());
+        Chord* pc = toChord(c->explicitParent());
         int index = 0;
         for (Chord* gc : pc->graceNotes()) {
             if (c == gc) {
@@ -5114,15 +5114,15 @@ void Score::undoAddElement(EngravingItem* element)
                 nsp->setTrack2((staffIdx + diff) * VOICES + (sp->track2() % VOICES));
                 undo(new AddElement(nsp));
             } else if (et == ElementType::MARKER || et == ElementType::JUMP) {
-                Measure* om = toMeasure(element->parent());
+                Measure* om = toMeasure(element->explicitParent());
                 Measure* m  = score->tick2measure(om->tick());
                 ne->setTrack(element->track());
                 ne->setParent(m);
                 undo(new AddElement(ne));
             } else if (et == ElementType::MEASURE_NUMBER) {
-                toMeasure(element->parent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
             } else {
-                Segment* segment  = toSegment(element->parent());
+                Segment* segment  = toSegment(element->explicitParent());
                 Fraction tick     = segment->tick();
                 Measure* m        = score->tick2measure(tick);
                 Segment* seg      = m->undoGetSegment(SegmentType::ChordRest, tick);
@@ -5135,8 +5135,8 @@ void Score::undoAddElement(EngravingItem* element)
     }
 
     if (et == ElementType::FINGERING
-        || (et == ElementType::IMAGE && !element->parent()->isSegment())
-        || (et == ElementType::SYMBOL && !element->parent()->isSegment())
+        || (et == ElementType::IMAGE && !element->explicitParent()->isSegment())
+        || (et == ElementType::SYMBOL && !element->explicitParent()->isSegment())
         || et == ElementType::NOTE
         || et == ElementType::TEXT
         || et == ElementType::GLISSANDO
@@ -5343,14 +5343,14 @@ void Score::undoAddElement(EngravingItem* element)
                 SegmentType st;
                 Measure* m;
                 Fraction tick;
-                if (a->parent()->isChordRest()) {
+                if (a->explicitParent()->isChordRest()) {
                     ChordRest* cr = a->chordRest();
                     segment       = cr->segment();
                     st            = SegmentType::ChordRest;
                     tick          = segment->tick();
                     m             = score->tick2measure(tick);
                 } else {
-                    segment  = toSegment(a->parent()->parent());
+                    segment  = toSegment(a->explicitParent()->explicitParent());
                     st       = SegmentType::EndBarLine;
                     tick     = segment->tick();
                     m        = score->tick2measure(tick);
@@ -5365,7 +5365,7 @@ void Score::undoAddElement(EngravingItem* element)
                 }
                 Articulation* na = toArticulation(ne);
                 na->setTrack(ntrack);
-                if (a->parent()->isChordRest()) {
+                if (a->explicitParent()->isChordRest()) {
                     ChordRest* cr = a->chordRest();
                     ChordRest* ncr;
                     if (cr->isGrace()) {
@@ -5380,7 +5380,7 @@ void Score::undoAddElement(EngravingItem* element)
                 }
                 undo(new AddElement(na));
             } else if (element->isChordLine() || element->isLyrics()) {
-                ChordRest* cr    = toChordRest(element->parent());
+                ChordRest* cr    = toChordRest(element->explicitParent());
                 Segment* segment = cr->segment();
                 Fraction tick    = segment->tick();
                 Measure* m       = score->tick2measure(tick);
@@ -5407,7 +5407,7 @@ void Score::undoAddElement(EngravingItem* element)
                      || element->isFermata()
                      || element->isHarmony()) {
                 Segment* segment
-                    = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
+                    = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(element->explicitParent());
                 Fraction tick    = segment->tick();
                 Measure* m       = score->tick2measure(tick);
                 if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick)) {
@@ -5515,12 +5515,12 @@ void Score::undoAddElement(EngravingItem* element)
                 ntremolo->setParent(c1);
                 undo(new AddElement(ntremolo));
             } else if (element->isTremolo() && !toTremolo(element)->twoNotes()) {
-                Chord* cr = toChord(element->parent());
+                Chord* cr = toChord(element->explicitParent());
                 Chord* c1 = findLinkedChord(cr, score->staff(staffIdx));
                 ne->setParent(c1);
                 undo(new AddElement(ne));
             } else if (element->isArpeggio()) {
-                ChordRest* cr = toChordRest(element->parent());
+                ChordRest* cr = toChordRest(element->explicitParent());
                 Segment* s    = cr->segment();
                 Measure* m    = s->measure();
                 Measure* nm   = score->tick2measure(m->tick());
@@ -5755,13 +5755,13 @@ void Score::undoRemoveElement(EngravingItem* element)
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         undo(new RemoveElement(e));
-        if (e->parent() && (e->parent()->isSegment())) {
-            Segment* s = toSegment(e->parent());
+        if (e->explicitParent() && (e->explicitParent()->isSegment())) {
+            Segment* s = toSegment(e->explicitParent());
             if (!segments.contains(s)) {
                 segments.append(s);
             }
         }
-        if (e->parent() && e->parent()->isSystem()) {
+        if (e->explicitParent() && e->explicitParent()->isSystem()) {
             e->setParent(0);       // systems will be regenerated upon redo, so detach
         }
     }

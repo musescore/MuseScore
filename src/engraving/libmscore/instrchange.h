@@ -65,7 +65,7 @@ public:
     bool init() const { return _init; }
     void setInit(bool init) { _init = init; }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
 
     mu::engraving::PropertyValue propertyDefault(Pid) const override;
 

@@ -1299,7 +1299,7 @@ void ChangeElement::flip(EditData*)
             score->select(newElement, SelectType::ADD);
         }
     }
-    if (oldElement->parent() == 0) {
+    if (oldElement->explicitParent() == 0) {
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {

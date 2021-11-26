@@ -155,6 +155,9 @@ enum class ElementType {
     BAGPIPE_EMBELLISHMENT,
     STICKING,
 
+    ROOT_ITEM,
+    DUMMY,
+
     MAXTYPE
     ///\}
 };

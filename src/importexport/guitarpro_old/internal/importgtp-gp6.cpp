@@ -918,7 +918,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
 
                 if (startSlur) {
                     Slur* slur = Factory::createSlur(score->dummy());
-                    slur->moveToDummy();
+                    slur->resetExplicitParent();
                     slur->setTrack(track);
                     slur->setTrack2(track);
                     legatos[track] = slur;
