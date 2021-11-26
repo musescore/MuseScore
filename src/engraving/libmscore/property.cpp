@@ -486,7 +486,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::SCALE: {
         const int i = value.indexOf('x');
         return PropertyValue::fromValue(ScaleF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
-    } break;
+    }
     case P_TYPE::SIZE: {
         // not used by MSCX
         const int i = value.indexOf('x');
@@ -494,7 +494,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     }
     case P_TYPE::STRING:
         return value;
-    case P_TYPE::GLISS_STYLE: {
+    case P_TYPE::GLISS_STYLE:
         if (value == "whitekeys") {
             return PropertyValue(int(GlissandoStyle::WHITE_KEYS));
         } else if (value == "blackkeys") {
@@ -506,16 +506,14 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         } else {       // e.g., normally "Chromatic"
             return PropertyValue(int(GlissandoStyle::CHROMATIC));
         }
-    }
-    break;
+        break;
     case P_TYPE::ORNAMENT_STYLE: {
         if (value == "baroque") {
             return PropertyValue(int(MScore::OrnamentStyle::BAROQUE));
         }
         return PropertyValue(int(MScore::OrnamentStyle::DEFAULT));
     }
-
-    case P_TYPE::DIRECTION_V: {
+    case P_TYPE::DIRECTION_V:
         if (value == "up") {
             return PropertyValue(DirectionV::UP);
         } else if (value == "down") {
@@ -525,10 +523,8 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         } else {
             return PropertyValue(DirectionV(value.toInt()));
         }
-    }
-    break;
+        break;
     case P_TYPE::DIRECTION_H:
-    {
         if (value == "left" || value == "1") {
             return PropertyValue(DirectionH::LEFT);
         } else if (value == "right" || value == "2") {
@@ -536,9 +532,8 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         } else if (value == "auto") {
             return PropertyValue(DirectionH::AUTO);
         }
-    }
-    break;
-    case P_TYPE::LAYOUT_BREAK: {
+        break;
+    case P_TYPE::LAYOUT_BREAK:
         if (value == "line") {
             return PropertyValue(int(LayoutBreak::Type::LINE));
         }
@@ -552,25 +547,22 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(LayoutBreak::Type::NOBREAK));
         }
         qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
-    }
-    break;
-    case P_TYPE::VALUE_TYPE: {
+        break;
+    case P_TYPE::VALUE_TYPE:
         if (value == "offset") {
             return PropertyValue(int(Note::ValueType::OFFSET_VAL));
         } else if (value == "user") {
             return PropertyValue(int(Note::ValueType::USER_VAL));
         }
-    }
-    break;
-    case P_TYPE::PLACEMENT_V: {
+        break;
+    case P_TYPE::PLACEMENT_V:
         if (value == "above") {
             return PropertyValue(int(PlacementV::ABOVE));
         } else if (value == "below") {
             return PropertyValue(int(PlacementV::BELOW));
         }
-    }
-    break;
-    case P_TYPE::PLACEMENT_H: {
+        break;
+    case P_TYPE::PLACEMENT_H:
         if (value == "left") {
             return PropertyValue(int(PlacementH::LEFT));
         } else if (value == "center") {
@@ -578,9 +570,8 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         } else if (value == "right") {
             return PropertyValue(int(PlacementH::RIGHT));
         }
-    }
-    break;
-    case P_TYPE::TEXT_PLACE: {
+        break;
+    case P_TYPE::TEXT_PLACE:
         if (value == "auto") {
             return PropertyValue(int(PlaceText::AUTO));
         } else if (value == "above") {
@@ -590,8 +581,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         } else if (value == "left") {
             return PropertyValue(int(PlaceText::LEFT));
         }
-    }
-    break;
+        break;
     case P_TYPE::BARLINE_TYPE: {
         bool ok;
         const int ct = value.toInt(&ok);
@@ -601,11 +591,10 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             BarLineType t = BarLine::barLineType(value);
             return PropertyValue::fromValue(t);
         }
+        break;
     }
-    break;
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
-
     case P_TYPE::GROUPS:
         // unsupported
         return PropertyValue();
@@ -713,12 +702,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::ALIGN:
     case P_TYPE::ORIENTATION:
         return propertyFromString(id, e.readElementText());
-
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
-
-    case P_TYPE::GROUPS:
-    {
+    case P_TYPE::GROUPS: {
         Groups g;
         g.read(e);
         return PropertyValue::fromValue(g);
@@ -945,7 +931,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         qFatal("unknown: GROUPS");
     case P_TYPE::INT_LIST:
         qFatal("unknown: INT_LIST");
-
     default: {
         switch (value.type()) {
         case P_TYPE::BOOL:
