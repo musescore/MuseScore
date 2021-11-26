@@ -59,7 +59,7 @@ public:
 
     int vStaffIdx() const override;
 
-    Chord* chord() const { return toChord(parent()); }
+    Chord* chord() const { return toChord(explicitParent()); }
     bool up() const;
 
     double baseLength() const { return m_baseLength; }

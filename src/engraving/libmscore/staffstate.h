@@ -74,7 +74,7 @@ public:
     Instrument* instrument() const { return _instrument; }
     void setInstrument(const Instrument* i) { *_instrument = *i; }
     void setInstrument(const Instrument&& i) { *_instrument = i; }
-    Segment* segment() { return (Segment*)parent(); }
+    Segment* segment() { return (Segment*)explicitParent(); }
 };
 }     // namespace Ms
 #endif

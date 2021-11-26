@@ -65,7 +65,7 @@ public:
 
     int subtype() const override { return int(jumpType()); }
 
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;

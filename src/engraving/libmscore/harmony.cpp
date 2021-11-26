@@ -1059,12 +1059,12 @@ Harmony* Harmony::findInSeg(Segment* seg) const
 Segment* Harmony::getParentSeg() const
 {
     Segment* seg;
-    if (parent()->isFretDiagram()) {
+    if (explicitParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
-        seg = toSegment(parent()->parent());
+        seg = toSegment(explicitParent()->explicitParent());
     } else {
-        seg = toSegment(parent());
+        seg = toSegment(explicitParent());
     }
     return seg;
 }
@@ -1392,7 +1392,7 @@ const ChordDescription* Harmony::generateDescription()
 
 void Harmony::layout()
 {
-    if (!parent()) {
+    if (!explicitParent()) {
         setPos(0.0, 0.0);
         setOffset(0.0, 0.0);
         layout1();
@@ -1431,7 +1431,7 @@ void Harmony::layout1()
 PointF Harmony::calculateBoundingRect()
 {
     const qreal ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
-    const FretDiagram* fd   = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
+    const FretDiagram* fd   = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
     const qreal cw   = symWidth(SymId::noteheadBlack);
     qreal newx = 0.0;
     qreal newy = 0.0;
@@ -1526,7 +1526,7 @@ PointF Harmony::calculateBoundingRect()
 
 qreal Harmony::xShapeOffset() const
 {
-    const FretDiagram* fd = (parent() && parent()->isFretDiagram()) ? toFretDiagram(parent()) : nullptr;
+    const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
     return (fd && textList.empty()) ? fd->centerX() : 0.0;
 }
 
@@ -2188,7 +2188,7 @@ EngravingItem* Harmony::drop(EditData& data)
     EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
-        fd->setParent(parent());
+        fd->setParent(explicitParent());
         fd->setTrack(track());
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
@@ -2291,7 +2291,7 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     }
     break;
     case Pid::OFFSET:
-        if (parent() && parent()->isFretDiagram()) {
+        if (explicitParent() && explicitParent()->isFretDiagram()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));
             break;
         }
@@ -2310,7 +2310,7 @@ PropertyValue Harmony::propertyDefault(Pid id) const
 Sid Harmony::getPropertyStyle(Pid pid) const
 {
     if (pid == Pid::OFFSET) {
-        if (parent() && parent()->isFretDiagram()) {
+        if (explicitParent() && explicitParent()->isFretDiagram()) {
             return Sid::NOSTYLE;
         } else if (tid() == Tid::HARMONY_A) {
             return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
@@ -2343,7 +2343,7 @@ void Harmony::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 {
     Q_UNUSED(all);
     // don't display harmony in palette
-    if (!parent()) {
+    if (!explicitParent()) {
         return;
     }
     func(data, this);

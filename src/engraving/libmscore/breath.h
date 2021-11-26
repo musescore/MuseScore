@@ -65,7 +65,7 @@ public:
     qreal pause() const { return _pause; }
     void setPause(qreal v) { _pause = v; }
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;

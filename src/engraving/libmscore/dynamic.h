@@ -70,8 +70,8 @@ public:
     Dynamic(Segment* parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void setDynamicType(DynamicType val) { _dynamicType = val; }
     void setDynamicType(const QString&);

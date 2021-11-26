@@ -570,8 +570,8 @@ void Tuplet::layout()
 
     setPos(0.0, 0.0);
     PointF mp(parentItem()->pagePos());
-    if (parent()->isMeasure()) {
-        System* s = toMeasure(parent())->system();
+    if (explicitParent()->isMeasure()) {
+        System* s = toMeasure(explicitParent())->system();
         if (s) {
             mp.ry() += s->staff(staffIdx())->y();
         }

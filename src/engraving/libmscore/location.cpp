@@ -241,8 +241,8 @@ int Location::measure(const EngravingItem* e)
 
 int Location::graceIndex(const EngravingItem* e)
 {
-    if (e->isChord() || (e->parent() && e->parent()->isChord())) {
-        const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
+    if (e->isChord() || (e->explicitParent() && e->explicitParent()->isChord())) {
+        const Chord* ch = e->isChord() ? toChord(e) : toChord(e->explicitParent());
         if (ch->isGrace()) {
             return ch->graceIndex();
         }

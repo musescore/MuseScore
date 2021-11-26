@@ -115,7 +115,7 @@ public:
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;

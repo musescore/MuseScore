@@ -496,7 +496,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
-            beam->moveToDummy();
+            beam->resetExplicitParent();
             if (startingBeam) {
                 qDebug("The read beam was not used");
                 delete startingBeam;

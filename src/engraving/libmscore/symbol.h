@@ -67,7 +67,7 @@ public:
     bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
 
     qreal baseLine() const override { return 0.0; }
-    virtual Segment* segment() const { return (Segment*)parent(); }
+    virtual Segment* segment() const { return (Segment*)explicitParent(); }
 };
 
 //---------------------------------------------------------
@@ -92,7 +92,7 @@ public:
     void layout() override;
 
     qreal baseLine() const override { return 0.0; }
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     mu::draw::Font font() const { return _font; }
     int code() const { return _code; }
     void setFont(const mu::draw::Font& f);

@@ -71,7 +71,7 @@ public:
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }
 
-    Chord* chord() const { return toChord(parent()); }
+    Chord* chord() const { return toChord(explicitParent()); }
     void setParent(Chord* ch);
 
     int subtype() const override { return static_cast<int>(_tremoloType); }

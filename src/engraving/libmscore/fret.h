@@ -192,7 +192,7 @@ public:
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
 
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const QString& s);
 

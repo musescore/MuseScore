@@ -59,7 +59,7 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    MeasureBase* measure() const { return (MeasureBase*)parent(); }
+    MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     qreal pause() const { return _pause; }
     void setPause(qreal v) { _pause = v; }
     bool startWithLongNames() const { return _startWithLongNames; }

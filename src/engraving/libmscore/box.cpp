@@ -502,8 +502,8 @@ HBox::HBox(System* parent)
 
 void HBox::layout()
 {
-    if (parent() && parent()->isVBox()) {
-        VBox* vb = toVBox(parent());
+    if (explicitParent() && explicitParent()->isVBox()) {
+        VBox* vb = toVBox(explicitParent());
         qreal x = vb->leftMargin() * DPMM;
         qreal y = vb->topMargin() * DPMM;
         qreal w = point(boxWidth());
@@ -664,8 +664,8 @@ RectF HBox::drag(EditData& data)
     RectF r(canvasBoundingRect());
     qreal diff = data.evtDelta.x();
     qreal x1   = offset().x() + diff;
-    if (parent()->type() == ElementType::VBOX) {
-        VBox* vb = toVBox(parent());
+    if (explicitParent()->type() == ElementType::VBOX) {
+        VBox* vb = toVBox(explicitParent());
         qreal x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
@@ -694,7 +694,7 @@ void HBox::endEditDrag(EditData&)
 
 bool HBox::isMovable() const
 {
-    return parent() && (parent()->isHBox() || parent()->isVBox());
+    return explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox());
 }
 
 //---------------------------------------------------------

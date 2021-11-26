@@ -332,7 +332,7 @@ ChordRest* Selection::firstChordRest(int track) const
     if (_el.size() == 1) {
         EngravingItem* el = _el[0];
         if (el->isNote()) {
-            return toChordRest(el->parent());
+            return toChordRest(el->explicitParent());
         } else if (el->isChordRest()) {
             return toChordRest(el);
         }
@@ -365,7 +365,7 @@ ChordRest* Selection::lastChordRest(int track) const
         EngravingItem* el = _el[0];
         if (el) {
             if (el->isNote()) {
-                return toChordRest(el->parent());
+                return toChordRest(el->explicitParent());
             } else if (el->isChordRest()) {
                 return toChordRest(el);
             }
@@ -993,12 +993,12 @@ QByteArray Selection::symbolListMimeData() const
         */
         case ElementType::ARTICULATION:
             // ignore articulations not attached to chords/rest
-            if (e->parent()->isChord()) {
-                Chord* par = toChord(e->parent());
+            if (e->explicitParent()->isChord()) {
+                Chord* par = toChord(e->explicitParent());
                 seg = par->segment();
                 break;
-            } else if (e->parent()->isRest()) {
-                Rest* par = toRest(e->parent());
+            } else if (e->explicitParent()->isRest()) {
+                Rest* par = toRest(e->explicitParent());
                 seg = par->segment();
                 break;
             }
@@ -1015,8 +1015,8 @@ QByteArray Selection::symbolListMimeData() const
         case ElementType::HARMONY:
         case ElementType::FRET_DIAGRAM:
             // ignore chord symbols or fret diagrams not attached to segment
-            if (e->parent()->isSegment()) {
-                seg = toSegment(e->parent());
+            if (e->explicitParent()->isSegment()) {
+                seg = toSegment(e->explicitParent());
                 break;
             }
             continue;

@@ -163,14 +163,14 @@ void Bend::layout()
     qreal _spatium = spatium();
 
     if (staff() && !staff()->isTabStaff(tick())) {
-        if (!parent()) {
+        if (!explicitParent()) {
             m_noteWidth = -_spatium * 2;
             m_notePos   = PointF(0.0, _spatium * 3);
         }
     }
 
     qreal _lw = _lineWidth;
-    Note* note = toNote(parent());
+    Note* note = toNote(explicitParent());
     if (note == 0) {
         m_noteWidth = 0.0;
         m_notePos = PointF();

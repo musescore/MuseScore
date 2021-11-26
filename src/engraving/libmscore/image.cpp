@@ -202,11 +202,11 @@ void Image::draw(mu::draw::Painter* painter) const
 
 bool Image::isImageFramed() const
 {
-    if (!parent()) {
+    if (!explicitParent()) {
         return false;
     }
 
-    return parent()->isBox();
+    return explicitParent()->isBox();
 }
 
 //---------------------------------------------------------
@@ -560,7 +560,7 @@ void Image::layout()
     }
 
     // if autoscale && inside a box, scale to box relevant size
-    if (autoScale() && parent() && ((parent()->isHBox() || parent()->isVBox()))) {
+    if (autoScale() && explicitParent() && ((explicitParent()->isHBox() || explicitParent()->isVBox()))) {
         if (_lockAspectRatio) {
             qreal f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());

@@ -104,7 +104,7 @@ PlacementV Fingering::calculatePlacement() const
 
 void Fingering::layout()
 {
-    if (parent()) {
+    if (explicitParent()) {
         Fraction tick = parentItem()->tick();
         const Staff* st = staff();
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {

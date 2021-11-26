@@ -35,7 +35,7 @@ class BSymbol : public EngravingItem
 {
 public:
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
     // Score Tree functions
     EngravingObject* scanParent() const override;

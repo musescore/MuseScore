@@ -165,7 +165,7 @@ void Breath::draw(mu::draw::Painter* painter) const
 
 mu::PointF Breath::pagePos() const
 {
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return pos();
     }
     System* system = segment()->measure()->system();

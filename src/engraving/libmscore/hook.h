@@ -45,7 +45,7 @@ public:
     int hookType() const { return _hookType; }
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    Chord* chord() const { return toChord(parent()); }
+    Chord* chord() const { return toChord(explicitParent()); }
     mu::PointF smuflAnchor() const;
 
     //! @p index: the number of flags (positive: upwards, negative: downwards)

@@ -94,7 +94,7 @@ public:
     virtual EngravingItem* drop(EditData&) override;
     virtual void undoUnlink() override;
 
-    virtual Segment* segment() const { return (Segment*)parent(); }
+    virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
     virtual void writeProperties(XmlWriter& xml) const override;
     virtual bool readProperties(XmlReader&) override;
@@ -194,7 +194,7 @@ public:
     void writeBeam(XmlWriter& xml) const;
     Segment* nextSegmentAfterCR(SegmentType types) const;
 
-    virtual void setScore(Score* s) override;
+    void setScore(Score* s) override;
     EngravingItem* nextArticulationOrLyric(EngravingItem* e);
     EngravingItem* prevArticulationOrLyric(EngravingItem* e);
     virtual EngravingItem* nextElement() override;

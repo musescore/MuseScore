@@ -45,7 +45,7 @@ class DurationElement : public EngravingItem
 public:
     ~DurationElement();
 
-    virtual Measure* measure() const { return (Measure*)(parent()); }
+    virtual Measure* measure() const { return (Measure*)(explicitParent()); }
 
     void readAddTuplet(Tuplet* t);
     void writeTupletStart(XmlWriter& xml) const;

@@ -2114,7 +2114,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
-            beam->moveToDummy();
+            beam->resetExplicitParent();
             e.addBeam(beam);
         } else if (tag == "Segment") {
             if (segment) {
@@ -2896,7 +2896,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
             beam->read(e);
-            beam->moveToDummy();
+            beam->resetExplicitParent();
             // _beams.append(beam);
             delete beam;
         } else if (tag == "name") {

@@ -213,7 +213,7 @@ void TrackList::append(EngravingItem* e)
         }
     } else {
         EngravingItem* c = e->clone();
-        c->moveToDummy();
+        c->resetExplicitParent();
         QList<EngravingItem*>::append(c);
     }
 }
@@ -682,7 +682,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             Spanner* s = i.second;
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
-                ns->moveToDummy();
+                ns->resetExplicitParent();
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
@@ -755,7 +755,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     }
     for (const Annotation& a : annotations) {
         Measure* tm = score->tick2measure(a.tick);
-        Segment* op = toSegment(a.e->parent());
+        Segment* op = toSegment(a.e->explicitParent());
         Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
         if (s) {
             a.e->setParent(s);

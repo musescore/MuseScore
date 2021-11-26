@@ -57,7 +57,7 @@ public:
     void layout() override;
 
     Segment* segment() const override { return nullptr; }
-    System* system() const { return (System*)parent(); }
+    System* system() const { return (System*)explicitParent(); }
 };
 } // namespace Ms
 

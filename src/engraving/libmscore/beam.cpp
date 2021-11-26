@@ -151,7 +151,7 @@ PointF Beam::pagePos() const
 PointF Beam::canvasPos() const
 {
     PointF p(pagePos());
-    if (system() && system()->parent()) {
+    if (system() && system()->explicitParent()) {
         p += system()->parentItem()->pos();
     }
     return p;
@@ -275,7 +275,7 @@ void Beam::move(const PointF& offset)
 
 void Beam::layout1()
 {
-    moveToDummy();  // parent is System
+    resetExplicitParent();  // parent is System
 
     _maxDuration.setType(TDuration::DurationType::V_INVALID);
 

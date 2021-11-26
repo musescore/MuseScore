@@ -657,7 +657,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     // allow grace notes to be added to other grace notes
     // by really adding to parent chord
     if (ch->noteType() != NoteType::NORMAL) {
-        ch = toChord(ch->parent());
+        ch = toChord(ch->explicitParent());
     }
 
     chord->setTrack(ch->track());
@@ -3417,7 +3417,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             continue;
         }
         RealizedHarmony r = h->getRealizedHarmony();
-        Segment* seg = h->parent()->isSegment() ? toSegment(h->parent()) : toSegment(h->parent()->parent());
+        Segment* seg = h->explicitParent()->isSegment() ? toSegment(h->explicitParent()) : toSegment(h->explicitParent()->explicitParent());
         Fraction tick = seg->tick();
         Fraction duration = r.getActualDuration(tick.ticks(), durationType);
         bool concertPitch = styleB(Sid::concertPitch);
