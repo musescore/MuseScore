@@ -106,40 +106,40 @@ private:
     qreal m_val = 0.0;
 };
 
-//inline Milimetre operator+(const Milimetre& a, const Milimetre& b)
-//{
-//    Milimetre r(a);
-//    r += b;
-//    return r;
-//}
+inline Milimetre operator+(const Milimetre& a, const Milimetre& b)
+{
+    Milimetre r(a);
+    r += b;
+    return r;
+}
 
-//inline Milimetre operator-(const Milimetre& a, const Milimetre& b)
-//{
-//    Milimetre r(a);
-//    r -= b;
-//    return r;
-//}
+inline Milimetre operator-(const Milimetre& a, const Milimetre& b)
+{
+    Milimetre r(a);
+    r -= b;
+    return r;
+}
 
-//inline Milimetre operator/(const Milimetre& a, qreal b)
-//{
-//    Milimetre r(a);
-//    r /= b;
-//    return r;
-//}
+inline Milimetre operator/(const Milimetre& a, qreal b)
+{
+    Milimetre r(a);
+    r /= b;
+    return r;
+}
 
-//inline Milimetre operator*(const Milimetre& a, qreal b)
-//{
-//    Milimetre r(a);
-//    r *= b;
-//    return r;
-//}
+inline Milimetre operator*(const Milimetre& a, qreal b)
+{
+    Milimetre r(a);
+    r *= b;
+    return r;
+}
 
-//inline Milimetre operator*(qreal a, const Milimetre& b)
-//{
-//    Milimetre r(b);
-//    r *= a;
-//    return r;
-//}
+inline Milimetre operator*(qreal a, const Milimetre& b)
+{
+    Milimetre r(b);
+    r *= a;
+    return r;
+}
 
 //---------------------------------------------------------
 //   Spatium

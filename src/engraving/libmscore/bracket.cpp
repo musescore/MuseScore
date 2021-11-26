@@ -111,7 +111,7 @@ qreal Bracket::width() const
         w = score()->styleMM(Sid::staffLineWidth) + spatium() * .5;
         break;
     case BracketType::LINE:
-        w = 0.67f * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
+        w = 0.67 * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::NO_BRACKET:
     default:
