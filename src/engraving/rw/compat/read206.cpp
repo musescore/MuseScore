@@ -3012,8 +3012,8 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
     b->setRightMargin(0.0);
     b->setTopMargin(0.0);
     b->setBottomMargin(0.0);
-    b->setTopGap(0.0);
-    b->setBottomGap(0.0);
+    b->setTopGap(Milimetre(0.0));
+    b->setBottomGap(Milimetre(0.0));
     b->setAutoSizeEnabled(false);
     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
     b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
@@ -3082,7 +3082,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toReal());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toMilimetre());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3123,10 +3123,10 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
                 if (!readMeasureLast && !lastReadBox) {
-                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toReal());
+                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toMilimetre());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
                 } else if (readMeasureLast) {
-                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toReal());
+                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toMilimetre());
                 }
 
                 lastReadBox = b;
