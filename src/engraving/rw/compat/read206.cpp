@@ -406,7 +406,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             break;
         case Pid::LINE_WIDTH:
             if (lineWidth != -1.0) {
-                value = lineWidth;
+                value = Milimetre(lineWidth);
             }
             break;
         default:
@@ -2068,7 +2068,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
                 volta->endings().append(i);
             }
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(e.readDouble() * volta->spatium());
+            volta->setLineWidth(Milimetre(e.readDouble() * volta->spatium()));
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
@@ -2132,7 +2132,7 @@ void Read206::readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h)
         if (tag == "subtype") {
             h->setHairpinType(HairpinType(e.readInt()));
         } else if (tag == "lineWidth") {
-            h->setLineWidth(e.readDouble() * h->spatium());
+            h->setLineWidth(Milimetre(e.readDouble() * h->spatium()));
             // lineWidthStyle = PropertyFlags::UNSTYLED;
         } else if (tag == "hairpinHeight") {
             h->setHairpinHeight(Spatium(e.readDouble()));

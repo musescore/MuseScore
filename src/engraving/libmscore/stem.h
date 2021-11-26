@@ -68,9 +68,9 @@ public:
     double userLength() const { return m_userLength; }
     void setUserLength(double userLength) { m_userLength = userLength; }
 
-    double lineWidth() const { return m_lineWidth; }
+    Milimetre lineWidth() const { return m_lineWidth; }
     double lineWidthMag() const { return m_lineWidth * mag(); }
-    void setLineWidth(double lineWidth) { m_lineWidth = lineWidth; }
+    void setLineWidth(Milimetre lineWidth) { m_lineWidth = lineWidth; }
 
     mu::PointF p2() const { return m_line.p2(); }
     mu::PointF flagPosition() const;
@@ -91,7 +91,7 @@ private:
     double m_baseLength = 0.0;
     double m_userLength = 0.0;
 
-    double m_lineWidth = 0.0;
+    Milimetre m_lineWidth = Milimetre(0.0);
 };
 }
 #endif

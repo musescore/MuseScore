@@ -320,7 +320,7 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.toReal());
+        setLineWidth(v.toMilimetre());
         break;
     case Pid::USER_LEN:
         setUserLength(v.toDouble());

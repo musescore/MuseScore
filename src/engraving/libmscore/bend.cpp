@@ -441,7 +441,7 @@ bool Bend::setProperty(Pid id, const PropertyValue& v)
         setPlayBend(v.toBool());
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.toReal();
+        _lineWidth = v.toMilimetre();
         break;
     case Pid::BEND_TYPE:
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
