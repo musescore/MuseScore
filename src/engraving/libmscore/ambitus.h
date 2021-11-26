@@ -55,6 +55,7 @@ class Ambitus final : public EngravingItem
 
     friend class mu::engraving::Factory;
     Ambitus(Segment* parent);
+    Ambitus(const Ambitus& a);
 
     void normalize();
 
