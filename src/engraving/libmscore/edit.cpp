@@ -3073,7 +3073,8 @@ void Score::cmdDeleteSelection()
                         }
                     }
                 } else if (e->explicitParent()
-                           && (e->explicitParent()->isSegment() || e->explicitParent()->isChord() || e->explicitParent()->isNote() || e->explicitParent()->isRest())) {
+                           && (e->explicitParent()->isSegment() || e->explicitParent()->isChord() || e->explicitParent()->isNote()
+                               || e->explicitParent()->isRest())) {
                     tick = e->parentItem()->tick();
                 }
                 //else tick < 0
@@ -5120,7 +5121,8 @@ void Score::undoAddElement(EngravingItem* element)
                 ne->setParent(m);
                 undo(new AddElement(ne));
             } else if (et == ElementType::MEASURE_NUMBER) {
-                toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE, static_cast<int>(MeasureNumberMode::SHOW));
+                toMeasure(element->explicitParent())->undoChangeProperty(Pid::MEASURE_NUMBER_MODE,
+                                                                         static_cast<int>(MeasureNumberMode::SHOW));
             } else {
                 Segment* segment  = toSegment(element->explicitParent());
                 Fraction tick     = segment->tick();
@@ -5407,7 +5409,8 @@ void Score::undoAddElement(EngravingItem* element)
                      || element->isFermata()
                      || element->isHarmony()) {
                 Segment* segment
-                    = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(element->explicitParent());
+                    = element->explicitParent()->isFretDiagram() ? toSegment(element->explicitParent()->explicitParent()) : toSegment(
+                          element->explicitParent());
                 Fraction tick    = segment->tick();
                 Measure* m       = score->tick2measure(tick);
                 if ((segment->segmentType() == SegmentType::EndBarLine) && (m->tick() == tick)) {
