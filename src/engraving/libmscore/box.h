@@ -39,14 +39,14 @@ namespace Ms {
 
 class Box : public MeasureBase
 {
-    Spatium _boxWidth             { Spatium(0) };    // only valid for HBox
-    Spatium _boxHeight            { Spatium(0) };    // only valid for VBox
-    qreal _topGap                 { 0.0 };           // distance from previous system (left border for hbox)
-                                                     // initialized with Sid::systemFrameDistance
-    qreal _bottomGap              { 0.0 };           // distance to next system (right border for hbox)
-                                                     // initialized with Sid::frameSystemDistance
+    Spatium _boxWidth             { Spatium(0) };     // only valid for HBox
+    Spatium _boxHeight            { Spatium(0) };     // only valid for VBox
+    Milimetre _topGap             { Milimetre(0.0) }; // distance from previous system (left border for hbox)
+                                                      // initialized with Sid::systemFrameDistance
+    Milimetre _bottomGap          { Milimetre(0.0) }; // distance to next system (right border for hbox)
+                                                      // initialized with Sid::frameSystemDistance
     qreal _leftMargin             { 0.0 };
-    qreal _rightMargin            { 0.0 };           // inner margins in metric mm
+    qreal _rightMargin            { 0.0 };            // inner margins in metric mm
     qreal _topMargin              { 0.0 };
     qreal _bottomMargin           { 0.0 };
     bool _isAutoSizeEnabled       { true };
@@ -87,10 +87,10 @@ public:
     void setRightMargin(qreal val) { _rightMargin = val; }
     void setTopMargin(qreal val) { _topMargin = val; }
     void setBottomMargin(qreal val) { _bottomMargin = val; }
-    qreal topGap() const { return _topGap; }
-    void setTopGap(qreal val) { _topGap = val; }
-    qreal bottomGap() const { return _bottomGap; }
-    void setBottomGap(qreal val) { _bottomGap = val; }
+    Milimetre topGap() const { return _topGap; }
+    void setTopGap(Milimetre val) { _topGap = val; }
+    Milimetre bottomGap() const { return _bottomGap; }
+    void setBottomGap(Milimetre val) { _bottomGap = val; }
     bool isAutoSizeEnabled() const { return _isAutoSizeEnabled; }
     void setAutoSizeEnabled(const bool val) { _isAutoSizeEnabled = val; }
     void copyValues(Box* origin);

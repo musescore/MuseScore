@@ -1404,11 +1404,11 @@ EngravingItem* System::prevSegmentElement()
 qreal System::minDistance(System* s2) const
 {
     if (vbox() && !s2->vbox()) {
-        return qMax(vbox()->bottomGap(), s2->minTop());
+        return qMax(qreal(vbox()->bottomGap()), s2->minTop());
     } else if (!vbox() && s2->vbox()) {
-        return qMax(s2->vbox()->topGap(), minBottom());
+        return qMax(qreal(s2->vbox()->topGap()), minBottom());
     } else if (vbox() && s2->vbox()) {
-        return s2->vbox()->topGap() + vbox()->bottomGap();
+        return qreal(s2->vbox()->topGap() + vbox()->bottomGap());
     }
 
     qreal minVerticalDistance = score()->styleMM(Sid::minVerticalDistance);
