@@ -989,7 +989,7 @@ void Chord::computeUp()
 int Chord::computeAutoStemDirection(const std::vector<int>* noteDistances)
 {
     int left = 0;
-    int right = noteDistances->size() - 1;
+    int right = static_cast<int>(noteDistances->size()) - 1;
 
     while (left <= right) {
         int leftNote = noteDistances->at(left);
