@@ -181,9 +181,9 @@ public:
         //! HACK Temporary hack for int to enum
         if constexpr (std::is_enum<T>::value) {
             if (P_TYPE::INT == m_type) {
-                const int* pi = std::get_if<int>(&m_val);
-                assert(pi);
-                return pi ? static_cast<T>(*pi) : T();
+                const int* p2i = std::get_if<int>(&m_val);
+                assert(p2i);
+                return p2i ? static_cast<T>(*p2i) : T();
             }
         }
 
@@ -216,9 +216,9 @@ public:
 
         //! HACK Temporary hack for int to bool
         if constexpr (std::is_same<T, bool>::value) {
-            const int* pi = std::get_if<int>(&m_val);
-            assert(pi);
-            return pi ? static_cast<T>(*pi) : T();
+            const int* p2i = std::get_if<int>(&m_val);
+            assert(p2i);
+            return p2i ? static_cast<T>(*p2i) : T();
         }
 
         //! HACK Temporary hack for real to Spatium
