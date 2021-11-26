@@ -27,15 +27,16 @@
 #include <QList>
 #include <QHash>
 
-#include "../iaccessibilitycontroller.h"
-#include "accessibleobject.h"
 #include "async/asyncable.h"
+#include "global/iapplication.h"
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
 #include "../iaccessibilityconfiguration.h"
 #include "../iqaccessibleinterfaceregister.h"
+#include "../iaccessibilitycontroller.h"
+#include "accessibleobject.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
@@ -48,10 +49,10 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
+    INJECT(accessibility, framework::IApplication, application)
     INJECT(accessibility, ui::IMainWindow, mainWindow)
     INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
     INJECT(accessibility, IAccessibilityConfiguration, configuration)
-    INJECT_STATIC(accessibility, IQAccessibleInterfaceRegister, accessibleInterfaceRegister)
 
 public:
     AccessibilityController() = default;
@@ -116,6 +117,8 @@ private:
     void stateChanged(IAccessible* item, IAccessible::State state, bool arg);
 
     void sendEvent(QAccessibleEvent* ev);
+
+    void cancelPreviousReading();
 
     QHash<const IAccessible*, Item> m_allItems;
 

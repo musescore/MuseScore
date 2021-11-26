@@ -53,6 +53,7 @@ if (BUILD_UNIT_TESTS)
     add_subdirectory(mpe/tests)
     add_subdirectory(system/tests)
     add_subdirectory(ui/tests)
+    add_subdirectory(accessibility/tests)
 endif(BUILD_UNIT_TESTS)
 
 if (BUILD_VST)
