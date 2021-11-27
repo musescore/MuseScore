@@ -692,7 +692,7 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    qreal userDist = 0;
+    qreal userDist = 0.0;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     bool showIfEmpty = false;
     bool cutaway = false;
