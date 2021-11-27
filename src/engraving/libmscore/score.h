@@ -892,7 +892,7 @@ public:
 
     const mu::engraving::PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
     Spatium  styleS(Sid idx) const { return style().styleS(idx); }
-    Milimetre styleMM(Sid idx) const { return style().styleMM(idx); }
+    Millimetre styleMM(Sid idx) const { return style().styleMM(idx); }
     QString styleSt(Sid idx) const { return style().styleSt(idx); }
     bool styleB(Sid idx) const { return style().styleB(idx); }
     qreal styleD(Sid idx) const { return style().styleD(idx); }

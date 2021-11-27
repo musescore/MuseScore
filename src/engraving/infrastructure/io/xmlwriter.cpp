@@ -261,10 +261,10 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         *this << data.value<Spatium>().val();
         *this << "</" << ename << ">\n";
         break;
-    case P_TYPE::MILIMETRE:
+    case P_TYPE::MILLIMETRE:
         putLevel();
         *this << "<" << name << ">";
-        *this << qreal(data.value<Milimetre>());
+        *this << qreal(data.value<Millimetre>());
         *this << "</" << ename << ">\n";
         break;
         break;

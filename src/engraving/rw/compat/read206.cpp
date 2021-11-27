@@ -406,7 +406,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             break;
         case Pid::LINE_WIDTH:
             if (lineWidth != -1.0) {
-                value = Milimetre(lineWidth);
+                value = Millimetre(lineWidth);
             }
             break;
         default:
@@ -2068,7 +2068,7 @@ static void readVolta206(XmlReader& e, const ReadContext& ctx, Volta* volta)
                 volta->endings().append(i);
             }
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Milimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
         } else if (!readTextLineProperties(e, ctx, volta)) {
             e.unknown();
         }
@@ -2132,7 +2132,7 @@ void Read206::readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h)
         if (tag == "subtype") {
             h->setHairpinType(HairpinType(e.readInt()));
         } else if (tag == "lineWidth") {
-            h->setLineWidth(Milimetre(e.readDouble() * h->spatium()));
+            h->setLineWidth(Millimetre(e.readDouble() * h->spatium()));
             // lineWidthStyle = PropertyFlags::UNSTYLED;
         } else if (tag == "hairpinHeight") {
             h->setHairpinHeight(Spatium(e.readDouble()));
@@ -2946,7 +2946,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Milimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2954,7 +2954,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Milimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
@@ -3012,8 +3012,8 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
     b->setRightMargin(0.0);
     b->setTopMargin(0.0);
     b->setBottomMargin(0.0);
-    b->setTopGap(Milimetre(0.0));
-    b->setBottomGap(Milimetre(0.0));
+    b->setTopGap(Millimetre(0.0));
+    b->setBottomGap(Millimetre(0.0));
     b->setAutoSizeEnabled(false);
     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::UNSTYLED);
     b->setPropertyFlags(Pid::BOTTOM_GAP, PropertyFlags::UNSTYLED);
@@ -3082,7 +3082,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toMilimetre());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toMillimetre());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3123,10 +3123,10 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
                 if (!readMeasureLast && !lastReadBox) {
-                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toMilimetre());
+                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toMillimetre());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
                 } else if (readMeasureLast) {
-                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toMilimetre());
+                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toMillimetre());
                 }
 
                 lastReadBox = b;

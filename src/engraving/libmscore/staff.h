@@ -91,7 +91,7 @@ private:
     std::map<int, TimeSig*> timesigs;
 
     QList <BracketItem*> _brackets;
-    int _barLineSpan        { false };       ///< true - span barline to next staff
+    int _barLineSpan         { false };       ///< true - span barline to next staff
     int _barLineFrom         { 0 };          ///< line of start staff to draw the barline from (0 = staff top line, ...)
     int _barLineTo           { 0 };          ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
 
@@ -102,7 +102,7 @@ private:
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
     mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
-    Milimetre _userDist      { Milimetre(0.0) };           ///< user edited extra distance
+    Millimetre _userDist     { Millimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
 
@@ -277,8 +277,8 @@ public:
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    Milimetre userDist() const { return _userDist; }
-    void setUserDist(Milimetre val) { _userDist = val; }
+    Millimetre userDist() const { return _userDist; }
+    void setUserDist(Millimetre val) { _userDist = val; }
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);

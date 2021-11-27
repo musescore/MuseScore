@@ -615,7 +615,7 @@ void EditDrumsetDialog::updateExample()
     note->setCachedNoteheadSym(SymNames::symIdByName(quarterCmb->currentData().toString()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
-    stem->setBaseLength(Milimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
+    stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->spatium()));
     chord->add(stem);
     drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
 }

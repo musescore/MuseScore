@@ -28,14 +28,14 @@
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   Milimetre
-//    - just milimetre
+//   Millimetre
+//    - just millimetre
 //---------------------------------------------------------
-class Milimetre
+class Millimetre
 {
 public:
-    Milimetre() = default;
-    explicit Milimetre(qreal v)
+    Millimetre() = default;
+    explicit Millimetre(qreal v)
         : m_val(v) {}
 
     qreal val() const { return m_val; }
@@ -43,105 +43,105 @@ public:
         return m_val;
     }
 
-    bool operator>(const Milimetre& a) const { return m_val > a.m_val; }
-    bool operator<(const Milimetre& a) const { return m_val < a.m_val; }
-    bool operator==(const Milimetre& a) const { return RealIsEqual(m_val, a.m_val); }
-    bool operator!=(const Milimetre& a) const { return m_val != a.m_val; }
+    bool operator>(const Millimetre& a) const { return m_val > a.m_val; }
+    bool operator<(const Millimetre& a) const { return m_val < a.m_val; }
+    bool operator==(const Millimetre& a) const { return RealIsEqual(m_val, a.m_val); }
+    bool operator!=(const Millimetre& a) const { return m_val != a.m_val; }
     bool isZero() const { return RealIsNull(m_val); }
 
-    Milimetre& operator=(qreal v)
+    Millimetre& operator=(qreal v)
     {
         m_val = v;
         return *this;
     }
 
-    Milimetre& operator+=(const Milimetre& a)
+    Millimetre& operator+=(const Millimetre& a)
     {
         m_val += a.m_val;
         return *this;
     }
 
-    Milimetre& operator+=(const qreal& a)
+    Millimetre& operator+=(const qreal& a)
     {
         m_val += a;
         return *this;
     }
 
-    Milimetre operator+(const Milimetre& a) const
+    Millimetre operator+(const Millimetre& a) const
     {
-        Milimetre r(*this);
+        Millimetre r(*this);
         r += a;
         return r;
     }
 
-    Milimetre& operator-=(const Milimetre& a)
+    Millimetre& operator-=(const Millimetre& a)
     {
         m_val -= a.m_val;
         return *this;
     }
 
-    Milimetre& operator-=(const qreal& a)
+    Millimetre& operator-=(const qreal& a)
     {
         m_val -= a;
         return *this;
     }
 
-    Milimetre operator-(const Milimetre& a) const
+    Millimetre operator-(const Millimetre& a) const
     {
-        Milimetre r(*this);
+        Millimetre r(*this);
         r -= a;
         return r;
     }
 
-    Milimetre& operator/=(qreal d)
+    Millimetre& operator/=(qreal d)
     {
         m_val /= d;
         return *this;
     }
 
-    Milimetre operator/(const Milimetre& b) const
+    Millimetre operator/(const Millimetre& b) const
     {
-        return Milimetre(m_val / b.m_val);
+        return Millimetre(m_val / b.m_val);
     }
 
-    Milimetre operator/(qreal b) const
+    Millimetre operator/(qreal b) const
     {
-        return Milimetre(m_val / b);
+        return Millimetre(m_val / b);
     }
 
-    Milimetre operator/(int b) const
+    Millimetre operator/(int b) const
     {
-        return Milimetre(m_val / b);
+        return Millimetre(m_val / b);
     }
 
-    Milimetre& operator*=(int d)
+    Millimetre& operator*=(int d)
     {
         m_val *= d;
         return *this;
     }
 
-    Milimetre& operator*=(qreal d)
+    Millimetre& operator*=(qreal d)
     {
         m_val *= d;
         return *this;
     }
 
-    Milimetre operator*(qreal b) const
+    Millimetre operator*(qreal b) const
     {
-        Milimetre r(*this);
+        Millimetre r(*this);
         r *= b;
         return r;
     }
 
-    Milimetre operator-() const { return Milimetre(-m_val); }
+    Millimetre operator-() const { return Millimetre(-m_val); }
 
 private:
     qreal m_val = 0.0;
 };
 
-inline Milimetre operator*(qreal a, const Milimetre& b)
+inline Millimetre operator*(qreal a, const Millimetre& b)
 {
-    Milimetre r(b);
+    Millimetre r(b);
     r *= a;
     return r;
 }
@@ -161,9 +161,9 @@ public:
 
     qreal val() const { return m_val; }
 
-    Milimetre toMM(qreal spval) const { return Milimetre(m_val * spval); }
+    Millimetre toMM(qreal spval) const { return Millimetre(m_val * spval); }
     static Spatium fromMM(qreal mm, qreal spval) { return Spatium(mm / spval); }
-    static Spatium fromMM(Milimetre mm, qreal spval) { return Spatium(mm.val() / spval); }
+    static Spatium fromMM(Millimetre mm, qreal spval) { return Spatium(mm.val() / spval); }
 
     bool operator>(const Spatium& a) const { return m_val > a.m_val; }
     bool operator<(const Spatium& a) const { return m_val < a.m_val; }
@@ -265,7 +265,7 @@ inline Spatium operator*(qreal a, const Spatium& b)
 //! NOTE compat
 namespace Ms {
 using Spatium = mu::engraving::Spatium;
-using Milimetre = mu::engraving::Milimetre;
+using Millimetre = mu::engraving::Millimetre;
 }
 
 #endif //MU_ENGRAVING_DIMENSION_H

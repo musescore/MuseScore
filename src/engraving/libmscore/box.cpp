@@ -412,10 +412,10 @@ bool Box::setProperty(Pid propertyId, const PropertyValue& v)
         _boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        _topGap = v.toMilimetre();
+        _topGap = v.toMillimetre();
         break;
     case Pid::BOTTOM_GAP:
-        _bottomGap = v.toMilimetre();
+        _bottomGap = v.toMillimetre();
         break;
     case Pid::LEFT_MARGIN:
         _leftMargin = v.toDouble();
@@ -451,9 +451,9 @@ PropertyValue Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? Milimetre(0.0) : score()->styleMM(Sid::systemFrameDistance);
+        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? Milimetre(0.0) : score()->styleMM(Sid::frameSystemDistance);
+        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:

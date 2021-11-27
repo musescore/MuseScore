@@ -231,7 +231,7 @@ PropertyValue TremoloBar::propertyDefault(Pid pid) const
     default:
         for (const StyledProperty& p : *styledProperties()) {
             if (p.pid == pid) {
-                if (propertyType(pid) == P_TYPE::MILIMETRE) {
+                if (propertyType(pid) == P_TYPE::MILLIMETRE) {
                     return score()->styleMM(p.sid);
                 }
                 return score()->styleV(p.sid);
