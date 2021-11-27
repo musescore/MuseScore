@@ -67,6 +67,13 @@ public:
         return *this;
     }
 
+    Milimetre operator+(const Milimetre& a) const
+    {
+        Milimetre r(*this);
+        r += a;
+        return r;
+    }
+
     Milimetre& operator-=(const Milimetre& a)
     {
         m_val -= a.m_val;
@@ -79,23 +86,30 @@ public:
         return *this;
     }
 
+    Milimetre operator-(const Milimetre& a) const
+    {
+        Milimetre r(*this);
+        r -= a;
+        return r;
+    }
+
     Milimetre& operator/=(qreal d)
     {
         m_val /= d;
         return *this;
     }
 
-    Milimetre operator/(const Milimetre& b)
+    Milimetre operator/(const Milimetre& b) const
     {
         return Milimetre(m_val / b.m_val);
     }
 
-    Milimetre operator/(qreal b)
+    Milimetre operator/(qreal b) const
     {
         return Milimetre(m_val / b);
     }
 
-    Milimetre operator/(int b)
+    Milimetre operator/(int b) const
     {
         return Milimetre(m_val / b);
     }
@@ -112,39 +126,18 @@ public:
         return *this;
     }
 
+    Milimetre operator*(qreal b) const
+    {
+        Milimetre r(*this);
+        r *= b;
+        return r;
+    }
+
     Milimetre operator-() const { return Milimetre(-m_val); }
 
 private:
     qreal m_val = 0.0;
 };
-
-inline Milimetre operator+(const Milimetre& a, const Milimetre& b)
-{
-    Milimetre r(a);
-    r += b;
-    return r;
-}
-
-inline Milimetre operator-(const Milimetre& a, const Milimetre& b)
-{
-    Milimetre r(a);
-    r -= b;
-    return r;
-}
-
-inline Milimetre operator/(const Milimetre& a, qreal b)
-{
-    Milimetre r(a);
-    r /= b;
-    return r;
-}
-
-inline Milimetre operator*(const Milimetre& a, qreal b)
-{
-    Milimetre r(a);
-    r *= b;
-    return r;
-}
 
 inline Milimetre operator*(qreal a, const Milimetre& b)
 {
@@ -184,10 +177,24 @@ public:
         return *this;
     }
 
+    Spatium operator+(const Spatium& a) const
+    {
+        Spatium r(*this);
+        r += a;
+        return r;
+    }
+
     Spatium& operator-=(const Spatium& a)
     {
         m_val -= a.m_val;
         return *this;
+    }
+
+    Spatium operator-(const Spatium& a) const
+    {
+        Spatium r(*this);
+        r -= a;
+        return r;
     }
 
     Spatium& operator/=(qreal d)
@@ -196,9 +203,16 @@ public:
         return *this;
     }
 
-    qreal operator/(const Spatium& b)
+    qreal operator/(const Spatium& b) const
     {
         return m_val / b.m_val;
+    }
+
+    Spatium operator/(qreal b) const
+    {
+        Spatium r(*this);
+        r /= b;
+        return r;
     }
 
     Spatium& operator*=(int d)
@@ -213,51 +227,30 @@ public:
         return *this;
     }
 
+    Spatium operator*(int b) const
+    {
+        Spatium r(*this);
+        r *= b;
+        return r;
+    }
+
+    Spatium operator*(qreal b) const
+    {
+        Spatium r(*this);
+        r *= b;
+        return r;
+    }
+
     Spatium operator-() const { return Spatium(-m_val); }
 
 private:
     qreal m_val = 0.0;
 };
 
-inline Spatium operator+(const Spatium& a, const Spatium& b)
-{
-    Spatium r(a);
-    r += b;
-    return r;
-}
-
-inline Spatium operator-(const Spatium& a, const Spatium& b)
-{
-    Spatium r(a);
-    r -= b;
-    return r;
-}
-
-inline Spatium operator/(const Spatium& a, qreal b)
-{
-    Spatium r(a);
-    r /= b;
-    return r;
-}
-
-inline Spatium operator*(const Spatium& a, int b)
-{
-    Spatium r(a);
-    r *= b;
-    return r;
-}
-
 inline Spatium operator*(int a, const Spatium& b)
 {
     Spatium r(b);
     r *= a;
-    return r;
-}
-
-inline Spatium operator*(const Spatium& a, qreal b)
-{
-    Spatium r(a);
-    r *= b;
     return r;
 }
 
