@@ -120,7 +120,7 @@ void DrumsetPalette::updateDrumset()
         chord->setIsUiItem(true);
         chord->setTrack(voice);
         Stem* stem = Factory::createStem(chord.get());
-        stem->setBaseLength((up ? -3.0 : 3.0) * _spatium);
+        stem->setBaseLength(Milimetre((up ? -3.0 : 3.0) * _spatium));
         chord->add(stem);
         Note* note = Factory::createNote(chord.get());
         note->setMark(true);
