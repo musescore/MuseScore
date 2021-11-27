@@ -1681,7 +1681,7 @@ void ChangeStaff::flip(EditData*)
 
     staff->setVisible(visible);
     staff->setDefaultClefType(clefType);
-    staff->setUserDist(userDist);
+    staff->setUserDist(Milimetre(userDist));
     staff->setHideWhenEmpty(hideMode);
     staff->setShowIfEmpty(showIfEmpty);
     staff->setCutaway(cutaway);

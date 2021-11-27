@@ -102,7 +102,7 @@ private:
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
     mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
-    qreal _userDist          { 0.0 };           ///< user edited extra distance
+    Milimetre _userDist      { Milimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
 
@@ -277,8 +277,8 @@ public:
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    qreal userDist() const { return _userDist; }
-    void setUserDist(qreal val) { _userDist = val; }
+    Milimetre userDist() const { return _userDist; }
+    void setUserDist(Milimetre val) { _userDist = val; }
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
