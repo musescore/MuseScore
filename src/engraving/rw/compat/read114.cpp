@@ -1233,7 +1233,7 @@ static void readVolta114(XmlReader& e, const ReadContext& ctx, Volta* volta)
         } else if (tag == "subtype") {
             e.readInt();
         } else if (tag == "lineWidth") {
-            volta->setLineWidth(Milimetre(e.readDouble() * volta->spatium()));
+            volta->setLineWidth(Millimetre(e.readDouble() * volta->spatium()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
@@ -1383,7 +1383,7 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
             pedal->setEndHookHeight(Spatium(e.readDouble()));
             pedal->setPropertyFlags(Pid::END_HOOK_HEIGHT, PropertyFlags::UNSTYLED);
         } else if (tag == "lineWidth") {
-            pedal->setLineWidth(Milimetre(e.readDouble()));
+            pedal->setLineWidth(Millimetre(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
             pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
@@ -2097,7 +2097,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Milimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2105,7 +2105,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Milimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
@@ -3059,7 +3059,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            Milimetre y = masterScore->styleMM(Sid::staffUpperBorder);
+            Millimetre y = masterScore->styleMM(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }

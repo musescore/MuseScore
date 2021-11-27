@@ -184,15 +184,15 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
 QVariant PropertyValue::toQVariant() const
 {
     switch (m_type) {
-    case P_TYPE::UNDEFINED: return QVariant();
+    case P_TYPE::UNDEFINED:   return QVariant();
     // base
-    case P_TYPE::BOOL:      return value<bool>();
-    case P_TYPE::INT:       return value<int>();
-    case P_TYPE::REAL:      return value<qreal>();
-    case P_TYPE::STRING:    return value<QString>();
+    case P_TYPE::BOOL:        return value<bool>();
+    case P_TYPE::INT:         return value<int>();
+    case P_TYPE::REAL:        return value<qreal>();
+    case P_TYPE::STRING:      return value<QString>();
     // geometry
-    case P_TYPE::POINT:     return value<PointF>().toQPointF();
-    case P_TYPE::SIZE:      return value<SizeF>().toQSizeF();
+    case P_TYPE::POINT:       return value<PointF>().toQPointF();
+    case P_TYPE::SIZE:        return value<SizeF>().toQSizeF();
     case P_TYPE::PATH: {
         UNREACHABLE; //! TODO
     }
@@ -201,26 +201,26 @@ QVariant PropertyValue::toQVariant() const
         UNREACHABLE; //! TODO
     }
     break;
-    case P_TYPE::SPATIUM:   return value<Spatium>().val();
-    case P_TYPE::MILIMETRE: return qreal(value<Milimetre>());
-    case P_TYPE::PAIR_REAL: return QVariant::fromValue(value<PairF>().toQPairF());
+    case P_TYPE::SPATIUM:     return value<Spatium>().val();
+    case P_TYPE::MILLIMETRE:  return qreal(value<Millimetre>());
+    case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>().toQPairF());
 
     // draw
-    case P_TYPE::COLOR:         return value<draw::Color>().toQColor();
-    case P_TYPE::ALIGN:         return QVariant::fromValue(int(value<Align>()));
-    case P_TYPE::PLACEMENT_V:   return static_cast<int>(value<PlacementV>());
-    case P_TYPE::PLACEMENT_H:   return static_cast<int>(value<PlacementH>());
-    case P_TYPE::DIRECTION_V:   return static_cast<int>(value<DirectionV>());
-    case P_TYPE::DIRECTION_H:   return static_cast<int>(value<DirectionH>());
+    case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
+    case P_TYPE::ALIGN:       return QVariant::fromValue(int(value<Align>()));
+    case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
+    case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
+    case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
+    case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
 
     // time
-    case P_TYPE::FRACTION:  return QVariant::fromValue(value<Fraction>().toString());
-    case P_TYPE::TDURATION: return QVariant::fromValue(toTDuration());
+    case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
+    case P_TYPE::TDURATION:   return QVariant::fromValue(toTDuration());
     // other
-    case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
-    case P_TYPE::SYMID:        return static_cast<int>(value<Ms::SymId>());
-    case P_TYPE::HOOK_TYPE:    return static_cast<int>(value<Ms::HookType>());
-    case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
+    case P_TYPE::BARLINE_TYPE:    return static_cast<int>(value<Ms::BarLineType>());
+    case P_TYPE::SYMID:           return static_cast<int>(value<Ms::SymId>());
+    case P_TYPE::HOOK_TYPE:       return static_cast<int>(value<Ms::HookType>());
+    case P_TYPE::DYNAMIC_TYPE:    return static_cast<int>(value<Ms::DynamicType>());
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
     default:
         UNREACHABLE; //! TODO
@@ -250,7 +250,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     break;
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
-    case P_TYPE::MILIMETRE:     return PropertyValue(Milimetre(v.toReal()));
+    case P_TYPE::MILLIMETRE:     return PropertyValue(Millimetre(v.toReal()));
     case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
 
     // Draw

@@ -57,7 +57,7 @@ enum class P_TYPE {
     PATH,
     SCALE,
     SPATIUM,
-    MILIMETRE,
+    MILLIMETRE,
     PAIR_REAL,
 
     // Draw
@@ -123,8 +123,8 @@ public:
     PropertyValue(const SizeF& v);
     PropertyValue(const PainterPath& v);
     PropertyValue(const Spatium& v);
-    PropertyValue(const Milimetre& v)
-        : m_type(P_TYPE::MILIMETRE), m_val(v) {}
+    PropertyValue(const Millimetre& v)
+        : m_type(P_TYPE::MILLIMETRE), m_val(v) {}
     PropertyValue(const PairF& v)
         : m_type(P_TYPE::PAIR_REAL), m_val(v) {}
 
@@ -239,19 +239,19 @@ public:
             }
         }
 
-        //! HACK Temporary hack for real to Milimetre
-        if constexpr (std::is_same<T, Milimetre>::value) {
+        //! HACK Temporary hack for real to Millimetre
+        if constexpr (std::is_same<T, Millimetre>::value) {
             if (P_TYPE::REAL == m_type) {
                 const qreal* pr = std::get_if<qreal>(&m_val);
                 assert(pr);
-                return pr ? Milimetre(*pr) : Milimetre();
+                return pr ? Millimetre(*pr) : Millimetre();
             }
         }
 
         //! HACK Temporary hack for Spatium to real
         if constexpr (std::is_same<T, qreal>::value) {
-            if (P_TYPE::MILIMETRE == m_type) {
-                const Milimetre* ps = std::get_if<Milimetre>(&m_val);
+            if (P_TYPE::MILLIMETRE == m_type) {
+                const Millimetre* ps = std::get_if<Millimetre>(&m_val);
                 assert(ps);
                 return ps ? ps->val() : T();
             }
@@ -275,7 +275,7 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
-    Milimetre toMilimetre() const { return value<Milimetre>(); }
+    Millimetre toMillimetre() const { return value<Millimetre>(); }
 
     const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;
@@ -297,7 +297,7 @@ private:
         bool, int, qreal, QString,
 
         // Geometry
-        PointF, SizeF, PainterPath, Spatium, Milimetre, PairF,
+        PointF, SizeF, PainterPath, Spatium, Millimetre, PairF,
 
         // Draw
         Color,

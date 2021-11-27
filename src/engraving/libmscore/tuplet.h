@@ -48,7 +48,7 @@ class Tuplet final : public DurationElement
     DirectionV _direction;
     TupletNumberType _numberType;
     TupletBracketType _bracketType;
-    Milimetre _bracketWidth;
+    Millimetre _bracketWidth;
 
     bool _hasBracket;
     Fraction _ratio;
@@ -105,8 +105,8 @@ public:
     void setBracketType(TupletBracketType val) { _bracketType = val; }
     bool hasBracket() const { return _hasBracket; }
     void setHasBracket(bool b) { _hasBracket = b; }
-    Milimetre bracketWidth() const { return _bracketWidth; }
-    void setBracketWidth(Milimetre s) { _bracketWidth = s; }
+    Millimetre bracketWidth() const { return _bracketWidth; }
+    void setBracketWidth(Millimetre s) { _bracketWidth = s; }
 
     Fraction ratio() const { return _ratio; }
     void setRatio(const Fraction& r) { _ratio = r; }

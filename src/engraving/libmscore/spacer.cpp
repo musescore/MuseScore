@@ -118,7 +118,7 @@ void Spacer::layout0()
 //   setGap
 //---------------------------------------------------------
 
-void Spacer::setGap(Milimetre sp)
+void Spacer::setGap(Millimetre sp)
 {
     _gap = sp;
     layout0();
@@ -162,7 +162,7 @@ void Spacer::editDrag(EditData& ed)
         break;
     }
     if (_gap.val() < spatium() * 2.0) {
-        _gap = Milimetre(spatium() * 2);
+        _gap = Millimetre(spatium() * 2);
     }
     layout0();
     triggerLayout();
@@ -242,7 +242,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.toMilimetre());
+        setGap(v.toMillimetre());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -264,7 +264,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return Milimetre(0.0);
+        return Millimetre(0.0);
     default:
         return EngravingItem::propertyDefault(id);
     }
