@@ -156,7 +156,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                                 fixedDistance = true;
                                 break;
                             } else {
-                                distance = qMax(distance, sp->gap());
+                                distance = qMax(distance, sp->gap().val());
                             }
                         }
                     }
