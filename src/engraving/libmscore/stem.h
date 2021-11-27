@@ -62,11 +62,11 @@ public:
     Chord* chord() const { return toChord(explicitParent()); }
     bool up() const;
 
-    double baseLength() const { return m_baseLength; }
-    void setBaseLength(double baseLength);
+    Milimetre baseLength() const { return m_baseLength; }
+    void setBaseLength(Milimetre baseLength);
 
-    double userLength() const { return m_userLength; }
-    void setUserLength(double userLength) { m_userLength = userLength; }
+    Milimetre userLength() const { return m_userLength; }
+    void setUserLength(Milimetre userLength) { m_userLength = userLength; }
 
     Milimetre lineWidth() const { return m_lineWidth; }
     double lineWidthMag() const { return m_lineWidth * mag(); }
@@ -88,8 +88,8 @@ private:
 
     mu::LineF m_line;
 
-    double m_baseLength = 0.0;
-    double m_userLength = 0.0;
+    Milimetre m_baseLength = Milimetre(0.0);
+    Milimetre m_userLength = Milimetre(0.0);
 
     Milimetre m_lineWidth = Milimetre(0.0);
 };
