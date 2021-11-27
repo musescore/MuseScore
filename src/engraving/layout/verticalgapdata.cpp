@@ -47,7 +47,7 @@ VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* 
 
         if (spacer) {
             _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
-            _normalisedSpacing = qMax(_normalisedSpacing, spacer->gap());
+            _normalisedSpacing = qMax(_normalisedSpacing, spacer->gap().val());
             if (_fixedSpacer) {
                 _maxActualSpacing = _normalisedSpacing;
             }

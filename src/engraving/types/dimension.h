@@ -61,9 +61,21 @@ public:
         return *this;
     }
 
+    Milimetre& operator+=(const qreal& a)
+    {
+        m_val += a;
+        return *this;
+    }
+
     Milimetre& operator-=(const Milimetre& a)
     {
         m_val -= a.m_val;
+        return *this;
+    }
+
+    Milimetre& operator-=(const qreal& a)
+    {
+        m_val -= a;
         return *this;
     }
 

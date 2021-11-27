@@ -128,7 +128,7 @@ void Stem::layout()
 
 void Stem::setBaseLength(Milimetre baseLength)
 {
-    m_baseLength = Milimetre(std::abs(qreal(baseLength)));
+    m_baseLength = Milimetre(std::abs(baseLength.val()));
     layout();
 }
 

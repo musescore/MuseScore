@@ -1442,7 +1442,7 @@ qreal System::minDistance(System* s2) const
                     fixedDownDistance = true;
                     break;
                 } else {
-                    dist = qMax(dist, sp->gap());
+                    dist = qMax(dist, sp->gap().val());
                 }
             }
         }
@@ -1453,7 +1453,7 @@ qreal System::minDistance(System* s2) const
                 Measure* m = toMeasure(mb2);
                 Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
-                    dist = qMax(dist, sp->gap());
+                    dist = qMax(dist, sp->gap().val());
                 }
             }
         }
@@ -1586,7 +1586,7 @@ qreal System::spacerDistance(bool up) const
                     dist = sp->gap();
                     break;
                 } else {
-                    dist = qMax(dist, sp->gap());
+                    dist = qMax(dist, sp->gap().val());
                 }
             }
         }

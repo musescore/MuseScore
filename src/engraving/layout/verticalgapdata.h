@@ -23,6 +23,7 @@
 #define MU_ENGRAVING_VERTICALGAPDATALIST_H
 
 #include <QList>
+#include "../types/dimension.h"
 
 namespace Ms {
 class MStyle;

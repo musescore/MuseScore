@@ -79,7 +79,7 @@ void Spacer::layout0()
     path    = PainterPath();
     qreal w = _spatium;
     qreal b = w * .5;
-    qreal h = explicitParent() ? _gap : qMin(_gap, spatium() * 4.0);      // limit length for palette
+    qreal h = explicitParent() ? _gap : qMin(_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -118,7 +118,7 @@ void Spacer::layout0()
 //   setGap
 //---------------------------------------------------------
 
-void Spacer::setGap(qreal sp)
+void Spacer::setGap(Milimetre sp)
 {
     _gap = sp;
     layout0();
@@ -161,8 +161,8 @@ void Spacer::editDrag(EditData& ed)
         _gap -= s;
         break;
     }
-    if (_gap < spatium() * 2.0) {
-        _gap = spatium() * 2;
+    if (_gap.val() < spatium() * 2.0) {
+        _gap = Milimetre(spatium() * 2);
     }
     layout0();
     triggerLayout();
@@ -197,7 +197,7 @@ void Spacer::write(XmlWriter& xml) const
     xml.startObject(this);
     xml.tag("subtype", int(_spacerType));
     EngravingItem::writeProperties(xml);
-    xml.tag("space", _gap / spatium());
+    xml.tag("space", _gap.val() / spatium());
     xml.endObject();
 }
 
@@ -242,7 +242,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.toDouble());
+        setGap(v.toMilimetre());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -264,7 +264,7 @@ PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return PropertyValue(0.0);
+        return Milimetre(0.0);
     default:
         return EngravingItem::propertyDefault(id);
     }

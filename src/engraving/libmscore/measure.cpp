@@ -1728,7 +1728,7 @@ EngravingItem* Measure::drop(EditData& data)
                 qreal y2 = s->staffYpage(nextVisStaffIdx);
                 gap = y2 - y1 - score()->staff(staffIdx)->height();
             }
-            spacer->setGap(gap);
+            spacer->setGap(Milimetre(gap));
         }
         score()->undoAddElement(spacer);
         triggerLayout();
