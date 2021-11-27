@@ -91,7 +91,7 @@ QVariant ScoreElement::get(Ms::Pid pid) const
     }
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
-    case P_TYPE::MILIMETRE:
+    case P_TYPE::MILLIMETRE:
         return val.toReal() / spatium();
     case P_TYPE::SPATIUM:
         return val.value<Spatium>().val();
@@ -124,7 +124,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     case P_TYPE::POINT:
         val = val.toPointF() * spatium();
         break;
-    case P_TYPE::MILIMETRE:
+    case P_TYPE::MILLIMETRE:
         val = val.toReal() * spatium();
         break;
     default:

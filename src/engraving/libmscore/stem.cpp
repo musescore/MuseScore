@@ -126,9 +126,9 @@ void Stem::layout()
     setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
-void Stem::setBaseLength(Milimetre baseLength)
+void Stem::setBaseLength(Millimetre baseLength)
 {
-    m_baseLength = Milimetre(std::abs(baseLength.val()));
+    m_baseLength = Millimetre(std::abs(baseLength.val()));
     layout();
 }
 
@@ -262,7 +262,7 @@ void Stem::startEdit(EditData& ed)
 void Stem::editDrag(EditData& ed)
 {
     double yDelta = ed.delta.y();
-    m_userLength += up() ? Milimetre(-yDelta) : Milimetre(yDelta);
+    m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
     layout();
     Chord* c = chord();
     if (c->hook()) {
@@ -320,10 +320,10 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.toMilimetre());
+        setLineWidth(v.toMillimetre());
         break;
     case Pid::USER_LEN:
-        setUserLength(v.toMilimetre());
+        setUserLength(v.toMillimetre());
         break;
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());

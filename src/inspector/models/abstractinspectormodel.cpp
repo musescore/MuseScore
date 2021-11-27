@@ -299,7 +299,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
         }
     }
 
-    case P_TYPE::MILIMETRE:
+    case P_TYPE::MILLIMETRE:
         return Spatium(value.toReal()).toMM(element->spatium());
 
     case P_TYPE::SPATIUM:
@@ -336,7 +336,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         }
     }
 
-    case P_TYPE::MILIMETRE:
+    case P_TYPE::MILLIMETRE:
         return Spatium::fromMM(value.toReal(), element->spatium()).val();
 
     case P_TYPE::SPATIUM:

@@ -1902,8 +1902,8 @@ bool EngravingItem::isUserModified() const
         PropertyValue val = getProperty(pid);
         PropertyValue defaultValue = propertyDefault(pid);
 
-        if (propertyType(pid) == P_TYPE::MILIMETRE) {
-            if (qAbs(val.value<Milimetre>() - defaultValue.value<Milimetre>()) > 0.0001) {         // we don’t care spatium diffs that small
+        if (propertyType(pid) == P_TYPE::MILLIMETRE) {
+            if (qAbs(val.value<Millimetre>() - defaultValue.value<Millimetre>()) > 0.0001) {         // we don’t care spatium diffs that small
                 return true;
             }
         } else {

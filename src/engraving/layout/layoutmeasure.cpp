@@ -722,8 +722,8 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                                     chord->tremolo(),
                                     stem1->p2().y(),
                                     stem2->p2().y());
-                                stem1->setBaseLength(Milimetre(extendedLen.first));
-                                stem2->setBaseLength(Milimetre(extendedLen.second));
+                                stem1->setBaseLength(Millimetre(extendedLen.first));
+                                stem2->setBaseLength(Millimetre(extendedLen.second));
                             }
                         }
                     }
