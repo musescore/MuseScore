@@ -421,19 +421,19 @@ PalettePtr PaletteCreator::newLayoutPalette()
     qreal _spatium = gpaletteScore->spatium();
     auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::DOWN);
-    spacer->setGap(3 * _spatium);
+    spacer->setGap(Milimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer down"));
     cell->mag = .7;
 
     spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::UP);
-    spacer->setGap(3 * _spatium);
+    spacer->setGap(Milimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer up"));
     cell->mag = .7;
 
     spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::FIXED);
-    spacer->setGap(3 * _spatium);
+    spacer->setGap(Milimetre(3 * _spatium));
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
     cell->mag = .7;
 

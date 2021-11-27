@@ -47,7 +47,7 @@ enum class SpacerType : char {
 class Spacer final : public EngravingItem
 {
     SpacerType _spacerType;
-    qreal _gap;
+    Milimetre _gap;
 
     mu::PainterPath path;
 
@@ -77,8 +77,8 @@ public:
     void editDrag(EditData&) override;
     void spatiumChanged(qreal, qreal) override;
 
-    void setGap(qreal sp);
-    qreal gap() const { return _gap; }
+    void setGap(Milimetre sp);
+    Milimetre gap() const { return _gap; }
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
     int gripsCount() const override { return 1; }

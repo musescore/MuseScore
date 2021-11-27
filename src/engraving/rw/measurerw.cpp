@@ -133,7 +133,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Milimetre(e.readDouble() * _spatium));
         } else if (tag == "vspacerFixed") {
             if (!measure->m_mstaves[staffIdx]->vspacerDown()) {
                 Spacer* spacer = Factory::createSpacer(measure);
@@ -141,7 +141,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
+            measure->m_mstaves[staffIdx]->vspacerDown()->setGap(Milimetre(e.readDouble() * _spatium));
         } else if (tag == "vspacerUp") {
             if (!measure->m_mstaves[staffIdx]->vspacerUp()) {
                 Spacer* spacer = Factory::createSpacer(measure);
@@ -149,7 +149,7 @@ void MeasureRW::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 spacer->setTrack(staffIdx * VOICES);
                 measure->add(spacer);
             }
-            measure->m_mstaves[staffIdx]->vspacerUp()->setGap(e.readDouble() * _spatium);
+            measure->m_mstaves[staffIdx]->vspacerUp()->setGap(Milimetre(e.readDouble() * _spatium));
         } else if (tag == "visible") {
             measure->m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if ((tag == "slashStyle") || (tag == "stemless")) {
@@ -579,13 +579,13 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
     }
 
     if (mstaff->vspacerUp()) {
-        xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
+        xml.tag("vspacerUp", mstaff->vspacerUp()->gap().val() / _spatium);
     }
     if (mstaff->vspacerDown()) {
         if (mstaff->vspacerDown()->spacerType() == SpacerType::FIXED) {
-            xml.tag("vspacerFixed", mstaff->vspacerDown()->gap() / _spatium);
+            xml.tag("vspacerFixed", mstaff->vspacerDown()->gap().val() / _spatium);
         } else {
-            xml.tag("vspacerDown", mstaff->vspacerDown()->gap() / _spatium);
+            xml.tag("vspacerDown", mstaff->vspacerDown()->gap().val() / _spatium);
         }
     }
     if (!mstaff->visible()) {
