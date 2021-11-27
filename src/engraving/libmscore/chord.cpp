@@ -1537,7 +1537,7 @@ qreal Chord::calcDefaultStemLength()
 void Chord::setBeamExtension(qreal extension)
 {
     if (_stem) {
-        _stem->setBaseLength(_stem->baseLength() + extension);
+        _stem->setBaseLength(_stem->baseLength() + Milimetre(extension));
         _defaultStemLength += extension;
     }
 }
@@ -1624,7 +1624,7 @@ void Chord::layoutStem()
 
     _defaultStemLength = calcDefaultStemLength();
     // This calls _stem->layout()
-    _stem->setBaseLength(_defaultStemLength);
+    _stem->setBaseLength(Milimetre(_defaultStemLength));
 
     // And now we need to set the position of the flag.
     if (_hook) {
