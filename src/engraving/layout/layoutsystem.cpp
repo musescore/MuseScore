@@ -86,11 +86,33 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
+    Fraction minSysTicks = Fraction(4, 1); // Inizialize variable which stores the shortest note of the system
+    bool changeMinSysTicks = false;
+
     while (ctx.curMeasure) {      // collect measure for system
+
         System* oldSystem = ctx.curMeasure->system();
         system->appendMeasure(ctx.curMeasure);
 
         qreal ww  = 0;          // width of current measure
+
+        // After appending a new measure, the shortest note in the system may change, in which case
+        // we need to recompute the layout of the previous measures. By updating the width of these
+        // measures, minWidth must be updated accordingly.
+        if (ctx.curMeasure->isMeasure())
+            if (toMeasure(ctx.curMeasure)->computeTicks() < minSysTicks) {
+                changeMinSysTicks = true;
+                for (MeasureBase* mb : system->measures()) {
+                    if (mb == ctx.curMeasure) break; // Cause I want to change only previous measures, not current one
+                    if (mb->isMeasure()) {
+                        qreal prevWidth = toMeasure(mb)->width();
+                        toMeasure(mb)->computeMinWidth();
+                        qreal newWidth = toMeasure(mb)->width();
+                        minWidth += newWidth - prevWidth;
+                    }
+                }
+            }
+            else changeMinSysTicks = false;
 
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
@@ -158,6 +180,18 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 minWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
                 ctx.curMeasure->setParent(oldSystem);
+            }
+            // If the last appended measure caused a re-layout of the previous measures, now that we are
+            // removing it we need to re-layout the previous measures again.
+            if (changeMinSysTicks) {
+                for (MeasureBase* mb : system->measures()) {
+                    if (mb->isMeasure()) {
+                        qreal prevWidth = toMeasure(mb)->width();
+                        toMeasure(mb)->computeMinWidth();
+                        qreal newWidth = toMeasure(mb)->width();
+                        minWidth += newWidth - prevWidth;
+                    }
+                }
             }
             break;
         }
@@ -344,8 +378,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else if (mb->isMeasure()) {
                 Measure* m  = toMeasure(mb);
                 mw          += m->width();                       // measures are stretched already with basicStretch()
-                int weight   = m->layoutWeight();
-                totalWeight += weight * m->basicStretch();
+                //int weight   = m->layoutWeight();
+                //totalWeight += weight * m->basicStretch();
+                qreal weight = m->stretchWeight(); // The stretch is now assigned proportionally to the width
+                totalWeight += weight; // No need now to multiply again by m->basicStretch()
             }
         }
 
@@ -381,8 +417,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             mb->setPos(pos);
             Measure* m = toMeasure(mb);
             qreal stretch = m->basicStretch();
-            int weight = m->layoutWeight();
-            ww  += rest * weight * stretch;
+            //int weight = m->layoutWeight();
+            //ww  += rest * weight * stretch;
+            qreal weight = m->stretchWeight(); // Updated stretching formula
+            ww += rest * weight;
             m->stretchMeasure(ww);
             m->layoutStaffLines();
             if (createBrackets) {
