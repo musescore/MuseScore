@@ -1477,7 +1477,7 @@ void EditStyle::setValues()
         }
         PropertyValue val = styleValue(sw.idx);
         if (sw.reset) {
-            sw.reset->setEnabled(hasDefaultStyleValue(sw.idx));
+            sw.reset->setEnabled(!hasDefaultStyleValue(sw.idx));
         }
 
         switch (val.type()) {
@@ -1803,7 +1803,7 @@ void EditStyle::enableStyleWidget(const StyleId idx, bool enable)
     const StyleWidget& sw { styleWidget(idx) };
     static_cast<QWidget*>(sw.widget)->setEnabled(enable);
     if (sw.reset) {
-        sw.reset->setEnabled(enable && hasDefaultStyleValue(idx));
+        sw.reset->setEnabled(enable && !hasDefaultStyleValue(idx));
     }
 }
 
