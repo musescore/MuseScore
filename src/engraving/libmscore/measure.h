@@ -336,6 +336,9 @@ public:
     qreal basicStretch() const;
     qreal basicWidth() const;
     int layoutWeight(int maxMMRestLength = 0) const;
+    qreal stretchWeight();
+    qreal stretchFormula(Fraction curTicks, Fraction minTicks);
+    Fraction minSysTicks();
     void computeMinWidth() override;
     void checkHeader();
     void checkTrailer();
