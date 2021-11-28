@@ -125,9 +125,10 @@ void Bracket::setStaffSpan(int a, int b)
 
             if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland")
                   v = qMin(4, v);
-            // total default height of a system of n staves / height of a 5 line staff
-            qreal dist = score()->enableVerticalSpread() ? score()->styleS(Sid::maxAkkoladeDistance).val() : score()->styleS(Sid::akkoladeDistance).val();
-            _magx = v + ((v - 1) * dist / 4.0);
+
+            // 1.625 is a "magic" number based on akkoladeDistance/4.0 (default value 6.5).
+            _magx = v + ((v - 1) * 1.625);
+
             if (v == 1)
                   _braceSymbol = SymId::braceSmall;
             else if (v <= 2)
