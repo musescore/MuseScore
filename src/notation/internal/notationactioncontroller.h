@@ -206,6 +206,15 @@ private:
 
     void startNoteInputIfNeed();
 
+    void setOpenNotations(QList<INotationPtr> notations);
+    bool isMasterNotation(const INotationPtr notation) const;
+    std::vector<INotationPtr> getOpenNotations();
+    int getNotationIndex(std::vector<INotationPtr> notations);
+    void closeCurrentNotation();
+    void openPreviousNotation();
+    void openNextNotation();
+    void changeCurrentNotation(int index);
+
     bool hasSelection() const;
     bool canUndo() const;
     bool canRedo() const;

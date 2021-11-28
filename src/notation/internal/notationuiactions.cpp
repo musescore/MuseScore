@@ -1492,6 +1492,66 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              QT_TRANSLATE_NOOP("action", "Strike-throuch"),
              QT_TRANSLATE_NOOP("action", "Strike-through"),
              Checkable::Yes
+             ),
+    UiAction("notation-close",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Close current notation"),
+             QT_TRANSLATE_NOOP("action", "Close current notation")
+             ),
+    UiAction("notation-previous",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to previous notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to previous notation")
+             ),
+    UiAction("notation-next",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to next notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to next notation")
+             ),
+    UiAction("notation-change-1",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to first notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to first notation")
+             ),
+    UiAction("notation-change-2",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to second notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to second notation")
+             ),
+    UiAction("notation-change-3",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to third notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to third notation")
+             ),
+    UiAction("notation-change-4",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to fourth notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to fourth notation")
+             ),
+    UiAction("notation-change-5",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to fifth notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to fifth notation")
+             ),
+    UiAction("notation-change-6",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to sixth notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to sixth notation")
+             ),
+    UiAction("notation-change-7",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to seventh notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to seventh notation")
+             ),
+    UiAction("notation-change-8",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to eighth notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to eighth notation")
+             ),
+    UiAction("notation-change-9",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Switch to ninth notation"),
+             QT_TRANSLATE_NOOP("action", "Switch to ninth notation")
              )
 };
 

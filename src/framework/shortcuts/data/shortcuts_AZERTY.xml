@@ -43,14 +43,6 @@
         <seq>Shift+Tab</seq>
     </SC>
     <SC>
-        <key>nav-next-tab</key>
-        <seq>Ctrl+Tab</seq>
-    </SC>
-    <SC>
-        <key>nav-prev-tab</key>
-        <seq>Ctrl+Shift+Tab</seq>
-    </SC>
-    <SC>
         <key>nav-right</key>
         <seq>Right</seq>
     </SC>
@@ -116,7 +108,7 @@
     <seq>Ctrl+Shift+S</seq>
     </SC>
   <SC>
-    <key>file-close</key>
+    <key>notation-close</key>
     <std>4</std>
     </SC>
   <SC>
@@ -867,13 +859,49 @@
     <seq>P</seq>
     </SC>
   <SC>
-    <key>next-score</key>
+    <key>notation-next</key>
     <std>20</std>
     </SC>
   <SC>
-    <key>previous-score</key>
-    <std>21</std>
+    <key>notation-previous</key>
+    <seq>Ctrl+Shift+Tab</seq>
     </SC>
+  <SC>
+    <key>notation-change-1</key>
+    <seq>Ctrl+Shift+1</seq>
+    </SC>
+  <SC>
+    <key>notation-change-2</key>
+    <seq>Ctrl+Shift+2</seq>
+    </SC>
+  <SC>
+    <key>notation-change-3</key>
+    <seq>Ctrl+Shift+3</seq>
+    </SC>
+  <SC>
+    <key>notation-change-4</key>
+    <seq>Ctrl+Shift+4</seq>
+    </SC>
+  <SC>
+    <key>notation-change-5</key>
+    <seq>Ctrl+Shift+5</seq>
+    </SC>
+  <SC>
+    <key>notation-change-6</key>
+    <seq>Ctrl+Shift+6</seq>
+    </SC>
+  <SC>
+    <key>notation-change-7</key>
+    <seq>Ctrl+Shift+7</seq>
+    </SC>
+  <SC>
+    <key>notation-change-8</key>
+    <seq>Ctrl+Shift+8</seq>
+    </SC>
+  <SC>
+    <key>notation-change-9</key>
+    <seq>Ctrl+Shift+9</seq>
+    </SC>v
   <SC>
     <key>inspector</key>
     <seq>F8</seq>

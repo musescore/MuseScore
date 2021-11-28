@@ -304,6 +304,19 @@ void NotationActionController::init()
     registerTextAction("text-u", &NotationActionController::toggleUnderline);
     registerTextAction("text-u", &NotationActionController::toggleStrike);
 
+    registerAction("notation-close", &NotationActionController::closeCurrentNotation);
+    registerAction("notation-next", &NotationActionController::openNextNotation);
+    registerAction("notation-previous", &NotationActionController::openPreviousNotation);
+    registerAction("notation-change-1", [this]() { changeCurrentNotation(1); });
+    registerAction("notation-change-2", [this]() { changeCurrentNotation(2); });
+    registerAction("notation-change-3", [this]() { changeCurrentNotation(3); });
+    registerAction("notation-change-4", [this]() { changeCurrentNotation(4); });
+    registerAction("notation-change-5", [this]() { changeCurrentNotation(5); });
+    registerAction("notation-change-6", [this]() { changeCurrentNotation(6); });
+    registerAction("notation-change-7", [this]() { changeCurrentNotation(7); });
+    registerAction("notation-change-8", [this]() { changeCurrentNotation(8); });
+    registerAction("notation-change-9", [this]() { changeCurrentNotation(9); });
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             registerAction("interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -1905,6 +1918,135 @@ void NotationActionController::toggleUnderline()
 void NotationActionController::toggleStrike()
 {
     currentNotationInteraction()->toggleStrike();
+}
+
+bool NotationActionController::isMasterNotation(const INotationPtr notation) const
+{
+    return globalContext()->currentMasterNotation()->notation() == notation;
+}
+
+std::vector<INotationPtr> NotationActionController::getOpenNotations()
+{
+    std::vector<INotationPtr> notations;
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    auto excerpts = masterNotation->excerpts().val;
+    for (IExcerptNotationPtr excerpt: excerpts) {
+        INotationPtr notation = excerpt->notation();
+        if (notation->opened().val) {
+            notations.push_back(notation);
+        }
+    }
+
+    if (masterNotation->notation()->opened().val) {
+        notations.insert(notations.begin(), masterNotation->notation()); //Adds main notation
+    }
+
+    return notations;
+}
+
+int NotationActionController::getNotationIndex(std::vector<INotationPtr> notations)
+{
+    for (int i = 0; i < (int)notations.size(); i++) {
+        INotationPtr notation = notations.at(i);
+        if (notation == currentNotation()) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void NotationActionController::closeCurrentNotation()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    std::vector<INotationPtr> notations = getOpenNotations();
+    INotationPtr nextNotation = nullptr;
+
+    int notationIndex = getNotationIndex(notations);
+    if (notationIndex == -1) {
+        return;
+    }
+
+    if (notationIndex == 0) {
+        nextNotation = nullptr;
+    } else if (notationIndex == (int)notations.size() - 1) {
+        nextNotation = notations.at(notationIndex - 1);
+    } else {
+        nextNotation = notations.at(notationIndex + 1);
+    }
+
+    if (isMasterNotation(currentNotation())) {
+        dispatcher()->dispatch("file-close");
+    } else {
+        currentNotation()->setOpened(false);
+    }
+    if (nextNotation) {
+        globalContext()->setCurrentNotation(nextNotation);
+    }
+}
+
+void NotationActionController::openPreviousNotation()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    std::vector<INotationPtr> notations = getOpenNotations();
+    INotationPtr previousNotation = nullptr;
+
+    int notationIndex = getNotationIndex(notations);
+    if (notationIndex == -1) {
+        return;
+    }
+
+    if (notationIndex == 0) {
+        previousNotation = notations.at(notations.size() - 1);
+    } else {
+        previousNotation = notations.at(notationIndex - 1);
+    }
+
+    globalContext()->setCurrentNotation(previousNotation);
+}
+
+void NotationActionController::openNextNotation()
+{
+    if (!currentNotation()) {
+        return;
+    }
+
+    std::vector<INotationPtr> notations = getOpenNotations();
+    INotationPtr nextNotation = nullptr;
+
+    int notationIndex = getNotationIndex(notations);
+    if (notationIndex == -1) {
+        return;
+    }
+
+    if (notationIndex == (int)notations.size() - 1) {
+        nextNotation = notations.at(0);
+    } else {
+        nextNotation = notations.at(notationIndex + 1);
+    }
+
+    globalContext()->setCurrentNotation(nextNotation);
+}
+
+void NotationActionController::changeCurrentNotation(int index)
+{
+    std::vector<INotationPtr> notations = getOpenNotations();
+
+    if (index == 9) {
+        globalContext()->setCurrentNotation(notations.at(notations.size() - 1));
+    } else {
+        if (index > (int)notations.size()) {
+            return;
+        }
+
+        globalContext()->setCurrentNotation(notations.at(index - 1));
+    }
 }
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
