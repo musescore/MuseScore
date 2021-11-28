@@ -3157,6 +3157,10 @@ void Measure::stretchMeasure(qreal targetWidth)
 
     std::multimap<qreal, Segment*> springs;
 
+    //Fraction minTicks = computeTicks();
+    Fraction minTicks = minSysTicks(); // The stretching must be done according to the shortest note *of the system*!
+    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
+
     Segment* seg = first();
     while (seg && (!seg->enabled() || seg->allElementsInvisible())) {
         seg = seg->next();
@@ -3168,7 +3172,7 @@ void Measure::stretchMeasure(qreal targetWidth)
         }
         Fraction t = s.ticks();
         if (t.isNotZero()) {
-            qreal str = 1.0 + 0.865617 * log(qreal(t.ticks()) / qreal(minTick.ticks()));       // .6 * log(t / minTick.ticks()) / log(2);
+            qreal str = stretchFormula(t, minTicks); // Moved the formula to a dedicated method
             qreal d   = s.width() / str;
             s.setStretch(str);
             springs.insert(std::pair<qreal, Segment*>(d, &s));
@@ -3659,6 +3663,40 @@ qreal Measure::basicWidth() const
 }
 
 //---------------------------------------------------------
+//   stretchWeight
+//   Used for distributing the space remaining at the end of
+//   a system. Returns a weight parameter proportional to the
+//   current with of the measure. You cannot simply get it 
+//   by multiplying measure->width() becase measures containing 
+//   additional elements such as clefs, tempo, etc would be 
+//   stretched more than the others.
+//---------------------------------------------------------
+qreal Measure::stretchWeight() {
+    if (isMMRest())
+        return width();
+    qreal w = 0;
+    qreal W = 0;
+    qreal weight = 0;
+    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
+    qreal minNoteDistance = score()->styleMM(Sid::minNoteDistance);
+    Fraction minTicks = minSysTicks();
+ 
+    for (Segment* s = first(); s; s = s->next()) {
+        if (s->enabled() && s->visible() && !s->allElementsInvisible() && s->isChordRestType()) {
+            qreal str = stretchFormula(s->ticks(), minTicks);
+            w += minNoteSpace * str * basicStretch();
+            W += s->width();
+            // You cannot simply do weight += s->width(), because the s->width() also includes
+            // the space for accidentals, and it would cause measures with many accidentals to be 
+            // given more weight than the others, resulting in inconsistent spacing.
+        }
+        continue;
+    }
+    weight = w * (w / W); // Empirical correction factor (see documentation)
+    return weight;
+}
+
+//---------------------------------------------------------
 //   layoutWeight
 //---------------------------------------------------------
 
@@ -4072,7 +4110,11 @@ void Measure::setStretchedWidth(qreal w)
         w = minWidth;
     }
 
-    qreal stretchableWidth = 0.0;
+    // New spacing algorithm: this stretching is not necessary anymore, as it's already
+    // applied within computeMinWidth(). This function was the main responsible for measures 
+    // with many accidentals being too wide.
+
+    /*qreal stretchableWidth = 0.0;
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         if (!s->enabled()) {
             continue;
@@ -4081,7 +4123,7 @@ void Measure::setStretchedWidth(qreal w)
     }
     const int maxMMRestLength = 32;       // TODO: style
     int weight = layoutWeight(maxMMRestLength);
-    w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;
+    w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;*/
 
     setWidth(w);
 }
@@ -4113,6 +4155,56 @@ static bool hasAccidental(Segment* s)
 }
 
 //---------------------------------------------------------
+//      minSysTicks
+//      returns the shortest note/rest in the system
+//---------------------------------------------------------
+
+Fraction Measure::minSysTicks() {
+    Fraction minTicks = ticks();
+    //System* sys = system();
+    for (MeasureBase* mb : system()->measures()) {
+        if (mb->isMeasure()) {
+            Measure* m = toMeasure(mb);
+            Fraction curMinTicks = m->computeTicks();
+            if (curMinTicks < minTicks)
+                minTicks = curMinTicks;
+        }
+    }
+    if (minTicks > Fraction(1, 8))
+        return Fraction(1, 8);
+    else
+        return minTicks;
+}
+
+//---------------------------------------------------------
+//      Stretch formula
+//      Computes the stretch for a given segment depending
+//      on its duration with respect to the shortest one.
+//      The spacing formula is customizable. Three options
+//      proposed: linear spacing, quadratic spacing (Gould),
+//      or logarithmic spacing (Musescore 3.6). 
+//      These formulas takes into account also user stretch and style
+//      settings. This produces a finer, more natural response 
+//      to the } and { commands. The numeric coefficients are 
+//      optimized to give the best results for userStretch = 1
+//      and measureSpacing = 1.2, i.e. the program defaults (see
+//      documentation). 
+//      TODO: choice of formula in style settings!
+//---------------------------------------------------------
+qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks) {
+    qreal uStretch = userStretch();
+    qreal genLayoutStretch = score()->styleD(Sid::measureSpacing);
+    qreal stretch = uStretch * genLayoutStretch;
+    // Linear spacing
+    //qreal str = 1 - 0.945 * stretch +  0.945 * stretch * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
+    // Logarithmic spacing (MS 3.6)
+    //qreal str = 1.0 + 0.721 * stretch * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    // Quadratic spacing (Gould)
+    qreal str = 1 - 0.647 * stretch + 0.647 * stretch * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    return str;
+}
+
+//---------------------------------------------------------
 //   computeMinWidth
 //    sets the minimum stretched width of segment list s
 //    set the width and x position for all segments
@@ -4126,6 +4218,9 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
     }
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
+
+    Fraction minTicks = minSysTicks(); // New spacing algorithm: we get the shortest note duration in the system.
+    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
 
     if (isMMRest()) {
         // Reset MM rest to initial size and position
@@ -4171,6 +4266,15 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
                 isSystemHeader = false;
             } else {
                 w = s->minHorizontalDistance(ns, false);
+                // New spacing algorithm: we apply an additional spacing which depends on the duration of
+                // the note with respect to the shortest note *of the system*. This is done
+                // according to the stretch formula, which can be customized.
+                Fraction t = s->ticks();
+                qreal str = stretchFormula(t, minTicks);
+                // Simply doing w * str would be wrong at this point cause you would stretch also the additional
+                // space taken by accidentals.
+                qreal minStretchedWidth = minNoteSpace * str * basicStretch();
+                w = qMax(w, minStretchedWidth);
             }
             // look back for collisions with previous segments
             // this is time consuming (ca. +5%) and probably requires more optimization
