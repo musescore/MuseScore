@@ -102,6 +102,21 @@ void ProjectFilesController::openProject(const actions::ActionData& args)
 
 Ret ProjectFilesController::openProject(const io::path& projectPath_)
 {
+    //! NOTE This method is synchronous,
+    //! but inside `multiInstancesProvider` there can be an event loop
+    //! to wait for the responces from other instances, accordingly,
+    //! the events (like user click) can be executed and this method can be called several times,
+    //! before the end of the current call.
+    //! So we ignore all subsequent calls until the current one completes.
+    if (m_isProjectProcessing) {
+        return make_ret(Ret::Code::InternalError);
+    }
+    m_isProjectProcessing = true;
+
+    Defer defer([this]() {
+        m_isProjectProcessing = false;
+    });
+
     //! Step 1. If no path is specified, ask the user to select a project
     io::path projectPath = projectPath_;
     if (projectPath.empty()) {
@@ -201,13 +216,13 @@ void ProjectFilesController::newProject()
     //! the events (like user click) can be executed and this method can be called several times,
     //! before the end of the current call.
     //! So we ignore all subsequent calls until the current one completes.
-    if (m_isNewProjectProcessing) {
+    if (m_isProjectProcessing) {
         return;
     }
-    m_isNewProjectProcessing = true;
+    m_isProjectProcessing = true;
 
     Defer defer([this]() {
-        m_isNewProjectProcessing = false;
+        m_isProjectProcessing = false;
     });
 
     if (globalContext()->currentProject()) {

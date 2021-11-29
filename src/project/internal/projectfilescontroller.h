@@ -107,7 +107,7 @@ private:
     bool isNeedSaveScore() const;
     bool hasSelection() const;
 
-    bool m_isNewProjectProcessing = false;
+    bool m_isProjectProcessing = false;
 };
 }
 
