@@ -43,6 +43,8 @@ public:
     QString partStyleFilePath() const override;
     void setPartStyleFilePath(const QString& path) override;
 
+    std::string iconsFontFamily() const override;
+
     draw::Color defaultColor() const override;
     draw::Color invisibleColor() const override;
     draw::Color lassoColor() const override;

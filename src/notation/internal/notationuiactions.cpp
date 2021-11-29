@@ -513,35 +513,43 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("acciaccatura",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Acciaccatura")
+             QT_TRANSLATE_NOOP("action", "Acciaccatura"),
+             IconCode::Code::ACCIACCATURA
              ),
     UiAction("appoggiatura",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Appoggiatura")
+             QT_TRANSLATE_NOOP("action", "Appoggiatura"),
+             IconCode::Code::APPOGGIATURA
              ),
     UiAction("grace4",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: quarter")
+             QT_TRANSLATE_NOOP("action", "Grace: quarter"),
+             IconCode::Code::GRACE4
              ),
     UiAction("grace16",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: 16th")
+             QT_TRANSLATE_NOOP("action", "Grace: 16th"),
+             IconCode::Code::GRACE16
              ),
     UiAction("grace32",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: 32nd")
+             QT_TRANSLATE_NOOP("action", "Grace: 32nd"),
+             IconCode::Code::GRACE32
              ),
     UiAction("grace8after",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: 8th after")
+             QT_TRANSLATE_NOOP("action", "Grace: 8th after"),
+             IconCode::Code::GRACE8_AFTER
              ),
     UiAction("grace16after",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: 16th after")
+             QT_TRANSLATE_NOOP("action", "Grace: 16th after"),
+             IconCode::Code::GRACE16_AFTER
              ),
     UiAction("grace32after",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Grace: 32nd after")
+             QT_TRANSLATE_NOOP("action", "Grace: 32nd after"),
+             IconCode::Code::GRACE32_AFTER
              ),
     UiAction("beam-start",
              mu::context::UiCtxNotationOpened,
