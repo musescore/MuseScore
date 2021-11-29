@@ -22,6 +22,7 @@
 #include "accessibleroot.h"
 
 #include "../libmscore/score.h"
+#include "context/uicontext.h"
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
@@ -48,6 +49,10 @@ void AccessibleRoot::setFocusedElement(AccessibleItem* e)
 
 AccessibleItem* AccessibleRoot::focusedElement() const
 {
+    if (uicontextResolver()->currentUiContext() != mu::context::UiCtxNotationFocused) {
+        return nullptr;
+    }
+
     return m_focusedElement;
 }
 
