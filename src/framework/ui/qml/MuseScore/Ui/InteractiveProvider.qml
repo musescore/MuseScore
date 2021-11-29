@@ -47,14 +47,16 @@ Item {
         function onFireOpen(data) {
 
             var page = data.data()
-            console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))
+            var uri = data.value("uri")
+
+            console.log("try open uri: " + uri + ", page: " + JSON.stringify(page))
             if (!(page && (page.type === ContainerType.PrimaryPage || page.type === ContainerType.QmlDialog))) {
                 data.setValue("ret", {errcode: 101 }) // ResolveFailed
                 return;
             }
 
             if (page.type === ContainerType.PrimaryPage) {
-                root.requestedDockPage(data.value("uri"), page.params)
+                root.requestedDockPage(uri, page.params)
                 root.provider.onOpen(page.type, {})
                 data.setValue("ret", {errcode: 0 })
                 return;
@@ -70,6 +72,10 @@ Item {
                 if (dialogObj.ret.errcode > 0) {
                     return
                 }
+
+                dialogObj.object.opened.connect(function() {
+                    root.provider.notifyAboutUriOpened(uri)
+                })
 
                 if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     dialogObj.object.exec()

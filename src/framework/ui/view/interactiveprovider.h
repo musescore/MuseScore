@@ -102,6 +102,8 @@ signals:
     void fireOpenStandardDialog(QmlLaunchData* data);
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event);
+
     struct OpenData
     {
         bool sync = false;
