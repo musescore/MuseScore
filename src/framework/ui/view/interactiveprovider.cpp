@@ -154,6 +154,11 @@ RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
     return RetVal<bool>::make_ok(false);
 }
 
+async::Channel<Uri> InteractiveProvider::opened() const
+{
+    return m_opened;
+}
+
 void InteractiveProvider::raise(const UriQuery& uri)
 {
     for (const ObjectInfo& objectInfo: m_stack) {
@@ -549,6 +554,11 @@ void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
     if (found) {
         notifyAboutCurrentUriChanged();
     }
+}
+
+void InteractiveProvider::notifyAboutUriOpened(const QString& uri)
+{
+    m_opened.send(Uri(uri.toStdString()));
 }
 
 void InteractiveProvider::notifyAboutCurrentUriChanged()
