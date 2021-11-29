@@ -75,6 +75,7 @@ public:
     RetVal<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
+    async::Channel<Uri> opened() const override;
 
     void raise(const UriQuery& uri) override;
 
@@ -90,6 +91,8 @@ public:
 
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);
     Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
+
+    Q_INVOKABLE void notifyAboutUriOpened(const QString& uri);
 
 signals:
     void fireOpen(QmlLaunchData* data);
@@ -139,6 +142,7 @@ private:
     QStack<ObjectInfo> m_stack;
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
+    async::Channel<Uri> m_opened;
 };
 }
 
