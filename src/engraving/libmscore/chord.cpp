@@ -1506,10 +1506,11 @@ qreal Chord::calcDefaultStemLength()
     int minStemLengthQuarterSpaces = calcMinStemLength();
     _minStemLength = minStemLengthQuarterSpaces / 4.0 * _spatium;
 
-    int staffLineCount = staffItem->lines(tick());
+    int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2 + 1;
     int shortestStem = score()->styleD(Sid::shortestStem) * 4;
     int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook);
+
     if (isGrace()) {
         stemLength = qMax(static_cast<int>(defaultStemLength * score()->styleD(Sid::graceNoteMag)), minStemLengthQuarterSpaces);
     } else if (up()) {
