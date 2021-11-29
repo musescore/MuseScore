@@ -35,6 +35,7 @@ add_subdirectory(appshell)
 add_subdirectory(context)
 add_subdirectory(notation)
 add_subdirectory(project)
+add_subdirectory(print)
 
 if (BUILD_LEARN_MODULE)
     add_subdirectory(learn)

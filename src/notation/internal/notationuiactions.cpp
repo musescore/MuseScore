@@ -1372,12 +1372,6 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              IconCode::Code::TUNING_FORK,
              Checkable::Yes
              ),
-    UiAction("print",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Print"),
-             QT_TRANSLATE_NOOP("action", "Print score/part"),
-             IconCode::Code::PRINT
-             ),
     UiAction("toggle-imagecapture",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Image capture"),

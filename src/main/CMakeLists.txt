@@ -154,6 +154,7 @@ set(LINK_LIB ${LINK_LIB}
     learn
     notation
     project
+    print
     commonscene
     palette
     inspector

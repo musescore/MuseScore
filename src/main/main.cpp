@@ -71,6 +71,7 @@
 #include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
 #include "project/projectmodule.h"
+#include "print/printmodule.h"
 
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
@@ -215,6 +216,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::project::ProjectModule());
+    app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
 #ifdef BUILD_PLAYBACK_MODULE
     app.addModule(new mu::playback::PlaybackModule());
