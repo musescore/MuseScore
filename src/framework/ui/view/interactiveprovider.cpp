@@ -46,6 +46,8 @@ InteractiveProvider::InteractiveProvider()
             raiseWindowInStack(widget);
         }
     });
+
+    qApp->installEventFilter(this);
 }
 
 void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
@@ -67,6 +69,20 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
             return;
         }
     }
+}
+
+bool InteractiveProvider::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() != QEvent::Show || m_stack.empty()) {
+        return QObject::eventFilter(watched, event);
+    }
+
+    const ObjectInfo& info = m_stack.top();
+    if (watched && info.window == watched) {
+        m_opened.send(info.uriQuery.uri());
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 RetVal<Val> InteractiveProvider::question(const std::string& title, const IInteractive::Text& text,
