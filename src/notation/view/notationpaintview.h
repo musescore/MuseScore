@@ -93,7 +93,8 @@ public:
     void moveCanvasHorizontal(qreal dx) override;
 
     qreal currentScaling() const override;
-    void setScaling(qreal scaling, const QPointF& pos) override;
+    void setScaling(qreal scaling, const PointF& pos) override;
+    void scale(qreal factor, const PointF& pos);
     Q_INVOKABLE void scale(qreal factor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
