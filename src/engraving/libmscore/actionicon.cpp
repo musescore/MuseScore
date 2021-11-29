@@ -24,12 +24,16 @@
 #include "rw/xml.h"
 #include "property.h"
 
+#include "log.h"
+
 using namespace mu;
+using namespace mu::draw;
 
 namespace Ms {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
+    m_iconFont = Font(QString::fromStdString(engravingConfiguration()->iconsFontFamily()));
 }
 
 ActionIcon* ActionIcon::clone() const
@@ -66,6 +70,7 @@ qreal ActionIcon::extent() const
 void ActionIcon::setExtent(qreal extent)
 {
     m_extent = extent;
+    m_iconFont.setPointSizeF(m_extent / 2);
 }
 
 void ActionIcon::write(XmlWriter& xml) const
@@ -102,9 +107,10 @@ void ActionIcon::layout()
     setbbox(boundingBox());
 }
 
-void ActionIcon::draw(mu::draw::Painter* painter) const
+void ActionIcon::draw(Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    painter->setFont(m_iconFont);
     painter->drawText(boundingBox(), Qt::AlignCenter, QChar(m_icon));
 }
 
