@@ -28,7 +28,7 @@
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 #include "internal/projectautosaver.h"
-#include "internal/projectfilescontroller.h"
+#include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 #include "internal/exportprojectscenario.h"
@@ -60,7 +60,7 @@ using namespace mu::project;
 using namespace mu::modularity;
 
 static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
-static std::shared_ptr<ProjectFilesController> s_fileController = std::make_shared<ProjectFilesController>();
+static std::shared_ptr<ProjectActionsController> s_actionsController = std::make_shared<ProjectActionsController>();
 static std::shared_ptr<RecentProjectsProvider> s_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
 
 static void project_init_qrc()
@@ -79,7 +79,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
-    ioc()->registerExport<IProjectFilesController>(moduleName(), s_fileController);
+    ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
@@ -99,7 +99,7 @@ void ProjectModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(s_fileController));
+        ar->reg(std::make_shared<ProjectUiActions>(s_actionsController));
     }
 
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
@@ -134,7 +134,7 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     s_configuration->init();
-    s_fileController->init();
+    s_actionsController->init();
     s_recentProjectsProvider->init();
 
     static ProjectAutoSaver autoSaver;

@@ -23,7 +23,7 @@
 #define MU_PROJECT_PROJECTUIACTIONS_H
 
 #include "ui/iuiactionsmodule.h"
-#include "projectfilescontroller.h"
+#include "projectactionscontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
 
@@ -33,7 +33,7 @@ class ProjectUiActions : public ui::IUiActionsModule
     INJECT(project, context::IUiContextResolver, uicontextResolver)
 public:
 
-    ProjectUiActions(std::shared_ptr<ProjectFilesController> controller);
+    ProjectUiActions(std::shared_ptr<ProjectActionsController> controller);
 
     const ui::UiActionList& actionsList() const override;
 
@@ -45,7 +45,7 @@ public:
 
 private:
     static const ui::UiActionList m_actions;
-    std::shared_ptr<ProjectFilesController> m_controller;
+    std::shared_ptr<ProjectActionsController> m_controller;
     async::Channel<actions::ActionCodeList> m_actionEnabledChanged;
     async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
 };

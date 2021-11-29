@@ -137,7 +137,7 @@ MenuItem AppMenuModel::fileItem() const
         makeMenuItem("edit-info"),
         makeMenuItem("parts"),
         makeSeparator(),
-        makeMenuItem("print"), // need implement
+        makeMenuItem("print"),
         makeSeparator(),
         makeMenuItem("quit", MenuItemRole::QuitRole)
     };
