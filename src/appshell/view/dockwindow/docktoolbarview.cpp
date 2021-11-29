@@ -53,13 +53,6 @@ public:
         m_dockWidget->setFloating(true);
         floatingWindow = m_dockWidget->floatingWindow();
 
-        //! NOTE: size constraints will be reset after creating a new window
-        //! (see TitleBar::makeWindow())
-        //! So, reapply them here:
-        if (m_updateSizeConstraints) {
-            m_updateSizeConstraints();
-        }
-
         auto draggable = static_cast<KDDockWidgets::Draggable*>(this);
         return std::unique_ptr<KDDockWidgets::WindowBeingDragged>(new KDDockWidgets::WindowBeingDragged(floatingWindow, draggable));
     }
@@ -106,15 +99,9 @@ public:
         redirectMouseEvents(mouseArea);
     }
 
-    void setUpdateSizeConstraintsFunc(const std::function<void()>& func)
-    {
-        m_updateSizeConstraints = func;
-    }
-
 private:
     KDDockWidgets::DockWidgetBase* m_dockWidget = nullptr;
     QQuickItem* m_mouseArea = nullptr;
-    std::function<void()> m_updateSizeConstraints;
 };
 
 DockToolBarView::DockToolBarView(QQuickItem* parent)
@@ -163,10 +150,6 @@ void DockToolBarView::setDraggableMouseArea(QQuickItem* mouseArea)
 
     m_draggableArea->setParent(mouseArea);
     m_draggableArea->setMouseArea(mouseArea);
-
-    m_draggableArea->setUpdateSizeConstraintsFunc([this]() {
-        applySizeConstraints();
-    });
 }
 
 void DockToolBarView::componentComplete()
