@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_PROJECTFILESCONTROLLER_H
-#define MU_PROJECT_PROJECTFILESCONTROLLER_H
+#ifndef MU_PROJECT_PROJECTACTIONSCONTROLLER_H
+#define MU_PROJECT_PROJECTACTIONSCONTROLLER_H
 
 #include "iprojectfilescontroller.h"
 
@@ -42,7 +42,7 @@
 #include "iplatformrecentfilescontroller.h"
 
 namespace mu::project {
-class ProjectFilesController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
+class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
@@ -111,4 +111,4 @@ private:
 };
 }
 
-#endif // MU_PROJECT_PROJECTFILESCONTROLLER_H
+#endif // MU_PROJECT_PROJECTACTIONSCONTROLLER_H

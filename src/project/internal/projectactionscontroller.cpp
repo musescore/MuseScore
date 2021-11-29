@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "projectfilescontroller.h"
+#include "projectactionscontroller.h"
 
 #include <QBuffer>
 #include <QFileOpenEvent>
@@ -37,29 +37,29 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 
-void ProjectFilesController::init()
+void ProjectActionsController::init()
 {
     qApp->installEventFilter(this);
 
-    dispatcher()->reg(this, "file-open", this, &ProjectFilesController::openProject);
-    dispatcher()->reg(this, "file-new", this, &ProjectFilesController::newProject);
+    dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
+    dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
     dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
 
     dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
-    dispatcher()->reg(this, "file-save-as", this, &ProjectFilesController::saveProjectAs);
-    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectFilesController::saveProjectCopy);
-    dispatcher()->reg(this, "file-save-selection", this, &ProjectFilesController::saveSelection);
-    dispatcher()->reg(this, "file-save-online", this, &ProjectFilesController::saveOnline);
+    dispatcher()->reg(this, "file-save-as", this, &ProjectActionsController::saveProjectAs);
+    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectActionsController::saveProjectCopy);
+    dispatcher()->reg(this, "file-save-selection", this, &ProjectActionsController::saveSelection);
+    dispatcher()->reg(this, "file-save-online", this, &ProjectActionsController::saveOnline);
 
-    dispatcher()->reg(this, "file-export", this, &ProjectFilesController::exportScore);
-    dispatcher()->reg(this, "file-import-pdf", this, &ProjectFilesController::importPdf);
+    dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
+    dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
 
-    dispatcher()->reg(this, "clear-recent", this, &ProjectFilesController::clearRecentScores);
+    dispatcher()->reg(this, "clear-recent", this, &ProjectActionsController::clearRecentScores);
 
-    dispatcher()->reg(this, "continue-last-session", this, &ProjectFilesController::continueLastSession);
+    dispatcher()->reg(this, "continue-last-session", this, &ProjectActionsController::continueLastSession);
 }
 
-bool ProjectFilesController::eventFilter(QObject* watched, QEvent* event)
+bool ProjectActionsController::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == qApp && event->type() == QEvent::FileOpen) {
         QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
@@ -69,38 +69,38 @@ bool ProjectFilesController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-INotationProjectPtr ProjectFilesController::currentNotationProject() const
+INotationProjectPtr ProjectActionsController::currentNotationProject() const
 {
     return globalContext()->currentProject();
 }
 
-IMasterNotationPtr ProjectFilesController::currentMasterNotation() const
+IMasterNotationPtr ProjectActionsController::currentMasterNotation() const
 {
     return currentNotationProject() ? currentNotationProject()->masterNotation() : nullptr;
 }
 
-INotationPtr ProjectFilesController::currentNotation() const
+INotationPtr ProjectActionsController::currentNotation() const
 {
     return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
 }
 
-INotationInteractionPtr ProjectFilesController::currentInteraction() const
+INotationInteractionPtr ProjectActionsController::currentInteraction() const
 {
     return currentNotation() ? currentNotation()->interaction() : nullptr;
 }
 
-INotationSelectionPtr ProjectFilesController::currentNotationSelection() const
+INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 {
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-void ProjectFilesController::openProject(const actions::ActionData& args)
+void ProjectActionsController::openProject(const actions::ActionData& args)
 {
     io::path projectPath = !args.empty() ? args.arg<io::path>(0) : "";
     openProject(projectPath);
 }
 
-Ret ProjectFilesController::openProject(const io::path& projectPath_)
+Ret ProjectActionsController::openProject(const io::path& projectPath_)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -154,7 +154,7 @@ Ret ProjectFilesController::openProject(const io::path& projectPath_)
     return doOpenProject(projectPath);
 }
 
-Ret ProjectFilesController::doOpenProject(const io::path& filePath)
+Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 {
     TRACEFUNC;
 
@@ -184,7 +184,7 @@ Ret ProjectFilesController::doOpenProject(const io::path& filePath)
     return make_ret(Ret::Code::Ok);
 }
 
-bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
+bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
 {
     auto project = globalContext()->currentProject();
     if (!project) {
@@ -199,7 +199,7 @@ bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
     return false;
 }
 
-bool ProjectFilesController::isAnyProjectOpened() const
+bool ProjectActionsController::isAnyProjectOpened() const
 {
     auto project = globalContext()->currentProject();
     if (project) {
@@ -208,7 +208,7 @@ bool ProjectFilesController::isAnyProjectOpened() const
     return false;
 }
 
-void ProjectFilesController::newProject()
+void ProjectActionsController::newProject()
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -251,7 +251,7 @@ void ProjectFilesController::newProject()
     }
 }
 
-bool ProjectFilesController::closeOpenedProject()
+bool ProjectActionsController::closeOpenedProject()
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -283,7 +283,7 @@ bool ProjectFilesController::closeOpenedProject()
     return result;
 }
 
-IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
+IInteractive::Button ProjectActionsController::askAboutSavingScore(const io::path& filePath)
 {
     QString scoreName = qtrc("project", "Untitled");
     if (!filePath.empty()) {
@@ -307,7 +307,7 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
     return result.standardButton();
 }
 
-bool ProjectFilesController::saveProject(const io::path& path)
+bool ProjectActionsController::saveProject(const io::path& path)
 {
     if (!currentNotationProject()) {
         LOGW() << "no current project";
@@ -338,7 +338,7 @@ bool ProjectFilesController::saveProject(const io::path& path)
     return true;
 }
 
-void ProjectFilesController::saveProjectAs()
+void ProjectActionsController::saveProjectAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
@@ -349,7 +349,7 @@ void ProjectFilesController::saveProjectAs()
     doSaveScore(selectedFilePath, SaveMode::SaveAs);
 }
 
-void ProjectFilesController::saveProjectCopy()
+void ProjectActionsController::saveProjectCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
@@ -360,7 +360,7 @@ void ProjectFilesController::saveProjectCopy()
     doSaveScore(selectedFilePath, SaveMode::SaveCopy);
 }
 
-void ProjectFilesController::saveSelection()
+void ProjectActionsController::saveSelection()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save selection"));
@@ -374,7 +374,7 @@ void ProjectFilesController::saveSelection()
     }
 }
 
-void ProjectFilesController::saveOnline()
+void ProjectActionsController::saveOnline()
 {
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
@@ -424,7 +424,7 @@ void ProjectFilesController::saveOnline()
     uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 }
 
-bool ProjectFilesController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
+bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
 {
     static const QList<notation::Err> ignorableErrors {
         notation::Err::FileTooOld,
@@ -459,18 +459,18 @@ bool ProjectFilesController::checkCanIgnoreError(const Ret& ret, const io::path&
     return result.standardButton() == IInteractive::Button::Ignore;
 }
 
-void ProjectFilesController::importPdf()
+void ProjectActionsController::importPdf()
 {
     interactive()->openUrl("https://musescore.com/import");
 }
 
-void ProjectFilesController::clearRecentScores()
+void ProjectActionsController::clearRecentScores()
 {
     configuration()->setRecentProjectPaths({});
     platformRecentFilesController()->clearRecentFiles();
 }
 
-void ProjectFilesController::continueLastSession()
+void ProjectActionsController::continueLastSession()
 {
     io::paths recentScorePaths = configuration()->recentProjectPaths();
 
@@ -482,12 +482,12 @@ void ProjectFilesController::continueLastSession()
     openProject(lastScorePath);
 }
 
-void ProjectFilesController::exportScore()
+void ProjectActionsController::exportScore()
 {
     interactive()->open("musescore://project/export");
 }
 
-io::path ProjectFilesController::selectScoreOpeningFile()
+io::path ProjectActionsController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
@@ -511,7 +511,7 @@ io::path ProjectFilesController::selectScoreOpeningFile()
     return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
 }
 
-io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
+io::path ProjectActionsController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
 {
     QString filter = QObject::tr("MuseScore File") + " (*.mscz)";
     io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
@@ -519,7 +519,7 @@ io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFi
     return filePath;
 }
 
-bool ProjectFilesController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
+bool ProjectActionsController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
 {
     io::path oldPath = currentNotationProject()->metaInfo().filePath;
 
@@ -537,7 +537,7 @@ bool ProjectFilesController::doSaveScore(const io::path& filePath, project::Save
     return true;
 }
 
-io::path ProjectFilesController::defaultSavingFilePath() const
+io::path ProjectActionsController::defaultSavingFilePath() const
 {
     ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
 
@@ -549,7 +549,7 @@ io::path ProjectFilesController::defaultSavingFilePath() const
     return configuration()->defaultSavingFilePath(fileName);
 }
 
-void ProjectFilesController::prependToRecentScoreList(const io::path& filePath)
+void ProjectActionsController::prependToRecentScoreList(const io::path& filePath)
 {
     if (filePath.empty()) {
         return;
@@ -567,17 +567,17 @@ void ProjectFilesController::prependToRecentScoreList(const io::path& filePath)
     platformRecentFilesController()->addRecentFile(filePath);
 }
 
-bool ProjectFilesController::isProjectOpened() const
+bool ProjectActionsController::isProjectOpened() const
 {
     return currentNotationProject() != nullptr;
 }
 
-bool ProjectFilesController::isNeedSaveScore() const
+bool ProjectActionsController::isNeedSaveScore() const
 {
     return currentNotationProject() && currentNotationProject()->needSave().val;
 }
 
-bool ProjectFilesController::hasSelection() const
+bool ProjectActionsController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }
