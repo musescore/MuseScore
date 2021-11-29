@@ -3146,6 +3146,8 @@ void Score::select(EngravingItem* e, SelectType type, int staffIdx)
     case SelectType::RANGE:
         selectRange(e, staffIdx);
         break;
+    case SelectType::REPLACE:
+        break;
     }
     setSelectionChanged(true);
 }

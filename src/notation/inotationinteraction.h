@@ -63,7 +63,7 @@ public:
     // Select
     virtual void addChordToSelection(MoveDirection d) = 0;
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
-    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0) = 0;
+    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
     virtual void selectFirstElement(bool frame = true) = 0;

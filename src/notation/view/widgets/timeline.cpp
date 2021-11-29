@@ -2213,12 +2213,19 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             Segment* seg = static_cast<Segment*>(currGraphicsItem->data(6).value<void*>());
 
             if (seg) {
-                interaction()->clearSelection();
+                std::vector<EngravingItem*> elements;
+
                 for (int track = 0; track < score()->nstaves() * VOICES; track++) {
                     EngravingItem* element = seg->element(track);
                     if (element) {
-                        interaction()->select({ seg->element(track) }, SelectType::ADD);
+                        elements.push_back(element);
                     }
+                }
+
+                if (elements.empty()) {
+                    interaction()->clearSelection();
+                } else {
+                    interaction()->select(elements);
                 }
             } else {
                 // Also select the elements that they correspond to
@@ -2235,21 +2242,31 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                     for (; currSeg && currSeg->segmentType() != segmentType; currSeg = currSeg->next()) {
                     }
                     if (currSeg) {
-                        interaction()->clearSelection();
+                        std::vector<EngravingItem*> elements;
+
                         for (int j = 0; j < score()->nstaves(); j++) {
                             EngravingItem* element = currSeg->firstElement(j);
                             if (element) {
-                                interaction()->select({ element }, SelectType::ADD);
+                                elements.push_back(element);
                             }
+                        }
+
+                        if (elements.empty()) {
+                            interaction()->clearSelection();
+                        } else {
+                            interaction()->select(elements);
                         }
                     }
                 } else {
-                    interaction()->clearSelection();
-                    interaction()->select({ currMeasure }, SelectType::ADD, 0);
                     // Select just the element for tempo_text
                     EngravingItem* element = static_cast<EngravingItem*>(currGraphicsItem->data(4).value<void*>());
-                    interaction()->clearSelection();
-                    interaction()->select({ element }, SelectType::SINGLE);
+                    if (element) {
+                        interaction()->select({ element });
+                    } else if (currMeasure) {
+                        interaction()->select({ currMeasure });
+                    } else {
+                        interaction()->clearSelection();
+                    }
                 }
             }
         } else {
@@ -2260,7 +2277,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                 } else if (currMeasure->mmRestCount() == -1) {
                     currMeasure = currMeasure->prevMeasureMM();
                 }
-                interaction()->select({ currMeasure }, SelectType::RANGE, stave);
+
+                if (currMeasure) {
+                    interaction()->select({ currMeasure }, SelectType::RANGE, stave);
+                }
             } else if (event->modifiers() == Qt::ControlModifier) {
                 if (interaction()->selection()->isNone()) {
                     if (currMeasure->mmRest()) {
@@ -2269,8 +2289,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                         currMeasure = currMeasure->prevMeasureMM();
                     }
 
-                    interaction()->select({ currMeasure }, SelectType::RANGE, 0);
-                    interaction()->select({ currMeasure }, SelectType::RANGE, score()->nstaves() - 1);
+                    if (currMeasure) {
+                        interaction()->select({ currMeasure }, SelectType::RANGE, 0);
+                        interaction()->select({ currMeasure }, SelectType::RANGE, score()->nstaves() - 1);
+                    }
                 } else {
                     interaction()->clearSelection();
                 }
@@ -2280,7 +2302,10 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                 } else if (currMeasure->mmRestCount() == -1) {
                     currMeasure = currMeasure->prevMeasureMM();
                 }
-                interaction()->select({ currMeasure }, SelectType::SINGLE, stave);
+
+                if (currMeasure) {
+                    interaction()->select({ currMeasure }, SelectType::SINGLE, stave);
+                }
             }
         }
     } else {
@@ -2416,8 +2441,13 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
                     brMeasure = brMeasure->prevMeasureMM();
                 }
 
-                interaction()->select({ tlMeasure }, SelectType::SINGLE, tlStave);
-                interaction()->select({ brMeasure }, SelectType::RANGE, brStave);
+                if (tlMeasure) {
+                    interaction()->select({ tlMeasure }, SelectType::SINGLE, tlStave);
+                }
+
+                if (brMeasure) {
+                    interaction()->select({ brMeasure }, SelectType::RANGE, brStave);
+                }
             }
         }
     } else if (state == ViewState::DRAG) {

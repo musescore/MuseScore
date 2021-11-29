@@ -534,11 +534,18 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
 
 void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
 {
+    TRACEFUNC;
+
     if (needEndTextEditing(elements)) {
         endEditText();
     }
 
     updateGripEdit(elements);
+
+    if (type == SelectType::REPLACE) {
+        score()->deselectAll();
+        type = SelectType::ADD;
+    }
 
     for (EngravingItem* element: elements) {
         score()->select(element, type, staffIndex);
@@ -547,6 +554,8 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
 
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
 {
+    TRACEFUNC;
+
     doSelect(elements, type, staffIndex);
     notifyAboutSelectionChanged();
 }
