@@ -180,7 +180,6 @@ bool NotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) 
 void NotationPaintView::onCurrentNotationChanged()
 {
     TRACEFUNC;
-
     if (m_notation) {
         m_notation->notationChanged().resetOnNotify(this);
         INotationInteractionPtr interaction = m_notation->interaction();
