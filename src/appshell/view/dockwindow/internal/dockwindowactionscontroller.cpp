@@ -34,10 +34,10 @@ static QString dockNameFromArgs(const ActionData& args)
 
 void DockWindowActionsController::init()
 {
-    dispatcher()->reg(this, "set-dock-open", this, &DockWindowActionsController::setDockOpen);
-    dispatcher()->reg(this, "toggle-dock", this, &DockWindowActionsController::toggleOpened);
-    dispatcher()->reg(this, "toggle-floating", this, &DockWindowActionsController::toggleFloating);
-    dispatcher()->reg(this, "restore-default-layout", this, &DockWindowActionsController::restoreDefaultLayout);
+    dispatcher()->reg(this, "dock-set-open", this, &DockWindowActionsController::setDockOpen);
+    dispatcher()->reg(this, "dock-toggle", this, &DockWindowActionsController::toggleOpened);
+    dispatcher()->reg(this, "dock-toggle-floating", this, &DockWindowActionsController::toggleFloating);
+    dispatcher()->reg(this, "dock-restore-default-layout", this, &DockWindowActionsController::restoreDefaultLayout);
 }
 
 void DockWindowActionsController::setDockOpen(const ActionData& args)
