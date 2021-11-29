@@ -81,6 +81,11 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Revert to factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
              ),
+    UiAction("dock-restore-default-layout",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Restore the default layout"),
+             QT_TRANSLATE_NOOP("action", "Restore the default layout")
+             ),
     UiAction("toggle-mixer",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Mixer"),

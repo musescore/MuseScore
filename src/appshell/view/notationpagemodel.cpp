@@ -143,7 +143,7 @@ void NotationPageModel::toggleDock(const QString& name)
         return;
     }
 
-    dispatcher()->dispatch("toggle-dock", ActionData::make_arg1<QString>(name));
+    dispatcher()->dispatch("dock-toggle", ActionData::make_arg1<QString>(name));
 }
 
 void NotationPageModel::updateDrumsetPanelVisibility()
@@ -168,5 +168,5 @@ void NotationPageModel::updateDrumsetPanelVisibility()
         return;
     }
 
-    dispatcher()->dispatch("set-dock-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, isNeedOpen));
+    dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, isNeedOpen));
 }

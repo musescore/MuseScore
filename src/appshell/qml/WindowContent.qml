@@ -80,11 +80,6 @@ DockWindow {
         }
     ]
 
-    mainToolBarDockingHolder: DockingHolder {
-        objectName: root.objectName + "_mainToolBarDockingHolderTop"
-        location: Location.Top
-    }
-
     pages: [
         HomePage {},
 

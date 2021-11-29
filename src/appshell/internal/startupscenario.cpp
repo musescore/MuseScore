@@ -23,6 +23,7 @@
 #include "startupscenario.h"
 
 #include "async/async.h"
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::actions;
@@ -64,39 +65,39 @@ void StartupScenario::setStartupScorePath(const io::path& path)
 
 void StartupScenario::run()
 {
+    TRACEFUNC;
+
     if (!m_startupScorePath.empty()) {
         openScore(m_startupScorePath);
         return;
     }
 
-    async::Async::call(nullptr, [this]() {
-        StartupSessionType sessionType;
-        if (!m_sessionType.isEmpty()) {
-            sessionType = sessionTypeTromString(m_sessionType);
-        } else {
-            sessionType = configuration()->startupSessionType();
-        }
+    StartupSessionType sessionType;
+    if (!m_sessionType.isEmpty()) {
+        sessionType = sessionTypeTromString(m_sessionType);
+    } else {
+        sessionType = configuration()->startupSessionType();
+    }
 
-        interactive()->open(startupPageUri(sessionType));
+    interactive()->open(startupPageUri(sessionType));
 
-        switch (sessionType) {
-        case StartupSessionType::StartEmpty:
-            break;
-        case StartupSessionType::StartWithNewScore:
-            dispatcher()->dispatch("file-new");
-            break;
-        case StartupSessionType::ContinueLastSession:
-            dispatcher()->dispatch("continue-last-session");
-            break;
-        case StartupSessionType::StartWithScore: {
-            openScore(configuration()->startupScorePath());
-        } break;
-        }
+    switch (sessionType) {
+    case StartupSessionType::StartEmpty:
+        break;
+    case StartupSessionType::StartWithNewScore:
+        dispatcher()->dispatch("file-new");
+        break;
+    case StartupSessionType::ContinueLastSession:
+        dispatcher()->dispatch("continue-last-session");
+        break;
+    case StartupSessionType::StartWithScore: {
+        openScore(configuration()->startupScorePath());
+    } break;
+    }
 
-        if (!configuration()->hasCompletedFirstLaunchSetup()) {
-            runFirstLaunchSetup();
-        }
-    });
+    if (!configuration()->hasCompletedFirstLaunchSetup()) {
+        runFirstLaunchSetup();
+    }
 }
 
 void StartupScenario::runFirstLaunchSetup()

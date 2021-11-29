@@ -37,7 +37,7 @@ ApplicationWindow {
     minimumWidth: 1150
     minimumHeight: 600
 
-    visible: true
+    visible: false
 
     color: ui.theme.backgroundPrimaryColor
 

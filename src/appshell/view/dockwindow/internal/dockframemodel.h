@@ -30,6 +30,7 @@
 
 namespace KDDockWidgets {
 class Frame;
+class DockWidgetBase;
 }
 
 namespace mu::dock {
@@ -87,7 +88,7 @@ private:
     void setTitleBarVisible(bool visible);
     void setIsHorizontalPanel(bool is);
 
-    const QObject* currentDockObject() const;
+    KDDockWidgets::DockWidgetBase* currentDockWidget() const;
     QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;

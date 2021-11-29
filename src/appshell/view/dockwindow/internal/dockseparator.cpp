@@ -63,7 +63,7 @@ static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator*
     }
 
     auto frame = dynamic_cast<KDDockWidgets::Frame*>(nearestItem->guestAsQObject());
-    return frame ? frame->currentDockWidget() : nullptr;
+    return frame && !frame->isEmpty() ? frame->currentDockWidget() : nullptr;
 }
 }
 
