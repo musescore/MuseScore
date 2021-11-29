@@ -486,7 +486,7 @@ io::path ProjectFilesController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
-    return interactive()->selectOpeningFile(qtrc("project", "Score"), "", filter.join(";;"));
+    return interactive()->selectOpeningFile(qtrc("project", "Score"), configuration()->userProjectsPath(), filter.join(";;"));
 }
 
 io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
