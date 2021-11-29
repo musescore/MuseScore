@@ -33,8 +33,7 @@ SpinBoxPropertyView {
     property PropertyItem minimumDistance: null
 
     anchors.left: parent.left
-    anchors.right: parent.horizontalCenter
-    anchors.rightMargin: 2
+    anchors.right: parent.right
 
     navigationName: "Minimum distance"
 
