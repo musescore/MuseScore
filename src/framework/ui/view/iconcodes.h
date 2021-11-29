@@ -335,6 +335,15 @@ public:
         BEAM_DISTANCE_REGULAR = 0xF425,
         BEAM_DISTANCE_WIDE = 0xF426,
 
+        ACCIACCATURA = 0xF427,
+        APPOGGIATURA = 0xF428,
+        GRACE4 = 0xF429,
+        GRACE16 = 0xF42A,
+        GRACE32 = 0xF42B,
+        GRACE8_AFTER = 0xF42C,
+        GRACE16_AFTER = 0xF42D,
+        GRACE32_AFTER = 0xF42E,
+
         NONE = 0xFFFF
     };
 

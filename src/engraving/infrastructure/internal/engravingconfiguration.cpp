@@ -94,6 +94,11 @@ void EngravingConfiguration::setPartStyleFilePath(const QString& path)
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
+std::string EngravingConfiguration::iconsFontFamily() const
+{
+    return uiConfiguration()->iconsFontFamily();
+}
+
 Color EngravingConfiguration::defaultColor() const
 {
     return Color::black;

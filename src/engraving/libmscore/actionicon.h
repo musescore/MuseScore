@@ -91,6 +91,7 @@ private:
     std::string m_actionCode;
     char16_t m_icon = 0;
     qreal m_extent { 40 };
+    mu::draw::Font m_iconFont;
 };
 }
 

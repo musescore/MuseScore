@@ -47,6 +47,8 @@ public:
     virtual QString partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const QString& path) = 0;
 
+    virtual std::string iconsFontFamily() const = 0;
+
     virtual draw::Color defaultColor() const = 0;
     virtual draw::Color invisibleColor() const = 0;
     virtual draw::Color lassoColor() const = 0;
