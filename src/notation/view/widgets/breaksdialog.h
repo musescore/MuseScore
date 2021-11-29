@@ -45,6 +45,11 @@ public:
 
 private slots:
     void accept() override;
+
+private:
+    void showEvent(QShowEvent*);
+
+    bool _allSelected = false;
 };
 }
 

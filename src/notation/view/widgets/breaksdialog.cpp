@@ -56,14 +56,6 @@ void BreaksDialog::accept()
     }
 
     INotationInteractionPtr interaction = notation->interaction();
-    INotationSelectionPtr selection = interaction->selection();
-
-    bool allSelected = false;
-
-    if (selection->isNone()) {
-        interaction->selectAll();
-        allSelected = true;
-    }
 
     int interval = intervalButton->isChecked() ? intervalBox->value() : 0;
     BreaksSpawnIntervalType intervalType = BreaksSpawnIntervalType::MeasuresInterval;
@@ -76,9 +68,33 @@ void BreaksDialog::accept()
 
     interaction->setBreaksSpawnInterval(intervalType, interval);
 
-    if (allSelected) {
+    if (_allSelected) {
         interaction->clearSelection();
     }
 
     QDialog::accept();
+}
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void BreaksDialog::showEvent(QShowEvent* ev)
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    INotationInteractionPtr interaction = notation->interaction();
+    INotationSelectionPtr selection = interaction->selection();
+
+    if (!selection->isRange()) {
+        interaction->selectAll();
+        _allSelected = true;
+    } else {
+        _allSelected = false;
+    }
+
+    QWidget::showEvent(ev);
 }
