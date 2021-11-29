@@ -202,7 +202,7 @@ MenuItem AppMenuModel::viewItem() const
         makeSeparator(),
         makeMenuItem("fullscreen"),
         makeSeparator(),
-        makeMenuItem("restore-default-layout")
+        makeMenuItem("dock-restore-default-layout")
     };
 
     return makeMenu(qtrc("appshell", "&View"), viewItems);
