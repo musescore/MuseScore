@@ -53,7 +53,7 @@ public:
     virtual void moveCanvasVertical(qreal dy) = 0;
 
     virtual qreal currentScaling() const = 0;
-    virtual void setScaling(qreal scaling, const QPointF& pos) = 0;
+    virtual void setScaling(qreal scaling, const PointF& pos) = 0;
 
     virtual PointF toLogical(const PointF& p) const = 0;
     virtual PointF toLogical(const QPointF& p) const = 0;
@@ -101,7 +101,7 @@ public:
     void dropEvent(QDropEvent* event);
 
     ElementType selectionType() const;
-    mu::PointF hitElementPos() const;
+    PointF hitElementPos() const;
 
 private:
     INotationPtr currentNotation() const;
@@ -115,8 +115,8 @@ private:
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    QPointF findZoomFocusPoint() const;
-    void setZoom(int zoomPercentage, const QPointF& pos = QPointF());
+    PointF findZoomFocusPoint() const;
+    void setZoom(int zoomPercentage, const PointF& pos = PointF());
 
     void setViewMode(const ViewMode& viewMode);
 

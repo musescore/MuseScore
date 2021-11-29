@@ -28,6 +28,7 @@
 #include "notationpaintview.h"
 #include "commonscene/commonscenetypes.h"
 
+using namespace mu;
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::commonscene;
@@ -140,18 +141,18 @@ void NotationViewInputController::zoomOut()
     setZoom(zoom, findZoomFocusPoint());
 }
 
-QPointF NotationViewInputController::findZoomFocusPoint() const
+PointF NotationViewInputController::findZoomFocusPoint() const
 {
     INotationSelectionPtr selection = m_view->notationInteraction()->selection();
 
     // No selection: zoom at the center of the view
     if (selection->isNone()) {
-        return QPointF(m_view->width() / 2, m_view->height() / 2);
+        return PointF(m_view->width() / 2, m_view->height() / 2);
     }
 
     // Selection: zoom at the center of the selection
-    return ((selection->canvasBoundingRect().center() * m_view->currentScaling())
-            + m_view->canvasPos()).toQPointF();
+    return (selection->canvasBoundingRect().center() * m_view->currentScaling())
+           + m_view->canvasPos();
 }
 
 void NotationViewInputController::zoomToPageWidth()
@@ -163,7 +164,7 @@ void NotationViewInputController::zoomToPageWidth()
     qreal pageWidth = notationStyle()->styleValue(Ms::Sid::pageWidth).toDouble() * Ms::DPI;
     qreal scale = m_view->width() / pageWidth / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPointF());
+    setZoom(scale * 100, PointF());
     m_isZoomInited = true;
 }
 
@@ -181,7 +182,7 @@ void NotationViewInputController::zoomToWholePage()
 
     qreal scale = std::min(pageWidthScale, pageHeightScale) / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPointF());
+    setZoom(scale * 100, PointF());
     m_isZoomInited = true;
 }
 
@@ -211,7 +212,7 @@ void NotationViewInputController::zoomToTwoPages()
 
     qreal scale = std::min(pageHeightScale, pageWidthScale) / configuration()->notationScaling();
 
-    setZoom(scale * 100, QPointF());
+    setZoom(scale * 100, PointF());
     m_isZoomInited = true;
 }
 
@@ -231,7 +232,7 @@ int NotationViewInputController::currentZoomPercentage() const
     return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling());
 }
 
-void NotationViewInputController::setZoom(int zoomPercentage, const QPointF& pos)
+void NotationViewInputController::setZoom(int zoomPercentage, const PointF& pos)
 {
     int minZoom = m_possibleZoomsPercentage.first();
     int maxZoom = m_possibleZoomsPercentage.last();
@@ -284,7 +285,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         double zoomSpeed = qPow(2.0, 1.0 / configuration()->mouseZoomPrecision());
         qreal absSteps = sqrt(stepsX * stepsX + stepsY * stepsY) * (stepsY > -stepsX ? 1 : -1);
         double zoomAmount = m_view->currentScaling() * qPow(zoomSpeed, absSteps);
-        m_view->setScaling(zoomAmount, event->position());
+        m_view->setScaling(zoomAmount, PointF::fromQPointF(event->position()));
     } else {
         qreal correction = 1.0 / m_view->currentScaling();
         if (keyState & Qt::ShiftModifier) {

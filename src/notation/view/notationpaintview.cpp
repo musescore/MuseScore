@@ -716,7 +716,7 @@ qreal NotationPaintView::currentScaling() const
     return m_matrix.m11();
 }
 
-void NotationPaintView::setScaling(qreal scaling, const QPointF& pos)
+void NotationPaintView::setScaling(qreal scaling, const PointF& pos)
 {
     TRACEFUNC;
     qreal currentScaling = this->currentScaling();
@@ -737,7 +737,7 @@ void NotationPaintView::setScaling(qreal scaling, const QPointF& pos)
     scale(deltaScaling, pos);
 }
 
-void NotationPaintView::scale(qreal factor, const QPointF& pos)
+void NotationPaintView::scale(qreal factor, const PointF& pos)
 {
     TRACEFUNC;
     if (qFuzzyCompare(factor, 1.0)) {
@@ -758,6 +758,11 @@ void NotationPaintView::scale(qreal factor, const QPointF& pos)
     if (!moveCanvas(dx, dy)) {
         update();
     }
+}
+
+void NotationPaintView::scale(qreal factor, const QPointF& pos)
+{
+    scale(factor, PointF::fromQPointF(pos));
 }
 
 void NotationPaintView::wheelEvent(QWheelEvent* event)
@@ -911,7 +916,7 @@ qreal NotationPaintView::height() const
 
 PointF NotationPaintView::canvasPos() const
 {
-    return PointF(m_matrix.dx(), m_matrix.dy());
+    return toLogical(PointF(0.0, 0.0));
 }
 
 PointF NotationPaintView::toLogical(const PointF& point) const
