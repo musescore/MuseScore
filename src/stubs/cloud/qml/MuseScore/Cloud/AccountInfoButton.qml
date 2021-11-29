@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
-GradientTabButton {
+PageTabButton {
     id: root
 
     property string userName: ""

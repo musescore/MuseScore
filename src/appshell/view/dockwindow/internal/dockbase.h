@@ -24,6 +24,8 @@
 
 #include <QQuickItem>
 
+#include <optional>
+
 #include "../docktypes.h"
 #include "uicomponents/view/qmllistproperty.h"
 
@@ -141,6 +143,9 @@ protected:
 protected slots:
     void applySizeConstraints();
 
+private slots:
+    void updateFloatingStatus();
+
 private:
     void listenFloatingChanges();
 
@@ -164,6 +169,8 @@ private:
     QRect m_highlightingRect;
 
     bool m_defaultVisibility = false;
+
+    std::optional<bool> m_floating = std::nullopt;
 
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
 };

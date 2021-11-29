@@ -23,6 +23,8 @@
 #include "dockbase.h"
 
 #include <QRect>
+#include <QTimer>
+#include <QAction>
 
 #include "log.h"
 
@@ -162,7 +164,7 @@ bool DockBase::separatorsVisible() const
 
 bool DockBase::floating() const
 {
-    return m_dockWidget && m_dockWidget->isFloating();
+    return m_floating.value_or(false);
 }
 
 KDDockWidgets::DockWidgetQuick* DockBase::dockWidget() const
@@ -292,7 +294,7 @@ void DockBase::setSeparatorsVisible(bool visible)
 
 void DockBase::setFloating(bool floating)
 {
-    if (floating == this->floating()) {
+    IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
 
@@ -306,10 +308,6 @@ void DockBase::init()
     }
 
     setVisible(m_dockWidget->isOpen());
-
-    applySizeConstraints();
-
-    emit floatingChanged();
 }
 
 bool DockBase::isOpen() const
@@ -471,22 +469,57 @@ void DockBase::listenFloatingChanges()
     auto frameConn = std::make_shared<QMetaObject::Connection>();
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
+        if (frameConn) {
+            disconnect(*frameConn);
+        }
+
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
             return;
         }
-
-        disconnect(*frameConn);
 
         const KDDockWidgets::Frame* frame = m_dockWidget->frame();
         if (!frame) {
             return;
         }
 
-        *frameConn = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
-            emit floatingChanged();
-            applySizeConstraints();
-        }, Qt::UniqueConnection);
+        //! NOTE: window will be available later
+        //! So it is important to apply size constraints
+        //! and emit floatingChanged() after that
+        QTimer::singleShot(0, this, [this]() {
+            if (!m_floating.has_value()) {
+                updateFloatingStatus();
+            }
+        });
+
+        *frameConn
+            = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, &DockBase::updateFloatingStatus, Qt::UniqueConnection);
     });
+
+    connect(m_dockWidget->toggleAction(), &QAction::toggled, this, [this]() {
+        if (!isOpen()) {
+            m_floating = std::nullopt;
+        }
+    });
+}
+
+void DockBase::updateFloatingStatus()
+{
+    bool floating = m_dockWidget && m_dockWidget->floatingWindow();
+    bool oldValueIsNull = (m_floating == std::nullopt);
+
+    if (!oldValueIsNull && m_floating.value() == floating) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    m_floating = floating;
+
+    if (!oldValueIsNull || floating) {
+        emit floatingChanged();
+    }
+
+    applySizeConstraints();
 }
 
 void DockBase::writeProperties()

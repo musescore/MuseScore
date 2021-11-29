@@ -385,7 +385,15 @@ bool StateDragging::handleMouseMove(QPoint globalPos)
         return true;
     }
 
-    DropArea *dropArea = q->dropAreaUnderCursor();
+    DropArea *dropArea = nullptr;
+    ResolveDropAreaFunc resolveDropArea = q->resolveDropAreaFunc();
+
+    if (resolveDropArea) {
+        dropArea = resolveDropArea(globalPos);
+    } else {
+        dropArea = q->dropAreaUnderCursor();
+    }
+
     if (q->m_currentDropArea && dropArea != q->m_currentDropArea)
         q->m_currentDropArea->removeHover();
 
@@ -680,6 +688,16 @@ void DragController::enableFallbackMouseGrabber()
 {
     if (!m_fallbackMouseGrabber)
         m_fallbackMouseGrabber = new FallbackMouseGrabber(this);
+}
+
+ResolveDropAreaFunc DragController::resolveDropAreaFunc() const
+{
+    return m_resolveDropAreaFunc;
+}
+
+void DragController::setResolveDropAreaFunc(ResolveDropAreaFunc func)
+{
+    m_resolveDropAreaFunc = func;
 }
 
 WindowBeingDragged *DragController::windowBeingDragged() const
