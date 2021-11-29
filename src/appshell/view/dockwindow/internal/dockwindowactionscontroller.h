@@ -43,6 +43,8 @@ private:
     void toggleOpened(const actions::ActionData& args);
     void toggleFloating(const actions::ActionData& args);
 
+    void restoreDefaultLayout();
+
     IDockWindow* window() const;
 };
 }

@@ -58,5 +58,9 @@ AppWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        onWindowLoaded: {
+            root.visible = true
+        }
     }
 }

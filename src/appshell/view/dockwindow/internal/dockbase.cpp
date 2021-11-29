@@ -31,6 +31,11 @@
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
 namespace mu::dock {
+static QSize adjustSizeByContraints(const QSize& size, const QSize& min, const QSize& max)
+{
+    return size.expandedTo(min).boundedTo(max);
+}
+
 class DockWidgetImpl : public KDDockWidgets::DockWidgetQuick
 {
 public:
@@ -296,7 +301,15 @@ void DockBase::setFloating(bool floating)
 
 void DockBase::init()
 {
+    IF_ASSERT_FAILED(m_dockWidget) {
+        return;
+    }
+
+    setVisible(m_dockWidget->isOpen());
+
     applySizeConstraints();
+
+    emit floatingChanged();
 }
 
 bool DockBase::isOpen() const
@@ -310,6 +323,8 @@ bool DockBase::isOpen() const
 
 void DockBase::open()
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
@@ -320,6 +335,8 @@ void DockBase::open()
 
 void DockBase::close()
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
@@ -352,8 +369,15 @@ QRect DockBase::frameGeometry() const
     return QRect();
 }
 
+void DockBase::resetToDefault()
+{
+    setVisible(m_defaultVisibility);
+}
+
 void DockBase::componentComplete()
 {
+    TRACEFUNC;
+
     QQuickItem::componentComplete();
 
     auto children = childItems();
@@ -391,6 +415,8 @@ void DockBase::componentComplete()
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
+
+    m_defaultVisibility = isVisible();
 }
 
 void DockBase::applySizeConstraints()
@@ -421,12 +447,18 @@ void DockBase::applySizeConstraints()
     m_dockWidget->setMinimumSize(minimumSize);
     m_dockWidget->setMaximumSize(maximumSize);
 
-    if (auto floatingWindow = m_dockWidget->floatingWindow()) {
-        QRect rect(floatingWindow->dragRect().topLeft(), minimumSize);
+    if (auto window = m_dockWidget->floatingWindow()) {
+        window->setMinimumSize(minimumSize);
+        window->setMaximumSize(maximumSize);
 
-        floatingWindow->setGeometry(rect);
-        floatingWindow->setMinimumSize(minimumSize);
-        floatingWindow->setMaximumSize(maximumSize);
+        QSize winSize = adjustSizeByContraints(window->frameGeometry().size(), minimumSize, maximumSize);
+        QRect winRect(window->dragRect().topLeft(), winSize);
+
+        window->setGeometry(winRect);
+
+        if (auto layout = window->layoutWidget()) {
+            layout->setLayoutSize(winSize);
+        }
     }
 }
 

@@ -44,6 +44,8 @@ DockPageView::DockPageView(QQuickItem* parent)
 
 void DockPageView::init()
 {
+    TRACEFUNC;
+
     for (DockBase* dock : allDocks()) {
         dock->init();
     }
@@ -303,6 +305,7 @@ void DockPageView::componentComplete()
     QQuickItem::componentComplete();
 
     Q_ASSERT(!m_uri.isEmpty());
+    Q_ASSERT(m_central != nullptr);
 }
 
 QList<DockBase*> DockPageView::allDocks() const

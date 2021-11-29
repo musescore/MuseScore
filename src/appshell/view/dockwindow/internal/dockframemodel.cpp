@@ -58,7 +58,7 @@ bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
     if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
         emit tabsChanged();
 
-        if (watched == currentDockObject()) {
+        if (watched == currentDockWidget()) {
             emit currentDockChanged();
         }
     }
@@ -125,7 +125,7 @@ void DockFrameModel::listenChangesInFrame()
     connect(m_frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this]() {
         emit tabsChanged();
 
-        if (!m_frame->currentDockWidget()) {
+        if (!currentDockWidget()) {
             m_frame->setCurrentTabIndex(0);
         }
 
@@ -195,11 +195,8 @@ QObject* DockFrameModel::navigationSection() const
 
 QString DockFrameModel::currentDockUniqueName() const
 {
-    if (m_frame && m_frame->currentDockWidget()) {
-        return m_frame->currentDockWidget()->uniqueName();
-    }
-
-    return QString();
+    auto dock = currentDockWidget();
+    return dock ? dock->uniqueName() : QString();
 }
 
 QVariant DockFrameModel::currentDockContextMenuModel() const
@@ -229,15 +226,15 @@ QRect DockFrameModel::highlightingRect() const
     return QRect();
 }
 
-const QObject* DockFrameModel::currentDockObject() const
+KDDockWidgets::DockWidgetBase* DockFrameModel::currentDockWidget() const
 {
-    return m_frame ? m_frame->currentDockWidget() : nullptr;
+    return m_frame && !m_frame->isEmpty() ? m_frame->currentDockWidget() : nullptr;
 }
 
 QVariant DockFrameModel::currentDockProperty(const char* propertyName) const
 {
-    const QObject* obj = currentDockObject();
-    return obj ? obj->property(propertyName) : QVariant();
+    const QObject* dock = currentDockWidget();
+    return dock ? dock->property(propertyName) : QVariant();
 }
 
 void DockFrameModel::handleMenuItem(const QString& itemId) const

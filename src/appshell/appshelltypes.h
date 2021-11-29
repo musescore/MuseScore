@@ -35,7 +35,6 @@ static const DockName INSPECTOR_PANEL_NAME("inspectorPanel");
 static const DockName NOTATION_NAVIGATOR_PANEL_NAME("notationNavigatorPanel");
 static const DockName TIMELINE_PANEL_NAME("timelinePanel");
 static const DockName MIXER_PANEL_NAME("mixerPanel");
-static const DockName SYNTHESIZER_PANEL_NAME("synthesizerPanel");
 static const DockName SELECTION_FILTERS_PANEL_NAME("selectionFiltersPanel");
 static const DockName PIANO_PANEL_NAME("pianoPanel");
 static const DockName DRUMSET_PANEL_NAME("drumsetPanel");
