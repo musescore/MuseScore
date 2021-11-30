@@ -1328,34 +1328,22 @@ qreal Chord::calcMinStemLength()
     qreal minStemLength = 0.0;
     qreal _spatium = spatium();
 
-    int beamCount = beams();
-    if (_tremolo) {
-        if (_tremolo->twoNotes()) {
-            const qreal strokeWidth = score()->styleMM(Sid::tremoloStrokeWidth).val() * chordMag();
-            Beam* beamItem = beam();
-            const qreal beamDist = beamItem ? beamItem->beamDist() : (strokeWidth * spatium());
-            const qreal tremoloDistance = score()->styleMM(Sid::tremoloDistance).val() * chordMag();
-            if (_tremolo->chord2() && _tremolo->chord1()->up() == _tremolo->chord2()->up()) {
-                const qreal tremoloMinHeight = _tremolo->minHeight() * _spatium;
-                minStemLength += tremoloMinHeight + beamCount * beamDist + 2 * tremoloDistance * _spatium;
-            }
-        } else {
-            // buzz roll's height is actually half of the visual height,
-            // so we need to multiply it by 2 to get the actual height
-            int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-            minStemLength += _tremolo->minHeight() * _spatium * buzzRollMultiplier;
-            static const qreal outSidePadding = 0.5;
-            static const qreal noteSidePadding = 1.5;
-            qreal line = _up ? upNote()->line() : downNote()->line();
-            line /= 2;
-            qreal outsideStaffOffset = 0;
-            if (!_up && line < -1) {
-                outsideStaffOffset = -1 * line;
-            } else if (_up && line > staff()->lines(tick())) {
-                outsideStaffOffset = line - staff()->lines(tick()) + 1;
-            }
-            minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset)) * _spatium;
+    if (_tremolo && !_tremolo->twoNotes()) {
+        // buzz roll's height is actually half of the visual height,
+        // so we need to multiply it by 2 to get the actual height
+        int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
+        minStemLength += _tremolo->minHeight() * _spatium * buzzRollMultiplier;
+        static const qreal outSidePadding = 0.5;
+        static const qreal noteSidePadding = 1.5;
+        qreal line = _up ? upNote()->line() : downNote()->line();
+        line /= 2;
+        qreal outsideStaffOffset = 0;
+        if (!_up && line < -1) {
+            outsideStaffOffset = -1 * line;
+        } else if (_up && line > staff()->lines(tick())) {
+            outsideStaffOffset = line - staff()->lines(tick()) + 1;
         }
+        minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset)) * _spatium;
     }
 
     if (_hook) {
@@ -1363,7 +1351,7 @@ qreal Chord::calcMinStemLength()
         // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
         // https://github.com/w3c/smufl/issues/203
         qreal cutout = up() ? 1.5 * _spatium : 2 * _spatium;
-        if (beamCount >= 2) {
+        if (beams() >= 2) {
             cutout -= 0.5 * _spatium;
         }
         if (score()->styleB(Sid::useStraightNoteFlags)) {
@@ -1378,11 +1366,11 @@ qreal Chord::calcMinStemLength()
         minStemLength = ceil(minStemLength / _spatium * 2) / 2 * _spatium;
     } else {
         static const qreal minInnerStemLengths[4] = { 2.5, 2.25, 2, 1.75 };
-        minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beamCount, 3)] * _spatium);
+        minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)] * _spatium);
 
         // add beam lengths
-        minStemLength += beamCount * 0.75 * _spatium;
-        if (beamCount > 0) {
+        minStemLength += beams() * 0.75 * _spatium;
+        if (beams() > 0) {
             minStemLength -= 0.25 * _spatium;
         }
         // ceils to the nearest quarter-space (returned as pixels)
