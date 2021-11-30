@@ -54,27 +54,21 @@ void DummyElement::init()
 
     m_page = Factory::createPage(m_root);
     m_page->setParent(explicitParent());
-    m_page->setupAccessible();
 
     m_system = Factory::createSystem(m_page);
     m_system->setParent(m_page);
-    m_system->setupAccessible();
 
     m_measure = Factory::createMeasure(m_system);
     m_measure->setParent(m_system);
-    m_measure->setupAccessible();
 
     m_segment = Factory::createSegment(m_measure);
     m_segment->setParent(m_measure);
-    m_segment->setupAccessible();
 
     m_chord = Factory::createChord(m_segment);
     m_chord->setParent(m_segment);
-    m_chord->setupAccessible();
 
     m_note = Factory::createNote(m_chord);
     m_note->setParent(m_chord);
-    m_note->setupAccessible();
 }
 
 RootItem* DummyElement::rootItem()
