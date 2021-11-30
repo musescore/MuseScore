@@ -35,8 +35,9 @@ using namespace mu::framework;
 class WidgetDialogEventFilter : public QObject
 {
 public:
-    WidgetDialogEventFilter(QObject* parent, const std::function<void()>& onShownCallBack)
-        : QObject(parent), m_onShownCallBack(onShownCallBack)
+    WidgetDialogEventFilter(QObject* parent, const std::function<void()>& onShownCallBack,
+                            const std::function<void()>& onHideCallBack)
+        : QObject(parent), m_onShownCallBack(onShownCallBack), m_onHideCallBack(onHideCallBack)
     {
     }
 
@@ -47,10 +48,15 @@ private:
             m_onShownCallBack();
         }
 
+        if (event->type() == QEvent::Hide && m_onHideCallBack) {
+            m_onHideCallBack();
+        }
+
         return QObject::eventFilter(watched, event);
     }
 
     std::function<void()> m_onShownCallBack;
+    std::function<void()> m_onHideCallBack;
 };
 
 InteractiveProvider::InteractiveProvider()
@@ -427,30 +433,26 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
-    dialog->installEventFilter(new WidgetDialogEventFilter(dialog, [this, dialog, objectId]() {
+    dialog->installEventFilter(new WidgetDialogEventFilter(dialog,
+                                                           [this, dialog, objectId]() {
         if (dialog) {
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
         }
-    }));
+    },
+                                                           [this, dialog, objectId]() {
+        if (!dialog) {
+            return;
+        }
 
-    connect(dialog, &QDialog::finished, [this, objectId, dialog](int code) {
         QVariantMap status;
 
-        QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(code);
-        switch (dialogCode) {
-        case QDialog::Rejected: {
-            status["errcode"] = static_cast<int>(Ret::Code::Cancel);
-            break;
-        }
-        case QDialog::Accepted: {
-            status["errcode"] = static_cast<int>(Ret::Code::Ok);
-            break;
-        }
-        }
+        QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(dialog->result());
+        Ret::Code errorCode = dialogCode == QDialog::Accepted ? Ret::Code::Ok : Ret::Code::Cancel;
+        status["errcode"] = static_cast<int>(errorCode);
 
         onClose(objectId, status);
         dialog->deleteLater();
-    });
+    }));
 
     bool sync = q.param("sync", Val(false)).toBool();
     if (sync) {
