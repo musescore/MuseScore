@@ -92,8 +92,6 @@ public:
     Q_INVOKABLE void onOpen(const QVariant& type, const QVariant& objectId, QObject* window = nullptr);
     Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
 
-    Q_INVOKABLE void notifyAboutUriOpened(const QString& uri);
-
 signals:
     void fireOpen(QmlLaunchData* data);
     void fireClose(QVariant data);
@@ -102,8 +100,6 @@ signals:
     void fireOpenStandardDialog(QmlLaunchData* data);
 
 private:
-    bool eventFilter(QObject* watched, QEvent* event);
-
     struct OpenData
     {
         bool sync = false;

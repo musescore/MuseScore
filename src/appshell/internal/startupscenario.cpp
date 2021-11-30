@@ -32,7 +32,7 @@ static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const mu::Uri HOME_URI("musescore://home");
 static const mu::Uri NOTATION_URI("musescore://notation");
 
-StartupSessionType StartupScenario::sessionTypeTromString(const QString& str) const
+static StartupSessionType sessionTypeTromString(const QString& str)
 {
     if ("start-empty" == str) {
         return StartupSessionType::StartEmpty;
@@ -67,18 +67,7 @@ void StartupScenario::run()
 {
     TRACEFUNC;
 
-    if (!m_startupScorePath.empty()) {
-        openScore(m_startupScorePath);
-        return;
-    }
-
-    StartupSessionType sessionType;
-    if (!m_sessionType.isEmpty()) {
-        sessionType = sessionTypeTromString(m_sessionType);
-    } else {
-        sessionType = configuration()->startupSessionType();
-    }
-
+    StartupSessionType sessionType = resolveStartupSessionType();
     Uri startupUri = startupPageUri(sessionType);
     async::Channel<Uri> opened = interactive()->opened();
 
@@ -87,15 +76,30 @@ void StartupScenario::run()
             return;
         }
 
-        onStartupPageOpened(sessionType);
         opened.resetOnReceive(this);
+        onStartupPageOpened(sessionType);
     });
 
     interactive()->open(startupUri);
 }
 
+StartupSessionType StartupScenario::resolveStartupSessionType() const
+{
+    if (!m_startupScorePath.empty()) {
+        return StartupSessionType::StartWithScore;
+    }
+
+    if (!m_sessionType.isEmpty()) {
+        return sessionTypeTromString(m_sessionType);
+    }
+
+    return configuration()->startupSessionType();
+}
+
 void StartupScenario::onStartupPageOpened(StartupSessionType sessionType)
 {
+    TRACEFUNC;
+
     switch (sessionType) {
     case StartupSessionType::StartEmpty:
         break;
@@ -106,7 +110,9 @@ void StartupScenario::onStartupPageOpened(StartupSessionType sessionType)
         dispatcher()->dispatch("continue-last-session");
         break;
     case StartupSessionType::StartWithScore: {
-        openScore(configuration()->startupScorePath());
+        io::path path = m_startupScorePath.empty() ? configuration()->startupScorePath()
+                        : m_startupScorePath;
+        openScore(path);
     } break;
     }
 

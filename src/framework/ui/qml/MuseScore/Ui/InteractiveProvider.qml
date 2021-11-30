@@ -41,6 +41,10 @@ Item {
         color: "#440000"
     }
 
+    function onPageOpened() {
+        root.provider.onOpen(ContainerType.PrimaryPage, {})
+    }
+
     Connections {
         target: root.provider
 
@@ -57,7 +61,6 @@ Item {
 
             if (page.type === ContainerType.PrimaryPage) {
                 root.requestedDockPage(uri, page.params)
-                root.provider.onOpen(page.type, {})
                 data.setValue("ret", {errcode: 0 })
                 return;
             }
@@ -72,10 +75,6 @@ Item {
                 if (dialogObj.ret.errcode > 0) {
                     return
                 }
-
-                dialogObj.object.opened.connect(function() {
-                    root.provider.notifyAboutUriOpened(uri)
-                })
 
                 if (Boolean(data.value("sync")) && data.value("sync") === true) {
                     dialogObj.object.exec()
@@ -131,12 +130,14 @@ Item {
             return { "ret": ret, "object" : obj }
         }
 
+        obj.opened.connect(function() {
+            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
+        })
+
         obj.closed.connect(function() {
             root.provider.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
-
-        root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
 
         return { "ret": ret, "object" : obj }
     }

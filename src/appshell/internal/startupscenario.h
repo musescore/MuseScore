@@ -46,7 +46,7 @@ public:
 private:
     void onStartupPageOpened(StartupSessionType sessionType);
 
-    StartupSessionType sessionTypeTromString(const QString& str) const;
+    StartupSessionType resolveStartupSessionType() const;
     Uri startupPageUri(StartupSessionType sessionType) const;
 
     void openScore(const io::path& path);
