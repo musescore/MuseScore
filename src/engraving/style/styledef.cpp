@@ -208,6 +208,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::accidentalNoteDistance,  "accidentalNoteDistance",  Spatium(0.25) },
     { Sid::bracketedAccidentalPadding,  "bracketedAccidentalPadding",  Spatium(0.175) }, // Padding inside parentheses for bracketed accidentals
     { Sid::alignAccidentalsLeft,    "alignAccidentalsLeft",    false },   // When laid out in columns, whether accidentals align left or right. Musescore <= 3.5 uses left alignment.
+    { Sid::keysigAccidentalDistance, "keysigAccidentalDistance", Spatium(0.22) },
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
     { Sid::beamDistance,            "beamDistance",            PropertyValue(0.5) },
