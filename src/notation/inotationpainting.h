@@ -19,21 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "printmodule.h"
+#ifndef MU_NOTATION_INOTATIONPAINTING_H
+#define MU_NOTATION_INOTATIONPAINTING_H
 
-#include "modularity/ioc.h"
+#include <memory>
+#include "notationtypes.h"
 
-#include "internal/printprovider.h"
-
-using namespace mu::print;
-using namespace mu::modularity;
-
-std::string PrintModule::moduleName() const
+namespace mu::notation {
+class INotationPainting
 {
-    return "print";
+public:
+    virtual ~INotationPainting() = default;
+
+    virtual void setViewMode(const ViewMode& vm) = 0;
+    virtual ViewMode viewMode() const = 0;
+    virtual void paint(mu::draw::Painter* painter, const RectF& frameRect) = 0;
+};
+
+using INotationPaintingPtr = std::shared_ptr<INotationPainting>;
 }
 
-void PrintModule::registerExports()
-{
-    ioc()->registerExport<IPrintProvider>(moduleName(), new PrintProvider());
-}
+#endif // MU_NOTATION_INOTATIONPAINTING_H
