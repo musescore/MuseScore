@@ -352,8 +352,8 @@ void Dynamic::layout()
                     qreal fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
                     qreal left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
 
-                    opticalCenter += fontScaling;
-                    left += fontScaling;
+                    opticalCenter *= fontScaling;
+                    left *= fontScaling;
 
                     qreal offset = opticalCenter - left - bbox().width() * 0.5;
                     rxpos() -= offset;
