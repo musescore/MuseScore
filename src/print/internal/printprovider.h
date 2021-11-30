@@ -30,7 +30,7 @@ class PrintProvider : public IPrintProvider
 public:
     PrintProvider() = default;
 
-    Ret setupAndPrint(const Options& opt, const PrintFuncs& funcs) override;
+    Ret printNotation(notation::INotationPtr notation) override;
 };
 }
 

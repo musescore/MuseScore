@@ -496,30 +496,7 @@ void ProjectActionsController::printScore()
         return;
     }
 
-    using namespace mu::print;
-    IPrintProvider::Options opt;
-    opt.title = notation->title();
-    opt.pageSize = QSizeF(800, 800);
-    opt.pages = 1;
-
-    double backupPixelRatio = Ms::MScore::pixelRatio;
-
-    IPrintProvider::PrintFuncs funcs;
-    funcs.onStartPrint = [](QPainter* qp, int logicalDpi) {
-        Ms::MScore::pixelRatio = Ms::DPI / logicalDpi;
-    };
-
-    funcs.onPagePrint = [notation](QPainter* qp, int page) {
-        mu::draw::Painter mup(qp, "print");
-        mu::draw::Painter* painter = &mup;
-        notation->painting()->paintView(painter, RectF());
-    };
-
-    funcs.onEndPrint = [backupPixelRatio](QPainter*) {
-        Ms::MScore::pixelRatio = backupPixelRatio;
-    };
-
-    printProvider()->setupAndPrint(opt, funcs);
+    printProvider()->printNotation(notation);
 }
 
 io::path ProjectActionsController::selectScoreOpeningFile()
