@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 
 import MuseScore.Ui 1.0
@@ -37,7 +36,7 @@ MixerPanelSection {
         height: contentRow.implicitHeight
         width: root.delegateDefaultWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
 
         Row {
             id: contentRow
@@ -49,10 +48,10 @@ MixerPanelSection {
             KnobControl {
                 id: balanceKnob
 
-                value: item.balance
+                value: mixerItem.balance
                 stepSize: 1
 
-                navigation.panel: item.panel
+                navigation.panel: mixerItem.panel
                 navigation.row: root.navigationRowStart
                 navigation.accessible.name: content.accessibleName
                 navigation.onActiveChanged: {
@@ -62,15 +61,15 @@ MixerPanelSection {
                 }
 
                 onMoved: {
-                    item.balance = value
+                    mixerItem.balance = value
                 }
 
                 onIncreaseRequested: {
-                    item.balance += stepSize
+                    mixerItem.balance += stepSize
                 }
 
                 onDecreaseRequested: {
-                    item.balance -= stepSize
+                    mixerItem.balance -= stepSize
                 }
             }
 
@@ -86,7 +85,7 @@ MixerPanelSection {
                 textSidePadding: 0
                 background.radius: 2
 
-                navigation.panel: item.panel
+                navigation.panel: mixerItem.panel
                 navigation.row: root.navigationRowStart + 1
                 navigation.accessible.name: content.accessibleName + " " + currentText
                 navigation.onActiveChanged: {
@@ -101,11 +100,11 @@ MixerPanelSection {
                     bottom: -100
                 }
 
-                currentText: item.balance
+                currentText: mixerItem.balance
 
                 onCurrentTextEdited: {
-                    if (item.balance !== Number(newTextValue)) {
-                        item.balance = Number(newTextValue)
+                    if (mixerItem.balance !== Number(newTextValue)) {
+                        mixerItem.balance = Number(newTextValue)
                     }
                 }
             }
