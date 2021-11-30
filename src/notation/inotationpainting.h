@@ -26,7 +26,7 @@
 #include "notationtypes.h"
 
 #include "infrastructure/draw/painter.h"
-#include "infrastructure/draw/pagedpaintdevice.h"
+#include "infrastructure/draw/paintdevice.h"
 
 namespace mu::notation {
 class INotationPainting
@@ -36,16 +36,21 @@ public:
 
     struct Options
     {
-        int fromPage = -1;
+        int fromPage = -1; // 0 is first
         int toPage = -1;
         int copies = 1;
+        int trimMarginPixelSize = -1;
+        int deviceDpi = -1;
     };
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
-    virtual void paint(draw::Painter* painter, const RectF& frameRect) = 0;
 
+    virtual SizeF pageSizeInch() const = 0; // size in inches
+
+    virtual void paintView(draw::Painter* painter, const RectF& frameRect) = 0;
     virtual void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintPng(draw::Painter* painter, const Options& opt) = 0;
 };
 
 using INotationPaintingPtr = std::shared_ptr<INotationPainting>;

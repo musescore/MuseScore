@@ -45,9 +45,12 @@ public:
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
-    void paint(draw::Painter* painter, const RectF& frameRect) override;
 
+    SizeF pageSizeInch() const override;
+
+    void paintView(draw::Painter* painter, const RectF& frameRect) override;
     void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) override;
+    void paintPng(draw::Painter* painter, const Options& opt) override;
 
 private:
     Ms::Score* score() const;
