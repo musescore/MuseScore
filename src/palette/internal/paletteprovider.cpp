@@ -40,6 +40,7 @@
 #include "commonscene/commonscenetypes.h"
 
 #include "translation.h"
+#include "uri.h"
 
 using namespace mu::palette;
 using namespace mu::framework;
@@ -94,18 +95,32 @@ void PaletteElementEditor::open()
         return;
     }
 
+    mu::UriQuery uri;
+
     using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig: {
-        interactive()->open("musescore://notation/keysignatures?sync=false&showKeyPalette=false");
+        uri = mu::UriQuery("musescore://notation/keysignatures");
+        uri.addParam("showKeyPalette", mu::Val(false));
     }
     break;
     case Type::TimeSig: {
-        interactive()->open("musescore://notation/timesignatures?sync=false&showTimePalette=false");
+        uri = mu::UriQuery("musescore://notation/timesignatures");
+        uri.addParam("showTimePalette", mu::Val(false));
     }
     break;
     default:
         break;
+    }
+
+    if (uri.isValid()) {
+        uri.addParam("sync", mu::Val(false));
+
+        if (interactive()->isOpened(uri).val) {
+            interactive()->raise(uri);
+        } else {
+            interactive()->open(uri);
+        }
     }
 }
 
