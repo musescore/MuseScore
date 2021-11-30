@@ -23,6 +23,10 @@ set(MODULE print)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/printmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/printmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprintprovider.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/printprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/printprovider.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

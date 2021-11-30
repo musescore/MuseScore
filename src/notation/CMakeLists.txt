@@ -34,6 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imasternotation.h
     ${CMAKE_CURRENT_LIST_DIR}/iexcerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationpainting.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
@@ -60,6 +61,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/excerptnotation.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notation.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpainting.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpainting.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp

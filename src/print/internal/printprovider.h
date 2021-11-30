@@ -19,21 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "printmodule.h"
+#ifndef MU_PRINT_PRINTPROVIDER_H
+#define MU_PRINT_PRINTPROVIDER_H
 
-#include "modularity/ioc.h"
+#include "../iprintprovider.h"
 
-#include "internal/printprovider.h"
-
-using namespace mu::print;
-using namespace mu::modularity;
-
-std::string PrintModule::moduleName() const
+namespace mu::print {
+class PrintProvider : public IPrintProvider
 {
-    return "print";
+public:
+    PrintProvider() = default;
+
+    Ret setupAndPrint(const Options& opt, const PrintFuncs& funcs) override;
+};
 }
 
-void PrintModule::registerExports()
-{
-    ioc()->registerExport<IPrintProvider>(moduleName(), new PrintProvider());
-}
+#endif // MU_PRINT_PRINTPROVIDER_H
