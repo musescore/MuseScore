@@ -3666,29 +3666,25 @@ qreal Measure::basicWidth() const
 //   stretchWeight
 //   Used for distributing the space remaining at the end of
 //   a system. Returns a weight parameter proportional to the
-//   current with of the measure. You cannot simply get it 
-//   by multiplying measure->width() becase measures containing 
-//   additional elements such as clefs, tempo, etc would be 
-//   stretched more than the others.
+//   current with of the measure.
 //---------------------------------------------------------
-qreal Measure::stretchWeight() {
-    if (isMMRest())
+qreal Measure::stretchWeight() 
+{
+    if (isMMRest()) {
         return width();
+    }
     qreal w = 0;
     qreal W = 0;
     qreal weight = 0;
     qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
     qreal minNoteDistance = score()->styleMM(Sid::minNoteDistance);
     Fraction minTicks = minSysTicks();
- 
     for (Segment* s = first(); s; s = s->next()) {
         if (s->enabled() && s->visible() && !s->allElementsInvisible() && s->isChordRestType()) {
             qreal str = stretchFormula(s->ticks(), minTicks);
             w += minNoteSpace * str * basicStretch();
             W += s->width();
-            // You cannot simply do weight += s->width(), because the s->width() also includes
-            // the space for accidentals, and it would cause measures with many accidentals to be 
-            // given more weight than the others, resulting in inconsistent spacing.
+            // You cannot simply do weight += s->width(), because the s->width() also includes accidentals
         }
         continue;
     }
@@ -4110,9 +4106,7 @@ void Measure::setStretchedWidth(qreal w)
         w = minWidth;
     }
 
-    // New spacing algorithm: this stretching is not necessary anymore, as it's already
-    // applied within computeMinWidth(). This function was the main responsible for measures 
-    // with many accidentals being too wide.
+    // New spacing algorithm: this stretching is not necessary anymore.
 
 #if 0
     qreal stretchableWidth = 0.0;
@@ -4160,39 +4154,35 @@ static bool hasAccidental(Segment* s)
 //      returns the shortest note/rest in the system
 //---------------------------------------------------------
 
-Fraction Measure::minSysTicks() {
+Fraction Measure::minSysTicks() 
+{
     Fraction minTicks = ticks();
     //System* sys = system();
     for (MeasureBase* mb : system()->measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
             Fraction curMinTicks = m->computeTicks();
-            if (curMinTicks < minTicks)
+            if (curMinTicks < minTicks) {
                 minTicks = curMinTicks;
+            }
         }
     }
-    if (minTicks > Fraction(1, 8))
+    if (minTicks > Fraction(1, 8)) {
         return Fraction(1, 8);
-    else
+    }
+    else {
         return minTicks;
+    }
 }
 
 //---------------------------------------------------------
 //      Stretch formula
 //      Computes the stretch for a given segment depending
 //      on its duration with respect to the shortest one.
-//      The spacing formula is customizable. Three options
-//      proposed: linear spacing, quadratic spacing (Gould),
-//      or logarithmic spacing (Musescore 3.6). 
-//      These formulas takes into account also user stretch and style
-//      settings. This produces a finer, more natural response 
-//      to the } and { commands. The numeric coefficients are 
-//      optimized to give the best results for userStretch = 1
-//      and measureSpacing = 1.2, i.e. the program defaults (see
-//      documentation). 
-//      TODO: choice of formula in style settings!
+//      Three different options proposed (see documentation).
 //---------------------------------------------------------
-qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks) {
+qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks) 
+{
     qreal uStretch = userStretch();
     qreal genLayoutStretch = score()->styleD(Sid::measureSpacing);
     qreal stretch = uStretch * genLayoutStretch;
@@ -4203,6 +4193,7 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks) {
     // Quadratic spacing (Gould)
     qreal str = 1 - 0.647 * stretch + 0.647 * stretch * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     return str;
+    //TODO: choose formula in style settings
 }
 
 //---------------------------------------------------------
