@@ -845,11 +845,12 @@ void ChangeTextProperties::restoreSelection()
     tc.text()->cursor()->setColumn(tc.column());
 }
 
-ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const PropertyValue& propVal)
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
     : TextEditUndoCommand(*tc)
 {
     propertyId = propId;
     propertyVal = propVal;
+    flags = flags_;
     if (propertyId == Pid::FONT_STYLE) {
         existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
     }
@@ -867,6 +868,8 @@ void ChangeTextProperties::redo(EditData*)
 {
     xmlText = cursor().text()->xmlText();
     restoreSelection();
+    cursor().text()->setPropertyFlags(propertyId, flags);
+
     if (propertyId == Pid::FONT_STYLE) {
         FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
         TextCursor* tc = cursor().text()->cursor();
