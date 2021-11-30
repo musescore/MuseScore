@@ -1050,12 +1050,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
             if (el && el->isMeasure()) {
                 m_dropData.ed.dropElement->setTrack(staffIdx * Ms::VOICES);
-                if (m_dropData.ed.dropElement->isImage()) {
-                    m_dropData.ed.dropElement->setParent(el);
-                    offset = pos - el->canvasPos();
-                } else {
-                    m_dropData.ed.dropElement->setParent(seg);
-                }
+                m_dropData.ed.dropElement->setParent(seg);
+
                 if (applyUserOffset) {
                     m_dropData.ed.dropElement->setOffset(offset);
                 }
