@@ -592,7 +592,7 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     PointF position = note->pos() + chord->segment()->pos() + chord->measure()->pos();
 
     int upValue = _up ? -1 : 1;
-    qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * mag();
+    qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
     qreal beamOffset = beamWidth / 2 * upValue;
 
     qreal x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
@@ -608,7 +608,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
     int upValue = _up ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
-    qreal stemWidth = score()->styleMM(Sid::stemWidth).val();
+    qreal stemWidth = score()->styleMM(Sid::stemWidth).val() * startChord->mag();
 
     qreal startOffsetX = _up ? -stemWidth : 0.0;
     qreal endOffsetX = _up ? 0.0 : stemWidth;
@@ -709,7 +709,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
 
     int upValue = _up ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
-    qreal stemWidth = score()->styleMM(Sid::stemWidth).val();
+    qreal stemWidth = score()->styleMM(Sid::stemWidth).val() * chord->mag();
     qreal startOffsetX = 0;
     if (isBefore && !_up) {
         startOffsetX = stemWidth;
