@@ -4113,7 +4113,8 @@ void Measure::setStretchedWidth(qreal w)
     // applied within computeMinWidth(). This function was the main responsible for measures 
     // with many accidentals being too wide.
 
-    /*qreal stretchableWidth = 0.0;
+#if 0
+    qreal stretchableWidth = 0.0;
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         if (!s->enabled()) {
             continue;
@@ -4122,8 +4123,8 @@ void Measure::setStretchedWidth(qreal w)
     }
     const int maxMMRestLength = 32;       // TODO: style
     int weight = layoutWeight(maxMMRestLength);
-    w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;*/
-
+    w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;
+#endif
     setWidth(w);
 }
 
