@@ -90,7 +90,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool changeMinSysTicks = false;
 
     while (ctx.curMeasure) {      // collect measure for system
-
         System* oldSystem = ctx.curMeasure->system();
         system->appendMeasure(ctx.curMeasure);
 
@@ -99,11 +98,13 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // After appending a new measure, the shortest note in the system may change, in which case
         // we need to recompute the layout of the previous measures. By updating the width of these
         // measures, minWidth must be updated accordingly.
-        if (ctx.curMeasure->isMeasure())
+        if (ctx.curMeasure->isMeasure()) {
             if (toMeasure(ctx.curMeasure)->computeTicks() < minSysTicks) {
                 changeMinSysTicks = true;
                 for (MeasureBase* mb : system->measures()) {
-                    if (mb == ctx.curMeasure) break; // Cause I want to change only previous measures, not current one
+                    if (mb == ctx.curMeasure) {
+                        break; // Cause I want to change only previous measures, not current one
+                    }
                     if (mb->isMeasure()) {
                         qreal prevWidth = toMeasure(mb)->width();
                         toMeasure(mb)->computeMinWidth();
@@ -112,7 +113,10 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                 }
             }
-            else changeMinSysTicks = false;
+            else {
+                changeMinSysTicks = false;
+            }
+        }
 
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
