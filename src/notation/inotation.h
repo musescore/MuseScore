@@ -47,7 +47,9 @@ class INotation
 public:
     virtual ~INotation() = default;
 
-    virtual QString title() const = 0;
+    virtual QString title() const = 0;          //! NOTE Title of score (master) or title of part (excerpt)
+    virtual QString completedTitle() const = 0; //! NOTE Title of score plus title of part (if is part)
+    virtual QString scoreTitle() const = 0;     //! NOTE Title of score (master)
 
     virtual ValCh<bool> opened() const = 0;
     virtual void setOpened(bool opened) = 0;

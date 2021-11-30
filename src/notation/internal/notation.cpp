@@ -145,6 +145,34 @@ QString Notation::title() const
     return m_score ? m_score->title() : QString();
 }
 
+QString Notation::completedTitle() const
+{
+    if (!m_score) {
+        return QString();
+    }
+
+    QString title = m_score->metaTag("workTitle");
+    if (title.isEmpty()) { // workTitle unset?
+        title = m_score->masterScore()->title(); // fall back to (master)score's tab title
+    }
+
+    if (!m_score->isMaster()) { // excerpt?
+        QString partName = m_score->metaTag("partName");
+        if (partName.isEmpty()) { // partName unset?
+            partName = m_score->title(); // fall back to excerpt's tab title
+        }
+
+        title += " - " + partName;
+    }
+
+    return title;
+}
+
+QString Notation::scoreTitle() const
+{
+    return m_score ? m_score->masterScore()->title() : QString();
+}
+
 mu::ValCh<bool> Notation::opened() const
 {
     return m_opened;

@@ -50,6 +50,8 @@ public:
     static void init();
 
     QString title() const override;
+    QString completedTitle() const override;
+    QString scoreTitle() const override;
 
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;

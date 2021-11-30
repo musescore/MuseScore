@@ -25,15 +25,27 @@
 #include <memory>
 #include "notationtypes.h"
 
+#include "infrastructure/draw/painter.h"
+#include "infrastructure/draw/pagedpaintdevice.h"
+
 namespace mu::notation {
 class INotationPainting
 {
 public:
     virtual ~INotationPainting() = default;
 
+    struct Options
+    {
+        int fromPage = -1;
+        int toPage = -1;
+        int copies = 1;
+    };
+
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
-    virtual void paint(mu::draw::Painter* painter, const RectF& frameRect) = 0;
+    virtual void paint(draw::Painter* painter, const RectF& frameRect) = 0;
+
+    virtual void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
 };
 
 using INotationPaintingPtr = std::shared_ptr<INotationPainting>;
