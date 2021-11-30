@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 
 import MuseScore.Ui 1.0
@@ -35,7 +34,7 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -49,10 +48,10 @@ MixerPanelSection {
                 width: 20
 
                 icon: IconCode.MUTE
-                checked: item.muted
+                checked: mixerItem.muted
 
                 navigation.name: "MuteButton"
-                navigation.panel: item.panel
+                navigation.panel: mixerItem.panel
                 navigation.row: root.navigationRowStart
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("playback", "Mute")
                 navigation.onActiveChanged: {
@@ -62,7 +61,7 @@ MixerPanelSection {
                 }
 
                 onToggled: {
-                    item.muted = !item.muted
+                    mixerItem.muted = !mixerItem.muted
                 }
             }
 
@@ -73,10 +72,10 @@ MixerPanelSection {
                 width: 20
 
                 icon: IconCode.SOLO
-                checked: item.solo
+                checked: mixerItem.solo
 
                 navigation.name: "SoloButton"
-                navigation.panel: item.panel
+                navigation.panel: mixerItem.panel
                 navigation.row: root.navigationRowStart + 1
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("payback", "Solo")
                 navigation.onActiveChanged: {
@@ -86,7 +85,7 @@ MixerPanelSection {
                 }
 
                 onToggled: {
-                    item.solo = !item.solo
+                    mixerItem.solo = !mixerItem.solo
                 }
             }
         }

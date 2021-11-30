@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
@@ -33,11 +32,11 @@ Dial {
 
     property alias navigation: navCtrl
 
-    width: prv.radius * 2
-    height: width
+    implicitWidth: prv.radius * 2
+    implicitHeight: implicitWidth
 
-    implicitHeight: height
-    implicitWidth: width
+    width: implicitWidth
+    height: width
 
     wheelEnabled: true
 
@@ -121,18 +120,18 @@ Dial {
 
             ctx.strokeStyle = prv.outerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
+            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth/2, -140 * (Math.PI/180) - Math.PI/2, 140 * (Math.PI/180) - Math.PI/2, false)
             ctx.stroke()
 
             ctx.strokeStyle = prv.valueArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
+            ctx.arc(width/2, height/2, prv.radius - prv.outerArcLineWidth/2, -Math.PI/2, root.angle * (Math.PI/180) - Math.PI/2, prv.reversed)
             ctx.stroke()
 
             ctx.lineWidth = prv.innerArcLineWidth
             ctx.strokeStyle = prv.innerArcColor
             ctx.beginPath()
-            ctx.arc(width/2, height/2, prv.radius - (prv.outerArcLineWidth + prv.innerArcLineWidth), 0, Math.PI * 2, false)
+            ctx.arc(width/2, height/2, prv.radius - (prv.outerArcLineWidth + prv.innerArcLineWidth/2), 0, Math.PI * 2, false)
             ctx.stroke()
         }
     }

@@ -120,16 +120,15 @@ Rectangle {
 
         Column {
             id: contentColumn
-
             width: childrenRect.width
-
-            spacing: 8
+            spacing: 0
 
             MixerSoundSection {
                 id: soundSection
 
                 visible: contextMenuModel.soundSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                spacingAbove: 8
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -137,7 +136,7 @@ Rectangle {
                 navigationRowStart: 1
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -147,6 +146,7 @@ Rectangle {
 
                 visible: contextMenuModel.audioFxSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                spacingAbove: 8
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -154,7 +154,7 @@ Rectangle {
                 navigationRowStart: 100
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -171,7 +171,7 @@ Rectangle {
                 navigationRowStart: 200
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -188,7 +188,7 @@ Rectangle {
                 navigationRowStart: 300
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -198,6 +198,8 @@ Rectangle {
 
                 visible: contextMenuModel.faderSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                spacingAbove: -3
+                spacingBelow: -2
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -205,7 +207,7 @@ Rectangle {
                 navigationRowStart: 400
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -222,7 +224,7 @@ Rectangle {
                 navigationRowStart: 500
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }
@@ -232,6 +234,8 @@ Rectangle {
 
                 visible: contextMenuModel.titleSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                spacingAbove: 2
+                spacingBelow: 0
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -239,7 +243,7 @@ Rectangle {
                 navigationRowStart: 600
                 needReadChannelName: prv.isPanelActivated
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     prv.setNavigateControlIndex(index)
                 }
             }

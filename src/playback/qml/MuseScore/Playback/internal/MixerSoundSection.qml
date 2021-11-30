@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -36,9 +36,9 @@ MixerPanelSection {
         height: inputResourceControl.height
         width: root.delegateDefaultWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
 
-        visible: !item.outputOnly
+        visible: !mixerItem.outputOnly
 
         AudioResourceControl {
             id: inputResourceControl
@@ -47,15 +47,15 @@ MixerPanelSection {
 
             menuAnchorItem: root.rootPanel
             supportsByPassing: false
-            resourceItemModel: item.inputResourceItem
+            resourceItemModel: mixerItem.inputResourceItem
 
-            navigationPanel: item.panel
+            navigationPanel: mixerItem.panel
             navigationRowStart: root.navigationRowStart
             accessibleName: content.accessibleName
 
             onTitleClicked: {
-                if (item.inputResourceItem) {
-                    item.inputResourceItem.requestToLaunchNativeEditorView()
+                if (mixerItem.inputResourceItem) {
+                    mixerItem.inputResourceItem.requestToLaunchNativeEditorView()
                 }
             }
 

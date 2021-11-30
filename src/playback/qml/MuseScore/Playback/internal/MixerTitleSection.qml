@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -46,7 +46,7 @@ MixerPanelSection {
             readonly property int margin: -8
             width: margin + parent.width + margin
 
-            text: item.title
+            text: mixerItem.title
         }
     }
 }

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -28,7 +28,7 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
-    headerTitle: qsTrc("playback", "Audio Fx")
+    headerTitle: qsTrc("playback", "Audio FX")
 
     Column {
         id: content
@@ -38,7 +38,7 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
 
         spacing: 4
 
@@ -46,7 +46,7 @@ MixerPanelSection {
             id: repeater
             anchors.horizontalCenter: parent.horizontalCenter
 
-            model: item.outputResourceItemList
+            model: mixerItem.outputResourceItemList
             delegate: AudioResourceControl {
                 id: inputResourceControl
 
@@ -56,7 +56,7 @@ MixerPanelSection {
                 resourceItemModel: modelData
                 active: modelData.isActive
 
-                navigationPanel: item.panel
+                navigationPanel: mixerItem.panel
                 navigationRowStart: root.navigationRowStart + (model.index * 3) // NOTE: 3 - because AudioResourceControl have 3 controls
                 navigationName: modelData.id
                 accessibleName: content.accessibleName
