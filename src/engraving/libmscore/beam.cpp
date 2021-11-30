@@ -1027,8 +1027,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
     endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
 
-    qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * mag();
-    _beamDist = beamWidth + 0.25 * spatium();
+    _beamDist = 0.75 * spatium();
 
     add8thSpaceSlant(isStartDictator ? startAnchor : endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
