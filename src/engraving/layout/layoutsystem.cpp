@@ -112,8 +112,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                         minWidth += newWidth - prevWidth;
                     }
                 }
-            }
-            else {
+            } else {
                 changeMinSysTicks = false;
             }
         }
