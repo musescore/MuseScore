@@ -100,13 +100,18 @@ void KeySig::addLayout(SymId sym, int line)
     if (_sig.keySymbols().size() > 0) {
         KeySym& previous = _sig.keySymbols().back();
         qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        if (previous.sym != sym) {
+            accidentalGap *= 2;
+        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
+            accidentalGap = score()->styleS(Sid::keysigNaturalDistance).val();
+        }
         // width is divided by mag() to get the staff-scaling-independent width of the symbols
         qreal previousWidth = symWidth(previous.sym) / score()->spatium() / mag();
         x = previous.spos.x() + previousWidth + accidentalGap;
         bool isAscending = y < previous.spos.y();
         SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
         SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
-        PointF cutout = symSmuflAnchor(sym, isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW);
+        PointF cutout = symSmuflAnchor(sym, currentCutout);
         qreal currentCutoutY = y * spatium() + cutout.y();
         qreal previousCoutoutY = previous.spos.y() * spatium() + symSmuflAnchor(previous.sym, previousCutout).y();
         if ((isAscending && currentCutoutY < previousCoutoutY) || (!isAscending && currentCutoutY > previousCoutoutY)) {

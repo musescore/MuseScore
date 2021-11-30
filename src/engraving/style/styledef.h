@@ -222,6 +222,7 @@ enum class Sid {
     bracketedAccidentalPadding,
     alignAccidentalsLeft,
     keysigAccidentalDistance,
+    keysigNaturalDistance,
     beamWidth,
     beamDistance,
     beamMinLen,
