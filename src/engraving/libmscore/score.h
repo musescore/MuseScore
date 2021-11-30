@@ -555,7 +555,7 @@ public:
     void dumpScoreTree();  // for debugging purposes
 
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
-    mu::engraving::compat::DummyElement* dummy() { return m_rootItem->dummy(); }
+    mu::engraving::compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
