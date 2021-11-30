@@ -47,7 +47,7 @@ DockWindow {
     }
 
     onPageLoaded: {
-        root.interactiveProvider.provider.notifyAboutUriOpened(root.currentPageUri)
+        root.interactiveProvider.onPageOpened()
     }
 
     property NavigationSection topToolKeyNavSec: NavigationSection {

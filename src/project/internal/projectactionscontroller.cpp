@@ -37,6 +37,9 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 
+static mu::Uri NOTATION_PAGE_URI("musescore://notation");
+static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
+
 void ProjectActionsController::init()
 {
     qApp->installEventFilter(this);
@@ -129,12 +132,9 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
         }
     }
 
-    //! Sеep 2. If the project is already open in the current window, then just switch to showing the notation
+    //! Step 2. If the project is already open in the current window, then just switch to showing the notation
     if (isProjectOpened(projectPath)) {
-        if (!interactive()->isOpened("musescore://notation").val) {
-            interactive()->open("musescore://notation");
-        }
-        return make_ret(Ret::Code::Ok);
+        return openNotationPageIfNeed();
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
@@ -181,9 +181,16 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 
     prependToRecentScoreList(filePath);
 
-    interactive()->open("musescore://notation");
+    return openNotationPageIfNeed();
+}
 
-    return make_ret(Ret::Code::Ok);
+mu::Ret ProjectActionsController::openNotationPageIfNeed()
+{
+    if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
+        return make_ret(Ret::Code::Ok);
+    }
+
+    return interactive()->open(NOTATION_PAGE_URI).ret;
 }
 
 bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
@@ -242,10 +249,10 @@ void ProjectActionsController::newProject()
         return;
     }
 
-    Ret ret = interactive()->open("musescore://project/newscore").ret;
+    Ret ret = interactive()->open(NEW_SCORE_URI).ret;
 
     if (ret) {
-        ret = interactive()->open("musescore://notation").ret;
+        ret = openNotationPageIfNeed();
     }
 
     if (!ret) {
