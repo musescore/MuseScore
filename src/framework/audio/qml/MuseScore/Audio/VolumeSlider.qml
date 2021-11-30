@@ -252,6 +252,37 @@ Slider {
         implicitWidth: prv.handleWidth
         implicitHeight: prv.handleHeight
 
+        MouseArea {
+            anchors.fill: parent
+            onDoubleClicked: {
+                // Double click resets the volume
+                root.volumeLevelMoved(0.0)
+            }
+
+            // The MouseArea steals mouse press events from the slider.
+            // There is really no way to prevent that.
+            // (if you set mouse.accepted to false in the onPressed handler,
+            // the MouseArea won't receive doubleClick events).
+            // So we use this workaround.
+
+            preventStealing: true // Don't let a Flickable steal the mouse
+
+            property real dragStartOffset: 0.0
+
+            onPressed: function(mouse) {
+                dragStartOffset = mouse.y
+            }
+
+            onPositionChanged: function(mouse)  {
+                let mousePosInRoot = mapToItem(root, 0, mouse.y - dragStartOffset).y
+                let newPosZeroToOne = 1 - mousePosInRoot / prv.rulerLineHeight
+                let newPosClamped = Math.max(0.0, Math.min(newPosZeroToOne, 1.0))
+                let localNewValue = root.valueAt(newPosClamped)
+                let logicalNewValue = convertor.volumeLevelFromLocal(localNewValue)
+                root.volumeLevelMoved(logicalNewValue)
+            }
+        }
+
         StyledDropShadow {
             anchors.fill: handleRect
             source: handleRect
