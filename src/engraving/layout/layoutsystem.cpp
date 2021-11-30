@@ -378,8 +378,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else if (mb->isMeasure()) {
                 Measure* m  = toMeasure(mb);
                 mw          += m->width();                       // measures are stretched already with basicStretch()
-                //int weight   = m->layoutWeight();
-                //totalWeight += weight * m->basicStretch();
                 qreal weight = m->stretchWeight(); // The stretch is now assigned proportionally to the width
                 totalWeight += weight; // No need now to multiply again by m->basicStretch()
             }
@@ -417,8 +415,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             mb->setPos(pos);
             Measure* m = toMeasure(mb);
             qreal stretch = m->basicStretch();
-            //int weight = m->layoutWeight();
-            //ww  += rest * weight * stretch;
             qreal weight = m->stretchWeight(); // Updated stretching formula
             ww += rest * weight;
             m->stretchMeasure(ww);
