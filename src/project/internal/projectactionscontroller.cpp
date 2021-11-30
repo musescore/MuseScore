@@ -512,7 +512,7 @@ void ProjectActionsController::printScore()
     funcs.onPagePrint = [notation](QPainter* qp, int page) {
         mu::draw::Painter mup(qp, "print");
         mu::draw::Painter* painter = &mup;
-        notation->painting()->paint(painter, RectF());
+        notation->painting()->paintView(painter, RectF());
     };
 
     funcs.onEndPrint = [backupPixelRatio](QPainter*) {
