@@ -41,9 +41,7 @@ public:
     Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
 private:
-    QString documentTitle(const Ms::Score& score) const;
     void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title) const;
-    void doWrite(QPdfWriter& pdfWriter, mu::draw::Painter& painter, Ms::Score* score) const;
 };
 }
 

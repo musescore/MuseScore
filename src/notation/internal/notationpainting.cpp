@@ -26,6 +26,8 @@
 #include "notation.h"
 #include "notationinteraction.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 using namespace mu::draw;
 
@@ -154,4 +156,34 @@ void NotationPainting::paintForeground(mu::draw::Painter* painter, const RectF& 
         QPixmap pixmap(wallpaperPath);
         painter->drawTiledPixmap(pageRect, pixmap);
     }
+}
+
+void NotationPainting::paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->setPrinting(true);
+    Ms::MScore::pdfPrinting = true;
+
+    QSizeF size(score()->styleD(Ms::Sid::pageWidth), score()->styleD(Ms::Sid::pageHeight));
+    painter->setAntialiasing(true);
+    painter->setViewport(RectF(0.0, 0.0, size.width() * dev->logicalDpiX(), size.height() * dev->logicalDpiY()));
+    painter->setWindow(RectF(0.0, 0.0, size.width() * Ms::DPI, size.height() * Ms::DPI));
+
+    double pixelRationBackup = Ms::MScore::pixelRatio;
+    Ms::MScore::pixelRatio = Ms::DPI / dev->logicalDpiX();
+
+    for (int pageNumber = 0; pageNumber < score()->npages(); ++pageNumber) {
+        if (pageNumber > 0) {
+            dev->newPage();
+        }
+
+        score()->print(painter, pageNumber);
+    }
+
+    score()->setPrinting(false);
+    Ms::MScore::pixelRatio = pixelRationBackup;
+    Ms::MScore::pdfPrinting = false;
 }
