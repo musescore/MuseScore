@@ -26,6 +26,7 @@
 #include "../libmscore/rootitem.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
+#include "notation/notationtypes.h"
 
 namespace mu::engraving {
 class AccessibleRoot : public AccessibleItem
@@ -36,7 +37,9 @@ public:
 
     void setFocusedElement(AccessibleItem* e);
     AccessibleItem* focusedElement() const;
-    QRect toScreenRect(const QRect&, bool* ok = nullptr) const;
+
+    void setMapToScreenFunc(const notation::AccessibleMapToScreenFunc& func);
+    RectF toScreenRect(const RectF &, bool* ok = nullptr) const;
 
     const accessibility::IAccessible* accessibleParent() const override;
     accessibility::IAccessible::Role accessibleRole() const override;
@@ -44,6 +47,8 @@ public:
 
 private:
     AccessibleItem* m_focusedElement = nullptr;
+
+    notation::AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 };
 }
 

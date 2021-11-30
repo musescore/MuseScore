@@ -2533,11 +2533,20 @@ void EngravingItem::setSelected(bool f)
 
     if (f) {
         if (m_accessible) {
-            AccessibleRoot* accroot = m_accessible->accessibleRoot();
-            if (!accroot) {
-                return;
+            AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
+            if (accRoot) {
+                accRoot->setFocusedElement(nullptr);
             }
-            accroot->setFocusedElement(m_accessible);
+
+            AccessibleRoot* dummyAccRoot = score()->dummy()->rootItem()->accessible()->accessibleRoot();
+            if (dummyAccRoot) {
+                dummyAccRoot->setFocusedElement(nullptr);
+            }
+
+            AccessibleRoot* currAccRoot = m_accessible->accessibleRoot();
+            if (currAccRoot) {
+                currAccRoot->setFocusedElement(m_accessible);
+            }
         }
     }
 }

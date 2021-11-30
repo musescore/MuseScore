@@ -205,11 +205,11 @@ QRect AccessibleItem::accessibleRect() const
         return QRect();
     }
 
-    RectF bbox = m_element->bbox();
-    PointF canvasPos = m_element->canvasPos();
-    QRect canvasRect = QRectF(canvasPos.toQPointF(), bbox.size().toQSizeF()).toRect();
+    RectF bbox = m_element->canvasBoundingRect();
+    RectF canvasRect(m_element->canvasPos(), SizeF{bbox.width(), bbox.height()});
 
-    return accessibleRoot()->toScreenRect(canvasRect);
+    auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
+    return rect;
 }
 
 mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const

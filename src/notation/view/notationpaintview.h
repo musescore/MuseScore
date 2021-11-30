@@ -145,6 +145,8 @@ protected:
     RectF notationContentRect() const override;
 
     RectF toLogical(const RectF& rect) const;
+    PointF fromLogical(const PointF& point) const;
+    RectF fromLogical(const RectF& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;
