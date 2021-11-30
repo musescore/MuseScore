@@ -17,8 +17,8 @@ set (ENGRAVING_INFRASTRUCTURE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ipaintprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/pagedpaintdevice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/pagedpaintdevice.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/paintdevice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/paintdevice.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/buffereddrawtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.h

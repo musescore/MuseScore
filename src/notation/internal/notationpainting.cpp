@@ -22,12 +22,14 @@
 #include "notationpainting.h"
 
 #include "engraving/libmscore/score.h"
+#include "engraving/paint/paint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::notation;
 using namespace mu::draw;
 
@@ -61,7 +63,16 @@ ViewMode NotationPainting::viewMode() const
     return score()->layoutMode();
 }
 
-void NotationPainting::paint(Painter* painter, const RectF& frameRect)
+SizeF NotationPainting::pageSizeInch() const
+{
+    if (!score()) {
+        return SizeF();
+    }
+
+    return SizeF(score()->styleD(Ms::Sid::pageWidth), score()->styleD(Ms::Sid::pageHeight));
+}
+
+void NotationPainting::paintView(Painter* painter, const RectF& frameRect)
 {
     const QList<Ms::Page*>& pages = score()->pages();
     if (pages.empty()) {
@@ -186,4 +197,48 @@ void NotationPainting::paintPdf(draw::PagedPaintDevice* dev, draw::Painter* pain
     score()->setPrinting(false);
     Ms::MScore::pixelRatio = pixelRationBackup;
     Ms::MScore::pdfPrinting = false;
+}
+
+void NotationPainting::paintPng(Painter* painter, const Options& opt)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    score()->setPrinting(true);
+
+    double pixelRatioBackup = Ms::MScore::pixelRatio;
+
+    const int PAGE_NUMBER = opt.fromPage;
+    const QList<Ms::Page*>& pages = score()->pages();
+
+    if (PAGE_NUMBER < 0 || PAGE_NUMBER >= pages.size()) {
+        return;
+    }
+
+    Ms::Page* page = pages[PAGE_NUMBER];
+
+    const int TRIM_MARGIN_SIZE = opt.trimMarginPixelSize;
+    RectF pageRect = page->abbox();
+
+    if (TRIM_MARGIN_SIZE >= 0) {
+        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
+    }
+
+    double scaling = opt.deviceDpi / Ms::DPI;
+    Ms::MScore::pixelRatio = 1.0 / scaling;
+
+    painter->setAntialiasing(true);
+    painter->scale(scaling, scaling);
+    if (TRIM_MARGIN_SIZE >= 0) {
+        painter->translate(-pageRect.topLeft());
+    }
+
+    QList<Ms::EngravingItem*> elements = page->elements();
+    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
+
+    engraving::Paint::paintElements(*painter, elements);
+
+    score()->setPrinting(false);
+    Ms::MScore::pixelRatio = pixelRatioBackup;
 }

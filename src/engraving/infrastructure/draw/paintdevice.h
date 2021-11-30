@@ -19,47 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "pagedpaintdevice.h"
+#ifndef MU_DRAW_PAGEDPAINTDEVICE_H
+#define MU_DRAW_PAGEDPAINTDEVICE_H
+
+class QPaintDevice;
+class QPagedPaintDevice;
+namespace mu::draw {
+class PaintDevice
+{
+public:
+    PaintDevice() = default;
 
 #ifndef NO_QT_SUPPORT
-#include <QPagedPaintDevice>
+    PaintDevice(QPaintDevice* d);
 #endif
 
-#include "log.h"
+    int logicalDpiX() const;
+    int logicalDpiY() const;
 
-using namespace mu::draw;
+private:
+    QPaintDevice* m_d = nullptr;
+};
+
+class PagedPaintDevice : public PaintDevice
+{
+public:
+    PagedPaintDevice() = default;
 
 #ifndef NO_QT_SUPPORT
-PagedPaintDevice::PagedPaintDevice(QPagedPaintDevice* d)
-    : m_d(d)
-{
-}
-
+    PagedPaintDevice(QPagedPaintDevice* d);
 #endif
 
-int PagedPaintDevice::logicalDpiX() const
-{
-    if (m_d) {
-        return m_d->logicalDpiX();
-    }
-    NOT_IMPLEMENTED;
-    return -1;
+    int logicalDpiX() const;
+    int logicalDpiY() const;
+
+    void newPage();
+
+private:
+    QPagedPaintDevice* m_d = nullptr;
+};
 }
 
-int PagedPaintDevice::logicalDpiY() const
-{
-    if (m_d) {
-        return m_d->logicalDpiY();
-    }
-    NOT_IMPLEMENTED;
-    return -1;
-}
-
-void PagedPaintDevice::newPage()
-{
-    if (m_d) {
-        m_d->newPage();
-        return;
-    }
-    NOT_IMPLEMENTED;
-}
+#endif // MU_DRAW_PAGEDPAINTDEVICE_H

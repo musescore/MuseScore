@@ -369,7 +369,7 @@ void NotationPaintView::paint(QPainter* qp)
 
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
-    notation()->painting()->paint(painter, toLogical(rect));
+    notation()->painting()->paintView(painter, toLogical(rect));
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
