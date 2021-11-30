@@ -249,7 +249,7 @@ void MasterPalette::closeEvent(QCloseEvent* event)
     if (m_keyEditor->dirty()) {
         m_keyEditor->save();
     }
-    emit finished(QDialog::Accepted);
+    setResult(QDialog::Accepted);
     QWidget::closeEvent(event);
 }
 
