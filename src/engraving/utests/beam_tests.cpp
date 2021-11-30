@@ -91,6 +91,12 @@ TEST_F(BeamTests, beamG)
     beam("Beam-G.mscx");
 }
 
+// if the beamNoSlope style parameter is true, all beams are flat
+TEST_F(BeamTests, beamNoSlope)
+{
+    beam("beamNoSlope.mscx");
+}
+
 // cross staff beaming is not yet supported
 // in the new beams code
 // TEST_F(BeamTests, beamCrossMeasure2)
