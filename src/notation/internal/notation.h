@@ -51,13 +51,13 @@ public:
 
     QString title() const override;
 
-    void setViewMode(const ViewMode& viewMode) override;
-    ViewMode viewMode() const override;
-    void paint(draw::Painter* painter, const RectF& frameRect) override;
-
     ValCh<bool> opened() const override;
     void setOpened(bool opened) override;
 
+    void setViewMode(const ViewMode& viewMode) override;
+    ViewMode viewMode() const override;
+
+    INotationPaintingPtr painting() const override;
     INotationInteractionPtr interaction() const override;
     INotationMidiInputPtr midiInput() const override;
     INotationUndoStackPtr undoStack() const override;
@@ -79,14 +79,12 @@ protected:
 
 private:
     friend class NotationInteraction;
-
-    void paintPages(mu::draw::Painter* painter, const RectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
-    void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
-    void paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const;
+    friend class NotationPainting;
 
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
 
+    INotationPaintingPtr m_painting = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
     INotationPlaybackPtr m_playback = nullptr;
     INotationUndoStackPtr m_undoStack = nullptr;

@@ -54,6 +54,8 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-export", this, &ProjectActionsController::exportScore);
     dispatcher()->reg(this, "file-import-pdf", this, &ProjectActionsController::importPdf);
 
+    dispatcher()->reg(this, "print", this, &ProjectActionsController::printScore);
+
     dispatcher()->reg(this, "clear-recent", this, &ProjectActionsController::clearRecentScores);
 
     dispatcher()->reg(this, "continue-last-session", this, &ProjectActionsController::continueLastSession);
@@ -485,6 +487,39 @@ void ProjectActionsController::continueLastSession()
 void ProjectActionsController::exportScore()
 {
     interactive()->open("musescore://project/export");
+}
+
+void ProjectActionsController::printScore()
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    using namespace mu::print;
+    IPrintProvider::Options opt;
+    opt.title = notation->title();
+    opt.pageSize = QSizeF(800, 800);
+    opt.pages = 1;
+
+    double backupPixelRatio = Ms::MScore::pixelRatio;
+
+    IPrintProvider::PrintFuncs funcs;
+    funcs.onStartPrint = [](QPainter* qp, int logicalDpi) {
+        Ms::MScore::pixelRatio = Ms::DPI / logicalDpi;
+    };
+
+    funcs.onPagePrint = [notation](QPainter* qp, int page) {
+        mu::draw::Painter mup(qp, "print");
+        mu::draw::Painter* painter = &mup;
+        notation->painting()->paint(painter, RectF());
+    };
+
+    funcs.onEndPrint = [backupPixelRatio](QPainter*) {
+        Ms::MScore::pixelRatio = backupPixelRatio;
+    };
+
+    printProvider()->setupAndPrint(opt, funcs);
 }
 
 io::path ProjectActionsController::selectScoreOpeningFile()

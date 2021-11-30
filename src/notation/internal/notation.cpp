@@ -32,6 +32,7 @@
 #include "libmscore/rendermidi.h"
 #include "engraving/paint/paint.h"
 
+#include "notationpainting.h"
 #include "notationinteraction.h"
 #include "masternotationmididata.h"
 #include "notationplayback.h"
@@ -50,6 +51,7 @@ Notation::Notation(Ms::Score* score)
 {
     m_opened.val = false;
 
+    m_painting = std::make_shared<NotationPainting>(this);
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
@@ -113,6 +115,7 @@ Notation::~Notation()
     m_accessibility = nullptr;
     m_style = nullptr;
     m_elements = nullptr;
+    m_painting = nullptr;
 
     delete m_score;
 }
@@ -142,117 +145,6 @@ QString Notation::title() const
     return m_score ? m_score->title() : QString();
 }
 
-void Notation::setViewMode(const ViewMode& viewMode)
-{
-    if (!m_score) {
-        return;
-    }
-
-    score()->setLayoutMode(viewMode);
-    score()->doLayout();
-    notifyAboutNotationChanged();
-}
-
-ViewMode Notation::viewMode() const
-{
-    if (!m_score) {
-        return ViewMode::PAGE;
-    }
-
-    return score()->layoutMode();
-}
-
-void Notation::paint(mu::draw::Painter* painter, const RectF& frameRect)
-{
-    const QList<Ms::Page*>& pages = score()->pages();
-    if (pages.empty()) {
-        return;
-    }
-
-    switch (score()->layoutMode()) {
-    case engraving::LayoutMode::LINE:
-    case engraving::LayoutMode::HORIZONTAL_FIXED:
-    case engraving::LayoutMode::SYSTEM: {
-        bool paintBorders = false;
-        paintPages(painter, frameRect, { pages.first() }, paintBorders);
-        break;
-    }
-    case engraving::LayoutMode::FLOAT:
-    case engraving::LayoutMode::PAGE: {
-        bool paintBorders = !score()->printing();
-        paintPages(painter, frameRect, pages, paintBorders);
-    }
-    }
-
-    static_cast<NotationInteraction*>(m_interaction.get())->paint(painter);
-}
-
-void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
-{
-    for (Ms::Page* page : pages) {
-        RectF pageRect(page->abbox().translated(page->pos()));
-
-        if (pageRect.right() < frameRect.left()) {
-            continue;
-        }
-
-        if (pageRect.left() > frameRect.right()) {
-            break;
-        }
-
-        if (paintBorders) {
-            paintPageBorder(painter, page);
-        }
-
-        PointF pagePosition(page->pos());
-        painter->translate(pagePosition);
-        paintForeground(painter, page->bbox());
-        painter->translate(-pagePosition);
-
-        engraving::Paint::paintPage(*painter, page, frameRect.translated(-page->pos()));
-    }
-}
-
-void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) const
-{
-    using namespace mu::draw;
-    RectF boundingRect(page->canvasBoundingRect());
-
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(Pen(configuration()->borderColor(), configuration()->borderWidth()));
-    painter->drawRect(boundingRect);
-
-    if (!score()->showPageborders()) {
-        return;
-    }
-
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(engravingConfiguration()->formattingMarksColor());
-    boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
-    painter->drawRect(boundingRect);
-
-    if (!page->isOdd()) {
-        painter->drawLine(boundingRect.right(), 0.0, boundingRect.right(), boundingRect.bottom());
-    }
-}
-
-void Notation::paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const
-{
-    if (score()->printing()) {
-        painter->fillRect(pageRect, mu::draw::Color::white);
-        return;
-    }
-
-    QString wallpaperPath = configuration()->foregroundWallpaperPath().toQString();
-
-    if (configuration()->foregroundUseColor() || wallpaperPath.isEmpty()) {
-        painter->fillRect(pageRect, configuration()->foregroundColor());
-    } else {
-        QPixmap pixmap(wallpaperPath);
-        painter->drawTiledPixmap(pageRect, pixmap);
-    }
-}
-
 mu::ValCh<bool> Notation::opened() const
 {
     return m_opened;
@@ -270,6 +162,21 @@ void Notation::setOpened(bool opened)
 void Notation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();
+}
+
+void Notation::setViewMode(const ViewMode& viewMode)
+{
+    m_painting->setViewMode(viewMode);
+}
+
+ViewMode Notation::viewMode() const
+{
+    return m_painting->viewMode();
+}
+
+INotationPaintingPtr Notation::painting() const
+{
+    return m_painting;
 }
 
 INotationInteractionPtr Notation::interaction() const

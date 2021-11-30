@@ -34,6 +34,7 @@
 #include "multiinstances/imultiinstancesprovider.h"
 #include "cloud/iuploadingservice.h"
 #include "playback/iplaybackcontroller.h"
+#include "print/iprintprovider.h"
 
 #include "async/asyncable.h"
 
@@ -53,6 +54,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project, cloud::IUploadingService, uploadingService)
     INJECT(project, playback::IPlaybackController, playbackController)
+    INJECT(project, print::IPrintProvider, printProvider)
 
 public:
     void init();
@@ -98,6 +100,7 @@ private:
     bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     void exportScore();
+    void printScore();
 
     io::path defaultSavingFilePath() const;
 
