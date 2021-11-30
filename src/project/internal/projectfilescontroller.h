@@ -61,7 +61,7 @@ public:
     bool closeOpenedProject() override;
     bool isProjectOpened(const io::path& scorePath) const override;
     bool isAnyProjectOpened() const override;
-    void saveProject(const io::path& path = io::path()) override;
+    bool saveProject(const io::path& path = io::path()) override;
 
 private:
     void setupConnections();
@@ -95,7 +95,7 @@ private:
     io::path selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle);
 
     Ret doOpenProject(const io::path& filePath);
-    void doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
+    bool doSaveScore(const io::path& filePath = io::path(), project::SaveMode saveMode = project::SaveMode::Save);
 
     void exportScore();
 
