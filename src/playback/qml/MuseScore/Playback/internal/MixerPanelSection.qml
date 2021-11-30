@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -31,9 +31,13 @@ Loader {
 
     property string headerTitle: ""
     property bool headerVisible: true
-    property int headerHeight: 22
-    property int headerWidth: headerVisible ? 98 : 0
+    property int headerWidth: 98
+
     property int delegateDefaultWidth: 108
+
+    property real spacingAbove: 4
+    property real spacingBelow: 4
+
     property var model: undefined
     property var rootPanel: undefined
 
@@ -56,27 +60,59 @@ Loader {
 
         interactive: false
         orientation: Qt.Horizontal
-        spacing: 4
+        spacing: 0
 
         model: root.model
 
         header: Item {
-            height: root.headerHeight
-            width: root.headerWidth
+            width: visible ? root.headerWidth + 1 : 0 // +1 for separator
+            height: parent.height
+            visible: root.headerVisible
 
             StyledTextLabel {
-                anchors {
-                    fill: parent
-                    rightMargin: 12
-                    leftMargin: 12
-                }
+                anchors.top: parent.top
+                anchors.topMargin: root.spacingAbove
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: root.spacingBelow
+                anchors.right: separator.left
+                anchors.rightMargin: 12
+                anchors.left: parent.left
+                anchors.leftMargin: 12
 
                 horizontalAlignment: Qt.AlignRight
                 text: root.headerTitle
-                visible: root.headerVisible
+            }
+
+            SeparatorLine {
+                id: separator
+                anchors.right: parent.right
+                orientation: Qt.Vertical
             }
         }
 
-        delegate: root.delegateComponent
+        delegate: Row {
+            id: delegateRow
+
+            width: root.delegateDefaultWidth + 1 // for separator
+            height: root.spacingAbove + delegateLoader.implicitHeight + root.spacingBelow
+
+            topPadding: root.spacingAbove
+            bottomPadding: root.spacingBelow
+            spacing: 0
+
+            Loader {
+                id: delegateLoader
+
+                width: root.delegateDefaultWidth
+
+                property var mixerItem: model.item
+                sourceComponent: root.delegateComponent
+            }
+
+            SeparatorLine {
+                orientation: Qt.Vertical
+                height: root.height
+            }
+        }
     }
 }

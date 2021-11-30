@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 
 import MuseScore.Ui 1.0
@@ -37,7 +36,7 @@ MixerPanelSection {
         height: childrenRect.height
         width: root.delegateDefaultWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? item.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
 
         TextInputField {
             id: volumeTextInputField
@@ -52,7 +51,7 @@ MixerPanelSection {
             background.radius: 2
 
             navigation.name: "VolumeInputField"
-            navigation.panel: item.panel
+            navigation.panel: mixerItem.panel
             navigation.row: root.navigationRowStart
             navigation.accessible.name: content.accessibleName + " " + currentText
             navigation.onActiveChanged: {
@@ -68,11 +67,11 @@ MixerPanelSection {
                 decimal: 1
             }
 
-            currentText: Math.round(item.volumeLevel * 10) / 10
+            currentText: Math.round(mixerItem.volumeLevel * 10) / 10
 
             onCurrentTextEdited: {
-                if (item.volumeLevel !== Number(newTextValue)) {
-                    item.volumeLevel = Number(newTextValue)
+                if (mixerItem.volumeLevel !== Number(newTextValue)) {
+                    mixerItem.volumeLevel = Number(newTextValue)
                 }
             }
         }
