@@ -63,6 +63,15 @@ ViewMode NotationPainting::viewMode() const
     return score()->layoutMode();
 }
 
+int NotationPainting::pageCount() const
+{
+    if (!score()) {
+        return 0;
+    }
+
+    return score()->npages();
+}
+
 SizeF NotationPainting::pageSizeInch() const
 {
     if (!score()) {
@@ -192,6 +201,51 @@ void NotationPainting::paintPdf(draw::PagedPaintDevice* dev, draw::Painter* pain
         }
 
         score()->print(painter, pageNumber);
+    }
+
+    score()->setPrinting(false);
+    Ms::MScore::pixelRatio = pixelRationBackup;
+    Ms::MScore::pdfPrinting = false;
+}
+
+void NotationPainting::paintPrint(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    if (opt.fromPage >= score()->npages()) {
+        return;
+    }
+
+    score()->setPrinting(true);
+    Ms::MScore::pdfPrinting = true;
+
+    QSizeF size(score()->styleD(Ms::Sid::pageWidth), score()->styleD(Ms::Sid::pageHeight));
+    painter->setAntialiasing(true);
+    painter->setViewport(RectF(0.0, 0.0, size.width() * dev->logicalDpiX(), size.height() * dev->logicalDpiY()));
+    painter->setWindow(RectF(0.0, 0.0, size.width() * Ms::DPI, size.height() * Ms::DPI));
+
+    double pixelRationBackup = Ms::MScore::pixelRatio;
+    Ms::MScore::pixelRatio = Ms::DPI / dev->logicalDpiX();
+
+    int fromPage = opt.fromPage >= 0 ? opt.fromPage : 0;
+    int toPage = (opt.toPage >= 0 && opt.toPage < score()->npages()) ? opt.toPage : (score()->npages() - 1);
+
+    for (int copy = 0; copy < opt.copyCount; ++copy) {
+        bool firstPage = true;
+        for (int p = fromPage; p <= toPage; ++p) {
+            if (!firstPage) {
+                dev->newPage();
+            }
+            firstPage = false;
+
+            score()->print(painter, p);
+
+            if ((copy + 1) < opt.copyCount) {
+                dev->newPage();
+            }
+        }
     }
 
     score()->setPrinting(false);

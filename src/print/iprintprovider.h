@@ -27,6 +27,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "ret.h"
+#include "notation/inotation.h"
 
 namespace mu::print {
 class IPrintProvider : MODULE_EXPORT_INTERFACE
@@ -36,23 +37,7 @@ class IPrintProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPrintProvider() = default;
 
-    struct Options
-    {
-        QString title;
-        QSizeF pageSize;
-        int pages = 0;
-    };
-
-    struct PrintFuncs
-    {
-        std::function<void(QPainter*, int dpi)> onStartPrint;
-        std::function<void(QPainter*, int page)> onPagePrint;
-        std::function<void(QPainter*)> onEndPrint;
-    };
-
-    using PrintPageFunc = std::function<void (QPainter*, int page)>;
-
-    virtual Ret setupAndPrint(const Options& opt, const PrintFuncs& funcs) = 0;
+    virtual Ret printNotation(notation::INotationPtr notation) = 0;
 };
 }
 

@@ -28,14 +28,22 @@
 
 using namespace mu;
 using namespace mu::print;
+using namespace mu::draw;
+using namespace mu::notation;
 
-Ret PrintProvider::setupAndPrint(const Options& opt, const PrintFuncs& funcs)
+Ret PrintProvider::printNotation(INotationPtr notation)
 {
+    IF_ASSERT_FAILED(notation) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    auto painting = notation->painting();
+
+    SizeF pageSizeInch = painting->pageSizeInch();
     QPrinter printerDev(QPrinter::HighResolution);
-    //QPageSize ps(QPageSize::id(opt.pageSize, QPageSize::Inch));
-    QPageSize ps(QPageSize::A2);
+    QPageSize ps(QPageSize::id(pageSizeInch.toQSizeF(), QPageSize::Inch));
     printerDev.setPageSize(ps);
-    printerDev.setPageOrientation(opt.pageSize.width() > opt.pageSize.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
+    printerDev.setPageOrientation(pageSizeInch.width() > pageSizeInch.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
     //printerDev.setCreator("MuseScore Version: " VERSION);
     printerDev.setFullPage(true);
@@ -44,56 +52,27 @@ Ret PrintProvider::setupAndPrint(const Options& opt, const PrintFuncs& funcs)
     }
 
     printerDev.setColorMode(QPrinter::Color);
-    printerDev.setDocName(opt.title);
+    printerDev.setDocName(notation->completedTitle());
     printerDev.setOutputFormat(QPrinter::NativeFormat);
-    printerDev.setFromTo(1, opt.pages);
+    printerDev.setFromTo(1, painting->pageCount());
 
     QPrintDialog pd(&printerDev, 0);
     if (!pd.exec()) {
         return mu::make_ret(Ret::Code::Cancel);
     }
 
-    QPainter p(&printerDev);
-    p.setRenderHint(QPainter::Antialiasing, true);
-    p.setRenderHint(QPainter::TextAntialiasing, true);
-    p.scale(1, 1);
+    Painter painter(&printerDev, "print");
 
-    if (funcs.onStartPrint) {
-        funcs.onStartPrint(&p, printerDev.logicalDpiX());
-    }
+    PagedPaintDevice paintDev(&printerDev);
 
-    if (funcs.onPagePrint) {
-        int fromPage = printerDev.fromPage() - 1;
-        int toPage   = printerDev.toPage() - 1;
-        if (fromPage < 0) {
-            fromPage = 0;
-        }
-        if ((toPage < 0) || (toPage >= opt.pages)) {
-            toPage = opt.pages - 1;
-        }
+    INotationPainting::Options opt;
+    opt.fromPage = printerDev.fromPage() - 1;
+    opt.toPage = printerDev.toPage() - 1;
+    opt.copyCount = printerDev.copyCount();
 
-        for (int copy = 0; copy < printerDev.copyCount(); ++copy) {
-            bool firstPage = true;
-            for (int n = fromPage; n <= toPage; ++n) {
-                if (!firstPage) {
-                    printerDev.newPage();
-                }
-                firstPage = false;
+    painting->paintPrint(&paintDev, &painter, opt);
 
-                funcs.onPagePrint(&p, n);
-
-                if ((copy + 1) < printerDev.copyCount()) {
-                    printerDev.newPage();
-                }
-            }
-        }
-    }
-
-    if (funcs.onEndPrint) {
-        funcs.onEndPrint(&p);
-    }
-
-    p.end();
+    painter.endDraw();
 
     return mu::make_ret(Ret::Code::Ok);
 }
