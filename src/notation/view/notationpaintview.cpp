@@ -429,7 +429,14 @@ void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painte
     if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {
-        QPixmap pixmap(wallpaperPath);
+        static QPixmap pixmap(wallpaperPath);
+        static QString lastPath = wallpaperPath;
+
+        if (lastPath != wallpaperPath) {
+            pixmap = QPixmap(wallpaperPath);
+            lastPath = wallpaperPath;
+        }
+
         painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
 }
