@@ -23,6 +23,8 @@
 
 #include "libmscore/system.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
@@ -33,6 +35,8 @@ NotationNavigator::NotationNavigator(QQuickItem* parent)
 
 void NotationNavigator::load()
 {
+    TRACEFUNC;
+
     initOrientation();
     initVisible();
 
@@ -65,6 +69,8 @@ PageList NotationNavigator::pages() const
 
 void NotationNavigator::rescale()
 {
+    TRACEFUNC;
+
     PageList pages = this->pages();
     if (pages.empty()) {
         return;
@@ -95,6 +101,8 @@ void NotationNavigator::wheelEvent(QWheelEvent*)
 
 void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
+    TRACEFUNC;
+
     PointF logicPos = toLogical(event->pos());
     m_startMove = logicPos;
     if (m_cursorRect.contains(logicPos)) {
@@ -109,6 +117,8 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 
 void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 {
+    TRACEFUNC;
+
     PointF logicPos = toLogical(event->pos());
     PointF delta = logicPos - m_startMove;
     moveNotationRequested(-delta.x(), -delta.y());
@@ -118,6 +128,8 @@ void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 
 void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
 {
+    TRACEFUNC;
+
     RectF newViewRect = viewRect;
     RectF viewport = this->viewport();
     RectF notationContentRect = this->notationContentRect();
@@ -165,6 +177,8 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
     if (!rect.isValid()) {
         return;
     }
+
+    TRACEFUNC;
 
     RectF newCursorRect = notationContentRect().intersected(RectF::fromQRectF(rect));
 
@@ -219,14 +233,22 @@ void NotationNavigator::paint(QPainter* painter)
         return;
     }
 
+    TRACEFUNC;
+
     NotationPaintView::paint(painter);
-    paintCursor(painter);
 
     paintPageNumbers(painter);
+    paintCursor(painter);
+}
+
+void NotationNavigator::onViewSizeChanged()
+{
 }
 
 void NotationNavigator::paintCursor(QPainter* painter)
 {
+    TRACEFUNC;
+
     QColor color(configuration()->selectionColor());
     QPen pen(color, configuration()->borderWidth());
     painter->setPen(pen);
@@ -240,6 +262,8 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
     if (notationViewMode() != ViewMode::PAGE) {
         return;
     }
+
+    TRACEFUNC;
 
     constexpr int PAGE_NUMBER_FONT_SIZE = 2000;
     QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
