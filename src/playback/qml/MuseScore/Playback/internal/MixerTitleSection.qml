@@ -31,7 +31,7 @@ MixerPanelSection {
     headerTitle: qsTrc("playback", "Name")
 
     Rectangle {
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
         height: 22
 
         color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
@@ -46,7 +46,7 @@ MixerPanelSection {
             readonly property int margin: -8
             width: margin + parent.width + margin
 
-            text: mixerItem.title
+            text: channelItem.title
         }
     }
 }

@@ -34,11 +34,11 @@ MixerPanelSection {
         id: content
 
         height: inputResourceControl.height
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
-        visible: !mixerItem.outputOnly
+        visible: !channelItem.outputOnly
 
         AudioResourceControl {
             id: inputResourceControl
@@ -47,15 +47,15 @@ MixerPanelSection {
 
             menuAnchorItem: root.rootPanel
             supportsByPassing: false
-            resourceItemModel: mixerItem.inputResourceItem
+            resourceItemModel: channelItem.inputResourceItem
 
-            navigationPanel: mixerItem.panel
+            navigationPanel: channelItem.panel
             navigationRowStart: root.navigationRowStart
             accessibleName: content.accessibleName
 
             onTitleClicked: {
-                if (mixerItem.inputResourceItem) {
-                    mixerItem.inputResourceItem.requestToLaunchNativeEditorView()
+                if (channelItem.inputResourceItem) {
+                    channelItem.inputResourceItem.requestToLaunchNativeEditorView()
                 }
             }
 

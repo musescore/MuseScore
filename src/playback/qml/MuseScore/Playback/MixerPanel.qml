@@ -44,6 +44,9 @@ Rectangle {
         property var currentNavigateControlIndex: undefined
         property bool isPanelActivated: false
 
+        readonly property real headerWidth: 98
+        readonly property real channelItemWidth: 108
+
         function setNavigateControlIndex(index) {
             if (!Boolean(prv.currentNavigateControlIndex) ||
                     index.row !== prv.currentNavigateControlIndex.row ||
@@ -75,8 +78,8 @@ Rectangle {
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
-        contentWidth: contentColumn.width
-        contentHeight: contentColumn.height
+        contentWidth: contentColumn.width + 1 // for trailing separator
+        contentHeight: Math.max(contentColumn.height, height)
         interactive: height < contentHeight || width < contentWidth
 
         ScrollBar.vertical: StyledScrollBar { policy: ScrollBar.AlwaysOn }
@@ -96,7 +99,7 @@ Rectangle {
             function setupConnections() {
                 for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
                     var item = mixerPanelModel.get(i)
-                    item.item.panel.navigationEvent.connect(function(event) {
+                    item.channelItem.panel.navigationEvent.connect(function(event) {
                         if (event.type === NavigationEvent.AboutActive) {
                             if (Boolean(prv.currentNavigateControlIndex)) {
                                 event.setData("controlIndex", [prv.currentNavigateControlIndex.row, prv.currentNavigateControlIndex.column])
@@ -118,8 +121,24 @@ Rectangle {
             }
         }
 
+        Row {
+            id: separators
+            anchors.fill: parent
+            anchors.leftMargin: contextMenuModel.labelsSectionVisible ? prv.headerWidth : prv.channelItemWidth
+            spacing: prv.channelItemWidth
+
+            Repeater {
+                model: contextMenuModel.labelsSectionVisible ? mixerPanelModel.count + 1 : mixerPanelModel.count
+
+                SeparatorLine {
+                    orientation: Qt.Vertical
+                }
+            }
+        }
+
         Column {
             id: contentColumn
+            anchors.bottom: parent.bottom
             width: childrenRect.width
             spacing: 0
 
@@ -128,6 +147,8 @@ Rectangle {
 
                 visible: contextMenuModel.soundSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 spacingAbove: 8
                 rootPanel: root
 
@@ -146,6 +167,8 @@ Rectangle {
 
                 visible: contextMenuModel.audioFxSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 spacingAbove: 8
                 rootPanel: root
 
@@ -164,6 +187,8 @@ Rectangle {
 
                 visible: contextMenuModel.balanceSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -181,6 +206,8 @@ Rectangle {
 
                 visible: contextMenuModel.volumeSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -198,6 +225,8 @@ Rectangle {
 
                 visible: contextMenuModel.faderSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 spacingAbove: -3
                 spacingBelow: -2
                 rootPanel: root
@@ -217,6 +246,8 @@ Rectangle {
 
                 visible: contextMenuModel.muteAndSoloSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 rootPanel: root
 
                 model: mixerPanelModel
@@ -234,6 +265,8 @@ Rectangle {
 
                 visible: contextMenuModel.titleSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                headerWidth: prv.headerWidth
+                channelItemWidth: prv.channelItemWidth
                 spacingAbove: 2
                 spacingBelow: 0
                 rootPanel: root
