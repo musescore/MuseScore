@@ -29,6 +29,7 @@ MixerPanelSection {
     id: root
 
     headerTitle: qsTrc("playback", "Audio FX")
+    headerHeight: 24
 
     Column {
         id: content
@@ -36,9 +37,9 @@ MixerPanelSection {
         y: 0
 
         height: childrenRect.height
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
         spacing: 4
 
@@ -46,7 +47,7 @@ MixerPanelSection {
             id: repeater
             anchors.horizontalCenter: parent.horizontalCenter
 
-            model: mixerItem.outputResourceItemList
+            model: channelItem.outputResourceItemList
             delegate: AudioResourceControl {
                 id: inputResourceControl
 
@@ -56,7 +57,7 @@ MixerPanelSection {
                 resourceItemModel: modelData
                 active: modelData.isActive
 
-                navigationPanel: mixerItem.panel
+                navigationPanel: channelItem.panel
                 navigationRowStart: root.navigationRowStart + (model.index * 3) // NOTE: 3 - because AudioResourceControl have 3 controls
                 navigationName: modelData.id
                 accessibleName: content.accessibleName

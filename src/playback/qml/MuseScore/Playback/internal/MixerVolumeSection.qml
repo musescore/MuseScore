@@ -34,9 +34,9 @@ MixerPanelSection {
         id: content
 
         height: childrenRect.height
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
         TextInputField {
             id: volumeTextInputField
@@ -51,7 +51,7 @@ MixerPanelSection {
             background.radius: 2
 
             navigation.name: "VolumeInputField"
-            navigation.panel: mixerItem.panel
+            navigation.panel: channelItem.panel
             navigation.row: root.navigationRowStart
             navigation.accessible.name: content.accessibleName + " " + currentText
             navigation.onActiveChanged: {
@@ -67,11 +67,11 @@ MixerPanelSection {
                 decimal: 1
             }
 
-            currentText: Math.round(mixerItem.volumeLevel * 10) / 10
+            currentText: Math.round(channelItem.volumeLevel * 10) / 10
 
             onCurrentTextEdited: {
-                if (mixerItem.volumeLevel !== Number(newTextValue)) {
-                    mixerItem.volumeLevel = Number(newTextValue)
+                if (channelItem.volumeLevel !== Number(newTextValue)) {
+                    channelItem.volumeLevel = Number(newTextValue)
                 }
             }
         }

@@ -43,6 +43,8 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
     INJECT(playback, audio::IPlayback, playback)
     INJECT(playback, IPlaybackController, controller)
 
+    Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
+
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
 
@@ -53,9 +55,12 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+signals:
+    void rowCountChanged();
+
 private:
     enum Roles {
-        ItemRole = Qt::UserRole + 1
+        ChannelItemRole = Qt::UserRole + 1
     };
 
     void loadItems(const audio::TrackSequenceId sequenceId, const audio::TrackIdList& trackIdList);
