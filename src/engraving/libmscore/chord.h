@@ -163,7 +163,7 @@ public:
     qreal defaultStemLength() const { return _defaultStemLength; }
     qreal minStemLength() const { return _minStemLength; }
     void setBeamExtension(qreal extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams);
 
     void layoutStem();
     void layoutArpeggio2();

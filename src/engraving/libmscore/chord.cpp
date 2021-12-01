@@ -1396,13 +1396,13 @@ int Chord::stemLengthBeamAddition() const
     }
 }
 
-int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing)
+int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams)
 {
     int beamOverlap = 8;
     if (beamCount == 3 && !hasHook) {
         beamOverlap = 12;
     } else if (beamCount >= 4 && !hasHook) {
-        beamOverlap = (beamCount - 4) * beamSpacing + 3.5;
+        beamOverlap = (beamCount - 4) * beamSpacing + (useWideBeams ? 4.0 : 3.5);
     }
 
     int staffOverlap = qMin(beamOverlap, (staffLines - 1) * 4);
@@ -1512,7 +1512,8 @@ qreal Chord::calcDefaultStemLength()
 
     int staffLineCount = staffItem->lines(tick());
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2;
-    qreal middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75);
+    bool useWideBeams = score()->styleB(Sid::useWideBeams);
+    qreal middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 1.0 : 0.75, useWideBeams);
     qreal shortestStem = score()->styleB(Sid::useWideBeams) ? 3.0 : score()->styleD(Sid::shortestStem);
     if (isGrace()) {
         stemLength = qMax(static_cast<int>(defaultStemLength * score()->styleD(Sid::graceNoteMag)), minStemLengthQuarterSpaces);
