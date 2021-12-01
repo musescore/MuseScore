@@ -68,6 +68,7 @@ private:
     void rescale();
 
     void paint(QPainter* painter) override;
+    void onViewSizeChanged() override;
 
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
