@@ -68,10 +68,10 @@ private:
     static EditStylePage pageForElement(EngravingItem*);
 
     struct StyleWidget {
-        StyleId idx;
-        bool showPercent;
-        QObject* widget;
-        QToolButton* reset;
+        StyleId idx = StyleId::NOSTYLE;
+        bool showPercent = false;
+        QObject* widget = nullptr;
+        QToolButton* reset = nullptr;
     };
 
     QVector<StyleWidget> styleWidgets;
