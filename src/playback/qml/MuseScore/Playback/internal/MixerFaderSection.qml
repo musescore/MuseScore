@@ -32,9 +32,9 @@ MixerPanelSection {
         id: content
 
         height: childrenRect.height
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -42,10 +42,10 @@ MixerPanelSection {
             spacing: 8
 
             VolumeSlider {
-                volumeLevel: mixerItem.volumeLevel
+                volumeLevel: channelItem.volumeLevel
                 stepSize: 1.0
 
-                navigation.panel: mixerItem.panel
+                navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
                 navigation.accessible.name: content.accessibleName + " " + readableVolumeLevel
                 navigation.onActiveChanged: {
@@ -55,15 +55,15 @@ MixerPanelSection {
                 }
 
                 onVolumeLevelMoved: {
-                    mixerItem.volumeLevel = Math.round(level * 10) / 10
+                    channelItem.volumeLevel = Math.round(level * 10) / 10
                 }
 
                 onIncreaseRequested: {
-                    mixerItem.volumeLevel += stepSize
+                    channelItem.volumeLevel += stepSize
                 }
 
                 onDecreaseRequested: {
-                    mixerItem.volumeLevel -= stepSize
+                    channelItem.volumeLevel -= stepSize
                 }
             }
 
@@ -74,12 +74,12 @@ MixerPanelSection {
 
                 VolumePressureMeter {
                     id: leftPressure
-                    currentVolumePressure: mixerItem.leftChannelPressure
+                    currentVolumePressure: channelItem.leftChannelPressure
                 }
 
                 VolumePressureMeter {
                     id: rightPressure
-                    currentVolumePressure: mixerItem.rightChannelPressure
+                    currentVolumePressure: channelItem.rightChannelPressure
                     showRuler: true
                 }
             }

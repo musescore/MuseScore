@@ -34,9 +34,9 @@ MixerPanelSection {
         id: content
 
         height: contentRow.implicitHeight
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
         Row {
             id: contentRow
@@ -48,10 +48,10 @@ MixerPanelSection {
             KnobControl {
                 id: balanceKnob
 
-                value: mixerItem.balance
+                value: channelItem.balance
                 stepSize: 1
 
-                navigation.panel: mixerItem.panel
+                navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
                 navigation.accessible.name: content.accessibleName
                 navigation.onActiveChanged: {
@@ -61,15 +61,15 @@ MixerPanelSection {
                 }
 
                 onMoved: {
-                    mixerItem.balance = value
+                    channelItem.balance = value
                 }
 
                 onIncreaseRequested: {
-                    mixerItem.balance += stepSize
+                    channelItem.balance += stepSize
                 }
 
                 onDecreaseRequested: {
-                    mixerItem.balance -= stepSize
+                    channelItem.balance -= stepSize
                 }
             }
 
@@ -85,7 +85,7 @@ MixerPanelSection {
                 textSidePadding: 0
                 background.radius: 2
 
-                navigation.panel: mixerItem.panel
+                navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart + 1
                 navigation.accessible.name: content.accessibleName + " " + currentText
                 navigation.onActiveChanged: {
@@ -100,11 +100,11 @@ MixerPanelSection {
                     bottom: -100
                 }
 
-                currentText: mixerItem.balance
+                currentText: channelItem.balance
 
                 onCurrentTextEdited: {
-                    if (mixerItem.balance !== Number(newTextValue)) {
-                        mixerItem.balance = Number(newTextValue)
+                    if (channelItem.balance !== Number(newTextValue)) {
+                        channelItem.balance = Number(newTextValue)
                     }
                 }
             }

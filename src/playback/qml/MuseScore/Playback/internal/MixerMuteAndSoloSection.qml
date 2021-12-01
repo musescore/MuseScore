@@ -32,9 +32,9 @@ MixerPanelSection {
         id: content
 
         height: childrenRect.height
-        width: root.delegateDefaultWidth
+        width: root.channelItemWidth
 
-        property string accessibleName: (Boolean(root.needReadChannelName) ? mixerItem.title + " " : "") + root.headerTitle
+        property string accessibleName: (Boolean(root.needReadChannelName) ? channelItem.title + " " : "") + root.headerTitle
 
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -48,10 +48,10 @@ MixerPanelSection {
                 width: 20
 
                 icon: IconCode.MUTE
-                checked: mixerItem.muted
+                checked: channelItem.muted
 
                 navigation.name: "MuteButton"
-                navigation.panel: mixerItem.panel
+                navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("playback", "Mute")
                 navigation.onActiveChanged: {
@@ -61,7 +61,7 @@ MixerPanelSection {
                 }
 
                 onToggled: {
-                    mixerItem.muted = !mixerItem.muted
+                    channelItem.muted = !channelItem.muted
                 }
             }
 
@@ -72,10 +72,10 @@ MixerPanelSection {
                 width: 20
 
                 icon: IconCode.SOLO
-                checked: mixerItem.solo
+                checked: channelItem.solo
 
                 navigation.name: "SoloButton"
-                navigation.panel: mixerItem.panel
+                navigation.panel: channelItem.panel
                 navigation.row: root.navigationRowStart + 1
                 navigation.accessible.name: content.accessibleName + " " + qsTrc("payback", "Solo")
                 navigation.onActiveChanged: {
@@ -85,7 +85,7 @@ MixerPanelSection {
                 }
 
                 onToggled: {
-                    mixerItem.solo = !mixerItem.solo
+                    channelItem.solo = !channelItem.solo
                 }
             }
         }

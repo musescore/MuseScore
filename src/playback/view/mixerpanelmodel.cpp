@@ -34,6 +34,10 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load(QVariant::fromValue(m_itemsNavigationSection));
     });
+
+    connect(this, &QAbstractItemModel::modelReset, this, &MixerPanelModel::rowCountChanged);
+    connect(this, &QAbstractItemModel::rowsInserted, this, &MixerPanelModel::rowCountChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &MixerPanelModel::rowCountChanged);
 }
 
 void MixerPanelModel::load(const QVariant& navigationSection)
@@ -75,7 +79,7 @@ QVariantMap MixerPanelModel::get(int index)
 
 QVariant MixerPanelModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || role != ItemRole) {
+    if (!index.isValid() || index.row() >= rowCount() || role != ChannelItemRole) {
         return QVariant();
     }
 
@@ -90,7 +94,7 @@ int MixerPanelModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> MixerPanelModel::roleNames() const
 {
     static QHash<int, QByteArray> roles = {
-        { ItemRole, "item" }
+        { ChannelItemRole, "channelItem" }
     };
 
     return roles;

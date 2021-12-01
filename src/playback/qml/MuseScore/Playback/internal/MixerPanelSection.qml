@@ -32,8 +32,9 @@ Loader {
     property string headerTitle: ""
     property bool headerVisible: true
     property int headerWidth: 98
+    property int headerHeight: implicitHeight - spacingAbove - spacingBelow
 
-    property int delegateDefaultWidth: 108
+    property int channelItemWidth: 108
 
     property real spacingAbove: 4
     property real spacingBelow: 4
@@ -51,68 +52,42 @@ Loader {
 
     active: visible
 
-    sourceComponent: ListView {
-        id: sectionContentList
+    sourceComponent: Row {
+        width: implicitWidth
+        height: root.spacingAbove + sectionContentList.contentHeight + root.spacingBelow
+        spacing: 1 // for separator (will be rendered in MixerPanel.qml)
 
-        width: contentItem.childrenRect.width
-        height: contentHeight
-        contentHeight: contentItem.childrenRect.height
-
-        interactive: false
-        orientation: Qt.Horizontal
-        spacing: 0
-
-        model: root.model
-
-        header: Item {
-            width: visible ? root.headerWidth + 1 : 0 // +1 for separator
-            height: parent.height
+        StyledTextLabel {
             visible: root.headerVisible
 
-            StyledTextLabel {
-                anchors.top: parent.top
-                anchors.topMargin: root.spacingAbove
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: root.spacingBelow
-                anchors.right: separator.left
-                anchors.rightMargin: 12
-                anchors.left: parent.left
-                anchors.leftMargin: 12
+            anchors.top: parent.top
+            anchors.topMargin: root.spacingAbove
 
-                horizontalAlignment: Qt.AlignRight
-                text: root.headerTitle
-            }
+            width: root.headerWidth
+            height: root.headerHeight
 
-            SeparatorLine {
-                id: separator
-                anchors.right: parent.right
-                orientation: Qt.Vertical
-            }
+            leftPadding: 12
+            rightPadding: 12
+
+            horizontalAlignment: Qt.AlignRight
+            text: root.headerTitle
         }
 
-        delegate: Row {
-            id: delegateRow
+        ListView {
+            id: sectionContentList
 
-            width: root.delegateDefaultWidth + 1 // for separator
-            height: root.spacingAbove + delegateLoader.implicitHeight + root.spacingBelow
+            anchors.top: parent.top
+            anchors.topMargin: root.spacingAbove
+            width: contentItem.childrenRect.width
+            height: contentHeight
+            contentHeight: contentItem.childrenRect.height
 
-            topPadding: root.spacingAbove
-            bottomPadding: root.spacingBelow
-            spacing: 0
+            interactive: false
+            orientation: Qt.Horizontal
+            spacing: 1 // for separators (will be rendered in MixerPanel.qml)
 
-            Loader {
-                id: delegateLoader
-
-                width: root.delegateDefaultWidth
-
-                property var mixerItem: model.item
-                sourceComponent: root.delegateComponent
-            }
-
-            SeparatorLine {
-                orientation: Qt.Vertical
-                height: root.height
-            }
+            model: root.model
+            delegate: delegateComponent
         }
     }
 }
