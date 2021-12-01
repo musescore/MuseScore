@@ -69,6 +69,7 @@ public:
 
     QByteArray readAudioFile() const;
     QByteArray readAudioSettingsJsonFile() const;
+    QByteArray readViewSettingsJsonFile() const;
 
 private:
 

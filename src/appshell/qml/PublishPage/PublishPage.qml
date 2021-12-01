@@ -125,6 +125,7 @@ DockPage {
 
     central: NotationView {
         name: "PublishNotationView"
+        publishMode: true
     }
 
     statusBar: DockStatusBar {

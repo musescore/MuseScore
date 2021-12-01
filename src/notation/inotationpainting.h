@@ -50,6 +50,7 @@ public:
     virtual SizeF pageSizeInch() const = 0; // size in inches
 
     virtual void paintView(draw::Painter* painter, const RectF& frameRect) = 0;
+    virtual void paintPublish(draw::Painter* painter, const RectF& frameRect) = 0;
     virtual void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPng(draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPrint(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
