@@ -1011,6 +1011,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
         NOT_IMPL_RETURN;
     }
+    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
 
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());

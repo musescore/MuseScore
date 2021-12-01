@@ -529,7 +529,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
         { "staffLineThickness",            Sid::staffLineWidth },
         { "stemThickness",                 Sid::stemWidth },
         { "beamThickness",                 Sid::beamWidth },
-        { "beamSpacing",                   Sid::beamDistance },
+        { "beamSpacing",                   Sid::useWideBeams },
         { "legerLineThickness",            Sid::ledgerLineWidth },
         { "legerLineExtension",            Sid::ledgerLineLength },
         { "slurEndpointThickness",         Sid::SlurEndWidth },
@@ -561,7 +561,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
                 qreal value = engravingDefaultsObject.value(key).toDouble();
 
                 if (key == "beamSpacing") {
-                    value /= engravingDefaultsObject.value("beamThickness").toDouble();
+                    value = value > 0.75;
                 }
 
                 m_engravingDefaults.push_back({ mapping.second, value });

@@ -25,7 +25,7 @@ using namespace mu::notation;
 
 BeamsPageModel::BeamsPageModel(QObject* parent)
     : AbstractStyleDialogModel(parent, {
-    StyleId::beamDistance,
+    StyleId::useWideBeams,
     StyleId::beamWidth,
     StyleId::beamMinLen,
     StyleId::beamNoSlope
@@ -33,9 +33,9 @@ BeamsPageModel::BeamsPageModel(QObject* parent)
 {
 }
 
-StyleItem* BeamsPageModel::beamDistance() const
+StyleItem* BeamsPageModel::useWideBeams() const
 {
-    return styleItem(StyleId::beamDistance);
+    return styleItem(StyleId::useWideBeams);
 }
 
 StyleItem* BeamsPageModel::beamWidth() const
