@@ -1903,6 +1903,8 @@ const EditStyle::StyleWidget& EditStyle::styleWidget(StyleId idx) const
         }
     }
     UNREACHABLE;
+    static EditStyle::StyleWidget dummy;
+    return dummy;
 }
 
 //---------------------------------------------------------
