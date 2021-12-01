@@ -63,14 +63,14 @@ Ret PrintProvider::printNotation(INotationPtr notation)
 
     Painter painter(&printerDev, "print");
 
-    PagedPaintDevice paintDev(&printerDev);
-
     INotationPainting::Options opt;
     opt.fromPage = printerDev.fromPage() - 1;
     opt.toPage = printerDev.toPage() - 1;
     opt.copyCount = printerDev.copyCount();
+    opt.deviceDpi = printerDev.logicalDpiX();
+    opt.onNewPage = [&printerDev]() { printerDev.newPage(); };
 
-    painting->paintPrint(&paintDev, &painter, opt);
+    painting->paintPrint(&painter, opt);
 
     painter.endDraw();
 

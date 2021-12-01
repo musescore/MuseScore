@@ -34,8 +34,7 @@ public:
     PaintDevice(QPaintDevice* d);
 #endif
 
-    int logicalDpiX() const;
-    int logicalDpiY() const;
+    int dpi() const;
 
 private:
     QPaintDevice* m_d = nullptr;
@@ -49,9 +48,6 @@ public:
 #ifndef NO_QT_SUPPORT
     PagedPaintDevice(QPagedPaintDevice* d);
 #endif
-
-    int logicalDpiX() const;
-    int logicalDpiY() const;
 
     void newPage();
 

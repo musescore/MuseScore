@@ -54,16 +54,16 @@ mu::Ret PdfWriter::write(INotationPtr notation, io::Device& destinationDevice, c
     QPdfWriter pdfWriter(&destinationDevice);
     preparePdfWriter(pdfWriter, notation->completedTitle());
 
-    PagedPaintDevice dev(&pdfWriter);
-
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
         return false;
     }
 
     INotationPainting::Options opt;
+    opt.deviceDpi = pdfWriter.logicalDpiX();
+    opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
 
-    notation->painting()->paintPdf(&dev, &painter, opt);
+    notation->painting()->paintPdf(&painter, opt);
 
     painter.endDraw();
 
@@ -89,14 +89,14 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& dest
     QPdfWriter pdfWriter(&destinationDevice);
     preparePdfWriter(pdfWriter, firstNotation->scoreTitle());
 
-    PagedPaintDevice dev(&pdfWriter);
-
     Painter painter(&pdfWriter, "pdfwriter");
     if (!painter.isActive()) {
         return false;
     }
 
     INotationPainting::Options opt;
+    opt.deviceDpi = pdfWriter.logicalDpiX();
+    opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
 
     for (auto notation : notations) {
         IF_ASSERT_FAILED(notation) {
@@ -107,7 +107,7 @@ mu::Ret PdfWriter::writeList(const INotationPtrList& notations, io::Device& dest
             pdfWriter.newPage();
         }
 
-        notation->painting()->paintPdf(&dev, &painter, opt);
+        notation->painting()->paintPdf(&painter, opt);
     }
 
     painter.endDraw();
