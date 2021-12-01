@@ -61,6 +61,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectaudiosettings.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectviewsettings.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/irecentprojectsprovider.h
@@ -74,6 +75,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectaudiosettings.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectviewsettings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectviewsettings.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.cpp

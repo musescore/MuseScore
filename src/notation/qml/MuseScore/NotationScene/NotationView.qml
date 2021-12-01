@@ -32,7 +32,8 @@ import "internal"
 FocusScope {
     id: root
 
-    property string name
+    property alias name: notationView.objectName
+    property alias publishMode: notationView.publishMode
 
     property alias isNavigatorVisible: notationNavigator.visible
 
@@ -90,8 +91,6 @@ FocusScope {
                 NotationPaintView {
                     id: notationView
                     anchors.fill: parent
-
-                    objectName: root.name
 
                     NavigationPanel {
                         id: navPanel

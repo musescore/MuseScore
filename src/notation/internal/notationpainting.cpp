@@ -31,6 +31,7 @@
 
 using namespace mu;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 NotationPainting::NotationPainting(Notation* notation)
@@ -78,6 +79,13 @@ SizeF NotationPainting::pageSizeInch() const
         return SizeF();
     }
 
+    //! NOTE If now it is not PAGE view mode,
+    //! then the page sizes will differ from the standard sizes (in PAGE view mode)
+    if (score()->npages() > 0) {
+        const Ms::Page* page = score()->pages().front();
+        return SizeF(page->bbox().width() / Ms::DPI, page->bbox().height() / Ms::DPI);
+    }
+
     return SizeF(score()->styleD(Ms::Sid::pageWidth), score()->styleD(Ms::Sid::pageHeight));
 }
 
@@ -104,6 +112,34 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect)
     }
 
     static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);
+}
+
+void NotationPainting::paintPublish(draw::Painter* painter, const RectF& frameRect)
+{
+    const QList<Ms::Page*>& pages = score()->pages();
+    if (pages.empty()) {
+        return;
+    }
+
+    LayoutMode currentViewMode = score()->layoutMode();
+    if (currentViewMode != LayoutMode::PAGE) {
+        score()->setLayoutMode(LayoutMode::PAGE);
+        score()->doLayout();
+    }
+
+    score()->setPrinting(true);
+    Ms::MScore::pdfPrinting = true;
+
+    bool paintBorders = !score()->printing();
+    paintPages(painter, frameRect, pages, paintBorders);
+
+    score()->setPrinting(false);
+    Ms::MScore::pdfPrinting = false;
+
+    if (currentViewMode != score()->layoutMode()) {
+        score()->setLayoutMode(currentViewMode);
+        score()->doLayout();
+    }
 }
 
 void NotationPainting::paintPages(draw::Painter* painter, const RectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const
@@ -260,6 +296,7 @@ void NotationPainting::paintPng(Painter* painter, const Options& opt)
     }
 
     score()->setPrinting(true);
+    Ms::MScore::pdfPrinting = true;
 
     double pixelRatioBackup = Ms::MScore::pixelRatio;
 
@@ -294,5 +331,6 @@ void NotationPainting::paintPng(Painter* painter, const Options& opt)
     engraving::Paint::paintElements(*painter, elements);
 
     score()->setPrinting(false);
+    Ms::MScore::pdfPrinting = false;
     Ms::MScore::pixelRatio = pixelRatioBackup;
 }

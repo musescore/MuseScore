@@ -247,12 +247,15 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPointF& pos
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)
 {
-    auto notation = currentNotation();
-    if (!notation) {
-        return;
+    auto projec = globalContext()->currentProject();
+    if (projec) {
+        projec->viewSettings()->setNotationViewMode(viewMode);
     }
 
-    notation->setViewMode(viewMode);
+    auto notation = globalContext()->currentNotation();
+    if (notation) {
+        notation->setViewMode(viewMode);
+    }
 }
 
 void NotationViewInputController::wheelEvent(QWheelEvent* event)

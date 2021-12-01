@@ -65,6 +65,8 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
     Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
 
+    Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
+
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
 
@@ -114,6 +116,9 @@ public:
     RectF viewport() const;
     QRectF viewport_property() const;
 
+    bool publishMode() const;
+    void setPublishMode(bool arg);
+
 signals:
     void showContextMenuRequested(int elementType, const QPointF& pos);
     void hideContextMenuRequested();
@@ -125,6 +130,7 @@ signals:
 
     void backgroundColorChanged(QColor color);
     void viewportChanged();
+    void publishModeChanged();
 
     void activeFocusRequested();
 
@@ -213,6 +219,7 @@ private:
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
+    bool m_publishMode = false;
 };
 }
 
