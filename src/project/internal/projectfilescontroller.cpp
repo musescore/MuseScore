@@ -254,6 +254,7 @@ void ProjectFilesController::newProject()
 bool ProjectFilesController::closeOpenedProject()
 {
     INotationProjectPtr project = currentNotationProject();
+    bool result = false;
     if (!project) {
         return true;
     }
@@ -268,12 +269,16 @@ bool ProjectFilesController::closeOpenedProject()
         if (btn == IInteractive::Button::Cancel) {
             return false;
         } else if (btn == IInteractive::Button::Save) {
-            saveProject();
+            result = saveProject();
+        } else if (btn == IInteractive::Button::DontSave) {
+            result = true;
         }
     }
-
-    globalContext()->setCurrentProject(nullptr);
-    return true;
+    if (result) {
+        globalContext()->setCurrentProject(nullptr);
+        return true;
+    }
+    return false;
 }
 
 IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
@@ -300,16 +305,15 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
     return result.standardButton();
 }
 
-void ProjectFilesController::saveProject(const io::path& path)
+bool ProjectFilesController::saveProject(const io::path& path)
 {
     if (!currentNotationProject()) {
         LOGW() << "no current project";
-        return;
+        return false;
     }
 
     if (!currentNotationProject()->created().val) {
-        doSaveScore();
-        return;
+        return doSaveScore();
     }
 
     io::path filePath;
@@ -321,7 +325,7 @@ void ProjectFilesController::saveProject(const io::path& path)
     }
 
     if (filePath.empty()) {
-        return;
+        return false;
     }
 
     if (io::suffix(filePath).empty()) {
@@ -329,6 +333,7 @@ void ProjectFilesController::saveProject(const io::path& path)
     }
 
     doSaveScore(filePath);
+    return true;
 }
 
 void ProjectFilesController::saveProjectAs()
@@ -512,14 +517,14 @@ io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFi
     return filePath;
 }
 
-void ProjectFilesController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
+bool ProjectFilesController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
 {
     io::path oldPath = currentNotationProject()->metaInfo().filePath;
 
     Ret ret = currentNotationProject()->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
-        return;
+        return false;
     }
 
     if (saveMode == SaveMode::SaveAs && oldPath != filePath) {
@@ -527,6 +532,7 @@ void ProjectFilesController::doSaveScore(const io::path& filePath, project::Save
     }
 
     prependToRecentScoreList(filePath);
+    return true;
 }
 
 io::path ProjectFilesController::defaultSavingFilePath() const
