@@ -1369,9 +1369,9 @@ int Chord::calcMinStemLength()
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)]);
         // add beam lengths
-        minStemLength += beams() * _spatium * (score()->styleD(Sid::beamDistance) == 1.0 ? 1.0 : 0.75);
+        minStemLength += beams() * _spatium * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75);
         if (beams() > 0) {
-            minStemLength -= 1;
+            minStemLength -= 0.25 * _spatium;
         }
     }
     return minStemLength;

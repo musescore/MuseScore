@@ -108,6 +108,11 @@ TEST_F(BeamTests, flippedDirection)
     beam("flippedDirection.mscx");
 }
 
+TEST_F(BeamTests, wideBeams)
+{
+    beam("wideBeams.mscx");
+}
+
 // cross staff beaming is not yet supported
 // in the new beams code
 // TEST_F(BeamTests, beamCrossMeasure2)
