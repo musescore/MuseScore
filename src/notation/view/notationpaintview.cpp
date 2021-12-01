@@ -365,15 +365,16 @@ void NotationPaintView::hideContextMenu()
 void NotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
-    if (!isInited()) {
-        return;
-    }
 
     mu::draw::Painter mup(qp, objectName().toStdString());
     mu::draw::Painter* painter = &mup;
 
     RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
+
+    if (!isInited()) {
+        return;
+    }
 
     qreal guiScaling = configuration()->guiScaling();
     Transform guiScalingCompensation;
@@ -476,11 +477,6 @@ std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) 
     }
 
     return { dx, dy };
-}
-
-QColor NotationPaintView::backgroundColor() const
-{
-    return configuration()->backgroundColor();
 }
 
 RectF NotationPaintView::viewport() const
