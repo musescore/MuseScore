@@ -212,7 +212,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::keysigNaturalDistance,   "keysigNaturalDistance",   Spatium(0.4) },
 
     { Sid::beamWidth,               "beamWidth",               Spatium(0.5) },      // was 0.48
-    { Sid::beamDistance,            "beamDistance",            PropertyValue(0.5) },
+    { Sid::useWideBeams,            "useWideBeams",            false },
     { Sid::beamMinLen,              "beamMinLen",              Spatium(1.3) },     // 1.316178 exactly notehead widthen beams
     { Sid::beamNoSlope,             "beamNoSlope",             false },
 

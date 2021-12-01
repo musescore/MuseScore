@@ -41,15 +41,15 @@ StyleDialogPage {
             spacing: 12
 
             model: [
-                { iconCode: IconCode.BEAM_DISTANCE_REGULAR, text: qsTrc("notation", "Regular"), value: 0.50 },
-                { iconCode: IconCode.BEAM_DISTANCE_WIDE, text: qsTrc("notation", "Wide"), value: 1.00 }
+                { iconCode: IconCode.USE_WIDE_BEAMS_REGULAR, text: qsTrc("notation", "Regular"), value: false },
+                { iconCode: IconCode.USE_WIDE_BEAMS_WIDE, text: qsTrc("notation", "Wide"), value: true }
             ]
 
             delegate: FlatRadioButton {
                 width: 106
                 height: 70
 
-                checked: modelData.value === beamsPageModel.beamDistance.value
+                checked: modelData.value === beamsPageModel.useWideBeams.value
 
                 Column {
                     anchors.centerIn: parent
@@ -69,7 +69,7 @@ StyleDialogPage {
                 }
 
                 onToggled: {
-                    beamsPageModel.beamDistance.value = modelData.value
+                    beamsPageModel.useWideBeams.value = modelData.value
                 }
             }
         }

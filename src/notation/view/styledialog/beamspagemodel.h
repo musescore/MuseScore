@@ -29,7 +29,7 @@ class BeamsPageModel : public AbstractStyleDialogModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(StyleItem * beamDistance READ beamDistance CONSTANT)
+    Q_PROPERTY(StyleItem * useWideBeams READ useWideBeams CONSTANT)
     Q_PROPERTY(StyleItem * beamWidth READ beamWidth CONSTANT)
     Q_PROPERTY(StyleItem * beamMinLen READ beamMinLen CONSTANT)
     Q_PROPERTY(StyleItem * beamNoSlope READ beamNoSlope CONSTANT)
@@ -37,7 +37,7 @@ class BeamsPageModel : public AbstractStyleDialogModel
 public:
     explicit BeamsPageModel(QObject* parent = nullptr);
 
-    StyleItem* beamDistance() const;
+    StyleItem* useWideBeams() const;
     StyleItem* beamWidth() const;
     StyleItem* beamMinLen() const;
     StyleItem* beamNoSlope() const;

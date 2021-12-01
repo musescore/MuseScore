@@ -289,7 +289,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium)
         yOffset -= up ? 1.5 * spatium : 1 * spatium;
         yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
     } else if (beams) {
-        yOffset -= beams * (score()->styleD(Sid::beamDistance) == 1.0 ? 1.0 : 0.75) * spatium;
+        yOffset -= beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium;
         yOffset += beams == 0 ? 0.0 : 0.25 * spatium;
     }
     yOffset -= isBuzzRoll() && up ? 0.5 * spatium : 0.0;
