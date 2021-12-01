@@ -63,6 +63,7 @@ public:
     void addImageFile(const QString& fileName, const QByteArray& data);
     void writeAudioFile(const QByteArray& data);
     void writeAudioSettingsJsonFile(const QByteArray& data);
+    void writeViewSettingsJsonFile(const QByteArray& data);
 
 private:
 

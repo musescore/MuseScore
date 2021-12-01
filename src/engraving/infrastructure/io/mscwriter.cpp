@@ -171,6 +171,11 @@ void MscWriter::writeAudioSettingsJsonFile(const QByteArray& data)
     addFileData("audiosettings.json", data);
 }
 
+void MscWriter::writeViewSettingsJsonFile(const QByteArray& data)
+{
+    addFileData("viewsettings.json", data);
+}
+
 void MscWriter::writeMeta()
 {
     if (m_meta.isWrited) {

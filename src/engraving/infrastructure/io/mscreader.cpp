@@ -206,6 +206,11 @@ QByteArray MscReader::readAudioSettingsJsonFile() const
     return fileData("audiosettings.json");
 }
 
+QByteArray MscReader::readViewSettingsJsonFile() const
+{
+    return fileData("audiosettings.json");
+}
+
 // =======================================================================
 // Readers
 // =======================================================================

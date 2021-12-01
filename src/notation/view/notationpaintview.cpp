@@ -192,6 +192,12 @@ void NotationPaintView::onCurrentNotationChanged()
         return;
     }
 
+    if (publishMode()) {
+        m_notation->setViewMode(ViewMode::PAGE);
+    } else {
+        m_notation->setViewMode(globalContext()->currentProject()->viewSettings()->notationViewMode());
+    }
+
     m_notation->notationChanged().onNotify(this, [this]() {
         update();
     });
@@ -357,7 +363,7 @@ void NotationPaintView::paint(QPainter* qp)
         return;
     }
 
-    mu::draw::Painter mup(qp, "notationview");
+    mu::draw::Painter mup(qp, objectName().toStdString());
     mu::draw::Painter* painter = &mup;
 
     RectF rect(0.0, 0.0, width(), height());
@@ -369,7 +375,11 @@ void NotationPaintView::paint(QPainter* qp)
 
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
-    notation()->painting()->paintView(painter, toLogical(rect));
+    if (publishMode()) {
+        notation()->painting()->paintPublish(painter, toLogical(rect));
+    } else {
+        notation()->painting()->paintView(painter, toLogical(rect));
+    }
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);
@@ -1018,4 +1028,18 @@ PointF NotationPaintView::alignToCurrentPageBorder(const RectF& showRect, const 
     }
 
     return result;
+}
+
+bool NotationPaintView::publishMode() const
+{
+    return m_publishMode;
+}
+
+void NotationPaintView::setPublishMode(bool arg)
+{
+    if (m_publishMode == arg) {
+        return;
+    }
+    m_publishMode = arg;
+    emit publishModeChanged();
 }

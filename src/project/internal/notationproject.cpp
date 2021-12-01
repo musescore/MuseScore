@@ -83,6 +83,7 @@ NotationProject::NotationProject()
     m_engravingProject = EngravingProject::create();
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
+    m_viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
 }
 
 mu::io::path NotationProject::path() const
@@ -155,6 +156,12 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
         return ret;
     }
 
+    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
+    ret = viewSettings->read(reader);
+    if (!ret) {
+        return ret;
+    }
+
     // Set current if all success
     m_engravingProject = project;
 
@@ -215,6 +222,9 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     audioSettings->makeDefault();
 
+    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
+    audioSettings->makeDefault();
+
     // Set current if all success
     m_engravingProject = project;
 
@@ -222,6 +232,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     m_masterNotation->setMasterScore(project->masterScore());
 
     m_projectAudioSettings = audioSettings;
+    m_viewSettings = viewSettings;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -287,10 +298,14 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     audioSettings->makeDefault();
 
+    ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
+    viewSettings->makeDefault();
+
     // Set current if all success
     m_engravingProject = project;
     m_masterNotation = masterNotation;
     m_projectAudioSettings = audioSettings;
+    m_viewSettings = viewSettings;
 
     return make_ret(Ret::Code::Ok);
 }
@@ -465,6 +480,12 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
         return ret;
     }
 
+    ret = m_viewSettings->write(msczWriter);
+    if (!ret) {
+        LOGE() << "failed write project view settings, err: " << ret.toString();
+        return ret;
+    }
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -596,4 +617,9 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta)
 IProjectAudioSettingsPtr NotationProject::audioSettings() const
 {
     return m_projectAudioSettings;
+}
+
+IProjectViewSettingsPtr NotationProject::viewSettings() const
+{
+    return m_viewSettings;
 }

@@ -33,6 +33,7 @@
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
+#include "projectviewsettings.h"
 #include "iprojectmigrator.h"
 
 namespace mu::engraving {
@@ -67,6 +68,7 @@ public:
 
     notation::IMasterNotationPtr masterNotation() const override;
     IProjectAudioSettingsPtr audioSettings() const override;
+    IProjectViewSettingsPtr viewSettings() const override;
 
 private:
 
@@ -83,6 +85,7 @@ private:
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::MasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
+    ProjectViewSettingsPtr m_viewSettings = nullptr;
 };
 }
 
