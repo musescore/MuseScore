@@ -30,6 +30,9 @@ namespace mu::dock {
 inline const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
 inline const char* DOCK_PANEL_PROPERY("dockPanel");
 
+//! NOTE: need to be synchronized with Window shadow(see DockFloatingWindow margins)
+inline constexpr int DOCK_WINDOW_SHADOW(8);
+
 enum class DockType {
     Undefined = -1,
     Panel,
