@@ -41,7 +41,7 @@ using namespace mu::framework;
 static IInteractive::Result standardDialogResult(const RetVal<Val>& retVal)
 {
     if (!retVal.ret) {
-        return IInteractive::Result();
+        return IInteractive::Result(static_cast<int>(IInteractive::Button::Cancel));
     }
 
     QVariantMap resultMap = retVal.val.toQVariant().toMap();

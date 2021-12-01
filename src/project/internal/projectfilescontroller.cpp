@@ -254,7 +254,6 @@ void ProjectFilesController::newProject()
 bool ProjectFilesController::closeOpenedProject()
 {
     INotationProjectPtr project = currentNotationProject();
-    bool result = false;
     if (!project) {
         return true;
     }
@@ -263,22 +262,25 @@ bool ProjectFilesController::closeOpenedProject()
         playbackController()->reset();
     }
 
+    bool result = true;
+
     if (project->needSave().val) {
         IInteractive::Button btn = askAboutSavingScore(project->path());
 
         if (btn == IInteractive::Button::Cancel) {
-            return false;
+            result = false;
         } else if (btn == IInteractive::Button::Save) {
             result = saveProject();
         } else if (btn == IInteractive::Button::DontSave) {
             result = true;
         }
     }
+
     if (result) {
         globalContext()->setCurrentProject(nullptr);
-        return true;
     }
-    return false;
+
+    return result;
 }
 
 IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
