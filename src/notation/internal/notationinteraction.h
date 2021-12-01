@@ -75,7 +75,7 @@ public:
     // Select
     void addChordToSelection(MoveDirection d) override;
     void moveChordNoteSelection(MoveDirection d) override;
-    void select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0) override;
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;
     void selectFirstElement(bool frame = false) override;
