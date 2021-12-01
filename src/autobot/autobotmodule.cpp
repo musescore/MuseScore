@@ -71,7 +71,7 @@ void AutobotModule::registerExports()
 
     modularity::ioc()->registerExport<IApiRegister>(moduleName(), new ApiRegister());
 
-    draw::Painter::extended = AbPaintProvider::instance();
+    // draw::Painter::extended = AbPaintProvider::instance();
 }
 
 void AutobotModule::resolveImports()

@@ -74,21 +74,3 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*
         paintElement(painter, element);
     }
 }
-
-void Paint::paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& rect)
-{
-    PointF pagePosition(page->pos());
-    painter.translate(pagePosition);
-    painter.setClipping(true);
-    painter.setClipRect(page->bbox());
-
-    QList<EngravingItem*> elements = page->items(rect);
-    paintElements(painter, elements);
-
-#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
-    DebugPaint::paintPageDiagnostic(painter, page);
-#endif
-
-    painter.translate(-pagePosition);
-    painter.setClipping(false);
-}
