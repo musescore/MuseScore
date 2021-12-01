@@ -31,6 +31,7 @@
 
 namespace Ms {
 class Score;
+class Page;
 }
 
 namespace mu::notation {
@@ -49,18 +50,18 @@ public:
     int pageCount() const override;
     SizeF pageSizeInch() const override;
 
-    void paintView(draw::Painter* painter, const RectF& frameRect) override;
-    void paintPublish(draw::Painter* painter, const RectF& frameRect) override;
-    void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) override;
-    void paintPrint(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) override;
+    void paintView(draw::Painter* painter, const RectF& frameRect, bool isPublish) override;
+    void paintPdf(draw::Painter* painter, const Options& opt) override;
+    void paintPrint(draw::Painter* painter, const Options& opt) override;
     void paintPng(draw::Painter* painter, const Options& opt) override;
 
 private:
     Ms::Score* score() const;
 
-    void paintPages(mu::draw::Painter* painter, const RectF& frameRect, const QList<Ms::Page*>& pages, bool paintBorders) const;
-    void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
-    void paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const;
+    bool isPaintPageBorder() const;
+    void doPaint(draw::Painter* painter, const Options& opt);
+    void paintPageBorder(draw::Painter* painter, const Ms::Page* page) const;
+    void paintPageSheet(mu::draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) const;
 
     Notation* m_notation = nullptr;
 };

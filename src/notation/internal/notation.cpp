@@ -122,8 +122,6 @@ Notation::~Notation()
 
 void Notation::init()
 {
-    Ms::MScore::pixelRatio = Ms::DPI / QGuiApplication::primaryScreen()->logicalDotsPerInch();
-
     bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 

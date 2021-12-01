@@ -38,8 +38,6 @@ public:
 
     static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
     static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
-
-    static void paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& rect);
 };
 }
 

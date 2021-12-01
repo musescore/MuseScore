@@ -38,19 +38,10 @@ PaintDevice::PaintDevice(QPaintDevice* d)
 
 #endif
 
-int PagedPaintDevice::logicalDpiX() const
+int PaintDevice::dpi() const
 {
     if (m_d) {
         return m_d->logicalDpiX();
-    }
-    NOT_IMPLEMENTED;
-    return -1;
-}
-
-int PagedPaintDevice::logicalDpiY() const
-{
-    if (m_d) {
-        return m_d->logicalDpiY();
     }
     NOT_IMPLEMENTED;
     return -1;

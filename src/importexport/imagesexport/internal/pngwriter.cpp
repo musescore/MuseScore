@@ -64,68 +64,13 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     INotationPainting::Options opt;
     opt.fromPage = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
-    opt.deviceDpi = configuration()->exportPngDpiResolution();
+    opt.deviceDpi = CANVAS_DPI;
 
     notation->painting()->paintPng(&painter, opt);
 
     image.save(&destinationDevice, "png");
-    return true;
-
-//    Ms::Score* score = notation->elements()->msScore();
-//    IF_ASSERT_FAILED(score) {
-//        return make_ret(Ret::Code::UnknownError);
-//    }
-
-//    score->setPrinting(true); // don’t print page break symbols etc.
-
-//    double pixelRatioBackup = Ms::MScore::pixelRatio;
-
-//    const int PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
-//    const QList<Ms::Page*>& pages = score->pages();
-
-//    if (PAGE_NUMBER < 0 || PAGE_NUMBER >= pages.size()) {
-//        return false;
-//    }
-
-//    Ms::Page* page = pages[PAGE_NUMBER];
-
-//    const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
-//    RectF pageRect = page->abbox();
-
-//    if (TRIM_MARGIN_SIZE >= 0) {
-//        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
-//    }
-
-//    const float CANVAS_DPI = configuration()->exportPngDpiResolution();
-//    int width = std::lrint(pageRect.width() * CANVAS_DPI / Ms::DPI);
-//    int height = std::lrint(pageRect.height() * CANVAS_DPI / Ms::DPI);
-
-//    QImage image(width, height, QImage::Format_ARGB32_Premultiplied);
-//    image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
-//    image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / Ms::INCH));
-
-//    const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
-//    image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
-
-//    double scaling = CANVAS_DPI / Ms::DPI;
-//    Ms::MScore::pixelRatio = 1.0 / scaling;
-
-//    mu::draw::Painter painter(&image, "pngwriter");
-//    painter.setAntialiasing(true);
-//    painter.scale(scaling, scaling);
-//    if (TRIM_MARGIN_SIZE >= 0) {
-//        painter.translate(-pageRect.topLeft());
-//    }
-
-//    QList<Ms::EngravingItem*> elements = page->elements();
-//    std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
-
-//    engraving::Paint::paintElements(painter, elements);
-//    image.save(&destinationDevice, "png");
-
-//    score->setPrinting(false);
-//    Ms::MScore::pixelRatio = pixelRatioBackup;
 
     return true;
 }

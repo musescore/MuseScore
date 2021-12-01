@@ -36,24 +36,29 @@ public:
 
     struct Options
     {
+        bool isSetViewport = true;
+        bool isPrinting = false;
+        bool isMultiPage = false;
+        RectF frameRect;
         int fromPage = -1; // 0 is first
         int toPage = -1;
         int copyCount = 1;
         int trimMarginPixelSize = -1;
         int deviceDpi = -1;
+
+        std::function<void()> onNewPage;
     };
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
 
     virtual int pageCount() const = 0;
-    virtual SizeF pageSizeInch() const = 0; // size in inches
+    virtual SizeF pageSizeInch() const = 0;
 
-    virtual void paintView(draw::Painter* painter, const RectF& frameRect) = 0;
-    virtual void paintPublish(draw::Painter* painter, const RectF& frameRect) = 0;
-    virtual void paintPdf(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintView(draw::Painter* painter, const RectF& frameRect, bool isPublish) = 0;
+    virtual void paintPdf(draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintPrint(draw::Painter* painter, const Options& opt) = 0;
     virtual void paintPng(draw::Painter* painter, const Options& opt) = 0;
-    virtual void paintPrint(draw::PagedPaintDevice* dev, draw::Painter* painter, const Options& opt) = 0;
 };
 
 using INotationPaintingPtr = std::shared_ptr<INotationPainting>;
