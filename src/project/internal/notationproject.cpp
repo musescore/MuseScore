@@ -223,7 +223,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     audioSettings->makeDefault();
 
     ProjectViewSettingsPtr viewSettings = std::shared_ptr<ProjectViewSettings>(new ProjectViewSettings());
-    audioSettings->makeDefault();
+    viewSettings->makeDefault();
 
     // Set current if all success
     m_engravingProject = project;

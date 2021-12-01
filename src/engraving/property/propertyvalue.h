@@ -174,100 +174,98 @@ public:
         }
 
         const T* pv = std::get_if<T>(&m_val);
-        if (pv) {
-            return *pv;
-        }
+        if (!pv) {
+            //! HACK Temporary hack for int to enum
+            if constexpr (std::is_enum<T>::value) {
+                if (P_TYPE::INT == m_type) {
+                    const int* p2i = std::get_if<int>(&m_val);
+                    assert(p2i);
+                    return p2i ? static_cast<T>(*p2i) : T();
+                }
+            }
 
-        //! HACK Temporary hack for int to enum
-        if constexpr (std::is_enum<T>::value) {
-            if (P_TYPE::INT == m_type) {
+            //! HACK Temporary hack for enum to int
+            if constexpr (std::is_same<T, int>::value) {
+                switch (m_type) {
+                case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
+                case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
+                case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
+                case P_TYPE::DIRECTION_V:  return static_cast<int>(value<DirectionV>());
+                case P_TYPE::DIRECTION_H:  return static_cast<int>(value<DirectionH>());
+                case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
+                case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
+                case P_TYPE::HOOK_TYPE:  return static_cast<int>(value<Ms::HookType>());
+                case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
+                case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
+                default:
+                    break;
+                }
+            }
+
+            //! HACK Temporary hack for bool to int
+            if constexpr (std::is_same<T, int>::value) {
+                if (P_TYPE::BOOL == m_type) {
+                    const bool* pb = std::get_if<bool>(&m_val);
+                    assert(pb);
+                    return pb ? static_cast<T>(*pb) : T();
+                }
+            }
+
+            //! HACK Temporary hack for int to bool
+            if constexpr (std::is_same<T, bool>::value) {
                 const int* p2i = std::get_if<int>(&m_val);
                 assert(p2i);
                 return p2i ? static_cast<T>(*p2i) : T();
             }
-        }
 
-        //! HACK Temporary hack for enum to int
-        if constexpr (std::is_same<T, int>::value) {
-            switch (m_type) {
-            case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
-            case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
-            case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
-            case P_TYPE::DIRECTION_V:  return static_cast<int>(value<DirectionV>());
-            case P_TYPE::DIRECTION_H:  return static_cast<int>(value<DirectionH>());
-            case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
-            case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
-            case P_TYPE::HOOK_TYPE:  return static_cast<int>(value<Ms::HookType>());
-            case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
-            case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
-            default:
-                break;
+            //! HACK Temporary hack for real to Spatium
+            if constexpr (std::is_same<T, Spatium>::value) {
+                if (P_TYPE::REAL == m_type) {
+                    const qreal* pr = std::get_if<qreal>(&m_val);
+                    assert(pr);
+                    return pr ? Spatium(*pr) : Spatium();
+                }
             }
-        }
 
-        //! HACK Temporary hack for bool to int
-        if constexpr (std::is_same<T, int>::value) {
-            if (P_TYPE::BOOL == m_type) {
-                const bool* pb = std::get_if<bool>(&m_val);
-                assert(pb);
-                return pb ? static_cast<T>(*pb) : T();
+            //! HACK Temporary hack for Spatium to real
+            if constexpr (std::is_same<T, qreal>::value) {
+                if (P_TYPE::SPATIUM == m_type) {
+                    const Spatium* ps = std::get_if<Spatium>(&m_val);
+                    assert(ps);
+                    return ps ? ps->val() : T();
+                }
             }
-        }
 
-        //! HACK Temporary hack for int to bool
-        if constexpr (std::is_same<T, bool>::value) {
-            const int* p2i = std::get_if<int>(&m_val);
-            assert(p2i);
-            return p2i ? static_cast<T>(*p2i) : T();
-        }
-
-        //! HACK Temporary hack for real to Spatium
-        if constexpr (std::is_same<T, Spatium>::value) {
-            if (P_TYPE::REAL == m_type) {
-                const qreal* pr = std::get_if<qreal>(&m_val);
-                assert(pr);
-                return pr ? Spatium(*pr) : Spatium();
+            //! HACK Temporary hack for real to Millimetre
+            if constexpr (std::is_same<T, Millimetre>::value) {
+                if (P_TYPE::REAL == m_type) {
+                    const qreal* pr = std::get_if<qreal>(&m_val);
+                    assert(pr);
+                    return pr ? Millimetre(*pr) : Millimetre();
+                }
             }
-        }
 
-        //! HACK Temporary hack for Spatium to real
-        if constexpr (std::is_same<T, qreal>::value) {
-            if (P_TYPE::SPATIUM == m_type) {
-                const Spatium* ps = std::get_if<Spatium>(&m_val);
-                assert(ps);
-                return ps ? ps->val() : T();
+            //! HACK Temporary hack for Spatium to real
+            if constexpr (std::is_same<T, qreal>::value) {
+                if (P_TYPE::MILLIMETRE == m_type) {
+                    const Millimetre* ps = std::get_if<Millimetre>(&m_val);
+                    assert(ps);
+                    return ps ? ps->val() : T();
+                }
             }
-        }
 
-        //! HACK Temporary hack for real to Millimetre
-        if constexpr (std::is_same<T, Millimetre>::value) {
-            if (P_TYPE::REAL == m_type) {
-                const qreal* pr = std::get_if<qreal>(&m_val);
-                assert(pr);
-                return pr ? Millimetre(*pr) : Millimetre();
-            }
-        }
-
-        //! HACK Temporary hack for Spatium to real
-        if constexpr (std::is_same<T, qreal>::value) {
-            if (P_TYPE::MILLIMETRE == m_type) {
-                const Millimetre* ps = std::get_if<Millimetre>(&m_val);
-                assert(ps);
-                return ps ? ps->val() : T();
-            }
-        }
-
-        //! HACK Temporary hack for Fraction to String
-        if constexpr (std::is_same<T, QString>::value) {
-            if (P_TYPE::FRACTION == m_type) {
-                const Fraction* pf = std::get_if<Fraction>(&m_val);
-                assert(pf);
-                return pf ? pf->toString() : T();
+            //! HACK Temporary hack for Fraction to String
+            if constexpr (std::is_same<T, QString>::value) {
+                if (P_TYPE::FRACTION == m_type) {
+                    const Fraction* pf = std::get_if<Fraction>(&m_val);
+                    assert(pf);
+                    return pf ? pf->toString() : T();
+                }
             }
         }
 
         assert(pv);
-        return T();
+        return *pv;
     }
 
     bool toBool() const { return value<bool>(); }
