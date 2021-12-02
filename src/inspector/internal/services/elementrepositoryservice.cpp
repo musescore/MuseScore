@@ -302,7 +302,7 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findSectionBreaks() const
     for (Ms::EngravingItem* element : m_exposedElementList) {
         if (element && element->type() == Ms::ElementType::LAYOUT_BREAK) {
             const Ms::LayoutBreak* layoutBreak = Ms::toLayoutBreak(element);
-            if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::Type::SECTION) {
+            if (layoutBreak->layoutBreakType() != Ms::LayoutBreakType::SECTION) {
                 continue;
             }
 

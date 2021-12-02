@@ -1650,7 +1650,7 @@ EngravingItem* Measure::drop(EditData& data)
         LayoutBreak* b = toLayoutBreak(e);
         Measure* measure = isMMRest() ? mmRestLast() : this;
         switch (b->layoutBreakType()) {
-        case  LayoutBreak::Type::PAGE:
+        case  LayoutBreakType::PAGE:
             if (measure->pageBreak()) {
                 delete b;
                 b = 0;
@@ -1658,7 +1658,7 @@ EngravingItem* Measure::drop(EditData& data)
                 measure->setLineBreak(false);
             }
             break;
-        case  LayoutBreak::Type::LINE:
+        case  LayoutBreakType::LINE:
             if (measure->lineBreak()) {
                 delete b;
                 b = 0;
@@ -1666,7 +1666,7 @@ EngravingItem* Measure::drop(EditData& data)
                 measure->setPageBreak(false);
             }
             break;
-        case  LayoutBreak::Type::SECTION:
+        case  LayoutBreakType::SECTION:
             if (measure->sectionBreak()) {
                 delete b;
                 b = 0;
@@ -1674,7 +1674,7 @@ EngravingItem* Measure::drop(EditData& data)
                 measure->setLineBreak(false);
             }
             break;
-        case LayoutBreak::Type::NOBREAK:
+        case LayoutBreakType::NOBREAK:
             if (measure->noBreak()) {
                 delete b;
                 b = 0;

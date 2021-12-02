@@ -203,3 +203,31 @@ DirectionH XmlValue::fromXml(const QString& str, DirectionH def)
 
     return def;
 }
+
+QString XmlValue::toXml(LayoutBreakType v)
+{
+    switch (v) {
+    case LayoutBreakType::LINE: return "line";
+    case LayoutBreakType::PAGE: return "page";
+    case LayoutBreakType::SECTION: return "section";
+    case LayoutBreakType::NOBREAK: return "nobreak";
+    }
+    return QString();
+}
+
+LayoutBreakType XmlValue::fromXml(const QString& str, LayoutBreakType def)
+{
+    if (str == "line") {
+        return LayoutBreakType::LINE;
+    }
+    if (str == "page") {
+        return LayoutBreakType::PAGE;
+    }
+    if (str == "section") {
+        return LayoutBreakType::SECTION;
+    }
+    if (str == "nobreak") {
+        return LayoutBreakType::NOBREAK;
+    }
+    return def;
+}

@@ -2041,15 +2041,15 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
     // apply Page/Section Breaks if desired
     if (addPageBreak) {
         if (!last()->pageBreak()) {
-            last()->undoSetBreak(false, LayoutBreak::Type::LINE);       // remove line break if exists
-            last()->undoSetBreak(true, LayoutBreak::Type::PAGE);        // apply page break
+            last()->undoSetBreak(false, LayoutBreakType::LINE);       // remove line break if exists
+            last()->undoSetBreak(true, LayoutBreakType::PAGE);        // apply page break
         }
     } else if (!last()->lineBreak() && !last()->pageBreak()) {
-        last()->undoSetBreak(true, LayoutBreak::Type::LINE);
+        last()->undoSetBreak(true, LayoutBreakType::LINE);
     }
 
     if (addSectionBreak && !last()->sectionBreak()) {
-        last()->undoSetBreak(true, LayoutBreak::Type::SECTION);
+        last()->undoSetBreak(true, LayoutBreakType::SECTION);
     }
 
     // match concert pitch states

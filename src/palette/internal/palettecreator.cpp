@@ -399,22 +399,22 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->setVisible(false);
 
     auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreak::Type::LINE);
+    lb->setLayoutBreakType(LayoutBreakType::LINE);
     PaletteCellPtr cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "System break"));
     cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreak::Type::PAGE);
+    lb->setLayoutBreakType(LayoutBreakType::PAGE);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Page break"));
     cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreak::Type::SECTION);
+    lb->setLayoutBreakType(LayoutBreakType::SECTION);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Section break"));
     cell->mag = 1.2;
 
     lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
+    lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
     cell->mag = 1.2;
 

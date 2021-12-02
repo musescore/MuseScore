@@ -3920,7 +3920,7 @@ void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
 //   cmdToggleLayoutBreak
 //---------------------------------------------------------
 
-void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
+void Score::cmdToggleLayoutBreak(LayoutBreakType type)
 {
     // find measure(s)
     QList<MeasureBase*> mbl;
@@ -3934,7 +3934,7 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
         if (!startMeasure || !endMeasure) {
             return;
         }
-        if (type == LayoutBreak::Type::NOBREAK) {
+        if (type == LayoutBreakType::NOBREAK) {
             // add throughout the selection
             // or remove if already on every measure
             if (startMeasure == endMeasure) {
@@ -4000,36 +4000,36 @@ void Score::cmdToggleLayoutBreak(LayoutBreak::Type type)
         if (mb) {
             bool val = false;
             switch (type) {
-            case LayoutBreak::Type::LINE:
+            case LayoutBreakType::LINE:
                 val = !mb->lineBreak();
                 mb->undoSetBreak(val, type);
                 // remove page break if appropriate
                 if (val && mb->pageBreak()) {
-                    mb->undoSetBreak(false, LayoutBreak::Type::PAGE);
+                    mb->undoSetBreak(false, LayoutBreakType::PAGE);
                 }
                 break;
-            case LayoutBreak::Type::PAGE:
+            case LayoutBreakType::PAGE:
                 val = !mb->pageBreak();
                 mb->undoSetBreak(val, type);
                 // remove line break if appropriate
                 if (val && mb->lineBreak()) {
-                    mb->undoSetBreak(false, LayoutBreak::Type::LINE);
+                    mb->undoSetBreak(false, LayoutBreakType::LINE);
                 }
                 break;
-            case LayoutBreak::Type::SECTION:
+            case LayoutBreakType::SECTION:
                 val = !mb->sectionBreak();
                 mb->undoSetBreak(val, type);
                 break;
-            case LayoutBreak::Type::NOBREAK:
+            case LayoutBreakType::NOBREAK:
                 mb->undoSetBreak(!allNoBreaks, type);
                 // remove other breaks if appropriate
                 if (!mb->noBreak()) {
                     if (mb->pageBreak()) {
-                        mb->undoSetBreak(false, LayoutBreak::Type::PAGE);
+                        mb->undoSetBreak(false, LayoutBreakType::PAGE);
                     } else if (mb->lineBreak()) {
-                        mb->undoSetBreak(false, LayoutBreak::Type::LINE);
+                        mb->undoSetBreak(false, LayoutBreakType::LINE);
                     } else if (mb->sectionBreak()) {
-                        mb->undoSetBreak(false, LayoutBreak::Type::SECTION);
+                        mb->undoSetBreak(false, LayoutBreakType::SECTION);
                     }
                 }
                 break;

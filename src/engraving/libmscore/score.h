@@ -613,7 +613,7 @@ public:
     void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
-    void cmdToggleLayoutBreak(LayoutBreak::Type);
+    void cmdToggleLayoutBreak(LayoutBreakType);
     void cmdAddMeasureRepeat(Measure*, int numMeasures, int staffIdx);
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, int staffIdx);
     void cmdFlip();

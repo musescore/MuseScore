@@ -113,6 +113,10 @@ enum class DirectionV {
 enum class DirectionH : char {
     AUTO, LEFT, RIGHT
 };
+
+enum class LayoutBreakType {
+    PAGE, LINE, SECTION, NOBREAK
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -123,6 +127,7 @@ using PlacementV = mu::engraving::PlacementV;
 using PlacementH = mu::engraving::PlacementH;
 using DirectionV = mu::engraving::DirectionV;
 using DirectionH = mu::engraving::DirectionH;
+using LayoutBreakType = mu::engraving::LayoutBreakType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
