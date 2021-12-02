@@ -25,6 +25,7 @@
 #include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
+#include "internal/docktabbar.h"
 #include "internal/dockwindowactionscontroller.h"
 #include "internal/dockwindowprovider.h"
 
@@ -68,6 +69,11 @@ public:
     KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
     {
         return new DockTitleBar(floatingWindow);
+    }
+
+    KDDockWidgets::TabBar* createTabBar(KDDockWidgets::TabWidget* parent) const override
+    {
+        return new DockTabBar(parent);
     }
 
     QUrl titleBarFilename() const override
@@ -123,7 +129,8 @@ void DockSetup::setup(QQmlEngine* engine)
     KDDockWidgets::Config::self().setQmlEngine(engine);
 
     auto flags = KDDockWidgets::Config::self().flags()
-                 | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
+                 | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible
+                 | KDDockWidgets::Config::Flag_TitleBarNoFloatButton;
 
     KDDockWidgets::Config::self().setFlags(flags);
 
