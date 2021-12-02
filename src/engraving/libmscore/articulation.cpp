@@ -62,7 +62,7 @@ Articulation::Articulation(ChordRest* parent)
     _anchor        = ArticulationAnchor::TOP_STAFF;
     _direction     = DirectionV::AUTO;
     _up            = true;
-    _ornamentStyle = Ms::OrnamentStyle::DEFAULT;
+    _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
 }
@@ -315,7 +315,7 @@ PropertyValue Articulation::getProperty(Pid propertyId) const
     case Pid::SYMBOL:              return PropertyValue::fromValue(_symId);
     case Pid::DIRECTION:           return PropertyValue::fromValue<DirectionV>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
-    case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
+    case Pid::ORNAMENT_STYLE:      return ornamentStyle();
     case Pid::PLAY:                return bool(playArticulation());
     default:
         return EngravingItem::getProperty(propertyId);
@@ -342,7 +342,7 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
         setPlayArticulation(v.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
-        setOrnamentStyle(Ms::OrnamentStyle(v.toInt()));
+        setOrnamentStyle(v.value<OrnamentStyle>());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -359,11 +359,10 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
+        return DirectionV::AUTO;
 
     case Pid::ORNAMENT_STYLE:
-        //return int(score()->style()->ornamentStyle(_ornamentStyle));
-        return int(Ms::OrnamentStyle::DEFAULT);
+        return OrnamentStyle::DEFAULT;
 
     case Pid::PLAY:
         return true;

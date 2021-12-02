@@ -93,7 +93,7 @@ class Articulation final : public EngravingItem
     ArticulationAnchor _anchor;
 
     bool _up;
-    Ms::OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
+    OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
     friend class mu::engraving::Factory;
@@ -154,8 +154,8 @@ public:
     ArticulationAnchor anchor() const { return _anchor; }
     void setAnchor(ArticulationAnchor v) { _anchor = v; }
 
-    Ms::OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
-    void setOrnamentStyle(Ms::OrnamentStyle val) { _ornamentStyle = val; }
+    OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
+    void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
 
     bool playArticulation() const { return _playArticulation; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
