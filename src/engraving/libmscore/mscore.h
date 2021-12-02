@@ -301,10 +301,6 @@ class MScore
     static bool _verticalOrientation;
 
 public:
-    enum class OrnamentStyle : char {   /**.\{*/
-        DEFAULT, BAROQUE                                          /**\}*/
-    };
-    Q_ENUM(OrnamentStyle)
 
     static MsError _error;
     static std::vector<MScoreError> errorList;

@@ -80,7 +80,7 @@ public:
 private:
     Type _trillType;
     Accidental* _accidental;
-    MScore::OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
+    Ms::OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
     bool _playArticulation;
 
 public:
@@ -105,8 +105,8 @@ public:
     void setTrillType(const QString& s);
     void setTrillType(Type tt) { _trillType = tt; }
     Type trillType() const { return _trillType; }
-    void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val; }
-    MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
+    void setOrnamentStyle(Ms::OrnamentStyle val) { _ornamentStyle = val; }
+    Ms::OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
     static QString type2name(Trill::Type t);

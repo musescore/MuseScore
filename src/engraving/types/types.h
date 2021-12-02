@@ -47,6 +47,10 @@ using PairF = mu::PairF;                // P_TYPE::PAIR_REAL
 // --- Draw ---
 using Color = draw::Color;              // P_TYPE::COLOR
 
+enum class OrnamentStyle : char {
+    DEFAULT, BAROQUE
+};
+
 // --- Layout ---
 
 //---------------------------------------------------------
@@ -113,6 +117,7 @@ enum class DirectionH : char {
 
 //! NOTE compat
 namespace Ms {
+using OrnamentStyle = mu::engraving::OrnamentStyle;
 using Align = mu::engraving::Align;
 using PlacementV = mu::engraving::PlacementV;
 using PlacementH = mu::engraving::PlacementH;

@@ -139,10 +139,10 @@ class PluginAPI : public Ms::QmlPlugin
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.LEFT, MScore.RIGHT, MScore.AUTO.
     DECLARE_API_ENUM(DirectionH,       directionHEnum,         Ms::PluginAPI::DirectionH)
-    /// Contains Ms::MScore::OrnamentStyle enumeration values
+    /// Contains Ms::Ms::OrnamentStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.DEFAULT, MScore.BAROQUE.
-    DECLARE_API_ENUM(OrnamentStyle,    ornamentStyleEnum,      Ms::MScore::OrnamentStyle)
+    DECLARE_API_ENUM(OrnamentStyle,    ornamentStyleEnum,      Ms::PluginAPI::OrnamentStyle)
     /// Contains Ms::GlissandoStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,

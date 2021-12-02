@@ -291,7 +291,7 @@ Trill::Trill(EngravingItem* parent)
 {
     _trillType     = Type::TRILL_LINE;
     _accidental    = 0;
-    _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+    _ornamentStyle = Ms::OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&trillStyle);
 }
@@ -512,7 +512,7 @@ bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
         setPlayArticulation(val.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
-        setOrnamentStyle(MScore::OrnamentStyle(val.toInt()));
+        setOrnamentStyle(Ms::OrnamentStyle(val.toInt()));
         break;
     case Pid::COLOR:
         setColor(val.value<mu::draw::Color>());
@@ -538,7 +538,7 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
         return 0;
     case Pid::ORNAMENT_STYLE:
         //return int(score()->style()->ornamentStyle(_ornamentStyle));
-        return int(MScore::OrnamentStyle::DEFAULT);
+        return int(Ms::OrnamentStyle::DEFAULT);
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:

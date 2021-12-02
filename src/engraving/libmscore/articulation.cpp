@@ -62,7 +62,7 @@ Articulation::Articulation(ChordRest* parent)
     _anchor        = ArticulationAnchor::TOP_STAFF;
     _direction     = DirectionV::AUTO;
     _up            = true;
-    _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+    _ornamentStyle = Ms::OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
 }
@@ -342,7 +342,7 @@ bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
         setPlayArticulation(v.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
-        setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
+        setOrnamentStyle(Ms::OrnamentStyle(v.toInt()));
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -363,7 +363,7 @@ PropertyValue Articulation::propertyDefault(Pid propertyId) const
 
     case Pid::ORNAMENT_STYLE:
         //return int(score()->style()->ornamentStyle(_ornamentStyle));
-        return int(MScore::OrnamentStyle::DEFAULT);
+        return int(Ms::OrnamentStyle::DEFAULT);
 
     case Pid::PLAY:
         return true;
