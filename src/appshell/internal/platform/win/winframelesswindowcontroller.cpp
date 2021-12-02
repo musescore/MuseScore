@@ -124,7 +124,7 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* resul
     }
 
     const QRect availableGeometry = windowScreen->availableGeometry();
-    int scaleFactor = uiConfiguration()->guiScaling();
+    double scaleFactor = uiConfiguration()->guiScaling();
 
     auto minMaxInfo = reinterpret_cast<MINMAXINFO*>(message->lParam);
 
