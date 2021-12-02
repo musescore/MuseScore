@@ -91,8 +91,8 @@ static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
     { Ms::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
-static QMap<Ms::LayoutBreak::Type, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
-    { Ms::LayoutBreak::Type::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
+static QMap<Ms::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
+    { Ms::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
@@ -140,7 +140,7 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
     }
 
     if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
-        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreak::Type>(elementKey.subtype),
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
     }
 

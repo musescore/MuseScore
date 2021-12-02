@@ -510,7 +510,7 @@ TEST_F(SpannersTests, DISABLED_spanners13)
     Measure* msr   = score->firstMeasure();
     EXPECT_TRUE(msr);
     brk = Factory::createLayoutBreak(score->dummy()->measure());
-    brk->setLayoutBreakType(LayoutBreak::Type::LINE);
+    brk->setLayoutBreakType(LayoutBreakType::LINE);
     dropData.pos      = msr->pagePos();
     dropData.dropElement  = brk;
     score->startCmd();

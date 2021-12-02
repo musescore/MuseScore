@@ -74,8 +74,9 @@ enum class P_TYPE {
     // Duration
     FRACTION,
 
-    TDURATION,
-    LAYOUT_BREAK,
+    // Types
+    LAYOUTBREAK_TYPE,
+
     VALUE_TYPE,
     BEAM_MODE,
 
@@ -103,7 +104,9 @@ enum class P_TYPE {
 
     PITCH_VALUES,
     HOOK_TYPE,
-    ACCIDENTAL_ROLE
+    ACCIDENTAL_ROLE,
+
+    TDURATION
 };
 
 class PropertyValue
@@ -147,6 +150,10 @@ public:
     // Duration
     PropertyValue(const Fraction& v)
         : m_type(P_TYPE::FRACTION), m_val(v) {}
+
+    // Types
+    PropertyValue(LayoutBreakType v)
+        : m_type(P_TYPE::LAYOUTBREAK_TYPE), m_val(v) {}
 
     PropertyValue(Ms::SymId v);
     PropertyValue(Ms::BarLineType v);
@@ -200,6 +207,7 @@ public:
                 case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
                 case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
                 case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+                case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
                 default:
                     break;
                 }
@@ -308,6 +316,9 @@ private:
 
         // Duration
         Fraction,
+
+        // Types
+        LayoutBreakType,
 
         Ms::SymId, Ms::BarLineType, Ms::HookType,
         Ms::DynamicType,

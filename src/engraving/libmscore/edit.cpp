@@ -5193,7 +5193,7 @@ void Score::undoAddElement(EngravingItem* element)
 
     if (et == ElementType::LAYOUT_BREAK) {
         LayoutBreak* lb = toLayoutBreak(element);
-        if (lb->layoutBreakType() == LayoutBreak::Type::SECTION) {
+        if (lb->layoutBreakType() == LayoutBreakType::SECTION) {
             MeasureBase* m = lb->measure();
             for (Score* s : scoreList()) {
                 if (s == lb->score()) {

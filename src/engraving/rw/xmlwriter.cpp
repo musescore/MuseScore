@@ -333,6 +333,12 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         tag(name, f);
     }
     break;
+    case P_TYPE::LAYOUTBREAK_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<LayoutBreakType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

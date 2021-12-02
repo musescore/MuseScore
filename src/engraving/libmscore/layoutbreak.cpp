@@ -49,7 +49,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     _startWithLongNames = false;
     _startWithMeasureOne = false;
     _firstSystemIdentation = false;
-    _layoutBreakType = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
+    _layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
 
@@ -163,7 +163,7 @@ void LayoutBreak::layout0()
     m_iconPath = PainterPath();
 
     switch (layoutBreakType()) {
-    case Type::LINE:
+    case LayoutBreakType::LINE:
         m_iconPath.moveTo(w * .8, h * .3);
         m_iconPath.lineTo(w * .8, h * .6);
         m_iconPath.lineTo(w * .3, h * .6);
@@ -174,7 +174,7 @@ void LayoutBreak::layout0()
         m_iconPath.lineTo(w * .4, h * .5);
         break;
 
-    case Type::PAGE:
+    case LayoutBreakType::PAGE:
         m_iconPath.moveTo(w * .25, h * .2);
         m_iconPath.lineTo(w * .60, h * .2);
         m_iconPath.lineTo(w * .75, h * .35);
@@ -187,7 +187,7 @@ void LayoutBreak::layout0()
         m_iconPath.lineTo(w * .74, h * .40);
         break;
 
-    case Type::SECTION:
+    case LayoutBreakType::SECTION:
         m_iconPath.moveTo(w * .25, h * .2);
         m_iconPath.lineTo(w * .75, h * .2);
         m_iconPath.lineTo(w * .75, h * .8);
@@ -197,7 +197,7 @@ void LayoutBreak::layout0()
         m_iconPath.lineTo(w * .55, h * .79);
         break;
 
-    case Type::NOBREAK:
+    case LayoutBreakType::NOBREAK:
         m_iconPath.moveTo(w * .1,  h * .5);
         m_iconPath.lineTo(w * .9,  h * .5);
 
@@ -224,7 +224,7 @@ void LayoutBreak::layout0()
 //   setLayoutBreakType
 //---------------------------------------------------------
 
-void LayoutBreak::setLayoutBreakType(Type val)
+void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 {
     _layoutBreakType = val;
     layout0();
@@ -269,7 +269,7 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:
-        return int(_layoutBreakType);
+        return _layoutBreakType;
     case Pid::PAUSE:
         return _pause;
     case Pid::START_WITH_LONG_NAMES:
@@ -291,7 +291,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:
-        setLayoutBreakType(Type(v.toInt()));
+        setLayoutBreakType(v.value<LayoutBreakType>());
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());

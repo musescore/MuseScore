@@ -71,6 +71,14 @@ enum class DirectionH {
 };
 Q_ENUM_NS(DirectionH);
 
+enum class LayoutBreakType {
+    PAGE = int(mu::engraving::LayoutBreakType::PAGE),
+    LINE = int(mu::engraving::LayoutBreakType::LINE),
+    SECTION = int(mu::engraving::LayoutBreakType::SECTION),
+    NOBREAK = int(mu::engraving::LayoutBreakType::NOBREAK),
+};
+Q_ENUM_NS(LayoutBreakType);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -83,5 +91,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::Align);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
 Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
+Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
 
 #endif // MU_PLUGINS_APITYPES_H

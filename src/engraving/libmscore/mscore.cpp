@@ -252,7 +252,7 @@ void MScore::registerUiTypes()
     qRegisterMetaType<Beam::Mode>("BeamMode");
     qRegisterMetaType<HairpinType>("HairpinType");
     qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
-    qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
+    qRegisterMetaType<LayoutBreakType>("LayoutBreakType");
 
     //classed enumerations
 //      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
