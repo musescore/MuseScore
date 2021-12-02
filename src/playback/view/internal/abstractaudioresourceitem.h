@@ -32,6 +32,7 @@ class AbstractAudioResourceItem : public QObject
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
     Q_PROPERTY(bool isBlank READ isBlank NOTIFY isBlankChanged)
+    Q_PROPERTY(bool isActive READ isActive NOTIFY isActiveChanged)
     Q_PROPERTY(bool hasNativeEditorSupport READ hasNativeEditorSupport NOTIFY hasNativeEditorSupportChanged)
 
 public:
@@ -43,11 +44,13 @@ public:
 
     virtual QString title() const;
     virtual bool isBlank() const;
+    virtual bool isActive() const;
     virtual bool hasNativeEditorSupport() const;
 
 signals:
     void titleChanged();
     void isBlankChanged();
+    void isActiveChanged();
     void hasNativeEditorSupportChanged();
 
     void nativeEditorViewLaunchRequested();

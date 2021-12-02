@@ -55,7 +55,6 @@ MixerPanelSection {
 
                 menuAnchorItem: root.rootPanel
                 resourceItemModel: modelData
-                active: modelData.isActive
 
                 navigationPanel: channelItem.panel
                 navigationRowStart: root.navigationRowStart + (model.index * 3) // NOTE: 3 - because AudioResourceControl have 3 controls
