@@ -483,7 +483,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
         const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
 
-        QColor paletteColor = widget->palette().color(QPalette::Button);
+        QColor paletteColor = widget ? widget->palette().color(QPalette::Button) : QColor();
         const QColor background = paletteColor.isValid() ? paletteColor : buttonColor();
 
         drawButtonBackground(painter, option->rect, styleState, accentButton, flat, background);
