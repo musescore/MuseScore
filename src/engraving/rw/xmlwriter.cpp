@@ -24,10 +24,13 @@
 
 #include "libmscore/property.h"
 
+#include "xmlvalue.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -196,6 +199,12 @@ void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
         return;
     }
 
+    P_TYPE dataType = data.type();
+    P_TYPE propType = propertyType(id);
+    if (dataType != propType) {
+        LOGD() << "property value type mismatch, prop: " << name;
+    }
+
     const QString writableVal(propertyToString(id, data, /* mscx */ true));
     if (writableVal.isEmpty()) {
         tagProperty(name, data);
@@ -279,86 +288,43 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     break;
     case P_TYPE::ORNAMENT_STYLE: {
         putLevel();
-//        switch (data.value<OrnamentStyle>()) {
-//        case OrnamentStyle::BAROQUE:
-//            return "baroque";
-//        case OrnamentStyle::DEFAULT:
-//            return "default";
-//        }
-//        break;
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<OrnamentStyle>());
+        *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::ALIGN: {
         putLevel();
-        Align a = data.value<Align>();
-        const char* h;
-        if (a & Align::HCENTER) {
-            h = "center";
-        } else if (a & Align::RIGHT) {
-            h = "right";
-        } else {
-            h = "left";
-        }
-        const char* v;
-        if (a & Align::BOTTOM) {
-            v = "bottom";
-        } else if (a & Align::VCENTER) {
-            v = "center";
-        } else if (a & Align::BASELINE) {
-            v = "baseline";
-        } else {
-            v = "top";
-        }
-        *this << QString("<%1>%2,%3</%1>\n").arg(name).arg(h, v);
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<Align>());
+        *this << "</" << ename << ">\n";
     }
     break;
     case P_TYPE::PLACEMENT_V: {
         putLevel();
         *this << "<" << name << ">";
-        switch (data.value<PlacementV>()) {
-        case PlacementV::ABOVE:
-            *this << "above";
-            break;
-        case PlacementV::BELOW:
-            *this << "below";
-            break;
-        }
+        *this << XmlValue::toXml(data.value<PlacementV>());
         *this << "</" << ename << ">\n";
     }
     break;
     case P_TYPE::PLACEMENT_H: {
         putLevel();
         *this << "<" << name << ">";
-        switch (data.value<PlacementH>()) {
-        case PlacementH::LEFT:
-            *this << "left";
-            break;
-        case PlacementH::CENTER:
-            *this << "center";
-            break;
-        case PlacementH::RIGHT:
-            *this << "right";
-            break;
-        }
+        *this << XmlValue::toXml(data.value<PlacementH>());
         *this << "</" << ename << ">\n";
     }
     break;
     case P_TYPE::DIRECTION_V: {
         putLevel();
-        switch (data.value<DirectionV>()) {
-        case DirectionV::AUTO:
-            *this << "auto";
-            break;
-        case DirectionV::UP:
-            *this << "up";
-            break;
-        case DirectionV::DOWN:
-            *this << "down";
-            break;
-        }
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<DirectionV>());
+        *this << "</" << ename << ">\n";
     }
     break;
     case P_TYPE::DIRECTION_H: {
-        UNREACHABLE; //! TODO
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<DirectionH>());
+        *this << "</" << ename << ">\n";
     }
     break;
     // time

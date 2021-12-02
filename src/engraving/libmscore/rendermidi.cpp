@@ -1845,7 +1845,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 // This struct specifies how to render an articulation.
 //   atype - the articulation type to implement, such as SymId::ornamentTurn
 //   ostyles - the actual ornament has a property called ornamentStyle whose value is
-//             a value of type Ms::OrnamentStyle.  This ostyles field indicates the
+//             a value of type OrnamentStyle.  This ostyles field indicates the
 //             the set of ornamentStyles which apply to this rendition.
 //   duration - the default duration for each note in the rendition, the final duration
 //            rendered might be less than this if an articulation is attached to a note of
@@ -1871,7 +1871,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 
 struct OrnamentExcursion {
     SymId atype;
-    std::set<Ms::OrnamentStyle> ostyles;
+    std::set<OrnamentStyle> ostyles;
     int duration;
     std::vector<int> prefix;
     std::vector<int> body;
@@ -1880,9 +1880,9 @@ struct OrnamentExcursion {
     std::vector<int> suffix;
 };
 
-std::set<Ms::OrnamentStyle> baroque  = { Ms::OrnamentStyle::BAROQUE };
-std::set<Ms::OrnamentStyle> defstyle = { Ms::OrnamentStyle::DEFAULT };
-std::set<Ms::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
+std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
+std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
+std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
 int _16th = Constant::division / 4;
 int _32nd = _16th / 2;
 
@@ -1922,7 +1922,7 @@ std::vector<OrnamentExcursion> excursions = {
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, Ms::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, OrnamentStyle ornamentStyle)
 {
     if (!note->staff()->isPitchedStaff(note->tick())) { // not enough info in tab staff
         return false;
@@ -1943,7 +1943,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, S
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, Ms::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, OrnamentStyle ornamentStyle)
 {
     std::map<Trill::Type, SymId> articulationMap = {
         { Trill::Type::TRILL_LINE,      SymId::ornamentTrill },
