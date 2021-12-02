@@ -24,6 +24,7 @@ trap 'echo Check code style failed; exit 1' ERR
 mkdir -p $HOME/build_tools/uncrustify
 wget -q --show-progress -O $HOME/build_tools/uncrustify/uncrustify "https://s3.amazonaws.com/utils.musescore.org/uncrustify/uncrustify_0.73/uncrustify"
 chmod +x $HOME/build_tools/uncrustify/uncrustify
+
 export PATH="$HOME/build_tools/uncrustify:${PATH}"
 tools/codestyle/uncrustify_run.sh
 
