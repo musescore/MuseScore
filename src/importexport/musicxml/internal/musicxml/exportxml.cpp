@@ -398,6 +398,7 @@ class ExportMusicXml
 
     static QString fermataPosition(const Fermata* const fermata);
     static QString notePosition(const ExportMusicXml* const expMxml, const Note* const note);
+    static QString restPosition(const ExportMusicXml* const expMxml, const Rest* const rest);
     static QString positioningAttributes(EngravingItem const* const el, bool isSpanStart = true);
     static QString positioningAttributesForTboxText(const QPointF position, float spatium);
     static void identification(XmlWriter& xml, Score const* const score);
@@ -3738,6 +3739,29 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 }
 
 //---------------------------------------------------------
+//   restPosition
+//---------------------------------------------------------
+
+QString ExportMusicXml::restPosition(const ExportMusicXml* const expMxml, const Rest* const rest)
+{
+    QString res;
+
+    if (configuration()->musicxmlExportLayout()) {
+        const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
+
+        double measureX = expMxml->getTenthsFromDots(rest->measure()->pagePos().x());
+        double measureY = pageHeight - expMxml->getTenthsFromDots(rest->measure()->pagePos().y());
+        double noteX = expMxml->getTenthsFromDots(rest->pagePos().x());
+        double noteY = pageHeight - expMxml->getTenthsFromDots(rest->pagePos().y());
+
+        res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX, 'f', 2));
+        res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY, 'f', 2));
+    }
+
+    return res;
+}
+
+//---------------------------------------------------------
 //   rest
 //---------------------------------------------------------
 
@@ -3757,6 +3781,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 
     QString noteTag = QString("note");
     noteTag += color2xml(rest);
+    noteTag += restPosition(this, rest);
     if (!rest->visible()) {
         noteTag += QString(" print-object=\"no\"");
     }
