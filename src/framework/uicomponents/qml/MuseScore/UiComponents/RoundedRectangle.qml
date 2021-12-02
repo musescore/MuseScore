@@ -19,53 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
 
 Canvas {
     id: root
 
-    property int radius: 0
+    property real radius: 0
 
-    property int topLeftRadius: radius
-    property int topRightRadius: radius
-    property int bottomLeftRadius: radius
-    property int bottomRightRadius: radius
+    property real topLeftRadius: radius
+    property real topRightRadius: radius
+    property real bottomLeftRadius: radius
+    property real bottomRightRadius: radius
 
     property color color: "#FFFFFF"
 
     property Border border: Border {}
 
-    onColorChanged: {
-        requestPaint()
+    onColorChanged: { requestPaint() }
+    onBorderChanged: { requestPaint() }
+
+    Connections {
+        target: border
+        function onColorChanged() { requestPaint() }
+        function onWidthChanged() { requestPaint() }
     }
 
-    onBorderChanged: {
-        requestPaint()
-    }
+    onTopLeftRadiusChanged: { requestPaint() }
+    onTopRightRadiusChanged: { requestPaint() }
+    onBottomRightRadiusChanged: { requestPaint() }
+    onBottomLeftRadiusChanged: { requestPaint() }
 
-    onTopLeftRadiusChanged: {
-        requestPaint()
-    }
-
-    onTopRightRadiusChanged: {
-        requestPaint()
-    }
-
-    onBottomRightRadiusChanged: {
-        requestPaint()
-    }
-
-    onBottomLeftRadiusChanged: {
-        requestPaint()
-    }
-
-    onOpacityChanged: {
-        requestPaint()
-    }
-
-    onActiveFocusChanged: {
-        requestPaint()
-    }
+    onOpacityChanged: { requestPaint() }
+    onActiveFocusChanged: { requestPaint() }
 
     onPaint: {
         roundRect(0, 0, width, height)
@@ -83,6 +68,8 @@ Canvas {
         if (!needsFill && !needsStroke) {
             return
         }
+
+        context.clearRect(0, 0, width, height)
 
         context.beginPath()
         context.fillStyle = root.color

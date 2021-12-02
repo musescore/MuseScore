@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
 
 QtObject {
-    property int width: 0
+    property real width: 0
     property color color: "#00000000"
 }
