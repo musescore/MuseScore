@@ -277,6 +277,16 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
     break;
+    case P_TYPE::ORNAMENT_STYLE: {
+        putLevel();
+        switch (data.value<OrnamentStyle>()) {
+        case OrnamentStyle::BAROQUE:
+            return "baroque";
+        case OrnamentStyle::DEFAULT:
+            return "default";
+        }
+        break;
+    } break;
     case P_TYPE::ALIGN: {
         putLevel();
         Align a = data.value<Align>();
@@ -302,6 +312,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     }
     break;
     case P_TYPE::PLACEMENT_V: {
+        putLevel();
         *this << "<" << name << ">";
         switch (data.value<PlacementV>()) {
         case PlacementV::ABOVE:
@@ -360,7 +371,7 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         UNREACHABLE; //! TODO
     }
     break;
-//    case P_TYPE::ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
+
 //    case P_TYPE::TDURATION,
 //    case P_TYPE::LAYOUT_BREAK,
 //    case P_TYPE::VALUE_TYPE,

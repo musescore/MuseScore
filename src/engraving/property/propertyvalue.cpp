@@ -207,7 +207,10 @@ QVariant PropertyValue::toQVariant() const
 
     // draw
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
-    case P_TYPE::ALIGN:       return QVariant::fromValue(int(value<Align>()));
+    case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+
+    // Layout
+    case P_TYPE::ALIGN:       return static_cast<int>(value<Align>());
     case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
@@ -255,6 +258,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
+    case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
 
     // Layout
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));

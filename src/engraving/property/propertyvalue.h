@@ -62,6 +62,7 @@ enum class P_TYPE {
 
     // Draw
     COLOR,
+    ORNAMENT_STYLE,
 
     // Layout
     ALIGN,
@@ -73,7 +74,6 @@ enum class P_TYPE {
     // Duration
     FRACTION,
 
-    ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
     TDURATION,
     LAYOUT_BREAK,
     VALUE_TYPE,
@@ -130,6 +130,8 @@ public:
 
     // Draw
     PropertyValue(const draw::Color& v);
+    PropertyValue(OrnamentStyle v)
+        : m_type(P_TYPE::ORNAMENT_STYLE), m_val(v) {}
 
     // Layout
     PropertyValue(Align v);
@@ -197,6 +199,7 @@ public:
                 case P_TYPE::HOOK_TYPE:  return static_cast<int>(value<Ms::HookType>());
                 case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
                 case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
+                case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
                 default:
                     break;
                 }
@@ -298,7 +301,7 @@ private:
         PointF, SizeF, PainterPath, Spatium, Millimetre, PairF,
 
         // Draw
-        Color,
+        Color, OrnamentStyle,
 
         // Layout
         Align, PlacementV, PlacementH, DirectionV, DirectionH,
