@@ -60,8 +60,8 @@ MixerPanelSection {
                     }
                 }
 
-                onMoved: {
-                    channelItem.balance = value
+                onNewValueRequested: function(newValue) {
+                    channelItem.balance = newValue
                 }
 
                 onIncreaseRequested: {
