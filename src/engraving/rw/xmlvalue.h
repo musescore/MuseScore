@@ -47,6 +47,9 @@ public:
     static DirectionV fromXml(const QString& str, DirectionV def);
     static QString toXml(DirectionH v);
     static DirectionH fromXml(const QString& str, DirectionH def);
+
+    static QString toXml(LayoutBreakType v);
+    static LayoutBreakType fromXml(const QString& str, LayoutBreakType def);
 };
 }
 

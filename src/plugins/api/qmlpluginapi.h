@@ -128,7 +128,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::GlissandoType enumeration values
     DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      Ms::GlissandoType)             // was probably absent in 2.X
     /// Contains Ms::LayoutBreak::Type enumeration values
-    DECLARE_API_ENUM(LayoutBreak,      layoutBreakTypeEnum,    Ms::LayoutBreak::Type)
+    DECLARE_API_ENUM(LayoutBreak,      layoutBreakTypeEnum,    Ms::PluginAPI::LayoutBreakType)
     /// Contains Ms::Lyrics::Syllabic enumeration values
     DECLARE_API_ENUM(Lyrics,           lyricsSyllabicEnum,     Ms::Lyrics::Syllabic)
     /// Contains Ms::Direction enumeration values

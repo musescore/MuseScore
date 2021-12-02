@@ -238,7 +238,7 @@ TEST_F(BarlineTests, barline05)
     }
     // create and add a LineBreak element
     LayoutBreak* lb = Factory::createLayoutBreak(msr);
-    lb->setLayoutBreakType(LayoutBreak::Type::LINE);
+    lb->setLayoutBreakType(LayoutBreakType::LINE);
     lb->setTrack(-1);               // system-level element
     lb->setParent(msr);
     score->undoAddElement(lb);

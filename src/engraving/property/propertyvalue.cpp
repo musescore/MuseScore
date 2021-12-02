@@ -185,12 +185,12 @@ QVariant PropertyValue::toQVariant() const
 {
     switch (m_type) {
     case P_TYPE::UNDEFINED:   return QVariant();
-    // base
+    // Base
     case P_TYPE::BOOL:        return value<bool>();
     case P_TYPE::INT:         return value<int>();
     case P_TYPE::REAL:        return value<qreal>();
     case P_TYPE::STRING:      return value<QString>();
-    // geometry
+    // Geometry
     case P_TYPE::POINT:       return value<PointF>().toQPointF();
     case P_TYPE::SIZE:        return value<SizeF>().toQSizeF();
     case P_TYPE::PATH: {
@@ -205,7 +205,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::MILLIMETRE:  return qreal(value<Millimetre>());
     case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>().toQPairF());
 
-    // draw
+    // Draw
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
 
@@ -216,9 +216,13 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
 
-    // time
+    // Duration
     case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
     case P_TYPE::TDURATION:   return QVariant::fromValue(toTDuration());
+
+    // Types
+    case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
+
     // other
     case P_TYPE::BARLINE_TYPE:    return static_cast<int>(value<Ms::BarLineType>());
     case P_TYPE::SYMID:           return static_cast<int>(value<Ms::SymId>());
@@ -253,7 +257,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     break;
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::SPATIUM:       return PropertyValue(Spatium(v.toReal()));
-    case P_TYPE::MILLIMETRE:     return PropertyValue(Millimetre(v.toReal()));
+    case P_TYPE::MILLIMETRE:    return PropertyValue(Millimetre(v.toReal()));
     case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
 
     // Draw
@@ -267,12 +271,16 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
 
-    // time
+    // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));
     case P_TYPE::TDURATION: {
         UNREACHABLE; //! TODO
     }
     break;
+
+    // Types
+    case P_TYPE::LAYOUTBREAK_TYPE: return PropertyValue(LayoutBreakType(v.toInt()));
+
     // other
     case P_TYPE::BARLINE_TYPE: return PropertyValue(Ms::BarLineType(v.toInt()));
     case P_TYPE::SYMID:        return PropertyValue(Ms::SymId(v.toInt()));

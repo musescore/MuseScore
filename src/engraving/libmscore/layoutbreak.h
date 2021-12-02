@@ -37,22 +37,15 @@ namespace Ms {
 //---------------------------------------------------------
 class LayoutBreak final : public EngravingItem
 {
-    Q_GADGET
 public:
-    enum class Type {
-        ///.\{
-        PAGE, LINE, SECTION, NOBREAK
-        ///\}
-    };
-    Q_ENUM(Type);
 
     void setParent(MeasureBase* parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(_layoutBreakType); }
 
-    void setLayoutBreakType(Type);
-    Type layoutBreakType() const { return _layoutBreakType; }
+    void setLayoutBreakType(LayoutBreakType);
+    LayoutBreakType layoutBreakType() const { return _layoutBreakType; }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -69,10 +62,10 @@ public:
     bool firstSystemIdentation() const { return _firstSystemIdentation; }
     void setFirstSystemIdentation(bool v) { _firstSystemIdentation = v; }
 
-    bool isPageBreak() const { return _layoutBreakType == Type::PAGE; }
-    bool isLineBreak() const { return _layoutBreakType == Type::LINE; }
-    bool isSectionBreak() const { return _layoutBreakType == Type::SECTION; }
-    bool isNoBreak() const { return _layoutBreakType == Type::NOBREAK; }
+    bool isPageBreak() const { return _layoutBreakType == LayoutBreakType::PAGE; }
+    bool isLineBreak() const { return _layoutBreakType == LayoutBreakType::LINE; }
+    bool isSectionBreak() const { return _layoutBreakType == LayoutBreakType::SECTION; }
+    bool isNoBreak() const { return _layoutBreakType == LayoutBreakType::NOBREAK; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
@@ -96,7 +89,7 @@ private:
     bool _startWithLongNames;
     bool _startWithMeasureOne;
     bool _firstSystemIdentation;
-    Type _layoutBreakType;
+    LayoutBreakType _layoutBreakType;
 };
 }     // namespace Ms
 

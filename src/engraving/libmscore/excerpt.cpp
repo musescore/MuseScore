@@ -889,8 +889,8 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
         nmb->linkTo(mb);
         for (EngravingItem* e : mb->el()) {
             if (e->isLayoutBreak()) {
-                LayoutBreak::Type st = toLayoutBreak(e)->layoutBreakType();
-                if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE) {
+                LayoutBreakType st = toLayoutBreak(e)->layoutBreakType();
+                if (st == LayoutBreakType::PAGE || st == LayoutBreakType::LINE) {
                     continue;
                 }
             }

@@ -517,7 +517,7 @@ void MusicXMLParserPass1::skipLogCurrElem()
 //   addBreak
 //---------------------------------------------------------
 
-static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreak::Type type)
+static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreakType type)
 {
     LayoutBreak* lb = Factory::createLayoutBreak(mb);
     lb->setLayoutBreakType(type);
@@ -528,7 +528,7 @@ static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreak::Typ
 //   addBreakToPreviousMeasureBase
 //---------------------------------------------------------
 
-static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
+static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const mb, const LayoutBreakType type)
 {
     const auto pm = mb->prev();
     if (pm && musicxmlImportBreaks()) {
@@ -876,9 +876,9 @@ static void createMeasuresAndVboxes(Score* const score,
             mb = measure;
         }
         if (pageStartMeasureNrs.count(i)) {
-            addBreakToPreviousMeasureBase(score, mb, LayoutBreak::Type::PAGE);
+            addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::PAGE);
         } else if (systemStartMeasureNrs.count(i)) {
-            addBreakToPreviousMeasureBase(score, mb, LayoutBreak::Type::LINE);
+            addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::LINE);
         }
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached

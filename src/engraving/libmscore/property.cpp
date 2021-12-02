@@ -134,7 +134,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::RIGHT_MARGIN,            false, "rightMargin",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "right margin") },
     { Pid::TOP_MARGIN,              false, "topMargin",             P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "top margin") },
     { Pid::BOTTOM_MARGIN,           false, "bottomMargin",          P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "bottom margin") },
-    { Pid::LAYOUT_BREAK,            false, "subtype",               P_TYPE::LAYOUT_BREAK,   DUMMY_QT_TR_NOOP("propertyName", "subtype") },
+    { Pid::LAYOUT_BREAK,            false, "subtype",               P_TYPE::LAYOUTBREAK_TYPE, DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::AUTOSCALE,               false, "autoScale",             P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "autoscale") },
     { Pid::SIZE,                    false, "size",                  P_TYPE::SIZE,           DUMMY_QT_TR_NOOP("propertyName", "size") },
 
@@ -474,21 +474,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(GlissandoStyle::CHROMATIC));
         }
         break;
-    case P_TYPE::LAYOUT_BREAK:
-        if (value == "line") {
-            return PropertyValue(int(LayoutBreak::Type::LINE));
-        }
-        if (value == "page") {
-            return PropertyValue(int(LayoutBreak::Type::PAGE));
-        }
-        if (value == "section") {
-            return PropertyValue(int(LayoutBreak::Type::SECTION));
-        }
-        if (value == "nobreak") {
-            return PropertyValue(int(LayoutBreak::Type::NOBREAK));
-        }
-        qDebug("getProperty: invalid P_TYPE::LAYOUT_BREAK: <%s>", qPrintable(value));
-        break;
     case P_TYPE::VALUE_TYPE:
         if (value == "offset") {
             return PropertyValue(int(Note::ValueType::OFFSET_VAL));
@@ -597,7 +582,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
-    case P_TYPE::LAYOUT_BREAK:
+    case P_TYPE::LAYOUTBREAK_TYPE:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VALUE_TYPE:
     case P_TYPE::TEXT_PLACE:
     case P_TYPE::BARLINE_TYPE:
@@ -693,18 +679,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "portamento";
         case GlissandoStyle::CHROMATIC:
             return "Chromatic";
-        }
-        break;
-    case P_TYPE::LAYOUT_BREAK:
-        switch (LayoutBreak::Type(value.toInt())) {
-        case LayoutBreak::Type::LINE:
-            return "line";
-        case LayoutBreak::Type::PAGE:
-            return "page";
-        case LayoutBreak::Type::SECTION:
-            return "section";
-        case LayoutBreak::Type::NOBREAK:
-            return "nobreak";
         }
         break;
     case P_TYPE::VALUE_TYPE:

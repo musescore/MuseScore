@@ -128,11 +128,11 @@ public:
     const MeasureBase* findPotentialSectionBreak() const;
     LayoutBreak* sectionBreakElement() const;
 
-    void undoSetBreak(bool v, LayoutBreak::Type type);
-    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::LINE); }
-    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::PAGE); }
-    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::SECTION); }
-    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::NOBREAK); }
+    void undoSetBreak(bool v, LayoutBreakType type);
+    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreakType::LINE); }
+    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreakType::PAGE); }
+    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreakType::SECTION); }
+    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreakType::NOBREAK); }
 
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 
