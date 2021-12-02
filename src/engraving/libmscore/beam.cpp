@@ -521,6 +521,9 @@ int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int sta
 
 int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const
 {
+    if (score()->styleB(Sid::beamNoSlope)) {
+        return 0;
+    }
     if (dictator == middleLine && pointer == middleLine) {
         return 0;
     }
@@ -950,7 +953,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
 
 void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval)
 {
-    if (interval == 0 || beamCount > 2) {
+    if (interval == 0 || beamCount > 2 || score()->styleB(Sid::beamNoSlope)) {
         return;
     }
     bool isOnMiddleLine = pointer == middleLine && (qAbs(pointer - dictator) < 2);
@@ -966,7 +969,7 @@ void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int mi
 void Beam::add8thSpaceSlant(PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                             int interval, int middleLine, bool isFlat)
 {
-    if (beamCount != 3) {
+    if (beamCount != 3 || score()->styleB(Sid::beamNoSlope)) {
         return;
     }
     if ((isFlat && dictator != middleLine) || (dictator != pointer) || interval == 0) {
