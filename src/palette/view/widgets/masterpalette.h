@@ -36,6 +36,7 @@ class PaletteWidget;
 namespace Ms {
 class TimeDialog;
 class KeyEditor;
+class SymbolDialog;
 
 class MasterPalette : public QDialog, Ui::MasterPalette
 {
@@ -76,6 +77,7 @@ private:
     QTreeWidgetItem* m_symbolItem = nullptr;
 
     int m_idxAllSymbols = -1;
+    QHash<int, SymbolDialog*> m_symbolWidgets;
 };
 } // namespace Ms
 

@@ -33,6 +33,7 @@
 #include "ui/view/widgetstatestore.h"
 
 #include "translation.h"
+#include "log.h"
 
 using namespace mu::palette;
 using namespace mu::ui;
@@ -73,6 +74,8 @@ QString MasterPalette::selectedPaletteName() const
 
 void MasterPalette::addPalette(PalettePtr palette)
 {
+    TRACEFUNC;
+
     PaletteWidget* widget = new PaletteWidget(this);
     widget->setReadOnly(true);
     widget->setPalette(palette);
@@ -93,6 +96,8 @@ void MasterPalette::addPalette(PalettePtr palette)
 MasterPalette::MasterPalette(QWidget* parent)
     : QDialog(parent)
 {
+    TRACEFUNC;
+
     setObjectName("MasterPalette");
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -147,14 +152,17 @@ MasterPalette::MasterPalette(QWidget* parent)
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    for (const QString& s : mu::smuflRanges()->keys()) {
-        if (s == mu::SMUFL_ALL_SYMBOLS) {
+    QStringList symbols = mu::smuflRanges()->keys();
+    for (int i = 0; i < symbols.count(); i++) {
+        QString symbol = symbols[i];
+        if (symbol == mu::SMUFL_ALL_SYMBOLS) {
             continue;
         }
-        QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(s));
-        chld->setData(0, Qt::UserRole, stack->count());
+
+        QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(symbol));
+        chld->setData(0, Qt::UserRole, m_idxAllSymbols + i + 1);
+
         m_symbolItem->addChild(chld);
-        stack->addWidget(new SymbolDialog(s));
     }
 
     connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
@@ -195,6 +203,19 @@ void MasterPalette::retranslate(bool firstTime)
 void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 {
     int idx = item->data(0, Qt::UserRole).toInt();
+
+    if (idx > m_idxAllSymbols) {
+        if (!m_symbolWidgets.contains(idx)) {
+            QStringList symbols = mu::smuflRanges()->keys();
+            SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1]);
+            m_symbolWidgets[idx] = dialog;
+            stack->addWidget(dialog);
+        }
+
+        stack->setCurrentWidget(m_symbolWidgets[idx]);
+        return;
+    }
+
     if (idx != -1) {
         stack->setCurrentIndex(idx);
     }
