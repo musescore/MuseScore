@@ -86,6 +86,7 @@ public:
 
 signals:
     void windowLoaded();
+    void pageLoaded();
     void currentPageUriChanged(const QString& uri);
 
 private slots:
@@ -118,6 +119,8 @@ private:
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
 
     void initDocks(DockPageView* page);
+
+    void notifyAboutDocksOpenStatus();
 
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 

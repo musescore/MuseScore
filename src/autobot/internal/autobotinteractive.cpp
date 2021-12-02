@@ -109,6 +109,11 @@ RetVal<Val> AutobotInteractive::open(const std::string& uri) const
     return m_real->open(uri);
 }
 
+RetVal<Val> AutobotInteractive::open(const Uri& uri) const
+{
+    return m_real->open(uri);
+}
+
 RetVal<Val> AutobotInteractive::open(const UriQuery& uri) const
 {
     return m_real->open(uri);
@@ -127,6 +132,11 @@ RetVal<bool> AutobotInteractive::isOpened(const Uri& uri) const
 RetVal<bool> AutobotInteractive::isOpened(const UriQuery& uri) const
 {
     return m_real->isOpened(uri);
+}
+
+async::Channel<Uri> AutobotInteractive::opened() const
+{
+    return m_real->opened();
 }
 
 void AutobotInteractive::raise(const UriQuery& uri)

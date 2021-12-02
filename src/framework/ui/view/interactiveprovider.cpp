@@ -32,6 +32,27 @@ using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
 
+class WidgetDialogEventFilter : public QObject
+{
+public:
+    WidgetDialogEventFilter(QObject* parent, const std::function<void()>& onShownCallBack)
+        : QObject(parent), m_onShownCallBack(onShownCallBack)
+    {
+    }
+
+private:
+    bool eventFilter(QObject* watched, QEvent* event) override
+    {
+        if (event->type() == QEvent::Show && m_onShownCallBack) {
+            m_onShownCallBack();
+        }
+
+        return QObject::eventFilter(watched, event);
+    }
+
+    std::function<void()> m_onShownCallBack;
+};
+
 InteractiveProvider::InteractiveProvider()
     : QObject()
 {
@@ -152,6 +173,11 @@ RetVal<bool> InteractiveProvider::isOpened(const UriQuery& uri) const
     }
 
     return RetVal<bool>::make_ok(false);
+}
+
+async::Channel<Uri> InteractiveProvider::opened() const
+{
+    return m_opened;
 }
 
 void InteractiveProvider::raise(const UriQuery& uri)
@@ -401,6 +427,12 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
+    dialog->installEventFilter(new WidgetDialogEventFilter(dialog, [this, dialog, objectId]() {
+        if (dialog) {
+            onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
+        }
+    }));
+
     connect(dialog, &QDialog::finished, [this, objectId, dialog](int code) {
         QVariantMap status;
 
@@ -419,8 +451,6 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         onClose(objectId, status);
         dialog->deleteLater();
     });
-
-    onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
 
     bool sync = q.param("sync", Val(false)).toBool();
     if (sync) {
@@ -528,6 +558,8 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     }
 
     notifyAboutCurrentUriChanged();
+    m_opened.send(m_openingUriQuery.uri());
+
     m_openingUriQuery = UriQuery();
 }
 

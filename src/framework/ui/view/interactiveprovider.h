@@ -75,6 +75,7 @@ public:
     RetVal<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
+    async::Channel<Uri> opened() const override;
 
     void raise(const UriQuery& uri) override;
 
@@ -139,6 +140,7 @@ private:
     QStack<ObjectInfo> m_stack;
     async::Channel<Uri> m_currentUriChanged;
     QMap<QString, RetVal<Val> > m_retvals;
+    async::Channel<Uri> m_opened;
 };
 }
 

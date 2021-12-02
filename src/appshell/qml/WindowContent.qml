@@ -38,12 +38,16 @@ DockWindow {
 
     objectName: "WindowContent"
 
-    property var provider: InteractiveProvider {
+    property var interactiveProvider: InteractiveProvider {
         topParent: root
 
         onRequestedDockPage: function(uri, params) {
             root.loadPage(uri, params)
         }
+    }
+
+    onPageLoaded: {
+        root.interactiveProvider.onPageOpened()
     }
 
     property NavigationSection topToolKeyNavSec: NavigationSection {
