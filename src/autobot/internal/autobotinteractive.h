@@ -70,10 +70,12 @@ public:
 
     // custom
     RetVal<Val> open(const std::string& uri) const override;
+    RetVal<Val> open(const Uri& uri) const override;
     RetVal<Val> open(const UriQuery& uri) const override;
     RetVal<bool> isOpened(const std::string& uri) const override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
+    async::Channel<Uri> opened() const override;
 
     void raise(const UriQuery& uri) override;
 

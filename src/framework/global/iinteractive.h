@@ -157,10 +157,12 @@ public:
 
     // custom
     virtual RetVal<Val> open(const std::string& uri) const = 0;
+    virtual RetVal<Val> open(const Uri& uri) const = 0;
     virtual RetVal<Val> open(const UriQuery& uri) const = 0;
     virtual RetVal<bool> isOpened(const std::string& uri) const = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
+    virtual async::Channel<Uri> opened() const = 0;
 
     virtual void raise(const UriQuery& uri) = 0;
 

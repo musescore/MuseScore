@@ -155,6 +155,11 @@ RetVal<Val> Interactive::open(const std::string& uri) const
     return open(UriQuery(uri));
 }
 
+RetVal<Val> Interactive::open(const Uri& uri) const
+{
+    return open(UriQuery(uri));
+}
+
 RetVal<Val> Interactive::open(const UriQuery& uri) const
 {
     UriQuery newQuery = uri;
@@ -178,6 +183,11 @@ RetVal<bool> Interactive::isOpened(const Uri& uri) const
 RetVal<bool> Interactive::isOpened(const UriQuery& uri) const
 {
     return provider()->isOpened(uri);
+}
+
+async::Channel<Uri> Interactive::opened() const
+{
+    return provider()->opened();
 }
 
 void Interactive::raise(const UriQuery& uri)

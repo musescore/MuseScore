@@ -201,22 +201,18 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     restorePageState(newPage->objectName());
     initDocks(newPage);
 
-    QStringList allDockNames;
+    newPage->open(params);
 
-    for (DockBase* dock : newPage->allDocks()) {
-        allDockNames << dock->objectName();
-    }
+    m_currentPage = newPage;
+    emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
         emit windowLoaded();
     }
 
-    m_currentPage = newPage;
-    emit currentPageUriChanged(uri);
+    emit pageLoaded();
 
-    m_docksOpenStatusChanged.send(allDockNames);
-
-    newPage->open(params);
+    notifyAboutDocksOpenStatus();
 }
 
 bool DockWindow::isDockOpen(const QString& dockName) const
@@ -555,6 +551,27 @@ void DockWindow::initDocks(DockPageView* page)
             alignToolBars(page);
         }, Qt::UniqueConnection);
     }
+}
+
+void DockWindow::notifyAboutDocksOpenStatus()
+{
+    const DockPageView* page = currentPage();
+
+    IF_ASSERT_FAILED(page) {
+        return;
+    }
+
+    QStringList dockNames;
+
+    for (DockToolBarView* toolBar : page->toolBars()) {
+        dockNames << toolBar->objectName();
+    }
+
+    for (DockPanelView* panel : page->panels()) {
+        dockNames << panel->objectName();
+    }
+
+    m_docksOpenStatusChanged.send(dockNames);
 }
 
 QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) const

@@ -41,21 +41,26 @@ Item {
         color: "#440000"
     }
 
+    function onPageOpened() {
+        root.provider.onOpen(ContainerType.PrimaryPage, {})
+    }
+
     Connections {
         target: root.provider
 
         function onFireOpen(data) {
 
             var page = data.data()
-            console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))
+            var uri = data.value("uri")
+
+            console.log("try open uri: " + uri + ", page: " + JSON.stringify(page))
             if (!(page && (page.type === ContainerType.PrimaryPage || page.type === ContainerType.QmlDialog))) {
                 data.setValue("ret", {errcode: 101 }) // ResolveFailed
                 return;
             }
 
             if (page.type === ContainerType.PrimaryPage) {
-                root.requestedDockPage(data.value("uri"), page.params)
-                root.provider.onOpen(page.type, {})
+                root.requestedDockPage(uri, page.params)
                 data.setValue("ret", {errcode: 0 })
                 return;
             }
@@ -125,12 +130,14 @@ Item {
             return { "ret": ret, "object" : obj }
         }
 
+        obj.opened.connect(function() {
+            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
+        })
+
         obj.closed.connect(function() {
             root.provider.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
-
-        root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
 
         return { "ret": ret, "object" : obj }
     }
