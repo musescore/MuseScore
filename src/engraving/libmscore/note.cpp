@@ -32,7 +32,7 @@
 
 #include "translation.h"
 #include "draw/brush.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "accessibility/accessiblenote.h"
 
 #include "accidental.h"

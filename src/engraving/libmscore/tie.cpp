@@ -26,7 +26,7 @@
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "chord.h"
 #include "measure.h"

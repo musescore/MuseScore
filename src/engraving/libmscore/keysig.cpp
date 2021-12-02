@@ -23,7 +23,7 @@
 #include "keysig.h"
 
 #include "translation.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "symnames.h"
 #include "staff.h"

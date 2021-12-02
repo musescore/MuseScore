@@ -23,7 +23,7 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"

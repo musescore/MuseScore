@@ -21,7 +21,7 @@
  */
 #include "read400.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"

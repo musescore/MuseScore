@@ -25,7 +25,7 @@
 #include "draw/pen.h"
 #include "draw/brush.h"
 #include "draw/fontmetrics.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "score.h"
 #include "undo.h"

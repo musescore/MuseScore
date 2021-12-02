@@ -21,7 +21,7 @@
  */
 
 #include "layoutbreak.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "measurebase.h"
 

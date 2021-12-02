@@ -24,7 +24,7 @@
 
 #include <QBuffer>
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 
 namespace Ms {
 template<class T>

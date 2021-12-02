@@ -22,7 +22,7 @@
 
 #include "tremolobar.h"
 #include "draw/pen.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "undo.h"
 #include "staff.h"

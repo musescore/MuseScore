@@ -22,7 +22,7 @@
 
 #include "stringdata.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "chord.h"
 #include "note.h"

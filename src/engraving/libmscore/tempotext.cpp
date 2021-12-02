@@ -23,7 +23,7 @@
 #include <cmath>
 #include <QRegularExpression>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "measure.h"
 #include "musescoreCore.h"

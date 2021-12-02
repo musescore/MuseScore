@@ -26,7 +26,7 @@
 
 #include "draw/pen.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "system.h"

@@ -25,7 +25,7 @@
 #include <QRegularExpression>
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "barline.h"

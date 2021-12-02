@@ -27,7 +27,7 @@
 #include <QRegularExpression>
 
 #include "compat/writescorehook.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "duration.h"
 #include "measure.h"

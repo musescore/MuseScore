@@ -24,7 +24,7 @@
 #include <QDebug>
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "libmscore/masterscore.h"
 
 using namespace mu::engraving::compat;

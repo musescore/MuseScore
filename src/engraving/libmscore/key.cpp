@@ -21,7 +21,7 @@
  */
 
 #include "key.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "utils.h"
 #include "score.h"
 #include "pitchspelling.h"

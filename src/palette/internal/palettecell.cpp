@@ -23,7 +23,7 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"

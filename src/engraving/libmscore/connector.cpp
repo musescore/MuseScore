@@ -21,7 +21,7 @@
  */
 
 #include "connector.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "engravingitem.h"
 #include "score.h"
 #include "engravingobject.h"

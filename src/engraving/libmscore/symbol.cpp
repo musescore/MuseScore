@@ -23,7 +23,7 @@
 #include "symbol.h"
 
 #include "draw/fontmetrics.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "symnames.h"
 #include "scorefont.h"

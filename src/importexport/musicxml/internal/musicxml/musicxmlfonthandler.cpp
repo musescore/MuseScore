@@ -24,7 +24,7 @@
  MusicXML font handling support.
  */
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {

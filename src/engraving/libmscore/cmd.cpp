@@ -30,7 +30,7 @@
 #include "translation.h"
 #include "interactive/messagebox.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "types.h"

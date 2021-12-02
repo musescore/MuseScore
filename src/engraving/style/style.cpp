@@ -24,7 +24,7 @@
 
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/mscore.h"
 

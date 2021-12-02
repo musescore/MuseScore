@@ -21,7 +21,7 @@
  */
 
 #include "synthesizerstate.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 

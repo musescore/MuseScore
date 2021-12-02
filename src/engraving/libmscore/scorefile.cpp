@@ -28,7 +28,7 @@
 #include "style/defaultstyle.h"
 
 #include "compat/writescorehook.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "rw/staffrw.h"
 
 #include "score.h"

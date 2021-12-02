@@ -24,7 +24,7 @@
 
 #include <QRegularExpression>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "mscore.h"
 #include "pitchspelling.h"

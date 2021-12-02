@@ -22,7 +22,7 @@
 
 #include <cmath>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "score.h"
 #include "image.h"
