@@ -221,6 +221,8 @@ enum class Sid {
     accidentalNoteDistance,
     bracketedAccidentalPadding,
     alignAccidentalsLeft,
+    keysigAccidentalDistance,
+    keysigNaturalDistance,
     beamWidth,
     beamDistance,
     beamMinLen,
