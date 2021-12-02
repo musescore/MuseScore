@@ -37,7 +37,7 @@ Item {
     //! ---
 
     anchors.fill: parent
-    anchors.margins: 8 // Needed for the shadow
+    anchors.margins: 8 // Needed for the shadow, please sync with DOCK_WINDOW_SHADOW in docktypes.h
 
     StyledDropShadow {
         anchors.fill: background
