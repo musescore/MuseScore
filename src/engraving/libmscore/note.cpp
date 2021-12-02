@@ -3057,7 +3057,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::SMALL:
         return isSmall();
     case Pid::MIRROR_HEAD:
-        return int(userMirror());
+        return userMirror();
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
@@ -3117,7 +3117,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setSmall(v.toBool());
         break;
     case Pid::MIRROR_HEAD:
-        setUserMirror(DirectionH(v.toInt()));
+        setUserMirror(v.value<DirectionH>());
         break;
     case Pid::DOT_POSITION:
         setUserDotPosition(v.value<DirectionV>());
@@ -3191,7 +3191,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::SMALL:
         return false;
     case Pid::MIRROR_HEAD:
-        return int(DirectionH::AUTO);
+        return DirectionH::AUTO;
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     case Pid::HEAD_SCHEME:

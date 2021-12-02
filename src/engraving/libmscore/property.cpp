@@ -24,6 +24,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "accidental.h"
 #include "bracket.h"
@@ -44,6 +45,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -455,45 +457,10 @@ QString propertyUserName(Pid id)
 //    propertyFromString
 //---------------------------------------------------------
 
-PropertyValue propertyFromString(Pid id, QString value)
-{
-    return propertyFromString(propertyType(id), value);
-}
-
 PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
 {
     switch (type) {
-    case P_TYPE::BOOL:
-        return PropertyValue(bool(value.toInt()));
     case P_TYPE::ZERO_INT:
-    case P_TYPE::INT:
-        return PropertyValue(value.toInt());
-    case P_TYPE::REAL:
-    case P_TYPE::SPATIUM:
-    case P_TYPE::MILLIMETRE:
-    case P_TYPE::TEMPO:
-        return PropertyValue(value.toDouble());
-    case P_TYPE::FRACTION:
-        return Fraction::fromString(value);
-    case P_TYPE::COLOR:
-        // not used by MSCX
-        return PropertyValue::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
-    case P_TYPE::POINT: {
-        // not used by MSCX
-        const int i = value.indexOf(';');
-        return PropertyValue::fromValue(PointF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
-    }
-    case P_TYPE::SCALE: {
-        const int i = value.indexOf('x');
-        return PropertyValue::fromValue(ScaleF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
-    }
-    case P_TYPE::SIZE: {
-        // not used by MSCX
-        const int i = value.indexOf('x');
-        return PropertyValue::fromValue(SizeF(value.leftRef(i).toDouble(), value.midRef(i + 1).toDouble()));
-    }
-    case P_TYPE::STRING:
-        return value;
     case P_TYPE::GLISS_STYLE:
         if (value == "whitekeys") {
             return PropertyValue(int(GlissandoStyle::WHITE_KEYS));
@@ -505,32 +472,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(GlissandoStyle::PORTAMENTO));
         } else {       // e.g., normally "Chromatic"
             return PropertyValue(int(GlissandoStyle::CHROMATIC));
-        }
-        break;
-    case P_TYPE::ORNAMENT_STYLE: {
-        if (value == "baroque") {
-            return PropertyValue(int(Ms::OrnamentStyle::BAROQUE));
-        }
-        return PropertyValue(int(Ms::OrnamentStyle::DEFAULT));
-    }
-    case P_TYPE::DIRECTION_V:
-        if (value == "up") {
-            return PropertyValue(DirectionV::UP);
-        } else if (value == "down") {
-            return PropertyValue(DirectionV::DOWN);
-        } else if (value == "auto") {
-            return PropertyValue(DirectionV::AUTO);
-        } else {
-            return PropertyValue(DirectionV(value.toInt()));
-        }
-        break;
-    case P_TYPE::DIRECTION_H:
-        if (value == "left" || value == "1") {
-            return PropertyValue(DirectionH::LEFT);
-        } else if (value == "right" || value == "2") {
-            return PropertyValue(DirectionH::RIGHT);
-        } else if (value == "auto") {
-            return PropertyValue(DirectionH::AUTO);
         }
         break;
     case P_TYPE::LAYOUT_BREAK:
@@ -553,22 +494,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(Note::ValueType::OFFSET_VAL));
         } else if (value == "user") {
             return PropertyValue(int(Note::ValueType::USER_VAL));
-        }
-        break;
-    case P_TYPE::PLACEMENT_V:
-        if (value == "above") {
-            return PropertyValue(int(PlacementV::ABOVE));
-        } else if (value == "below") {
-            return PropertyValue(int(PlacementV::BELOW));
-        }
-        break;
-    case P_TYPE::PLACEMENT_H:
-        if (value == "left") {
-            return PropertyValue(int(PlacementH::LEFT));
-        } else if (value == "center") {
-            return PropertyValue(int(PlacementH::CENTER));
-        } else if (value == "right") {
-            return PropertyValue(int(PlacementH::RIGHT));
         }
         break;
     case P_TYPE::TEXT_PLACE:
@@ -612,33 +537,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::SUB_STYLE:
         return int(textStyleFromName(value));
     case P_TYPE::ALIGN: {
-        QStringList sl = value.split(',');
-        if (sl.size() != 2) {
-            qDebug("bad align text <%s>", qPrintable(value));
-            return PropertyValue();
-        }
-        Align align = Align::LEFT;
-        if (sl[0] == "center") {
-            align = align | Align::HCENTER;
-        } else if (sl[0] == "right") {
-            align = align | Align::RIGHT;
-        } else if (sl[0] == "left") {
-        } else {
-            qDebug("bad align text <%s>", qPrintable(sl[0]));
-            return PropertyValue();
-        }
-        if (sl[1] == "center") {
-            align = align | Align::VCENTER;
-        } else if (sl[1] == "bottom") {
-            align = align | Align::BOTTOM;
-        } else if (sl[1] == "baseline") {
-            align = align | Align::BASELINE;
-        } else if (sl[1] == "top") {
-        } else {
-            qDebug("bad align text <%s>", qPrintable(sl[1]));
-            return PropertyValue();
-        }
-        return int(align);
+        return PropertyValue(XmlValue::fromXml(value, Align::LEFT));
     }
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
@@ -667,15 +566,18 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::ZERO_INT:
     case P_TYPE::INT:
         return PropertyValue(e.readInt());
-    case P_TYPE::SPATIUM:   return PropertyValue(Spatium(e.readDouble()));
-    case P_TYPE::MILLIMETRE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
     case P_TYPE::REAL:
+        return PropertyValue(e.readDouble());
+    case P_TYPE::SPATIUM: return PropertyValue(Spatium(e.readDouble()));
+    case P_TYPE::MILLIMETRE: return PropertyValue(Spatium(e.readDouble())); //! NOTE type mm, but stored in xml as spatium
     case P_TYPE::TEMPO:
         return PropertyValue(e.readDouble());
     case P_TYPE::FRACTION:
         return PropertyValue::fromValue(e.readFraction());
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
+    case P_TYPE::ORNAMENT_STYLE:
+        return PropertyValue::fromValue(XmlValue::fromXml(e.readElementText(), OrnamentStyle::DEFAULT));
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
@@ -684,14 +586,19 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:
         return PropertyValue(e.readElementText());
+    case P_TYPE::ALIGN:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), Align::LEFT));
+    case P_TYPE::PLACEMENT_V:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementV::ABOVE));
+    case P_TYPE::PLACEMENT_H:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementH::LEFT));
     case P_TYPE::GLISS_STYLE:
-    case P_TYPE::ORNAMENT_STYLE:
     case P_TYPE::DIRECTION_V:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
     case P_TYPE::LAYOUT_BREAK:
     case P_TYPE::VALUE_TYPE:
-    case P_TYPE::PLACEMENT_V:
-    case P_TYPE::PLACEMENT_H:
     case P_TYPE::TEXT_PLACE:
     case P_TYPE::BARLINE_TYPE:
     case P_TYPE::SYMID:
@@ -699,9 +606,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::HEAD_GROUP:
     case P_TYPE::HEAD_TYPE:
     case P_TYPE::SUB_STYLE:
-    case P_TYPE::ALIGN:
     case P_TYPE::ORIENTATION:
-        return propertyFromString(id, e.readElementText());
+        return propertyFromString(propertyType(id), e.readElementText());
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
     case P_TYPE::GROUPS: {
@@ -748,31 +654,8 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     switch (propertyType(id)) {
-    case P_TYPE::BOOL:
-    case P_TYPE::INT:
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::REAL:
-        return QString::number(value.value<double>());
-    case P_TYPE::SPATIUM:
-        return QString::number(value.value<Spatium>().val());
-    case P_TYPE::DIRECTION_V:
-        switch (value.value<DirectionV>()) {
-        case DirectionV::AUTO:  return "auto";
-        case DirectionV::UP:    return "up";
-        case DirectionV::DOWN:  return "down";
-        }
-        break;
-    case P_TYPE::DIRECTION_H:
-        switch (value.value<DirectionH>()) {
-        case DirectionH::LEFT:  return "left";
-        case DirectionH::RIGHT: return "right";
-        case DirectionH::AUTO:  return "auto";
-        }
-        break;
-    case P_TYPE::STRING:
-    case P_TYPE::FRACTION:
-        return value.toString();
     case P_TYPE::KEYMODE:
         switch (KeyMode(value.toInt())) {
         case KeyMode::NONE:
@@ -798,14 +681,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         default:
             return "unknown";
         }
-    case P_TYPE::ORNAMENT_STYLE:
-        switch (Ms::OrnamentStyle(value.toInt())) {
-        case Ms::OrnamentStyle::BAROQUE:
-            return "baroque";
-        case Ms::OrnamentStyle::DEFAULT:
-            return "default";
-        }
-        break;
     case P_TYPE::GLISS_STYLE:
         switch (GlissandoStyle(value.toInt())) {
         case GlissandoStyle::BLACK_KEYS:

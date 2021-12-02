@@ -28,6 +28,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "compat/pageformat.h"
 
@@ -94,6 +95,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
@@ -2331,8 +2333,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
         } else if (tag == "direction") {
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
-                direction = propertyFromString(P_TYPE::DIRECTION_V, e.readElementText()).value<DirectionV>();
-            } else {
+                direction = XmlValue::fromXml(e.readElementText(), DirectionV::AUTO);
                 el->readProperties(e);
             }
         } else if (tag == "timeStretch") {
