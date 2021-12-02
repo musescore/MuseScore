@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
@@ -92,16 +92,13 @@ Item {
                 backgroundItem: RoundedRectangle {
                     id: activityButtonBackground
 
-                    color: root.active ? ui.theme.accentColor : ui.theme.buttonColor
-                    opacity: ui.theme.buttonOpacityNormal
+                    property real backgroundOpacity: ui.theme.buttonOpacityNormal
+                    color: Utils.colorWithAlpha(root.active ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
 
                     topLeftRadius: 3
                     topRightRadius: 0
                     bottomLeftRadius: 3
                     bottomRightRadius: 0
-
-                    border.width: ui.theme.borderWidth
-                    border.color: ui.theme.strokeColor
 
                     NavigationFocusBorder {
                         navigationCtrl: activityButton.navigation
@@ -114,31 +111,24 @@ Item {
 
                             PropertyChanges {
                                 target: activityButtonBackground
-                                opacity: ui.theme.buttonOpacityHit
+                                backgroundOpacity: ui.theme.buttonOpacityHit
                             }
                         },
 
                         State {
                             name: "HOVERED"
-                            when: rootMouseArea.containsMouse
+                            when: (!activityButton.mouseArea.pressed && rootMouseArea.containsMouse) || root.resourcePickingActive
 
                             PropertyChanges {
                                 target: activityButtonBackground
-                                opacity: ui.theme.buttonOpacityHover
+                                backgroundOpacity: ui.theme.buttonOpacityHover
                             }
                         }
                     ]
 
-                    Rectangle {
-                        id: rightSeparator
-
+                    SeparatorLine {
                         anchors.right: parent.right
-
-                        height: root.height
-                        width: 1
-
-                        color: ui.theme.fontPrimaryColor
-                        opacity: 0.3
+                        orientation: Qt.Vertical
                     }
                 }
 
@@ -182,12 +172,9 @@ Item {
                 backgroundItem: RoundedRectangle {
                     id: titleButtonBackground
 
-                    color: root.active ? ui.theme.accentColor : ui.theme.buttonColor
-                    opacity: ui.theme.buttonOpacityNormal
+                    property real backgroundOpacity: ui.theme.buttonOpacityNormal
+                    color: Utils.colorWithAlpha(root.active ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
                     radius: 3
-
-                    border.width: ui.theme.borderWidth
-                    border.color: ui.theme.strokeColor
 
                     NavigationFocusBorder {
                         navigationCtrl: titleButton.navigation
@@ -200,21 +187,23 @@ Item {
 
                             PropertyChanges {
                                 target: titleButtonBackground
-                                opacity: ui.theme.buttonOpacityHit
+                                radius: 0
+                                topLeftRadius: root.supportsByPassing ? 0 : 3
+                                bottomLeftRadius: topLeftRadius
+                                backgroundOpacity: ui.theme.buttonOpacityHit
                             }
                         },
 
                         State {
                             name: "HOVERED"
-                            when: rootMouseArea.containsMouse || root.resourcePickingActive
+                            when: (!titleButton.mouseArea.pressed && rootMouseArea.containsMouse) || root.resourcePickingActive
 
                             PropertyChanges {
                                 target: titleButtonBackground
-                                topRightRadius: 0
-                                bottomRightRadius: topRightRadius
+                                radius: 0
                                 topLeftRadius: root.supportsByPassing ? 0 : 3
                                 bottomLeftRadius: topLeftRadius
-                                opacity: ui.theme.buttonOpacityHover
+                                backgroundOpacity: ui.theme.buttonOpacityHover
                             }
 
                             PropertyChanges {
@@ -265,16 +254,13 @@ Item {
                 backgroundItem: RoundedRectangle {
                     id: menuButtonBackground
 
-                    color: root.active ? ui.theme.accentColor : ui.theme.buttonColor
-                    opacity: ui.theme.buttonOpacityNormal
+                    property real backgroundOpacity: ui.theme.buttonOpacityNormal
+                    color: Utils.colorWithAlpha(root.active ? ui.theme.accentColor : ui.theme.buttonColor, backgroundOpacity)
 
                     topLeftRadius: 0
                     topRightRadius: 3
                     bottomLeftRadius: 0
                     bottomRightRadius: 3
-
-                    border.width: ui.theme.borderWidth
-                    border.color: ui.theme.strokeColor
 
                     NavigationFocusBorder {
                         navigationCtrl: menuButton.navigation
@@ -283,35 +269,28 @@ Item {
                     states: [
                         State {
                             name: "PRESSED"
-                            when: root.resourcePickingActive
+                            when: menuButton.mouseArea.pressed || root.resourcePickingActive
 
                             PropertyChanges {
                                 target: menuButtonBackground
-                                opacity: ui.theme.buttonOpacityHit
+                                backgroundOpacity: ui.theme.buttonOpacityHit
                             }
                         },
 
                         State {
                             name: "HOVERED"
-                            when: rootMouseArea.containsMouse && !root.resourcePickingActive
+                            when: (!menuButton.mouseArea.pressed && rootMouseArea.containsMouse) && !root.resourcePickingActive
 
                             PropertyChanges {
                                 target: menuButtonBackground
-                                opacity: ui.theme.buttonOpacityHover
+                                backgroundOpacity: ui.theme.buttonOpacityHover
                             }
                         }
                     ]
 
-                    Rectangle {
-                        id: leftSeparator
-
+                    SeparatorLine {
                         anchors.left: parent.left
-
-                        height: root.height
-                        width: 1
-
-                        color: ui.theme.fontPrimaryColor
-                        opacity: 0.3
+                        orientation: Qt.Vertical
                     }
                 }
 
@@ -352,18 +331,19 @@ Item {
         }
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "transparent"
+        border.color: ui.theme.strokeColor
+        border.width: root.active ? ui.theme.borderWidth : 1
+        radius: 3
+    }
+
     MouseArea {
         id: rootMouseArea
 
         anchors.fill: parent
-        propagateComposedEvents: true
+        acceptedButtons: Qt.NoButton
         hoverEnabled: true
-
-        onClicked: mouse.accepted = false
-        onPressed: mouse.accepted = false
-        onReleased: mouse.accepted = false
-        onDoubleClicked: mouse.accepted = false
-        onPositionChanged: mouse.accepted = false
-        onPressAndHold: mouse.accepted = false
     }
 }
