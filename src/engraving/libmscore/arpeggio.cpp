@@ -26,7 +26,7 @@
 #include <QVector>
 
 #include "translation.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "scorefont.h"
 #include "accidental.h"

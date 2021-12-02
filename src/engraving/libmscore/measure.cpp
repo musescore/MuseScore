@@ -32,7 +32,7 @@
 #include "realfn.h"
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "rw/measurerw.h"
 
 #include "accidental.h"

@@ -28,7 +28,7 @@
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 #include "io/htmlparser.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"

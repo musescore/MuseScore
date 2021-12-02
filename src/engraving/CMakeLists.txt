@@ -37,6 +37,11 @@ set(MODULE_SRC
     ${ENGRAVING_INFRASTRUCTURE_SRC}
     ${LIBMSCORE_SRC}
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlvalue.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/xmlvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.cpp

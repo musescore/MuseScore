@@ -21,7 +21,7 @@
  */
 #include "spanner.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "connector.h"
 #include "score.h"

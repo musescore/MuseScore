@@ -23,7 +23,7 @@
 #include <QBuffer>
 #include <QMimeData>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "articulation.h"
 #include "beam.h"

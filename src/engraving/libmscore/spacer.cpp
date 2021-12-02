@@ -22,7 +22,7 @@
 
 #include "spacer.h"
 #include "draw/pen.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "staff.h"
 #include "measure.h"

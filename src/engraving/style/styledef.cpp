@@ -23,7 +23,7 @@
 #include "styledef.h"
 
 #include "draw/geometry.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/articulation.h"
 #include "libmscore/chordlist.h"

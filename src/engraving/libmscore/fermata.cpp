@@ -21,7 +21,7 @@
  */
 
 #include "fermata.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "chordrest.h"
 #include "system.h"

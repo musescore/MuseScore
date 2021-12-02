@@ -21,7 +21,7 @@
  */
 
 #include "groups.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "durationtype.h"
 #include "chordrest.h"
 #include "staff.h"

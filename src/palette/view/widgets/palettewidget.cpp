@@ -42,7 +42,7 @@
 
 #include "engraving/infrastructure/draw/color.h"
 #include "engraving/infrastructure/draw/pen.h"
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/engravingitem.h"

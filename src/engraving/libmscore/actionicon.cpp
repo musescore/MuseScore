@@ -21,7 +21,7 @@
  */
 
 #include "actionicon.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "property.h"
 
 using namespace mu;

@@ -22,7 +22,7 @@
 #include "pageformat.h"
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 using namespace Ms;
 

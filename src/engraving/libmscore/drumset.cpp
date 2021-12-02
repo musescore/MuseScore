@@ -22,7 +22,7 @@
 
 #include "drumset.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "articulation.h"
 #include "note.h"

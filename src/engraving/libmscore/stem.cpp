@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "draw/brush.h"
 
 #include "staff.h"

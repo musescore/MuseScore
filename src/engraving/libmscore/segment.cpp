@@ -22,7 +22,7 @@
 
 #include "segment.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "mscore.h"
 #include "engravingitem.h"

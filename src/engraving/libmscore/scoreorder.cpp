@@ -24,7 +24,7 @@
 #include <iostream>
 
 #include "translation.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"

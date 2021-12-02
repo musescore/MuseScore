@@ -23,7 +23,7 @@
 #include "property.h"
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "accidental.h"
 #include "bracket.h"

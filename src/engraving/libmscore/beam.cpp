@@ -28,7 +28,7 @@
 
 #include "draw/brush.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "segment.h"
 #include "score.h"

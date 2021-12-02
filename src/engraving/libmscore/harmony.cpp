@@ -28,7 +28,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/brush.h"
 #include "draw/pen.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "chordlist.h"
 #include "fret.h"

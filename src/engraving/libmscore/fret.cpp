@@ -24,7 +24,7 @@
 
 #include "draw/fontmetrics.h"
 #include "draw/brush.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "measure.h"

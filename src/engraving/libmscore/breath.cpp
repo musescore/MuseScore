@@ -22,7 +22,7 @@
 
 #include "breath.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "symnames.h"
 #include "system.h"

@@ -21,7 +21,7 @@
  */
 
 #include "stafftextbase.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "system.h"
 #include "staff.h"
 #include "score.h"

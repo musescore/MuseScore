@@ -39,7 +39,7 @@
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"

@@ -25,7 +25,7 @@
 #include <QDebug>
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "chord.h"

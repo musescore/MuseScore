@@ -23,7 +23,7 @@
 #include "articulation.h"
 
 #include "rw/compat/read206.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "score.h"
 #include "chordrest.h"
