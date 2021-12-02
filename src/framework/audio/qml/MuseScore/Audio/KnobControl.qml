@@ -44,6 +44,7 @@ Dial {
     to: root.valueScale
     value: 0
 
+    signal newValueRequested(int newValue)
     signal increaseRequested()
     signal decreaseRequested()
 
@@ -157,5 +158,44 @@ Dial {
 
     Component.onCompleted: {
         backgroundCanvas.requestPaint()
+    }
+
+    onMoved: {
+        newValueRequested(value)
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onDoubleClicked: {
+            root.newValueRequested(0)
+        }
+
+        // The MouseArea steals mouse press events from the slider.
+        // There is really no way to prevent that.
+        // (if you set mouse.accepted to false in the onPressed handler,
+        // the MouseArea won't receive doubleClick events).
+        // So we have to reimplement the dragging behaviour.
+        // That gives us the opportunity to do it better than Qt.
+        // We will allow both dragging vertically and horizontally.
+
+        preventStealing: true // Don't let a Flickable steal the mouse
+
+        property int initialValue: 0
+        property real dragStartX: 0
+        property real dragStartY: 0
+
+        onPressed: function(mouse) {
+            initialValue = root.value
+            dragStartX = mouse.x; dragStartY = mouse.y
+        }
+
+        onPositionChanged: function(mouse)  {
+            let dx = mouse.x - dragStartX; let dy = mouse.y - dragStartY
+            let dist = Math.sqrt(dx * dx + dy * dy)
+            let sgn = (dy < dx) ? 1 : -1
+            let newValue = initialValue + dist * sgn
+            let bounded = Math.max(root.from, Math.min(newValue, root.to))
+            root.newValueRequested(bounded)
+        }
     }
 }
