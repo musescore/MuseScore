@@ -3326,22 +3326,25 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
       }
 
 //---------------------------------------------------------
-//   notePosition
+//   elementPosition
 //---------------------------------------------------------
 
-static QString notePosition(const ExportMusicXml* const expMxml, const Note* const note)
+static QString elementPosition(const ExportMusicXml* const expMxml, const Element* const elm)
       {
       QString res;
 
       if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
             const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->styleD(Sid::pageHeight));
 
-            const auto chord = note->chord();
+            const auto meas = elm->findMeasure();
+            Q_ASSERT(meas);
+            if (!meas)
+                  return res;
 
-            double measureX = expMxml->getTenthsFromDots(chord->measure()->pagePos().x());
-            double measureY = pageHeight - expMxml->getTenthsFromDots(chord->measure()->pagePos().y());
-            double noteX = expMxml->getTenthsFromDots(note->pagePos().x());
-            double noteY = pageHeight - expMxml->getTenthsFromDots(note->pagePos().y());
+            double measureX = expMxml->getTenthsFromDots(meas->pagePos().x());
+            double measureY = pageHeight - expMxml->getTenthsFromDots(meas->pagePos().y());
+            double noteX = expMxml->getTenthsFromDots(elm->pagePos().x());
+            double noteY = pageHeight - expMxml->getTenthsFromDots(elm->pagePos().y());
 
             res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX,'f',2));
             res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY,'f',2));
@@ -3386,7 +3389,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             _attr.doAttr(_xml, false);
             QString noteTag = QString("note");
 
-            noteTag += notePosition(this, note);
+            noteTag += elementPosition(this, note);
 
             if (!note->visible()) {
                   noteTag += QString(" print-object=\"no\"");
@@ -3549,6 +3552,7 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
 
       QString noteTag = QString("note");
       noteTag += color2xml(rest);
+      noteTag += elementPosition(this, rest);
       if (!rest->visible() ) {
             noteTag += QString(" print-object=\"no\"");
             }
