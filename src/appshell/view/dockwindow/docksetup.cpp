@@ -35,6 +35,7 @@
 #include "dockingholderview.h"
 #include "dockcentralview.h"
 #include "dockpageview.h"
+#include "docktitlebar.h"
 
 #include "docktypes.h"
 
@@ -57,6 +58,16 @@ public:
     Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
     {
         return new DockSeparator(parent);
+    }
+
+    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
+    {
+        return new DockTitleBar(frame);
+    }
+
+    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
+    {
+        return new DockTitleBar(floatingWindow);
     }
 
     QUrl titleBarFilename() const override

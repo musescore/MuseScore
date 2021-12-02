@@ -38,6 +38,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dockstatusbarview.h
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarview.h
+    ${CMAKE_CURRENT_LIST_DIR}/docktitlebar.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/docktitlebar.h
     ${CMAKE_CURRENT_LIST_DIR}/dockingholderview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockingholderview.h
     ${CMAKE_CURRENT_LIST_DIR}/dockcentralview.cpp

@@ -27,6 +27,7 @@
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
 
 #include "log.h"
+#include "docktypes.h"
 
 using namespace mu::dock;
 
@@ -79,7 +80,10 @@ public:
         }
 
         QPointF result = m_mouseArea->mapToItem(m_dockWidget, QPointF(pos));
-        result.setY(result.y() + m_dockWidget->titleBar()->height());
+
+        result.setX(result.x() + DOCK_WINDOW_SHADOW);
+        result.setY(result.y() + DOCK_WINDOW_SHADOW);
+
         return QPoint(result.x(), result.y());
     }
 
