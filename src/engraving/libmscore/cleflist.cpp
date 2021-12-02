@@ -21,7 +21,7 @@
  */
 
 #include "cleflist.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "clef.h"
 #include "score.h"
 

@@ -29,7 +29,7 @@
 
 #include "importptb.h"
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 
 #include <libmscore/factory.h>
 #include <libmscore/measurebase.h>

@@ -27,7 +27,7 @@
 #include <array>
 
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "note.h"

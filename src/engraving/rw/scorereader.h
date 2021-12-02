@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_SCOREREADER_H
 
 #include "../engravingerrors.h"
-#include "../infrastructure/io/xml.h"
+#include "xml.h"
 #include "../infrastructure/io/mscreader.h"
 #include "readcontext.h"
 #include "../libmscore/masterscore.h"

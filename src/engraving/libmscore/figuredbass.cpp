@@ -22,7 +22,7 @@
 
 #include "figuredbass.h"
 #include "draw/fontmetrics.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "note.h"
 #include "measure.h"

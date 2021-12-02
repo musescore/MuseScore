@@ -279,13 +279,13 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
     break;
     case P_TYPE::ORNAMENT_STYLE: {
         putLevel();
-        switch (data.value<OrnamentStyle>()) {
-        case OrnamentStyle::BAROQUE:
-            return "baroque";
-        case OrnamentStyle::DEFAULT:
-            return "default";
-        }
-        break;
+//        switch (data.value<OrnamentStyle>()) {
+//        case OrnamentStyle::BAROQUE:
+//            return "baroque";
+//        case OrnamentStyle::DEFAULT:
+//            return "default";
+//        }
+//        break;
     } break;
     case P_TYPE::ALIGN: {
         putLevel();

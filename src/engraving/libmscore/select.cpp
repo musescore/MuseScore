@@ -27,7 +27,7 @@
 
 #include <QBuffer>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "mscore.h"
 #include "arpeggio.h"

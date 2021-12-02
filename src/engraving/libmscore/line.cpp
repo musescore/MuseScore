@@ -22,7 +22,7 @@
 
 #include "line.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "barline.h"
 #include "chord.h"

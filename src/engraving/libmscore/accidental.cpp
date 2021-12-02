@@ -21,7 +21,7 @@
  */
 
 #include "accidental.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "note.h"
 #include "symbol.h"
 #include "symnames.h"

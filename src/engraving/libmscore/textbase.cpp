@@ -29,7 +29,7 @@
 #include "draw/pen.h"
 #include "draw/brush.h"
 #include "style/defaultstyle.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "text.h"
 #include "textedit.h"

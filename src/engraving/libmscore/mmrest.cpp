@@ -23,7 +23,7 @@
 #include "mmrest.h"
 
 #include "draw/pen.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "measure.h"
 #include "score.h"

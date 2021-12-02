@@ -33,7 +33,7 @@
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
 #include "compat/dummyelement.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "articulation.h"
 #include "audio.h"

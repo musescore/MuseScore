@@ -22,7 +22,7 @@
 
 #include "instrument.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "io/htmlparser.h"
 #include "compat/midi/midipatch.h"
 

@@ -27,7 +27,7 @@
 
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
 #include "rw/scorereader.h"

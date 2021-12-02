@@ -26,7 +26,7 @@
 #include <unordered_set>
 
 #include "translation.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "score.h"
 #include "undo.h"

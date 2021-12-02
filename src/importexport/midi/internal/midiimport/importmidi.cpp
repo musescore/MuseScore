@@ -26,7 +26,7 @@
 
 #include "engraving/compat/midi/midifile.h"
 #include "engraving/style/style.h"
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"

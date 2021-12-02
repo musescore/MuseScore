@@ -21,7 +21,7 @@
  */
 #include "measurerw.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "../libmscore/factory.h"
 #include "../libmscore/measure.h"

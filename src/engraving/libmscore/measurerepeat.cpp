@@ -22,7 +22,7 @@
 
 #include "measurerepeat.h"
 #include "draw/pen.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "barline.h"
 #include "measure.h"
 #include "mscore.h"

@@ -21,7 +21,7 @@
  */
 
 #include "keylist.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "rw/readcontext.h"
 
 using namespace mu;

@@ -32,7 +32,7 @@
 
 #include "draw/pen.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"

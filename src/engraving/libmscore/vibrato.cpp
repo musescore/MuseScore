@@ -25,7 +25,7 @@
 
 #include "translation.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "system.h"
 #include "measure.h"

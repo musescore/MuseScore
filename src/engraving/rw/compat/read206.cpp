@@ -27,7 +27,7 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "compat/pageformat.h"
 

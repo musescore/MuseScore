@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "sig.h"
 #include "tempo.h"
 

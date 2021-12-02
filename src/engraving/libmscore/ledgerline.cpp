@@ -22,7 +22,7 @@
 
 #include "ledgerline.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "chord.h"
 #include "measure.h"

@@ -22,7 +22,7 @@
 
 #include "sticking.h"
 
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "segment.h"
 

@@ -32,7 +32,7 @@
 #include "defer.h"
 #include "ptrutils.h"
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 #include "engraving/infrastructure/draw/pen.h"
 #include "engraving/infrastructure/draw/painterpath.h"
 

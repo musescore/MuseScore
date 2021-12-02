@@ -21,7 +21,7 @@
  */
 
 #include "measurenumberbase.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "measure.h"
 #include "staff.h"

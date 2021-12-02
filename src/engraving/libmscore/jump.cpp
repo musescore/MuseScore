@@ -23,7 +23,7 @@
 #include "jump.h"
 
 #include "translation.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "score.h"
 #include "measure.h"

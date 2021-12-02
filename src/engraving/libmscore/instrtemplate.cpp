@@ -24,7 +24,7 @@
 
 #include "translation.h"
 #include "style/style.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "bracket.h"
 #include "drumset.h"

@@ -23,7 +23,7 @@
 #ifndef __CAPELLA_H__
 #define __CAPELLA_H__
 
-#include "engraving/infrastructure/io/xml.h"
+#include "engraving/rw/xml.h"
 
 namespace Ms {
 enum class TIMESTEP : char {

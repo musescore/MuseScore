@@ -48,11 +48,6 @@ set (ENGRAVING_INFRASTRUCTURE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/xml.h
-    ${CMAKE_CURRENT_LIST_DIR}/io/xmlreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/xmlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/xmlvalue.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/io/xmlvalue.h
 )
 
 set(ENGRAVING_INFRASTRUCTURE_DEF )

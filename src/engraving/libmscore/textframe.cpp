@@ -22,7 +22,7 @@
 #include "textframe.h"
 
 #include "draw/fontmetrics.h"
-#include "io/xml.h"
+#include "rw/xml.h"
 
 #include "factory.h"
 #include "box.h"
