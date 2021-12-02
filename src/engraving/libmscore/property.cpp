@@ -509,9 +509,9 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         break;
     case P_TYPE::ORNAMENT_STYLE: {
         if (value == "baroque") {
-            return PropertyValue(int(MScore::OrnamentStyle::BAROQUE));
+            return PropertyValue(int(Ms::OrnamentStyle::BAROQUE));
         }
-        return PropertyValue(int(MScore::OrnamentStyle::DEFAULT));
+        return PropertyValue(int(Ms::OrnamentStyle::DEFAULT));
     }
     case P_TYPE::DIRECTION_V:
         if (value == "up") {
@@ -799,10 +799,10 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "unknown";
         }
     case P_TYPE::ORNAMENT_STYLE:
-        switch (MScore::OrnamentStyle(value.toInt())) {
-        case MScore::OrnamentStyle::BAROQUE:
+        switch (Ms::OrnamentStyle(value.toInt())) {
+        case Ms::OrnamentStyle::BAROQUE:
             return "baroque";
-        case MScore::OrnamentStyle::DEFAULT:
+        case Ms::OrnamentStyle::DEFAULT:
             return "default";
         }
         break;

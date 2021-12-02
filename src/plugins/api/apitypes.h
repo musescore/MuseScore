@@ -30,6 +30,12 @@
 namespace Ms::PluginAPI {
 Q_NAMESPACE
 
+enum class OrnamentStyle : char {
+    DEFAULT = int(mu::engraving::OrnamentStyle::DEFAULT),
+    BAROQUE = int(mu::engraving::OrnamentStyle::BAROQUE)
+};
+Q_ENUM_NS(OrnamentStyle);
+
 enum class Align : char {
     LEFT     = char(mu::engraving::Align::LEFT),
     RIGHT    = char(mu::engraving::Align::RIGHT),
@@ -72,6 +78,7 @@ class Mops : public QObject
 };
 }
 
+Q_DECLARE_METATYPE(Ms::PluginAPI::OrnamentStyle);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Align);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
