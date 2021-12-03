@@ -68,6 +68,7 @@ enum class P_TYPE {
     ALIGN,
     PLACEMENT_V,
     PLACEMENT_H,
+    TEXT_PLACE,
     DIRECTION_V,
     DIRECTION_H,
     BEAM_MODE,
@@ -79,7 +80,6 @@ enum class P_TYPE {
     LAYOUTBREAK_TYPE,
     VELO_TYPE,
 
-    TEXT_PLACE,
     TEMPO,
     GROUPS,
     SYMID,
@@ -163,6 +163,9 @@ public:
         : m_type(P_TYPE::PLACEMENT_V), m_data(make_data<PlacementV>(v)) {}
     PropertyValue(PlacementH v)
         : m_type(P_TYPE::PLACEMENT_H), m_data(make_data<PlacementH>(v)) {}
+
+    PropertyValue(TextPlace v)
+        : m_type(P_TYPE::TEXT_PLACE), m_data(make_data<TextPlace>(v)) {}
 
     PropertyValue(DirectionV v)
         : m_type(P_TYPE::DIRECTION_V), m_data(make_data<DirectionV>(v)) {}
