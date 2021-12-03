@@ -242,7 +242,7 @@ bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.toMillimetre());
+        setGap(v.value<Millimetre>());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {

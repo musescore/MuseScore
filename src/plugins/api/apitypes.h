@@ -85,6 +85,18 @@ enum class VeloType {
 };
 Q_ENUM_NS(VeloType);
 
+enum class BeamMode {
+    AUTO = int(mu::engraving::BeamMode::AUTO),
+    BEGIN = int(mu::engraving::BeamMode::BEGIN),
+    MID = int(mu::engraving::BeamMode::MID),
+    END = int(mu::engraving::BeamMode::END),
+    NONE = int(mu::engraving::BeamMode::NONE),
+    BEGIN32 = int(mu::engraving::BeamMode::BEGIN32),
+    BEGIN64 = int(mu::engraving::BeamMode::BEGIN64),
+    INVALID = int(mu::engraving::BeamMode::INVALID),
+};
+Q_ENUM_NS(BeamMode);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -99,5 +111,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
 Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
 Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
+Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
 
 #endif // MU_PLUGINS_APITYPES_H

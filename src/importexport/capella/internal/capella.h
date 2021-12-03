@@ -38,7 +38,7 @@ enum class CapellaNoteObjectType : char {
     PAGE_BKGR
 };
 
-enum class BeamMode : unsigned char {
+enum class CapBeamMode : unsigned char {
     AUTO, FORCE, SPLIT
 };
 
@@ -228,7 +228,7 @@ struct CapSystem {
     bool bBarCountReset;
     unsigned char explLeftIndent;        // < 0 --> Einrückung gemäß Stimmenbezeichnungen
                                          // >=  --> explizite Einrückung
-    BeamMode beamMode;
+    CapBeamMode beamMode;
     unsigned tempo;
     QColor color;                   // fuer Systemklammern
     bool bJustified;                // Randausgleich (Blocksatz)
@@ -615,7 +615,7 @@ public:
     enum class StemDir : signed char {
         DOWN = -1, AUTO = 0, UP = 1, NONE = 3
     };
-    BeamMode beamMode;
+    CapBeamMode beamMode;
     signed char notationStave;
     char dStemLength;
     unsigned char nTremoloBars;

@@ -62,7 +62,7 @@ Rest::Rest(Segment* parent)
 Rest::Rest(const ElementType& type, Segment* parent)
     : ChordRest(type, parent)
 {
-    _beamMode  = Beam::Mode::NONE;
+    _beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
 }
 
@@ -74,7 +74,7 @@ Rest::Rest(Segment* parent, const TDuration& d)
 Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
     : ChordRest(type, parent)
 {
-    _beamMode  = Beam::Mode::NONE;
+    _beamMode  = BeamMode::NONE;
     m_sym      = SymId::restQuarter;
     setDurationType(d);
     if (d.fraction().isValid()) {

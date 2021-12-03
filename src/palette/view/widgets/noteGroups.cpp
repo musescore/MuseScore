@@ -151,10 +151,10 @@ void NoteGroups::resetClicked()
 void NoteGroups::noteClicked(Note* note)
 {
     Chord* chord = note->chord();
-    if (chord->beamMode() == Beam::Mode::AUTO) {
-        updateBeams(chord, Beam::Mode::BEGIN);
-    } else if (chord->beamMode() == Beam::Mode::BEGIN) {
-        updateBeams(chord, Beam::Mode::AUTO);
+    if (chord->beamMode() == BeamMode::AUTO) {
+        updateBeams(chord, BeamMode::BEGIN);
+    } else if (chord->beamMode() == BeamMode::BEGIN) {
+        updateBeams(chord, BeamMode::AUTO);
     }
 }
 
@@ -162,16 +162,16 @@ void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 {
     switch (icon->actionType()) {
     case ActionIconType::BEAM_START:
-        updateBeams(chord, Beam::Mode::BEGIN);
+        updateBeams(chord, BeamMode::BEGIN);
         break;
     case ActionIconType::BEAM_MID:
-        updateBeams(chord, Beam::Mode::AUTO);
+        updateBeams(chord, BeamMode::AUTO);
         break;
     case ActionIconType::BEAM_BEGIN_32:
-        updateBeams(chord, Beam::Mode::BEGIN32);
+        updateBeams(chord, BeamMode::BEGIN32);
         break;
     case ActionIconType::BEAM_BEGIN_64:
-        updateBeams(chord, Beam::Mode::BEGIN64);
+        updateBeams(chord, BeamMode::BEGIN64);
         break;
     default:
         break;
@@ -179,7 +179,7 @@ void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 }
 
 /// takes into account current state of changeShorterCheckBox to update smaller valued notes as well
-void NoteGroups::updateBeams(Chord* chord, Beam::Mode m)
+void NoteGroups::updateBeams(Chord* chord, BeamMode m)
 {
     chord->setBeamMode(m);
     chord->score()->doLayout();

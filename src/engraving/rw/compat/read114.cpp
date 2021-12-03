@@ -3032,21 +3032,21 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 if (cr) {
                     if (!first) {
                         switch (cr->beamMode()) {
-                        case Beam::Mode::AUTO:
-                        case Beam::Mode::BEGIN:
-                        case Beam::Mode::END:
-                        case Beam::Mode::NONE:
+                        case BeamMode::AUTO:
+                        case BeamMode::BEGIN:
+                        case BeamMode::END:
+                        case BeamMode::NONE:
                             break;
-                        case Beam::Mode::MID:
-                        case Beam::Mode::BEGIN32:
-                        case Beam::Mode::BEGIN64:
-                            cr->setBeamMode(Beam::Mode::BEGIN);
+                        case BeamMode::MID:
+                        case BeamMode::BEGIN32:
+                        case BeamMode::BEGIN64:
+                            cr->setBeamMode(BeamMode::BEGIN);
                             break;
-                        case Beam::Mode::INVALID:
+                        case BeamMode::INVALID:
                             if (cr->isChord()) {
-                                cr->setBeamMode(Beam::Mode::AUTO);
+                                cr->setBeamMode(BeamMode::AUTO);
                             } else {
-                                cr->setBeamMode(Beam::Mode::NONE);
+                                cr->setBeamMode(BeamMode::NONE);
                             }
                             break;
                         }
