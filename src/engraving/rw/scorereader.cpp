@@ -59,6 +59,16 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         masterScore->style().read(&buf);
     }
 
+    // Read images
+    {
+        if (!MScore::noImages) {
+            std::vector<QString> images = mscReader.imageFileNames();
+            for (const QString& name : images) {
+                imageStore.add(name, mscReader.readImageFile(name));
+            }
+        }
+    }
+
     // Read score
     {
         QByteArray scoreData = mscReader.readScoreFile();
@@ -110,16 +120,6 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         QBuffer buf(&styleData);
         buf.open(QIODevice::ReadOnly);
         masterScore->chordList()->read(&buf);
-    }
-
-    // Read images
-    {
-        if (!MScore::noImages) {
-            std::vector<QString> images = mscReader.imageFileNames();
-            for (const QString& name : images) {
-                imageStore.add(name, mscReader.readImageFile(name));
-            }
-        }
     }
 
     //  Read audio
