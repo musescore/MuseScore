@@ -882,7 +882,7 @@ bool PaletteTreeModel::insertPalette(PalettePtr pp, int row, const QModelIndex& 
 void PaletteTreeModel::updateCellsState(const Selection& sel)
 {
     const ChordRest* cr = sel.firstChordRest();
-    const Beam::Mode bm = cr ? cr->beamMode() : Beam::Mode::NONE;
+    const BeamMode bm = cr ? cr->beamMode() : BeamMode::NONE;
     const ActionIconType beamActionType = Beam::actionIconTypeForBeamMode(bm);
     bool deactivateAll = !cr;
 

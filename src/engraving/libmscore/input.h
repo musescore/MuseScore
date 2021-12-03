@@ -68,7 +68,7 @@ class InputState
     bool _rest { false }; // rest mode
 
     NoteType _noteType { NoteType::NORMAL };
-    Beam::Mode _beamMode { Beam::Mode::AUTO };
+    BeamMode _beamMode { BeamMode::AUTO };
 
     AccidentalType _accidentalType { AccidentalType::NONE };
     Slur* _slur = nullptr;
@@ -116,8 +116,8 @@ public:
     NoteType noteType() const { return _noteType; }
     void setNoteType(NoteType t) { _noteType = t; }
 
-    Beam::Mode beamMode() const { return _beamMode; }
-    void setBeamMode(Beam::Mode m) { _beamMode = m; }
+    BeamMode beamMode() const { return _beamMode; }
+    void setBeamMode(BeamMode m) { _beamMode = m; }
 
     bool noteEntryMode() const { return _noteEntryMode; }
     void setNoteEntryMode(bool v) { _noteEntryMode = v; }

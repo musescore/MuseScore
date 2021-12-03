@@ -361,16 +361,16 @@ void ExampleView::dropEvent(QDropEvent* event)
             emit beamPropertyDropped(chord, icon);
             switch (icon->actionType()) {
             case ActionIconType::BEAM_START:
-                chord->setBeamMode(Beam::Mode::BEGIN);
+                chord->setBeamMode(BeamMode::BEGIN);
                 break;
             case ActionIconType::BEAM_MID:
-                chord->setBeamMode(Beam::Mode::AUTO);
+                chord->setBeamMode(BeamMode::AUTO);
                 break;
             case ActionIconType::BEAM_BEGIN_32:
-                chord->setBeamMode(Beam::Mode::BEGIN32);
+                chord->setBeamMode(BeamMode::BEGIN32);
                 break;
             case ActionIconType::BEAM_BEGIN_64:
-                chord->setBeamMode(Beam::Mode::BEGIN64);
+                chord->setBeamMode(BeamMode::BEGIN64);
                 break;
             default:
                 break;

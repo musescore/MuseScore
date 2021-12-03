@@ -53,6 +53,9 @@ public:
 
     static QString toXml(VeloType v);
     static VeloType fromXml(const QString& str, VeloType def);
+
+    static QString toXml(BeamMode v);
+    static BeamMode fromXml(const QString& str, BeamMode def);
 };
 }
 

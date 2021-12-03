@@ -70,15 +70,14 @@ enum class P_TYPE {
     PLACEMENT_H,
     DIRECTION_V,
     DIRECTION_H,
+    BEAM_MODE,
 
     // Duration
     FRACTION,
 
     // Types
     LAYOUTBREAK_TYPE,
-
     VELO_TYPE,
-    BEAM_MODE,
 
     TEXT_PLACE,
     TEMPO,
@@ -169,6 +168,9 @@ public:
         : m_type(P_TYPE::DIRECTION_V), m_data(make_data<DirectionV>(v)) {}
     PropertyValue(DirectionH v)
         : m_type(P_TYPE::DIRECTION_H), m_data(make_data<DirectionH>(v)) {}
+
+    PropertyValue(BeamMode v)
+        : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}
 
     // Duration
     PropertyValue(const Fraction& v)
@@ -297,7 +299,6 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
-    Millimetre toMillimetre() const { return value<Millimetre>(); }
 
     const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;

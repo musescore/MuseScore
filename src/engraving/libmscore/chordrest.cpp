@@ -26,6 +26,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "factory.h"
 #include "chord.h"
@@ -65,6 +66,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -78,7 +80,7 @@ ChordRest::ChordRest(const ElementType& type, Segment* parent)
     _beam         = 0;
     _tabDur       = 0;
     _up           = true;
-    _beamMode     = Beam::Mode::AUTO;
+    _beamMode     = BeamMode::AUTO;
     m_isSmall     = false;
     _melismaEnd   = false;
     _crossMeasure = CrossMeasure::UNKNOWN;
@@ -145,31 +147,12 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     DurationElement::writeProperties(xml);
 
     //
-    // Beam::Mode default:
-    //    REST  - Beam::Mode::NONE
-    //    CHORD - Beam::Mode::AUTO
+    // BeamMode default:
+    //    REST  - BeamMode::NONE
+    //    CHORD - BeamMode::AUTO
     //
-    if ((isRest() && _beamMode != Beam::Mode::NONE) || (isChord() && _beamMode != Beam::Mode::AUTO)) {
-        QString s;
-        switch (_beamMode) {
-        case Beam::Mode::AUTO:    s = "auto";
-            break;
-        case Beam::Mode::BEGIN:   s = "begin";
-            break;
-        case Beam::Mode::MID:     s = "mid";
-            break;
-        case Beam::Mode::END:     s = "end";
-            break;
-        case Beam::Mode::NONE:    s = "no";
-            break;
-        case Beam::Mode::BEGIN32: s = "begin32";
-            break;
-        case Beam::Mode::BEGIN64: s = "begin64";
-            break;
-        case Beam::Mode::INVALID: s = "?";
-            break;
-        }
-        xml.tag("BeamMode", s);
+    if ((isRest() && _beamMode != BeamMode::NONE) || (isChord() && _beamMode != BeamMode::AUTO)) {
+        xml.tag("BeamMode", XmlValue::toXml(_beamMode));
     }
     writeProperty(xml, Pid::SMALL);
     if (actualDurationType().dots()) {
@@ -249,26 +232,7 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "BeamMode") {
-        QString val(e.readElementText());
-        Beam::Mode bm = Beam::Mode::AUTO;
-        if (val == "auto") {
-            bm = Beam::Mode::AUTO;
-        } else if (val == "begin") {
-            bm = Beam::Mode::BEGIN;
-        } else if (val == "mid") {
-            bm = Beam::Mode::MID;
-        } else if (val == "end") {
-            bm = Beam::Mode::END;
-        } else if (val == "no") {
-            bm = Beam::Mode::NONE;
-        } else if (val == "begin32") {
-            bm = Beam::Mode::BEGIN32;
-        } else if (val == "begin64") {
-            bm = Beam::Mode::BEGIN64;
-        } else {
-            bm = Beam::Mode(val.toInt());
-        }
-        _beamMode = Beam::Mode(bm);
+        _beamMode = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
     } else if (tag == "Articulation") {
         Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());
@@ -599,22 +563,22 @@ EngravingItem* ChordRest::drop(EditData& data)
     {
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::BEAM_START:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
             break;
         case ActionIconType::BEAM_MID:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::MID));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
             break;
         case ActionIconType::BEAM_NONE:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
             break;
         case ActionIconType::BEAM_BEGIN_32:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN32));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN32);
             break;
         case ActionIconType::BEAM_BEGIN_64:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN64));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN64);
             break;
         case ActionIconType::BEAM_AUTO:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
             break;
         default:
             break;
@@ -860,9 +824,9 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 //   undoSetBeamMode
 //---------------------------------------------------------
 
-void ChordRest::undoSetBeamMode(Beam::Mode mode)
+void ChordRest::undoSetBeamMode(BeamMode mode)
 {
-    undoChangeProperty(Pid::BEAM_MODE, int(mode));
+    undoChangeProperty(Pid::BEAM_MODE, mode);
 }
 
 //---------------------------------------------------------
@@ -906,7 +870,7 @@ bool ChordRest::setProperty(Pid propertyId, const PropertyValue& v)
         setSmall(v.toBool());
         break;
     case Pid::BEAM_MODE:
-        setBeamMode(Beam::Mode(v.toInt()));
+        setBeamMode(v.value<BeamMode>());
         break;
     case Pid::STAFF_MOVE:
         setStaffMove(v.toInt());
@@ -935,7 +899,7 @@ PropertyValue ChordRest::propertyDefault(Pid propertyId) const
     case Pid::SMALL:
         return false;
     case Pid::BEAM_MODE:
-        return int(Beam::Mode::AUTO);
+        return BeamMode::AUTO;
     case Pid::STAFF_MOVE:
         return 0;
     default:

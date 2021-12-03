@@ -1638,7 +1638,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setBarLineTo(v.toInt());
         break;
     case Pid::STAFF_USERDIST:
-        setUserDist(v.toMillimetre());
+        setUserDist(v.value<Millimetre>());
         break;
     default:
         qDebug("unhandled id <%s>", propertyName(id));

@@ -121,6 +121,10 @@ enum class LayoutBreakType {
 enum class VeloType : char {
     OFFSET_VAL, USER_VAL
 };
+
+enum class BeamMode : signed char {
+    AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -133,6 +137,7 @@ using DirectionV = mu::engraving::DirectionV;
 using DirectionH = mu::engraving::DirectionH;
 using LayoutBreakType = mu::engraving::LayoutBreakType;
 using VeloType = mu::engraving::VeloType;
+using BeamMode = mu::engraving::BeamMode;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

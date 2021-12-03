@@ -254,3 +254,44 @@ VeloType XmlValue::fromXml(const QString& str, VeloType def)
     LOGD() << "unknown value: " << str;
     return def;
 }
+
+QString XmlValue::toXml(BeamMode v)
+{
+    switch (v) {
+    case BeamMode::AUTO: return "auto";
+    case BeamMode::BEGIN: return "begin";
+    case BeamMode::MID: return "mid";
+    case BeamMode::END: return "end";
+    case BeamMode::NONE: return "no";
+    case BeamMode::BEGIN32: return "begin32";
+    case BeamMode::BEGIN64: return "begin64";
+    case BeamMode::INVALID: return "invalid";
+    }
+    return QString();
+}
+
+BeamMode XmlValue::fromXml(const QString& str, BeamMode def)
+{
+    if (str == "auto") {
+        return BeamMode::AUTO;
+    } else if (str == "begin") {
+        return BeamMode::BEGIN;
+    } else if (str == "mid") {
+        return BeamMode::MID;
+    } else if (str == "end") {
+        return BeamMode::END;
+    } else if (str == "no") {
+        return BeamMode::NONE;
+    } else if (str == "begin32") {
+        return BeamMode::BEGIN32;
+    } else if (str == "begin64") {
+        return BeamMode::BEGIN64;
+    } else {
+        bool ok = false;
+        int v = str.toInt(&ok);
+        if (ok) {
+            return static_cast<BeamMode>(v);
+        }
+    }
+    return def;
+}
