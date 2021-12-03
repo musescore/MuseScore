@@ -86,7 +86,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minSysTicks = Fraction(4, 1); // Inizialize variable which stores the shortest note of the system
+    Fraction minTicks = Fraction(1, 8); // Inizialize variable which stores the shortest note of the system
+    Fraction prevMinTicks = Fraction(1, 1);
     bool changeMinSysTicks = false;
 
     while (ctx.curMeasure) {      // collect measure for system
@@ -96,10 +97,12 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         qreal ww  = 0;          // width of current measure
 
         // After appending a new measure, the shortest note in the system may change, in which case
-        // we need to recompute the layout of the previous measures. By updating the width of these
+        // we need to recompute the layout of the previous measures. When updating the width of these
         // measures, minWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
-            if (toMeasure(ctx.curMeasure)->computeTicks() < minSysTicks) {
+            if (toMeasure(ctx.curMeasure)->computeTicks() < minTicks) {
+                prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
+                minTicks = toMeasure(ctx.curMeasure)->computeTicks();
                 changeMinSysTicks = true;
                 for (MeasureBase* mb : system->measures()) {
                     if (mb == ctx.curMeasure) {
@@ -107,7 +110,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                     if (mb->isMeasure()) {
                         qreal prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeMinWidth();
+                        toMeasure(mb)->computeMinWidth(minTicks);
                         qreal newWidth = toMeasure(mb)->width();
                         minWidth += newWidth - prevWidth;
                     }
@@ -149,7 +152,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else {
                 m->addSystemTrailer(m->nextMeasure());
             }
-            m->computeMinWidth();
+            m->computeMinWidth(minTicks);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->computeMinWidth();
@@ -185,12 +188,13 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 ctx.curMeasure->setParent(oldSystem);
             }
             // If the last appended measure caused a re-layout of the previous measures, now that we are
-            // removing it we need to re-layout the previous measures again.
+            // removing it we need to re-layout the previous measures again. 
             if (changeMinSysTicks) {
+                minTicks = prevMinTicks; // If the last measure caused it to change, now we need to restore it!
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
                         qreal prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeMinWidth();
+                        toMeasure(mb)->computeMinWidth(minTicks);
                         qreal newWidth = toMeasure(mb)->width();
                         minWidth += newWidth - prevWidth;
                     }
@@ -224,7 +228,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
-                        m1->computeMinWidth();
+                        m1->computeMinWidth(minTicks);
                         ww = m1->width();
                     }
                 }
@@ -317,7 +321,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     } else {
                         m->removeSystemTrailer();
                     }
-                    m->computeMinWidth();
+                    m->computeMinWidth(m->minSysTicks());
                     m->stretchMeasure(m->oldWidth());
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
@@ -359,7 +363,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             qreal w = lm->width();
             lm->addSystemTrailer(nm);
             if (lm->trailer()) {
-                lm->computeMinWidth();
+                lm->computeMinWidth(minTicks);
             }
             minWidth += lm->width() - w;
         }
