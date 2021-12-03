@@ -317,7 +317,7 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
         return Spatium(1.5);

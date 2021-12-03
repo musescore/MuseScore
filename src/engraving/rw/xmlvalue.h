@@ -43,6 +43,9 @@ public:
     static QString toXml(PlacementH v);
     static PlacementH fromXml(const QString& str, PlacementH def);
 
+    static QString toXml(TextPlace v);
+    static TextPlace fromXml(const QString& str, TextPlace def);
+
     static QString toXml(DirectionV v);
     static DirectionV fromXml(const QString& str, DirectionV def);
     static QString toXml(DirectionH v);

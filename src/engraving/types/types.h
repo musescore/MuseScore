@@ -104,6 +104,11 @@ enum class PlacementH {
     LEFT, CENTER, RIGHT
 };
 
+// P_TYPE::TEXT_PLACE
+enum class TextPlace : char {
+    AUTO, ABOVE, BELOW, LEFT
+};
+
 // P_TYPE::DIRECTION
 enum class DirectionV {
     AUTO, UP, DOWN
@@ -114,14 +119,17 @@ enum class DirectionH : char {
     AUTO, LEFT, RIGHT
 };
 
+// P_TYPE::LAYOUTBREAK_TYPE
 enum class LayoutBreakType {
     PAGE, LINE, SECTION, NOBREAK
 };
 
+// P_TYPE::VELO_TYPE
 enum class VeloType : char {
     OFFSET_VAL, USER_VAL
 };
 
+// P_TYPE::BEAM_MODE
 enum class BeamMode : signed char {
     AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
 };
@@ -138,6 +146,7 @@ using DirectionH = mu::engraving::DirectionH;
 using LayoutBreakType = mu::engraving::LayoutBreakType;
 using VeloType = mu::engraving::VeloType;
 using BeamMode = mu::engraving::BeamMode;
+using TextPlace = mu::engraving::TextPlace;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

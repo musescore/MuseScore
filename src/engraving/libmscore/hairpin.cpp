@@ -848,7 +848,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
 
     case Pid::BEGIN_TEXT_OFFSET:
     case Pid::CONTINUE_TEXT_OFFSET:

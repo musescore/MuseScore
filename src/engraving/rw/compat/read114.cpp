@@ -29,6 +29,7 @@
 #include "compat/pageformat.h"
 #include "io/htmlparser.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -87,6 +88,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
@@ -1353,11 +1355,11 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
         } else if (tag == "endSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "beginTextPlace") {
-            textLine->setBeginTextPlace(readPlacement(e));
+            textLine->setBeginTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "continueTextPlace") {
-            textLine->setContinueTextPlace(readPlacement(e));
+            textLine->setContinueTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "endTextPlace") {
-            textLine->setEndTextPlace(readPlacement(e));
+            textLine->setEndTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (!readTextLineProperties114(e, ctx, textLine)) {
             e.unknown();
         }

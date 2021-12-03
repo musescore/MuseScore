@@ -151,6 +151,35 @@ PlacementH XmlValue::fromXml(const QString& str, PlacementH def)
     return def;
 }
 
+QString XmlValue::toXml(TextPlace v)
+{
+    switch (v) {
+    case TextPlace::AUTO: return "auto";
+    case TextPlace::ABOVE: return "above";
+    case TextPlace::BELOW: return "below";
+    case TextPlace::LEFT: return "left";
+    }
+    return QString();
+}
+
+TextPlace XmlValue::fromXml(const QString& s, TextPlace def)
+{
+    if (s == "auto" || s == "0") {
+        return TextPlace::AUTO;
+    }
+    if (s == "above" || s == "1") {
+        return TextPlace::ABOVE;
+    }
+    if (s == "below" || s == "2") {
+        return TextPlace::BELOW;
+    }
+    if (s == "left" || s == "3") {
+        return TextPlace::LEFT;
+    }
+    LOGD() << "unknown value: " << s;
+    return def;
+}
+
 QString XmlValue::toXml(DirectionV v)
 {
     switch (v) {

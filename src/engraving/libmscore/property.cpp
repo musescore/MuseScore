@@ -474,17 +474,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(GlissandoStyle::CHROMATIC));
         }
         break;
-    case P_TYPE::TEXT_PLACE:
-        if (value == "auto") {
-            return PropertyValue(int(PlaceText::AUTO));
-        } else if (value == "above") {
-            return PropertyValue(int(PlaceText::ABOVE));
-        } else if (value == "below") {
-            return PropertyValue(int(PlaceText::BELOW));
-        } else if (value == "left") {
-            return PropertyValue(int(PlaceText::LEFT));
-        }
-        break;
     case P_TYPE::BARLINE_TYPE: {
         bool ok;
         const int ct = value.toInt(&ok);
@@ -570,6 +559,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementH::LEFT));
+    case P_TYPE::TEXT_PLACE:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
     case P_TYPE::GLISS_STYLE:
     case P_TYPE::DIRECTION_V:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
@@ -579,7 +570,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), VeloType::OFFSET_VAL));
-    case P_TYPE::TEXT_PLACE:
     case P_TYPE::BARLINE_TYPE:
     case P_TYPE::SYMID:
     case P_TYPE::HEAD_SCHEME:
@@ -673,18 +663,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "portamento";
         case GlissandoStyle::CHROMATIC:
             return "Chromatic";
-        }
-        break;
-    case P_TYPE::TEXT_PLACE:
-        switch (PlaceText(value.toInt())) {
-        case PlaceText::AUTO:
-            return "auto";
-        case PlaceText::ABOVE:
-            return "above";
-        case PlaceText::BELOW:
-            return "below";
-        case PlaceText::LEFT:
-            return "left";
         }
         break;
     case P_TYPE::SYMID:

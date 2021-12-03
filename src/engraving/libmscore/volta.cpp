@@ -103,8 +103,8 @@ Volta::Volta(EngravingItem* parent)
     setPlacement(PlacementV::ABOVE);
     initElementStyle(&voltaStyle);
 
-    setBeginTextPlace(PlaceText::BELOW);
-    setContinueTextPlace(PlaceText::BELOW);
+    setBeginTextPlace(TextPlace::BELOW);
+    setContinueTextPlace(TextPlace::BELOW);
     setLineVisible(true);
     resetProperty(Pid::BEGIN_TEXT);
     resetProperty(Pid::CONTINUE_TEXT);
@@ -322,7 +322,7 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::ABOVE);
+        return TextPlace::ABOVE;
 
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;

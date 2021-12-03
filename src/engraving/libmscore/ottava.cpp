@@ -230,8 +230,8 @@ Ottava::Ottava(EngravingItem* parent)
 {
     _ottavaType  = OttavaType::OTTAVA_8VA;
     _numbersOnly = false;
-    setBeginTextPlace(PlaceText::LEFT);
-    setContinueTextPlace(PlaceText::LEFT);
+    setBeginTextPlace(TextPlace::LEFT);
+    setContinueTextPlace(TextPlace::LEFT);
     setEndHookType(HookType::HOOK_90);
     setLineVisible(true);
     setBeginHookHeight(Spatium(.0));
@@ -363,7 +363,7 @@ PropertyValue Ottava::getProperty(Pid propertyId) const
         return _numbersOnly;
 
     case Pid::END_TEXT_PLACE:                         // HACK
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
 
     default:
         break;
@@ -426,7 +426,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
     case Pid::BEGIN_HOOK_TYPE:
         return int(HookType::NONE);
     case Pid::BEGIN_HOOK_HEIGHT:
