@@ -112,63 +112,96 @@ enum class P_TYPE {
 class PropertyValue
 {
 public:
-    PropertyValue();
+    PropertyValue() = default;
 
     // Base
-    PropertyValue(bool v);
-    PropertyValue(int v);
-    PropertyValue(qreal v);
-    PropertyValue(const char* v);
-    PropertyValue(const QString& v);
+    PropertyValue(bool v)
+        : m_type(P_TYPE::BOOL), m_data(make_data<bool>(v)) {}
+
+    PropertyValue(int v)
+        : m_type(P_TYPE::INT), m_data(make_data<int>(v)) {}
+
+    PropertyValue(qreal v)
+        : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}
+
+    PropertyValue(const char* v)
+        : m_type(P_TYPE::STRING), m_data(make_data<QString>(QString(v))) {}
+
+    PropertyValue(const QString& v)
+        : m_type(P_TYPE::STRING), m_data(make_data<QString>(v)) {}
 
     // Geometry
-    PropertyValue(const PointF& v);
-    PropertyValue(const SizeF& v);
-    PropertyValue(const PainterPath& v);
-    PropertyValue(const Spatium& v);
-    PropertyValue(const Millimetre& v)
-        : m_type(P_TYPE::MILLIMETRE), m_val(v) {}
+    PropertyValue(const PointF& v)
+        : m_type(P_TYPE::POINT), m_data(make_data<PointF>(v)) {}
+
     PropertyValue(const PairF& v)
-        : m_type(P_TYPE::PAIR_REAL), m_val(v) {}
+        : m_type(P_TYPE::PAIR_REAL), m_data(make_data<PairF>(v)) {}
+
+    PropertyValue(const SizeF& v)
+        : m_type(P_TYPE::SIZE), m_data(make_data<SizeF>(v)) {}
+
+    PropertyValue(const PainterPath& v)
+        : m_type(P_TYPE::PATH), m_data(make_data<PainterPath>(v)) {}
+
+    PropertyValue(const Spatium& v)
+        : m_type(P_TYPE::SPATIUM), m_data(make_data<Spatium>(v)) {}
+
+    PropertyValue(const Millimetre& v)
+        : m_type(P_TYPE::MILLIMETRE), m_data(make_data<Millimetre>(v)) {}
 
     // Draw
-    PropertyValue(const draw::Color& v);
+    PropertyValue(const Color& v)
+        : m_type(P_TYPE::COLOR), m_data(make_data<Color>(v)) {}
+
     PropertyValue(OrnamentStyle v)
-        : m_type(P_TYPE::ORNAMENT_STYLE), m_val(v) {}
+        : m_type(P_TYPE::ORNAMENT_STYLE), m_data(make_data<OrnamentStyle>(v)) {}
 
     // Layout
-    PropertyValue(Align v);
+    PropertyValue(Align v)
+        : m_type(P_TYPE::ALIGN), m_data(make_data<Align>(v)) {}
+
     PropertyValue(PlacementV v)
-        : m_type(P_TYPE::PLACEMENT_V), m_val(v) {}
+        : m_type(P_TYPE::PLACEMENT_V), m_data(make_data<PlacementV>(v)) {}
     PropertyValue(PlacementH v)
-        : m_type(P_TYPE::PLACEMENT_H), m_val(v) {}
+        : m_type(P_TYPE::PLACEMENT_H), m_data(make_data<PlacementH>(v)) {}
+
     PropertyValue(DirectionV v)
-        : m_type(P_TYPE::DIRECTION_V), m_val(v) {}
+        : m_type(P_TYPE::DIRECTION_V), m_data(make_data<DirectionV>(v)) {}
     PropertyValue(DirectionH v)
-        : m_type(P_TYPE::DIRECTION_H), m_val(v) {}
+        : m_type(P_TYPE::DIRECTION_H), m_data(make_data<DirectionH>(v)) {}
 
     // Duration
     PropertyValue(const Fraction& v)
-        : m_type(P_TYPE::FRACTION), m_val(v) {}
+        : m_type(P_TYPE::FRACTION), m_data(make_data<Fraction>(v)) {}
 
     // Types
     PropertyValue(LayoutBreakType v)
-        : m_type(P_TYPE::LAYOUTBREAK_TYPE), m_val(v) {}
-    PropertyValue(VeloType v)
-        : m_type(P_TYPE::VELO_TYPE), m_val(v) {}
+        : m_type(P_TYPE::LAYOUTBREAK_TYPE), m_data(make_data<LayoutBreakType>(v)) {}
 
-    PropertyValue(Ms::SymId v);
-    PropertyValue(Ms::BarLineType v);
-    PropertyValue(Ms::HookType v);
+    PropertyValue(VeloType v)
+        : m_type(P_TYPE::VELO_TYPE), m_data(make_data<VeloType>(v)) {}
+
+    // not sorted
+    PropertyValue(Ms::SymId v)
+        : m_type(P_TYPE::SYMID), m_data(make_data<Ms::SymId>(v)) {}
+
+    PropertyValue(Ms::BarLineType v)
+        : m_type(P_TYPE::BARLINE_TYPE), m_data(make_data<Ms::BarLineType>(v)) {}
+
+    PropertyValue(Ms::HookType v)
+        : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<Ms::HookType>(v)) {}
 
     PropertyValue(Ms::DynamicType v)
-        : m_type(P_TYPE::DYNAMIC_TYPE), m_val(v) {}
+        : m_type(P_TYPE::DYNAMIC_TYPE), m_data(make_data<Ms::DynamicType>(v)) {}
 
-    PropertyValue(const Ms::PitchValues& v);
+    PropertyValue(const Ms::PitchValues& v)
+        : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<Ms::PitchValues>(v)) {}
 
-    PropertyValue(const QList<int>& v); //endings
+    PropertyValue(const QList<int>& v)
+        : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}
+
     PropertyValue(const Ms::AccidentalRole& v)
-        : m_type(P_TYPE::ACCIDENTAL_ROLE), m_val(v) {}
+        : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<Ms::AccidentalRole>(v)) {}
 
     PropertyValue(const Ms::Groups& v);
     PropertyValue(const Ms::TDuration& v);
@@ -184,102 +217,79 @@ public:
             return T();
         }
 
-        const T* pv = std::get_if<T>(&m_val);
-        if (!pv) {
+        assert(m_data);
+        if (!m_data) {
+            return T();
+        }
+
+        Arg<T>* at = get<T>();
+        if (!at) {
             //! HACK Temporary hack for int to enum
             if constexpr (std::is_enum<T>::value) {
                 if (P_TYPE::INT == m_type) {
-                    const int* p2i = std::get_if<int>(&m_val);
-                    assert(p2i);
-                    return p2i ? static_cast<T>(*p2i) : T();
+                    return static_cast<T>(value<int>());
                 }
             }
 
             //! HACK Temporary hack for enum to int
             if constexpr (std::is_same<T, int>::value) {
-                switch (m_type) {
-                case P_TYPE::ALIGN:      return static_cast<int>(value<Align>());
-                case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
-                case P_TYPE::PLACEMENT_V:  return static_cast<int>(value<PlacementV>());
-                case P_TYPE::DIRECTION_V:  return static_cast<int>(value<DirectionV>());
-                case P_TYPE::DIRECTION_H:  return static_cast<int>(value<DirectionH>());
-                case P_TYPE::SYMID:      return static_cast<int>(value<Ms::SymId>());
-                case P_TYPE::BARLINE_TYPE: return static_cast<int>(value<Ms::BarLineType>());
-                case P_TYPE::HOOK_TYPE:  return static_cast<int>(value<Ms::HookType>());
-                case P_TYPE::DYNAMIC_TYPE: return static_cast<int>(value<Ms::DynamicType>());
-                case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
-                case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
-                case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
-                case P_TYPE::VELO_TYPE: return static_cast<int>(value<VeloType>());
-                default:
-                    break;
+                if (m_data->isEnum()) {
+                    return m_data->enumToInt();
                 }
             }
 
             //! HACK Temporary hack for bool to int
             if constexpr (std::is_same<T, int>::value) {
                 if (P_TYPE::BOOL == m_type) {
-                    const bool* pb = std::get_if<bool>(&m_val);
-                    assert(pb);
-                    return pb ? static_cast<T>(*pb) : T();
+                    return value<bool>();
                 }
             }
 
             //! HACK Temporary hack for int to bool
             if constexpr (std::is_same<T, bool>::value) {
-                const int* p2i = std::get_if<int>(&m_val);
-                assert(p2i);
-                return p2i ? static_cast<T>(*p2i) : T();
+                return value<int>();
             }
 
             //! HACK Temporary hack for real to Spatium
             if constexpr (std::is_same<T, Spatium>::value) {
                 if (P_TYPE::REAL == m_type) {
-                    const qreal* pr = std::get_if<qreal>(&m_val);
-                    assert(pr);
-                    return pr ? Spatium(*pr) : Spatium();
+                    Arg<qreal>* srv = get<qreal>();
+                    assert(srv);
+                    return srv ? Spatium(srv->v) : Spatium();
                 }
             }
 
             //! HACK Temporary hack for Spatium to real
             if constexpr (std::is_same<T, qreal>::value) {
                 if (P_TYPE::SPATIUM == m_type) {
-                    const Spatium* ps = std::get_if<Spatium>(&m_val);
-                    assert(ps);
-                    return ps ? ps->val() : T();
+                    return value<Spatium>().val();
                 }
             }
 
             //! HACK Temporary hack for real to Millimetre
             if constexpr (std::is_same<T, Millimetre>::value) {
                 if (P_TYPE::REAL == m_type) {
-                    const qreal* pr = std::get_if<qreal>(&m_val);
-                    assert(pr);
-                    return pr ? Millimetre(*pr) : Millimetre();
+                    Arg<qreal>* mrv = get<qreal>();
+                    assert(mrv);
+                    return mrv ? Millimetre(mrv->v) : Millimetre();
                 }
             }
 
             //! HACK Temporary hack for Spatium to real
             if constexpr (std::is_same<T, qreal>::value) {
                 if (P_TYPE::MILLIMETRE == m_type) {
-                    const Millimetre* ps = std::get_if<Millimetre>(&m_val);
-                    assert(ps);
-                    return ps ? ps->val() : T();
+                    return value<Millimetre>().val();
                 }
             }
 
             //! HACK Temporary hack for Fraction to String
             if constexpr (std::is_same<T, QString>::value) {
                 if (P_TYPE::FRACTION == m_type) {
-                    const Fraction* pf = std::get_if<Fraction>(&m_val);
-                    assert(pf);
-                    return pf ? pf->toString() : T();
+                    return value<Fraction>().toString();
                 }
             }
         }
-
-        assert(pv);
-        return *pv;
+        return at->v;
     }
 
     bool toBool() const { return value<bool>(); }
@@ -303,31 +313,58 @@ public:
     static PropertyValue fromQVariant(const QVariant& v, P_TYPE type);
 
 private:
+    struct IArg {
+        virtual ~IArg() = default;
+
+        virtual bool equal(const IArg* a) const = 0;
+
+        virtual bool isEnum() const = 0;
+        virtual int enumToInt() const = 0;
+    };
+
+    template<typename T>
+    struct Arg : public IArg {
+        T v;
+        Arg(const T& v)
+            : IArg(), v(v) {}
+
+        bool equal(const IArg* a) const override
+        {
+            assert(a);
+            const Arg<T>* at = dynamic_cast<const Arg<T>*>(a);
+            assert(at);
+            return at ? at->v == v : false;
+        }
+
+        //! HACK Temporary hack for enum to int
+        bool isEnum() const override
+        {
+            return std::is_enum<T>::value;
+        }
+
+        int enumToInt() const override
+        {
+            if constexpr (std::is_enum<T>::value) {
+                return static_cast<int>(v);
+            }
+            return -1;
+        }
+    };
+
+    template<typename T>
+    inline std::shared_ptr<IArg> make_data(const T& v) const
+    {
+        return std::shared_ptr<IArg>(new Arg<T>(v));
+    }
+
+    template<typename T>
+    inline Arg<T>* get() const
+    {
+        return dynamic_cast<Arg<T>*>(m_data.get());
+    }
+
     P_TYPE m_type = P_TYPE::UNDEFINED;
-    std::variant<
-        // Base
-        bool, int, qreal, QString,
-
-        // Geometry
-        PointF, SizeF, PainterPath, Spatium, Millimetre, PairF,
-
-        // Draw
-        Color, OrnamentStyle,
-
-        // Layout
-        Align, PlacementV, PlacementH, DirectionV, DirectionH,
-
-        // Duration
-        Fraction,
-
-        // Types
-        LayoutBreakType, VeloType,
-
-        Ms::SymId, Ms::BarLineType, Ms::HookType,
-        Ms::DynamicType,
-        Ms::PitchValues, QList<int>,
-        Ms::AccidentalRole
-        > m_val;
+    std::shared_ptr<IArg> m_data = nullptr;
 
     //! HACK Temporary solution for some types
     std::any m_any;
