@@ -386,7 +386,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                     m->stretchMeasureInPracticeMode(ww);
                 } else {
                     m->createEndBarLines(false);
-                    m->computeMinWidth();
+                    m->computeMinWidth(Fraction(1, 16));
                     ww = m->width();
                     m->stretchMeasure(ww);
                 }
