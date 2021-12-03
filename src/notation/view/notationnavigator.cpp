@@ -86,7 +86,7 @@ void NotationNavigator::rescale()
         return;
     }
 
-    setScaling(scaling, QPointF());
+    setScaling(scaling, PointF());
 }
 
 void NotationNavigator::wheelEvent(QWheelEvent*)
