@@ -189,9 +189,9 @@ void XmlWriter::netag(const char* s)
 //   tag
 //---------------------------------------------------------
 
-void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
+void XmlWriter::tag(Pid id, const PropertyValue& val, const PropertyValue& def)
 {
-    if (data == def) {
+    if (val == def) {
         return;
     }
     const char* name = propertyName(id);
@@ -199,13 +199,13 @@ void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
         return;
     }
 
-    P_TYPE dataType = data.type();
+    P_TYPE valType = val.type();
     P_TYPE propType = propertyType(id);
-    if (dataType != propType) {
+    if (valType != propType) {
         LOGD() << "property value type mismatch, prop: " << name;
     }
 
-    const QString writableVal(propertyToString(id, data, /* mscx */ true));
+    const QString writableVal(propertyToString(id, val, /* mscx */ true));
     if (writableVal.isEmpty()) {
         //! NOTE The data type is MILLIMETRE, but we write SPATIUM
         //! (the conversion from Millimetre to Spatium occurred higher up the stack)
@@ -216,11 +216,11 @@ void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
         //! HACK Temporary hack. We have some kind of property with property type BOOL,
         //! but the used value type is INT (not just 1 and 0)
         //! see STAFF_BARLINE_SPAN
-        if (propType == P_TYPE::BOOL && dataType == P_TYPE::INT) {
+        if (propType == P_TYPE::BOOL && valType == P_TYPE::INT) {
             propType = P_TYPE::INT;
         }
 
-        tagProperty(name, propType, data);
+        tagProperty(name, propType, val);
     } else {
         tagProperty(name, P_TYPE::STRING, PropertyValue(writableVal));
     }
