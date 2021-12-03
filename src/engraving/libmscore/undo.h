@@ -817,12 +817,12 @@ public:
 class ChangeVelocity : public UndoCommand
 {
     Note* note;
-    Note::ValueType veloType;
+    VeloType veloType;
     int veloOffset;
     void flip(EditData*) override;
 
 public:
-    ChangeVelocity(Note*, Note::ValueType, int);
+    ChangeVelocity(Note*, VeloType, int);
     UNDO_NAME("ChangeVelocity")
 };
 

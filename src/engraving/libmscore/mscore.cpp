@@ -233,7 +233,7 @@ void MScore::init()
 void MScore::registerUiTypes()
 {
 #ifdef SCRIPT_INTERFACE
-    qRegisterMetaType<Note::ValueType>("ValueType");
+    qRegisterMetaType<VeloType>("ValueType");
 
     qRegisterMetaType<DirectionH>("DirectionH");
     qRegisterMetaType<Spanner::Anchor>("Anchor");

@@ -2719,9 +2719,9 @@ int Note::octave() const
 
 int Note::customizeVelocity(int velo) const
 {
-    if (veloType() == ValueType::OFFSET_VAL) {
+    if (veloType() == VeloType::OFFSET_VAL) {
         velo = velo + (velo * veloOffset()) / 100;
-    } else if (veloType() == ValueType::USER_VAL) {
+    } else if (veloType() == VeloType::USER_VAL) {
         velo = veloOffset();
     }
     return limit(velo, 1, 127);
@@ -3150,7 +3150,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setHeadType(NoteHead::Type(v.toInt()));
         break;
     case Pid::VELO_TYPE:
-        setVeloType(ValueType(v.toInt()));
+        setVeloType(VeloType(v.toInt()));
         score()->setPlaylistDirty();
         break;
     case Pid::VISIBLE: {
@@ -3208,7 +3208,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::HEAD_TYPE:
         return int(NoteHead::Type::HEAD_AUTO);
     case Pid::VELO_TYPE:
-        return int(ValueType::OFFSET_VAL);
+        return int(VeloType::OFFSET_VAL);
     case Pid::PLAY:
         return true;
     case Pid::FIXED:

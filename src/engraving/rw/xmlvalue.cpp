@@ -41,6 +41,7 @@ OrnamentStyle XmlValue::fromXml(const QString& str, OrnamentStyle def)
         return OrnamentStyle::BAROQUE;
     }
 
+    LOGD() << "unknown value: " << str;
     return def;
 }
 
@@ -119,7 +120,7 @@ PlacementV XmlValue::fromXml(const QString& str, PlacementV def)
     if ("below" == str) {
         return PlacementV::BELOW;
     }
-
+    LOGD() << "unknown value: " << str;
     return def;
 }
 
@@ -146,7 +147,7 @@ PlacementH XmlValue::fromXml(const QString& str, PlacementH def)
     if ("right" == str) {
         return PlacementH::RIGHT;
     }
-
+    LOGD() << "unknown value: " << str;
     return def;
 }
 
@@ -173,7 +174,7 @@ DirectionV XmlValue::fromXml(const QString& str, DirectionV def)
     if ("down" == str) {
         return DirectionV::DOWN;
     }
-
+    LOGD() << "unknown value: " << str;
     return def;
 }
 
@@ -200,7 +201,7 @@ DirectionH XmlValue::fromXml(const QString& str, DirectionH def)
     if ("auto" == str) {
         return DirectionH::AUTO;
     }
-
+    LOGD() << "unknown value: " << str;
     return def;
 }
 
@@ -229,5 +230,27 @@ LayoutBreakType XmlValue::fromXml(const QString& str, LayoutBreakType def)
     if (str == "nobreak") {
         return LayoutBreakType::NOBREAK;
     }
+    LOGD() << "unknown value: " << str;
+    return def;
+}
+
+QString XmlValue::toXml(VeloType v)
+{
+    switch (v) {
+    case VeloType::OFFSET_VAL: return "offset";
+    case VeloType::USER_VAL: return "user";
+    }
+    return QString();
+}
+
+VeloType XmlValue::fromXml(const QString& str, VeloType def)
+{
+    if (str == "offset") {
+        return VeloType::OFFSET_VAL;
+    }
+    if (str == "user") {
+        return VeloType::USER_VAL;
+    }
+    LOGD() << "unknown value: " << str;
     return def;
 }

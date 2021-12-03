@@ -894,7 +894,7 @@ static void adjustPlacement(EngravingItem* e)
     qreal staffHeight = e->staff()->height();
     qreal threshold = staffHeight;
     qreal offsetAdjust = 0.0;
-    PlacementV defaultPlacement = PlacementV(e->propertyDefault(Pid::PLACEMENT).toInt());
+    PlacementV defaultPlacement = e->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
     PlacementV newPlacement;
     // most offsets will be recorded as relative to top staff line
     // exceptions are styled offsets on elements with default placement below
@@ -3213,10 +3213,10 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readCho
         } else if (tag == "harmonyY") {
             qreal val = -e.readDouble();
             if (val > 0.0) {
-                style->set(Sid::harmonyPlacement, int(PlacementV::BELOW));
+                style->set(Sid::harmonyPlacement, PlacementV::BELOW);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             } else {
-                style->set(Sid::harmonyPlacement, int(PlacementV::ABOVE));
+                style->set(Sid::harmonyPlacement, PlacementV::ABOVE);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
         } else {

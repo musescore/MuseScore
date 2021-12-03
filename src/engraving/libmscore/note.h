@@ -250,14 +250,6 @@ static const int INVALID_LINE = -10000;
 
 class Note final : public EngravingItem
 {
-    Q_GADGET
-public:
-    enum class ValueType : char {
-        OFFSET_VAL, USER_VAL
-    };
-    Q_ENUM(ValueType);
-    INJECT_STATIC(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
-
 private:
     bool _ghost         { false };        ///< ghost note (guitar: death note)
     bool _hidden        { false };        ///< marks this note as the hidden one if there are
@@ -281,7 +273,7 @@ private:
     NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
     NoteHead::Type _headType  { NoteHead::Type::HEAD_AUTO };
 
-    ValueType _veloType { ValueType::OFFSET_VAL };
+    VeloType _veloType { VeloType::OFFSET_VAL };
 
     char _offTimeType    { 0 };      // compatibility only 1 - user(absolute), 2 - offset (%)
     char _onTimeType     { 0 };      // compatibility only 1 - user, 2 - offset
@@ -492,8 +484,8 @@ public:
 
     void reset() override;
 
-    ValueType veloType() const { return _veloType; }
-    void setVeloType(ValueType v) { _veloType = v; }
+    VeloType veloType() const { return _veloType; }
+    void setVeloType(VeloType v) { _veloType = v; }
     int veloOffset() const { return _veloOffset; }
     void setVeloOffset(int v) { _veloOffset = v; }
 
