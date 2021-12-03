@@ -71,13 +71,17 @@ void StartupScenario::run()
     Uri startupUri = startupPageUri(sessionType);
     async::Channel<Uri> opened = interactive()->opened();
 
-    opened.onReceive(this, [this, &opened, startupUri, sessionType](const Uri& uri) {
-        IF_ASSERT_FAILED(uri == startupUri) {
+    opened.onReceive(this, [this, opened, startupUri, sessionType](const Uri& uri) {
+        if (uri != startupUri) {
             return;
         }
 
-        opened.resetOnReceive(this);
         onStartupPageOpened(sessionType);
+
+        async::Async::call(this, [this, opened]() {
+            async::Channel<Uri> mut = opened;
+            mut.resetOnReceive(this);
+        });
     });
 
     interactive()->open(startupUri);
