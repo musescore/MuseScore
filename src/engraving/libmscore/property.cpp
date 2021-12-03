@@ -461,19 +461,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
 {
     switch (type) {
     case P_TYPE::ZERO_INT:
-    case P_TYPE::GLISS_STYLE:
-        if (value == "whitekeys") {
-            return PropertyValue(int(GlissandoStyle::WHITE_KEYS));
-        } else if (value == "blackkeys") {
-            return PropertyValue(int(GlissandoStyle::BLACK_KEYS));
-        } else if (value == "diatonic") {
-            return PropertyValue(int(GlissandoStyle::DIATONIC));
-        } else if (value == "portamento") {
-            return PropertyValue(int(GlissandoStyle::PORTAMENTO));
-        } else {       // e.g., normally "Chromatic"
-            return PropertyValue(int(GlissandoStyle::CHROMATIC));
-        }
-        break;
     case P_TYPE::BARLINE_TYPE: {
         bool ok;
         const int ct = value.toInt(&ok);
@@ -561,7 +548,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementH::LEFT));
     case P_TYPE::TEXT_PLACE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
-    case P_TYPE::GLISS_STYLE:
     case P_TYPE::DIRECTION_V:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
@@ -570,6 +556,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), VeloType::OFFSET_VAL));
+    case P_TYPE::GLISS_STYLE:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), GlissandoStyle::CHROMATIC));
     case P_TYPE::BARLINE_TYPE:
     case P_TYPE::SYMID:
     case P_TYPE::HEAD_SCHEME:
@@ -651,20 +639,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         default:
             return "unknown";
         }
-    case P_TYPE::GLISS_STYLE:
-        switch (GlissandoStyle(value.toInt())) {
-        case GlissandoStyle::BLACK_KEYS:
-            return "blackkeys";
-        case GlissandoStyle::WHITE_KEYS:
-            return "whitekeys";
-        case GlissandoStyle::DIATONIC:
-            return "diatonic";
-        case GlissandoStyle::PORTAMENTO:
-            return "portamento";
-        case GlissandoStyle::CHROMATIC:
-            return "Chromatic";
-        }
-        break;
     case P_TYPE::SYMID:
         return SymNames::nameForSymId(SymId(value.toInt()));
     case P_TYPE::BARLINE_TYPE:

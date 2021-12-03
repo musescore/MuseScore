@@ -143,6 +143,7 @@ QVariant PropertyValue::toQVariant() const
     // Draw
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+    case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
     // Layout
     case P_TYPE::ALIGN:       return static_cast<int>(value<Align>());
@@ -200,6 +201,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     // Draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
+    case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
     // Layout
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));

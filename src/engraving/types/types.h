@@ -133,6 +133,11 @@ enum class VeloType : char {
 enum class BeamMode : signed char {
     AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
 };
+
+// P_TYPE::GLISS_STYLE
+enum class GlissandoStyle {
+    CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -147,6 +152,7 @@ using LayoutBreakType = mu::engraving::LayoutBreakType;
 using VeloType = mu::engraving::VeloType;
 using BeamMode = mu::engraving::BeamMode;
 using TextPlace = mu::engraving::TextPlace;
+using GlissandoStyle = mu::engraving::GlissandoStyle;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

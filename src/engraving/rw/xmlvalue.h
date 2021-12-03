@@ -59,6 +59,9 @@ public:
 
     static QString toXml(BeamMode v);
     static BeamMode fromXml(const QString& str, BeamMode def);
+
+    static QString toXml(GlissandoStyle v);
+    static GlissandoStyle fromXml(const QString& str, GlissandoStyle def);
 };
 }
 

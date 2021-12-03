@@ -324,3 +324,31 @@ BeamMode XmlValue::fromXml(const QString& str, BeamMode def)
     }
     return def;
 }
+
+QString XmlValue::toXml(GlissandoStyle v)
+{
+    switch (v) {
+    case GlissandoStyle::BLACK_KEYS: return "blackkeys";
+    case GlissandoStyle::WHITE_KEYS: return "whitekeys";
+    case GlissandoStyle::DIATONIC: return "diatonic";
+    case GlissandoStyle::PORTAMENTO: return "portamento";
+    case GlissandoStyle::CHROMATIC: return "chromatic";
+    }
+    return QString();
+}
+
+GlissandoStyle XmlValue::fromXml(const QString& str, GlissandoStyle def)
+{
+    if (str == "whitekeys") {
+        return GlissandoStyle::WHITE_KEYS;
+    } else if (str == "blackkeys") {
+        return GlissandoStyle::BLACK_KEYS;
+    } else if (str == "diatonic") {
+        return GlissandoStyle::DIATONIC;
+    } else if (str == "portamento") {
+        return GlissandoStyle::PORTAMENTO;
+    } else if (str == "chromatic" || str == "Chromatic") { //! NOTE Chromatic - for compat reason
+        return GlissandoStyle::CHROMATIC;
+    }
+    return def;
+}

@@ -63,6 +63,7 @@ enum class P_TYPE {
     // Draw
     COLOR,
     ORNAMENT_STYLE,
+    GLISS_STYLE,
 
     // Layout
     ALIGN,
@@ -84,7 +85,7 @@ enum class P_TYPE {
     GROUPS,
     SYMID,
     INT_LIST,
-    GLISS_STYLE,
+
     BARLINE_TYPE,
     HEAD_TYPE,          // enum class Notehead::Type
     HEAD_GROUP,         // enum class Notehead::Group
@@ -154,6 +155,9 @@ public:
 
     PropertyValue(OrnamentStyle v)
         : m_type(P_TYPE::ORNAMENT_STYLE), m_data(make_data<OrnamentStyle>(v)) {}
+
+    PropertyValue(GlissandoStyle v)
+        : m_type(P_TYPE::GLISS_STYLE), m_data(make_data<GlissandoStyle>(v)) {}
 
     // Layout
     PropertyValue(Align v)
