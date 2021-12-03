@@ -88,5 +88,3 @@ if (OS_IS_LIN)
 endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
-
-install(DIRECTORY DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/VST3)

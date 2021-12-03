@@ -68,6 +68,9 @@ IF %PACKAGE_TYPE% == "msi" (
     )
 )
 
+:: Temporary disabled, while we getting a new certificate
+SET DO_SIGN=OFF
+
 SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
 SET /p BUILD_DATETIME=<%ARTIFACTS_DIR%\env\build_datetime.env
 SET /p BUILD_BRANCH=<%ARTIFACTS_DIR%\env\build_branch.env
@@ -132,13 +135,11 @@ GOTO END_SUCCESS
 ECHO "Start msi packing..."
 :: sign dlls and exe files
 IF %DO_SIGN% == ON (
-    where /q secure-file
-    IF ERRORLEVEL 1 ( choco install -y choco install -y --ignore-checksums secure-file )
-    secure-file -decrypt build\ci\windows\resources\musescore.p12.enc -secret %SIGN_CERTIFICATE_ENCRYPT_SECRET%
+    7z x -y build\ci\windows\resources\musescore.p12.enc -obuild\ci\windows\resources\ -p%SIGN_CERTIFICATE_ENCRYPT_SECRET%
 
     for /f "delims=" %%f in ('dir /a-d /b /s "%INSTALL_DIR%\*.dll" "%INSTALL_DIR%\*.exe"') do (
         ECHO "Signing %%f"
-        %SIGNTOOL% sign /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
+        %SIGNTOOL% sign /debug /f "build\ci\windows\resources\musescore.p12" /t http://timestamp.verisign.com/scripts/timstamp.dll /p %SIGN_CERTIFICATE_PASSWORD% "%%f"
     )
 
 ) ELSE (
@@ -160,10 +161,10 @@ IF %BUILD_MODE% == stable_build (
 )
 cd "%BUILD_DIR%" 
 cmake -DPACKAGE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
-cd ..
 
 SET PATH=%WIX_DIR%;%PATH% 
-CALL msvc_build.bat package %TARGET_PROCESSOR_BITS%
+cmake --build . --target package
+cd ..
 
 ECHO "Create logs dir"
 MKDIR %ARTIFACTS_DIR%\logs
