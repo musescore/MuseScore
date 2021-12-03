@@ -140,7 +140,7 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.family = QString(UNSORTED_ID);
             sg.section = sectionId;
             sg.unsorted = group;
-            sg.bracket = false;
+            sg.bracket = true;
             sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
             sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
             sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
@@ -362,7 +362,7 @@ void ScoreOrder::read(Ms::XmlReader& reader)
             sg.family = QString(UNSORTED_ID);
             sg.section = sectionId;
             sg.unsorted = group;
-            sg.bracket = true;
+            sg.bracket = false;
             sg.showSystemMarkings = false;
             sg.barLineSpan = false;
             sg.thinBracket = false;
