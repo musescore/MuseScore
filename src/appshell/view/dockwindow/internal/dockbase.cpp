@@ -471,6 +471,7 @@ void DockBase::listenFloatingChanges()
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
         if (frameConn) {
             disconnect(*frameConn);
+            m_floating = std::nullopt;
         }
 
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
