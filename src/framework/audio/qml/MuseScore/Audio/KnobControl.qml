@@ -165,6 +165,7 @@ Dial {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         onDoubleClicked: {
             root.newValueRequested(0)
@@ -196,6 +197,14 @@ Dial {
             let newValue = initialValue + dist * sgn
             let bounded = Math.max(root.from, Math.min(newValue, root.to))
             root.newValueRequested(bounded)
+        }
+
+        // We also listen for wheel events here, but for a different reason:
+        // Qml Dial has a bug that it doesn't emit moved() when the value is changed through a wheel event.
+        // So when we see a wheel event, we let the dial handle it, but we will account for emitting the signal.
+        onWheel: function(wheel) {
+            wheel.accepted = false
+            Qt.callLater(function() { root.newValueRequested(Math.round(value)) })
         }
     }
 }
