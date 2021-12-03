@@ -29,85 +29,6 @@
 
 using namespace mu::engraving;
 
-PropertyValue::PropertyValue()
-{
-}
-
-PropertyValue::PropertyValue(bool v)
-    : m_type(P_TYPE::BOOL), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(int v)
-    : m_type(P_TYPE::INT), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(qreal v)
-    : m_type(P_TYPE::REAL), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const char* v)
-    : m_type(P_TYPE::STRING), m_val(QString(v))
-{
-}
-
-PropertyValue::PropertyValue(const QString& v)
-    : m_type(P_TYPE::STRING), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const Spatium& v)
-    : m_type(P_TYPE::SPATIUM), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const PointF& v)
-    : m_type(P_TYPE::POINT), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const SizeF& v)
-    : m_type(P_TYPE::SIZE), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const PainterPath& v)
-    : m_type(P_TYPE::PATH), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const draw::Color& v)
-    : m_type(P_TYPE::COLOR), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(Align v)
-    : m_type(P_TYPE::ALIGN), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(Ms::SymId v)
-    : m_type(P_TYPE::SYMID), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(Ms::BarLineType v)
-    : m_type(P_TYPE::BARLINE_TYPE), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(Ms::HookType v)
-    : m_type(P_TYPE::HOOK_TYPE), m_val(v)
-{
-}
-
-PropertyValue::PropertyValue(const Ms::PitchValues& v)
-    : m_type(P_TYPE::PITCH_VALUES), m_val(v)
-{
-}
-
 PropertyValue::PropertyValue(const Ms::Groups& v)
     : m_type(P_TYPE::GROUPS), m_any(v)
 {
@@ -126,11 +47,6 @@ PropertyValue::PropertyValue(const Ms::TDuration& v)
 const Ms::TDuration& PropertyValue::toTDuration() const
 {
     return std::any_cast<const Ms::TDuration&>(m_any);
-}
-
-PropertyValue::PropertyValue(const QList<int>& v)
-    : m_type(P_TYPE::INT_LIST), m_val(v)
-{
 }
 
 bool PropertyValue::isValid() const
@@ -187,7 +103,17 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
         return RealIsEqual(v.value<qreal>(), value<qreal>());
     }
 
-    return v.m_type == m_type && v.m_val == m_val;
+    assert(m_data);
+    if (!m_data) {
+        return false;
+    }
+
+    assert(v.m_data);
+    if (!v.m_data) {
+        return false;
+    }
+
+    return v.m_type == m_type && v.m_data->equal(m_data.get());
 }
 
 QVariant PropertyValue::toQVariant() const
