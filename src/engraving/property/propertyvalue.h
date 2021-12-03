@@ -77,7 +77,7 @@ enum class P_TYPE {
     // Types
     LAYOUTBREAK_TYPE,
 
-    VALUE_TYPE,
+    VELO_TYPE,
     BEAM_MODE,
 
     TEXT_PLACE,
@@ -154,6 +154,8 @@ public:
     // Types
     PropertyValue(LayoutBreakType v)
         : m_type(P_TYPE::LAYOUTBREAK_TYPE), m_val(v) {}
+    PropertyValue(VeloType v)
+        : m_type(P_TYPE::VELO_TYPE), m_val(v) {}
 
     PropertyValue(Ms::SymId v);
     PropertyValue(Ms::BarLineType v);
@@ -208,6 +210,7 @@ public:
                 case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
                 case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
                 case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
+                case P_TYPE::VELO_TYPE: return static_cast<int>(value<VeloType>());
                 default:
                     break;
                 }
@@ -318,7 +321,7 @@ private:
         Fraction,
 
         // Types
-        LayoutBreakType,
+        LayoutBreakType, VeloType,
 
         Ms::SymId, Ms::BarLineType, Ms::HookType,
         Ms::DynamicType,

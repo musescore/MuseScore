@@ -501,7 +501,7 @@ void setMusicNotesFromMidi(Score*,
         //note->setTpcFromPitch();
 
         chord->add(note);
-        note->setVeloType(Note::ValueType::USER_VAL);
+        note->setVeloType(VeloType::USER_VAL);
         note->setVeloOffset(mn.velo);
 
         if (useDrumset) {

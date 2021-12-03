@@ -226,7 +226,7 @@ PropertyValue Breath::propertyDefault(Pid id) const
     case Pid::PAUSE:
         return 0.0;
     case Pid::PLACEMENT:
-        return track() & 1 ? int(PlacementV::BELOW) : int(PlacementV::ABOVE);
+        return track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE;
     default:
         return EngravingItem::propertyDefault(id);
     }

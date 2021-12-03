@@ -88,7 +88,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FIXED_LINE,              false, "fixedLine",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fixed line") },
     { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::HEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
     { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::HEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
-    { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VALUE_TYPE,     DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
+    { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
     { Pid::VELO_OFFSET,             false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
 
@@ -474,13 +474,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
             return PropertyValue(int(GlissandoStyle::CHROMATIC));
         }
         break;
-    case P_TYPE::VALUE_TYPE:
-        if (value == "offset") {
-            return PropertyValue(int(Note::ValueType::OFFSET_VAL));
-        } else if (value == "user") {
-            return PropertyValue(int(Note::ValueType::USER_VAL));
-        }
-        break;
     case P_TYPE::TEXT_PLACE:
         if (value == "auto") {
             return PropertyValue(int(PlaceText::AUTO));
@@ -584,7 +577,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
     case P_TYPE::LAYOUTBREAK_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
-    case P_TYPE::VALUE_TYPE:
+    case P_TYPE::VELO_TYPE:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), VeloType::OFFSET_VAL));
     case P_TYPE::TEXT_PLACE:
     case P_TYPE::BARLINE_TYPE:
     case P_TYPE::SYMID:
@@ -681,32 +675,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
             return "Chromatic";
         }
         break;
-    case P_TYPE::VALUE_TYPE:
-        switch (Note::ValueType(value.toInt())) {
-        case Note::ValueType::OFFSET_VAL:
-            return "offset";
-        case Note::ValueType::USER_VAL:
-            return "user";
-        }
-        break;
-    case P_TYPE::PLACEMENT_V:
-        switch (PlacementV(value.toInt())) {
-        case PlacementV::ABOVE:
-            return "above";
-        case PlacementV::BELOW:
-            return "below";
-        }
-        break;
-    case P_TYPE::PLACEMENT_H:
-        switch (PlacementH(value.toInt())) {
-        case PlacementH::LEFT:
-            return "left";
-        case PlacementH::CENTER:
-            return "center";
-        case PlacementH::RIGHT:
-            return "right";
-        }
-        break;
     case P_TYPE::TEXT_PLACE:
         switch (PlaceText(value.toInt())) {
         case PlaceText::AUTO:
@@ -739,28 +707,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return ClefInfo::tag(ClefType(value.toInt()));
     case P_TYPE::DYNAMIC_TYPE:
         return Dynamic::dynamicTypeName(value.value<DynamicType>());
-    case P_TYPE::ALIGN: {
-        const Align a = Align(value.toInt());
-        const char* h;
-        if (a & Align::HCENTER) {
-            h = "center";
-        } else if (a & Align::RIGHT) {
-            h = "right";
-        } else {
-            h = "left";
-        }
-        const char* v;
-        if (a & Align::BOTTOM) {
-            v = "bottom";
-        } else if (a & Align::VCENTER) {
-            v = "center";
-        } else if (a & Align::BASELINE) {
-            v = "baseline";
-        } else {
-            v = "top";
-        }
-        return QString("%1,%2").arg(h, v);
-    }
     case P_TYPE::ORIENTATION: {
         const Orientation o = Orientation(value.toInt());
         if (o == Orientation::VERTICAL) {
@@ -781,15 +727,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     case P_TYPE::INT_LIST:
         qFatal("unknown: INT_LIST");
     default: {
-        switch (value.type()) {
-        case P_TYPE::BOOL:
-        case P_TYPE::INT:
-            return QString::number(value.toInt());
-        case P_TYPE::REAL:
-            return QString::number(value.value<qreal>());
-        default:
-            break;
-        }
+        break;
     }
     }
 

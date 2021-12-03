@@ -60,13 +60,13 @@ TEST_F(DynamicTests, test1)
     EXPECT_EQ(d->placement(), PlacementV::BELOW);
     delete d;
 
-    dynamic->setProperty(Pid::PLACEMENT, int(PlacementV::ABOVE));
+    dynamic->setProperty(Pid::PLACEMENT, PlacementV::ABOVE);
     dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->placement(), PlacementV::ABOVE);
     delete d;
 
-    dynamic->setProperty(Pid::PLACEMENT, int(PlacementV::BELOW));
+    dynamic->setProperty(Pid::PLACEMENT, PlacementV::BELOW);
     dynamic->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
     EXPECT_EQ(d->placement(), PlacementV::BELOW);

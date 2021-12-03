@@ -325,7 +325,7 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
         return int(PlaceText::ABOVE);
 
     case Pid::PLACEMENT:
-        return int(PlacementV::ABOVE);
+        return PlacementV::ABOVE;
 
     default:
         return TextLineBase::propertyDefault(propertyId);
