@@ -79,6 +79,12 @@ enum class LayoutBreakType {
 };
 Q_ENUM_NS(LayoutBreakType);
 
+enum class VeloType {
+    OFFSET_VAL = int(mu::engraving::VeloType::OFFSET_VAL),
+    USER_VAL = int(mu::engraving::VeloType::USER_VAL),
+};
+Q_ENUM_NS(VeloType);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -92,5 +98,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::Placement);
 Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
 Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
 Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
+Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
 
 #endif // MU_PLUGINS_APITYPES_H

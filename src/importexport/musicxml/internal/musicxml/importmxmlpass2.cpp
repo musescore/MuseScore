@@ -4698,7 +4698,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         note->setVisible(printObject);     // TODO also set the stem to invisible
 
         if (velocity > 0) {
-            note->setVeloType(Note::ValueType::USER_VAL);
+            note->setVeloType(VeloType::USER_VAL);
             note->setVeloOffset(velocity);
         }
 

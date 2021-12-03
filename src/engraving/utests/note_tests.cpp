@@ -166,14 +166,14 @@ TEST_F(NoteTests, note)
     delete n;
 
     // velo type
-    note->setVeloType(Note::ValueType::USER_VAL);
+    note->setVeloType(VeloType::USER_VAL);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), Note::ValueType::USER_VAL);
+    EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
     delete n;
 
-    note->setVeloType(Note::ValueType::OFFSET_VAL);
+    note->setVeloType(VeloType::OFFSET_VAL);
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), Note::ValueType::OFFSET_VAL);
+    EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
     //================================================
@@ -293,14 +293,14 @@ TEST_F(NoteTests, note)
     delete n;
 
     // velo type
-    note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::USER_VAL));
+    note->setProperty(Pid::VELO_TYPE, int(VeloType::USER_VAL));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), Note::ValueType::USER_VAL);
+    EXPECT_EQ(n->veloType(), VeloType::USER_VAL);
     delete n;
 
-    note->setProperty(Pid::VELO_TYPE, int(Note::ValueType::OFFSET_VAL));
+    note->setProperty(Pid::VELO_TYPE, int(VeloType::OFFSET_VAL));
     n = static_cast<Note*>(ScoreRW::writeReadElement(note));
-    EXPECT_EQ(n->veloType(), Note::ValueType::OFFSET_VAL);
+    EXPECT_EQ(n->veloType(), VeloType::OFFSET_VAL);
     delete n;
 
     delete chord;

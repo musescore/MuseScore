@@ -2022,7 +2022,7 @@ const ParsedChord* Harmony::parsedForm()
 void Harmony::setHarmonyType(HarmonyType val)
 {
     _harmonyType = val;
-    setPlacement(PlacementV(propertyDefault(Pid::PLACEMENT).toInt()));
+    setPlacement(propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     switch (_harmonyType) {
     case HarmonyType::STANDARD:
         initTid(Tid::HARMONY_A);

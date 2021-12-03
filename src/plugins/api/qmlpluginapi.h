@@ -172,10 +172,10 @@ class PluginAPI : public Ms::QmlPlugin
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).
     DECLARE_API_ENUM(NoteHeadGroup,    noteHeadGroupEnum,      Ms::NoteHead::Group)
-    /// Contains Ms::Note::ValueType enumeration values
+    /// Contains Ms::ValueType enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// Note.OFFSET_VAL, Note.USER_VAL
-    DECLARE_API_ENUM(NoteValueType,    noteValueTypeEnum,      Ms::Note::ValueType)
+    DECLARE_API_ENUM(NoteValueType,    noteValueTypeEnum,      Ms::PluginAPI::VeloType)
     /// Contains Ms::SegmentType enumeration values
     DECLARE_API_ENUM(Segment,          segmentTypeEnum,        Ms::SegmentType)
     DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      Ms::Spanner::Anchor)           // probably unavailable in 2.X

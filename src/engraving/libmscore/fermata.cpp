@@ -285,7 +285,7 @@ bool Fermata::setProperty(Pid propertyId, const PropertyValue& v)
         setSymId(v.value<SymId>());
         break;
     case Pid::PLACEMENT: {
-        PlacementV p = PlacementV(v.toInt());
+        PlacementV p = v.value<PlacementV>();
         if (p != placement()) {
             QString s = SymNames::nameForSymId(_symId);
             bool up = placeAbove();
@@ -319,7 +319,7 @@ PropertyValue Fermata::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
-        return int(track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
+        return track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE;
     case Pid::TIME_STRETCH:
         return 1.0;           // articulationList[int(articulationType())].timeStretch;
     case Pid::PLAY:

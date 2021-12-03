@@ -570,7 +570,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
-        setPlacement(PlacementV(v.toInt()));
+        setPlacement(v.value<PlacementV>());
         break;
     case Pid::SYLLABIC:
         _syllabic = Syllabic(v.toInt());

@@ -1292,7 +1292,7 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
     case Pid::MIN_DISTANCE:
         return _minDistance;
     case Pid::PLACEMENT:
-        return int(placement());
+        return placement();
     case Pid::AUTOPLACE:
         return autoplace();
     case Pid::Z:
@@ -1342,7 +1342,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setMinDistance(v.value<Spatium>());
         break;
     case Pid::PLACEMENT:
-        setPlacement(PlacementV(v.toInt()));
+        setPlacement(v.value<PlacementV>());
         break;
     case Pid::AUTOPLACE:
         setAutoplace(v.toBool());
@@ -1401,7 +1401,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
-        return int(PlacementV::BELOW);
+        return PlacementV::BELOW;
     }
     case Pid::SELECTED:
         return false;

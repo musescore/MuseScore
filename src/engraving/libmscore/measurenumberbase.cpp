@@ -74,7 +74,7 @@ bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::HPLACEMENT:
-        setHPlacement(PlacementH(val.toInt()));
+        setHPlacement(val.value<PlacementH>());
         setLayoutInvalid();
         triggerLayout();
         return true;

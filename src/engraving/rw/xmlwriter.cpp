@@ -207,17 +207,30 @@ void XmlWriter::tag(Pid id, const PropertyValue& data, const PropertyValue& def)
 
     const QString writableVal(propertyToString(id, data, /* mscx */ true));
     if (writableVal.isEmpty()) {
-        tagProperty(name, data);
+        //! NOTE The data type is MILLIMETRE, but we write SPATIUM
+        //! (the conversion from Millimetre to Spatium occurred higher up the stack)
+        if (propType == P_TYPE::MILLIMETRE) {
+            propType = P_TYPE::SPATIUM;
+        }
+
+        //! HACK Temporary hack. We have some kind of property with property type BOOL,
+        //! but the used value type is INT (not just 1 and 0)
+        //! see STAFF_BARLINE_SPAN
+        if (propType == P_TYPE::BOOL && dataType == P_TYPE::INT) {
+            propType = P_TYPE::INT;
+        }
+
+        tagProperty(name, propType, data);
     } else {
-        tagProperty(name, PropertyValue(writableVal));
+        tagProperty(name, P_TYPE::STRING, PropertyValue(writableVal));
     }
 }
 
-void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue& data)
+void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& data)
 {
     QString ename(QString(name).split(' ')[0]);
 
-    switch (data.type()) {
+    switch (type) {
     case P_TYPE::UNDEFINED:
         UNREACHABLE;
         break;
@@ -339,14 +352,18 @@ void XmlWriter::tagProperty(const char* name, const mu::engraving::PropertyValue
         *this << XmlValue::toXml(data.value<LayoutBreakType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::VELO_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<VeloType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
     break;
 
 //    case P_TYPE::TDURATION,
-//    case P_TYPE::LAYOUT_BREAK,
-//    case P_TYPE::VALUE_TYPE,
 //    case P_TYPE::BEAM_MODE,
 
 //    case P_TYPE::TEXT_PLACE,

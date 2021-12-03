@@ -50,6 +50,9 @@ public:
 
     static QString toXml(LayoutBreakType v);
     static LayoutBreakType fromXml(const QString& str, LayoutBreakType def);
+
+    static QString toXml(VeloType v);
+    static VeloType fromXml(const QString& str, VeloType def);
 };
 }
 

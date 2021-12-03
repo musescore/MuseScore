@@ -145,9 +145,18 @@ P_TYPE PropertyValue::type() const
 
 bool PropertyValue::operator ==(const PropertyValue& v) const
 {
+    if (v.m_type == P_TYPE::UNDEFINED || m_type == P_TYPE::UNDEFINED) {
+        return v.m_type == m_type;
+    }
+
     //! HACK Temporary hack for bool comparisons (maybe one type is bool and another type is int)
     if (v.m_type == P_TYPE::BOOL || m_type == P_TYPE::BOOL) {
         return v.value<bool>() == value<bool>();
+    }
+
+    //! HACK Temporary hack for int comparisons (maybe one type is int and another type is enum)
+    if (v.m_type == P_TYPE::INT || m_type == P_TYPE::INT) {
+        return v.value<int>() == value<int>();
     }
 
     //! HACK Temporary hack for Spatium comparisons (maybe one type is Spatium and another type is real)
@@ -222,6 +231,7 @@ QVariant PropertyValue::toQVariant() const
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
+    case P_TYPE::VELO_TYPE:        return static_cast<int>(value<VeloType>());
 
     // other
     case P_TYPE::BARLINE_TYPE:    return static_cast<int>(value<Ms::BarLineType>());
@@ -280,6 +290,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return PropertyValue(LayoutBreakType(v.toInt()));
+    case P_TYPE::VELO_TYPE:        return PropertyValue(VeloType(v.toInt()));
 
     // other
     case P_TYPE::BARLINE_TYPE: return PropertyValue(Ms::BarLineType(v.toInt()));
