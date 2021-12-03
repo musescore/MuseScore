@@ -97,6 +97,15 @@ enum class BeamMode {
 };
 Q_ENUM_NS(BeamMode);
 
+enum class GlissandoStyle {
+    CHROMATIC = int(mu::engraving::GlissandoStyle::CHROMATIC),
+    WHITE_KEYS = int(mu::engraving::GlissandoStyle::WHITE_KEYS),
+    BLACK_KEYS = int(mu::engraving::GlissandoStyle::BLACK_KEYS),
+    DIATONIC = int(mu::engraving::GlissandoStyle::DIATONIC),
+    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO),
+};
+Q_ENUM_NS(GlissandoStyle);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -112,5 +121,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
 Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
+Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
 
 #endif // MU_PLUGINS_APITYPES_H
