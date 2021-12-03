@@ -3605,7 +3605,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeMinWidth();
+            computeMinWidth(minSysTicks());
         }
         if (seg) {
             Segment* s1;
@@ -3628,7 +3628,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeMinWidth(s, x, false);
+        computeMinWidth(s, x, false, minSysTicks());
     }
 
     return width() - oldWidth;
@@ -4062,7 +4062,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeMinWidth();
+        computeMinWidth(minSysTicks());
     }
 }
 
@@ -4155,7 +4155,7 @@ static bool hasAccidental(Segment* s)
 
 Fraction Measure::minSysTicks()
 {
-    Fraction minTicks = ticks();
+    Fraction minTicks = Fraction(1, 8);
     //System* sys = system();
     for (MeasureBase* mb : system()->measures()) {
         if (mb->isMeasure()) {
@@ -4166,11 +4166,7 @@ Fraction Measure::minSysTicks()
             }
         }
     }
-    if (minTicks > Fraction(1, 8)) {
-        return Fraction(1, 8);
-    } else {
-        return minTicks;
-    }
+    return minTicks;
 }
 
 //---------------------------------------------------------
@@ -4200,7 +4196,7 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks)
 //    set the width and x position for all segments
 //---------------------------------------------------------
 
-void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
+void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks)
 {
     Segment* fs = firstEnabled();
     if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
@@ -4209,7 +4205,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    Fraction minTicks = minSysTicks(); // New spacing algorithm: we get the shortest note duration in the system.
+    //Fraction minTicks = minSysTicks(); // New spacing algorithm: we get the shortest note duration in the system.
     qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
 
     if (isMMRest()) {
@@ -4326,7 +4322,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
     setStretchedWidth(x);
 }
 
-void Measure::computeMinWidth()
+void Measure::computeMinWidth(Fraction minTicks)
 {
     Segment* s;
 
@@ -4373,7 +4369,7 @@ void Measure::computeMinWidth()
     x += s->extraLeadingSpace().val() * spatium();
     bool isSystemHeader = s->header();
 
-    computeMinWidth(s, x, isSystemHeader);
+    computeMinWidth(s, x, isSystemHeader, minTicks);
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
