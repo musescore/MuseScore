@@ -274,7 +274,7 @@ const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode)
 {
     const auto& shortCut = findShortcut(m_shortcuts, actionCode);
     if (shortCut.action.empty()) {
-        Shortcut sc = { actionCode };
+        Shortcut sc = { actionCode, 0 };
         m_shortcuts.push_back(sc);
         return findShortcut(m_shortcuts, actionCode);
     }

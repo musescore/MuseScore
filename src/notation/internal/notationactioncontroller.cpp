@@ -713,6 +713,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->moveSelection(direction, quickly ? MoveSelectionType::Measure : MoveSelectionType::Chord);
         }
         break;
+    case MoveDirection::Undefined:
+        break;
     }
     playSelectedElement(false);
 }

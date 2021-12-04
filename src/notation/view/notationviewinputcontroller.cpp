@@ -624,6 +624,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
+    UNUSED(event);
     EngravingItem* element = viewInteraction()->selection()->element();
 
     if (!viewInteraction()->textEditingAllowed(element)) {

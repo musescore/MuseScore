@@ -2021,6 +2021,11 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
         } else {
             el = score()->downStaff(cr);
         }
+    case MoveSelectionType::EngravingItem:
+    case MoveSelectionType::Frame:
+    case MoveSelectionType::System:
+    case MoveSelectionType::Undefined:
+        break;
     }
     if (el) {
         score()->select(el, SelectType::RANGE, el->staffIdx());
@@ -2591,7 +2596,6 @@ void NotationInteraction::updateAnchorLines()
     Ms::Grip anchorLinesGrip = m_editData.curGrip == Ms::Grip::NO_GRIP ? m_editData.element->defaultGrip() : m_editData.curGrip;
     QVector<LineF> anchorLines = m_editData.element->gripAnchorLines(anchorLinesGrip);
 
-    EngravingItem* page = m_editData.element->findAncestor(ElementType::PAGE);
     if (!anchorLines.isEmpty()) {
         for (LineF& line : anchorLines) {
             if (line.p1() != line.p2()) {
