@@ -22,6 +22,10 @@
 
 #include "winframelesswindowcontroller.h"
 
+#if defined(_WIN32_WINNT) && (_WIN32_WINNT < 0x600)
+#undef _WIN32_WINNT // like defined to `0x502` in _mingw.h for Qt 5.15
+#define _WIN32_WINNT 0x0600 // Vista or later, needed for `iPaddedBorderWidth`
+#endif
 #include <Windows.h>
 #include <windowsx.h>
 #include <dwmapi.h>
