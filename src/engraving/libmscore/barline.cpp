@@ -1059,7 +1059,7 @@ void BarLine::startEdit(EditData& ed)
 bool BarLine::edit(EditData& ed)
 {
     bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
-    if (ed.key == Qt::Key_Up && spanStaff() || ed.key == Qt::Key_Down && !spanStaff()) {
+    if ((ed.key == Qt::Key_Up && spanStaff()) || (ed.key == Qt::Key_Down && !spanStaff())) {
         if (local) {
             BarLine* b = toBarLine(segment()->element(staffIdx() * VOICES));
             if (b) {
