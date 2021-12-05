@@ -1325,34 +1325,34 @@ void Chord::setScore(Score* s)
 
 qreal Chord::calcMinStemLength()
 {
-    qreal minStemLength = 0.0;
+    int minStemLength = 0; // in quarter spaces
     qreal _spatium = spatium();
 
     if (_tremolo && !_tremolo->twoNotes()) {
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
-        minStemLength += _tremolo->minHeight() * _spatium * buzzRollMultiplier;
-        static const qreal outSidePadding = 0.5;
-        static const qreal noteSidePadding = 1.5;
-        qreal line = _up ? upNote()->line() : downNote()->line();
-        line /= 2;
-        qreal outsideStaffOffset = 0;
-        if (!_up && line < -1) {
-            outsideStaffOffset = -1 * line;
-        } else if (_up && line > staff()->lines(tick())) {
-            outsideStaffOffset = line - staff()->lines(tick()) + 1;
+        minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
+        static const int outSidePadding = 2;
+        static const int noteSidePadding = 6;
+        int line = _up ? upNote()->line() : downNote()->line();
+        line *= 2; // convert to quarter spaces
+        int outsideStaffOffset = 0;
+        if (!_up && line < -2) {
+            outsideStaffOffset = -line;
+        } else if (_up && line > staff()->lines(tick()) * 4) {
+            outsideStaffOffset = line - staff()->lines(tick()) * 4 + 4;
         }
-        minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset)) * _spatium;
+        minStemLength += (outSidePadding + qMax(noteSidePadding, outsideStaffOffset));
     }
 
     if (_hook) {
-        qreal hookOffset = _hook->height() - qAbs(_hook->smuflAnchor().y()) - 0.5 * _spatium;
+        int hookOffset = (_hook->height() - qAbs(_hook->smuflAnchor().y())) / _spatium * 4 - 2;
         // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
         // https://github.com/w3c/smufl/issues/203
-        qreal cutout = up() ? 1.5 * _spatium : 2 * _spatium;
+        int cutout = up() ? 6 : 8;
         if (beams() >= 2) {
-            cutout -= 0.5 * _spatium;
+            cutout -= 2;
         }
         if (score()->styleB(Sid::useStraightNoteFlags)) {
             cutout = 0;
@@ -1363,20 +1363,17 @@ qreal Chord::calcMinStemLength()
             minStemLength += hookOffset - cutout;
         }
         // ceils to the nearest half-space (returned as pixels)
-        minStemLength = ceil(minStemLength / _spatium * 2) / 2 * _spatium;
+        minStemLength = ceil(minStemLength / 2.0) * 2;
     } else {
-        static const qreal minInnerStemLengths[4] = { 2.5, 2.25, 2, 1.75 };
-        minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)] * _spatium);
-
+        static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
+        minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)]);
         // add beam lengths
-        minStemLength += beams() * 0.75 * _spatium;
+        minStemLength += beams() * 3;
         if (beams() > 0) {
-            minStemLength -= 0.25 * _spatium;
+            minStemLength -= 1;
         }
-        // ceils to the nearest quarter-space (returned as pixels)
-        minStemLength = ceil(minStemLength / _spatium * 4) / 4 * _spatium;
     }
-    return minStemLength;
+    return minStemLength / 4.0 * _spatium;
 }
 
 qreal Chord::stemLengthBeamAddition() const
@@ -1501,7 +1498,6 @@ qreal Chord::calcDefaultStemLength()
             idealStemLength -= stemOpticalAdjustment(stemEndPosition);
             idealStemLength = qMax(idealStemLength, score()->styleD(Sid::shortestStem));
         }
-
         stemLength = qMax(idealStemLength, minStemLengthSpaces);
     } else {
         qreal stemEndPosition = downLine() + defaultStemLength * 2;
@@ -1519,7 +1515,6 @@ qreal Chord::calcDefaultStemLength()
 
         stemLength = qMax(idealStemLength, minStemLengthSpaces);
     }
-
     return point(Spatium(stemLength + chordHeight));
 }
 
