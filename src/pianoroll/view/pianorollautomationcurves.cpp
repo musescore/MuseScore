@@ -344,7 +344,7 @@ void PianorollAutomationCurves::mouseDoubleClickEvent(QMouseEvent* event)
     double tick = pixelXToWholeNote(m_lastMousePos.x());
     val = qMin(qMax(val, pMin), pMax);
     tick = qMin(qMax(tick, 0.0), endTicks);
-    
+
     Ms::Fraction tickFrac(floor(tick * Ms::Constant::division), Ms::Constant::division);
 
     Ms::AnimationTrack* track = staff->getAnimationTrack(m_propertyName);
