@@ -71,6 +71,7 @@ public:
     IProjectViewSettingsPtr viewSettings() const override;
 
 private:
+    Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
