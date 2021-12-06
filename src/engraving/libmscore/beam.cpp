@@ -1000,8 +1000,14 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         // fix horizontal spacing of stems
         LayoutBeams::respace(&chordRests);
     }
-    Chord* startChord = toChord(chordRests[0]);
-    Chord* endChord = toChord(chordRests[chordRests.size() - 1]);
+
+    // FIXME
+    if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
+        NOT_IMPL_RETURN;
+    }
+
+    Chord* startChord = toChord(chordRests.front());
+    Chord* endChord = toChord(chordRests.back());
 
     // anchor represents the middle of the beam, not the tip of the stem
     PointF startAnchor = chordBeamAnchor(startChord);
