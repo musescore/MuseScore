@@ -1323,7 +1323,8 @@ void Chord::setScore(Score* s)
     processSiblings([s](EngravingItem* e) { e->setScore(s); });
 }
 
-qreal Chord::calcMinStemLength()
+// all values are in quarter spaces
+int Chord::calcMinStemLength()
 {
     int minStemLength = 0; // in quarter spaces
     qreal _spatium = spatium();
@@ -1373,84 +1374,92 @@ qreal Chord::calcMinStemLength()
             minStemLength -= 1;
         }
     }
-    return minStemLength / 4.0 * _spatium;
+    return minStemLength;
 }
 
-qreal Chord::stemLengthBeamAddition() const
+// all values are in quarter spaces
+int Chord::stemLengthBeamAddition() const
 {
     if (_hook) {
-        return 0.0;
+        return 0;
     }
     int beamCount = beams();
     switch (beamCount) {
     case 0:
     case 1:
     case 2:
-        return 0.0;
+        return 0;
     case 3:
-        return 0.5;
+        return 2;
     default:
-        return (beamCount - 3) * 0.75;
+        return (beamCount - 3) * 3;
     }
 }
 
+// all values are in quarter spaces
 int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook)
 {
-    qreal beamOverlap = 2.0;
+    int beamOverlap = 8;
     if (beamCount == 3 && !hasHook) {
-        beamOverlap = 3.0;
+        beamOverlap = 12;
     } else if (beamCount >= 4 && !hasHook) {
-        beamOverlap = (beamCount - 4) * 0.75 + 3.5;
+        beamOverlap = (beamCount - 4) * 3 + 14;
     }
 
-    int staffOverlap = qMin(beamOverlap, staffLines - 1.0) * 2;
+    int staffOverlap = qMin(beamOverlap, (staffLines - 1) * 4);
     if (!up) {
         return staffOverlap;
     }
-    return (staffLines - 1) * 2 - staffOverlap;
+    return (staffLines - 1) * 4 - staffOverlap;
 }
 
-qreal Chord::maxReduction(int extensionOutsideStaff) const
+// all values are in quarter spaces
+int Chord::maxReduction(int extensionOutsideStaff) const
 {
     // [extensionOutsideStaff][beamCount]
-    static const qreal maxReductions[4][5] = {
+    static const int maxReductions[4][5] = {
         //1sp 1.5sp 2sp   2.5sp >=3sp -- extensionOutsideStaff
-        { 0.0, 0.25, 0.5,  0.75, 1.0 }, // 0 beams
-        { 0.5, 0.5,  0.5,  0.75, 0.75 }, // 1 beam
-        { 0.0, 0.25, 0.25, 0.25, 0.25 }, // 2 beams
-        { 0.0, 0.0,  0.0, -0.25, 0.25 }, // 3 beams
+        { 0, 1, 2,  3, 4 }, // 0 beams
+        { 2, 2, 2,  3, 3 }, // 1 beam
+        { 0, 1, 1,  1, 1 }, // 2 beams
+        { 0, 0, 0, -1, 1 }, // 3 beams
     };
     int beamCount = beams();
     if (beamCount >= 4) {
-        return 0.0;
+        return 0;
     }
-    if (extensionOutsideStaff >= 5) {
+    int extensionHalfSpaces = extensionOutsideStaff / 2;
+    if (extensionHalfSpaces >= 5) {
         return maxReductions[beamCount][4];
     }
     if (_hook) {
-        return maxReductions[0][extensionOutsideStaff];
+        return maxReductions[0][extensionHalfSpaces];
     }
-    return maxReductions[beamCount][extensionOutsideStaff];
+    return maxReductions[beamCount][extensionHalfSpaces];
 }
 
-qreal Chord::stemOpticalAdjustment(qreal stemEndPosition) const
+// all values are in quarter spaces
+int Chord::stemOpticalAdjustment(int stemEndPosition) const
 {
     if (_hook) {
-        return 0.0;
+        return 0;
     }
     int beamCount = beams();
     if (beamCount == 0 || beamCount > 2) {
-        return 0.0;
+        return 0;
     }
-    if (fmod(stemEndPosition + 2, 2) == 1) {
-        return 0.25;
+    bool isOnEvenLine = fmod(stemEndPosition + 4, 4) == 2;
+    if (isOnEvenLine) {
+        return 1;
     }
-    return 0.0;
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
 //   defaultStemLength
 ///   Get the default stem length for this chord
+///   all internal calculation is done in quarter spaces
+///   using integers to eliminate all possibilities for rounding errors
 //-----------------------------------------------------------------------------
 
 qreal Chord::calcDefaultStemLength()
@@ -1460,9 +1469,9 @@ qreal Chord::calcDefaultStemLength()
     }
 
     qreal _spatium = spatium();
-    qreal defaultStemLength = isSmall() ? score()->styleD(Sid::stemLengthSmall) : score()->styleD(Sid::stemLength);
+    int defaultStemLength = (isSmall() ? score()->styleD(Sid::stemLengthSmall) : score()->styleD(Sid::stemLength)) * 4;
     defaultStemLength += stemLengthBeamAddition();
-    qreal chordHeight = (downLine() - upLine()) / 2.0;
+    int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
     qreal stemLength = defaultStemLength;
 
     const Staff* staffItem = staff();
@@ -1474,48 +1483,49 @@ qreal Chord::calcDefaultStemLength()
         return tab->chordStemLength(this) * _spatium;
     }
 
-    _minStemLength = calcMinStemLength();
-    qreal minStemLengthSpaces = _minStemLength / _spatium;
+    int minStemLengthQuarterSpaces = calcMinStemLength();
+    _minStemLength = minStemLengthQuarterSpaces / 4.0 * _spatium;
 
     int staffLineCount = staffItem->lines(tick());
-    int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2;
-    qreal middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook);
+    int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2 + 1;
+    int shortestStem = score()->styleD(Sid::shortestStem) * 4;
+    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook);
     if (isGrace()) {
-        stemLength = qMax(defaultStemLength * score()->styleD(Sid::graceNoteMag), minStemLengthSpaces);
+        stemLength = qMax(static_cast<int>(defaultStemLength * score()->styleD(Sid::graceNoteMag)), minStemLengthQuarterSpaces);
     } else if (up()) {
-        qreal stemEndPosition = upLine() - defaultStemLength * 2;
-        qreal idealStemLength = defaultStemLength;
+        int stemEndPosition = upLine() * 2 - defaultStemLength;
+        int idealStemLength = defaultStemLength;
 
-        if (stemEndPosition <= -1 * shortStemStart) {
-            qreal reduction = maxReduction(qAbs(stemEndPosition + shortStemStart));
+        if (stemEndPosition <= -shortStemStart) {
+            int reduction = maxReduction(qAbs(stemEndPosition + shortStemStart));
             if (_hook) {
-                reduction = floor(reduction * 2) / 2;
+                reduction = reduction / 2 * 2; // transforms to only half steps positions
             }
-            idealStemLength = qMax(idealStemLength - reduction, score()->styleD(Sid::shortestStem));
+            idealStemLength = qMax(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition > middleLine) {
-            idealStemLength += (stemEndPosition - middleLine) / 2.0;
+            idealStemLength += stemEndPosition - middleLine;
         } else {
             idealStemLength -= stemOpticalAdjustment(stemEndPosition);
-            idealStemLength = qMax(idealStemLength, score()->styleD(Sid::shortestStem));
+            idealStemLength = qMax(idealStemLength, shortestStem);
         }
-        stemLength = qMax(idealStemLength, minStemLengthSpaces);
+        stemLength = qMax(idealStemLength, minStemLengthQuarterSpaces);
     } else {
-        qreal stemEndPosition = downLine() + defaultStemLength * 2;
-        qreal idealStemLength = defaultStemLength;
-        int downShortStemStart = (staffLineCount - 1) * 2 + shortStemStart;
+        int stemEndPosition = downLine() * 2 + defaultStemLength;
+        int idealStemLength = defaultStemLength;
+        int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
         if (stemEndPosition >= downShortStemStart) {
-            qreal reduction = maxReduction((stemEndPosition - downShortStemStart));
-            idealStemLength = qMax(idealStemLength - reduction, score()->styleD(Sid::shortestStem));
+            int reduction = maxReduction(stemEndPosition - downShortStemStart);
+            idealStemLength = qMax(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition < middleLine) {
-            idealStemLength += (middleLine - stemEndPosition) / 2.0;
+            idealStemLength += middleLine - stemEndPosition;
         } else {
             idealStemLength -= stemOpticalAdjustment(stemEndPosition);
-            idealStemLength = qMax(idealStemLength, score()->styleD(Sid::shortestStem));
+            idealStemLength = qMax(idealStemLength, shortestStem);
         }
 
-        stemLength = qMax(idealStemLength, minStemLengthSpaces);
+        stemLength = qMax(idealStemLength, minStemLengthQuarterSpaces);
     }
-    return point(Spatium(stemLength + chordHeight));
+    return (stemLength + chordHeight) / 4.0 * _spatium;
 }
 
 void Chord::setBeamExtension(qreal extension)

@@ -120,10 +120,10 @@ class Chord final : public ChordRest
     void createHook();
     void layoutHook();
 
-    qreal stemLengthBeamAddition() const;
-    qreal maxReduction(int extensionOutsideStaff) const;
-    qreal stemOpticalAdjustment(qreal stemEndPosition) const;
-    qreal calcMinStemLength();
+    int stemLengthBeamAddition() const;
+    int maxReduction(int extensionOutsideStaff) const;
+    int stemOpticalAdjustment(int stemEndPosition) const;
+    int calcMinStemLength();
     qreal calcDefaultStemLength();
 
     bool computeUpContext();
