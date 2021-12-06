@@ -51,6 +51,7 @@
 #include "libmscore/textframe.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/stafflines.h"
+#include "libmscore/stafftype.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/undo.h"
 #include "libmscore/navigate.h"
@@ -2032,16 +2033,27 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
 
 void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 {
-    IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
-        return;
-    }
-
     IF_ASSERT_FAILED(MoveSelectionType::Undefined != type) {
         return;
     }
 
+    if (type != MoveSelectionType::String) {
+        IF_ASSERT_FAILED(MoveDirection::Left == d || MoveDirection::Right == d) {
+            return;
+        }
+    } else {
+        IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+            return;
+        }
+    }
+
     if (MoveSelectionType::EngravingItem == type) {
         moveElementSelection(d);
+        return;
+    }
+
+    if (MoveSelectionType::String == type) {
+        moveStringSelection(d);
         return;
     }
 
@@ -2056,6 +2068,7 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
         case MoveSelectionType::Track:     return QString("track");
         case MoveSelectionType::Frame:     return QString("frame");
         case MoveSelectionType::System:    return QString("system");
+        case MoveSelectionType::String:   return QString();
         }
         return QString();
     };
@@ -2208,6 +2221,24 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
 
     if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
         score()->setPlayNote(true);
+    }
+}
+
+void NotationInteraction::moveStringSelection(MoveDirection d)
+{
+    Ms::InputState& is = score()->inputState();
+    Ms::Staff* staff = score()->staff(is.track() / Ms::VOICES);
+    int instrStrgs = staff->part()->instrument(is.tick())->stringData()->strings();
+    int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : +1);
+
+    if (MoveDirection::Up == d) {
+        delta = -delta;
+    }
+
+    int strg = is.string() + delta;
+    if (strg >= 0 && strg < instrStrgs) {
+        is.setString(strg);
+        notifyAboutSelectionChanged();
     }
 }
 

@@ -270,6 +270,7 @@ private:
     void drawSelectionRange(mu::draw::Painter* painter);
     void drawGripPoints(mu::draw::Painter* painter);
     void moveElementSelection(MoveDirection d);
+    void moveStringSelection(MoveDirection d);
 
     EngravingItem* dropTarget(Ms::EditData& ed) const;
     bool dragMeasureAnchorElement(const PointF& pos);

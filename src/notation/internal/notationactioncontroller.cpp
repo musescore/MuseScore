@@ -370,6 +370,11 @@ void NotationActionController::init()
         registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
     }
 
+    // TAB
+    registerAction("string-above", &NotationActionController::move, MoveDirection::Up, false, &NotationActionController::isTablatureStaff);
+    registerAction("string-below", &NotationActionController::move, MoveDirection::Down, false,
+                   &NotationActionController::isTablatureStaff);
+
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), &INotationInteraction::addFret, i, &NotationActionController::isTablatureStaff);
     }
@@ -702,7 +707,9 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     if (!interaction) {
         return;
     }
+
     EngravingItem* selectedElement = interaction->selection()->element();
+
     switch (direction) {
     case MoveDirection::Up:
     case MoveDirection::Down:
@@ -710,6 +717,8 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             interaction->moveLyrics(direction);
         } else if (selectedElement && (selectedElement->isTextBase() || selectedElement->isArticulation())) {
             interaction->nudge(direction, quickly);
+        } else if (interaction->noteInput()->isNoteInputMode() && interaction->noteInput()->state().staffGroup == Ms::StaffGroup::TAB) {
+            interaction->moveSelection(direction, MoveSelectionType::String);
         } else {
             interaction->movePitch(direction, quickly ? PitchMode::OCTAVE : PitchMode::CHROMATIC);
         }
