@@ -412,10 +412,10 @@ bool Box::setProperty(Pid propertyId, const PropertyValue& v)
         _boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        _topGap = v.toMillimetre();
+        _topGap = v.value<Millimetre>();
         break;
     case Pid::BOTTOM_GAP:
-        _bottomGap = v.toMillimetre();
+        _bottomGap = v.value<Millimetre>();
         break;
     case Pid::LEFT_MARGIN:
         _leftMargin = v.toDouble();

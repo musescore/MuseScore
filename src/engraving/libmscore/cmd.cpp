@@ -2139,12 +2139,12 @@ void Score::cmdResetBeamMode()
                 continue;
             }
             if (cr->type() == ElementType::CHORD) {
-                if (cr->beamMode() != Beam::Mode::AUTO) {
-                    cr->undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
+                if (cr->beamMode() != BeamMode::AUTO) {
+                    cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
                 }
             } else if (cr->type() == ElementType::REST) {
-                if (cr->beamMode() != Beam::Mode::NONE) {
-                    cr->undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+                if (cr->beamMode() != BeamMode::NONE) {
+                    cr->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
                 }
             }
         }

@@ -49,7 +49,6 @@ struct BeamFragment;
 
 class Beam final : public EngravingItem
 {
-    Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
     QVector<mu::LineF*> _beamSegments;
     DirectionV _direction    { DirectionV::AUTO };
@@ -104,13 +103,6 @@ class Beam final : public EngravingItem
     void removeChordRest(ChordRest* a);
 
 public:
-    enum class Mode : signed char {
-        ///.\{
-        AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
-                                                                 ///\}
-    };
-    Q_ENUM(Mode);
-
     ~Beam();
 
     // Score Tree functions
@@ -167,7 +159,7 @@ public:
     void setBeamDirection(DirectionV d);
     DirectionV beamDirection() const { return _direction; }
 
-    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this locally
+    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -205,7 +197,7 @@ public:
     Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    static ActionIconType actionIconTypeForBeamMode(Mode);
+    static ActionIconType actionIconTypeForBeamMode(BeamMode);
 
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;

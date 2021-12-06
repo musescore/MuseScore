@@ -677,7 +677,7 @@ PropertyValue Glissando::getProperty(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return showText();
     case Pid::GLISS_STYLE:
-        return int(glissandoStyle());
+        return glissandoStyle();
     case Pid::GLISS_EASEIN:
         return easeIn();
     case Pid::GLISS_EASEOUT:
@@ -713,7 +713,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setShowText(v.toBool());
         break;
     case Pid::GLISS_STYLE:
-        setGlissandoStyle(GlissandoStyle(v.toInt()));
+        setGlissandoStyle(v.value<GlissandoStyle>());
         break;
     case Pid::GLISS_EASEIN:
         setEaseIn(v.toInt());
@@ -755,7 +755,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return int(GlissandoStyle::CHROMATIC);
+        return GlissandoStyle::CHROMATIC;
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;

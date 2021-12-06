@@ -151,6 +151,35 @@ PlacementH XmlValue::fromXml(const QString& str, PlacementH def)
     return def;
 }
 
+QString XmlValue::toXml(TextPlace v)
+{
+    switch (v) {
+    case TextPlace::AUTO: return "auto";
+    case TextPlace::ABOVE: return "above";
+    case TextPlace::BELOW: return "below";
+    case TextPlace::LEFT: return "left";
+    }
+    return QString();
+}
+
+TextPlace XmlValue::fromXml(const QString& s, TextPlace def)
+{
+    if (s == "auto" || s == "0") {
+        return TextPlace::AUTO;
+    }
+    if (s == "above" || s == "1") {
+        return TextPlace::ABOVE;
+    }
+    if (s == "below" || s == "2") {
+        return TextPlace::BELOW;
+    }
+    if (s == "left" || s == "3") {
+        return TextPlace::LEFT;
+    }
+    LOGD() << "unknown value: " << s;
+    return def;
+}
+
 QString XmlValue::toXml(DirectionV v)
 {
     switch (v) {
@@ -252,5 +281,74 @@ VeloType XmlValue::fromXml(const QString& str, VeloType def)
         return VeloType::USER_VAL;
     }
     LOGD() << "unknown value: " << str;
+    return def;
+}
+
+QString XmlValue::toXml(BeamMode v)
+{
+    switch (v) {
+    case BeamMode::AUTO: return "auto";
+    case BeamMode::BEGIN: return "begin";
+    case BeamMode::MID: return "mid";
+    case BeamMode::END: return "end";
+    case BeamMode::NONE: return "no";
+    case BeamMode::BEGIN32: return "begin32";
+    case BeamMode::BEGIN64: return "begin64";
+    case BeamMode::INVALID: return "invalid";
+    }
+    return QString();
+}
+
+BeamMode XmlValue::fromXml(const QString& str, BeamMode def)
+{
+    if (str == "auto") {
+        return BeamMode::AUTO;
+    } else if (str == "begin") {
+        return BeamMode::BEGIN;
+    } else if (str == "mid") {
+        return BeamMode::MID;
+    } else if (str == "end") {
+        return BeamMode::END;
+    } else if (str == "no") {
+        return BeamMode::NONE;
+    } else if (str == "begin32") {
+        return BeamMode::BEGIN32;
+    } else if (str == "begin64") {
+        return BeamMode::BEGIN64;
+    } else {
+        bool ok = false;
+        int v = str.toInt(&ok);
+        if (ok) {
+            return static_cast<BeamMode>(v);
+        }
+    }
+    return def;
+}
+
+QString XmlValue::toXml(GlissandoStyle v)
+{
+    switch (v) {
+    case GlissandoStyle::BLACK_KEYS: return "blackkeys";
+    case GlissandoStyle::WHITE_KEYS: return "whitekeys";
+    case GlissandoStyle::DIATONIC: return "diatonic";
+    case GlissandoStyle::PORTAMENTO: return "portamento";
+    case GlissandoStyle::CHROMATIC: return "chromatic";
+    }
+    return QString();
+}
+
+GlissandoStyle XmlValue::fromXml(const QString& str, GlissandoStyle def)
+{
+    if (str == "whitekeys") {
+        return GlissandoStyle::WHITE_KEYS;
+    } else if (str == "blackkeys") {
+        return GlissandoStyle::BLACK_KEYS;
+    } else if (str == "diatonic") {
+        return GlissandoStyle::DIATONIC;
+    } else if (str == "portamento") {
+        return GlissandoStyle::PORTAMENTO;
+    } else if (str == "chromatic" || str == "Chromatic") { //! NOTE Chromatic - for compat reason
+        return GlissandoStyle::CHROMATIC;
+    }
     return def;
 }

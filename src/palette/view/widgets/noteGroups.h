@@ -52,7 +52,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups
     QString _z, _n;
 
     Score* createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords);
-    void updateBeams(Chord*, Beam::Mode);
+    void updateBeams(Chord*, BeamMode);
 
 private slots:
     void resetClicked();

@@ -670,9 +670,9 @@ bool Beam::calcIsBeamletBefore(Chord* chord, int i, int level) const
     // for subbeams
     ChordRest* previousChordRest = _elements[i - 1];
     ChordRest* nextChordRest = _elements[i + 1];
-    Mode beamMode = Groups::endBeam(chord, previousChordRest);
-    bool ends32Beam = (level >= 1) && (beamMode == Mode::BEGIN32);
-    bool ends64Beam = (level >= 2) && (beamMode == Mode::BEGIN64);
+    BeamMode beamMode = Groups::endBeam(chord, previousChordRest);
+    bool ends32Beam = (level >= 1) && (beamMode == BeamMode::BEGIN32);
+    bool ends64Beam = (level >= 2) && (beamMode == BeamMode::BEGIN64);
 
     if (ends32Beam || ends64Beam) {
         return true;
@@ -1588,20 +1588,20 @@ Fraction Beam::ticks() const
 //   actionIconTypeForBeamMode
 //---------------------------------------------------------
 
-ActionIconType Beam::actionIconTypeForBeamMode(Mode mode)
+ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
 {
     switch (mode) {
-    case Mode::BEGIN:
+    case BeamMode::BEGIN:
         return ActionIconType::BEAM_START;
-    case Mode::MID:
+    case BeamMode::MID:
         return ActionIconType::BEAM_MID;
-    case Mode::NONE:
+    case BeamMode::NONE:
         return ActionIconType::BEAM_NONE;
-    case Mode::BEGIN32:
+    case BeamMode::BEGIN32:
         return ActionIconType::BEAM_BEGIN_32;
-    case Mode::BEGIN64:
+    case BeamMode::BEGIN64:
         return ActionIconType::BEAM_BEGIN_64;
-    case Mode::AUTO:
+    case BeamMode::AUTO:
         return ActionIconType::BEAM_AUTO;
     default:
         break;

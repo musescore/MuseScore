@@ -51,18 +51,6 @@ XmlWriter::XmlWriter(Score* s, QIODevice* device)
 }
 
 //---------------------------------------------------------
-//   pTag
-//---------------------------------------------------------
-
-void XmlWriter::pTag(const char* name, PlaceText place)
-{
-    const char* tags[] = {
-        "auto", "above", "below", "left"
-    };
-    tag(name, tags[int(place)]);
-}
-
-//---------------------------------------------------------
 //   putLevel
 //---------------------------------------------------------
 
@@ -323,6 +311,13 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         putLevel();
         *this << "<" << name << ">";
         *this << XmlValue::toXml(data.value<PlacementH>());
+        *this << "</" << ename << ">\n";
+    }
+    break;
+    case P_TYPE::TEXT_PLACE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<TextPlace>());
         *this << "</" << ename << ">\n";
     }
     break;

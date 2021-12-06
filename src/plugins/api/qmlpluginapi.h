@@ -119,8 +119,8 @@ class PluginAPI : public Ms::QmlPlugin
     DECLARE_API_ENUM(EngravingItem,    elementTypeEnum,        Ms::ElementType)
     /// Contains Ms::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     Ms::AccidentalType)
-    /// Contains Ms::Beam::Mode enumeration values
-    DECLARE_API_ENUM(Beam,             beamModeEnum,           Ms::Beam::Mode)
+    /// Contains Ms::BeamMode enumeration values
+    DECLARE_API_ENUM(Beam,             beamModeEnum,           Ms::PluginAPI::BeamMode)
     /// Contains Ms::Placement enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// EngravingItem.ABOVE and EngravingItem.BELOW.
@@ -147,7 +147,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.CHROMATIC, MScore.WHITE_KEYS, MScore.BLACK_KEYS,
     /// MScore.DIATONIC.
-    DECLARE_API_ENUM(GlissandoStyle,   glissandoStyleEnum,     Ms::GlissandoStyle)
+    DECLARE_API_ENUM(GlissandoStyle,   glissandoStyleEnum,     Ms::PluginAPI::GlissandoStyle)
     /// Contains Ms::Tid enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// TextStyleType (TextStyleType.TITLE etc.)

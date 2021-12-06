@@ -24,6 +24,7 @@
 #define __TEXTLINEBASE_H__
 
 #include "style/style.h"
+#include "types/types.h"
 
 #include "line.h"
 #include "property.h"
@@ -68,14 +69,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   PlaceText
-//---------------------------------------------------------
-
-enum class PlaceText : char {
-    AUTO, ABOVE, BELOW, LEFT
-};
-
-//---------------------------------------------------------
 //   @@ TextLineBase
 //---------------------------------------------------------
 
@@ -87,7 +80,7 @@ class TextLineBase : public SLine
     M_PROPERTY(Spatium,   beginHookHeight,       setBeginHookHeight)
     M_PROPERTY(Spatium,   endHookHeight,         setEndHookHeight)
 
-    M_PROPERTY(PlaceText, beginTextPlace,        setBeginTextPlace)
+    M_PROPERTY(TextPlace, beginTextPlace,        setBeginTextPlace)
     M_PROPERTY(QString,   beginText,             setBeginText)
     M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
     M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
@@ -95,7 +88,7 @@ class TextLineBase : public SLine
     M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
     M_PROPERTY(mu::PointF,   beginTextOffset,       setBeginTextOffset)
 
-    M_PROPERTY(PlaceText, continueTextPlace,     setContinueTextPlace)
+    M_PROPERTY(TextPlace, continueTextPlace,     setContinueTextPlace)
     M_PROPERTY(QString,   continueText,          setContinueText)
     M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
     M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
@@ -103,7 +96,7 @@ class TextLineBase : public SLine
     M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
     M_PROPERTY(mu::PointF,   continueTextOffset,    setContinueTextOffset)
 
-    M_PROPERTY(PlaceText, endTextPlace,          setEndTextPlace)
+    M_PROPERTY(TextPlace, endTextPlace,          setEndTextPlace)
     M_PROPERTY(QString,   endText,               setEndText)
     M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
     M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)

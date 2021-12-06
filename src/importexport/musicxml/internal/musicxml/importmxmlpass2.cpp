@@ -1800,7 +1800,7 @@ static Measure* findMeasure(Score* score, const Fraction& tick)
 static void removeBeam(Beam*& beam)
 {
     for (int i = 0; i < beam->elements().size(); ++i) {
-        beam->elements().at(i)->setBeamMode(Beam::Mode::NONE);
+        beam->elements().at(i)->setBeamMode(BeamMode::NONE);
     }
     delete beam;
     beam = 0;
@@ -1810,13 +1810,13 @@ static void removeBeam(Beam*& beam)
 //   handleBeamAndStemDir
 //---------------------------------------------------------
 
-static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo)
+static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const DirectionV sd, Beam*& beam, bool hasBeamingInfo)
 {
     if (!cr) {
         return;
     }
     // create a new beam
-    if (bm == Beam::Mode::BEGIN) {
+    if (bm == BeamMode::BEGIN) {
         // if currently in a beam, delete it
         if (beam) {
             qDebug("handleBeamAndStemDir() new beam, removing previous incomplete beam %p", beam);
@@ -1837,11 +1837,11 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
                    beam->track(), cr->track());
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
-        } else if (bm == Beam::Mode::NONE) {
-            qDebug("handleBeamAndStemDir() in beam, bm Beam::Mode::NONE -> abort beam");
+        } else if (bm == BeamMode::NONE) {
+            qDebug("handleBeamAndStemDir() in beam, bm BeamMode::NONE -> abort beam");
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
-        } else if (!(bm == Beam::Mode::BEGIN || bm == Beam::Mode::MID || bm == Beam::Mode::END)) {
+        } else if (!(bm == BeamMode::BEGIN || bm == BeamMode::MID || bm == BeamMode::END)) {
             qDebug("handleBeamAndStemDir() in beam, bm %d -> abort beam", static_cast<int>(bm));
             // reset beam mode for all elements and remove the beam
             removeBeam(beam);
@@ -1858,13 +1858,13 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
         bool canGetBeam = (cr->durationType().type() >= TDuration::DurationType::V_EIGHTH
                            && cr->durationType().type() <= TDuration::DurationType::V_1024TH);
         if (hasBeamingInfo && canGetBeam) {
-            cr->setBeamMode(Beam::Mode::NONE);
+            cr->setBeamMode(BeamMode::NONE);
         } else {
-            cr->setBeamMode(Beam::Mode::AUTO);
+            cr->setBeamMode(BeamMode::AUTO);
         }
     }
     // terminate the current beam and add to the score
-    if (beam && bm == Beam::Mode::END) {
+    if (beam && bm == BeamMode::END) {
         beam = 0;
     }
 }
@@ -4123,7 +4123,7 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
 static Chord* findOrCreateChord(Score*, Measure* m,
                                 const Fraction& tick, const int track, const int move,
                                 const TDuration duration, const Fraction dura,
-                                Beam::Mode bm)
+                                BeamMode bm)
 {
     //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
     //       tick, track, duration.ticks(), qPrintable(dura.print()), bm);
@@ -4132,8 +4132,8 @@ static Chord* findOrCreateChord(Score*, Measure* m,
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
         c = Factory::createChord(s);
         // better not to force beam end, as the beam palette does not support it
-        if (bm == Beam::Mode::END) {
-            c->setBeamMode(Beam::Mode::AUTO);
+        if (bm == BeamMode::END) {
+            c->setBeamMode(BeamMode::AUTO);
         } else {
             c->setBeamMode(bm);
         }
@@ -4465,7 +4465,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     int velocity = round(_e.attributes().value("dynamics").toDouble() * 0.9);
     bool graceSlash = false;
     bool printObject = _e.attributes().value("print-object") != "no";
-    Beam::Mode bm  = Beam::Mode::AUTO;
+    BeamMode bm  = BeamMode::AUTO;
     QString instrumentId;
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
     MusicXMLParserNotations notations { _e, _score, _logger };
@@ -4667,13 +4667,13 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         if (cr) {
             if (currBeam) {
                 if (currBeam->track() == track) {
-                    cr->setBeamMode(Beam::Mode::MID);
+                    cr->setBeamMode(BeamMode::MID);
                     currBeam->add(cr);
                 } else {
                     removeBeam(currBeam);
                 }
             } else {
-                cr->setBeamMode(Beam::Mode::NONE);
+                cr->setBeamMode(BeamMode::NONE);
             }
             cr->setSmall(isSmall);
             if (noteColor != QColor::Invalid) {
@@ -5292,18 +5292,18 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
  Sets beamMode in case of begin, continue or end beam number 1.
  */
 
-void MusicXMLParserPass2::beam(Beam::Mode& beamMode)
+void MusicXMLParserPass2::beam(BeamMode& beamMode)
 {
     int beamNo = _e.attributes().value("number").toInt();
 
     if (beamNo == 1) {
         QString s = _e.readElementText();
         if (s == "begin") {
-            beamMode = Beam::Mode::BEGIN;
+            beamMode = BeamMode::BEGIN;
         } else if (s == "end") {
-            beamMode = Beam::Mode::END;
+            beamMode = BeamMode::END;
         } else if (s == "continue") {
-            beamMode = Beam::Mode::MID;
+            beamMode = BeamMode::MID;
         } else if (s == "backward hook") {
         } else if (s == "forward hook") {
         } else {

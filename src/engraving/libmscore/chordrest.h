@@ -68,7 +68,7 @@ protected:
     TabDurationSymbol* _tabDur;           // stores a duration symbol in tablature staves
 
     Beam* _beam;
-    Beam::Mode _beamMode;
+    BeamMode _beamMode;
     bool _up;                             // actual stem direction
     bool _usesAutoUp;
     bool m_isSmall;
@@ -100,9 +100,9 @@ public:
     virtual bool readProperties(XmlReader&) override;
     virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
 
-    void setBeamMode(Beam::Mode m) { _beamMode = m; }
-    void undoSetBeamMode(Beam::Mode m);
-    Beam::Mode beamMode() const { return _beamMode; }
+    void setBeamMode(BeamMode m) { _beamMode = m; }
+    void undoSetBeamMode(BeamMode m);
+    BeamMode beamMode() const { return _beamMode; }
 
     void setBeam(Beam* b);
     virtual Beam* beam() const final { return !(measure() && measure()->stemless(staffIdx())) ? _beam : nullptr; }

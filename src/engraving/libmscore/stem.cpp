@@ -320,10 +320,10 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.toMillimetre());
+        setLineWidth(v.value<Millimetre>());
         break;
     case Pid::USER_LEN:
-        setUserLength(v.toMillimetre());
+        setUserLength(v.value<Millimetre>());
         break;
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());

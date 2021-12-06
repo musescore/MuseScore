@@ -2010,11 +2010,11 @@ void Score::addNoteLine()
 //   cmdSetBeamMode
 //---------------------------------------------------------
 
-void Score::cmdSetBeamMode(Beam::Mode mode)
+void Score::cmdSetBeamMode(BeamMode mode)
 {
     for (ChordRest* cr : getSelectedChordRests()) {
         if (cr) {
-            cr->undoChangeProperty(Pid::BEAM_MODE, int(mode));
+            cr->undoChangeProperty(Pid::BEAM_MODE, mode);
         }
     }
 }

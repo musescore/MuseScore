@@ -143,6 +143,7 @@ QVariant PropertyValue::toQVariant() const
     // Draw
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
+    case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
     // Layout
     case P_TYPE::ALIGN:       return static_cast<int>(value<Align>());
@@ -150,6 +151,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
+    case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
 
     // Duration
     case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
@@ -199,6 +201,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     // Draw
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
+    case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
     // Layout
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
@@ -206,6 +209,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
+    case P_TYPE::BEAM_MODE:     return PropertyValue(BeamMode(v.toInt()));
 
     // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));

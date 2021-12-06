@@ -2336,8 +2336,8 @@ void Chord::layoutTablature()
     if (!tab->genDurations()                           // if tab is not set for duration symbols
         || track2voice(track())                        // or not in first voice
         || (isGrace()                                  // no tab duration symbols if grace notes
-            && beamMode() == Beam::Mode::AUTO)) {      // and beammode == AUTO
-                                                       //
+            && beamMode() == BeamMode::AUTO)) {      // and beammode == AUTO
+        //
         delete _tabDur;       // delete an existing duration symbol
         _tabDur = 0;
     } else {
@@ -2360,7 +2360,7 @@ void Chord::layoutTablature()
             ChordRest* prevCR = prevChordRest(this);
             if (prevCR == 0) {
                 needTabDur = true;
-            } else if (beamMode() != Beam::Mode::AUTO
+            } else if (beamMode() != BeamMode::AUTO
                        || prevCR->durationType().type() != durationType().type()
                        || prevCR->dots() != dots()
                        || prevCR->tuplet() != tuplet()
@@ -3017,7 +3017,7 @@ void Chord::setSlash(bool flag, bool stemless)
     // make stemless if asked
     if (stemless) {
         undoChangeProperty(Pid::NO_STEM, true);
-        undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+        undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
     }
 
     const StaffType* staffType = this->staffType();

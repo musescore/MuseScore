@@ -43,6 +43,9 @@ public:
     static QString toXml(PlacementH v);
     static PlacementH fromXml(const QString& str, PlacementH def);
 
+    static QString toXml(TextPlace v);
+    static TextPlace fromXml(const QString& str, TextPlace def);
+
     static QString toXml(DirectionV v);
     static DirectionV fromXml(const QString& str, DirectionV def);
     static QString toXml(DirectionH v);
@@ -53,6 +56,12 @@ public:
 
     static QString toXml(VeloType v);
     static VeloType fromXml(const QString& str, VeloType def);
+
+    static QString toXml(BeamMode v);
+    static BeamMode fromXml(const QString& str, BeamMode def);
+
+    static QString toXml(GlissandoStyle v);
+    static GlissandoStyle fromXml(const QString& str, GlissandoStyle def);
 };
 }
 
