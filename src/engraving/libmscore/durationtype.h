@@ -78,7 +78,7 @@ public:
     TDuration operator+(const TDuration& t) const { return TDuration(*this) += t; }
 
     QString name() const;
-    NoteHead::Type headType() const;
+    NoteHeadType headType() const;
     int hooks() const;
     bool hasStem() const;
     TDuration shift(int nSteps) const { TDuration d(type()); d.shiftType(nSteps); return d; }                                // dots are not retained

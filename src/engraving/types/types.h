@@ -172,6 +172,16 @@ constexpr bool operator&(BarLineType t1, BarLineType t2)
 {
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
+
+// P_TYPE::HEAD_TYPE
+enum class NoteHeadType : signed char {
+    HEAD_AUTO    = -1,
+    HEAD_WHOLE   = 0,
+    HEAD_HALF    = 1,
+    HEAD_QUARTER = 2,
+    HEAD_BREVIS  = 3,
+    HEAD_TYPES
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -188,6 +198,7 @@ using BeamMode = mu::engraving::BeamMode;
 using TextPlace = mu::engraving::TextPlace;
 using GlissandoStyle = mu::engraving::GlissandoStyle;
 using BarLineType = mu::engraving::BarLineType;
+using NoteHeadType = mu::engraving::NoteHeadType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

@@ -52,7 +52,7 @@ struct DrumInstrument {
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
     NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;   ///< notehead symbol set
-    SymId noteheads[int(NoteHead::Type::HEAD_TYPES)]
+    SymId noteheads[int(NoteHeadType::HEAD_TYPES)]
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
     int line = 0;               ///< place notehead onto this line
@@ -83,7 +83,7 @@ class Drumset
 public:
     bool isValid(int pitch) const { return !_drum[pitch].name.isEmpty(); }
     NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead; }
-    SymId noteHeads(int pitch, NoteHead::Type t) const { return _drum[pitch].noteheads[int(t)]; }
+    SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return _drum[pitch].line; }
     int voice(int pitch) const { return _drum[pitch].voice; }
     DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }

@@ -106,6 +106,16 @@ enum class GlissandoStyle {
 };
 Q_ENUM_NS(GlissandoStyle);
 
+enum class NoteHeadType {
+    HEAD_AUTO = int(mu::engraving::NoteHeadType::HEAD_AUTO),
+    HEAD_WHOLE = int(mu::engraving::NoteHeadType::HEAD_WHOLE),
+    HEAD_HALF = int(mu::engraving::NoteHeadType::HEAD_HALF),
+    HEAD_QUARTER = int(mu::engraving::NoteHeadType::HEAD_QUARTER),
+    HEAD_BREVIS = int(mu::engraving::NoteHeadType::HEAD_BREVIS),
+    HEAD_TYPES = int(mu::engraving::NoteHeadType::HEAD_TYPES),
+};
+Q_ENUM_NS(NoteHeadType);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -122,5 +132,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
 Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
+Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadType);
 
 #endif // MU_PLUGINS_APITYPES_H
