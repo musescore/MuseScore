@@ -86,7 +86,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LINE,                    false, "line",                  P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line") },
     { Pid::FIXED,                   false, "fixed",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "fixed") },
     { Pid::FIXED_LINE,              false, "fixedLine",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fixed line") },
-    { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::HEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
+    { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::NOTEHEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
     { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::HEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
     { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
     { Pid::VELO_OFFSET,             false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
@@ -472,8 +472,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         return PropertyValue::fromValue(int(NoteHead::name2scheme(value)));
     case P_TYPE::HEAD_GROUP:
         return PropertyValue::fromValue(int(NoteHead::name2group(value)));
-    case P_TYPE::HEAD_TYPE:
-        return PropertyValue::fromValue(int(NoteHead::name2type(value)));
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
@@ -549,10 +547,12 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), GlissandoStyle::CHROMATIC));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
+    case P_TYPE::NOTEHEAD_TYPE:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::SYMID:
     case P_TYPE::HEAD_SCHEME:
     case P_TYPE::HEAD_GROUP:
-    case P_TYPE::HEAD_TYPE:
+
     case P_TYPE::SUB_STYLE:
     case P_TYPE::ORIENTATION:
         return propertyFromString(propertyType(id), e.readElementText());
@@ -635,8 +635,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return NoteHead::scheme2name(NoteHead::Scheme(value.toInt()));
     case P_TYPE::HEAD_GROUP:
         return NoteHead::group2name(NoteHead::Group(value.toInt()));
-    case P_TYPE::HEAD_TYPE:
-        return NoteHead::type2name(NoteHead::Type(value.toInt()));
     case P_TYPE::SUB_STYLE:
         return textStyleName(Tid(value.toInt()));
     case P_TYPE::CHANGE_SPEED:

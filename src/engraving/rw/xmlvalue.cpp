@@ -404,3 +404,34 @@ BarLineType XmlValue::fromXml(const QString& str, BarLineType def)
     }
     return def;
 }
+
+QString XmlValue::toXml(NoteHeadType v)
+{
+    switch (v) {
+    case NoteHeadType::HEAD_AUTO: return "auto";
+    case NoteHeadType::HEAD_WHOLE: return "whole";
+    case NoteHeadType::HEAD_HALF: return "half";
+    case NoteHeadType::HEAD_QUARTER: return "quarter";
+    case NoteHeadType::HEAD_BREVIS: return "breve";
+    case NoteHeadType::HEAD_TYPES: {
+        UNREACHABLE;
+    } break;
+    }
+    return QString();
+}
+
+NoteHeadType XmlValue::fromXml(const QString& str, NoteHeadType def)
+{
+    if (str == "auto") {
+        return NoteHeadType::HEAD_AUTO;
+    } else if (str == "whole") {
+        return NoteHeadType::HEAD_WHOLE;
+    } else if (str == "half") {
+        return NoteHeadType::HEAD_HALF;
+    } else if (str == "quarter") {
+        return NoteHeadType::HEAD_QUARTER;
+    } else if (str == "breve") {
+        return NoteHeadType::HEAD_BREVIS;
+    }
+    return def;
+}

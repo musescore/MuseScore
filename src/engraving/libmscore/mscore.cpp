@@ -235,7 +235,6 @@ void MScore::registerUiTypes()
 #ifdef SCRIPT_INTERFACE
     qRegisterMetaType<Spanner::Anchor>("Anchor");
     qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
-    qRegisterMetaType<NoteHead::Type>("NoteHeadType");
     qRegisterMetaType<SegmentType>("SegmentType");
     qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
     qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
@@ -249,9 +248,6 @@ void MScore::registerUiTypes()
     qRegisterMetaType<HairpinType>("HairpinType");
     qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
 
-    //classed enumerations
-//      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
-//      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
 }
 

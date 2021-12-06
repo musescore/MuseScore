@@ -23,12 +23,14 @@
 #include "drumset.h"
 
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "articulation.h"
 #include "note.h"
 #include "symnames.h"
 
 using namespace mu;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 Drumset* smDrumset = nullptr;           // standard midi drumset
@@ -50,8 +52,8 @@ void Drumset::save(XmlWriter& xml) const
         xml.tag("head", NoteHead::group2name(saveNHValue));
         if (nh == NoteHead::Group::HEAD_CUSTOM) {
             xml.startObject("noteheads");
-            for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
-                xml.tag(NoteHead::type2name(NoteHead::Type(j)), SymNames::nameForSymId(noteHeads(i, NoteHead::Type(j))));
+            for (int j = 0; j < int(NoteHeadType::HEAD_TYPES); j++) {
+                xml.tag(XmlValue::toXml(NoteHeadType(j)), SymNames::nameForSymId(noteHeads(i, NoteHeadType(j))));
             }
             xml.endObject();
         }
@@ -112,8 +114,8 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
         _drum[pitch].notehead = NoteHead::Group::HEAD_CUSTOM;
         while (e.readNextStartElement()) {
             const QStringRef& nhTag(e.name());
-            int noteType = int(NoteHead::name2type(nhTag.toString()));
-            if (noteType > int(NoteHead::Type::HEAD_TYPES) - 1 || noteType < 0) {
+            int noteType = int(XmlValue::fromXml(nhTag.toString(), NoteHeadType::HEAD_AUTO));
+            if (noteType > int(NoteHeadType::HEAD_TYPES) - 1 || noteType < 0) {
                 return false;
             }
 

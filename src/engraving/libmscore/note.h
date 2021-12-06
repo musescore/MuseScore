@@ -159,21 +159,9 @@ public:
         HEAD_INVALID = -1
                        ///\}
     };
-    // keep in sync with noteHeadTypeNames array in note.cpp
-    enum class Type : signed char {
-        ///.\{
-        HEAD_AUTO    = -1,
-        HEAD_WHOLE   = 0,
-        HEAD_HALF    = 1,
-        HEAD_QUARTER = 2,
-        HEAD_BREVIS  = 3,
-        HEAD_TYPES
-        ///\}
-    };
 
     Q_ENUM(Scheme);
     Q_ENUM(Group);
-    Q_ENUM(Type);
 
     NoteHead(Note* parent = 0);
     NoteHead& operator=(const NoteHead&) = delete;
@@ -183,13 +171,11 @@ public:
 
     static QString scheme2userName(Scheme scheme);
     static QString group2userName(Group group);
-    static QString type2userName(Type type);
+    static QString type2userName(NoteHeadType type);
     static QString scheme2name(Scheme scheme);
     static QString group2name(Group group);
-    static QString type2name(Type type);
     static Scheme name2scheme(const QString& s);
     static Group name2group(const QString& s);
-    static Type name2type(const QString& s);
 };
 
 //---------------------------------------------------------
@@ -271,7 +257,7 @@ private:
 
     NoteHead::Scheme _headScheme { NoteHead::Scheme::HEAD_AUTO };
     NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
-    NoteHead::Type _headType  { NoteHead::Type::HEAD_AUTO };
+    NoteHeadType _headType  { NoteHeadType::HEAD_AUTO };
 
     VeloType _veloType { VeloType::OFFSET_VAL };
 
@@ -373,10 +359,10 @@ public:
     NoteHead::Scheme headScheme() const { return _headScheme; }
     void updateHeadGroup(const NoteHead::Group headGroup);
     NoteHead::Group headGroup() const { return _headGroup; }
-    NoteHead::Type headType() const { return _headType; }
+    NoteHeadType headType() const { return _headType; }
     void setHeadScheme(NoteHead::Scheme val);
     void setHeadGroup(NoteHead::Group val);
-    void setHeadType(NoteHead::Type t);
+    void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
     QString subtypeName() const override;
@@ -540,8 +526,8 @@ public:
 
     void addParentheses();
 
-    static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHead::Scheme scheme);
-    static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
+    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType, int tpc, Key key, NoteHead::Scheme scheme);
+    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType);
     NoteVal noteVal() const;
 
     EngravingItem* nextInEl(EngravingItem* e);

@@ -90,7 +90,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 //int(NoteHead::Group::HEAD_GROUPS) - 1: "-1" is needed to prevent building CUSTOM_GROUP noteheads set, since it is built by users and keep a specific set of existing noteheads
-static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteHead::Type::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteHeadType::HEAD_TYPES)] = {
     {    // down stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
           SymId::noteheadDoubleWhole },
@@ -410,7 +410,7 @@ QString NoteHead::group2userName(NoteHead::Group group)
 //   type2userName
 //---------------------------------------------------------
 
-QString NoteHead::type2userName(NoteHead::Type type)
+QString NoteHead::type2userName(NoteHeadType type)
 {
     return qtrc("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
 }
@@ -431,15 +431,6 @@ QString NoteHead::scheme2name(NoteHead::Scheme scheme)
 QString NoteHead::group2name(NoteHead::Group group)
 {
     return noteHeadGroupNames[int(group)].name;
-}
-
-//---------------------------------------------------------
-//   type2name
-//---------------------------------------------------------
-
-QString NoteHead::type2name(NoteHead::Type type)
-{
-    return noteHeadTypeNames[int(type) + 1].name;
 }
 
 //---------------------------------------------------------
@@ -471,29 +462,15 @@ NoteHead::Group NoteHead::name2group(const QString& s)
 }
 
 //---------------------------------------------------------
-//   name2type
-//---------------------------------------------------------
-
-NoteHead::Type NoteHead::name2type(const QString& s)
-{
-    for (int i = 0; i <= int(NoteHead::Type::HEAD_TYPES); ++i) {
-        if (noteHeadTypeNames[i].name == s) {
-            return NoteHead::Type(i - 1);
-        }
-    }
-    return NoteHead::Type::HEAD_AUTO;
-}
-
-//---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
 
-SymId Note::noteHead(int direction, NoteHead::Group group, NoteHead::Type t)
+SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t)
 {
     return noteHeads[direction][int(group)][int(t)];
 }
 
-SymId Note::noteHead(int direction, NoteHead::Group group, NoteHead::Type t, int tpc, Key key, NoteHead::Scheme scheme)
+SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int tpc, Key key, NoteHead::Scheme scheme)
 {
     // shortcut
     if (scheme == NoteHead::Scheme::HEAD_NORMAL) {
@@ -997,15 +974,15 @@ int Note::transposeTpc(int tpc)
 SymId Note::noteHead() const
 {
     int up;
-    NoteHead::Type ht;
+    NoteHeadType ht;
     if (chord()) {
         up = chord()->up();
         ht = chord()->durationType().headType();
     } else {
         up = 1;
-        ht = NoteHead::Type::HEAD_QUARTER;
+        ht = NoteHeadType::HEAD_QUARTER;
     }
-    if (_headType != NoteHead::Type::HEAD_AUTO) {
+    if (_headType != NoteHeadType::HEAD_AUTO) {
         ht = _headType;
     }
 
@@ -2281,10 +2258,10 @@ void Note::layout()
         _cachedNoteheadSym = nh;
         if (isNoteName()) {
             _cachedSymNull = SymId::noteEmptyBlack;
-            NoteHead::Type ht = _headType == NoteHead::Type::HEAD_AUTO ? chord()->durationType().headType() : _headType;
-            if (ht == NoteHead::Type::HEAD_WHOLE) {
+            NoteHeadType ht = _headType == NoteHeadType::HEAD_AUTO ? chord()->durationType().headType() : _headType;
+            if (ht == NoteHeadType::HEAD_WHOLE) {
                 _cachedSymNull = SymId::noteEmptyWhole;
-            } else if (ht == NoteHead::Type::HEAD_HALF) {
+            } else if (ht == NoteHeadType::HEAD_HALF) {
                 _cachedSymNull = SymId::noteEmptyHalf;
             }
         } else {
@@ -3075,9 +3052,9 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::GHOST:
         return ghost();
     case Pid::HEAD_TYPE:
-        return int(headType());
+        return headType();
     case Pid::VELO_TYPE:
-        return int(veloType());
+        return veloType();
     case Pid::PLAY:
         return play();
     case Pid::LINE:
@@ -3147,10 +3124,10 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setGhost(v.toBool());
         break;
     case Pid::HEAD_TYPE:
-        setHeadType(NoteHead::Type(v.toInt()));
+        setHeadType(v.value<NoteHeadType>());
         break;
     case Pid::VELO_TYPE:
-        setVeloType(VeloType(v.toInt()));
+        setVeloType(v.value<VeloType>());
         score()->setPlaylistDirty();
         break;
     case Pid::VISIBLE: {
@@ -3193,7 +3170,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::MIRROR_HEAD:
         return DirectionH::AUTO;
     case Pid::DOT_POSITION:
-        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
+        return DirectionV::AUTO;
     case Pid::HEAD_SCHEME:
         return int(NoteHead::Scheme::HEAD_AUTO);
     case Pid::HEAD_GROUP:
@@ -3206,9 +3183,9 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::STRING:
         return -1;
     case Pid::HEAD_TYPE:
-        return int(NoteHead::Type::HEAD_AUTO);
+        return NoteHeadType::HEAD_AUTO;
     case Pid::VELO_TYPE:
-        return int(VeloType::OFFSET_VAL);
+        return VeloType::OFFSET_VAL;
     case Pid::PLAY:
         return true;
     case Pid::FIXED:
@@ -3230,7 +3207,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
 //   setHeadType
 //---------------------------------------------------------
 
-void Note::setHeadType(NoteHead::Type t)
+void Note::setHeadType(NoteHeadType t)
 {
     _headType = t;
 }
