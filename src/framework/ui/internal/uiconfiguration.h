@@ -73,7 +73,7 @@ public:
     async::Notification musicalFontChanged() const override;
 
     double guiScaling() const override;
-    double physicalDotsPerInch() const override;
+    double dpi() const override;
 
     void setPhysicalDotsPerInch(std::optional<double> dpi) override;
 
