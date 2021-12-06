@@ -788,8 +788,8 @@ void Chord::addLedgerLines()
 
                   //ledger lines need the leftmost point of the notehead with a respect of bbox
                   x = note->pos().x() + note->bboxXShift();
-                  if (x - extraLen < minX) {
-                        minX  = x - extraLen;
+                  if (x - extraLen * note->mag() < minX) {
+                        minX  = x - extraLen * note->mag();
                         // increase width of all lines between this one and the staff
                         for (auto& d : vecLines) {
                               if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) )
@@ -797,8 +797,8 @@ void Chord::addLedgerLines()
                               }
                         }
                   // same for left side
-                  if (x + hw + extraLen > maxX) {
-                        maxX = x + hw + extraLen;
+                  if (x + hw + extraLen * note->mag()> maxX) {
+                        maxX = x + hw + extraLen * note->mag();
                         for (auto& d : vecLines)
                               if ( (l < 0 && d.line >= l) || (l > 0 && d.line <= l) )
                                     d.maxX = maxX;
