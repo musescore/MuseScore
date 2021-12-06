@@ -508,8 +508,8 @@ void Beam::layout()
 
 int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
-    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false) * 2;
-    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false) * 2;
+    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false);
+    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false);
 
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
