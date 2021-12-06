@@ -35,6 +35,10 @@ struct Shortcut
     std::string sequence;
     QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
 
+    Shortcut() = default;
+    Shortcut(const std::string& a)
+        : action(a) {}
+
     bool isValid() const
     {
         return !action.empty() && (!sequence.empty() || standardKey != QKeySequence::UnknownKey);

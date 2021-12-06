@@ -50,7 +50,7 @@ public:
     Ret setShortcuts(const ShortcutList& shortcuts) override;
     async::Notification shortcutsChanged() const override;
 
-    const Shortcut& shortcut(const std::string& actionCode) override;
+    const Shortcut& shortcut(const std::string& actionCode) const override;
     const Shortcut& defaultShortcut(const std::string& actionCode) const override;
 
     bool isRegistered(const std::string& sequence) const override;

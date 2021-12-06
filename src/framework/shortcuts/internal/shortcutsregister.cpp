@@ -270,15 +270,9 @@ Notification ShortcutsRegister::shortcutsChanged() const
     return m_shortcutsChanged;
 }
 
-const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode)
+const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
 {
-    const auto& shortCut = findShortcut(m_shortcuts, actionCode);
-    if (shortCut.action.empty()) {
-        Shortcut sc = { actionCode, 0 };
-        m_shortcuts.push_back(sc);
-        return findShortcut(m_shortcuts, actionCode);
-    }
-    return shortCut;
+    return findShortcut(m_shortcuts, actionCode);
 }
 
 const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode) const
