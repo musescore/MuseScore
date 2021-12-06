@@ -87,7 +87,7 @@ ExampleView::ExampleView(QWidget* parent)
 
     sm->start();
 
-    m_defaultScaling = 0.9 * uiConfiguration()->physicalDotsPerInch() / DPI; // 90% of nominal
+    m_defaultScaling = 0.9 * uiConfiguration()->dpi() / DPI; // 90% of nominal
 }
 
 //---------------------------------------------------------

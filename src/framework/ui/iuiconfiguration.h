@@ -71,7 +71,7 @@ public:
     virtual async::Notification musicalFontChanged() const = 0;
 
     virtual double guiScaling() const = 0;
-    virtual double physicalDotsPerInch() const = 0;
+    virtual double dpi() const = 0;
 
     //! NOTE Maybe set from command line
     virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;

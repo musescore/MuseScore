@@ -569,14 +569,14 @@ void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
     m_customDPI = dpi;
 }
 
-double UiConfiguration::physicalDotsPerInch() const
+double UiConfiguration::dpi() const
 {
     if (m_customDPI) {
         return m_customDPI.value();
     }
 
     const QScreen* screen = mainWindow()->screen();
-    return screen ? screen->physicalDotsPerInch() : 100;
+    return screen ? screen->logicalDotsPerInch() : 100;
 }
 
 QByteArray UiConfiguration::pageState(const QString& pageName) const

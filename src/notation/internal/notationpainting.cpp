@@ -269,13 +269,11 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
 
 void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPublish)
 {
-    static int screenDpi = QGuiApplication::primaryScreen()->logicalDotsPerInch();
-
     Options opt;
     opt.isSetViewport = false;
     opt.isMultiPage = true;
     opt.frameRect = frameRect;
-    opt.deviceDpi = screenDpi;
+    opt.deviceDpi = uiConfiguration()->dpi();
     opt.isPrinting = isPublish;
     doPaint(painter, opt);
 }
