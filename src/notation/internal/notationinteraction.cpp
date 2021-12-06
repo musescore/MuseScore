@@ -2022,6 +2022,7 @@ void NotationInteraction::addToSelection(MoveDirection d, MoveSelectionType type
     case MoveSelectionType::EngravingItem:
     case MoveSelectionType::Frame:
     case MoveSelectionType::System:
+    case MoveSelectionType::String:
     case MoveSelectionType::Undefined:
         break;
     }
@@ -2229,7 +2230,7 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
     Ms::InputState& is = score()->inputState();
     Ms::Staff* staff = score()->staff(is.track() / Ms::VOICES);
     int instrStrgs = staff->part()->instrument(is.tick())->stringData()->strings();
-    int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : +1);
+    int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : 1);
 
     if (MoveDirection::Up == d) {
         delta = -delta;
