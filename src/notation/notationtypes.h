@@ -165,7 +165,8 @@ enum class MoveSelectionType
     Measure,
     Track,
     Frame,
-    System
+    System,
+    String // TAB Staff
 };
 
 enum class ExpandSelectionMode
@@ -246,6 +247,7 @@ struct NoteInputState
     int currentVoiceIndex = 0;
     int currentTrack = 0;
     const Drumset* drumset = nullptr;
+    StaffGroup staffGroup = StaffGroup::STANDARD;
 };
 
 enum class NoteFilter
