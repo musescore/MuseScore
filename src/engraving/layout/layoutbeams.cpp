@@ -188,12 +188,12 @@ void LayoutBeams::breakCrossMeasureBeams(const LayoutContext& ctx, Measure* meas
     }
 }
 
-static bool beamNoContinue(Beam::Mode mode)
+static bool beamNoContinue(BeamMode mode)
 {
-    return mode == Beam::Mode::END || mode == Beam::Mode::NONE || mode == Beam::Mode::INVALID;
+    return mode == BeamMode::END || mode == BeamMode::NONE || mode == BeamMode::INVALID;
 }
 
-#define beamModeMid(a) (a == Beam::Mode::MID || a == Beam::Mode::BEGIN32 || a == Beam::Mode::BEGIN64)
+#define beamModeMid(a) (a == BeamMode::MID || a == BeamMode::BEGIN32 || a == BeamMode::BEGIN64)
 
 //---------------------------------------------------------
 //   beamGraceNotes
@@ -203,12 +203,12 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
 {
     ChordRest* a1    = 0;        // start of (potential) beam
     Beam* beam       = 0;        // current beam
-    Beam::Mode bm = Beam::Mode::AUTO;
+    BeamMode bm = BeamMode::AUTO;
     QVector<Chord*> graceNotes = after ? mainNote->graceNotesAfter() : mainNote->graceNotesBefore();
 
     for (ChordRest* cr : qAsConst(graceNotes)) {
         bm = Groups::endBeam(cr);
-        if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
+        if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->layoutGraceNotes();
                 beam = 0;
@@ -221,11 +221,11 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
             continue;
         }
         if (beam) {
-            bool beamEnd = bm == Beam::Mode::BEGIN;
+            bool beamEnd = bm == BeamMode::BEGIN;
             if (!beamEnd) {
                 cr->replaceBeam(beam);
                 cr = 0;
-                beamEnd = (bm == Beam::Mode::END);
+                beamEnd = (bm == BeamMode::END);
             }
             if (beamEnd) {
                 beam->layoutGraceNotes();
@@ -238,7 +238,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
         if (a1 == 0) {
             a1 = cr;
         } else {
-            if (!beamModeMid(bm) && (bm == Beam::Mode::BEGIN)) {
+            if (!beamModeMid(bm) && (bm == BeamMode::BEGIN)) {
                 a1->removeDeleteBeam(false);
                 a1 = cr;
             } else {
@@ -276,7 +276,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
         ChordRest* a1    = 0;          // start of (potential) beam
         bool firstCR     = true;
         Beam* beam       = 0;          // current beam
-        Beam::Mode bm    = Beam::Mode::AUTO;
+        BeamMode bm    = BeamMode::AUTO;
         ChordRest* prev  = 0;
         bool checkBeats  = false;
         Fraction stretch = Fraction(1, 1);
@@ -316,8 +316,8 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             if (firstCR) {
                 firstCR = false;
                 // Handle cross-measure beams
-                Beam::Mode mode = cr->beamMode();
-                if (mode == Beam::Mode::MID || mode == Beam::Mode::END) {
+                BeamMode mode = cr->beamMode();
+                if (mode == BeamMode::MID || mode == BeamMode::END) {
                     ChordRest* prevCR = score->findCR(measure->tick() - Fraction::fromTicks(1), track);
                     if (prevCR) {
                         const Measure* pm = prevCR->measure();
@@ -346,13 +346,13 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 }
             }
 
-            if (cr->isRest() && cr->beamMode() == Beam::Mode::AUTO) {
-                bm = Beam::Mode::NONE;                   // do not beam rests set to Beam::Mode::AUTO
+            if (cr->isRest() && cr->beamMode() == BeamMode::AUTO) {
+                bm = BeamMode::NONE;                   // do not beam rests set to BeamMode::AUTO
             } else {
                 bm = Groups::endBeam(cr, prev);          // get defaults from time signature properties
             }
             // perform additional context-dependent checks
-            if (bm == Beam::Mode::AUTO) {
+            if (bm == BeamMode::AUTO) {
                 // check if we need to break beams according to minimum duration in current / previous beat
                 if (checkBeats && cr->rtick().isNotZero()) {
                     Fraction tick = cr->rtick() * stretch;
@@ -380,10 +380,10 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             // set beam mode to NONE (do not combine with following chord beam/hook, if any)
 
             if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
-                bm = Beam::Mode::NONE;
+                bm = BeamMode::NONE;
             }
 
-            if ((cr->isChord() && cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
+            if ((cr->isChord() && cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
                     beam->layout1();
@@ -401,11 +401,11 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             }
 
             if (beam) {
-                bool beamEnd = (bm == Beam::Mode::BEGIN);
+                bool beamEnd = (bm == BeamMode::BEGIN);
                 if (!beamEnd) {
                     cr->replaceBeam(beam);
                     cr = 0;
-                    beamEnd = (bm == Beam::Mode::END);
+                    beamEnd = (bm == BeamMode::END);
                 }
                 if (beamEnd) {
                     beam->layout1();
@@ -421,7 +421,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
             } else {
                 if (!beamModeMid(bm)
                     &&
-                    (bm == Beam::Mode::BEGIN
+                    (bm == BeamMode::BEGIN
                      || (a1->segment()->segmentType() != cr->segment()->segmentType())
                      || (a1->tick() + a1->actualTicks() < cr->tick())
                     )

@@ -1613,25 +1613,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             }
         }
     } else if (tag == "BeamMode") {
-        QString val(e.readElementText());
-        Beam::Mode bm = Beam::Mode::AUTO;
-        if (val == "auto") {
-            bm = Beam::Mode::AUTO;
-        } else if (val == "begin") {
-            bm = Beam::Mode::BEGIN;
-        } else if (val == "mid") {
-            bm = Beam::Mode::MID;
-        } else if (val == "end") {
-            bm = Beam::Mode::END;
-        } else if (val == "no") {
-            bm = Beam::Mode::NONE;
-        } else if (val == "begin32") {
-            bm = Beam::Mode::BEGIN32;
-        } else if (val == "begin64") {
-            bm = Beam::Mode::BEGIN64;
-        } else {
-            bm = Beam::Mode(val.toInt());
-        }
+        BeamMode bm = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
         EngravingItem* el = readArticulation(ch, e, ctx);
@@ -3083,7 +3065,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 
             if (tag == "Measure") {
                 if (lastReadBox) {
-                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).toMillimetre());
+                    lastReadBox->setBottomGap(lastReadBox->bottomGap() + lastReadBox->propertyDefault(Pid::BOTTOM_GAP).value<Millimetre>());
                     lastReadBox = nullptr;
                 }
                 readMeasureLast = true;
@@ -3124,10 +3106,10 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
                 if (!readMeasureLast && !lastReadBox) {
-                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).toMillimetre());
+                    b->setTopGap(b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
                     b->setPropertyFlags(Pid::TOP_GAP, PropertyFlags::STYLED);
                 } else if (readMeasureLast) {
-                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).toMillimetre());
+                    b->setTopGap(b->topGap() + b->propertyDefault(Pid::TOP_GAP).value<Millimetre>());
                 }
 
                 lastReadBox = b;

@@ -29,6 +29,7 @@
 #include "compat/pageformat.h"
 #include "io/htmlparser.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -87,6 +88,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
@@ -1353,11 +1355,11 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
         } else if (tag == "endSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "beginTextPlace") {
-            textLine->setBeginTextPlace(readPlacement(e));
+            textLine->setBeginTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "continueTextPlace") {
-            textLine->setContinueTextPlace(readPlacement(e));
+            textLine->setContinueTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (tag == "endTextPlace") {
-            textLine->setEndTextPlace(readPlacement(e));
+            textLine->setEndTextPlace(XmlValue::fromXml(e.readElementText(), TextPlace::AUTO));
         } else if (!readTextLineProperties114(e, ctx, textLine)) {
             e.unknown();
         }
@@ -3032,21 +3034,21 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 if (cr) {
                     if (!first) {
                         switch (cr->beamMode()) {
-                        case Beam::Mode::AUTO:
-                        case Beam::Mode::BEGIN:
-                        case Beam::Mode::END:
-                        case Beam::Mode::NONE:
+                        case BeamMode::AUTO:
+                        case BeamMode::BEGIN:
+                        case BeamMode::END:
+                        case BeamMode::NONE:
                             break;
-                        case Beam::Mode::MID:
-                        case Beam::Mode::BEGIN32:
-                        case Beam::Mode::BEGIN64:
-                            cr->setBeamMode(Beam::Mode::BEGIN);
+                        case BeamMode::MID:
+                        case BeamMode::BEGIN32:
+                        case BeamMode::BEGIN64:
+                            cr->setBeamMode(BeamMode::BEGIN);
                             break;
-                        case Beam::Mode::INVALID:
+                        case BeamMode::INVALID:
                             if (cr->isChord()) {
-                                cr->setBeamMode(Beam::Mode::AUTO);
+                                cr->setBeamMode(BeamMode::AUTO);
                             } else {
-                                cr->setBeamMode(Beam::Mode::NONE);
+                                cr->setBeamMode(BeamMode::NONE);
                             }
                             break;
                         }

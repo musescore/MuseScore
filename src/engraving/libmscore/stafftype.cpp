@@ -897,8 +897,8 @@ void TabDurationSymbol::layout()
     Chord* chord = explicitParent() && explicitParent()->isChord() ? toChord(explicitParent()) : nullptr;
     // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (!chord || !chord->isChord()
-        || (chord->beamMode() != Beam::Mode::BEGIN && chord->beamMode() != Beam::Mode::MID
-            && chord->beamMode() != Beam::Mode::END)) {
+        || (chord->beamMode() != BeamMode::BEGIN && chord->beamMode() != BeamMode::MID
+            && chord->beamMode() != BeamMode::END)) {
         mu::draw::FontMetrics fm(_tab->durationFont());
         hbb   = _tab->durationBoxH();
         wbb   = fm.width(_text);
@@ -921,10 +921,10 @@ void TabDurationSymbol::layout()
         ybb   = -hbb;                                       // bbox top is at top of stem height
         xpos  = 0.75 * _spatium;                            // conventional centring of stem on fret marks
         ypos  = _tab->durationGridYOffset();                // stem start is at bottom
-        if (chord->beamMode() == Beam::Mode::BEGIN) {
+        if (chord->beamMode() == BeamMode::BEGIN) {
             _beamGrid   = TabBeamGrid::INITIAL;
             _beamLength = 0.0;
-        } else if (chord->beamMode() == Beam::Mode::MID || chord->beamMode() == Beam::Mode::END) {
+        } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
             _beamLevel  = static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel);
             _beamGrid   = (_beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
             // _beamLength and bbox x and width will be set in layout2(),

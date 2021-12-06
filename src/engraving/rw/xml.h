@@ -36,7 +36,6 @@
 #include "libmscore/select.h"
 
 namespace Ms {
-enum class PlaceText : char;
 enum class ClefType : signed char;
 class Spanner;
 class Beam;
@@ -298,9 +297,6 @@ public:
     const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
 
-    void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
-    void pTag(const char* name, PlaceText);
-
     void writeHeader();
 
     void startObject(const QString&);
@@ -336,7 +332,5 @@ public:
     static QString xmlString(const QString&);
     static QString xmlString(ushort c);
 };
-
-extern PlaceText readPlacement(XmlReader&);
 }     // namespace Ms
 #endif

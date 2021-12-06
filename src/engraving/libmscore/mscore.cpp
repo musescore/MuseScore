@@ -233,9 +233,6 @@ void MScore::init()
 void MScore::registerUiTypes()
 {
 #ifdef SCRIPT_INTERFACE
-    qRegisterMetaType<VeloType>("ValueType");
-
-    qRegisterMetaType<DirectionH>("DirectionH");
     qRegisterMetaType<Spanner::Anchor>("Anchor");
     qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
     qRegisterMetaType<NoteHead::Type>("NoteHeadType");
@@ -249,10 +246,8 @@ void MScore::registerUiTypes()
     qRegisterMetaType<Dynamic::Range>("DynamicRange");
     qRegisterMetaType<Jump::Type>("JumpType");
     qRegisterMetaType<Marker::Type>("MarkerType");
-    qRegisterMetaType<Beam::Mode>("BeamMode");
     qRegisterMetaType<HairpinType>("HairpinType");
     qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
-    qRegisterMetaType<LayoutBreakType>("LayoutBreakType");
 
     //classed enumerations
 //      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");

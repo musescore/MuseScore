@@ -1484,7 +1484,7 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         _lineColor = v.value<mu::draw::Color>();
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.toMillimetre();
+        _lineWidth = v.value<Millimetre>();
         break;
     case Pid::LINE_STYLE:
         _lineStyle = mu::draw::PenStyle(v.toInt());

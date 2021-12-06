@@ -63,29 +63,29 @@ enum class P_TYPE {
     // Draw
     COLOR,
     ORNAMENT_STYLE,
+    GLISS_STYLE,
 
     // Layout
     ALIGN,
     PLACEMENT_V,
     PLACEMENT_H,
+    TEXT_PLACE,
     DIRECTION_V,
     DIRECTION_H,
+    BEAM_MODE,
 
     // Duration
     FRACTION,
 
     // Types
     LAYOUTBREAK_TYPE,
-
     VELO_TYPE,
-    BEAM_MODE,
 
-    TEXT_PLACE,
     TEMPO,
     GROUPS,
     SYMID,
     INT_LIST,
-    GLISS_STYLE,
+
     BARLINE_TYPE,
     HEAD_TYPE,          // enum class Notehead::Type
     HEAD_GROUP,         // enum class Notehead::Group
@@ -156,6 +156,9 @@ public:
     PropertyValue(OrnamentStyle v)
         : m_type(P_TYPE::ORNAMENT_STYLE), m_data(make_data<OrnamentStyle>(v)) {}
 
+    PropertyValue(GlissandoStyle v)
+        : m_type(P_TYPE::GLISS_STYLE), m_data(make_data<GlissandoStyle>(v)) {}
+
     // Layout
     PropertyValue(Align v)
         : m_type(P_TYPE::ALIGN), m_data(make_data<Align>(v)) {}
@@ -165,10 +168,16 @@ public:
     PropertyValue(PlacementH v)
         : m_type(P_TYPE::PLACEMENT_H), m_data(make_data<PlacementH>(v)) {}
 
+    PropertyValue(TextPlace v)
+        : m_type(P_TYPE::TEXT_PLACE), m_data(make_data<TextPlace>(v)) {}
+
     PropertyValue(DirectionV v)
         : m_type(P_TYPE::DIRECTION_V), m_data(make_data<DirectionV>(v)) {}
     PropertyValue(DirectionH v)
         : m_type(P_TYPE::DIRECTION_H), m_data(make_data<DirectionH>(v)) {}
+
+    PropertyValue(BeamMode v)
+        : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}
 
     // Duration
     PropertyValue(const Fraction& v)
@@ -297,7 +306,6 @@ public:
     qreal toReal() const { return value<qreal>(); }
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
-    Millimetre toMillimetre() const { return value<Millimetre>(); }
 
     const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;

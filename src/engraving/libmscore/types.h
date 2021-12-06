@@ -391,16 +391,6 @@ enum class GlissandoType {
 };
 
 //---------------------------------------------------------
-//   GlissandoStyle
-//---------------------------------------------------------
-
-enum class GlissandoStyle {
-    ///.\{
-    CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
-    ///\}
-};
-
-//---------------------------------------------------------
 //   HarmonyType
 //---------------------------------------------------------
 
@@ -648,7 +638,6 @@ enum class AccidentalRole : char {
 #ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType);
 Q_ENUM_NS(GlissandoType);
-Q_ENUM_NS(GlissandoStyle);
 Q_ENUM_NS(SegmentType);
 Q_ENUM_NS(Tid);
 Q_ENUM_NS(NoteType);

@@ -439,29 +439,6 @@ QString XmlReader::readXml()
 }
 
 //---------------------------------------------------------
-//   readPlacement
-//---------------------------------------------------------
-
-PlaceText readPlacement(XmlReader& e)
-{
-    const QString& s(e.readElementText());
-    if (s == "auto" || s == "0") {
-        return PlaceText::AUTO;
-    }
-    if (s == "above" || s == "1") {
-        return PlaceText::ABOVE;
-    }
-    if (s == "below" || s == "2") {
-        return PlaceText::BELOW;
-    }
-    if (s == "left" || s == "3") {
-        return PlaceText::LEFT;
-    }
-    qDebug("unknown placement value <%s>", qPrintable(s));
-    return PlaceText::AUTO;
-}
-
-//---------------------------------------------------------
 //   spannerValues
 //---------------------------------------------------------
 

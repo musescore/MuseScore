@@ -354,7 +354,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
         ticks = 2 * ticks / 3;
     }
 
-    Ms::Beam::Mode bm  = (beamList.at(0) == Bww::BeamType::BM_BEGIN) ? Ms::Beam::Mode::BEGIN : Ms::Beam::Mode::AUTO;
+    Ms::BeamMode bm  = (beamList.at(0) == Bww::BeamType::BM_BEGIN) ? Ms::BeamMode::BEGIN : Ms::BeamMode::AUTO;
     Ms::DirectionV sd = Ms::DirectionV::AUTO;
 
     // create chord

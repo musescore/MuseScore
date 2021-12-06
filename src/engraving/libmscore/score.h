@@ -579,7 +579,7 @@ public:
     void cmdAddParentheses();
     void cmdAddBraces();
     void cmdAddFret(int fret);
-    void cmdSetBeamMode(Beam::Mode);
+    void cmdSetBeamMode(BeamMode);
     void cmdRemovePart(Part*);
     void cmdAddTie(bool addToChord = false);
     void cmdToggleTie();

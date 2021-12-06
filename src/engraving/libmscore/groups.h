@@ -62,8 +62,8 @@ public:
     void write(XmlWriter&) const;
     void read(XmlReader&);
 
-    Beam::Mode beamMode(int tick, TDuration::DurationType d) const;
-    void addStop(int pos, TDuration::DurationType d, Beam::Mode bm);
+    BeamMode beamMode(int tick, TDuration::DurationType d) const;
+    void addStop(int pos, TDuration::DurationType d, BeamMode bm);
     bool operator==(const Groups& g) const
     {
         if (g.size() != size()) {
@@ -80,7 +80,7 @@ public:
     void dump(const char*) const;
 
     static const Groups& endings(const Fraction& f);
-    static Beam::Mode endBeam(ChordRest* cr, ChordRest* prev = 0);
+    static BeamMode endBeam(ChordRest* cr, ChordRest* prev = 0);
 };
 
 //---------------------------------------------------------

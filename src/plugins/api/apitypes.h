@@ -85,6 +85,27 @@ enum class VeloType {
 };
 Q_ENUM_NS(VeloType);
 
+enum class BeamMode {
+    AUTO = int(mu::engraving::BeamMode::AUTO),
+    BEGIN = int(mu::engraving::BeamMode::BEGIN),
+    MID = int(mu::engraving::BeamMode::MID),
+    END = int(mu::engraving::BeamMode::END),
+    NONE = int(mu::engraving::BeamMode::NONE),
+    BEGIN32 = int(mu::engraving::BeamMode::BEGIN32),
+    BEGIN64 = int(mu::engraving::BeamMode::BEGIN64),
+    INVALID = int(mu::engraving::BeamMode::INVALID),
+};
+Q_ENUM_NS(BeamMode);
+
+enum class GlissandoStyle {
+    CHROMATIC = int(mu::engraving::GlissandoStyle::CHROMATIC),
+    WHITE_KEYS = int(mu::engraving::GlissandoStyle::WHITE_KEYS),
+    BLACK_KEYS = int(mu::engraving::GlissandoStyle::BLACK_KEYS),
+    DIATONIC = int(mu::engraving::GlissandoStyle::DIATONIC),
+    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO),
+};
+Q_ENUM_NS(GlissandoStyle);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -99,5 +120,7 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::Direction);
 Q_DECLARE_METATYPE(Ms::PluginAPI::DirectionH);
 Q_DECLARE_METATYPE(Ms::PluginAPI::LayoutBreakType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
+Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
+Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
 
 #endif // MU_PLUGINS_APITYPES_H

@@ -350,14 +350,14 @@ void TextLineBaseSegment::layout()
     if (!_text->empty()) {
         qreal textlineTextDistance = _spatium * .5;
         if (((isSingleType() || isBeginType())
-             && (tl->beginTextPlace() == PlaceText::LEFT || tl->beginTextPlace() == PlaceText::AUTO))
-            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT))) {
+             && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
         qreal h = _text->height();
-        if (textLineBase()->beginTextPlace() == PlaceText::ABOVE) {
+        if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
             y1 = qMin(y1, -h);
-        } else if (textLineBase()->beginTextPlace() == PlaceText::BELOW) {
+        } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
             y2 = qMax(y2, h);
         } else {
             y1 = qMin(y1, -h * .5);
@@ -674,7 +674,7 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::BEGIN_TEXT_PLACE:
-        _beginTextPlace = PlaceText(v.toInt());
+        _beginTextPlace = v.value<TextPlace>();
         break;
     case Pid::BEGIN_TEXT_ALIGN:
         _beginTextAlign = v.value<Align>();
@@ -686,10 +686,10 @@ bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
         _endTextAlign = v.value<Align>();
         break;
     case Pid::CONTINUE_TEXT_PLACE:
-        _continueTextPlace = PlaceText(v.toInt());
+        _continueTextPlace = v.value<TextPlace>();
         break;
     case Pid::END_TEXT_PLACE:
-        _endTextPlace = PlaceText(v.toInt());
+        _endTextPlace = v.value<TextPlace>();
         break;
     case Pid::BEGIN_HOOK_HEIGHT:
         _beginHookHeight = v.value<Spatium>();
