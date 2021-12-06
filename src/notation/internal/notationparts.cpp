@@ -883,7 +883,11 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
         int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = engraving::Factory::createStaff(part);
-        initStaff(staff, templ, Ms::StaffType::preset(StaffType::STANDARD), staffIndex);
+        const Ms::StaffType* staffType = templ.staffTypePreset;
+        if (!staffType) {
+            staffType = Ms::StaffType::preset(StaffType::STANDARD);
+        }
+        initStaff(staff, templ, staffType, staffIndex);
 
         if (lastStaffIndex > 0) {
             staff->setBarLineSpan(score()->staff(lastStaffIndex - 1)->barLineSpan());
