@@ -182,7 +182,7 @@ enum class NoteHeadType : signed char {
     HEAD_BREVIS  = 3,
     HEAD_TYPES
 };
-} // mu::engraving
+}  // mu::engraving
 
 //! NOTE compat
 namespace Ms {
