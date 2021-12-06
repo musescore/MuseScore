@@ -637,6 +637,19 @@ PalettePtr PaletteCreator::newTremoloPalette()
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
+
+    static const SymIdList dots {
+        SymId::tremoloDivisiDots2,
+        SymId::tremoloDivisiDots3,
+        SymId::tremoloDivisiDots4,
+        SymId::tremoloDivisiDots6
+    };
+    // include additional symbol-based tremolo articulations, implemented as articulations
+    for (auto i : dots) {
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
+        s->setSymId(i);
+        sp->appendElement(s, s->typeUserName());
+    }
     return sp;
 }
 
@@ -675,6 +688,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
+    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const SymIdList defaultArticulations {
         SymId::articAccentAbove,
         SymId::articStaccatoAbove,
@@ -771,7 +785,6 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
     static const SymIdList defaultOrnaments {
         SymId::ornamentTurnInverted,
         SymId::ornamentTurn,
@@ -831,8 +844,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-    static SymIdList art {
+    static const SymIdList art {
         SymId::accdnCombDot,
         SymId::accdnCombLH2RanksEmpty,
         SymId::accdnCombLH3RanksEmptySquare,
