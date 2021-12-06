@@ -72,6 +72,7 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.currentTrack = inputState.track();
     noteInputState.drumset = inputState.drumset();
     noteInputState.isRest = inputState.rest();
+    noteInputState.staffGroup = inputState.staffGroup();
 
     return noteInputState;
 }
