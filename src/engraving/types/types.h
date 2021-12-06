@@ -51,6 +51,11 @@ enum class OrnamentStyle : char {
     DEFAULT, BAROQUE
 };
 
+// P_TYPE::GLISS_STYLE
+enum class GlissandoStyle {
+    CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
+};
+
 // --- Layout ---
 
 //---------------------------------------------------------
@@ -119,6 +124,13 @@ enum class DirectionH : char {
     AUTO, LEFT, RIGHT
 };
 
+// P_TYPE::BEAM_MODE
+enum class BeamMode : signed char {
+    AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+};
+
+// --- Types ---
+
 // P_TYPE::LAYOUTBREAK_TYPE
 enum class LayoutBreakType {
     PAGE, LINE, SECTION, NOBREAK
@@ -129,15 +141,37 @@ enum class VeloType : char {
     OFFSET_VAL, USER_VAL
 };
 
-// P_TYPE::BEAM_MODE
-enum class BeamMode : signed char {
-    AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
+// P_TYPE::BARLINE_TYPE
+enum class BarLineType {
+    NORMAL           = 1,
+    SINGLE           = BarLineType::NORMAL,
+    DOUBLE           = 2,
+    START_REPEAT     = 4,
+    LEFT_REPEAT      = BarLineType::START_REPEAT,
+    END_REPEAT       = 8,
+    RIGHT_REPEAT     = BarLineType::END_REPEAT,
+    BROKEN           = 0x10,
+    DASHED           = BarLineType::BROKEN,
+    END              = 0x20,
+    FINAL            = BarLineType::END,
+    END_START_REPEAT = 0x40,
+    LEFT_RIGHT_REPEAT= BarLineType::END_START_REPEAT,
+    DOTTED           = 0x80,
+    REVERSE_END      = 0x100,
+    REVERSE_FINALE   = BarLineType::REVERSE_END,
+    HEAVY            = 0x200,
+    DOUBLE_HEAVY     = 0x400,
 };
 
-// P_TYPE::GLISS_STYLE
-enum class GlissandoStyle {
-    CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
-};
+constexpr BarLineType operator|(BarLineType t1, BarLineType t2)
+{
+    return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
+}
+
+constexpr bool operator&(BarLineType t1, BarLineType t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
 } // mu::engraving
 
 //! NOTE compat
@@ -153,6 +187,7 @@ using VeloType = mu::engraving::VeloType;
 using BeamMode = mu::engraving::BeamMode;
 using TextPlace = mu::engraving::TextPlace;
 using GlissandoStyle = mu::engraving::GlissandoStyle;
+using BarLineType = mu::engraving::BarLineType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

@@ -62,6 +62,9 @@ public:
 
     static QString toXml(GlissandoStyle v);
     static GlissandoStyle fromXml(const QString& str, GlissandoStyle def);
+
+    static QString toXml(BarLineType v);
+    static BarLineType fromXml(const QString& str, BarLineType def);
 };
 }
 
