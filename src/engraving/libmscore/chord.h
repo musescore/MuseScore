@@ -124,6 +124,7 @@ class Chord final : public ChordRest
     int maxReduction(int extensionOutsideStaff) const;
     int stemOpticalAdjustment(int stemEndPosition) const;
     int calcMinStemLength();
+    int calc4BeamsException(int stemLength) const;
     qreal calcDefaultStemLength();
 
     bool computeUpContext();

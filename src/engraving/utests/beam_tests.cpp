@@ -91,6 +91,12 @@ TEST_F(BeamTests, beamG)
     beam("Beam-G.mscx");
 }
 
+// make sure the beam end positions are correct for 2+ beams
+TEST_F(BeamTests, beamPositions)
+{
+    beam("beamPositions.mscx");
+}
+
 // if the beamNoSlope style parameter is true, all beams are flat
 TEST_F(BeamTests, beamNoSlope)
 {
