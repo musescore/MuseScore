@@ -741,6 +741,7 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
         levelHasBeam = false;
         Chord* startChord = nullptr;
         Chord* endChord = nullptr;
+        bool breakBeam = false;
 
         for (uint i = 0; i < chordRests.size(); i++) {
             ChordRest* chordRest = chordRests[i];
@@ -748,14 +749,17 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
                 continue;
             }
             Chord* chord = toChord(chordRest);
-            if (level < chord->beams()) {
+            BeamMode beamMode = chord->beamMode();
+            breakBeam = level < chord->beams()
+                        && ((level >= 1 && beamMode == BeamMode::BEGIN32) || (level >= 2 && beamMode == BeamMode::BEGIN64));
+            if (level < chord->beams() && !breakBeam) {
                 endChord = chord;
                 if (!startChord) {
                     startChord = chord;
                 }
                 levelHasBeam = true;
             } else {
-                if (startChord) {
+                if (startChord && endChord) {
                     if (startChord == endChord) {
                         bool isBeamletBefore = calcIsBeamletBefore(startChord, i - 1, level);
                         createBeamletSegment(startChord, isBeamletBefore, level);
@@ -763,14 +767,14 @@ void Beam::createBeamSegments(std::vector<ChordRest*> chordRests)
                         createBeamSegment(startChord, endChord, level);
                     }
                 }
-                startChord = nullptr;
+                startChord = breakBeam ? chord : nullptr;
                 endChord = nullptr;
             }
         }
 
         // if the beam ends on the last chord
-        if (startChord) {
-            if (startChord == endChord) {
+        if (startChord && (endChord || breakBeam)) {
+            if (startChord == endChord || !endChord) {
                 // since it's the last chord, beamlet always goes before
                 createBeamletSegment(startChord, true, level);
             } else {
