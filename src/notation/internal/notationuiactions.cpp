@@ -1323,7 +1323,97 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("toggle-hide-empty",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Toggle 'Hide empty staves'")
-             )
+             ),
+    UiAction("set-visible",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Set visible")
+             ),
+    UiAction("unset-visible",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Set invisible")
+             ),
+    UiAction("toggle-autoplace",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Toggle 'automatic placement' for selected elements")
+             ),
+    UiAction("autoplace-enabled",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Toggle 'automatic placement' (whole score)")
+             ),
+    UiAction("string-above",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "String Above (TAB)")
+             ),
+    UiAction("string-below",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "String Below (TAB)")
+             ),
+    UiAction("pad-note-1-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Whole note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: whole note"),
+             IconCode::Code::NOTE_WHOLE
+             ),
+    UiAction("pad-note-2-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Half note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: half note"),
+             IconCode::Code::NOTE_HALF
+             ),
+    UiAction("pad-note-4-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Quarter note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: quarter note"),
+             IconCode::Code::NOTE_QUARTER
+             ),
+    UiAction("pad-note-8-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "8th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 8th note"),
+             IconCode::Code::NOTE_8TH
+             ),
+    UiAction("pad-note-16-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "16th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 16th note"),
+             IconCode::Code::NOTE_16TH
+             ),
+    UiAction("pad-note-32-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "32nd note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 32nd note"),
+             IconCode::Code::NOTE_32ND
+             ),
+    UiAction("pad-note-64-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "64th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 64th note"),
+             IconCode::Code::NOTE_64TH
+             ),
+    UiAction("pad-note-128-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "128th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 128th note"),
+             IconCode::Code::NOTE_128TH
+             ),
+    UiAction("pad-note-256-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "256th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 256th note"),
+             IconCode::Code::NOTE_256TH
+             ),
+    UiAction("pad-note-512-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "512th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 512th note"),
+             IconCode::Code::NOTE_512TH
+             ),
+    UiAction("pad-note-1024-TAB",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "1024th note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 1024th note"),
+             IconCode::Code::NOTE_1024TH
+             ),
 };
 
 const UiActionList NotationUiActions::m_noteInputActions = {

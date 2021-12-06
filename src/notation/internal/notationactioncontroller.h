@@ -186,7 +186,9 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+
     void registerPadNoteAction(const mu::actions::ActionCode&, Pad padding);
+    void registerTabPadNoteAction(const mu::actions::ActionCode&, Pad padding);
 
     enum PlayMode {
         NoPlay, PlayNote, PlayChord
