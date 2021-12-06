@@ -18,6 +18,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+set -e
+set -o pipefail
+
 echo "MuseScore VTest"
 
 RUN_CMD="compare" # gen_cur, gen_ref
@@ -65,12 +68,12 @@ if [ "$RUN_CMD" == "gen" ]; then
     if [ $IS_REF -eq 1 ]; then 
         JSON_FILE=$PNG_REF_DIR/vtestjob_ref.json; 
         PNG_DIR=$PNG_REF_DIR
-        PNG_PREFIX=".ref.png"
+        PNG_SUFFIX=".ref.png"
         LOG_FILE=$PNG_REF_DIR/convert_ref.log
     else 
         JSON_FILE=$PNG_CUR_DIR/vtestjob.json; 
         PNG_DIR=$PNG_CUR_DIR
-        PNG_PREFIX=".png"
+        PNG_SUFFIX=".png"
         LOG_FILE=$PNG_CUR_DIR/convert.log
     fi
 
@@ -82,19 +85,28 @@ if [ "$RUN_CMD" == "gen" ]; then
     echo "Generate JSON job file"
     echo "[" >> $JSON_FILE
     for score in $SCORES_LIST ; do
-        OUT_FILE=$PNG_DIR/${score%.*}$PNG_PREFIX
+        OUT_FILE=$PNG_DIR/${score%.*}$PNG_SUFFIX
         rm -f $OUT_FILE
-        echo "{ \"in\" : \"$SCORES_DIR/$score\",         \"out\" : \"$OUT_FILE\" }," >> $JSON_FILE;
+        echo "{ \"in\" : \"$SCORES_DIR/$score\", \"out\" : \"$OUT_FILE\" }," >> $JSON_FILE;
     done
     echo "{}]" >> $JSON_FILE
     cat $JSON_FILE        
 
     echo "Generate PNG files"
-    $MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE
+    $MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE && SUCCESS="true"
 
+    if [ -z "$SUCCESS" ]; then
+        echo -e "\033[0;31mGenerating PNGs failed!\033[0m"
+    fi
+    
     echo "========"
+    echo "Generated files:"
     ls $PNG_DIR
     echo "========"
+    
+    if [ -z "$SUCCESS" ]; then
+        exit 1
+    fi
 
 #######################################
 # Compare
