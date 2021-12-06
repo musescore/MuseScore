@@ -1455,6 +1455,26 @@ int Chord::stemOpticalAdjustment(int stemEndPosition) const
     return 0;
 }
 
+int Chord::calc4BeamsException(int stemLength) const
+{
+    int difference = 0;
+    int staffLines = (staff()->lines(tick()) - 1) * 2;
+    if (up() && upNote()->line() > staffLines) {
+        difference = upNote()->line() - staffLines;
+    } else if (!up() && downNote()->line() < 0) {
+        difference = qAbs(downNote()->line());
+    }
+    switch (difference) {
+    case 2:
+        return qMax(stemLength, 21);
+    case 3:
+    case 4:
+        return qMax(stemLength, 23);
+    default:
+        return stemLength;
+    }
+}
+
 //-----------------------------------------------------------------------------
 //   defaultStemLength
 ///   Get the default stem length for this chord
@@ -1472,7 +1492,7 @@ qreal Chord::calcDefaultStemLength()
     int defaultStemLength = (isSmall() ? score()->styleD(Sid::stemLengthSmall) : score()->styleD(Sid::stemLength)) * 4;
     defaultStemLength += stemLengthBeamAddition();
     int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
-    qreal stemLength = defaultStemLength;
+    int stemLength = defaultStemLength;
 
     const Staff* staffItem = staff();
     const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
@@ -1524,6 +1544,9 @@ qreal Chord::calcDefaultStemLength()
         }
 
         stemLength = qMax(idealStemLength, minStemLengthQuarterSpaces);
+    }
+    if (beams() == 4) {
+        stemLength = calc4BeamsException(stemLength);
     }
     return (stemLength + chordHeight) / 4.0 * _spatium;
 }
