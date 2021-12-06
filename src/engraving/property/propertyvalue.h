@@ -80,13 +80,13 @@ enum class P_TYPE {
     // Types
     LAYOUTBREAK_TYPE,
     VELO_TYPE,
+    BARLINE_TYPE,
 
     TEMPO,
     GROUPS,
     SYMID,
     INT_LIST,
 
-    BARLINE_TYPE,
     HEAD_TYPE,          // enum class Notehead::Type
     HEAD_GROUP,         // enum class Notehead::Group
     ZERO_INT,           // displayed with offset +1
@@ -190,12 +190,12 @@ public:
     PropertyValue(VeloType v)
         : m_type(P_TYPE::VELO_TYPE), m_data(make_data<VeloType>(v)) {}
 
+    PropertyValue(BarLineType v)
+        : m_type(P_TYPE::BARLINE_TYPE), m_data(make_data<BarLineType>(v)) {}
+
     // not sorted
     PropertyValue(Ms::SymId v)
         : m_type(P_TYPE::SYMID), m_data(make_data<Ms::SymId>(v)) {}
-
-    PropertyValue(Ms::BarLineType v)
-        : m_type(P_TYPE::BARLINE_TYPE), m_data(make_data<Ms::BarLineType>(v)) {}
 
     PropertyValue(Ms::HookType v)
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<Ms::HookType>(v)) {}

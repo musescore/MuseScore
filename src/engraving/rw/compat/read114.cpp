@@ -2077,7 +2077,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(e.track());
-            barLine->setBarLineType(val);
+            barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = new Tuplet(m);

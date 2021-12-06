@@ -2472,7 +2472,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "subtype") {
-                    bl->setBarLineType(e.readElementText());
+                    bl->setBarLineType(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
@@ -2907,7 +2907,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(e.track());
-            barLine->setBarLineType(val);
+            barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = new Tuplet(m);

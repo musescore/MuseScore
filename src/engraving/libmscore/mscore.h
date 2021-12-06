@@ -213,41 +213,6 @@ enum class StaffGroup : char {
 constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
-//   BarLineType
-//---------------------------------------------------------
-
-enum class BarLineType {
-    NORMAL           = 1,
-    SINGLE           = BarLineType::NORMAL,
-    DOUBLE           = 2,
-    START_REPEAT     = 4,
-    LEFT_REPEAT      = BarLineType::START_REPEAT,
-    END_REPEAT       = 8,
-    RIGHT_REPEAT     = BarLineType::END_REPEAT,
-    BROKEN           = 0x10,
-    DASHED           = BarLineType::BROKEN,
-    END              = 0x20,
-    FINAL            = BarLineType::END,
-    END_START_REPEAT = 0x40,
-    LEFT_RIGHT_REPEAT= BarLineType::END_START_REPEAT,
-    DOTTED           = 0x80,
-    REVERSE_END      = 0x100,
-    REVERSE_FINALE   = BarLineType::REVERSE_END,
-    HEAVY            = 0x200,
-    DOUBLE_HEAVY     = 0x400,
-};
-
-constexpr BarLineType operator|(BarLineType t1, BarLineType t2)
-{
-    return static_cast<BarLineType>(static_cast<int>(t1) | static_cast<int>(t2));
-}
-
-constexpr bool operator&(BarLineType t1, BarLineType t2)
-{
-    return static_cast<int>(t1) & static_cast<int>(t2);
-}
-
-//---------------------------------------------------------
 //   MScoreError
 //---------------------------------------------------------
 
@@ -393,7 +358,5 @@ static constexpr int limit(int val, int min, int max)
     return val;
 }
 } // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::BarLineType);
 
 #endif
