@@ -6,8 +6,13 @@ on:
     - master
 
 jobs:
-  run_vtests:
+  setup:
+    name: "Setup VTests workflow"
     runs-on: ubuntu-18.04
+    outputs:
+      do_run: ${{ steps.output_data.outputs.do_run }}
+      head_ref: ${{ steps.output_data.outputs.head_ref }}
+      base_ref: ${{ steps.output_data.outputs.base_ref }}
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
@@ -15,15 +20,6 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Сcache cache files
-      uses: actions/cache@v2
-      with:
-        path: ~/.ccache
-        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
-        restore-keys: ${{github.workflow}}-ccache-  # restore ccache from either previous build on this branch or on master  
-    - name: Setup ccache
-      run: |
-        bash ./build/ci/tools/setup_ccache.sh  
     - name: Get base commit for PR
       if: github.event_name == 'pull_request'
       run: |
@@ -40,56 +36,120 @@ jobs:
         BASE_REF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
         if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
         echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
-        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV  
-    - name: Setup the environment
-      if: env.DO_RUN == 'true'
+        echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+    - id: output_data
+      name: Output workflow data
+      run: |
+        echo "::set-output name=do_run::${{ env.DO_RUN }}"
+        echo "::set-output name=head_ref::${{ env.HEAD_REF }}"
+        echo "::set-output name=base_ref::${{ env.BASE_REF }}"
+
+  generate_current_pngs:
+    name: "Generate current PNGs"
+    runs-on: ubuntu-18.04
+    needs: setup
+    if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Сcache cache files
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+    - name: Setup ccache
+      run: |
+        bash ./build/ci/tools/setup_ccache.sh
+    - name: Setup environment
       run: |
         sudo bash ./build/ci/linux/setup.sh
-    - name: Build current branch
-      if: env.DO_RUN == 'true'
+    - name: Build
       run: |
         source ./../musescore_environment.sh
-        mkdir -p "$HOME/musescore_current"  
+        mkdir -p "$HOME/musescore_install"
         bash ninja_build.sh -t clean
-        MUSESCORE_INSTALL_DIR="$HOME/musescore_current" bash ninja_build.sh -t installdebug
-    - name: Checkout on ref branch
-      if: env.DO_RUN == 'true'
-      uses: actions/checkout@v2    
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
+    - name: Generate current PNGs
+      run: |
+        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $HOME/musescore_install/bin/mscore
+    - name: Upload PNGs
+      uses: actions/upload-artifact@v2
       with:
-        ref: ${{ env.BASE_REF }}
-    - name: Build ref branch
-      if: env.DO_RUN == 'true'
+        name: Current PNGs
+        path: ./current_pngs
+
+  generate_reference_pngs:
+    name: "Generate reference PNGs"
+    runs-on: ubuntu-18.04
+    needs: setup
+    if: needs.setup.outputs.do_run == 'true'
+    steps:
+    - name: Clone repository and checkout reference commit
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ needs.setup.outputs.base_ref }}
+    - name: Сcache cache files
+      uses: actions/cache@v2
+      with:
+        path: ~/.ccache
+        key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
+        restore-keys: ${{github.workflow}}-ccache- # restore ccache from either previous build on this branch or on master
+    - name: Setup ccache
+      run: |
+        bash ./build/ci/tools/setup_ccache.sh
+    - name: Setup environment
+      run: |
+        sudo bash ./build/ci/linux/setup.sh
+    - name: Build
       run: |
         source ./../musescore_environment.sh
-        mkdir -p "$HOME/musescore_ref"
+        mkdir -p "$HOME/musescore_install"
         bash ninja_build.sh -t clean
-        MUSESCORE_INSTALL_DIR="$HOME/musescore_ref" bash ninja_build.sh -t installdebug
-    - name: Checkout on current branch
-      if: env.DO_RUN == 'true'
-      uses: actions/checkout@v2    
+        MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
+    - name: Checkout current commit
+      uses: actions/checkout@v2
       with:
-        ref: ${{ env.HEAD_REF }}
-    - name: Generate ref png
-      if: env.DO_RUN == 'true'
+        ref: ${{ needs.setup.outputs.head_ref }}
+    - name: Generate reference PNGs
       run: |
-        xvfb-run ./vtest/vtest.sh -c gen_ref -m $HOME/musescore_ref/bin/mscore
-    - name: Generate current png
-      if: env.DO_RUN == 'true'
-      run: |
-        xvfb-run ./vtest/vtest.sh -c gen_cur -m $HOME/musescore_current/bin/mscore
-    - name: Compare png
-      if: env.DO_RUN == 'true'
+        xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
+    - name: Upload PNGs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Reference PNGs
+        path: ./reference_pngs
+
+  compare_pngs:
+    name: "Compare PNGs"
+    runs-on: ubuntu-18.04
+    needs: [generate_current_pngs, generate_reference_pngs]
+    if: needs.setup.outputs.do_run == 'true'
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+    - name: Download current PNGs
+      uses: actions/download-artifact@v2
+      with:
+        name: Current PNGs
+        path: ./current_pngs
+    - name: Download reference PNGs
+      uses: actions/download-artifact@v2
+      with:
+        name: Reference PNGs
+        path: ./reference_pngs
+    - name: Compare PNGs
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
-        ./vtest/vtest.sh -c compare
-    - name: Upload artifact
-      if: env.DO_RUN == 'true'
-      uses: actions/upload-artifact@v1
+        ./vtest/vtest-compare-pngs.sh
+    - name: Upload comparison
+      if: env.VTEST_DIFF_FOUND == 'true'
+      uses: actions/upload-artifact@v2
       with:
-        name: VTest.Artifacts
-        path: ./vtest.artifacts
+        name: Comparison
+        path: ./comparison
     - name: Skip failure signal if PR is labeled 'vtests'
-      if: github.event_name == 'pull_request' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
+      if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
       run: |
         echo "This PR appears to change some of the visual tests."
         echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -97,19 +157,19 @@ jobs:
         export VTEST_DIFF_FOUND=false
         echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
     - name: Emit failure signal for PR if differences are found
-      if: github.event_name == 'pull_request' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true')
+      if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true')
       run: |
         echo "This PR appears to change some of the visual tests."
         echo "Please carefully review the new visual test results in the uploaded artifact that can be found here: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         exit 1
     - name: Comment push commit
-      if: github.event_name == 'push' && contains( env.DO_RUN, 'true') && contains( env.VTEST_DIFF_FOUND, 'true')
+      if: github.event_name == 'push' && contains( env.VTEST_DIFF_FOUND, 'true')
       uses: peter-evans/commit-comment@v1.1.0
       with:
         body: |
           This is an automatic message. This commit appears to change some of the visual tests.
           Please carefully review the new visual test results in the uploaded artifact that can be found
           [here][1]
-          
+
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         token: ${{ secrets.GITHUB_TOKEN }}
