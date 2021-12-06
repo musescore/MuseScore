@@ -1,5 +1,4 @@
 [
-{ "in": "01-General/00-Blank.mscx",                            "out": "01-General/00-Blank.mscz"},
 { "in": "01-General/01-Treble_Clef.mscx",                      "out": "01-General/01-Treble_Clef.mscz"},
 { "in": "01-General/02-Bass_Clef.mscx",                        "out": "01-General/02-Bass_Clef.mscz"},
 { "in": "01-General/03-Grand_Staff.mscx",                      "out": "01-General/03-Grand_Staff.mscz"},
