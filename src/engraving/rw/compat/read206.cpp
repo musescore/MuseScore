@@ -2316,6 +2316,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
             useDefaultPlacement = false;
             if (!el || el->isFermata()) {
                 direction = XmlValue::fromXml(e.readElementText(), DirectionV::AUTO);
+            } else {
                 el->readProperties(e);
             }
         } else if (tag == "timeStretch") {
