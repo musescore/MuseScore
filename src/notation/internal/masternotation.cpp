@@ -82,6 +82,8 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
         return;
     }
 
+    TRACEFUNC;
+
     setScore(score);
     initExcerptNotations(masterScore()->excerpts());
     m_notationMidiData->init(m_parts);
@@ -94,6 +96,8 @@ Ms::MasterScore* MasterNotation::masterScore() const
 
 static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOptions)
 {
+    TRACEFUNC;
+
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
     bool pickupMeasure = scoreOptions.withPickupMeasure;
@@ -204,46 +208,41 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
 
 //! NOTE: this method with all of its dependencies was copied from MU3
 //! source: file.cpp, MuseScore::getNewFile()
-mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* templateScore, const ScoreCreateOptions& scoreOptions)
+mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions)
 {
-    Ms::VBox* nvb = nullptr;
+    TRACEFUNC;
+
     setScore(score);
-    QList<Ms::Excerpt*> excerpts;
-    if (templateScore) {
-        score->setStyle(templateScore->style());
-        score->setScoreOrder(templateScore->scoreOrder());
 
-        // create instruments from template
-        for (Ms::Part* tpart : templateScore->parts()) {
-            Ms::Part* part = new Ms::Part(score);
-            part->setInstrument(tpart->instrument());
-            part->setPartName(tpart->partName());
+    parts()->setParts(scoreOptions.parts, scoreOptions.order);
 
-            for (Ms::Staff* tstaff : *tpart->staves()) {
-                Ms::Staff* staff = engraving::Factory::createStaff(part);
-                staff->init(tstaff);
-                if (tstaff->links() && !part->staves()->isEmpty()) {
-                    Staff* linkedStaff = part->staves()->back();
-                    staff->linkTo(linkedStaff);
-                }
-                score->appendStaff(staff);
-            }
-            score->appendPart(part);
-        }
-        for (Ms::Excerpt* ex : templateScore->excerpts()) {
-            Ms::Excerpt* x = new Ms::Excerpt(score);
-            x->setTitle(ex->title());
-            for (Part* p : ex->parts()) {
-                int pidx = templateScore->parts().indexOf(p);
-                if (pidx == -1) {
-                    LOGE() << "part not found";
-                } else {
-                    x->parts().append(score->parts()[pidx]);
-                }
-            }
-            excerpts.append(x);
-        }
-        Ms::MeasureBase* mb = templateScore->first();
+    score->checkChordList();
+    createMeasures(score, scoreOptions);
+
+    applyOptions(score, scoreOptions);
+
+    {
+        Ms::ScoreLoad sl;
+        score->doLayout();
+    }
+    initExcerptNotations(score->excerpts());
+    addExcerptsToMasterScore(score->excerpts());
+
+    score->setExcerptsChanged(true);
+
+    m_notationMidiData->init(m_parts);
+
+    return make_ret(Err::NoError);
+}
+
+void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate)
+{
+    TRACEFUNC;
+
+    Ms::VBox* nvb = nullptr;
+
+    if (createdFromTemplate) {
+        Ms::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             Ms::VBox* tvb = toVBox(mb);
             nvb = new Ms::VBox(score->dummy()->system());
@@ -257,8 +256,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
-    } else {
-        parts()->setParts(scoreOptions.parts, scoreOptions.order);
     }
 
     score->setName(qtrc("notation", "Untitled"));
@@ -269,8 +266,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
 
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
-
-    createMeasures(score, scoreOptions);
 
     //
     // select first rest
@@ -302,21 +297,30 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             } else if (nvb) {
                 delete nvb;
             }
+
+            auto setText = [score](Ms::Tid textItemId, const QString& text) {
+                Ms::TextBase* textItem = score->getText(textItemId);
+
+                if (!textItem) {
+                    textItem = score->addText(textItemId);
+                }
+
+                if (textItem) {
+                    textItem->setPlainText(text);
+                }
+            };
+
             if (!title.isEmpty()) {
-                Ms::TextBase* s = score->addText(Ms::Tid::TITLE);
-                s->setPlainText(title);
+                setText(Ms::Tid::TITLE, title);
             }
             if (!subtitle.isEmpty()) {
-                Ms::TextBase* s = score->addText(Ms::Tid::SUBTITLE);
-                s->setPlainText(subtitle);
+                setText(Ms::Tid::SUBTITLE, subtitle);
             }
             if (!composer.isEmpty()) {
-                Ms::TextBase* s = score->addText(Ms::Tid::COMPOSER);
-                s->setPlainText(composer);
+                setText(Ms::Tid::COMPOSER, composer);
             }
             if (!lyricist.isEmpty()) {
-                Ms::TextBase* s = score->addText(Ms::Tid::POET);
-                s->setPlainText(lyricist);
+                setText(Ms::Tid::POET, lyricist);
             }
         } else if (nvb) {
             delete nvb;
@@ -402,19 +406,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         seg->add(tt);
         score->setTempo(seg, tempo);
     }
-
-    {
-        Ms::ScoreLoad sl;
-        score->doLayout();
-    }
-    initExcerptNotations(excerpts);
-    addExcerptsToMasterScore(excerpts);
-
-    score->setExcerptsChanged(true);
-
-    m_notationMidiData->init(m_parts);
-
-    return make_ret(Err::NoError);
 }
 
 mu::RetVal<bool> MasterNotation::created() const
@@ -442,6 +433,8 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
     if (excerpts.empty()) {
         return;
     }
+
+    TRACEFUNC;
 
     undoStack()->prepareChanges();
 
@@ -473,6 +466,8 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
         return;
     }
 
+    TRACEFUNC;
+
     undoStack()->prepareChanges();
 
     for (IExcerptNotationPtr excerptNotation : excerpts) {
@@ -493,6 +488,8 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 {
+    TRACEFUNC;
+
     m_excerpts.set(excerpts);
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 
@@ -534,6 +531,8 @@ IMasterNotationMidiDataPtr MasterNotation::midiData() const
 
 ExcerptNotationList MasterNotation::potentialExcerpts() const
 {
+    TRACEFUNC;
+
     auto excerptExists = [this](const ID& partId) {
         for (const Ms::Excerpt* excerpt : masterScore()->excerpts()) {
             const QList<Part*>& excerptParts = excerpt->parts();
@@ -578,6 +577,8 @@ void MasterNotation::onSaveCopy()
 
 void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 {
+    TRACEFUNC;
+
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
@@ -593,6 +594,8 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 
 void MasterNotation::addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts)
 {
+    TRACEFUNC;
+
     for (Ms::Excerpt* excerpt : excerpts) {
         masterScore()->initAndAddExcerpt(excerpt, false);
     }

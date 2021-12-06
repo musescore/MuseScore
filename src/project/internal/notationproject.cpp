@@ -74,6 +74,26 @@ static bool isStandardTag(const QString& tag)
     return standardTags.contains(tag);
 }
 
+static void setupProjectProperties(Ms::MasterScore* masterScore, const ProjectCreateOptions& projectOptions)
+{
+    if (!projectOptions.title.isEmpty()) {
+        masterScore->fileInfo()->setFile(projectOptions.title);
+        masterScore->setMetaTag("workTitle", projectOptions.title);
+    }
+    if (!projectOptions.subtitle.isEmpty()) {
+        masterScore->setMetaTag("subtitle", projectOptions.subtitle);
+    }
+    if (!projectOptions.composer.isEmpty()) {
+        masterScore->setMetaTag("composer", projectOptions.composer);
+    }
+    if (!projectOptions.lyricist.isEmpty()) {
+        masterScore->setMetaTag("lyricist", projectOptions.lyricist);
+    }
+    if (!projectOptions.copyright.isEmpty()) {
+        masterScore->setMetaTag("copyright", projectOptions.copyright);
+    }
+}
+
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -117,6 +137,8 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 
 mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode)
 {
+    TRACEFUNC;
+
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
     project->setPath(reader.params().filePath);
@@ -169,12 +191,15 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
     m_masterNotation->setMasterScore(project->masterScore());
 
     m_projectAudioSettings = audioSettings;
+    m_viewSettings = viewSettings;
 
     return make_ret(Ret::Code::Ok);
 }
 
 mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePath, bool forceMode)
 {
+    TRACEFUNC;
+
     // Find import reader
     std::string suffix = io::suffix(path);
     INotationReaderPtr scoreReader = readers()->reader(suffix);
@@ -239,54 +264,24 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
 mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 {
-    // Create new engraving project
-    EngravingProjectPtr project = EngravingProject::create();
+    TRACEFUNC;
 
     // Load template if present
-    io::path templatePath = projectOptions.templatePath;
-    EngravingProjectPtr templateProject;
-    if (!templatePath.empty()) {
-        templateProject = EngravingProject::create(DefaultStyle::baseStyle());
-        engraving::Err err = engraving::compat::loadMsczOrMscx(templateProject, templatePath.toQString());
-        if (err != engraving::Err::NoError) {
-            LOGE() << "failed load template";
-            return make_ret(err);
-        }
-
-        err = templateProject->setupMasterScore();
-        if (err != engraving::Err::NoError) {
-            LOGE() << "failed load template";
-            return make_ret(err);
-        }
+    if (!projectOptions.templatePath.empty()) {
+        return loadTemplate(projectOptions);
     }
 
+    // Create new engraving project
+    EngravingProjectPtr project = EngravingProject::create();
     Ms::MasterScore* masterScore = project->masterScore();
-
-    // Setup project properties
-    if (!projectOptions.title.isEmpty()) {
-        masterScore->fileInfo()->setFile(projectOptions.title);
-        masterScore->setMetaTag("workTitle", projectOptions.title);
-    }
-    if (!projectOptions.subtitle.isEmpty()) {
-        masterScore->setMetaTag("subtitle", projectOptions.subtitle);
-    }
-    if (!projectOptions.composer.isEmpty()) {
-        masterScore->setMetaTag("composer", projectOptions.composer);
-    }
-    if (!projectOptions.lyricist.isEmpty()) {
-        masterScore->setMetaTag("lyricist", projectOptions.lyricist);
-    }
-    if (!projectOptions.copyright.isEmpty()) {
-        masterScore->setMetaTag("copyright", projectOptions.copyright);
-    }
+    setupProjectProperties(masterScore, projectOptions);
 
     // Make new master score
     MasterNotationPtr masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
-    Ms::MasterScore* templateScore = templateProject ? templateProject->masterScore() : nullptr;
 
     masterNotation->undoStack()->lock();
 
-    Ret ret = masterNotation->setupNewScore(masterScore, templateScore, projectOptions.scoreOptions);
+    Ret ret = masterNotation->setupNewScore(masterScore, projectOptions.scoreOptions);
     if (!ret) {
         masterNotation->undoStack()->unlock();
         return ret;
@@ -308,6 +303,24 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
     m_viewSettings = viewSettings;
 
     return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions)
+{
+    TRACEFUNC;
+
+    Ret ret = load(projectOptions.templatePath);
+
+    if (ret) {
+        Ms::MasterScore* masterScore = m_masterNotation->masterScore();
+        setupProjectProperties(masterScore, projectOptions);
+
+        m_masterNotation->undoStack()->lock();
+        m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
+        m_masterNotation->undoStack()->unlock();
+    }
+
+    return ret;
 }
 
 mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
