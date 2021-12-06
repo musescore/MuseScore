@@ -42,7 +42,7 @@
 #define DEPRECATED LOGD() << "This function deprecated!!"
 #define DEPRECATED_USE(use) LOGD() << "This function deprecated!! Use:" << use
 #define NOT_IMPLEMENTED LOGW() << "Not implemented!!"
-#define NOT_IMPL_RETURN NOT_IMPLEMENTED return
+#define NOT_IMPL_RETURN NOT_IMPLEMENTED; return
 #define NOT_SUPPORTED LOGW() << "Not supported!!"
 #define NOT_SUPPORTED_USE(use) LOGW() << "Not supported!! Use:" << use
 
