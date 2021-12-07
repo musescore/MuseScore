@@ -22,6 +22,8 @@
 
 #include "notationswitchlistmodel.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 
 NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
@@ -31,31 +33,44 @@ NotationSwitchListModel::NotationSwitchListModel(QObject* parent)
 
 void NotationSwitchListModel::load()
 {
+    TRACEFUNC;
+
+    onMasterNotationChanged();
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+        onMasterNotationChanged();
+    });
+
+    onCurrentNotationChanged();
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
+}
+
+void NotationSwitchListModel::onMasterNotationChanged()
+{
     loadNotations();
 
-    context()->currentMasterNotationChanged().onNotify(this, [this]() {
+    IMasterNotationPtr master = masterNotation();
+    if (!master) {
+        return;
+    }
+
+    master->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
         loadNotations();
-
-        if (!masterNotation()) {
-            return;
-        }
-
-        masterNotation()->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
-            loadNotations();
-        });
-
-        listenNotationSavingStatus(masterNotation());
     });
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        INotationPtr notation = context()->currentNotation();
-        if (!notation) {
-            return;
-        }
+    listenNotationSavingStatus(master);
+}
 
-        int currentNotationIndex = m_notations.indexOf(notation);
-        emit currentNotationIndexChanged(currentNotationIndex);
-    });
+void NotationSwitchListModel::onCurrentNotationChanged()
+{
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    int currentNotationIndex = m_notations.indexOf(notation);
+    emit currentNotationIndexChanged(currentNotationIndex);
 }
 
 void NotationSwitchListModel::loadNotations()
