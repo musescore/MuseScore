@@ -856,6 +856,18 @@ PalettePanel* MuseScore::newTremoloPalettePanel()
             tremolo->setTremoloType(TremoloType(i));
             sp->append(tremolo, tremolo->subtypeName());
             }
+
+      static const std::vector<SymId> dots {
+            SymId::tremoloDivisiDots2,
+            SymId::tremoloDivisiDots3,
+            SymId::tremoloDivisiDots4,
+            SymId::tremoloDivisiDots6
+            };
+      // include additional symbol-based tremolo articulations implemented as articulations
+      for (auto i : dots) {
+            Articulation* s = new Articulation(i, gscore);
+            sp->append(s, s->userName());
+            }
       return sp;
       }
 
@@ -901,7 +913,6 @@ PalettePanel* MuseScore::newArticulationsPalettePanel()
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
       static const std::vector<SymId> fermatas {
             SymId::fermataAbove,
             SymId::fermataShortAbove,
@@ -915,6 +926,7 @@ PalettePanel* MuseScore::newArticulationsPalettePanel()
             Fermata* f = new Fermata(i, gscore);
             sp->append(f, f->userName());
             }
+      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
       static const std::vector<SymId> art {
             SymId::articAccentAbove,
             SymId::articStaccatoAbove,
@@ -986,7 +998,6 @@ PalettePanel* MuseScore::newOrnamentsPalettePanel()
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
       static const std::vector<SymId> art {
             SymId::ornamentTurnInverted,
             SymId::ornamentTurnSlash,
@@ -1023,8 +1034,7 @@ PalettePanel* MuseScore::newAccordionPalettePanel()
       sp->setGrid(42, 25);
       sp->setDrawGrid(true);
 
-      // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-      static std::vector<SymId> art {
+      static const std::vector<SymId> art {
             SymId::accdnCombDot,
             SymId::accdnCombLH2RanksEmpty,
             SymId::accdnCombLH3RanksEmptySquare,
