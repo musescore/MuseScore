@@ -442,10 +442,10 @@ void EditDrumsetDialog::apply()
 void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 {
     m_editedDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_WHOLE)] = SymNames::symIdByName(wholeCmb->currentData().toString());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_QUARTER)] = SymNames::symIdByName(quarterCmb->currentData().toString());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_HALF)] = SymNames::symIdByName(halfCmb->currentData().toString());
-    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_BREVIS)]
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_WHOLE)] = SymNames::symIdByName(wholeCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_QUARTER)] = SymNames::symIdByName(quarterCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_HALF)] = SymNames::symIdByName(halfCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_BREVIS)]
         = SymNames::symIdByName(doubleWholeCmb->currentData().toString());
 }
 
@@ -453,23 +453,23 @@ void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 {
     if (customGroup) {
         wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                        NoteHead::Type::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHead::Type::HEAD_HALF))));
+                                                                                                        NoteHeadType::HEAD_WHOLE))));
+        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch, NoteHeadType::HEAD_HALF))));
         quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                          NoteHead::Type::HEAD_QUARTER))));
+                                                                                                          NoteHeadType::HEAD_QUARTER))));
         doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(m_editedDrumset.noteHeads(pitch,
-                                                                                                              NoteHead::Type::HEAD_BREVIS))));
+                                                                                                              NoteHeadType::HEAD_BREVIS))));
     } else {
         const auto group = m_editedDrumset.drum(pitch).notehead;
         if (group == NoteHead::Group::HEAD_INVALID) {
             return;
         }
 
-        wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHead::Type::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHead::Type::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHead::Type::HEAD_QUARTER))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_WHOLE))));
+        halfCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_HALF))));
+        quarterCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group, NoteHeadType::HEAD_QUARTER))));
         doubleWholeCmb->setCurrentIndex(quarterCmb->findData(SymNames::nameForSymId(Note::noteHead(0, group,
-                                                                                                   NoteHead::Type::HEAD_BREVIS))));
+                                                                                                   NoteHeadType::HEAD_BREVIS))));
     }
 }
 
@@ -610,7 +610,7 @@ void EditDrumsetDialog::updateExample()
     note->setTpcFromPitch();
     note->setLine(line);
     note->setPos(0.0, gpaletteScore->spatium() * .5 * line);
-    note->setHeadType(NoteHead::Type::HEAD_QUARTER);
+    note->setHeadType(NoteHeadType::HEAD_QUARTER);
     note->setHeadGroup(nh);
     note->setCachedNoteheadSym(SymNames::symIdByName(quarterCmb->currentData().toString()));
     chord->add(note);

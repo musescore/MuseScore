@@ -3206,9 +3206,9 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     if (rightParenthesis && leftParenthesis) {
         noteheadTagname += " parentheses=\"yes\"";
     }
-    if (note->headType() == NoteHead::Type::HEAD_QUARTER) {
+    if (note->headType() == NoteHeadType::HEAD_QUARTER) {
         noteheadTagname += " filled=\"yes\"";
-    } else if ((note->headType() == NoteHead::Type::HEAD_HALF) || (note->headType() == NoteHead::Type::HEAD_WHOLE)) {
+    } else if ((note->headType() == NoteHeadType::HEAD_HALF) || (note->headType() == NoteHeadType::HEAD_WHOLE)) {
         noteheadTagname += " filled=\"no\"";
     }
     if (note->headGroup() == NoteHead::Group::HEAD_SLASH) {
@@ -3249,7 +3249,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tag(noteheadTagname, "normal");
     } else if (rightParenthesis && leftParenthesis) {
         xml.tag(noteheadTagname, "normal");
-    } else if (note->headType() != NoteHead::Type::HEAD_AUTO) {
+    } else if (note->headType() != NoteHeadType::HEAD_AUTO) {
         xml.tag(noteheadTagname, "normal");
     }
 }

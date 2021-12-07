@@ -4237,9 +4237,9 @@ static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteh
     }
 
     if (noteheadFilled == "no") {
-        note->setHeadType(NoteHead::Type::HEAD_HALF);
+        note->setHeadType(NoteHeadType::HEAD_HALF);
     } else if (noteheadFilled == "yes") {
-        note->setHeadType(NoteHead::Type::HEAD_QUARTER);
+        note->setHeadType(NoteHeadType::HEAD_QUARTER);
     }
 }
 

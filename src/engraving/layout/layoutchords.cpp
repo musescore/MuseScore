@@ -276,8 +276,8 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                 Note* p = overlapNotes[0];
                 for (int i = 0, count = overlapNotes.size(); i < count; ++i) {
                     Note* n = overlapNotes[i];
-                    NoteHead::Type nHeadType;
-                    NoteHead::Type pHeadType;
+                    NoteHeadType nHeadType;
+                    NoteHeadType pHeadType;
                     Chord* nchord = n->chord();
                     Chord* pchord = p->chord();
                     if (n->mirror()) {
@@ -295,8 +295,8 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                         // unison
                         conflictUnison = true;
                         matchPending = false;
-                        nHeadType = (n->headType() == NoteHead::Type::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
-                        pHeadType = (p->headType() == NoteHead::Type::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
+                        nHeadType = (n->headType() == NoteHeadType::HEAD_AUTO) ? n->chord()->durationType().headType() : n->headType();
+                        pHeadType = (p->headType() == NoteHeadType::HEAD_AUTO) ? p->chord()->durationType().headType() : p->headType();
                         // the most important rules for sharing noteheads on unisons between voices are
                         // that notes must be one same line with same tpc
                         // noteheads must be unmirrored and of same group
@@ -316,7 +316,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                             // TODO: consider adding a style option, staff properties, or note property to control sharing
                             if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
                                  || n->isSmall() || p->isSmall())
-                                && ((n->headType() == NoteHead::Type::HEAD_AUTO && p->headType() == NoteHead::Type::HEAD_AUTO)
+                                && ((n->headType() == NoteHeadType::HEAD_AUTO && p->headType() == NoteHeadType::HEAD_AUTO)
                                     || nHeadType != pHeadType)
                                 && (n->visible() == p->visible())) {
                                 shareHeads = false;
@@ -856,7 +856,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
         Stem* stem = chord->stem();
         if (stem) {
             overlapMirror = stem->lineWidth();
-        } else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE) {
+        } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
             overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
         } else {
             overlapMirror = 0.0;

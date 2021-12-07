@@ -26,6 +26,7 @@
 #include "draw/font.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
 
 #include "factory.h"
 #include "score.h"
@@ -50,6 +51,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -246,17 +248,17 @@ public:
 //---------------------------------------------------------
 
 const std::vector<BarLineTableItem> BarLine::barLineTable {
-    { BarLineType::NORMAL,           SymNames::userNameForSymId(SymId::barlineSingle),       "normal" },
-    { BarLineType::DOUBLE,           SymNames::userNameForSymId(SymId::barlineDouble),       "double" },
-    { BarLineType::START_REPEAT,     SymNames::userNameForSymId(SymId::repeatLeft),          "start-repeat" },
-    { BarLineType::END_REPEAT,       SymNames::userNameForSymId(SymId::repeatRight),         "end-repeat" },
-    { BarLineType::BROKEN,           SymNames::userNameForSymId(SymId::barlineDashed),       "dashed" },
-    { BarLineType::END,              SymNames::userNameForSymId(SymId::barlineFinal),        "end" },
-    { BarLineType::END_START_REPEAT, SymNames::userNameForSymId(SymId::repeatRightLeft),     "end-start-repeat" },
-    { BarLineType::DOTTED,           SymNames::userNameForSymId(SymId::barlineDotted),       "dotted" },
-    { BarLineType::REVERSE_END,      SymNames::userNameForSymId(SymId::barlineReverseFinal), "reverse-end" },
-    { BarLineType::HEAVY,            SymNames::userNameForSymId(SymId::barlineHeavy),        "heavy" },
-    { BarLineType::DOUBLE_HEAVY,     SymNames::userNameForSymId(SymId::barlineHeavyHeavy),   "double-heavy" },
+    { BarLineType::NORMAL,           SymNames::userNameForSymId(SymId::barlineSingle) },
+    { BarLineType::DOUBLE,           SymNames::userNameForSymId(SymId::barlineDouble) },
+    { BarLineType::START_REPEAT,     SymNames::userNameForSymId(SymId::repeatLeft) },
+    { BarLineType::END_REPEAT,       SymNames::userNameForSymId(SymId::repeatRight) },
+    { BarLineType::BROKEN,           SymNames::userNameForSymId(SymId::barlineDashed) },
+    { BarLineType::END,              SymNames::userNameForSymId(SymId::barlineFinal) },
+    { BarLineType::END_START_REPEAT, SymNames::userNameForSymId(SymId::repeatRightLeft) },
+    { BarLineType::DOTTED,           SymNames::userNameForSymId(SymId::barlineDotted) },
+    { BarLineType::REVERSE_END,      SymNames::userNameForSymId(SymId::barlineReverseFinal) },
+    { BarLineType::HEAVY,            SymNames::userNameForSymId(SymId::barlineHeavy) },
+    { BarLineType::DOUBLE_HEAVY,     SymNames::userNameForSymId(SymId::barlineHeavyHeavy) },
 };
 
 //---------------------------------------------------------
@@ -283,54 +285,6 @@ QString BarLine::userTypeName(BarLineType t)
         }
     }
     return QString();
-}
-
-//---------------------------------------------------------
-//   barLineTypeName
-//
-//    Instance form returning the name string of the bar line type and
-//    static form returning the name string for an arbitrary bar line type.
-//---------------------------------------------------------
-
-QString BarLine::barLineTypeName() const
-{
-    return barLineTypeName(barLineType());
-}
-
-QString BarLine::barLineTypeName(BarLineType t)
-{
-    for (const auto& i : barLineTable) {
-        if (i.type == t) {
-            return i.name;
-        }
-    }
-    return QString("??");
-}
-
-//---------------------------------------------------------
-//   setBarLineType
-//
-//    Set the bar line type from the type name string.
-//    Does not update _customSubtype or _generated flags: to be used when reading from a score file
-//---------------------------------------------------------
-
-void BarLine::setBarLineType(const QString& s)
-{
-    _barLineType = barLineType(s);
-}
-
-//---------------------------------------------------------
-//   barLineType
-//---------------------------------------------------------
-
-BarLineType BarLine::barLineType(const QString& s)
-{
-    for (const auto& i : barLineTable) {
-        if (i.name == s) {
-            return i.type;
-        }
-    }
-    return BarLineType::NORMAL;     // silent default
 }
 
 //---------------------------------------------------------
@@ -867,7 +821,7 @@ void BarLine::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "subtype") {
-            setBarLineType(e.readElementText());
+            setBarLineType(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
         } else if (tag == "span") {
             _spanStaff  = e.readBool();
         } else if (tag == "spanFromOffset") {

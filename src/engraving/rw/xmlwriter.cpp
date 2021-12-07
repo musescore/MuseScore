@@ -353,6 +353,18 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << XmlValue::toXml(data.value<VeloType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::BARLINE_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<BarLineType>());
+        *this << "</" << ename << ">\n";
+    } break;
+    case P_TYPE::NOTEHEAD_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << XmlValue::toXml(data.value<NoteHeadType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
