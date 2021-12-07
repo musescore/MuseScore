@@ -82,6 +82,7 @@ enum class P_TYPE {
     VELO_TYPE,
     BARLINE_TYPE,
     NOTEHEAD_TYPE,
+    NOTEHEAD_SCHEME,
 
     TEMPO,
     GROUPS,
@@ -99,8 +100,6 @@ enum class P_TYPE {
     DYNAMIC_TYPE,       // enum class DynamicType
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
-
-    HEAD_SCHEME,        // enum class NoteHead::Scheme
 
     PITCH_VALUES,
     HOOK_TYPE,
@@ -195,6 +194,9 @@ public:
 
     PropertyValue(NoteHeadType v)
         : m_type(P_TYPE::NOTEHEAD_TYPE), m_data(make_data<NoteHeadType>(v)) {}
+
+    PropertyValue(NoteHeadScheme v)
+        : m_type(P_TYPE::NOTEHEAD_SCHEME), m_data(make_data<NoteHeadScheme>(v)) {}
 
     // not sorted
     PropertyValue(Ms::SymId v)

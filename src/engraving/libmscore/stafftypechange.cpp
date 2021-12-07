@@ -216,7 +216,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         _staffType->setStemless(v.toBool());
         break;
     case Pid::HEAD_SCHEME:
-        _staffType->setNoteHeadScheme(NoteHead::Scheme(v.toInt()));
+        _staffType->setNoteHeadScheme(v.value<NoteHeadScheme>());
         break;
     case Pid::STAFF_GEN_CLEF:
         _staffType->setGenClef(v.toBool());
@@ -286,7 +286,7 @@ PropertyValue StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_STEMLESS:
         return false;
     case Pid::HEAD_SCHEME:
-        return int(NoteHead::Scheme::HEAD_NORMAL);
+        return NoteHeadScheme::HEAD_NORMAL;
     case Pid::STAFF_GEN_CLEF:
         return true;
     case Pid::STAFF_GEN_TIMESIG:

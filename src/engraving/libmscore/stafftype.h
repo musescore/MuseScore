@@ -214,7 +214,7 @@ class StaffType
     bool _genKeysig       = true;         // create key signature at beginning of system
 
     // Standard: configurable properties
-    NoteHead::Scheme _noteHeadScheme = NoteHead::Scheme::HEAD_NORMAL;
+    NoteHeadScheme _noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
 
     // TAB: configurable properties
     qreal _durationFontSize = 15.0;       // the size (in points) for the duration symbol font
@@ -343,8 +343,8 @@ public:
     bool genKeysig() const { return _genKeysig; }
     void setShowLedgerLines(bool val) { _showLedgerLines = val; }
     bool showLedgerLines() const { return _showLedgerLines; }
-    void setNoteHeadScheme(NoteHead::Scheme s) { _noteHeadScheme = s; }
-    NoteHead::Scheme noteHeadScheme() const { return _noteHeadScheme; }
+    void setNoteHeadScheme(NoteHeadScheme s) { _noteHeadScheme = s; }
+    NoteHeadScheme noteHeadScheme() const { return _noteHeadScheme; }
 
     QString fretString(int fret, int string, bool ghost) const;     // returns a string with the text for fret
     QString durationString(TDuration::DurationType type, int dots) const;

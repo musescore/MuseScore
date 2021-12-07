@@ -68,6 +68,8 @@ public:
 
     static QString toXml(NoteHeadType v);
     static NoteHeadType fromXml(const QString& str, NoteHeadType def);
+    static QString toXml(NoteHeadScheme v);
+    static NoteHeadScheme fromXml(const QString& str, NoteHeadScheme def);
 };
 }
 
