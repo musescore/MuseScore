@@ -44,6 +44,8 @@ jobs:
         echo "PR_INFO=\"\"" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
+      env:
+        pr_info: ${{ env.PR_INFO }}
       run: |
         echo "::set-output name=do_run::${{ env.DO_RUN }}"
         echo "DO_RUN=${{ env.DO_RUN }}"
@@ -51,7 +53,7 @@ jobs:
         echo "HEAD_REF=${{ env.HEAD_REF }}"
         echo "::set-output name=base_ref::${{ env.BASE_REF }}"
         echo "BASE_REF=${{ env.BASE_REF }}"
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ github.run_id }}${{ env.PR_INFO }}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ github.run_id }}${pr_info}")"
         echo "::set-output name=artifact_name::$UPLOAD_ARTIFACT_NAME"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
