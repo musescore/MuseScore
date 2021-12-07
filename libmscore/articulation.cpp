@@ -434,6 +434,12 @@ Articulation::AnchorGroup Articulation::anchorGroup(SymId symId)
             case SymId::luteFingeringRHThird:
                   return AnchorGroup::LUTE_FINGERING;
 
+            case SymId::tremoloDivisiDots2:
+            case SymId::tremoloDivisiDots3:
+            case SymId::tremoloDivisiDots4:
+            case SymId::tremoloDivisiDots6:
+                  return AnchorGroup::ARTICULATION;
+
             default:
                   break;
             }
@@ -457,6 +463,10 @@ const char* Articulation::symId2ArticulationName(SymId symId)
 
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
+            case SymId::tremoloDivisiDots2:
+            case SymId::tremoloDivisiDots3:
+            case SymId::tremoloDivisiDots4:
+            case SymId::tremoloDivisiDots6:
                   return "staccato";
 
             case SymId::articAccentStaccatoAbove:
@@ -590,7 +600,9 @@ bool Articulation::isStaccato() const
       {
       return _symId == SymId::articStaccatoAbove        || _symId == SymId::articStaccatoBelow
           || _symId == SymId::articMarcatoStaccatoAbove || _symId == SymId::articMarcatoStaccatoBelow
-          || _symId == SymId::articAccentStaccatoAbove  || _symId == SymId::articAccentStaccatoBelow;
+          || _symId == SymId::articAccentStaccatoAbove || _symId == SymId::articAccentStaccatoBelow
+          || _symId == SymId::tremoloDivisiDots2 || _symId == SymId::tremoloDivisiDots3
+          || _symId == SymId::tremoloDivisiDots4 || _symId == SymId::tremoloDivisiDots6;
       }
 
 bool Articulation::isAccent() const

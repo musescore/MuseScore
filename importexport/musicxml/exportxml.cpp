@@ -2496,6 +2496,10 @@ static std::vector<QString> symIdToArtics(const SymId sid)
 
             case SymId::articStaccatoAbove:
             case SymId::articStaccatoBelow:
+            case SymId::tremoloDivisiDots2:
+            case SymId::tremoloDivisiDots3:
+            case SymId::tremoloDivisiDots4:
+            case SymId::tremoloDivisiDots6:
                   return { "staccato" };
                   break;
 
