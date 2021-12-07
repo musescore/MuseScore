@@ -46,7 +46,7 @@ static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_share
 
 static void telemetry_init_qrc()
 {
-    Q_INIT_RESOURCE(telemetry);
+    //Q_INIT_RESOURCE(telemetry);
 }
 
 std::string TelemetryModule::moduleName() const
