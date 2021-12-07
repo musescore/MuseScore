@@ -100,7 +100,7 @@ jobs:
         fi
 
         if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Mac${PR_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Mac${PR_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
