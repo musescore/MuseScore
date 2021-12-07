@@ -69,6 +69,7 @@ Rectangle {
         anchors.bottom: parent.bottom
 
         width: Math.min(contentWidth, parent.width)
+        clip: true
 
         model: notationSwitchModel
         currentIndex: 0
