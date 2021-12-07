@@ -235,6 +235,7 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopInMarker->setStyle(m_notation->style());
     m_loopOutMarker->setStyle(m_notation->style());
 
+    forceFocusIn();
     update();
 
     emit horizontalScrollChanged();

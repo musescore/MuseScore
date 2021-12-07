@@ -522,16 +522,6 @@ GridView {
             }
             navigation.onTriggered: paletteCell.clicked(null)
 
-            Connections {
-                target: paletteView
-
-                function onCurrentIndexChanged() {
-                    if (paletteView.currentIndex === paletteCell.rowIndex && !paletteCell.navigation.active) {
-                        paletteCell.navigation.requestActive()
-                    }
-                }
-            }
-
             IconView {
                 anchors.fill: parent
                 icon: model.decoration
