@@ -104,7 +104,7 @@ void MixerPanelContextMenuModel::load()
     }
 
     MenuItemList viewMenu {
-        makeMenu(qtrc("playback", "View"), viewMenuItems, true /*enabled*/, VIEW_MENU_ID)
+        makeMenu(qtrc("playback", "View"), viewMenuItems, VIEW_MENU_ID)
     };
 
     setItems(viewMenu);

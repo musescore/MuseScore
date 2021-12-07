@@ -94,7 +94,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
     }
 
     MenuItemList items {
-        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems, true /*enabled*/, ORDERING_MENU_ID)
+        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems, ORDERING_MENU_ID)
     };
 
     setItems(items);

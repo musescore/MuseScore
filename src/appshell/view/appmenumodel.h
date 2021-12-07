@@ -22,32 +22,48 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
+#include <memory>
+
 #include "ui/view/abstractmenumodel.h"
 
+#include "actions/actionable.h"
 #include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+#include "ui/iuiactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
 #include "project/irecentprojectsprovider.h"
+#include "internal/iappmenuactioncontroller.h"
 
 namespace mu::appshell {
 class AppMenuModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
+    INJECT(appshell, ui::IMainWindow, mainWindow)
+    INJECT(appshell, ui::IUiActionsRegister, uiActionsRegister)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
+    INJECT(appshell, IAppMenuActionController, controller)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
+signals:
+    void openMenu(const QString& menuId);
+
 private:
     void setupConnections();
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
+
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    ui::MenuItem makeAppMenu(const actions::ActionCode& actionCode, const ui::MenuItemList& items) const;
 
     using ui::AbstractMenuModel::makeMenuItem;
     ui::MenuItem makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;

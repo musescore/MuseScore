@@ -40,6 +40,16 @@ ListView {
 
     AppMenuModel {
         id: appMenuModel
+
+        onOpenMenu: {
+            for (var i = 0; i < root.count; ++i) {
+                var item = root.itemAtIndex(i)
+                if (Boolean(item) && item.menuId === menuId) {
+                    item.navigation.requestActive()
+                    item.navigation.triggered()
+                }
+            }
+        }
     }
 
     Component.onCompleted: {
@@ -63,6 +73,7 @@ ListView {
         id: radioButtonDelegate
 
         property var item: Boolean(modelData) ? modelData : null
+        property string menuId: Boolean(item) ? item.id : ""
 
         narrowMargins: true
         drawFocusBorderInsideRect: true

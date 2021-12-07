@@ -72,8 +72,31 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
     emit itemsChanged();
 }
 
+bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress && watched == mainWindow()->qWindow()) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Alt) {
+            setActive(!active());
+        }
+    }
+
+    return AbstractMenuModel::eventFilter(watched, event);
+}
+
+MenuItem AppMenuModel::makeAppMenu(const ActionCode& actionCode, const ui::MenuItemList& items) const
+{
+    UiAction menuAction = uiActionsRegister()->action(actionCode);
+
+    return makeMenu(menuAction.title, items, QString::fromStdString(menuAction.code));
+}
+
 void AppMenuModel::setupConnections()
 {
+    controller()->openMenuChannel().onReceive(this, [this](const std::string& menuId) {
+        emit openMenu(QString::fromStdString(menuId));
+    });
+
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
@@ -122,7 +145,7 @@ MenuItem AppMenuModel::fileItem() const
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
+        makeMenu(qtrc("appshell", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -142,7 +165,7 @@ MenuItem AppMenuModel::fileItem() const
         makeMenuItem("quit", MenuItemRole::QuitRole)
     };
 
-    return makeMenu(qtrc("appshell", "&File"), fileItems);
+    return makeAppMenu("menu-file", fileItems);
 }
 
 MenuItem AppMenuModel::editItem() const
@@ -166,7 +189,7 @@ MenuItem AppMenuModel::editItem() const
         makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
     };
 
-    return makeMenu(qtrc("appshell", "&Edit"), editItems);
+    return makeAppMenu("menu-edit", editItems);
 }
 
 MenuItem AppMenuModel::viewItem() const
@@ -187,8 +210,8 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("zoomin"),
         makeMenuItem("zoomout"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems()),
-        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "menu-select-workspace"),
+        makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems(), "menu-toolbars"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), "menu-select-workspace"),
         makeMenuItem("toggle-statusbar"),
         makeSeparator(),
         makeMenuItem("split-h"), // need implement
@@ -205,7 +228,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("dock-restore-default-layout")
     };
 
-    return makeMenu(qtrc("appshell", "&View"), viewItems);
+    return makeAppMenu("menu-view", viewItems);
 }
 
 MenuItem AppMenuModel::addItem() const
@@ -221,7 +244,7 @@ MenuItem AppMenuModel::addItem() const
         makeMenu(qtrc("appshell", "&Lines"), linesItems()),
     };
 
-    return makeMenu(qtrc("appshell", "&Add"), addItems);
+    return makeAppMenu("menu-add", addItems);
 }
 
 MenuItem AppMenuModel::formatItem() const
@@ -247,7 +270,7 @@ MenuItem AppMenuModel::formatItem() const
         makeMenuItem("save-style") // need implement
     };
 
-    return makeMenu(qtrc("appshell", "F&ormat"), formatItems);
+    return makeAppMenu("menu-format", formatItems);
 }
 
 MenuItem AppMenuModel::toolsItem() const
@@ -289,7 +312,7 @@ MenuItem AppMenuModel::toolsItem() const
         makeMenuItem("del-empty-measures"),
     };
 
-    return makeMenu(qtrc("appshell", "&Tools"), toolsItems);
+    return makeAppMenu("menu-tools", toolsItems);
 }
 
 MenuItem AppMenuModel::helpItem() const
@@ -313,7 +336,7 @@ MenuItem AppMenuModel::helpItem() const
               << makeSeparator()
               << makeMenuItem("revert-factory");
 
-    return makeMenu(qtrc("appshell", "&Help"), helpItems);
+    return makeAppMenu("menu-help", helpItems);
 }
 
 MenuItem AppMenuModel::diagnosticItem() const
@@ -344,7 +367,7 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenu(qtrc("appshell", "Autobot"), autobotItems),
     };
 
-    return makeMenu(qtrc("appshell", "Diagnostic"), items);
+    return makeAppMenu("menu-diagnostic", items);
 }
 
 MenuItemList AppMenuModel::recentScores() const
