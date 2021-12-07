@@ -21,6 +21,10 @@
  */
 #include "appmenumodel.h"
 
+#include <QApplication>
+#include <QWindow>
+#include <QKeyEvent>
+
 #include "translation.h"
 
 #include "log.h"
@@ -40,6 +44,7 @@ static QString makeId(const ActionCode& actionCode, int itemIndex)
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+    qApp->installEventFilter(this);
 }
 
 void AppMenuModel::load()
@@ -64,6 +69,21 @@ void AppMenuModel::load()
     setItems(items);
 
     setupConnections();
+}
+
+bool AppMenuModel::active() const
+{
+    return m_active;
+}
+
+void AppMenuModel::setActive(bool active)
+{
+    if (m_active == active) {
+        return;
+    }
+
+    m_active = active;
+    emit activeChanged(m_active);
 }
 
 void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
