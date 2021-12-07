@@ -44,6 +44,12 @@ void ShortcutsController::activate(const std::string& sequence)
     }
 
     for (const Shortcut& sc: shortcuts) {
+        //! NOTE Check if the shortcut itself is allowed
+        if (!uiContextResolver()->isShortcutContextAllowed(sc.context)) {
+            continue;
+        }
+
+        //! NOTE Check if the action is allowed
         ui::UiActionState st = aregister()->actionState(sc.action);
         if (!st.enabled) {
             continue;
