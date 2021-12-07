@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "iinteractive.h"
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -37,6 +38,7 @@ class TupletDialog : public QDialog, Ui::TupletDialog
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, framework::IInteractive, interactive)
 
     virtual void hideEvent(QHideEvent*);
 

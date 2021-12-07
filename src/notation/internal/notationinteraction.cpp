@@ -64,6 +64,7 @@
 #include "libmscore/image.h"
 #include "libmscore/mscore.h"
 #include "libmscore/linkedobjects.h"
+#include "libmscore/tuplet.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -3045,6 +3046,22 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
     notifyAboutNotationChanged();
 }
 
+bool NotationInteraction::canAddTupletToSelecredChordRests() const
+{
+    for (ChordRest* chordRest : score()->getSelectedChordRests()) {
+        if (chordRest->isGrace()) {
+            continue;
+        }
+
+        if (chordRest->durationType() < Ms::TDuration(Ms::TDuration::DurationType::V_512TH)
+            && chordRest->durationType() != Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& options)
 {
     if (selection()->isNone()) {
@@ -3057,6 +3074,7 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
             score()->addTuplet(chordRest, options.ratio, options.numberType, options.bracketType);
         }
     }
+
     apply();
 
     notifyAboutSelectionChanged();

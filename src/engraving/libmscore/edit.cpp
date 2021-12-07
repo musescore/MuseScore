@@ -265,6 +265,22 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 
     cmdCreateTuplet(destinationChordRest, tuplet);
 
+    const std::vector<Ms::DurationElement*>& elements = tuplet->elements();
+    Ms::DurationElement* elementForSelect = nullptr;
+    if (!elements.empty()) {
+        Ms::DurationElement* firstElement = elements.front();
+        if (firstElement->isRest()) {
+            elementForSelect = firstElement;
+        } else if (elements.size() > 1) {
+            elementForSelect = elements[1];
+        }
+    }
+
+    if (elementForSelect) {
+        score()->select(elementForSelect, SelectType::SINGLE, 0);
+        score()->inputState().setDuration(tuplet->baseLen());
+    }
+
     return tuplet;
 }
 

@@ -131,6 +131,12 @@ void TupletDialog::apply()
         return;
     }
 
+    if (!interaction->canAddTupletToSelecredChordRests()) {
+        interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"),
+                             { framework::IInteractive::Button::Ok });
+        return;
+    }
+
     TupletOptions options;
     options.ratio = Fraction(actualNotes->value(), normalNotes->value());
     options.numberType = numberType();
