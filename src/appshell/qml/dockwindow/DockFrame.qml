@@ -39,8 +39,6 @@ Item {
 
     anchors.fill: parent
 
-    clip: true
-
     onFrameCppChanged: {
         if (Boolean(frameCpp)) {
             frameCpp.setStackLayout(stackLayout)
