@@ -90,7 +90,7 @@ protected:
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
-    MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true, const QString& menuId = "") const;
+    MenuItem makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
 
     MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
     MenuItem makeSeparator() const;
