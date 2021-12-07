@@ -79,7 +79,7 @@ jobs:
         fi
 
         if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-        UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win${PR_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win${PR_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
@@ -186,7 +186,7 @@ jobs:
   #       echo "DO_PUBLISH: $DO_PUBLISH"
 
   #       if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-  #       UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win_x86${PR_INFO}")"
+  #       UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win_x86${PR_INFO}")"
   #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
   #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
@@ -264,7 +264,7 @@ jobs:
   #       echo "DO_PUBLISH: $DO_PUBLISH"    
 
   #       if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
-  #       UPLOAD_ARTIFACT_NAME="$(tr "\":<>|*?/\\" "_" <<<"MU4_${{ github.run_id }}_Win_Portable${PR_INFO}")"
+  #       UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Win_Portable${PR_INFO}")"
   #       echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
   #       echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
