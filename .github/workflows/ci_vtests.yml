@@ -13,6 +13,7 @@ jobs:
       do_run: ${{ steps.output_data.outputs.do_run }}
       head_ref: ${{ steps.output_data.outputs.head_ref }}
       base_ref: ${{ steps.output_data.outputs.base_ref }}
+      artifact_name: ${{ steps.output_data.outputs.artifact_name }}
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.9.1
@@ -22,6 +23,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Get base commit for PR
       if: github.event_name == 'pull_request'
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         HEAD_REF=${{ github.event.pull_request.head.sha }}
         BASE_REF=${{ github.event.pull_request.base.sha }}
@@ -29,6 +32,7 @@ jobs:
         echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
         echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+        echo "PR_INFO= ${{ github.event.pull_request.number }} ${pull_request_title}" >> $GITHUB_ENV
     - name: Get base commit for push commit
       if: github.event_name == 'push'
       run: |
@@ -37,12 +41,19 @@ jobs:
         if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
         echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
+        echo "PR_INFO=\"\"" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
       run: |
         echo "::set-output name=do_run::${{ env.DO_RUN }}"
+        echo "DO_RUN=${{ env.DO_RUN }}"
         echo "::set-output name=head_ref::${{ env.HEAD_REF }}"
+        echo "HEAD_REF=${{ env.HEAD_REF }}"
         echo "::set-output name=base_ref::${{ env.BASE_REF }}"
+        echo "BASE_REF=${{ env.BASE_REF }}"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ github.run_id }}${{ env.PR_INFO }}")"
+        echo "::set-output name=artifact_name::$UPLOAD_ARTIFACT_NAME"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
 
   generate_current_pngs:
     name: "Generate current PNGs"
@@ -123,7 +134,7 @@ jobs:
   compare_pngs:
     name: "Compare PNGs"
     runs-on: ubuntu-18.04
-    needs: [generate_current_pngs, generate_reference_pngs]
+    needs: [setup, generate_current_pngs, generate_reference_pngs]
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
@@ -146,7 +157,7 @@ jobs:
       if: env.VTEST_DIFF_FOUND == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: Comparison
+        name: ${{ needs.setup.outputs.artifact_name }}
         path: ./comparison
     - name: Skip failure signal if PR is labeled 'vtests'
       if: github.event_name == 'pull_request' && contains( env.VTEST_DIFF_FOUND, 'true') && contains(github.event.pull_request.labels.*.name, 'vtests')
