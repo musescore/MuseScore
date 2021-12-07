@@ -51,6 +51,8 @@ public:
 
     void onNotationViewFocuseChanged(bool focused) override;
 
+    bool isShortcutContextAllowed(const std::string& scContext) const override;
+
 private:
     void notifyAboutContextChanged();
 

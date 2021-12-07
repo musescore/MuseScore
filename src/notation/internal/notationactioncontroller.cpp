@@ -414,11 +414,9 @@ bool NotationActionController::canReceiveAction(const actions::ActionCode& code)
     auto iter = m_isEnabledMap.find(code);
     if (iter != m_isEnabledMap.end()) {
         bool enabled = (this->*iter->second)();
-        LOGI() << code << ", enabled: " << enabled;
         return enabled;
     }
 
-    LOGI() << code << ", 2 enabled: " << true;
     return true;
 }
 
@@ -1463,7 +1461,7 @@ void NotationActionController::registerNoteAction(const mu::actions::ActionCode&
 
 void NotationActionController::registerPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
 {
-    registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isStandardStaff);
+    registerAction(code, [this, padding]() { padNote(padding); });
 }
 
 void NotationActionController::registerTabPadNoteAction(const mu::actions::ActionCode& code, Pad padding)

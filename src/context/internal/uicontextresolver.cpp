@@ -148,3 +148,36 @@ void UiContextResolver::onNotationViewFocuseChanged(bool focused)
 
     notifyAboutContextChanged();
 }
+
+bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) const
+{
+    //! NOTE If (when) there are many different contexts here,
+    //! then the implementation of this method will need to be changed
+    //! so that it does not become spaghetti-code.
+    //! It would be nice if this context as part of the UI context,
+    //! for this we should complicate the implementation of the UI context,
+    //! probably make a tree, for example:
+    //! NotationOpened
+    //!     NotationFocused
+    //!         NotationStaffTab
+
+    static const std::string CTX_NOTATION_STAFF_STANDART("notation-staff-standart");
+    static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
+
+    if (CTX_NOTATION_STAFF_STANDART == scContext) {
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+
+        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::STANDARD;
+    } else if (CTX_NOTATION_STAFF_TAB == scContext) {
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
+    }
+
+    return true;
+}

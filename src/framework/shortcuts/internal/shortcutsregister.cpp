@@ -38,6 +38,7 @@ constexpr std::string_view SHORTCUT_TAG("SC");
 constexpr std::string_view ACTION_CODE_TAG("key");
 constexpr std::string_view STANDARD_KEY_TAG("std");
 constexpr std::string_view SEQUENCE_TAG("seq");
+constexpr std::string_view CONTEXT_TAG("ctx");
 
 static const Shortcut& findShortcut(const ShortcutList& shortcuts, const std::string& actionCode)
 {
@@ -201,9 +202,15 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
             shortcut.sequence += reader.readString() + "\n";
+        } else if (tag == CONTEXT_TAG) {
+            shortcut.context = reader.readString();
         } else {
             reader.skipCurrentElement();
         }
+    }
+
+    if (shortcut.context.empty()) {
+        shortcut.context = "any";
     }
 
     return shortcut;
