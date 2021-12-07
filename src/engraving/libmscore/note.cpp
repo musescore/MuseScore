@@ -392,7 +392,7 @@ static NoteHeadName noteHeadTypeNames[] = {
 //   scheme2userName
 //---------------------------------------------------------
 
-QString NoteHead::scheme2userName(NoteHead::Scheme scheme)
+QString NoteHead::scheme2userName(NoteHeadScheme scheme)
 {
     return qtrc("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
 }
@@ -416,35 +416,12 @@ QString NoteHead::type2userName(NoteHeadType type)
 }
 
 //---------------------------------------------------------
-//   scheme2name
-//---------------------------------------------------------
-
-QString NoteHead::scheme2name(NoteHead::Scheme scheme)
-{
-    return noteHeadSchemeNames[int(scheme) + 1].name;
-}
-
-//---------------------------------------------------------
 //   group2name
 //---------------------------------------------------------
 
 QString NoteHead::group2name(NoteHead::Group group)
 {
     return noteHeadGroupNames[int(group)].name;
-}
-
-//---------------------------------------------------------
-//   name2scheme
-//---------------------------------------------------------
-
-NoteHead::Scheme NoteHead::name2scheme(const QString& s)
-{
-    for (int i = 0; i <= int(NoteHead::Scheme::HEAD_SCHEMES); ++i) {
-        if (noteHeadSchemeNames[i].name == s) {
-            return NoteHead::Scheme(i - 1);
-        }
-    }
-    return NoteHead::Scheme::HEAD_NORMAL;
 }
 
 //---------------------------------------------------------
@@ -470,18 +447,18 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t)
     return noteHeads[direction][int(group)][int(t)];
 }
 
-SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int tpc, Key key, NoteHead::Scheme scheme)
+SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int tpc, Key key, NoteHeadScheme scheme)
 {
     // shortcut
-    if (scheme == NoteHead::Scheme::HEAD_NORMAL) {
+    if (scheme == NoteHeadScheme::HEAD_NORMAL) {
         return noteHeads[direction][int(group)][int(t)];
     }
     // other schemes
-    if (scheme == NoteHead::Scheme::HEAD_PITCHNAME || scheme == NoteHead::Scheme::HEAD_PITCHNAME_GERMAN) {
+    if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
         if (tpc == Tpc::TPC_A) {
             group = NoteHead::Group::HEAD_A;
         } else if (tpc == Tpc::TPC_B) {
-            if (scheme == NoteHead::Scheme::HEAD_PITCHNAME_GERMAN) {
+            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
                 group = NoteHead::Group::HEAD_H;
             } else {
                 group = NoteHead::Group::HEAD_B;
@@ -499,7 +476,7 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
         } else if (tpc == Tpc::TPC_A_S) {
             group = NoteHead::Group::HEAD_A_SHARP;
         } else if (tpc == Tpc::TPC_B_S) {
-            if (scheme == NoteHead::Scheme::HEAD_PITCHNAME_GERMAN) {
+            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
                 group = NoteHead::Group::HEAD_H_SHARP;
             } else {
                 group = NoteHead::Group::HEAD_B_SHARP;
@@ -517,7 +494,7 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
         } else if (tpc == Tpc::TPC_A_B) {
             group = NoteHead::Group::HEAD_A_FLAT;
         } else if (tpc == Tpc::TPC_B_B) {
-            if (scheme == NoteHead::Scheme::HEAD_PITCHNAME_GERMAN) {
+            if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
                 group = NoteHead::Group::HEAD_B;
             } else {
                 group = NoteHead::Group::HEAD_B_FLAT;
@@ -533,7 +510,7 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
         } else if (tpc == Tpc::TPC_G_B) {
             group = NoteHead::Group::HEAD_G_FLAT;
         }
-    } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_4) {
+    } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
         int degree = tpc2degree(tpc, key);
         switch (degree) {
         case 0:
@@ -552,26 +529,26 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
             group = NoteHead::Group::HEAD_MI;
             break;
         }
-    } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN
-               || scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK
-               || scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER) {
+    } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN
+               || scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK
+               || scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
         int degree = tpc2degree(tpc, key);
         switch (degree) {
         case 0:
-            if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN) {
+            if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
                 group = NoteHead::Group::HEAD_DO;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
                 group = NoteHead::Group::HEAD_DO_FUNK;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
                 group = NoteHead::Group::HEAD_DO_WALKER;
             }
             break;
         case 1:
-            if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN) {
+            if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
                 group = NoteHead::Group::HEAD_RE;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
                 group = NoteHead::Group::HEAD_RE_FUNK;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
                 group = NoteHead::Group::HEAD_RE_WALKER;
             }
             break;
@@ -588,16 +565,16 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
             group = NoteHead::Group::HEAD_LA;
             break;
         case 6:
-            if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN) {
+            if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
                 group = NoteHead::Group::HEAD_TI;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
                 group = NoteHead::Group::HEAD_TI_FUNK;
-            } else if (scheme == NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER) {
+            } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
                 group = NoteHead::Group::HEAD_TI_WALKER;
             }
             break;
         }
-    } else if (scheme == NoteHead::Scheme::HEAD_SOLFEGE) {
+    } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE) {
         int degree = tpc2degree(tpc, key);
         switch (degree) {
         case 0:
@@ -622,7 +599,7 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
             group = NoteHead::Group::HEAD_TI_NAME;
             break;
         }
-    } else if (scheme == NoteHead::Scheme::HEAD_SOLFEGE_FIXED) {
+    } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
         QString stepName = tpc2stepName(tpc);
         if (stepName == "C") {
             group = NoteHead::Group::HEAD_DO_NAME;
@@ -1007,18 +984,18 @@ SymId Note::noteHead() const
     }
 
     Key key = Key::C;
-    NoteHead::Scheme scheme = _headScheme;
+    NoteHeadScheme scheme = _headScheme;
     if (st) {
         Fraction tick = chord()->tick();
         if (tick >= Fraction(0, 1)) {
             key    = st->key(tick);
-            if (scheme == NoteHead::Scheme::HEAD_AUTO) {
+            if (scheme == NoteHeadScheme::HEAD_AUTO) {
                 scheme = st->staffTypeForElement(chord())->noteHeadScheme();
             }
         }
     }
-    if (scheme == NoteHead::Scheme::HEAD_AUTO) {
-        scheme = NoteHead::Scheme::HEAD_NORMAL;
+    if (scheme == NoteHeadScheme::HEAD_AUTO) {
+        scheme = NoteHeadScheme::HEAD_NORMAL;
     }
     SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
     if (t == SymId::noSym) {
@@ -1381,12 +1358,12 @@ bool Note::isNoteName() const
 {
     if (chord() && chord()->staff()) {
         const Staff* st = staff();
-        NoteHead::Scheme s = _headScheme;
-        if (s == NoteHead::Scheme::HEAD_AUTO) {
+        NoteHeadScheme s = _headScheme;
+        if (s == NoteHeadScheme::HEAD_AUTO) {
             s = st->staffTypeForElement(this)->noteHeadScheme();
         }
-        return s == NoteHead::Scheme::HEAD_PITCHNAME || s == NoteHead::Scheme::HEAD_PITCHNAME_GERMAN
-               || s == NoteHead::Scheme::HEAD_SOLFEGE || s == NoteHead::Scheme::HEAD_SOLFEGE_FIXED;
+        return s == NoteHeadScheme::HEAD_PITCHNAME || s == NoteHeadScheme::HEAD_PITCHNAME_GERMAN
+               || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
     }
     return false;
 }
@@ -2607,10 +2584,10 @@ void Note::setString(int val)
 //   setHeadScheme
 //---------------------------------------------------------
 
-void Note::setHeadScheme(NoteHead::Scheme val)
+void Note::setHeadScheme(NoteHeadScheme val)
 {
-    IF_ASSERT_FAILED(int(val) >= -1 && int(val) < int(NoteHead::Scheme::HEAD_SCHEMES)) {
-        val = NoteHead::Scheme::HEAD_AUTO;
+    IF_ASSERT_FAILED(int(val) >= -1 && int(val) < int(NoteHeadScheme::HEAD_SCHEMES)) {
+        val = NoteHeadScheme::HEAD_AUTO;
     }
     _headScheme = val;
 }
@@ -3101,7 +3078,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         triggerLayout();
         return true;
     case Pid::HEAD_SCHEME:
-        setHeadScheme(NoteHead::Scheme(v.toInt()));
+        setHeadScheme(v.value<NoteHeadScheme>());
         break;
     case Pid::HEAD_GROUP:
         setHeadGroup(NoteHead::Group(v.toInt()));
@@ -3172,7 +3149,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::DOT_POSITION:
         return DirectionV::AUTO;
     case Pid::HEAD_SCHEME:
-        return int(NoteHead::Scheme::HEAD_AUTO);
+        return NoteHeadScheme::HEAD_AUTO;
     case Pid::HEAD_GROUP:
         return int(NoteHead::Group::HEAD_NORMAL);
     case Pid::VELO_OFFSET:

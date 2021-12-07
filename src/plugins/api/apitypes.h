@@ -116,6 +116,21 @@ enum class NoteHeadType {
 };
 Q_ENUM_NS(NoteHeadType);
 
+enum class NoteHeadScheme {
+    HEAD_AUTO = int(mu::engraving::NoteHeadScheme::HEAD_AUTO),
+    HEAD_NORMAL = int(mu::engraving::NoteHeadScheme::HEAD_NORMAL),
+    HEAD_PITCHNAME = int(mu::engraving::NoteHeadScheme::HEAD_PITCHNAME),
+    HEAD_PITCHNAME_GERMAN = int(mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN),
+    HEAD_SOLFEGE = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE),
+    HEAD_SOLFEGE_FIXED = int(mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED),
+    HEAD_SHAPE_NOTE_4 = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4),
+    HEAD_SHAPE_NOTE_7_AIKIN = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN),
+    HEAD_SHAPE_NOTE_7_FUNK = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK),
+    HEAD_SHAPE_NOTE_7_WALKER = int(mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER),
+    HEAD_SCHEMES = int(mu::engraving::NoteHeadScheme::HEAD_SCHEMES),
+};
+Q_ENUM_NS(NoteHeadScheme);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -133,5 +148,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::VeloType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
 Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadType);
+Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadScheme);
 
 #endif // MU_PLUGINS_APITYPES_H

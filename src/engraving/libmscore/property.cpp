@@ -289,7 +289,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_INVISIBLE,         false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "invisible") },
     { Pid::STAFF_COLOR,             false, "color",                 P_TYPE::COLOR,          DUMMY_QT_TR_NOOP("propertyName", "color") },
 
-    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::HEAD_SCHEME,    DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
+    { Pid::HEAD_SCHEME,             false, "headScheme",            P_TYPE::NOTEHEAD_SCHEME,    DUMMY_QT_TR_NOOP("propertyName", "notehead scheme") },
     { Pid::STAFF_GEN_CLEF,          false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "generating clefs") },
     { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "generating time signature") },
     { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "generating key signature") },
@@ -468,8 +468,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         return PropertyValue();
     case P_TYPE::SYMID:
         return PropertyValue::fromValue(SymNames::symIdByName(value));
-    case P_TYPE::HEAD_SCHEME:
-        return PropertyValue::fromValue(int(NoteHead::name2scheme(value)));
     case P_TYPE::HEAD_GROUP:
         return PropertyValue::fromValue(int(NoteHead::name2group(value)));
     case P_TYPE::TDURATION:
@@ -549,8 +547,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
     case P_TYPE::NOTEHEAD_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
+    case P_TYPE::NOTEHEAD_SCHEME:
+        return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::SYMID:
-    case P_TYPE::HEAD_SCHEME:
     case P_TYPE::HEAD_GROUP:
 
     case P_TYPE::SUB_STYLE:
@@ -631,8 +630,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         }
     case P_TYPE::SYMID:
         return SymNames::nameForSymId(SymId(value.toInt()));
-    case P_TYPE::HEAD_SCHEME:
-        return NoteHead::scheme2name(NoteHead::Scheme(value.toInt()));
     case P_TYPE::HEAD_GROUP:
         return NoteHead::group2name(NoteHead::Group(value.toInt()));
     case P_TYPE::SUB_STYLE:

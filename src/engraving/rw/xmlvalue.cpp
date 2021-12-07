@@ -435,3 +435,50 @@ NoteHeadType XmlValue::fromXml(const QString& str, NoteHeadType def)
     }
     return def;
 }
+
+static const std::vector<std::pair<NoteHeadScheme, QString> > noteHeadSchemes = {
+    { NoteHeadScheme::HEAD_AUTO, "auto" },
+    { NoteHeadScheme::HEAD_NORMAL, "normal" },
+    { NoteHeadScheme::HEAD_PITCHNAME, "name-pitch" },
+    { NoteHeadScheme::HEAD_PITCHNAME_GERMAN, "name-pitch-german" },
+    { NoteHeadScheme::HEAD_SOLFEGE, "solfege-movable" },
+    { NoteHeadScheme::HEAD_SOLFEGE_FIXED, "solfege-fixed" },
+    { NoteHeadScheme::HEAD_SHAPE_NOTE_4, "shape-4" },
+    { NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN, "shape-7-aikin" },
+    { NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK, "shape-7-funk" },
+    { NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER, "shape-7-walker" },
+};
+
+template<typename T>
+QString findString(const std::vector<std::pair<T, QString> >& cont, const T& v)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const std::pair<T, QString>& p) {
+        return p.first == v;
+    });
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        return QString();
+    }
+    return it->second;
+}
+
+template<typename T>
+T findValue(const std::vector<std::pair<T, QString> >& cont, const QString& str, const T& def)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [str](const std::pair<T, QString>& p) {
+        return p.second == str;
+    });
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        return def;
+    }
+    return it->first;
+}
+
+QString XmlValue::toXml(NoteHeadScheme v)
+{
+    return findString<NoteHeadScheme>(noteHeadSchemes, v);
+}
+
+NoteHeadScheme XmlValue::fromXml(const QString& str, NoteHeadScheme def)
+{
+    return findValue<NoteHeadScheme>(noteHeadSchemes, str, def);
+}

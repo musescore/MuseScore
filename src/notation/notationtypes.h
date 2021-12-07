@@ -435,7 +435,7 @@ struct StaffConfig
     bool hideSystemBarline = false;
     bool mergeMatchingRests = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
-    NoteHead::Scheme noteheadScheme = NoteHead::Scheme::HEAD_AUTO;
+    engraving::NoteHeadScheme noteheadScheme = engraving::NoteHeadScheme::HEAD_AUTO;
     ClefTypeList clefTypeList;
 };
 
