@@ -103,5 +103,6 @@
         <file>qml/platform/win/AppTitleBar.qml</file>
         <file>qml/AppMenuBar.qml</file>
         <file>qml/DevTools/MPE/ArticulationsProfileEditorView.qml</file>
+        <file>qml/Preferences/internal/MiscellaneousSection.qml</file>
     </qresource>
 </RCC>

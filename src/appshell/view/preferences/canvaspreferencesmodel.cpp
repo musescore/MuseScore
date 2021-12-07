@@ -75,6 +75,11 @@ bool CanvasPreferencesModel::limitScrollArea() const
     return notationConfiguration()->isLimitCanvasScrollArea();
 }
 
+int CanvasPreferencesModel::selectionProximity() const
+{
+    return notationConfiguration()->selectionProximity();
+}
+
 void CanvasPreferencesModel::setDefaultZoomType(int zoomType)
 {
     ZoomType type = static_cast<ZoomType>(zoomType);
@@ -123,6 +128,16 @@ void CanvasPreferencesModel::setLimitScrollArea(bool limit)
 
     notationConfiguration()->setIsLimitCanvasScrollArea(limit);
     emit limitScrollAreaChanged();
+}
+
+void CanvasPreferencesModel::setSelectionProximity(int proximity)
+{
+    if (selectionProximity() == proximity) {
+        return;
+    }
+
+    notationConfiguration()->setSelectionProximity(proximity);
+    emit selectionProximityChanged(proximity);
 }
 
 void CanvasPreferencesModel::setupConnections()

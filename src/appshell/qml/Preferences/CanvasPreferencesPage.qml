@@ -81,5 +81,18 @@ PreferencesPage {
                 preferencesModel.limitScrollArea = limit
             }
         }
+
+        SeparatorLine { }
+
+        MiscellaneousSection {
+            selectionProximity: preferencesModel.selectionProximity
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onSelectionProximityChangeRequested: {
+                preferencesModel.selectionProximity = proximity
+            }
+        }
     }
 }
