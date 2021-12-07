@@ -69,22 +69,6 @@ class NoteHead final : public Symbol
 {
     Q_GADGET
 public:
-    // keep in sync with noteHeadSchemeNames array in note.cpp
-    enum class Scheme : signed char {
-        ///.\{
-        HEAD_AUTO = -1,
-        HEAD_NORMAL,
-        HEAD_PITCHNAME,
-        HEAD_PITCHNAME_GERMAN,
-        HEAD_SOLFEGE,
-        HEAD_SOLFEGE_FIXED,
-        HEAD_SHAPE_NOTE_4,
-        HEAD_SHAPE_NOTE_7_AIKIN,
-        HEAD_SHAPE_NOTE_7_FUNK,
-        HEAD_SHAPE_NOTE_7_WALKER,
-        HEAD_SCHEMES
-        ///\}
-    };
     // keep in sync with noteHeadGroupNames array in note.cpp
     enum class Group : signed char {
         ///.\{
@@ -160,7 +144,6 @@ public:
                        ///\}
     };
 
-    Q_ENUM(Scheme);
     Q_ENUM(Group);
 
     NoteHead(Note* parent = 0);
@@ -169,12 +152,10 @@ public:
 
     Group headGroup() const;
 
-    static QString scheme2userName(Scheme scheme);
+    static QString scheme2userName(NoteHeadScheme scheme);
     static QString group2userName(Group group);
     static QString type2userName(NoteHeadType type);
-    static QString scheme2name(Scheme scheme);
     static QString group2name(Group group);
-    static Scheme name2scheme(const QString& s);
     static Group name2group(const QString& s);
 };
 
@@ -255,7 +236,7 @@ private:
     DirectionH _userMirror { DirectionH::AUTO };        ///< user override of mirror
     DirectionV _userDotPosition { DirectionV::AUTO };                 ///< user override of dot position
 
-    NoteHead::Scheme _headScheme { NoteHead::Scheme::HEAD_AUTO };
+    NoteHeadScheme _headScheme { NoteHeadScheme::HEAD_AUTO };
     NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
     NoteHeadType _headType  { NoteHeadType::HEAD_AUTO };
 
@@ -356,11 +337,11 @@ public:
     qreal headBodyWidth() const;
     qreal outsideTieAttachX(bool up) const;
 
-    NoteHead::Scheme headScheme() const { return _headScheme; }
+    NoteHeadScheme headScheme() const { return _headScheme; }
     void updateHeadGroup(const NoteHead::Group headGroup);
     NoteHead::Group headGroup() const { return _headGroup; }
     NoteHeadType headType() const { return _headType; }
-    void setHeadScheme(NoteHead::Scheme val);
+    void setHeadScheme(NoteHeadScheme val);
     void setHeadGroup(NoteHead::Group val);
     void setHeadType(NoteHeadType t);
 
@@ -526,7 +507,7 @@ public:
 
     void addParentheses();
 
-    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType, int tpc, Key key, NoteHead::Scheme scheme);
+    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHead::Group, NoteHeadType);
     NoteVal noteVal() const;
 

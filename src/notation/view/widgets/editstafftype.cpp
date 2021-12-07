@@ -50,16 +50,16 @@ const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
 //   noteHeadSchemes
 //---------------------------------------------------------
 
-Ms::NoteHead::Scheme noteHeadSchemes[] = {
-    Ms::NoteHead::Scheme::HEAD_NORMAL,
-    Ms::NoteHead::Scheme::HEAD_PITCHNAME,
-    Ms::NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
-    Ms::NoteHead::Scheme::HEAD_SOLFEGE,
-    Ms::NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER
+Ms::NoteHeadScheme noteHeadSchemes[] = {
+    Ms::NoteHeadScheme::HEAD_NORMAL,
+    Ms::NoteHeadScheme::HEAD_PITCHNAME,
+    Ms::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+    Ms::NoteHeadScheme::HEAD_SOLFEGE,
+    Ms::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER
 };
 
 //---------------------------------------------------------
@@ -86,7 +86,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(Ms::NoteHead::scheme2userName(i), Ms::NoteHead::scheme2name(i));
+        noteHeadScheme->addItem(Ms::NoteHead::scheme2userName(i), static_cast<int>(i));
     }
 
     // load a sample standard score in preview
@@ -457,7 +457,7 @@ void EditStaffType::setFromDlg()
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
-        staffType.setNoteHeadScheme(Ms::NoteHead::name2scheme(noteHeadScheme->currentData().toString()));
+        staffType.setNoteHeadScheme(static_cast<NoteHeadScheme>(noteHeadScheme->currentData().toInt()));
     }
     if (staffType.group() == Ms::StaffGroup::PERCUSSION) {
         staffType.setGenKeysig(genKeysigPercussion->isChecked());
