@@ -1216,7 +1216,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
                      1.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
                      QT_TRANSLATE_NOOP("palette", "Dotted eighth note = quarter note metric modulation"),
-                     2.0 / 3.0, true, false, true, false, false),
+                     4.0 / 3.0, true, false, true, false, false),
     };
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
