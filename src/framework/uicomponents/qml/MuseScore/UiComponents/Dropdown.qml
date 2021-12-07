@@ -43,7 +43,7 @@ Item {
     property string displayText : root.currentText
 
     property int popupWidth: root.width
-    property int popupItemsCount: root.defaultPopupItemsCount()
+    property int popupItemsCount: 18
 
     property alias dropIcon: dropIconItem
     property alias label: mainItem.label
@@ -109,14 +109,6 @@ Item {
         }
 
         return -1
-    }
-
-    function defaultPopupItemsCount() {
-        if (root.count > 20) {
-            return 16
-        }
-
-        return 6
     }
 
     function positionViewAtFirstChar(text) {
@@ -279,7 +271,10 @@ Item {
 
                     model: root.model
 
-                    ScrollBar.vertical: StyledScrollBar { thickness: 6 }
+                    ScrollBar.vertical: StyledScrollBar {
+                        thickness: 6
+                        policy: ScrollBar.AlwaysOn
+                    }
 
                     delegate: DropdownItem {
 
