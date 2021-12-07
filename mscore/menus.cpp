@@ -1557,7 +1557,7 @@ PalettePanel* MuseScore::newTempoPalettePanel(bool defaultPalettePanel)
             TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",    QT_TRANSLATE_NOOP("Palette", "Quarter note = half note metric modulation"),    2.0/1.0, true, false, true, false, false),
             TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",         QT_TRANSLATE_NOOP("Palette", "Eighth note = eighth note metric modulation"),   1.0/1.0, true, false, true, false, false),
             TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>", QT_TRANSLATE_NOOP("Palette", "Quarter note = quarter note metric modulation"), 1.0/1.0, true, false, true, false, false),
-            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",     QT_TRANSLATE_NOOP("Palette", "Dotted eighth note = quarter note metric modulation"),  2.0/3.0, true, false, true, false, false),
+            TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",     QT_TRANSLATE_NOOP("Palette", "Dotted eighth note = quarter note metric modulation"),  4.0/3.0, true, false, true, false, false),
             };
       for (TempoPattern tp : tps) {
             TempoText* tt = new TempoText(gscore);
