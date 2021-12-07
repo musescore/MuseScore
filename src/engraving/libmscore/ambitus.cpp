@@ -41,7 +41,7 @@ using namespace mu::engraving;
 
 namespace Ms {
 static const NoteHead::Group NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
-static const NoteHead::Type NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
+static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
 static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
 static const Spatium LINEWIDTH_DEFAULT(0.12);
@@ -565,9 +565,9 @@ void Ambitus::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 SymId Ambitus::noteHead() const
 {
     int hg = 1;
-    NoteHead::Type ht  = NoteHead::Type::HEAD_QUARTER;
+    NoteHeadType ht  = NoteHeadType::HEAD_QUARTER;
 
-    if (_noteHeadType != NoteHead::Type::HEAD_AUTO) {
+    if (_noteHeadType != NoteHeadType::HEAD_AUTO) {
         ht = _noteHeadType;
     }
 
@@ -754,10 +754,10 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
         setNoteHeadGroup(NoteHead::Group(v.toInt()));
         break;
     case Pid::HEAD_TYPE:
-        setNoteHeadType(NoteHead::Type(v.toInt()));
+        setNoteHeadType(v.value<NoteHeadType>());
         break;
     case Pid::MIRROR_HEAD:
-        setDirection(DirectionH(v.toInt()));
+        setDirection(v.value<DirectionH>());
         break;
     case Pid::GHOST:                         // recycled property = _hasLine
         setHasLine(v.toBool());

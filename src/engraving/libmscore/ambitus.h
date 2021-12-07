@@ -39,7 +39,7 @@ namespace Ms {
 class Ambitus final : public EngravingItem
 {
     NoteHead::Group _noteHeadGroup;
-    NoteHead::Type _noteHeadType;
+    NoteHeadType _noteHeadType;
     DirectionH _dir;
     bool _hasLine;
     Spatium _lineWidth;
@@ -75,7 +75,7 @@ public:
 
     // getters and setters
     NoteHead::Group noteHeadGroup() const { return _noteHeadGroup; }
-    NoteHead::Type noteHeadType() const { return _noteHeadType; }
+    NoteHeadType noteHeadType() const { return _noteHeadType; }
     DirectionH direction() const { return _dir; }
     bool hasLine() const { return _hasLine; }
     Spatium lineWidth() const { return _lineWidth; }
@@ -87,7 +87,7 @@ public:
     int bottomTpc() const { return _bottomTpc; }
 
     void setNoteHeadGroup(NoteHead::Group val) { _noteHeadGroup = val; }
-    void setNoteHeadType(NoteHead::Type val) { _noteHeadType  = val; }
+    void setNoteHeadType(NoteHeadType val) { _noteHeadType  = val; }
     void setDirection(DirectionH val) { _dir = val; }
     void setHasLine(bool val) { _hasLine = val; }
     void setLineWidth(Spatium val) { _lineWidth = val; }

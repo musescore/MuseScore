@@ -128,8 +128,8 @@ TEST_F(NoteTests, note)
     }
 
     // headType
-    for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
-        note->setHeadType(NoteHead::Type(i));
+    for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
+        note->setHeadType(NoteHeadType(i));
         n = static_cast<Note*>(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headType()), i);
         delete n;
@@ -250,7 +250,7 @@ TEST_F(NoteTests, note)
     }
 
     // headType
-    for (int i = 0; i < int(NoteHead::Type::HEAD_TYPES); ++i) {
+    for (int i = 0; i < int(NoteHeadType::HEAD_TYPES); ++i) {
         note->setProperty(Pid::HEAD_TYPE, i);
         n = static_cast<Note*>(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headType()), i);

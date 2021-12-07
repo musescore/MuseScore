@@ -164,7 +164,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::NoteHead::Type enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
-    DECLARE_API_ENUM(NoteHeadType,     noteHeadTypeEnum,       Ms::NoteHead::Type)
+    DECLARE_API_ENUM(NoteHeadType,     noteHeadTypeEnum,       Ms::PluginAPI::NoteHeadType)
     /// Contains Ms::NoteHead::Scheme enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(NoteHeadScheme,   noteHeadSchemeEnum,     Ms::NoteHead::Scheme)

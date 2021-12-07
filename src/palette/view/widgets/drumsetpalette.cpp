@@ -133,9 +133,9 @@ void DrumsetPalette::updateDrumset()
         note->setHeadGroup(noteHead);
         SymId noteheadSym = SymId::noteheadBlack;
         if (noteHead == NoteHead::Group::HEAD_CUSTOM) {
-            noteheadSym = m_drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+            noteheadSym = m_drumset->noteHeads(pitch, NoteHeadType::HEAD_QUARTER);
         } else {
-            noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
+            noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);
         }
 
         note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout

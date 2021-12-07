@@ -352,3 +352,86 @@ GlissandoStyle XmlValue::fromXml(const QString& str, GlissandoStyle def)
     }
     return def;
 }
+
+QString XmlValue::toXml(BarLineType v)
+{
+    switch (v) {
+    case BarLineType::NORMAL: return "normal";
+    case BarLineType::DOUBLE: return "double";
+    case BarLineType::START_REPEAT: return "start-repeat";
+    case BarLineType::END_REPEAT: return "end-repeat";
+    case BarLineType::BROKEN: return "dashed";
+    case BarLineType::END: return "end";
+    case BarLineType::END_START_REPEAT: return "end-start-repeat";
+    case BarLineType::DOTTED: return "dotted";
+    case BarLineType::REVERSE_END: return "reverse-end";
+    case BarLineType::HEAVY: return "heavy";
+    case BarLineType::DOUBLE_HEAVY: return "double-heavy";
+    }
+    return QString();
+}
+
+BarLineType XmlValue::fromXml(const QString& str, BarLineType def)
+{
+    if (str == "normal") {
+        return BarLineType::NORMAL;
+    } else if (str == "double") {
+        return BarLineType::DOUBLE;
+    } else if (str == "start-repeat") {
+        return BarLineType::START_REPEAT;
+    } else if (str == "end-repeat") {
+        return BarLineType::END_REPEAT;
+    } else if (str == "dashed") {
+        return BarLineType::BROKEN;
+    } else if (str == "end") {
+        return BarLineType::END;
+    } else if (str == "end-start-repeat") {
+        return BarLineType::END_START_REPEAT;
+    } else if (str == "dotted") {
+        return BarLineType::DOTTED;
+    } else if (str == "reverse-end") {
+        return BarLineType::REVERSE_END;
+    } else if (str == "heavy") {
+        return BarLineType::HEAVY;
+    } else if (str == "double-heavy") {
+        return BarLineType::DOUBLE_HEAVY;
+    } else {
+        bool ok = false;
+        int v = str.toInt(&ok);
+        if (ok) {
+            return static_cast<BarLineType>(v);
+        }
+    }
+    return def;
+}
+
+QString XmlValue::toXml(NoteHeadType v)
+{
+    switch (v) {
+    case NoteHeadType::HEAD_AUTO: return "auto";
+    case NoteHeadType::HEAD_WHOLE: return "whole";
+    case NoteHeadType::HEAD_HALF: return "half";
+    case NoteHeadType::HEAD_QUARTER: return "quarter";
+    case NoteHeadType::HEAD_BREVIS: return "breve";
+    case NoteHeadType::HEAD_TYPES: {
+        UNREACHABLE;
+    } break;
+    }
+    return QString();
+}
+
+NoteHeadType XmlValue::fromXml(const QString& str, NoteHeadType def)
+{
+    if (str == "auto") {
+        return NoteHeadType::HEAD_AUTO;
+    } else if (str == "whole") {
+        return NoteHeadType::HEAD_WHOLE;
+    } else if (str == "half") {
+        return NoteHeadType::HEAD_HALF;
+    } else if (str == "quarter") {
+        return NoteHeadType::HEAD_QUARTER;
+    } else if (str == "breve") {
+        return NoteHeadType::HEAD_BREVIS;
+    }
+    return def;
+}

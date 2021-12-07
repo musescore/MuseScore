@@ -58,7 +58,6 @@ static const int BARLINE_SPAN_SHORT2_TO         = -1;
 struct BarLineTableItem {
     BarLineType type;
     const char* userName;         // user name, translatable
-    const char* name;
 };
 
 //---------------------------------------------------------
@@ -141,12 +140,8 @@ public:
     static QString userTypeName(BarLineType);
     static const BarLineTableItem* barLineTableItem(unsigned);
 
-    QString barLineTypeName() const;
-    static QString barLineTypeName(BarLineType t);
-    void setBarLineType(const QString& s);
     void setBarLineType(BarLineType i) { _barLineType = i; }
     BarLineType barLineType() const { return _barLineType; }
-    static BarLineType barLineType(const QString&);
 
     int subtype() const override { return int(_barLineType); }
 

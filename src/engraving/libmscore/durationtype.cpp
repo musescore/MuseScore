@@ -188,9 +188,9 @@ QString TDuration::name() const
 //   headType
 //---------------------------------------------------------
 
-NoteHead::Type TDuration::headType() const
+NoteHeadType TDuration::headType() const
 {
-    NoteHead::Type headType = NoteHead::Type::HEAD_WHOLE;
+    NoteHeadType headType = NoteHeadType::HEAD_WHOLE;
     switch (_val) {
     case DurationType::V_1024TH:
     case DurationType::V_512TH:
@@ -201,25 +201,25 @@ NoteHead::Type TDuration::headType() const
     case DurationType::V_16TH:
     case DurationType::V_EIGHTH:
     case DurationType::V_QUARTER:
-        headType = NoteHead::Type::HEAD_QUARTER;
+        headType = NoteHeadType::HEAD_QUARTER;
         break;
     case DurationType::V_HALF:
-        headType = NoteHead::Type::HEAD_HALF;
+        headType = NoteHeadType::HEAD_HALF;
         break;
     case DurationType::V_MEASURE:
     case DurationType::V_WHOLE:
-        headType = NoteHead::Type::HEAD_WHOLE;
+        headType = NoteHeadType::HEAD_WHOLE;
         break;
     case DurationType::V_BREVE:
-        headType = NoteHead::Type::HEAD_BREVIS;
+        headType = NoteHeadType::HEAD_BREVIS;
         break;
     case DurationType::V_LONG:
-        headType = NoteHead::Type::HEAD_BREVIS;
+        headType = NoteHeadType::HEAD_BREVIS;
         break;
     default:
     case DurationType::V_INVALID:
     case DurationType::V_ZERO:
-        headType = NoteHead::Type::HEAD_QUARTER;
+        headType = NoteHeadType::HEAD_QUARTER;
         break;
     }
     return headType;

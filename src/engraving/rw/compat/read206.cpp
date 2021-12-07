@@ -537,24 +537,24 @@ NoteHead::Group Read206::convertHeadGroup(int i)
     return val;
 }
 
-static NoteHead::Type convertHeadType(int i)
+static NoteHeadType convertHeadType(int i)
 {
-    NoteHead::Type val;
+    NoteHeadType val;
     switch (i) {
     case 0:
-        val = NoteHead::Type::HEAD_WHOLE;
+        val = NoteHeadType::HEAD_WHOLE;
         break;
     case 1:
-        val = NoteHead::Type::HEAD_HALF;
+        val = NoteHeadType::HEAD_HALF;
         break;
     case 2:
-        val = NoteHead::Type::HEAD_QUARTER;
+        val = NoteHeadType::HEAD_QUARTER;
         break;
     case 3:
-        val = NoteHead::Type::HEAD_BREVIS;
+        val = NoteHeadType::HEAD_BREVIS;
         break;
     default:
-        val = NoteHead::Type::HEAD_AUTO;
+        val = NoteHeadType::HEAD_AUTO;
     }
     return val;
 }
@@ -822,7 +822,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
             note->setHeadGroup(val);
         } else if (tag == "headType") {
             int i = e.readInt();
-            NoteHead::Type val = convertHeadType(i);
+            NoteHeadType val = convertHeadType(i);
             note->setHeadType(val);
         } else if (Read206::readNoteProperties206(note, e, ctx)) {
         } else {
@@ -2473,7 +2473,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "subtype") {
-                    bl->setBarLineType(e.readElementText());
+                    bl->setBarLineType(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
@@ -2908,7 +2908,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
             BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(e.track());
-            barLine->setBarLineType(val);
+            barLine->setBarLineType(XmlValue::fromXml(val, BarLineType::NORMAL));
             segment->add(barLine);
         } else if (tag == "Tuplet") {
             Tuplet* tuplet = new Tuplet(m);

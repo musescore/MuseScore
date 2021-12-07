@@ -208,7 +208,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
     position.pos.rx() -= qMin(relX - score()->styleMM(Ms::Sid::barNoteDistance) * mag, 0.0);
 
     Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
-    Ms::NoteHead::Type noteHead = inputState.duration().headType();
+    Ms::NoteHeadType noteHead = inputState.duration().headType();
     int line = position.line;
 
     if (instr->useDrumset()) {
