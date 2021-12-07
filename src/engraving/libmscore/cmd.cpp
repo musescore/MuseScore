@@ -2614,51 +2614,6 @@ EngravingItem* Score::selectMove(const QString& cmd)
 }
 
 //---------------------------------------------------------
-//   cmdMirrorNoteHead
-//---------------------------------------------------------
-
-void Score::cmdMirrorNoteHead()
-{
-    const QList<EngravingItem*>& el = selection().elements();
-    for (EngravingItem* e : el) {
-        if (e->isNote()) {
-            Note* note = toNote(e);
-            if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
-                e->undoChangeProperty(Pid::GHOST, !note->ghost());
-            } else {
-                DirectionH d = note->userMirror();
-                if (d == DirectionH::AUTO) {
-                    d = note->chord()->up() ? DirectionH::RIGHT : DirectionH::LEFT;
-                } else {
-                    d = d == DirectionH::LEFT ? DirectionH::RIGHT : DirectionH::LEFT;
-                }
-                undoChangeUserMirror(note, d);
-            }
-        } else if (e->isHairpinSegment()) {
-            Hairpin* h = toHairpinSegment(e)->hairpin();
-            HairpinType st = h->hairpinType();
-            switch (st) {
-            case HairpinType::CRESC_HAIRPIN:
-                st = HairpinType::DECRESC_HAIRPIN;
-                break;
-            case HairpinType::DECRESC_HAIRPIN:
-                st = HairpinType::CRESC_HAIRPIN;
-                break;
-            case HairpinType::CRESC_LINE:
-                st = HairpinType::DECRESC_LINE;
-                break;
-            case HairpinType::DECRESC_LINE:
-                st = HairpinType::CRESC_LINE;
-                break;
-            case HairpinType::INVALID:
-                break;
-            }
-            h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmdIncDecDuration
 //     When stepDotted is false and nSteps is 1 or -1, will halve or double the duration
 //     When stepDotted is true, will step by nearest dotted or undotted note
@@ -4063,28 +4018,6 @@ void Score::cmdToggleHideEmpty()
 }
 
 //---------------------------------------------------------
-//   cmdSetVisible
-//---------------------------------------------------------
-
-void Score::cmdSetVisible()
-{
-    for (EngravingItem* e : selection().elements()) {
-        undo(new ChangeProperty(e, Pid::VISIBLE, true));
-    }
-}
-
-//---------------------------------------------------------
-//   cmdUnsetVisible
-//---------------------------------------------------------
-
-void Score::cmdUnsetVisible()
-{
-    for (EngravingItem* e : selection().elements()) {
-        undo(new ChangeProperty(e, Pid::VISIBLE, false));
-    }
-}
-
-//---------------------------------------------------------
 //   cmdAddPitch
 ///   insert note or add note to chord
 //    c d e f g a b entered:
@@ -4303,41 +4236,6 @@ void Score::cmdRelayout()
 }
 
 //---------------------------------------------------------
-//   cmdToggleAutoplace
-//---------------------------------------------------------
-
-void Score::cmdToggleAutoplace(bool all)
-{
-    if (all) {
-        bool val = !styleB(Sid::autoplaceEnabled);
-        undoChangeStyleVal(Sid::autoplaceEnabled, val);
-        setLayoutAll();
-    } else {
-        QSet<EngravingItem*> spanners;
-        for (EngravingItem* e : selection().elements()) {
-            if (e->isSpannerSegment()) {
-                if (EngravingItem* ee = e->propertyDelegate(Pid::AUTOPLACE)) {
-                    e = ee;
-                }
-                // spanner segments may each have their own autoplace setting
-                // but if they delegate to spanner, only toggle once
-                if (e->isSpanner()) {
-                    if (spanners.contains(e)) {
-                        continue;
-                    }
-                    spanners.insert(e);
-                }
-            }
-            PropertyFlags pf = e->propertyFlags(Pid::AUTOPLACE);
-            if (pf == PropertyFlags::STYLED) {
-                pf = PropertyFlags::UNSTYLED;
-            }
-            e->undoChangeProperty(Pid::AUTOPLACE, !e->getProperty(Pid::AUTOPLACE).toBool(), pf);
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   cmd
 //---------------------------------------------------------
 
@@ -4357,22 +4255,12 @@ void Score::cmd(const QString& cmd, EditData& ed)
 
     static const std::vector<ScoreCmd> cmdList {
         { "toggle-visible",             [](Score* cs, EditData&) { cs->cmdToggleVisible(); } },
-        { "mirror-note",                [](Score* cs, EditData&) { cs->cmdMirrorNoteHead(); } },
         { "add-trill",                  [](Score* cs, EditData&) { cs->toggleArticulation(SymId::ornamentTrill); } },
         { "add-up-bow",                 [](Score* cs, EditData&) { cs->toggleArticulation(SymId::stringsUpBow); } },
         { "add-down-bow",               [](Score* cs, EditData&) { cs->toggleArticulation(SymId::stringsDownBow); } },
         { "clef-violin",                [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::G); } },
-        { "clef-bass",                  [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::F); } },
-        { "sharp2-post",                [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP2); } },
-        { "sharp-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP); } },
-        { "nat-post",                   [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::NATURAL); } },
-        { "flat-post",                  [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT); } },
-        { "flat2-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT2); } },
         { "transpose-up",               [](Score* cs, EditData&) { cs->transposeSemitone(1); } },
         { "transpose-down",             [](Score* cs, EditData&) { cs->transposeSemitone(-1); } },
-        { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::UP); } },
-        { "pitch-down-diatonic-alterations", [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::DOWN); } },
-        { "full-measure-rest",          [](Score* cs, EditData&) { cs->cmdFullMeasureRest(); } },
         { "toggle-insert-mode",         [](Score* cs, EditData&) { cs->_is.setInsertMode(!cs->_is.insertMode()); } },
         { "pitch-up",                   [](Score* cs, EditData&) { cs->cmdPitchUp(); } },
         { "pitch-down",                 [](Score* cs, EditData&) { cs->cmdPitchDown(); } },
@@ -4384,11 +4272,7 @@ void Score::cmd(const QString& cmd, EditData& ed)
         { "pad-note-decrease-TAB",      [](Score* cs, EditData& ed) { cs->cmdPadNoteDecreaseTAB(ed); } },
         { "toggle-mmrest",              [](Score* cs, EditData&) { cs->cmdToggleMmrest(); } },
         { "toggle-hide-empty",          [](Score* cs, EditData&) { cs->cmdToggleHideEmpty(); } },
-        { "set-visible",                [](Score* cs, EditData&) { cs->cmdSetVisible(); } },
-        { "unset-visible",              [](Score* cs, EditData&) { cs->cmdUnsetVisible(); } },
         { "relayout",                   [](Score* cs, EditData&) { cs->cmdRelayout(); } },
-        { "toggle-autoplace",           [](Score* cs, EditData&) { cs->cmdToggleAutoplace(false); } },
-        { "autoplace-enabled",          [](Score* cs, EditData&) { cs->cmdToggleAutoplace(true); } },
     };
 
     for (const auto& c : cmdList) {

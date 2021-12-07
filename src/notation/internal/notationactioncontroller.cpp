@@ -344,24 +344,12 @@ void NotationActionController::init()
 
     registerAction("repeat-sel", &INotationInteraction::repeatSelection);
 
-    registerAction("mirror-note", &INotationInteraction::execute, &Ms::Score::cmdMirrorNoteHead);
     registerAction("add-trill", &INotationInteraction::toggleArticulation, Ms::SymId::ornamentTrill);
     registerAction("add-up-bow", &INotationInteraction::toggleArticulation, Ms::SymId::stringsUpBow);
     registerAction("add-down-bow", &INotationInteraction::toggleArticulation, Ms::SymId::stringsDownBow);
     registerAction("clef-violin", &INotationInteraction::insertClef, Ms::ClefType::G);
-    registerAction("clef-bass", &INotationInteraction::insertClef, Ms::ClefType::F);
-    registerAction("sharp2-post", &INotationInteraction::changeAccidental, Ms::AccidentalType::SHARP2, PlayMode::PlayNote);
-    registerAction("sharp-post", &INotationInteraction::changeAccidental, Ms::AccidentalType::SHARP, PlayMode::PlayNote);
-    registerAction("nat-post", &INotationInteraction::changeAccidental, Ms::AccidentalType::NATURAL, PlayMode::PlayNote);
-    registerAction("flat-post", &INotationInteraction::changeAccidental, Ms::AccidentalType::FLAT, PlayMode::PlayNote);
-    registerAction("flat2-post", &INotationInteraction::changeAccidental, Ms::AccidentalType::FLAT2, PlayMode::PlayNote);
     registerAction("transpose-up", &INotationInteraction::transposeSemitone, 1, PlayMode::PlayNote);
     registerAction("transpose-down", &INotationInteraction::transposeSemitone, -1, PlayMode::PlayNote);
-    registerAction("pitch-up-diatonic-alterations", &INotationInteraction::transposeDiatonicAlterations, Ms::TransposeDirection::UP,
-                   PlayMode::PlayNote);
-    registerAction("pitch-down-diatonic-alterations", &INotationInteraction::transposeDiatonicAlterations, Ms::TransposeDirection::DOWN,
-                   PlayMode::PlayNote);
-    registerAction("full-measure-rest", &INotationInteraction::execute, &Ms::Score::cmdFullMeasureRest);
     registerAction("toggle-insert-mode", &INotationInteraction::toggleGlobalOrLocalInsert);
     registerAction("pad-note-decrease", &NotationActionController::halveNoteInputDuration, &NotationActionController::isNoteInputMode);
     registerAction("pad-note-increase", &NotationActionController::doubleNoteInputDuration, &NotationActionController::isNoteInputMode);
@@ -370,10 +358,6 @@ void NotationActionController::init()
     registerAction("get-location", &INotationInteraction::getLocation, &NotationActionController::isNotationPage);
     registerAction("toggle-mmrest", &INotationInteraction::execute, &Ms::Score::cmdToggleMmrest);
     registerAction("toggle-hide-empty", &INotationInteraction::execute, &Ms::Score::cmdToggleHideEmpty);
-    registerAction("set-visible", &INotationInteraction::execute, &Ms::Score::cmdSetVisible);
-    registerAction("unset-visible", &INotationInteraction::execute, &Ms::Score::cmdUnsetVisible);
-    registerAction("toggle-autoplace", &INotationInteraction::toggleAutoplace, false);
-    registerAction("autoplace-enabled", &INotationInteraction::toggleAutoplace, true);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
