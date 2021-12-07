@@ -26,6 +26,8 @@
 
 #include "io/path.h"
 
+#include <QDir>
+
 using namespace mu;
 using namespace mu::project;
 
@@ -58,8 +60,13 @@ Templates TemplatesRepository::loadTemplates(const io::paths& filePaths) const
             LOGE() << "failed read template: " << path;
             continue;
         }
+
+        //! FIXME: temporary solution, will be fixed soon
+        QDir dir(path.toQString());
+        dir.cdUp();
+
         Template templ(meta.val);
-        templ.categoryTitle = correctedTitle(io::dirname(meta.val.filePath).toQString());
+        templ.categoryTitle = correctedTitle(io::dirname(io::path(dir.absolutePath())).toQString());
 
         result << templ;
     }
