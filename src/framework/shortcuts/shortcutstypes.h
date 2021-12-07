@@ -33,6 +33,7 @@ struct Shortcut
 {
     std::string action;
     std::string sequence;
+    std::string context;
     QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
 
     Shortcut() = default;

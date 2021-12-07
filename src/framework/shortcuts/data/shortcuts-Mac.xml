@@ -585,42 +585,52 @@
   <SC>
     <key>note-longa</key>
     <seq>9</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>note-breve</key>
     <seq>8</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-1</key>
     <seq>7</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-2</key>
     <seq>6</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-4</key>
     <seq>5</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-8</key>
     <seq>4</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-16</key>
     <seq>3</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-32</key>
     <seq>2</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-note-64</key>
     <seq>1</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>pad-dot</key>
     <seq>.</seq>
+    <ctx>notation-staff-standart</ctx>
     </SC>
   <SC>
     <key>tie</key>
@@ -947,75 +957,92 @@
   <SC>
     <key>string-above</key>
     <seq>Up</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>string-below</key>
     <seq>Down</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-0</key>
     <seq>0</seq>
     <seq>A</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-1</key>
     <seq>1</seq>
     <seq>B</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-2</key>
     <seq>2</seq>
     <seq>C</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-3</key>
     <seq>3</seq>
     <seq>D</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-4</key>
     <seq>4</seq>
     <seq>E</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-5</key>
     <seq>5</seq>
     <seq>F</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-6</key>
     <seq>6</seq>
     <seq>G</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-7</key>
     <seq>7</seq>
     <seq>H</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-8</key>
     <seq>8</seq>
     <seq>J</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-9</key>
     <seq>9</seq>
     <seq>K</seq>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-10</key>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-11</key>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-12</key>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-13</key>
+    <ctx>notation-staff-tab</ctx>
     </SC>
   <SC>
     <key>fret-14</key>
+    <ctx>notation-staff-tab</ctx>
     </SC>
 <!-- HARMONY / FIGURED BASS specific shortcuts -->
   <SC>

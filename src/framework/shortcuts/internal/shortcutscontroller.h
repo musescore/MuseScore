@@ -22,13 +22,14 @@
 #ifndef MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
 #define MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
 
+#include "../ishortcutscontroller.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveprovider.h"
 #include "ishortcutsregister.h"
-#include "../ishortcutscontroller.h"
+#include "context/iuicontextresolver.h"
 
 namespace mu::shortcuts {
 class ShortcutsController : public IShortcutsController, public async::Asyncable
@@ -37,6 +38,7 @@ class ShortcutsController : public IShortcutsController, public async::Asyncable
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts, ui::IUiActionsRegister, aregister)
     INJECT(shortcuts, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(shortcuts, context::IUiContextResolver, uiContextResolver)
 
 public:
     ShortcutsController() = default;
