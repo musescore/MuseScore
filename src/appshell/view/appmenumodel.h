@@ -49,13 +49,21 @@ class AppMenuModel : public ui::AbstractMenuModel
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
     INJECT(appshell, IAppMenuActionController, controller)
 
+    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
+    bool active() const;
+
+public slots:
+    void setActive(bool active);
+
 signals:
     void openMenu(const QString& menuId);
+    void activeChanged(bool active);
 
 private:
     void setupConnections();
@@ -89,6 +97,8 @@ private:
     ui::MenuItemList linesItems() const;
     ui::MenuItemList toolbarsItems() const;
     ui::MenuItemList workspacesItems() const;
+
+    bool m_active = false;
 };
 }
 

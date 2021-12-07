@@ -253,7 +253,8 @@ ListItemBlank {
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
+            text: Boolean(modelData) && Boolean(modelData.title) ? Utils.makeMnemonicText(modelData.title) : ""
+            textFormat: Text.RichText
             horizontalAlignment: Text.AlignLeft
         }
 

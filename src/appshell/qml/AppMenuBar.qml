@@ -42,13 +42,11 @@ ListView {
         id: appMenuModel
 
         onOpenMenu: {
-            for (var i = 0; i < root.count; ++i) {
-                var item = root.itemAtIndex(i)
-                if (Boolean(item) && item.menuId === menuId) {
-                    item.navigation.requestActive()
-                    item.navigation.triggered()
-                }
-            }
+            prv.openMenu(menuId)
+        }
+
+        onActiveChanged: {
+            prv.activeMenu()
         }
     }
 
@@ -60,6 +58,75 @@ ListView {
         id: prv
 
         property var showedMenu: null
+
+        //! Navigation
+
+        function openMenu(menuId) {
+            for (var i = 0; i < root.count; ++i) {
+                var item = root.itemAtIndex(i)
+                if (Boolean(item) && item.menuId === menuId) {
+                    item.navigation.requestActive()
+                    item.navigation.triggered()
+                }
+            }
+        }
+
+        function activeMenu() {
+            var firstItem = root.itemAtIndex(0)
+            if (firstItem) {
+                if (appMenuModel.active) {
+                    if (prv.hasNavigatedItem()) {
+                        return
+                    }
+
+                    firstItem.navigation.requestActive()
+                } else {
+                    firstItem.navigation.requestDeactive()
+                }
+            }
+        }
+
+        function hasNavigatedItem() {
+            for (var i = 0; i < root.count; ++i) {
+                var item = root.itemAtIndex(i)
+
+                if (!Boolean(item)) {
+                    continue
+                }
+
+                if (item.navigation.active) {
+                    return true
+                }
+            }
+
+            return false
+        }
+
+        function itemByKey(key) {
+            for (var i = 0; i < root.count; ++i) {
+                var item = root.itemAtIndex(i)
+
+                if (!Boolean(item)) {
+                    continue
+                }
+
+                var title = item.item.title
+                if (Boolean(title)) {
+                    title = title.toLowerCase()
+                    var index = title.indexOf('&')
+                    if (index === -1) {
+                        continue
+                    }
+
+                    var activateKey = title[index + 1]
+                    if (activateKey === key) {
+                        return item
+                    }
+                }
+            }
+
+            return null
+        }
     }
 
     NavigationPanel {
@@ -81,13 +148,39 @@ ListView {
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened
 
-        text: Boolean(item) ? item.title : ""
+        text: Boolean(item) ? replaceText(item.title) : ""
+        textFormat: Text.RichText
+
+        function replaceText(text) {
+            if (!prv.hasNavigatedItem()) {
+                return text.replace('&', '')
+            }
+
+            return Utils.makeMnemonicText(text)
+        }
 
         navigation.name: text
         navigation.panel: navPanel
         navigation.order: index
         accessible.name: {
             return text.replace('&', '')
+        }
+
+        Keys.onShortcutOverride: {
+            if (!prv.hasNavigatedItem()) {
+                return
+            }
+
+            var activatedItem = prv.itemByKey(event.text)
+            event.accepted = Boolean(activatedItem)
+        }
+
+        Keys.onPressed: {
+            var activatedItem = prv.itemByKey(event.text)
+            if (Boolean(activatedItem)) {
+                activatedItem.navigation.requestActive()
+                activatedItem.navigation.triggered()
+            }
         }
 
         mouseArea.onContainsMouseChanged: {

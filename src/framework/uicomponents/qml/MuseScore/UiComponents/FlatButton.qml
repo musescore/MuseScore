@@ -28,6 +28,7 @@ FocusScope {
 
     property int icon: IconCode.NONE
     property string text: ""
+    property int textFormat: Text.AutoText
 
     property string toolTipTitle: ""
     property string toolTipDescription: ""
@@ -173,6 +174,7 @@ FocusScope {
 
                 text: root.text
                 font: root.textFont
+                textFormat: root.textFormat
 
                 height: text === "" ? 0 : implicitHeight
                 horizontalAlignment: Text.AlignHCenter
