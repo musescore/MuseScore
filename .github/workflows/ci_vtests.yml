@@ -83,7 +83,7 @@ jobs:
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
         ./vtest/vtest.sh -c compare
     - name: Upload artifact
-      if: env.DO_RUN == 'true'
+      if: ${{ always() }}
       uses: actions/upload-artifact@v1
       with:
         name: VTest.Artifacts
