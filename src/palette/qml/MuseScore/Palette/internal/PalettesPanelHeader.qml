@@ -130,12 +130,11 @@ Item {
             root.endSearch()
         }
 
-        visible: root.isSearchOpened
-        onVisibleChanged: {
-            if (!searchField.visible) {
-                addPalettesButton.navigation.requestActive()
-            }
+        onTextEditingFinished: {
+            root.endSearch()
         }
+
+        visible: root.isSearchOpened
 
         onSearchTextChanged: resultsTimer.restart()
         onActiveFocusChanged: {
