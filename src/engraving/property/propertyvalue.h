@@ -357,8 +357,9 @@ private:
         {
             if constexpr (std::is_enum<T>::value) {
                 return static_cast<int>(v);
+            } else {
+                return -1;
             }
-            return -1;
         }
     };
 
