@@ -4063,11 +4063,6 @@ void NotationInteraction::toggleArticulation(Ms::SymId symId)
     execute(&Ms::Score::toggleArticulation, symId);
 }
 
-void NotationInteraction::toggleAutoplace(bool all)
-{
-    execute(&Ms::Score::cmdToggleAutoplace, all);
-}
-
 void NotationInteraction::insertClef(Ms::ClefType clef)
 {
     execute(&Ms::Score::cmdInsertClef, clef);
@@ -4081,11 +4076,6 @@ void NotationInteraction::changeAccidental(Ms::AccidentalType accidental)
 void NotationInteraction::transposeSemitone(int steps)
 {
     execute(&Ms::Score::transposeSemitone, steps);
-}
-
-void NotationInteraction::transposeDiatonicAlterations(Ms::TransposeDirection direction)
-{
-    execute(&Ms::Score::transposeDiatonicAlterations, direction);
 }
 
 void NotationInteraction::toggleGlobalOrLocalInsert()

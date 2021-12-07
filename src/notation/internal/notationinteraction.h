@@ -228,12 +228,10 @@ public:
     void toggleUnderline() override;
     void toggleStrike() override;
     void toggleArticulation(Ms::SymId) override;
-    void toggleAutoplace(bool) override;
 
     void insertClef(Ms::ClefType) override;
     void changeAccidental(Ms::AccidentalType) override;
     void transposeSemitone(int) override;
-    void transposeDiatonicAlterations(Ms::TransposeDirection) override;
     void toggleGlobalOrLocalInsert() override;
     void getLocation() override;
     void execute(void (Ms::Score::*)()) override;
