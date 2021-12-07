@@ -766,8 +766,6 @@ public:
     virtual void setInstrumentsChanged(bool);
     void addRefresh(const mu::RectF&);
 
-    void cmdRelayout();
-
     bool playNote() const { return _updateState._playNote; }
     void setPlayNote(bool v) { _updateState._playNote = v; }
     bool playChord() const { return _updateState._playChord; }
@@ -841,7 +839,6 @@ public:
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
     EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
-    void cmd(const QString&, EditData&);
     int fileDivision(int t) const { return ((qint64)t * Constant::division + _fileDivision / 2) / _fileDivision; }
     void setFileDivision(int t) { _fileDivision = t; }
 
