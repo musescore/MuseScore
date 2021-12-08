@@ -237,7 +237,7 @@ class Fraction {
 
       int ticks() const
             {
-            if (_numerator == -1 && _denominator == 1)        // HACK
+            if ((_numerator == -1 && _denominator == 1) || _denominator == 0)        // HACK
                   return -1;
 
             // MScore::division     - ticks per quarter note
