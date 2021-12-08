@@ -76,6 +76,8 @@ private:
     void toggleAccidental(AccidentalType type);
     void addArticulation(SymbolId articulationSymbolId);
 
+    void putTuplet(const actions::ActionData& data);
+    void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
 
     void move(MoveDirection direction, bool quickly = false);
