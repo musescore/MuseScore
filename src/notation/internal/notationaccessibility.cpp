@@ -64,7 +64,7 @@ mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
     return m_accessibilityInfo;
 }
 
-void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc &func)
+void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
     score()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
     score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);

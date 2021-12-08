@@ -156,7 +156,13 @@ QString AccessibleItem::accessibleName() const
 
 QString AccessibleItem::accessibleDescription() const
 {
-    return m_element->accessibleExtraInfo();
+    QString result;
+#ifdef Q_OS_MACOS
+    result = accessibleName() + " ";
+#endif
+
+    result += m_element->accessibleExtraInfo();
+    return result;
 }
 
 QVariant AccessibleItem::accesibleValue() const
@@ -206,7 +212,7 @@ QRect AccessibleItem::accessibleRect() const
     }
 
     RectF bbox = m_element->canvasBoundingRect();
-    RectF canvasRect(m_element->canvasPos(), SizeF{bbox.width(), bbox.height()});
+    RectF canvasRect(m_element->canvasPos(), SizeF(bbox.width(), bbox.height()));
 
     auto rect = accessibleRoot()->toScreenRect(canvasRect).toQRect();
     return rect;

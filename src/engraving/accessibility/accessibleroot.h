@@ -39,7 +39,7 @@ public:
     AccessibleItem* focusedElement() const;
 
     void setMapToScreenFunc(const notation::AccessibleMapToScreenFunc& func);
-    RectF toScreenRect(const RectF &, bool* ok = nullptr) const;
+    RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
 
     const accessibility::IAccessible* accessibleParent() const override;
     accessibility::IAccessible::Role accessibleRole() const override;
