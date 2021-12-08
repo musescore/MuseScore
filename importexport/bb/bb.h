@@ -105,7 +105,7 @@ static const BBStyle styles[] = {
       {  4, 4 },   // Bouncy
       {  4, 4 },   // Irish
       { 12, 8 },   // Pop Ballad 12/8
-      { 12, 8 },   // Country12/8 old
+      { 12, 8 },   // Country 12/8 old
       {  4, 4 },   // Reggae
       };
 

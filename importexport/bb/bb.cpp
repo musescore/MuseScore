@@ -72,7 +72,7 @@ struct MNote {
 BBFile::BBFile()
       {
       for (int i = 0; i < MAX_BARS; ++i)
-            _barType[i]  = 0;
+            _barType[i] = 0;
       bbDivision = 120;
       }
 
@@ -155,7 +155,7 @@ bool BBFile::read(const QString& name)
       // minor   C, Db,  D, Eb,  E,  F, Gb,  G, Ab,  A, Bb,  B, C#, D#, F#, G#, A#
       static int kt[] = {
            0,    0, -5,  2, -3,  4, -1, -6,  1, -4,  3, -2,  5,  7, -3,  6, -4, -2,
-                -3, 4,  -1, -6,  1, -4,  3, -2,  5,  0, -5,  2,  4,  6,  3,  5, 7
+                -3,  4, -1, -6,  1, -4,  3, -2,  5,  0, -5,  2,  4,  6,  3,  5,  7
            };
       if (_key >= int (sizeof(kt)/sizeof(*kt))) {
             qDebug("bad key %d", _key);
@@ -177,7 +177,7 @@ bool BBFile::read(const QString& name)
       //---------------------------------------------------
 
       int bar = a[idx++];           // starting bar number
-      while (bar < 255) {
+      while (bar < MAX_BARS) {
             int val = a[idx++];
             if (val == 0)
                   bar += a[idx++];
@@ -325,7 +325,7 @@ bool BBFile::read(const QString& name)
                   if (type == 0x90) {
                         int channel = a[idx + 7];
                         BBTrack* track = 0;
-                        foreach (BBTrack* t, _tracks) {
+                        for (BBTrack* t : _tracks) {
                               if (t->outChannel() == channel) {
                                     track = t;
                                     break;
@@ -423,15 +423,15 @@ Score::FileError importBB(MasterScore* score, const QString& name)
       //  create notes
       //---------------------------------------------------
 
-      foreach (BBTrack* track, *tracks)
+      for (BBTrack* track : *tracks)
             track->cleanup();
 
       if (tracks->isEmpty()) {
             for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
                   if (mb->type() != ElementType::MEASURE)
                         continue;
-                  Measure* measure = (Measure*)mb;
-                  Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                  Measure* measure = toMeasure(mb);
+                  Rest* rest = new Rest(score, TDuration::DurationType::V_MEASURE);
                   rest->setTicks(measure->ticks());
                   rest->setTrack(0);
                   Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
@@ -440,17 +440,17 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             }
       else {
             int staffIdx = 0;
-            foreach (BBTrack* track, *tracks)
+            for (BBTrack* track : *tracks)
                   bb.convertTrack(score, track, staffIdx++);
             }
 
       for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             if (mb->type() != ElementType::MEASURE)
                   continue;
-            Measure* measure = (Measure*)mb;
+            Measure* measure = toMeasure(mb);
             Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
             if (s == 0) {
-                  Rest* rest = new Rest(score, TDuration(TDuration::DurationType::V_MEASURE));
+                  Rest* rest = new Rest(score, TDuration::DurationType::V_MEASURE);
                   rest->setTicks(measure->ticks());
                   rest->setTrack(0);
                   Segment* s1 = measure->getSegment(SegmentType::ChordRest, measure->tick());
@@ -484,7 +484,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
           //C  Db, D,  Eb,  E, F, Gb, G,  Ab, A,  Bb, B,  C#, D#, F#  G#  A#
             14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19, 21, 23, 20, 22, 24
             };
-      foreach(const BBChord& c, bb.chords()) {
+      for (const BBChord& c : bb.chords()) {
             Fraction tick = Fraction(c.beat, 4);      // c.beat  * MScore::division;
 // qDebug("CHORD %d %d", c.beat, tick);
             Measure* m = score->tick2measure(tick);
@@ -533,7 +533,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             ++n;
             }
 
-      foreach(Staff* staff, score->staves()) {
+      for (Staff* staff : score->staves()) {
             Fraction tick = Fraction(0,1);
             KeySigEvent ke;
             ke.setKey(Key(bb.key()));
@@ -565,7 +565,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
       //
       // look for len of shortest note
       //
-      foreach (const MNote* n, *notes) {
+      for (const MNote* n : *notes) {
             if (n->mc.duration() < len.ticks())
                   len = Fraction::fromTicks(n->mc.duration());
             }
@@ -591,7 +591,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
       Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
       s->add(chord);
 
-      foreach (MNote* n, *notes) {
+      for (MNote* n : *notes) {
             QList<Event>& nl = n->mc.notes();
             for (int i = 0; i < nl.size(); ++i) {
                   const Event& mn = nl[i];
@@ -637,7 +637,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
 
 static ciEvent collectNotes(const Fraction& tick, int voice, ciEvent i, const EventList* el, QList<MNote*>* notes)
       {
-      for (;i != el->end(); ++i) {
+      for (; i != el->end(); ++i) {
             const Event& e = *i;
             if (e.type() != ME_CHORD)
                   continue;
@@ -878,7 +878,7 @@ void BBTrack::cleanup()
       // quantize
       //
       int lastTick = 0;
-      foreach (const Event& e, _events) {
+      for (const Event& e : _events) {
             if (e.type() != ME_NOTE)
                   continue;
             int offtime  = e.offtime();
@@ -899,7 +899,7 @@ void BBTrack::cleanup()
       //
       _events.clear();
 
-      for(iEvent i = dl.begin(); i != dl.end(); ++i) {
+      for (iEvent i = dl.begin(); i != dl.end(); ++i) {
             Event& e = *i;
             if (e.type() == ME_NOTE) {
                   iEvent ii = i;
