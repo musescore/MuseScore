@@ -161,6 +161,8 @@ FocusScope {
 
                 SplitView.preferredHeight: 100
                 SplitView.preferredWidth: 100
+                SplitView.minimumWidth: 30
+                SplitView.minimumHeight: 30
 
                 sourceComponent: notationNavigator.visible ? navigatorComp : null
 
