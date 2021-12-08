@@ -3675,8 +3675,7 @@ qreal Measure::stretchWeight()
     qreal w = 0;
     qreal W = 0;
     qreal weight = 0;
-    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
-    qreal minNoteDistance = score()->styleMM(Sid::minNoteDistance);
+    qreal minNoteSpace = score()->noteHeadWidth();
     Fraction minTicks = minSysTicks();
     for (Segment* s = first(); s; s = s->next()) {
         if (s->enabled() && s->visible() && !s->allElementsInvisible() && s->isChordRestType()) {
@@ -4181,11 +4180,15 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks)
     qreal genLayoutStretch = score()->styleD(Sid::measureSpacing);
     qreal stretch = uStretch * genLayoutStretch;
     // Linear spacing
-    //qreal str = 1 - 0.945 * stretch +  0.945 * stretch * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
+    //qreal str = 1 - 0.112 * stretch +  0.112 * stretch * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
     // Logarithmic spacing (MS 3.6)
     //qreal str = 1.0 + 0.721 * stretch * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     // Quadratic spacing (Gould)
     qreal str = 1 - 0.647 * stretch + 0.647 * stretch * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    if (minTicks > Fraction(1, 16)) {
+        // This additional stretch avoids long notes being too narrow in the absense of shorter notes.
+        str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(Fraction(1, 16).ticks())));
+    }
     return str;
     //TODO: choose formula in style settings
 }
@@ -4205,8 +4208,8 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    //Fraction minTicks = minSysTicks(); // New spacing algorithm: we get the shortest note duration in the system.
-    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
+    qreal minNoteSpace = score()->noteHeadWidth();
+    qreal stretch = userStretch() * score()->styleD(Sid::measureSpacing);
 
     if (isMMRest()) {
         // Reset MM rest to initial size and position
@@ -4259,7 +4262,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
                 qreal str = stretchFormula(t, minTicks);
                 // Simply doing w * str would be wrong at this point cause you would stretch also the additional
                 // space taken by accidentals.
-                qreal minStretchedWidth = minNoteSpace * str * basicStretch();
+                qreal minStretchedWidth = minNoteSpace * str * stretch;
                 w = qMax(w, minStretchedWidth);
             }
             // look back for collisions with previous segments
