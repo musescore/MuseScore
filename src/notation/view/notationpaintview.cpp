@@ -237,7 +237,7 @@ void NotationPaintView::onCurrentNotationChanged()
 
     notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect){
         auto res = fromLogical(elementRect);
-        res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF{res.width(), res.height()});
+        res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
 
         return res;
     });
@@ -959,12 +959,12 @@ RectF NotationPaintView::toLogical(const RectF& rect) const
     return m_matrix.inverted().map(rect);
 }
 
-PointF NotationPaintView::fromLogical(const PointF &point) const
+PointF NotationPaintView::fromLogical(const PointF& point) const
 {
     return m_matrix.map(point);
 }
 
-RectF NotationPaintView::fromLogical(const RectF &rect) const
+RectF NotationPaintView::fromLogical(const RectF& rect) const
 {
     return m_matrix.map(rect);
 }
