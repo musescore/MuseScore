@@ -86,8 +86,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minTicks = Fraction(1, 8); // Inizialize variable which stores the shortest note of the system
-    Fraction prevMinTicks = Fraction(1, 1);
+    Fraction minTicks = Fraction(4, 1); // Inizialize variable which stores the shortest note of the system
+    Fraction prevMinTicks = Fraction(4, 1);
     bool changeMinSysTicks = false;
 
     while (ctx.curMeasure) {      // collect measure for system
