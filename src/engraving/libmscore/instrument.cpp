@@ -24,6 +24,7 @@
 
 #include "rw/xml.h"
 #include "io/htmlparser.h"
+#include "types/typesconv.h"
 #include "compat/midi/midipatch.h"
 
 #include "drumset.h"
@@ -39,6 +40,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //: Channel name for otherwise unamed channels
@@ -315,7 +317,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
         ClefTypeList ct = _clefType[i];
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
-                QString tag = ClefInfo::tag(ct._concertClef);
+                QString tag = TConv::toXml(ct._concertClef);
                 if (i) {
                     xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
                 } else {
@@ -323,8 +325,8 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
                 }
             }
         } else {
-            QString tag1 = ClefInfo::tag(ct._concertClef);
-            QString tag2 = ClefInfo::tag(ct._transposingClef);
+            QString tag1 = TConv::toXml(ct._concertClef);
+            QString tag2 = TConv::toXml(ct._transposingClef);
             if (i) {
                 xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
                 xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
@@ -525,17 +527,14 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         _channel.append(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        ClefType ct = Clef::clefType(val);
+        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
         setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        setClefType(idx, ClefTypeList(Clef::clefType(val), clefType(idx)._transposingClef));
+        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), clefType(idx)._transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, Clef::clefType(val)));
+        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
     } else {
         return false;
     }

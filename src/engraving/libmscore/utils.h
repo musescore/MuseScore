@@ -23,7 +23,7 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
-#include "types/fraction.h"
+#include "types/types.h"
 
 #include "mscore.h"
 #include "interval.h"
@@ -52,8 +52,6 @@ class EngravingItem;
 class Note;
 class Tuplet;
 class BarLine;
-
-enum class ClefType : signed char;
 
 extern mu::RectF handleRect(const mu::PointF& pos);
 

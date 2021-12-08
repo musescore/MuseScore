@@ -25,6 +25,7 @@
 
 #include <QList>
 
+#include "types/types.h"
 #include "symid.h"
 #include "infrastructure/draw/geometry.h"
 
@@ -33,7 +34,6 @@ class XmlWriter;
 class Score;
 class XmlReader;
 enum class AccidentalVal : signed char;
-enum class ClefType : signed char;
 
 //---------------------------------------------------------
 //   Key

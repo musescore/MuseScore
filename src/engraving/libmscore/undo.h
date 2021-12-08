@@ -88,7 +88,6 @@ class InstrumentChange;
 class Box;
 class Spanner;
 class BarLine;
-enum class ClefType : signed char;
 enum class PlayEventType : char;
 class Excerpt;
 class EditData;
