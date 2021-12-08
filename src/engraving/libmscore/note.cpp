@@ -288,52 +288,6 @@ static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHea
     }
 };
 
-struct NoteHeadName {
-    const char* name;
-    const char* username;
-};
-
-// same order as NoteHead::Scheme
-static NoteHeadName noteHeadSchemeNames[] = {
-    { "auto",                QT_TRANSLATE_NOOP("noteheadschemes", "Auto") },
-    { "normal",              QT_TRANSLATE_NOOP("noteheadschemes", "Normal") },
-    { "name-pitch",          QT_TRANSLATE_NOOP("noteheadschemes", "Pitch names") },
-    { "name-pitch-german",   QT_TRANSLATE_NOOP("noteheadschemes", "German Pitch names") },
-    { "solfege-movable",     QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge movable Do") },  // &egrave;
-    { "solfege-fixed",       QT_TRANSLATE_NOOP("noteheadschemes", "Solf\u00e8ge fixed Do") },    // &egrave;
-    { "shape-4",             QT_TRANSLATE_NOOP("noteheadschemes", "4-shape (Walker)") },
-    { "shape-7-aikin",       QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Aikin)") },
-    { "shape-7-funk",        QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Funk)") },
-    { "shape-7-walker",      QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Walker)") }
-};
-
-// same order as NoteHead::Type
-static NoteHeadName noteHeadTypeNames[] = {
-    { "auto",    QT_TRANSLATE_NOOP("noteheadnames", "Auto") },
-    { "whole",   QT_TRANSLATE_NOOP("noteheadnames", "Whole") },
-    { "half",    QT_TRANSLATE_NOOP("noteheadnames", "Half") },
-    { "quarter", QT_TRANSLATE_NOOP("noteheadnames", "Quarter") },
-    { "breve",   QT_TRANSLATE_NOOP("noteheadnames", "Breve") },
-};
-
-//---------------------------------------------------------
-//   scheme2userName
-//---------------------------------------------------------
-
-QString NoteHead::scheme2userName(NoteHeadScheme scheme)
-{
-    return qtrc("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
-}
-
-//---------------------------------------------------------
-//   type2userName
-//---------------------------------------------------------
-
-QString NoteHead::type2userName(NoteHeadType type)
-{
-    return qtrc("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
-}
-
 //---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
