@@ -131,6 +131,25 @@ enum class NoteHeadScheme {
 };
 Q_ENUM_NS(NoteHeadScheme);
 
+enum class NoteHeadGroup {
+    HEAD_NORMAL = int(mu::engraving::NoteHeadGroup::HEAD_NORMAL),
+    HEAD_CROSS = int(mu::engraving::NoteHeadGroup::HEAD_CROSS),
+    HEAD_PLUS = int(mu::engraving::NoteHeadGroup::HEAD_PLUS),
+    HEAD_XCIRCLE = int(mu::engraving::NoteHeadGroup::HEAD_XCIRCLE),
+    HEAD_WITHX = int(mu::engraving::NoteHeadGroup::HEAD_WITHX),
+    HEAD_TRIANGLE_UP = int(mu::engraving::NoteHeadGroup::HEAD_TRIANGLE_UP),
+    HEAD_TRIANGLE_DOWN = int(mu::engraving::NoteHeadGroup::HEAD_TRIANGLE_DOWN),
+    HEAD_SLASHED1 = int(mu::engraving::NoteHeadGroup::HEAD_SLASHED1),
+    HEAD_SLASHED2 = int(mu::engraving::NoteHeadGroup::HEAD_SLASHED2),
+    HEAD_DIAMOND = int(mu::engraving::NoteHeadGroup::HEAD_DIAMOND),
+    HEAD_DIAMOND_OLD = int(mu::engraving::NoteHeadGroup::HEAD_DIAMOND_OLD),
+    HEAD_CIRCLED = int(mu::engraving::NoteHeadGroup::HEAD_CIRCLED),
+    HEAD_CIRCLED_LARGE = int(mu::engraving::NoteHeadGroup::HEAD_CIRCLED_LARGE),
+    HEAD_LARGE_ARROW = int(mu::engraving::NoteHeadGroup::HEAD_LARGE_ARROW),
+    HEAD_BREVIS_ALT = int(mu::engraving::NoteHeadGroup::HEAD_BREVIS_ALT)
+};
+Q_ENUM_NS(NoteHeadGroup);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {
@@ -149,5 +168,6 @@ Q_DECLARE_METATYPE(Ms::PluginAPI::BeamMode);
 Q_DECLARE_METATYPE(Ms::PluginAPI::GlissandoStyle);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadType);
 Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadScheme);
+Q_DECLARE_METATYPE(Ms::PluginAPI::NoteHeadGroup);
 
 #endif // MU_PLUGINS_APITYPES_H

@@ -27,6 +27,7 @@
 
 #include "selectnotedialog.h"
 
+#include "engraving/types/typesconv.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/masterscore.h"
@@ -38,6 +39,7 @@
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::ui;
 
 //---------------------------------------------------------
@@ -53,7 +55,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
 
     m_note = dynamic_cast<Ms::Note*>(globalContext()->currentNotation()->interaction()->selection()->element());
 
-    notehead->setText(Ms::NoteHead::group2userName(m_note->headGroup()));
+    notehead->setText(TConv::toUserName(m_note->headGroup()));
     sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
 
     pitch->setText(m_note->tpcUserName());

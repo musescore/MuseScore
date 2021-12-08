@@ -23,6 +23,7 @@
 #include "editdrumsetdialog.h"
 
 #include "engraving/rw/xml.h"
+#include "engraving/types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/utils.h"
@@ -72,29 +73,29 @@ public:
 //   as not being useful for drums
 //---------------------------------------------------------
 
-NoteHead::Group noteHeadNames[] = {
-    NoteHead::Group::HEAD_NORMAL,
-    NoteHead::Group::HEAD_CROSS,
-    NoteHead::Group::HEAD_PLUS,
-    NoteHead::Group::HEAD_XCIRCLE,
-    NoteHead::Group::HEAD_WITHX,
-    NoteHead::Group::HEAD_TRIANGLE_UP,
-    NoteHead::Group::HEAD_TRIANGLE_DOWN,
-    NoteHead::Group::HEAD_SLASH,
-    NoteHead::Group::HEAD_SLASHED1,
-    NoteHead::Group::HEAD_SLASHED2,
-    NoteHead::Group::HEAD_DIAMOND,
-    NoteHead::Group::HEAD_DIAMOND_OLD,
-    NoteHead::Group::HEAD_CIRCLED,
-    NoteHead::Group::HEAD_CIRCLED_LARGE,
-    NoteHead::Group::HEAD_LARGE_ARROW,
-    NoteHead::Group::HEAD_DO,
-    NoteHead::Group::HEAD_RE,
-    NoteHead::Group::HEAD_MI,
-    NoteHead::Group::HEAD_FA,
-    NoteHead::Group::HEAD_LA,
-    NoteHead::Group::HEAD_TI,
-    NoteHead::Group::HEAD_CUSTOM
+NoteHeadGroup noteHeadNames[] = {
+    NoteHeadGroup::HEAD_NORMAL,
+    NoteHeadGroup::HEAD_CROSS,
+    NoteHeadGroup::HEAD_PLUS,
+    NoteHeadGroup::HEAD_XCIRCLE,
+    NoteHeadGroup::HEAD_WITHX,
+    NoteHeadGroup::HEAD_TRIANGLE_UP,
+    NoteHeadGroup::HEAD_TRIANGLE_DOWN,
+    NoteHeadGroup::HEAD_SLASH,
+    NoteHeadGroup::HEAD_SLASHED1,
+    NoteHeadGroup::HEAD_SLASHED2,
+    NoteHeadGroup::HEAD_DIAMOND,
+    NoteHeadGroup::HEAD_DIAMOND_OLD,
+    NoteHeadGroup::HEAD_CIRCLED,
+    NoteHeadGroup::HEAD_CIRCLED_LARGE,
+    NoteHeadGroup::HEAD_LARGE_ARROW,
+    NoteHeadGroup::HEAD_DO,
+    NoteHeadGroup::HEAD_RE,
+    NoteHeadGroup::HEAD_MI,
+    NoteHeadGroup::HEAD_FA,
+    NoteHeadGroup::HEAD_LA,
+    NoteHeadGroup::HEAD_TI,
+    NoteHeadGroup::HEAD_CUSTOM
 };
 
 //---------------------------------------------------------
@@ -164,7 +165,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     updatePitchesList();
 
     for (auto g : noteHeadNames) {
-        noteHead->addItem(NoteHead::group2userName(g), int(g));
+        noteHead->addItem(TConv::toUserName(g), int(g));
     }
 
     connect(pitchList, &QTreeWidget::currentItemChanged, this, &EditDrumsetDialog::itemChanged);
@@ -287,9 +288,9 @@ void EditDrumsetDialog::customGboxToggled(bool checked)
 {
     noteHead->setEnabled(!checked);
     if (checked) {
-        noteHead->setCurrentIndex(noteHead->findData(int(NoteHead::Group::HEAD_CUSTOM)));
+        noteHead->setCurrentIndex(noteHead->findData(int(NoteHeadGroup::HEAD_CUSTOM)));
     } else {
-        noteHead->setCurrentIndex(noteHead->findData(int(NoteHead::Group::HEAD_NORMAL)));
+        noteHead->setCurrentIndex(noteHead->findData(int(NoteHeadGroup::HEAD_NORMAL)));
     }
 }
 
@@ -441,7 +442,7 @@ void EditDrumsetDialog::apply()
 //---------------------------------------------------------
 void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 {
-    m_editedDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
+    m_editedDrumset.drum(pitch).notehead = NoteHeadGroup::HEAD_CUSTOM;
     m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_WHOLE)] = SymNames::symIdByName(wholeCmb->currentData().toString());
     m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_QUARTER)] = SymNames::symIdByName(quarterCmb->currentData().toString());
     m_editedDrumset.drum(pitch).noteheads[int(NoteHeadType::HEAD_HALF)] = SymNames::symIdByName(halfCmb->currentData().toString());
@@ -461,7 +462,7 @@ void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
                                                                                                               NoteHeadType::HEAD_BREVIS))));
     } else {
         const auto group = m_editedDrumset.drum(pitch).notehead;
-        if (group == NoteHead::Group::HEAD_INVALID) {
+        if (group == NoteHeadGroup::HEAD_INVALID) {
             return;
         }
 
@@ -486,7 +487,7 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
         } else {
             const QVariant currData = noteHead->currentData();
             if (currData.isValid()) {
-                m_editedDrumset.drum(pitch).notehead = NoteHead::Group(currData.toInt());
+                m_editedDrumset.drum(pitch).notehead = NoteHeadGroup(currData.toInt());
             }
         }
 
@@ -515,8 +516,8 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
     voice->setCurrentIndex(m_editedDrumset.voice(pitch));
     stemDirection->setCurrentIndex(int(m_editedDrumset.stemDirection(pitch)));
 
-    NoteHead::Group nh = m_editedDrumset.noteHead(pitch);
-    bool isCustomGroup = (nh == NoteHead::Group::HEAD_CUSTOM);
+    NoteHeadGroup nh = m_editedDrumset.noteHead(pitch);
+    bool isCustomGroup = (nh == NoteHeadGroup::HEAD_CUSTOM);
     if (m_editedDrumset.isValid(pitch)) {
         setCustomNoteheadsGUIEnabled(isCustomGroup);
     }
@@ -545,7 +546,7 @@ void EditDrumsetDialog::setCustomNoteheadsGUIEnabled(bool enabled)
     customGbox->setChecked(enabled);
     noteHead->setEnabled(!enabled);
     if (enabled) {
-        noteHead->setCurrentIndex(noteHead->findData(int(NoteHead::Group::HEAD_CUSTOM)));
+        noteHead->setCurrentIndex(noteHead->findData(int(NoteHeadGroup::HEAD_CUSTOM)));
     }
 }
 
@@ -559,11 +560,11 @@ void EditDrumsetDialog::valueChanged()
     }
     int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
     m_editedDrumset.drum(pitch).name          = name->text();
-    if (customGbox->isChecked() || noteHead->currentIndex() == noteHead->findData(int(NoteHead::Group::HEAD_CUSTOM))) {
+    if (customGbox->isChecked() || noteHead->currentIndex() == noteHead->findData(int(NoteHeadGroup::HEAD_CUSTOM))) {
         fillCustomNoteheadsDataFromComboboxes(pitch);
         setCustomNoteheadsGUIEnabled(true);
     } else {
-        m_editedDrumset.drum(pitch).notehead = NoteHead::Group(noteHead->currentData().toInt());
+        m_editedDrumset.drum(pitch).notehead = NoteHeadGroup(noteHead->currentData().toInt());
         fillNoteheadsComboboxes(false, pitch);
         setCustomNoteheadsGUIEnabled(false);
     }
@@ -594,7 +595,7 @@ void EditDrumsetDialog::updateExample()
         return;
     }
     int line      = m_editedDrumset.line(pitch);
-    NoteHead::Group nh = m_editedDrumset.noteHead(pitch);
+    NoteHeadGroup nh = m_editedDrumset.noteHead(pitch);
     int v         = m_editedDrumset.voice(pitch);
     DirectionV dir = m_editedDrumset.stemDirection(pitch);
     bool up = (DirectionV::UP == dir) || (DirectionV::AUTO == dir && line > 4);

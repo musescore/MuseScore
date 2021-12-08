@@ -162,7 +162,7 @@ public:
     Part* getPart(const QString& id) const { return _partMap.value(id); }
     MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
     MusicXMLInstruments getInstruments(const QString& id) const { return _instruments.value(id); }
-    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const DirectionV sd);
+    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const QString id) const;
     MusicXmlIntervalList getIntervals(const QString id) const;
     Fraction getMeasureStart(const int i) const;

@@ -806,7 +806,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             note->chord()->setStaffMove(e.readInt());
         } else if (tag == "head") {
             int i = e.readInt();
-            NoteHead::Group val = Read206::convertHeadGroup(i);
+            NoteHeadGroup val = Read206::convertHeadGroup(i);
             note->setHeadGroup(val);
         } else if (tag == "headType") {
             int i = e.readInt();

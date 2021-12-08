@@ -206,7 +206,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             slides[staffIdx * VOICES] = -2;
             tieNote = true;
         } else if (variant == 3) {                   // dead notes = ghost note
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         } else {
             qDebug("unknown note variant: %d", variant);
@@ -319,7 +319,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
-                gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                 gn->setGhost(true);
             }
             if (fret == 255) {
@@ -436,7 +436,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     Staff* staff = note->staff();
     if (fretNumber == 255) {
         fretNumber = 0;
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
     // dead note represented as high numbers - fix to zero

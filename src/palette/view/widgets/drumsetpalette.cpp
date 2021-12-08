@@ -102,7 +102,7 @@ void DrumsetPalette::updateDrumset()
 
         bool up = false;
         int line = m_drumset->line(pitch);
-        NoteHead::Group noteHead = m_drumset->noteHead(pitch);
+        NoteHeadGroup noteHead = m_drumset->noteHead(pitch);
         int voice = m_drumset->voice(pitch);
         DirectionV dir = m_drumset->stemDirection(pitch);
 
@@ -132,7 +132,7 @@ void DrumsetPalette::updateDrumset()
         note->setPos(0.0, _spatium * .5 * line);
         note->setHeadGroup(noteHead);
         SymId noteheadSym = SymId::noteheadBlack;
-        if (noteHead == NoteHead::Group::HEAD_CUSTOM) {
+        if (noteHead == NoteHeadGroup::HEAD_CUSTOM) {
             noteheadSym = m_drumset->noteHeads(pitch, NoteHeadType::HEAD_QUARTER);
         } else {
             noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);

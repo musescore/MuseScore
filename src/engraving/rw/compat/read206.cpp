@@ -487,52 +487,52 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
     }
 }
 
-NoteHead::Group Read206::convertHeadGroup(int i)
+NoteHeadGroup Read206::convertHeadGroup(int i)
 {
-    NoteHead::Group val;
+    NoteHeadGroup val;
     switch (i) {
     case 1:
-        val = NoteHead::Group::HEAD_CROSS;
+        val = NoteHeadGroup::HEAD_CROSS;
         break;
     case 2:
-        val = NoteHead::Group::HEAD_DIAMOND;
+        val = NoteHeadGroup::HEAD_DIAMOND;
         break;
     case 3:
-        val = NoteHead::Group::HEAD_TRIANGLE_DOWN;
+        val = NoteHeadGroup::HEAD_TRIANGLE_DOWN;
         break;
     case 4:
-        val = NoteHead::Group::HEAD_MI;
+        val = NoteHeadGroup::HEAD_MI;
         break;
     case 5:
-        val = NoteHead::Group::HEAD_SLASH;
+        val = NoteHeadGroup::HEAD_SLASH;
         break;
     case 6:
-        val = NoteHead::Group::HEAD_XCIRCLE;
+        val = NoteHeadGroup::HEAD_XCIRCLE;
         break;
     case 7:
-        val = NoteHead::Group::HEAD_DO;
+        val = NoteHeadGroup::HEAD_DO;
         break;
     case 8:
-        val = NoteHead::Group::HEAD_RE;
+        val = NoteHeadGroup::HEAD_RE;
         break;
     case 9:
-        val = NoteHead::Group::HEAD_FA;
+        val = NoteHeadGroup::HEAD_FA;
         break;
     case 10:
-        val = NoteHead::Group::HEAD_LA;
+        val = NoteHeadGroup::HEAD_LA;
         break;
     case 11:
-        val = NoteHead::Group::HEAD_TI;
+        val = NoteHeadGroup::HEAD_TI;
         break;
     case 12:
-        val = NoteHead::Group::HEAD_SOL;
+        val = NoteHeadGroup::HEAD_SOL;
         break;
     case 13:
-        val = NoteHead::Group::HEAD_BREVIS_ALT;
+        val = NoteHeadGroup::HEAD_BREVIS_ALT;
         break;
     case 0:
     default:
-        val = NoteHead::Group::HEAD_NORMAL;
+        val = NoteHeadGroup::HEAD_NORMAL;
     }
     return val;
 }
@@ -818,7 +818,7 @@ static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
             note->add(a);
         } else if (tag == "head") {
             int i = e.readInt();
-            NoteHead::Group val = Read206::convertHeadGroup(i);
+            NoteHeadGroup val = Read206::convertHeadGroup(i);
             note->setHeadGroup(val);
         } else if (tag == "headType") {
             int i = e.readInt();

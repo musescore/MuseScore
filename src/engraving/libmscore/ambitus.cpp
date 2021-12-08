@@ -40,7 +40,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-static const NoteHead::Group NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
+static const NoteHeadGroup NOTEHEADGROUP_DEFAULT = NoteHeadGroup::HEAD_NORMAL;
 static const NoteHeadType NOTEHEADTYPE_DEFAULT  = NoteHeadType::HEAD_AUTO;
 static const DirectionH DIR_DEFAULT     = DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
@@ -574,7 +574,7 @@ SymId Ambitus::noteHead() const
     SymId t = Note::noteHead(hg, _noteHeadGroup, ht);
     if (t == SymId::noSym) {
         qDebug("invalid notehead %d/%d", int(_noteHeadGroup), int(_noteHeadType));
-        t = Note::noteHead(0, NoteHead::Group::HEAD_NORMAL, ht);
+        t = Note::noteHead(0, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
 }
@@ -751,7 +751,7 @@ bool Ambitus::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::HEAD_GROUP:
-        setNoteHeadGroup(NoteHead::Group(v.toInt()));
+        setNoteHeadGroup(v.value<NoteHeadGroup>());
         break;
     case Pid::HEAD_TYPE:
         setNoteHeadType(v.value<NoteHeadType>());

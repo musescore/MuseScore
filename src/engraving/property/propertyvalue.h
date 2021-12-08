@@ -83,13 +83,13 @@ enum class P_TYPE {
     BARLINE_TYPE,
     NOTEHEAD_TYPE,
     NOTEHEAD_SCHEME,
+    NOTEHEAD_GROUP,
 
     TEMPO,
     GROUPS,
     SYMID,
     INT_LIST,
 
-    HEAD_GROUP,         // enum class Notehead::Group
     ZERO_INT,           // displayed with offset +1
 
     SUB_STYLE,
@@ -194,9 +194,10 @@ public:
 
     PropertyValue(NoteHeadType v)
         : m_type(P_TYPE::NOTEHEAD_TYPE), m_data(make_data<NoteHeadType>(v)) {}
-
     PropertyValue(NoteHeadScheme v)
         : m_type(P_TYPE::NOTEHEAD_SCHEME), m_data(make_data<NoteHeadScheme>(v)) {}
+    PropertyValue(NoteHeadGroup v)
+        : m_type(P_TYPE::NOTEHEAD_GROUP), m_data(make_data<NoteHeadGroup>(v)) {}
 
     // not sorted
     PropertyValue(Ms::SymId v)

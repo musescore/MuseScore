@@ -171,7 +171,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::NoteHead::Group enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_TRIANGLE).
-    DECLARE_API_ENUM(NoteHeadGroup,    noteHeadGroupEnum,      Ms::NoteHead::Group)
+    DECLARE_API_ENUM(NoteHeadGroup,    noteHeadGroupEnum,      Ms::PluginAPI::NoteHeadGroup)
     /// Contains Ms::ValueType enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// Note.OFFSET_VAL, Note.USER_VAL

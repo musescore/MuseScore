@@ -3211,39 +3211,39 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     } else if ((note->headType() == NoteHeadType::HEAD_HALF) || (note->headType() == NoteHeadType::HEAD_WHOLE)) {
         noteheadTagname += " filled=\"no\"";
     }
-    if (note->headGroup() == NoteHead::Group::HEAD_SLASH) {
+    if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
         xml.tag(noteheadTagname, "slash");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE_UP) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_UP) {
         xml.tag(noteheadTagname, "triangle");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_DIAMOND) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_DIAMOND) {
         xml.tag(noteheadTagname, "diamond");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_PLUS) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_PLUS) {
         xml.tag(noteheadTagname, "cross");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_CROSS) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_CROSS) {
         xml.tag(noteheadTagname, "x");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_XCIRCLE) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_XCIRCLE) {
         xml.tag(noteheadTagname, "circle-x");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_TRIANGLE_DOWN) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_DOWN) {
         xml.tag(noteheadTagname, "inverted triangle");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_SLASHED1) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASHED1) {
         xml.tag(noteheadTagname, "slashed");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_SLASHED2) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_SLASHED2) {
         xml.tag(noteheadTagname, "back slashed");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_DO) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_DO) {
         xml.tag(noteheadTagname, "do");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_RE) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_RE) {
         xml.tag(noteheadTagname, "re");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_MI) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_MI) {
         xml.tag(noteheadTagname, "mi");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_FA && !note->chord()->up()) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_FA && !note->chord()->up()) {
         xml.tag(noteheadTagname, "fa");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_FA && note->chord()->up()) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_FA && note->chord()->up()) {
         xml.tag(noteheadTagname, "fa up");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_LA) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_LA) {
         xml.tag(noteheadTagname, "la");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_TI) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_TI) {
         xml.tag(noteheadTagname, "ti");
-    } else if (note->headGroup() == NoteHead::Group::HEAD_SOL) {
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_SOL) {
         xml.tag(noteheadTagname, "so");
     } else if (note->color() != engravingConfiguration()->defaultColor()) {
         xml.tag(noteheadTagname, "normal");
@@ -6370,7 +6370,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             findPitchesUsed(part, pitches);
             for (int i = 0; i < 128; ++i) {
                 DrumInstrument di = drumset->drum(i);
-                if (di.notehead != NoteHead::Group::HEAD_INVALID) {
+                if (di.notehead != NoteHeadGroup::HEAD_INVALID) {
                     scoreInstrument(xml, idx + 1, i + 1, di.name);
                 } else if (pitches.contains(i)) {
                     scoreInstrument(xml, idx + 1, i + 1, QString("Instrument %1").arg(i + 1));
@@ -6383,7 +6383,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
 
             for (int i = 0; i < 128; ++i) {
                 DrumInstrument di = drumset->drum(i);
-                if (di.notehead != NoteHead::Group::HEAD_INVALID || pitches.contains(i)) {
+                if (di.notehead != NoteHeadGroup::HEAD_INVALID || pitches.contains(i)) {
                     midiInstrument(xml, idx + 1, i + 1, part->instrument(), score, i + 1);
                 }
             }

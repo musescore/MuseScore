@@ -675,7 +675,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 auto note = Factory::createNote(chord);
                 chord->add(note);
                 if (n.dead) {
-                    note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                    note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                     note->setGhost(true);
                 }
 

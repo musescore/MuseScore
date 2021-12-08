@@ -25,6 +25,7 @@
 #include "libmscore/property.h"
 
 #include "xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -369,6 +370,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         putLevel();
         *this << "<" << name << ">";
         *this << XmlValue::toXml(data.value<NoteHeadScheme>());
+        *this << "</" << ename << ">\n";
+    } break;
+    case P_TYPE::NOTEHEAD_GROUP: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXmlTag(data.value<NoteHeadGroup>());
         *this << "</" << ename << ">\n";
     } break;
     default: {

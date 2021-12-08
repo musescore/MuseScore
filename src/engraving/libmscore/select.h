@@ -65,7 +65,7 @@ struct NotePattern {
     int pitch = -1;
     int string = INVALID_STRING_INDEX;
     int tpc = Tpc::TPC_INVALID;
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
+    NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;
     TDuration durationType = TDuration();
     Fraction durationTicks;
     NoteType type = NoteType::INVALID;

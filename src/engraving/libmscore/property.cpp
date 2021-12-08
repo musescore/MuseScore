@@ -25,6 +25,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "accidental.h"
 #include "bracket.h"
@@ -87,7 +88,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FIXED,                   false, "fixed",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "fixed") },
     { Pid::FIXED_LINE,              false, "fixedLine",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fixed line") },
     { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::NOTEHEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
-    { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::HEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
+    { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::NOTEHEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
     { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
     { Pid::VELO_OFFSET,             false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
@@ -468,8 +469,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         return PropertyValue();
     case P_TYPE::SYMID:
         return PropertyValue::fromValue(SymNames::symIdByName(value));
-    case P_TYPE::HEAD_GROUP:
-        return PropertyValue::fromValue(int(NoteHead::name2group(value)));
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
@@ -549,8 +548,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
+    case P_TYPE::NOTEHEAD_GROUP:
+        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
     case P_TYPE::SYMID:
-    case P_TYPE::HEAD_GROUP:
 
     case P_TYPE::SUB_STYLE:
     case P_TYPE::ORIENTATION:
@@ -630,8 +630,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         }
     case P_TYPE::SYMID:
         return SymNames::nameForSymId(SymId(value.toInt()));
-    case P_TYPE::HEAD_GROUP:
-        return NoteHead::group2name(NoteHead::Group(value.toInt()));
     case P_TYPE::SUB_STYLE:
         return textStyleName(Tid(value.toInt()));
     case P_TYPE::CHANGE_SPEED:
