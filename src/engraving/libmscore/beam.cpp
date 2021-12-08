@@ -1010,6 +1010,10 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
 
+    if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
+        NOT_IMPL_RETURN;
+    }
+
     // todo: add edge case for when a beam starts or ends on a rest
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
@@ -1041,7 +1045,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
     endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
 
-    _beamDist = (_beamSpacing / 4.0) * spatium();
+    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     add8thSpaceSlant(isStartDictator ? startAnchor : endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
