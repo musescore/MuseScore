@@ -42,6 +42,8 @@ class CanvasPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(int scrollPagesOrientation READ scrollPagesOrientation WRITE setScrollPagesOrientation NOTIFY scrollPagesOrientationChanged)
     Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
 
+    Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
+
 public:
     explicit CanvasPreferencesModel(QObject* parent = nullptr);
 
@@ -57,17 +59,22 @@ public:
     int scrollPagesOrientation() const;
     bool limitScrollArea() const;
 
+    int selectionProximity() const;
+
 public slots:
     void setMouseZoomPrecision(int precision);
 
     void setScrollPagesOrientation(int orientation);
     void setLimitScrollArea(bool limit);
 
+    void setSelectionProximity(int proximity);
+
 signals:
     void defaultZoomChanged();
     void mouseZoomPrecisionChanged();
     void scrollPagesOrientationChanged();
     void limitScrollAreaChanged();
+    void selectionProximityChanged(int selectionProximity);
 
 private:
     void setupConnections();
