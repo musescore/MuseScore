@@ -53,6 +53,9 @@ signals:
     void currentNotationIndexChanged(int index);
 
 private:
+    void onMasterNotationChanged();
+    void onCurrentNotationChanged();
+
     IMasterNotationPtr masterNotation() const;
 
     void loadNotations();
