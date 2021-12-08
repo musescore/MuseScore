@@ -34,6 +34,7 @@
 #include "draw/brush.h"
 #include "rw/xml.h"
 #include "accessibility/accessiblenote.h"
+#include "types/typesconv.h"
 
 #include "accidental.h"
 #include "actionicon.h"
@@ -90,7 +91,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 //int(NoteHead::Group::HEAD_GROUPS) - 1: "-1" is needed to prevent building CUSTOM_GROUP noteheads set, since it is built by users and keep a specific set of existing noteheads
-static const SymId noteHeads[2][int(NoteHead::Group::HEAD_GROUPS) - 1][int(NoteHeadType::HEAD_TYPES)] = {
+static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHeadType::HEAD_TYPES)] = {
     {    // down stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
           SymId::noteheadDoubleWhole },
@@ -306,79 +307,6 @@ static NoteHeadName noteHeadSchemeNames[] = {
     { "shape-7-walker",      QT_TRANSLATE_NOOP("noteheadschemes", "7-shape (Walker)") }
 };
 
-// same order as NoteHead::Group
-static NoteHeadName noteHeadGroupNames[] = {
-    { "normal",         QT_TRANSLATE_NOOP("noteheadnames", "Normal") },
-    { "cross",          QT_TRANSLATE_NOOP("noteheadnames", "Cross") },
-    { "plus",           QT_TRANSLATE_NOOP("noteheadnames", "Plus") },
-    { "xcircle",        QT_TRANSLATE_NOOP("noteheadnames", "XCircle") },
-    { "withx",          QT_TRANSLATE_NOOP("noteheadnames", "With X") },
-    { "triangle-up",    QT_TRANSLATE_NOOP("noteheadnames", "Triangle up") },
-    { "triangle-down",  QT_TRANSLATE_NOOP("noteheadnames", "Triangle down") },
-    { "slashed1",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (forwards)") },
-    { "slashed2",       QT_TRANSLATE_NOOP("noteheadnames", "Slashed (backwards)") },
-    { "diamond",        QT_TRANSLATE_NOOP("noteheadnames", "Diamond") },
-    { "diamond-old",    QT_TRANSLATE_NOOP("noteheadnames", "Diamond (old)") },
-    { "circled",        QT_TRANSLATE_NOOP("noteheadnames", "Circled") },
-    { "circled-large",  QT_TRANSLATE_NOOP("noteheadnames", "Circled large") },
-    { "large-arrow",    QT_TRANSLATE_NOOP("noteheadnames", "Large arrow") },
-    { "altbrevis",      QT_TRANSLATE_NOOP("noteheadnames", "Alt. brevis") },
-
-    { "slash",     QT_TRANSLATE_NOOP("noteheadnames", "Slash") },
-
-    // shape notes
-    { "sol",       QT_TRANSLATE_NOOP("noteheadnames", "Sol") },
-    { "la",        QT_TRANSLATE_NOOP("noteheadnames", "La") },
-    { "fa",        QT_TRANSLATE_NOOP("noteheadnames", "Fa") },
-    { "mi",        QT_TRANSLATE_NOOP("noteheadnames", "Mi") },
-    { "do",        QT_TRANSLATE_NOOP("noteheadnames", "Do") },
-    { "re",        QT_TRANSLATE_NOOP("noteheadnames", "Re") },
-    { "ti",        QT_TRANSLATE_NOOP("noteheadnames", "Ti") },
-
-    // not exposed
-    { "do-walker", QT_TRANSLATE_NOOP("noteheadnames", "Do (Walker)") },
-    { "re-walker", QT_TRANSLATE_NOOP("noteheadnames", "Re (Walker)") },
-    { "ti-walker", QT_TRANSLATE_NOOP("noteheadnames", "Ti (Walker)") },
-    { "do-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Do (Funk)") },
-    { "re-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Re (Funk)") },
-    { "ti-funk",   QT_TRANSLATE_NOOP("noteheadnames", "Ti (Funk)") },
-
-    // note name
-    { "do-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Do (Name)") },
-    { "re-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Re (Name)") },
-    { "mi-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Mi (Name)") },
-    { "fa-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Fa (Name)") },
-    { "sol-name", QT_TRANSLATE_NOOP("noteheadnames",  "Sol (Name)") },
-    { "la-name",  QT_TRANSLATE_NOOP("noteheadnames",  "La (Name)") },
-    { "ti-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Ti (Name)") },
-    { "si-name",  QT_TRANSLATE_NOOP("noteheadnames",  "Si (Name)") },
-
-    { "a-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "A♯ (Name)") },
-    { "a-name",       QT_TRANSLATE_NOOP("noteheadnames",  "A (Name)") },
-    { "a-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "A♭ (Name)") },
-    { "b-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "B♯ (Name)") },
-    { "b-name",       QT_TRANSLATE_NOOP("noteheadnames",  "B (Name)") },
-    { "b-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "B♭ (Name)") },
-    { "c-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "C♯ (Name)") },
-    { "c-name",       QT_TRANSLATE_NOOP("noteheadnames",  "C (Name)") },
-    { "c-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "C♭ (Name)") },
-    { "d-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "D♯ (Name)") },
-    { "d-name",       QT_TRANSLATE_NOOP("noteheadnames",  "D (Name)") },
-    { "d-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "D♭ (Name)") },
-    { "e-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "E♯ (Name)") },
-    { "e-name",       QT_TRANSLATE_NOOP("noteheadnames",  "E (Name)") },
-    { "e-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "E♭ (Name)") },
-    { "f-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "F♯ (Name)") },
-    { "f-name",       QT_TRANSLATE_NOOP("noteheadnames",  "F (Name)") },
-    { "f-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "F♭ (Name)") },
-    { "g-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "G♯ (Name)") },
-    { "g-name",       QT_TRANSLATE_NOOP("noteheadnames",  "G (Name)") },
-    { "g-flat-name",  QT_TRANSLATE_NOOP("noteheadnames",  "G♭ (Name)") },
-    { "h-name",       QT_TRANSLATE_NOOP("noteheadnames",  "H (Name)") },
-    { "h-sharp-name", QT_TRANSLATE_NOOP("noteheadnames",  "H♯ (Name)") },
-    { "custom",       QT_TRANSLATE_NOOP("noteheadnames",  "Custom") }
-};
-
 // same order as NoteHead::Type
 static NoteHeadName noteHeadTypeNames[] = {
     { "auto",    QT_TRANSLATE_NOOP("noteheadnames", "Auto") },
@@ -398,15 +326,6 @@ QString NoteHead::scheme2userName(NoteHeadScheme scheme)
 }
 
 //---------------------------------------------------------
-//   group2userName
-//---------------------------------------------------------
-
-QString NoteHead::group2userName(NoteHead::Group group)
-{
-    return qtrc("noteheadnames", noteHeadGroupNames[int(group)].username);
-}
-
-//---------------------------------------------------------
 //   type2userName
 //---------------------------------------------------------
 
@@ -416,38 +335,15 @@ QString NoteHead::type2userName(NoteHeadType type)
 }
 
 //---------------------------------------------------------
-//   group2name
-//---------------------------------------------------------
-
-QString NoteHead::group2name(NoteHead::Group group)
-{
-    return noteHeadGroupNames[int(group)].name;
-}
-
-//---------------------------------------------------------
-//   name2group
-//---------------------------------------------------------
-
-NoteHead::Group NoteHead::name2group(const QString& s)
-{
-    for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
-        if (noteHeadGroupNames[i].name == s) {
-            return NoteHead::Group(i);
-        }
-    }
-    return NoteHead::Group::HEAD_NORMAL;
-}
-
-//---------------------------------------------------------
 //   noteHead
 //---------------------------------------------------------
 
-SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t)
+SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t)
 {
     return noteHeads[direction][int(group)][int(t)];
 }
 
-SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int tpc, Key key, NoteHeadScheme scheme)
+SymId Note::noteHead(int direction, NoteHeadGroup group, NoteHeadType t, int tpc, Key key, NoteHeadScheme scheme)
 {
     // shortcut
     if (scheme == NoteHeadScheme::HEAD_NORMAL) {
@@ -456,77 +352,77 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
     // other schemes
     if (scheme == NoteHeadScheme::HEAD_PITCHNAME || scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
         if (tpc == Tpc::TPC_A) {
-            group = NoteHead::Group::HEAD_A;
+            group = NoteHeadGroup::HEAD_A;
         } else if (tpc == Tpc::TPC_B) {
             if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
-                group = NoteHead::Group::HEAD_H;
+                group = NoteHeadGroup::HEAD_H;
             } else {
-                group = NoteHead::Group::HEAD_B;
+                group = NoteHeadGroup::HEAD_B;
             }
         } else if (tpc == Tpc::TPC_C) {
-            group = NoteHead::Group::HEAD_C;
+            group = NoteHeadGroup::HEAD_C;
         } else if (tpc == Tpc::TPC_D) {
-            group = NoteHead::Group::HEAD_D;
+            group = NoteHeadGroup::HEAD_D;
         } else if (tpc == Tpc::TPC_E) {
-            group = NoteHead::Group::HEAD_E;
+            group = NoteHeadGroup::HEAD_E;
         } else if (tpc == Tpc::TPC_F) {
-            group = NoteHead::Group::HEAD_F;
+            group = NoteHeadGroup::HEAD_F;
         } else if (tpc == Tpc::TPC_G) {
-            group = NoteHead::Group::HEAD_G;
+            group = NoteHeadGroup::HEAD_G;
         } else if (tpc == Tpc::TPC_A_S) {
-            group = NoteHead::Group::HEAD_A_SHARP;
+            group = NoteHeadGroup::HEAD_A_SHARP;
         } else if (tpc == Tpc::TPC_B_S) {
             if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
-                group = NoteHead::Group::HEAD_H_SHARP;
+                group = NoteHeadGroup::HEAD_H_SHARP;
             } else {
-                group = NoteHead::Group::HEAD_B_SHARP;
+                group = NoteHeadGroup::HEAD_B_SHARP;
             }
         } else if (tpc == Tpc::TPC_C_S) {
-            group = NoteHead::Group::HEAD_C_SHARP;
+            group = NoteHeadGroup::HEAD_C_SHARP;
         } else if (tpc == Tpc::TPC_D_S) {
-            group = NoteHead::Group::HEAD_D_SHARP;
+            group = NoteHeadGroup::HEAD_D_SHARP;
         } else if (tpc == Tpc::TPC_E_S) {
-            group = NoteHead::Group::HEAD_E_SHARP;
+            group = NoteHeadGroup::HEAD_E_SHARP;
         } else if (tpc == Tpc::TPC_F_S) {
-            group = NoteHead::Group::HEAD_F_SHARP;
+            group = NoteHeadGroup::HEAD_F_SHARP;
         } else if (tpc == Tpc::TPC_G_S) {
-            group = NoteHead::Group::HEAD_G_SHARP;
+            group = NoteHeadGroup::HEAD_G_SHARP;
         } else if (tpc == Tpc::TPC_A_B) {
-            group = NoteHead::Group::HEAD_A_FLAT;
+            group = NoteHeadGroup::HEAD_A_FLAT;
         } else if (tpc == Tpc::TPC_B_B) {
             if (scheme == NoteHeadScheme::HEAD_PITCHNAME_GERMAN) {
-                group = NoteHead::Group::HEAD_B;
+                group = NoteHeadGroup::HEAD_B;
             } else {
-                group = NoteHead::Group::HEAD_B_FLAT;
+                group = NoteHeadGroup::HEAD_B_FLAT;
             }
         } else if (tpc == Tpc::TPC_C_B) {
-            group = NoteHead::Group::HEAD_C_FLAT;
+            group = NoteHeadGroup::HEAD_C_FLAT;
         } else if (tpc == Tpc::TPC_D_B) {
-            group = NoteHead::Group::HEAD_D_FLAT;
+            group = NoteHeadGroup::HEAD_D_FLAT;
         } else if (tpc == Tpc::TPC_E_B) {
-            group = NoteHead::Group::HEAD_E_FLAT;
+            group = NoteHeadGroup::HEAD_E_FLAT;
         } else if (tpc == Tpc::TPC_F_B) {
-            group = NoteHead::Group::HEAD_F_FLAT;
+            group = NoteHeadGroup::HEAD_F_FLAT;
         } else if (tpc == Tpc::TPC_G_B) {
-            group = NoteHead::Group::HEAD_G_FLAT;
+            group = NoteHeadGroup::HEAD_G_FLAT;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_4) {
         int degree = tpc2degree(tpc, key);
         switch (degree) {
         case 0:
         case 3:
-            group = NoteHead::Group::HEAD_FA;
+            group = NoteHeadGroup::HEAD_FA;
             break;
         case 1:
         case 4:
-            group = NoteHead::Group::HEAD_SOL;
+            group = NoteHeadGroup::HEAD_SOL;
             break;
         case 2:
         case 5:
-            group = NoteHead::Group::HEAD_LA;
+            group = NoteHeadGroup::HEAD_LA;
             break;
         case 6:
-            group = NoteHead::Group::HEAD_MI;
+            group = NoteHeadGroup::HEAD_MI;
             break;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN
@@ -536,41 +432,41 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
         switch (degree) {
         case 0:
             if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
-                group = NoteHead::Group::HEAD_DO;
+                group = NoteHeadGroup::HEAD_DO;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
-                group = NoteHead::Group::HEAD_DO_FUNK;
+                group = NoteHeadGroup::HEAD_DO_FUNK;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
-                group = NoteHead::Group::HEAD_DO_WALKER;
+                group = NoteHeadGroup::HEAD_DO_WALKER;
             }
             break;
         case 1:
             if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
-                group = NoteHead::Group::HEAD_RE;
+                group = NoteHeadGroup::HEAD_RE;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
-                group = NoteHead::Group::HEAD_RE_FUNK;
+                group = NoteHeadGroup::HEAD_RE_FUNK;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
-                group = NoteHead::Group::HEAD_RE_WALKER;
+                group = NoteHeadGroup::HEAD_RE_WALKER;
             }
             break;
         case 2:
-            group = NoteHead::Group::HEAD_MI;
+            group = NoteHeadGroup::HEAD_MI;
             break;
         case 3:
-            group = NoteHead::Group::HEAD_FA;
+            group = NoteHeadGroup::HEAD_FA;
             break;
         case 4:
-            group = NoteHead::Group::HEAD_SOL;
+            group = NoteHeadGroup::HEAD_SOL;
             break;
         case 5:
-            group = NoteHead::Group::HEAD_LA;
+            group = NoteHeadGroup::HEAD_LA;
             break;
         case 6:
             if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN) {
-                group = NoteHead::Group::HEAD_TI;
+                group = NoteHeadGroup::HEAD_TI;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK) {
-                group = NoteHead::Group::HEAD_TI_FUNK;
+                group = NoteHeadGroup::HEAD_TI_FUNK;
             } else if (scheme == NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER) {
-                group = NoteHead::Group::HEAD_TI_WALKER;
+                group = NoteHeadGroup::HEAD_TI_WALKER;
             }
             break;
         }
@@ -578,43 +474,43 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHeadType t, int t
         int degree = tpc2degree(tpc, key);
         switch (degree) {
         case 0:
-            group = NoteHead::Group::HEAD_DO_NAME;
+            group = NoteHeadGroup::HEAD_DO_NAME;
             break;
         case 1:
-            group = NoteHead::Group::HEAD_RE_NAME;
+            group = NoteHeadGroup::HEAD_RE_NAME;
             break;
         case 2:
-            group = NoteHead::Group::HEAD_MI_NAME;
+            group = NoteHeadGroup::HEAD_MI_NAME;
             break;
         case 3:
-            group = NoteHead::Group::HEAD_FA_NAME;
+            group = NoteHeadGroup::HEAD_FA_NAME;
             break;
         case 4:
-            group = NoteHead::Group::HEAD_SOL_NAME;
+            group = NoteHeadGroup::HEAD_SOL_NAME;
             break;
         case 5:
-            group = NoteHead::Group::HEAD_LA_NAME;
+            group = NoteHeadGroup::HEAD_LA_NAME;
             break;
         case 6:
-            group = NoteHead::Group::HEAD_TI_NAME;
+            group = NoteHeadGroup::HEAD_TI_NAME;
             break;
         }
     } else if (scheme == NoteHeadScheme::HEAD_SOLFEGE_FIXED) {
         QString stepName = tpc2stepName(tpc);
         if (stepName == "C") {
-            group = NoteHead::Group::HEAD_DO_NAME;
+            group = NoteHeadGroup::HEAD_DO_NAME;
         } else if (stepName == "D") {
-            group = NoteHead::Group::HEAD_RE_NAME;
+            group = NoteHeadGroup::HEAD_RE_NAME;
         } else if (stepName == "E") {
-            group = NoteHead::Group::HEAD_MI_NAME;
+            group = NoteHeadGroup::HEAD_MI_NAME;
         } else if (stepName == "F") {
-            group = NoteHead::Group::HEAD_FA_NAME;
+            group = NoteHeadGroup::HEAD_FA_NAME;
         } else if (stepName == "G") {
-            group = NoteHead::Group::HEAD_SOL_NAME;
+            group = NoteHeadGroup::HEAD_SOL_NAME;
         } else if (stepName == "A") {
-            group = NoteHead::Group::HEAD_LA_NAME;
+            group = NoteHeadGroup::HEAD_LA_NAME;
         } else if (stepName == "B") {
-            group = NoteHead::Group::HEAD_SI_NAME;
+            group = NoteHeadGroup::HEAD_SI_NAME;
         }
     }
     return noteHeads[direction][int(group)][int(t)];
@@ -629,12 +525,12 @@ NoteHead::NoteHead(Note* parent)
 //   they are either half note, either double whole
 //---------------------------------------------------------
 
-NoteHead::Group NoteHead::headGroup() const
+NoteHeadGroup NoteHead::headGroup() const
 {
-    Group group = Group::HEAD_INVALID;
-    for (int i = 0; i < int(Group::HEAD_DO_WALKER); ++i) {
+    NoteHeadGroup group = NoteHeadGroup::HEAD_INVALID;
+    for (int i = 0; i < int(NoteHeadGroup::HEAD_DO_WALKER); ++i) {
         if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
-            group = (Group)i;
+            group = (NoteHeadGroup)i;
             break;
         }
     }
@@ -897,7 +793,7 @@ QString Note::tpcUserName(const bool explicitAccidental) const
 {
     QString pitchName = tpcUserName(tpc(), epitch() + ottaveCapoFret(), explicitAccidental);
 
-    if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
+    if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         // see Note::accessibleInfo(), but we return what we have
         return pitchName;
     }
@@ -965,7 +861,7 @@ SymId Note::noteHead() const
 
     const Staff* st = chord() ? chord()->staff() : nullptr;
 
-    if (_headGroup == NoteHead::Group::HEAD_CUSTOM) {
+    if (_headGroup == NoteHeadGroup::HEAD_CUSTOM) {
         if (st) {
             if (st->staffTypeForElement(chord())->isDrumStaff()) {
                 Fraction t = chord()->tick();
@@ -975,7 +871,7 @@ SymId Note::noteHead() const
                     return d->noteHeads(_pitch, ht);
                 } else {
                     qDebug("no drumset");
-                    return noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
+                    return noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
                 }
             }
         } else {
@@ -1000,7 +896,7 @@ SymId Note::noteHead() const
     SymId t = noteHead(up, _headGroup, ht, tpc(), key, scheme);
     if (t == SymId::noSym) {
         qDebug("invalid notehead %d/%d", int(_headGroup), int(ht));
-        t = noteHead(up, NoteHead::Group::HEAD_NORMAL, ht);
+        t = noteHead(up, NoteHeadGroup::HEAD_NORMAL, ht);
     }
     return t;
 }
@@ -1036,13 +932,13 @@ qreal Note::outsideTieAttachX(bool up) const
     qreal xo;
 
     // special cases:
-    if (_headGroup == NoteHead::Group::HEAD_SLASH) {
+    if (_headGroup == NoteHeadGroup::HEAD_SLASH) {
         // the anchors are really close to the stem attach points
         xo = up ? symSmuflAnchor(noteHead(), SmuflAnchorId::stemUpSE).x() : symSmuflAnchor(noteHead(), SmuflAnchorId::stemDownNW).x();
         xo += spatium() * 0.13 * (chord()->up() ? mag() : -mag());
         return x() + xo;
     }
-    if (_headGroup == NoteHead::Group::HEAD_SLASHED1 || _headGroup == NoteHead::Group::HEAD_SLASHED2) {
+    if (_headGroup == NoteHeadGroup::HEAD_SLASHED1 || _headGroup == NoteHeadGroup::HEAD_SLASHED2) {
         // just use the very center of the notehead
         return x() + ((headBodyWidth() / 2) * mag());
     }
@@ -1077,13 +973,13 @@ qreal Note::outsideTieAttachX(bool up) const
     return x() + ((headWidth() / 2) * mag());
 }
 
-void Note::updateHeadGroup(const NoteHead::Group headGroup)
+void Note::updateHeadGroup(const NoteHeadGroup headGroup)
 {
-    NoteHead::Group group = headGroup;
+    NoteHeadGroup group = headGroup;
 
-    if (group == NoteHead::Group::HEAD_INVALID) {
+    if (group == NoteHeadGroup::HEAD_INVALID) {
         qDebug("unknown notehead");
-        group = NoteHead::Group::HEAD_NORMAL;
+        group = NoteHeadGroup::HEAD_NORMAL;
     }
 
     if (group == _headGroup) {
@@ -1096,7 +992,7 @@ void Note::updateHeadGroup(const NoteHead::Group headGroup)
 
             Note* note = toNote(scoreElement);
 
-            if (note->staff() && note->staff()->isTabStaff(chord()->tick()) && group == NoteHead::Group::HEAD_CROSS) {
+            if (note->staff() && note->staff()->isTabStaff(chord()->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
                 scoreElement->undoChangeProperty(Pid::GHOST, true);
             }
         }
@@ -1929,10 +1825,10 @@ EngravingItem* Note::drop(EditData& data)
     case ElementType::NOTEHEAD:
     {
         NoteHead* s = toNoteHead(e);
-        NoteHead::Group group = s->headGroup();
-        if (group == NoteHead::Group::HEAD_INVALID) {
+        NoteHeadGroup group = s->headGroup();
+        if (group == NoteHeadGroup::HEAD_INVALID) {
             qDebug("unknown notehead");
-            group = NoteHead::Group::HEAD_NORMAL;
+            group = NoteHeadGroup::HEAD_NORMAL;
         }
         delete s;
 
@@ -1941,7 +1837,7 @@ EngravingItem* Note::drop(EditData& data)
                 for (EngravingObject* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                     Note* note = toNote(se);
-                    if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS) {
+                    if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHeadGroup::HEAD_CROSS) {
                         se->undoChangeProperty(Pid::GHOST, true);
                     }
                 }
@@ -2596,9 +2492,9 @@ void Note::setHeadScheme(NoteHeadScheme val)
 //   setHeadGroup
 //---------------------------------------------------------
 
-void Note::setHeadGroup(NoteHead::Group val)
+void Note::setHeadGroup(NoteHeadGroup val)
 {
-    Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHead::Group::HEAD_GROUPS));
+    Q_ASSERT(int(val) >= 0 && int(val) < int(NoteHeadGroup::HEAD_GROUPS));
     _headGroup = val;
 }
 
@@ -2972,7 +2868,7 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
         }
     }
 
-    _headGroup = NoteHead::Group(nval.headGroup);
+    _headGroup = NoteHeadGroup(nval.headGroup);
 }
 
 //---------------------------------------------------------
@@ -3081,7 +2977,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         setHeadScheme(v.value<NoteHeadScheme>());
         break;
     case Pid::HEAD_GROUP:
-        setHeadGroup(NoteHead::Group(v.toInt()));
+        setHeadGroup(v.value<NoteHeadGroup>());
         break;
     case Pid::VELO_OFFSET:
         setVeloOffset(v.toInt());
@@ -3151,7 +3047,7 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::HEAD_SCHEME:
         return NoteHeadScheme::HEAD_AUTO;
     case Pid::HEAD_GROUP:
-        return int(NoteHead::Group::HEAD_NORMAL);
+        return NoteHeadGroup::HEAD_NORMAL;
     case Pid::VELO_OFFSET:
         return 0;
     case Pid::TUNING:
@@ -3253,7 +3149,7 @@ QString Note::accessibleInfo() const
     }
 
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
-    if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
+    if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
@@ -3280,7 +3176,7 @@ QString Note::screenReaderInfo() const
     QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
     QString pitchName;
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
-    if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
+    if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
@@ -3376,7 +3272,7 @@ int Note::qmlDotsCount()
 
 QString Note::subtypeName() const
 {
-    return NoteHead::group2userName(_headGroup);
+    return TConv::toUserName(_headGroup);
 }
 
 //---------------------------------------------------------

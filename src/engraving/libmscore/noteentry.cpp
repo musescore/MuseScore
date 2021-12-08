@@ -83,7 +83,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
             return nval;
         }
         nval.headGroup = ds->noteHead(nval.pitch);
-        if (nval.headGroup == NoteHead::Group::HEAD_INVALID) {
+        if (nval.headGroup == NoteHeadGroup::HEAD_INVALID) {
             error = true;
             return nval;
         }

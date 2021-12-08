@@ -22,6 +22,8 @@
 
 #include "palettecreator.h"
 
+#include "engraving/types/typesconv.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
@@ -526,15 +528,15 @@ PalettePtr PaletteCreator::newNoteHeadsPalette()
     sp->setGridSize(33, 36);
     sp->setDrawGrid(true);
 
-    for (int i = 0; i < int(NoteHead::Group::HEAD_DO_WALKER); ++i) {
-        SymId sym = Note::noteHead(0, NoteHead::Group(i), NoteHeadType::HEAD_HALF);
+    for (int i = 0; i < int(NoteHeadGroup::HEAD_DO_WALKER); ++i) {
+        SymId sym = Note::noteHead(0, NoteHeadGroup(i), NoteHeadType::HEAD_HALF);
         // HEAD_BREVIS_ALT shows up only for brevis value
-        if (i == int(NoteHead::Group::HEAD_BREVIS_ALT)) {
-            sym = Note::noteHead(0, NoteHead::Group(i), NoteHeadType::HEAD_BREVIS);
+        if (i == int(NoteHeadGroup::HEAD_BREVIS_ALT)) {
+            sym = Note::noteHead(0, NoteHeadGroup(i), NoteHeadType::HEAD_BREVIS);
         }
         auto nh = makeElement<NoteHead>(gpaletteScore);
         nh->setSym(sym);
-        sp->appendElement(nh, NoteHead::group2userName(NoteHead::Group(i)));
+        sp->appendElement(nh, TConv::toUserName((NoteHeadGroup(i))));
     }
 
     sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");

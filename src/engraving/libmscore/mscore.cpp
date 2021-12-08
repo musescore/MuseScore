@@ -234,7 +234,6 @@ void MScore::registerUiTypes()
 {
 #ifdef SCRIPT_INTERFACE
     qRegisterMetaType<Spanner::Anchor>("Anchor");
-    qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
     qRegisterMetaType<SegmentType>("SegmentType");
     qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
     qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");

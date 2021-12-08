@@ -3484,7 +3484,7 @@ void Score::collectNoteMatch(void* data, EngravingItem* e)
     if (p->tpc != Tpc::TPC_INVALID && p->tpc != n->tpc()) {
         return;
     }
-    if (p->notehead != NoteHead::Group::HEAD_INVALID && p->notehead != n->headGroup()) {
+    if (p->notehead != NoteHeadGroup::HEAD_INVALID && p->notehead != n->headGroup()) {
         return;
     }
     if (p->durationType.type() != TDuration::DurationType::V_INVALID && p->durationType != n->chord()->actualDurationType()) {

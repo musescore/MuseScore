@@ -3264,7 +3264,7 @@ void Score::cmdSlashFill()
             }
             if (staff(staffIdx)->staffType(s->tick())->group() == StaffGroup::PERCUSSION) {
                 nv.pitch = 0;
-                nv.headGroup = NoteHead::Group::HEAD_SLASH;
+                nv.headGroup = NoteHeadGroup::HEAD_SLASH;
             } else {
                 Position p;
                 p.segment = s;

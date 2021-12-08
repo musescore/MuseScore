@@ -51,7 +51,7 @@ struct DrumInstrument {
     QString name;
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;   ///< notehead symbol set
+    NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;   ///< notehead symbol set
     SymId noteheads[int(NoteHeadType::HEAD_TYPES)]
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
@@ -62,7 +62,7 @@ struct DrumInstrument {
     QList<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
-    DrumInstrument(const char* s, NoteHead::Group nh, int l, DirectionV d,
+    DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
         : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
     void addVariant(DrumInstrumentVariant v) { variants.append(v); }
@@ -82,7 +82,7 @@ class Drumset
 
 public:
     bool isValid(int pitch) const { return !_drum[pitch].name.isEmpty(); }
-    NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead; }
+    NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return _drum[pitch].line; }
     int voice(int pitch) const { return _drum[pitch].voice; }

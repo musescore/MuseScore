@@ -401,7 +401,7 @@ struct FilterNotesOptions : FilterElementsOptions
     int pitch = -1;
     int string = Ms::INVALID_STRING_INDEX;
     int tpc = Ms::Tpc::TPC_INVALID;
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
+    engraving::NoteHeadGroup notehead = engraving::NoteHeadGroup::HEAD_INVALID;
     Ms::TDuration durationType = Ms::TDuration();
     Ms::NoteType noteType = Ms::NoteType::INVALID;
 };

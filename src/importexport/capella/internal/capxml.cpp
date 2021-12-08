@@ -505,9 +505,9 @@ void ChordObj::readCapxNotes(XmlReader& e)
             n.explAlteration = 0;
             n.headType = 0;
             if (shape == "none") {
-                n.headGroup = int(NoteHead::Group::HEAD_CROSS);
+                n.headGroup = int(NoteHeadGroup::HEAD_CROSS);
             } else {
-                n.headGroup = int(NoteHead::Group::HEAD_NORMAL);
+                n.headGroup = int(NoteHeadGroup::HEAD_NORMAL);
             }
             n.alteration = istep;
             n.silent = 0;

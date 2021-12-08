@@ -351,7 +351,7 @@ MusicXmlIntervalList MusicXMLParserPass1::getIntervals(const QString id) const
 
 void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const QString& instrId,
-                                            const NoteHead::Group hg,
+                                            const NoteHeadGroup hg,
                                             const int line,
                                             const DirectionV sd)
 {

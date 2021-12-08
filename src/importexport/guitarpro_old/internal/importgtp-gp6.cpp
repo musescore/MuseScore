@@ -1065,7 +1065,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     midi = currentProperty.firstChild().toElement().text();
                                 } else if (argument == "Muted") {
                                     if (!currentProperty.firstChild().nodeName().compare("Enable")) {
-                                        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                                        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                                         note->setGhost(true);
                                     }
                                 } else if (argument == "Tapped") {
@@ -1182,7 +1182,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
                                         harmonicNote->setString(musescoreString);
                                         harmonicNote->setFret(harmonicFret);                                         // add the octave for the harmonic
-                                        harmonicNote->setHeadGroup(NoteHead::Group::HEAD_DIAMOND);
+                                        harmonicNote->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
                                         if (!value.compare("12")) {
                                             harmonicFret += 12;
                                         } else if (!value.compare("7") || !value.compare("19")) {
@@ -1222,7 +1222,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 note->setPitch(midi.toInt());
                             } else if (element != "") {
                                 readDrumNote(note, element.toInt(), variation.toInt());
-                            } else if (stringNum != "" && stringNum.toInt() >= 0 && note->headGroup() != NoteHead::Group::HEAD_DIAMOND) {
+                            } else if (stringNum != "" && stringNum.toInt() >= 0 && note->headGroup() != NoteHeadGroup::HEAD_DIAMOND) {
                                 Staff* staff        = note->staff();
                                 int fretNumber      = fretNum.toInt();
                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
