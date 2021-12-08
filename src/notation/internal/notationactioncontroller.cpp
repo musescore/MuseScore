@@ -340,7 +340,7 @@ void NotationActionController::init()
     registerAction("enh-both", &Interaction::changeEnharmonicSpelling, true);
     registerAction("enh-current", &Interaction::changeEnharmonicSpelling, false);
 
-    registerAction("edit-element", &Interaction::startEditElement);
+    registerAction("edit-element", &Controller::startEditSelectedElement);
 
     registerAction("text-b", &Interaction::toggleBold, &Controller::isEditingText);
     registerAction("text-i", &Interaction::toggleItalic, &Controller::isEditingText);
@@ -1037,6 +1037,21 @@ void NotationActionController::openSelectionMoreOptions()
     } else {
         interactive()->open("musescore://notation/selectelement");
     }
+}
+
+void NotationActionController::startEditSelectedElement()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = interaction->selection();
+    if (!selection) {
+        return;
+    }
+
+    interaction->startEditElement(selection->element());
 }
 
 void NotationActionController::insertBoxes(BoxType boxType, int count)

@@ -76,6 +76,21 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
 
+static int findSystemIndex(Ms::EngravingItem* element)
+{
+    Ms::System* target = element->parent()->isSystem() ? toSystem(element->parent()) : element->findMeasureBase()->system();
+    return element->score()->systems().indexOf(target);
+}
+
+static int findBracketIndex(Ms::EngravingItem* element)
+{
+    if (!element->isBracket()) {
+        return -1;
+    }
+    Ms::Bracket* bracket = toBracket(element);
+    return bracket->system()->brackets().indexOf(bracket);
+}
+
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_editData(&m_scoreCallbacks)
 {
@@ -2460,75 +2475,6 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-static int findSystemIndex(Ms::EngravingItem* element)
-{
-    Ms::System* target = element->parent()->isSystem() ? toSystem(element->parent()) : element->findMeasureBase()->system();
-    return element->score()->systems().indexOf(target);
-}
-
-static int findBracketIndex(Ms::EngravingItem* element)
-{
-    if (!element->isBracket()) {
-        return -1;
-    }
-    Ms::Bracket* bracket = toBracket(element);
-    return bracket->system()->brackets().indexOf(bracket);
-}
-
-void NotationInteraction::editText(QKeyEvent* event)
-{
-    m_editData.modifiers = event->modifiers();
-
-    if (isDragStarted()) {
-        return; // ignore all key strokes while dragging
-    }
-
-    bool wasEditing = m_editData.element != nullptr;
-    if (!wasEditing && selection()->element()) {
-        m_editData.element = selection()->element();
-    }
-
-    if (!m_editData.element) {
-        return;
-    }
-
-    m_editData.key = event->key();
-    m_editData.s = event->text();
-
-    int systemIndex = findSystemIndex(m_editData.element);
-    int bracketIndex = findBracketIndex(m_editData.element);
-
-    startEdit();
-    bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
-
-    if (!wasEditing) {
-        m_editData.element = nullptr;
-    }
-
-    if (handled) {
-        event->accept();
-        apply();
-
-        if (needEndTextEdit()) {
-            endEditText();
-            return;
-        }
-    } else {
-        rollback();
-    }
-
-    if (isTextEditingStarted()) {
-        notifyAboutTextEditingChanged();
-    } else {
-        if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
-            Ms::System* sys = score()->systems()[systemIndex];
-            Ms::EngravingItem* bracket = sys->brackets()[bracketIndex];
-            score()->select(bracket);
-            notifyAboutSelectionChanged();
-        }
-    }
-}
-
 void NotationInteraction::endEditText()
 {
     IF_ASSERT_FAILED(m_editData.element) {
@@ -2662,6 +2608,76 @@ void NotationInteraction::startEditGrip(Ms::Grip grip)
     notifyAboutNotationChanged();
 }
 
+bool NotationInteraction::isElementEditStarted() const
+{
+    return m_editData.element != nullptr && (m_editData.grips == 0 || m_editData.curGrip != Ms::Grip::NO_GRIP);
+}
+
+void NotationInteraction::startEditElement(EngravingItem* element)
+{
+    if (!element) {
+        return;
+    }
+
+    if (isElementEditStarted()) {
+        return;
+    }
+
+    if (element->isTextBase()) {
+        startEditText(element, PointF());
+    } else if (m_editData.grips > 1) {
+        startEditGrip(Ms::Grip::END);
+        if (m_editData.element->generated()) {
+            m_editData.element = nullptr;
+        }
+    } else if (element->isEditable()) {
+        element->startEdit(m_editData);
+        m_editData.element = element;
+    }
+}
+
+void NotationInteraction::editElement(QKeyEvent* event)
+{
+    m_editData.modifiers = event->modifiers();
+    if (isDragStarted()) {
+        return; // ignore all key strokes while dragging
+    }
+    bool wasEditing = m_editData.element != nullptr;
+    if (!wasEditing && selection()->element()) {
+        m_editData.element = selection()->element();
+    }
+
+    if (!m_editData.element) {
+        return;
+    }
+
+    m_editData.key = event->key();
+    m_editData.s = event->text();
+    startEdit();
+    int systemIndex = findSystemIndex(m_editData.element);
+    int bracketIndex = findBracketIndex(m_editData.element);
+    bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
+    if (!wasEditing) {
+        m_editData.element = nullptr;
+    }
+    if (handled) {
+        event->accept();
+        apply();
+    } else {
+        m_undoStack->rollbackChanges();
+    }
+    if (isTextEditingStarted()) {
+        notifyAboutTextEditingChanged();
+    } else {
+        if (bracketIndex >= 0 && systemIndex < score()->systems().size()) {
+            Ms::System* sys = score()->systems()[systemIndex];
+            Ms::EngravingItem* bracket = sys->brackets()[bracketIndex];
+            score()->select(bracket);
+            notifyAboutSelectionChanged();
+        }
+    }
+}
+
 void NotationInteraction::endEditElement()
 {
     if (!m_editData.element) {
@@ -2685,30 +2701,6 @@ void NotationInteraction::endEditElement()
         updateAnchorLines();
     }
     notifyAboutNotationChanged();
-}
-
-bool NotationInteraction::isElementEditStarted() const
-{
-    return m_editData.element != nullptr && (m_editData.grips == 0 || m_editData.curGrip != Ms::Grip::NO_GRIP);
-}
-
-void NotationInteraction::startEditElement()
-{
-    auto el = selection()->element();
-    if (!el || isElementEditStarted()) {
-        return;
-    }
-    if (el->isTextBase()) {
-        startEditText(el, PointF());
-    } else if (m_editData.grips > 1) {
-        startEditGrip(Ms::Grip::END);
-        if (m_editData.element->generated()) {
-            m_editData.element = nullptr;
-        }
-    } else if (el->isEditable()) {
-        el->startEdit(m_editData);
-        m_editData.element = el;
-    }
 }
 
 void NotationInteraction::splitSelectedMeasure()
