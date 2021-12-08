@@ -55,7 +55,7 @@ void Drumset::save(XmlWriter& xml) const
         if (nh == NoteHeadGroup::HEAD_CUSTOM) {
             xml.startObject("noteheads");
             for (int j = 0; j < int(NoteHeadType::HEAD_TYPES); j++) {
-                xml.tag(XmlValue::toXml(NoteHeadType(j)), SymNames::nameForSymId(noteHeads(i, NoteHeadType(j))));
+                xml.tag(TConv::toXmlTag(NoteHeadType(j)), SymNames::nameForSymId(noteHeads(i, NoteHeadType(j))));
             }
             xml.endObject();
         }
@@ -116,7 +116,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
         _drum[pitch].notehead = NoteHeadGroup::HEAD_CUSTOM;
         while (e.readNextStartElement()) {
             const QStringRef& nhTag(e.name());
-            int noteType = int(XmlValue::fromXml(nhTag.toString(), NoteHeadType::HEAD_AUTO));
+            int noteType = int(TConv::fromXmlTag(nhTag.toString(), NoteHeadType::HEAD_AUTO));
             if (noteType > int(NoteHeadType::HEAD_TYPES) - 1 || noteType < 0) {
                 return false;
             }

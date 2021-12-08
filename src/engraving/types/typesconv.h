@@ -32,6 +32,12 @@ class TConv
 public:
     TConv() = default;
 
+    static QString toUserName(NoteHeadType v);
+    static QString toXmlTag(NoteHeadType v);
+    static NoteHeadType fromXmlTag(const QString& tag, NoteHeadType def);
+    static QString toUserName(NoteHeadScheme v);
+    static QString toXmlTag(NoteHeadScheme v);
+    static NoteHeadScheme fromXmlTag(const QString& tag, NoteHeadScheme def);
     static QString toUserName(NoteHeadGroup v);
     static QString toXmlTag(NoteHeadGroup v);
     static NoteHeadGroup fromXmlTag(const QString& tag, NoteHeadGroup def);
