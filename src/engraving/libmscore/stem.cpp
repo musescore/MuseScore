@@ -272,7 +272,7 @@ void Stem::editDrag(EditData& ed)
 
 void Stem::reset()
 {
-    undoChangeProperty(Pid::USER_LEN, 0.0);
+    undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
     EngravingItem::reset();
 }
 
