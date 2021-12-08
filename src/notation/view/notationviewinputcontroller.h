@@ -142,7 +142,6 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
-    bool m_pressedOnSelected = false;
 
     bool m_isZoomInited = false;
     PointF m_beginPoint;

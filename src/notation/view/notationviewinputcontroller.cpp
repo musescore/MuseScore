@@ -451,12 +451,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    if (viewInteraction()->isHitGrip(logicPos)) {
-        viewInteraction()->startEditGrip(logicPos);
-        return;
-    }
-
-    m_pressedOnSelected = hitElement && hitElement == viewInteraction()->selection()->element();
+    const EngravingItem* prevSelectedElement = viewInteraction()->selection()->element();
 
     if (needSelect(event, logicPos)) {
         SelectType selectType = SelectType::SINGLE;
@@ -480,24 +475,25 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         m_view->hideContextMenu();
     }
 
-    if (hitElement) {
-        playbackController()->playElement(hitElement);
+    if (!hitElement) {
+        viewInteraction()->endEditElement();
+        return;
+    }
+
+    playbackController()->playElement(hitElement);
+
+    if (hitElement == prevSelectedElement && viewInteraction()->textEditingAllowed(hitElement)) {
+        viewInteraction()->startEditText(hitElement);
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
-        if (!hitElement || !hitElement->isTextBase()) {
-            viewInteraction()->endEditText();
-        } else {
-            const mu::RectF& bbox = hitElement->canvasBoundingRect();
-            mu::PointF constrainedPt = mu::PointF(
-                m_beginPoint.x() < bbox.left() ? bbox.left()
-                : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
-                m_beginPoint.y() < bbox.top() ? bbox.top()
-                : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
-            viewInteraction()->changeTextCursorPosition(constrainedPt);
-        }
-    } else if (!hitElement) {
-        viewInteraction()->endEditElement();
+        mu::RectF bbox = hitElement->canvasBoundingRect();
+        mu::PointF constrainedPt = mu::PointF(
+            m_beginPoint.x() < bbox.left() ? bbox.left()
+            : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
+            m_beginPoint.y() < bbox.top() ? bbox.top()
+            : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
+        viewInteraction()->changeTextCursorPosition(constrainedPt);
     }
 }
 
@@ -604,7 +600,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
     viewInteraction()->startDrag(elements, elementsOffset, isDraggable);
 }
 
-void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
+void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
     if (!hitElement() && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
         && !viewInteraction()->isDragStarted()) {
@@ -615,19 +611,20 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 
     if (viewInteraction()->isDragStarted()) {
         viewInteraction()->endDrag();
-    } else if (m_pressedOnSelected && viewInteraction()->selection()->element()
-               && viewInteraction()->selection()->element()->isTextBase()) {
-        viewInteraction()->startEditText(viewInteraction()->selection()->element(), PointF(m_view->toLogical(event->pos())));
     }
 }
 
-void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
+void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
 {
-    UNUSED(event);
     EngravingItem* element = viewInteraction()->selection()->element();
+    if (!element) {
+        return;
+    }
 
-    if (!viewInteraction()->textEditingAllowed(element)) {
-        viewInteraction()->startEditElement();
+    if (viewInteraction()->textEditingAllowed(element)) {
+        viewInteraction()->startEditText(element);
+    } else {
+        viewInteraction()->startEditElement(element);
     }
 }
 
@@ -641,8 +638,8 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    if (viewInteraction()->selection()->element() != nullptr) {
-        viewInteraction()->editText(event);
+    if (viewInteraction()->isElementEditStarted()) {
+        viewInteraction()->editElement(event);
     } else if (viewInteraction()->isTextSelected()) {
         if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
             viewInteraction()->startEditText(viewInteraction()->selection()->element(), PointF());
