@@ -1166,35 +1166,35 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
  Convert a MusicXML notehead name to a MuseScore headgroup.
  */
 
-static NoteHead::Group convertNotehead(QString mxmlName)
+static NoteHeadGroup convertNotehead(QString mxmlName)
 {
     QMap<QString, int> map;   // map MusicXML notehead name to a MuseScore headgroup
-    map["slash"] = int(NoteHead::Group::HEAD_SLASH);
-    map["triangle"] = int(NoteHead::Group::HEAD_TRIANGLE_UP);
-    map["diamond"] = int(NoteHead::Group::HEAD_DIAMOND);
-    map["cross"] = int(NoteHead::Group::HEAD_PLUS);
-    map["x"] = int(NoteHead::Group::HEAD_CROSS);
-    map["circle-x"] = int(NoteHead::Group::HEAD_XCIRCLE);
-    map["inverted triangle"] = int(NoteHead::Group::HEAD_TRIANGLE_DOWN);
-    map["slashed"] = int(NoteHead::Group::HEAD_SLASHED1);
-    map["back slashed"] = int(NoteHead::Group::HEAD_SLASHED2);
-    map["normal"] = int(NoteHead::Group::HEAD_NORMAL);
-    map["do"] = int(NoteHead::Group::HEAD_DO);
-    map["re"] = int(NoteHead::Group::HEAD_RE);
-    map["mi"] = int(NoteHead::Group::HEAD_MI);
-    map["fa"] = int(NoteHead::Group::HEAD_FA);
-    map["fa up"] = int(NoteHead::Group::HEAD_FA);
-    map["so"] = int(NoteHead::Group::HEAD_SOL);
-    map["la"] = int(NoteHead::Group::HEAD_LA);
-    map["ti"] = int(NoteHead::Group::HEAD_TI);
+    map["slash"] = int(NoteHeadGroup::HEAD_SLASH);
+    map["triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_UP);
+    map["diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
+    map["cross"] = int(NoteHeadGroup::HEAD_PLUS);
+    map["x"] = int(NoteHeadGroup::HEAD_CROSS);
+    map["circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
+    map["inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
+    map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
+    map["back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
+    map["normal"] = int(NoteHeadGroup::HEAD_NORMAL);
+    map["do"] = int(NoteHeadGroup::HEAD_DO);
+    map["re"] = int(NoteHeadGroup::HEAD_RE);
+    map["mi"] = int(NoteHeadGroup::HEAD_MI);
+    map["fa"] = int(NoteHeadGroup::HEAD_FA);
+    map["fa up"] = int(NoteHeadGroup::HEAD_FA);
+    map["so"] = int(NoteHeadGroup::HEAD_SOL);
+    map["la"] = int(NoteHeadGroup::HEAD_LA);
+    map["ti"] = int(NoteHeadGroup::HEAD_TI);
 
     if (map.contains(mxmlName)) {
-        return NoteHead::Group(map.value(mxmlName));
+        return NoteHeadGroup(map.value(mxmlName));
     } else {
         qDebug("unknown notehead %s", qPrintable(mxmlName));      // TODO
     }
     // default: return 0
-    return NoteHead::Group::HEAD_NORMAL;
+    return NoteHeadGroup::HEAD_NORMAL;
 }
 
 //---------------------------------------------------------
@@ -4384,7 +4384,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
 // the MusicXML values for each note are simply copied to the defaults
 
 static void setDrumset(Chord* c, MusicXMLParserPass1& pass1, const QString& partId, const QString& instrumentId,
-                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const DirectionV stemDir, const NoteHead::Group headGroup)
+                       const Fraction noteStartTime, const mxmlNotePitch& mnp, const DirectionV stemDir, const NoteHeadGroup headGroup)
 {
     // determine staff line based on display-step / -octave and clef type
     const auto clef = c->staff()->clef(noteStartTime);
@@ -4456,7 +4456,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     QString voice;
     DirectionV stemDir = DirectionV::AUTO;
     bool noStem = false;
-    NoteHead::Group headGroup = NoteHead::Group::HEAD_NORMAL;
+    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
     QColor noteColor = QColor::Invalid;
     noteColor.setNamedColor(_e.attributes().value("color").toString());
     QColor noteheadColor = QColor::Invalid;

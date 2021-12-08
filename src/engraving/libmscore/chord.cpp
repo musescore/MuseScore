@@ -3015,15 +3015,15 @@ bool Chord::slash()
 void Chord::setSlash(bool flag, bool stemless)
 {
     int line = 0;
-    NoteHead::Group head = NoteHead::Group::HEAD_SLASH;
+    NoteHeadGroup head = NoteHeadGroup::HEAD_SLASH;
 
     if (!flag) {
         // restore to normal
         undoChangeProperty(Pid::NO_STEM, false);
         undoChangeProperty(Pid::SMALL, false);
-        undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(PointF()));
+        undoChangeProperty(Pid::OFFSET, PointF());
         for (Note* n : _notes) {
-            n->undoChangeProperty(Pid::HEAD_GROUP, int(NoteHead::Group::HEAD_NORMAL));
+            n->undoChangeProperty(Pid::HEAD_GROUP, NoteHeadGroup::HEAD_NORMAL);
             n->undoChangeProperty(Pid::FIXED, false);
             n->undoChangeProperty(Pid::FIXED_LINE, 0);
             n->undoChangeProperty(Pid::PLAY, true);
@@ -3032,8 +3032,8 @@ void Chord::setSlash(bool flag, bool stemless)
                 const Drumset* ds = part()->instrument(tick())->drumset();
                 int pitch = n->pitch();
                 if (ds && ds->isValid(pitch)) {
-                    undoChangeProperty(Pid::STEM_DIRECTION, PropertyValue::fromValue<DirectionV>(ds->stemDirection(pitch)));
-                    n->undoChangeProperty(Pid::HEAD_GROUP, int(ds->noteHead(pitch)));
+                    undoChangeProperty(Pid::STEM_DIRECTION, ds->stemDirection(pitch));
+                    n->undoChangeProperty(Pid::HEAD_GROUP, ds->noteHead(pitch));
                 }
             }
         }
@@ -3075,7 +3075,7 @@ void Chord::setSlash(bool flag, bool stemless)
             // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
             rypos() += y;
         } else {
-            head = NoteHead::Group::HEAD_NORMAL;
+            head = NoteHeadGroup::HEAD_NORMAL;
         }
     }
 

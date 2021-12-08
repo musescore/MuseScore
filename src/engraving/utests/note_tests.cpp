@@ -120,8 +120,8 @@ TEST_F(NoteTests, note)
     EXPECT_EQ(int(n->userDotPosition()), int(DirectionV::AUTO));
     delete n;
     // headGroup
-    for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
-        note->setHeadGroup(NoteHead::Group(i));
+    for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
+        note->setHeadGroup(NoteHeadGroup(i));
         n = static_cast<Note*>(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headGroup()), i);
         delete n;
@@ -242,7 +242,7 @@ TEST_F(NoteTests, note)
     delete n;
 
     // headGroup
-    for (int i = 0; i < int(NoteHead::Group::HEAD_GROUPS); ++i) {
+    for (int i = 0; i < int(NoteHeadGroup::HEAD_GROUPS); ++i) {
         note->setProperty(Pid::HEAD_GROUP, i);
         n = static_cast<Note*>(ScoreRW::writeReadElement(note));
         EXPECT_EQ(int(n->headGroup()), i);

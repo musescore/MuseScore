@@ -21,10 +21,11 @@
  */
 #include "noteheadgroupsmodel.h"
 
-#include "engraving/libmscore/note.h"
+#include "engraving/types/typesconv.h"
 #include "engraving/libmscore/scorefont.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 using namespace Ms;
 
 NoteheadGroupsModel::NoteheadGroupsModel(QObject* parent)
@@ -43,7 +44,7 @@ QHash<int, QByteArray> NoteheadGroupsModel::roleNames() const
 
 int NoteheadGroupsModel::rowCount(const QModelIndex&) const
 {
-    return static_cast<int>(NoteHead::Group::HEAD_DO_WALKER);
+    return static_cast<int>(NoteHeadGroup::HEAD_DO_WALKER);
 }
 
 QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
@@ -53,15 +54,15 @@ QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
     }
 
     int row = index.row();
-    auto group = static_cast<NoteHead::Group>(row);
+    auto group = static_cast<NoteHeadGroup>(row);
 
     switch (role) {
     case HeadGroupRole:
         return row;
     case HintRole:
-        return NoteHead::group2userName(group);
+        return TConv::toUserName(group);
     case IconCodeRole: {
-        auto type = (group == NoteHead::Group::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
+        auto type = (group == NoteHeadGroup::HEAD_BREVIS_ALT) ? NoteHeadType::HEAD_BREVIS : NoteHeadType::HEAD_QUARTER;
         return ScoreFont::fallbackFont()->symCode(Note::noteHead(0, group, type));
     }
     default: break;

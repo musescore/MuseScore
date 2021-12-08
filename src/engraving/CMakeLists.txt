@@ -94,6 +94,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/types.h
     ${CMAKE_CURRENT_LIST_DIR}/types/dimension.h
     ${CMAKE_CURRENT_LIST_DIR}/types/fraction.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/typesconv.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/typesconv.h
 
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h

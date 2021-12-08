@@ -782,7 +782,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
                 chord->add(note);
                 note->setPitch(pitch);
-                note->setHeadGroup(NoteHead::Group(n.headGroup));
+                note->setHeadGroup(NoteHeadGroup(n.headGroup));
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
@@ -1984,9 +1984,9 @@ void ChordObj::read()
         n.headType      = b & 7;
         if (n.headType == 6) {
             n.headType = 0;
-            n.headGroup = int(NoteHead::Group::HEAD_CROSS);
+            n.headGroup = int(NoteHeadGroup::HEAD_CROSS);
         } else {
-            n.headGroup = int(NoteHead::Group::HEAD_NORMAL);
+            n.headGroup = int(NoteHeadGroup::HEAD_NORMAL);
         }
         n.alteration    = ((b >> 3) & 7) - 2;      // -2 -- +2
         if (b & 0x40) {

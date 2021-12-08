@@ -312,84 +312,84 @@ void GuitarPro::initGuitarProDrumset()
 {
     gpDrumset = new Drumset;
     for (int i = 0; i < 128; ++i) {
-        gpDrumset->drum(i).notehead = NoteHead::Group::HEAD_INVALID;
+        gpDrumset->drum(i).notehead = NoteHeadGroup::HEAD_INVALID;
         gpDrumset->drum(i).line     = 0;
         gpDrumset->drum(i).shortcut = 0;
         gpDrumset->drum(i).voice    = 0;
         gpDrumset->drum(i).stemDirection = DirectionV::UP;
     }
     // new drumset determined via guitar pro (third argument specifies position on staff, 10 = C3, 9 = D3, 8 = E3,...)
-    gpDrumset->drum(27) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Q"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(28) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Slap"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(29) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Push"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(30) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Pull"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(31) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sticks"), NoteHead::Group::HEAD_CROSS, 3, DirectionV::UP);
-    gpDrumset->drum(32) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Square Click"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(33) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Click"), NoteHead::Group::HEAD_CROSS, 3, DirectionV::UP);
-    gpDrumset->drum(34) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Bell"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(27) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Q"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(28) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Slap"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(29) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Push"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(30) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Scratch Pull"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(31) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sticks"), NoteHeadGroup::HEAD_CROSS, 3, DirectionV::UP);
+    gpDrumset->drum(32) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Square Click"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(33) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Click"), NoteHeadGroup::HEAD_CROSS, 3, DirectionV::UP);
+    gpDrumset->drum(34) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Metronome Bell"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
     gpDrumset->drum(35)
-        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Acoustic Bass Drum"), NoteHead::Group::HEAD_NORMAL, 7, DirectionV::UP);
-    gpDrumset->drum(36) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Bass Drum 1"), NoteHead::Group::HEAD_NORMAL, 7, DirectionV::UP);
-    gpDrumset->drum(37) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Side Stick"), NoteHead::Group::HEAD_CROSS, 3, DirectionV::UP);
-    gpDrumset->drum(38) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Acoustic Snare"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(39) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hand Clap"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(40) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Electric Snare"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(41) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Floor Tom"), NoteHead::Group::HEAD_NORMAL, 6, DirectionV::UP);
-    gpDrumset->drum(42) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Closed Hi-Hat"), NoteHead::Group::HEAD_CROSS, -1, DirectionV::UP);
-    gpDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Floor Tom"), NoteHead::Group::HEAD_NORMAL, 6, DirectionV::UP);
-    gpDrumset->drum(44) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Pedal Hi-Hat"), NoteHead::Group::HEAD_CROSS, 9, DirectionV::UP);
-    gpDrumset->drum(45) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Tom"), NoteHead::Group::HEAD_NORMAL, 5, DirectionV::UP);
-    gpDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi-Hat"), NoteHead::Group::HEAD_XCIRCLE, -1, DirectionV::UP);
-    gpDrumset->drum(47) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low-Mid Tom"), NoteHead::Group::HEAD_NORMAL, 4, DirectionV::UP);
-    gpDrumset->drum(48) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi-Mid Tom"), NoteHead::Group::HEAD_NORMAL, 2, DirectionV::UP);
-    gpDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 1"), NoteHead::Group::HEAD_CROSS, -1, DirectionV::UP);
-    gpDrumset->drum(50) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Tom"), NoteHead::Group::HEAD_NORMAL, 1, DirectionV::UP);
-    gpDrumset->drum(51) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 1"), NoteHead::Group::HEAD_CROSS, 0, DirectionV::UP);
-    gpDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Chinese Cymbal"), NoteHead::Group::HEAD_CROSS, -3, DirectionV::UP);
-    gpDrumset->drum(53) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Bell"), NoteHead::Group::HEAD_DIAMOND, 0, DirectionV::UP);
-    gpDrumset->drum(54) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Tambourine"), NoteHead::Group::HEAD_CROSS, 2, DirectionV::UP);
-    gpDrumset->drum(55) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Splash Cymbal"), NoteHead::Group::HEAD_CROSS, -2, DirectionV::UP);
-    gpDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Medium"), NoteHead::Group::HEAD_NORMAL, 0, DirectionV::UP);
-    gpDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 2"), NoteHead::Group::HEAD_CROSS, -2, DirectionV::UP);
-    gpDrumset->drum(58) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Vibraslap"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 2"), NoteHead::Group::HEAD_DIAMOND, 0, DirectionV::UP);
-    gpDrumset->drum(60) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Bongo"), NoteHead::Group::HEAD_NORMAL, 8, DirectionV::UP);
-    gpDrumset->drum(61) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Bongo"), NoteHead::Group::HEAD_NORMAL, 9, DirectionV::UP);
-    gpDrumset->drum(62) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Hi Conga"), NoteHead::Group::HEAD_CROSS, 5, DirectionV::UP);
-    gpDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi Conga"), NoteHead::Group::HEAD_CROSS, 4, DirectionV::UP);
-    gpDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Conga"), NoteHead::Group::HEAD_CROSS, 6, DirectionV::UP);
-    gpDrumset->drum(65) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Timbale"), NoteHead::Group::HEAD_CROSS, 8, DirectionV::UP);
-    gpDrumset->drum(66) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Timbale"), NoteHead::Group::HEAD_CROSS, 9, DirectionV::UP);
-    gpDrumset->drum(67) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Agogo"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(68) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Agogo"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(69) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cabasa"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(70) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Maracas"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(71) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Whistle"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(72) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Whistle"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(73) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Güiro"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(74) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Güiro"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(75) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Claves"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(76) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Wood Block"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(77) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Wood Block"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(78) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Cuica"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(79) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Cuica"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(80) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Triangle"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(81) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Triangle"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(82) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Shaker"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(83) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sleigh Bell"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(84) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mark Tree"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(85) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Castanets"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(86) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Surdo"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
-    gpDrumset->drum(87) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Surdo"), NoteHead::Group::HEAD_NORMAL, 3, DirectionV::UP);
+        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Acoustic Bass Drum"), NoteHeadGroup::HEAD_NORMAL, 7, DirectionV::UP);
+    gpDrumset->drum(36) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Bass Drum 1"), NoteHeadGroup::HEAD_NORMAL, 7, DirectionV::UP);
+    gpDrumset->drum(37) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Side Stick"), NoteHeadGroup::HEAD_CROSS, 3, DirectionV::UP);
+    gpDrumset->drum(38) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Acoustic Snare"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(39) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hand Clap"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(40) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Electric Snare"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(41) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Floor Tom"), NoteHeadGroup::HEAD_NORMAL, 6, DirectionV::UP);
+    gpDrumset->drum(42) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Closed Hi-Hat"), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
+    gpDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Floor Tom"), NoteHeadGroup::HEAD_NORMAL, 6, DirectionV::UP);
+    gpDrumset->drum(44) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Pedal Hi-Hat"), NoteHeadGroup::HEAD_CROSS, 9, DirectionV::UP);
+    gpDrumset->drum(45) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Tom"), NoteHeadGroup::HEAD_NORMAL, 5, DirectionV::UP);
+    gpDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi-Hat"), NoteHeadGroup::HEAD_XCIRCLE, -1, DirectionV::UP);
+    gpDrumset->drum(47) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low-Mid Tom"), NoteHeadGroup::HEAD_NORMAL, 4, DirectionV::UP);
+    gpDrumset->drum(48) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi-Mid Tom"), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
+    gpDrumset->drum(49) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 1"), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
+    gpDrumset->drum(50) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Tom"), NoteHeadGroup::HEAD_NORMAL, 1, DirectionV::UP);
+    gpDrumset->drum(51) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 1"), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::UP);
+    gpDrumset->drum(52) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Chinese Cymbal"), NoteHeadGroup::HEAD_CROSS, -3, DirectionV::UP);
+    gpDrumset->drum(53) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Bell"), NoteHeadGroup::HEAD_DIAMOND, 0, DirectionV::UP);
+    gpDrumset->drum(54) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Tambourine"), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
+    gpDrumset->drum(55) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Splash Cymbal"), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
+    gpDrumset->drum(56) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Medium"), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::UP);
+    gpDrumset->drum(57) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Crash Cymbal 2"), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
+    gpDrumset->drum(58) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Vibraslap"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(59) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride Cymbal 2"), NoteHeadGroup::HEAD_DIAMOND, 0, DirectionV::UP);
+    gpDrumset->drum(60) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Bongo"), NoteHeadGroup::HEAD_NORMAL, 8, DirectionV::UP);
+    gpDrumset->drum(61) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Bongo"), NoteHeadGroup::HEAD_NORMAL, 9, DirectionV::UP);
+    gpDrumset->drum(62) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Hi Conga"), NoteHeadGroup::HEAD_CROSS, 5, DirectionV::UP);
+    gpDrumset->drum(63) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi Conga"), NoteHeadGroup::HEAD_CROSS, 4, DirectionV::UP);
+    gpDrumset->drum(64) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Conga"), NoteHeadGroup::HEAD_CROSS, 6, DirectionV::UP);
+    gpDrumset->drum(65) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Timbale"), NoteHeadGroup::HEAD_CROSS, 8, DirectionV::UP);
+    gpDrumset->drum(66) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Timbale"), NoteHeadGroup::HEAD_CROSS, 9, DirectionV::UP);
+    gpDrumset->drum(67) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Agogo"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(68) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Agogo"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(69) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cabasa"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(70) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Maracas"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(71) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Whistle"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(72) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Whistle"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(73) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Short Güiro"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(74) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Long Güiro"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(75) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Claves"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(76) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Hi Wood Block"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(77) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Wood Block"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(78) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Cuica"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(79) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Cuica"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(80) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Triangle"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(81) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Triangle"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(82) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Shaker"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(83) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Sleigh Bell"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(84) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mark Tree"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(85) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Castanets"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(86) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Mute Surdo"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
+    gpDrumset->drum(87) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Surdo"), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
 
     gpDrumset->drum(91)
-        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Snare (Rim shot)"), NoteHead::Group::HEAD_DIAMOND, 3, DirectionV::UP);
-    gpDrumset->drum(93) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (Edge)"), NoteHead::Group::HEAD_CROSS, 0, DirectionV::UP);
+        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Snare (Rim shot)"), NoteHeadGroup::HEAD_DIAMOND, 3, DirectionV::UP);
+    gpDrumset->drum(93) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Ride (Edge)"), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::UP);
 
     //Additional clutch presets (midi by default can't play this)
-    gpDrumset->drum(99) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Low"), NoteHead::Group::HEAD_TRIANGLE_UP, 1, DirectionV::UP);
+    gpDrumset->drum(99) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell Low"), NoteHeadGroup::HEAD_TRIANGLE_UP, 1, DirectionV::UP);
     gpDrumset->drum(102)
-        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell High"), NoteHead::Group::HEAD_TRIANGLE_UP, -1, DirectionV::UP);
+        = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Cowbell High"), NoteHeadGroup::HEAD_TRIANGLE_UP, -1, DirectionV::UP);
 }
 
 //---------------------------------------------------------
@@ -1848,7 +1848,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         if (version == 300) {
             note->setGhost(true);
         } else {
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         }
     }
@@ -1861,7 +1861,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         } else if (variant == 2) {
             tieNote = true;
         } else if (variant == 3) {                   // dead notes
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         } else {
             qDebug("unknown note variant: %d", variant);
@@ -1934,7 +1934,7 @@ bool GuitarPro1::readNote(int string, Note* note)
             Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
-                gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                 gn->setGhost(true);
             }
             if (fret == 255) {
@@ -2060,7 +2060,7 @@ bool GuitarPro1::readNote(int string, Note* note)
     Staff* staff = note->staff();
     if (fretNumber == 255) {
         fretNumber = 0;
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
     // dead note represented as high numbers - fix to zero

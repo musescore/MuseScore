@@ -209,7 +209,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
     qreal relX = position.pos.x() - position.segment->measure()->canvasPos().x();
     position.pos.rx() -= qMin(relX - score()->styleMM(Ms::Sid::barNoteDistance) * mag, 0.0);
 
-    Ms::NoteHead::Group noteheadGroup = Ms::NoteHead::Group::HEAD_NORMAL;
+    Ms::NoteHeadGroup noteheadGroup = Ms::NoteHeadGroup::HEAD_NORMAL;
     Ms::NoteHeadType noteHead = inputState.duration().headType();
     int line = position.line;
 
@@ -247,7 +247,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
         delete rest;
     } else {
-        if (Ms::NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
+        if (Ms::NoteHeadGroup::HEAD_CUSTOM == noteheadGroup) {
             symNotehead = instr->drumset()->noteHeads(inputState.drumNote(), noteHead);
         } else {
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);

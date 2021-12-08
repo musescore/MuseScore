@@ -67,96 +67,16 @@ static constexpr int MAX_DOTS = 4;
 
 class NoteHead final : public Symbol
 {
-    Q_GADGET
 public:
-    // keep in sync with noteHeadGroupNames array in note.cpp
-    enum class Group : signed char {
-        ///.\{
-        HEAD_NORMAL = 0,
-        HEAD_CROSS,
-        HEAD_PLUS,
-        HEAD_XCIRCLE,
-        HEAD_WITHX,
-        HEAD_TRIANGLE_UP,
-        HEAD_TRIANGLE_DOWN,
-        HEAD_SLASHED1,
-        HEAD_SLASHED2,
-        HEAD_DIAMOND,
-        HEAD_DIAMOND_OLD,
-        HEAD_CIRCLED,
-        HEAD_CIRCLED_LARGE,
-        HEAD_LARGE_ARROW,
-        HEAD_BREVIS_ALT,
-
-        HEAD_SLASH,
-
-        HEAD_SOL,
-        HEAD_LA,
-        HEAD_FA,
-        HEAD_MI,
-        HEAD_DO,
-        HEAD_RE,
-        HEAD_TI,
-        // not exposed from here
-        HEAD_DO_WALKER,
-        HEAD_RE_WALKER,
-        HEAD_TI_WALKER,
-        HEAD_DO_FUNK,
-        HEAD_RE_FUNK,
-        HEAD_TI_FUNK,
-
-        HEAD_DO_NAME,
-        HEAD_RE_NAME,
-        HEAD_MI_NAME,
-        HEAD_FA_NAME,
-        HEAD_SOL_NAME,
-        HEAD_LA_NAME,
-        HEAD_TI_NAME,
-        HEAD_SI_NAME,
-
-        HEAD_A_SHARP,
-        HEAD_A,
-        HEAD_A_FLAT,
-        HEAD_B_SHARP,
-        HEAD_B,
-        HEAD_B_FLAT,
-        HEAD_C_SHARP,
-        HEAD_C,
-        HEAD_C_FLAT,
-        HEAD_D_SHARP,
-        HEAD_D,
-        HEAD_D_FLAT,
-        HEAD_E_SHARP,
-        HEAD_E,
-        HEAD_E_FLAT,
-        HEAD_F_SHARP,
-        HEAD_F,
-        HEAD_F_FLAT,
-        HEAD_G_SHARP,
-        HEAD_G,
-        HEAD_G_FLAT,
-        HEAD_H,
-        HEAD_H_SHARP,
-
-        HEAD_CUSTOM,
-        HEAD_GROUPS,
-        HEAD_INVALID = -1
-                       ///\}
-    };
-
-    Q_ENUM(Group);
 
     NoteHead(Note* parent = 0);
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
 
-    Group headGroup() const;
+    NoteHeadGroup headGroup() const;
 
     static QString scheme2userName(NoteHeadScheme scheme);
-    static QString group2userName(Group group);
     static QString type2userName(NoteHeadType type);
-    static QString group2name(Group group);
-    static Group name2group(const QString& s);
 };
 
 //---------------------------------------------------------
@@ -171,7 +91,7 @@ struct NoteVal {
     int tpc2                  { Tpc::TPC_INVALID };
     int fret                  { INVALID_FRET_INDEX };
     int string                { INVALID_STRING_INDEX };
-    NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
+    NoteHeadGroup headGroup { NoteHeadGroup::HEAD_NORMAL };
 
     NoteVal() {}
     NoteVal(int p)
@@ -237,7 +157,7 @@ private:
     DirectionV _userDotPosition { DirectionV::AUTO };                 ///< user override of dot position
 
     NoteHeadScheme _headScheme { NoteHeadScheme::HEAD_AUTO };
-    NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
+    NoteHeadGroup _headGroup { NoteHeadGroup::HEAD_NORMAL };
     NoteHeadType _headType  { NoteHeadType::HEAD_AUTO };
 
     VeloType _veloType { VeloType::OFFSET_VAL };
@@ -338,11 +258,11 @@ public:
     qreal outsideTieAttachX(bool up) const;
 
     NoteHeadScheme headScheme() const { return _headScheme; }
-    void updateHeadGroup(const NoteHead::Group headGroup);
-    NoteHead::Group headGroup() const { return _headGroup; }
+    void updateHeadGroup(const NoteHeadGroup headGroup);
+    NoteHeadGroup headGroup() const { return _headGroup; }
     NoteHeadType headType() const { return _headType; }
     void setHeadScheme(NoteHeadScheme val);
-    void setHeadGroup(NoteHead::Group val);
+    void setHeadGroup(NoteHeadGroup val);
     void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
@@ -507,8 +427,8 @@ public:
 
     void addParentheses();
 
-    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
-    static SymId noteHead(int direction, NoteHead::Group, NoteHeadType);
+    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
+    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
     NoteVal noteVal() const;
 
     EngravingItem* nextInEl(EngravingItem* e);
