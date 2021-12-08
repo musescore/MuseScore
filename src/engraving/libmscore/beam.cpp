@@ -511,8 +511,8 @@ void Beam::layout()
 int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams) * 2;
-    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams) * 2;
+    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
+    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
 
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
@@ -960,7 +960,7 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
 
 void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval)
 {
-    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || beamCount >= 4 || score()->styleB(Sid::beamNoSlope)) {
+    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || score()->styleB(Sid::beamNoSlope)) {
         return;
     }
     bool isOnMiddleLine = pointer == middleLine && (qAbs(pointer - dictator) < 2);
@@ -1008,16 +1008,11 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         LayoutBeams::respace(&chordRests);
     }
 
-    // FIXME
-    if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
-        NOT_IMPL_RETURN;
-    }
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
 
+    // todo: add edge case for when a beam starts or ends on a rest
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
-
-    _beamSpacing = score()->styleD(Sid::beamDistance) == 1.0 ? 4 : 3;
 
     // anchor represents the middle of the beam, not the tip of the stem
     PointF startAnchor = chordBeamAnchor(startChord);
