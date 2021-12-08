@@ -131,6 +131,7 @@ void NotationActionController::init()
     registerAction("septuplet", [this]() { putTuplet(7); });
     registerAction("octuplet", [this]() { putTuplet(8); });
     registerAction("nonuplet", [this]() { putTuplet(9); });
+    registerAction("custom-tuplet", &NotationActionController::putTuplet);
     registerAction("tuplet-dialog", &NotationActionController::openTupletOtherDialog);
 
     registerAction("put-note", &NotationActionController::putNote);
@@ -629,7 +630,18 @@ void NotationActionController::addArticulation(SymbolId articulationSymbolId)
     }
 }
 
-void NotationActionController::putTuplet(int tupletCount)
+void NotationActionController::putTuplet(const ActionData& data)
+{
+    IF_ASSERT_FAILED(data.count() == 1) {
+        return;
+    }
+
+    TupletOptions options = data.arg<TupletOptions>(0);
+
+    putTuplet(options);
+}
+
+void NotationActionController::putTuplet(const TupletOptions& options)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
@@ -642,14 +654,27 @@ void NotationActionController::putTuplet(int tupletCount)
         return;
     }
 
-    TupletOptions options;
-    options.ratio.setNumerator(tupletCount);
+    if (!interaction->canAddTupletToSelecredChordRests()) {
+        interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"),
+                             { IInteractive::Button::Ok });
+        return;
+    }
 
     if (noteInput->isNoteInputMode()) {
         noteInput->addTuplet(options);
     } else {
         interaction->addTupletToSelectedChordRests(options);
     }
+}
+
+void NotationActionController::putTuplet(int tupletCount)
+{
+    TRACEFUNC;
+
+    TupletOptions options;
+    options.ratio.setNumerator(tupletCount);
+
+    putTuplet(options);
 }
 
 void NotationActionController::doubleNoteInputDuration()

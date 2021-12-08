@@ -42,7 +42,7 @@ public:
         V_ZERO, V_MEASURE,  V_INVALID
     };
 private:
-    DurationType _val;
+    DurationType _val = DurationType::V_INVALID;
     char _dots;
     void shiftType(int nSteps, bool stepDotted = false);
     void truncateToFraction(const Fraction& l, int maxDots);

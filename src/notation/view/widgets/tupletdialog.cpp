@@ -27,6 +27,7 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::actions;
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -121,26 +122,13 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    auto interaction = notation()->interaction();
-    if (!interaction) {
-        return;
-    }
-
-    auto noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
-
     TupletOptions options;
     options.ratio = Fraction(actualNotes->value(), normalNotes->value());
     options.numberType = numberType();
     options.bracketType = bracketType();
 
-    if (noteInput->isNoteInputMode()) {
-        noteInput->addTuplet(options);
-    } else {
-        interaction->addTupletToSelectedChordRests(options);
-    }
+    ActionData data = ActionData::make_arg1<TupletOptions>(options);
+    dispatcher()->dispatch("custom-tuplet", data);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)
