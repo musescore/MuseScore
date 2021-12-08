@@ -341,6 +341,7 @@ void NotationActionController::init()
     registerAction("enh-current", &Interaction::changeEnharmonicSpelling, false);
 
     registerAction("edit-element", &Controller::startEditSelectedElement);
+    registerAction("edit-text", &Controller::startEditSelectedText);
 
     registerAction("text-b", &Interaction::toggleBold, &Controller::isEditingText);
     registerAction("text-i", &Interaction::toggleItalic, &Controller::isEditingText);
@@ -1051,7 +1052,40 @@ void NotationActionController::startEditSelectedElement()
         return;
     }
 
-    interaction->startEditElement(selection->element());
+    Ms::EngravingItem* element = selection->element();
+    if (!element) {
+        return;
+    }
+
+    if (element->isInstrumentName()) {
+        openStaffProperties();
+        return;
+    }
+
+    if (interaction->textEditingAllowed(element)) {
+        interaction->startEditText(element);
+    } else {
+        interaction->startEditElement(element);
+    }
+}
+
+void NotationActionController::startEditSelectedText()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = interaction->selection();
+    if (!selection) {
+        return;
+    }
+
+    Ms::EngravingItem* element = selection->element();
+
+    if (interaction->textEditingAllowed(element)) {
+        interaction->startEditText(element);
+    }
 }
 
 void NotationActionController::insertBoxes(BoxType boxType, int count)
