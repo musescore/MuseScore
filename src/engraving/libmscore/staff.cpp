@@ -22,6 +22,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "factory.h"
 #include "mscore.h"
@@ -487,7 +488,7 @@ Fraction Staff::currentClefTick(const Fraction& tick) const
 
 QString Staff::staffName() const
 {
-    return Ms::ClefInfo::name(defaultClefType()._transposingClef);
+    return TConv::toUserName(defaultClefType()._transposingClef);
 }
 
 #ifndef NDEBUG
@@ -789,11 +790,11 @@ void Staff::write(XmlWriter& xml) const
     ClefTypeList ct = _defaultClefType;
     if (ct._concertClef == ct._transposingClef) {
         if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", ClefInfo::tag(ct._concertClef));
+            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
         }
     } else {
-        xml.tag("defaultConcertClef", ClefInfo::tag(ct._concertClef));
-        xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
+        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
+        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
     }
 
     if (isLinesInvisible(Fraction(0, 1))) {
@@ -861,15 +862,12 @@ bool Staff::readProperties(XmlReader& e)
         st.read(e);
         setStaffType(Fraction(0, 1), st);
     } else if (tag == "defaultClef") {           // sets both default transposing and concert clef
-        QString val(e.readElementText());
-        ClefType ct = Clef::clefType(val);
+        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
         setDefaultClefType(ClefTypeList(ct, ct));
     } else if (tag == "defaultConcertClef") {
-        QString val(e.readElementText());
-        setDefaultClefType(ClefTypeList(Clef::clefType(val), defaultClefType()._transposingClef));
+        setDefaultClefType(ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), defaultClefType()._transposingClef));
     } else if (tag == "defaultTransposingClef") {
-        QString val(e.readElementText());
-        setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, Clef::clefType(val)));
+        setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
     } else if (tag == "small") {                // obsolete
         staffType(Fraction(0, 1))->setSmall(e.readInt());
     } else if (tag == "invisible") {

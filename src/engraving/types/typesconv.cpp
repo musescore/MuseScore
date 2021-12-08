@@ -21,6 +21,7 @@
  */
 #include "typesconv.h"
 
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::engraving;
@@ -29,29 +30,43 @@ template<typename T>
 struct Item
 {
     T type;
-    QString xmlTag;
-    QString userName;
+    QString xml;
+    const char* userName = nullptr;
 };
 
 template<typename T>
-const Item<T>& findItemByType(const std::vector<Item<T> >& cont, const T& v)
+static QString findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
         return i.type == v;
     });
 
     IF_ASSERT_FAILED(it != cont.cend()) {
-        static Item<T> dummy;
+        static QString dummy;
         return dummy;
     }
-    return *it;
+    return mu::qtrc("engraving", it->userName);
 }
 
 template<typename T>
-T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag, T def)
+static QString findXmlTagByType(const std::vector<Item<T> >& cont, const T& v)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        static QString dummy;
+        return dummy;
+    }
+    return it->xml;
+}
+
+template<typename T>
+static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag, T def)
 {
     auto it = std::find_if(cont.cbegin(), cont.cend(), [tag](const Item<T>& i) {
-        return i.xmlTag == tag;
+        return i.xml == tag;
     });
 
     IF_ASSERT_FAILED(it != cont.cend()) {
@@ -61,9 +76,6 @@ T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag, T def)
 }
 
 // ==========================================================
-// NoteHead
-// ==========================================================
-
 static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
     { NoteHeadType::HEAD_AUTO,      "auto",    QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   QT_TRANSLATE_NOOP("engraving", "Whole") },
@@ -74,15 +86,15 @@ static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
 
 QString TConv::toUserName(NoteHeadType v)
 {
-    return findItemByType<NoteHeadType>(NOTEHEAD_TYPES, v).userName;
+    return findUserNameByType<NoteHeadType>(NOTEHEAD_TYPES, v);
 }
 
-QString TConv::toXmlTag(NoteHeadType v)
+QString TConv::toXml(NoteHeadType v)
 {
-    return findItemByType<NoteHeadType>(NOTEHEAD_TYPES, v).xmlTag;
+    return findXmlTagByType<NoteHeadType>(NOTEHEAD_TYPES, v);
 }
 
-NoteHeadType TConv::fromXmlTag(const QString& tag, NoteHeadType def)
+NoteHeadType TConv::fromXml(const QString& tag, NoteHeadType def)
 {
     return findTypeByXmlTag<NoteHeadType>(NOTEHEAD_TYPES, tag, def);
 }
@@ -102,15 +114,15 @@ static const std::vector<Item<NoteHeadScheme> > NOTEHEAD_SCHEMES = {
 
 QString TConv::toUserName(NoteHeadScheme v)
 {
-    return findItemByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v).userName;
+    return findUserNameByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
 }
 
-QString TConv::toXmlTag(NoteHeadScheme v)
+QString TConv::toXml(NoteHeadScheme v)
 {
-    return findItemByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v).xmlTag;
+    return findXmlTagByType<NoteHeadScheme>(NOTEHEAD_SCHEMES, v);
 }
 
-NoteHeadScheme TConv::fromXmlTag(const QString& tag, NoteHeadScheme def)
+NoteHeadScheme TConv::fromXml(const QString& tag, NoteHeadScheme def)
 {
     return findTypeByXmlTag<NoteHeadScheme>(NOTEHEAD_SCHEMES, tag, def);
 }
@@ -190,15 +202,70 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
 
 QString TConv::toUserName(NoteHeadGroup v)
 {
-    return findItemByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v).userName;
+    return findUserNameByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
 
-QString TConv::toXmlTag(NoteHeadGroup v)
+QString TConv::toXml(NoteHeadGroup v)
 {
-    return findItemByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v).xmlTag;
+    return findXmlTagByType<NoteHeadGroup>(NOTEHEAD_GROUPS, v);
 }
 
-NoteHeadGroup TConv::fromXmlTag(const QString& tag, NoteHeadGroup def)
+NoteHeadGroup TConv::fromXml(const QString& tag, NoteHeadGroup def)
 {
     return findTypeByXmlTag<NoteHeadGroup>(NOTEHEAD_GROUPS, tag, def);
+}
+
+static const std::vector<Item<ClefType> > CLEF_TYPES = {
+    { ClefType::G,          "G",        QT_TRANSLATE_NOOP("engraving", "Treble clef") },
+    { ClefType::G15_MB,     "G15mb",    QT_TRANSLATE_NOOP("engraving", "Treble clef 15ma bassa") },
+    { ClefType::G8_VB,      "G8vb",     QT_TRANSLATE_NOOP("engraving", "Treble clef 8va bassa") },
+    { ClefType::G8_VA,      "G8va",     QT_TRANSLATE_NOOP("engraving", "Treble clef 8va alta") },
+    { ClefType::G15_MA,     "G15ma",    QT_TRANSLATE_NOOP("engraving", "Treble clef 15ma alta") },
+    { ClefType::G8_VB_O,    "G8vbo",    QT_TRANSLATE_NOOP("engraving", "Double treble clef 8va bassa on 2nd line") },
+    { ClefType::G8_VB_P,    "G8vbp",    QT_TRANSLATE_NOOP("engraving", "Treble clef optional 8va bassa") },
+    { ClefType::G_1,        "G1",       QT_TRANSLATE_NOOP("engraving", "French violin clef") },
+    { ClefType::C1,         "C1",       QT_TRANSLATE_NOOP("engraving", "Soprano clef") },
+    { ClefType::C2,         "C2",       QT_TRANSLATE_NOOP("engraving", "Mezzo-soprano clef") },
+    { ClefType::C3,         "C3",       QT_TRANSLATE_NOOP("engraving", "Alto clef") },
+    { ClefType::C4,         "C4",       QT_TRANSLATE_NOOP("engraving", "Tenor clef") },
+    { ClefType::C5,         "C5",       QT_TRANSLATE_NOOP("engraving", "Baritone clef (C clef)") },
+    { ClefType::C_19C,      "C_19C",    QT_TRANSLATE_NOOP("engraving", "C clef, H shape (19th century)") },
+    { ClefType::C1_F18C,    "C1_F18C",  QT_TRANSLATE_NOOP("engraving", "Soprano clef (French, 18th century)") },
+    { ClefType::C3_F18C,    "C3_F18C",  QT_TRANSLATE_NOOP("engraving", "Alto clef (French, 18th century)") },
+    { ClefType::C4_F18C,    "C4_F18C",  QT_TRANSLATE_NOOP("engraving", "Tenor clef (French, 18th century)") },
+    { ClefType::C1_F20C,    "C1_F20C",  QT_TRANSLATE_NOOP("engraving", "Soprano clef (French, 20th century)") },
+    { ClefType::C3_F20C,    "C3_F20C",  QT_TRANSLATE_NOOP("engraving", "Alto clef (French, 20th century)") },
+    { ClefType::C4_F20C,    "C4_F20C",  QT_TRANSLATE_NOOP("engraving", "Tenor clef (French, 20th century)") },
+    { ClefType::F,          "F",        QT_TRANSLATE_NOOP("engraving", "Bass clef") },
+    { ClefType::F15_MB,     "F15mb",    QT_TRANSLATE_NOOP("engraving", "Bass clef 15ma bassa") },
+    { ClefType::F8_VB,      "F8vb",     QT_TRANSLATE_NOOP("engraving", "Bass clef 8va bassa") },
+    { ClefType::F_8VA,      "F8va",     QT_TRANSLATE_NOOP("engraving", "Bass clef 8va alta") },
+    { ClefType::F_15MA,     "F15ma",    QT_TRANSLATE_NOOP("engraving", "Bass clef 15ma alta") },
+    { ClefType::F_B,        "F3",       QT_TRANSLATE_NOOP("engraving", "Baritone clef (F clef)") },
+    { ClefType::F_C,        "F5",       QT_TRANSLATE_NOOP("engraving", "Subbass clef") },
+    { ClefType::F_F18C,     "F_F18C",   QT_TRANSLATE_NOOP("engraving", "F clef (French, 18th century)") },
+    { ClefType::F_19C,      "F_19C",    QT_TRANSLATE_NOOP("engraving", "F clef (19th century)") },
+
+    { ClefType::PERC,       "PERC",     QT_TRANSLATE_NOOP("engraving", "Percussion") },
+    { ClefType::PERC2,      "PERC2",    QT_TRANSLATE_NOOP("engraving", "Percussion 2") },
+
+    { ClefType::TAB,        "TAB",      QT_TRANSLATE_NOOP("engraving", "Tablature") },
+    { ClefType::TAB4,       "TAB4",     QT_TRANSLATE_NOOP("engraving", "Tablature 4 lines") },
+    { ClefType::TAB_SERIF,  "TAB2",     QT_TRANSLATE_NOOP("engraving", "Tablature Serif") },
+    { ClefType::TAB4_SERIF, "TAB4_SERIF", QT_TRANSLATE_NOOP("engraving", "Tablature Serif 4 lines") },
+};
+
+QString TConv::toUserName(ClefType v)
+{
+    return findUserNameByType<ClefType>(CLEF_TYPES, v);
+}
+
+QString TConv::toXml(ClefType v)
+{
+    return findXmlTagByType<ClefType>(CLEF_TYPES, v);
+}
+
+ClefType TConv::fromXml(const QString& tag, ClefType def)
+{
+    return findTypeByXmlTag<ClefType>(CLEF_TYPES, tag, def);
 }

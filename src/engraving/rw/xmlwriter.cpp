@@ -363,19 +363,25 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
     case P_TYPE::NOTEHEAD_TYPE: {
         putLevel();
         *this << "<" << name << ">";
-        *this << TConv::toXmlTag(data.value<NoteHeadType>());
+        *this << TConv::toXml(data.value<NoteHeadType>());
         *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::NOTEHEAD_SCHEME: {
         putLevel();
         *this << "<" << name << ">";
-        *this << TConv::toXmlTag(data.value<NoteHeadScheme>());
+        *this << TConv::toXml(data.value<NoteHeadScheme>());
         *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::NOTEHEAD_GROUP: {
         putLevel();
         *this << "<" << name << ">";
-        *this << TConv::toXmlTag(data.value<NoteHeadGroup>());
+        *this << TConv::toXml(data.value<NoteHeadGroup>());
+        *this << "</" << ename << ">\n";
+    } break;
+    case P_TYPE::CLEF_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<ClefType>());
         *this << "</" << ename << ">\n";
     } break;
     default: {

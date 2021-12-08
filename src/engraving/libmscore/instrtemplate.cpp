@@ -25,6 +25,7 @@
 #include "translation.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "bracket.h"
 #include "drumset.h"
@@ -34,6 +35,7 @@
 #include "scoreorder.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 QList<InstrumentGroup*> instrumentGroups;
@@ -294,15 +296,15 @@ void InstrumentTemplate::write(XmlWriter& xml) const
     }
     for (int i = 0; i < staffCount; ++i) {
         if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
-            QString tag = ClefInfo::tag(clefTypes[i]._concertClef);
+            QString tag = TConv::toXml(clefTypes[i]._concertClef);
             if (i) {
                 xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
             } else {
                 xml.tag("clef", tag);
             }
         } else {
-            QString tag1 = ClefInfo::tag(clefTypes[i]._concertClef);
-            QString tag2 = ClefInfo::tag(clefTypes[i]._transposingClef);
+            QString tag1 = TConv::toXml(clefTypes[i]._concertClef);
+            QString tag2 = TConv::toXml(clefTypes[i]._transposingClef);
             if (i) {
                 xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
                 xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
@@ -457,7 +459,7 @@ void InstrumentTemplate::read(XmlReader& e)
             QString val(e.readElementText());
             bool ok;
             int i = val.toInt(&ok);
-            ClefType ct = ok ? ClefType(i) : Clef::clefType(val);
+            ClefType ct = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
             clefTypes[idx]._concertClef = ct;
             clefTypes[idx]._transposingClef = ct;
         } else if (tag == "concertClef") {
@@ -465,13 +467,13 @@ void InstrumentTemplate::read(XmlReader& e)
             QString val(e.readElementText());
             bool ok;
             int i = val.toInt(&ok);
-            clefTypes[idx]._concertClef = ok ? ClefType(i) : Clef::clefType(val);
+            clefTypes[idx]._concertClef = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
         } else if (tag == "transposingClef") {
             int idx = readStaffIdx(e);
             QString val(e.readElementText());
             bool ok;
             int i = val.toInt(&ok);
-            clefTypes[idx]._transposingClef = ok ? ClefType(i) : Clef::clefType(val);
+            clefTypes[idx]._transposingClef = ok ? ClefType(i) : TConv::fromXml(val, ClefType::G);
         } else if (tag == "stafflines") {
             int idx = readStaffIdx(e);
             staffLines[idx] = e.readInt();

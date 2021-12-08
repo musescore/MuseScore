@@ -84,6 +84,7 @@ enum class P_TYPE {
     NOTEHEAD_TYPE,
     NOTEHEAD_SCHEME,
     NOTEHEAD_GROUP,
+    CLEF_TYPE,
 
     TEMPO,
     GROUPS,
@@ -96,7 +97,7 @@ enum class P_TYPE {
 
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
     CHANGE_SPEED,       // enum class Dynamic::Speed
-    CLEF_TYPE,          // enum class ClefType
+
     DYNAMIC_TYPE,       // enum class DynamicType
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
@@ -198,6 +199,9 @@ public:
         : m_type(P_TYPE::NOTEHEAD_SCHEME), m_data(make_data<NoteHeadScheme>(v)) {}
     PropertyValue(NoteHeadGroup v)
         : m_type(P_TYPE::NOTEHEAD_GROUP), m_data(make_data<NoteHeadGroup>(v)) {}
+
+    PropertyValue(ClefType v)
+        : m_type(P_TYPE::CLEF_TYPE), m_data(make_data<ClefType>(v)) {}
 
     // not sorted
     PropertyValue(Ms::SymId v)

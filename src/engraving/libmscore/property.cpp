@@ -545,11 +545,13 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
     case P_TYPE::NOTEHEAD_TYPE:
-        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadType::HEAD_AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
-        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
+        return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:
-        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
+        return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
+    case P_TYPE::CLEF_TYPE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), ClefType::G));
     case P_TYPE::SYMID:
 
     case P_TYPE::SUB_STYLE:
@@ -636,8 +638,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return Dynamic::speedToName(Dynamic::Speed(value.toInt()));
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
-    case P_TYPE::CLEF_TYPE:
-        return ClefInfo::tag(ClefType(value.toInt()));
     case P_TYPE::DYNAMIC_TYPE:
         return Dynamic::dynamicTypeName(value.value<DynamicType>());
     case P_TYPE::ORIENTATION: {
