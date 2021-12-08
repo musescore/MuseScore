@@ -99,6 +99,7 @@ private:
     void openSelectionMoreOptions();
 
     void startEditSelectedElement();
+    void startEditSelectedText();
 
     void selectMeasuresCountAndInsert();
     void selectMeasuresCountAndAppend();

@@ -482,8 +482,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     playbackController()->playElement(hitElement);
 
-    if (hitElement == prevSelectedElement && viewInteraction()->textEditingAllowed(hitElement)) {
-        viewInteraction()->startEditText(hitElement);
+    if (hitElement == prevSelectedElement && viewInteraction()->isTextSelected()) {
+        dispatcher()->dispatch("edit-text");
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
@@ -616,16 +616,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
 {
-    EngravingItem* element = viewInteraction()->selection()->element();
-    if (!element) {
-        return;
-    }
-
-    if (viewInteraction()->textEditingAllowed(element)) {
-        viewInteraction()->startEditText(element);
-    } else {
-        viewInteraction()->startEditElement(element);
-    }
+    dispatcher()->dispatch("edit-element");
 }
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
@@ -642,7 +633,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         viewInteraction()->editElement(event);
     } else if (viewInteraction()->isTextSelected()) {
         if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            viewInteraction()->startEditText(viewInteraction()->selection()->element(), PointF());
+            dispatcher()->dispatch("edit-text");
             event->accept();
         }
     }
