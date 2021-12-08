@@ -270,6 +270,47 @@ enum class NoteHeadGroup : signed char {
     HEAD_GROUPS,
     HEAD_INVALID = -1
 };
+
+// P_TYPE::CLEF_TYPE
+enum class ClefType : signed char {
+    INVALID = -1,
+    G = 0,
+    G15_MB,
+    G8_VB,
+    G8_VA,
+    G15_MA,
+    G8_VB_O,
+    G8_VB_P,
+    G_1,
+    C1,
+    C2,
+    C3,
+    C4,
+    C5,
+    C_19C,
+    C1_F18C,
+    C3_F18C,
+    C4_F18C,
+    C3_F20C,
+    C1_F20C,
+    C4_F20C,
+    F,
+    F15_MB,
+    F8_VB,
+    F_8VA,
+    F_15MA,
+    F_B,
+    F_C,
+    F_F18C,
+    F_19C,
+    PERC,
+    PERC2,
+    TAB,
+    TAB4,
+    TAB_SERIF,
+    TAB4_SERIF,
+    MAX
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -289,6 +330,7 @@ using BarLineType = mu::engraving::BarLineType;
 using NoteHeadType = mu::engraving::NoteHeadType;
 using NoteHeadScheme = mu::engraving::NoteHeadScheme;
 using NoteHeadGroup = mu::engraving::NoteHeadGroup;
+using ClefType = mu::engraving::ClefType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

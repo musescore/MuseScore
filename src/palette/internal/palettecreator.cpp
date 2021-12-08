@@ -881,7 +881,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {
         auto clef = Factory::makeClef(gpaletteScore->dummy()->segment());
         clef->setClefType(ClefTypeList(clefType, clefType));
-        sp->appendElement(clef, ClefInfo::name(clefType));
+        sp->appendElement(clef, TConv::toUserName(clefType));
     }
     return sp;
 }

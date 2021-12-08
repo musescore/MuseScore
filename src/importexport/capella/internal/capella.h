@@ -24,6 +24,7 @@
 #define __CAPELLA_H__
 
 #include "engraving/rw/xml.h"
+#include "engraving/types/types.h"
 
 namespace Ms {
 enum class TIMESTEP : char {
@@ -31,7 +32,6 @@ enum class TIMESTEP : char {
 };
 
 class Capella;
-enum class ClefType : signed char;
 
 enum class CapellaNoteObjectType : char {
     REST, CHORD, CLEF, KEY, METER, EXPL_BARLINE, IMPL_BARLINE,

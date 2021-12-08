@@ -122,7 +122,6 @@ class XmlWriter;
 struct Interval;
 
 enum class Tid;
-enum class ClefType : signed char;
 enum class BeatType : char;
 enum class Key;
 enum class HairpinType : signed char;

@@ -2195,6 +2195,69 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
 //---------------------------------------------------------
 //   clef
 //---------------------------------------------------------
+struct MusicXmlClefInfo
+{
+    ClefType type;
+    const char* sign;
+    int octChng;
+};
+
+static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
+    { ClefType::G,          "G", 0 },
+    { ClefType::G15_MB,     "G", -2 },
+    { ClefType::G8_VB,      "G", -1 },
+    { ClefType::G8_VA,      "G", 1 },
+    { ClefType::G15_MA,     "G", 2 },
+    { ClefType::G8_VB_O,    "G", -1 },
+    { ClefType::G8_VB_P,    "G", 0 },
+    { ClefType::G_1,        "G", 0 },
+
+    { ClefType::C1,         "C", 0 },
+    { ClefType::C2,         "C", 0 },
+    { ClefType::C3,         "C", 0 },
+    { ClefType::C4,         "C", 0 },
+    { ClefType::C5,         "C", 0 },
+
+    { ClefType::C_19C,      "G", 0 },
+
+    { ClefType::C1_F18C,    "C", 0 },
+    { ClefType::C3_F18C,    "C", 0 },
+    { ClefType::C4_F18C,    "C", 0 },
+    { ClefType::C1_F20C,    "C", 0 },
+    { ClefType::C3_F20C,    "C", 0 },
+    { ClefType::C4_F20C,    "C", 0 },
+
+    { ClefType::F,          "F", 0 },
+    { ClefType::F15_MB,     "F", -2 },
+    { ClefType::F8_VB,      "F", -1 },
+    { ClefType::F_8VA,      "F", 1 },
+    { ClefType::F_15MA,     "F", 2 },
+    { ClefType::F_B,        "F", 0 },
+    { ClefType::F_C,        "F", 0 },
+    { ClefType::F_F18C,     "F", 0 },
+    { ClefType::F_19C,      "F", 0 },
+
+    { ClefType::PERC,       "percussion", 0 },
+    { ClefType::PERC2,      "percussion", 0 },
+
+    { ClefType::TAB,        "TAB", 0 },
+    { ClefType::TAB4,       "TAB", 0 },
+    { ClefType::TAB_SERIF,  "TAB", 0 },
+    { ClefType::TAB4_SERIF, "TAB", 0 },
+};
+
+static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)
+{
+    auto it = std::find_if(CLEF_INFOS.cbegin(), CLEF_INFOS.cend(), [v](const MusicXmlClefInfo& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != CLEF_INFOS.cend()) {
+        static MusicXmlClefInfo dummy;
+        return dummy;
+    }
+    return *it;
+}
 
 void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttributes)
 {
@@ -2208,12 +2271,13 @@ void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttr
     _attr.doAttr(_xml, true);
     _xml.startObject(tagName);
 
-    QString sign = ClefInfo::sign(ct);
-    int line   = ClefInfo::line(ct);
-    _xml.tag("sign", sign);
+    MusicXmlClefInfo info = findClefInfoByType(ct);
+
+    int line = ClefInfo::line(ct);
+    _xml.tag("sign", info.sign);
     _xml.tag("line", line);
-    if (ClefInfo::octChng(ct)) {
-        _xml.tag("clef-octave-change", ClefInfo::octChng(ct));
+    if (info.octChng) {
+        _xml.tag("clef-octave-change", info.octChng);
     }
     _xml.endObject();
 }

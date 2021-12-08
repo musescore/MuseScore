@@ -36,7 +36,6 @@
 #include "libmscore/select.h"
 
 namespace Ms {
-enum class ClefType : signed char;
 class Spanner;
 class Beam;
 class Tuplet;

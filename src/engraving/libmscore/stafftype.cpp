@@ -272,7 +272,7 @@ void StaffType::write(XmlWriter& xml) const
         xml.tag("color", _color.toQString());
     }
     if (_group == StaffGroup::STANDARD) {
-        xml.tag("noteheadScheme", TConv::toXmlTag(_noteHeadScheme), TConv::toXmlTag(NoteHeadScheme::HEAD_NORMAL));
+        xml.tag("noteheadScheme", TConv::toXml(_noteHeadScheme), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
     }
     if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
         if (!_genKeysig) {
@@ -360,7 +360,7 @@ void StaffType::read(XmlReader& e)
         } else if (tag == "timesig") {
             setGenTimesig(e.readInt());
         } else if (tag == "noteheadScheme") {
-            setNoteHeadScheme(TConv::fromXmlTag(e.readElementText(), NoteHeadScheme::HEAD_NORMAL));
+            setNoteHeadScheme(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_NORMAL));
         } else if (tag == "keysig") {
             _genKeysig = e.readInt();
         } else if (tag == "ledgerlines") {
