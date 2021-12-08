@@ -80,19 +80,19 @@ Rectangle {
         delegate: NotationSwitchButton {
             id: button
 
-            navigation.name: "NotationTab" + model.index
+            navigation.name: "NotationTab" + index
             navigation.panel: navPanel
             navigation.row: 1
-            navigation.column: model.index + 1
+            navigation.column: index + 1
 
             text: model.title
             needSave: model.needSave
 
             ButtonGroup.group: notationsView.radioButtonGroup
-            checked: model.index === notationsView.currentIndex
+            checked: index === notationsView.currentIndex
 
             function resolveNextNotationIndex() {
-                var nextIndex = model.index - 1
+                var nextIndex = index - 1
                 if (nextIndex < 0) {
                     return 0
                 }
@@ -101,18 +101,18 @@ Rectangle {
             }
 
             onToggled: {
-                notationSwitchModel.setCurrentNotation(model.index)
+                notationSwitchModel.setCurrentNotation(index)
             }
 
             onCloseRequested: {
-                if (model.index !== notationsView.currentIndex) {
-                    notationSwitchModel.closeNotation(model.index)
+                if (index !== notationsView.currentIndex) {
+                    notationSwitchModel.closeNotation(index)
                     return
                 }
 
-                var index = button.resolveNextNotationIndex()
-                notationSwitchModel.closeNotation(model.index)
-                notationSwitchModel.setCurrentNotation(index)
+                var nextIndex = button.resolveNextNotationIndex()
+                notationSwitchModel.setCurrentNotation(nextIndex)
+                notationSwitchModel.closeNotation(index)
             }
         }
     }

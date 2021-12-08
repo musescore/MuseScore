@@ -221,7 +221,7 @@ Item {
                         property bool isSelected: false
 
                         function updateIsSelected() {
-                            treeItemDelegateLoader.isSelected = instrumentsTreeModel.isSelected(styleData.index)
+                            treeItemDelegateLoader.isSelected = (Boolean(styleData.index.row) && instrumentsTreeModel.isSelected(styleData.index))
                         }
 
                         Connections {
