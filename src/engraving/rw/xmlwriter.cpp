@@ -363,13 +363,13 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
     case P_TYPE::NOTEHEAD_TYPE: {
         putLevel();
         *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<NoteHeadType>());
+        *this << TConv::toXmlTag(data.value<NoteHeadType>());
         *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::NOTEHEAD_SCHEME: {
         putLevel();
         *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<NoteHeadScheme>());
+        *this << TConv::toXmlTag(data.value<NoteHeadScheme>());
         *this << "</" << ename << ">\n";
     } break;
     case P_TYPE::NOTEHEAD_GROUP: {

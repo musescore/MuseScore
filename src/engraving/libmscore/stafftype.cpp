@@ -25,7 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
 #include "rw/xml.h"
-#include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "chord.h"
 #include "measure.h"
@@ -35,7 +35,7 @@
 #include "score.h"
 
 using namespace mu;
-using namespace mu::engraving::rw;
+using namespace mu::engraving;
 
 #define TAB_DEFAULT_LINE_SP   (1.5)
 #define TAB_RESTSYMBDISPL     2.0
@@ -272,7 +272,7 @@ void StaffType::write(XmlWriter& xml) const
         xml.tag("color", _color.toQString());
     }
     if (_group == StaffGroup::STANDARD) {
-        xml.tag("noteheadScheme", XmlValue::toXml(_noteHeadScheme), XmlValue::toXml(NoteHeadScheme::HEAD_NORMAL));
+        xml.tag("noteheadScheme", TConv::toXmlTag(_noteHeadScheme), TConv::toXmlTag(NoteHeadScheme::HEAD_NORMAL));
     }
     if (_group == StaffGroup::STANDARD || _group == StaffGroup::PERCUSSION) {
         if (!_genKeysig) {
@@ -360,7 +360,7 @@ void StaffType::read(XmlReader& e)
         } else if (tag == "timesig") {
             setGenTimesig(e.readInt());
         } else if (tag == "noteheadScheme") {
-            setNoteHeadScheme(XmlValue::fromXml(e.readElementText(), NoteHeadScheme::HEAD_NORMAL));
+            setNoteHeadScheme(TConv::fromXmlTag(e.readElementText(), NoteHeadScheme::HEAD_NORMAL));
         } else if (tag == "keysig") {
             _genKeysig = e.readInt();
         } else if (tag == "ledgerlines") {

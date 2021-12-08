@@ -27,6 +27,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stringdata.h"
 
+#include "engraving/types/typesconv.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
@@ -41,9 +42,9 @@ using namespace mu::engraving;
 using namespace mu::ui;
 
 const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
-    QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
-    QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF"),
-    QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
+    QT_TRANSLATE_NOOP("notation", "STANDARD STAFF"),
+    QT_TRANSLATE_NOOP("notation", "PERCUSSION STAFF"),
+    QT_TRANSLATE_NOOP("notation", "TABLATURE STAFF")
 };
 
 //---------------------------------------------------------
@@ -86,7 +87,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(Ms::NoteHead::scheme2userName(i), static_cast<int>(i));
+        noteHeadScheme->addItem(TConv::toUserName(i), static_cast<int>(i));
     }
 
     // load a sample standard score in preview

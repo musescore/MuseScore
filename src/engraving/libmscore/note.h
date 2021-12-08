@@ -74,9 +74,6 @@ public:
     NoteHead* clone() const override { return new NoteHead(*this); }
 
     NoteHeadGroup headGroup() const;
-
-    static QString scheme2userName(NoteHeadScheme scheme);
-    static QString type2userName(NoteHeadType type);
 };
 
 //---------------------------------------------------------

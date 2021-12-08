@@ -65,13 +65,6 @@ public:
 
     static QString toXml(BarLineType v);
     static BarLineType fromXml(const QString& str, BarLineType def);
-
-    static QString toXml(NoteHeadType v);
-    static NoteHeadType fromXml(const QString& str, NoteHeadType def);
-    static QString toXml(NoteHeadScheme v);
-    static NoteHeadScheme fromXml(const QString& str, NoteHeadScheme def);
-    static QString toXml(NoteHeadGroup v);
-    static NoteHeadGroup fromXml(const QString& str, NoteHeadGroup def);
 };
 }
 

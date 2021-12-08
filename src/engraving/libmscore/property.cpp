@@ -545,9 +545,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
     case P_TYPE::NOTEHEAD_TYPE:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
+        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
+        return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:
         return PropertyValue(TConv::fromXmlTag(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
     case P_TYPE::SYMID:
