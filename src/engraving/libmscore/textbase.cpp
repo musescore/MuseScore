@@ -3665,7 +3665,7 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
     }
     if (id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE || id == Pid::TEXT_SCRIPT_ALIGN) {
         // can't use standard change property as Undo might set to "undefined"
-        score()->undo(new ChangeTextProperties(_cursor, id, v));
+        score()->undo(new ChangeTextProperties(_cursor, id, v, ps));
     } else {
         EngravingItem::undoChangeProperty(id, v, ps);
     }
