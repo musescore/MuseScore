@@ -38,25 +38,27 @@ Item {
         property var showedToolTip: null
     }
 
+    Component {
+        id: toolTipComp
+
+        StyledToolTip {}
+    }
+
     Connections {
         target: root.provider
 
         function onShowToolTip(parent, title, description, shortcut) {
-            var toolTipComponentPath = "../UiComponents/StyledToolTip.qml"
-            var toolTipComponent = Qt.createComponent(toolTipComponentPath)
-            if (toolTipComponent.status !== Component.Ready) {
-                console.log("[qml] failed create component: " + toolTipComponentPath + ", err: " + toolTipComponent.errorString())
-                return
-            }
 
-            var toolTip = toolTipComponent.createObject(parent)
+            onHideToolTip()
+
+            var toolTip = toolTipComp.createObject(parent)
             toolTip.title = title
             toolTip.description = description
             toolTip.shortcut = shortcut
 
             toolTip.closed.connect(function() {
+                prv.showedToolTip.destroy()
                 prv.showedToolTip = null
-                toolTip.destroy()
             })
 
             prv.showedToolTip = toolTip
