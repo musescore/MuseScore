@@ -107,6 +107,10 @@ ExpandableBlank {
             navigationPanel: navPanel
             navigationRowStart: root.navigation.row + 1
             anchorItem: root.anchorItem
+
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(-invisibleContentHeight)
+            }
         }
     }
 
