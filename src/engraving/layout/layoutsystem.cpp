@@ -188,7 +188,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 ctx.curMeasure->setParent(oldSystem);
             }
             // If the last appended measure caused a re-layout of the previous measures, now that we are
-            // removing it we need to re-layout the previous measures again. 
+            // removing it we need to re-layout the previous measures again.
             if (changeMinSysTicks) {
                 minTicks = prevMinTicks; // If the last measure caused it to change, now we need to restore it!
                 for (MeasureBase* mb : system->measures()) {
@@ -421,7 +421,6 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             mb->setPos(pos);
             Measure* m = toMeasure(mb);
-            qreal stretch = m->basicStretch();
             qreal weight = m->stretchWeight(); // Updated stretching formula
             ww += rest * weight;
             m->stretchMeasure(ww);
