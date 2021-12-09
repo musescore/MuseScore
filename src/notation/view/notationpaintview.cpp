@@ -631,6 +631,10 @@ void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
     RectF viewRect = viewport();
     RectF showRect = logicRect;
 
+    if (viewRect.isEmpty()) {
+        return;
+    }
+
     if (viewRect.contains(showRect)) {
         return;
     }
