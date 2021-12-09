@@ -26,7 +26,6 @@ import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 
 import "../common"
-import "../general/playback"
 
 InspectorSectionView {
     id: root
