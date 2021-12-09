@@ -535,6 +535,11 @@
     <seq>Ctrl+Backspace</seq>
     </SC>
   <SC>
+    <key>full-measure-rest</key>
+    <seq>Ctrl+Shift+Del</seq>
+    <seq>Ctrl+Shift+Backspace</seq>
+    </SC>
+  <SC>
     <key>append-measure</key>
     <seq>Ctrl+B</seq>
     </SC>
@@ -741,6 +746,10 @@
     <seq>Ctrl+Y,Ctrl+1</seq>
     </SC>
   <SC>
+    <key>clef-bass</key>
+    <seq>Ctrl+Y,Ctrl+2</seq>
+    </SC>
+  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     </SC>
@@ -795,6 +804,10 @@
   <SC>
     <key>zoom100</key>
     <seq>Ctrl+0</seq>
+    </SC>
+  <SC>
+    <key>mirror-note</key>
+    <seq>Shift+X</seq>
     </SC>
   <SC>
     <key>double-duration</key>
@@ -1136,6 +1149,10 @@
   <SC>
     <key>toggle-insert-mode</key>
     <seq>Ctrl+I</seq>
+    </SC>
+  <SC>
+    <key>toggle-autoplace</key>
+    <seq>=</seq>
     </SC>
   <SC>
     <key>zoom-in-horiz-pre</key>
