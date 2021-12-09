@@ -127,8 +127,8 @@ void TupletDialog::apply()
     options.numberType = numberType();
     options.bracketType = bracketType();
 
-    ActionData data = ActionData::make_arg1<TupletOptions>(options);
-    dispatcher()->dispatch("custom-tuplet", data);
+    ActionData data_ = ActionData::make_arg1<TupletOptions>(options);
+    dispatcher()->dispatch("custom-tuplet", data_);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)

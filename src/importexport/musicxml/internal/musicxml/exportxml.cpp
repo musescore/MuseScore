@@ -2253,8 +2253,8 @@ static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)
     });
 
     IF_ASSERT_FAILED(it != CLEF_INFOS.cend()) {
-        static MusicXmlClefInfo dummy;
-        return dummy;
+        static MusicXmlClefInfo dummy_;
+        return dummy_;
     }
     return *it;
 }
