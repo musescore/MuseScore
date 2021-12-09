@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -39,5 +40,53 @@ InspectorSectionView {
         width: parent.width
 
         spacing: 12
+
+        RowLayout {
+            width: parent.width
+            spacing: 4
+
+            PopupViewButton {
+                id: insertMeasuresPopupButton
+
+                anchorItem: root.anchorItem
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "InsertMeasures"
+                navigation.row: root.navigationRowStart + 1
+
+                text: qsTrc("inspector", "Insert measures")
+
+                popupContent: InsertMeasuresPopup {
+                    id: insertMeasuresPopup
+                    model: root.model
+
+                    navigationPanel: insertMeasuresPopupButton.popupNavigationPanel
+
+                    onCloseRequested: {
+                        insertMeasuresPopupButton.closePopup()
+                    }
+                }
+
+                onPopupOpened: {
+                    Qt.callLater(insertMeasuresPopup.focusOnFirst)
+                }
+
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+            }
+
+            FlatButton {
+                id: deleteButton
+
+                navigation.panel: root.navigationPanel
+                navigation.name: "DeleteMeasures"
+                navigation.row: root.navigationRowStart + 1
+
+                icon: IconCode.DELETE_TANK
+
+                onClicked: model.deleteSelectedMeasures()
+            }
+        }
     }
 }

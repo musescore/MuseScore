@@ -21,6 +21,7 @@
  */
 #include "measuressettingsmodel.h"
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -35,4 +36,14 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepository
 bool MeasuresSettingsModel::isEmpty() const
 {
     return !currentNotation() || !currentNotation()->interaction()->selection()->isRange();
+}
+
+void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
+{
+    NOT_IMPLEMENTED;
+}
+
+void MeasuresSettingsModel::deleteSelectedMeasures()
+{
+    NOT_IMPLEMENTED;
 }

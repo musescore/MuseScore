@@ -38,6 +38,17 @@ public:
     void requestElements() override { }
 
     bool isEmpty() const override;
+
+    enum class InsertMeasuresTarget {
+        AfterSelection,
+        BeforeSelection,
+        AtStartOfScore,
+        AtEndOfScore
+    };
+    Q_ENUM(InsertMeasuresTarget)
+
+    Q_INVOKABLE void insertMeasures(int numberOfMeasures, InsertMeasuresTarget target);
+    Q_INVOKABLE void deleteSelectedMeasures();
 };
 }
 
