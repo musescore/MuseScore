@@ -58,6 +58,7 @@ public:
     enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
+        SECTION_MEASURES,
         SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
@@ -175,6 +176,7 @@ protected:
     void endCommand();
 
     void updateNotation();
+    notation::INotationPtr currentNotation() const;
     async::Notification currentNotationChanged() const;
 
     IElementRepositoryService* m_repository = nullptr;

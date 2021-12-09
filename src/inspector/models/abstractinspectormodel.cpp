@@ -458,20 +458,12 @@ bool AbstractInspectorModel::isNotationExisting() const
 
 INotationStylePtr AbstractInspectorModel::style() const
 {
-    if (!context() || !context()->currentNotation()) {
-        return nullptr;
-    }
-
-    return context()->currentNotation()->style();
+    return currentNotation() ? currentNotation()->style() : nullptr;
 }
 
 INotationUndoStackPtr AbstractInspectorModel::undoStack() const
 {
-    if (!context() || !context()->currentNotation()) {
-        return nullptr;
-    }
-
-    return context()->currentNotation()->undoStack();
+    return currentNotation() ? currentNotation()->undoStack() : nullptr;
 }
 
 void AbstractInspectorModel::beginCommand()
@@ -488,24 +480,21 @@ void AbstractInspectorModel::endCommand()
     }
 }
 
+INotationPtr AbstractInspectorModel::currentNotation() const
+{
+    return context()->currentNotation();
+}
+
 mu::async::Notification AbstractInspectorModel::currentNotationChanged() const
 {
-    IF_ASSERT_FAILED(context()) {
-        return mu::async::Notification();
-    }
-
     return context()->currentNotationChanged();
 }
 
 void AbstractInspectorModel::updateNotation()
 {
-    IF_ASSERT_FAILED(context()) {
+    if (!currentNotation()) {
         return;
     }
 
-    if (!context()->currentNotation()) {
-        return;
-    }
-
-    context()->currentNotation()->notationChanged().notify();
+    currentNotation()->notationChanged().notify();
 }
