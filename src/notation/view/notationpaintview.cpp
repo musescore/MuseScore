@@ -365,15 +365,16 @@ void NotationPaintView::hideContextMenu()
 void NotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
-    if (!isInited()) {
-        return;
-    }
 
     mu::draw::Painter mup(qp, objectName().toStdString());
     mu::draw::Painter* painter = &mup;
 
     RectF rect(0.0, 0.0, width(), height());
     paintBackground(rect, painter);
+
+    if (!isInited()) {
+        return;
+    }
 
     qreal guiScaling = configuration()->guiScaling();
     Transform guiScalingCompensation;
@@ -428,7 +429,14 @@ void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painte
     if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {
-        QPixmap pixmap(wallpaperPath);
+        static QPixmap pixmap(wallpaperPath);
+        static QString lastPath = wallpaperPath;
+
+        if (lastPath != wallpaperPath) {
+            pixmap = QPixmap(wallpaperPath);
+            lastPath = wallpaperPath;
+        }
+
         painter->drawTiledPixmap(rect, pixmap, rect.topLeft() - PointF(m_matrix.m31(), m_matrix.m32()));
     }
 }
@@ -476,11 +484,6 @@ std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) 
     }
 
     return { dx, dy };
-}
-
-QColor NotationPaintView::backgroundColor() const
-{
-    return configuration()->backgroundColor();
 }
 
 RectF NotationPaintView::viewport() const
@@ -627,6 +630,10 @@ void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
     TRACEFUNC;
     RectF viewRect = viewport();
     RectF showRect = logicRect;
+
+    if (viewRect.isEmpty()) {
+        return;
+    }
 
     if (viewRect.contains(showRect)) {
         return;
