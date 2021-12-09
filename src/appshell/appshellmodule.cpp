@@ -57,6 +57,7 @@
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
+#include "view/windowdroparea.h"
 
 #include "view/dockwindow/docksetup.h"
 
@@ -89,6 +90,7 @@ void AppShellModule::registerExports()
     DockSetup::registerExports();
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
+    ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
 }
 
@@ -147,6 +149,8 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
+
+    qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)

@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+#include "../iapplicationactioncontroller.h"
+
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -37,7 +39,7 @@
 #include "project/iprojectfilescontroller.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public QObject, public actions::Actionable, public async::Asyncable
+class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
 {
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
@@ -52,6 +54,10 @@ public:
     void init();
 
     ValCh<bool> isFullScreen() const;
+
+    void onDragEnterEvent(QDragEnterEvent* event) override;
+    void onDragMoveEvent(QDragMoveEvent* event) override;
+    void onDropEvent(QDropEvent* event) override;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;

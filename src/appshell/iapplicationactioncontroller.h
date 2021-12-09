@@ -19,28 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
-#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#ifndef MU_APPSHELL_IAPPLICATIONACTIONCONTROLLER_H
+#define MU_APPSHELL_IAPPLICATIONACTIONCONTROLLER_H
+
+#include <QEvent>
 
 #include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
 
-namespace mu::project {
-class IProjectFilesController : MODULE_EXPORT_INTERFACE
+namespace mu::appshell {
+class IApplicationActionController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IProjectFilesController)
+    INTERFACE_ID(IApplicationActionController)
 
 public:
-    virtual ~IProjectFilesController() = default;
+    virtual ~IApplicationActionController() = default;
 
-    virtual bool isFileSupported(const io::path& path) const = 0;
-    virtual Ret openProject(const io::path& path) = 0;
-    virtual bool closeOpenedProject() = 0;
-    virtual bool isProjectOpened(const io::path& path) const = 0;
-    virtual bool isAnyProjectOpened() const = 0;
-    virtual bool saveProject(const io::path& path = io::path()) = 0;
+    virtual void onDragEnterEvent(QDragEnterEvent* event) = 0;
+    virtual void onDragMoveEvent(QDragMoveEvent* event) = 0;
+    virtual void onDropEvent(QDropEvent* event) = 0;
 };
 }
 
-#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#endif // MU_APPSHELL_IAPPLICATIONACTIONCONTROLLER_H
