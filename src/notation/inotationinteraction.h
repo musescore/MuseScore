@@ -221,7 +221,9 @@ public:
     virtual void insertClef(Ms::ClefType) = 0;
     virtual void changeAccidental(Ms::AccidentalType) = 0;
     virtual void transposeSemitone(int) = 0;
+    virtual void transposeDiatonicAlterations(Ms::TransposeDirection) = 0;
     virtual void toggleGlobalOrLocalInsert() = 0;
+    virtual void toggleAutoplace(bool all) = 0;
     virtual void getLocation() = 0;
     virtual void execute(void (Ms::Score::*)()) = 0;
 };
