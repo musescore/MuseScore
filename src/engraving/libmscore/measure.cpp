@@ -3149,17 +3149,13 @@ void Measure::stretchMeasure(qreal targetWidth)
 {
     bbox().setWidth(targetWidth);
 
-    Fraction minTick = computeTicks();
-
     //---------------------------------------------------
     //    compute stretch
     //---------------------------------------------------
 
     std::multimap<qreal, Segment*> springs;
 
-    //Fraction minTicks = computeTicks();
     Fraction minTicks = minSysTicks(); // The stretching must be done according to the shortest note *of the system*!
-    qreal minNoteSpace = (score()->noteHeadWidth() + score()->styleMM(Sid::minNoteDistance));
 
     Segment* seg = first();
     while (seg && (!seg->enabled() || seg->allElementsInvisible())) {
