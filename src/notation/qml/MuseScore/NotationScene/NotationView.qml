@@ -80,10 +80,6 @@ FocusScope {
 
             orientation: notationNavigator.orientation === Qt.Horizontal ? Qt.Vertical : Qt.Horizontal
 
-            background: Rectangle {
-                color: notationView.backgroundColor
-            }
-
             NotationScrollAndZoomArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
@@ -165,6 +161,8 @@ FocusScope {
 
                 SplitView.preferredHeight: 100
                 SplitView.preferredWidth: 100
+                SplitView.minimumWidth: 30
+                SplitView.minimumHeight: 30
 
                 sourceComponent: notationNavigator.visible ? navigatorComp : null
 
@@ -195,7 +193,7 @@ FocusScope {
             }
 
             handle: Rectangle {
-                id: background
+                id: resizingHandle
 
                 implicitWidth: 4
                 implicitHeight: 4
@@ -205,17 +203,17 @@ FocusScope {
                 states: [
                     State {
                         name: "PRESSED"
-                        when: background.SplitHandle.pressed
+                        when: resizingHandle.SplitHandle.pressed
                         PropertyChanges {
-                            target: background
+                            target: resizingHandle
                             opacity: ui.theme.accentOpacityHit
                         }
                     },
                     State {
                         name: "HOVERED"
-                        when: background.SplitHandle.hovered
+                        when: resizingHandle.SplitHandle.hovered
                         PropertyChanges {
-                            target: background
+                            target: resizingHandle
                             opacity: ui.theme.accentOpacityHover
                         }
                     }
