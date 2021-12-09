@@ -94,9 +94,24 @@ Ms::MasterScore* MasterNotation::masterScore() const
     return dynamic_cast<Ms::MasterScore*>(score());
 }
 
+static void clearMeasures(Ms::Score* score)
+{
+    for (Ms::Score* _score : score->scoreList()) {
+        Ms::MeasureBaseList* measures = _score->measures();
+
+        for (Ms::MeasureBase* measure = measures->first(); measure; measure = measure->next()) {
+            measure->deleteLater();
+        }
+
+        measures->clear();
+    }
+}
+
 static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOptions)
 {
     TRACEFUNC;
+
+    clearMeasures(score);
 
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
@@ -264,8 +279,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
 
     score->checkChordList();
 
-    Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
-    score->sigmap()->add(0, timesig);
+    createMeasures(score, scoreOptions);
 
     //
     // select first rest
@@ -328,7 +342,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     }
 
     if (scoreOptions.withTempo) {
-        Ms::Fraction ts = timesig;
+        Ms::Fraction ts(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
 
         QString text("<sym>metNoteQuarterUp</sym> = %1");
         double bpm = scoreOptions.tempo.valueBpm;
