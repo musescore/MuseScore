@@ -24,8 +24,11 @@
 #include <QCoreApplication>
 #include <QCloseEvent>
 #include <QWindow>
+#include <QMimeData>
 
 #include "translation.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -52,6 +55,37 @@ void ApplicationActionController::init()
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
 
     qApp->installEventFilter(this);
+}
+
+void ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
+{
+    onDragMoveEvent(event);
+}
+
+void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
+{
+    const QMimeData* mime = event->mimeData();
+    QList<QUrl> urls = mime->urls();
+    if (urls.count() > 0) {
+        QString file = urls.first().toLocalFile();
+        LOGD() << file;
+        if (projectFilesController()->isFileSupported(io::path(file))) {
+            event->setDropAction(Qt::LinkAction);
+            event->acceptProposedAction();
+        }
+    }
+}
+
+void ApplicationActionController::onDropEvent(QDropEvent* event)
+{
+    const QMimeData* mime = event->mimeData();
+    QList<QUrl> urls = mime->urls();
+    if (urls.count() > 0) {
+        QString file = urls.first().toLocalFile();
+        LOGD() << file;
+        projectFilesController()->openProject(io::path(file));
+        event->ignore();
+    }
 }
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)

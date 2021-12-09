@@ -19,28 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
-#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
+#include "windowdroparea.h"
 
-namespace mu::project {
-class IProjectFilesController : MODULE_EXPORT_INTERFACE
+#include "log.h"
+
+WindowDropArea::WindowDropArea(QQuickItem* parent)
+    : QQuickItem(parent)
 {
-    INTERFACE_ID(IProjectFilesController)
-
-public:
-    virtual ~IProjectFilesController() = default;
-
-    virtual bool isFileSupported(const io::path& path) const = 0;
-    virtual Ret openProject(const io::path& path) = 0;
-    virtual bool closeOpenedProject() = 0;
-    virtual bool isProjectOpened(const io::path& path) const = 0;
-    virtual bool isAnyProjectOpened() const = 0;
-    virtual bool saveProject(const io::path& path = io::path()) = 0;
-};
+    setFlag(ItemAcceptsDrops, true);
 }
 
-#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H
+void WindowDropArea::dragEnterEvent(QDragEnterEvent* event)
+{
+    applicationActionController()->onDragEnterEvent(event);
+}
+
+void WindowDropArea::dragMoveEvent(QDragMoveEvent* event)
+{
+    applicationActionController()->onDragMoveEvent(event);
+}
+
+void WindowDropArea::dropEvent(QDropEvent* event)
+{
+    LOGI() << event;
+    applicationActionController()->onDropEvent(event);
+}

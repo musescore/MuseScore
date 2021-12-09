@@ -28,6 +28,7 @@
 #include "defer.h"
 #include "notation/notationerrors.h"
 #include "projectconfiguration.h"
+#include "engraving/infrastructure/io/mscio.h"
 
 #include "log.h"
 
@@ -97,6 +98,20 @@ INotationInteractionPtr ProjectActionsController::currentInteraction() const
 INotationSelectionPtr ProjectActionsController::currentNotationSelection() const
 {
     return currentNotation() ? currentInteraction()->selection() : nullptr;
+}
+
+bool ProjectActionsController::isFileSupported(const io::path& path) const
+{
+    std::string suffix = io::suffix(path);
+    if (engraving::isMuseScoreFile(suffix)) {
+        return true;
+    }
+
+    if (readers()->reader(suffix)) {
+        return true;
+    }
+
+    return false;
 }
 
 void ProjectActionsController::openProject(const actions::ActionData& args)

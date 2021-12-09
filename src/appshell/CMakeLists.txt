@@ -33,6 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iapplicationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/appshelltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationuiactions.h
@@ -95,6 +96,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/framelesswindow/framelesswindowmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/publish/publishtoolbarmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/windowdroparea.h
     ${DOCKWINDOW_SRC}
     )
 
