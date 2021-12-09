@@ -1,4 +1,5 @@
 module MuseScore.UiComponents
+StyledToolTip 1.0 StyledToolTip.qml
 Border 1.0 Border.qml
 NavigationFocusBorder 1.0 NavigationFocusBorder.qml
 CheckBox 1.0 CheckBox.qml
