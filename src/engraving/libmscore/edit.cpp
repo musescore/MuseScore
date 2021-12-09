@@ -1247,7 +1247,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                 nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
                 nsig->undoChangeProperty(Pid::GROUPS, ts->groups());
                 nsig->setSelected(false);
-                nsig->setDropTarget(0);
+                nsig->setDropTarget(false);
             }
         }
     } else {
@@ -1324,7 +1324,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                     nsig->undoChangeProperty(Pid::TIMESIG_STRETCH, ts->stretch());
                     nsig->undoChangeProperty(Pid::GROUPS, ts->groups());
                     nsig->setSelected(false);
-                    nsig->setDropTarget(0);                 // DEBUG
+                    nsig->setDropTarget(false);                 // DEBUG
                 }
 
                 if (score->isMaster()) {

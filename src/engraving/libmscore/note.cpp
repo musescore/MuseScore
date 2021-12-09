@@ -752,6 +752,8 @@ Note::Note(const Note& n, bool link)
         add(Factory::copyNoteDot(*dot));
     }
     _mark      = n._mark;
+
+    setDropTarget(false);
 }
 
 void Note::setParent(Chord* ch)
@@ -1402,7 +1404,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    mu::draw::Color c(curColor());
+    Color c(curColor());
     painter->setPen(c);
     bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 

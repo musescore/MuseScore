@@ -543,16 +543,17 @@ mu::draw::Color EngravingItem::curColor(bool isVisible) const
     return curColor(isVisible, color());
 }
 
-mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalColor) const
+mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
-        return (normalColor == engravingConfiguration()->defaultColor()) ? mu::draw::Color::black : normalColor;
+        return (normalColor == engravingConfiguration()->defaultColor()) ? Color::black : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
         return engravingConfiguration()->highlightSelectionColor(track() == -1 ? 0 : voice());
     }
+
     bool marked = false;
     if (isNote()) {
         //const Note* note = static_cast<const Note*>(this);
