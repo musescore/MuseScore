@@ -315,6 +315,8 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
         Ms::MasterScore* masterScore = m_masterNotation->masterScore();
         setupProjectProperties(masterScore, projectOptions);
 
+        m_engravingProject->setPath("");
+
         m_masterNotation->undoStack()->lock();
         m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
         m_masterNotation->undoStack()->unlock();
