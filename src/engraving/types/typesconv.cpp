@@ -25,6 +25,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace Ms;
 
 template<typename T>
 struct Item
@@ -32,6 +33,7 @@ struct Item
     T type;
     QString xml;
     const char* userName = nullptr;
+    SymId symId = SymId::noSym;
 };
 
 template<typename T>
@@ -45,7 +47,25 @@ static QString findUserNameByType(const std::vector<Item<T> >& cont, const T& v)
         static QString dummy;
         return dummy;
     }
+
+    if (!it->userName) {
+        return it->xml;
+    }
+
     return mu::qtrc("engraving", it->userName);
+}
+
+template<typename T>
+static SymId findSymIdByType(const std::vector<Item<T> >& cont, const T& v)
+{
+    auto it = std::find_if(cont.cbegin(), cont.cend(), [v](const Item<T>& i) {
+        return i.type == v;
+    });
+
+    IF_ASSERT_FAILED(it != cont.cend()) {
+        return SymId::noSym;
+    }
+    return it->symId;
 }
 
 template<typename T>
@@ -268,4 +288,63 @@ QString TConv::toXml(ClefType v)
 ClefType TConv::fromXml(const QString& tag, ClefType def)
 {
     return findTypeByXmlTag<ClefType>(CLEF_TYPES, tag, def);
+}
+
+static const std::vector<Item<DynamicType> > DYNAMIC_TYPES = {
+    { DynamicType::OTHER,   "other-dynamics",   nullptr, SymId::noSym },
+    { DynamicType::PPPPPP,  "pppppp",           nullptr, SymId::dynamicPPPPPP },
+    { DynamicType::PPPPP,   "ppppp",            nullptr, SymId::dynamicPPPPP },
+    { DynamicType::PPPP,    "pppp",             nullptr, SymId::dynamicPPPP },
+    { DynamicType::PPP,     "ppp",              nullptr, SymId::dynamicPPP },
+    { DynamicType::PP,      "pp",               nullptr, SymId::dynamicPP },
+    { DynamicType::P,       "p",                nullptr, SymId::dynamicPiano },
+
+    { DynamicType::MP,      "mp",               nullptr, SymId::dynamicMP },
+    { DynamicType::MF,      "mf",               nullptr, SymId::dynamicMF },
+
+    { DynamicType::F,       "f",                nullptr, SymId::dynamicForte },
+    { DynamicType::FF,      "ff",               nullptr, SymId::dynamicFF },
+    { DynamicType::FFF,     "fff",              nullptr, SymId::dynamicFFF },
+    { DynamicType::FFFF,    "ffff",             nullptr, SymId::dynamicFFFF },
+    { DynamicType::FFFFF,   "fffff",            nullptr, SymId::dynamicFFFFF },
+    { DynamicType::FFFFFF,  "ffffff",           nullptr, SymId::dynamicFFFFFF },
+
+    { DynamicType::FP,      "fp",               nullptr, SymId::dynamicFortePiano },
+    { DynamicType::PF,      "pf",               nullptr, SymId::noSym },
+
+    { DynamicType::SF,      "sf",               nullptr, SymId::dynamicSforzando1 },
+    { DynamicType::SFZ,     "sfz",              nullptr, SymId::dynamicSforzato },
+    { DynamicType::SFF,     "sff",              nullptr, SymId::noSym },
+    { DynamicType::SFFZ,    "sffz",             nullptr, SymId::dynamicSforzatoFF },
+    { DynamicType::SFP,     "sfp",              nullptr, SymId::dynamicSforzandoPiano },
+    { DynamicType::SFPP,    "sfpp",             nullptr, SymId::dynamicSforzandoPianissimo },
+
+    { DynamicType::RFZ,     "rfz",              nullptr, SymId::dynamicRinforzando2 },
+    { DynamicType::RF,      "rf",               nullptr, SymId::dynamicRinforzando1 },
+    { DynamicType::FZ,      "fz",               nullptr, SymId::dynamicForzando },
+    { DynamicType::M,       "m",                nullptr, SymId::dynamicMezzo },
+    { DynamicType::R,       "r",                nullptr, SymId::dynamicRinforzando },
+    { DynamicType::S,       "s",                nullptr, SymId::dynamicSforzando },
+    { DynamicType::Z,       "z",                nullptr, SymId::dynamicZ },
+    { DynamicType::N,       "n",                nullptr, SymId::dynamicNiente },
+};
+
+QString TConv::toUserName(DynamicType v)
+{
+    return findUserNameByType<DynamicType>(DYNAMIC_TYPES, v);
+}
+
+Ms::SymId TConv::symId(DynamicType v)
+{
+    return findSymIdByType<DynamicType>(DYNAMIC_TYPES, v);
+}
+
+QString TConv::toXml(DynamicType v)
+{
+    return findXmlTagByType<DynamicType>(DYNAMIC_TYPES, v);
+}
+
+DynamicType TConv::fromXml(const QString& tag, DynamicType def)
+{
+    return findTypeByXmlTag<DynamicType>(DYNAMIC_TYPES, tag, def);
 }

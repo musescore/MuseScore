@@ -311,6 +311,42 @@ enum class ClefType : signed char {
     TAB4_SERIF,
     MAX
 };
+
+// P_TYPE::DYNAMIC_TYPE
+enum class DynamicType : char {
+    OTHER,
+    PPPPPP,
+    PPPPP,
+    PPPP,
+    PPP,
+    PP,
+    P,
+    MP,
+    MF,
+    F,
+    FF,
+    FFF,
+    FFFF,
+    FFFFF,
+    FFFFFF,
+    FP,
+    PF,
+    SF,
+    SFZ,
+    SFF,
+    SFFZ,
+    SFP,
+    SFPP,
+    RFZ,
+    RF,
+    FZ,
+    M,
+    R,
+    S,
+    Z,
+    N,
+    LAST
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -331,6 +367,7 @@ using NoteHeadType = mu::engraving::NoteHeadType;
 using NoteHeadScheme = mu::engraving::NoteHeadScheme;
 using NoteHeadGroup = mu::engraving::NoteHeadGroup;
 using ClefType = mu::engraving::ClefType;
+using DynamicType = mu::engraving::DynamicType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

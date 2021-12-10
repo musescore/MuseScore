@@ -165,11 +165,12 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::NOTEHEAD_SCHEME:  return static_cast<int>(value<NoteHeadScheme>());
     case P_TYPE::NOTEHEAD_GROUP:   return static_cast<int>(value<NoteHeadGroup>());
     case P_TYPE::CLEF_TYPE:        return static_cast<int>(value<ClefType>());
+    case P_TYPE::DYNAMIC_TYPE:     return static_cast<int>(value<DynamicType>());
 
     // other
     case P_TYPE::SYMID:           return static_cast<int>(value<Ms::SymId>());
     case P_TYPE::HOOK_TYPE:       return static_cast<int>(value<Ms::HookType>());
-    case P_TYPE::DYNAMIC_TYPE:    return static_cast<int>(value<Ms::DynamicType>());
+
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
     default:
         UNREACHABLE; //! TODO
@@ -230,12 +231,12 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::NOTEHEAD_SCHEME:  return PropertyValue(NoteHeadScheme(v.toInt()));
     case P_TYPE::NOTEHEAD_GROUP:   return PropertyValue(NoteHeadGroup(v.toInt()));
     case P_TYPE::CLEF_TYPE:        return PropertyValue(ClefType(v.toInt()));
+    case P_TYPE::DYNAMIC_TYPE:     return PropertyValue(DynamicType(v.toInt()));
 
     // other
 
     case P_TYPE::SYMID:        return PropertyValue(Ms::SymId(v.toInt()));
     case P_TYPE::HOOK_TYPE:    return PropertyValue(Ms::HookType(v.toInt()));
-    case P_TYPE::DYNAMIC_TYPE: return PropertyValue(Ms::DynamicType(v.toInt()));
     case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(Ms::AccidentalRole(v.toInt()));
     default:
         break;

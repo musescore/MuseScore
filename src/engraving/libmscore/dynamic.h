@@ -75,11 +75,10 @@ public:
 
     void setDynamicType(DynamicType val) { _dynamicType = val; }
     void setDynamicType(const QString&);
-    static QString dynamicTypeName(DynamicType type);
-    QString dynamicTypeName() const { return dynamicTypeName(_dynamicType); }
+
     DynamicType dynamicType() const { return _dynamicType; }
     int subtype() const override { return static_cast<int>(_dynamicType); }
-    QString subtypeName() const override { return dynamicTypeName(); }
+    QString subtypeName() const override;
 
     void layout() override;
     void write(XmlWriter& xml) const override;
@@ -118,7 +117,8 @@ public:
     void doAutoplace();
 
     static const std::vector<ChangeSpeedItem> changeSpeedTable;
-    static int findInString(const QString& text, int& length, QString& type);
+
+    static QString dynamicText(DynamicType t);
 };
 }     // namespace Ms
 

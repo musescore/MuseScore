@@ -384,6 +384,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<ClefType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::DYNAMIC_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<DynamicType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
@@ -392,27 +398,20 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
 //    case P_TYPE::TDURATION,
 //    case P_TYPE::BEAM_MODE,
 
-//    case P_TYPE::TEXT_PLACE,
 //    case P_TYPE::TEMPO,
 //    case P_TYPE::GROUPS,
 //    case P_TYPE::SYMID,
 //    case P_TYPE::INT_LIST,
 //    case P_TYPE::GLISS_STYLE,
 //    case P_TYPE::BARLINE_TYPE,
-//    case P_TYPE::HEAD_TYPE,          // enum class Notehead::Type
-//    case P_TYPE::HEAD_GROUP,         // enum class Notehead::Group
 //    case P_TYPE::ZERO_INT,           // displayed with offset +1
 
 //    case P_TYPE::SUB_STYLE,
 
 //    case P_TYPE::CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
 //    case P_TYPE::CHANGE_SPEED,       // enum class Dynamic::Speed
-//    case P_TYPE::CLEF_TYPE,          // enum class ClefType
-//    case P_TYPE::DYNAMIC_TYPE,       // enum class DynamicType
 //    case P_TYPE::KEYMODE,            // enum class KeyMode
 //    case P_TYPE::ORIENTATION,        // enum class Orientation
-
-//    case P_TYPE::HEAD_SCHEME,        // enum class NoteHead::Scheme
 
 //    case P_TYPE::PITCH_VALUES,
 //    case P_TYPE::HOOK_TYPE

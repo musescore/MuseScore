@@ -25,6 +25,7 @@
 
 #include <QString>
 #include "types.h"
+#include "libmscore/symid.h"
 
 namespace mu::engraving {
 class TConv
@@ -45,6 +46,11 @@ public:
     static QString toUserName(ClefType v);
     static QString toXml(ClefType v);
     static ClefType fromXml(const QString& tag, ClefType def);
+
+    static QString toUserName(DynamicType v);
+    static Ms::SymId symId(DynamicType v);
+    static QString toXml(DynamicType v);
+    static DynamicType fromXml(const QString& tag, DynamicType def);
 };
 }
 
