@@ -594,38 +594,6 @@ enum class HookType : char {
     NONE, HOOK_90, HOOK_45, HOOK_90T
 };
 
-enum class DynamicType : char {
-    OTHER,
-    PPPPPP,
-    PPPPP,
-    PPPP,
-    PPP,
-    PP,
-    P,
-    MP,
-    MF,
-    F,
-    FF,
-    FFF,
-    FFFF,
-    FFFFF,
-    FFFFFF,
-    FP,
-    SF,
-    SFZ,
-    SFF,
-    SFFZ,
-    SFP,
-    SFPP,
-    RFZ,
-    RF,
-    FZ,
-    M,
-    R,
-    S,
-    Z
-};
-
 //---------------------------------------------------------
 //   AccidentalRole
 //---------------------------------------------------------
@@ -644,7 +612,6 @@ Q_ENUM_NS(NoteType);
 Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
 Q_ENUM_NS(HarmonyType);
-Q_ENUM_NS(DynamicType);
 #endif
 
 //hack: to force the build system to run moc on this file
@@ -660,7 +627,5 @@ Q_DECLARE_METATYPE(Ms::NoteType);
 Q_DECLARE_METATYPE(Ms::PlayEventType);
 
 Q_DECLARE_METATYPE(Ms::AccidentalType);
-
-Q_DECLARE_METATYPE(Ms::DynamicType)
 
 #endif

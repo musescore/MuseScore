@@ -552,8 +552,10 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
     case P_TYPE::CLEF_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), ClefType::G));
-    case P_TYPE::SYMID:
+    case P_TYPE::DYNAMIC_TYPE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), DynamicType::OTHER));
 
+    case P_TYPE::SYMID:
     case P_TYPE::SUB_STYLE:
     case P_TYPE::ORIENTATION:
         return propertyFromString(propertyType(id), e.readElementText());
@@ -638,8 +640,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return Dynamic::speedToName(Dynamic::Speed(value.toInt()));
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
-    case P_TYPE::DYNAMIC_TYPE:
-        return Dynamic::dynamicTypeName(value.value<DynamicType>());
     case P_TYPE::ORIENTATION: {
         const Orientation o = Orientation(value.toInt());
         if (o == Orientation::VERTICAL) {
