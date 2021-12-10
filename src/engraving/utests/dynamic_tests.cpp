@@ -92,33 +92,33 @@ TEST_F(DynamicTests, test1)
     EXPECT_EQ(d->velocity(), 57);
     delete d;
 
-    dynamic->setDynRange(Dynamic::Range::STAFF);
+    dynamic->setDynRange(DynamicRange::STAFF);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::STAFF);
+    EXPECT_EQ(d->dynRange(), DynamicRange::STAFF);
     delete d;
 
-    dynamic->setDynRange(Dynamic::Range::PART);
+    dynamic->setDynRange(DynamicRange::PART);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::PART);
+    EXPECT_EQ(d->dynRange(), DynamicRange::PART);
     delete d;
 
-    dynamic->setDynRange(Dynamic::Range::SYSTEM);
+    dynamic->setDynRange(DynamicRange::SYSTEM);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::SYSTEM);
+    EXPECT_EQ(d->dynRange(), DynamicRange::SYSTEM);
     delete d;
 
-    dynamic->setProperty(Pid::DYNAMIC_RANGE, int(Dynamic::Range::STAFF));
+    dynamic->setProperty(Pid::DYNAMIC_RANGE, DynamicRange::STAFF);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::STAFF);
+    EXPECT_EQ(d->dynRange(), DynamicRange::STAFF);
     delete d;
 
-    dynamic->setProperty(Pid::DYNAMIC_RANGE, int(Dynamic::Range::PART));
+    dynamic->setProperty(Pid::DYNAMIC_RANGE, DynamicRange::PART);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::PART);
+    EXPECT_EQ(d->dynRange(), DynamicRange::PART);
     delete d;
 
-    dynamic->setDynRange(Dynamic::Range::SYSTEM);
+    dynamic->setDynRange(DynamicRange::SYSTEM);
     d = static_cast<Dynamic*>(ScoreRW::writeReadElement(dynamic));
-    EXPECT_EQ(d->dynRange(), Dynamic::Range::SYSTEM);
+    EXPECT_EQ(d->dynRange(), DynamicRange::SYSTEM);
     delete d;
 }

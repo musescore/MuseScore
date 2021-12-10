@@ -166,6 +166,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::NOTEHEAD_GROUP:   return static_cast<int>(value<NoteHeadGroup>());
     case P_TYPE::CLEF_TYPE:        return static_cast<int>(value<ClefType>());
     case P_TYPE::DYNAMIC_TYPE:     return static_cast<int>(value<DynamicType>());
+    case P_TYPE::DYNAMIC_RANGE:    return static_cast<int>(value<DynamicRange>());
 
     // other
     case P_TYPE::SYMID:           return static_cast<int>(value<Ms::SymId>());
@@ -232,6 +233,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::NOTEHEAD_GROUP:   return PropertyValue(NoteHeadGroup(v.toInt()));
     case P_TYPE::CLEF_TYPE:        return PropertyValue(ClefType(v.toInt()));
     case P_TYPE::DYNAMIC_TYPE:     return PropertyValue(DynamicType(v.toInt()));
+    case P_TYPE::DYNAMIC_RANGE:    return PropertyValue(DynamicRange(v.toInt()));
 
     // other
 

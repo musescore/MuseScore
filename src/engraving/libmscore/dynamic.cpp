@@ -131,7 +131,7 @@ Dynamic::Dynamic(Segment* parent)
     : TextBase(ElementType::DYNAMIC, parent, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _velocity    = -1;
-    _dynRange    = Range::PART;
+    _dynRange    = DynamicRange::PART;
     _dynamicType = DynamicType::OTHER;
     _changeInVelocity = 128;
     _velChangeSpeed = Speed::NORMAL;
@@ -266,7 +266,7 @@ void Dynamic::read(XmlReader& e)
         } else if (tag == "velocity") {
             _velocity = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = Range(e.readInt());
+            _dynRange = TConv::fromXml(e.readElementText(), DynamicRange::STAFF);
         } else if (tag == "veloChange") {
             _changeInVelocity = e.readInt();
         } else if (tag == "veloChangeSpeed") {
@@ -472,9 +472,9 @@ mu::RectF Dynamic::drag(EditData& ed)
 //   undoSetDynRange
 //---------------------------------------------------------
 
-void Dynamic::undoSetDynRange(Range v)
+void Dynamic::undoSetDynRange(DynamicRange v)
 {
-    undoChangeProperty(Pid::DYNAMIC_RANGE, int(v));
+    undoChangeProperty(Pid::DYNAMIC_RANGE, v);
 }
 
 //---------------------------------------------------------
@@ -514,7 +514,7 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        return PropertyValue::fromValue(_dynamicType);
+        return _dynamicType;
     case Pid::DYNAMIC_RANGE:
         return int(_dynRange);
     case Pid::VELOCITY:
@@ -545,7 +545,7 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
         _dynamicType = v.value<DynamicType>();
         break;
     case Pid::DYNAMIC_RANGE:
-        _dynRange = Range(v.toInt());
+        _dynRange = v.value<DynamicRange>();
         break;
     case Pid::VELOCITY:
         _velocity = v.toInt();
@@ -581,7 +581,7 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
     case Pid::SUB_STYLE:
         return int(Tid::DYNAMICS);
     case Pid::DYNAMIC_RANGE:
-        return int(Range::PART);
+        return DynamicRange::PART;
     case Pid::VELOCITY:
         return -1;
     case Pid::VELO_CHANGE:

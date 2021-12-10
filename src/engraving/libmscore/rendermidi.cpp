@@ -967,15 +967,15 @@ void Score::updateHairpin(Hairpin* h)
     }
 
     switch (h->dynRange()) {
-    case Dynamic::Range::STAFF:
+    case DynamicRange::STAFF:
         st->velocities().addRamp(tick, tick2, veloChange, method, direction);
         break;
-    case Dynamic::Range::PART:
+    case DynamicRange::PART:
         for (Staff* s : *st->part()->staves()) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
-    case Dynamic::Range::SYSTEM:
+    case DynamicRange::SYSTEM:
         for (Staff* s : qAsConst(_staves)) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
@@ -1037,7 +1037,7 @@ void Score::updateVelo()
 
                 int dStaffIdx = d->staffIdx();
                 switch (d->dynRange()) {
-                case Dynamic::Range::STAFF:
+                case DynamicRange::STAFF:
                     if (dStaffIdx == staffIdx) {
                         velo.addFixed(tick, v);
                         if (change != 0) {
@@ -1047,7 +1047,7 @@ void Score::updateVelo()
                         }
                     }
                     break;
-                case Dynamic::Range::PART:
+                case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
                         for (int i = partStaff; i < partStaff + partStaves; ++i) {
                             ChangeMap& stVelo = staff(i)->velocities();
@@ -1060,7 +1060,7 @@ void Score::updateVelo()
                         }
                     }
                     break;
-                case Dynamic::Range::SYSTEM:
+                case DynamicRange::SYSTEM:
                     for (int i = 0; i < nstaves(); ++i) {
                         ChangeMap& stVelo = staff(i)->velocities();
                         stVelo.addFixed(tick, v);

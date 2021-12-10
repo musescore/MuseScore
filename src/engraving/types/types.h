@@ -347,6 +347,11 @@ enum class DynamicType : char {
     N,
     LAST
 };
+
+// P_TYPE::DYNAMIC_RANGE
+enum class DynamicRange : char {
+    STAFF, PART, SYSTEM
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -368,6 +373,7 @@ using NoteHeadScheme = mu::engraving::NoteHeadScheme;
 using NoteHeadGroup = mu::engraving::NoteHeadGroup;
 using ClefType = mu::engraving::ClefType;
 using DynamicType = mu::engraving::DynamicType;
+using DynamicRange = mu::engraving::DynamicRange;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

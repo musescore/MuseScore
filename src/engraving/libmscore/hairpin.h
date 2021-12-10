@@ -94,7 +94,7 @@ class Hairpin final : public TextLineBase
     HairpinType _hairpinType { HairpinType::INVALID };
     int _veloChange;
     bool _hairpinCircledTip;
-    Dynamic::Range _dynRange;
+    DynamicRange _dynRange;
     bool _singleNoteDynamics;
     ChangeMethod _veloChangeMethod;
 
@@ -123,8 +123,8 @@ public:
     int veloChange() const { return _veloChange; }
     void setVeloChange(int v) { _veloChange = v; }
 
-    Dynamic::Range dynRange() const { return _dynRange; }
-    void setDynRange(Dynamic::Range t) { _dynRange = t; }
+    DynamicRange dynRange() const { return _dynRange; }
+    void setDynRange(DynamicRange t) { _dynRange = t; }
 
     Spatium hairpinHeight() const { return _hairpinHeight; }
     void setHairpinHeight(Spatium val) { _hairpinHeight = val; }

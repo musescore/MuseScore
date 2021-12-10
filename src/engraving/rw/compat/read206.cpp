@@ -29,6 +29,7 @@
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "compat/pageformat.h"
 
@@ -1438,7 +1439,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(Dynamic::Range(tctx.reader().readInt()));
+            d->setDynRange(TConv::fromXml(tctx.reader().readElementText(), DynamicRange::STAFF));
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
             tctx.reader().unknown();
         }
@@ -2129,7 +2130,7 @@ void Read206::readHairpin206(XmlReader& e, const ReadContext& ctx, Hairpin* h)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(Dynamic::Range(e.readInt()));
+            h->setDynRange(DynamicRange(e.readInt()));
         } else if (tag == "useTextLine") {        // < 206
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {

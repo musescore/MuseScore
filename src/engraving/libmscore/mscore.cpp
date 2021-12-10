@@ -241,7 +241,6 @@ void MScore::registerUiTypes()
     qRegisterMetaType<Volta::Type>("VoltaType");
     qRegisterMetaType<OttavaType>("OttavaType");
     qRegisterMetaType<Trill::Type>("TrillType");
-    qRegisterMetaType<Dynamic::Range>("DynamicRange");
     qRegisterMetaType<Jump::Type>("JumpType");
     qRegisterMetaType<Marker::Type>("MarkerType");
     qRegisterMetaType<HairpinType>("HairpinType");
