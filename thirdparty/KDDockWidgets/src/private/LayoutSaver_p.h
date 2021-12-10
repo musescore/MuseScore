@@ -284,6 +284,7 @@ public:
     QString uniqueName;
     QStringList affinities;
     QRect geometry;
+    QRect normalGeometry;
     int screenIndex;
     QSize screenSize; // for relative-size restoring
     bool isVisible;
