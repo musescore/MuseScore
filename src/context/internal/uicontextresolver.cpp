@@ -161,10 +161,11 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     //!     NotationFocused
     //!         NotationStaffTab
 
-    static const std::string CTX_NOTATION_STAFF_STANDART("notation-staff-standart");
+    static const std::string CTX_ANY("any");
+    static const std::string CTX_NOTATION_STAFF_STANDARD("notation-staff-standard");
     static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
 
-    if (CTX_NOTATION_STAFF_STANDART == scContext) {
+    if (CTX_NOTATION_STAFF_STANDARD == scContext) {
         auto notation = globalContext()->currentNotation();
         if (!notation) {
             return false;
@@ -179,5 +180,8 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
         return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
     }
 
+    IF_ASSERT_FAILED(CTX_ANY == scContext) {
+        return true;
+    }
     return true;
 }
