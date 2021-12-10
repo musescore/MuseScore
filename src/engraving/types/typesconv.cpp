@@ -350,9 +350,9 @@ DynamicType TConv::fromXml(const QString& tag, DynamicType def)
 }
 
 static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
-    { DynamicRange::STAFF,  "staff",    nullptr },
-    { DynamicRange::PART,   "part",     nullptr },
-    { DynamicRange::SYSTEM, "system",   nullptr },
+    { DynamicRange::STAFF,  "staff" },
+    { DynamicRange::PART,   "part" },
+    { DynamicRange::SYSTEM, "system" },
 };
 
 QString TConv::toUserName(DynamicRange v)
@@ -370,4 +370,25 @@ DynamicRange TConv::fromXml(const QString& tag, DynamicRange def)
     bool ok = false;
     int v = tag.toInt(&ok);
     return ok ? DynamicRange(v) : def;
+}
+
+static const std::vector<Item<DynamicSpeed> > DYNAMIC_SPEEDS = {
+    { DynamicSpeed::NORMAL, "normal" },
+    { DynamicSpeed::SLOW,   "slow" },
+    { DynamicSpeed::FAST,   "fast" },
+};
+
+QString TConv::toUserName(DynamicSpeed v)
+{
+    return findUserNameByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
+}
+
+QString TConv::toXml(DynamicSpeed v)
+{
+    return findXmlTagByType<DynamicSpeed>(DYNAMIC_SPEEDS, v);
+}
+
+DynamicSpeed TConv::fromXml(const QString& tag, DynamicSpeed def)
+{
+    return findTypeByXmlTag<DynamicSpeed>(DYNAMIC_SPEEDS, tag, def);
 }

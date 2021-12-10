@@ -87,6 +87,7 @@ enum class P_TYPE {
     CLEF_TYPE,
     DYNAMIC_TYPE,
     DYNAMIC_RANGE,
+    DYNAMIC_SPEED,
 
     HOOK_TYPE,
 
@@ -100,7 +101,6 @@ enum class P_TYPE {
     SUB_STYLE,
 
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-    CHANGE_SPEED,       // enum class Dynamic::Speed
 
     KEYMODE,            // enum class KeyMode
     ORIENTATION,        // enum class Orientation
@@ -210,6 +210,8 @@ public:
         : m_type(P_TYPE::DYNAMIC_TYPE), m_data(make_data<DynamicType>(v)) {}
     PropertyValue(DynamicRange v)
         : m_type(P_TYPE::DYNAMIC_RANGE), m_data(make_data<DynamicRange>(v)) {}
+    PropertyValue(DynamicSpeed v)
+        : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 
     // not sorted
     PropertyValue(Ms::SymId v)

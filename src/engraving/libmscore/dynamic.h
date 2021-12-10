@@ -41,12 +41,8 @@ class Dynamic final : public TextBase
 {
 public:
 
-    enum class Speed : char {
-        SLOW, NORMAL, FAST
-    };
-
     struct ChangeSpeedItem {
-        Speed speed;
+        DynamicSpeed speed;
         const char* name;
     };
 
@@ -58,7 +54,7 @@ private:
     DynamicRange _dynRange;     // STAFF, PART, SYSTEM
 
     int _changeInVelocity         { 128 };
-    Speed _velChangeSpeed         { Speed::NORMAL };
+    DynamicSpeed _velChangeSpeed         { DynamicSpeed::NORMAL };
 
     mu::RectF drag(EditData&) override;
 
@@ -96,10 +92,8 @@ public:
     Fraction velocityChangeLength() const;
     bool isVelocityChangeAvailable() const;
 
-    Speed velChangeSpeed() const { return _velChangeSpeed; }
-    void setVelChangeSpeed(Speed val) { _velChangeSpeed = val; }
-    static QString speedToName(Speed speed);
-    static Speed nameToSpeed(QString name);
+    DynamicSpeed velChangeSpeed() const { return _velChangeSpeed; }
+    void setVelChangeSpeed(DynamicSpeed val) { _velChangeSpeed = val; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
@@ -111,8 +105,6 @@ public:
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;
     void doAutoplace();
-
-    static const std::vector<ChangeSpeedItem> changeSpeedTable;
 
     static QString dynamicText(DynamicType t);
 };
