@@ -1208,15 +1208,15 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Image capture' mode"),
              IconCode::Code::CAMERA
              ),
-    UiAction("next-lyric",
+    UiAction("next-text-element",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Next lyric"),
-             QT_TRANSLATE_NOOP("action", "Move to lyric on next note")
+             QT_TRANSLATE_NOOP("action", "Next text element"),
+             QT_TRANSLATE_NOOP("action", "Move to text element on next note")
              ),
-    UiAction("prev-lyric",
+    UiAction("prev-text-element",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Previous lyric"),
-             QT_TRANSLATE_NOOP("action", "Move to lyric on previous note")
+             QT_TRANSLATE_NOOP("action", "Previous text element"),
+             QT_TRANSLATE_NOOP("action", "Move to text element on previous note")
              ),
     UiAction("next-lyric-verse",
              mu::context::UiCtxNotationOpened,

@@ -892,11 +892,11 @@
     <seq>Z</seq>
     </SC>
   <SC>
-    <key>next-lyric</key>
+    <key>next-text-element</key>
     <seq>Space</seq>
     </SC>
   <SC>
-    <key>prev-lyric</key>
+    <key>prev-text-element</key>
     <seq>Shift+Space</seq>
     </SC>
   <SC>

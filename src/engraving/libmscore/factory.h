@@ -190,6 +190,8 @@ public:
 
     static Ms::Dynamic* createDynamic(Ms::Segment* parent, bool setupAccessible = true);
 
+    static Ms::Harmony* createHarmony(Ms::EngravingItem* parent, bool setupAccessible = true);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };
