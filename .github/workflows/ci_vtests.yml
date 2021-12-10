@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-18.04
     outputs:
       do_run: ${{ steps.output_data.outputs.do_run }}
-      head_ref: ${{ steps.output_data.outputs.head_ref }}
-      base_ref: ${{ steps.output_data.outputs.base_ref }}
+      reference_sha: ${{ steps.output_data.outputs.reference_sha }}
       artifact_name: ${{ steps.output_data.outputs.artifact_name }}
     steps:
     - name: Cancel Previous Runs
@@ -21,27 +20,24 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository
       uses: actions/checkout@v2
-    - name: Get base commit for PR
+    - name: Get reference commit for PR
       if: github.event_name == 'pull_request'
       env:
         pull_request_title: ${{ github.event.pull_request.title }}
       run: |
-        HEAD_REF=${{ github.event.pull_request.head.sha }}
-        BASE_REF=${{ github.event.pull_request.base.sha }}
-        if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
-        echo "HEAD_REF=$HEAD_REF" >> $GITHUB_ENV
-        echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
+        REFERENCE_SHA=${{ github.event.pull_request.base.sha }}
+        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
         echo "PR_INFO= ${{ github.event.pull_request.number }} ${pull_request_title}" >> $GITHUB_ENV
-    - name: Get base commit for push commit
+    - name: Get reference commit for push commit
       if: github.event_name == 'push'
       run: |
-        HEAD_REF=${{ github.sha }}
-        BASE_REF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
-        if [ -z "$BASE_REF" ]; then DO_RUN='false'; else DO_RUN='true'; fi
-        echo "BASE_REF=$BASE_REF" >> $GITHUB_ENV
+        REFERENCE_SHA=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
+        if [ -z "$REFERENCE_SHA" ]; then DO_RUN='false'; else DO_RUN='true'; fi
+        echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
         echo "DO_RUN=$DO_RUN" >> $GITHUB_ENV
-        echo "PR_INFO=\"\"" >> $GITHUB_ENV
+        echo "PR_INFO=" >> $GITHUB_ENV
     - id: output_data
       name: Output workflow data
       env:
@@ -49,10 +45,8 @@ jobs:
       run: |
         echo "::set-output name=do_run::${{ env.DO_RUN }}"
         echo "DO_RUN=${{ env.DO_RUN }}"
-        echo "::set-output name=head_ref::${{ env.HEAD_REF }}"
-        echo "HEAD_REF=${{ env.HEAD_REF }}"
-        echo "::set-output name=base_ref::${{ env.BASE_REF }}"
-        echo "BASE_REF=${{ env.BASE_REF }}"
+        echo "::set-output name=reference_sha::${{ env.REFERENCE_SHA }}"
+        echo "REFERENCE_SHA=${{ env.REFERENCE_SHA }}"
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"VTests Comparison ${{ github.run_id }}${pr_info}")"
         echo "::set-output name=artifact_name::$UPLOAD_ARTIFACT_NAME"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME"
@@ -101,7 +95,7 @@ jobs:
     - name: Clone repository and checkout reference commit
       uses: actions/checkout@v2
       with:
-        ref: ${{ needs.setup.outputs.base_ref }}
+        ref: ${{ needs.setup.outputs.reference_sha }}
     - name: Сcache cache files
       uses: actions/cache@v2
       with:
@@ -122,8 +116,6 @@ jobs:
         MUSESCORE_INSTALL_DIR="$HOME/musescore_install" bash ninja_build.sh -t installdebug
     - name: Checkout current commit
       uses: actions/checkout@v2
-      with:
-        ref: ${{ needs.setup.outputs.head_ref }}
     - name: Generate reference PNGs
       run: |
         xvfb-run ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $HOME/musescore_install/bin/mscore
