@@ -61,24 +61,6 @@ enum class Key {
     DELTA_ENHARMONIC = 12
 };
 
-//---------------------------------------------------------
-//   KeyMode
-//---------------------------------------------------------
-
-enum class KeyMode {
-    UNKNOWN = -1,
-    NONE,
-    MAJOR,
-    MINOR,
-    DORIAN,
-    PHRYGIAN,
-    LYDIAN,
-    MIXOLYDIAN,
-    AEOLIAN,
-    IONIAN,
-    LOCRIAN
-};
-
 static inline bool operator<(Key a, Key b) { return static_cast<int>(a) < static_cast<int>(b); }
 static inline bool operator>(Key a, Key b) { return static_cast<int>(a) > static_cast<int>(b); }
 static inline bool operator>(Key a, int b) { return static_cast<int>(a) > b; }
