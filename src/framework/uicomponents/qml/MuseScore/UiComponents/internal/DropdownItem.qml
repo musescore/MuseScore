@@ -65,7 +65,7 @@ Item {
         id: backgroundItem
         anchors.fill: parent
         color: ui.theme.buttonColor
-        radius: 4
+        radius: 3
         opacity: 0.7
 
         NavigationFocusBorder { navigationCtrl: navCtrl }

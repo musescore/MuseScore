@@ -44,6 +44,10 @@ FocusScope {
     property bool hasText: valueInput.text.length > 0
     property alias readOnly: valueInput.readOnly
 
+    property real textSidePadding: 12
+    property real accessoriesPadding: 4
+    property alias radius: background.radius
+
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
 
@@ -104,7 +108,7 @@ FocusScope {
         id: background
         anchors.fill: parent
         color: ui.theme.textFieldColor
-        radius: 2
+        radius: 3
 
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
@@ -114,8 +118,8 @@ FocusScope {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: 4
-        anchors.rightMargin: 4
+        anchors.leftMargin: hintIcon.visible ? 0 : root.textSidePadding
+        anchors.rightMargin: clearTextButtonItem.visible ? 0 : root.textSidePadding
 
         spacing: 0
 
@@ -123,9 +127,10 @@ FocusScope {
             id: hintIcon
 
             Layout.fillHeight: true
-            Layout.preferredWidth: hintIcon.visible ? 30 : 0
+            Layout.preferredWidth: height
+            Layout.margins: root.accessoriesPadding
 
-            visible: Boolean(!hintIcon.isEmpty)
+            visible: !isEmpty
         }
 
         TextField {
@@ -135,6 +140,7 @@ FocusScope {
 
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !measureUnitsLabel.visible
+            padding: 0
 
             //! NOTE Disabled default Qt Accessible
             Accessible.role: Accessible.NoRole
@@ -205,7 +211,7 @@ FocusScope {
             Layout.alignment: Qt.AlignVCenter
 
             color: ui.theme.fontPrimaryColor
-            visible: !root.isIndeterminate && Boolean(text)
+            visible: !root.isIndeterminate && !isEmpty
         }
 
         FlatButton {
@@ -213,11 +219,7 @@ FocusScope {
 
             Layout.fillHeight: true
             Layout.preferredWidth: height
-
-            readonly property int margin: 4
-
-            Layout.topMargin: margin
-            Layout.bottomMargin: margin
+            Layout.margins: root.accessoriesPadding
 
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
