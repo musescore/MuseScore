@@ -334,7 +334,7 @@ QString TConv::toUserName(DynamicType v)
     return findUserNameByType<DynamicType>(DYNAMIC_TYPES, v);
 }
 
-Ms::SymId TConv::symId(DynamicType v)
+SymId TConv::symId(DynamicType v)
 {
     return findSymIdByType<DynamicType>(DYNAMIC_TYPES, v);
 }
@@ -347,4 +347,27 @@ QString TConv::toXml(DynamicType v)
 DynamicType TConv::fromXml(const QString& tag, DynamicType def)
 {
     return findTypeByXmlTag<DynamicType>(DYNAMIC_TYPES, tag, def);
+}
+
+static const std::vector<Item<DynamicRange> > DYNAMIC_RANGES = {
+    { DynamicRange::STAFF,  "staff",    nullptr },
+    { DynamicRange::PART,   "part",     nullptr },
+    { DynamicRange::SYSTEM, "system",   nullptr },
+};
+
+QString TConv::toUserName(DynamicRange v)
+{
+    return findUserNameByType<DynamicRange>(DYNAMIC_RANGES, v);
+}
+
+QString TConv::toXml(DynamicRange v)
+{
+    return QString::number(static_cast<int>(v));
+}
+
+DynamicRange TConv::fromXml(const QString& tag, DynamicRange def)
+{
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    return ok ? DynamicRange(v) : def;
 }
