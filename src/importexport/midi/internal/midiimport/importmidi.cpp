@@ -53,7 +53,6 @@
 #include "libmscore/bracket.h"
 #include "libmscore/drumset.h"
 #include "libmscore/box.h"
-#include "libmscore/symid.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/articulation.h"

@@ -25,7 +25,7 @@
 #include "mscoreview.h"
 #include "score.h"
 #include "scorefont.h"
-#include "symnames.h"
+#include "types/symnames.h"
 
 #include "log.h"
 

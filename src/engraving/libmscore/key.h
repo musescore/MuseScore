@@ -26,7 +26,6 @@
 #include <QList>
 
 #include "types/types.h"
-#include "symid.h"
 #include "infrastructure/draw/geometry.h"
 
 namespace Ms {

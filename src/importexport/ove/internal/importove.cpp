@@ -67,7 +67,6 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/marker.h"
 #include "libmscore/jump.h"
-#include "libmscore/symid.h"
 #include "libmscore/bracketItem.h"
 
 #include "modularity/ioc.h"

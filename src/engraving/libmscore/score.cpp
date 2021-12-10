@@ -81,7 +81,6 @@
 #include "staff.h"
 #include "stafftext.h"
 #include "stafftype.h"
-#include "symid.h"
 #include "synthesizerstate.h"
 #include "system.h"
 #include "tempo.h"

@@ -181,7 +181,7 @@ class PluginAPI : public Ms::QmlPlugin
     DECLARE_API_ENUM(Spanner,          spannerAnchorEnum,      Ms::Spanner::Anchor)           // probably unavailable in 2.X
     /// Contains Ms::SymId enumeration values
     /// \since MuseScore 3.5
-    DECLARE_API_ENUM(SymId,            symIdEnum,              Ms::SymId)
+    DECLARE_API_ENUM(SymId,            symIdEnum,              Ms::PluginAPI::SymId)
     /// Contains Ms::HarmonyType enumeration values
     /// \since MuseScore 3.6
     DECLARE_API_ENUM(HarmonyType,      harmonyTypeEnum,        Ms::HarmonyType)

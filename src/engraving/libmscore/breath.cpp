@@ -23,8 +23,8 @@
 #include "breath.h"
 
 #include "rw/xml.h"
+#include "types/symnames.h"
 
-#include "symnames.h"
 #include "system.h"
 #include "segment.h"
 #include "measure.h"

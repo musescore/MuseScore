@@ -23,10 +23,10 @@
 #include "symboldialog.h"
 
 #include "engraving/style/style.h"
+#include "engraving/types/symnames.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
-#include "libmscore/symnames.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/symbol.h"
 

@@ -25,7 +25,6 @@
 
 #include "engravingitem.h"
 #include "mscore.h"
-#include "symid.h"
 
 namespace mu::engraving {
 class Factory;

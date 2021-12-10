@@ -27,6 +27,7 @@
 
 #include "translation.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
 #include "score.h"
 #include "undo.h"
@@ -35,7 +36,6 @@
 #include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
-#include "symnames.h"
 #include "masterscore.h"
 #include "factory.h"
 #include "linkedobjects.h"

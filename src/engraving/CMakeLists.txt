@@ -96,6 +96,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/fraction.h
     ${CMAKE_CURRENT_LIST_DIR}/types/typesconv.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/typesconv.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/symid.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/symid_p.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/symnames.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/symnames.h
 
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property/propertyvalue.h

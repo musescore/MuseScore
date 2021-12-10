@@ -43,7 +43,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
-#include "libmscore/symid.h"
 
 using namespace mu::engraving;
 

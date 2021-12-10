@@ -29,7 +29,6 @@
 #include "mscore.h"
 #include "shape.h"
 #include "sig.h"
-#include "symid.h"
 
 #include "infrastructure/draw/color.h"
 #include "infrastructure/draw/geometry.h"
@@ -38,6 +37,7 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
+#include "types/symid.h"
 #include "types/fraction.h"
 
 namespace mu::engraving {
@@ -53,7 +53,6 @@ namespace Ms {
 #endif
 
 enum class Pid;
-enum class SmuflAnchorId;
 class StaffType;
 class XmlReader;
 class XmlWriter;

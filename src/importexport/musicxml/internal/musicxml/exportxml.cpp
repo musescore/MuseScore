@@ -49,6 +49,7 @@
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"
 #include "engraving/types/typesconv.h"
+#include "engraving/types/symnames.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -84,7 +85,6 @@
 #include "libmscore/trill.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/symnames.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/utils.h"
 #include "libmscore/articulation.h"

@@ -19,48 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOM_SYMID_H
-#define MU_DOM_SYMID_H
 
-#include "config.h"
-
-// Needs to be duplicated here and in style.h since moc doesn't handle macros from #include'd files
-#ifdef SCRIPT_INTERFACE
-#include <QObject>
-#define BEGIN_QT_REGISTERED_ENUM(Name) \
-    class MSQE_##Name { \
-        Q_GADGET \
-    public:
-#define END_QT_REGISTERED_ENUM(Name) \
-    Q_ENUM(Name); \
-}; \
-    using Name = MSQE_##Name::Name;
-#else
-#define BEGIN_QT_REGISTERED_ENUM(Name)
-#define END_QT_REGISTERED_ENUM(Name)
-#endif
-
-namespace Ms {
-enum class SmuflAnchorId {
-    stemDownNW,
-    stemUpSE,
-    stemDownSW,
-    stemUpNW,
-    cutOutNE,
-    cutOutNW,
-    cutOutSE,
-    cutOutSW,
-    opticalCenter,
-};
+// No guard
+#include <vector>
 
 //---------------------------------------------------------
 //   SymId
 //    must be in sync with symNames
 //---------------------------------------------------------
-
-BEGIN_QT_REGISTERED_ENUM(SymId)
 enum class SymId {
-    ///.\{
     noSym,
 
     // DO NOT edit the SMuFL standard symbol IDs (see below) manually!
@@ -3061,13 +3028,5 @@ enum class SymId {
 //    END OF TABLE
 
     lastSym
-    ///\}
 };
-END_QT_REGISTERED_ENUM(SymId)
-
 using SymIdList = std::vector<SymId>;
-} // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::SymId);
-
-#endif // MU_DOM_SYMID_H

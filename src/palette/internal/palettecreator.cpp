@@ -22,7 +22,10 @@
 
 #include "palettecreator.h"
 
+#include "translation.h"
+
 #include "engraving/types/typesconv.h"
+#include "engraving/types/symnames.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/accidental.h"
@@ -69,7 +72,6 @@
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
-#include "libmscore/symnames.h"
 #include "libmscore/systemtext.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
@@ -81,8 +83,6 @@
 #include "libmscore/undo.h"
 #include "libmscore/vibrato.h"
 #include "libmscore/volta.h"
-
-#include "translation.h"
 
 using namespace mu::palette;
 using namespace mu::engraving;

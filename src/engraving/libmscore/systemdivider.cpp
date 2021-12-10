@@ -22,12 +22,14 @@
 
 #include "systemdivider.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "score.h"
 #include "measure.h"
-#include "symnames.h"
 #include "system.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------

@@ -24,7 +24,6 @@
 #include "chord.h"
 #include "stem.h"
 #include "score.h"
-#include "symid.h"
 
 #include "log.h"
 

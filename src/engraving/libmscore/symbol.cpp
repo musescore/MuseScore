@@ -24,8 +24,8 @@
 
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
-#include "symnames.h"
 #include "scorefont.h"
 #include "system.h"
 #include "staff.h"

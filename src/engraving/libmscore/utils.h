@@ -27,7 +27,6 @@
 
 #include "mscore.h"
 #include "interval.h"
-#include "symid.h"
 
 #include "infrastructure/draw/geometry.h"
 

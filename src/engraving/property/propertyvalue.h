@@ -30,8 +30,9 @@
 #include <QVariant>
 
 #include "types/types.h"
+#include "types/symid.h"
+
 #include "libmscore/types.h"
-#include "libmscore/symid.h"
 #include "libmscore/pitchvalue.h"
 #include "libmscore/mscore.h"
 
@@ -152,6 +153,9 @@ public:
         : m_type(P_TYPE::MILLIMETRE), m_data(make_data<Millimetre>(v)) {}
 
     // Draw
+    PropertyValue(SymId v)
+        : m_type(P_TYPE::SYMID), m_data(make_data<SymId>(v)) {}
+
     PropertyValue(const Color& v)
         : m_type(P_TYPE::COLOR), m_data(make_data<Color>(v)) {}
 
@@ -216,8 +220,6 @@ public:
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
 
     // not sorted
-    PropertyValue(Ms::SymId v)
-        : m_type(P_TYPE::SYMID), m_data(make_data<Ms::SymId>(v)) {}
 
     PropertyValue(const Ms::PitchValues& v)
         : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<Ms::PitchValues>(v)) {}
