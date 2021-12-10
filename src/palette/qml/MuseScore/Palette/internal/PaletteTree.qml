@@ -306,6 +306,7 @@ ListView {
                 navigation.panel: keynavTree
                 navigation.row: control.navigationRow
                 navigation.column: 0
+                navigation.accessible.name: control.text
                 enabled: control.visible
                 navigation.onActiveChanged: {
                     if (navigation.active && !control.selected) {

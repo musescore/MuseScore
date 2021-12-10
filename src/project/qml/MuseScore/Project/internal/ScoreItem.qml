@@ -75,6 +75,7 @@ FocusScope {
                 id: loader
 
                 anchors.fill: parent
+                anchors.margins: 2 //! NOTE: it is necessary to simplify understanding of which element the user is on when navigating
 
                 property var thumbnail: undefined
 
