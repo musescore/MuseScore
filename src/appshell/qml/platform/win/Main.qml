@@ -46,6 +46,7 @@ AppWindow {
 
     Component.onCompleted: {
         framelessWindowModel.init()
+        window.init()
     }
 
     AppTitleBar {

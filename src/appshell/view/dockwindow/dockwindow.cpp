@@ -101,25 +101,6 @@ void DockWindow::componentComplete()
                                                       this);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
-
-    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
-        if (!m_quiting) {
-            resetWindowState();
-        }
-    });
-
-    clearRegistry();
-
-    /*! TODO: restoring of the window geometry is temporarily disabled
-     * because it has a lot of problems on Windows
-     * restoreGeometry();
-    */
-
-    dockWindowProvider()->init(this);
-
-    Async::call(this, [this]() {
-        startupScenario()->run();
-    });
 }
 
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -172,6 +153,25 @@ QQmlListProperty<mu::dock::DockToolBarView> DockWindow::toolBarsProperty()
 QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
 {
     return m_pages.property();
+}
+
+void DockWindow::init()
+{
+    clearRegistry();
+
+    restoreGeometry();
+
+    dockWindowProvider()->init(this);
+
+    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
+        if (!m_quiting) {
+            resetWindowState();
+        }
+    });
+
+    Async::call(this, [this]() {
+        startupScenario()->run();
+    });
 }
 
 void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
