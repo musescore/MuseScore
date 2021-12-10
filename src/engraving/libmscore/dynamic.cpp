@@ -114,16 +114,6 @@ static const ElementStyle dynamicsStyle {
 };
 
 //---------------------------------------------------------
-//   changeSpeedTable
-//---------------------------------------------------------
-
-const std::vector<Dynamic::ChangeSpeedItem> Dynamic::changeSpeedTable {
-    { Dynamic::Speed::NORMAL,           "normal" },
-    { Dynamic::Speed::SLOW,             "slow" },
-    { Dynamic::Speed::FAST,             "fast" },
-};
-
-//---------------------------------------------------------
 //   Dynamic
 //---------------------------------------------------------
 
@@ -134,7 +124,7 @@ Dynamic::Dynamic(Segment* parent)
     _dynRange    = DynamicRange::PART;
     _dynamicType = DynamicType::OTHER;
     _changeInVelocity = 128;
-    _velChangeSpeed = Speed::NORMAL;
+    _velChangeSpeed = DynamicSpeed::NORMAL;
     initElementStyle(&dynamicsStyle);
 }
 
@@ -193,13 +183,13 @@ Fraction Dynamic::velocityChangeLength() const
     double ratio = double(score()->tempomap()->tempo(segment()->tick().ticks())) / double(Score::defaultTempo());
     double speedMult;
     switch (velChangeSpeed()) {
-    case Dynamic::Speed::SLOW:
+    case DynamicSpeed::SLOW:
         speedMult = 1.3;
         break;
-    case Dynamic::Speed::FAST:
+    case DynamicSpeed::FAST:
         speedMult = 0.5;
         break;
-    case Dynamic::Speed::NORMAL:
+    case DynamicSpeed::NORMAL:
     default:
         speedMult = 0.8;
         break;
@@ -270,7 +260,7 @@ void Dynamic::read(XmlReader& e)
         } else if (tag == "veloChange") {
             _changeInVelocity = e.readInt();
         } else if (tag == "veloChangeSpeed") {
-            _velChangeSpeed = nameToSpeed(e.readElementText());
+            _velChangeSpeed = TConv::fromXml(e.readElementText(), DynamicSpeed::NORMAL);
         } else if (!TextBase::readProperties(e)) {
             e.unknown();
         }
@@ -478,35 +468,6 @@ void Dynamic::undoSetDynRange(DynamicRange v)
 }
 
 //---------------------------------------------------------
-//   speedToName
-//---------------------------------------------------------
-
-QString Dynamic::speedToName(Speed speed)
-{
-    for (auto i : Dynamic::changeSpeedTable) {
-        if (i.speed == speed) {
-            return i.name;
-        }
-    }
-    qFatal("Unrecognised change speed!");
-    return "none";   // silence a compiler warning
-}
-
-//---------------------------------------------------------
-//   nameToSpeed
-//---------------------------------------------------------
-
-Dynamic::Speed Dynamic::nameToSpeed(QString name)
-{
-    for (auto i : Dynamic::changeSpeedTable) {
-        if (i.name == name) {
-            return i.speed;
-        }
-    }
-    return Speed::NORMAL;     // default
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -559,7 +520,7 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     case Pid::VELO_CHANGE_SPEED:
-        _velChangeSpeed = Speed(v.toInt());
+        _velChangeSpeed = v.value<DynamicSpeed>();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -591,7 +552,7 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
             return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
-        return int(Speed::NORMAL);
+        return DynamicSpeed::NORMAL;
     default:
         return TextBase::propertyDefault(id);
     }

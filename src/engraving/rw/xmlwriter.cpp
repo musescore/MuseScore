@@ -283,7 +283,7 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
     // draw
     case P_TYPE::COLOR: {
         putLevel();
-        Color color(data.value<draw::Color>());
+        Color color(data.value<Color>());
         *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
             .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
     }
@@ -396,6 +396,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<DynamicRange>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::DYNAMIC_SPEED: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<DynamicSpeed>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
@@ -415,7 +421,6 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
 //    case P_TYPE::SUB_STYLE,
 
 //    case P_TYPE::CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-//    case P_TYPE::CHANGE_SPEED,       // enum class Dynamic::Speed
 //    case P_TYPE::KEYMODE,            // enum class KeyMode
 //    case P_TYPE::ORIENTATION,        // enum class Orientation
 
