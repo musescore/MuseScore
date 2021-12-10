@@ -310,9 +310,9 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
     case Pid::ANCHOR:
         return int(VOLTA_ANCHOR);
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::HOOK_90);
+        return HookType::HOOK_90;
     case Pid::END_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:

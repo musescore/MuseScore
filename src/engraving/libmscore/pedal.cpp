@@ -208,7 +208,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
 
     case Pid::LINE_VISIBLE:
         return true;

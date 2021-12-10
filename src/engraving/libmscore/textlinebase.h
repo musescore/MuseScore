@@ -123,6 +123,5 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
 };
 }     // namespace Ms
-Q_DECLARE_METATYPE(Ms::HookType);
 
 #endif

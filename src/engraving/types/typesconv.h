@@ -57,6 +57,10 @@ public:
     static QString toUserName(DynamicSpeed v);
     static QString toXml(DynamicSpeed v);
     static DynamicSpeed fromXml(const QString& tag, DynamicSpeed def);
+
+    static QString toUserName(HookType v);
+    static QString toXml(HookType v);
+    static HookType fromXml(const QString& tag, HookType def);
 };
 }
 

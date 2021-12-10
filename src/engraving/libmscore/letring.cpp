@@ -182,7 +182,7 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
         return "";
 
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
