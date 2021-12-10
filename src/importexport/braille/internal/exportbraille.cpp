@@ -51,7 +51,6 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/symid.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/utils.h"
 #include "libmscore/articulation.h"

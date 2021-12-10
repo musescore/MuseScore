@@ -30,6 +30,7 @@
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
 #include "types/typesconv.h"
+#include "types/symnames.h"
 
 #include "compat/pageformat.h"
 
@@ -38,7 +39,6 @@
 #include "libmscore/revisions.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/symnames.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/audio.h"

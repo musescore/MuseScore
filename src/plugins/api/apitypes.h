@@ -30,6 +30,9 @@
 namespace Ms::PluginAPI {
 Q_NAMESPACE
 
+#include "engraving/types/symid_p.h"
+Q_ENUM_NS(SymId);
+
 enum class OrnamentStyle : char {
     DEFAULT = int(mu::engraving::OrnamentStyle::DEFAULT),
     BAROQUE = int(mu::engraving::OrnamentStyle::BAROQUE)

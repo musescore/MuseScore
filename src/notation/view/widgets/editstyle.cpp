@@ -34,9 +34,9 @@
 #include "fontStyleSelect.h"
 #include "offsetSelect.h"
 
+#include "engraving/types/symnames.h"
 #include "engraving/libmscore/figuredbass.h"
 #include "engraving/libmscore/scorefont.h"
-#include "engraving/libmscore/symnames.h"
 #include "engraving/libmscore/realizedharmony.h"
 
 #include "settings.h"
@@ -535,8 +535,8 @@ EditStyle::EditStyle(QWidget* parent)
         Ms::SymId::systemDivider, Ms::SymId::systemDividerLong, Ms::SymId::systemDividerExtraLong
     };
     for (Ms::SymId id : ids) {
-        const QString& un = Ms::SymNames::translatedUserNameForSymId(id);
-        const char* n = Ms::SymNames::nameForSymId(id);
+        const QString& un = SymNames::translatedUserNameForSymId(id);
+        const char* n = SymNames::nameForSymId(id);
         dividerLeftSym->addItem(un,  QVariant(QString(n)));
         dividerRightSym->addItem(un, QVariant(QString(n)));
     }

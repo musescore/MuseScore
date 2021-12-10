@@ -30,6 +30,7 @@
 #include "draw/brush.h"
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
 #include "text.h"
 #include "textedit.h"
@@ -43,7 +44,6 @@
 #include "page.h"
 #include "textframe.h"
 #include "scorefont.h"
-#include "symnames.h"
 #include "undo.h"
 #include "mscore.h"
 

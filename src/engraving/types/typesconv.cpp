@@ -22,6 +22,9 @@
 #include "typesconv.h"
 
 #include "translation.h"
+
+#include "symnames.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -96,6 +99,21 @@ static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag,
 }
 
 // ==========================================================
+QString TConv::toUserName(SymId v)
+{
+    return SymNames::translatedUserNameForSymId(v);
+}
+
+QString TConv::toXml(SymId v)
+{
+    return SymNames::nameForSymId(v);
+}
+
+SymId TConv::fromXml(const QString& tag, SymId def)
+{
+    return SymNames::symIdByName(tag, def);
+}
+
 static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
     { NoteHeadType::HEAD_AUTO,      "auto",    QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   QT_TRANSLATE_NOOP("engraving", "Whole") },

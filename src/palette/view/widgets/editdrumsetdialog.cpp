@@ -24,6 +24,7 @@
 
 #include "engraving/rw/xml.h"
 #include "engraving/types/typesconv.h"
+#include "engraving/types/symnames.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/utils.h"
@@ -32,7 +33,6 @@
 #include "libmscore/note.h"
 #include "libmscore/stem.h"
 #include "libmscore/scorefont.h"
-#include "libmscore/symnames.h"
 
 #include "engraving/infrastructure/draw/geometry.h"
 

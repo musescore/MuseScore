@@ -26,6 +26,8 @@
 
 #include <QRegularExpression>
 
+#include "engraving/types/symnames.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/accidental.h"
 #include "libmscore/arpeggio.h"
@@ -65,7 +67,6 @@
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/symnames.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/textline.h"

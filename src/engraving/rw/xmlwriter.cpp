@@ -281,6 +281,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         break;
 
     // draw
+    case P_TYPE::SYMID: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<SymId>());
+        *this << "</" << ename << ">\n";
+    } break;
     case P_TYPE::COLOR: {
         putLevel();
         Color color(data.value<Color>());

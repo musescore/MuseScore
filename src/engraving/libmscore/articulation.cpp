@@ -24,6 +24,7 @@
 
 #include "rw/compat/read206.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
 #include "score.h"
 #include "chordrest.h"
@@ -34,7 +35,6 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
-#include "symnames.h"
 #include "masterscore.h"
 
 using namespace mu;

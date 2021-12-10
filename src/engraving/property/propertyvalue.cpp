@@ -141,6 +141,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>().toQPairF());
 
     // Draw
+    case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
     case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
@@ -171,7 +172,6 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
 
     // other
-    case P_TYPE::SYMID:           return static_cast<int>(value<Ms::SymId>());
 
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
     default:
@@ -206,6 +206,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PAIR_REAL:     return PropertyValue(PairF::fromQPairF(v.value<QPair<qreal, qreal> >()));
 
     // Draw
+    case P_TYPE::SYMID:         return PropertyValue(SymId(v.toInt()));
     case P_TYPE::COLOR:         return PropertyValue(Color::fromQColor(v.value<QColor>()));
     case P_TYPE::ORNAMENT_STYLE: return PropertyValue(OrnamentStyle(v.toInt()));
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
@@ -239,8 +240,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::HOOK_TYPE:    return PropertyValue(HookType(v.toInt()));
 
     // other
-
-    case P_TYPE::SYMID:        return PropertyValue(Ms::SymId(v.toInt()));
     case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(Ms::AccidentalRole(v.toInt()));
     default:
         break;

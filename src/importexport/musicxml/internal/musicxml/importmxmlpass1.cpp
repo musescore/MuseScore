@@ -36,9 +36,8 @@
 #include "engraving/libmscore/timesig.h"
 #include "engraving/libmscore/spanner.h"
 #include "engraving/libmscore/bracketItem.h"
-#include "engraving/libmscore/symid.h"
-#include "engraving/libmscore/symnames.h"
 
+#include "engraving/types/symnames.h"
 #include "engraving/style/style.h"
 
 #include "importmxmllogger.h"

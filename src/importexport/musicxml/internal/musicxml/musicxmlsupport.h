@@ -30,7 +30,6 @@
 #include "engraving/types/fraction.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
-#include "libmscore/symid.h"
 
 class Chord;
 

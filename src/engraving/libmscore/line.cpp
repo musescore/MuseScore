@@ -35,7 +35,6 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "symid.h"
 #include "system.h"
 #include "textline.h"
 #include "utils.h"

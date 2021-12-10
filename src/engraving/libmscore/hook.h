@@ -25,8 +25,6 @@
 
 #include "symbol.h"
 
-#include "symid.h"
-
 namespace Ms {
 class Chord;
 

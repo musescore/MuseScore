@@ -21,7 +21,10 @@
  */
 
 #include "fermata.h"
+
 #include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "score.h"
 #include "chordrest.h"
 #include "system.h"
@@ -31,7 +34,6 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
-#include "symnames.h"
 
 using namespace mu;
 using namespace mu::engraving;

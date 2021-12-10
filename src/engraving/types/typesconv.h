@@ -25,13 +25,16 @@
 
 #include <QString>
 #include "types.h"
-#include "libmscore/symid.h"
 
 namespace mu::engraving {
 class TConv
 {
 public:
     TConv() = default;
+
+    static QString toUserName(SymId v);
+    static QString toXml(SymId v);
+    static SymId fromXml(const QString& tag, SymId def);
 
     static QString toUserName(NoteHeadType v);
     static QString toXml(NoteHeadType v);

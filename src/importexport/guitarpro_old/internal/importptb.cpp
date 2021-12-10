@@ -41,7 +41,6 @@
 #include "libmscore/rest.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/symid.h"
 #include "libmscore/symbol.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"

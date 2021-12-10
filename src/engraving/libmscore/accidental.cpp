@@ -21,10 +21,12 @@
  */
 
 #include "accidental.h"
+
 #include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "note.h"
 #include "symbol.h"
-#include "symnames.h"
 #include "score.h"
 #include "scorefont.h"
 #include "actionicon.h"

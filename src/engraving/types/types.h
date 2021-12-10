@@ -28,6 +28,7 @@
 #include "infrastructure/draw/painterpath.h"
 #include "dimension.h"
 #include "fraction.h"
+#include "symid.h"
 
 #ifndef MU_ENGRAVING_TYPES_H
 #define MU_ENGRAVING_TYPES_H

@@ -29,8 +29,6 @@
 #include "modularity/ioc.h"
 #include "infrastructure/draw/ifontprovider.h"
 
-#include "symid.h"
-
 namespace mu::draw {
 class Painter;
 }
