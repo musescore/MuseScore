@@ -69,12 +69,14 @@ void StartupScenario::run()
 
     StartupSessionType sessionType = resolveStartupSessionType();
     Uri startupUri = startupPageUri(sessionType);
-    async::Channel<Uri> opened = interactive()->opened();
 
-    opened.onReceive(this, [this, opened, startupUri, sessionType](const Uri& uri) {
-        if (uri != startupUri) {
+    async::Channel<Uri> opened = interactive()->opened();
+    opened.onReceive(this, [this, opened, sessionType](const Uri&) {
+        static bool once = false;
+        if (once) {
             return;
         }
+        once = true;
 
         onStartupPageOpened(sessionType);
 
