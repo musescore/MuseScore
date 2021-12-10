@@ -27,6 +27,7 @@
 #include "types/linetypes.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : AbstractInspectorModel(parent, repository, elementType)
@@ -298,7 +299,7 @@ QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& ty
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     auto hasHook = [](const PropertyItem* item) {
-        return static_cast<Ms::HookType>(item->value().toInt()) != Ms::HookType::NONE;
+        return static_cast<HookType>(item->value().toInt()) != HookType::NONE;
     };
 
     bool isLineAvailable = m_isLineVisible->value().toBool();

@@ -416,7 +416,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::OTTAVA_TYPE:
         return PropertyValue();
     case Pid::END_HOOK_TYPE:
-        return int(HookType::HOOK_90);
+        return HookType::HOOK_90;
     case Pid::LINE_VISIBLE:
         return true;
     case Pid::BEGIN_TEXT_OFFSET:
@@ -428,7 +428,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
     case Pid::BEGIN_HOOK_HEIGHT:
         return Spatium(.0);
     case Pid::END_TEXT:

@@ -392,3 +392,27 @@ DynamicSpeed TConv::fromXml(const QString& tag, DynamicSpeed def)
 {
     return findTypeByXmlTag<DynamicSpeed>(DYNAMIC_SPEEDS, tag, def);
 }
+
+static const std::vector<Item<HookType> > HOOK_TYPES = {
+    { HookType::NONE,       "hook_none" },
+    { HookType::HOOK_90,    "hook_90" },
+    { HookType::HOOK_45,    "hook_45" },
+    { HookType::HOOK_90T,   "hook_90t" },
+};
+
+QString TConv::toUserName(HookType v)
+{
+    return findUserNameByType<HookType>(HOOK_TYPES, v);
+}
+
+QString TConv::toXml(HookType v)
+{
+    return QString::number(static_cast<int>(v));
+}
+
+HookType TConv::fromXml(const QString& tag, HookType def)
+{
+    bool ok = false;
+    int v = tag.toInt(&ok);
+    return ok ? HookType(v) : def;
+}
