@@ -27,11 +27,11 @@
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "types/symnames.h"
 
 #include "factory.h"
 #include "score.h"
 #include "scorefont.h"
-#include "symnames.h"
 #include "staff.h"
 #include "part.h"
 #include "system.h"

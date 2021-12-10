@@ -34,10 +34,6 @@
 #include "tremolo.h"
 #include "note.h"
 
-// Part of the dot-drawing hack in Stem::draw()
-#include "symid.h"
-//--
-
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;

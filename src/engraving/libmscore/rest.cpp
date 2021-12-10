@@ -31,7 +31,6 @@
 #include "score.h"
 #include "utils.h"
 #include "tuplet.h"
-#include "symid.h"
 #include "stafftext.h"
 #include "articulation.h"
 #include "chord.h"

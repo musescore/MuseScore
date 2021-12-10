@@ -40,7 +40,7 @@
 #include "groups.h"
 #include "note.h"
 #include "barline.h"
-#include "symnames.h"
+#include "types/symnames.h"
 #include "changeMap.h"
 #include "fret.h"
 
@@ -512,6 +512,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(e.readDouble());
     case P_TYPE::FRACTION:
         return PropertyValue::fromValue(e.readFraction());
+
+    case P_TYPE::SYMID:
+        return PropertyValue(TConv::fromXml(e.readElementText(), SymId::noSym));
     case P_TYPE::COLOR:
         return PropertyValue::fromValue(e.readColor());
     case P_TYPE::ORNAMENT_STYLE:
@@ -561,7 +564,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::HOOK_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), HookType::NONE));
 
-    case P_TYPE::SYMID:
     case P_TYPE::SUB_STYLE:
     case P_TYPE::ORIENTATION:
         return propertyFromString(propertyType(id), e.readElementText());
@@ -638,8 +640,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         default:
             return "unknown";
         }
-    case P_TYPE::SYMID:
-        return SymNames::nameForSymId(SymId(value.toInt()));
     case P_TYPE::SUB_STYLE:
         return textStyleName(Tid(value.toInt()));
     case P_TYPE::CHANGE_METHOD:

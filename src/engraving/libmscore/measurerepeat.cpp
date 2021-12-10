@@ -28,7 +28,6 @@
 #include "mscore.h"
 #include "score.h"
 #include "staff.h"
-#include "symid.h"
 #include "system.h"
 
 using namespace mu;

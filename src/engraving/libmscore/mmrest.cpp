@@ -24,10 +24,10 @@
 
 #include "draw/pen.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
 #include "measure.h"
 #include "score.h"
-#include "symid.h"
 #include "undo.h"
 #include "utils.h"
 

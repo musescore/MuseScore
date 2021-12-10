@@ -19,20 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LIBMSCORE_SYMNAMES_H
-#define MU_LIBMSCORE_SYMNAMES_H
+#ifndef MU_ENGRAVING_SYMNAMES_H
+#define MU_ENGRAVING_SYMNAMES_H
 
+#include <array>
+#include <QString>
+#include <QHash>
 #include "symid.h"
 
-namespace Ms {
+namespace mu::engraving {
 struct SymNames {
-    SymNames() = delete;
-
     static const char* nameForSymId(SymId id);
     static const char* userNameForSymId(SymId id);
     static QString translatedUserNameForSymId(SymId id);
 
-    static SymId symIdByName(const QString& name);
+    static SymId symIdByName(const QString& name, SymId def = SymId::noSym);
     static SymId symIdByOldName(const QString& oldName);
     static SymId symIdByUserName(const QString& userName);
 
@@ -48,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_LIBMSCORE_SYMNAMES_H
+#endif // MU_ENGRAVING_SYMNAMES_H

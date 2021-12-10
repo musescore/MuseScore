@@ -29,7 +29,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/stemslash.h"
-#include "libmscore/symid.h"
 
 using namespace mu::engraving;
 using namespace Ms;

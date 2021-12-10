@@ -33,7 +33,6 @@
 #include "chord.h"
 #include "note.h"
 #include "score.h"
-#include "symid.h"
 #include "staff.h"
 #include "stafflines.h"
 #include "part.h"

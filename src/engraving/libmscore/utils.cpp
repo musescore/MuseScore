@@ -45,7 +45,6 @@
 #include "key.h"
 #include "sig.h"
 #include "tuplet.h"
-#include "symid.h"
 
 using namespace mu;
 

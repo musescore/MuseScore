@@ -24,8 +24,8 @@
 
 #include "translation.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
-#include "symnames.h"
 #include "staff.h"
 #include "clef.h"
 #include "measure.h"

@@ -34,7 +34,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/articulation.h"
-#include "libmscore/symid.h"
 #include "libmscore/key.h"
 #include "libmscore/pitchspelling.h"
 

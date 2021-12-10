@@ -25,10 +25,10 @@
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
 #include "types/typesconv.h"
+#include "types/symnames.h"
 
 #include "articulation.h"
 #include "note.h"
-#include "symnames.h"
 
 using namespace mu;
 using namespace mu::engraving;

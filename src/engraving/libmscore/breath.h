@@ -24,7 +24,6 @@
 #define __BREATH_H__
 
 #include "engravingitem.h"
-#include "symid.h"
 
 namespace mu::engraving {
 class Factory;

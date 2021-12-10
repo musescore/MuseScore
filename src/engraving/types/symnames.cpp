@@ -21,10 +21,10 @@
  */
 #include "symnames.h"
 
-#include "log.h"
 #include "translation.h"
+#include "log.h"
 
-using namespace Ms;
+using namespace mu::engraving;
 
 const char* SymNames::nameForSymId(SymId id)
 {
@@ -41,12 +41,12 @@ QString SymNames::translatedUserNameForSymId(SymId id)
     return mu::qtrc("symUserNames", userNameForSymId(id));
 }
 
-SymId SymNames::symIdByName(const QString& name)
+SymId SymNames::symIdByName(const QString& name, SymId def)
 {
     if (s_nameToSymIdHash.empty()) {
         loadNameToSymIdHash();
     }
-    return s_nameToSymIdHash.value(name, SymId::noSym);
+    return s_nameToSymIdHash.value(name, def);
 }
 
 SymId SymNames::symIdByOldName(const QString& oldName)

@@ -53,7 +53,6 @@
 #include "libmscore/box.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/drumset.h"
-#include "libmscore/symid.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"

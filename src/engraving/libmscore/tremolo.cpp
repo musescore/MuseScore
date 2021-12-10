@@ -38,7 +38,6 @@
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
-#include "symid.h"
 
 using namespace mu;
 using namespace mu::engraving;

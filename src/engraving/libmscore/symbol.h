@@ -24,7 +24,6 @@
 #define __SYMBOL_H__
 
 #include "bsymbol.h"
-#include "symid.h"
 
 #include "infrastructure/draw/font.h"
 

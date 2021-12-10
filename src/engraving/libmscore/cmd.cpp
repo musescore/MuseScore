@@ -31,6 +31,7 @@
 #include "interactive/messagebox.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/symnames.h"
 
 #include "factory.h"
 #include "types.h"
@@ -86,7 +87,6 @@
 #include "accidental.h"
 #include "tremolo.h"
 #include "rehearsalmark.h"
-#include "symnames.h"
 #include "linkedobjects.h"
 #include "mscoreview.h"
 #include "masterscore.h"

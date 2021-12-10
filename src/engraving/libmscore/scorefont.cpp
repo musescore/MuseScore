@@ -27,11 +27,12 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 
-#include "log.h"
-
 #include "draw/painter.h"
+#include "types/symnames.h"
+
 #include "mscore.h"
-#include "symnames.h"
+
+#include "log.h"
 
 using namespace Ms;
 using namespace mu;
