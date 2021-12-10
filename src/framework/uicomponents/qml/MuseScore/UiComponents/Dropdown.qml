@@ -223,7 +223,7 @@ Item {
                 id: bgItem
                 anchors.fill: parent
                 color: mainItem.background.color
-                radius: 4
+                radius: 3
                 border.width: ui.theme.borderWidth
                 border.color: ui.theme.strokeColor
             }

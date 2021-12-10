@@ -79,10 +79,12 @@ MixerPanelSection {
 
                 anchors.verticalCenter: balanceKnob.verticalCenter
 
-                textHorizontalAlignment: Qt.AlignHCenter
-
                 height: 24
                 width: 36
+
+                textHorizontalAlignment: Qt.AlignHCenter
+                textSidePadding: 0
+                radius: 2
 
                 navigation.panel: item.panel
                 navigation.row: root.navigationRowStart + 1
