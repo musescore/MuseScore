@@ -220,7 +220,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     for (const char* dynamicType : (defaultPalette ? defaultArray : fullArray)) {
         auto dynamic = makeElement<Dynamic>(Ms::gpaletteScore);
         dynamic->setDynamicType(dynamicType);
-        sp->appendElement(dynamic, dynamic->dynamicTypeName());
+        sp->appendElement(dynamic, TConv::toUserName(dynamic->dynamicType()));
     }
     return sp;
 }

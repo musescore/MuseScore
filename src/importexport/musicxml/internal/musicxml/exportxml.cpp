@@ -48,6 +48,7 @@
 
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"
+#include "engraving/types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -4497,6 +4498,46 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 }
 
 //---------------------------------------------------------
+//   findInString
+//---------------------------------------------------------
+
+// find the longest first match of dynList's dynamic text in s
+// used by the MusicXML export to correctly export dynamics embedded
+// in spanner begin- or endtexts
+// return match's position and length and the dynamic type
+
+static int findDynamicInString(const QString& s, int& length, QString& type)
+{
+    length = 0;
+    type = "";
+    int matchIndex { -1 };
+    const int n = static_cast<int>(DynamicType::LAST) - 1;
+
+    // for all dynamics, find their text in s
+    for (int i = 0; i < n; ++i) {
+        DynamicType t = static_cast<DynamicType>(i);
+        const QString dynamicText = Dynamic::dynamicText(t);
+        const int dynamicLength = dynamicText.length();
+        // note: skip entries with empty text
+        if (dynamicLength > 0) {
+            const auto index = s.indexOf(dynamicText);
+            if (index >= 0) {
+                // found a match, accept it if
+                // - it is the first one
+                // - or it starts a the same index but is longer ("pp" versus "p")
+                if (matchIndex == -1 || (index == matchIndex && dynamicLength > length)) {
+                    matchIndex = index;
+                    length = dynamicLength;
+                    type = TConv::toXml(t);
+                }
+            }
+        }
+    }
+
+    return matchIndex;
+}
+
+//---------------------------------------------------------
 //   writeHairpinText
 //---------------------------------------------------------
 
@@ -4506,7 +4547,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
     while (text != "") {
         int dynamicLength { 0 };
         QString dynamicsType;
-        auto dynamicPosition = Dynamic::findInString(text, dynamicLength, dynamicsType);
+        auto dynamicPosition = findDynamicInString(text, dynamicLength, dynamicsType);
         if (dynamicPosition == -1 || dynamicPosition > 0) {
             // text remaining and either no dynamic of not at front of text
             xml.startObject("direction-type");
@@ -4888,7 +4929,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
     QString tagName = "dynamics";
     tagName += positioningAttributes(dyn);
     _xml.startObject(tagName);
-    const QString dynTypeName = dyn->dynamicTypeName();
+    const QString dynTypeName = TConv::toXml(dyn->dynamicType());
 
     if (set.contains(dynTypeName)) {
         _xml.tagE(dynTypeName);
