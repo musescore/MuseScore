@@ -88,7 +88,6 @@ enum class P_TYPE {
     DYNAMIC_TYPE,
     DYNAMIC_RANGE,
     DYNAMIC_SPEED,
-
     HOOK_TYPE,
 
     TEMPO,
@@ -213,12 +212,12 @@ public:
     PropertyValue(DynamicSpeed v)
         : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 
+    PropertyValue(HookType v)
+        : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
+
     // not sorted
     PropertyValue(Ms::SymId v)
         : m_type(P_TYPE::SYMID), m_data(make_data<Ms::SymId>(v)) {}
-
-    PropertyValue(Ms::HookType v)
-        : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<Ms::HookType>(v)) {}
 
     PropertyValue(const Ms::PitchValues& v)
         : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<Ms::PitchValues>(v)) {}

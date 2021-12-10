@@ -357,6 +357,11 @@ enum class DynamicRange : char {
 enum class DynamicSpeed : char {
     SLOW, NORMAL, FAST
 };
+
+// P_TYPE::HOOK_TYPE
+enum class HookType : char {
+    NONE, HOOK_90, HOOK_45, HOOK_90T
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -380,6 +385,7 @@ using ClefType = mu::engraving::ClefType;
 using DynamicType = mu::engraving::DynamicType;
 using DynamicRange = mu::engraving::DynamicRange;
 using DynamicSpeed = mu::engraving::DynamicSpeed;
+using HookType = mu::engraving::HookType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

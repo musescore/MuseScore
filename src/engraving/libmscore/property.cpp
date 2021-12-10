@@ -323,7 +323,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEGIN_TEXT,              true,  "beginText",             P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "begin text") },
     { Pid::BEGIN_TEXT_ALIGN,        false, "beginTextAlign",        P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "begin text align") },
     { Pid::BEGIN_TEXT_PLACE,        false, "beginTextPlace",        P_TYPE::TEXT_PLACE,     DUMMY_QT_TR_NOOP("propertyName", "begin text place") },
-    { Pid::BEGIN_HOOK_TYPE,         false, "beginHookType",         P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "begin hook type") },
+    { Pid::BEGIN_HOOK_TYPE,         false, "beginHookType",         P_TYPE::HOOK_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "begin hook type") },
     { Pid::BEGIN_HOOK_HEIGHT,       false, "beginHookHeight",       P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "begin hook height") },
     { Pid::BEGIN_FONT_FACE,         false, "beginFontFace",         P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "begin font face") },
     { Pid::BEGIN_FONT_SIZE,         false, "beginFontSize",         P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "begin font size") },
@@ -341,7 +341,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::END_TEXT,                true,  "endText",               P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "end text") },
     { Pid::END_TEXT_ALIGN,          false, "endTextAlign",          P_TYPE::ALIGN,          DUMMY_QT_TR_NOOP("propertyName", "end text align") },
     { Pid::END_TEXT_PLACE,          false, "endTextPlace",          P_TYPE::TEXT_PLACE,     DUMMY_QT_TR_NOOP("propertyName", "end text place") },
-    { Pid::END_HOOK_TYPE,           false, "endHookType",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "end hook type") },
+    { Pid::END_HOOK_TYPE,           false, "endHookType",           P_TYPE::HOOK_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "end hook type") },
     { Pid::END_HOOK_HEIGHT,         false, "endHookHeight",         P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "end hook height") },
     { Pid::END_FONT_FACE,           false, "endFontFace",           P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "end font face") },
     { Pid::END_FONT_SIZE,           false, "endFontSize",           P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "end font size") },
@@ -557,6 +557,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
 
     case P_TYPE::DYNAMIC_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), DynamicType::OTHER));
+
+    case P_TYPE::HOOK_TYPE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), HookType::NONE));
 
     case P_TYPE::SYMID:
     case P_TYPE::SUB_STYLE:
