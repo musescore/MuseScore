@@ -111,7 +111,7 @@ StyledDialogView {
             StyledTextLabel {
                 Layout.fillWidth: true
                 text: {
-                    var message = qsTrc("appshell", "Copyright © 1999-2021 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
+                    var message = qsTrc("appshell", "Copyright © 1999-2022 MuseScore BVBA and others.\nPublished under the %1GNU General Public License version 3%2.")
                     return message
                     .arg("<a href='https://www.gnu.org/licenses/gpl-3.0.html'>")
                     .arg("</a>")
