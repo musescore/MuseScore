@@ -216,6 +216,9 @@ public:
     PropertyValue(DynamicSpeed v)
         : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 
+    PropertyValue(KeyMode v)
+        : m_type(P_TYPE::KEYMODE), m_data(make_data<KeyMode>(v)) {}
+
     PropertyValue(HookType v)
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
 
