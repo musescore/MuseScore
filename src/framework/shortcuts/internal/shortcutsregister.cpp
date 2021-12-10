@@ -90,13 +90,18 @@ void ShortcutsRegister::reload(bool onlyDef)
 void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const
 {
     ShortcutList needadd;
-    for (const Shortcut& sh : defaultShortcuts) {
-        auto it = std::find_if(shortcuts.begin(), shortcuts.end(), [sh](const Shortcut& i) {
-            return i.action == sh.action;
+    for (const Shortcut& defSc : defaultShortcuts) {
+        auto it = std::find_if(shortcuts.begin(), shortcuts.end(), [defSc](const Shortcut& i) {
+            return i.action == defSc.action;
         });
 
+        //! NOTE If no default shortcut is found in user shortcuts add def
         if (it == shortcuts.end()) {
-            needadd.push_back(sh);
+            needadd.push_back(defSc);
+        }
+        //! NOTE If user shortcut is found, set context (context should always as default)
+        else {
+            it->context = defSc.context;
         }
     }
 
