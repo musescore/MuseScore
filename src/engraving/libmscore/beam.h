@@ -65,6 +65,10 @@ class Beam final : public EngravingItem
     qreal _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
 
+    // for tabs
+    bool _isBesideTabStaff  { false };
+    StaffType const* _tab         { nullptr };
+
     QVector<BeamFragment*> fragments;       // beam splits across systems
 
     mutable int _id         { 0 };          // used in read()/write()

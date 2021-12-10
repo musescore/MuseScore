@@ -242,14 +242,10 @@ std::vector<int> Chord::noteDistances() const
     Q_ASSERT(staffType);
     bool isTabStaff = staffType->isTabStaff();
     int staffMiddleLine = staffType->middleLine();
-    int upStringAmount = 0;
-    if (isTabStaff) {
-        upStringAmount = upString() * 2;
-    }
 
     std::vector<int> distances;
     for (Note* note : _notes) {
-        int noteLine = isTabStaff ? upStringAmount : note->line();
+        int noteLine = isTabStaff ? note->string() : note->line();
         distances.push_back(noteLine - staffMiddleLine);
     }
     return distances;
