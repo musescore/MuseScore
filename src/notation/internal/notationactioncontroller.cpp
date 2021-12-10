@@ -97,11 +97,13 @@ void NotationActionController::init()
     registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
     registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
 
-    registerAction("next-lyric", &Interaction::nextLyrics, MoveDirection::Right, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("prev-lyric", &Interaction::nextLyrics, MoveDirection::Left, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("next-lyric-verse", &Interaction::nextLyricsVerse, MoveDirection::Down, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("prev-lyric-verse", &Interaction::nextLyricsVerse, MoveDirection::Up, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("next-syllable", &Interaction::nextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("next-text-element", &NotationActionController::nextTextElement, &NotationActionController::textNavigationAvailable);
+    registerAction("prev-text-element", &NotationActionController::prevTextElement, &NotationActionController::textNavigationAvailable);
+
+    registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("next-syllable", &Interaction::nagivateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
+
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
@@ -1251,6 +1253,64 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
     }
 
     return options;
+}
+
+bool NotationActionController::textNavigationAvailable() const
+{
+    if (!isEditingText()) {
+        return false;
+    }
+
+    auto selection = currentNotationSelection();
+    if (!selection) {
+        return false;
+    }
+
+    const Ms::EngravingItem* element = selection->element();
+    if (!element) {
+        return false;
+    }
+
+    static const QList<Ms::ElementType> allowedElements {
+        Ms::ElementType::LYRICS,
+        Ms::ElementType::HARMONY
+    };
+
+    return allowedElements.contains(element->type());
+}
+
+void NotationActionController::prevTextElement()
+{
+    navigateToTextElement(MoveDirection::Left);
+}
+
+void NotationActionController::nextTextElement()
+{
+    navigateToTextElement(MoveDirection::Right);
+}
+
+void NotationActionController::navigateToTextElement(MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto selection = interaction->selection();
+    if (!selection) {
+        return;
+    }
+
+    Ms::EngravingItem* element = selection->element();
+    if (!element) {
+        return;
+    }
+
+    if (element->isLyrics()) {
+        interaction->navigateToLyrics(direction);
+    } else if (element->isHarmony()) {
+        interaction->navigateToHarmonyBeats(direction, true);
+    }
 }
 
 bool NotationActionController::isEditingText() const

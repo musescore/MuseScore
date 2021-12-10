@@ -170,6 +170,11 @@ private:
 
     FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
+    bool textNavigationAvailable() const;
+    void prevTextElement();
+    void nextTextElement();
+    void navigateToTextElement(MoveDirection direction);
+
     void startNoteInputIfNeed();
 
     bool hasSelection() const;
