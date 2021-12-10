@@ -28,6 +28,7 @@
 #include "draw/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "dynamichairpingroup.h"
 #include "utils.h"
@@ -621,7 +622,7 @@ Hairpin::Hairpin(Segment* parent)
 
     _hairpinCircledTip     = false;
     _veloChange            = 0;
-    _dynRange              = Dynamic::Range::PART;
+    _dynRange              = DynamicRange::PART;
     _singleNoteDynamics    = true;
     _veloChangeMethod      = ChangeMethod::NORMAL;
 }
@@ -720,7 +721,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "veloChange") {
             _veloChange = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = Dynamic::Range(e.readInt());
+            _dynRange = TConv::fromXml(e.readElementText(), DynamicRange::STAFF);
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (hairpinType() == HairpinType::CRESC_HAIRPIN) {
@@ -784,7 +785,7 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         _veloChange = v.toInt();
         break;
     case Pid::DYNAMIC_RANGE:
-        _dynRange = Dynamic::Range(v.toInt());
+        _dynRange = v.value<DynamicRange>();
         break;
     case Pid::HAIRPIN_HEIGHT:
         _hairpinHeight = v.value<Spatium>();
@@ -819,7 +820,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         return 0;
 
     case Pid::DYNAMIC_RANGE:
-        return int(Dynamic::Range::PART);
+        return DynamicRange::PART;
 
     case Pid::LINE_STYLE:
         if (isLineType()) {

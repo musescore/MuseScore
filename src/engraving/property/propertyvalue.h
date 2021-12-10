@@ -86,6 +86,9 @@ enum class P_TYPE {
     NOTEHEAD_GROUP,
     CLEF_TYPE,
     DYNAMIC_TYPE,
+    DYNAMIC_RANGE,
+
+    HOOK_TYPE,
 
     TEMPO,
     GROUPS,
@@ -103,7 +106,7 @@ enum class P_TYPE {
     ORIENTATION,        // enum class Orientation
 
     PITCH_VALUES,
-    HOOK_TYPE,
+
     ACCIDENTAL_ROLE,
 
     TDURATION
@@ -205,6 +208,8 @@ public:
 
     PropertyValue(DynamicType v)
         : m_type(P_TYPE::DYNAMIC_TYPE), m_data(make_data<DynamicType>(v)) {}
+    PropertyValue(DynamicRange v)
+        : m_type(P_TYPE::DYNAMIC_RANGE), m_data(make_data<DynamicRange>(v)) {}
 
     // not sorted
     PropertyValue(Ms::SymId v)

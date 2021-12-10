@@ -390,6 +390,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<DynamicType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::DYNAMIC_RANGE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<DynamicRange>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

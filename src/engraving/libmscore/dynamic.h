@@ -41,10 +41,6 @@ class Dynamic final : public TextBase
 {
 public:
 
-    enum class Range : char {
-        STAFF, PART, SYSTEM
-    };
-
     enum class Speed : char {
         SLOW, NORMAL, FAST
     };
@@ -59,7 +55,7 @@ private:
 
     mutable mu::PointF dragOffset;
     int _velocity;       // associated midi velocity 0-127
-    Range _dynRange;     // STAFF, PART, SYSTEM
+    DynamicRange _dynRange;     // STAFF, PART, SYSTEM
 
     int _changeInVelocity         { 128 };
     Speed _velChangeSpeed         { Speed::NORMAL };
@@ -91,9 +87,9 @@ public:
 
     void setVelocity(int v) { _velocity = v; }
     int velocity() const;
-    Range dynRange() const { return _dynRange; }
-    void setDynRange(Range t) { _dynRange = t; }
-    void undoSetDynRange(Range t);
+    DynamicRange dynRange() const { return _dynRange; }
+    void setDynRange(DynamicRange t) { _dynRange = t; }
+    void undoSetDynRange(DynamicRange t);
 
     int changeInVelocity() const;
     void setChangeInVelocity(int val);
@@ -121,7 +117,5 @@ public:
     static QString dynamicText(DynamicType t);
 };
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Dynamic::Range);
 
 #endif

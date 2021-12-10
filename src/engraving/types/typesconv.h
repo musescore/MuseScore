@@ -51,6 +51,9 @@ public:
     static Ms::SymId symId(DynamicType v);
     static QString toXml(DynamicType v);
     static DynamicType fromXml(const QString& tag, DynamicType def);
+    static QString toUserName(DynamicRange v);
+    static QString toXml(DynamicRange v);
+    static DynamicRange fromXml(const QString& tag, DynamicRange def);
 };
 }
 
