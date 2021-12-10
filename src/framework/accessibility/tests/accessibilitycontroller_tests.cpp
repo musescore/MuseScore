@@ -31,8 +31,6 @@
 #include "mocks/accessibilityconfigurationmock.h"
 
 using ::testing::Return;
-using ::testing::ReturnRef;
-using ::testing::NiceMock;
 using ::testing::_;
 using ::testing::SaveArgPointee;
 using ::testing::DoAll;
@@ -160,4 +158,9 @@ TEST_F(AccessibilityControllerTests, SendEventOnFocusChanged)
 
     delete item1;
     delete item2;
+
+    //! NOTE: need if tested class was created as a shared pointer
+    testing::Mock::AllowLeak(m_mainWindow.get());
+    testing::Mock::AllowLeak(m_application.get());
+    testing::Mock::AllowLeak(m_configuration.get());
 }
