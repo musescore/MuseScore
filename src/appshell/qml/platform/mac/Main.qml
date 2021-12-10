@@ -61,6 +61,14 @@ AppWindow {
 
             menuBar.addMenu(menu)
         }
+
+        menuModel.itemsChanged.connect(function() {
+            for (var i in menuModel.items) {
+                menuBar.menus[i].subitems = menuModel.items[i].subitems
+            }
+        })
+
+        window.init()
     }
 
     function makeMenu(menuInfo) {
@@ -130,6 +138,8 @@ AppWindow {
     }
 
     WindowContent {
+        id: window
+
         anchors.fill: parent
 
         onWindowLoaded: {

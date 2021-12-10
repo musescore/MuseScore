@@ -40,6 +40,10 @@ AppWindow {
         appWindow: root
     }
 
+    Component.onCompleted: {
+        window.init()
+    }
+
     WindowContent {
         id: window
 
