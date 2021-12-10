@@ -352,6 +352,11 @@ enum class DynamicType : char {
 enum class DynamicRange : char {
     STAFF, PART, SYSTEM
 };
+
+// P_TYPE::DYNAMIC_SPEED
+enum class DynamicSpeed : char {
+    SLOW, NORMAL, FAST
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -374,6 +379,7 @@ using NoteHeadGroup = mu::engraving::NoteHeadGroup;
 using ClefType = mu::engraving::ClefType;
 using DynamicType = mu::engraving::DynamicType;
 using DynamicRange = mu::engraving::DynamicRange;
+using DynamicSpeed = mu::engraving::DynamicSpeed;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

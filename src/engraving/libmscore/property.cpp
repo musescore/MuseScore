@@ -183,7 +183,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HAIRPIN_CONT_HEIGHT,     false, "hairpinContHeight",     P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "hairpin cont height") },
     { Pid::VELO_CHANGE,             true,  "veloChange",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity change") },
     { Pid::VELO_CHANGE_METHOD,      true,  "veloChangeMethod",      P_TYPE::CHANGE_METHOD,  DUMMY_QT_TR_NOOP("propertyName", "velocity change method") }, // left as a compatability property - we need to be able to read it correctly
-    { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::CHANGE_SPEED,   DUMMY_QT_TR_NOOP("propertyName", "velocity change speed") },
+    { Pid::VELO_CHANGE_SPEED,       true,  "veloChangeSpeed",       P_TYPE::DYNAMIC_SPEED,   DUMMY_QT_TR_NOOP("propertyName", "velocity change speed") },
     { Pid::DYNAMIC_TYPE,            true,  "subtype",               P_TYPE::DYNAMIC_TYPE,   DUMMY_QT_TR_NOOP("propertyName", "dynamic type") },
     { Pid::DYNAMIC_RANGE,           true,  "dynType",               P_TYPE::DYNAMIC_RANGE,  DUMMY_QT_TR_NOOP("propertyName", "dynamic range") },
 
@@ -544,14 +544,17 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), GlissandoStyle::CHROMATIC));
     case P_TYPE::BARLINE_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), BarLineType::NORMAL));
+
     case P_TYPE::NOTEHEAD_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadType::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_SCHEME:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadScheme::HEAD_AUTO));
     case P_TYPE::NOTEHEAD_GROUP:
         return PropertyValue(TConv::fromXml(e.readElementText(), NoteHeadGroup::HEAD_NORMAL));
+
     case P_TYPE::CLEF_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), ClefType::G));
+
     case P_TYPE::DYNAMIC_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), DynamicType::OTHER));
 
@@ -636,8 +639,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return SymNames::nameForSymId(SymId(value.toInt()));
     case P_TYPE::SUB_STYLE:
         return textStyleName(Tid(value.toInt()));
-    case P_TYPE::CHANGE_SPEED:
-        return Dynamic::speedToName(Dynamic::Speed(value.toInt()));
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
     case P_TYPE::ORIENTATION: {

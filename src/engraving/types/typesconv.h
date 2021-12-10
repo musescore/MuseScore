@@ -54,6 +54,9 @@ public:
     static QString toUserName(DynamicRange v);
     static QString toXml(DynamicRange v);
     static DynamicRange fromXml(const QString& tag, DynamicRange def);
+    static QString toUserName(DynamicSpeed v);
+    static QString toXml(DynamicSpeed v);
+    static DynamicSpeed fromXml(const QString& tag, DynamicSpeed def);
 };
 }
 
