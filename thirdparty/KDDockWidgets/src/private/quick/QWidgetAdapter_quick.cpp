@@ -138,6 +138,8 @@ QWidgetAdapter::QWidgetAdapter(QQuickItem *parent, Qt::WindowFlags flags)
         }
     });
 
+    qApp->installEventFilter(this);
+
     setSize(QSize(800, 800));
 }
 
@@ -177,6 +179,56 @@ void QWidgetAdapter::onMouseRelease()
 }
 void QWidgetAdapter::onCloseEvent(QCloseEvent *)
 {
+}
+
+void QWidgetAdapter::onResizeEvent(QResizeEvent *event)
+{
+    QWindow* window = windowHandle();
+    if (!window) {
+        return;
+    }
+
+    if (isNormalWindowState(m_oldWindowState)) {
+        QRect geo = normalGeometry();
+
+        auto curState = window->windowState();
+        if (isNormalWindowState(curState)) {
+            geo.setSize(event->size());
+        } else {
+            geo.setSize(event->oldSize());
+        }
+
+        setNormalGeometry(geo);
+    }
+}
+void QWidgetAdapter::onMoveEvent(QMoveEvent *event)
+{
+    QWindow* window = windowHandle();
+    if (!window) {
+        return;
+    }
+
+    if (isNormalWindowState(m_oldWindowState)) {
+        QRect geo = normalGeometry();
+
+        auto windowCurrentState = window->windowState();
+        if (isNormalWindowState(windowCurrentState)) {
+            geo.moveTopLeft(event->pos());
+        } else {
+            geo.moveTopLeft(event->oldPos());
+        }
+
+        setNormalGeometry(geo);
+    }
+}
+void QWidgetAdapter::onWindowStateChangeEvent(QWindowStateChangeEvent *)
+{
+    QWindow* window = windowHandle();
+    if (!window) {
+        return;
+    }
+
+    m_oldWindowState = window->windowState();
 }
 
 void QWidgetAdapter::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data)
@@ -300,23 +352,12 @@ QRect QWidgetAdapter::geometry() const
 
 QRect QWidgetAdapter::normalGeometry() const
 {
-    // TODO: There's no such concept in QWindow, do we need to workaround for QtQuick ?
-    return QWidgetAdapter::geometry();
+    return m_normalGeometry;
 }
 
 void QWidgetAdapter::setNormalGeometry(QRect geo)
 {
-    if (!isTopLevel())
-        return;
-
-    if (QWindow *w = windowHandle()) {
-        if (isNormalWindowState(w->windowStates())) {
-            w->setGeometry(geo);
-        } else {
-            // Nothing better at this point, as QWindow doesn't have this concept
-            qDebug() << Q_FUNC_INFO << "TODO";
-        }
-    }
+    m_normalGeometry = geo;
 }
 
 QRect QWidgetAdapter::rect() const
@@ -748,6 +789,14 @@ bool QWidgetAdapter::eventFilter(QObject *watched, QEvent *ev)
             default:
                 break;
             }
+        }
+
+        if (ev->type() == QEvent::Resize) {
+            onResizeEvent(static_cast<QResizeEvent *>(ev));
+        } else if (ev->type() == QEvent::Move) {
+            onMoveEvent(static_cast<QMoveEvent *>(ev));
+        } else if (ev->type() == QEvent::WindowStateChange) {
+            onWindowStateChangeEvent(static_cast<QWindowStateChangeEvent *>(ev));
         }
     }
 
