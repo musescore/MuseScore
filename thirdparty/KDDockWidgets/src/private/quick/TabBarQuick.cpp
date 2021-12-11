@@ -124,7 +124,7 @@ QQuickItem *TabBarQuick::listView() const
 
     const QList<QQuickItem *> children = m_tabBarQmlItem->childItems();
     for (QQuickItem *child : children) {
-        if (qstrcmp(child->metaObject()->className(), "QQuickListView") == 0)
+        if (QString::fromUtf8(child->metaObject()->className()).startsWith(QString::fromUtf8("QQuickListView")))
             return child;
     }
 
