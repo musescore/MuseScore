@@ -27,9 +27,10 @@
 #include <QWidget>
 
 #include "async/asyncable.h"
-#include "modularity/ioc.h"
 
+#include "modularity/ioc.h"
 #include "ivstpluginsregister.h"
+#include "ui/imainwindow.h"
 
 namespace mu::vst {
 class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
@@ -40,6 +41,7 @@ class AbstractVstEditorView : public QDialog, public Steinberg::IPlugFrame, publ
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
+    INJECT(vst, ui::IMainWindow, mainWindow)
 
 public:
     AbstractVstEditorView(QWidget* parent = nullptr);
@@ -64,8 +66,6 @@ protected:
 
 private:
     void attachView(VstPluginPtr pluginPtr);
-
-    void updateStayOnTopness();
 
     FIDString currentPlatformUiType() const;
 
