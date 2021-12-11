@@ -36,9 +36,10 @@ BaseSection {
 
     GridLayout {
         id: grid
+        width: parent.width
 
-        columnSpacing: parent.width / 8
-        rowSpacing: 20
+        columnSpacing: root.columnSpacing
+        rowSpacing: root.rowSpacing
         columns: 2
 
         Repeater {
@@ -50,6 +51,8 @@ BaseSection {
             ]
 
             delegate: Row {
+                Layout.preferredWidth: (grid.width - grid.columnSpacing) / 2
+                spacing: root.columnSpacing
 
                 StyledTextLabel {
                     id: titleLabel
@@ -69,7 +72,7 @@ BaseSection {
                     navigation.column: index % grid.columns
                     navigation.accessible.name: titleLabel.text
 
-                    onNewColorSelected: {
+                    onNewColorSelected: function(newColor) {
                         root.colorChangeRequested(newColor, modelData.typeRole)
                     }
                 }

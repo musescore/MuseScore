@@ -51,7 +51,7 @@ BaseSection {
         rows: 2
         columns: 2
 
-        rowSpacing: 8
+        rowSpacing: root.rowSpacing
         columnSpacing: root.columnSpacing
 
         RoundedRadioButton {

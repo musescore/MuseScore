@@ -37,38 +37,33 @@ BaseSection {
 
     title: qsTrc("appshell", "MIDI")
 
-    Column {
-        width: parent.width
-        spacing: 12
+    ComboBoxWithTitle {
+        id: inputDevicesBox
 
-        ComboBoxWithTitle {
-            id: inputDevicesBox
+        title: qsTrc("appshell", "MIDI input:")
+        columnWidth: root.columnWidth
 
-            title: qsTrc("appshell", "MIDI input:")
-            columnWidth: root.columnWidth
+        navigation.name: "MidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
-            navigation.name: "MidiInputBox"
-            navigation.panel: root.navigation
-            navigation.row: 1
-
-            onValueEdited: function(newValue) {
-                root.currentInputDeviceIndexChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.currentInputDeviceIndexChangeRequested(currentIndex)
         }
+    }
 
-        ComboBoxWithTitle {
-            id: outputDevicesBox
+    ComboBoxWithTitle {
+        id: outputDevicesBox
 
-            title: qsTrc("appshell", "MIDI output:")
-            columnWidth: root.columnWidth
+        title: qsTrc("appshell", "MIDI output:")
+        columnWidth: root.columnWidth
 
-            navigation.name: "MidiOutputBox"
-            navigation.panel: root.navigation
-            navigation.row: 2
+        navigation.name: "MidiOutputBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
-            onValueEdited: function(newValue) {
-                root.currentOuputDeviceIndexChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.currentOuputDeviceIndexChangeRequested(currentIndex)
         }
     }
 }

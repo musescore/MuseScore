@@ -72,9 +72,6 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
-        //! NOTE: Added to prevent components clipping when navigating
-        anchors.margins: 2
-
         spacing: 20
 
         ShortcutsTopPanel {

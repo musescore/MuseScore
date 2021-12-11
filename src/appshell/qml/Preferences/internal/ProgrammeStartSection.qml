@@ -40,10 +40,12 @@ BaseSection {
     signal startupScorePathChanged(string path)
     signal panelsVisibleChanged(int panelIndex, bool visible)
 
+    rowSpacing: 16
+
     RadioButtonGroup {
         id: startupModesBox
 
-        spacing: 16
+        spacing: root.rowSpacing
         orientation: Qt.Vertical
 
         width: parent.width
@@ -83,7 +85,7 @@ BaseSection {
                 navigationRowOrderStart: model.index
                 navigationColumnOrderStart: 1
 
-                onPathEdited: {
+                onPathEdited: function(newPath) {
                     root.startupScorePathChanged(newPath)
                 }
             }
@@ -93,7 +95,7 @@ BaseSection {
     ListView {
         id: panelsView
 
-        spacing: 16
+        spacing: root.rowSpacing
         interactive: false
 
         width: parent.width
