@@ -41,9 +41,10 @@ int TabBarQuick::tabAt(QPoint p) const
     }
 
     if (QQuickItem *internalListView = listView()) {
+        double x = internalListView->property("contentX").toDouble() + p.x();
         int index = -1;
         QMetaObject::invokeMethod(internalListView, "indexAt", Q_RETURN_ARG(int, index),
-                                  Q_ARG(double, p.x()), Q_ARG(double, p.y()));
+                                  Q_ARG(double, x), Q_ARG(double, p.y()));
 
         return index;
     } else {

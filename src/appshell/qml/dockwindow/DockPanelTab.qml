@@ -31,6 +31,7 @@ StyledTabButton {
 
     property alias contextMenuModel: contextMenuButton.menuModel
 
+    signal navigationActivated()
     signal handleContextMenuItemRequested(string itemId)
 
     readonly property real actualHeight: 34
@@ -44,6 +45,12 @@ StyledTabButton {
     rightPadding: (contextMenuButton.visible ? buttonPadding : textPadding) + 1 // For separator
     topPadding: 0
     bottomPadding: 1 // For separator
+
+    navigation.onActiveChanged: {
+        if (navigation.active) {
+            root.navigationActivated()
+        }
+    }
 
     contentItem: Row {
         spacing: root.buttonPadding
@@ -87,6 +94,11 @@ StyledTabButton {
 
             navigation.panel: root.navigation.panel
             navigation.order: root.navigation.order + 1
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    root.navigationActivated()
+                }
+            }
 
             onHandleMenuItem: function(itemId) {
                 root.handleContextMenuItemRequested(itemId)

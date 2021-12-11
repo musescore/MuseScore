@@ -142,10 +142,11 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.left: parent.left
 
-            width: contentWidth
+            // NOTE: + 1, because we don't need to see the separator of the rightmost tab
+            width: Math.min(contentWidth, parent.width + 1)
 
             orientation: Qt.Horizontal
-            interactive: false
+            boundsBehavior: Flickable.StopAtBounds
             spacing: 0
 
             currentIndex: tabsPanel.currentIndex
@@ -166,6 +167,10 @@ Rectangle {
 
                 onClicked: {
                     tabsPanel.currentIndex = model.index
+                }
+
+                onNavigationActivated: {
+                    tabs.positionViewAtIndex(model.index, ListView.Contain)
                 }
 
                 onHandleContextMenuItemRequested: function(itemId) {
