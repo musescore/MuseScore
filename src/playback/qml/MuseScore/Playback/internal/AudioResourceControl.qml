@@ -162,6 +162,10 @@ Item {
                 height: root.height
                 width: titleLoader.width
 
+                enabled: root.showAdditionalButtons
+                         ? (root.resourceItemModel ? root.resourceItemModel.hasNativeEditorSupport : false)
+                         : true
+
                 navigation.panel: root.navigationPanel
                 navigation.name: root.navigationName + "TitleButton"
                 navigation.row: root.navigationRowStart + 2
@@ -189,12 +193,16 @@ Item {
 
                     states: [
                         State {
+                            name: "DISABLED"
+                            when: !titleButton.enabled
+                        },
+
+                        State {
                             name: "PRESSED"
                             when: titleButton.mouseArea.pressed
 
                             PropertyChanges {
                                 target: titleButtonBackground
-                                radius: 0
                                 backgroundOpacity: ui.theme.buttonOpacityHit
                             }
                         },
@@ -205,13 +213,7 @@ Item {
 
                             PropertyChanges {
                                 target: titleButtonBackground
-                                radius: 0
                                 backgroundOpacity: ui.theme.buttonOpacityHover
-                            }
-
-                            PropertyChanges {
-                                target: titleButton
-                                enabled: root.resourceItemModel ? root.resourceItemModel.hasNativeEditorSupport : true
                             }
                         }
                     ]
