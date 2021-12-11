@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -45,7 +45,7 @@ Item {
             editMappingDialog.startEdit(mappingsModel.currentAction())
         }
 
-        onMapToEventRequested: {
+        onMapToEventRequested: function(event) {
             mappingsModel.mapCurrentActionToMidiEvent(event)
         }
     }
@@ -63,9 +63,6 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
-        //! NOTE: Added to prevent components clipping when navigating
-        anchors.margins: 2
-
         spacing: 20
 
         MidiMappingTopPanel {
@@ -74,7 +71,7 @@ Item {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onUseRemoteControlChangeRequested: {
+            onUseRemoteControlChangeRequested: function(checked) {
                 mappingsModel.useRemoteControl = checked
             }
         }

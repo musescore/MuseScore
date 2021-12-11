@@ -39,77 +39,73 @@ BaseSection {
     signal defaultZoomLevelChangeRequested(int zoomLevel)
     signal mouseZoomPrecisionChangeRequested(int zoomPrecision)
 
-    Column {
-        spacing: 8
+    Row {
+        spacing: root.columnSpacing
 
-        Row {
-            spacing: root.columnSpacing
+        ComboBoxWithTitle {
+            id: defaultZoomTypesBox
 
-            ComboBoxWithTitle {
-                id: defaultZoomTypesBox
-
-                title: qsTrc("appshell", "Default zoom:")
-                columnWidth: root.columnWidth
-
-                control.textRole: "title"
-                control.valueRole: "value"
-
-                currentIndex: control.indexOfValue(root.defaultZoom.type)
-
-                navigation.name: "DefaultZoomBox"
-                navigation.panel: root.navigation
-                navigation.row: 0
-                navigation.column: 0
-
-                onValueEdited: function(newValue) {
-                    root.defaultZoomTypeChangeRequested(newValue)
-                }
-            }
-
-            IncrementalPropertyControl {
-                id: defaultZoomControl
-                width: 64
-
-                maxValue: 1600
-                minValue: 10
-                step: 10
-                decimals: 0
-
-                measureUnitsSymbol: "%"
-
-                currentValue: root.defaultZoom.level
-                enabled: root.defaultZoom.isPercentage
-
-                navigation.name: "DefaultZoomControl"
-                navigation.panel: root.navigation
-                navigation.row: 0
-                navigation.column: 1
-
-                onValueEdited: function(newValue) {
-                    root.defaultZoomLevelChangeRequested(newValue)
-                }
-            }
-        }
-
-        IncrementalPropertyControlWithTitle {
-            id: mouseZoomPrecisionControl
-
-            title: qsTrc("appshell", "Mouse zoom precision:")
-
+            title: qsTrc("appshell", "Default zoom:")
             columnWidth: root.columnWidth
-            control.width: 60
 
-            minValue: 1
-            maxValue: 16
+            control.textRole: "title"
+            control.valueRole: "value"
 
-            navigation.name: "MouseZoomPercisionControl"
+            currentIndex: control.indexOfValue(root.defaultZoom.type)
+
+            navigation.name: "DefaultZoomBox"
             navigation.panel: root.navigation
-            navigation.row: 1
+            navigation.row: 0
             navigation.column: 0
 
             onValueEdited: function(newValue) {
-                root.mouseZoomPrecisionChangeRequested(newValue)
+                root.defaultZoomTypeChangeRequested(newValue)
             }
+        }
+
+        IncrementalPropertyControl {
+            id: defaultZoomControl
+            width: 64
+
+            maxValue: 1600
+            minValue: 10
+            step: 10
+            decimals: 0
+
+            measureUnitsSymbol: "%"
+
+            currentValue: root.defaultZoom.level
+            enabled: root.defaultZoom.isPercentage
+
+            navigation.name: "DefaultZoomControl"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 1
+
+            onValueEdited: function(newValue) {
+                root.defaultZoomLevelChangeRequested(newValue)
+            }
+        }
+    }
+
+    IncrementalPropertyControlWithTitle {
+        id: mouseZoomPrecisionControl
+
+        title: qsTrc("appshell", "Mouse zoom precision:")
+
+        columnWidth: root.columnWidth
+        control.width: 60
+
+        minValue: 1
+        maxValue: 16
+
+        navigation.name: "MouseZoomPercisionControl"
+        navigation.panel: root.navigation
+        navigation.row: 1
+        navigation.column: 0
+
+        onValueEdited: function(newValue) {
+            root.mouseZoomPrecisionChangeRequested(newValue)
         }
     }
 }

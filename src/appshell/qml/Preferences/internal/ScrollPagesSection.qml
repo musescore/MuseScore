@@ -35,61 +35,56 @@ BaseSection {
     signal orientationChangeRequested(int orientation)
     signal limitScrollAreaChangeRequested(bool limit)
 
-    Column {
+    RadioButtonGroup {
+        id: radioButtonList
+
         width: parent.width
+        height: implicitHeight
+
         spacing: 12
+        orientation: ListView.Vertical
 
-        RadioButtonGroup {
-            id: radioButtonList
+        model: [
+            { title: qsTrc("appshell", "Horizontal"), value: Qt.Horizontal },
+            { title: qsTrc("appshell", "Vertical"), value: Qt.Vertical }
+        ]
 
-            width: parent.width
-            height: implicitHeight
+        delegate: RoundedRadioButton {
+            leftPadding: 0
+            spacing: 6
 
-            spacing: 12
-            orientation: ListView.Vertical
+            property string title: modelData["title"]
 
-            model: [
-                { title: qsTrc("appshell", "Horizontal"), value: Qt.Horizontal },
-                { title: qsTrc("appshell", "Vertical"), value: Qt.Vertical }
-            ]
+            checked: root.orientation === modelData["value"]
 
-            delegate: RoundedRadioButton {
-                leftPadding: 0
-                spacing: 6
+            navigation.name: "ScrollPagesOrientationButton"
+            navigation.panel: root.navigation
+            navigation.row: model.index
+            navigation.accessible.name: title
 
-                property string title: modelData["title"]
+            StyledTextLabel {
+                text: title
+                horizontalAlignment: Text.AlignLeft
+            }
 
-                checked: root.orientation === modelData["value"]
-
-                navigation.name: "ScrollPagesOrientationButton"
-                navigation.panel: root.navigation
-                navigation.row: model.index
-                navigation.accessible.name: title
-
-                StyledTextLabel {
-                    text: title
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                onToggled: {
-                    root.orientationChangeRequested(modelData["value"])
-                }
+            onToggled: {
+                root.orientationChangeRequested(modelData["value"])
             }
         }
+    }
 
-        CheckBox {
-            id: limitScrollAreaBox
-            width: parent.width
+    CheckBox {
+        id: limitScrollAreaBox
+        width: parent.width
 
-            text: qsTrc("appshell", "Limit scroll area to page borders")
+        text: qsTrc("appshell", "Limit scroll area to page borders")
 
-            navigation.name: "LimitScrollAreaBox"
-            navigation.panel: root.navigation
-            navigation.row: radioButtonList.model.length
+        navigation.name: "LimitScrollAreaBox"
+        navigation.panel: root.navigation
+        navigation.row: radioButtonList.model.length
 
-            onClicked: {
-                root.limitScrollAreaChangeRequested(!checked)
-            }
+        onClicked: {
+            root.limitScrollAreaChangeRequested(!checked)
         }
     }
 }

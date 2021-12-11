@@ -47,7 +47,7 @@ BaseSection {
     signal ensureContentVisibleRequested(var contentRect)
 
     CheckBox {
-        width: root.columnWidth
+        width: parent.height
 
         text: qsTrc("appshell", "Enable high-contrast")
 
@@ -87,7 +87,7 @@ BaseSection {
         navigation.section: root.navigation.section
         navigation.order: root.navigation.order + 1
 
-        onAccentColorChangeRequested: {
+        onAccentColorChangeRequested: function(newColorIndex) {
             root.accentColorChangeRequested(newColorIndex)
         }
 

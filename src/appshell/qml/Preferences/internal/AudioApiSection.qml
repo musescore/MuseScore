@@ -33,29 +33,25 @@ BaseSection {
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
 
-    Column {
-        spacing: 12
+    ComboBoxWithTitle {
+        id: apiComboBox
 
-        ComboBoxWithTitle {
-            id: apiComboBox
+        title: qsTrc("appshell", "Audio API:")
+        columnWidth: root.columnWidth
 
-            title: qsTrc("appshell", "Audio API:")
-            columnWidth: root.columnWidth
+        navigation.name: "AudioApiBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
-            navigation.name: "AudioApiBox"
-            navigation.panel: root.navigation
-            navigation.row: 1
-
-            onValueEdited: function(newValue) {
-                root.currentAudioApiIndexChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.currentAudioApiIndexChangeRequested(currentIndex)
         }
+    }
 
-        CommonAudioApiConfiguration {
-            columnWidth: root.columnWidth
+    CommonAudioApiConfiguration {
+        columnWidth: root.columnWidth
 
-            navigation: root.navigation
-            navigationOrderStart: 2
-        }
+        navigation: root.navigation
+        navigationOrderStart: 2
     }
 }
