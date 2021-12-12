@@ -82,10 +82,10 @@ Column {
             navigation.accessible.name: qsTrc("inspector", "Where to insert measures:") + " " + currentText
 
             model: [
-                { text: qsTrc("inspector", "After selection"), value: MeasuresSettingsModel.AfterSelection },
-                { text: qsTrc("inspector", "Before selection"), value: MeasuresSettingsModel.BeforeSelection },
-                { text: qsTrc("inspector", "At start of score"), value: MeasuresSettingsModel.AtStartOfScore },
-                { text: qsTrc("inspector", "At end of score"), value: MeasuresSettingsModel.AtEndOfScore }
+                { text: qsTrc("notation", "After selection"), value: MeasuresSettingsModel.AfterSelection },
+                { text: qsTrc("notation", "Before selection"), value: MeasuresSettingsModel.BeforeSelection },
+                { text: qsTrc("notation", "At start of score"), value: MeasuresSettingsModel.AtStartOfScore },
+                { text: qsTrc("notation", "At end of score"), value: MeasuresSettingsModel.AtEndOfScore }
             ]
 
             currentIndex: 0

@@ -21,11 +21,9 @@
  */
 #include "measuressettingsmodel.h"
 
-#include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
-using namespace mu::notation;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -41,33 +39,22 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    if (!currentNotation() || numberOfMeasures < 1) {
-        return;
-    }
+    actions::ActionData actionData = actions::ActionData::make_arg1(numberOfMeasures);
 
-    auto interaction = currentNotation()->interaction();
-    auto selection = interaction->selection();
-    if (!selection->isRange()) {
-        return;
-    }
-
-    int beforeIndex = 0;
     switch (target) {
     case InsertMeasuresTarget::AfterSelection:
-        beforeIndex = selection->range()->endMeasureIndex() + 1;
+        dispatcher()->dispatch("insert-measures-after-selection", actionData);
         break;
     case InsertMeasuresTarget::BeforeSelection:
-        beforeIndex = selection->range()->startMeasureIndex();
+        dispatcher()->dispatch("insert-measures", actionData);
         break;
     case InsertMeasuresTarget::AtStartOfScore:
-        beforeIndex = INotationInteraction::ADD_BOXES_AT_START_OF_SCORE;
+        dispatcher()->dispatch("insert-measures-at-start-of-score", actionData);
         break;
     case InsertMeasuresTarget::AtEndOfScore:
-        beforeIndex = INotationInteraction::ADD_BOXES_AT_END_OF_SCORE;
+        dispatcher()->dispatch("append-measures", actionData);
         break;
     }
-
-    interaction->addBoxes(notation::BoxType::Measure, numberOfMeasures, beforeIndex);
 }
 
 void MeasuresSettingsModel::deleteSelectedMeasures()

@@ -230,16 +230,32 @@ void NotationActionController::init()
 
     registerAction("split-measure", &Interaction::splitSelectedMeasure);
     registerAction("join-measures", &Interaction::joinSelectedMeasures);
-    registerAction("insert-measures", &Controller::selectMeasuresCountAndInsert);
-    registerAction("append-measures", &Controller::selectMeasuresCountAndAppend);
-    registerAction("insert-measure", [this]() { insertBox(BoxType::Measure); });
-    registerAction("append-measure", [this]() { appendBox(BoxType::Measure); });
-    registerAction("insert-hbox", [this]() { insertBox(BoxType::Horizontal); });
-    registerAction("insert-vbox", [this]() { insertBox(BoxType::Vertical); });
-    registerAction("insert-textframe", [this]() { insertBox(BoxType::Text); });
-    registerAction("append-hbox", [this]() { appendBox(BoxType::Horizontal); });
-    registerAction("append-vbox", [this]() { appendBox(BoxType::Vertical); });
-    registerAction("append-textframe", [this]() { appendBox(BoxType::Text); });
+
+    registerAction("insert-measure", [this]() {
+        addBoxes(BoxType::Measure, 1, AddBoxesTarget::BeforeSelection);
+    }, &Controller::hasSelection);
+    registerAction("insert-measures", [this](const ActionData& actionData) {
+        addMeasures(actionData, AddBoxesTarget::BeforeSelection);
+    }, &Controller::hasSelection);
+    registerAction("insert-measures-after-selection", [this](const ActionData& actionData) {
+        addMeasures(actionData, AddBoxesTarget::AfterSelection);
+    }, &Controller::hasSelection);
+    registerAction("insert-measures-at-start-of-score", [this](const ActionData& actionData) {
+        addMeasures(actionData, AddBoxesTarget::AtStartOfScore);
+    });
+    registerAction("append-measure", [this]() {
+        addBoxes(BoxType::Measure, 1, AddBoxesTarget::AtEndOfScore);
+    });
+    registerAction("append-measures", [this](const ActionData& actionData) {
+        addMeasures(actionData, AddBoxesTarget::AtEndOfScore);
+    });
+
+    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
+    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
+    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
+    registerAction("append-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
+    registerAction("append-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
+    registerAction("append-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
 
     registerAction("edit-style", &Controller::openEditStyleDialog);
     registerAction("page-settings", &Controller::openPageSettingsDialog);
@@ -1144,68 +1160,27 @@ void NotationActionController::startEditSelectedText()
     }
 }
 
-void NotationActionController::insertBoxes(BoxType boxType, int count)
+void NotationActionController::addMeasures(const actions::ActionData& actionData, AddBoxesTarget target)
 {
     TRACEFUNC;
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
+    int count = 1;
 
-    int firstSelectedBoxIndex = this->firstSelectedBoxIndex();
+    if (actionData.empty()) {
+        RetVal<Val> result = interactive()->open("musescore://notation/selectmeasurescount");
 
-    if (firstSelectedBoxIndex == INVALID_BOX_INDEX) {
-        return;
-    }
-
-    interaction->addBoxes(boxType, count, firstSelectedBoxIndex);
-}
-
-void NotationActionController::insertBox(BoxType boxType)
-{
-    TRACEFUNC;
-
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    Ret ret = interaction->canAddBoxes();
-    if (!ret) {
-        if (configuration()->needToShowAddBoxesErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddBoxesErrorMessage(false);
-            }
+        if (result.ret) {
+            count = result.val.toInt();
+        } else {
+            return;
         }
-
-        return;
+    } else {
+        count = actionData.arg<int>();
     }
 
-    insertBoxes(boxType, 1);
+    addBoxes(BoxType::Measure, count, target);
 }
 
-int NotationActionController::firstSelectedBoxIndex() const
-{
-    TRACEFUNC;
-    int result = INVALID_BOX_INDEX;
-
-    auto selection = currentNotationSelection();
-    if (!selection) {
-        return result;
-    }
-
-    if (selection->isRange()) {
-        result = selection->range()->startMeasureIndex();
-    } else if (selection->element()) {
-        Measure* measure = selection->element()->findMeasure();
-        result = measure ? measure->index() : INVALID_BOX_INDEX;
-    }
-
-    return result;
-}
-
-void NotationActionController::appendBoxes(BoxType boxType, int count)
+void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
 {
     TRACEFUNC;
     auto interaction = currentNotationInteraction();
@@ -1213,13 +1188,7 @@ void NotationActionController::appendBoxes(BoxType boxType, int count)
         return;
     }
 
-    interaction->addBoxes(boxType, count);
-}
-
-void NotationActionController::appendBox(BoxType boxType)
-{
-    TRACEFUNC;
-    appendBoxes(boxType, 1);
+    interaction->addBoxes(boxType, count, target);
 }
 
 void NotationActionController::unrollRepeats()
@@ -1287,37 +1256,6 @@ void NotationActionController::resetBeamMode()
 
     if (selection->isNone() || selection->isRange()) {
         interaction->resetBeamMode();
-    }
-}
-
-void NotationActionController::selectMeasuresCountAndInsert()
-{
-    TRACEFUNC;
-
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    Ret ret = interaction->canAddBoxes();
-    if (!ret) {
-        showErrorMessage(ret.text());
-        return;
-    }
-
-    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=insert");
-
-    if (measureCount.ret) {
-        insertBoxes(BoxType::Measure, measureCount.val.toInt());
-    }
-}
-
-void NotationActionController::selectMeasuresCountAndAppend()
-{
-    RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=append");
-
-    if (measureCount.ret) {
-        appendBoxes(BoxType::Measure, measureCount.val.toInt());
     }
 }
 
@@ -1745,6 +1683,14 @@ bool NotationActionController::isNotEditingElement() const
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
                                               std::function<void()> handler, bool (NotationActionController::* isEnabled)() const)
+{
+    m_isEnabledMap[code] = isEnabled;
+    dispatcher()->reg(this, code, handler);
+}
+
+void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+                                              std::function<void(const actions::ActionData&)> handler,
+                                              bool (NotationActionController::* isEnabled)() const)
 {
     m_isEnabledMap[code] = isEnabled;
     dispatcher()->reg(this, code, handler);

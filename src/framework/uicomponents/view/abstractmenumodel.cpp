@@ -193,7 +193,7 @@ MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& 
     return item;
 }
 
-MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode)
+MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode, const QString& title)
 {
     const UiAction& action = uiActionsRegister()->action(actionCode);
     if (!action.isValid()) {
@@ -203,6 +203,10 @@ MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode)
 
     MenuItem* item = new MenuItem(action, this);
     item->setState(uiActionsRegister()->actionState(actionCode));
+
+    if (!title.isEmpty()) {
+        item->setTitle(title);
+    }
 
     return item;
 }
