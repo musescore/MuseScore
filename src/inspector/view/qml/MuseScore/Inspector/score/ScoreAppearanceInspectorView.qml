@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -37,43 +38,94 @@ InspectorSectionView {
         id: contentColumn
 
         width: parent.width
+        spacing: 8
 
-        spacing: 24
-
-        Column {
+        RowLayout {
             width: parent.width
+            spacing: 4
 
-            spacing: 8
+            VisibilityBox {
+                Layout.fillWidth: true
+                isVisible: root.model ? !root.model.hideEmptyStaves : true
+                text: qsTrc("inspector", "Empty staves")
 
-            FlatButton {
-                width: parent.width
-
+                navigation.name: "EmptyStaves"
                 navigation.panel: root.navigationPanel
-                navigation.name: "Page settings"
-                navigation.row: root.navigationRow(6)
+                navigation.row: root.navigationRow(1)
 
-                text: qsTrc("inspector", "Page settings")
-
-                onClicked: {
+                onVisibleToggled: {
                     if (root.model) {
-                        root.model.showPageSettings()
+                        root.model.hideEmptyStaves = !!isVisible
                     }
                 }
             }
 
-            FlatButton {
-                width: parent.width
+            PopupViewButton {
+                id: hideEmptyStavesSettingsPopupButton
+                Layout.fillWidth: false
+                Layout.minimumWidth: implicitWidth
 
+                enabled: root.model.hideEmptyStaves
+                icon: IconCode.SETTINGS_COG
+                transparent: !popup.isOpened
+
+                anchorItem: root.anchorItem
+
+                navigation.name: "HideEmptyStavesSettings"
                 navigation.panel: root.navigationPanel
-                navigation.name: "Style settings"
-                navigation.row: root.navigationRow(7)
+                navigation.row: root.navigationRow(2)
+                accessible.name: qsTrc("inspector", "Show options for hiding empty staves")
 
-                text: qsTrc("inspector", "Style settings")
+                popupContent: HideEmptyStavesSettings {
+                    id: hideEmptyStavesSettings
+                    model: root.model
+                    navigationPanel: hideEmptyStavesSettingsPopupButton.popupNavigationPanel
+                }
 
-                onClicked: {
-                    if (root.model) {
-                        root.model.showStyleSettings()
+                onPopupOpened: {
+                    Qt.callLater(hideEmptyStavesSettings.focusOnFirst)
+                }
+
+                onEnabledChanged: {
+                    if (!enabled) {
+                        closePopup()
                     }
+                }
+
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "Page settings"
+            navigation.row: root.navigationRow(3)
+
+            text: qsTrc("inspector", "Page settings")
+
+            onClicked: {
+                if (root.model) {
+                    root.model.showPageSettings()
+                }
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "Style settings"
+            navigation.row: root.navigationRow(4)
+
+            text: qsTrc("inspector", "Style settings")
+
+            onClicked: {
+                if (root.model) {
+                    root.model.showStyleSettings()
                 }
             }
         }

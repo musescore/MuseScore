@@ -540,7 +540,7 @@
                   <item>
                    <widget class="QCheckBox" name="alwaysShowBrackets">
                     <property name="text">
-                     <string>Always show brackets which span to single staff</string>
+                     <string>Show brackets when spanning a single staff</string>
                     </property>
                    </widget>
                   </item>

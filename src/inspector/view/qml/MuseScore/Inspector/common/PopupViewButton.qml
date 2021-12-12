@@ -33,7 +33,7 @@ FlatButton {
     property alias popupContent: popup.contentData
     property alias popupNavigationPanel: popup.navigationPanel
 
-    property int popupAvailableWidth: 0
+    property int popupAvailableWidth: parent ? parent.width : 0
     property var anchorItem: null
 
     signal ensureContentVisibleRequested(int invisibleContentHeight)
@@ -41,6 +41,10 @@ FlatButton {
 
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
+
+    function closePopup() {
+        popup.close()
+    }
 
     InspectorPopupController {
         id: popupController
@@ -61,6 +65,7 @@ FlatButton {
         id: popup
 
         anchorItem: root.anchorItem
+        contentWidth: root.popupAvailableWidth - 2 * margins
 
         navigationParentControl: root.navigation
 
