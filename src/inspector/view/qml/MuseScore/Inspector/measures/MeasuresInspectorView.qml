@@ -83,6 +83,8 @@ InspectorSectionView {
                 navigation.name: "DeleteMeasures"
                 navigation.row: root.navigationRowStart + 1
 
+                toolTipTitle: qsTrc("inspector", "Delete selected measures")
+
                 icon: IconCode.DELETE_TANK
 
                 onClicked: model.deleteSelectedMeasures()
