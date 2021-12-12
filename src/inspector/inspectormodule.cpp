@@ -50,7 +50,6 @@
 #include "types/articulationtypes.h"
 #include "types/ambitustypes.h"
 #include "types/chordsymboltypes.h"
-#include "types/scoreappearancetypes.h"
 #include "types/bendtypes.h"
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
@@ -106,7 +105,6 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<AmbitusTypes>("MuseScore.Inspector", 1, 0, "AmbitusTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ChordSymbolTypes>("MuseScore.Inspector", 1, 0, "ChordSymbolTypes", "Not creatable as it is an enum type");
     qmlRegisterType<FretCanvas>("MuseScore.Inspector", 1, 0, "FretCanvas");
-    qmlRegisterUncreatableType<ScoreAppearanceTypes>("MuseScore.Inspector", 1, 0, "ScoreAppearanceTypes", "Not creatable...");
     qmlRegisterType<GridCanvas>("MuseScore.Inspector", 1, 0, "GridCanvas");
     qmlRegisterUncreatableType<BendTypes>("MuseScore.Inspector", 1, 0, "BendTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspector", 1, 0, "TremoloBarTypes", "Not creatable as it is an enum type");

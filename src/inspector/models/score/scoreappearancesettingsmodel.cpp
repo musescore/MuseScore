@@ -21,9 +21,7 @@
  */
 #include "scoreappearancesettingsmodel.h"
 
-#include "log.h"
 #include "translation.h"
-#include "types/scoreappearancetypes.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
