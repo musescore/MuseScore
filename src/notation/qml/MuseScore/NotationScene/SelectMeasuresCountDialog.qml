@@ -45,7 +45,17 @@ StyledDialogView {
             Layout.fillWidth: true
             spacing: 12
 
+            NavigationPanel {
+                id: measuresCountNavigationPanel
+                name: "MeasuresCountNavigationPanel"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 1
+                direction: NavigationPanel.Horizontal
+            }
+
             StyledTextLabel {
+                id: hintLabel
                 Layout.fillWidth: true
                 text: qsTrc("notation", "Number of measures to insert:")
                 font: ui.theme.bodyBoldFont
@@ -57,6 +67,11 @@ StyledDialogView {
 
                 Layout.alignment: Qt.AlignRight
                 Layout.preferredWidth: 132
+
+                navigation.name: "MeasuresCountInputField"
+                navigation.panel: measuresCountNavigationPanel
+                navigation.order: 0
+                navigation.accessible: hintLabel.text + " " + currentValue
 
                 currentValue: root.measuresCount
                 step: 1
@@ -76,8 +91,21 @@ StyledDialogView {
 
             spacing: 12
 
+            NavigationPanel {
+                id: buttonsNavigationPanel
+                name: "ButtonsNavigationPanel"
+                enabled: parent.enabled && parent.visible
+                section: root.navigationSection
+                order: 2
+                direction: NavigationPanel.Horizontal
+            }
+
             FlatButton {
                 text: qsTrc("global", "Cancel")
+
+                navigation.name: "CancelButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.order: 2
 
                 onClicked: {
                     root.reject()
@@ -88,6 +116,10 @@ StyledDialogView {
                 text: qsTrc("global", "OK")
                 enabled: root.measuresCount > 0
                 accentButton: enabled
+
+                navigation.name: "OkButton"
+                navigation.panel: buttonsNavigationPanel
+                navigation.order: 1
 
                 onClicked: {
                     root.ret = { errcode: 0, value: root.measuresCount }
