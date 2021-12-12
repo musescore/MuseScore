@@ -118,7 +118,7 @@ public:
     }
 
 #else
-    QEvent expectDispatchEventOnFocus(Env&)
+    QEvent expectDispatchEventOnFocus()
     {
         return QEvent(QEvent::None);
     }
