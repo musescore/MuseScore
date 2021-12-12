@@ -470,11 +470,11 @@ MenuItemList AppMenuModel::makeTupletsItems()
 MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
-        makeMenuItem("insert-measure"),
-        makeMenuItem("insert-measures"),
+        makeMenuItem("insert-measures-after-selection", qtrc("notation", "Insert after selection…")),
+        makeMenuItem("insert-measures", qtrc("notation", "Insert before selection…")),
         makeSeparator(),
-        makeMenuItem("append-measure"),
-        makeMenuItem("append-measures")
+        makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "Insert at start of score…")),
+        makeMenuItem("append-measures", qtrc("notation", "Insert at end of score…"))
     };
 
     return items;

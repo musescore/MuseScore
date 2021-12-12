@@ -2864,6 +2864,68 @@ mu::Ret NotationInteraction::canAddBoxes() const
     return make_ret(Err::MeasureIsNotSelected);
 }
 
+void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
+{
+    int beforeBoxIndex = -1;
+
+    switch (target) {
+    case AddBoxesTarget::AfterSelection:
+    case AddBoxesTarget::BeforeSelection: {
+        if (selection()->isNone()) {
+            return;
+        }
+
+        if (selection()->isRange()) {
+            beforeBoxIndex = target == AddBoxesTarget::BeforeSelection
+                             ? selection()->range()->startMeasureIndex()
+                             : selection()->range()->endMeasureIndex() + 1;
+            break;
+        }
+
+        auto elements = selection()->elements();
+        IF_ASSERT_FAILED(!elements.empty()) {
+            // This would contradict the fact that selection()->isNone() == false at this point
+            return;
+        }
+
+        for (Ms::EngravingItem* item : elements) {
+            Ms::MeasureBase* itemMeasure = item->findMeasureBase();
+            if (!itemMeasure) {
+                continue;
+            }
+
+            int itemMeasureIndex = itemMeasure->index();
+            if (itemMeasureIndex < 0) {
+                continue;
+            }
+
+            if (target == AddBoxesTarget::BeforeSelection) {
+                if (beforeBoxIndex < 0 || itemMeasureIndex < beforeBoxIndex) {
+                    beforeBoxIndex = itemMeasureIndex;
+                }
+            } else {
+                if (itemMeasureIndex + 1 > beforeBoxIndex) {
+                    beforeBoxIndex = itemMeasureIndex + 1;
+                }
+            }
+        }
+
+        if (beforeBoxIndex < 0) {
+            // No suitable element found
+            return;
+        }
+    } break;
+    case AddBoxesTarget::AtStartOfScore:
+        beforeBoxIndex = score()->firstMeasure()->index();
+        break;
+    case AddBoxesTarget::AtEndOfScore:
+        beforeBoxIndex = -1;
+        break;
+    }
+
+    addBoxes(boxType, count, beforeBoxIndex);
+}
+
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
     auto boxTypeToElementType = [](BoxType boxType) {
@@ -2880,12 +2942,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 
     Ms::ElementType elementType = boxTypeToElementType(boxType);
 
-    Ms::MeasureBase* beforeBox = nullptr;
-    if (beforeBoxIndex == ADD_BOXES_AT_START_OF_SCORE) {
-        beforeBox = score()->firstMeasure();
-    } else if (beforeBoxIndex >= 0) {
-        beforeBox = score()->measure(beforeBoxIndex);
-    }
+    Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
     startEdit();
 

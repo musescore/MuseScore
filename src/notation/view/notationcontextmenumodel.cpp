@@ -89,6 +89,7 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
 
     items << makeMenuItem("staff-properties");
     items << makeSeparator();
+    items << makeMenu(qtrc("notation", "Insert measures"), makeInsertMeasuresItems());
     items << makeMenuItem("measure-properties");
 
     return items;
@@ -149,6 +150,19 @@ MenuItemList NotationContextMenuModel::makeElementItems()
     if (isSingleSelection()) {
         items << makeMenu(qtrc("notation", "Select"), makeSelectItems());
     }
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
+{
+    MenuItemList items {
+        makeMenuItem("insert-measures-after-selection", qtrc("notation", "After selection…")),
+        makeMenuItem("insert-measures", qtrc("notation", "Before selection…")),
+        makeSeparator(),
+        makeMenuItem("insert-measures-at-start-of-score", qtrc("notation", "At start of score…")),
+        makeMenuItem("append-measures", qtrc("notation", "At end of score…"))
+    };
 
     return items;
 }

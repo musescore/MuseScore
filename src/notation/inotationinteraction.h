@@ -144,11 +144,9 @@ public:
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
-    static constexpr int ADD_BOXES_AT_START_OF_SCORE = -1;
-    static constexpr int ADD_BOXES_AT_END_OF_SCORE = -2;
-
     virtual Ret canAddBoxes() const = 0;
-    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = ADD_BOXES_AT_END_OF_SCORE) = 0;
+    virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
+    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
 
     virtual void copySelection() = 0;
     virtual void copyLyrics() = 0;

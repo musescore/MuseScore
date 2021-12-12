@@ -151,7 +151,8 @@ public:
     void joinSelectedMeasures() override;
 
     Ret canAddBoxes() const override;
-    void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
+    void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
+    void addBoxes(BoxType boxType, int count, int beforeBoxIndex) override;
 
     void copySelection() override;
     void copyLyrics() override;

@@ -49,7 +49,7 @@ class MenuItem : public QObject
     Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
     Q_PROPERTY(QString portableShortcuts READ portableShortcuts NOTIFY actionChanged)
 
-    Q_PROPERTY(QString title READ title_property NOTIFY actionChanged)
+    Q_PROPERTY(QString title READ title NOTIFY actionChanged)
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
     Q_PROPERTY(QString section READ section NOTIFY sectionChanged)
 
@@ -72,6 +72,7 @@ public:
     MenuItem(const ui::UiAction& action, QObject* parent = nullptr);
 
     QString id() const;
+    QString title() const;
     QString section() const;
 
     bool selectable() const;
@@ -92,6 +93,7 @@ public:
 
 public slots:
     void setId(const QString& id);
+    void setTitle(const QString& title);
     void setSection(const QString& section);
     void setState(const mu::ui::UiActionState& state);
     void setSelectable(bool selectable);
@@ -103,7 +105,7 @@ public slots:
 
 signals:
     void idChanged(QString id);
-
+    void titleChanged(QString title);
     void sectionChanged(QString section);
     void stateChanged();
     void selectableChanged(bool selectable);
@@ -115,7 +117,6 @@ signals:
 private:
     QString code_property() const;
 
-    QString title_property() const;
     QString description_property() const;
 
     int icon_property() const;

@@ -50,6 +50,7 @@ private:
     uicomponents::MenuItemList makeHarmonyItems();
     uicomponents::MenuItemList makeSelectItems();
     uicomponents::MenuItemList makeElementItems();
+    uicomponents::MenuItemList makeInsertMeasuresItems();
 
     bool isSingleSelection() const;
     bool isDrumsetStaff() const;
