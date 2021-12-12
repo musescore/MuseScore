@@ -60,7 +60,7 @@ public:
     void init();
 
     Ret openProject(const io::path& projectPath) override;
-    bool closeOpenedProject() override;
+    bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path& scorePath) const override;
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path& path = io::path()) override;

@@ -35,7 +35,7 @@ public:
     virtual ~IProjectFilesController() = default;
 
     virtual Ret openProject(const io::path& path) = 0;
-    virtual bool closeOpenedProject() = 0;
+    virtual bool closeOpenedProject(bool quitApp = false) = 0;
     virtual bool isProjectOpened(const io::path& path) const = 0;
     virtual bool isAnyProjectOpened() const = 0;
     virtual bool saveProject(const io::path& path = io::path()) = 0;
