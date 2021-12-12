@@ -2879,7 +2879,13 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     };
 
     Ms::ElementType elementType = boxTypeToElementType(boxType);
-    Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
+
+    Ms::MeasureBase* beforeBox = nullptr;
+    if (beforeBoxIndex == ADD_BOXES_AT_START_OF_SCORE) {
+        beforeBox = score()->firstMeasure();
+    } else if (beforeBoxIndex >= 0) {
+        beforeBox = score()->measure(beforeBoxIndex);
+    }
 
     startEdit();
 
