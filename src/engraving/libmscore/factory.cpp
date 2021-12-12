@@ -466,6 +466,10 @@ CREATE_ITEM_IMPL(Chord, ElementType::CHORD, Segment, setupAccessible)
 Ms::Chord* Factory::copyChord(const Ms::Chord& src, bool link)
 {
     Chord* copy = new Chord(src, link);
+    if (src.accessible()) {
+        copy->setupAccessible();
+    }
+
     return copy;
 }
 MAKE_ITEM_IMPL(Chord, Segment)
@@ -506,6 +510,10 @@ CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, setupAccessible)
 Note* Factory::copyNote(const Note& src, bool link)
 {
     Note* copy = new Note(src, link);
+    if (src.accessible()) {
+        copy->setupAccessible();
+    }
+
     return copy;
 }
 MAKE_ITEM_IMPL(Note, Chord)
@@ -547,6 +555,10 @@ Ms::Rest* Factory::createRest(Ms::Segment* parent, const Ms::TDuration& t, bool 
 Ms::Rest* Factory::copyRest(const Ms::Rest& src, bool link)
 {
     Rest* copy = new Rest(src, link);
+    if (src.accessible()) {
+        copy->setupAccessible();
+    }
+
     return copy;
 }
 
@@ -669,3 +681,5 @@ CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, setupAccessibl
 CREATE_ITEM_IMPL(Volta, ElementType::VOLTA, EngravingItem, setupAccessible)
 
 CREATE_ITEM_IMPL(Pedal, ElementType::PEDAL, EngravingItem, setupAccessible)
+
+CREATE_ITEM_IMPL(Dynamic, ElementType::DYNAMIC, Segment, setupAccessible)

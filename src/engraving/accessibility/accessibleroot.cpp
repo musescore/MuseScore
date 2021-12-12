@@ -22,6 +22,7 @@
 #include "accessibleroot.h"
 
 #include "../libmscore/score.h"
+#include "context/uicontext.h"
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
@@ -48,16 +49,29 @@ void AccessibleRoot::setFocusedElement(AccessibleItem* e)
 
 AccessibleItem* AccessibleRoot::focusedElement() const
 {
+    if (!m_focusedElement) {
+        return nullptr;
+    }
+
+    if (uicontextResolver()->currentUiContext() != mu::context::UiCtxNotationFocused) {
+        return nullptr;
+    }
+
     return m_focusedElement;
 }
 
-QRect AccessibleRoot::toScreenRect(const QRect&, bool* ok) const
+mu::RectF AccessibleRoot::toScreenRect(const RectF& rect, bool* ok) const
 {
-    //! TODO Not implemented
-    if (ok) {
-        *ok = false;
+    RectF result;
+    if (m_accessibleMapToScreenFunc) {
+        result = m_accessibleMapToScreenFunc(rect);
     }
-    return QRect();
+
+    if (ok) {
+        *ok = m_accessibleMapToScreenFunc != nullptr;
+    }
+
+    return result;
 }
 
 const IAccessible* AccessibleRoot::accessibleParent() const
@@ -73,4 +87,9 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 QString AccessibleRoot::accessibleName() const
 {
     return element()->score()->title();
+}
+
+void AccessibleRoot::setMapToScreenFunc(const notation::AccessibleMapToScreenFunc& func)
+{
+    m_accessibleMapToScreenFunc = func;
 }

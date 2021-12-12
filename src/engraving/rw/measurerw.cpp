@@ -424,7 +424,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         // Annotation
         else if (tag == "Dynamic") {
             segment = measure->getSegment(SegmentType::ChordRest, e.tick());
-            Dynamic* dyn = new Dynamic(segment);
+            Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(e.track());
             dyn->read(e);
             segment->add(dyn);

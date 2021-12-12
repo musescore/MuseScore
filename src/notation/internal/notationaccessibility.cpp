@@ -34,6 +34,8 @@
 #include "libmscore/sig.h"
 #include "libmscore/measure.h"
 
+#include "accessibility/accessibleroot.h"
+
 using namespace mu::notation;
 using namespace mu::async;
 
@@ -60,6 +62,12 @@ const Ms::Selection* NotationAccessibility::selection() const
 mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
 {
     return m_accessibilityInfo;
+}
+
+void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
+{
+    score()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
+    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
 }
 
 void NotationAccessibility::updateAccessibilityInfo()

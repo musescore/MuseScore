@@ -1962,7 +1962,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
         } else if (tag == "Dynamic") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Dynamic* dyn = new Dynamic(segment);
+            Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(e.track());
             dyn->read(e);
             dyn->setDynamicType(dyn->xmlText());

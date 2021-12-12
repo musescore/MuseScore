@@ -2828,7 +2828,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
         // Annotation
         else if (tag == "Dynamic") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Dynamic* dyn = new Dynamic(segment);
+            Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(e.track());
             readDynamic(dyn, e, ctx);
             segment->add(dyn);
