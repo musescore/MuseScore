@@ -2928,6 +2928,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
 
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
+    if (count < 1) {
+        return;
+    }
+
     auto boxTypeToElementType = [](BoxType boxType) {
         switch (boxType) {
         case BoxType::Horizontal: return Ms::ElementType::HBOX;
@@ -2941,6 +2945,9 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     };
 
     Ms::ElementType elementType = boxTypeToElementType(boxType);
+    if (elementType == Ms::ElementType::INVALID) {
+        return;
+    }
 
     Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
@@ -2957,7 +2964,16 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 
     apply();
 
+    int indexOfFirstAddedMeasure = beforeBoxIndex >= 0 ? beforeBoxIndex : score()->measures()->size() - count;
+    doSelect({ score()->measure(indexOfFirstAddedMeasure) }, SelectType::REPLACE);
+
+    // For other box types, it makes little sense to select them all
+    if (boxType == BoxType::Measure) {
+        doSelect({ score()->measure(indexOfFirstAddedMeasure + count - 1) }, SelectType::RANGE);
+    }
+
     notifyAboutNotationChanged();
+    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::copySelection()
