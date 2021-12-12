@@ -2637,7 +2637,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
     // do dynamics
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     for (QStringList::Iterator it = _dynamicsList.begin(); it != _dynamicsList.end(); ++it) {
-        Dynamic* dyn = new Dynamic(_score->dummy()->segment());
+        Dynamic* dyn = Factory::createDynamic(_score->dummy()->segment());
         dyn->setDynamicType(*it);
         if (!_dynaVelocity.isEmpty()) {
             int dynaValue = round(_dynaVelocity.toDouble() * 0.9);
@@ -6338,7 +6338,7 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
     // TODO remove duplicate code (see MusicXml::direction)
     for (const auto& d : qAsConst(_dynamicsList)) {
-        auto dynamic = new Dynamic(_score->dummy()->segment());
+        auto dynamic = Factory::createDynamic(_score->dummy()->segment());
         dynamic->setDynamicType(d);
         addElemOffset(dynamic, cr->track(), _dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
     }

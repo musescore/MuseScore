@@ -25,14 +25,8 @@
 #include <limits>
 #include <utility>
 
-#include <QCoreApplication>
 #include <QWindow>
-#include <QKeyEvent>
 #include <QTextStream>
-
-#ifdef Q_OS_LINUX
-#include <private/qcoreapplication_p.h>
-#endif
 
 #include "diagnostics/diagnosticutils.h"
 #include "async/async.h"
@@ -354,13 +348,6 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 
 void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
-#ifdef Q_OS_LINUX
-    //! HACK: it needs for canceling reading the name of previous control on accessibility
-    QKeyEvent* keyEvent = new QKeyEvent(QEvent::Type::KeyPress, Qt::Key_Cancel, Qt::KeyboardModifier::NoModifier, 0, 1, 0);
-    QCoreApplicationPrivate::setEventSpontaneous(keyEvent, true);
-    application()->notify(mainWindow()->qWindow(), keyEvent);
-#endif
-
     switch (type) {
     case NavigationType::NextSection:
         goToNextSection();

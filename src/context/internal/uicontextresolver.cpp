@@ -31,7 +31,7 @@ using namespace mu::ui;
 static const mu::Uri HOME_PAGE_URI("musescore://home");
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
 
-static const QString NOTATION_NAVIGATION_SECTION("NotationView");
+static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
 void UiContextResolver::init()
 {
@@ -92,9 +92,9 @@ UiContext UiContextResolver::currentUiContext() const
             return context::UiCtxUnknown;
         }
 
-        INavigationSection* activeSection = navigationController()->activeSection();
-        if (activeSection) {
-            if (activeSection->name() == NOTATION_NAVIGATION_SECTION) {
+        INavigationPanel* activePanel = navigationController()->activePanel();
+        if (activePanel) {
+            if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
                 return context::UiCtxNotationFocused;
             }
         } else {

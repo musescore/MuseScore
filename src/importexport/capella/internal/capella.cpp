@@ -88,7 +88,7 @@ const char* Capella::errmsg[] = {
 
 static void addDynamic(Score*, Segment* s, int track, const char* name)
 {
-    Dynamic* d = new Dynamic(s);
+    Dynamic* d = Factory::createDynamic(s);
     d->setDynamicType(name);
     d->setTrack(track);
     s->add(d);

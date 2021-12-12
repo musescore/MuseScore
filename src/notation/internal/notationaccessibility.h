@@ -44,6 +44,8 @@ public:
 
     ValCh<std::string> accessibilityInfo() const override;
 
+    void setMapToScreenFunc(const AccessibleMapToScreenFunc& func) override;
+
 private:
     const Ms::Score* score() const;
     const Ms::Selection* selection() const;

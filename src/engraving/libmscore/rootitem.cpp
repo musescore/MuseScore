@@ -49,7 +49,6 @@ void RootItem::init()
     setupAccessible();
 
     m_dummy->setParent(this);
-    m_dummy->setupAccessible();
     m_dummy->init();
 }
 

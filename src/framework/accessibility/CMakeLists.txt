@@ -40,4 +40,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.h
     )
 
+if (OS_IS_LIN)
+# it needed to send a spontaneous event by activating navigation
+set(MODULE_INCLUDE
+    ${Qt5Core_PRIVATE_INCLUDE_DIRS}
+    )
+endif()
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

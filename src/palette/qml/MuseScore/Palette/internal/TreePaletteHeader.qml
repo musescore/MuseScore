@@ -68,6 +68,7 @@ Item {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
         navigation.column: 1
+        accessible.name: qsTrc("palette", "Expand")
 
         onClicked: root.toggleExpandRequested()
     }

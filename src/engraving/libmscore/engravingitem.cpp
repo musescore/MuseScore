@@ -182,8 +182,7 @@ EngravingItem::~EngravingItem()
 void EngravingItem::setupAccessible()
 {
     static std::list<ElementType> accessibleDisabled = {
-        ElementType::LEDGER_LINE,
-        ElementType::SYSTEM
+        ElementType::LEDGER_LINE
     };
 
     if (score() && !score()->isPaletteScore()) {
@@ -2534,11 +2533,20 @@ void EngravingItem::setSelected(bool f)
 
     if (f) {
         if (m_accessible) {
-            AccessibleRoot* accroot = m_accessible->accessibleRoot();
-            if (!accroot) {
-                return;
+            AccessibleRoot* accRoot = score()->rootItem()->accessible()->accessibleRoot();
+            if (accRoot && accRoot->registered()) {
+                accRoot->setFocusedElement(nullptr);
             }
-            accroot->setFocusedElement(m_accessible);
+
+            AccessibleRoot* dummyAccRoot = score()->dummy()->rootItem()->accessible()->accessibleRoot();
+            if (dummyAccRoot && dummyAccRoot->registered()) {
+                dummyAccRoot->setFocusedElement(nullptr);
+            }
+
+            AccessibleRoot* currAccRoot = m_accessible->accessibleRoot();
+            if (currAccRoot && currAccRoot->registered()) {
+                currAccRoot->setFocusedElement(m_accessible);
+            }
         }
     }
 }

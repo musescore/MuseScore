@@ -666,7 +666,7 @@ void GuitarPro::addDynamic(Note* note, int d)
         s = note->chord()->segment();
     }
     if (!s->findAnnotation(ElementType::DYNAMIC, note->staffIdx() * VOICES, note->staffIdx() * VOICES + VOICES - 1)) {
-        Dynamic* dyn = new Dynamic(s);
+        Dynamic* dyn = Factory::createDynamic(s);
         // guitar pro only allows their users to go from ppp to fff
         QString map_dyn[] = { "f", "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff" };
         dyn->setDynamicType(map_dyn[d]);

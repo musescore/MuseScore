@@ -20,24 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INOTATIONACCESSIBILITY_H
-#define MU_NOTATION_INOTATIONACCESSIBILITY_H
+#include "testing/environment.h"
 
-#include "retval.h"
-#include "notationtypes.h"
+#include "log.h"
+#include "framework/accessibility/accessibilitymodule.h"
+#include "framework/ui/uimodule.h"
+#include "framework/global/globalmodule.h"
 
-namespace mu::notation {
-class INotationAccessibility
+static mu::testing::SuiteEnvironment accessibility_senv(
 {
-public:
-    virtual ~INotationAccessibility() = default;
-
-    virtual ValCh<std::string> accessibilityInfo() const = 0;
-
-    virtual void setMapToScreenFunc(const AccessibleMapToScreenFunc& func) = 0;
-};
-
-using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
+    new mu::accessibility::AccessibilityModule()
+},
+    []() {
+    LOGI() << "accessibility tests suite post init";
 }
-
-#endif // MU_NOTATION_INOTATIONACCESSIBILITY_H
+    );

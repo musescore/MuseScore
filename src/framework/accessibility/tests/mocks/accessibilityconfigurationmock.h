@@ -19,25 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
+#define MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
 
-#ifndef MU_NOTATION_INOTATIONACCESSIBILITY_H
-#define MU_NOTATION_INOTATIONACCESSIBILITY_H
+#include <gmock/gmock.h>
 
-#include "retval.h"
-#include "notationtypes.h"
+#include "framework/accessibility/iaccessibilityconfiguration.h"
 
-namespace mu::notation {
-class INotationAccessibility
+namespace mu::accessibility {
+class AccessibilityConfigurationMock : public IAccessibilityConfiguration
 {
 public:
-    virtual ~INotationAccessibility() = default;
-
-    virtual ValCh<std::string> accessibilityInfo() const = 0;
-
-    virtual void setMapToScreenFunc(const AccessibleMapToScreenFunc& func) = 0;
+    MOCK_METHOD(bool, enabled, (), (const, override));
 };
-
-using INotationAccessibilityPtr = std::shared_ptr<INotationAccessibility>;
 }
 
-#endif // MU_NOTATION_INOTATIONACCESSIBILITY_H
+#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
