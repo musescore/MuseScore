@@ -363,13 +363,15 @@ void Beam::layout1()
             std::set<int> noteSet(_notes.begin(), _notes.end());
             notes.assign(noteSet.begin(), noteSet.end());
             _up = Chord::computeAutoStemDirection(&notes) > 0;
-            int middleStaffLine = firstNote->staffType()->middleLine();
-            for (uint i = 0; i < _notes.size(); i++) {
-                _notes[i] += middleStaffLine;
-            }
         }
     } else {
         _up = true;
+    }
+
+    ChordRest* firstNote = _elements.first();
+    int middleStaffLine = firstNote->staffType()->middleLine();
+    for (uint i = 0; i < _notes.size(); i++) {
+        _notes[i] += middleStaffLine;
     }
 
     _cross = _minMove < _maxMove;
