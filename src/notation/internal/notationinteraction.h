@@ -199,6 +199,7 @@ public:
     void implodeSelectedStaff() override;
 
     void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) override;
+    void removeSelectedMeasures() override;
     void removeSelectedRange() override;
     void removeEmptyTrailingMeasures() override;
 

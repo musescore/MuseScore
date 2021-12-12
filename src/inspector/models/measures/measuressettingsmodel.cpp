@@ -76,5 +76,5 @@ void MeasuresSettingsModel::deleteSelectedMeasures()
         return;
     }
 
-    NOT_IMPLEMENTED;
+    currentNotation()->interaction()->removeSelectedMeasures();
 }

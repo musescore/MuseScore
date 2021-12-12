@@ -3528,6 +3528,47 @@ void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voic
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::removeSelectedMeasures()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    Ms::MeasureBase* firstMeasure = nullptr;
+    Ms::MeasureBase* lastMeasure = nullptr;
+
+    if (selection()->isRange()) {
+        firstMeasure = score()->measure(selection()->range()->startMeasureIndex());
+        lastMeasure = score()->measure(selection()->range()->endMeasureIndex());
+    } else {
+        auto elements = selection()->elements();
+        if (elements.empty()) {
+            return;
+        }
+
+        for (auto element : elements) {
+            Ms::MeasureBase* elementMeasure = element->findMeasureBase();
+
+            if (!firstMeasure || firstMeasure->index() > elementMeasure->index()) {
+                firstMeasure = elementMeasure;
+            }
+
+            if (!lastMeasure || lastMeasure->index() < elementMeasure->index()) {
+                lastMeasure = elementMeasure;
+            }
+        }
+    }
+
+    doSelect({ firstMeasure }, SelectType::REPLACE);
+    doSelect({ lastMeasure }, SelectType::RANGE);
+
+    startEdit();
+    score()->cmdTimeDelete();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
 void NotationInteraction::removeSelectedRange()
 {
     if (selection()->isNone()) {

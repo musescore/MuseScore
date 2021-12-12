@@ -196,6 +196,7 @@ public:
     virtual void implodeSelectedStaff() = 0;
 
     virtual void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) = 0;
+    virtual void removeSelectedMeasures() = 0;
     virtual void removeSelectedRange() = 0;
     virtual void removeEmptyTrailingMeasures() = 0;
 
