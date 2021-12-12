@@ -25,6 +25,7 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -40,10 +41,40 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    NOT_IMPLEMENTED;
+    if (!currentNotation() || numberOfMeasures < 1) {
+        return;
+    }
+
+    auto interaction = currentNotation()->interaction();
+    auto selection = interaction->selection();
+    if (!selection->isRange()) {
+        return;
+    }
+
+    int beforeIndex = 0;
+    switch (target) {
+    case InsertMeasuresTarget::AfterSelection:
+        beforeIndex = selection->range()->endMeasureIndex() + 1;
+        break;
+    case InsertMeasuresTarget::BeforeSelection:
+        beforeIndex = selection->range()->startMeasureIndex();
+        break;
+    case InsertMeasuresTarget::AtStartOfScore:
+        beforeIndex = INotationInteraction::ADD_BOXES_AT_START_OF_SCORE;
+        break;
+    case InsertMeasuresTarget::AtEndOfScore:
+        beforeIndex = INotationInteraction::ADD_BOXES_AT_END_OF_SCORE;
+        break;
+    }
+
+    interaction->addBoxes(notation::BoxType::Measure, numberOfMeasures, beforeIndex);
 }
 
 void MeasuresSettingsModel::deleteSelectedMeasures()
 {
+    if (!currentNotation()) {
+        return;
+    }
+
     NOT_IMPLEMENTED;
 }
