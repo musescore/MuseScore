@@ -32,8 +32,22 @@ using namespace mu::framework;
 
 static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
+static constexpr bool NOTEREST = true;
+
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
+
+static const QMap<ActionCode, Fraction> DURATIONS_FOR_TEXT_NAVIGATION {
+    { "advance-longa", Fraction(4, 1) },
+    { "advance-breve", Fraction(2, 1) },
+    { "advance-1", Fraction(1, 1) },
+    { "advance-2", Fraction(1, 2) },
+    { "advance-4", Fraction(1, 4) },
+    { "advance-8", Fraction(1, 8) },
+    { "advance-16", Fraction(1, 16) },
+    { "advance-32", Fraction(1, 32) },
+    { "advance-64", Fraction(1, 64) },
+};
 
 void NotationActionController::init()
 {
@@ -97,8 +111,16 @@ void NotationActionController::init()
     registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
     registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
 
-    registerAction("next-text-element", &NotationActionController::nextTextElement, &NotationActionController::textNavigationAvailable);
-    registerAction("prev-text-element", &NotationActionController::prevTextElement, &NotationActionController::textNavigationAvailable);
+    registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
+    registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
+    registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationAvailable);
+    registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationAvailable);
+    registerAction("next-measure-TEXT", &Controller::nextMeasureTextElement, &Controller::textNavigationAvailable);
+    registerAction("prev-measure-TEXT", &Controller::prevMeasureTextElement, &Controller::textNavigationAvailable);
+
+    for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
+        registerAction(it.key(), [this, it]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
+    }
 
     registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay, &Controller::isEditingLyrics);
@@ -1261,12 +1283,7 @@ bool NotationActionController::textNavigationAvailable() const
         return false;
     }
 
-    auto selection = currentNotationSelection();
-    if (!selection) {
-        return false;
-    }
-
-    const Ms::EngravingItem* element = selection->element();
+    const Ms::EngravingItem* element = selectedElement();
     if (!element) {
         return false;
     }
@@ -1279,9 +1296,22 @@ bool NotationActionController::textNavigationAvailable() const
     return allowedElements.contains(element->type());
 }
 
-void NotationActionController::prevTextElement()
+bool NotationActionController::textNavigationByFractionAvailable() const
 {
-    navigateToTextElement(MoveDirection::Left);
+    if (!isEditingText()) {
+        return false;
+    }
+
+    const Ms::EngravingItem* element = selectedElement();
+    if (!element) {
+        return false;
+    }
+
+    static const QList<Ms::ElementType> allowedElements {
+        Ms::ElementType::HARMONY
+    };
+
+    return allowedElements.contains(element->type());
 }
 
 void NotationActionController::nextTextElement()
@@ -1289,27 +1319,66 @@ void NotationActionController::nextTextElement()
     navigateToTextElement(MoveDirection::Right);
 }
 
-void NotationActionController::navigateToTextElement(MoveDirection direction)
+void NotationActionController::prevTextElement()
 {
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
+    navigateToTextElement(MoveDirection::Left);
+}
 
-    auto selection = interaction->selection();
-    if (!selection) {
-        return;
-    }
+void NotationActionController::nextBeatTextElement()
+{
+    navigateToTextElement(MoveDirection::Right, NOTEREST);
+}
 
-    Ms::EngravingItem* element = selection->element();
+void NotationActionController::prevBeatTextElement()
+{
+    navigateToTextElement(MoveDirection::Left, NOTEREST);
+}
+
+void NotationActionController::nextMeasureTextElement()
+{
+    navigateToTextElementInNearMeasure(MoveDirection::Right);
+}
+
+void NotationActionController::prevMeasureTextElement()
+{
+    navigateToTextElementInNearMeasure(MoveDirection::Left);
+}
+
+void NotationActionController::navigateToTextElement(MoveDirection direction, bool noterest)
+{
+    const Ms::EngravingItem* element = selectedElement();
     if (!element) {
         return;
     }
 
     if (element->isLyrics()) {
-        interaction->navigateToLyrics(direction);
+        currentNotationInteraction()->navigateToLyrics(direction);
     } else if (element->isHarmony()) {
-        interaction->navigateToHarmonyBeats(direction, true);
+        currentNotationInteraction()->navigateToHarmonyInNearBeat(direction, noterest);
+    }
+}
+
+void NotationActionController::navigateToTextElementByFraction(const Fraction& fraction)
+{
+    const Ms::EngravingItem* element = selectedElement();
+    if (!element) {
+        return;
+    }
+
+    if (element->isHarmony()) {
+        currentNotationInteraction()->navigateToHarmony(fraction);
+    }
+}
+
+void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection direction)
+{
+    const Ms::EngravingItem* element = selectedElement();
+    if (!element) {
+        return;
+    }
+
+    if (element->isHarmony()) {
+        currentNotationInteraction()->navigateToHarmonyInNearMeasure(direction);
     }
 }
 
@@ -1461,6 +1530,12 @@ void NotationActionController::startNoteInputIfNeed()
 bool NotationActionController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
+}
+
+Ms::EngravingItem* NotationActionController::selectedElement() const
+{
+    auto selection = currentNotationSelection();
+    return selection ? selection->element() : nullptr;
 }
 
 bool NotationActionController::canUndo() const

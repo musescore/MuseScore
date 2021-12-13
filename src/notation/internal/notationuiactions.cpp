@@ -1209,14 +1209,79 @@ const UiActionList NotationUiActions::m_actions = {
              IconCode::Code::CAMERA
              ),
     UiAction("next-text-element",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Next text element"),
              QT_TRANSLATE_NOOP("action", "Move to text element on next note")
              ),
     UiAction("prev-text-element",
-             mu::context::UiCtxNotationOpened,
+             mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Previous text element"),
              QT_TRANSLATE_NOOP("action", "Move to text element on previous note")
+             ),
+    UiAction("next-beat-TEXT",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Next Beat (Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Next beat (Chord symbol)")
+             ),
+    UiAction("prev-beat-TEXT",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Previous Beat (Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Previous beat (Chord symbol)")
+             ),
+    UiAction("next-measure-TEXT",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Next Measure (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Next measure (Figured bass/Chord symbol only)")
+             ),
+    UiAction("prev-measure-TEXT",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Previous Measure (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Previous measure (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-longa",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Longa Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a longa (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-breve",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Breve Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a double whole note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-1",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Whole Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a whole note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-2",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Half Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a half note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-4",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Quarter Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a quarter note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-8",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Eighth Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of an eighth note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-16",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "16th Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a 16th note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-32",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "32nd Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a 32nd note (Figured bass/Chord symbol only)")
+             ),
+    UiAction("advance-64",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "64th Note Advance (F.B./Chord Symbol)"),
+             QT_TRANSLATE_NOOP("action", "Advance of a 64th note (Figured bass/Chord symbol only)")
              ),
     UiAction("next-lyric-verse",
              mu::context::UiCtxNotationOpened,
