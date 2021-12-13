@@ -72,12 +72,15 @@ public:
     const std::set<INavigationPanel*>& panels() const override;
     async::Notification panelsListChanged() const override;
 
-    SectionPanelControlChannel activeRequested() const override;
-
     void componentComplete() override;
 
     void addPanel(NavigationPanel* panel);
     void removePanel(NavigationPanel* panel);
+
+    void setOnActiveRequested(const OnActiveRequested& func) override;
+
+    //! NOTE Can be called from QML without args
+    Q_INVOKABLE void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr) override;
 
 public slots:
     void setType(QmlType type);
@@ -90,8 +93,8 @@ private:
 
     std::set<INavigationPanel*> m_panels;
     async::Notification m_panelsListChanged;
-    SectionPanelControlChannel m_forceActiveRequested;
     QmlType m_type = Regular;
+    OnActiveRequested m_onActiveRequested;
 };
 }
 
