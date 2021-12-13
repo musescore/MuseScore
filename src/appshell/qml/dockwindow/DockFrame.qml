@@ -28,7 +28,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
-Item {
+Rectangle {
     id: root
 
     //! NOTE: please, don't rename those properties because they are used in c++
@@ -38,6 +38,7 @@ Item {
     //! ---
 
     anchors.fill: parent
+    color: ui.theme.backgroundPrimaryColor
 
     onFrameCppChanged: {
         if (Boolean(frameCpp)) {
