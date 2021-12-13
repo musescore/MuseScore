@@ -92,7 +92,7 @@ class Beam final : public EngravingItem
     void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
                                bool isAscending);
     void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
-    void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool isFlat);
+    void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
     void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
     mu::PointF chordBeamAnchor(Chord* chord) const;
     bool calcIsBeamletBefore(Chord* chord, int i, int level) const;
