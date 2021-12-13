@@ -848,8 +848,6 @@ QFont TextFragment::font(const TextBase* t) const
             m *= t->spatium() / SPATIUM20;
       if (format.valign() != VerticalAlignment::AlignNormal)
             m *= subScriptSize;
-      font.setUnderline(format.underline() || format.preedit());
-      font.setStrikeOut(format.strike() || format.preedit());
 
       QString family;
       if (format.fontFamily() == "ScoreText") {
@@ -883,12 +881,16 @@ QFont TextFragment::font(const TextBase* t) const
             if (fail)
                   family = ScoreFont::fallbackTextFont();
             }
-      else
+      else {
             family = format.fontFamily();
 
+            font.setBold(format.bold());
+            font.setItalic(format.italic());
+            font.setUnderline(format.underline());
+            font.setStrikeOut(format.strike());
+            }
+
       font.setFamily(family);
-      font.setBold(format.bold());
-      font.setItalic(format.italic());
       Q_ASSERT(m > 0.0);
 
       font.setPointSizeF(m * t->mag());
