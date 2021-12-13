@@ -164,6 +164,7 @@ void AbstractNavigation::setActive(bool active)
 
     m_active = active;
     emit activeChanged(m_active);
+    emit highlightChanged();
 
     if (m_activeChanged.isConnected()) {
         m_activeChanged.send(m_active);
@@ -221,4 +222,9 @@ void AbstractNavigation::setAccessibleParent(AccessibleItem* p)
     if (m_accessible) {
         m_accessible->setAccessibleParent(p);
     }
+}
+
+bool AbstractNavigation::highlight() const
+{
+    return active();
 }
