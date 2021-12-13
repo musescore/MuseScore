@@ -127,10 +127,10 @@ bool EditShortcutModel::canApplySequence() const
 
 QString EditShortcutModel::unitedSequence() const
 {
-    QStringList sequences {
-        m_originSequence,
-        inputedSequence()
-    };
-
-    return sequences.join("; ");
+    QString united = m_originSequence;
+    if (!united.isEmpty()) {
+        united += "; ";
+    }
+    united += inputedSequence();
+    return united;
 }
