@@ -935,12 +935,7 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     }
 
     PointF oldPos = m_view->toLogical(event->oldPosF());
-
-#ifdef MU_QT5_COMPAT
-    PointF pos = m_view->toLogical(event->posF());
-#else
     PointF pos = m_view->toLogical(event->position());
-#endif
 
     if (oldPos == pos) {
         return;
@@ -1082,13 +1077,8 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
         }
     }
 
-#ifdef MU_QT5_COMPAT
-    PointF pos = m_view->toLogical(event->pos());
-    Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
-#else
     PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
-#endif
 
     bool isAccepted = viewInteraction()->isDropAccepted(pos, modifiers);
     if (isAccepted) {
@@ -1105,13 +1095,8 @@ void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
 {
-#ifdef MU_QT5_COMPAT
-    PointF pos = m_view->toLogical(event->pos());
-    Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
-#else
     PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
-#endif
 
     bool isAccepted = viewInteraction()->drop(pos, modifiers);
     if (isAccepted) {

@@ -121,7 +121,7 @@ private:
     qreal columnWidth(const QRectF& frameRect) const;
     qreal rowHeight(const QRectF& frameRect) const;
 
-    QPointF frameCoord(const QRectF& frameRect, int x, int y) const;
+    QPointF frameCoord(const QRectF& frameRect, double x, double y) const;
 
     void drawBackground(QPainter* painter, const QRectF& frameRect);
     void drawCurve(QPainter* painter, const QRectF& frameRect);

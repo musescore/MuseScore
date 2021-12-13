@@ -105,11 +105,7 @@ void NoteGroupsExampleView::dragMoveEvent(QDragMoveEvent* event)
 
     const EngravingItem* newDropTarget = nullptr;
 
-#ifdef MU_QT5_COMPAT
-    PointF position = toLogical(event->posF());
-#else
     PointF position = toLogical(event->position());
-#endif
     std::vector<EngravingItem*> el = elementsAt(position);
 
     for (const EngravingItem* e : el) {
@@ -151,11 +147,7 @@ void NoteGroupsExampleView::setDropTarget(const EngravingItem* el)
 
 void NoteGroupsExampleView::dropEvent(QDropEvent* event)
 {
-#ifdef MU_QT5_COMPAT
-    PointF position = toLogical(event->posF());
-#else
     PointF position = toLogical(event->position());
-#endif
 
     if (!m_dragElement) {
         return;
@@ -186,7 +178,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
 {
     ExampleView::mousePressEvent(event);
 
-    PointF position = toLogical(event->pos());
+    PointF position = toLogical(event->position());
 
     foreach (EngravingItem* e, elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
