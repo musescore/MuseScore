@@ -46,7 +46,11 @@ void ProjectActionsController::init()
 
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
-    dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
+
+    dispatcher()->reg(this, "file-close", [this]() {
+        bool quitApp = multiInstancesProvider()->instances().size() > 1;
+        closeOpenedProject(quitApp);
+    });
 
     dispatcher()->reg(this, "file-save", [this]() { saveProject(); });
     dispatcher()->reg(this, "file-save-as", this, &ProjectActionsController::saveProjectAs);
@@ -260,7 +264,7 @@ void ProjectActionsController::newProject()
     }
 }
 
-bool ProjectActionsController::closeOpenedProject()
+bool ProjectActionsController::closeOpenedProject(bool quitApp)
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -287,6 +291,10 @@ bool ProjectActionsController::closeOpenedProject()
 
     if (result) {
         globalContext()->setCurrentProject(nullptr);
+
+        if (quitApp) {
+            dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+        }
     }
 
     return result;
