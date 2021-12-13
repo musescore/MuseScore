@@ -121,7 +121,7 @@ public:
     void setPublishMode(bool arg);
 
 signals:
-    void showContextMenuRequested(int elementType, const QPointF& pos);
+    void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
 
     void textEdittingStarted();
