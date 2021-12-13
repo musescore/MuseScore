@@ -22,6 +22,8 @@
 
 #include "timesignaturepropertiesdialog.h"
 
+#include <QRegularExpression>
+
 #include "engraving/libmscore/timesig.h"
 #include "engraving/libmscore/mcursor.h"
 #include "engraving/libmscore/durationtype.h"
@@ -66,7 +68,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     allaBreveButton->setText(musicalSymbolToString(MusicalSymbolCodes::Code::TIMESIG_CUT));
     allaBreveButton->setMaximumHeight(30);
 
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
     EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
@@ -82,8 +84,8 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     nText->setText(m_editedTimeSig->denominatorString());
     // set validators for numerator and denominator strings
     // which only accept '+', '(', ')', digits and some time symb conventional representations
-    QRegExp rx("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
-    QValidator* validator = new QRegExpValidator(rx, this);
+    QRegularExpression regex("[0-9+CO()\\x00A2\\x00D8\\x00BD\\x00BC]*");
+    QValidator* validator = new QRegularExpressionValidator(regex, this);
     zText->setValidator(validator);
     nText->setValidator(validator);
 
