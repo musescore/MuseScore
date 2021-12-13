@@ -956,8 +956,6 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     if (format.valign() != VerticalAlignment::AlignNormal) {
         m *= subScriptSize;
     }
-    font.setUnderline(format.underline());
-    font.setStrike(format.strike());
 
     QString family;
     if (format.fontFamily() == "ScoreText") {
@@ -1004,6 +1002,8 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         family = format.fontFamily();
         font.setBold(format.bold());
         font.setItalic(format.italic());
+        font.setUnderline(format.underline());
+        font.setStrike(format.strike());
     }
 
     font.setFamily(family);
