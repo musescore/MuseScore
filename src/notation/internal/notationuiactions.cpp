@@ -1279,6 +1279,10 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Go to first empty trailing measure")
              ),
+    UiAction("mirror-note",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Mirror notehead")
+             ),
     UiAction("add-trill",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Toggle trill")
@@ -1300,6 +1304,30 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Add treble clef")
              ),
+    UiAction("clef-bass",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Add bass clef")
+             ),
+    UiAction("sharp2-post",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Double ♯ (non-toggle)")
+             ),
+    UiAction("sharp-post",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "♯ (non-toggle)")
+             ),
+    UiAction("nat-post",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "♮ (non-toggle)")
+             ),
+    UiAction("flat-post",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "♭ (non-toggle)")
+             ),
+    UiAction("flat2-post",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Double ♭ (non-toggle)")
+             ),
     UiAction("transpose-up",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Transpose up")
@@ -1308,6 +1336,14 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Transpose down")
              ),
+    UiAction("pitch-up-diatonic-alterations",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Diatonic pitch up (keep degree alterations)")
+             ),
+    UiAction("pitch-down-diatonic-alterations",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Diatonic pitch down (keep degree alterations)")
+             ),
     UiAction("transpose-down",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Transpose down")
@@ -1315,6 +1351,10 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("transpose-up",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Transpose up")
+             ),
+    UiAction("full-measure-rest",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Full measure rest")
              ),
     UiAction("toggle-mmrest",
              mu::context::UiCtxNotationOpened,
@@ -1413,7 +1453,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "1024th note"),
              QT_TRANSLATE_NOOP("action", "Note duration: 1024th note"),
              IconCode::Code::NOTE_1024TH
-             ),
+             )
 };
 
 const UiActionList NotationUiActions::m_noteInputActions = {

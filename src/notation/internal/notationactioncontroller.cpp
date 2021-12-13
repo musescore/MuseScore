@@ -349,7 +349,6 @@ void NotationActionController::init()
     registerAction("add-trill", &Interaction::toggleArticulation, Ms::SymId::ornamentTrill);
     registerAction("add-up-bow", &Interaction::toggleArticulation, Ms::SymId::stringsUpBow);
     registerAction("add-down-bow", &Interaction::toggleArticulation, Ms::SymId::stringsDownBow);
-    registerAction("clef-violin", &Interaction::insertClef, Ms::ClefType::G);
     registerAction("transpose-up", &Interaction::transposeSemitone, 1, PlayMode::PlayNote);
     registerAction("transpose-down", &Interaction::transposeSemitone, -1, PlayMode::PlayNote);
     registerAction("toggle-insert-mode", &Interaction::toggleGlobalOrLocalInsert);
@@ -360,6 +359,24 @@ void NotationActionController::init()
     registerAction("get-location", &Interaction::getLocation, &Controller::isNotationPage);
     registerAction("toggle-mmrest", &Interaction::execute, &Ms::Score::cmdToggleMmrest);
     registerAction("toggle-hide-empty", &Interaction::execute, &Ms::Score::cmdToggleHideEmpty);
+
+    registerAction("mirror-note", &Interaction::execute, &Ms::Score::cmdMirrorNoteHead);
+    registerAction("clef-violin", &Interaction::insertClef, Ms::ClefType::G);
+    registerAction("clef-bass", &Interaction::insertClef, Ms::ClefType::F);
+    registerAction("sharp2-post", &Interaction::changeAccidental, Ms::AccidentalType::SHARP2, PlayMode::PlayNote);
+    registerAction("sharp-post", &Interaction::changeAccidental, Ms::AccidentalType::SHARP, PlayMode::PlayNote);
+    registerAction("nat-post", &Interaction::changeAccidental, Ms::AccidentalType::NATURAL, PlayMode::PlayNote);
+    registerAction("flat-post", &Interaction::changeAccidental, Ms::AccidentalType::FLAT, PlayMode::PlayNote);
+    registerAction("flat2-post", &Interaction::changeAccidental, Ms::AccidentalType::FLAT2, PlayMode::PlayNote);
+    registerAction("pitch-up-diatonic-alterations", &Interaction::transposeDiatonicAlterations, Ms::TransposeDirection::UP,
+                   PlayMode::PlayNote);
+    registerAction("pitch-down-diatonic-alterations", &Interaction::transposeDiatonicAlterations, Ms::TransposeDirection::DOWN,
+                   PlayMode::PlayNote);
+    registerAction("full-measure-rest", &Interaction::execute, &Ms::Score::cmdFullMeasureRest);
+    registerAction("set-visible", &Interaction::execute, &Ms::Score::cmdSetVisible);
+    registerAction("unset-visible", &Interaction::execute, &Ms::Score::cmdUnsetVisible);
+    registerAction("toggle-autoplace", &Interaction::toggleAutoplace, false);
+    registerAction("autoplace-enabled", &Interaction::toggleAutoplace, true);
 
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {

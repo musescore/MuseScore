@@ -2614,6 +2614,51 @@ EngravingItem* Score::selectMove(const QString& cmd)
 }
 
 //---------------------------------------------------------
+//   cmdMirrorNoteHead
+//---------------------------------------------------------
+
+void Score::cmdMirrorNoteHead()
+{
+    const QList<EngravingItem*>& el = selection().elements();
+    for (EngravingItem* e : el) {
+        if (e->isNote()) {
+            Note* note = toNote(e);
+            if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
+                e->undoChangeProperty(Pid::GHOST, !note->ghost());
+            } else {
+                DirectionH d = note->userMirror();
+                if (d == DirectionH::AUTO) {
+                    d = note->chord()->up() ? DirectionH::RIGHT : DirectionH::LEFT;
+                } else {
+                    d = d == DirectionH::LEFT ? DirectionH::RIGHT : DirectionH::LEFT;
+                }
+                undoChangeUserMirror(note, d);
+            }
+        } else if (e->isHairpinSegment()) {
+            Hairpin* h = toHairpinSegment(e)->hairpin();
+            HairpinType st = h->hairpinType();
+            switch (st) {
+            case HairpinType::CRESC_HAIRPIN:
+                st = HairpinType::DECRESC_HAIRPIN;
+                break;
+            case HairpinType::DECRESC_HAIRPIN:
+                st = HairpinType::CRESC_HAIRPIN;
+                break;
+            case HairpinType::CRESC_LINE:
+                st = HairpinType::DECRESC_LINE;
+                break;
+            case HairpinType::DECRESC_LINE:
+                st = HairpinType::CRESC_LINE;
+                break;
+            case HairpinType::INVALID:
+                break;
+            }
+            h->undoChangeProperty(Pid::HAIRPIN_TYPE, int(st));
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   cmdIncDecDuration
 //     When stepDotted is false and nSteps is 1 or -1, will halve or double the duration
 //     When stepDotted is true, will step by nearest dotted or undotted note
@@ -4018,6 +4063,28 @@ void Score::cmdToggleHideEmpty()
 }
 
 //---------------------------------------------------------
+//   cmdSetVisible
+//---------------------------------------------------------
+
+void Score::cmdSetVisible()
+{
+    for (EngravingItem* e : selection().elements()) {
+        undo(new ChangeProperty(e, Pid::VISIBLE, true));
+    }
+}
+
+//---------------------------------------------------------
+//   cmdUnsetVisible
+//---------------------------------------------------------
+
+void Score::cmdUnsetVisible()
+{
+    for (EngravingItem* e : selection().elements()) {
+        undo(new ChangeProperty(e, Pid::VISIBLE, false));
+    }
+}
+
+//---------------------------------------------------------
 //   cmdAddPitch
 ///   insert note or add note to chord
 //    c d e f g a b entered:
@@ -4224,5 +4291,40 @@ void Score::cmdAddFret(int fret)
     pos.line      = staff(pos.staffIdx)->staffType(is.tick())->physStringToVisual(is.string());
     pos.fret      = fret;
     putNote(pos, false);
+}
+
+//---------------------------------------------------------
+//   cmdToggleAutoplace
+//---------------------------------------------------------
+
+void Score::cmdToggleAutoplace(bool all)
+{
+    if (all) {
+        bool val = !styleB(Sid::autoplaceEnabled);
+        undoChangeStyleVal(Sid::autoplaceEnabled, val);
+        setLayoutAll();
+    } else {
+        QSet<EngravingItem*> spanners;
+        for (EngravingItem* e : selection().elements()) {
+            if (e->isSpannerSegment()) {
+                if (EngravingItem* ee = e->propertyDelegate(Pid::AUTOPLACE)) {
+                    e = ee;
+                }
+                // spanner segments may each have their own autoplace setting
+                // but if they delegate to spanner, only toggle once
+                if (e->isSpanner()) {
+                    if (spanners.contains(e)) {
+                        continue;
+                    }
+                    spanners.insert(e);
+                }
+            }
+            PropertyFlags pf = e->propertyFlags(Pid::AUTOPLACE);
+            if (pf == PropertyFlags::STYLED) {
+                pf = PropertyFlags::UNSTYLED;
+            }
+            e->undoChangeProperty(Pid::AUTOPLACE, !e->getProperty(Pid::AUTOPLACE).toBool(), pf);
+        }
+    }
 }
 }

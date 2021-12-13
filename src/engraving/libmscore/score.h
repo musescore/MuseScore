@@ -614,6 +614,8 @@ public:
     void cmdPadNoteDecreaseTAB(const EditData& ed);
     void cmdToggleMmrest();
     void cmdToggleHideEmpty();
+    void cmdSetVisible();
+    void cmdUnsetVisible();
     void cmdMoveRest(Rest*, DirectionV);
     void cmdMoveLyrics(Lyrics*, DirectionV);
 
@@ -734,6 +736,7 @@ public:
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
     void cmdDeleteSelection();
+    void cmdFullMeasureRest();
 
     void putNote(const mu::PointF&, bool replace, bool insert);
     void insertChord(const Position&);
@@ -764,6 +767,8 @@ public:
     virtual void addLayoutFlags(LayoutFlags);
     virtual void setInstrumentsChanged(bool);
     void addRefresh(const mu::RectF&);
+
+    void cmdToggleAutoplace(bool all);
 
     bool playNote() const { return _updateState._playNote; }
     void setPlayNote(bool v) { _updateState._playNote = v; }
@@ -992,6 +997,7 @@ public:
     int utime2utick(qreal utime) const;
 
     void nextInputPos(ChordRest* cr, bool);
+    void cmdMirrorNoteHead();
 
     virtual int npages() const { return _pages.size(); }
     virtual int pageIdx(Page* page) const { return _pages.indexOf(page); }
@@ -1108,6 +1114,7 @@ public:
     void cmdSelectAll();
     void cmdSelectSection();
     void transposeSemitone(int semitone);
+    void transposeDiatonicAlterations(TransposeDirection direction);
 
     void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false, bool moveSignaturesClef = true,
                        bool needDeselectAll = true);
