@@ -258,13 +258,13 @@ Qt::KeyboardModifiers qtModifiers(int keys)
     return result;
 }
 
-QSet<int> possibleKeys(const QKeySequence& sequence)
+QSet<QKeyCombination> possibleKeys(const QKeySequence& sequence)
 {
-    const int key = sequence[0];
+    const QKeyCombination keyCombination = sequence[0];
 
-    Qt::Key qKey = Qt::Key(key & ~Qt::KeyboardModifierMask);
+    const Qt::Key qKey = keyCombination.key();
     if (qKey == Qt::Key_Insert) {
-        return { key };
+        return { keyCombination };
     }
 
     UCKeyboardLayout* keyboard = keyboardLayout();
@@ -273,7 +273,7 @@ QSet<int> possibleKeys(const QKeySequence& sequence)
         return {};
     }
 
-    Qt::KeyboardModifiers modifiers = Qt::KeyboardModifiers(key & Qt::KeyboardModifierMask);
+    Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
 
     quint32 keyNativeCode = nativeKeycode(keyboard, qKey);
     quint32 keyNativeModifiers = nativeModifiers(keyboard, qKey, modifiers, keyNativeCode);
@@ -282,25 +282,26 @@ QSet<int> possibleKeys(const QKeySequence& sequence)
     //! then we should update the qt modifiers
     modifiers = qtModifiers(keyNativeModifiers);
 
-    QKeyEvent fakeKey(QKeyEvent::None, key, modifiers, keyNativeCode, keyNativeCode, keyNativeModifiers);
+    QKeyEvent fakeKey(QKeyEvent::None, keyCombination.toCombined(), modifiers, keyNativeCode, keyNativeCode, keyNativeModifiers);
     QList<int> keys = QGuiApplicationPrivate::platformIntegration()->possibleKeys(&fakeKey);
 
-    QList<int> result;
+    QSet<QKeyCombination> result;
     for (int key : keys) {
+        QKeyCombination combination = QKeyCombination::fromCombined(key);
         if (modifiers != Qt::NoModifier) {
-            if (Qt::KeyboardModifiers(key & Qt::KeyboardModifierMask) == Qt::NoModifier) {
-                key += modifiers;
+            if (combination.keyboardModifiers() == Qt::NoModifier) {
+                combination = QKeyCombination(modifiers, combination.key());
             }
 
-            if (Qt::KeyboardModifiers(key & Qt::KeyboardModifierMask) != modifiers) {
+            if (combination.keyboardModifiers() != modifiers) {
                 continue;
             }
         }
 
-        result << key;
+        result << combination;
     }
 
-    return QSet<int>(result.cbegin(), result.cend());
+    return result;
 }
 
 MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
@@ -322,8 +323,8 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
         for (const std::string& seq : sc.sequences) {
             QString sequence = QString::fromStdString(seq);
 
-            QSet<int> keys = possibleKeys(QKeySequence::fromString(sequence, QKeySequence::PortableText));
-            for (int key : keys) {
+            QSet<QKeyCombination> keys = possibleKeys(QKeySequence::fromString(sequence, QKeySequence::PortableText));
+            for (QKeyCombination key : keys) {
                 QKeySequence keySeq(key);
                 QString seqStr = keySeq.toString(QKeySequence::PortableText);
 

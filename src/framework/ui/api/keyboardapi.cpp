@@ -38,11 +38,7 @@ KeyboardApi::KeyboardApi(api::IApiEngine* e)
 void KeyboardApi::key(const QString& key)
 {
     LOGD() << key;
-#ifdef MU_QT5_COMPAT
-    int code = QKeySequence::fromString(key.toUpper())[0];
-#else
     int code = QKeySequence::fromString(key.toUpper())[0].toCombined();
-#endif
 
     QWindow* w = qApp->focusWindow();
     if (!w) {
