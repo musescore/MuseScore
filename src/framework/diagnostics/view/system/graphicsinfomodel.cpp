@@ -22,6 +22,7 @@
 #include "graphicsinfomodel.h"
 
 #include <QClipboard>
+#include <QGuiApplication>
 
 using namespace muse::diagnostics;
 

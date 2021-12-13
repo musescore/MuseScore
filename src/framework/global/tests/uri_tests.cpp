@@ -21,7 +21,10 @@
  */
 #include <gtest/gtest.h>
 
+#include <string>
+
 #include "types/uri.h"
+#include "types/val.h"
 
 using namespace muse;
 

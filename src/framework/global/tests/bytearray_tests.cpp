@@ -21,7 +21,9 @@
  */
 #include <gtest/gtest.h>
 
+#include <cstdint>
 #include <cstring>
+#include <vector>
 
 #include "types/bytearray.h"
 

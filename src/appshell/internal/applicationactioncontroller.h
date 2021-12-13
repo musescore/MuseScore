@@ -41,6 +41,10 @@
 #include "extensions/iextensioninstaller.h"
 #include "context/iglobalcontext.h"
 
+class QDragEnterEvent;
+class QDragMoveEvent;
+class QDropEvent;
+
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public muse::Injectable, public muse::actions::Actionable, public muse::async::Asyncable
 {

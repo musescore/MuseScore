@@ -22,10 +22,9 @@
 
 #include "testing/environment.h"
 
+#include "accessibility/accessibilitymodule.h"
+
 #include "log.h"
-#include "framework/accessibility/accessibilitymodule.h"
-#include "framework/ui/uimodule.h"
-#include "framework/global/globalmodule.h"
 
 static muse::testing::SuiteEnvironment accessibility_senv(
 {

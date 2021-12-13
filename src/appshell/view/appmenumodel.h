@@ -22,8 +22,6 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
-Q_MOC_INCLUDE(< QWindow >)
-
 #include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"

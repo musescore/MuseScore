@@ -23,6 +23,11 @@
 #ifndef PROJECTPROPERTIESMODEL_H
 #define PROJECTPROPERTIESMODEL_H
 
+#include <QAbstractListModel>
+#include <QList>
+#include <QString>
+
+#include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
 

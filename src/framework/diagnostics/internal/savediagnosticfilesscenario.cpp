@@ -22,10 +22,11 @@
 
 #include "savediagnosticfilesscenario.h"
 
+#include <QCursor>
+#include <QGuiApplication>
+
 #include "diagnosticfileswriter.h"
 #include "translation.h"
-
-#include <QGuiApplication>
 
 using namespace muse::diagnostics;
 using namespace muse;
