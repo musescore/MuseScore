@@ -34,10 +34,9 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
 
-using namespace mu::engraving;
+#include "log.h"
 
-namespace Ms {
-}
+using namespace mu::engraving;
 
 namespace Ms {
 MTest::MTest()
@@ -62,7 +61,7 @@ MasterScore* MTest::readScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(path).arg(csl)));
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(path).arg(csl);
         delete score;
         score = 0;
     } else {
