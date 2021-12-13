@@ -50,7 +50,7 @@ Item {
         anchors.fill: parent
 
         heightWhenVisible: titleBarContent.implicitHeight
-        color: "transparent"
+        color: ui.theme.backgroundPrimaryColor
 
         visible: parent.visible
 
