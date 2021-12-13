@@ -19,32 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.UiComponents 1.0
+#ifndef MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
+#define MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H
 
-BaseSection {
-    id: root
+#include <QObject>
 
-    title: qsTrc("appshell", "Telemetry")
+namespace mu::diagnostics {
+class CrashHandlerDevToolsModel : public QObject
+{
+    Q_OBJECT
 
-    property alias isTelemetryAllowed: sendCheckBox.checked
+public:
+    explicit CrashHandlerDevToolsModel(QObject* parent = nullptr);
 
-    signal telemetryAllowedChanged(bool allowed)
-
-    CheckBox {
-        id: sendCheckBox
-
-        width: root.columnWidth
-
-        text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
-
-        navigation.name: "TelemetryAllowedBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
-
-        onClicked: {
-            root.telemetryAllowedChanged(!checked)
-        }
-    }
+    Q_INVOKABLE void doCrash();
+};
 }
+
+#endif // MU_DIAGNOSTICS_CRASHHANDLERDEVTOOLSMODEL_H

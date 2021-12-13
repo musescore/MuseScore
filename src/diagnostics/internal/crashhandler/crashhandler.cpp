@@ -31,7 +31,7 @@
 #include "log.h"
 #include "global/version.h"
 
-using namespace mu::telemetry;
+using namespace mu::diagnostics;
 using namespace crashpad;
 
 CrashHandler::~CrashHandler()

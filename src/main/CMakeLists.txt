@@ -134,13 +134,8 @@ set(LINK_LIB
     fonts
     system
     network
-    )
 
-if (BUILD_TELEMETRY_MODULE)
-    set(LINK_LIB ${LINK_LIB} telemetry)
-endif(BUILD_TELEMETRY_MODULE)
-
-set(LINK_LIB ${LINK_LIB}
+    diagnostics
     engraving
     actions
     accessibility
@@ -182,8 +177,6 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
 endif()
-
-list(APPEND LINK_LIB diagnostics)
 
 if (BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
