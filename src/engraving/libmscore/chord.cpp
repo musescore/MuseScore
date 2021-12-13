@@ -1496,6 +1496,8 @@ qreal Chord::calcDefaultStemLength()
     bool isBesideTabStaff = tab && !tab->stemless() && !tab->stemThrough();
     if (isBesideTabStaff) {
         return tab->chordStemLength(this) * _spatium;
+    } else if (tab) {
+        defaultStemLength *= 1.5;
     }
 
     int minStemLengthQuarterSpaces = calcMinStemLength();
@@ -1514,6 +1516,9 @@ qreal Chord::calcDefaultStemLength()
 
         if (stemEndPosition <= -shortStemStart) {
             int reduction = maxReduction(qAbs(stemEndPosition + shortStemStart));
+            if (tab) {
+                reduction *= 2;
+            }
             if (_hook) {
                 reduction = reduction / 2 * 2; // transforms to only half steps positions
             }
@@ -1531,6 +1536,9 @@ qreal Chord::calcDefaultStemLength()
         int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
         if (stemEndPosition >= downShortStemStart) {
             int reduction = maxReduction(stemEndPosition - downShortStemStart);
+            if (tab) {
+                reduction *= 2;
+            }
             idealStemLength = qMax(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition < middleLine) {
             idealStemLength += middleLine - stemEndPosition;
