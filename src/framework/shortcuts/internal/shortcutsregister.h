@@ -72,6 +72,7 @@ private:
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
+    void makeUnique(ShortcutList& shortcuts);
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
     ShortcutList m_shortcuts;
