@@ -21,6 +21,7 @@
  */
 
 import QtQuick 2.15
+import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -61,6 +62,16 @@ Item {
         id: dropArea
         anchors.fill: background
         anchors.margins: background.border.width
+
+        // Clip content to our beautiful rounded rect
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Rectangle {
+                width: dropArea.width
+                height: dropArea.height
+                radius: background.radius - background.border.width
+            }
+        }
     }
 
     onTitleBarHeightChanged: {
