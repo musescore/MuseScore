@@ -105,10 +105,9 @@ jobs:
       if: env.DO_BUILD == 'true'
       shell: cmd
       run: |
-        IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="" )
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
         IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
-        build\ci\windows\build.bat -n ${{ github.run_id }} --telemetry %T_ID% --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
+        build\ci\windows\build.bat -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL%
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -198,10 +197,9 @@ jobs:
   #     if: env.DO_BUILD == 'true'
   #     shell: cmd
   #     run: |
-  #       IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
   #       IF ${{ secrets.SENTRY_SERVER_SANDBOX_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} ) ELSE ( SET C_KEY="''" )
   #       IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="''" )
-  #       build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --telemetry %T_ID% --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
+  #       build\ci\windows\build.bat -b 32 -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
   #   - name: Package
   #     if: env.DO_BUILD == 'true'
   #     shell: cmd
@@ -276,10 +274,9 @@ jobs:
   #     if: env.DO_BUILD == 'true'
   #     shell: cmd
   #     run: |
-  #       IF ${{ secrets.TELEMETRY_TRACK_ID != 0 }} == true ( SET T_ID=${{ secrets.TELEMETRY_TRACK_ID }} ) ELSE ( SET T_ID="''" )
   #       IF ${{ secrets.SENTRY_SERVER_SANDBOX_KEY != 0 }} == true ( SET C_KEY=${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} ) ELSE ( SET C_KEY="''" )
   #       IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="''" )
-  #       build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --telemetry %T_ID% --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
+  #       build\ci\windows\build.bat --portable ON -n ${{ github.run_id }} --youtube_api_key %YT_API_KEY% --sentrykey %C_KEY%
   #   - name: Package
   #     if: env.DO_BUILD == 'true'
   #     shell: cmd

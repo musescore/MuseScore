@@ -5,17 +5,17 @@ It’s an unfortunate truth that any large piece of software will contain bugs t
 
 Fixing bugs and incompatibilities in client software that ships to millions of users around the world is a daunting task. User reports and manual reproduction of crashes can work, but even given a user report, often times the problem is not readily reproducible. This is for various reasons, such as e.g. system version or third-party software incompatibility, or the problem can happen due to a race of some sort. Users are also unlikely to report problems they encounter, and user reports are often of poor quality, as unfortunately most users don’t have experience with making good bug reports.
 
-Automatic crash telemetry has been the best solution to the problem so far, as this relieves the burden of manual reporting from users, while capturing the hardware and software state at the time of crash.
+Automated crash reports have been the best solution to the problem so far, as this relieves the burden of manual reporting from users, while capturing the hardware and software state at the time of crash.
 
 ## Capturing crash dumps
 For capturing crash dumps we use [Crashpad](https://chromium.googlesource.com/crashpad/crashpad/+/master/README.md).  
 Crashpad is a client-side library that focuses on capturing machine and program state in a postmortem crash report, and transmitting this report to a backend server - a “collection server”. The Crashpad library is embedded by the client application. Conceptually, Crashpad breaks down into the handler and the client. The handler runs in a separate process from the client or clients. It is responsible for snapshotting the crashing client process’ state on a crash, saving it to a crash dump, and transmitting the crash dump to an upstream server. Clients register with the handler to allow it to capture and upload their crashes.
 
 ### Crashpad client
-The Crashpad client is integrated into the telemetry module. It is initialized when the application starts and launches a `crashpad_handler` (see `TelemetrySetup::onInit`)  
+The Crashpad client is integrated into the Diagnostics module. It is initialized when the application starts and launches a `crashpad_handler` (see `DiagnosticsModule::onInit`).
   
 ### Crashpad handler  
-The Crashpad handler prebuilt for all platforms and installing with MuseScore (see `/framework/telemetry/crashpad_handler`)  
+The Crashpad handler prebuilt for all platforms and installed with MuseScore (see `src/diagnostics/crashpad_handler`).
   
 ### Save and send dumps
 Crash dumps saving into logs directory.  
