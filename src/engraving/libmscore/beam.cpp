@@ -542,7 +542,25 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 return 0;
             }
             if (higherEnd == _notes[0] && higherEnd >= _notes[1]) {
-                return 0;
+                if (higherEnd > _notes[1]) {
+                    return 0;
+                }
+                int chordCount = _elements.size();
+                if (chordCount >= 3 && _notes.size() >= 3) {
+                    bool middleNoteHigherThanHigherEnd = higherEnd >= _notes[2];
+                    if (middleNoteHigherThanHigherEnd) {
+                        return 0;
+                    }
+                    bool secondNoteSameHeightAsHigherEnd = startNote < endNote && _elements[1]->isChord()
+                                                           && toChord(_elements[1])->upLine() == higherEnd;
+                    bool secondToLastNoteSameHeightAsHigherEnd = endNote < startNote && _elements[chordCount - 2]->isChord() && toChord(
+                        _elements[chordCount - 2])->upLine() == higherEnd;
+                    if (!(secondNoteSameHeightAsHigherEnd || secondToLastNoteSameHeightAsHigherEnd)) {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
             }
         } else {
             int lowerEnd = qMax(startNote, endNote);
@@ -550,7 +568,25 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
                 return 0;
             }
             if (lowerEnd == _notes[_notes.size() - 1] && lowerEnd <= _notes[_notes.size() - 2]) {
-                return 0;
+                if (lowerEnd < _notes[_notes.size() - 2]) {
+                    return 0;
+                }
+                int chordCount = _elements.size();
+                if (chordCount >= 3 && _notes.size() >= 3) {
+                    bool middleNoteLowerThanLowerEnd = lowerEnd <= _notes[_notes.size() - 3];
+                    if (middleNoteLowerThanLowerEnd) {
+                        return 0;
+                    }
+                    bool secondNoteSameHeightAsLowerEnd = startNote > endNote && _elements[1]->isChord()
+                                                          && toChord(_elements[1])->downLine() == lowerEnd;
+                    bool secondToLastNoteSameHeightAsLowerEnd = endNote > startNote && _elements[chordCount - 2]->isChord() && toChord(
+                        _elements[chordCount - 2])->downLine() == lowerEnd;
+                    if (!(secondNoteSameHeightAsLowerEnd || secondToLastNoteSameHeightAsLowerEnd)) {
+                        return 0;
+                    }
+                } else {
+                    return 0;
+                }
             }
         }
     }
