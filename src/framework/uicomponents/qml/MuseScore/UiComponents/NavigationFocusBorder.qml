@@ -32,7 +32,7 @@ Rectangle {
     anchors.fill: parent
     anchors.margins: drawOutsideParent ? -border.width : 0
 
-    visible: navigationCtrl ? navigationCtrl.active : false
+    visible: navigationCtrl ? navigationCtrl.highlight : false
 
     color: "transparent"
 

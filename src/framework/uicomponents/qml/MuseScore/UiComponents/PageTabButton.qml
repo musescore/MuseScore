@@ -73,8 +73,8 @@ RadioDelegate {
         color: ui.theme.backgroundPrimaryColor
         opacity: ui.theme.buttonOpacityNormal
 
-        border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
-        border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
+        border.color: navCtrl.highlight ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
+        border.width: navCtrl.highlight ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
 
         Rectangle {
             id: line
