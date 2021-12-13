@@ -38,8 +38,34 @@ AbstractVstEditorView::AbstractVstEditorView(QWidget* parent)
     : QDialog(parent)
 {
     setAttribute(Qt::WA_NativeWindow, true);
-    updateStayOnTopness();
-    connect(qApp, &QApplication::applicationStateChanged, this, &AbstractVstEditorView::updateStayOnTopness);
+
+    // We want the VST windows to be on top of the main window.
+    // But not on top of all other applications when MuseScore isn't active.
+    // On Windows, we achieve this by setting the transient parent.
+    // On macOS, we have to use a workaround:
+    // When the application becomes active, the VST windows will get the StayOnTop hint.
+    // and when the application becomes inactive, the hint will be removed.
+#ifdef Q_OS_MAC
+    auto updateStayOnTopHint = [this]() {
+        bool stay = qApp->applicationState() == Qt::ApplicationActive;
+
+        bool wasShown = isVisible();
+        bool wasActive = isActiveWindow();
+
+        setWindowFlag(Qt::WindowStaysOnTopHint, stay);
+        if (wasShown) {
+            if (!wasActive) {
+                setAttribute(Qt::WA_ShowWithoutActivating, true);
+            }
+            show();
+            setAttribute(Qt::WA_ShowWithoutActivating, false);
+        }
+    };
+    updateStayOnTopHint();
+    connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
+#else
+    windowHandle()->setTransientParent(mainWindow()->qWindow());
+#endif
 }
 
 AbstractVstEditorView::~AbstractVstEditorView()
@@ -151,32 +177,5 @@ void AbstractVstEditorView::setResourceId(const QString& newResourceId)
 
     if (isAbleToWrapPlugin()) {
         wrapPluginView();
-    }
-}
-
-// We want the VST windows to be on top of the main window.
-// But not on top of all other applications when MuseScore isn't active.
-// So when the application becomes active, the VST windows will get the StayOnTop hint.
-// and when the application becomes inactive, the hint will be removed.
-// Some ceremony is required to make this work.
-void AbstractVstEditorView::updateStayOnTopness()
-{
-    bool stay = qApp->applicationState() == Qt::ApplicationActive;
-
-    bool wasShown = isVisible();
-    bool wasActive = isActiveWindow();
-
-    setWindowFlag(Qt::WindowStaysOnTopHint, stay);
-    if (wasShown) {
-        if (!wasActive) {
-            setAttribute(Qt::WA_ShowWithoutActivating, true);
-        }
-        show();
-#ifdef Q_OS_WIN
-        if (!wasActive && !stay) {
-            lower();
-        }
-#endif
-        setAttribute(Qt::WA_ShowWithoutActivating, false);
     }
 }
