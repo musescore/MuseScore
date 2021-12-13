@@ -224,7 +224,7 @@ enum class Sid {
     keysigAccidentalDistance,
     keysigNaturalDistance,
     beamWidth,
-    beamDistance,
+    useWideBeams,
     beamMinLen,
     beamNoSlope,
 

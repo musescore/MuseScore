@@ -63,6 +63,7 @@ class Beam final : public EngravingItem
     qreal _grow1            { 1.0f };                     // define "feather" beams
     qreal _grow2            { 1.0f };
     qreal _beamDist         { 0.0f };
+    int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
 
     QVector<BeamFragment*> fragments;       // beam splits across systems
 
