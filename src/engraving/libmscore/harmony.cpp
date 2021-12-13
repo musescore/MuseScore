@@ -846,6 +846,10 @@ bool Harmony::edit(EditData& ed)
         return false;
     }
 
+    if (ed.key == Qt::Key_Semicolon) {
+        return false;
+    }
+
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset

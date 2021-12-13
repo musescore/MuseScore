@@ -3908,7 +3908,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
-void NotationInteraction::navigateToHarmonyBeats(MoveDirection direction, bool noterest)
+void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest)
 {
     Ms::Harmony* harmony = editedHarmony();
     Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
@@ -3991,7 +3991,7 @@ void NotationInteraction::navigateToHarmonyBeats(MoveDirection direction, bool n
 }
 
 //! NOTE: Copied from ScoreView::harmonyTab
-void NotationInteraction::navigateToHarmony(MoveDirection direction)
+void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction)
 {
     Ms::Harmony* harmony = editedHarmony();
     Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;

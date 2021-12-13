@@ -469,6 +469,10 @@ public:
 
 inline bool isNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 {
+    if (modifiers == Qt::ControlModifier) {
+        return true;
+    }
+
     if (modifiers == 0 || modifiers == Qt::ShiftModifier) {
         switch (key) {
         case Qt::Key_Space:
@@ -478,6 +482,7 @@ inline bool isNavigationKey(int key, Qt::KeyboardModifiers modifiers)
         case Qt::Key_Return:
         case Qt::Key_Up:
         case Qt::Key_Down:
+        case Qt::Key_Tab:
             return true; // allow shortcut key controller to handle
         default:
             break;

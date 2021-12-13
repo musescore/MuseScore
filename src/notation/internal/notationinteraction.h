@@ -223,8 +223,8 @@ public:
 
     void nagivateToNextSyllable() override;
 
-    void navigateToHarmonyBeats(MoveDirection direction, bool noterest) override;
-    void navigateToHarmony(MoveDirection direction) override;
+    void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) override;
+    void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
     void navigateToHarmony(const Fraction& ticks) override;
 
     void addMelisma() override;

@@ -215,8 +215,8 @@ public:
 
     virtual void nagivateToNextSyllable() = 0;
 
-    virtual void navigateToHarmonyBeats(MoveDirection direction, bool noterest) = 0;
-    virtual void navigateToHarmony(MoveDirection direction) = 0;
+    virtual void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) = 0;
+    virtual void navigateToHarmonyInNearMeasure(MoveDirection direction) = 0;
     virtual void navigateToHarmony(const Fraction& ticks) = 0;
 
     // Text style
