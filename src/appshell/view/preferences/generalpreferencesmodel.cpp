@@ -48,10 +48,6 @@ void GeneralPreferencesModel::load()
     projectConfiguration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
         emit autoSaveIntervalChanged(minutes);
     });
-
-    telemetryConfiguration()->isTelemetryAllowed().ch.onReceive(this, [this](bool) {
-        emit isTelemetryAllowedChanged(isTelemetryAllowed());
-    });
 }
 
 void GeneralPreferencesModel::openUpdateTranslationsPage()
@@ -101,11 +97,6 @@ QString GeneralPreferencesModel::currentKeyboardLayout() const
     return shortcutsConfiguration()->currentKeyboardLayout();
 }
 
-bool GeneralPreferencesModel::isTelemetryAllowed() const
-{
-    return telemetryConfiguration()->isTelemetryAllowed().val;
-}
-
 bool GeneralPreferencesModel::isAutoSaveEnabled() const
 {
     return projectConfiguration()->isAutoSaveEnabled();
@@ -144,16 +135,6 @@ void GeneralPreferencesModel::setCurrentKeyboardLayout(const QString& keyboardLa
 
     shortcutsConfiguration()->setCurrentKeyboardLayout(keyboardLayout);
     emit currentKeyboardLayoutChanged();
-}
-
-void GeneralPreferencesModel::setIsTelemetryAllowed(bool isTelemetryAllowed)
-{
-    if (isTelemetryAllowed == this->isTelemetryAllowed()) {
-        return;
-    }
-
-    telemetryConfiguration()->setIsTelemetryAllowed(isTelemetryAllowed);
-    emit isTelemetryAllowedChanged(isTelemetryAllowed);
 }
 
 void GeneralPreferencesModel::setAutoSaveEnabled(bool enabled)

@@ -32,7 +32,7 @@ import MuseScore.Mpe 1.0
 import "./Gallery"
 import "./Interactive"
 import "./NotationDialogs"
-import "./Telemetry"
+import "./CrashHandler"
 import "./VST"
 import "./KeyNav"
 import "./Preferences"
@@ -51,7 +51,7 @@ DockPage {
         case "gallery": root.central = galleryComp; break
         case "interactive": root.central = interactiveComp; break
         case "mu3dialogs": root.central = notationDialogs; break
-        case "telemetry": root.central = telemetryComp; break
+        case "crashhandler": root.central = crashhandlerComp; break
         case "audio": root.central = audioComp; break
         case "synth": root.central = synthSettingsComp; break
         case "midiports": root.central = midiPortsComp; break
@@ -87,7 +87,7 @@ DockPage {
                         { "name": "gallery", "title": "UI Gallery" },
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "mu3dialogs", "title": "MU3Dialogs" },
-                        { "name": "telemetry", "title": "Telemetry" },
+                        { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "audio", "title": "Audio" },
                         { "name": "synth", "title": "Synth" },
                         { "name": "midiports", "title": "MIDI ports" },
@@ -133,11 +133,9 @@ DockPage {
     }
 
     Component {
-        id: telemetryComp
+        id: crashhandlerComp
 
-        Loader {
-            source: "qrc:/qml/DevTools/Telemetry/TelemetryInfo.qml"
-        }
+        CrashHandlerDevTools {}
     }
 
     Component {

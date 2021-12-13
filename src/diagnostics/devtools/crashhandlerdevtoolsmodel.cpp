@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "crashhandlerdevtoolsmodel.h"
 
-#ifndef MU_TELEMETRY_TELEMETRYDEVTOOLS_H
-#define MU_TELEMETRY_TELEMETRYDEVTOOLS_H
+#include "log.h"
 
-#include <QObject>
+using namespace mu::diagnostics;
 
-namespace mu::telemetry {
-class TelemetryDevTools : public QObject
+CrashHandlerDevToolsModel::CrashHandlerDevToolsModel(QObject* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit TelemetryDevTools(QObject* parent = nullptr);
-
-    Q_INVOKABLE void doCrash();
-};
 }
 
-#endif // MU_TELEMETRY_TELEMETRYDEVTOOLS_H
+void CrashHandlerDevToolsModel::doCrash()
+{
+    LOGW() << "Crashing on demand!";
+
+    volatile int* a = (int*)(nullptr);
+    *a = 1;
+}

@@ -105,9 +105,6 @@
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
 #endif
-#ifdef BUILD_TELEMETRY_MODULE
-#include "framework/telemetry/telemetrymodule.h"
-#endif
 
 #ifndef Q_OS_WASM
 #ifdef BUILD_WORKSPACE_MODULE
@@ -172,11 +169,9 @@ int main(int argc, char** argv)
 
     mu::appshell::AppShell app;
 
-    //! NOTE `telemetry` must be first, because it install crash handler.
-    //! others modules order not important (must be)
-#ifdef BUILD_TELEMETRY_MODULE
-    app.addModule(new mu::telemetry::TelemetryModule());
-#endif
+    //! NOTE `diagnostics` must be first, because it installs the crash handler.
+    //! For other modules, the order is (an should be) unimportant.
+    app.addModule(new mu::diagnostics::DiagnosticsModule());
     app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
@@ -280,7 +275,6 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::mi::MultiInstancesModule());
-    app.addModule(new mu::diagnostics::DiagnosticsModule());
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());

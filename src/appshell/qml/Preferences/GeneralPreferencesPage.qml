@@ -78,25 +78,6 @@ PreferencesPage {
             }
         }
 
-        SeparatorLine {
-            visible: telemetrySection.visible
-        }
-
-        TelemetrySection {
-            id: telemetrySection
-
-            isTelemetryAllowed: preferencesModel.isTelemetryAllowed
-
-            visible: false
-
-            navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 3
-
-            onTelemetryAllowedChanged: function(allowed) {
-                preferencesModel.isTelemetryAllowed = allowed
-            }
-        }
-
         SeparatorLine { }
 
         AutoSaveSection {
@@ -104,7 +85,7 @@ PreferencesPage {
             autoSaveInterval: preferencesModel.autoSaveInterval
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 4
+            navigation.order: root.navigationOrderStart + 3
 
             onAutoSaveEnabledChanged: function(enabled) {
                 preferencesModel.isAutoSaveEnabled = enabled
@@ -122,7 +103,7 @@ PreferencesPage {
             oscPort: preferencesModel.oscPort
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 5
+            navigation.order: root.navigationOrderStart + 4
 
             onRemoteControlChanged: function(control) {
                 preferencesModel.isOSCRemoteControl = control
