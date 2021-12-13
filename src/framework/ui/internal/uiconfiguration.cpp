@@ -23,6 +23,8 @@
 
 #include "async/async.h"
 #include "settings.h"
+#include "log.h"
+#include "translation.h"
 #include "themeconverter.h"
 
 #include <QScreen>
@@ -34,8 +36,6 @@
 #ifdef Q_OS_WIN
 #include <QOperatingSystemVersion>
 #endif
-
-#include "log.h"
 
 using namespace mu;
 using namespace mu::ui;
@@ -394,12 +394,7 @@ ThemeList UiConfiguration::themes() const
 
 QStringList UiConfiguration::possibleFontFamilies() const
 {
-#ifdef MU_QT5_COMPAT
-    QFontDatabase db;
-    QStringList allFonts = db.families();
-#else
     QStringList allFonts = QFontDatabase::families();
-#endif
     QStringList smuflFonts
         = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
     for (const QString& font : smuflFonts) {
@@ -615,13 +610,7 @@ std::string UiConfiguration::defaultFontFamily() const
 {
 #ifdef Q_OS_WIN
     static const QString defaultWinFamily = "Segoe UI";
-
-#ifdef MU_QT5_COMPAT
-    QFontDatabase fontDatabase;
-    if (fontDatabase.hasFamily(defaultWinFamily)) {
-#else
     if (QFontDatabase::hasFamily(defaultWinFamily)) {
-#endif
         return defaultWinFamily.toStdString();
     }
 #endif
