@@ -46,6 +46,20 @@ void mu::strings::split(const std::string& str, std::vector<std::string>& out, c
     out.push_back(str.substr(previous, current - previous));
 }
 
+std::string mu::strings::join(const std::vector<std::string>& strs, const std::string& sep)
+{
+    std::string str;
+    bool first = true;
+    for (const std::string& s : strs) {
+        if (!first) {
+            str += sep;
+        }
+        first = false;
+        str += s;
+    }
+    return str;
+}
+
 void mu::strings::ltrim(std::string& s)
 {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {

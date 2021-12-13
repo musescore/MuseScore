@@ -55,10 +55,11 @@ bool TextInputFieldModel::isShortcutAllowedOverride(int key, Qt::KeyboardModifie
 
     QKeySequence keySequence(newModifiers + newKey);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {
-        QKeySequence shortcutSequence(QString::fromStdString(shortcut.sequence));
-
-        if (shortcutSequence == keySequence) {
-            return false;
+        for (const std::string& seq : shortcut.sequences) {
+            QKeySequence shortcutSequence(QString::fromStdString(seq));
+            if (shortcutSequence == keySequence) {
+                return false;
+            }
         }
     }
 

@@ -175,7 +175,7 @@ struct UiAction
     QString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
-    std::string shortcut;
+    std::vector<std::string> shortcuts;
 
     UiAction() = default;
     UiAction(const actions::ActionCode& code, UiContext ctx, Checkable ch = Checkable::No)
@@ -280,6 +280,15 @@ struct MenuItem : public UiAction
         id = QString::fromStdString(a.code);
     }
 
+    QString shortcutsAsString() const
+    {
+        QStringList list;
+        for (const std::string& sc : shortcuts) {
+            list << QString::fromStdString(sc);
+        }
+        return list.join("; ");
+    }
+
     QVariantMap toMap() const
     {
         QVariantList subitemsVariantList;
@@ -290,7 +299,7 @@ struct MenuItem : public UiAction
         return {
             { "id", id },
             { "code", QString::fromStdString(code) },
-            { "shortcut", QString::fromStdString(shortcut) },
+            { "shortcut", shortcutsAsString() },
             { "title", title },
             { "description", description },
             { "section", section },

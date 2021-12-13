@@ -21,7 +21,11 @@
  */
 
 #include "templatepaintview.h"
+
+#include "stringutils.h"
+
 #include "notation/imasternotation.h"
+
 #include "log.h"
 
 using namespace mu::project;
@@ -51,13 +55,13 @@ void TemplatePaintView::load(const QString& templatePath)
 QString TemplatePaintView::zoomInSequence() const
 {
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut("zoomin");
-    return QString::fromStdString(shortcut.sequence);
+    return QString::fromStdString(shortcut.sequencesAsString());
 }
 
 QString TemplatePaintView::zoomOutSequence() const
 {
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut("zoomout");
-    return QString::fromStdString(shortcut.sequence);
+    return QString::fromStdString(shortcut.sequencesAsString());
 }
 
 void TemplatePaintView::adjustCanvas()

@@ -132,5 +132,5 @@ QString EditShortcutModel::unitedSequence() const
         inputedSequence()
     };
 
-    return sequences.join(", ");
+    return sequences.join("; ");
 }

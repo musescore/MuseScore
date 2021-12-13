@@ -26,13 +26,14 @@
 #include <list>
 #include <QKeySequence>
 
+#include "stringutils.h"
 #include "midi/midievent.h"
 
 namespace mu::shortcuts {
 struct Shortcut
 {
     std::string action;
-    std::string sequence;
+    std::vector<std::string> sequences;
     std::string context;
     QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
 
@@ -42,12 +43,26 @@ struct Shortcut
 
     bool isValid() const
     {
-        return !action.empty() && (!sequence.empty() || standardKey != QKeySequence::UnknownKey);
+        return !action.empty() && (!sequences.empty() || standardKey != QKeySequence::UnknownKey);
     }
 
     bool operator ==(const Shortcut& sc) const
     {
-        return action == sc.action && sequence == sc.sequence && standardKey == sc.standardKey;
+        return action == sc.action && sequences == sc.sequences && standardKey == sc.standardKey;
+    }
+
+    std::string sequencesAsString() const { return sequencesToString(sequences); }
+
+    static std::string sequencesToString(const std::vector<std::string>& seqs)
+    {
+        return strings::join(seqs, "; ");
+    }
+
+    static std::vector<std::string> sequencesFromString(const std::string& str)
+    {
+        std::vector<std::string> seqs;
+        strings::split(str, seqs, "; ");
+        return seqs;
     }
 };
 
