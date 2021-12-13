@@ -108,7 +108,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     m_symbolsWidget->setSelectable(true);
 
     connect(systemFlag, &QCheckBox::stateChanged, this, &SymbolDialog::systemFlagChanged);
-    connect(fontList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolDialog::systemFontChanged);
+    connect(fontList, &QComboBox::currentIndexChanged, this, &SymbolDialog::systemFontChanged);
 
     symbolsArea->setWidget(m_symbolsWidget);
 

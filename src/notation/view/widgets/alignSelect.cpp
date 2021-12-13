@@ -53,10 +53,8 @@ AlignSelect::AlignSelect(QWidget* parent)
     WidgetUtils::setWidgetIcon(alignBaseline, IconCode::Code::TEXT_ALIGN_BASELINE);
     WidgetUtils::setWidgetIcon(alignBottom, IconCode::Code::TEXT_ALIGN_BOTTOM);
 
-    connect(g1, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
-            this, &AlignSelect::_alignChanged);
-    connect(g2, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
-            this, &AlignSelect::_alignChanged);
+    connect(g1, &QButtonGroup::buttonToggled, this, &AlignSelect::_alignChanged);
+    connect(g2, &QButtonGroup::buttonToggled, this, &AlignSelect::_alignChanged);
 }
 
 void AlignSelect::_alignChanged()

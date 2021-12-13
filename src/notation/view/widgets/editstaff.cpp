@@ -86,16 +86,12 @@ EditStaff::EditStaff(QWidget* parent)
 
     connect(color, &Awl::ColorLabel::colorChanged, this, &EditStaff::colorChanged);
 
-    connect(mag, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &EditStaff::magChanged);
+    connect(mag, &QDoubleSpinBox::valueChanged, this, &EditStaff::magChanged);
 
-    connect(iList, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &EditStaff::transpositionChanged);
+    connect(iList, &QComboBox::currentIndexChanged, this, &EditStaff::transpositionChanged);
 
-    connect(lines, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &EditStaff::numOfLinesChanged);
-    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-            this, &EditStaff::lineDistanceChanged);
+    connect(lines, &QSpinBox::valueChanged, this, &EditStaff::numOfLinesChanged);
+    connect(lineDistance, &QDoubleSpinBox::valueChanged, this, &EditStaff::lineDistanceChanged);
 
     WidgetUtils::setWidgetIcon(nextButton, IconCode::Code::ARROW_DOWN);
     WidgetUtils::setWidgetIcon(previousButton, IconCode::Code::ARROW_UP);

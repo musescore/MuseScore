@@ -104,14 +104,14 @@ EditStaffType::EditStaffType(QWidget* parent)
 
     connect(name, &QLineEdit::textEdited, this, &EditStaffType::nameEdited);
 
-    connect(lines,        QOverload<int>::of(&QSpinBox::valueChanged),          this, &EditStaffType::updatePreview);
-    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(lines,        &QSpinBox::valueChanged,       this, &EditStaffType::updatePreview);
+    connect(lineDistance, &QDoubleSpinBox::valueChanged, this, &EditStaffType::updatePreview);
 
     connect(showBarlines, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(genClef,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(genTimesig,   &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
-    connect(noteHeadScheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::updatePreview);
+    connect(noteHeadScheme, &QComboBox::currentIndexChanged, this, &EditStaffType::updatePreview);
 
     connect(genKeysigPitched,          &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(showLedgerLinesPitched,    &QCheckBox::toggled, this, &EditStaffType::updatePreview);
@@ -134,12 +134,12 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(minimSlashedRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(showRests,           &QRadioButton::toggled, this, &EditStaffType::updatePreview);
 
-    connect(durFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::durFontNameChanged);
-    connect(durFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
-    connect(durY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
-    connect(fretFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::fretFontNameChanged);
-    connect(fretFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
-    connect(fretY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(durFontName, &QComboBox::currentIndexChanged, this, &EditStaffType::durFontNameChanged);
+    connect(durFontSize, &QDoubleSpinBox::valueChanged, this, &EditStaffType::updatePreview);
+    connect(durY,        &QDoubleSpinBox::valueChanged, this, &EditStaffType::updatePreview);
+    connect(fretFontName, &QComboBox::currentIndexChanged, this, &EditStaffType::fretFontNameChanged);
+    connect(fretFontSize, &QDoubleSpinBox::valueChanged, this, &EditStaffType::updatePreview);
+    connect(fretY,        &QDoubleSpinBox::valueChanged, this, &EditStaffType::updatePreview);
 
     connect(linesThroughRadio, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
     connect(onLinesRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
@@ -150,7 +150,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
 
-    //connect(groupCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::staffGroupChanged);
+    //connect(groupCombo, &QComboBox::currentIndexChanged, this, &EditStaffType::staffGroupChanged);
 
     addToTemplates->setVisible(false);
 
