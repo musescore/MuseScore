@@ -122,13 +122,15 @@ FocusScope {
                         root.textEdittingStarted()
                     }
 
-                    onShowContextMenuRequested: function (elementType, pos) {
+                    onShowContextMenuRequested: function (elementType, viewPos) {
                         contextMenuModel.loadItems(elementType)
 
+                        var posOnFakeItem = notationView.mapToItem(contextMenuParentFake, viewPos.x, viewPos.y)
+
                         if (contextMenuLoader.isMenuOpened) {
-                            contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
+                            contextMenuLoader.update(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
                         } else {
-                            contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
+                            contextMenuLoader.open(contextMenuModel.items, posOnFakeItem.x, posOnFakeItem.y)
                         }
                     }
 
@@ -140,13 +142,25 @@ FocusScope {
                         notationNavigator.setCursorRect(viewport)
                     }
 
-                    StyledMenuLoader {
-                        id: contextMenuLoader
+                    Item {
+                        id: contextMenuParentFake
 
-                        navigation: fakeNavCtrl
+                        //! NOTE: Item coordinates are not important.
+                        //  To open the context menu next to the position(if the menu does not fit into the screen size),
+                        //  only the size of the item is important.
+                        //  Height and width are equal to zero - the menu will appear exactly
+                        //  next(depending on the limitation) to the pressed position.
+                        width: 0
+                        height: 0
 
-                        onHandleMenuItem: function (itemId) {
-                            contextMenuModel.handleMenuItem(itemId)
+                        StyledMenuLoader {
+                            id: contextMenuLoader
+
+                            navigation: fakeNavCtrl
+
+                            onHandleMenuItem: function (itemId) {
+                                contextMenuModel.handleMenuItem(itemId)
+                            }
                         }
                     }
                 }
