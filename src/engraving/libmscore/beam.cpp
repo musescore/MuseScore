@@ -604,8 +604,9 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     qreal x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
     qreal y = position.y() + chord->defaultStemLength() * upValue - beamOffset;
     if (_isBesideTabStaff) {
-        y = _tab->chordRestStemPosY(chord) + (_up ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * chord->mag()
-            / chord->staff()->staffMag(chord);
+        StaffType const* staffType = chord->staff()->staffType(chord->tick());
+        qreal stemLength = staffType->chordStemLength(chord);
+        y = _tab->chordRestStemPosY(chord) + stemLength;
         y *= spatium();
         y -= beamOffset;
     }
@@ -1480,7 +1481,7 @@ void Beam::setUserModified(bool val)
 PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION: return beamDirection();
+    case Pid::STEM_DIRECTION : return beamDirection();
     case Pid::DISTRIBUTE:     return distribute();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
