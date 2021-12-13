@@ -44,6 +44,9 @@ class Score;
 }
 
 namespace mu::notation {
+//! NOTE When this class is going to be removed, make sure to
+//! remove the StateMachine dependency from FindQt6.cmake too.
+//! This is the only class that uses it.
 class ExampleView : public QFrame, public engraving::MuseScoreView
 {
     Q_OBJECT
