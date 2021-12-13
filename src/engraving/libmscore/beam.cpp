@@ -604,7 +604,8 @@ PointF Beam::chordBeamAnchor(Chord* chord) const
     qreal x = chord->stemPosX() + chord->pagePos().x() - pagePos().x();
     qreal y = position.y() + chord->defaultStemLength() * upValue - beamOffset;
     if (_isBesideTabStaff) {
-        y = _tab->chordRestStemPosY(chord) + (_up ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN);
+        y = _tab->chordRestStemPosY(chord) + (_up ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * chord->mag()
+            / chord->staff()->staffMag(chord);
         y *= spatium();
         y -= beamOffset;
     }
@@ -1016,6 +1017,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     }
 
     _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
+    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
         NOT_IMPL_RETURN;
@@ -1063,7 +1065,6 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
             addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
         }
 
-        _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
         startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
         endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
 
