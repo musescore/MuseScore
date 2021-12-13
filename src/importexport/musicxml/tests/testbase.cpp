@@ -36,6 +36,8 @@
 
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 namespace Ms {
@@ -75,7 +77,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(csl);
         delete score;
         score = 0;
     } else {
