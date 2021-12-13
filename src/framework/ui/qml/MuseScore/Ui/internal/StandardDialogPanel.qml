@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Rectangle {
+RowLayout {
     id: root
 
     property string type: "INFO" // "QUESTION", "INFO", "WARNING", "ERROR"
@@ -42,14 +42,9 @@ Rectangle {
     property var buttons: []
     property int defaultButtonId: 0
 
-    property real contentWidth: Math.max(textContent.contentWidth, buttons.width)
-    property real contentHeight: content.contentHeight
-
     property alias navigation: navPanel
 
     signal clicked(int buttonId, bool showAgain)
-
-    color: ui.theme.backgroundPrimaryColor
 
     function onOpened() {
         var btn = root.firstFocusBtn()
@@ -112,126 +107,109 @@ Rectangle {
         name: root.title + " " + root.text + " " + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
     }
 
-    ColumnLayout {
-        id: content
+    spacing: 27
 
-        anchors.fill: parent
+    StyledIconLabel {
+        id: icon
 
-        property int contentHeight: childrenRect.height
+        Layout.alignment: Qt.AlignTop
+        Layout.preferredWidth: 48
+        Layout.preferredHeight: 48
 
-        spacing: 16
+        font.pixelSize: 48
+        iconCode: root.standardIcon(root.type)
 
-        RowLayout {
-            id: textContent
+        visible: root.withIcon && !isEmpty
+    }
 
-            property int contentWidth: (icon.visible ? icon.width + textContent.spacing : 0) + textColumn._preferredWidth
+    Column {
+        Layout.fillWidth: true
 
-            Layout.preferredWidth: content.width
-            Layout.preferredHeight: childrenRect.height
+        // Unclear why "+ 1" is needed; apparently implicitWidth is incorrect
+        readonly property real textsImplicitWidth: Math.max(titleLabel.implicitWidth,
+                                                            textLabel.implicitWidth,
+                                                            withShowAgainCheckBox.implicitWidth) + 1
 
-            spacing: 28
+        // Allow the text to make the dialog wider, but not too much wider
+        readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
 
-            StyledIconLabel {
-                id: icon
+        // But if the buttons need more space, then the dialog becomes as wide as necessary
+        Layout.preferredWidth: Math.max(buttons.width, textsImplicitWidthBounded)
 
-                Layout.alignment: Qt.AlignTop
-                Layout.preferredWidth: 48
-                Layout.preferredHeight: 48
+        spacing: 18
 
-                font.pixelSize: 48
-                iconCode: root.standardIcon(root.type)
+        Column {
+            width: parent.width
+            height: Math.max(implicitHeight, 32)
+            spacing: 18
 
-                visible: root.withIcon && !isEmpty
+            StyledTextLabel {
+                id: titleLabel
+                width: parent.width
+
+                font: ui.theme.largeBodyBoldFont
+                horizontalAlignment: Text.AlignLeft
+                maximumLineCount: 2
+                wrapMode: Text.Wrap
+
+                visible: !isEmpty
             }
 
-            Column {
-                id: textColumn
+            StyledTextLabel {
+                id: textLabel
+                width: parent.width
 
-                property int _preferredWidth: Math.max(Math.min(titleLabel.implicitWidth, 420),
-                                                       Math.min(textLabel.implicitWidth, 420))
+                horizontalAlignment: Text.AlignLeft
+                maximumLineCount: 3
+                wrapMode: Text.Wrap
 
-                Layout.preferredWidth: _preferredWidth + /*todo*/ 76
-                Layout.preferredHeight: childrenRect.height
+                visible: !isEmpty
+            }
 
-                spacing: 16
+            CheckBox {
+                id: withShowAgainCheckBox
+                width: parent.width
+                visible: Boolean(root.withShowAgain)
 
-                StyledTextLabel {
-                    id: titleLabel
+                text: qsTrc("ui", "Show this message again")
+                checked: true
 
-                    width: parent._preferredWidth + /*todo*/ 4
-
-                    font: ui.theme.largeBodyBoldFont
-                    horizontalAlignment: Text.AlignLeft
-                    maximumLineCount: 2
-                    wrapMode: Text.Wrap
-
-                    visible: !isEmpty
-                }
-
-                StyledTextLabel {
-                    id: textLabel
-
-                    width: parent._preferredWidth + /*todo*/ 4
-
-                    horizontalAlignment: Text.AlignLeft
-                    maximumLineCount: 3
-                    wrapMode: Text.Wrap
-
-                    visible: !isEmpty
-                }
-
-                CheckBox {
-                    id: withShowAgainCheckBox
-
-                    Layout.fillWidth: true
-
-                    text: qsTrc("ui", "Show this message again")
-
-                    checked: true
-
-                    visible: Boolean(root.withShowAgain)
-
-                    onClicked: {
-                        checked = !checked
-                    }
+                onClicked: {
+                    checked = !checked
                 }
             }
         }
 
-        Item {
-            Layout.preferredHeight: 30
-            Layout.preferredWidth: content.width
+        ListView {
+            id: buttons
+            anchors.right: parent.right
+            spacing: 12
 
-            ListView {
-                id: buttons
-                anchors.right: parent.right
-                spacing: 12
+            width: contentWidth
+            height: contentHeight
+            contentHeight: 30
 
-                width: contentWidth
-                height: contentHeight
+            model: root.buttons
+            orientation: Qt.Horizontal
+            interactive: false
 
-                model: root.buttons
-                orientation: Qt.Horizontal
+            delegate: FlatButton {
+                navigation.panel: navPanel
+                navigation.column: model.index
 
-                delegate: FlatButton {
-
-                    navigation.panel: navPanel
-                    navigation.column: model.index
-
-                    //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                    accessible.ignored: true
-                    navigation.onActiveChanged: {
-                        if (navigation.active) {
-                            accessible.ignored = false
-                        }
+                //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                accessible.ignored: true
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        accessible.ignored = false
                     }
+                }
 
-                    text: modelData.title
-                    accentButton: Boolean(modelData.accent)
+                text: modelData.title
+                accentButton: Boolean(modelData.accent)
 
-                    onClicked: {
-                        root.clicked(modelData.buttonId, withShowAgainCheckBox.checked)
-                    }
+                onClicked: {
+                    root.clicked(modelData.buttonId, withShowAgainCheckBox.checked)
                 }
             }
         }

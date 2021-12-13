@@ -61,6 +61,7 @@ public:
     virtual void setOnHidden(const std::function<void()>& callback) = 0;
 
 signals:
+    void sizeChanged();
     void aboutToClose(QQuickCloseEvent* event);
 };
 }

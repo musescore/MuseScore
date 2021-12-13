@@ -91,6 +91,7 @@ void PopupWindow_QQuickView::setContent(QQuickItem* item)
         }
         if (item->implicitWidth() != m_view->width()) {
             m_view->resize(item->implicitWidth(), item->implicitHeight());
+            emit sizeChanged();
         }
     });
 
@@ -100,6 +101,7 @@ void PopupWindow_QQuickView::setContent(QQuickItem* item)
         }
         if (item->implicitHeight() != m_view->height()) {
             m_view->resize(item->implicitWidth(), item->implicitHeight());
+            emit sizeChanged();
         }
     });
 }
