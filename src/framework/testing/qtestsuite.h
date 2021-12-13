@@ -119,7 +119,7 @@ public:
 #undef QTEST_MAIN
 #endif
 
-#define DECLARE_TEST(className) static mu::testing::QTestHolder<className> _t(#className);
+#define DECLARE_TEST(className) static mu::testing::QTestHolder<className> t_(#className);
 #define QTEST_MAIN(className) DECLARE_TEST(className)
 }
 
