@@ -41,6 +41,9 @@ StyledDialogView {
     property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK") } ]
     property alias defaultButtonId: content.defaultButtonId
 
+    contentWidth: content.implicitWidth
+    contentHeight: content.implicitHeight
+
     margins: 16
 
     onOpened: {
@@ -49,20 +52,10 @@ StyledDialogView {
 
     StandardDialogPanel {
         id: content
-
         anchors.fill: parent
 
         navigation.section: root.navigationSection
-
         buttons: root.buttons
-
-        onContentWidthChanged: {
-            root.contentWidth = Math.max(Math.min(491, content.contentWidth), 306)
-        }
-
-        onContentHeightChanged: {
-            root.contentHeight = Math.max(104, content.contentHeight)
-        }
 
         onClicked: function(buttonId, showAgain) {
             root.ret = { "errcode": 0, "value": { "buttonId": buttonId, "showAgain": showAgain}}

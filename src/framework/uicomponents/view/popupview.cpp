@@ -103,6 +103,10 @@ void PopupView::componentComplete()
     m_window->setOnHidden([this]() { onHidden(); });
     m_window->setContent(m_contentItem);
 
+    if (isDialog()) {
+        connect(m_window, &IPopupWindow::sizeChanged, this, &PopupView::updateSize);
+    }
+
     // TODO: Can't use new `connect` syntax because the IPopupWindow::aboutToClose
     // has a parameter of type QQuickCloseEvent, which is not public, so we
     // can't include any header for it and it will always be an incomplete
@@ -175,11 +179,7 @@ void PopupView::open()
         qWindow->setModality(Qt::NonModal);
 #endif
 
-        QRect winRect = m_window->geometry();
-        qWindow->setMinimumSize(winRect.size());
-        if (!m_resizable) {
-            qWindow->setMaximumSize(winRect.size());
-        }
+        updateSize();
     }
 
     m_window->show(m_globalPos.toPoint());
@@ -572,6 +572,24 @@ QRect PopupView::currentScreenGeometry() const
     }
 
     return currentScreen->availableGeometry();
+}
+
+void PopupView::updateSize()
+{
+    if (!isDialog()) {
+        return;
+    }
+
+    QWindow* qWindow = this->qWindow();
+    if (!qWindow) {
+        return;
+    }
+
+    QSize size = qWindow->size();
+    qWindow->setMinimumSize(size);
+    if (!m_resizable) {
+        qWindow->setMaximumSize(size);
+    }
 }
 
 void PopupView::updatePosition()
