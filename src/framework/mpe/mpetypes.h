@@ -548,8 +548,8 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
                 break;
             }
 
-            for (const auto& pair : segment.pitchPattern.pitchOffsetMap) {
-                result[pair.first] += pair.second;
+            for (const auto& pair2 : segment.pitchPattern.pitchOffsetMap) {
+                result[pair2.first] += pair2.second;
             }
         }
 
@@ -655,8 +655,8 @@ struct ArticulationMap : public std::map<ArticulationType, ArticulationData>
                 break;
             }
 
-            for (const auto& pair : segment.expressionPattern.dynamicOffsetMap) {
-                result[pair.first] += pair.second;
+            for (const auto& pair2 : segment.expressionPattern.dynamicOffsetMap) {
+                result[pair2.first] += pair2.second;
             }
         }
 

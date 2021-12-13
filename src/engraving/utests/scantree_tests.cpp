@@ -80,8 +80,8 @@ void ScanTreeTests::traverseTree(EngravingObject* element)
             LOGD() << "EngravingItem: " << elementToText(element);
             LOGD() << "Number of children: " << element->scanChildCount();
             LOGD() << "Children: ";
-            for (int i = 0; i < element->scanChildCount(); i++) {
-                LOGD() << element->scanChild(i);
+            for (int i2 = 0; i2 < element->scanChildCount(); i2++) {
+                LOGD() << element->scanChild(i2);
             }
         }
         EXPECT_TRUE(child);

@@ -77,8 +77,8 @@ TEST_F(DurationTypeTests, halfDuration)
         score->startCmd();
         score->cmdHalfDuration();
         score->endCmd();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
+        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c2->ticks(), Fraction(i / 2, 128));
     }
 }
 
@@ -133,12 +133,12 @@ TEST_F(DurationTypeTests, decDurationDotted)
     // repeatedly dec-duration-dotted from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
         score->cmdDecDurationDotted();
-        Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i + i / 2, 256));
+        Ms::Chord* c2 = score->firstMeasure()->findChord(Fraction(0, 1), 0);
+        EXPECT_EQ(c2->ticks(), Fraction(i + i / 2, 256));
 
         score->cmdDecDurationDotted();
         c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
+        EXPECT_EQ(c2->ticks(), Fraction(i / 2, 128));
     }
     score->endCmd();
 }

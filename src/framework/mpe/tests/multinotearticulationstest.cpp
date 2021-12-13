@@ -241,18 +241,18 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
 
     ArticulationPattern crescendoScope;
 
-    for (size_t i = 0; i <= dynamicSegmentsCount; ++i) {
+    for (int i = 0; i <= dynamicSegmentsCount; ++i) {
         ArticulationPatternSegment crescendoPattern;
         crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
         crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(
                                                                                DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP
-                                                                           / dynamicSegmentsCount);
+                                                                           / static_cast<dynamic_level_t>(dynamicSegmentsCount));
 
         crescendoScope.emplace(25 * ONE_PERCENT * i, std::move(crescendoPattern));
     }
 
-    for (size_t i = 0; i < noteCount; ++i) {
+    for (int i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
         ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * ONE_PERCENT * i,
                                           25 * ONE_PERCENT * (i + 1), 0, dynamicLevelDiff);

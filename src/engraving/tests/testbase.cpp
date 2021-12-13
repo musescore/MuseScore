@@ -106,36 +106,36 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    MasterScore* score_ = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     QFileInfo fi(name);
-    score->setName(fi.completeBaseName());
+    score_->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = compat::loadMsczOrMscx(score, name, false);
+        rv = compat::loadMsczOrMscx(score_, name, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
         QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
-        delete score;
-        score = 0;
+        delete score_;
+        score_ = 0;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
-    return score;
+    return score_;
 }
 
 //---------------------------------------------------------
 //   saveScore
 //---------------------------------------------------------
 
-bool MTest::saveScore(Score* score, const QString& name) const
+bool MTest::saveScore(Score* score_, const QString& name) const
 {
     QFile file(name);
     if (file.exists()) {
@@ -147,7 +147,7 @@ bool MTest::saveScore(Score* score, const QString& name) const
     }
 
     compat::WriteScoreHook hook;
-    return score->writeScore(&file, false, false, hook);
+    return score_->writeScore(&file, false, false, hook);
 }
 
 //---------------------------------------------------------
@@ -189,9 +189,9 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
 //---------------------------------------------------------
 
 // bool MTest::saveCompareScore(MasterScore* score, const QString& saveName, const QString& compareWith) const
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
+bool MTest::saveCompareScore(Score* score_, const QString& saveName, const QString& compareWith) const
 {
-    if (!saveScore(score, saveName)) {
+    if (!saveScore(score_, saveName)) {
         return false;
     }
     return compareFiles(saveName, compareWith);
