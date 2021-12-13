@@ -94,14 +94,11 @@ void NavigationControl::trigger()
     emit triggered();
 }
 
-mu::async::Channel<INavigationControl*> NavigationControl::activeRequested() const
-{
-    return m_forceActiveRequested;
-}
-
 void NavigationControl::requestActive()
 {
-    m_forceActiveRequested.send(this);
+    if (m_panel) {
+        m_panel->requestActive(this);
+    }
 }
 
 void NavigationControl::setPanel(NavigationPanel* panel)

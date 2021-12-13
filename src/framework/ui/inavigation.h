@@ -24,6 +24,7 @@
 
 #include <tuple>
 #include <memory>
+#include <functional>
 #include <QString>
 #include <QList>
 #include <QVariantMap>
@@ -38,9 +39,7 @@ class INavigationSection;
 class INavigationPanel;
 class INavigationControl;
 
-using PanelControlChannel = async::Channel<INavigationPanel*, INavigationControl*>;
-using SectionPanelControlChannel = async::Channel<INavigationSection*, INavigationPanel*, INavigationControl*>;
-
+using OnActiveRequested = std::function<void (INavigationSection* sec, INavigationPanel* panel, INavigationControl* ctrl)>;
 class INavigation
 {
 public:
@@ -110,7 +109,7 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
-    virtual async::Channel<INavigationControl*> activeRequested() const = 0;
+    virtual void requestActive() = 0;
 };
 
 class INavigationSection;
@@ -130,7 +129,7 @@ public:
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual PanelControlChannel activeRequested() const = 0;
+    virtual void requestActive(INavigationControl* control = nullptr) = 0;
 };
 
 class INavigationSection : public INavigation
@@ -149,7 +148,9 @@ public:
     virtual Type type() const = 0;
     virtual const std::set<INavigationPanel*>& panels() const = 0;
     virtual async::Notification panelsListChanged() const = 0;
-    virtual SectionPanelControlChannel activeRequested() const = 0;
+
+    virtual void setOnActiveRequested(const OnActiveRequested& func) = 0;
+    virtual void requestActive(INavigationPanel* panel = nullptr, INavigationControl* control = nullptr) = 0;
 };
 }
 

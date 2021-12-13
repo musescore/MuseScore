@@ -116,7 +116,6 @@ public:
         c->control = new NiceMock<NavigationControlMock>();
         ON_CALL(*c->control, enabled()).WillByDefault(Return(true));
         ON_CALL(*c->control, active()).WillByDefault(Return(false));
-        ON_CALL(*c->control, activeRequested()).WillByDefault(Return(async::Channel<INavigationControl*>()));
         ON_CALL(*c->control, index()).WillByDefault(ReturnRef(idx));
 
         return c;
@@ -139,7 +138,6 @@ public:
         p->panel = new NiceMock<NavigationPanelMock>();
         ON_CALL(*p->panel, enabled()).WillByDefault(Return(true));
         ON_CALL(*p->panel, active()).WillByDefault(Return(false));
-        ON_CALL(*p->panel, activeRequested()).WillByDefault(Return(PanelControlChannel()));
         ON_CALL(*p->panel, controls()).WillByDefault(ReturnRef(p->icontrols));
 
         INavigation::Index& idx = make_idx(env);
@@ -163,7 +161,6 @@ public:
         ON_CALL(*s->section, type()).WillByDefault(Return(INavigationSection::Type::Regular));
         ON_CALL(*s->section, enabled()).WillByDefault(Return(true));
         ON_CALL(*s->section, active()).WillByDefault(Return(false));
-        ON_CALL(*s->section, activeRequested()).WillByDefault(Return(SectionPanelControlChannel()));
         ON_CALL(*s->section, panels()).WillByDefault(ReturnRef(s->ipanels));
 
         INavigation::Index& idx = make_idx(env);
