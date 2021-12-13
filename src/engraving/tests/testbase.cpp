@@ -44,6 +44,8 @@
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"
 
+#include "log.h"
+
 using namespace mu::engraving;
 
 static void initMyResources()
@@ -120,7 +122,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
+        LOGE() << QString("readScore: cannot load <%1> type <%2>").arg(name).arg(csl);
         delete score_;
         score_ = 0;
     } else {
