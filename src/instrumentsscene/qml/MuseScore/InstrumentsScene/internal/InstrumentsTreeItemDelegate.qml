@@ -124,7 +124,7 @@ Item {
         id: background
 
         anchors.fill: parent
-        anchors.margins: navCtrl.active ? ui.theme.navCtrlBorderWidth : 0
+        anchors.margins: navCtrl.highlight ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1

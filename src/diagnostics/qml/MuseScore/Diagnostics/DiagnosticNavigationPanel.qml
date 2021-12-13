@@ -97,7 +97,7 @@ Rectangle {
             Rectangle {
                 anchors.fill: parent
                 color: item.section.enabled ? "#fcaf3e" : "#eeeeec"
-                border.width: item.section.active ? 2 : 0
+                border.width: item.section.highlight ? 2 : 0
                 border.color: ui.theme.focusColor
             }
 
@@ -139,7 +139,7 @@ Rectangle {
                     Rectangle {
                         anchors.fill: parent
                         color: subitem.panel.enabled ? "#729fcf" : "#eeeeec"
-                        border.width: subitem.panel.active ? 2 : 0
+                        border.width: subitem.panel.highlight ? 2 : 0
                         border.color: ui.theme.focusColor
                     }
 
@@ -178,8 +178,8 @@ Rectangle {
                             radius: 4
                             color: control.enabled ? "#73d216" : "#eeeeec"
                             enabled: control.enabled
-                            border.width: control.active ? 2 : 1
-                            border.color: control.active ? ui.theme.focusColor : "#2e3436"
+                            border.width: control.highlight ? 2 : 1
+                            border.color: control.highlight ? ui.theme.focusColor : "#2e3436"
 
                             Column {
                                 anchors.fill: parent

@@ -42,7 +42,7 @@ Item {
 
     property bool resourcePickingActive: false
 
-    property bool showAdditionalButtons: rootMouseArea.containsMouse || (navigationPanel ? navigationPanel.active : true)
+    property bool showAdditionalButtons: rootMouseArea.containsMouse || (navigationPanel ? navigationPanel.highlight : true)
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
