@@ -67,6 +67,8 @@ Column {
 
             title: qsTrc("project", "Title")
 
+            info: qsTrc("project", "Untitled Score")
+
             navigation.panel: root.navigationPanel
             navigation.column: 0
         }
@@ -78,6 +80,8 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Composer")
+
+            info: qsTrc("project", "Composer / arranger")
 
             navigation.panel: root.navigationPanel
             navigation.column: 1
@@ -102,6 +106,8 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Subtitle")
+
+            info: qsTrc("project", "Subtitle")
 
             navigation.panel: root.navigationPanel
             navigation.column: 2
