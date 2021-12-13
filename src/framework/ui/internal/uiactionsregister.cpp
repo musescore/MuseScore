@@ -110,7 +110,7 @@ void UiActionsRegister::updateShortcuts()
     auto screg = shortcutsRegister();
     for (auto it = m_actions.begin(); it != m_actions.end(); ++it) {
         Info& inf = it->second;
-        inf.action.shortcut = screg->shortcut(inf.action.code).sequence;
+        inf.action.shortcuts = screg->shortcut(inf.action.code).sequences;
     }
 }
 

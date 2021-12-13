@@ -60,12 +60,14 @@ void ShortcutsInstanceModel::loadShortcuts()
 
     const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
     for (const Shortcut& sc : shortcuts) {
-        QString sequence = QString::fromStdString(sc.sequence);
+        for (const std::string& seq : sc.sequences) {
+            QString sequence = QString::fromStdString(seq);
 
-        //! NOTE There may be several identical shortcuts for different contexts.
-        //! We only need a list of unique ones.
-        if (!m_shortcuts.contains(sequence)) {
-            m_shortcuts << sequence;
+            //! NOTE There may be several identical shortcuts for different contexts.
+            //! We only need a list of unique ones.
+            if (!m_shortcuts.contains(sequence)) {
+                m_shortcuts << sequence;
+            }
         }
     }
 
