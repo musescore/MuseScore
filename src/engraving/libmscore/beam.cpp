@@ -510,8 +510,9 @@ void Beam::layout()
 
 int Beam::getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const
 {
-    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false);
-    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false);
+    bool useWideBeams = score()->styleB(Sid::useWideBeams);
+    int startMiddleLine = Chord::minStaffOverlap(_up, staffLines, startChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
+    int endMiddleLine = Chord::minStaffOverlap(_up, staffLines, endChord->beams(), false, _beamSpacing / 4.0, useWideBeams);
 
     // offset middle line by 1 or -1 since the anchor is at the middle of the beam,
     // not at the tip of the stem
@@ -846,9 +847,10 @@ bool Beam::isBeamInsideStaff(int yPos, int staffLines) const
 
 int Beam::getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const
 {
-    int offset = (beamCount - 1) * (_up ? -3 : 3);
+    int spacing = (_up ? -_beamSpacing : _beamSpacing);
+    int offset = (beamCount - 1) * spacing;
     while (offset != 0 && !isBeamInsideStaff(innerBeam + offset, staffLines)) {
-        offset -= _up ? -3 : 3;
+        offset -= spacing;
     }
     return offset;
 }
@@ -882,6 +884,9 @@ bool Beam::isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool is
 
 bool Beam::is64thBeamPositionException(int& yPos, int staffLines) const
 {
+    if (_beamSpacing == 4) {
+        return false;
+    }
     return yPos == 2 || yPos == staffLines * 4 - 2 || yPos == staffLines * 4 - 6 || yPos == -2;
 }
 
@@ -890,7 +895,7 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
 {
     bool isBeamValid = false;
     int offset = 0;
-    int innerBeam = outer + (beamCount - 1) * (_up ? 3 : -3);
+    int innerBeam = outer + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
     while (!isBeamValid) {
         while (!isValidBeamPosition(innerBeam + offset, isStart, isAscending, isFlat, staffLines)) {
             offset += _up ? -1 : 1;
@@ -898,7 +903,7 @@ int Beam::findValidBeamOffset(int outer, int beamCount, int staffLines, bool isS
         int outerMostBeam = innerBeam + offset + getOuterBeamPosOffset(innerBeam + offset, beamCount, staffLines);
         if (isValidBeamPosition(outerMostBeam, isStart, isAscending, isFlat,
                                 staffLines)
-            || ((beamCount == 4) && is64thBeamPositionException(outerMostBeam, staffLines))) {
+            || (beamCount == 4 && is64thBeamPositionException(outerMostBeam, staffLines))) {
             isBeamValid = true;
         } else {
             offset += _up ? -1 : 1;
@@ -912,11 +917,11 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
 {
     bool areBeamsValid = false;
     bool has3BeamsInsideStaff = beamCount >= 3;
-    while (!areBeamsValid && has3BeamsInsideStaff) {
-        int dictatorInner = dictator + (beamCount - 1) * (_up ? 3 : -3);
+    while (!areBeamsValid && has3BeamsInsideStaff && _beamSpacing != 4) {
+        int dictatorInner = dictator + (beamCount - 1) * (_up ? _beamSpacing : -_beamSpacing);
         // use dictatorInner for both to simulate flat beams
         int outerDictatorOffset = getOuterBeamPosOffset(dictatorInner, beamCount, staffLines);
-        if (qAbs(outerDictatorOffset) < 3) {
+        if (qAbs(outerDictatorOffset) < _beamSpacing) {
             has3BeamsInsideStaff = false;
             break;
         }
@@ -955,12 +960,12 @@ void Beam::setValidBeamPositions(int& dictator, int& pointer, int beamCount, int
 
 void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval)
 {
-    if (interval == 0 || beamCount > 2 || score()->styleB(Sid::beamNoSlope)) {
+    if (interval == 0 || (beamCount > 2 && _beamSpacing != 4) || score()->styleB(Sid::beamNoSlope)) {
         return;
     }
     bool isOnMiddleLine = pointer == middleLine && (qAbs(pointer - dictator) < 2);
     if (isOnMiddleLine) {
-        if (interval == 1 || beamCount == 2) {
+        if (interval == 1 || (beamCount == 2 && _beamSpacing != 4)) {
             dictator = middleLine + (_up ? -1 : 1);
         } else {
             dictator = middleLine + (_up ? -2 : 2);
@@ -971,7 +976,7 @@ void Beam::addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int mi
 void Beam::add8thSpaceSlant(PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                             int interval, int middleLine, bool isFlat)
 {
-    if (beamCount != 3 || score()->styleB(Sid::beamNoSlope)) {
+    if (beamCount != 3 || score()->styleB(Sid::beamNoSlope) || _beamSpacing != 3) {
         return;
     }
     if ((isFlat && dictator != middleLine) || (dictator != pointer) || interval == 0) {
@@ -1003,11 +1008,13 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         LayoutBeams::respace(&chordRests);
     }
 
-    // FIXME
+    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
+
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
         NOT_IMPL_RETURN;
     }
 
+    // todo: add edge case for when a beam starts or ends on a rest
     Chord* startChord = toChord(chordRests.front());
     Chord* endChord = toChord(chordRests.back());
 
@@ -1038,7 +1045,7 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
     endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
 
-    _beamDist = 0.75 * spatium();
+    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     add8thSpaceSlant(isStartDictator ? startAnchor : endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 

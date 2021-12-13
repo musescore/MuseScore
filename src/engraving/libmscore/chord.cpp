@@ -1369,7 +1369,7 @@ int Chord::calcMinStemLength()
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)]);
         // add beam lengths
-        minStemLength += beams() * 3;
+        minStemLength += beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3);
         if (beams() > 0) {
             minStemLength -= 1;
         }
@@ -1392,18 +1392,17 @@ int Chord::stemLengthBeamAddition() const
     case 3:
         return 2;
     default:
-        return (beamCount - 3) * 3;
+        return (beamCount - 3) * (score()->styleB(Sid::useWideBeams) ? 4 : 3);
     }
 }
 
-// all values are in quarter spaces
-int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook)
+int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams)
 {
     int beamOverlap = 8;
     if (beamCount == 3 && !hasHook) {
         beamOverlap = 12;
     } else if (beamCount >= 4 && !hasHook) {
-        beamOverlap = (beamCount - 4) * 3 + 14;
+        beamOverlap = (beamCount - 4) * beamSpacing + (useWideBeams ? 16 : 14);
     }
 
     int staffOverlap = qMin(beamOverlap, (staffLines - 1) * 4);
@@ -1508,9 +1507,9 @@ qreal Chord::calcDefaultStemLength()
 
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2 + 1;
-    int shortestStem = score()->styleD(Sid::shortestStem) * 4;
-    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook);
-
+    bool useWideBeams = score()->styleB(Sid::useWideBeams);
+    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams);
+    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : score()->styleD(Sid::shortestStem) * 4;
     if (isGrace()) {
         stemLength = qMax(static_cast<int>(defaultStemLength * score()->styleD(Sid::graceNoteMag)), minStemLengthQuarterSpaces);
     } else if (up()) {
