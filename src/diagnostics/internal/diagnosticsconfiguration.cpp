@@ -19,18 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "diagnosticsconfiguration.h"
 
-#include "telemetrydevtools.h"
+#include "global/settings.h"
 
-using namespace mu::telemetry;
+using namespace mu::diagnostics;
+using namespace mu::framework;
 
-TelemetryDevTools::TelemetryDevTools(QObject* parent)
-    : QObject(parent)
+static const Settings::Key IS_DUMP_UPLOAD_ALLOWED("diagnostics", "diagnostics/is_dump_upload_allowed");
+
+void DiagnosticsConfiguration::init()
 {
+    settings()->setDefaultValue(IS_DUMP_UPLOAD_ALLOWED, Val(true));
 }
 
-void TelemetryDevTools::doCrash()
+bool DiagnosticsConfiguration::isDumpUploadAllowed() const
 {
-    volatile int* a = (int*)(nullptr);
-    *a = 1;
+    return settings()->value(IS_DUMP_UPLOAD_ALLOWED).toBool();
+}
+
+void DiagnosticsConfiguration::setIsDumpUploadAllowed(bool val)
+{
+    settings()->setSharedValue(IS_DUMP_UPLOAD_ALLOWED, Val(val));
 }

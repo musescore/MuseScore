@@ -20,26 +20,35 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_TELEMETRY_TELEMETRYMODULE_H
-#define MU_TELEMETRY_TELEMETRYMODULE_H
+#ifndef MU_DIAGNOSTICS_CRASHHANDLER_H
+#define MU_DIAGNOSTICS_CRASHHANDLER_H
 
-#include "framework/global/modularity/imodulesetup.h"
+#include <string>
+
+#include "io/path.h"
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
 
-namespace mu::telemetry {
-class TelemetryModule : public modularity::IModuleSetup
-{
-    INJECT(telemetry, system::IFileSystem, fileSystem)
-public:
-    std::string moduleName() const override;
+namespace crashpad {
+class CrashpadClient;
+}
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+namespace mu::diagnostics {
+class CrashHandler
+{
+    INJECT(diagnostics, system::IFileSystem, fileSystem)
+
+public:
+    CrashHandler() = default;
+    ~CrashHandler();
+
+    bool start(const io::path& handlerFilePath, const io::path& dumpsDir, const std::string& serverUrl);
+
+private:
+    void removePendingLockFiles(const io::path& dumpsDir);
+
+    crashpad::CrashpadClient* m_client = nullptr;
 };
 }
 
-#endif // MU_TELEMETRY_TELEMETRYMODULE_H
+#endif // MU_DIAGNOSTICS_CRASHHANDLER_H

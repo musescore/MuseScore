@@ -24,13 +24,17 @@
 #include <QQmlEngine>
 
 #include "modularity/ioc.h"
+#include "global/iglobalconfiguration.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
+#include "internal/diagnosticsconfiguration.h"
 #include "internal/diagnosticsactions.h"
 #include "internal/diagnosticsactionscontroller.h"
 #include "internal/diagnosticspathsregister.h"
 #include "internal/engravingelementsprovider.h"
+
+#include "internal/crashhandler/crashhandler.h"
 
 #include "view/diagnosticspathsmodel.h"
 #include "view/system/profilerviewmodel.h"
@@ -45,9 +49,15 @@
 
 #include "view/engraving/engravingelementsmodel.h"
 
+#include "devtools/crashhandlerdevtoolsmodel.h"
+
+#include "log.h"
+#include "config.h"
+
 using namespace mu::diagnostics;
 using namespace mu::modularity;
 
+static std::shared_ptr<DiagnosticsConfiguration> s_configuration = std::make_shared<DiagnosticsConfiguration>();
 static std::shared_ptr<DiagnosticsActionsController> s_actionsController = std::make_shared<DiagnosticsActionsController>();
 
 std::string DiagnosticsModule::moduleName() const
@@ -92,9 +102,50 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
 
     qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
+
+    qmlRegisterType<CrashHandlerDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CrashHandlerDevToolsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 {
+    s_configuration->init();
     s_actionsController->init();
+
+    auto globalConf = modularity::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
+    IF_ASSERT_FAILED(globalConf) {
+        return;
+    }
+
+#ifdef BUILD_CRASHPAD_CLIENT
+
+    static CrashHandler s_crashHandler;
+
+#ifdef _MSC_VER
+    io::path handlerFile("crashpad_handler.exe");
+#else
+    io::path handlerFile("crashpad_handler");
+#endif // _MSC_VER
+
+    io::path handlerPath = globalConf->appBinPath() + "/" + handlerFile;
+    io::path dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
+    fileSystem()->makePath(dumpsDir);
+    std::string serverUrl(CRASH_REPORT_URL);
+
+    if (!s_configuration->isDumpUploadAllowed()) {
+        serverUrl.clear();
+        LOGD() << "not allowed dump upload";
+    } else {
+        LOGD() << "crash server url: " << serverUrl;
+    }
+
+    bool ok = s_crashHandler.start(handlerPath, dumpsDir, serverUrl);
+    if (!ok) {
+        LOGE() << "failed start crash handler";
+    } else {
+        LOGI() << "success start crash handler";
+    }
+
+#else
+    LOGW() << "crash handling disabled";
+#endif // BUILD_CRASHPAD_CLIENT
 }

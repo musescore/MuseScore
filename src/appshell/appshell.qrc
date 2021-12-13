@@ -12,7 +12,7 @@
         <file>qml/HomePage/AddonsContent.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
-        <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
+        <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
@@ -86,7 +86,6 @@
         <file>resources/win_opengl_buglist.json</file>
         <file>qml/Preferences/internal/BaseSection.qml</file>
         <file>qml/Preferences/internal/LanguagesSection.qml</file>
-        <file>qml/Preferences/internal/TelemetrySection.qml</file>
         <file>qml/Preferences/internal/AutoSaveSection.qml</file>
         <file>qml/Preferences/internal/RemoteControlSection.qml</file>
         <file>qml/Preferences/internal/ProgrammeStartSection.qml</file>

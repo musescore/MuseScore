@@ -19,28 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_TELEMETRY_ITELEMETRYCONFIGURATION_H
-#define MU_TELEMETRY_ITELEMETRYCONFIGURATION_H
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
+#define MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
-#include "retval.h"
-
-namespace mu::telemetry {
-class ITelemetryConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::diagnostics {
+class DiagnosticsConfiguration
 {
-    INTERFACE_ID(ITelemetryConfiguration)
-
 public:
-    virtual ~ITelemetryConfiguration() = default;
+    DiagnosticsConfiguration() = default;
 
-    virtual bool needRequestTelemetryPermission() const = 0;
+    void init();
 
-    virtual ValCh<bool> isTelemetryAllowed() const = 0;
-    virtual void setIsTelemetryAllowed(bool val) = 0;
-
-    virtual bool isDumpUploadAllowed() const = 0;
-    virtual void setIsDumpUploadAllowed(bool val) = 0;
+    bool isDumpUploadAllowed() const;
+    void setIsDumpUploadAllowed(bool val);
 };
 }
 
-#endif // MU_TELEMETRY_ITELEMETRYCONFIGURATION_H
+#endif // MU_DIAGNOSTICS_DIAGNOSTICSCONFIGURATION_H

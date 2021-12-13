@@ -51,8 +51,6 @@ option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
-option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
-set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
 option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
 
