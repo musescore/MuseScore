@@ -44,6 +44,10 @@ DialogView {
     property bool isDoActiveParentOnClose: true
     property alias navigationSection: navSec
 
+    onOpened: {
+        navSec.requestActive()
+    }
+
     onClosed: {
         if (root.isDoActiveParentOnClose && root.navigationParentControl) {
             Qt.callLater(root.navigationParentControl.requestActive)

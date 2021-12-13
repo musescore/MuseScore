@@ -71,13 +71,14 @@ public:
     const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    PanelControlChannel activeRequested() const override;
-
     INavigationSection* section() const override;
     NavigationSection* section_property() const;
 
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
+
+    //! NOTE Can be called from QML without args
+    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr) override;
 
 public slots:
     void setSection_property(NavigationSection* section);
@@ -95,7 +96,6 @@ private:
     NavigationSection* m_section = nullptr;
     std::set<INavigationControl*> m_controls;
     async::Notification m_controlsListChanged;
-    PanelControlChannel m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
 };
 }

@@ -29,6 +29,9 @@
 #include "qmlaccessible.h"
 #include "navigationevent.h"
 
+#include "modularity/ioc.h"
+#include "../inavigationcontroller.h"
+
 namespace mu::ui {
 class AbstractNavigation : public QObject, public QQmlParserStatus
 {
@@ -48,6 +51,8 @@ class AbstractNavigation : public QObject, public QQmlParserStatus
     Q_PROPERTY(AccessibleItem * accessible READ accessible WRITE setAccessible NOTIFY accessibleChanged)
 
     Q_INTERFACES(QQmlParserStatus)
+
+    INJECT(ui, INavigationController, navigationController)
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);

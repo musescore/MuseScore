@@ -64,6 +64,7 @@ public:
 
     async::Notification navigationChanged() const override;
 
+    bool isHighlight() const override;
     void setIsResetOnMousePress(bool arg) override;
 
     void dump() const override;
@@ -82,7 +83,6 @@ private:
         Right,
         Up,
         Down,
-        Escape,
         TriggerControl,
         FirstControl,
         LastControl,
@@ -125,11 +125,12 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
-    void resetActiveIfNeed(QObject* watched);
+    void resetIfNeed(QObject* watched);
     void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
+    bool m_isNavigatedByKeyboard = false;
     bool m_isResetOnMousePress = true;
 };
 }

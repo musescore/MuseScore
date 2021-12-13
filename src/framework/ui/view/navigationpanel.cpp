@@ -143,11 +143,6 @@ mu::async::Notification NavigationPanel::controlsListChanged() const
     return m_controlsListChanged;
 }
 
-PanelControlChannel NavigationPanel::activeRequested() const
-{
-    return m_forceActiveRequested;
-}
-
 INavigationSection* NavigationPanel::section() const
 {
     return m_section;
@@ -199,10 +194,6 @@ void NavigationPanel::addControl(NavigationControl* control)
 
     m_controls.insert(control);
 
-    control->activeRequested().onReceive(this, [this](INavigationControl* control) {
-        m_forceActiveRequested.send(this, control);
-    });
-
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
@@ -216,9 +207,15 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 
     m_controls.erase(control);
-    control->activeRequested().resetOnReceive(this);
 
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
+    }
+}
+
+void NavigationPanel::requestActive(INavigationControl* control)
+{
+    if (m_section) {
+        m_section->requestActive(this, control);
     }
 }

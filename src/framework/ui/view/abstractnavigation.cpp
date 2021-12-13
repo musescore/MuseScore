@@ -226,5 +226,5 @@ void AbstractNavigation::setAccessibleParent(AccessibleItem* p)
 
 bool AbstractNavigation::highlight() const
 {
-    return active();
+    return active() && navigationController()->isHighlight();
 }

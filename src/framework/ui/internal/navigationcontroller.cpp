@@ -34,7 +34,7 @@
 
 #include "config.h"
 
-//#define NAVIGATION_LOGGING_ENABLED
+// #define NAVIGATION_LOGGING_ENABLED
 
 #ifdef NAVIGATION_LOGGING_ENABLED
 #define MYLOG() LOGI()
@@ -284,7 +284,7 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-left", [this]() { navigateTo(NavigationType::Left); });
     dispatcher()->reg(this, "nav-up", [this]() { navigateTo(NavigationType::Up); });
     dispatcher()->reg(this, "nav-down", [this]() { navigateTo(NavigationType::Down); });
-    dispatcher()->reg(this, "nav-escape", [this]() { navigateTo(NavigationType::Escape); });
+    dispatcher()->reg(this, "nav-escape", [this]() { onEscape(); });
 
     dispatcher()->reg(this, "nav-first-control", [this]() { navigateTo(NavigationType::FirstControl); });         // typically Home key
     dispatcher()->reg(this, "nav-last-control", [this]() { navigateTo(NavigationType::LastControl); });           // typically End key
@@ -299,8 +299,7 @@ void NavigationController::reg(INavigationSection* section)
     //! TODO add check on valid state
     TRACEFUNC;
     m_sections.insert(section);
-
-    section->activeRequested().onReceive(this, [this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control) {
+    section->setOnActiveRequested([this](INavigationSection* section, INavigationPanel* panel, INavigationControl* control) {
         onActiveRequested(section, panel, control);
     });
 }
@@ -309,7 +308,7 @@ void NavigationController::unreg(INavigationSection* section)
 {
     TRACEFUNC;
     m_sections.erase(section);
-    section->activeRequested().resetOnReceive(this);
+    section->setOnActiveRequested(nullptr);
 }
 
 const std::set<INavigationSection*>& NavigationController::sections() const
@@ -317,12 +316,17 @@ const std::set<INavigationSection*>& NavigationController::sections() const
     return m_sections;
 }
 
+bool NavigationController::isHighlight() const
+{
+    return m_isNavigatedByKeyboard;
+}
+
 void NavigationController::setIsResetOnMousePress(bool arg)
 {
     m_isResetOnMousePress = arg;
 }
 
-void NavigationController::resetActiveIfNeed(QObject* watched)
+void NavigationController::resetIfNeed(QObject* watched)
 {
     if (!m_isResetOnMousePress) {
         return;
@@ -334,13 +338,13 @@ void NavigationController::resetActiveIfNeed(QObject* watched)
     }
 #endif
 
-    resetActive();
+    m_isNavigatedByKeyboard = false;
 }
 
 bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
-        resetActiveIfNeed(watched);
+        resetIfNeed(watched);
     }
 
     return QObject::eventFilter(watched, event);
@@ -348,6 +352,16 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 
 void NavigationController::navigateTo(NavigationController::NavigationType type)
 {
+    //! NOTE We will assume that if a action was sent, then it was sent using the keyboard
+    //! (instead of an explicit request to activate the by clicking the mouse)
+    if (!m_isNavigatedByKeyboard) {
+        m_isNavigatedByKeyboard = true;
+        INavigationSection* activeSec = findActive(m_sections);
+        if (activeSec) {
+            doDeactivateSection(activeSec);
+        }
+    }
+
     switch (type) {
     case NavigationType::NextSection:
         goToNextSection();
@@ -375,9 +389,6 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
         break;
     case NavigationType::Down:
         onDown();
-        break;
-    case NavigationType::Escape:
-        onEscape();
         break;
     case NavigationType::TriggerControl:
         doTriggerControl();
@@ -1177,18 +1188,13 @@ bool NavigationController::requestActivateByIndex(const std::string& sectName, c
 void NavigationController::onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl, bool force)
 {
     TRACEFUNC;
+    UNUSED(force);
 
     if (m_sections.empty()) {
         return;
     }
 
     INavigationSection* activeSec = findActive(m_sections);
-
-    //! NOTE If there is no active section,
-    //! we may not be using keyboard navigation, so ignore the request.
-    if (!force && !activeSec) {
-        return;
-    }
 
     bool isChanged = false;
 
@@ -1207,18 +1213,18 @@ void NavigationController::onActiveRequested(INavigationSection* sect, INavigati
         doDeactivatePanel(activePanel);
     }
 
-    if (!panel->active()) {
+    if (panel && !panel->active()) {
         panel->setActive(true);
         isChanged = true;
         MYLOG() << "activated panel: " << panel->name() << ", order: " << panel->index().order();
     }
 
-    INavigationControl* activeCtrl = findActive(panel->controls());
+    INavigationControl* activeCtrl = panel ? findActive(panel->controls()) : nullptr;
     if (activeCtrl && activeCtrl != ctrl) {
         activeCtrl->setActive(false);
     }
 
-    if (!ctrl->active()) {
+    if (ctrl && !ctrl->active()) {
         ctrl->setActive(true);
         isChanged = true;
         MYLOG() << "activated control: " << ctrl->name() << ", row: " << ctrl->index().row << ", column: " << ctrl->index().column;
