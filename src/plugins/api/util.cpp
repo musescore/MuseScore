@@ -134,7 +134,7 @@ int FileIO::modifiedTime()
         source = url.toLocalFile();
     }
     QFileInfo fileInfo(source);
-    return fileInfo.lastModified().toTime_t();
+    return fileInfo.lastModified().toSecsSinceEpoch();
 }
 
 //---------------------------------------------------------
