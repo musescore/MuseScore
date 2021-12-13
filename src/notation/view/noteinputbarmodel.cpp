@@ -228,6 +228,7 @@ void NoteInputBarModel::updateNoteInputModeState()
     MenuItemList subitems = noteInputMethodItems();
     item = makeActionItem(currentNoteInputModeAction(), currentSection, subitems);
     item.state.checked = isNoteInputMode();
+    item.state.enabled = true;
 
     emit dataChanged(index(noteInputModeIndex), index(noteInputModeIndex));
 }
@@ -357,7 +358,7 @@ void NoteInputBarModel::updateRestState()
 
 void NoteInputBarModel::updateTupletState()
 {
-    findItem(ActionCode(TUPLET_ACTION_CODE)).subitems = tupletItems();
+    findItem(ActionCode(TUPLET_ACTION_CODE)).state.enabled = resolveTupletEnabled();
 }
 
 void NoteInputBarModel::updateAddState()
@@ -510,6 +511,25 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
     }
 
     return result;
+}
+
+bool NoteInputBarModel::resolveTupletEnabled() const
+{
+    if (isNoteInputMode()) {
+        return true;
+    }
+
+    if (!selection()) {
+        return false;
+    }
+
+    for (const EngravingItem* element: selection()->elements()) {
+        if (element->isRest() || element->isNote()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) const
