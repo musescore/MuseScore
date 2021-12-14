@@ -69,7 +69,7 @@ MixerPanelSection {
 
             currentText: Math.round(channelItem.volumeLevel * 10) / 10
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 if (channelItem.volumeLevel !== Number(newTextValue)) {
                     channelItem.volumeLevel = Number(newTextValue)
                 }
