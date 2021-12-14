@@ -152,6 +152,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
+    case P_TYPE::ORIENTATION: return static_cast<int>(value<Orientation>());
     case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
 
     // Duration
@@ -217,6 +218,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
+    case P_TYPE::ORIENTATION:   return PropertyValue(Orientation(v.toInt()));
     case P_TYPE::BEAM_MODE:     return PropertyValue(BeamMode(v.toInt()));
 
     // Duration

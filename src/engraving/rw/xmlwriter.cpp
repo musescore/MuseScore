@@ -342,6 +342,13 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << "</" << ename << ">\n";
     }
     break;
+    case P_TYPE::ORIENTATION: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<Orientation>());
+        *this << "</" << ename << ">\n";
+    }
+    break;
     // time
     case P_TYPE::FRACTION: {
         const Fraction& f = data.value<Fraction>();
