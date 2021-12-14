@@ -39,7 +39,7 @@ Item {
         accessible.name: root.name
         enabled: root.enabled && root.visible
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
