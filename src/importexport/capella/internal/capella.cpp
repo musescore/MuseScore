@@ -31,6 +31,9 @@
 #include "libmscore/mscore.h"
 #include "capella.h"
 
+#include "translation.h"
+#include "interactive/messagebox.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -2804,10 +2807,9 @@ Score::FileError importCapella(MasterScore* score, const QString& name)
     }
     catch (Capella::Error errNo) {
         if (!MScore::noGui) {
-            QMessageBox::warning(0,
-                                 QWidget::tr("Import Capella"),
-                                 QWidget::tr("Load failed: %1").arg(cf.error(errNo)),
-                                 QString(), QWidget::tr("Quit"), QString(), 0, 1);
+            MessageBox::warning(mu::trc("iex_capella", "Import Capella"),
+                                mu::qtrc("iex_capella", "Import failed: %1").arg(cf.error(errNo)).toStdString(),
+                                { MessageBox::Ok });
         }
         fp.close();
         // avoid another error message box

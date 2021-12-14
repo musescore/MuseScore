@@ -31,6 +31,9 @@
 
 #include "rw/xml.h"
 
+#include "translation.h"
+#include "interactive/messagebox.h"
+
 #include <libmscore/factory.h>
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>
@@ -2915,12 +2918,13 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         return Score::FileError::FILE_BAD_FORMAT;
     }
     if (readResult == false) {
-        /*if (!MScore::noGui) {
-              QMessageBox::warning(0,
-                 QWidget::tr("Import Guitar Pro"),
-                 QWidget::tr("Load failed: %1").arg(gp->error(errNo)),
-                 QString::null, QWidget::tr("Quit"), QString::null, 0, 1);
-              }*/
+        /*
+        if (!MScore::noGui) {
+            MessageBox::warning(mu::trc("iex_guitarpro", "Import Guitar Pro"),
+                                mu::qtrc("iex_guitarpro", "Import failed: %1").arg(gp->error(errNo)).toStdString(),
+                                { MessageBox::Ok });
+        }
+        */
         qDebug("guitar pro import error====");
         // avoid another error message box
         return Score::FileError::FILE_NO_ERROR;

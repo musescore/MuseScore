@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_MESSAGEBOX_H
 #define MU_ENGRAVING_MESSAGEBOX_H
 
+#include <set>
 #include <string>
 
 #ifndef NO_ENGRAVING_INTERACTIVE
@@ -42,7 +43,7 @@ public:
         Cancel
     };
 
-    static Button warning(const std::string& title, const std::string& text);
+    static Button warning(const std::string& title, const std::string& text, const std::set<Button>& buttons = { Ok, Cancel });
 };
 }
 
