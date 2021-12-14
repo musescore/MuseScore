@@ -137,7 +137,7 @@ Item {
             navigation.panel: navPanel
             navigation.order: 3
 
-            onChangeCurrentViewModeRequested: {
+            onChangeCurrentViewModeRequested: function(newViewMode) {
                 model.setCurrentViewMode(newViewMode)
             }
         }
@@ -156,11 +156,11 @@ Item {
             navigationPanel: navPanel
             navigationOrderMin: 4
 
-            onChangeZoomPercentageRequested: {
+            onChangeZoomPercentageRequested: function(newZoomPercentage) {
                 model.currentZoomPercentage = newZoomPercentage
             }
 
-            onChangeZoomRequested: {
+            onChangeZoomRequested: function(zoomId) {
                 model.setCurrentZoom(zoomId)
             }
 
@@ -200,7 +200,7 @@ Item {
                 return result
             }
 
-            onHandleMenuItem: {
+            onHandleMenuItem: function(itemId) {
                 switch (itemId) {
                 case model.concertPitchAction.id:
                     model.handleAction(model.concertPitchAction.code)

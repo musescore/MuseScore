@@ -49,7 +49,7 @@ Rectangle {
             separatorCpp.onMouseReleased()
         }
 
-        onPositionChanged: {
+        onPositionChanged: function(mouse) {
             separatorCpp.onMouseMoved(Qt.point(mouse.x, mouse.y))
         }
 
