@@ -184,7 +184,7 @@ FlatButton {
                     navigation.row: 2
                     navigation.column: 0
 
-                    onValueEdited: {
+                    onValueEdited: function(newValue) {
                         var tempo = root.model.tempo
                         tempo.value = newValue
                         root.model.tempo = tempo

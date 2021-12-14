@@ -89,7 +89,7 @@ Item {
             section: root.navigationSection
             order: 1
 
-            onNavigationEvent: {
+            onNavigationEvent: function(event) {
                 if (event.type === NavigationEvent.AboutActive) {
                     event.setData("controlIndex", bar.currentItemNavigationIndex)
                 }

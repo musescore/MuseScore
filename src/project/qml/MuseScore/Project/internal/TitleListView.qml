@@ -50,7 +50,7 @@ Item {
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
                 event.setData("controlIndex", prv.currentItemNavigationIndex)
             }
