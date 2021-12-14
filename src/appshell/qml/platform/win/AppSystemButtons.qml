@@ -15,6 +15,8 @@ Row {
         accessible.name: qsTrc("appshell", "App control")
     }
 
+    spacing: 8
+
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()

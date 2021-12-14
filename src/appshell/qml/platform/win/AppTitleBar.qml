@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,7 +33,7 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    property alias title: titleLabel.text
+    property alias title: titleTextmetrics.text
     property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
     property alias windowIsMiximized: systemButtons.windowIsMiximized
@@ -54,43 +55,64 @@ Rectangle {
         }
     }
 
-    Item {
+    RowLayout {
         anchors.fill: parent
+
+        spacing: 8
 
         AppMenuBar {
             id: menu
 
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            Layout.preferredWidth: width
+            Layout.preferredHeight: height
 
             navigation.section: navSec
             navigation.order: 0
         }
 
-        Item {
-            id: titleMoveArea
-
-            anchors.top: parent.top
-            anchors.left: menu.right
-            anchors.right: systemButtons.left
-            anchors.bottom: parent.bottom
-        }
-
         StyledTextLabel {
             id: titleLabel
-            anchors.centerIn: parent
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
             horizontalAlignment: Text.AlignLeft
-            text: qsTrc("appshell", "MuseScore 4")
+            leftPadding: {
+                var parentCenterX = parent.width / 2
+                var expectedTextCenterX = parentCenterX - titleTextmetrics.width / 2
+                if (expectedTextCenterX > x) {
+                    return expectedTextCenterX - x
+                }
 
+                return 0
+            }
+
+            text: titleTextmetrics.elidedText
             textFormat: Text.RichText
+
+            TextMetrics {
+                id: titleTextmetrics
+
+                text: qsTrc("appshell", "MuseScore 4")
+                font: titleLabel.font
+                elide: Qt.ElideRight
+                elideWidth: titleLabel.width
+            }
+
+            Item {
+                id: titleMoveArea
+
+                anchors.fill: parent
+            }
         }
 
         AppSystemButtons {
             id: systemButtons
 
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.RightLeft | Qt.AlignVCenter
+            Layout.preferredWidth: width
+            Layout.preferredHeight: height
 
             navigationPanel.section: navSec
             navigationPanel.order: 1
