@@ -47,7 +47,7 @@ Rectangle {
         accessible.name: root.name + ". " + root.description
         enabled: root.enabled && root.visible
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }

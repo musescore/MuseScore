@@ -58,14 +58,14 @@ Item {
     ExtensionListModel {
         id: extensionListModel
 
-        onProgress: {
+        onProgress: function(extensionCode, status, indeterminate, current, total) {
             if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== extensionCode) {
                 return
             }
 
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
-        onFinish: {
+        onFinish: function(item) {
             if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== item.code) {
                 return
             }
