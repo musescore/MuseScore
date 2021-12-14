@@ -75,7 +75,7 @@ FlatButton {
 
         navigationParentControl: root.navigation
 
-        onHandleMenuItem: {
+        onHandleMenuItem: function(itemId) {
             Qt.callLater(root.changeCurrentViewModeRequested, itemId)
         }
     }

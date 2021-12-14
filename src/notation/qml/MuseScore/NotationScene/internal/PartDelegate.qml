@@ -59,6 +59,10 @@ ListItemBlank {
         }
     }
 
+    onCurrentPartIndexChanged: {
+        root.endEditTitle()
+    }
+
     height: 42
 
     onClicked: {
@@ -96,14 +100,6 @@ ListItemBlank {
 
             sourceComponent: partTitle
 
-            Connections {
-                target: root
-
-                function onCurrentPartIndexChanged(currentPartIndex) {
-                    root.endEditTitle()
-                }
-            }
-
             Component {
                 id: partTitle
 
@@ -130,7 +126,7 @@ ListItemBlank {
 
                     currentText: root.title
 
-                    onCurrentTextEdited: {
+                    onCurrentTextEdited: function(newTextValue) {
                         root.titleEdited(newTextValue)
                     }
 
@@ -153,7 +149,7 @@ ListItemBlank {
             navigation.row: root.navigation.row
             navigation.column: 2
 
-            onHandleMenuItem: {
+            onHandleMenuItem: function(itemId) {
                 switch(itemId) {
                 case "duplicate":
                     root.copyPartRequested()
