@@ -50,7 +50,7 @@ FocusScope {
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 openMoreInfoButton.navigation.requestActive()
                 accessibleInfo.focused = true

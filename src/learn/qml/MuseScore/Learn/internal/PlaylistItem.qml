@@ -46,7 +46,7 @@ FocusScope {
         accessible.role: MUAccessible.Button
         accessible.name: root.title + ". " + root.author
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
