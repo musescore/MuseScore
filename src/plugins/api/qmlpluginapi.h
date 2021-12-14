@@ -151,7 +151,7 @@ class PluginAPI : public Ms::QmlPlugin
     /// Contains Ms::Tid enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// TextStyleType (TextStyleType.TITLE etc.)
-    DECLARE_API_ENUM(Tid,              tidEnum,                Ms::Tid)
+    DECLARE_API_ENUM(Tid,              tidEnum,                Ms::PluginAPI::Tid)
     /// Contains Ms::Align enumeration values
     /// \since MuseScore 3.3
     DECLARE_API_ENUM(Align,            alignEnum,              Ms::PluginAPI::Align)

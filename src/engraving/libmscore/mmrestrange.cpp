@@ -82,8 +82,8 @@ bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
 PropertyValue MMRestRange::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::MMREST_RANGE);
+    case Pid::TEXT_TYPE:
+        return Tid::MMREST_RANGE;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::mmRestRangeVPlacement);
     case Pid::HPLACEMENT:

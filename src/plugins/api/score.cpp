@@ -61,15 +61,15 @@ void Score::addText(const QString& type, const QString& txt)
         score()->insertMeasure(ElementType::VBOX, measure);
         measure = score()->first();
     }
-    Tid tid = Tid::DEFAULT;
+    Ms::Tid tid = Ms::Tid::DEFAULT;
     if (type == "title") {
-        tid = Tid::TITLE;
+        tid = Ms::Tid::TITLE;
     } else if (type == "subtitle") {
-        tid = Tid::SUBTITLE;
+        tid = Ms::Tid::SUBTITLE;
     } else if (type == "composer") {
-        tid = Tid::COMPOSER;
+        tid = Ms::Tid::COMPOSER;
     } else if (type == "lyricist") {
-        tid = Tid::POET;
+        tid = Ms::Tid::POET;
     }
 
     Ms::Text* text = mu::engraving::Factory::createText(measure, tid);

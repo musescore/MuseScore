@@ -1010,7 +1010,7 @@ struct TextStyleName {
 
 // Must be in sync with Tid enum (in types.h)
 
-static constexpr std::array<TextStyleName, size_t(Tid::TEXT_STYLES)> textStyles { {
+static constexpr std::array<TextStyleName, size_t(Tid::TEXT_TYPES)> textStyles { {
     { QT_TRANSLATE_NOOP("TextStyle", "Default"),                 &defaultTextStyle,           Tid::DEFAULT },
 // Page-orientde styles
     { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleTextStyle,             Tid::TITLE },
@@ -1189,7 +1189,7 @@ static const std::vector<Tid> _primaryTextStyles = {
 const std::vector<Tid>& allTextStyles()
 {
     if (_allTextStyles.empty()) {
-        _allTextStyles.reserve(int(Tid::TEXT_STYLES));
+        _allTextStyles.reserve(int(Tid::TEXT_TYPES));
         for (const auto& s : textStyles) {
             if (s.tid == Tid::DEFAULT) {
                 continue;
