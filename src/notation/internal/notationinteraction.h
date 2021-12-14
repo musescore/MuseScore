@@ -227,6 +227,10 @@ public:
     void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
     void navigateToHarmony(const Fraction& ticks) override;
 
+    void navigateToFiguredBassInNearBeat(MoveDirection direction) override;
+    void navigateToFiguredBassInNearMeasure(MoveDirection direction) override;
+    void navigateToFiguredBass(const Fraction& ticks) override;
+
     void addMelisma() override;
     void addLyricsVerse() override;
 
