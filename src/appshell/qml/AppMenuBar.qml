@@ -148,22 +148,43 @@ ListView {
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened
 
-        text: Boolean(item) ? replaceText(item.title) : ""
-        textFormat: Text.RichText
+        contentItem: StyledTextLabel {
+            id: textLabel
 
-        function replaceText(text) {
-            if (!prv.hasNavigatedItem()) {
-                return text.replace('&', '')
+            text: Boolean(radioButtonDelegate.item) ? correctText(radioButtonDelegate.item.title) : ""
+            textFormat: Text.RichText
+
+            width: textMetrics.width
+
+            TextMetrics {
+                id: textMetrics
+
+                font: textLabel.font
+                text: textLabel.removeAmpersands(radioButtonDelegate.item.title)
             }
 
-            return Utils.makeMnemonicText(text)
+            function correctText(text) {
+                if (!prv.hasNavigatedItem()) {
+                    return removeAmpersands(text)
+                }
+
+                return makeMnemonicText(text)
+            }
+
+            function removeAmpersands(text) {
+                return Utils.removeAmpersands(text)
+            }
+
+            function makeMnemonicText(text) {
+                return Utils.makeMnemonicText(text)
+            }
         }
 
         navigation.name: text
         navigation.panel: navPanel
         navigation.order: index
         accessible.name: {
-            return text.replace('&', '')
+            return Utils.removeAmpersands(text)
         }
 
         Keys.onShortcutOverride: {
