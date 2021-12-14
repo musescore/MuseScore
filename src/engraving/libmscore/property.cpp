@@ -78,7 +78,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::Z,                       false, "z",                     P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "z") },
     { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "small") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEYMODE,        DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
+    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,        DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
     { Pid::LINE_TYPE,               false, "lineType",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "pitch") },
 
@@ -474,13 +474,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
         return int(textStyleFromName(value));
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
-    case P_TYPE::ORIENTATION:
-        if (value == "vertical") {
-            return PropertyValue(int(Orientation::VERTICAL));
-        } else if (value == "horizontal") {
-            return PropertyValue(int(Orientation::HORIZONTAL));
-        }
-        break;
     default:
         break;
     }
@@ -563,6 +556,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::HOOK_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), HookType::NONE));
 
+    case P_TYPE::KEY_MODE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), KeyMode::NONE));
+
     case P_TYPE::SUB_STYLE:
         return propertyFromString(propertyType(id), e.readElementText());
     case P_TYPE::BEAM_MODE:
@@ -613,39 +609,12 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::KEYMODE:
-        switch (KeyMode(value.toInt())) {
-        case KeyMode::NONE:
-            return "none";
-        case KeyMode::MAJOR:
-            return "major";
-        case KeyMode::MINOR:
-            return "minor";
-        case KeyMode::DORIAN:
-            return "dorian";
-        case KeyMode::PHRYGIAN:
-            return "phrygian";
-        case KeyMode::LYDIAN:
-            return "lydian";
-        case KeyMode::MIXOLYDIAN:
-            return "mixolydian";
-        case KeyMode::AEOLIAN:
-            return "aeolian";
-        case KeyMode::IONIAN:
-            return "ionian";
-        case KeyMode::LOCRIAN:
-            return "locrian";
-        default:
-            return "unknown";
-        }
     case P_TYPE::SUB_STYLE:
         return textStyleName(Tid(value.toInt()));
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
-    case P_TYPE::BEAM_MODE:
-        qFatal("unknown: BEAM_MODE");
     case P_TYPE::TEMPO:
         qFatal("unknown: TEMPO");
     case P_TYPE::GROUPS:

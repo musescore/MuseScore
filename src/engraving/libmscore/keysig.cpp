@@ -25,6 +25,7 @@
 #include "translation.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 
 #include "staff.h"
 #include "clef.h"
@@ -390,31 +391,11 @@ void KeySig::write(XmlWriter& xml) const
     } else {
         xml.tag("accidental", int(_sig.key()));
     }
-    switch (_sig.mode()) {
-    case KeyMode::NONE:       xml.tag("mode", "none");
-        break;
-    case KeyMode::MAJOR:      xml.tag("mode", "major");
-        break;
-    case KeyMode::MINOR:      xml.tag("mode", "minor");
-        break;
-    case KeyMode::DORIAN:     xml.tag("mode", "dorian");
-        break;
-    case KeyMode::PHRYGIAN:   xml.tag("mode", "phrygian");
-        break;
-    case KeyMode::LYDIAN:     xml.tag("mode", "lydian");
-        break;
-    case KeyMode::MIXOLYDIAN: xml.tag("mode", "mixolydian");
-        break;
-    case KeyMode::AEOLIAN:    xml.tag("mode", "aeolian");
-        break;
-    case KeyMode::IONIAN:     xml.tag("mode", "ionian");
-        break;
-    case KeyMode::LOCRIAN:    xml.tag("mode", "locrian");
-        break;
-    case KeyMode::UNKNOWN:
-    default:
-        ;
+
+    if (_sig.mode() != KeyMode::UNKNOWN) {
+        xml.tag("mode", TConv::toXml(_sig.mode()));
     }
+
     if (!_showCourtesy) {
         xml.tag("showCourtesySig", _showCourtesy);
     }
