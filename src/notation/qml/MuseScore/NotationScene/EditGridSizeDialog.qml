@@ -89,7 +89,7 @@ StyledDialogView {
 
                         measureUnitsSymbol: qsTrc("notation", "sp")
 
-                        onValueEdited: {
+                        onValueEdited: function(newValue) {
                             model.horizontalGridSizeSpatium = newValue
                         }
                     }
@@ -130,7 +130,7 @@ StyledDialogView {
 
                         measureUnitsSymbol: qsTrc("notation", "sp")
 
-                        onValueEdited: {
+                        onValueEdited: function(newValue) {
                             model.verticalGridSizeSpatium = newValue
                         }
                     }

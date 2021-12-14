@@ -44,7 +44,7 @@ Item {
         name: "NotationToolBar"
         enabled: root.enabled && root.visible
         accessible.name: qsTrc("notation", "Notation toolbar")
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.activeFocusRequested()
                 root.forceActiveFocus()

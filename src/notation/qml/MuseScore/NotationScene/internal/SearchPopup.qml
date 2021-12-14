@@ -83,7 +83,7 @@ Rectangle {
 
             width: 500
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 model.search(newTextValue)
             }
         }
