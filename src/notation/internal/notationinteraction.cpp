@@ -3941,7 +3941,7 @@ void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, b
                                                    )
                                                * ticksPerBeat);
 
-    startEdit();
+    bool needAddSegment = false;
 
     // look for next/prev beat, note, rest or chord
     for (;;) {
@@ -3963,7 +3963,7 @@ void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, b
                 qDebug("no prev segment");
                 return;
             }
-            score()->undoAddElement(segment);
+            needAddSegment = true;
             break;
         }
 
@@ -3978,6 +3978,12 @@ void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, b
                 break;
             }
         }
+    }
+
+    startEdit();
+
+    if (needAddSegment) {
+        score()->undoAddElement(segment);
     }
 
     Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
@@ -4026,10 +4032,12 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
     Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
     if (!nextHarmony) {
         nextHarmony = createHarmony(segment, track, harmony->harmonyType());
+
+        startEdit();
         score()->undoAddElement(nextHarmony);
+        apply();
     }
 
-    apply();
     startEditText(nextHarmony);
 }
 
@@ -4047,8 +4055,6 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 
     Fraction newTick   = segment->tick() + ticks;
 
-    startEdit();
-
     // find the measure containing the target tick
     while (newTick >= measure->tick() + measure->ticks()) {
         measure = measure->nextMeasure();
@@ -4062,6 +4068,9 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     while (segment && segment->tick() < newTick) {
         segment = segment->next1(Ms::SegmentType::ChordRest);
     }
+
+    startEdit();
+
     if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
         segment = Factory::createSegment(measure, Ms::SegmentType::ChordRest, newTick - measure->tick());
         score()->undoAddElement(segment);
