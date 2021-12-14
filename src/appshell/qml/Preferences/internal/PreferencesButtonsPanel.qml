@@ -35,7 +35,7 @@ Rectangle {
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
