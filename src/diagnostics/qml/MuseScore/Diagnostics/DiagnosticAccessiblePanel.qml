@@ -45,7 +45,7 @@ Rectangle {
 
         property var lastFocusedIndex: null
 
-        onFocusedItem: {
+        onFocusedItem: function(index) {
             if (lastFocusedIndex) {
                 view.collapseBranch(lastFocusedIndex)
             }
