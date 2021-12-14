@@ -136,7 +136,7 @@ InspectorSectionView {
                     playbackSettings.focusOnCurrentTab()
                 }
 
-                onEnsureContentVisibleRequested: {
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }
@@ -166,7 +166,7 @@ InspectorSectionView {
                     appearanceSettings.focusOnFirst()
                 }
 
-                onEnsureContentVisibleRequested: {
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }

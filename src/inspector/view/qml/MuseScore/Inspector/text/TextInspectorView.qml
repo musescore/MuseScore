@@ -279,7 +279,7 @@ InspectorSectionView {
                 Qt.callLater(textSettings.focusOnFirst)
             }
 
-            onEnsureContentVisibleRequested: {
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                 root.ensureContentVisibleRequested(invisibleContentHeight)
             }
         }
