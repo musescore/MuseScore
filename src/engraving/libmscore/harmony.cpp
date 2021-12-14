@@ -846,7 +846,7 @@ bool Harmony::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Qt::Key_Semicolon) {
+    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
         return false;
     }
 

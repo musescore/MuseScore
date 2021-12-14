@@ -469,7 +469,7 @@ public:
 
 inline bool isNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 {
-    if (modifiers == Qt::ControlModifier) {
+    if (modifiers & Qt::ControlModifier) {
         return true;
     }
 

@@ -1129,14 +1129,6 @@
     <seq>Ctrl+&amp;</seq> <!-- AZERTY for 1 -->
     </SC>
   <SC>
-    <key>prev-measure-TEXT</key>
-    <seq>Shift+Tab</seq>
-    </SC>
-  <SC>
-    <key>next-measure-TEXT</key>
-    <seq>Tab</seq>
-    </SC>
-  <SC>
     <key>prev-beat-TEXT</key>
     <seq>:</seq>
     </SC>

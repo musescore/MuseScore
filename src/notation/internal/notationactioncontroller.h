@@ -170,6 +170,8 @@ private:
 
     FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
+    bool measureNavigationAvailable() const;
+
     bool textNavigationAvailable() const;
     bool textNavigationByFractionAvailable() const;
 
@@ -177,8 +179,6 @@ private:
     void prevTextElement();
     void nextBeatTextElement();
     void prevBeatTextElement();
-    void nextMeasureTextElement();
-    void prevMeasureTextElement();
     void navigateToTextElement(MoveDirection direction, bool noterest = false);
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);

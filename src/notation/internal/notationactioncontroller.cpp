@@ -115,15 +115,15 @@ void NotationActionController::init()
     registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
     registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationAvailable);
     registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationAvailable);
-    registerAction("next-measure-TEXT", &Controller::nextMeasureTextElement, &Controller::textNavigationAvailable);
-    registerAction("prev-measure-TEXT", &Controller::prevMeasureTextElement, &Controller::textNavigationAvailable);
 
     for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
-        registerAction(it.key(), [this, it]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
+        registerAction(it.key(), [=]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
     }
 
-    registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay, &Controller::isEditingLyrics);
-    registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay, &Controller::isEditingLyrics);
+    registerAction("next-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Down, PlayMode::NoPlay,
+                   &Controller::isEditingLyrics);
+    registerAction("prev-lyric-verse", &Interaction::navigateToLyricsVerse, MoveDirection::Up, PlayMode::NoPlay,
+                   &Controller::isEditingLyrics);
     registerAction("next-syllable", &Interaction::nagivateToNextSyllable, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
@@ -167,8 +167,8 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("next-chord", &Controller::move, MoveDirection::Right, false);
     registerAction("prev-chord", &Controller::move, MoveDirection::Left, false);
-    registerAction("next-measure", &Controller::move, MoveDirection::Right, true);
-    registerAction("prev-measure", &Controller::move, MoveDirection::Left, true);
+    registerAction("next-measure", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
+    registerAction("prev-measure", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
     registerAction("next-track", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::Track, PlayMode::PlayChord);
     registerAction("prev-track", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::Track, PlayMode::PlayChord);
     registerAction("pitch-up", &Controller::move, MoveDirection::Up, false);
@@ -776,6 +776,11 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
+        if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
+            navigateToTextElementInNearMeasure(direction);
+            break;
+        }
+
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
         } else {
@@ -1277,6 +1282,11 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Engr
     return options;
 }
 
+bool NotationActionController::measureNavigationAvailable() const
+{
+    return isNotEditingElement() || textNavigationAvailable();
+}
+
 bool NotationActionController::textNavigationAvailable() const
 {
     if (!isEditingText()) {
@@ -1332,16 +1342,6 @@ void NotationActionController::nextBeatTextElement()
 void NotationActionController::prevBeatTextElement()
 {
     navigateToTextElement(MoveDirection::Left, NOTEREST);
-}
-
-void NotationActionController::nextMeasureTextElement()
-{
-    navigateToTextElementInNearMeasure(MoveDirection::Right);
-}
-
-void NotationActionController::prevMeasureTextElement()
-{
-    navigateToTextElementInNearMeasure(MoveDirection::Left);
 }
 
 void NotationActionController::navigateToTextElement(MoveDirection direction, bool noterest)

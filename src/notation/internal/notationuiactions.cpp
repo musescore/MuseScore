@@ -1228,16 +1228,6 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Previous Beat (Chord Symbol)"),
              QT_TRANSLATE_NOOP("action", "Previous beat (Chord symbol)")
              ),
-    UiAction("next-measure-TEXT",
-             mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Next Measure (F.B./Chord Symbol)"),
-             QT_TRANSLATE_NOOP("action", "Next measure (Figured bass/Chord symbol only)")
-             ),
-    UiAction("prev-measure-TEXT",
-             mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Previous Measure (F.B./Chord Symbol)"),
-             QT_TRANSLATE_NOOP("action", "Previous measure (Figured bass/Chord symbol only)")
-             ),
     UiAction("advance-longa",
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Longa Advance (F.B./Chord Symbol)"),
