@@ -39,22 +39,24 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: -5 //! NOTE: extra space for user convenience
 
-        cursorShape: (separatorCpp && separatorCpp.showResizeCursor) ? (separatorCpp.isVertical ? Qt.SizeVerCursor : Qt.SizeHorCursor)
-                                   : Qt.ArrowCursor
+        cursorShape: (root.separatorCpp && separatorCpp.showResizeCursor)
+                     ? (root.separatorCpp.isVertical ? Qt.SizeVerCursor : Qt.SizeHorCursor)
+                     : Qt.ArrowCursor
+
         onPressed: {
-            separatorCpp.onMousePressed()
+            root.separatorCpp.onMousePressed()
         }
 
         onReleased: {
-            separatorCpp.onMouseReleased()
+            root.separatorCpp.onMouseReleased()
         }
 
         onPositionChanged: function(mouse) {
-            separatorCpp.onMouseMoved(Qt.point(mouse.x, mouse.y))
+            root.separatorCpp.onMouseMoved(Qt.point(mouse.x, mouse.y))
         }
 
         onDoubleClicked: {
-            separatorCpp.onMouseDoubleClicked()
+            root.separatorCpp.onMouseDoubleClicked()
         }
     }
 }

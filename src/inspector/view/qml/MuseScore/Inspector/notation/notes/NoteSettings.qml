@@ -69,7 +69,7 @@ Column {
         }
 
         InspectorTabButton {
-            text: root.headModel ? root.headModel.title : ""
+            text: root.headModel?.title ?? ""
 
             navigation.name: "HeadTab"
             navigation.panel: root.navigationPanel
