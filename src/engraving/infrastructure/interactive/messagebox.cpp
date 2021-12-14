@@ -25,11 +25,20 @@
 
 using namespace mu::engraving;
 
-MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text)
+MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text, const std::set<Button>& buttons)
 {
 #ifndef NO_ENGRAVING_INTERACTIVE
     using namespace mu::framework;
-    IInteractive::Result res = interactive()->warning(title, text, { IInteractive::Button::Ok, IInteractive::Button::Cancel });
+
+    std::vector<IInteractive::Button> realButtons;
+    if (buttons.find(Cancel) != buttons.cend()) {
+        realButtons.push_back(IInteractive::Button::Cancel);
+    }
+    if (buttons.find(Ok) != buttons.cend() || realButtons.empty()) {
+        realButtons.push_back(IInteractive::Button::Ok);
+    }
+
+    IInteractive::Result res = interactive()->warning(title, text, realButtons);
     if (res.standardButton() == IInteractive::Button::Ok) {
         return MessageBox::Button::Ok;
     }
