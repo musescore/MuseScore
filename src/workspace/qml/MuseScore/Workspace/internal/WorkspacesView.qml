@@ -36,7 +36,7 @@ RadioButtonGroup {
         name: "WorkspacesViewPanel"
         direction: NavigationPanel.Vertical
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
                 event.setData("controlIndex", prv.currentItemNavigationIndex)
                 //! NOTE If we removed workspace, then control with saved index may not be
