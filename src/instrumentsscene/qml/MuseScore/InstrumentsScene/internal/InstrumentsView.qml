@@ -49,7 +49,7 @@ Item {
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
                 for (var i = 0; i < instrumentsView.count; ++i) {
                     var item = instrumentsView.itemAtIndex(i)
