@@ -68,6 +68,10 @@ public:
     static QString toUserName(HookType v);
     static QString toXml(HookType v);
     static HookType fromXml(const QString& tag, HookType def);
+
+    static QString toUserName(KeyMode v);
+    static QString toXml(KeyMode v);
+    static KeyMode fromXml(const QString& tag, KeyMode def);
 };
 }
 

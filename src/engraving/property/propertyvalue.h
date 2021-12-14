@@ -92,7 +92,7 @@ enum class P_TYPE {
     DYNAMIC_RANGE,
     DYNAMIC_SPEED,
     HOOK_TYPE,
-    KEYMODE,
+    KEY_MODE,
 
     // not sorted
 
@@ -225,7 +225,7 @@ public:
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
 
     PropertyValue(KeyMode v)
-        : m_type(P_TYPE::KEYMODE), m_data(make_data<KeyMode>(v)) {}
+        : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
 
     // not sorted
 

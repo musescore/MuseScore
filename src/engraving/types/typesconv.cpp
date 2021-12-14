@@ -454,3 +454,32 @@ HookType TConv::fromXml(const QString& tag, HookType def)
     int v = tag.toInt(&ok);
     return ok ? HookType(v) : def;
 }
+
+static const std::vector<Item<KeyMode> > KEY_MODES = {
+    { KeyMode::UNKNOWN,     "unknown" },
+    { KeyMode::NONE,        "none" },
+    { KeyMode::MAJOR,       "major" },
+    { KeyMode::MINOR,       "minor" },
+    { KeyMode::DORIAN,      "dorian" },
+    { KeyMode::PHRYGIAN,    "phrygian" },
+    { KeyMode::LYDIAN,      "lydian" },
+    { KeyMode::MIXOLYDIAN,  "mixolydian" },
+    { KeyMode::AEOLIAN,     "aeolian" },
+    { KeyMode::IONIAN,      "ionian" },
+    { KeyMode::LOCRIAN,     "locrian" },
+};
+
+QString TConv::toUserName(KeyMode v)
+{
+    return findUserNameByType<KeyMode>(KEY_MODES, v);
+}
+
+QString TConv::toXml(KeyMode v)
+{
+    return findXmlTagByType<KeyMode>(KEY_MODES, v);
+}
+
+KeyMode TConv::fromXml(const QString& tag, KeyMode def)
+{
+    return findTypeByXmlTag<KeyMode>(KEY_MODES, tag, def);
+}
