@@ -44,7 +44,7 @@ RowLayout {
 
     focus: true
 
-    Keys.onShortcutOverride: {
+    Keys.onShortcutOverride: function(event) {
         if (event.key === Qt.Key_Delete) {
             root.removingRequested()
         }

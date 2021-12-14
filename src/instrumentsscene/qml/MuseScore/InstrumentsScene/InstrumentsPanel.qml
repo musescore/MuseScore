@@ -166,7 +166,7 @@ Item {
                     enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
                     order: 3
 
-                    onNavigationEvent: {
+                    onNavigationEvent: function(event) {
                         if (event.type === NavigationEvent.AboutActive) {
                             event.setData("controlName", prv.currentItemNavigationName)
                         }
@@ -261,7 +261,7 @@ Item {
 
                                 property real contentYBackup: 0
 
-                                onPopupOpened: {
+                                onPopupOpened: function(popupX, popupY, popupHeight) {
                                     contentYBackup = flickable.contentY
                                     var mappedPopupY = mapToItem(flickable, popupX, popupY).y
 
@@ -297,7 +297,7 @@ Item {
                         }
                     }
 
-                    onEntered: {
+                    onEntered: function(drag) {
                         if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.type)) {
                             return
                         }

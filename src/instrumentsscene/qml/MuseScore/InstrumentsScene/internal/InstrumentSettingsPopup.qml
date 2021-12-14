@@ -72,7 +72,7 @@ StyledPopupView {
 
             currentText: settingsModel.instrumentName
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 settingsModel.instrumentName = newTextValue
             }
         }
@@ -91,7 +91,7 @@ StyledPopupView {
 
             currentText: settingsModel.abbreviature
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 settingsModel.abbreviature = newTextValue
             }
         }
@@ -110,7 +110,7 @@ StyledPopupView {
 
             currentText: settingsModel.partName
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 settingsModel.partName = newTextValue
             }
         }
