@@ -53,7 +53,7 @@ FocusScope {
         section: root.navigationSection
         accessible.name: pageTitle.text
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 createNewAccount.navigation.requestActive()
                 description.readInfo()

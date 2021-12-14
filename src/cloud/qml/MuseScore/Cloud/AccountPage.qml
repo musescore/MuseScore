@@ -34,7 +34,7 @@ FocusScope {
         name: "Account"
         enabled: root.enabled && root.visible
         order: 3
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
