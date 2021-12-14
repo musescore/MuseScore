@@ -155,7 +155,7 @@ Item {
             {id: "properties", title: qsTrc("palette", "Palette properties…") },
         ]
 
-        onHandleMenuItem: {
+        onHandleMenuItem: function(itemId) {
             switch(itemId) {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break

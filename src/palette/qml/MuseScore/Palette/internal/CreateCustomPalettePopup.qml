@@ -62,7 +62,7 @@ StyledPopup {
 
             property string name: ""
 
-            onCurrentTextEdited: function (newTextValue) {
+            onCurrentTextEdited: function(newTextValue) {
                 name = newTextValue
             }
         }
