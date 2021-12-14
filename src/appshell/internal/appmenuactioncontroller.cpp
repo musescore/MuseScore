@@ -47,7 +47,7 @@ void AppMenuActionController::init()
     for (const QString& actionCode: shortcuts.keys()) {
         Shortcut sc;
         sc.action = actionCode.toStdString();
-        sc.sequence = shortcuts.value(actionCode).toStdString();
+        sc.sequences.push_back(shortcuts.value(actionCode).toStdString());
 
         dispatcher()->reg(this, sc.action, [=](){
             m_openMenuChannel.send(sc.action);
