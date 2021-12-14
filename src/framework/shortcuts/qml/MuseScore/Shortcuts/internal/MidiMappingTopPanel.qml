@@ -38,7 +38,7 @@ RowLayout {
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("shortcuts", "Midi mapping top panel")
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }

@@ -44,7 +44,7 @@ RowLayout {
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("shortcuts", "Shortcuts bottom panel")
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
