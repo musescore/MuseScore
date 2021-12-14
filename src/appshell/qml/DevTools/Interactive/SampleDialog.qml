@@ -87,7 +87,7 @@ StyledDialogView {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
-            onClicked: {
+            onClicked: function(mouse) {
                 var items = [
                             {id: "undo", title: "Undo", shortcut: "Ctrl+Z", icon: IconCode.UNDO},
                             {id: "redo", title: "Redo", shortcut: "Shift+Ctrl+Z", enabled: false, icon: IconCode.REDO},
@@ -98,14 +98,14 @@ StyledDialogView {
                             {id: "checkable", title: "Checkable", checkable: true, checked: false}
                         ]
 
-                menuLoader.toggleOpened(items, mouseX, mouseY)
+                menuLoader.toggleOpened(items, mouse.x, mouse.y)
             }
         }
 
         StyledMenuLoader {
             id: menuLoader
 
-            onHandleMenuItem: {
+            onHandleMenuItem: function(itemId) {
                 console.log("selected " + itemId)
             }
         }

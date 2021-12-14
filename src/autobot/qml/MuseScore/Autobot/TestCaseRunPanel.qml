@@ -60,7 +60,7 @@ Rectangle {
     TestCaseRunModel {
         id: runModel
 
-        onCurrentStepChanged: {
+        onCurrentStepChanged: function(stepIndex) {
             stepsView.positionViewAtIndex(stepIndex, ListView.Center)
         }
 

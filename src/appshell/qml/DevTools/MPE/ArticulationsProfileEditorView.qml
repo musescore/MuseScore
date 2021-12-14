@@ -310,7 +310,7 @@ Rectangle {
                                 bottom: positionFrom.minValue
                             }
 
-                            onValueEdited: {
+                            onValueEdited: function(newValue) {
                                 if (editorModel) {
                                     editorModel.selectedItem.currentPatternSegment.positionFrom = newValue * 100
                                 }
@@ -349,7 +349,7 @@ Rectangle {
                                 bottom: positionFrom.minValue
                             }
 
-                            onValueEdited: {
+                            onValueEdited: function(newValue) {
                                 if (editorModel) {
                                     editorModel.selectedItem.currentPatternSegment.positionTo = newValue * 100
                                 }
