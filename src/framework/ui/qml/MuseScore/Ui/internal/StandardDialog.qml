@@ -64,7 +64,7 @@ StyledDialogView {
             root.contentHeight = Math.max(104, content.contentHeight)
         }
 
-        onClicked: {
+        onClicked: function(buttonId, showAgain) {
             root.ret = { "errcode": 0, "value": { "buttonId": buttonId, "showAgain": showAgain}}
             root.hide()
         }

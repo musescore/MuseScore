@@ -225,7 +225,7 @@ FocusScope {
 
         hoverEnabled: true
 
-        onClicked: function (mouse) {
+        onClicked: function(mouse) {
             root.clicked(mouse)
         }
 
@@ -233,7 +233,7 @@ FocusScope {
             ui.tooltip.hide(root)
         }
 
-        onPressAndHold: function (mouse) {
+        onPressAndHold: function(mouse) {
             root.pressAndHold(mouse)
         }
 

@@ -153,7 +153,7 @@ ListItemBlank {
 
             currentText: val
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 textControl.changed(newTextValue)
             }
         }
@@ -175,7 +175,7 @@ ListItemBlank {
 
             color: val
 
-            onNewColorSelected: {
+            onNewColorSelected: function(newColor) {
                 colorControl.changed(newColor)
             }
         }
@@ -200,7 +200,7 @@ ListItemBlank {
             step: 1
             decimals: 0
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 intControl.changed(newValue)
             }
         }
@@ -223,7 +223,7 @@ ListItemBlank {
             currentValue: val
             step: 1.0
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 doubleControl.changed(newValue)
             }
         }

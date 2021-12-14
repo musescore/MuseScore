@@ -39,7 +39,9 @@ Text {
         pixelSize: ui.theme.bodyFont.pixelSize
     }
 
-    onLinkActivated: Qt.openUrlExternally(link)
+    onLinkActivated: function(link) {
+        Qt.openUrlExternally(link)
+    }
 
     MouseArea {
         anchors.fill: parent

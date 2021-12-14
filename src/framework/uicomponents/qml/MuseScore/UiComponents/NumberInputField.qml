@@ -142,11 +142,11 @@ FocusScope {
             bottom: root.minValue
         }
 
-        Keys.onShortcutOverride: {
+        Keys.onShortcutOverride: function(event) {
             event.accepted = true
         }
 
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                     || event.key === Qt.Key_Escape) {
                 textField.focus = false

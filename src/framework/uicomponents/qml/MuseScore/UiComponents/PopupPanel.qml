@@ -86,13 +86,13 @@ Rectangle {
         enabled: root.enabled && root.visible
         order: 1
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
         }
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
                 root.close()
             }

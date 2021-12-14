@@ -104,7 +104,7 @@ PopupPanel {
             section: root.navigationSection
             order: 1
 
-            onActiveChanged: {
+            onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()
                 }
