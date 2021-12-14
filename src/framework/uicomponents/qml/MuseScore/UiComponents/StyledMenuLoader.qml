@@ -53,7 +53,7 @@ Loader {
     sourceComponent: StyledMenu {
         id: itemMenu
 
-        onHandleMenuItem: {
+        onHandleMenuItem: function(itemId) {
             itemMenu.close()
             Qt.callLater(loader.handleMenuItem, itemId)
         }

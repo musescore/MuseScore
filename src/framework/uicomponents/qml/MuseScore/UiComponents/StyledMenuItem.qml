@@ -80,7 +80,7 @@ ListItemBlank {
         return Utils.removeAmpersands(text)
     }
 
-    navigation.onNavigationEvent: {
+    navigation.onNavigationEvent: function(event) {
         switch (event.type) {
         case NavigationEvent.Right:
             if (!itemPrv.hasSubMenu) {
@@ -291,7 +291,7 @@ ListItemBlank {
         }
     }
 
-    onHovered: {
+    onHovered: function(isHovered, mouseX, mouseY) {
         if (!itemPrv.hasSubMenu) {
             return
         }

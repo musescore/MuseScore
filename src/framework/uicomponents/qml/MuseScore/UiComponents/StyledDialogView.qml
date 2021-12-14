@@ -55,7 +55,7 @@ DialogView {
             }
         }
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
                 root.close()
             }

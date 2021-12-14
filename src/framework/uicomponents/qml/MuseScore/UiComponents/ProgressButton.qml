@@ -81,7 +81,7 @@ FocusScope {
         accessible.name: root.text
         accessible.visualItem: root
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.ensureActiveFocus()
             }
@@ -115,7 +115,7 @@ FocusScope {
         accessible.maximumValue: 100
         accessible.stepSize: 1
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 accessible.ignored = false
             }

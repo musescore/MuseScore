@@ -35,7 +35,7 @@ FocusScope {
         // mouse event will be propagated to other overlapped mouse areas
         z: 1000
 
-        onClicked: {
+        onClicked: function(mouse) {
             if (!activeFocus) {
                 root.forceActiveFocus()
             }
@@ -43,11 +43,11 @@ FocusScope {
             mouse.accepted = false
         }
 
-        onPressed: {
+        onPressed: function(mouse) {
             mouse.accepted = false
         }
 
-        onReleased: {
+        onReleased: function(mouse) {
             mouse.accepted = false
         }
     }

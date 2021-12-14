@@ -67,7 +67,7 @@ StyledPopupView {
         order: 1
     }
 
-    navigationSection.onNavigationEvent: {
+    navigationSection.onNavigationEvent: function(event) {
         if (event.type === NavigationEvent.Escape) {
             if (prv.showedSubMenu) {
                 prv.showedSubMenu.close()
@@ -220,12 +220,12 @@ StyledPopupView {
 
                     padding: root.padding
 
-                    Keys.onShortcutOverride: {
+                    Keys.onShortcutOverride: function(event) {
                         var activatedItem = view.itemByKey(event.text)
                         event.accepted = Boolean(activatedItem)
                     }
 
-                    Keys.onPressed: {
+                    Keys.onPressed: function(event) {
                         var activatedItem = view.itemByKey(event.text)
                         if (Boolean(activatedItem)) {
                             activatedItem.navigation.requestActive()
@@ -233,7 +233,7 @@ StyledPopupView {
                         }
                     }
 
-                    onOpenSubMenuRequested: {
+                    onOpenSubMenuRequested: function(menu) {
                         if (prv.showedSubMenu){
                             if (prv.showedSubMenu === menu) {
                                 return
@@ -245,7 +245,7 @@ StyledPopupView {
                         menu.toggleOpened()
                     }
 
-                    onSubMenuShowed: {
+                    onSubMenuShowed: function(menu) {
                         root.closePolicy = PopupView.NoAutoClose
                         prv.showedSubMenu = menu
                     }
@@ -263,7 +263,7 @@ StyledPopupView {
                         }
                     }
 
-                    onHandleMenuItem: {
+                    onHandleMenuItem: function(itemId) {
                         // NOTE: reset view state
                         view.update()
 

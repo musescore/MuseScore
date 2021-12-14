@@ -64,7 +64,7 @@ TabButton {
         accessible.name: root.text
         accessible.checked: root.isCurrent
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.ensureActiveFocus()
             }
