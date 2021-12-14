@@ -72,21 +72,24 @@ ListView {
         }
 
         function activeMenu() {
-            var firstItem = root.itemAtIndex(0)
-            if (firstItem) {
-                if (appMenuModel.active) {
-                    if (prv.hasNavigatedItem()) {
-                        return
-                    }
-
-                    firstItem.navigation.requestActive()
-                } else {
-                    firstItem.navigation.requestDeactive()
+            if (appMenuModel.active) {
+                if (prv.hasNavigatedItem()) {
+                    return
                 }
+
+                var firstItem = root.itemAtIndex(0)
+                firstItem.navigation.requestActive()
+            } else {
+                var _navigatedItem = navigatedItem()
+                _navigatedItem.navigation.requestDeactive()
             }
         }
 
         function hasNavigatedItem() {
+            return navigatedItem() !== null
+        }
+
+        function navigatedItem() {
             for (var i = 0; i < root.count; ++i) {
                 var item = root.itemAtIndex(i)
 
@@ -95,11 +98,11 @@ ListView {
                 }
 
                 if (item.navigation.active) {
-                    return true
+                    return item
                 }
             }
 
-            return false
+            return null
         }
 
         function itemByKey(key) {
