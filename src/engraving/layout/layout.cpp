@@ -386,9 +386,9 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& ct
                     m->stretchMeasureInPracticeMode(ww);
                 } else {
                     m->createEndBarLines(false);
-                    m->computeMinWidth(Fraction(1, 16));
+                    m->computeMinWidth(Fraction(1, 16), 1);
                     ww = m->width();
-                    m->stretchMeasure(ww);
+                    m->stretchMeasure(ww, Fraction(1, 16));
                 }
             } else {
                 // for measures not in range, use existing layout
