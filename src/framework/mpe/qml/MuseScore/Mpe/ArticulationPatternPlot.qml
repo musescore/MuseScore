@@ -303,11 +303,11 @@ Item {
             pressAndHoldInterval: 250
             scrollGestureEnabled: true
 
-            onPressAndHold: {
+            onPressAndHold: function(mouse) {
                 plotMouseArea.lastX = mouse.x
             }
 
-            onPositionChanged: {
+            onPositionChanged: function(mouse) {
                 if (mouse.wasHeld) {
                     var shift = (mouse.x - plotMouseArea.lastX) /  root.width
                     prv.centerXRatio += shift
@@ -316,7 +316,7 @@ Item {
                 }
             }
 
-            onWheel: {
+            onWheel: function(wheel) {
                 var shift = wheel.angleDelta.y / 360
                 var newZoomLevel = root.zoomLevel -= shift
 

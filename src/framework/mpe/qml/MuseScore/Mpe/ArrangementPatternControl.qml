@@ -84,7 +84,7 @@ Column {
                 bottom: timestampOffsetInput.minValue
             }
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 if (root.patternModel) {
                     root.patternModel.timestampShiftFactor = newValue * 100
                 }
@@ -144,7 +144,7 @@ Column {
                 bottom: durationFactorInput.minValue
             }
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 if (root.patternModel) {
                     root.patternModel.durationFactor = newValue * 100
                 }

@@ -84,7 +84,7 @@ ListView {
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     hoverEnabled: true
 
-                    onClicked: {
+                    onClicked: function(mouse) {
                         if (mouse.button === Qt.LeftButton) {
                             delegateItem.selectCurrentItem()
                             return
@@ -99,7 +99,7 @@ ListView {
                 StyledMenuLoader {
                     id: menuLoader
 
-                    onHandleMenuItem: {
+                    onHandleMenuItem: function(itemId) {
                         if (itemId !== "copy" || !root.editorModel) {
                             return
                         }
