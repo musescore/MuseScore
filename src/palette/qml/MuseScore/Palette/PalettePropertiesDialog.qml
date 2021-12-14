@@ -56,7 +56,7 @@ StyledDialogView {
         TextInputField {
             currentText: propertiesModel.name
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 propertiesModel.name = newTextValue
             }
         }
@@ -110,7 +110,7 @@ StyledDialogView {
                         measureUnitsSymbol: Boolean(modelData["measureUnit"]) ? modelData["measureUnit"] : ""
                         step: modelData["incrementStep"]
 
-                        onValueEdited: {
+                        onValueEdited: function(newValue) {
                             repeater.setValue(model.index, newValue)
                         }
                     }

@@ -69,7 +69,9 @@ Item {
         navigation.section: root.navigationSection
         navigation.order: 2
 
-        onAddCustomPaletteRequested: paletteTree.insertCustomPalette(0, paletteName);
+        onAddCustomPaletteRequested: function(paletteName) {
+            paletteTree.insertCustomPalette(0, paletteName)
+        }
     }
 
     StyledTextLabel {

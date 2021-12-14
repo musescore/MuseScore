@@ -58,7 +58,7 @@ Item {
         id: navPanel
         name: "PalettesHeader"
         enabled: root.enabled && root.visible
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
@@ -162,7 +162,7 @@ Item {
         anchorItem: addPalettesButton
         width: parent.width
 
-        onAddCustomPaletteRequested: function (paletteName) {
+        onAddCustomPaletteRequested: function(paletteName) {
             root.addCustomPaletteRequested(paletteName)
         }
     }

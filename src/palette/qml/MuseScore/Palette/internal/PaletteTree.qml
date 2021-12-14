@@ -61,7 +61,7 @@ ListView {
         name: "PalettesTree"
         enabled: paletteTree.enabled && paletteTree.visible
         direction: NavigationPanel.Both
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 paletteTree.forceActiveFocus()
             }
@@ -365,7 +365,7 @@ ListView {
                 placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
-            Drag.onDragFinished: function (dropAction) {
+            Drag.onDragFinished: function(dropAction) {
                 paletteTree.itemDragged = false;
 
                 if (dropAction !== Qt.IgnoreAction) {
@@ -399,8 +399,8 @@ ListView {
                     }
                 }
 
-                onDropped: {
-                    if (drop.proposedAction == Qt.MoveAction)
+                onDropped: function(drop) {
+                    if (drop.proposedAction === Qt.MoveAction)
                         drop.acceptProposedAction();
                 }
             }
@@ -472,7 +472,9 @@ ListView {
                     }
 
                     editingEnabled: model.editable
-                    onEnableEditingToggled: model.editable = val
+                    onEnableEditingToggled: function(val) {
+                        model.editable = val
+                    }
 
                     onHideSelectedElementsRequested: paletteTree.removeSelectedItems(control.modelIndex);
 
@@ -498,8 +500,8 @@ ListView {
                             control.Drag.imageSource = result.url
                         })
 
-                        onClicked: control.onClicked(mouse)
-                        onDoubleClicked: control.onDoubleClicked(mouse)
+                        onClicked: function(mouse) { control.clicked() }
+                        onDoubleClicked: function(mouse) { control.doubleClicked() }
                     }
                 }
 
@@ -532,7 +534,7 @@ ListView {
                         }
 
                         showMoreButton: !filter.length
-                        onMoreButtonClicked: control.togglePopup(btn);
+                        onMoreButtonClicked: function(btn) { control.togglePopup(btn) }
 
                         onVisibleChanged: {
                             if (!visible && control.popupExpanded) {
@@ -592,7 +594,7 @@ ListView {
                             scrollToPopupBottom();
                     }
 
-                    onAddElementsRequested: {
+                    onAddElementsRequested: function(mimeDataList) {
                         const parentIndex = control.modelIndex;
                         var idx = paletteTree.paletteModel.rowCount(parentIndex);
 
