@@ -241,7 +241,7 @@ FocusableItem {
                                 navigation.row: beamHeight.navigationRowStart + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
 
-                                onValueEdited: { root.model.beamVectorX.value = newValue }
+                                onValueEdited: function(newValue) { root.model.beamVectorX.value = newValue }
                             }
 
                             FlatToggleButton {
@@ -283,7 +283,7 @@ FocusableItem {
                                 navigation.row: lockButton.navigation.row + 1
                                 navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
 
-                                onValueEdited: { root.model.beamVectorY.value = newValue }
+                                onValueEdited: function(newValue) { root.model.beamVectorY.value = newValue }
                             }
                         }
                     }

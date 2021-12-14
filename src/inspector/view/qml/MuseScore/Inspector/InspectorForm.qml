@@ -106,7 +106,7 @@ Rectangle {
                             flickableArea.returnToBounds()
                         }
 
-                        onEnsureContentVisibleRequested: {
+                        onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                             flickableArea.ensureContentVisible(invisibleContentHeight)
                         }
                     }
