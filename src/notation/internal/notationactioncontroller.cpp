@@ -32,7 +32,6 @@ using namespace mu::framework;
 
 static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
-static const ActionCode ESCAPE_ACTION_CODE = "escape";
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
 
@@ -45,7 +44,7 @@ void NotationActionController::init()
     using Interaction = INotationInteraction;
 
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
-    registerAction(ESCAPE_ACTION_CODE, &Controller::resetState, &Controller::isNotationPage);
+    registerAction("notation-escape", &Controller::resetState, &Controller::isNotationPage);
 
     registerAction("note-input", [this]() { toggleNoteInput(); });
     registerNoteInputAction("note-input-steptime", NoteInputMethod::STEPTIME);
@@ -1416,7 +1415,7 @@ bool NotationActionController::canRedo() const
 
 bool NotationActionController::isNotationPage() const
 {
-    return interactive()->isOpened("musescore://notation").val;
+    return uiContextResolver()->matchWithCurrent(context::UiCtxNotationOpened);
 }
 
 bool NotationActionController::isStandardStaff() const
