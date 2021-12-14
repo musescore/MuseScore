@@ -155,7 +155,7 @@ FocusScope {
             recentScoresModel.addNewScore()
         }
 
-        onOpenScoreRequested: {
+        onOpenScoreRequested: function(scorePath) {
             recentScoresModel.openRecentScore(scorePath)
         }
     }
