@@ -121,7 +121,7 @@ Item {
             order: root.navigationOrderStart
             accessible.name: qsTrc("uicomponents", "Value list header panel")
 
-            onActiveChanged: {
+            onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()
                 }
@@ -192,7 +192,7 @@ Item {
             order: root.navigationOrderStart + 1
             accessible.name: qsTrc("uicomponents", "Value list panel")
 
-            onActiveChanged: {
+            onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()
                 }
@@ -226,7 +226,7 @@ Item {
             navigation.row: model.index
             navigation.column: 0
 
-            navigation.onNavigationEvent: {
+            navigation.onNavigationEvent: function(event) {
                 switch (event.type) {
                 case NavigationEvent.Up:
                     if (model.index === 0) {

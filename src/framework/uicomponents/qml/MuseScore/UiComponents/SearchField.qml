@@ -28,7 +28,7 @@ TextInputField {
 
     property string searchText: currentText
 
-    onCurrentTextEdited: {
+    onCurrentTextEdited: function(newTextValue) {
         searchText = newTextValue
     }
 

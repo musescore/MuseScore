@@ -37,7 +37,7 @@ FocusableControl {
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
-    signal hovered(var isHovered, var mouseX, int mouseY)
+    signal hovered(var isHovered, real mouseX, real mouseY)
 
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30

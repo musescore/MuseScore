@@ -171,7 +171,7 @@ FocusScope {
                 textInputFieldModel.init()
             }
 
-            Keys.onShortcutOverride: {
+            Keys.onShortcutOverride: function(event) {
                 if (textInputFieldModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
                     event.accepted = true
                 } else {
@@ -182,7 +182,7 @@ FocusScope {
                 }
             }
 
-            Keys.onPressed: {
+            Keys.onPressed: function(event) {
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                         || event.key === Qt.Key_Escape) {
                     root.focus = false
@@ -283,7 +283,7 @@ FocusScope {
         propagateComposedEvents: true
         hoverEnabled: true
 
-        onPressed: {
+        onPressed: function(mouse) {
             root.ensureActiveFocus()
             mouse.accepted = false
         }

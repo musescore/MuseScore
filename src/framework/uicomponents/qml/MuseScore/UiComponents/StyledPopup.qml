@@ -21,7 +21,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 
@@ -86,7 +85,7 @@ Popup {
             }
         }
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.Escape) {
                 root.close()
             }

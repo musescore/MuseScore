@@ -208,7 +208,7 @@ Item {
                 }
             }
 
-            onNavigationEvent: {
+            onNavigationEvent: function(event) {
                 console.log("onNavigationEvent event: " + JSON.stringify(event))
                 if (event.type === NavigationEvent.Escape) {
                     popup.closeAndReturnFocus()
@@ -238,7 +238,7 @@ Item {
             id: contentItem
             focus: true
 
-            Keys.onShortcutOverride: {
+            Keys.onShortcutOverride: function(event) {
                 // console.log("onShortcutOverride event: " + JSON.stringify(event))
                 if (event.text !== "") {
                     event.accepted = true
@@ -249,7 +249,7 @@ Item {
                 }
             }
 
-            Keys.onReleased: {
+            Keys.onReleased: function(event) {
                 // console.log("onReleased event: " + JSON.stringify(event))
                 if (event.text === "") {
                     return
