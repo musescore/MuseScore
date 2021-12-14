@@ -82,7 +82,7 @@ Dial {
         accessible.maximumValue: root.to
         accessible.stepSize: root.stepSize
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             switch(event.type) {
             case NavigationEvent.Left:
                 root.decreaseRequested()
