@@ -46,7 +46,7 @@ FocusScope {
         name: "Learn"
         enabled: root.visible
         order: 3
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
@@ -154,7 +154,7 @@ FocusScope {
             accessible.name: qsTrc("learn", "Learn tabs")
             enabled: tabBar.enabled && tabBar.visible
 
-            onNavigationEvent: {
+            onNavigationEvent: function(event) {
                 if (event.type === NavigationEvent.AboutActive) {
                     event.setData("controlName", tabBar.currentItem.navigation.name)
                 }
@@ -211,7 +211,7 @@ FocusScope {
             backgroundColor: root.color
             sideMargin: prv.sideMargin
 
-            onRequestOpenVideo: {
+            onRequestOpenVideo: function(videoId) {
                 pageModel.openVideo(videoId)
             }
         }
@@ -229,7 +229,7 @@ FocusScope {
             backgroundColor: root.color
             sideMargin: prv.sideMargin
 
-            onRequestOpenVideo: {
+            onRequestOpenVideo: function(videoId) {
                 pageModel.openVideo(videoId)
             }
         }

@@ -71,14 +71,14 @@ Item {
     LanguageListModel {
         id: languageListModel
 
-        onProgress: {
+        onProgress: function(languageCode, status, indeterminate, current, total) {
             if (prv.selectedLanguage.code !== languageCode) {
                 return
             }
 
             panel.setProgress(status, indeterminate, current, total)
         }
-        onFinish: {
+        onFinish: function(item) {
             if (prv.selectedLanguage.code !== item.code) {
                 return
             }
