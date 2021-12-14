@@ -192,11 +192,11 @@ Dialog {
             }
         }
 
-        Keys.onShortcutOverride: {
+        Keys.onShortcutOverride: function(event) {
             event.accepted = true
         }
 
-        Keys.onPressed: {
+        Keys.onPressed: function(event) {
             model.inputKey(event.key, event.modifiers)
         }
     }
