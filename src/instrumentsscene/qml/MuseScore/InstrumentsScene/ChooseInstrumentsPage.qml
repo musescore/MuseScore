@@ -107,12 +107,12 @@ Rectangle {
             currentGenreIndex: instrumentsModel.currentGenreIndex
             currentGroupIndex: instrumentsModel.currentGroupIndex
 
-            onGenreSelected: {
+            onGenreSelected: function(newIndex) {
                 instrumentsModel.currentGenreIndex = newIndex
                 instrumentsView.clearSearch()
             }
 
-            onGroupSelected: {
+            onGroupSelected: function(newIndex) {
                 var selectedGroupName = groupName(newIndex)
                 instrumentsModel.currentGroupIndex = newIndex
                 instrumentsView.clearSearch()

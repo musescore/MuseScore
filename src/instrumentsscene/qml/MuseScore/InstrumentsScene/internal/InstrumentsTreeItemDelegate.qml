@@ -109,7 +109,7 @@ Item {
         accessible.role: MUAccessible.ListItem
         accessible.name: titleLabel.text
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
