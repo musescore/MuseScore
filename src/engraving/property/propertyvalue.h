@@ -318,6 +318,11 @@ public:
                 }
             }
         }
+
+        assert(at);
+        if (!at) {
+            return T();
+        }
         return at->v;
     }
 
