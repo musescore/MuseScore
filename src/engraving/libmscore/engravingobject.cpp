@@ -441,11 +441,11 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
-    } else if (id == Pid::SUB_STYLE) {
+    } else if (id == Pid::TEXT_TYPE) {
         //
         // change a list of properties
         //
-        auto l = textStyle(Tid(v.toInt()));
+        auto l = textStyle(v.value<Tid>());
         // Change to ElementStyle defaults
         for (const StyledProperty& p : *l) {
             if (p.sid == Sid::NOSTYLE) {

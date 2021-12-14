@@ -241,8 +241,8 @@ void InstrumentChange::read(XmlReader& e)
 engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SUB_STYLE:
-        return int(Tid::INSTRUMENT_CHANGE);
+    case Pid::TEXT_TYPE:
+        return Tid::INSTRUMENT_CHANGE;
     default:
         return TextBase::propertyDefault(propertyId);
     }

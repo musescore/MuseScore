@@ -62,6 +62,7 @@ enum class P_TYPE {
     PAIR_REAL,
 
     // Draw
+    SYMID,
     COLOR,
     ORNAMENT_STYLE,
     GLISS_STYLE,
@@ -73,6 +74,7 @@ enum class P_TYPE {
     TEXT_PLACE,
     DIRECTION_V,
     DIRECTION_H,
+    ORIENTATION,
     BEAM_MODE,
 
     // Duration
@@ -90,20 +92,19 @@ enum class P_TYPE {
     DYNAMIC_RANGE,
     DYNAMIC_SPEED,
     HOOK_TYPE,
+    KEY_MODE,
+    TEXT_TYPE,
+
+    // not sorted
 
     TEMPO,
     GROUPS,
-    SYMID,
+
     INT_LIST,
 
     ZERO_INT,           // displayed with offset +1
 
-    SUB_STYLE,
-
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-
-    KEYMODE,            // enum class KeyMode
-    ORIENTATION,        // enum class Orientation
 
     PITCH_VALUES,
 
@@ -182,6 +183,9 @@ public:
     PropertyValue(DirectionH v)
         : m_type(P_TYPE::DIRECTION_H), m_data(make_data<DirectionH>(v)) {}
 
+    PropertyValue(Orientation v)
+        : m_type(P_TYPE::ORIENTATION), m_data(make_data<Orientation>(v)) {}
+
     PropertyValue(BeamMode v)
         : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}
 
@@ -216,11 +220,14 @@ public:
     PropertyValue(DynamicSpeed v)
         : m_type(P_TYPE::DYNAMIC_SPEED), m_data(make_data<DynamicSpeed>(v)) {}
 
-    PropertyValue(KeyMode v)
-        : m_type(P_TYPE::KEYMODE), m_data(make_data<KeyMode>(v)) {}
-
     PropertyValue(HookType v)
         : m_type(P_TYPE::HOOK_TYPE), m_data(make_data<HookType>(v)) {}
+
+    PropertyValue(KeyMode v)
+        : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
+
+    PropertyValue(Tid v)
+        : m_type(P_TYPE::TEXT_TYPE), m_data(make_data<Tid>(v)) {}
 
     // not sorted
 

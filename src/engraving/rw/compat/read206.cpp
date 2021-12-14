@@ -303,11 +303,11 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         { "Header",                  Tid::HEADER },
         { "Footer",                  Tid::FOOTER },
         { "Instrument Change",       Tid::INSTRUMENT_CHANGE },
-        { "Repeat Text",             Tid::IGNORED_STYLES, },         // Repeat Text style no longer exists
-        { "Figured Bass",            Tid::IGNORED_STYLES, },         // F.B. data are in style properties
+        { "Repeat Text",             Tid::IGNORED_TYPES, },         // Repeat Text style no longer exists
+        { "Figured Bass",            Tid::IGNORED_TYPES, },         // F.B. data are in style properties
         { "Volta",                   Tid::VOLTA },
     };
-    Tid ss = Tid::TEXT_STYLES;
+    Tid ss = Tid::TEXT_TYPES;
     for (const auto& i : styleTable) {
         if (name == i.name) {
             ss = i.ss;
@@ -315,14 +315,14 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         }
     }
 
-    if (ss == Tid::IGNORED_STYLES) {
+    if (ss == Tid::IGNORED_TYPES) {
         return;
     }
 
     bool isExcessStyle = false;
-    if (ss == Tid::TEXT_STYLES) {
+    if (ss == Tid::TEXT_TYPES) {
         ss = e.addUserTextStyle(name);
-        if (ss == Tid::TEXT_STYLES) {
+        if (ss == Tid::TEXT_TYPES) {
             qDebug("unhandled substyle <%s>", qPrintable(name));
             isExcessStyle = true;
         } else {
@@ -350,7 +350,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             break;
         }
         switch (i.pid) {
-        case Pid::SUB_STYLE:
+        case Pid::TEXT_TYPE:
             value = int(ss);
             break;
         case Pid::BEGIN_FONT_FACE:
@@ -1191,10 +1191,10 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
         } else {
             Tid ss;
             ss = e.lookupUserTextStyle(s);
-            if (ss == Tid::TEXT_STYLES) {
+            if (ss == Tid::TEXT_TYPES) {
                 ss = textStyleFromName(s);
             }
-            if (ss != Tid::TEXT_STYLES) {
+            if (ss != Tid::TEXT_TYPES) {
                 t->initTid(ss);
             }
         }
