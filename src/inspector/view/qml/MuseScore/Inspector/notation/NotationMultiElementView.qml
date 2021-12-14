@@ -68,7 +68,7 @@ InspectorSectionView {
                     navigationPanel: button.popupNavigationPanel
                 }
 
-                onEnsureContentVisibleRequested: {
+                onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
 

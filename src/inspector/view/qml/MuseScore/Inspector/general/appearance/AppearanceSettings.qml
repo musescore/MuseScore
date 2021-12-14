@@ -75,7 +75,7 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: verticalSpacingSection.navigationRowEnd + 1
 
-        onSnapToGridToggled: {
+        onSnapToGridToggled: function(snap) {
             if (model) {
                 model.isSnappedToGrid = snap
             }

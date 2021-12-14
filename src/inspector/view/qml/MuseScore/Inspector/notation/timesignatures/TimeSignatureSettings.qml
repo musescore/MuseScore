@@ -80,7 +80,9 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 2
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Horizontal") + currentValue
 
-                onValueEdited: { root.model.horizontalScale.value = newValue }
+                onValueEdited: function(newValue) {
+                    root.model.horizontalScale.value = newValue
+                }
             }
 
             IncrementalPropertyControl {
@@ -105,7 +107,9 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 3
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue
 
-                onValueEdited: { root.model.verticalScale.value = newValue }
+                onValueEdited: function(newValue) {
+                    root.model.verticalScale.value = newValue
+                }
             }
         }
     }

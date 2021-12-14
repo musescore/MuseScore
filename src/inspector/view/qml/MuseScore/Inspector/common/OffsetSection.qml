@@ -72,7 +72,7 @@ InspectorPropertyView {
             isIndeterminate: root.horizontalOffset && enabled ? root.horizontalOffset.isUndefined : false
             currentValue: root.horizontalOffset ? root.horizontalOffset.value : 0
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.horizontalOffset.value = newValue
             }
         }
@@ -95,7 +95,7 @@ InspectorPropertyView {
             isIndeterminate: root.verticalOffset && enabled ? root.verticalOffset.isUndefined : false
             currentValue: root.verticalOffset ? root.verticalOffset.value : 0
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.verticalOffset.value = newValue
             }
         }
