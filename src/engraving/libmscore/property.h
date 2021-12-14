@@ -303,7 +303,7 @@ enum class Pid {
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
 //200
-    SUB_STYLE,
+    TEXT_TYPE,
 
     FONT_FACE,
     FONT_SIZE,

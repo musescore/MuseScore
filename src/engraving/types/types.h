@@ -370,7 +370,7 @@ enum class HookType : char {
     NONE, HOOK_90, HOOK_45, HOOK_90T
 };
 
-// P_TYPE::KEYMODE
+// P_TYPE::KEY_MODE
 enum class KeyMode : char {
     UNKNOWN = -1,
     NONE,
@@ -383,6 +383,76 @@ enum class KeyMode : char {
     AEOLIAN,
     IONIAN,
     LOCRIAN
+};
+
+//-------------------------------------------------------------------
+//   Tid
+///   Enumerates the list of built-in text substyles
+///   \internal
+///   Must be in sync with textStyles array (in textstyle.cpp)
+//-------------------------------------------------------------------
+// P_TYPE::TEXT_TYPE
+enum class Tid {
+    DEFAULT,
+    TITLE,
+    SUBTITLE,
+    COMPOSER,
+    POET,
+    TRANSLATOR,
+    FRAME,
+    INSTRUMENT_EXCERPT,
+    INSTRUMENT_LONG,
+    INSTRUMENT_SHORT,
+    INSTRUMENT_CHANGE,
+    HEADER,
+    FOOTER,
+    MEASURE_NUMBER,
+    MMREST_RANGE,
+    TEMPO,
+    METRONOME,
+    REPEAT_LEFT,       // align to start of measure
+    REPEAT_RIGHT,      // align to end of measure
+    REHEARSAL_MARK,
+    SYSTEM,
+    STAFF,
+    EXPRESSION,
+    DYNAMICS,
+    HAIRPIN,
+    LYRICS_ODD,
+    LYRICS_EVEN,
+    HARMONY_A,
+    HARMONY_B,
+    HARMONY_ROMAN,
+    HARMONY_NASHVILLE,
+    TUPLET,
+    STICKING,
+    FINGERING,
+    LH_GUITAR_FINGERING,
+    RH_GUITAR_FINGERING,
+    STRING_NUMBER,
+    TEXTLINE,
+    VOLTA,
+    OTTAVA,
+    GLISSANDO,
+    PEDAL,
+    BEND,
+    LET_RING,
+    PALM_MUTE,
+    USER1,
+    USER2,
+    USER3,
+    USER4,
+    USER5,
+    USER6,
+    USER7,
+    USER8,
+    USER9,
+    USER10,
+    USER11,
+    USER12,
+    // special, no-contents, styles used while importing older scores
+    TEXT_TYPES,           // used for user-defined types
+    IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
 } // mu::engraving
 
@@ -410,6 +480,7 @@ using DynamicRange = mu::engraving::DynamicRange;
 using DynamicSpeed = mu::engraving::DynamicSpeed;
 using HookType = mu::engraving::HookType;
 using KeyMode = mu::engraving::KeyMode;
+using Tid = mu::engraving::Tid;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

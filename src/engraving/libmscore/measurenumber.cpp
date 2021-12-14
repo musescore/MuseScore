@@ -66,8 +66,8 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::MEASURE_NUMBER);
+    case Pid::TEXT_TYPE:
+        return Tid::MEASURE_NUMBER;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:

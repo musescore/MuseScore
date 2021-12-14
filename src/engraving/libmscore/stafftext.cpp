@@ -66,8 +66,8 @@ void StaffText::layout()
 engraving::PropertyValue StaffText::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::STAFF);
+    case Pid::TEXT_TYPE:
+        return Tid::STAFF;
     default:
         return StaffTextBase::propertyDefault(id);
     }

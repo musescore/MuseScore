@@ -93,6 +93,7 @@ enum class P_TYPE {
     DYNAMIC_SPEED,
     HOOK_TYPE,
     KEY_MODE,
+    TEXT_TYPE,
 
     // not sorted
 
@@ -102,8 +103,6 @@ enum class P_TYPE {
     INT_LIST,
 
     ZERO_INT,           // displayed with offset +1
-
-    SUB_STYLE,
 
     CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
 
@@ -226,6 +225,9 @@ public:
 
     PropertyValue(KeyMode v)
         : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
+
+    PropertyValue(Tid v)
+        : m_type(P_TYPE::TEXT_TYPE), m_data(make_data<Tid>(v)) {}
 
     // not sorted
 

@@ -153,6 +153,23 @@ enum class NoteHeadGroup {
 };
 Q_ENUM_NS(NoteHeadGroup);
 
+enum class Tid {
+    DEFAULT = int(mu::engraving::Tid::DEFAULT),
+    TITLE = int(mu::engraving::Tid::TITLE),
+    SUBTITLE = int(mu::engraving::Tid::SUBTITLE),
+    COMPOSER = int(mu::engraving::Tid::COMPOSER),
+    POET = int(mu::engraving::Tid::POET),
+    TRANSLATOR = int(mu::engraving::Tid::TRANSLATOR),
+    FRAME = int(mu::engraving::Tid::FRAME),
+    INSTRUMENT_EXCERPT = int(mu::engraving::Tid::INSTRUMENT_EXCERPT),
+    INSTRUMENT_LONG = int(mu::engraving::Tid::INSTRUMENT_LONG),
+    INSTRUMENT_SHORT = int(mu::engraving::Tid::INSTRUMENT_SHORT),
+    INSTRUMENT_CHANGE = int(mu::engraving::Tid::INSTRUMENT_CHANGE),
+    HEADER = int(mu::engraving::Tid::HEADER),
+    FOOTER = int(mu::engraving::Tid::FOOTER),
+};
+Q_ENUM_NS(Tid);
+
 //! HACK to force the build system to run moc on this file
 class Mops : public QObject
 {

@@ -73,8 +73,8 @@ void Text::read(XmlReader& e)
 engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::DEFAULT);
+    case Pid::TEXT_TYPE:
+        return Tid::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
     }
