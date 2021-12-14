@@ -75,7 +75,7 @@ ListItemBlank {
             text += " " + qsTrc("appshell", "menu")
         }
 
-        return text.replace('&', '')
+        return Utils.removeAmpersands(text)
     }
 
     navigation.onNavigationEvent: {
