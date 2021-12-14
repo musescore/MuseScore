@@ -513,7 +513,7 @@ int XmlReader::spannerId(const Spanner* s)
 Tid XmlReader::addUserTextStyle(const QString& name)
 {
     qDebug("%s", qPrintable(name));
-    Tid id = Tid::TEXT_STYLES;
+    Tid id = Tid::TEXT_TYPES;
     if (userTextStyles.size() == 0) {
         id = Tid::USER1;
     } else if (userTextStyles.size() == 1) {
@@ -541,7 +541,7 @@ Tid XmlReader::addUserTextStyle(const QString& name)
     } else {
         qDebug("too many user defined textstyles");
     }
-    if (id != Tid::TEXT_STYLES) {
+    if (id != Tid::TEXT_TYPES) {
         userTextStyles.push_back({ name, id });
     }
     return id;
@@ -558,7 +558,7 @@ Tid XmlReader::lookupUserTextStyle(const QString& name) const
             return i.ss;
         }
     }
-    return Tid::TEXT_STYLES;         // not found
+    return Tid::TEXT_TYPES;         // not found
 }
 
 //---------------------------------------------------------

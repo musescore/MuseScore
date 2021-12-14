@@ -346,7 +346,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(bracketSpan,             BRACKET_SPAN)
     API_PROPERTY(bracketColumn,           BRACKET_COLUMN)
     API_PROPERTY(inameLayoutPosition,     INAME_LAYOUT_POSITION)
-    API_PROPERTY(subStyle,                SUB_STYLE)
+    API_PROPERTY(subStyle,                TEXT_TYPE)
     API_PROPERTY(fontFace,                FONT_FACE)
     API_PROPERTY(fontSize,                FONT_SIZE)
     API_PROPERTY(fontStyle,               FONT_STYLE)

@@ -2276,16 +2276,16 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::HARMONY_TYPE:
         v = int(HarmonyType::STANDARD);
         break;
-    case Pid::SUB_STYLE: {
+    case Pid::TEXT_TYPE: {
         switch (_harmonyType) {
         case HarmonyType::STANDARD:
-            v = int(Tid::HARMONY_A);
+            v = Tid::HARMONY_A;
             break;
         case HarmonyType::ROMAN:
-            v = int(Tid::HARMONY_ROMAN);
+            v = Tid::HARMONY_ROMAN;
             break;
         case HarmonyType::NASHVILLE:
-            v = int(Tid::HARMONY_NASHVILLE);
+            v = Tid::HARMONY_NASHVILLE;
             break;
         }
     }

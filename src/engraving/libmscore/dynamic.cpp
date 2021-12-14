@@ -476,7 +476,7 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
     case Pid::DYNAMIC_TYPE:
         return _dynamicType;
     case Pid::DYNAMIC_RANGE:
-        return int(_dynRange);
+        return _dynRange;
     case Pid::VELOCITY:
         return velocity();
     case Pid::SUBTYPE:
@@ -538,8 +538,8 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Dynamic::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::DYNAMICS);
+    case Pid::TEXT_TYPE:
+        return Tid::DYNAMICS;
     case Pid::DYNAMIC_RANGE:
         return DynamicRange::PART;
     case Pid::VELOCITY:

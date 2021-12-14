@@ -114,6 +114,26 @@ SymId TConv::fromXml(const QString& tag, SymId def)
     return SymNames::symIdByName(tag, def);
 }
 
+static const std::vector<Item<Orientation> > ORIENTATION = {
+    { Orientation::VERTICAL,    "vertical",     QT_TRANSLATE_NOOP("engraving", "Vertical") },
+    { Orientation::HORIZONTAL,  "horizontal",   QT_TRANSLATE_NOOP("engraving", "Horizontal") },
+};
+
+QString TConv::toUserName(Orientation v)
+{
+    return findUserNameByType<Orientation>(ORIENTATION, v);
+}
+
+QString TConv::toXml(Orientation v)
+{
+    return findXmlTagByType<Orientation>(ORIENTATION, v);
+}
+
+Orientation TConv::fromXml(const QString& tag, Orientation def)
+{
+    return findTypeByXmlTag<Orientation>(ORIENTATION, tag, def);
+}
+
 static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
     { NoteHeadType::HEAD_AUTO,      "auto",    QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   QT_TRANSLATE_NOOP("engraving", "Whole") },
@@ -433,4 +453,33 @@ HookType TConv::fromXml(const QString& tag, HookType def)
     bool ok = false;
     int v = tag.toInt(&ok);
     return ok ? HookType(v) : def;
+}
+
+static const std::vector<Item<KeyMode> > KEY_MODES = {
+    { KeyMode::UNKNOWN,     "unknown" },
+    { KeyMode::NONE,        "none" },
+    { KeyMode::MAJOR,       "major" },
+    { KeyMode::MINOR,       "minor" },
+    { KeyMode::DORIAN,      "dorian" },
+    { KeyMode::PHRYGIAN,    "phrygian" },
+    { KeyMode::LYDIAN,      "lydian" },
+    { KeyMode::MIXOLYDIAN,  "mixolydian" },
+    { KeyMode::AEOLIAN,     "aeolian" },
+    { KeyMode::IONIAN,      "ionian" },
+    { KeyMode::LOCRIAN,     "locrian" },
+};
+
+QString TConv::toUserName(KeyMode v)
+{
+    return findUserNameByType<KeyMode>(KEY_MODES, v);
+}
+
+QString TConv::toXml(KeyMode v)
+{
+    return findXmlTagByType<KeyMode>(KEY_MODES, v);
+}
+
+KeyMode TConv::fromXml(const QString& tag, KeyMode def)
+{
+    return findTypeByXmlTag<KeyMode>(KEY_MODES, tag, def);
 }

@@ -539,19 +539,19 @@ int NotationConfiguration::notationDivision() const
     return Ms::Constant::division;
 }
 
-ValCh<Orientation> NotationConfiguration::canvasOrientation() const
+ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const
 {
-    ValCh<Orientation> orientation;
+    ValCh<framework::Orientation> orientation;
     orientation.ch = m_canvasOrientationChanged;
     bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
-    orientation.val = isVertical ? Orientation::Vertical : Orientation::Horizontal;
+    orientation.val = isVertical ? framework::Orientation::Vertical : framework::Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setCanvasOrientation(Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(framework::Orientation orientation)
 {
-    bool isVertical = orientation == Orientation::Vertical;
+    bool isVertical = orientation == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
@@ -726,46 +726,46 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
     }
 }
 
-bool NotationConfiguration::isSnappedToGrid(Orientation gridOrientation) const
+bool NotationConfiguration::isSnappedToGrid(framework::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
-    case Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
+    case framework::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
+    case framework::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
     }
 
     return false;
 }
 
-void NotationConfiguration::setIsSnappedToGrid(Orientation gridOrientation, bool isSnapped)
+void NotationConfiguration::setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped)
 {
     switch (gridOrientation) {
-    case Orientation::Horizontal:
+    case framework::Orientation::Horizontal:
         settings()->setSharedValue(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY, Val(isSnapped));
         break;
-    case Orientation::Vertical:
+    case framework::Orientation::Vertical:
         settings()->setSharedValue(IS_SNAPPED_TO_VERTICAL_GRID_KEY, Val(isSnapped));
         break;
     }
 }
 
-int NotationConfiguration::gridSizeSpatium(Orientation gridOrientation) const
+int NotationConfiguration::gridSizeSpatium(framework::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
-    case Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
+    case framework::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
+    case framework::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
     }
 
     return DEFAULT_GRID_SIZE_SPATIUM;
 }
 
-void NotationConfiguration::setGridSize(Orientation gridOrientation, int sizeSpatium)
+void NotationConfiguration::setGridSize(framework::Orientation gridOrientation, int sizeSpatium)
 {
     switch (gridOrientation) {
-    case Orientation::Horizontal:
+    case framework::Orientation::Horizontal:
         Ms::MScore::setHRaster(sizeSpatium);
         settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
-    case Orientation::Vertical:
+    case framework::Orientation::Vertical:
         Ms::MScore::setVRaster(sizeSpatium);
         settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;

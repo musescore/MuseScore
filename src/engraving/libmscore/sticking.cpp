@@ -88,8 +88,8 @@ void Sticking::layout()
 engraving::PropertyValue Sticking::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::STICKING);
+    case Pid::TEXT_TYPE:
+        return Tid::STICKING;
     default:
         return TextBase::propertyDefault(id);
     }

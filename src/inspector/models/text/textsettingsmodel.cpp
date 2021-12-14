@@ -70,7 +70,7 @@ void TextSettingsModel::createProperties()
     m_frameMargin = buildPropertyItem(Ms::Pid::FRAME_PADDING);
     m_frameCornerRadius = buildPropertyItem(Ms::Pid::FRAME_ROUND);
 
-    m_textType = buildPropertyItem(Ms::Pid::SUB_STYLE);
+    m_textType = buildPropertyItem(Ms::Pid::TEXT_TYPE);
     m_textPlacement = buildPropertyItem(Ms::Pid::PLACEMENT);
     m_textScriptAlignment = buildPropertyItem(Ms::Pid::TEXT_SCRIPT_ALIGN);
 }

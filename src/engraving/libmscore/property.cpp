@@ -78,7 +78,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::Z,                       false, "z",                     P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "z") },
     { Pid::SMALL,                   false, "small",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "small") },
     { Pid::SHOW_COURTESY,           false, "showCourtesySig",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
-    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEYMODE,        DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
+    { Pid::KEYSIG_MODE,             false, "keysig_mode",           P_TYPE::KEY_MODE,        DUMMY_QT_TR_NOOP("propertyName", "show courtesy") },
     { Pid::LINE_TYPE,               false, "lineType",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line type") },
     { Pid::PITCH,                   true,  "pitch",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "pitch") },
 
@@ -303,7 +303,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },
-    { Pid::SUB_STYLE,               false, "style",                 P_TYPE::SUB_STYLE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
+    { Pid::TEXT_TYPE,               false, "style",                 P_TYPE::TEXT_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
     { Pid::FONT_FACE,               false, "family",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "family") },
     { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "size") },
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "font style") },
@@ -467,25 +467,13 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::GROUPS:
         // unsupported
         return PropertyValue();
-    case P_TYPE::SYMID:
-        return PropertyValue::fromValue(SymNames::symIdByName(value));
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
-    case P_TYPE::SUB_STYLE:
+    case P_TYPE::TEXT_TYPE:
         return int(textStyleFromName(value));
-    case P_TYPE::ALIGN: {
-        return PropertyValue(XmlValue::fromXml(value, Align::LEFT));
-    }
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
-    case P_TYPE::ORIENTATION:
-        if (value == "vertical") {
-            return PropertyValue(int(Orientation::VERTICAL));
-        } else if (value == "horizontal") {
-            return PropertyValue(int(Orientation::HORIZONTAL));
-        }
-        break;
     default:
         break;
     }
@@ -527,6 +515,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:
         return PropertyValue(e.readElementText());
+
     case P_TYPE::ALIGN:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), Align::LEFT));
     case P_TYPE::PLACEMENT_V:
@@ -539,6 +528,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
+    case P_TYPE::ORIENTATION:
+        return PropertyValue(TConv::fromXml(e.readElementText(), Orientation::VERTICAL));
+
     case P_TYPE::LAYOUTBREAK_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
@@ -564,8 +556,10 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::HOOK_TYPE:
         return PropertyValue(TConv::fromXml(e.readElementText(), HookType::NONE));
 
-    case P_TYPE::SUB_STYLE:
-    case P_TYPE::ORIENTATION:
+    case P_TYPE::KEY_MODE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), KeyMode::NONE));
+
+    case P_TYPE::TEXT_TYPE:
         return propertyFromString(propertyType(id), e.readElementText());
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
@@ -615,48 +609,12 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::KEYMODE:
-        switch (KeyMode(value.toInt())) {
-        case KeyMode::NONE:
-            return "none";
-        case KeyMode::MAJOR:
-            return "major";
-        case KeyMode::MINOR:
-            return "minor";
-        case KeyMode::DORIAN:
-            return "dorian";
-        case KeyMode::PHRYGIAN:
-            return "phrygian";
-        case KeyMode::LYDIAN:
-            return "lydian";
-        case KeyMode::MIXOLYDIAN:
-            return "mixolydian";
-        case KeyMode::AEOLIAN:
-            return "aeolian";
-        case KeyMode::IONIAN:
-            return "ionian";
-        case KeyMode::LOCRIAN:
-            return "locrian";
-        default:
-            return "unknown";
-        }
-    case P_TYPE::SUB_STYLE:
-        return textStyleName(Tid(value.toInt()));
+    case P_TYPE::TEXT_TYPE:
+        return textStyleName(value.value<Tid>());
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
-    case P_TYPE::ORIENTATION: {
-        const Orientation o = Orientation(value.toInt());
-        if (o == Orientation::VERTICAL) {
-            return "vertical";
-        } else if (o == Orientation::HORIZONTAL) {
-            return "horizontal";
-        }
-        break;
-    }
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
-    case P_TYPE::BEAM_MODE:
-        qFatal("unknown: BEAM_MODE");
     case P_TYPE::TEMPO:
         qFatal("unknown: TEMPO");
     case P_TYPE::GROUPS:

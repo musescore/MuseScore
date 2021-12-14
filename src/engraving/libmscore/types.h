@@ -461,78 +461,6 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
-//-------------------------------------------------------------------
-//   Tid
-///   Enumerates the list of built-in text substyles
-///   \internal
-///   Must be in sync with textStyles array (in textstyle.cpp)
-//-------------------------------------------------------------------
-
-enum class Tid {
-    ///.\{
-    DEFAULT,
-    TITLE,
-    SUBTITLE,
-    COMPOSER,
-    POET,
-    TRANSLATOR,
-    FRAME,
-    INSTRUMENT_EXCERPT,
-    INSTRUMENT_LONG,
-    INSTRUMENT_SHORT,
-    INSTRUMENT_CHANGE,
-    HEADER,
-    FOOTER,
-    MEASURE_NUMBER,
-    MMREST_RANGE,
-    TEMPO,
-    METRONOME,
-    REPEAT_LEFT,       // align to start of measure
-    REPEAT_RIGHT,      // align to end of measure
-    REHEARSAL_MARK,
-    SYSTEM,
-    STAFF,
-    EXPRESSION,
-    DYNAMICS,
-    HAIRPIN,
-    LYRICS_ODD,
-    LYRICS_EVEN,
-    HARMONY_A,
-    HARMONY_B,
-    HARMONY_ROMAN,
-    HARMONY_NASHVILLE,
-    TUPLET,
-    STICKING,
-    FINGERING,
-    LH_GUITAR_FINGERING,
-    RH_GUITAR_FINGERING,
-    STRING_NUMBER,
-    TEXTLINE,
-    VOLTA,
-    OTTAVA,
-    GLISSANDO,
-    PEDAL,
-    BEND,
-    LET_RING,
-    PALM_MUTE,
-    USER1,
-    USER2,
-    USER3,
-    USER4,
-    USER5,
-    USER6,
-    USER7,
-    USER8,
-    USER9,
-    USER10,
-    USER11,
-    USER12,
-    // special, no-contents, styles used while importing older scores
-    TEXT_STYLES,           // used for user-defined styles
-    IGNORED_STYLES         // used for styles no longer relevant (mainly Figured bass text style)
-    ///.\}
-};
-
 //---------------------------------------------------------
 //   FontStyle
 //---------------------------------------------------------
@@ -599,7 +527,6 @@ enum class AccidentalRole : char {
 Q_ENUM_NS(ElementType);
 Q_ENUM_NS(GlissandoType);
 Q_ENUM_NS(SegmentType);
-Q_ENUM_NS(Tid);
 Q_ENUM_NS(NoteType);
 Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);

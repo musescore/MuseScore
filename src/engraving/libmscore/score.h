@@ -121,7 +121,6 @@ class XmlReader;
 class XmlWriter;
 struct Interval;
 
-enum class Tid;
 enum class BeatType : char;
 enum class Key;
 enum class HairpinType : signed char;
