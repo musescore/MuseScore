@@ -32,9 +32,9 @@ Dialog {
 
     signal applySequenceRequested(var newSequence)
 
-    function startEdit(sequence, allShortcuts) {
+    function startEdit(shortcut, allShortcuts) {
         open()
-        model.load(sequence, allShortcuts)
+        model.load(shortcut, allShortcuts)
         content.forceActiveFocus()
     }
 

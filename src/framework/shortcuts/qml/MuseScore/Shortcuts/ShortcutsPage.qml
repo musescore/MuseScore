@@ -62,10 +62,10 @@ Item {
             shortcutsModel.applySequenceToCurrentShortcut(newSequence)
         }
 
-        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentSequence)
+        property bool canEditCurrentShortcut: Boolean(shortcutsModel.currentShortcut)
 
         function startEditCurrentShortcut() {
-            editShortcutDialog.startEdit(shortcutsModel.currentSequence, shortcutsModel.shortcuts())
+            editShortcutDialog.startEdit(shortcutsModel.currentShortcut, shortcutsModel.shortcuts())
         }
     }
 

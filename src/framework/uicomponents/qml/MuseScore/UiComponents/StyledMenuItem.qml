@@ -55,7 +55,7 @@ ListItemBlank {
     hoverHitColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
-    isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.active
+    isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
     navigation.name: titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem

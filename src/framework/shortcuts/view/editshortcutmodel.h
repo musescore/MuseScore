@@ -46,7 +46,7 @@ public:
     QString errorMessage() const;
     bool canApplySequence() const;
 
-    Q_INVOKABLE void load(const QString& sequence, const QVariantList& allShortcuts);
+    Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void clear();
 
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
@@ -62,7 +62,7 @@ private:
 
     QVariantList m_allShortcuts;
     QKeySequence m_inputedSequence;
-    QString m_originSequence;
+    QVariantMap m_originShortcut;
     QString m_errorMessage;
 };
 }
