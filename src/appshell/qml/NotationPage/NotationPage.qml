@@ -138,7 +138,7 @@ DockPage {
         DockToolBar {
             id: playbackToolBar
 
-            objectName: pageModel.playbackToolBarName()
+            objectName: root.pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
 
             separatorsVisible: false
@@ -160,7 +160,7 @@ DockPage {
         },
 
         DockToolBar {
-            objectName: pageModel.undoRedoToolBarName()
+            objectName: root.pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo")
 
             floatable: false
@@ -182,7 +182,7 @@ DockPage {
         DockToolBar {
             id: noteInputBar
 
-            objectName: pageModel.noteInputBarName()
+            objectName: root.pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
 
             dropDestinations: [
@@ -211,7 +211,7 @@ DockPage {
         DockPanel {
             id: palettesPanel
 
-            objectName: pageModel.palettesPanelName()
+            objectName: root.pageModel.palettesPanelName()
             title: qsTrc("appshell", "Palettes")
 
             navigationSection: root.navigationPanelSec(palettesPanel.location)
@@ -236,7 +236,7 @@ DockPage {
         DockPanel {
             id: instrumentsPanel
 
-            objectName: pageModel.instrumentsPanelName()
+            objectName: root.pageModel.instrumentsPanelName()
             title: qsTrc("appshell", "Instruments")
 
             navigationSection: root.navigationPanelSec(instrumentsPanel.location)
@@ -261,7 +261,7 @@ DockPage {
         DockPanel {
             id: inspectorPanel
 
-            objectName: pageModel.inspectorPanelName()
+            objectName: root.pageModel.inspectorPanelName()
             title: qsTrc("appshell", "Properties")
 
             navigationSection: root.navigationPanelSec(inspectorPanel.location)
@@ -283,7 +283,7 @@ DockPage {
         DockPanel {
             id: selectionFilterPanel
 
-            objectName: pageModel.selectionFiltersPanelName()
+            objectName: root.pageModel.selectionFiltersPanelName()
             title: qsTrc("appshell", "Selection filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
@@ -311,7 +311,7 @@ DockPage {
         DockPanel {
             id: mixerPanel
 
-            objectName: pageModel.mixerPanelName()
+            objectName: root.pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
             height: 368
@@ -345,7 +345,7 @@ DockPage {
         DockPanel {
             id: pianoKeyboardPanel
 
-            objectName: pageModel.pianoKeyboardPanelName()
+            objectName: root.pageModel.pianoKeyboardPanelName()
             title: qsTrc("appshell", "Piano keyboard")
 
             height: 200
@@ -375,7 +375,7 @@ DockPage {
         DockPanel {
             id: timelinePanel
 
-            objectName: pageModel.timelinePanelName()
+            objectName: root.pageModel.timelinePanelName()
             title: qsTrc("appshell", "Timeline")
 
             height: 200
@@ -401,7 +401,7 @@ DockPage {
         DockPanel {
             id: drumsetPanel
 
-            objectName: pageModel.drumsetPanelName()
+            objectName: root.pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset tools")
 
             height: 64
@@ -428,14 +428,14 @@ DockPage {
         id: notationView
         name: "MainNotationView"
 
-        isNavigatorVisible: pageModel.isNavigatorVisible
-        isBraillePanelVisible: pageModel.isBraillePanelVisible
+        isNavigatorVisible: root.pageModel.isNavigatorVisible
+        isBraillePanelVisible: root.pageModel.isBraillePanelVisible
         isMainView: true
 
         Component.onCompleted: {
             root.notationView = notationView.paintView
 
-            root.setDefaultNavigationControl(defaultNavigationControl)
+            root.setDefaultNavigationControl(root.defaultNavigationControl)
         }
 
         Component.onDestruction: {
@@ -444,7 +444,7 @@ DockPage {
     }
 
     statusBar: DockStatusBar {
-        objectName: pageModel.statusBarName()
+        objectName: root.pageModel.statusBarName()
 
         contentNavigationPanel: content.navigationPanel
 

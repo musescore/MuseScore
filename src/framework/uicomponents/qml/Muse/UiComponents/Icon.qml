@@ -39,7 +39,7 @@ Item {
 
         anchors.centerIn: parent
 
-        height: pixelSize
+        height: root.pixelSize
         width: implicitWidth
 
         fillMode: Image.PreserveAspectFit
