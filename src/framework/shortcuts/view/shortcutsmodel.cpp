@@ -131,15 +131,20 @@ QItemSelection ShortcutsModel::selection() const
     return m_selection;
 }
 
-QString ShortcutsModel::currentSequence() const
+QVariant ShortcutsModel::currentShortcut() const
 {
     QModelIndex index = currentShortcutIndex();
-
-    if (index.isValid()) {
-        return QString::fromStdString(m_shortcuts[index.row()].sequencesAsString());
+    if (!index.isValid()) {
+        return QVariant();
     }
 
-    return QString();
+    const Shortcut& sc = m_shortcuts.at(index.row());
+
+    QVariantMap obj;
+    obj["title"] = actionTitle(sc.action);
+    obj["sequence"] = QString::fromStdString(sc.sequencesAsString());
+    obj["context"] = QString::fromStdString(sc.context);
+    return obj;
 }
 
 QModelIndex ShortcutsModel::currentShortcutIndex() const
@@ -237,6 +242,7 @@ QVariantList ShortcutsModel::shortcuts() const
         QVariantMap obj;
         obj["title"] = actionTitle(shortcut.action);
         obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+        obj["context"] = QString::fromStdString(shortcut.context);
 
         result << obj;
     }
