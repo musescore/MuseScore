@@ -363,6 +363,21 @@ enum class DynamicSpeed : char {
 enum class HookType : char {
     NONE, HOOK_90, HOOK_45, HOOK_90T
 };
+
+// P_TYPE::KEYMODE
+enum class KeyMode : char {
+    UNKNOWN = -1,
+    NONE,
+    MAJOR,
+    MINOR,
+    DORIAN,
+    PHRYGIAN,
+    LYDIAN,
+    MIXOLYDIAN,
+    AEOLIAN,
+    IONIAN,
+    LOCRIAN
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -387,6 +402,7 @@ using DynamicType = mu::engraving::DynamicType;
 using DynamicRange = mu::engraving::DynamicRange;
 using DynamicSpeed = mu::engraving::DynamicSpeed;
 using HookType = mu::engraving::HookType;
+using KeyMode = mu::engraving::KeyMode;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
