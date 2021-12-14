@@ -3142,9 +3142,10 @@ QString Measure::accessibleInfo() const
 //-----------------------------------------------------------------------------
 //    stretchMeasure
 //    resize width of measure to targetWidth
+//    receives in input the shortest note of the system in ticks
 //-----------------------------------------------------------------------------
 
-void Measure::stretchMeasure(qreal targetWidth)
+void Measure::stretchMeasure(qreal targetWidth, Fraction minTicks)
 {
     bbox().setWidth(targetWidth);
 
@@ -3152,9 +3153,7 @@ void Measure::stretchMeasure(qreal targetWidth)
     //    compute stretch
     //---------------------------------------------------
 
-    std::multimap<qreal, Segment*> springs;
-
-    Fraction minTicks = minSysTicks(); // The stretching must be done according to the shortest note *of the system*!
+    /*std::multimap<qreal, Segment*> springs;
 
     Segment* seg = first();
     while (seg && (!seg->enabled() || seg->allElementsInvisible())) {
@@ -3167,7 +3166,7 @@ void Measure::stretchMeasure(qreal targetWidth)
         }
         Fraction t = s.ticks();
         if (t.isNotZero()) {
-            qreal str = stretchFormula(t, minTicks); // Moved the formula to a dedicated method
+            qreal str = stretchFormula(t, minTicks, 1); // Moved the formula to a dedicated method
             qreal d   = s.width() / str;
             s.setStretch(str);
             springs.insert(std::pair<qreal, Segment*>(d, &s));
@@ -3218,7 +3217,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             x += s->width();
             s = s->nextEnabled();
         }
-    }
+    }*/
 
     //---------------------------------------------------
     //    layout individual elements
@@ -3600,7 +3599,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeMinWidth(minSysTicks());
+            computeMinWidth(minSysTicks(), 1);
         }
         if (seg) {
             Segment* s1;
@@ -3623,7 +3622,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeMinWidth(s, x, false, minSysTicks());
+        computeMinWidth(s, x, false, minSysTicks(), 1);
     }
 
     return width() - oldWidth;
@@ -3670,11 +3669,11 @@ qreal Measure::stretchWeight()
     qreal w = 0;
     qreal W = 0;
     qreal weight = 0;
-    qreal minNoteSpace = score()->noteHeadWidth();
+    qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
     Fraction minTicks = minSysTicks();
     for (Segment* s = first(); s; s = s->next()) {
         if (s->enabled() && s->visible() && !s->allElementsInvisible() && s->isChordRestType()) {
-            qreal str = stretchFormula(s->ticks(), minTicks);
+            qreal str = stretchFormula(s->ticks(), minTicks, 1);
             w += minNoteSpace * str * basicStretch();
             W += s->width();
             // You cannot simply do weight += s->width(), because the s->width() also includes accidentals
@@ -4056,7 +4055,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeMinWidth(minSysTicks());
+        computeMinWidth(minSysTicks(), 1);
     }
 }
 
@@ -4169,21 +4168,31 @@ Fraction Measure::minSysTicks()
 //      on its duration with respect to the shortest one.
 //      Three different options proposed (see documentation).
 //---------------------------------------------------------
-qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks)
+qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretchCoeff)
 {
-    qreal uStretch = userStretch();
-    qreal genLayoutStretch = score()->styleD(Sid::measureSpacing);
-    qreal stretch = uStretch * genLayoutStretch;
+    qreal slope = userStretch() * score()->styleD(Sid::measureSpacing);
+
+    if (minTicks <= Fraction(1 , 32)) {
+        // Reduces the slope of the spacing curve in case very short notes are present.
+        // Avoids having longer notes too wide.
+        qreal reduction = qMax((1 - 0.2 * log2(qreal(Fraction(1, 16).ticks()) / qreal(minTicks.ticks()))), 0.3);
+        slope = slope * reduction;
+    }
+
     // Linear spacing
-    //qreal str = 1 - 0.112 * stretch +  0.112 * stretch * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
+    //qreal str = 1 - 0.112 * slope +  0.112 * slope * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
     // Logarithmic spacing (MS 3.6)
-    //qreal str = 1.0 + 0.721 * stretch * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    //qreal str = 1.0 + 0.721 * slope * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     // Quadratic spacing (Gould)
-    qreal str = 1 - 0.647 * stretch + 0.647 * stretch * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    qreal str = 1 - 0.647 * slope + 0.647 * slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+
     if (minTicks > Fraction(1, 16)) {
         // This additional stretch avoids long notes being too narrow in the absense of shorter notes.
         str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(Fraction(1, 16).ticks())));
     }
+
+    str *= stretchCoeff;
+
     return str;
     //TODO: choose formula in style settings
 }
@@ -4194,7 +4203,7 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks)
 //    set the width and x position for all segments
 //---------------------------------------------------------
 
-void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks)
+void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff)
 {
     Segment* fs = firstEnabled();
     if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
@@ -4203,7 +4212,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    qreal minNoteSpace = score()->noteHeadWidth();
+    qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
     qreal stretch = userStretch() * score()->styleD(Sid::measureSpacing);
 
     if (isMMRest()) {
@@ -4254,7 +4263,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
                 // the note with respect to the shortest note *of the system*. This is done
                 // according to the stretch formula, which can be customized.
                 Fraction t = s->ticks();
-                qreal str = stretchFormula(t, minTicks);
+                qreal str = stretchFormula(t, minTicks, stretchCoeff);
                 // Simply doing w * str would be wrong at this point cause you would stretch also the additional
                 // space taken by accidentals.
                 qreal minStretchedWidth = minNoteSpace * str * stretch;
@@ -4320,7 +4329,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
     setStretchedWidth(x);
 }
 
-void Measure::computeMinWidth(Fraction minTicks)
+void Measure::computeMinWidth(Fraction minTicks, qreal stretchCoeff)
 {
     Segment* s;
 
@@ -4367,7 +4376,7 @@ void Measure::computeMinWidth(Fraction minTicks)
     x += s->extraLeadingSpace().val() * spatium();
     bool isSystemHeader = s->header();
 
-    computeMinWidth(s, x, isSystemHeader, minTicks);
+    computeMinWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)

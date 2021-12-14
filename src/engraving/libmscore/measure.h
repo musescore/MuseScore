@@ -210,7 +210,7 @@ public:
     qreal userStretch() const;
     void setUserStretch(qreal v) { m_userStretch = v; }
 
-    void stretchMeasure(qreal stretch);
+    void stretchMeasure(qreal stretch, Fraction minTicks);
     Fraction computeTicks();
     void layout2();
 
@@ -337,9 +337,9 @@ public:
     qreal basicWidth() const;
     int layoutWeight(int maxMMRestLength = 0) const;
     qreal stretchWeight();
-    qreal stretchFormula(Fraction curTicks, Fraction minTicks);
+    qreal stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretchCoeff);
     Fraction minSysTicks();
-    void computeMinWidth(Fraction minTicks);
+    void computeMinWidth(Fraction minTicks, qreal stretchCoeff);
     void checkHeader();
     void checkTrailer();
     void setStretchedWidth(qreal);
@@ -370,7 +370,7 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
-    void computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks);
+    void computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
 
     MStaff* mstaff(int staffIndex) const;
 
