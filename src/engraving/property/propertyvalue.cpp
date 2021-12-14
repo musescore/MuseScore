@@ -213,7 +213,11 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
 
+    // other
+    case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(Ms::AccidentalRole(v.toInt()));
+    case P_TYPE::SUB_STYLE:       return PropertyValue(v.toInt());
     default:
+        UNREACHABLE;
         break;
     }
 
