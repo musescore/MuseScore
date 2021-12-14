@@ -33,6 +33,21 @@ https://musescore.com/contact
 Change log
 ----------
 
+25 November 2021 (Martin Keary & Simon Smith) Leland Version 0.74
+- Leland
+  - Added:
+    - Bar repeat components (E503-E505)
+    - Baroque ornaments:
+      - Right- and left-facing half circle (E571, E572)
+      - Curve below (E578)
+      - Shake (Muffat) (E584)
+    - Combining strokes for trills and mordents:
+      - Ornament low left concave stroke (E598)
+      - Ornament zig-zag line without right-hand/left-hand end (E59D, E59E)
+    - Precomposed trills and mordents:
+      - Cadence (E5BE)
+      - Double cadence with lower/upper prefix (E5C0, E5C3)
+
 17 November 2021 (Martin Keary & Simon Smith) Leland Version 0.73
 - Corrected small bump in contour of whole note symbols
 - Fixed missing extrema in pedal symbols E650 and E651
