@@ -1312,10 +1312,21 @@ void FiguredBass::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
+bool FiguredBass::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+        return false;
+    }
+
+    return TextBase::edit(ed);
+}
+
 void FiguredBass::endEdit(EditData& ed)
 {
-    int idx;
-
     TextBase::endEdit(ed);
     // as the standard text editor keeps inserting spurious HTML formatting and styles
     // retrieve and work only on the plain text
@@ -1329,7 +1340,7 @@ void FiguredBass::endEdit(EditData& ed)
     qDeleteAll(items);
     items.clear();
     QString normalizedText = QString();
-    idx = 0;
+    int idx = 0;
     for (QString str : qAsConst(list)) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing

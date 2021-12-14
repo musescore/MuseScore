@@ -1301,7 +1301,8 @@ bool NotationActionController::textNavigationAvailable() const
 
     static const QList<Ms::ElementType> allowedElements {
         Ms::ElementType::LYRICS,
-        Ms::ElementType::HARMONY
+        Ms::ElementType::HARMONY,
+        Ms::ElementType::FIGURED_BASS
     };
 
     return allowedElements.contains(element->type());
@@ -1319,7 +1320,8 @@ bool NotationActionController::textNavigationByFractionAvailable() const
     }
 
     static const QList<Ms::ElementType> allowedElements {
-        Ms::ElementType::HARMONY
+        Ms::ElementType::HARMONY,
+        Ms::ElementType::FIGURED_BASS
     };
 
     return allowedElements.contains(element->type());
@@ -1356,6 +1358,8 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
         currentNotationInteraction()->navigateToLyrics(direction);
     } else if (element->isHarmony()) {
         currentNotationInteraction()->navigateToHarmonyInNearBeat(direction, noterest);
+    } else if (element->isFiguredBass()) {
+        currentNotationInteraction()->navigateToFiguredBassInNearBeat(direction);
     }
 }
 
@@ -1368,6 +1372,8 @@ void NotationActionController::navigateToTextElementByFraction(const Fraction& f
 
     if (element->isHarmony()) {
         currentNotationInteraction()->navigateToHarmony(fraction);
+    } else if (element->isFiguredBass()) {
+        currentNotationInteraction()->navigateToFiguredBass(fraction);
     }
 }
 
@@ -1380,6 +1386,8 @@ void NotationActionController::navigateToTextElementInNearMeasure(MoveDirection 
 
     if (element->isHarmony()) {
         currentNotationInteraction()->navigateToHarmonyInNearMeasure(direction);
+    } else if (element->isFiguredBass()) {
+        currentNotationInteraction()->navigateToFiguredBassInNearMeasure(direction);
     }
 }
 

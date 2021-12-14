@@ -4088,6 +4088,147 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     startEditText(nextHarmony);
 }
 
+//! NOTE: Copied from ScoreView::figuredBassTab
+void NotationInteraction::navigateToFiguredBassInNearBeat(MoveDirection direction)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    Ms::Segment* segm = fb->segment();
+    int track = fb->track();
+    bool backDirection = direction == MoveDirection::Left;
+
+    if (!segm) {
+        qDebug("figuredBassTab: no segment");
+        return;
+    }
+
+    // search next chord segment in same staff
+    Ms::Segment* nextSegm = backDirection ? segm->prev1(Ms::SegmentType::ChordRest) : segm->next1(Ms::SegmentType::ChordRest);
+    int minTrack = (track / Ms::VOICES) * Ms::VOICES;
+    int maxTrack = minTrack + (Ms::VOICES - 1);
+
+    while (nextSegm) { // look for a ChordRest in the compatible track range
+        if (nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack)) {
+            break;
+        }
+        nextSegm = backDirection ? nextSegm->prev1(Ms::SegmentType::ChordRest) : nextSegm->next1(Ms::SegmentType::ChordRest);
+    }
+
+    if (!nextSegm) {
+        qDebug("figuredBassTab: no prev/next segment");
+        return;
+    }
+
+    bool bNew = false;
+    // add a (new) FB element, using chord duration as default duration
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0, 1), &bNew);
+    if (bNew) {
+        startEdit();
+        score()->undoAddElement(fbNew);
+        apply();
+    }
+
+    startEditText(fbNew);
+}
+
+//! NOTE: Copied from ScoreView::figuredBassTab
+void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direction)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    Ms::Segment* segm = fb->segment();
+
+    if (!segm) {
+        qDebug("figuredBassTab: no segment");
+        return;
+    }
+
+    // if moving to next/prev measure
+    Measure* meas = segm->measure();
+    if (meas) {
+        if (direction == MoveDirection::Left) {
+            meas = meas->prevMeasure();
+        } else {
+            meas = meas->nextMeasure();
+        }
+    }
+    if (!meas) {
+        qDebug("figuredBassTab: no prev/next measure");
+        return;
+    }
+    // find initial ChordRest segment
+    Ms::Segment* nextSegm = meas->findSegment(Ms::SegmentType::ChordRest, meas->tick());
+    if (!nextSegm) {
+        qDebug("figuredBassTab: no ChordRest segment at measure");
+        return;
+    }
+
+    bool bNew = false;
+    // add a (new) FB element, using chord duration as default duration
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, fb->track(), Fraction(0, 1), &bNew);
+    if (bNew) {
+        startEdit();
+        score()->undoAddElement(fbNew);
+        apply();
+    }
+
+    startEditText(fbNew);
+}
+
+//! NOTE: Copied from ScoreView::figuredBassTicksTab
+void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    int track = fb->track();
+    Ms::Segment* segm = fb->segment();
+    if (!segm) {
+        qDebug("figuredBassTicksTab: no segment");
+        return;
+    }
+    Measure* measure = segm->measure();
+
+    Fraction nextSegTick   = segm->tick() + ticks;
+
+    // find the measure containing the target tick
+    while (nextSegTick >= measure->tick() + measure->ticks()) {
+        measure = measure->nextMeasure();
+        if (!measure) {
+            qDebug("figuredBassTicksTab: no next measure");
+            return;
+        }
+    }
+
+    // look for a segment at this tick; if none, create one
+    Ms::Segment* nextSegm = segm;
+    while (nextSegm && nextSegm->tick() < nextSegTick) {
+        nextSegm = nextSegm->next1(Ms::SegmentType::ChordRest);
+    }
+
+    bool needAddSegment = false;
+
+    if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
+        nextSegm = Factory::createSegment(measure, Ms::SegmentType::ChordRest, nextSegTick - measure->tick());
+        if (!nextSegm) {
+            qDebug("figuredBassTicksTab: no next segment");
+            return;
+        }
+        needAddSegment = true;
+    }
+
+    startEdit();
+
+    if (needAddSegment) {
+        score()->undoAddElement(nextSegm);
+    }
+
+    bool bNew = false;
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
+    if (bNew) {
+        score()->undoAddElement(fbNew);
+    }
+
+    apply();
+    startEditText(fbNew);
+}
+
 void NotationInteraction::addMelisma()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
