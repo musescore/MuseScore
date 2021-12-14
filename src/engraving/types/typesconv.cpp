@@ -114,6 +114,26 @@ SymId TConv::fromXml(const QString& tag, SymId def)
     return SymNames::symIdByName(tag, def);
 }
 
+static const std::vector<Item<Orientation> > ORIENTATION = {
+    { Orientation::VERTICAL,    "vertical",     QT_TRANSLATE_NOOP("engraving", "Vertical") },
+    { Orientation::HORIZONTAL,  "horizontal",   QT_TRANSLATE_NOOP("engraving", "Horizontal") },
+};
+
+QString TConv::toUserName(Orientation v)
+{
+    return findUserNameByType<Orientation>(ORIENTATION, v);
+}
+
+QString TConv::toXml(Orientation v)
+{
+    return findXmlTagByType<Orientation>(ORIENTATION, v);
+}
+
+Orientation TConv::fromXml(const QString& tag, Orientation def)
+{
+    return findTypeByXmlTag<Orientation>(ORIENTATION, tag, def);
+}
+
 static const std::vector<Item<NoteHeadType> > NOTEHEAD_TYPES = {
     { NoteHeadType::HEAD_AUTO,      "auto",    QT_TRANSLATE_NOOP("engraving", "Auto") },
     { NoteHeadType::HEAD_WHOLE,     "whole",   QT_TRANSLATE_NOOP("engraving", "Whole") },

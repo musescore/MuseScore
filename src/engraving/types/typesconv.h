@@ -36,6 +36,10 @@ public:
     static QString toXml(SymId v);
     static SymId fromXml(const QString& tag, SymId def);
 
+    static QString toUserName(Orientation v);
+    static QString toXml(Orientation v);
+    static Orientation fromXml(const QString& tag, Orientation def);
+
     static QString toUserName(NoteHeadType v);
     static QString toXml(NoteHeadType v);
     static NoteHeadType fromXml(const QString& tag, NoteHeadType def);

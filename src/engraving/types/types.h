@@ -125,6 +125,12 @@ enum class DirectionH : char {
     AUTO, LEFT, RIGHT
 };
 
+// P_TYPE::ORIENTATION
+enum class Orientation : signed char {
+    VERTICAL,
+    HORIZONTAL
+};
+
 // P_TYPE::BEAM_MODE
 enum class BeamMode : signed char {
     AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
@@ -388,6 +394,7 @@ using PlacementV = mu::engraving::PlacementV;
 using PlacementH = mu::engraving::PlacementH;
 using DirectionV = mu::engraving::DirectionV;
 using DirectionH = mu::engraving::DirectionH;
+using Orientation = mu::engraving::Orientation;
 using LayoutBreakType = mu::engraving::LayoutBreakType;
 using VeloType = mu::engraving::VeloType;
 using BeamMode = mu::engraving::BeamMode;

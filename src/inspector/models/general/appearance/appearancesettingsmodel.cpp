@@ -148,8 +148,8 @@ PropertyItem* AppearanceSettingsModel::verticalOffset() const
 
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
-    bool isSnapped = notationConfiguration()->isSnappedToGrid(Orientation::Horizontal);
-    isSnapped &= notationConfiguration()->isSnappedToGrid(Orientation::Vertical);
+    bool isSnapped = notationConfiguration()->isSnappedToGrid(framework::Orientation::Horizontal);
+    isSnapped &= notationConfiguration()->isSnappedToGrid(framework::Orientation::Vertical);
 
     return isSnapped;
 }
@@ -160,8 +160,8 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
         return;
     }
 
-    notationConfiguration()->setIsSnappedToGrid(Orientation::Horizontal, isSnapped);
-    notationConfiguration()->setIsSnappedToGrid(Orientation::Vertical, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Horizontal, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

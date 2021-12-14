@@ -1365,7 +1365,7 @@ PropertyValue FretDiagram::getProperty(Pid propertyId) const
     case Pid::FRET_NUM_POS:
         return _numPos;
     case Pid::ORIENTATION:
-        return int(_orientation);
+        return _orientation;
         break;
     default:
         return EngravingItem::getProperty(propertyId);
@@ -1398,7 +1398,7 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         _numPos = v.toInt();
         break;
     case Pid::ORIENTATION:
-        _orientation = Orientation(v.toInt());
+        _orientation = v.value<Orientation>();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

@@ -36,11 +36,6 @@ namespace Ms {
 class StringData;
 class Chord;
 
-enum class Orientation : signed char {
-    VERTICAL,
-    HORIZONTAL
-};
-
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
 enum class FretDotType : signed char {

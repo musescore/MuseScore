@@ -467,16 +467,11 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::GROUPS:
         // unsupported
         return PropertyValue();
-    case P_TYPE::SYMID:
-        return PropertyValue::fromValue(SymNames::symIdByName(value));
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
     case P_TYPE::SUB_STYLE:
         return int(textStyleFromName(value));
-    case P_TYPE::ALIGN: {
-        return PropertyValue(XmlValue::fromXml(value, Align::LEFT));
-    }
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
     case P_TYPE::ORIENTATION:
@@ -527,6 +522,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:
         return PropertyValue(e.readElementText());
+
     case P_TYPE::ALIGN:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), Align::LEFT));
     case P_TYPE::PLACEMENT_V:
@@ -539,6 +535,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionV::AUTO));
     case P_TYPE::DIRECTION_H:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), DirectionH::AUTO));
+    case P_TYPE::ORIENTATION:
+        return PropertyValue(TConv::fromXml(e.readElementText(), Orientation::VERTICAL));
+
     case P_TYPE::LAYOUTBREAK_TYPE:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), LayoutBreakType::NOBREAK));
     case P_TYPE::VELO_TYPE:
@@ -565,7 +564,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(TConv::fromXml(e.readElementText(), HookType::NONE));
 
     case P_TYPE::SUB_STYLE:
-    case P_TYPE::ORIENTATION:
         return propertyFromString(propertyType(id), e.readElementText());
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
@@ -644,15 +642,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
         return textStyleName(Tid(value.toInt()));
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
-    case P_TYPE::ORIENTATION: {
-        const Orientation o = Orientation(value.toInt());
-        if (o == Orientation::VERTICAL) {
-            return "vertical";
-        } else if (o == Orientation::HORIZONTAL) {
-            return "horizontal";
-        }
-        break;
-    }
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
     case P_TYPE::BEAM_MODE:
