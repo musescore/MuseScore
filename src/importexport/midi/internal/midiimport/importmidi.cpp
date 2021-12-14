@@ -28,6 +28,9 @@
 #include "engraving/style/style.h"
 #include "engraving/rw/xml.h"
 
+#include "translation.h"
+#include "interactive/messagebox.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/key.h"
@@ -1242,10 +1245,9 @@ Score::FileError importMidi(MasterScore* score, const QString& name)
         }
         catch (QString errorText) {
             if (!MScore::noGui) {
-                QMessageBox::warning(0,
-                                     QWidget::tr("Load MIDI"),
-                                     QWidget::tr("Load failed: %1").arg(errorText),
-                                     QString(), QWidget::tr("Quit"), QString(), 0, 1);
+                MessageBox::warning(mu::trc("iex_midi", "Import MIDI"),
+                                    mu::qtrc("iex_midi", "Import failed: %1").arg(errorText).toStdString(),
+                                    { MessageBox::Ok });
             }
             fp.close();
             qDebug("importMidi: bad file format");
