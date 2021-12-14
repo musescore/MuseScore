@@ -313,7 +313,7 @@ Rectangle {
                 StyledMenuLoader {
                     id: menuLoader
 
-                    onHandleMenuItem: {
+                    onHandleMenuItem: function(itemId) {
                         console.log("selected " + itemId)
                     }
                 }
@@ -360,7 +360,7 @@ Rectangle {
 
             color: "black"
 
-            onNewColorSelected: {
+            onNewColorSelected: function(newColor) {
                 color = newColor
             }
         }
@@ -555,7 +555,7 @@ Rectangle {
                 minValue: 0
                 step: 0.5
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     currentValue = newValue
                 }
             }
@@ -570,7 +570,7 @@ Rectangle {
                 minValue: 0
                 step: 0.5
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     currentValue = newValue
                 }
             }
@@ -584,7 +584,7 @@ Rectangle {
                 minValue: 0
                 step: 0.5
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     currentValue = newValue
                 }
             }

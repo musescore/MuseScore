@@ -54,7 +54,7 @@ Rectangle {
             anchors.right: btnRow.left
             anchors.verticalCenter: parent.verticalCenter
             anchors.margins: 16
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 profModel.find(newTextValue)
             }
         }

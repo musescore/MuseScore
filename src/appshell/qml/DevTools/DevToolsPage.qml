@@ -98,7 +98,7 @@ DockPage {
                         { "name": "navigation", "title": "KeyNav" }
                     ]
 
-                    onSelected: {
+                    onSelected: function(name) {
                         root.setCurrentCentral(name)
                     }
                 }

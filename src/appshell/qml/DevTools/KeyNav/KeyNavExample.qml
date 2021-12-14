@@ -80,7 +80,9 @@ Rectangle {
                     keynavSection: mainMenu.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
-                    onClicked: root.lastClickedInfo = "sec: " + mainMenu.sectionName + ", " + info
+                    onClicked: function(info) {
+                        root.lastClickedInfo = "sec: " + mainMenu.sectionName + ", " + info
+                    }
                 }
             }
         }
@@ -110,7 +112,9 @@ Rectangle {
                     keynavSection: topTools.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
-                    onClicked: root.lastClickedInfo = "sec: " + topTools.sectionName + ", " + info
+                    onClicked: function(info) {
+                        root.lastClickedInfo = "sec: " + topTools.sectionName + ", " + info
+                    }
                 }
             }
         }
@@ -139,7 +143,9 @@ Rectangle {
                     keynavSection: leftPanel.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
-                    onClicked: root.lastClickedInfo = "sec: " + leftPanel.sectionName + ", " + info
+                    onClicked: function(info) {
+                        root.lastClickedInfo = "sec: " + leftPanel.sectionName + ", " + info
+                    }
                 }
             }
         }
@@ -168,7 +174,9 @@ Rectangle {
                     keynavSection: rightPanel.keynavSection
                     subsectionName: "subsec" + model.index
                     subsectionOrder: model.index
-                    onClicked: root.lastClickedInfo = "sec: " + rightPanel.sectionName + ", " + info
+                    onClicked: function(info) {
+                        root.lastClickedInfo = "sec: " + rightPanel.sectionName + ", " + info
+                    }
                 }
             }
         }
@@ -191,7 +199,9 @@ Rectangle {
             keynavSection: centerPanel.keynavSection
             subsectionName: "subsec0"
             subsectionOrder: 0
-            onClicked: root.lastClickedInfo = "sec: " + centerPanel.sectionName + ", " + info
+            onClicked: function(info) {
+                root.lastClickedInfo = "sec: " + centerPanel.sectionName + ", " + info
+            }
         }
     }
 }
