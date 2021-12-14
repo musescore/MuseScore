@@ -84,7 +84,7 @@ StyledDialogView {
             navigation.row: 1
             navigation.accessible.name: workspaceNameTitle.text + " " + currentText
 
-            onCurrentTextEdited: {
+            onCurrentTextEdited: function(newTextValue) {
                 workspaceModel.workspaceName = newTextValue
             }
 
