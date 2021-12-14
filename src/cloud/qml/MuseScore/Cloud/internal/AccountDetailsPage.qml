@@ -51,7 +51,7 @@ FocusScope {
         section: root.navigationSection
         accessible.name: userName.text
 
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 accountInfoButton.navigation.requestActive()
                 accountInfo.readInfo()
