@@ -46,7 +46,7 @@ FocusScope {
         name: "Add-ons"
         enabled: root.enabled && root.visible
         order: 3
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
@@ -193,7 +193,7 @@ FocusScope {
             order: 2
             accessible.name: qsTrc("appshell", "Add-ons tabs")
 
-            onNavigationEvent: {
+            onNavigationEvent: function(event) {
                 if (event.type === NavigationEvent.AboutActive) {
                     event.setData("controlName", tabBar.currentItem.navigation.name)
                 }

@@ -69,7 +69,7 @@ Rectangle {
         section: frameModel.navigationSection
         order: 1
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
                 event.setData("controlName", tabs.currentItem.navigation.name)
             }
@@ -168,7 +168,7 @@ Rectangle {
                     tabsPanel.currentIndex = model.index
                 }
 
-                onHandleContextMenuItemRequested: {
+                onHandleContextMenuItemRequested: function(itemId) {
                     frameModel.handleMenuItem(itemId)
                 }
             }

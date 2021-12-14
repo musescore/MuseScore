@@ -77,7 +77,7 @@ DockWindow {
                     }
                 }
 
-                onSelected: {
+                onSelected: function(uri) {
                     api.launcher.open(uri)
                 }
             }

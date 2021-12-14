@@ -85,7 +85,7 @@ DockPage {
             HomeMenu {
                 currentPageName: root.section
 
-                onSelected: {
+                onSelected: function(name) {
                     root.setCurrentCentral(name)
                 }
             }
