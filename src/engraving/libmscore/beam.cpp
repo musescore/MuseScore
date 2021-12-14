@@ -556,7 +556,7 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     }
     // for 2-indexed interval i (seconds, thirds, etc.)
     // maxSlopes[i] = max slope of beam for notes with interval i
-    static const int maxSlopes[] = { 1, 2, 3, 4, 5, 6 };
+    static const int maxSlopes[] = { 1, 2, 3, 4, 5, 6, 7 };
 
     // calculate max slope based on distance between first and last chords
     qreal beamWidth = _elements[_elements.size() - 1]->stemPos().x() - _elements[0]->stemPos().x();
@@ -564,20 +564,23 @@ int Beam::computeDesiredSlant(int startNote, int endNote, int middleLine, int di
     int maxSlope = 6;
     if (beamWidth < 3.0) {
         maxSlope = maxSlopes[0];
-    } else if (beamWidth < 6.0) {
+    } else if (beamWidth < 5.0) {
         maxSlope = maxSlopes[1];
-    } else if (beamWidth < 12.0) {
+    } else if (beamWidth < 8.0) {
         maxSlope = maxSlopes[2];
-    } else if (beamWidth < 24.0) {
+    } else if (beamWidth < 13.0) {
         maxSlope = maxSlopes[3];
-    } else if (beamWidth < 48.0) {
+    } else if (beamWidth < 21.0) {
         maxSlope = maxSlopes[4];
-    } else {
+    } else if (beamWidth < 34.0) {
         maxSlope = maxSlopes[5];
+    } else {
+        maxSlope = maxSlopes[6];
     }
 
     // calculate max slope based on note interval
-    int interval = qMin(qAbs(endNote - startNote), 5);
+    // TODO: calculate the max value from the length of maxSlopes
+    int interval = qMin(qAbs(endNote - startNote), static_cast<int>(std::end(maxSlopes) - std::begin(maxSlopes)));
     return qMin(maxSlope, maxSlopes[interval]) * (_up ? 1 : -1);
 }
 
