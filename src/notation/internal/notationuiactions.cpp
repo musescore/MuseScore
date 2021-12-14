@@ -40,8 +40,8 @@ static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
 
 const UiActionList NotationUiActions::m_actions = {
-    UiAction("escape",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-escape",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Esc")
              ),
     UiAction("put-note", // args: PointF pos, bool replace, bool insert

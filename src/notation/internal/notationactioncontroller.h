@@ -28,6 +28,7 @@
 #include "actions/actiontypes.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "context/iuicontextresolver.h"
 #include "inotation.h"
 #include "iinteractive.h"
 #include "playback/iplaybackcontroller.h"
@@ -39,6 +40,7 @@ class NotationActionController : public actions::Actionable, public async::Async
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)

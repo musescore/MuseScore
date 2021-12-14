@@ -523,8 +523,9 @@
     <seq>Ctrl+Y,Ctrl+O,Ctrl+B</seq>
     </SC>
   <SC>
-    <key>escape</key>
+    <key>notation-escape</key>
     <seq>Esc</seq>
+    <ctx>notation-opened</ctx>
     </SC>
   <SC>
     <key>delete</key>
