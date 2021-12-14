@@ -19,14 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
-import QtQml.Models 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.Ui
+import MuseScore.UiComponents
+import MuseScore.InstrumentsScene
 
 import "internal"
 
@@ -61,7 +60,7 @@ Item {
         id: contextMenuModel
 
         onExpandCollapseAllRequested: function(expand) {
-            instrumentsTreeView.expandCollapseAll(expand)
+            expand ? instrumentsTreeView.expandRecursively() : instrumentsTreeView.collapseRecursively()
         }
     }
 
@@ -136,171 +135,93 @@ Item {
             wrapMode: Text.WordWrap
         }
 
-        StyledFlickable {
-            id: flickable
+        TreeView {
+            id: instrumentsTreeView
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
             contentWidth: width
-            contentHeight: instrumentsTreeView.implicitHeight
 
-            TreeView {
-                id: instrumentsTreeView
+            visible: !instrumentsTreeModel.isEmpty
 
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            maximumFlickVelocity: ui.theme.flickableMaxVelocity
 
-                implicitHeight: flickableItem.contentHeight
-                flickableItem.interactive: false
+            ScrollBar.vertical: StyledScrollBar {}
+            ScrollBar.horizontal: StyledScrollBar {}
 
-                visible: !instrumentsTreeModel.isEmpty
+            model: InstrumentsPanelTreeModel {
+                id: instrumentsTreeModel
+            }
 
-                model: InstrumentsPanelTreeModel {
-                    id: instrumentsTreeModel
-                }
+            selectionModel: instrumentsTreeModel ? instrumentsTreeModel.selectionModel() : null
 
-                selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel() : null
+            property NavigationPanel navigationTreePanel : NavigationPanel {
+                name: "InstrumentsTree"
+                section: root.navigationSection
+                direction: NavigationPanel.Both
+                enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
+                order: controlPanel.navigation.order + 1
 
-                alternatingRowColors: false
-                backgroundVisible: false
-                headerVisible: false
-                frameVisible: false
-
-                function expandCollapseAll(expand) {
-                    for (let row = 0; row < instrumentsTreeView.model.rowCount(); row++) {
-                        const instrumentIndex = instrumentsTreeView.model.index(row, 0);
-                        const instrumentsTreeItemDelegate = instrumentsTreeView.model.data(instrumentIndex);
-                        if (instrumentsTreeItemDelegate.isExpandable){
-                            if (expand) {
-                                instrumentsTreeView.expand(instrumentIndex)
-                            } else {
-                                instrumentsTreeView.collapse(instrumentIndex)
-                            }
-                        }
-                    }
-                    flickable.returnToBounds();
-                }
-
-                property NavigationPanel navigationTreePanel : NavigationPanel {
-                    name: "InstrumentsTree"
-                    section: root.navigationSection
-                    direction: NavigationPanel.Both
-                    enabled: instrumentsTreeView.enabled && instrumentsTreeView.visible
-                    order: controlPanel.navigation.order + 1
-
-                    onNavigationEvent: function(event) {
-                        if (event.type === NavigationEvent.AboutActive) {
-                            event.setData("controlName", prv.currentItemNavigationName)
-                        }
+                onNavigationEvent: function(event) {
+                    if (event.type === NavigationEvent.AboutActive) {
+                        event.setData("controlName", prv.currentItemNavigationName)
                     }
                 }
+            }
 
-                TableViewColumn {
-                    role: "itemRole"
-                }
+            function isControl(itemType) {
+                return itemType === InstrumentsTreeItemType.CONTROL_ADD_STAFF
+                        || itemType === InstrumentsTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
+            }
 
-                function isControl(itemType) {
-                    return itemType === InstrumentsTreeItemType.CONTROL_ADD_STAFF ||
-                            itemType === InstrumentsTreeItemType.CONTROL_ADD_DOUBLE_INSTRUMENT
-                }
+            delegate: DropArea {
+                id: dropArea
 
-                style: TreeViewStyle {
-                    indentation: 0
+                required property bool expanded
+                required property int depth
+                required property int row
+                required property int column
 
-                    frame: Item {}
-                    incrementControl: Item {}
-                    decrementControl: Item {}
-                    handle: Item {}
-                    scrollBarBackground: Item {}
-                    branchDelegate: Item {}
+                readonly property var item: model ? model.itemRole : null
+                readonly property var modelIndex: instrumentsTreeView.modelIndex(row, column)
 
-                    backgroundColor: "transparent"
+                width: parent.width
+                implicitHeight: 38
 
-                    rowDelegate: Item {
-                        height: 38
-                        width: parent.width
-                    }
-                }
+                Loader {
+                    id: treeItemDelegateLoader
 
-                itemDelegate: DropArea {
-                    id: dropArea
+                    readonly property alias item: dropArea.item
+                    readonly property var delegateType: item ? item.type : InstrumentsTreeItemType.UNDEFINED
 
+                    anchors.fill: parent
 
-                    Loader {
-                        id: treeItemDelegateLoader
+                    sourceComponent: instrumentsTreeView.isControl(delegateType)
+                                     ? controlItemDelegateComponent : treeItemDelegateComponent
 
-                        property var item: model ? model.itemRole : null
-                        property int delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
-                        property bool isSelected: model ? model.itemRole.isSelected : false
+                    Component {
+                        id: treeItemDelegateComponent
 
-                        height: parent.height
-                        width: parent.width
+                        InstrumentsTreeItemDelegate {
+                            treeView: instrumentsTreeView
 
-                        sourceComponent: instrumentsTreeView.isControl(delegateType) ?
-                                             controlItemDelegateComponent : treeItemDelegateComponent
+                            item: dropArea.item
+                            row: dropArea.row
+                            modelIndex: dropArea.modelIndex
+                            isExpanded: dropArea.expanded
+                            depth: dropArea.depth
 
-                        Component {
-                            id: treeItemDelegateComponent
+                            sideMargin: contentColumn.sideMargin
+                            popupAnchorItem: root
 
-                            InstrumentsTreeItemDelegate {
-                                treeView: instrumentsTreeView
-
-                                item: treeItemDelegateLoader.item
-
-                                sideMargin: contentColumn.sideMargin
-                                popupAnchorItem: root
-
-                                navigation.name: model ? model.itemRole.title : "ItemInstrumentsTree"
-                                navigation.panel: instrumentsTreeView.navigationTreePanel
-                                navigation.row: model ? model.index : 0
-                                navigation.onActiveChanged: {
-                                    if (navigation.active) {
-                                        prv.currentItemNavigationName = navigation.name
-                                    }
-                                }
-
-                                onClicked: {
-                                    instrumentsTreeModel.selectRow(styleData.index)
-                                }
-
-                                onDoubleClicked: {
-                                    if (!isExpandable) {
-                                        return
-                                    }
-
-                                    if (!styleData.isExpanded) {
-                                        instrumentsTreeView.expand(styleData.index)
-                                    } else {
-                                        instrumentsTreeView.collapse(styleData.index)
-                                    }
-                                }
-
-                                onRemoveSelectionRequested: {
-                                    instrumentsTreeModel.removeSelectedRows()
-                                }
-
-                                property real contentYBackup: 0
-
-                                onPopupOpened: function(popupX, popupY, popupHeight) {
-                                    contentYBackup = flickable.contentY
-                                    var mappedPopupY = mapToItem(flickable, popupX, popupY).y
-
-                                    if (mappedPopupY + popupHeight < flickable.height - contentColumn.sideMargin) {
-                                        return
-                                    }
-
-                                    var hiddenPopupPartHeight = Math.abs(flickable.height - (mappedPopupY + popupHeight))
-                                    flickable.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
-                                }
-
-                                onPopupClosed: {
-                                    flickable.contentY = contentYBackup
-                                }
-
-                                onVisibilityChanged: function(visible) {
-                                    instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
+                            navigation.panel: instrumentsTreeView.navigationTreePanel
+                            navigation.row: dropArea.row
+                            navigation.onActiveChanged: {
+                                if (navigation.active) {
+                                    prv.currentItemNavigationName = navigation.name
                                 }
 
                                 onDragStarted: {
@@ -311,37 +232,72 @@ Item {
                                     instrumentsTreeModel.endActiveDrag()
                                 }
                             }
-                        }
 
-                        Component {
-                            id: controlItemDelegateComponent
+                            onClicked: {
+                                instrumentsTreeModel.selectRow(dropArea.modelIndex)
+                            }
 
-                            InstrumentsTreeItemControl {
-                                isSelected: treeItemDelegateLoader.isSelected
-
-                                navigation.panel: instrumentsTreeView.navigationTreePanel
-                                navigation.row: model ? model.index : 0
-
-                                sideMargin: contentColumn.sideMargin
-
-                                onClicked: {
-                                    styleData.value.appendNewItem()
+                            onToggleExpandedRequested: {
+                                if (!isExpandable) {
+                                    return
                                 }
+
+                                instrumentsTreeView.toggleExpanded(dropArea.row)
+                            }
+
+                            onVisibilityChanged: function(visible) {
+                                instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
+                            }
+
+                            onRemoveSelectionRequested: {
+                                instrumentsTreeModel.removeSelectedRows()
+                            }
+
+                            property real contentYBackup: 0
+
+                            onPopupOpened: function(popupX, popupY, popupHeight) {
+                                contentYBackup = instrumentsTreeView.contentY
+                                var mappedPopupY = mapToItem(instrumentsTreeView, popupX, popupY).y
+
+                                if (mappedPopupY + popupHeight < instrumentsTreeView.height - contentColumn.sideMargin) {
+                                    return
+                                }
+
+                                var hiddenPopupPartHeight = Math.abs(instrumentsTreeView.height - (mappedPopupY + popupHeight))
+                                instrumentsTreeView.contentY += hiddenPopupPartHeight + contentColumn.sideMargin
+                            }
+
+                            onPopupClosed: {
+                                instrumentsTreeView.contentY = contentYBackup
                             }
                         }
                     }
 
-                    onEntered: function(drag) {
-                        if (styleData.index === drag.source.index || !styleData.value.canAcceptDrop(drag.source.item)) {
-                            return
-                        }
+                    Component {
+                        id: controlItemDelegateComponent
 
-                        instrumentsTreeModel.moveRows(drag.source.index.parent,
-                                                     drag.source.index.row,
-                                                     1,
-                                                     styleData.index.parent,
-                                                     styleData.index.row)
+                        InstrumentsTreeItemControl {
+                            item: treeItemDelegateLoader.item
+                            depth: dropArea.depth
+
+                            navigation.panel: instrumentsTreeView.navigationTreePanel
+                            navigation.row: dropArea.row
+
+                            sideMargin: contentColumn.sideMargin
+                        }
                     }
+                }
+
+                onEntered: function(drag) {
+                    if (modelIndex === drag.source.modelIndex || !model.itemRole.canAcceptDrop(drag.source.item)) {
+                        return
+                    }
+
+                    instrumentsTreeModel.moveRows(drag.source.modelIndex.parent,
+                                                  drag.source.modelIndex.row,
+                                                  1,
+                                                  modelIndex.parent,
+                                                  modelIndex.row)
                 }
             }
         }

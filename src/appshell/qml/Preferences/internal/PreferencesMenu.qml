@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
 
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+import MuseScore.Ui
+import MuseScore.UiComponents
 
 Item {
     id: root
@@ -64,44 +64,26 @@ Item {
         anchors.fill: parent
         anchors.topMargin: 12
 
-        alternatingRowColors: false
-        headerVisible: false
-        frameVisible: false
+        boundsBehavior: Flickable.StopAtBounds
 
-        TableViewColumn {
-            role: "itemRole"
-        }
+        delegate: PageTabButton {
+            required property bool expanded
+            required property int depth
+            required property int row
+            required property int column
 
-        style: TreeViewStyle {
-            indentation: 0
+            readonly property var modelIndex: treeView.modelIndex(row, column)
 
-            frame: Item {}
-            incrementControl: Item {}
-            decrementControl: Item {}
-            handle: Item {}
-            scrollBarBackground: Item {}
-            branchDelegate: Item {}
+            readonly property int navigationRow: modelIndex.row
+            readonly property int navigationColumn: depth
 
-            backgroundColor: background.color
-
-            rowDelegate: Rectangle {
-                id: rowTreeDelegate
-
-                height: 36
-                width: parent.width
-                color: background.color
-            }
-        }
-
-        itemDelegate: PageTabButton {
-            property bool expanded: Boolean(model) ? model.itemRole.expanded : false
-            property int navigationRow: styleData.index.row
-            property int navigationColumn: styleData.depth
+            implicitWidth: treeView.width
+            implicitHeight: 36
 
             orientation: Qt.Horizontal
 
             spacing: 16
-            leftPadding: spacing * (styleData.depth + 1)
+            leftPadding: spacing * (depth + 1)
 
             normalStateFont: ui.theme.bodyFont
             selectedStateFont: ui.theme.bodyBoldFont
@@ -118,24 +100,26 @@ Item {
             navigation.accessible.role: MUAccessible.ListItem
             navigation.onActiveChanged: {
                 if (navigation.active) {
-                    treeView.model.selectRow(styleData.index)
+                    treeView.model.selectRow(modelIndex)
+                }
+            }
+
+            readonly property bool shouldBeExpanded: model?.itemRole?.expanded ?? false
+
+            function updateExpandedState() {
+                if (shouldBeExpanded) {
+                    treeView.expand(row)
+                } else {
+                    treeView.collapse(row)
                 }
             }
 
             Component.onCompleted: {
-                updateExpandedState()
+                Qt.callLater(updateExpandedState)
             }
 
-            onExpandedChanged: {
-                updateExpandedState()
-            }
-
-            function updateExpandedState() {
-                if (expanded) {
-                    treeView.expand(styleData.index)
-                } else {
-                    treeView.collapse(styleData.index)
-                }
+            onShouldBeExpandedChanged: {
+                Qt.callLater(updateExpandedState)
             }
 
             iconComponent: StyledIconLabel {
@@ -151,7 +135,7 @@ Item {
             }
 
             onClicked: {
-                treeView.model.selectRow(styleData.index)
+                treeView.model.selectRow(modelIndex)
             }
         }
     }
