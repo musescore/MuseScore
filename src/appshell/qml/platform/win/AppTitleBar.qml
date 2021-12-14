@@ -35,6 +35,8 @@ Rectangle {
     property alias title: titleLabel.text
     property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
 
+    property alias windowIsMiximized: systemButtons.windowIsMiximized
+
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
@@ -84,65 +86,25 @@ Rectangle {
             textFormat: Text.RichText
         }
 
-        Row {
+        AppSystemButtons {
             id: systemButtons
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
 
-            NavigationPanel {
-                id: navAppControlPanel
-                name: "AppControl"
-                enabled: systemButtons.enabled && systemButtons.visible
-                section: navSec
-                order: 1
-                accessible.name: qsTrc("appshell", "App control")
+            navigationPanel.section: navSec
+            navigationPanel.order: 1
+
+            onShowWindowMinimizedRequested: {
+                root.showWindowMinimizedRequested()
             }
 
-            FlatButton {
-                icon: IconCode.MINUS
-                transparent: true
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 1
-                accessible.name: qsTrc("appshell", "Minimize")
-
-                onClicked: {
-                    root.showWindowMinimizedRequested()
-                }
+            onToggleWindowMaximizedRequested: {
+                root.toggleWindowMaximizedRequested()
             }
 
-            FlatButton {
-                icon: IconCode.SPLIT_OUT_ARROWS
-                transparent: true
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 2
-                accessible.name: qsTrc("appshell", "Maximize") // todo
-
-                onClicked: {
-                    root.toggleWindowMaximizedRequested()
-                }
-            }
-
-            FlatButton {
-                icon: IconCode.CLOSE_X_ROUNDED
-                transparent: true
-                hoverHitColor: "red"
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 3
-                accessible.name: qsTrc("appshell", "Quit")
-
-                onClicked: {
-                    root.closeWindowRequested()
-                }
+            onCloseWindowRequested: {
+                root.closeWindowRequested()
             }
         }
     }

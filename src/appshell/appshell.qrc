@@ -103,5 +103,6 @@
         <file>qml/AppMenuBar.qml</file>
         <file>qml/DevTools/MPE/ArticulationsProfileEditorView.qml</file>
         <file>qml/Preferences/internal/MiscellaneousSection.qml</file>
+        <file>qml/platform/win/AppSystemButtons.qml</file>
     </qresource>
 </RCC>
