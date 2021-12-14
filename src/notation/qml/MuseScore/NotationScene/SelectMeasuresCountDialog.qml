@@ -80,7 +80,7 @@ StyledDialogView {
                     maxValue: 1000
                     minValue: 1
 
-                    onValueEdited: {
+                    onValueEdited: function(newValue) {
                         root.measuresCount = newValue
                     }
                 }

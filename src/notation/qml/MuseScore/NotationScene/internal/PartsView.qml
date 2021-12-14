@@ -85,13 +85,13 @@ Item {
             enabled: root.enabled && root.visible
             direction: NavigationPanel.Both
             accessible.name: qsTrc("notation", "Parts view")
-            onActiveChanged: {
+            onActiveChanged: function(active) {
                 if (active) {
                     root.forceActiveFocus()
                 }
             }
 
-            onNavigationEvent: {
+            onNavigationEvent: function(event) {
                 if (event.type === NavigationEvent.AboutActive) {
                     event.setData("controlName", prv.currentItemNavigationName)
                 }
@@ -133,7 +133,7 @@ Item {
                 view.currentIndex = model.index
             }
 
-            onTitleEdited: {
+            onTitleEdited: function(newTitle) {
                 root.model.setPartTitle(model.index, newTitle)
             }
 

@@ -43,7 +43,7 @@ Rectangle {
     NotationSwitchListModel {
         id: notationSwitchModel
 
-        onCurrentNotationIndexChanged: {
+        onCurrentNotationIndexChanged: function(index) {
             notationsView.currentIndex = index
         }
     }

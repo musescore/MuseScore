@@ -155,7 +155,7 @@ Item {
                 Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
-            onClicked: function (mouse) {
+            onClicked: function(mouse) {
                 if (menuLoader.isMenuOpened // If already menu open, close it
                         || (hasMenu // Or if can open menu
                             && (!item.isMenuSecondary // And _should_ open menu

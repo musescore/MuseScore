@@ -110,7 +110,7 @@ StyledPopupView {
             navigationPanel.order: 2
             navigationPanel.accessible.name: titleLabel.text
 
-            onSelectRowRequested: {
+            onSelectRowRequested: function(index) {
                 customiseModel.selectRow(index)
             }
 

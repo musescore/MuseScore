@@ -45,7 +45,7 @@ RowLayout {
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.name: qsTrc("notation", "Customise control")
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }

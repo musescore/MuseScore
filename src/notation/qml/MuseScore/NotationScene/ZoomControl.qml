@@ -97,7 +97,7 @@ RowLayout {
             navigation.panel: root.navigationPanel
             navigation.order: zoomOutButton.navigation.order + 1
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.changeZoomPercentageRequested(newValue)
             }
         }
@@ -122,7 +122,7 @@ RowLayout {
 
         menuModel: root.availableZoomList
         menuAnchorItem: ui.rootItem
-        onHandleMenuItem: {
+        onHandleMenuItem: function(itemId) {
             root.changeZoomRequested(itemId)
         }
     }

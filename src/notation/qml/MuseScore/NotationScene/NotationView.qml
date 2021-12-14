@@ -132,7 +132,7 @@ FocusScope {
                         }
                     }
 
-                    onHideContextMenuRequested: function() {
+                    onHideContextMenuRequested: {
                         contextMenuLoader.close()
                     }
 
@@ -156,7 +156,7 @@ FocusScope {
 
                             navigationParentControl: fakeNavCtrl
 
-                            onHandleMenuItem: function (itemId) {
+                            onHandleMenuItem: function(itemId) {
                                 contextMenuModel.handleMenuItem(itemId)
                             }
                         }
@@ -198,7 +198,7 @@ FocusScope {
                         load()
                     }
 
-                    onMoveNotationRequested: function (dx, dy) {
+                    onMoveNotationRequested: function(dx, dy) {
                         notationView.moveCanvas(dx, dy)
                     }
                 }
