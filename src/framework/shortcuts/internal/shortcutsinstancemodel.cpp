@@ -32,6 +32,10 @@ ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
 
 void ShortcutsInstanceModel::init()
 {
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
+        loadShortcuts();
+    });
+
     shortcutsRegister()->activeChanged().onNotify(this, [this](){
         emit activeChanged();
     });

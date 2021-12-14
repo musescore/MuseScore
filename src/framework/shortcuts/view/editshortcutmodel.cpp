@@ -24,9 +24,9 @@
 
 #include <QKeySequence>
 
-#include "log.h"
 #include "translation.h"
 #include "shortcutstypes.h"
+#include "log.h"
 
 using namespace mu::shortcuts;
 
@@ -35,13 +35,13 @@ EditShortcutModel::EditShortcutModel(QObject* parent)
 {
 }
 
-void EditShortcutModel::load(const QString& sequence, const QVariantList& allShortcuts)
+void EditShortcutModel::load(const QVariant& shortcut, const QVariantList& allShortcuts)
 {
     clear();
 
     m_allShortcuts = allShortcuts;
-    m_originSequence = sequence;
-    emit originSequenceChanged(sequence);
+    m_originShortcut = shortcut.toMap();
+    emit originSequenceChanged(originSequence());
 }
 
 void EditShortcutModel::clear()
@@ -94,11 +94,16 @@ void EditShortcutModel::validateInputedSequence()
 {
     m_errorMessage.clear();
 
-    for (const QVariant& shortcut: m_allShortcuts) {
-        QVariantMap map = shortcut.toMap();
+    QString input = inputedSequence();
+    QVariant context = m_originShortcut.value("context");
+    for (const QVariant& shortcut : m_allShortcuts) {
+        QVariantMap sc = shortcut.toMap();
+        if (sc.value("context") != context) {
+            continue;
+        }
 
-        if (map["sequence"].toString() == inputedSequence()) {
-            QString title = map["title"].toString();
+        if (sc.value("sequence").toString() == input) {
+            QString title = sc.value("title").toString();
             m_errorMessage = qtrc("shortcuts", "Shortcut conflicts with %1").arg(title);
             return;
         }
@@ -107,7 +112,7 @@ void EditShortcutModel::validateInputedSequence()
 
 QString EditShortcutModel::originSequence() const
 {
-    return m_originSequence;
+    return m_originShortcut.value("sequence").toString();
 }
 
 QString EditShortcutModel::inputedSequence() const
@@ -127,7 +132,7 @@ bool EditShortcutModel::canApplySequence() const
 
 QString EditShortcutModel::unitedSequence() const
 {
-    QString united = m_originSequence;
+    QString united = originSequence();
     if (!united.isEmpty()) {
         united += "; ";
     }

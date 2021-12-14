@@ -22,9 +22,9 @@
 
 #include "editmidimappingmodel.h"
 
-#include "log.h"
-#include "utils.h"
 #include "translation.h"
+#include "utils.h"
+#include "log.h"
 
 using namespace mu::shortcuts;
 using namespace mu::midi;

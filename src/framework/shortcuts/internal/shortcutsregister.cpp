@@ -95,17 +95,18 @@ void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutLi
 
     ShortcutList needadd;
     for (const Shortcut& defSc : defaultShortcuts) {
-        auto it = std::find_if(shortcuts.begin(), shortcuts.end(), [defSc](const Shortcut& i) {
-            return i.action == defSc.action;
-        });
+        bool found = false;
+        for (Shortcut& sc : shortcuts) {
+            //! NOTE If user shortcut is found, set context (context should always as default)
+            if (sc.action == defSc.action) {
+                sc.context = defSc.context;
+                found = true;
+            }
+        }
 
         //! NOTE If no default shortcut is found in user shortcuts add def
-        if (it == shortcuts.end()) {
+        if (!found) {
             needadd.push_back(defSc);
-        }
-        //! NOTE If user shortcut is found, set context (context should always as default)
-        else {
-            it->context = defSc.context;
         }
     }
 
@@ -134,10 +135,12 @@ void ShortcutsRegister::makeUnique(ShortcutList& shortcuts)
             continue;
         }
 
-        IF_ASSERT_FAILED(it->context == sc.context) {
+        Shortcut& foundSc = *it;
+
+        IF_ASSERT_FAILED(foundSc.context == sc.context) {
         }
 
-        it->sequences.insert(it->sequences.end(), sc.sequences.begin(), sc.sequences.end());
+        foundSc.sequences.insert(foundSc.sequences.end(), sc.sequences.begin(), sc.sequences.end());
     }
 }
 
