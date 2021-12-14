@@ -35,13 +35,13 @@ Item {
         name: "PreferencesMenuPanel"
         enabled: root.enabled && root.visible
         direction: NavigationPanel.Both
-        onActiveChanged: {
+        onActiveChanged: function(active) {
             if (active) {
                 root.forceActiveFocus()
             }
         }
 
-        onNavigationEvent: {
+        onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
                 event.setData("controlIndex", prv.currentItemNavigationIndex)
             }
