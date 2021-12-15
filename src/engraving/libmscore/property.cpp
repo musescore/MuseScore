@@ -303,7 +303,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::BRACKET_COLUMN,          false, "level",                 P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "level") },
     { Pid::INAME_LAYOUT_POSITION,   false, "layoutPosition",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "layout position") },
-    { Pid::TEXT_TYPE,               false, "style",                 P_TYPE::TEXT_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
+    { Pid::TEXT_STYLE,               false, "style",                 P_TYPE::TEXT_STYLE,      DUMMY_QT_TR_NOOP("propertyName", "style") },
     { Pid::FONT_FACE,               false, "family",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "family") },
     { Pid::FONT_SIZE,               false, "size",                  P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "size") },
     { Pid::FONT_STYLE,              false, "fontStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "font style") },
@@ -470,7 +470,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
-    case P_TYPE::TEXT_TYPE:
+    case P_TYPE::TEXT_STYLE:
         return int(textStyleFromName(value));
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
@@ -559,7 +559,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::KEY_MODE:
         return PropertyValue(TConv::fromXml(e.readElementText(), KeyMode::NONE));
 
-    case P_TYPE::TEXT_TYPE:
+    case P_TYPE::TEXT_STYLE:
         return propertyFromString(propertyType(id), e.readElementText());
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
@@ -609,7 +609,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::TEXT_TYPE:
+    case P_TYPE::TEXT_STYLE:
         return textStyleName(value.value<Tid>());
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));

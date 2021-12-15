@@ -612,7 +612,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Lyrics::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return isEven() ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::lyricsPlacement);

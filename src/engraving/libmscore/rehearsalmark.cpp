@@ -98,7 +98,7 @@ void RehearsalMark::layout()
 engraving::PropertyValue RehearsalMark::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::REHEARSAL_MARK;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::rehearsalMarkPlacement);

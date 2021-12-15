@@ -90,7 +90,7 @@ bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
