@@ -269,12 +269,12 @@ void Lyrics::layout()
 
     bool styleDidChange = false;
     if (isEven() && !_even) {
-        initTid(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
+        initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
         _even             = true;
         styleDidChange    = true;
     }
     if (!isEven() && _even) {
-        initTid(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
+        initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
         _even             = false;
         styleDidChange    = true;
     }

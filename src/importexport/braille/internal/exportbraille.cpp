@@ -1047,13 +1047,13 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
-            if (marker->tid() == TextStyleType::REPEAT_LEFT) {
+            if (marker->textStyleType() == TextStyleType::REPEAT_LEFT) {
                 out << brailleMarker(toMarker(el));
             }
         }
         if (el->isJump()) {
             Jump* jump = toJump(el);
-            if (jump->tid() == TextStyleType::REPEAT_LEFT) {
+            if (jump->textStyleType() == TextStyleType::REPEAT_LEFT) {
                 out << brailleJump(toJump(el));
             }
         }
@@ -1158,13 +1158,13 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
-            if (marker->tid() == TextStyleType::REPEAT_RIGHT) {
+            if (marker->textStyleType() == TextStyleType::REPEAT_RIGHT) {
                 out << brailleMarker(toMarker(el));
             }
         }
         if (el->isJump()) {
             Jump* jump = toJump(el);
-            if (jump->tid() == TextStyleType::REPEAT_RIGHT) {
+            if (jump->textStyleType() == TextStyleType::REPEAT_RIGHT) {
                 out << brailleJump(toJump(el));
             }
         }
@@ -2088,8 +2088,8 @@ QString ExportBraille::brailleFingeringAfter(Fingering* fingering)
     // 15.1 - 15.2. Page 108. Music Braille Code 2015.
     // TODO: 15.3 - 15.4. Page 108. Music Braille Code 2015.
     QString result = QString();
-    if (fingering->tid() == TextStyleType::FINGERING
-        || fingering->tid() == TextStyleType::LH_GUITAR_FINGERING) {
+    if (fingering->textStyleType() == TextStyleType::FINGERING
+        || fingering->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
         for (QChar c : fingering->plainText()) {
             if (c == QChar('0')) {
                 result += BRAILLE_FINGERING_OPEN;

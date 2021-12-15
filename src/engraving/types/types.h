@@ -389,7 +389,7 @@ enum class KeyMode : char {
 //   Tid
 ///   Enumerates the list of built-in text substyles
 ///   \internal
-///   Must be in sync with textStyles array (in textstyle.cpp)
+///   Must be in sync with textStyles (in textstyle.cpp)
 //-------------------------------------------------------------------
 // P_TYPE::TEXT_STYLE
 enum class TextStyleType {

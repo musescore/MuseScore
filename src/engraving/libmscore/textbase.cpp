@@ -1696,7 +1696,7 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextS
     _cursor->init();
     _textLineSpacing        = 1.0;
 
-    _tid                    = tid;
+    _textStyleType                    = tid;
     _bgColor                = mu::draw::Color::transparent;
     _frameColor             = mu::draw::Color::black;
     _align                  = Align::LEFT;
@@ -1724,7 +1724,7 @@ TextBase::TextBase(const TextBase& st)
     _layoutToParentWidth         = st._layoutToParentWidth;
     hexState                     = -1;
 
-    _tid                         = st._tid;
+    _textStyleType                         = st._textStyleType;
     _textLineSpacing             = st._textLineSpacing;
     _bgColor                     = st._bgColor;
     _frameColor                  = st._frameColor;
@@ -2451,7 +2451,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
             writeProperty(xml, spp.pid);
         }
     }
-    for (const StyledProperty& spp : *textStyle(tid())) {
+    for (const StyledProperty& spp : *textStyle(textStyleType())) {
         if (!isStyled(spp.pid) && spp.pid != Pid::FONT_FACE && spp.pid != Pid::FONT_SIZE && spp.pid != Pid::FONT_STYLE
             && spp.pid != Pid::TEXT_SCRIPT_ALIGN) {
             writeProperty(xml, spp.pid);
@@ -2772,7 +2772,7 @@ QString TextBase::escape(QString s)
 QString TextBase::accessibleInfo() const
 {
     QString rez;
-    switch (tid()) {
+    switch (textStyleType()) {
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
@@ -2780,7 +2780,7 @@ QString TextBase::accessibleInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
+        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2802,7 +2802,7 @@ QString TextBase::screenReaderInfo() const
 {
     QString rez;
 
-    switch (tid()) {
+    switch (textStyleType()) {
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
@@ -2810,7 +2810,7 @@ QString TextBase::screenReaderInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
+        rez = score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2826,7 +2826,7 @@ QString TextBase::screenReaderInfo() const
 
 int TextBase::subtype() const
 {
-    return int(tid());
+    return int(textStyleType());
 }
 
 //---------------------------------------------------------
@@ -2835,7 +2835,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
 {
-    return score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
+    return score() ? score()->getTextStyleUserName(textStyleType()) : TConv::toUserName(textStyleType());
 }
 
 //---------------------------------------------------------
@@ -2974,7 +2974,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEXT_STYLE:
-        return int(tid());
+        return int(textStyleType());
     case Pid::FONT_FACE:
         return _cursor->selectedFragmentsFormat().fontFamily();
     case Pid::FONT_SIZE:
@@ -3019,7 +3019,7 @@ bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
     bool rv = true;
     switch (pid) {
     case Pid::TEXT_STYLE:
-        initTid(TextStyleType(v.toInt()));
+        initTextStyleType(TextStyleType(v.toInt()));
         break;
     case Pid::FONT_FACE:
         setFamily(v.toString());
@@ -3124,7 +3124,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
         }
         ++i;
     }
-    for (const StyledProperty& p : *textStyle(tid())) {
+    for (const StyledProperty& p : *textStyle(textStyleType())) {
         if (p.pid == id) {
             return i;
         }
@@ -3140,11 +3140,11 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 Sid TextBase::offsetSid() const
 {
     TextStyleType defaultTid = TextStyleType(propertyDefault(Pid::TEXT_STYLE).toInt());
-    if (tid() != defaultTid) {
+    if (textStyleType() != defaultTid) {
         return Sid::NOSTYLE;
     }
     bool above = placeAbove();
-    switch (tid()) {
+    switch (textStyleType()) {
     case TextStyleType::DYNAMICS:
         return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
     case TextStyleType::LYRICS_ODD:
@@ -3248,7 +3248,7 @@ Sid TextBase::getPropertyStyle(Pid id) const
             return p.sid;
         }
     }
-    for (const StyledProperty& p : *textStyle(tid())) {
+    for (const StyledProperty& p : *textStyle(textStyleType())) {
         if (p.pid == id) {
             return p.sid;
         }
@@ -3274,7 +3274,7 @@ void TextBase::styleChanged()
         }
         ++i;
     }
-    for (const StyledProperty& spp : *textStyle(tid())) {
+    for (const StyledProperty& spp : *textStyle(textStyleType())) {
         PropertyFlags f = _propertyFlagsList[i];
         if (f == PropertyFlags::STYLED) {
             setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
@@ -3300,7 +3300,7 @@ void TextBase::initElementStyle(const ElementStyle* ss)
     for (const StyledProperty& p : *_elementStyle) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
-    for (const StyledProperty& p : *textStyle(tid())) {
+    for (const StyledProperty& p : *textStyle(textStyleType())) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
 }
@@ -3309,12 +3309,12 @@ void TextBase::initElementStyle(const ElementStyle* ss)
 //   initTid
 //---------------------------------------------------------
 
-void TextBase::initTid(TextStyleType tid, bool preserveDifferent)
+void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 {
     if (!preserveDifferent) {
-        initTid(tid);
+        initTextStyleType(tid);
     } else {
-        setTid(tid);
+        setTextStyleType(tid);
         for (const StyledProperty& p : *textStyle(tid)) {
             if (getProperty(p.pid) == propertyDefault(p.pid)) {
                 setProperty(p.pid, styleValue(p.pid, p.sid));
@@ -3323,9 +3323,9 @@ void TextBase::initTid(TextStyleType tid, bool preserveDifferent)
     }
 }
 
-void TextBase::initTid(TextStyleType tid)
+void TextBase::initTextStyleType(TextStyleType tid)
 {
-    setTid(tid);
+    setTextStyleType(tid);
     for (const StyledProperty& p : *textStyle(tid)) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }

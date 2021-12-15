@@ -83,7 +83,7 @@ void Jump::setJumpType(Type t)
             setJumpTo(p.jumpTo);
             setPlayUntil(p.playUntil);
             setContinueAt(p.continueAt);
-            initTid(TextStyleType::REPEAT_RIGHT);
+            initTextStyleType(TextStyleType::REPEAT_RIGHT);
             break;
         }
     }

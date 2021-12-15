@@ -283,7 +283,7 @@ class TextBase : public EngravingItem
 
     QList<TextBlock> _layout;
     bool layoutInvalid            { true };
-    TextStyleType _tid;           // text style id
+    TextStyleType _textStyleType;           // text style id
 
     bool _layoutToParentWidth     { false };
 
@@ -437,10 +437,10 @@ public:
     bool circle() const { return _frameType == FrameType::CIRCLE; }
     bool square() const { return _frameType == FrameType::SQUARE; }
 
-    TextStyleType tid() const { return _tid; }
-    void setTid(TextStyleType id) { _tid = id; }
-    void initTid(TextStyleType id);
-    void initTid(TextStyleType id, bool preserveDifferent);
+    TextStyleType textStyleType() const { return _textStyleType; }
+    void setTextStyleType(TextStyleType id) { _textStyleType = id; }
+    void initTextStyleType(TextStyleType id);
+    void initTextStyleType(TextStyleType id, bool preserveDifferent);
     virtual void initElementStyle(const ElementStyle*) override;
 
     static const QString UNDEFINED_FONT_FAMILY;

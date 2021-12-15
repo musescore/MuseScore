@@ -112,19 +112,19 @@ void Marker::setMarkerType(Type t)
 
     case Type::FINE:
         txt = "Fine";
-        initTid(TextStyleType::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("fine");
         break;
 
     case Type::TOCODA:
         txt = "To Coda";
-        initTid(TextStyleType::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 
     case Type::TOCODASYM:
         txt = "To <font size=\"20\"/><sym>coda</sym>";
-        initTid(TextStyleType::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 

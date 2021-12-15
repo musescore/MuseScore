@@ -1456,7 +1456,7 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
         // ty already set correctly
     }
 
-    const QString creditType= tidToCreditType(text->tid());
+    const QString creditType= tidToCreditType(text->textStyleType());
 
     creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList(), creditType);
 }
@@ -3349,11 +3349,11 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
             }
 
-            if (f->tid() == TextStyleType::RH_GUITAR_FINGERING) {
+            if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING) {
                 xml.tag("pluck" + attr, t);
-            } else if (f->tid() == TextStyleType::LH_GUITAR_FINGERING) {
+            } else if (f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
                 xml.tag("fingering" + attr, t);
-            } else if (f->tid() == TextStyleType::FINGERING) {
+            } else if (f->textStyleType() == TextStyleType::FINGERING) {
                 // for generic fingering, try to detect plucking
                 // (backwards compatibility with MuseScore 1.x)
                 // p, i, m, a, c represent the plucking finger
@@ -3362,7 +3362,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 } else {
                     xml.tag("fingering" + attr, t);
                 }
-            } else if (f->tid() == TextStyleType::STRING_NUMBER) {
+            } else if (f->textStyleType() == TextStyleType::STRING_NUMBER) {
                 bool ok;
                 int i = t.toInt(&ok);
                 if (ok) {
