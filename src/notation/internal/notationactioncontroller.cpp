@@ -1326,22 +1326,22 @@ bool NotationActionController::textNavigationByFractionAvailable() const
 
 void NotationActionController::nextTextElement()
 {
-    navigateToTextElement(MoveDirection::Right);
+    navigateToTextElement(MoveDirection::Right, NOTEREST);
 }
 
 void NotationActionController::prevTextElement()
 {
-    navigateToTextElement(MoveDirection::Left);
+    navigateToTextElement(MoveDirection::Left, NOTEREST);
 }
 
 void NotationActionController::nextBeatTextElement()
 {
-    navigateToTextElement(MoveDirection::Right, NOTEREST);
+    navigateToTextElement(MoveDirection::Right);
 }
 
 void NotationActionController::prevBeatTextElement()
 {
-    navigateToTextElement(MoveDirection::Left, NOTEREST);
+    navigateToTextElement(MoveDirection::Left);
 }
 
 void NotationActionController::navigateToTextElement(MoveDirection direction, bool noterest)

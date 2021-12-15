@@ -467,10 +467,12 @@ public:
     using EngravingObject::undoChangeProperty;
 };
 
-inline bool isNavigationKey(int key, Qt::KeyboardModifiers modifiers)
+// allow shortcut key controller to handle
+inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
 {
     if (modifiers & Qt::ControlModifier) {
-        return true;
+        // Ctrl + Space inserts the space symbol
+        return key != Qt::Key_Space;
     }
 
     if (modifiers == 0 || modifiers == Qt::ShiftModifier) {
@@ -483,7 +485,7 @@ inline bool isNavigationKey(int key, Qt::KeyboardModifiers modifiers)
         case Qt::Key_Up:
         case Qt::Key_Down:
         case Qt::Key_Tab:
-            return true; // allow shortcut key controller to handle
+            return true;
         default:
             break;
         }
