@@ -226,8 +226,8 @@ public:
     PropertyValue(KeyMode v)
         : m_type(P_TYPE::KEY_MODE), m_data(make_data<KeyMode>(v)) {}
 
-    PropertyValue(Tid v)
-        : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<Tid>(v)) {}
+    PropertyValue(TextStyleType v)
+        : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
 
     // not sorted
 

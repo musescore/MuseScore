@@ -352,7 +352,7 @@ ovebase::Staff* getStaff(const ovebase::OveSong* ove, int track)
 }
 
 namespace ove {
-void addText(VBox*& vbox, Score* s, QString strTxt, Tid stl)
+void addText(VBox*& vbox, Score* s, QString strTxt, TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbox == 0) {
@@ -372,7 +372,7 @@ void OveToMScore::convertHeader()
     if (!titles.empty() && !titles[0].isEmpty()) {
         QString title = titles[0];
         m_score->setMetaTag("movementTitle", title);
-        ove::addText(vbox, m_score, title, Tid::TITLE);
+        ove::addText(vbox, m_score, title, TextStyleType::TITLE);
     }
 
     QList<QString> copyrights = m_ove->getCopyrights();
@@ -384,19 +384,19 @@ void OveToMScore::convertHeader()
     QList<QString> annotates = m_ove->getAnnotates();
     if (!annotates.empty() && !annotates[0].isEmpty()) {
         QString annotate = annotates[0];
-        ove::addText(vbox, m_score, annotate, Tid::POET);
+        ove::addText(vbox, m_score, annotate, TextStyleType::POET);
     }
 
     QList<QString> writers = m_ove->getWriters();
     if (!writers.empty()) {
         QString composer = writers[0];
         m_score->setMetaTag("composer", composer);
-        ove::addText(vbox, m_score, composer, Tid::COMPOSER);
+        ove::addText(vbox, m_score, composer, TextStyleType::COMPOSER);
     }
 
     if (writers.size() > 1) {
         QString lyricist = writers[1];
-        ove::addText(vbox, m_score, lyricist, Tid::POET);
+        ove::addText(vbox, m_score, lyricist, TextStyleType::POET);
     }
 
     if (vbox) {
@@ -2398,7 +2398,7 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
         ovebase::Expressions* expressionPtr = static_cast<ovebase::Expressions*>(expressions[i]);
         int absTick = m_mtt->getTick(measure->no(), expressionPtr->getTick());
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
-        Text* t = Factory::createText(s, Tid::EXPRESSION);
+        Text* t = Factory::createText(s, TextStyleType::EXPRESSION);
         t->setPlainText(expressionPtr->getText());
         t->setTrack(track);
 

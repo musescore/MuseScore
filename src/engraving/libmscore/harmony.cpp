@@ -189,7 +189,7 @@ const ElementStyle chordSymbolStyle {
 //---------------------------------------------------------
 
 Harmony::Harmony(Segment* parent)
-    : TextBase(ElementType::HARMONY, parent, Tid::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::HARMONY, parent, TextStyleType::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _rootTpc    = Tpc::TPC_INVALID;
     _baseTpc    = Tpc::TPC_INVALID;
@@ -2025,13 +2025,13 @@ void Harmony::setHarmonyType(HarmonyType val)
     setPlacement(propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     switch (_harmonyType) {
     case HarmonyType::STANDARD:
-        initTid(Tid::HARMONY_A);
+        initTid(TextStyleType::HARMONY_A);
         break;
     case HarmonyType::ROMAN:
-        initTid(Tid::HARMONY_ROMAN);
+        initTid(TextStyleType::HARMONY_ROMAN);
         break;
     case HarmonyType::NASHVILLE:
-        initTid(Tid::HARMONY_NASHVILLE);
+        initTid(TextStyleType::HARMONY_NASHVILLE);
         break;
     }
     // TODO: convert text
@@ -2279,13 +2279,13 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE: {
         switch (_harmonyType) {
         case HarmonyType::STANDARD:
-            v = Tid::HARMONY_A;
+            v = TextStyleType::HARMONY_A;
             break;
         case HarmonyType::ROMAN:
-            v = Tid::HARMONY_ROMAN;
+            v = TextStyleType::HARMONY_ROMAN;
             break;
         case HarmonyType::NASHVILLE:
-            v = Tid::HARMONY_NASHVILLE;
+            v = TextStyleType::HARMONY_NASHVILLE;
             break;
         }
     }
@@ -2312,13 +2312,13 @@ Sid Harmony::getPropertyStyle(Pid pid) const
     if (pid == Pid::OFFSET) {
         if (explicitParent() && explicitParent()->isFretDiagram()) {
             return Sid::NOSTYLE;
-        } else if (tid() == Tid::HARMONY_A) {
+        } else if (tid() == TextStyleType::HARMONY_A) {
             return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
-        } else if (tid() == Tid::HARMONY_B) {
+        } else if (tid() == TextStyleType::HARMONY_B) {
             return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
-        } else if (tid() == Tid::HARMONY_ROMAN) {
+        } else if (tid() == TextStyleType::HARMONY_ROMAN) {
             return placeAbove() ? Sid::romanNumeralPosAbove : Sid::romanNumeralPosBelow;
-        } else if (tid() == Tid::HARMONY_NASHVILLE) {
+        } else if (tid() == TextStyleType::HARMONY_NASHVILLE) {
             return placeAbove() ? Sid::nashvilleNumberPosAbove : Sid::nashvilleNumberPosBelow;
         }
     }

@@ -1002,7 +1002,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             case CapellaType::TEXT: {
                 TextObj* to = static_cast<TextObj*>(o);
                 MeasureBase* measure = score->measures()->first();
-                Text* s = Factory::createText(measure, Tid::TITLE);
+                Text* s = Factory::createText(measure, TextStyleType::TITLE);
                 QString ss = ::rtf2html(QString(to->text));
 
                 // qDebug("string %f:%f w %d ratio %d <%s>",
@@ -1266,15 +1266,15 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         case CapellaType::SIMPLE_TEXT:
         {
             SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
-            Tid tid;
+            TextStyleType tid;
             switch (to->textalign()) {
-            case 0:   tid = Tid::POET;
+            case 0:   tid = TextStyleType::POET;
                 break;
-            case 1:   tid = Tid::TITLE;
+            case 1:   tid = TextStyleType::TITLE;
                 break;
-            case 2:   tid = Tid::COMPOSER;
+            case 2:   tid = TextStyleType::COMPOSER;
                 break;
-            default:  tid = Tid::DEFAULT;
+            default:  tid = TextStyleType::DEFAULT;
                 break;
             }
 

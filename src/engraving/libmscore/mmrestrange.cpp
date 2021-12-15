@@ -40,7 +40,7 @@ static const ElementStyle mmRestRangeStyle {
 };
 
 MMRestRange::MMRestRange(Measure* parent)
-    : MeasureNumberBase(ElementType::MMREST_RANGE, parent, Tid::MMREST_RANGE)
+    : MeasureNumberBase(ElementType::MMREST_RANGE, parent, TextStyleType::MMREST_RANGE)
 {
     initElementStyle(&mmRestRangeStyle);
 }
@@ -83,7 +83,7 @@ PropertyValue MMRestRange::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::MMREST_RANGE;
+        return TextStyleType::MMREST_RANGE;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::mmRestRangeVPlacement);
     case Pid::HPLACEMENT:

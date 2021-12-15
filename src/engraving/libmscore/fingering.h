@@ -33,7 +33,7 @@ namespace Ms {
 class Fingering final : public TextBase
 {
 public:
-    Fingering(Note* parent, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering(Note* parent, TextStyleType tid, ElementFlags ef = ElementFlag::HAS_TAG);
     Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
 
     Fingering* clone() const override { return new Fingering(*this); }

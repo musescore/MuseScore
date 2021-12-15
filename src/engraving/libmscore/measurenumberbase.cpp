@@ -34,7 +34,7 @@ namespace Ms {
 //   MeasureNumberBase
 //---------------------------------------------------------
 
-MeasureNumberBase::MeasureNumberBase(const ElementType& type, Measure* parent, Tid tid)
+MeasureNumberBase::MeasureNumberBase(const ElementType& type, Measure* parent, TextStyleType tid)
     : TextBase(type, parent, tid)
 {
     setFlag(ElementFlag::ON_STAFF, true);
@@ -91,7 +91,7 @@ PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::DEFAULT;
+        return TextStyleType::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
     }

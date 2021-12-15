@@ -64,7 +64,7 @@ int jumpTypeTableSize()
 //---------------------------------------------------------
 
 Jump::Jump(Measure* parent)
-    : TextBase(ElementType::JUMP, parent, Tid::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM)
+    : TextBase(ElementType::JUMP, parent, TextStyleType::REPEAT_RIGHT, ElementFlag::MOVABLE | ElementFlag::SYSTEM)
 {
     initElementStyle(&jumpStyle);
     setLayoutToParentWidth(true);
@@ -83,7 +83,7 @@ void Jump::setJumpType(Type t)
             setJumpTo(p.jumpTo);
             setPlayUntil(p.playUntil);
             setContinueAt(p.continueAt);
-            initTid(Tid::REPEAT_RIGHT);
+            initTid(TextStyleType::REPEAT_RIGHT);
             break;
         }
     }

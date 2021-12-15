@@ -1511,7 +1511,7 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Beam::propertyDefault(Pid id) const
 {
     switch (id) {
-//            case Pid::SUB_STYLE:      return int(Tid::BEAM);
+//            case Pid::SUB_STYLE:      return int(TextStyleName::BEAM);
     case Pid::STEM_DIRECTION: return DirectionV::AUTO;
     case Pid::DISTRIBUTE:     return false;
     case Pid::GROW_LEFT:      return 1.0;

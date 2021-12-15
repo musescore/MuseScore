@@ -43,7 +43,7 @@ static const ElementStyle stickingStyle {
 //---------------------------------------------------------
 
 Sticking::Sticking(Segment* parent)
-    : TextBase(ElementType::STICKING, parent, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::STICKING, parent, TextStyleType::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);
 }
@@ -89,7 +89,7 @@ engraving::PropertyValue Sticking::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::STICKING;
+        return TextStyleType::STICKING;
     default:
         return TextBase::propertyDefault(id);
     }

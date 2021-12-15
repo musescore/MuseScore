@@ -36,7 +36,7 @@ class SystemText final : public StaffTextBase
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    SystemText(Segment* parent, Tid = Tid::SYSTEM);
+    SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM);
 
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }

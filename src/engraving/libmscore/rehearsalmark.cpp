@@ -42,7 +42,7 @@ static const ElementStyle rehearsalMarkStyle {
 //---------------------------------------------------------
 
 RehearsalMark::RehearsalMark(Segment* parent)
-    : TextBase(ElementType::REHEARSAL_MARK, parent, Tid::REHEARSAL_MARK)
+    : TextBase(ElementType::REHEARSAL_MARK, parent, TextStyleType::REHEARSAL_MARK)
 {
     initElementStyle(&rehearsalMarkStyle);
     setSystemFlag(true);
@@ -99,7 +99,7 @@ engraving::PropertyValue RehearsalMark::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::REHEARSAL_MARK;
+        return TextStyleType::REHEARSAL_MARK;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::rehearsalMarkPlacement);
     default:

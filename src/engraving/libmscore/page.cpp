@@ -195,7 +195,7 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
     if (area < MAX_HEADERS) {
         text = score()->headerText(area);
         if (!text) {
-            text = Factory::createText((Page*)this, Tid::HEADER);
+            text = Factory::createText((Page*)this, TextStyleType::HEADER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -204,7 +204,7 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
     } else {
         text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
         if (!text) {
-            text = Factory::createText((Page*)this, Tid::FOOTER);
+            text = Factory::createText((Page*)this, TextStyleType::FOOTER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);

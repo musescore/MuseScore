@@ -82,7 +82,7 @@ void ExcerptNotation::fillWithDefaultInfo()
 
     Ms::Score* excerptScore = m_excerpt->partScore();
 
-    auto setText = [&excerptScore](TextType textType, const QString& text) {
+    auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
         TextBase* textBox = excerptScore->getText(textType);
 
         if (!textBox) {
@@ -95,10 +95,10 @@ void ExcerptNotation::fillWithDefaultInfo()
         }
     };
 
-    setText(TextType::TITLE, qtrc("notation", "Title"));
-    setText(TextType::COMPOSER, qtrc("notation", "Composer"));
-    setText(TextType::SUBTITLE, "");
-    setText(TextType::POET, "");
+    setText(TextStyleType::TITLE, qtrc("notation", "Title"));
+    setText(TextStyleType::COMPOSER, qtrc("notation", "Composer"));
+    setText(TextStyleType::SUBTITLE, "");
+    setText(TextStyleType::POET, "");
 
     excerptScore->doLayout();
 }
@@ -132,7 +132,7 @@ void ExcerptNotation::setTitle(const QString& title)
         return;
     }
 
-    Ms::Text* excerptTitle = score()->getText(Ms::Tid::INSTRUMENT_EXCERPT);
+    Ms::Text* excerptTitle = score()->getText(Ms::TextStyleType::INSTRUMENT_EXCERPT);
     if (!excerptTitle) {
         return;
     }

@@ -613,7 +613,7 @@ EngravingItem* Box::drop(EditData& data)
 
     case ElementType::STAFF_TEXT:
     {
-        Text* text = Factory::createText(this, Tid::FRAME);
+        Text* text = Factory::createText(this, TextStyleType::FRAME);
         text->setParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);

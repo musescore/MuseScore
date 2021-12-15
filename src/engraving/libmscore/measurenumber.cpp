@@ -40,7 +40,7 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Measure* parent, Tid tid)
+MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
     : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);
@@ -67,7 +67,7 @@ engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::MEASURE_NUMBER;
+        return TextStyleType::MEASURE_NUMBER;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:

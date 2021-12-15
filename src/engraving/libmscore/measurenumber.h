@@ -33,7 +33,7 @@ namespace Ms {
 class MeasureNumber : public MeasureNumberBase
 {
 public:
-    MeasureNumber(Measure* parent = nullptr, Tid tid = Tid::MEASURE_NUMBER);
+    MeasureNumber(Measure* parent = nullptr, TextStyleType tid = TextStyleType::MEASURE_NUMBER);
     MeasureNumber(const MeasureNumber& other);
 
     virtual MeasureNumber* clone() const override { return new MeasureNumber(*this); }

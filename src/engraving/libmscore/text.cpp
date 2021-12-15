@@ -39,7 +39,7 @@ static const ElementStyle defaultStyle {
 //   Text
 //---------------------------------------------------------
 
-Text::Text(EngravingItem* parent, Tid tid)
+Text::Text(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::TEXT, parent, tid)
 {
     initElementStyle(&defaultStyle);
@@ -58,7 +58,7 @@ void Text::read(XmlReader& e)
             if (sn == "Tuplet") {              // ugly hack for compatibility
                 continue;
             }
-            Tid s = textStyleFromName(sn);
+            TextStyleType s = textStyleFromName(sn);
             initTid(s);
         } else if (!readProperties(e)) {
             e.unknown();
@@ -74,7 +74,7 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::DEFAULT;
+        return TextStyleType::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
     }
