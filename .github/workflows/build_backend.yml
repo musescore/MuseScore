@@ -57,9 +57,9 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [ "${{ inputs.publish }}" = "on" ]; then 
+        if [ "${{ inputs.publish }}" = "on" ]; then
           DO_PUBLISH='true';
-          if [ -z "${{ secrets.S3_KEY_CONVERTER }}" ]; then 
+          if [ -z "${{ secrets.S3_KEY_CONVERTER }}" ]; then
             echo "::warning::S3_KEY_CONVERTER is empty; publishing to S3 disabled"
             DO_PUBLISH='false'
           fi
@@ -77,7 +77,7 @@ jobs:
         bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
         GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}"
-        
+
         VERSION_MAJOR_MINOR=$(echo "$VERSION" | cut -d '.' -f 1,2)
 
         echo "github.repository: ${{ github.repository }}"
@@ -88,6 +88,15 @@ jobs:
         echo "VERSION=$VERSION" | tee -a $GITHUB_ENV
         echo "VERSION_MAJOR_MINOR=$VERSION_MAJOR_MINOR" | tee -a $GITHUB_ENV
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.*'
+        host: 'linux'
+        target: 'desktop'
+        arch: 'linux_gcc_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
 
     - name: Setup environment
       run: |
@@ -109,7 +118,7 @@ jobs:
           --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
           --stage ${{ inputs.build_mode }} \
           --mu_version ${{ env.VERSION }} \
-          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}  
+          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}
 
     - name: Build Docker (used package from S3)
       if: env.DO_PUBLISH == 'true'
