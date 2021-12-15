@@ -637,7 +637,7 @@ Ms::System* Factory::createSystem(Ms::Page * parent, bool setupAccessible)
     return s;
 }
 
-Ms::Text* Factory::createText(Ms::EngravingItem* parent, Ms::Tid tid, bool setupAccessible)
+Ms::Text* Factory::createText(Ms::EngravingItem* parent, TextStyleType tid, bool setupAccessible)
 {
     Text* t = new Text(parent, tid);
     if (setupAccessible) {

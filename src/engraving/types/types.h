@@ -391,8 +391,8 @@ enum class KeyMode : char {
 ///   \internal
 ///   Must be in sync with textStyles array (in textstyle.cpp)
 //-------------------------------------------------------------------
-// P_TYPE::TEXT_TYPE
-enum class Tid {
+// P_TYPE::TEXT_STYLE
+enum class TextStyleType {
     DEFAULT,
     TITLE,
     SUBTITLE,
@@ -480,7 +480,7 @@ using DynamicRange = mu::engraving::DynamicRange;
 using DynamicSpeed = mu::engraving::DynamicSpeed;
 using HookType = mu::engraving::HookType;
 using KeyMode = mu::engraving::KeyMode;
-using Tid = mu::engraving::Tid;
+using TextStyleType = mu::engraving::TextStyleType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

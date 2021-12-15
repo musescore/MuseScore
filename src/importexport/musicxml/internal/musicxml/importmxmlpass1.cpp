@@ -543,7 +543,7 @@ static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const
  Add text \a strTxt to VBox \a vbx using Tid \a stl.
  */
 
-static void addText(VBox* vbx, Score*, const QString strTxt, const Tid stl)
+static void addText(VBox* vbx, Score*, const QString strTxt, const TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
@@ -561,7 +561,7 @@ static void addText(VBox* vbx, Score*, const QString strTxt, const Tid stl)
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score*, const QString strTxt, const Tid stl, const Align align, const double yoffs)
+static void addText2(VBox* vbx, Score*, const QString strTxt, const TextStyleType stl, const Align align, const double yoffs)
 {
     if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
@@ -620,25 +620,25 @@ static Align alignForCreditWords(const CreditWords* const w, const int pageWidth
 //   creditWordTypeToTid
 //---------------------------------------------------------
 
-static Tid creditWordTypeToTid(const QString& type)
+static TextStyleType creditWordTypeToTid(const QString& type)
 {
     if (type == "composer") {
-        return Tid::COMPOSER;
+        return TextStyleType::COMPOSER;
     } else if (type == "lyricist") {
-        return Tid::POET;
+        return TextStyleType::POET;
     }
     /*
     else if (type == "page number")
-          return Tid::;
+          return TextStyleName::;
     else if (type == "rights")
-          return Tid::;
+          return TextStyleName::;
      */
     else if (type == "subtitle") {
-        return Tid::SUBTITLE;
+        return TextStyleType::SUBTITLE;
     } else if (type == "title") {
-        return Tid::TITLE;
+        return TextStyleType::TITLE;
     } else {
-        return Tid::DEFAULT;
+        return TextStyleType::DEFAULT;
     }
 }
 
@@ -646,7 +646,7 @@ static Tid creditWordTypeToTid(const QString& type)
 //   creditWordTypeGuess
 //---------------------------------------------------------
 
-static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
 {
     const auto pw1 = pageWidth / 3;
     const auto pw2 = pageWidth * 2 / 3;
@@ -654,12 +654,12 @@ static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const 
     // composer is in the right column
     if (pw2 < defx) {
         // found composer
-        return Tid::COMPOSER;
+        return TextStyleType::COMPOSER;
     }
     // poet is in the left column
     else if (defx < pw1) {
         // found poet/lyricist
-        return Tid::POET;
+        return TextStyleType::POET;
     }
     // title is in the middle column
     else {
@@ -672,10 +672,10 @@ static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const 
                 continue;                 // it's not in the middle column
             }
             if (word->fontSize < w->fontSize) {
-                return Tid::SUBTITLE;                  // word does not have the largest font size, assume subtitle
+                return TextStyleType::SUBTITLE;                  // word does not have the largest font size, assume subtitle
             }
         }
-        return Tid::TITLE;                // no better title candidate found
+        return TextStyleType::TITLE;                // no better title candidate found
     }
 }
 
@@ -683,10 +683,10 @@ static Tid creditWordTypeGuess(const CreditWords* const word, std::vector<const 
 //   tidForCreditWords
 //---------------------------------------------------------
 
-static Tid tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
+static TextStyleType tidForCreditWords(const CreditWords* const word, std::vector<const CreditWords*>& words, const int pageWidth)
 {
-    const Tid tid = creditWordTypeToTid(word->type);
-    if (tid != Tid::DEFAULT) {
+    const TextStyleType tid = creditWordTypeToTid(word->type);
+    if (tid != TextStyleType::DEFAULT) {
         // type recognized, done
         return tid;
     } else {
@@ -773,7 +773,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
     for (const auto w : words) {
         if (mustAddWordToVbox(w->type)) {
             const auto align = alignForCreditWords(w, pageSize.width());
-            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : Tid::DEFAULT;
+            const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             double yoffs = (maxy - w->defaultY) * score->spatium() / 10;
             if (!vbox) {
                 vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
@@ -826,11 +826,11 @@ static void createDefaultHeader(Score* const score)
     }
 
     const auto vbox = createAndAddVBoxForCreditWords(score);
-    addText(vbox, score, strTitle.toHtmlEscaped(),      Tid::TITLE);
-    addText(vbox, score, strSubTitle.toHtmlEscaped(),   Tid::SUBTITLE);
-    addText(vbox, score, strComposer.toHtmlEscaped(),   Tid::COMPOSER);
-    addText(vbox, score, strPoet.toHtmlEscaped(),       Tid::POET);
-    addText(vbox, score, strTranslator.toHtmlEscaped(), Tid::TRANSLATOR);
+    addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
+    addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
+    addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
+    addText(vbox, score, strPoet.toHtmlEscaped(),       TextStyleType::POET);
+    addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
 }
 
 //---------------------------------------------------------
@@ -1403,12 +1403,12 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
  Determine if tid is a style type used in a title frame
  */
 
-static bool isTitleFrameStyle(const Tid tid)
+static bool isTitleFrameStyle(const TextStyleType tid)
 {
-    return tid == Tid::TITLE
-           || tid == Tid::SUBTITLE
-           || tid == Tid::COMPOSER
-           || tid == Tid::POET;
+    return tid == TextStyleType::TITLE
+           || tid == TextStyleType::SUBTITLE
+           || tid == TextStyleType::COMPOSER
+           || tid == TextStyleType::POET;
 }
 
 //---------------------------------------------------------
@@ -1440,8 +1440,8 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
-        if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN
-            || tid == Tid::HARMONY_ROMAN
+        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
+            || tid == TextStyleType::HARMONY_ROMAN
             || isTitleFrameStyle(tid)) {
             continue;
         }

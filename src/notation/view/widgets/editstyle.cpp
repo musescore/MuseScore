@@ -1062,7 +1062,7 @@ EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
     case ElementType::PAGE:
         return &EditStyle::PagePage;
     case ElementType::TEXT:
-        if (toText(e)->tid() == Ms::Tid::FOOTER || toText(e)->tid() == Ms::Tid::HEADER) {
+        if (toText(e)->tid() == Ms::TextStyleType::FOOTER || toText(e)->tid() == Ms::TextStyleType::HEADER) {
             return &EditStyle::PageHeaderFooter;
         }
         return nullptr;
@@ -1978,7 +1978,7 @@ void EditStyle::resetStyleValue(int i)
 
 void EditStyle::textStyleChanged(int row)
 {
-    Ms::Tid tid = Ms::Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
+    Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     const Ms::TextStyle* ts = Ms::textStyle(tid);
 
     for (const Ms::StyledProperty& a : *ts) {
@@ -2065,7 +2065,7 @@ void EditStyle::textStyleChanged(int row)
     }
 
     styleName->setText(Ms::textStyleUserName(tid));
-    styleName->setEnabled(int(tid) >= int(Ms::Tid::USER1));
+    styleName->setEnabled(int(tid) >= int(Ms::TextStyleType::USER1));
     resetTextStyleName->setEnabled(styleName->text() != Ms::textStyleUserName(tid));
 }
 
@@ -2075,7 +2075,7 @@ void EditStyle::textStyleChanged(int row)
 
 void EditStyle::textStyleValueChanged(Ms::Pid pid, QVariant value)
 {
-    Ms::Tid tid = Ms::Tid(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
     const Ms::TextStyle* ts = Ms::textStyle(tid);
 
     for (const Ms::StyledProperty& a : *ts) {
@@ -2093,7 +2093,7 @@ void EditStyle::textStyleValueChanged(Ms::Pid pid, QVariant value)
 
 void EditStyle::resetTextStyle(Ms::Pid pid)
 {
-    Ms::Tid tid = Ms::Tid(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
+    Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(textStyles->currentRow())->data(Qt::UserRole).toInt());
     const Ms::TextStyle* ts = Ms::textStyle(tid);
 
     for (const Ms::StyledProperty& a : *ts) {
@@ -2112,7 +2112,7 @@ void EditStyle::resetTextStyle(Ms::Pid pid)
 void EditStyle::editUserStyleName()
 {
     int row = textStyles->currentRow();
-    Ms::Tid tid = Ms::Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
+    Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     textStyles->item(row)->setText(styleName->text());
     resetTextStyleName->setEnabled(styleName->text() != Ms::textStyleUserName(tid));
 }
@@ -2124,9 +2124,9 @@ void EditStyle::editUserStyleName()
 void EditStyle::endEditUserStyleName()
 {
     int row = textStyles->currentRow();
-    Ms::Tid tid = Ms::Tid(textStyles->item(row)->data(Qt::UserRole).toInt());
-    int idx = int(tid) - int(Ms::Tid::USER1);
-    if (int(tid) < int(Ms::Tid::USER1) || int(tid) > int(Ms::Tid::USER12)) {
+    Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
+    int idx = int(tid) - int(Ms::TextStyleType::USER1);
+    if (int(tid) < int(Ms::TextStyleType::USER1) || int(tid) > int(Ms::TextStyleType::USER12)) {
         qDebug("User style index %d outside of range.", idx);
         return;
     }

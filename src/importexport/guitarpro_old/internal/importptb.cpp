@@ -697,7 +697,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (false && n.slide) {
-                    Text* st = Factory::createText(score->dummy(), Tid::HARMONY_A);
+                    Text* st = Factory::createText(score->dummy(), TextStyleType::HARMONY_A);
                     st->setXmlText(QString("SLIDE %1").arg(n.slide));
                     st->setTrack(staff * VOICES);
                     chord->notes().front()->add(st);
@@ -727,7 +727,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 slur->setTrack2(staff * VOICES);
                 score->addElement(slur);
 
-                Text* st = Factory::createText(score->dummy(), Tid::HARMONY_A);
+                Text* st = Factory::createText(score->dummy(), TextStyleType::HARMONY_A);
                 st->setXmlText("H");
                 st->setTrack(staff * VOICES);
                 cr1->notes().front()->add(st);
@@ -1274,7 +1274,7 @@ Score::FileError PowerTab::read()
     // create title
     std::string name = song.info.name;
     if (!name.empty()) {
-        Text* s = Factory::createText(score->dummy(), Tid::TITLE);
+        Text* s = Factory::createText(score->dummy(), TextStyleType::TITLE);
         s->setPlainText(QString::fromUtf8(name.data(), int(name.size())));
         m->add(s);
     }
@@ -1353,7 +1353,7 @@ Score::FileError PowerTab::read()
             pscore->addMeasure(mb, measure);
             measure = mb;
         }
-        Text* txt = Factory::createText(pscore->dummy(), Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(pscore->dummy(), TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(part->longName());
         measure->add(txt);
 

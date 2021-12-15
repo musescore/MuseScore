@@ -1386,20 +1386,20 @@ static double parentHeight(const EngravingItem* element)
 //   tidToCreditType
 //---------------------------------------------------------
 
-static QString tidToCreditType(const Tid tid)
+static QString tidToCreditType(const TextStyleType tid)
 {
     QString res;
     switch (tid) {
-    case Tid::COMPOSER:
+    case TextStyleType::COMPOSER:
         res = "composer";
         break;
-    case Tid::POET:
+    case TextStyleType::POET:
         res = "lyricist";
         break;
-    case Tid::SUBTITLE:
+    case TextStyleType::SUBTITLE:
         res = "subtitle";
         break;
-    case Tid::TITLE:
+    case TextStyleType::TITLE:
         res = "title";
         break;
     default:
@@ -3349,11 +3349,11 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
             }
 
-            if (f->tid() == Tid::RH_GUITAR_FINGERING) {
+            if (f->tid() == TextStyleType::RH_GUITAR_FINGERING) {
                 xml.tag("pluck" + attr, t);
-            } else if (f->tid() == Tid::LH_GUITAR_FINGERING) {
+            } else if (f->tid() == TextStyleType::LH_GUITAR_FINGERING) {
                 xml.tag("fingering" + attr, t);
-            } else if (f->tid() == Tid::FINGERING) {
+            } else if (f->tid() == TextStyleType::FINGERING) {
                 // for generic fingering, try to detect plucking
                 // (backwards compatibility with MuseScore 1.x)
                 // p, i, m, a, c represent the plucking finger
@@ -3362,7 +3362,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
                 } else {
                     xml.tag("fingering" + attr, t);
                 }
-            } else if (f->tid() == Tid::STRING_NUMBER) {
+            } else if (f->tid() == TextStyleType::STRING_NUMBER) {
                 bool ok;
                 int i = t.toInt(&ok);
                 if (ok) {

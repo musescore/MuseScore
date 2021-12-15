@@ -42,7 +42,7 @@ public:
 
 private:
     friend class mu::engraving::Factory;
-    Text(EngravingItem* parent, Tid tid = Tid::DEFAULT);
+    Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);
 };
 }     // namespace Ms
 

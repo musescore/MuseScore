@@ -185,7 +185,7 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
-    void addText(TextType type) override;
+    void addText(TextStyleType type) override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;

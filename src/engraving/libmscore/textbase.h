@@ -283,7 +283,7 @@ class TextBase : public EngravingItem
 
     QList<TextBlock> _layout;
     bool layoutInvalid            { true };
-    Tid _tid;           // text style id
+    TextStyleType _tid;           // text style id
 
     bool _layoutToParentWidth     { false };
 
@@ -303,7 +303,8 @@ class TextBase : public EngravingItem
     static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
 
 protected:
-    TextBase(const ElementType& type, EngravingItem* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
+    TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
+             ElementFlags = ElementFlag::NOTHING);
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
@@ -436,10 +437,10 @@ public:
     bool circle() const { return _frameType == FrameType::CIRCLE; }
     bool square() const { return _frameType == FrameType::SQUARE; }
 
-    Tid tid() const { return _tid; }
-    void setTid(Tid id) { _tid = id; }
-    void initTid(Tid id);
-    void initTid(Tid id, bool preserveDifferent);
+    TextStyleType tid() const { return _tid; }
+    void setTid(TextStyleType id) { _tid = id; }
+    void initTid(TextStyleType id);
+    void initTid(TextStyleType id, bool preserveDifferent);
     virtual void initElementStyle(const ElementStyle*) override;
 
     static const QString UNDEFINED_FONT_FAMILY;

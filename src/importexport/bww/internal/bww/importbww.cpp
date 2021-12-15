@@ -65,7 +65,7 @@ namespace Bww {
 //   TODO: remove duplicate code
 //---------------------------------------------------------
 
-static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::Tid stl)
+static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::TextStyleType stl)
 {
     if (!strTxt.isEmpty()) {
         if (vbx == 0) {
@@ -446,11 +446,11 @@ void MsScWriter::header(const QString title, const QString type,
 
     //  score->setWorkTitle(title);
     Ms::VBox* vbox  = 0;
-    Bww::addText(vbox, score, title, Ms::Tid::TITLE);
-    Bww::addText(vbox, score, type, Ms::Tid::SUBTITLE);
-    Bww::addText(vbox, score, composer, Ms::Tid::COMPOSER);
-    // addText(vbox, score, strPoet, Ms::Tid::POET);
-    // addText(vbox, score, strTranslator, Ms::Tid::TRANSLATOR);
+    Bww::addText(vbox, score, title, Ms::TextStyleType::TITLE);
+    Bww::addText(vbox, score, type, Ms::TextStyleType::SUBTITLE);
+    Bww::addText(vbox, score, composer, Ms::TextStyleType::COMPOSER);
+    // addText(vbox, score, strPoet, Ms::TextStyleName::POET);
+    // addText(vbox, score, strTranslator, Ms::TextStyleName::TRANSLATOR);
     if (vbox) {
         vbox->setTick(Ms::Fraction(0, 1));
         score->measures()->add(vbox);

@@ -64,11 +64,11 @@ int markerTypeTableSize()
 //---------------------------------------------------------
 
 Marker::Marker(EngravingItem* parent)
-    : Marker(parent, Tid::REPEAT_LEFT)
+    : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
 }
 
-Marker::Marker(EngravingItem* parent, Tid tid)
+Marker::Marker(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
@@ -112,19 +112,19 @@ void Marker::setMarkerType(Type t)
 
     case Type::FINE:
         txt = "Fine";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTid(TextStyleType::REPEAT_RIGHT, true);
         setLabel("fine");
         break;
 
     case Type::TOCODA:
         txt = "To Coda";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTid(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 
     case Type::TOCODASYM:
         txt = "To <font size=\"20\"/><sym>coda</sym>";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTid(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 

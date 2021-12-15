@@ -3264,7 +3264,7 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::addText(TextType type)
+void NotationInteraction::addText(TextStyleType type)
 {
     if (!scoreHasMeasure()) {
         LOGE() << "Need to create measure";

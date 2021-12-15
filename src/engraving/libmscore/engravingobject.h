@@ -236,7 +236,7 @@ public:
     virtual bool setProperty(Pid, const mu::engraving::PropertyValue&) = 0;
     virtual mu::engraving::PropertyValue propertyDefault(Pid) const;
     virtual void resetProperty(Pid id);
-    mu::engraving::PropertyValue propertyDefault(Pid pid, Tid tid) const;
+    mu::engraving::PropertyValue propertyDefault(Pid pid, TextStyleType tid) const;
     virtual bool sizeIsSpatiumDependent() const { return true; }
     virtual bool offsetIsSpatiumDependent() const { return true; }
 

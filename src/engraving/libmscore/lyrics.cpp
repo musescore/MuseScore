@@ -54,7 +54,7 @@ static const ElementStyle lyricsElementStyle {
 //---------------------------------------------------------
 
 Lyrics::Lyrics(ChordRest* parent)
-    : TextBase(ElementType::LYRICS, parent, Tid::LYRICS_ODD)
+    : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD)
 {
     _even       = false;
     initElementStyle(&lyricsElementStyle);
@@ -269,12 +269,12 @@ void Lyrics::layout()
 
     bool styleDidChange = false;
     if (isEven() && !_even) {
-        initTid(Tid::LYRICS_EVEN, /* preserveDifferent */ true);
+        initTid(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
         _even             = true;
         styleDidChange    = true;
     }
     if (!isEven() && _even) {
-        initTid(Tid::LYRICS_ODD, /* preserveDifferent */ true);
+        initTid(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
         _even             = false;
         styleDidChange    = true;
     }
@@ -613,7 +613,7 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return isEven() ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD;
+        return isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::lyricsPlacement);
     case Pid::SYLLABIC:

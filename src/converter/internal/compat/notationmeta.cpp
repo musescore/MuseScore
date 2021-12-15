@@ -33,6 +33,7 @@
 #include "global/xmlwriter.h"
 
 using namespace mu::converter;
+using namespace mu::engraving;
 
 static QString boolToString(bool b)
 {
@@ -87,7 +88,7 @@ mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
 QString NotationMeta::title(const Ms::Score* score)
 {
     QString title;
-    const Ms::Text* text = score->getText(Ms::Tid::TITLE);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::TITLE);
     if (text) {
         title = text->plainText();
     }
@@ -106,7 +107,7 @@ QString NotationMeta::title(const Ms::Score* score)
 QString NotationMeta::subtitle(const Ms::Score* score)
 {
     QString subtitle;
-    const Ms::Text* text = score->getText(Ms::Tid::SUBTITLE);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::SUBTITLE);
     if (text) {
         subtitle = text->plainText();
     }
@@ -117,7 +118,7 @@ QString NotationMeta::subtitle(const Ms::Score* score)
 QString NotationMeta::composer(const Ms::Score* score)
 {
     QString composer;
-    const Ms::Text* text = score->getText(Ms::Tid::COMPOSER);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::COMPOSER);
     if (text) {
         composer = text->plainText();
     }
@@ -132,7 +133,7 @@ QString NotationMeta::composer(const Ms::Score* score)
 QString NotationMeta::poet(const Ms::Score* score)
 {
     QString poet;
-    const Ms::Text* text = score->getText(Ms::Tid::POET);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::POET);
     if (text) {
         poet = text->plainText();
     }
@@ -226,7 +227,7 @@ static void findTextByType(void* data, Ms::EngravingItem* element)
     }
 
     const Ms::TextBase* text = toTextBase(element);
-    auto* typeStringsData = static_cast<std::pair<Ms::Tid, QStringList*>*>(data);
+    auto* typeStringsData = static_cast<std::pair<TextStyleType, QStringList*>*>(data);
     if (text->tid() == typeStringsData->first) {
         QStringList* titleStrings = typeStringsData->second;
         Q_ASSERT(titleStrings);
@@ -237,17 +238,17 @@ static void findTextByType(void* data, Ms::EngravingItem* element)
 QString NotationMeta::typeData(Ms::Score* score)
 {
     QJsonObject typesData;
-    static std::vector<std::pair<QString, Ms::Tid> > namesTypesList {
-        { "titles", Ms::Tid::TITLE },
-        { "subtitles", Ms::Tid::SUBTITLE },
-        { "composers", Ms::Tid::COMPOSER },
-        { "poets", Ms::Tid::POET }
+    static std::vector<std::pair<QString, TextStyleType> > namesTypesList {
+        { "titles", TextStyleType::TITLE },
+        { "subtitles", TextStyleType::SUBTITLE },
+        { "composers", TextStyleType::COMPOSER },
+        { "poets", TextStyleType::POET }
     };
 
     for (auto nameType : namesTypesList) {
         QJsonArray typeData;
         QStringList typeTextStrings;
-        std::pair<Ms::Tid, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
+        std::pair<TextStyleType, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
         score->scanElements(&extendedTitleData, findTextByType);
         for (auto typeStr : typeTextStrings) {
             typeData.append(typeStr);

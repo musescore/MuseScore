@@ -610,7 +610,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
     case P_TYPE::TEXT_STYLE:
-        return textStyleName(value.value<Tid>());
+        return textStyleName(value.value<TextStyleType>());
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
     case P_TYPE::TDURATION:

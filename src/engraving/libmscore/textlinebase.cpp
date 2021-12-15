@@ -48,8 +48,8 @@ namespace Ms {
 TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : LineSegment(type, sp, parent, f)
 {
-    _text    = Factory::createText(this, Tid::DEFAULT, false);
-    _endText = Factory::createText(this, Tid::DEFAULT, false);
+    _text    = Factory::createText(this, TextStyleType::DEFAULT, false);
+    _endText = Factory::createText(this, TextStyleType::DEFAULT, false);
     _text->setParent(this);
     _endText->setParent(this);
     _text->setFlag(ElementFlag::MOVABLE, false);

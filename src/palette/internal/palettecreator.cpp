@@ -471,21 +471,21 @@ PalettePtr PaletteCreator::newFingeringPalette()
     finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
-        f->setTid(Tid::RH_GUITAR_FINGERING);
+        f->setTid(TextStyleType::RH_GUITAR_FINGERING);
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "RH guitar fingering %1"));
     }
     finger = "012345T";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
-        f->setTid(Tid::LH_GUITAR_FINGERING);
+        f->setTid(TextStyleType::LH_GUITAR_FINGERING);
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "LH guitar fingering %1"));
     }
     finger = "0123456";
     for (unsigned i = 0; i < strlen(finger); ++i) {
         auto f = makeElement<Fingering>(gpaletteScore);
-        f->setTid(Tid::STRING_NUMBER);
+        f->setTid(TextStyleType::STRING_NUMBER);
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
@@ -1204,7 +1204,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     };
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTid(Tid::TEMPO);
+    stxt->setTid(TextStyleType::TEMPO);
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Swing"));
     stxt->setSwing(true);
     sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"))->setElementTranslated(true);
@@ -1241,7 +1241,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(st, QT_TRANSLATE_NOOP("palette", "Staff text"))->setElementTranslated(true);
 
     st = makeElement<StaffText>(gpaletteScore);
-    st->setTid(Tid::EXPRESSION);
+    st->setTid(TextStyleType::EXPRESSION);
     st->setXmlText(QT_TRANSLATE_NOOP("palette", "Expression"));
     st->setPlacement(PlacementV::BELOW);
     st->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
@@ -1256,7 +1256,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(rhm, QT_TRANSLATE_NOOP("palette", "Rehearsal mark"));
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTid(Tid::TEMPO);
+    stxt->setTid(TextStyleType::TEMPO);
     /*: System text to switch from swing rhythm back to straight rhythm */
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Straight"));
     // need to be true to enable the "Off" option
@@ -1275,7 +1275,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     // Instead, they simply set the corresponding measure's MeasureNumberMode to SHOW
     // Because of that, the element shown in the palettes does not have to have any particular formatting.
     auto meaNum = makeElement<MeasureNumber>(gpaletteScore);
-    meaNum->setProperty(Pid::TEXT_STYLE, int(Tid::STAFF));   // Make the element bigger in the palettes (using the default measure number style makes it too small)
+    meaNum->setProperty(Pid::TEXT_STYLE, int(TextStyleType::STAFF));   // Make the element bigger in the palettes (using the default measure number style makes it too small)
     meaNum->setXmlText(QT_TRANSLATE_NOOP("palette", "Measure number"));
     sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
@@ -1297,7 +1297,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         sp->appendElement(ar, QT_TRANSLATE_NOOP("palette", "Arco"))->setElementTranslated(true);
 
         auto tm = makeElement<StaffText>(gpaletteScore);
-        tm->setTid(Tid::EXPRESSION);
+        tm->setTid(TextStyleType::EXPRESSION);
         tm->setXmlText(QT_TRANSLATE_NOOP("palette", "tremolo"));
         tm->setChannelName(0, "tremolo");
         tm->setChannelName(1, "tremolo");

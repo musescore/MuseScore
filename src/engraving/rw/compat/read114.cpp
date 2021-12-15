@@ -296,84 +296,84 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
     const QStringRef& tag(e.name());
     if (tag == "style") {
         int i = e.readInt();
-        Tid ss = Tid::DEFAULT;
+        TextStyleType ss = TextStyleType::DEFAULT;
         switch (i) {
-        case 2:  ss = Tid::TITLE;
+        case 2:  ss = TextStyleType::TITLE;
             break;
-        case 3:  ss = Tid::SUBTITLE;
+        case 3:  ss = TextStyleType::SUBTITLE;
             break;
-        case 4:  ss = Tid::COMPOSER;
+        case 4:  ss = TextStyleType::COMPOSER;
             break;
-        case 5:  ss = Tid::POET;
-            break;
-
-        case 6:  ss = Tid::LYRICS_ODD;
-            break;
-        case 7:  ss = Tid::LYRICS_EVEN;
+        case 5:  ss = TextStyleType::POET;
             break;
 
-        case 8:  ss = Tid::FINGERING;
+        case 6:  ss = TextStyleType::LYRICS_ODD;
             break;
-        case 9:  ss = Tid::INSTRUMENT_LONG;
-            break;
-        case 10: ss = Tid::INSTRUMENT_SHORT;
-            break;
-        case 11: ss = Tid::INSTRUMENT_EXCERPT;
+        case 7:  ss = TextStyleType::LYRICS_EVEN;
             break;
 
-        case 12: ss = Tid::DYNAMICS;
+        case 8:  ss = TextStyleType::FINGERING;
             break;
-        case 13: ss = Tid::EXPRESSION;
+        case 9:  ss = TextStyleType::INSTRUMENT_LONG;
             break;
-        case 14: ss = Tid::TEMPO;
+        case 10: ss = TextStyleType::INSTRUMENT_SHORT;
             break;
-        case 15: ss = Tid::METRONOME;
+        case 11: ss = TextStyleType::INSTRUMENT_EXCERPT;
             break;
-        case 16: ss = Tid::FOOTER;
+
+        case 12: ss = TextStyleType::DYNAMICS;
+            break;
+        case 13: ss = TextStyleType::EXPRESSION;
+            break;
+        case 14: ss = TextStyleType::TEMPO;
+            break;
+        case 15: ss = TextStyleType::METRONOME;
+            break;
+        case 16: ss = TextStyleType::FOOTER;
             break;                                      // TextStyleType::COPYRIGHT
-        case 17: ss = Tid::MEASURE_NUMBER;
+        case 17: ss = TextStyleType::MEASURE_NUMBER;
             break;
-        case 18: ss = Tid::FOOTER;
+        case 18: ss = TextStyleType::FOOTER;
             break;                                     // TextStyleType::PAGE_NUMBER_ODD
-        case 19: ss = Tid::FOOTER;
+        case 19: ss = TextStyleType::FOOTER;
             break;                                     // TextStyleType::PAGE_NUMBER_EVEN
-        case 20: ss = Tid::TRANSLATOR;
+        case 20: ss = TextStyleType::TRANSLATOR;
             break;
-        case 21: ss = Tid::TUPLET;
-            break;
-
-        case 22: ss = Tid::SYSTEM;
-            break;
-        case 23: ss = Tid::STAFF;
-            break;
-        case 24: ss = Tid::HARMONY_A;
-            break;
-        case 25: ss = Tid::REHEARSAL_MARK;
-            break;
-        case 26: ss = Tid::REPEAT_LEFT;
-            break;
-        case 27: ss = Tid::VOLTA;
-            break;
-        case 28: ss = Tid::FRAME;
-            break;
-        case 29: ss = Tid::TEXTLINE;
-            break;
-        case 30: ss = Tid::GLISSANDO;
-            break;
-        case 31: ss = Tid::STRING_NUMBER;
+        case 21: ss = TextStyleType::TUPLET;
             break;
 
-        case 32: ss = Tid::OTTAVA;
+        case 22: ss = TextStyleType::SYSTEM;
             break;
-//??                  case 33: ss = Tid::BENCH;   break;
-        case 34: ss = Tid::HEADER;
+        case 23: ss = TextStyleType::STAFF;
             break;
-        case 35: ss = Tid::FOOTER;
+        case 24: ss = TextStyleType::HARMONY_A;
+            break;
+        case 25: ss = TextStyleType::REHEARSAL_MARK;
+            break;
+        case 26: ss = TextStyleType::REPEAT_LEFT;
+            break;
+        case 27: ss = TextStyleType::VOLTA;
+            break;
+        case 28: ss = TextStyleType::FRAME;
+            break;
+        case 29: ss = TextStyleType::TEXTLINE;
+            break;
+        case 30: ss = TextStyleType::GLISSANDO;
+            break;
+        case 31: ss = TextStyleType::STRING_NUMBER;
+            break;
+
+        case 32: ss = TextStyleType::OTTAVA;
+            break;
+//??                  case 33: ss = TextStyleName::BENCH;   break;
+        case 34: ss = TextStyleType::HEADER;
+            break;
+        case 35: ss = TextStyleType::FOOTER;
             break;
         case 0:
         default:
             qDebug("style %d invalid", i);
-            ss = Tid::DEFAULT;
+            ss = TextStyleType::DEFAULT;
             break;
         }
         t->initTid(ss);
@@ -624,7 +624,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
             auto subtype = e.readElementText();
             if (subtype == "StringNumber") {
                 isStringNumber = true;
-                fing->setProperty(Pid::TEXT_STYLE, int(Tid::STRING_NUMBER));
+                fing->setProperty(Pid::TEXT_STYLE, int(TextStyleType::STRING_NUMBER));
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
         } else if (tag == "frame") {
@@ -1172,19 +1172,19 @@ static bool readTextLineProperties114(XmlReader& e, const ReadContext& ctx, Text
     const QStringRef& tag(e.name());
 
     if (tag == "beginText") {
-        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
+        Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
         readText114(e, text, tl);
         tl->setBeginText(text->xmlText());
         tl->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "continueText") {
-        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
+        Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
         readText114(e, text, tl);
         tl->setContinueText(text->xmlText());
         tl->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         delete text;
     } else if (tag == "endText") {
-        Text* text = Factory::createText(tl, Tid::DEFAULT, false);
+        Text* text = Factory::createText(tl, TextStyleType::DEFAULT, false);
         readText114(e, text, tl);
         tl->setEndText(text->xmlText());
         tl->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
@@ -2559,12 +2559,12 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (tag == "name") {
-            Text* t = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
+            Text* t = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
             readText114(e, t, t);
             part->instrument()->setLongName(t->xmlText());
             delete t;
         } else if (tag == "shortName") {
-            Text* t = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
+            Text* t = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
             readText114(e, t, t);
             part->instrument()->setShortName(t->xmlText());
             delete t;
@@ -2821,7 +2821,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             compat::PageFormat pf;
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = Factory::createText(masterScore->dummy(), Tid::DEFAULT, false);
+            Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
             readText114(e, text, text);
             masterScore->setMetaTag("copyright", text->plainText());
             delete text;
