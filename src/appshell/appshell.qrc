@@ -100,9 +100,10 @@
         <file>qml/Preferences/internal/ScoreViewSection.qml</file>
         <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
         <file>qml/platform/win/AppTitleBar.qml</file>
-        <file>qml/AppMenuBar.qml</file>
         <file>qml/DevTools/MPE/ArticulationsProfileEditorView.qml</file>
         <file>qml/Preferences/internal/MiscellaneousSection.qml</file>
         <file>qml/platform/win/AppSystemButtons.qml</file>
+        <file>qml/platform/AppMenuBar.qml</file>
+        <file>qml/platform/AppButtonBackground.qml</file>
     </qresource>
 </RCC>

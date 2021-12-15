@@ -24,44 +24,43 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "../"
-import "../../"
-
-AppWindow {
+Rectangle {
     id: root
 
-    AppMenuBar {
-        id: appMenuBar
+    property alias navigationCtrl: focusBorder.navigationCtrl
+    property var mouseArea: null
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+    color: "transparent"
 
-        navigation.section: navSec
+    border.width: ui.theme.borderWidth
+    border.color: ui.theme.strokeColor
 
-        NavigationSection {
-            id: navSec
-            name: "AppMenuBar"
-            order: 0
+    NavigationFocusBorder {
+        id: focusBorder
+        drawOutsideParent: false
+    }
 
-            onActiveChanged: {
-                if (active) {
-                    appMenuBar.forceActiveFocus()
-                }
+    states: [
+        State {
+            name: "PRESSED"
+            when: root.mouseArea.pressed
+
+            PropertyChanges {
+                target: root
+                color: ui.theme.buttonColor
+                opacity: 1
+            }
+        },
+
+        State {
+            name: "HOVERED"
+            when: root.mouseArea.containsMouse && !root.mouseArea.pressed
+
+            PropertyChanges {
+                target: root
+                color: ui.theme.buttonColor
+                opacity: 0.5
             }
         }
-    }
-
-    WindowContent {
-        id: window
-
-        anchors.top: appMenuBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-
-        onWindowLoaded: {
-            root.visible = true
-        }
-    }
+    ]
 }
