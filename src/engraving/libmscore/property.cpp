@@ -470,8 +470,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
-    case P_TYPE::TEXT_STYLE:
-        return int(textStyleFromName(value));
     case P_TYPE::CHANGE_METHOD:
         return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
     default:
@@ -560,7 +558,8 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(TConv::fromXml(e.readElementText(), KeyMode::NONE));
 
     case P_TYPE::TEXT_STYLE:
-        return propertyFromString(propertyType(id), e.readElementText());
+        return PropertyValue(TConv::fromXml(e.readElementText(), TextStyleType::DEFAULT));
+
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
     case P_TYPE::GROUPS: {
@@ -609,8 +608,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::TEXT_STYLE:
-        return textStyleName(value.value<TextStyleType>());
     case P_TYPE::CHANGE_METHOD:
         return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
     case P_TYPE::TDURATION:

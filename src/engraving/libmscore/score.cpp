@@ -34,6 +34,7 @@
 #include "compat/writescorehook.h"
 #include "compat/dummyelement.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "articulation.h"
 #include "audio.h"
@@ -5000,7 +5001,7 @@ QString Score::getTextStyleUserName(TextStyleType tid)
         name = styleSt(sid[idx]);
     }
     if (name == "") {
-        name = textStyleUserName(tid);
+        name = TConv::toUserName(tid);
     }
     return name;
 }

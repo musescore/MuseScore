@@ -421,6 +421,18 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<HookType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::KEY_MODE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<KeyMode>());
+        *this << "</" << ename << ">\n";
+    } break;
+    case P_TYPE::TEXT_STYLE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<TextStyleType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
