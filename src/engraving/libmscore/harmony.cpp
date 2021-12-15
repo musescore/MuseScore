@@ -2276,7 +2276,7 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::HARMONY_TYPE:
         v = int(HarmonyType::STANDARD);
         break;
-    case Pid::TEXT_TYPE: {
+    case Pid::TEXT_STYLE: {
         switch (_harmonyType) {
         case HarmonyType::STANDARD:
             v = Tid::HARMONY_A;

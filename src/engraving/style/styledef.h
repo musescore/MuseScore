@@ -27,10 +27,10 @@
 #include <vector>
 
 #include "property/propertyvalue.h"
+#include "libmscore/property.h"
 #include "config.h"
 
 namespace Ms {
-enum class Pid : int;
 
 // Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE

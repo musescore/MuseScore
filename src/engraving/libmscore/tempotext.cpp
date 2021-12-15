@@ -437,7 +437,7 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue TempoText::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::TEMPO;
     case Pid::TEMPO:
         return 2.0;

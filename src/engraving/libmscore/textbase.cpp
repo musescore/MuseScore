@@ -2443,7 +2443,7 @@ void TextBase::read(XmlReader& e)
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
 {
     EngravingItem::writeProperties(xml);
-    writeProperty(xml, Pid::TEXT_TYPE);
+    writeProperty(xml, Pid::TEXT_STYLE);
 
     for (const StyledProperty& spp : *_elementStyle) {
         if (!isStyled(spp.pid)) {
@@ -2462,7 +2462,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
 }
 
 static constexpr std::array<Pid, 18> TextBasePropertyId { {
-    Pid::TEXT_TYPE,
+    Pid::TEXT_STYLE,
     Pid::FONT_FACE,
     Pid::FONT_SIZE,
     Pid::TEXT_LINE_SPACING,
@@ -2972,7 +2972,7 @@ mu::draw::FontMetrics TextBase::fontMetrics() const
 PropertyValue TextBase::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return int(tid());
     case Pid::FONT_FACE:
         return _cursor->selectedFragmentsFormat().fontFamily();
@@ -3017,7 +3017,7 @@ bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
 
     bool rv = true;
     switch (pid) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         initTid(Tid(v.toInt()));
         break;
     case Pid::FONT_FACE:
@@ -3090,7 +3090,7 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
     }
     PropertyValue v;
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         v = Tid::DEFAULT;
         break;
     case Pid::TEXT:
@@ -3138,7 +3138,7 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 
 Sid TextBase::offsetSid() const
 {
-    Tid defaultTid = Tid(propertyDefault(Pid::TEXT_TYPE).toInt());
+    Tid defaultTid = Tid(propertyDefault(Pid::TEXT_STYLE).toInt());
     if (tid() != defaultTid) {
         return Sid::NOSTYLE;
     }

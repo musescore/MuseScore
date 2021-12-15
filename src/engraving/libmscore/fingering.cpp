@@ -272,7 +272,7 @@ engraving::PropertyValue Fingering::propertyDefault(Pid id) const
     switch (id) {
     case Pid::PLACEMENT:
         return calculatePlacement();
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::FINGERING;
     default:
         return TextBase::propertyDefault(id);
