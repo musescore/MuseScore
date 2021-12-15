@@ -134,13 +134,18 @@ jobs:
     - name: Register msvc problem matcher
       run: echo "::add-matcher::.github/problem_matchers/msvc.json"
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.*'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2022_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
-    - name: Make environment file
-      shell: bash
-      run: |
-        bash ./buildscripts/ci/windows/make_environment.sh
+
     - name: Generate _en.ts files
       shell: bash
       env:
@@ -148,7 +153,7 @@ jobs:
         POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
         POSTPROCESS_LAUNCHER: "python3 -X utf8"
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: cbjeukendrup/cli-action@windows
@@ -259,13 +264,18 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.*'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2022_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat --portable ON
-    - name: Make environment file
-      shell: bash
-      run: |
-        bash ./buildscripts/ci/windows/make_environment.sh
+
     - name: Generate _en.ts files
       shell: bash
       env:
@@ -273,7 +283,7 @@ jobs:
         POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
         POSTPROCESS_LAUNCHER: "python3 -X utf8"
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: cbjeukendrup/cli-action@windows

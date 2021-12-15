@@ -151,15 +151,24 @@ jobs:
         brew install ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.*'
+        host: 'mac'
+        target: 'desktop'
+        arch: 'clang_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/macos/setup.sh
+
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2

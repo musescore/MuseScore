@@ -120,12 +120,6 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
-    # - name: Generate _en.ts files
-    #   env:
-    #     LUPDATE_ARGS: ""
-    #     POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
-    #   run: |
-    #     bash ./buildscripts/ci/translation/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2
@@ -135,7 +129,7 @@ jobs:
 
     - name: Register gcc problem matcher
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
-  
+
     - name: Setup, Generate _en.ts files, Build AppImage, Package, Checksum
       env: # For lupdate
         LUPDATE_ARGS: ""
@@ -144,8 +138,10 @@ jobs:
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         sudo docker run --platform linux/arm -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:jammy" /bin/bash -c "\
           cd /MuseScore && \
+          git config --global --add safe.directory /MuseScore && \
           bash /MuseScore/buildscripts/ci/linux/setup.sh --arch armv7l && \
-          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
+          bash /MuseScore/buildscripts/ci/linux/arm32/install_qt.sh && \
+          bash /MuseScore/tools/translation/run_lupdate.sh && \
           bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch armv7l && \
           bash /MuseScore/buildscripts/ci/linux/package.sh --arch armv7l && \
           bash /MuseScore/buildscripts/ci/tools/checksum.sh \

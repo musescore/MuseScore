@@ -28,13 +28,18 @@ jobs:
 
           echo "LUPDATE_ARGS=$LUPDATE_ARGS" | tee -a $GITHUB_ENV
 
-      - name: Setup environment
-        run: |
-          bash ./buildscripts/ci/translation/qt_install.sh
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          host: 'linux'
+          target: 'desktop'
+          arch: 'linux_gcc_64'
+          archives: 'qttools'
 
       - name: Run lupdate
         run: |
-          bash ./buildscripts/ci/translation/run_lupdate.sh
+          bash ./tools/translations/run_lupdate.sh
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
