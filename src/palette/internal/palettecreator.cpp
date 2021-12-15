@@ -1275,7 +1275,7 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     // Instead, they simply set the corresponding measure's MeasureNumberMode to SHOW
     // Because of that, the element shown in the palettes does not have to have any particular formatting.
     auto meaNum = makeElement<MeasureNumber>(gpaletteScore);
-    meaNum->setProperty(Pid::TEXT_TYPE, int(Tid::STAFF));   // Make the element bigger in the palettes (using the default measure number style makes it too small)
+    meaNum->setProperty(Pid::TEXT_STYLE, int(Tid::STAFF));   // Make the element bigger in the palettes (using the default measure number style makes it too small)
     meaNum->setXmlText(QT_TRANSLATE_NOOP("palette", "Measure number"));
     sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 

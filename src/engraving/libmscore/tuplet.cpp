@@ -797,7 +797,7 @@ void Tuplet::write(XmlWriter& xml) const
 
     if (_number) {
         xml.startObject("Number", _number);
-        _number->writeProperty(xml, Pid::TEXT_TYPE);
+        _number->writeProperty(xml, Pid::TEXT_STYLE);
         _number->writeProperty(xml, Pid::TEXT);
         xml.endObject();
     }
@@ -1200,7 +1200,7 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Tuplet::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::TUPLET;
     case Pid::SYSTEM_FLAG:
         return false;

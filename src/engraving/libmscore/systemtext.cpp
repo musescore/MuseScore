@@ -51,7 +51,7 @@ SystemText::SystemText(Segment* parent, Tid tid)
 engraving::PropertyValue SystemText::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::SYSTEM;
     default:
         return TextBase::propertyDefault(id);

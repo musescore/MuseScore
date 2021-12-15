@@ -538,7 +538,7 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue Dynamic::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::TEXT_TYPE:
+    case Pid::TEXT_STYLE:
         return Tid::DYNAMICS;
     case Pid::DYNAMIC_RANGE:
         return DynamicRange::PART;

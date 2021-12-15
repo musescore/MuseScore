@@ -441,7 +441,7 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
-    } else if (id == Pid::TEXT_TYPE) {
+    } else if (id == Pid::TEXT_STYLE) {
         //
         // change a list of properties
         //

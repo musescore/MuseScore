@@ -350,7 +350,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
             break;
         }
         switch (i.pid) {
-        case Pid::TEXT_TYPE:
+        case Pid::TEXT_STYLE:
             value = int(ss);
             break;
         case Pid::BEGIN_FONT_FACE:
