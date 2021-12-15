@@ -113,7 +113,10 @@ option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)
 
 # === Compile ===
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
-option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
+option(MUE_COMPILE_BUILD_MACOS_UNIVERSAL "Build a Universal macOS app, i.e. compile both x86_64 and arm64 into one executable.
+Requires Universal version of Qt and libsndfile. Overrides MUE_COMPILE_BUILD_MACOS_APPLE_SILICON." OFF)
+option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture.
+Only applicable on Macs with Apple Silicon, and requires suitable version of Qt and libsndfile." OFF)
 option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)

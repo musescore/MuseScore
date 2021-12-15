@@ -125,7 +125,9 @@ endif()
 
 # APPLE specific
 if (OS_IS_MAC)
-    if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
+    if (MUE_COMPILE_BUILD_MACOS_UNIVERSAL)
+        set(CMAKE_OSX_ARCHITECTURES x86_64 arm64)
+    elseif (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
         set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
     else()
         set(CMAKE_OSX_ARCHITECTURES x86_64)
