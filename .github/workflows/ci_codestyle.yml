@@ -3,7 +3,7 @@ name: CI_codestyle
 on:
   pull_request:
     branches:
-    - master
+    - master_off
 
 jobs:
   codestyle:    
