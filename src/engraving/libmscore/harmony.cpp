@@ -842,7 +842,7 @@ void Harmony::startEdit(EditData& ed)
 
 bool Harmony::edit(EditData& ed)
 {
-    if (isNavigationKey(ed.key, ed.modifiers)) {
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
     }
 
