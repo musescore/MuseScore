@@ -210,7 +210,10 @@ public:
     qreal userStretch() const;
     void setUserStretch(qreal v) { m_userStretch = v; }
 
-    void stretchMeasure(qreal stretch, Fraction minTicks);
+    void setLayoutStretch(qreal stretchCoeff) { m_layoutStretch = stretchCoeff; }
+    qreal layoutStretch() { return m_layoutStretch; }
+
+    void layoutMeasureElements();
     Fraction computeTicks();
     void layout2();
 
@@ -339,7 +342,7 @@ public:
     qreal stretchWeight();
     qreal stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretchCoeff);
     Fraction minSysTicks();
-    void computeMinWidth(Fraction minTicks, qreal stretchCoeff);
+    void computeWidth(Fraction minTicks, qreal stretchCoeff);
     void checkHeader();
     void checkTrailer();
     void setStretchedWidth(qreal);
@@ -370,7 +373,7 @@ private:
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
-    void computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
+    void computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff);
 
     MStaff* mstaff(int staffIndex) const;
 
@@ -395,6 +398,8 @@ private:
     bool m_breakMultiMeasureRest;
 
     Fraction m_quantumOfSegmentCell = { 1, 16 };
+
+    qreal m_layoutStretch = 1;
 };
 }     // namespace Ms
 #endif

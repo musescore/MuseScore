@@ -3140,84 +3140,16 @@ QString Measure::accessibleInfo() const
 }
 
 //-----------------------------------------------------------------------------
-//    stretchMeasure
-//    resize width of measure to targetWidth
-//    receives in input the shortest note of the system in ticks
+//  layoutMeasureElements()
+//  lays out all the element of a measure
+//  LEGACY: this method used to be called stretchMeasure() and was used to 
+//  distribute the remaining space at the end of a system. That task is now
+//  performed elsewhere and only the layout tasks are kept.
 //-----------------------------------------------------------------------------
 
-void Measure::stretchMeasure(qreal targetWidth, Fraction minTicks)
+void Measure::layoutMeasureElements()
 {
-    bbox().setWidth(targetWidth);
-
-    //---------------------------------------------------
-    //    compute stretch
-    //---------------------------------------------------
-
-    /*std::multimap<qreal, Segment*> springs;
-
-    Segment* seg = first();
-    while (seg && (!seg->enabled() || seg->allElementsInvisible())) {
-        seg = seg->next();
-    }
-    qreal minimumWidth = seg ? seg->x() : 0.0;
-    for (Segment& s : m_segments) {
-        if (!s.enabled() || !s.visible() || s.allElementsInvisible()) {
-            continue;
-        }
-        Fraction t = s.ticks();
-        if (t.isNotZero()) {
-            qreal str = stretchFormula(t, minTicks, 1); // Moved the formula to a dedicated method
-            qreal d   = s.width() / str;
-            s.setStretch(str);
-            springs.insert(std::pair<qreal, Segment*>(d, &s));
-        }
-        minimumWidth += s.width();
-    }
-
-    //---------------------------------------------------
-    //    compute 1/Force for a given Extend
-    //---------------------------------------------------
-
-    if (targetWidth > minimumWidth) {
-        qreal force = 0;
-        qreal c     = 0.0;
-        for (auto i = springs.begin(); i != springs.end();) {
-            c            += i->second->stretch();
-            minimumWidth -= i->second->width();
-            qreal f       = (targetWidth - minimumWidth) / c;
-            ++i;
-            if (i == springs.end() || f <= i->first) {
-                force = f;
-                break;
-            }
-        }
-
-        //---------------------------------------------------
-        //    distribute stretch to segments
-        //---------------------------------------------------
-
-        for (auto& i : springs) {
-            qreal width = force * i.second->stretch();
-            if (width > i.second->width()) {
-                i.second->setWidth(width);
-            }
-        }
-
-        //---------------------------------------------------
-        //    move segments to final position
-        //---------------------------------------------------
-
-        Segment* s = first();
-        while (s && (!s->enabled() || s->allElementsInvisible())) {
-            s = s->next();
-        }
-        qreal x = s ? s->pos().x() : 0.0;
-        while (s) {
-            s->rxpos() = x;
-            x += s->width();
-            s = s->nextEnabled();
-        }
-    }*/
+    //bbox().setWidth(targetWidth); // Doesn't seem to be needed but I keep it here just to be safe
 
     //---------------------------------------------------
     //    layout individual elements
@@ -3248,7 +3180,7 @@ void Measure::stretchMeasure(qreal targetWidth, Fraction minTicks)
                     }
                 }
                 qreal x1 = s1 ? s1->x() + s1->minRight() : 0;
-                qreal x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
+                qreal x2 = s2 ? s2->x() - s2->minLeft() : width();
 
                 if (e->isMMRest()) {
                     MMRest* mmrest = toMMRest(e);
@@ -3599,7 +3531,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeMinWidth(minSysTicks(), 1);
+            computeWidth(minSysTicks(), 1);
         }
         if (seg) {
             Segment* s1;
@@ -3622,7 +3554,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeMinWidth(s, x, false, minSysTicks(), 1);
+        computeWidth(s, x, false, minSysTicks(), 1);
     }
 
     return width() - oldWidth;
@@ -4055,7 +3987,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeMinWidth(minSysTicks(), 1);
+        computeWidth(minSysTicks(), 1);
     }
 }
 
@@ -4198,12 +4130,15 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretc
 }
 
 //---------------------------------------------------------
-//   computeMinWidth
-//    sets the minimum stretched width of segment list s
-//    set the width and x position for all segments
+//   computeWidth
+//   Computes the width of a measure depending on note durations
+//   (and given the shortest note of the system minTicks) and
+//   depending on the stretch coefficient
+//   LEGACY: this method used to be called computeMinWidth and was only used
+//   to compute the minimum non-collision distance between elements.
 //---------------------------------------------------------
 
-void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff)
+void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction minTicks, qreal stretchCoeff)
 {
     Segment* fs = firstEnabled();
     if (!fs->visible()) {           // first enabled could be a clef change on invisible staff
@@ -4214,20 +4149,6 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
 
     qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
     qreal stretch = userStretch() * score()->styleD(Sid::measureSpacing);
-
-    if (isMMRest()) {
-        // Reset MM rest to initial size and position
-        Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-        const int nstaves = score()->nstaves();
-        for (int st = 0; st < nstaves; ++st) {
-            MMRest* mmRest = toMMRest(seg->element(staff2track(st)));
-            if (mmRest) {
-                mmRest->rxpos() = 0;
-                mmRest->setWidth(score()->styleMM(Sid::minMMRestWidth) * mag());
-                mmRest->segment()->createShapes();
-            }
-        }
-    }
 
     while (s) {
         s->rxpos() = x;
@@ -4260,12 +4181,12 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
             } else {
                 w = s->minHorizontalDistance(ns, false);
                 // New spacing algorithm: we apply an additional spacing which depends on the duration of
-                // the note with respect to the shortest note *of the system*. This is done
-                // according to the stretch formula, which can be customized.
+                // the note with respect to the shortest note *of the system*.
                 Fraction t = s->ticks();
+                if (t > m_timesig) { // Avoids long MM rests being super wide
+                    t = 2 * m_timesig; 
+                }
                 qreal str = stretchFormula(t, minTicks, stretchCoeff);
-                // Simply doing w * str would be wrong at this point cause you would stretch also the additional
-                // space taken by accidentals.
                 qreal minStretchedWidth = minNoteSpace * str * stretch;
                 w = qMax(w, minStretchedWidth);
             }
@@ -4326,10 +4247,33 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader, Fraction
         x += w;
         s = s->next();
     }
+
+    // This doesn't seem to be needed but I'm not sure yet.
+    /*if (isMMRest()) {
+        // Reset MM rest to initial size and position
+        Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+        const int nstaves = score()->nstaves();
+        for (int st = 0; st < nstaves; ++st) {
+            MMRest* mmRest = toMMRest(seg->element(staff2track(st)));
+            if (mmRest) {
+                mmRest->rxpos() = 0;
+                mmRest->setWidth(score()->styleMM(Sid::minMMRestWidth) * mag());
+                mmRest->segment()->createShapes();
+            }
+        }
+    }*/
+    if (isMMRest() && x < score()->styleMM(Sid::minMMRestWidth)) {
+        x = score()->styleMM(Sid::minMMRestWidth);
+    }
+    if (!isMMRest() && x < score()->styleMM(Sid::minMeasureWidth)) {
+        x = score()->styleMM(Sid::minMeasureWidth);
+    }
+
+    setLayoutStretch(stretchCoeff);
     setStretchedWidth(x);
 }
 
-void Measure::computeMinWidth(Fraction minTicks, qreal stretchCoeff)
+void Measure::computeWidth(Fraction minTicks, qreal stretchCoeff)
 {
     Segment* s;
 
@@ -4376,7 +4320,7 @@ void Measure::computeMinWidth(Fraction minTicks, qreal stretchCoeff)
     x += s->extraLeadingSpace().val() * spatium();
     bool isSystemHeader = s->header();
 
-    computeMinWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
+    computeWidth(s, x, isSystemHeader, minTicks, stretchCoeff);
 }
 
 void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)

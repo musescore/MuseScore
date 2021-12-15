@@ -89,6 +89,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction minTicks = Fraction(4, 1); // Inizialize variable which stores the shortest note of the system
     Fraction prevMinTicks = Fraction(4, 1);
     bool changeMinSysTicks = false;
+    qreal oldStretch = 1;
 
     while (ctx.curMeasure) {      // collect measure for system
         System* oldSystem = ctx.curMeasure->system();
@@ -110,7 +111,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     }
                     if (mb->isMeasure()) {
                         qreal prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeMinWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, 1);
                         qreal newWidth = toMeasure(mb)->width();
                         minWidth += newWidth - prevWidth;
                     }
@@ -152,7 +153,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             } else {
                 m->addSystemTrailer(m->nextMeasure());
             }
-            m->computeMinWidth(minTicks, 1);
+            m->computeWidth(minTicks, 1);
             ww = m->width();
         } else if (ctx.curMeasure->isHBox()) {
             ctx.curMeasure->computeMinWidth();
@@ -194,7 +195,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 for (MeasureBase* mb : system->measures()) {
                     if (mb->isMeasure()) {
                         qreal prevWidth = toMeasure(mb)->width();
-                        toMeasure(mb)->computeMinWidth(minTicks, 1);
+                        toMeasure(mb)->computeWidth(minTicks, 1);
                         qreal newWidth = toMeasure(mb)->width();
                         minWidth += newWidth - prevWidth;
                     }
@@ -228,7 +229,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
-                        m1->computeMinWidth(minTicks, 1);
+                        m1->computeWidth(minTicks, 1);
                         ww = m1->width();
                     }
                 }
@@ -265,7 +266,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     nmb = nm->mmRest();
                 }
             }
-            nmb->setOldWidth(nmb->width());
+            if (nmb->isMeasure()) {
+                oldStretch = toMeasure(nmb)->layoutStretch();
+            }
             if (!ctx.curMeasure->noBreak()) {
                 // current measure is not a nobreak,
                 // so next measure could possibly start a system
@@ -321,8 +324,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     } else {
                         m->removeSystemTrailer();
                     }
-                    m->computeMinWidth(m->minSysTicks(), 1);
-                    m->stretchMeasure(m->oldWidth(), m->minSysTicks());
+                    m->computeWidth(m->minSysTicks(), oldStretch);
+                    m->layoutMeasureElements();
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {
                         break;
@@ -363,12 +366,13 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             qreal w = lm->width();
             lm->addSystemTrailer(nm);
             if (lm->trailer()) {
-                lm->computeMinWidth(minTicks, 1);
+                lm->computeWidth(minTicks, 1);
             }
             minWidth += lm->width() - w;
         }
     }
 
+    // BRING THE WIDTH OF THE SYSTEM TO THE DESIRED VALUE
     // Gradient descent method: calls the computeWidth() function with a stretch parameter
     // proportional to the difference between the current length and the target length.
     // After few iterations, the length will converge to the target length.
@@ -382,62 +386,22 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     }
     qreal stretchCoeff = 1;
     qreal prevWidth = 0;
-    int iter = 0; // Debug check variable
+    int iter = 0;
     while (abs(newRest) > score->spatium() * 0.08 && iter < 200) { // spatium*0.08 is about the width of a note stem
         stretchCoeff += 1.5 * newRest / minWidth;
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 Measure* m = toMeasure(mb);
                 prevWidth = m->width();
-                m->computeMinWidth(minTicks, stretchCoeff);
+                m->computeWidth(minTicks, stretchCoeff);
                 minWidth += m->width() - prevWidth;
             }
         }
         newRest = systemWidth - minWidth;
         iter++;
-    } 
-
-    /*
-    //
-    // stretch incomplete row
-    //
-    qreal rest;
-    if (MScore::noHorizontalStretch) {
-        rest = 0;
-    } else {
-        qreal mw          = system->leftMargin();          // DEBUG
-        qreal totalWeight = 0.0;
-
-        for (MeasureBase* mb : system->measures()) {
-            if (mb->isHBox()) {
-                mw += mb->width();
-            } else if (mb->isMeasure()) {
-                Measure* m  = toMeasure(mb);
-                mw          += m->width();                       // measures are stretched already with basicStretch()
-                qreal weight = m->stretchWeight(); // The stretch is now assigned proportionally to the width
-                totalWeight += weight; // No need now to multiply again by m->basicStretch()
-            }
-        }
-
-#ifndef NDEBUG
-        if (!qFuzzyCompare(mw, minWidth)) {
-            qDebug("==layoutSystem %6d old %.1f new %.1f", system->measures().front()->tick().ticks(), minWidth, mw);
-        }
-#endif
-        rest = systemWidth - minWidth;
-        //
-        // don’t stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
-        //
-        if (ctx.curMeasure == 0 && ((minWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-            if (minWidth > rest) {
-                rest = rest * .5;
-            } else {
-                rest = minWidth;
-            }
-        }
-        rest /= totalWeight;
-    }*/
+    }
     
+    // LAYOUT MEASURES
     PointF pos;
     firstMeasure = true;
     bool createBrackets = false;
@@ -450,9 +414,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
             mb->setPos(pos);
             Measure* m = toMeasure(mb);
-            //qreal weight = m->stretchWeight(); // Updated stretching formula
-            //ww += rest * weight;
-            m->stretchMeasure(ww, minTicks);
+            m->layoutMeasureElements();
             m->layoutStaffLines();
             if (createBrackets) {
                 system->addBrackets(ctx, toMeasure(mb));
