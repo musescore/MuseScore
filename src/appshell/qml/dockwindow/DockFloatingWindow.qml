@@ -41,24 +41,31 @@ Item {
     anchors.margins: 8 // Needed for the shadow, please sync with DOCK_WINDOW_SHADOW in docktypes.h
 
     StyledDropShadow {
-        anchors.fill: background
-        source: background
-        radius: 8
+        anchors.fill: backgroundContainer
+        source: backgroundContainer
+        radius: root.anchors.margins
     }
 
-    Rectangle {
-        id: background
+    Item {
+        id: backgroundContainer
         anchors.fill: parent
+        anchors.margins: -root.anchors.margins
 
-        color: ui.theme.backgroundPrimaryColor
-        border.color: ui.theme.strokeColor
-        border.width: 1
-        radius: 3
+        Rectangle {
+            id: background
+            anchors.fill: parent
+            anchors.margins: root.anchors.margins
+
+            color: ui.theme.backgroundPrimaryColor
+            border.color: ui.theme.strokeColor
+            border.width: 1
+            radius: 3
+        }
     }
 
     Item {
         id: dropArea
-        anchors.fill: background
+        anchors.fill: parent
         anchors.margins: background.border.width
 
         // Clip content to our beautiful rounded rect
