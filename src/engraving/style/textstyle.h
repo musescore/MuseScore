@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_TEXTSTYLE_H
 
 #include "styledef.h"
-#include "libmscore/types.h"
+#include "types/types.h"
 
 namespace Ms {
 #define TEXT_STYLE_SIZE 14
@@ -31,12 +31,6 @@ namespace Ms {
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
 
 const TextStyle* textStyle(TextStyleType);
-const TextStyle* textStyle(const char*);
-
-const char* textStyleName(TextStyleType);
-QString textStyleUserName(TextStyleType);
-TextStyleType textStyleFromName(const QString&);
-
 const std::vector<TextStyleType>& allTextStyles();
 const std::vector<TextStyleType>& primaryTextStyles();
 }

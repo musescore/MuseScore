@@ -31,6 +31,7 @@
 #include "style/defaultstyle.h"
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 
 #include "text.h"
 #include "textedit.h"
@@ -2779,7 +2780,7 @@ QString TextBase::accessibleInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
+        rez = score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2809,7 +2810,7 @@ QString TextBase::screenReaderInfo() const
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
-        rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
+        rez = score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
         break;
     default:
         rez = EngravingItem::accessibleInfo();
@@ -2834,7 +2835,7 @@ int TextBase::subtype() const
 
 QString TextBase::subtypeName() const
 {
-    return score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
+    return score() ? score()->getTextStyleUserName(tid()) : TConv::toUserName(tid());
 }
 
 //---------------------------------------------------------

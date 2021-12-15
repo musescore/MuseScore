@@ -22,9 +22,11 @@
 
 #include "text.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -55,10 +57,10 @@ void Text::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "style") {
             QString sn = e.readElementText();
-            if (sn == "Tuplet") {              // ugly hack for compatibility
+            TextStyleType s = TConv::fromXml(sn, TextStyleType::DEFAULT);
+            if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
                 continue;
             }
-            TextStyleType s = textStyleFromName(sn);
             initTid(s);
         } else if (!readProperties(e)) {
             e.unknown();
