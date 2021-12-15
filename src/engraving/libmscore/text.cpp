@@ -61,7 +61,7 @@ void Text::read(XmlReader& e)
             if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
                 continue;
             }
-            initTid(s);
+            initTextStyleType(s);
         } else if (!readProperties(e)) {
             e.unknown();
         }

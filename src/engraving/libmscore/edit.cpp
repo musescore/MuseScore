@@ -5167,7 +5167,7 @@ void Score::undoAddElement(EngravingItem* element)
         // don't link part name
         if (et == ElementType::TEXT) {
             Text* t = toText(element);
-            if (t->tid() == TextStyleType::INSTRUMENT_EXCERPT) {
+            if (t->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
                 links = 0;
             }
         }

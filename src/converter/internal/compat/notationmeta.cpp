@@ -228,7 +228,7 @@ static void findTextByType(void* data, Ms::EngravingItem* element)
 
     const Ms::TextBase* text = toTextBase(element);
     auto* typeStringsData = static_cast<std::pair<TextStyleType, QStringList*>*>(data);
-    if (text->tid() == typeStringsData->first) {
+    if (text->textStyleType() == typeStringsData->first) {
         QStringList* titleStrings = typeStringsData->second;
         Q_ASSERT(titleStrings);
         titleStrings->append(text->plainText());

@@ -89,10 +89,10 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 {
     _instrumentNameType = st;
     if (st == InstrumentNameType::SHORT) {
-        setTid(TextStyleType::INSTRUMENT_SHORT);
+        setTextStyleType(TextStyleType::INSTRUMENT_SHORT);
         initElementStyle(&shortInstrumentStyle);
     } else {
-        setTid(TextStyleType::INSTRUMENT_LONG);
+        setTextStyleType(TextStyleType::INSTRUMENT_LONG);
         initElementStyle(&longInstrumentStyle);
     }
 }

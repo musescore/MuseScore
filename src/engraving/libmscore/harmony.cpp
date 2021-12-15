@@ -2025,13 +2025,13 @@ void Harmony::setHarmonyType(HarmonyType val)
     setPlacement(propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     switch (_harmonyType) {
     case HarmonyType::STANDARD:
-        initTid(TextStyleType::HARMONY_A);
+        initTextStyleType(TextStyleType::HARMONY_A);
         break;
     case HarmonyType::ROMAN:
-        initTid(TextStyleType::HARMONY_ROMAN);
+        initTextStyleType(TextStyleType::HARMONY_ROMAN);
         break;
     case HarmonyType::NASHVILLE:
-        initTid(TextStyleType::HARMONY_NASHVILLE);
+        initTextStyleType(TextStyleType::HARMONY_NASHVILLE);
         break;
     }
     // TODO: convert text
@@ -2312,13 +2312,13 @@ Sid Harmony::getPropertyStyle(Pid pid) const
     if (pid == Pid::OFFSET) {
         if (explicitParent() && explicitParent()->isFretDiagram()) {
             return Sid::NOSTYLE;
-        } else if (tid() == TextStyleType::HARMONY_A) {
+        } else if (textStyleType() == TextStyleType::HARMONY_A) {
             return placeAbove() ? Sid::chordSymbolAPosAbove : Sid::chordSymbolAPosBelow;
-        } else if (tid() == TextStyleType::HARMONY_B) {
+        } else if (textStyleType() == TextStyleType::HARMONY_B) {
             return placeAbove() ? Sid::chordSymbolBPosAbove : Sid::chordSymbolBPosBelow;
-        } else if (tid() == TextStyleType::HARMONY_ROMAN) {
+        } else if (textStyleType() == TextStyleType::HARMONY_ROMAN) {
             return placeAbove() ? Sid::romanNumeralPosAbove : Sid::romanNumeralPosBelow;
-        } else if (tid() == TextStyleType::HARMONY_NASHVILLE) {
+        } else if (textStyleType() == TextStyleType::HARMONY_NASHVILLE) {
             return placeAbove() ? Sid::nashvilleNumberPosAbove : Sid::nashvilleNumberPosBelow;
         }
     }
