@@ -914,7 +914,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             // layout breaks other than section were skipped above,
             // but section breaks do need to be cloned & linked
             // other measure-attached elements (?) are cloned but not linked
-            if (e->isText() && toText(e)->tid() == TextStyleType::INSTRUMENT_EXCERPT) {
+            if (e->isText() && toText(e)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
                 // skip part name in score
                 continue;
             } else if (e->isTextBase() || e->isLayoutBreak()) {

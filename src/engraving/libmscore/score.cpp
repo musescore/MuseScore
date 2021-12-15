@@ -1972,7 +1972,7 @@ Text* Score::getText(TextStyleType tid) const
     MeasureBase* m = first();
     if (m && m->isVBox()) {
         for (EngravingItem* e : m->el()) {
-            if (e->isText() && toText(e)->tid() == tid) {
+            if (e->isText() && toText(e)->textStyleType() == tid) {
                 return toText(e);
             }
         }

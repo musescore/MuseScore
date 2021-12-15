@@ -1063,7 +1063,7 @@ EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
     case ElementType::PAGE:
         return &EditStyle::PagePage;
     case ElementType::TEXT:
-        if (toText(e)->tid() == Ms::TextStyleType::FOOTER || toText(e)->tid() == Ms::TextStyleType::HEADER) {
+        if (toText(e)->textStyleType() == Ms::TextStyleType::FOOTER || toText(e)->textStyleType() == Ms::TextStyleType::HEADER) {
             return &EditStyle::PageHeaderFooter;
         }
         return nullptr;

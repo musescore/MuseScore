@@ -376,7 +376,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
             ss = TextStyleType::DEFAULT;
             break;
         }
-        t->initTid(ss);
+        t->initTextStyleType(ss);
     } else if (tag == "subtype") {
         e.skipCurrentElement();
     } else if (tag == "html-data") {

@@ -31,7 +31,6 @@
 #include "config.h"
 
 namespace Ms {
-
 // Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
 #define BEGIN_QT_REGISTERED_ENUM(Name) \

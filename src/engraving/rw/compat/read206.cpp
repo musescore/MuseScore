@@ -1181,7 +1181,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             // Init the text with a style that can't be stored as a user style
             // due to the limit on the number of user styles possible.
             // Use User-1, since it has all the possible user style pids
-            t->initTid(TextStyleType::DEFAULT);
+            t->initTextStyleType(TextStyleType::DEFAULT);
             std::map<Sid, PropertyValue> styleVals = excessTextStyles206[s];
             for (const StyledProperty& p : *textStyle(TextStyleType::USER1)) {
                 if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end()) {
@@ -1195,7 +1195,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
                 ss = TConv::fromXml(s, TextStyleType::DEFAULT);
             }
             if (ss != TextStyleType::TEXT_TYPES) {
-                t->initTid(ss);
+                t->initTextStyleType(ss);
             }
         }
     }
