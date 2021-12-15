@@ -151,13 +151,15 @@ ListView {
         transparent: !menuLoader.isMenuOpened
         accentButton: menuLoader.isMenuOpened
 
-        contentItem: StyledTextLabel {
+        contentItem: Text {
             id: textLabel
+
+            width: textMetrics.width
 
             text: Boolean(radioButtonDelegate.item) ? correctText(radioButtonDelegate.item.title) : ""
             textFormat: Text.RichText
-
-            width: textMetrics.width
+            color: ui.theme.fontPrimaryColor
+            font.pixelSize: 12
 
             TextMetrics {
                 id: textMetrics
@@ -181,6 +183,13 @@ ListView {
             function makeMnemonicText(text) {
                 return Utils.makeMnemonicText(text)
             }
+        }
+
+        backgroundItem: AppButtonBackground {
+            navigationCtrl: radioButtonDelegate.navigation
+            mouseArea: radioButtonDelegate.mouseArea
+
+            color: radioButtonDelegate.normalColor
         }
 
         navigation.name: text
