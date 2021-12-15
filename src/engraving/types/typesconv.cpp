@@ -483,3 +483,170 @@ KeyMode TConv::fromXml(const QString& tag, KeyMode def)
 {
     return findTypeByXmlTag<KeyMode>(KEY_MODES, tag, def);
 }
+
+static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
+    { TextStyleType::DEFAULT,           "default",              QT_TRANSLATE_NOOP("engraving", "Default") },
+    { TextStyleType::TITLE,             "title",                QT_TRANSLATE_NOOP("engraving", "Title") },
+    { TextStyleType::SUBTITLE,          "subtitle",             QT_TRANSLATE_NOOP("engraving", "Subtitle") },
+    { TextStyleType::COMPOSER,          "composer",             QT_TRANSLATE_NOOP("engraving", "Composer") },
+    { TextStyleType::POET,              "poet",                 QT_TRANSLATE_NOOP("engraving", "Poet") },
+    { TextStyleType::TRANSLATOR,        "translator",           QT_TRANSLATE_NOOP("engraving", "Translator") },
+    { TextStyleType::FRAME,             "frame",                QT_TRANSLATE_NOOP("engraving", "Frame") },
+    { TextStyleType::INSTRUMENT_EXCERPT, "instrument_excerpt",  QT_TRANSLATE_NOOP("engraving", "Instrument Name (Part)") },
+    { TextStyleType::INSTRUMENT_LONG,   "instrument_long",      QT_TRANSLATE_NOOP("engraving", "Instrument Name (Long)") },
+    { TextStyleType::INSTRUMENT_SHORT,  "instrument_short",     QT_TRANSLATE_NOOP("engraving", "Instrument Name (Short)") },
+    { TextStyleType::INSTRUMENT_CHANGE, "instrument_change",    QT_TRANSLATE_NOOP("engraving", "Instrument Change") },
+    { TextStyleType::HEADER,            "header",               QT_TRANSLATE_NOOP("engraving", "Header") },
+    { TextStyleType::FOOTER,            "footer",               QT_TRANSLATE_NOOP("engraving", "Footer") },
+
+    { TextStyleType::MEASURE_NUMBER,    "measure_number",       QT_TRANSLATE_NOOP("engraving", "Measure Number") },
+    { TextStyleType::MMREST_RANGE,      "mmrest_range",         QT_TRANSLATE_NOOP("engraving", "Multimeasure Rest Range") },
+
+    { TextStyleType::TEMPO,             "tempo",                QT_TRANSLATE_NOOP("engraving", "Tempo") },
+    { TextStyleType::METRONOME,         "metronome",            QT_TRANSLATE_NOOP("engraving", "Metronome") },
+    { TextStyleType::REPEAT_LEFT,       "repeat_left",          QT_TRANSLATE_NOOP("engraving", "Repeat Text Left") },
+    { TextStyleType::REPEAT_RIGHT,      "repeat_right",         QT_TRANSLATE_NOOP("engraving", "Repeat Text Right") },
+    { TextStyleType::REHEARSAL_MARK,    "rehearsal_mark",       QT_TRANSLATE_NOOP("engraving", "Rehearsal Mark") },
+    { TextStyleType::SYSTEM,            "system",               QT_TRANSLATE_NOOP("engraving", "System") },
+
+    { TextStyleType::STAFF,             "staff",                QT_TRANSLATE_NOOP("engraving", "Staff") },
+    { TextStyleType::EXPRESSION,        "expression",           QT_TRANSLATE_NOOP("engraving", "Expression") },
+    { TextStyleType::DYNAMICS,          "dynamics",             QT_TRANSLATE_NOOP("engraving", "Dynamics") },
+    { TextStyleType::HAIRPIN,           "hairpin",              QT_TRANSLATE_NOOP("engraving", "Hairpin") },
+    { TextStyleType::LYRICS_ODD,        "lyrics_odd",           QT_TRANSLATE_NOOP("engraving", "Lyrics Odd Lines") },
+    { TextStyleType::LYRICS_EVEN,       "lyrics_even",          QT_TRANSLATE_NOOP("engraving", "Lyrics Even Lines") },
+    { TextStyleType::HARMONY_A,         "harmony_a",            QT_TRANSLATE_NOOP("engraving", "Chord Symbol") },
+    { TextStyleType::HARMONY_B,         "harmony_b",            QT_TRANSLATE_NOOP("engraving", "Chord Symbol (Alternate)") },
+    { TextStyleType::HARMONY_ROMAN,     "harmony_roman",        QT_TRANSLATE_NOOP("engraving", "Roman Numeral Analysis") },
+    { TextStyleType::HARMONY_NASHVILLE, "harmony_nashville",    QT_TRANSLATE_NOOP("engraving", "Nashville Number") },
+
+    { TextStyleType::TUPLET,            "tuplet",               QT_TRANSLATE_NOOP("engraving", "Tuplet") },
+    { TextStyleType::STICKING,          "sticking",             QT_TRANSLATE_NOOP("engraving", "Sticking") },
+    { TextStyleType::FINGERING,         "fingering",            QT_TRANSLATE_NOOP("engraving", "Fingering") },
+    { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", QT_TRANSLATE_NOOP("engraving", "LH Guitar Fingering") },
+    { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", QT_TRANSLATE_NOOP("engraving", "RH Guitar Fingering") },
+    { TextStyleType::STRING_NUMBER,     "string_number",        QT_TRANSLATE_NOOP("engraving", "String Number") },
+
+    { TextStyleType::TEXTLINE,          "textline",             QT_TRANSLATE_NOOP("engraving", "Text Line") },
+    { TextStyleType::VOLTA,             "volta",                QT_TRANSLATE_NOOP("engraving", "Volta") },
+    { TextStyleType::OTTAVA,            "ottava",               QT_TRANSLATE_NOOP("engraving", "Ottava") },
+    { TextStyleType::GLISSANDO,         "glissando",            QT_TRANSLATE_NOOP("engraving", "Glissando") },
+    { TextStyleType::PEDAL,             "pedal",                QT_TRANSLATE_NOOP("engraving", "Pedal") },
+    { TextStyleType::BEND,              "bend",                 QT_TRANSLATE_NOOP("engraving", "Bend") },
+    { TextStyleType::LET_RING,          "let_ring",             QT_TRANSLATE_NOOP("engraving", "Let Ring") },
+    { TextStyleType::PALM_MUTE,         "palm_mute",            QT_TRANSLATE_NOOP("engraving", "Palm Mute") },
+
+    { TextStyleType::USER1,             "user_1",               QT_TRANSLATE_NOOP("engraving", "User-1") },
+    { TextStyleType::USER2,             "user_2",               QT_TRANSLATE_NOOP("engraving", "User-2") },
+    { TextStyleType::USER3,             "user_3",               QT_TRANSLATE_NOOP("engraving", "User-3") },
+    { TextStyleType::USER4,             "user_4",               QT_TRANSLATE_NOOP("engraving", "User-4") },
+    { TextStyleType::USER5,             "user_5",               QT_TRANSLATE_NOOP("engraving", "User-5") },
+    { TextStyleType::USER6,             "user_6",               QT_TRANSLATE_NOOP("engraving", "User-6") },
+    { TextStyleType::USER7,             "user_7",               QT_TRANSLATE_NOOP("engraving", "User-7") },
+    { TextStyleType::USER8,             "user_8",               QT_TRANSLATE_NOOP("engraving", "User-8") },
+    { TextStyleType::USER9,             "user_9",               QT_TRANSLATE_NOOP("engraving", "User-9") },
+    { TextStyleType::USER10,            "user_10",              QT_TRANSLATE_NOOP("engraving", "User-10") },
+    { TextStyleType::USER11,            "user_11",              QT_TRANSLATE_NOOP("engraving", "User-11") },
+    { TextStyleType::USER12,            "user_12",              QT_TRANSLATE_NOOP("engraving", "User-12") },
+};
+
+QString TConv::toUserName(TextStyleType v)
+{
+    return findUserNameByType<TextStyleType>(TEXTSTYLE_TYPES, v);
+}
+
+QString TConv::toXml(TextStyleType v)
+{
+    return findXmlTagByType<TextStyleType>(TEXTSTYLE_TYPES, v);
+}
+
+TextStyleType TConv::fromXml(const QString& tag, TextStyleType def)
+{
+    auto it = std::find_if(TEXTSTYLE_TYPES.cbegin(), TEXTSTYLE_TYPES.cend(), [tag](const Item<TextStyleType>& i) {
+        return i.xml == tag;
+    });
+
+    if (it != TEXTSTYLE_TYPES.cend()) {
+        return it->type;
+    }
+
+    // compatibility
+
+    static const std::map<QString, TextStyleType> OLD_TST_TAGS = {
+        { "Default", TextStyleType::DEFAULT },
+        { "Title", TextStyleType::TITLE },
+        { "Subtitle", TextStyleType::SUBTITLE },
+        { "Composer", TextStyleType::COMPOSER },
+        { "Lyricist", TextStyleType::POET },
+        { "Translator", TextStyleType::TRANSLATOR },
+        { "Frame", TextStyleType::FRAME },
+        { "Instrument Name (Part)", TextStyleType::INSTRUMENT_EXCERPT },
+        { "Instrument Name (Long)", TextStyleType::INSTRUMENT_LONG },
+        { "Instrument Name (Short)", TextStyleType::INSTRUMENT_SHORT },
+        { "Instrument Change", TextStyleType::INSTRUMENT_CHANGE },
+        { "Header", TextStyleType::HEADER },
+        { "Footer", TextStyleType::FOOTER },
+
+        { "Measure Number", TextStyleType::MEASURE_NUMBER },
+        { "Multimeasure Rest Range", TextStyleType::MMREST_RANGE },
+
+        { "Tempo", TextStyleType::TEMPO },
+        { "Metronome", TextStyleType::METRONOME },
+        { "Repeat Text Left", TextStyleType::REPEAT_LEFT },
+        { "Repeat Text Right", TextStyleType::REPEAT_RIGHT },
+        { "Rehearsal Mark", TextStyleType::REHEARSAL_MARK },
+        { "System", TextStyleType::SYSTEM },
+
+        { "Staff", TextStyleType::STAFF },
+        { "Expression", TextStyleType::EXPRESSION },
+        { "Dynamics", TextStyleType::DYNAMICS },
+        { "Hairpin", TextStyleType::HAIRPIN },
+        { "Lyrics Odd Lines", TextStyleType::LYRICS_ODD },
+        { "Lyrics Even Lines", TextStyleType::LYRICS_EVEN },
+        { "Chord Symbol", TextStyleType::HARMONY_A },
+        { "Chord Symbol (Alternate)", TextStyleType::HARMONY_B },
+        { "Roman Numeral Analysis", TextStyleType::HARMONY_ROMAN },
+        { "Nashville Number", TextStyleType::HARMONY_NASHVILLE },
+
+        { "Tuplet", TextStyleType::TUPLET },
+        { "Sticking", TextStyleType::STICKING },
+        { "Fingering", TextStyleType::FINGERING },
+        { "LH Guitar Fingering", TextStyleType::LH_GUITAR_FINGERING },
+        { "RH Guitar Fingering", TextStyleType::RH_GUITAR_FINGERING },
+        { "String Number", TextStyleType::STRING_NUMBER },
+
+        { "Text Line", TextStyleType::TEXTLINE },
+        { "Volta", TextStyleType::VOLTA },
+        { "Ottava", TextStyleType::OTTAVA },
+        { "Glissando", TextStyleType::GLISSANDO },
+        { "Pedal", TextStyleType::PEDAL },
+        { "Bend", TextStyleType::BEND },
+        { "Let Ring", TextStyleType::LET_RING },
+        { "Palm Mute", TextStyleType::PALM_MUTE },
+
+        { "User-1", TextStyleType::USER1 },
+        { "User-2", TextStyleType::USER2 },
+        { "User-3", TextStyleType::USER3 },
+        { "User-4", TextStyleType::USER4 },
+        { "User-5", TextStyleType::USER5 },
+        { "User-6", TextStyleType::USER6 },
+        { "User-7", TextStyleType::USER7 },
+        { "User-8", TextStyleType::USER8 },
+        { "User-9", TextStyleType::USER9 },
+        { "User-10", TextStyleType::USER10 },
+        { "User-11", TextStyleType::USER11 },
+        { "User-12", TextStyleType::USER12 },
+    };
+
+    auto old = OLD_TST_TAGS.find(tag);
+    if (old != OLD_TST_TAGS.cend()) {
+        return old->second;
+    }
+
+    if (tag == "Technique") {
+        return TextStyleType::EXPRESSION;
+    }
+
+    UNREACHABLE;
+    return def;
+}

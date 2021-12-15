@@ -340,7 +340,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     std::map<Sid, PropertyValue> excessPairs;
     const TextStyle* ts;
     if (isExcessStyle) {
-        ts = textStyle("User-1");
+        ts = textStyle(TextStyleType::USER1);
     } else {
         ts = textStyle(ss);
     }
@@ -1183,7 +1183,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             // Use User-1, since it has all the possible user style pids
             t->initTid(TextStyleType::DEFAULT);
             std::map<Sid, PropertyValue> styleVals = excessTextStyles206[s];
-            for (const StyledProperty& p : *textStyle("User-1")) {
+            for (const StyledProperty& p : *textStyle(TextStyleType::USER1)) {
                 if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end()) {
                     t->setProperty(p.pid, styleVals[p.sid]);
                 }
@@ -1192,7 +1192,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             TextStyleType ss;
             ss = e.lookupUserTextStyle(s);
             if (ss == TextStyleType::TEXT_TYPES) {
-                ss = textStyleFromName(s);
+                ss = TConv::fromXml(s, TextStyleType::DEFAULT);
             }
             if (ss != TextStyleType::TEXT_TYPES) {
                 t->initTid(ss);

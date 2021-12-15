@@ -35,6 +35,7 @@
 #include "offsetSelect.h"
 
 #include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
 #include "engraving/libmscore/figuredbass.h"
 #include "engraving/libmscore/scorefont.h"
 #include "engraving/libmscore/realizedharmony.h"
@@ -692,7 +693,7 @@ EditStyle::EditStyle(QWidget* parent)
 
     textStyles->clear();
     for (auto ss : Ms::allTextStyles()) {
-        QListWidgetItem* item = new QListWidgetItem(Ms::textStyleUserName(ss));
+        QListWidgetItem* item = new QListWidgetItem(TConv::toUserName(ss));
         item->setData(Qt::UserRole, int(ss));
         textStyles->addItem(item);
     }
@@ -949,7 +950,7 @@ void EditStyle::retranslate()
 
     int idx = 0;
     for (auto ss : Ms::allTextStyles()) {
-        QString name = Ms::textStyleUserName(ss);
+        QString name = TConv::toUserName(ss);
         textStyles->item(idx)->setText(name);
         ++idx;
     }
@@ -2064,9 +2065,9 @@ void EditStyle::textStyleChanged(int row)
         }
     }
 
-    styleName->setText(Ms::textStyleUserName(tid));
+    styleName->setText(TConv::toUserName(tid));
     styleName->setEnabled(int(tid) >= int(Ms::TextStyleType::USER1));
-    resetTextStyleName->setEnabled(styleName->text() != Ms::textStyleUserName(tid));
+    resetTextStyleName->setEnabled(false);
 }
 
 //---------------------------------------------------------
@@ -2114,7 +2115,7 @@ void EditStyle::editUserStyleName()
     int row = textStyles->currentRow();
     Ms::TextStyleType tid = Ms::TextStyleType(textStyles->item(row)->data(Qt::UserRole).toInt());
     textStyles->item(row)->setText(styleName->text());
-    resetTextStyleName->setEnabled(styleName->text() != Ms::textStyleUserName(tid));
+    resetTextStyleName->setEnabled(styleName->text() != TConv::toUserName(tid));
 }
 
 //---------------------------------------------------------
@@ -2136,7 +2137,7 @@ void EditStyle::endEditUserStyleName()
     QString name = styleName->text();
     setStyleValue(sid[idx], name);
     if (name == "") {
-        name = Ms::textStyleUserName(tid);
+        name = TConv::toUserName(tid);
         styleName->setText(name);
         textStyles->item(row)->setText(name);
         resetTextStyleName->setEnabled(false);

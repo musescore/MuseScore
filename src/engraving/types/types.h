@@ -394,6 +394,8 @@ enum class KeyMode : char {
 // P_TYPE::TEXT_STYLE
 enum class TextStyleType {
     DEFAULT,
+
+    // Page-orientde styles
     TITLE,
     SUBTITLE,
     COMPOSER,
@@ -406,14 +408,20 @@ enum class TextStyleType {
     INSTRUMENT_CHANGE,
     HEADER,
     FOOTER,
+
+    // Measure-oriented styles
     MEASURE_NUMBER,
     MMREST_RANGE,
+
+    // Sytem-level styles
     TEMPO,
     METRONOME,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
     REHEARSAL_MARK,
     SYSTEM,
+
+    // Staff oriented styles
     STAFF,
     EXPRESSION,
     DYNAMICS,
@@ -424,12 +432,16 @@ enum class TextStyleType {
     HARMONY_B,
     HARMONY_ROMAN,
     HARMONY_NASHVILLE,
+
+    // Note oriented styles
     TUPLET,
     STICKING,
     FINGERING,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+
+    // Line-oriented styles
     TEXTLINE,
     VOLTA,
     OTTAVA,
@@ -438,6 +450,8 @@ enum class TextStyleType {
     BEND,
     LET_RING,
     PALM_MUTE,
+
+    // User styles
     USER1,
     USER2,
     USER3,
