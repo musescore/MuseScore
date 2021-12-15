@@ -72,11 +72,20 @@ jobs:
         run: |
           bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
 
+      - name: Install Qt for lrelease
+        if: env.DO_PUSH_TO_S3 == 'true'
+        uses: jurplel/install-qt-action@v4
+        with:
+          aqtversion: '==3.1.*'
+          version: '6.8.0'
+          host: 'linux'
+          target: 'desktop'
+          arch: 'linux_gcc_64'
+          archives: 'qttools'
+
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
         run: |
-          # lrelease
-          bash ./buildscripts/ci/translation/qt_install.sh
           bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
 
           bash ./buildscripts/ci/tools/make_build_number.sh
