@@ -46,6 +46,8 @@ public:
     void layout() override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
+
+    bool edit(EditData&) override;
 };
 }     // namespace Ms
 #endif

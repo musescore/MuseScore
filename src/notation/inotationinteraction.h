@@ -223,6 +223,8 @@ public:
     virtual void navigateToFiguredBassInNearMeasure(MoveDirection direction) = 0;
     virtual void navigateToFiguredBass(const Fraction& ticks) = 0;
 
+    virtual void navigateToNearText(MoveDirection direction) = 0;
+
     // Text style
     virtual void toggleBold() = 0;
     virtual void toggleItalic() = 0;
