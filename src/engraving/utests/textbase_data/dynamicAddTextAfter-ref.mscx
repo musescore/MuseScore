@@ -112,11 +112,11 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Split Measure+Slur</text>
           </Text>
         </VBox>

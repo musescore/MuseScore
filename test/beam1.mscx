@@ -76,12 +76,12 @@ p, li { white-space: pre-wrap; }
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <subtype>Title</subtype>
           <text>Beam-Test</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <subtype>Subtitle</subtype>
           <text>Beam-Direction</text>
           </Text>

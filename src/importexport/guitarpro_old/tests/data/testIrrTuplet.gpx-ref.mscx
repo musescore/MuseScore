@@ -140,7 +140,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -333,7 +333,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Electric Guitar</text>
             </Text>
           </VBox>
@@ -379,7 +379,7 @@
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -489,7 +489,7 @@
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>

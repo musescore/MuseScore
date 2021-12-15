@@ -88,7 +88,7 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Treble</text>
           </Text>
         </VBox>
@@ -290,11 +290,11 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Treble</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>

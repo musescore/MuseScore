@@ -131,7 +131,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Simplify tied eighth notes to indicate rhythm in 4/4
 N = 1 eighth note</text>
             </StaffText>
@@ -180,7 +180,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 2</text>
             </StaffText>
           <Beam>
@@ -331,7 +331,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 3</text>
             </StaffText>
           <Beam>
@@ -626,7 +626,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 4</text>
             </StaffText>
           <Beam>
@@ -973,7 +973,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 5</text>
             </StaffText>
           <Beam>
@@ -1292,7 +1292,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 6</text>
             </StaffText>
           <Beam>
@@ -1531,7 +1531,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 7</text>
             </StaffText>
           <Beam>
@@ -1730,7 +1730,7 @@ N = 1 eighth note</text>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 8</text>
             </StaffText>
           <Beam>

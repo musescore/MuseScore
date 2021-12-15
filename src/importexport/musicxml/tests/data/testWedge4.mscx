@@ -95,15 +95,15 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Wedge 4</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>MuseScore testfile</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Leon Vinken</text>
           </Text>
         </VBox>

@@ -974,7 +974,7 @@
           <height>10</height>
           <lid>0</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic (DADGAD)</text>
             </Text>
           </VBox>

@@ -76,11 +76,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>TestMetronomeSimple</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Stressed beats are louder and the 1st beat of a measure uses a different sound to the remaining beats.</text>
           </Text>
         </VBox>

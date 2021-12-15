@@ -81,15 +81,15 @@
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Layout test</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Just an artificial score to test whether all elements are laid out</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Composer</text>
           </Text>
         <Text>
@@ -97,7 +97,7 @@
           <text>Lyricist</text>
           </Text>
         <Text>
-          <style>Instrument Name (Part)</style>
+          <style>instrument_excerpt</style>
           <text>The only part</text>
           </Text>
         </VBox>
@@ -215,7 +215,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>

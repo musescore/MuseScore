@@ -155,11 +155,11 @@ p, li { white-space: pre-wrap; }
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat9</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>
 RepeatList of 2a is set to 1, so it'll be skipped</text>
           </Text>

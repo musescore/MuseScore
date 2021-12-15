@@ -92,7 +92,7 @@
         <lid>0</lid>
         <Text>
           <lid>1</lid>
-          <style>Title</style>
+          <style>title</style>
           <text>Double articulations</text>
           </Text>
         </VBox>
@@ -1837,11 +1837,11 @@
           <lid>0</lid>
           <Text>
             <lid>1</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>Double articulations</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>

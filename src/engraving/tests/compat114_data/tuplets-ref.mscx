@@ -71,7 +71,7 @@
         <bottomMargin>5</bottomMargin>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text><font size="24"/><font face="Times New Roman"/>Tuplets</text>
           </Text>
         </VBox>

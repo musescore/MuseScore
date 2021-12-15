@@ -155,7 +155,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Stemless</text>
           </Text>
         </VBox>

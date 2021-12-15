@@ -67,12 +67,12 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <subtype>Title</subtype>
           <text>stem-1</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <subtype>Subtitle</subtype>
           <text>Stem Length Tests</text>
           </Text>

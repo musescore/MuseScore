@@ -81,11 +81,11 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat54 = repeat20 without label changes</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>DS al Coda followed by DS al Fine -- pick correct segno</text>
           </Text>
         </VBox>

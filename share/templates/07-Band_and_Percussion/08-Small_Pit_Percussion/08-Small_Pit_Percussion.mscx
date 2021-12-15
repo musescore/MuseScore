@@ -1621,7 +1621,7 @@
       <VBox>
         <height>7</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Small Pit Percussion</text>
           </Text>
         </VBox>

@@ -165,11 +165,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
       <VBox>
         <height>7</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Unclaimed Gift</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Marc Sabatella</text>
           </Text>
         <Text>

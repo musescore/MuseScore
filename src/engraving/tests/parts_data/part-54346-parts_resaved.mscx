@@ -138,7 +138,7 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Test</text>
           </Text>
         </VBox>
@@ -351,11 +351,11 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>B♭ Trumpet</text>
             </Text>
           </VBox>
@@ -535,11 +535,11 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>C Trumpet</text>
             </Text>
           </VBox>

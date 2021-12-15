@@ -125,7 +125,7 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Guitar-tab-parts</text>
           </Text>
         </VBox>
@@ -529,11 +529,11 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Guitar-tab-parts</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar</text>
             </Text>
           </VBox>

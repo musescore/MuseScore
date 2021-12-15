@@ -126,11 +126,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Grouping conflicts</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Currently the grouping algorithm does not consider other notes and rests in the measure.</text>
           </Text>
         </VBox>
@@ -141,7 +141,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Simple Triple: must expose 2 out of 3 beats</text>
             </StaffText>
           <Beam>
@@ -408,7 +408,7 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Compound: must expose 2 out of 3 divisions within a beat (similar to Simple Triple)</text>
             </StaffText>
           <Beam>
@@ -694,7 +694,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Syncopation: allow simple rhythms to cross unstressed beats</text>
             </StaffText>
           <Beam>
@@ -1109,7 +1109,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Syncopation continued:  don't allow isolated notes to cross unstressed beats</text>
             </StaffText>
           <Chord>

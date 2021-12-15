@@ -101,7 +101,7 @@
           <actualNotes>5</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
+            <style>tuplet</style>
             <text>5</text>
             </Number>
           </Tuplet>
@@ -155,7 +155,7 @@
           <actualNotes>5</actualNotes>
           <baseNote>eighth</baseNote>
           <Number>
-            <style>Tuplet</style>
+            <style>tuplet</style>
             <text>5</text>
             </Number>
           </Tuplet>

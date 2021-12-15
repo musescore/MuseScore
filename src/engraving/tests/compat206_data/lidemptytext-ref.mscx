@@ -314,7 +314,7 @@
           <bottomGap>13</bottomGap>
           <boxAutoSize>0</boxAutoSize>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Bass</text>
             </Text>
           </VBox>

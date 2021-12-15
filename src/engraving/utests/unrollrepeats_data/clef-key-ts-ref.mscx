@@ -143,7 +143,7 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Clef-Key-TS test case
 </text>
           </Text>
@@ -1425,12 +1425,12 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Clef-Key-TS test case
 </text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>TestPart</text>
             </Text>
           </VBox>

@@ -169,7 +169,7 @@ B</longName>
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>SATB Closed Score</text>
           </Text>
         </VBox>

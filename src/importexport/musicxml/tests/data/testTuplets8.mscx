@@ -97,15 +97,15 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Tuplets 8</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>MuseScore testfile</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Leon Vinken</text>
           </Text>
         </VBox>
@@ -124,7 +124,7 @@
             <p2 x="-0.139806" y="-1.53786"/>
             <baseNote>quarter</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             <direction>up</direction>
@@ -148,7 +148,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>
@@ -202,7 +202,7 @@
             <p2 x="-0.139806" y="-2.65631"/>
             <baseNote>quarter</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             <direction>up</direction>
@@ -219,7 +219,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>
@@ -280,7 +280,7 @@
             <p2 x="-0.139806" y="-1.53786"/>
             <baseNote>quarter</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             <direction>up</direction>
@@ -290,7 +290,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>

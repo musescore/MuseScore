@@ -108,11 +108,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Adeste Fideles</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>John F. Wade</text>
           </Text>
         </VBox>

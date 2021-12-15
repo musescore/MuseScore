@@ -967,15 +967,15 @@
         <height>20</height>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text><b>Dawn</b></text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Orchestrated from &quot;Dynamic Strings&quot;</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Originally Composed by<b> James Thistlewood
 </b>Arranged by <b>J. Y. Zheng</b>（郑加毅）
 </text>
