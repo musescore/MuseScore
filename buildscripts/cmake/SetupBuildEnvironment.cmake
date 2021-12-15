@@ -127,5 +127,10 @@ endif()
 if (OS_IS_MAC)
     set(MACOSX_DEPLOYMENT_TARGET 10.14)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
+
+    if (MUSE_COMPILE_MACOS_UNIVERSAL)
+        set(CMAKE_OSX_ARCHITECTURES x86_64 arm64)
+        # Otherwise, build for the architecture of the current machine only
+    endif()
 endif(OS_IS_MAC)
 
