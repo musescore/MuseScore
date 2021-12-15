@@ -3295,11 +3295,8 @@ void NotationInteraction::addText(TextStyleType type)
     apply();
 
     if (textBox) {
-        doSelect({ textBox }, SelectType::SINGLE, 0);
-        startEditText(textBox, PointF());
+        startEditText(textBox);
     }
-
-    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::addFiguredBass()
@@ -4247,6 +4244,124 @@ void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
 
     apply();
     startEditText(fbNew);
+}
+
+//! NOTE: Copied from ScoreView::textTab
+void NotationInteraction::navigateToNearText(MoveDirection direction)
+{
+    Ms::EngravingItem* oe = m_editData.element;
+    if (!oe || !oe->isTextBase()) {
+        return;
+    }
+
+    Ms::EngravingItem* op = dynamic_cast<Ms::EngravingItem*>(oe->parent());
+    if (!op || !(op->isSegment() || op->isNote())) {
+        return;
+    }
+
+    TextBase* ot = Ms::toTextBase(oe);
+    Ms::TextStyleType textStyleType = ot->textStyleType();
+    ElementType type = ot->type();
+    int staffIdx = ot->staffIdx();
+    bool back = direction == MoveDirection::Left;
+
+    // get prev/next element now, as current element may be deleted if empty
+    Ms::EngravingItem* el = back ? score()->prevElement() : score()->nextElement();
+
+    // find new note to add text to
+    bool here = false;      // prevent infinite loop (relevant if navigation is allowed to wrap around end of score)
+    while (el) {
+        if (el->isNote()) {
+            Note* n = Ms::toNote(el);
+            if (op->isNote() && n != op) {
+                break;
+            } else if (op->isSegment() && n->chord()->segment() != op) {
+                break;
+            } else if (here) {
+                break;
+            }
+            here = true;
+        } else if (el->isRest() && op->isSegment()) {
+            // skip rests, but still check for infinite loop
+            Rest* r = Ms::toRest(el);
+            if (r->segment() != op) {
+            } else if (here) {
+                break;
+            }
+            here = true;
+        }
+        // get prev/next note
+        score()->select(el);
+        Ms::EngravingItem* el2 = back ? score()->prevElement() : score()->nextElement();
+        // start/end of score reached
+        if (el2 == el) {
+            break;
+        }
+        el = el2;
+    }
+
+    if (!el || !el->isNote()) {
+        // nothing found, exit cleanly
+        if (op->selectable()) {
+            select({ op });
+        } else {
+            clearSelection();
+        }
+        return;
+    }
+
+    Note* nn = Ms::toNote(el);
+
+    // go to note
+    if (nn) {
+        score()->select(nn, SelectType::SINGLE);
+    }
+
+    // get existing text to edit
+    el = nullptr;
+    if (op->isNote()) {
+        // check element list of new note
+        for (Ms::EngravingItem* e : nn->el()) {
+            if (e->type() != type) {
+                continue;
+            }
+            TextBase* nt = Ms::toTextBase(e);
+            if (nt->textStyleType() == textStyleType) {
+                el = e;
+                break;
+            }
+        }
+    } else if (op->isSegment()) {
+        // check annotation list of new segment
+        Ms::Segment* ns = nn->chord()->segment();
+        for (Ms::EngravingItem* e : ns->annotations()) {
+            if (e->staffIdx() != staffIdx || e->type() != type) {
+                continue;
+            }
+            TextBase* nt = Ms::toTextBase(e);
+            if (nt->textStyleType() == textStyleType) {
+                el = e;
+                break;
+            }
+        }
+    }
+
+    if (el) {
+        // edit existing text
+        TextBase* text = dynamic_cast<TextBase*>(el);
+
+        if (text) {
+            startEditText(text);
+        }
+    } else {
+        // add new text if no existing element to edit
+        // TODO: for tempo text, mscore->addTempo() could be called
+        // but it pre-fills the text
+        // would be better to create empty tempo element
+        if (type != ElementType::TEMPO_TEXT) {
+            addText(textStyleType);
+        }
+    }
 }
 
 void NotationInteraction::addMelisma()

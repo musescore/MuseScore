@@ -231,6 +231,8 @@ public:
     void navigateToFiguredBassInNearMeasure(MoveDirection direction) override;
     void navigateToFiguredBass(const Fraction& ticks) override;
 
+    void navigateToNearText(MoveDirection direction) override;
+
     void addMelisma() override;
     void addLyricsVerse() override;
 

@@ -54,7 +54,9 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
     }
 
     MscReader msczReader(params);
-    msczReader.open();
+    if (!msczReader.open()) {
+        return make_ret(Ret::Code::InternalError);
+    }
 
     // Read score meta
     QByteArray scoreData = msczReader.readScoreFile();

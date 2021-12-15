@@ -1302,7 +1302,9 @@ bool NotationActionController::textNavigationAvailable() const
     static const QList<Ms::ElementType> allowedElements {
         Ms::ElementType::LYRICS,
         Ms::ElementType::HARMONY,
-        Ms::ElementType::FIGURED_BASS
+        Ms::ElementType::FIGURED_BASS,
+        Ms::ElementType::STICKING,
+        Ms::ElementType::FINGERING
     };
 
     return allowedElements.contains(element->type());
@@ -1360,6 +1362,8 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
         currentNotationInteraction()->navigateToHarmonyInNearBeat(direction, noterest);
     } else if (element->isFiguredBass()) {
         currentNotationInteraction()->navigateToFiguredBassInNearBeat(direction);
+    } else {
+        currentNotationInteraction()->navigateToNearText(direction);
     }
 }
 
