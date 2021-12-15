@@ -50,22 +50,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ 
-          (github.event_name != 'workflow_dispatch' 
-           || (contains(inputs.platforms, 'linux_x64') && contains(inputs.platforms, 'linux_arm64'))) 
-          && fromJson('["linux_x64","linux_arm64"]') 
-          || (contains(inputs.platforms, 'linux_x64') && fromJson('["linux_x64"]') 
-          || (contains(inputs.platforms, 'linux_arm64') && fromJson('["linux_arm64"]') 
-          || fromJson('[]'))) 
+        platform: ${{
+          (github.event_name != 'workflow_dispatch'
+           || (contains(inputs.platforms, 'linux_x64') && contains(inputs.platforms, 'linux_arm64')))
+          && fromJson('["linux_x64","linux_arm64"]')
+          || (contains(inputs.platforms, 'linux_x64') && fromJson('["linux_x64"]')
+          || (contains(inputs.platforms, 'linux_arm64') && fromJson('["linux_arm64"]')
+          || fromJson('[]')))
           }}
         include:
           - platform: linux_x64
             arch: x86_64
             runs-on: ubuntu-22.04
+            qt-host: linux
+            qt-arch: linux_gcc_64
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
             runs-on: ubuntu-22.04-arm
+            qt-host: linux_arm64
+            qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
     steps:
     - name: Cancel Previous Runs
@@ -165,16 +169,25 @@ jobs:
 
     - name: Register gcc problem matcher
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
-  
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.*'
+        host: ${{ matrix.qt-host }}
+        target: 'desktop'
+        arch: ${{ matrix.qt-arch }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }}
+
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2

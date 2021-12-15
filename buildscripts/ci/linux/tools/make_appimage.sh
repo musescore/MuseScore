@@ -118,8 +118,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 # Remove Qt plugins for MySQL and PostgreSQL to prevent
 # linuxdeploy-plugin-qt from failing due to missing dependencies.
 # SQLite plugin alone should be enough for our AppImage.
-# rm -f ${QT_PATH}/plugins/sqldrivers/libqsql{mysql,psql}.so
-qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
+# rm -f ${QT_ROOT_DIR}/plugins/sqldrivers/libqsql{mysql,psql}.so
+qt_sql_drivers_path="${QT_ROOT_DIR}/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
 [ -f "${qt_sql_drivers_path}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
@@ -249,7 +249,7 @@ for file in "${additional_qt_components[@]}"; do
     continue
   fi
   mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
+  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
