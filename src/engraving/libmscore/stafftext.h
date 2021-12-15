@@ -38,7 +38,7 @@ class StaffText final : public StaffTextBase
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    StaffText(Segment* parent = 0, Tid = Tid::STAFF);
+    StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
     void layout() override;

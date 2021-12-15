@@ -730,7 +730,7 @@ public:
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(Tid type);
+    TextBase* addText(TextStyleType type);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
@@ -894,7 +894,7 @@ public:
     int styleI(Sid idx) const { return style().styleI(idx); }
 
     void setStyleValue(Sid sid, const mu::engraving::PropertyValue& value) { style().set(sid, value); }
-    QString getTextStyleUserName(Tid tid);
+    QString getTextStyleUserName(TextStyleType tid);
     qreal spatium() const { return styleD(Sid::spatium); }
     void setSpatium(qreal v) { setStyleValue(Sid::spatium, v); }
 
@@ -961,7 +961,7 @@ public:
 
     bool defaultsRead() const { return _defaultsRead; }
     void setDefaultsRead(bool b) { _defaultsRead = b; }
-    Text* getText(Tid subtype) const;
+    Text* getText(TextStyleType subtype) const;
 
     bool enableVerticalSpread() const;
     void setEnableVerticalSpread(bool val);

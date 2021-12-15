@@ -35,7 +35,7 @@ namespace Ms {
 class MeasureNumberBase : public TextBase
 {
 public:
-    MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, Tid = Tid::DEFAULT);
+    MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
     mu::engraving::PropertyValue getProperty(Pid id) const override;

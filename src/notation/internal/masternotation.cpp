@@ -312,7 +312,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
                 delete nvb;
             }
 
-            auto setText = [score](Ms::Tid textItemId, const QString& text) {
+            auto setText = [score](Ms::TextStyleType textItemId, const QString& text) {
                 Ms::TextBase* textItem = score->getText(textItemId);
 
                 if (!textItem) {
@@ -325,16 +325,16 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
             };
 
             if (!title.isEmpty()) {
-                setText(Ms::Tid::TITLE, title);
+                setText(Ms::TextStyleType::TITLE, title);
             }
             if (!subtitle.isEmpty()) {
-                setText(Ms::Tid::SUBTITLE, subtitle);
+                setText(Ms::TextStyleType::SUBTITLE, subtitle);
             }
             if (!composer.isEmpty()) {
-                setText(Ms::Tid::COMPOSER, composer);
+                setText(Ms::TextStyleType::COMPOSER, composer);
             }
             if (!lyricist.isEmpty()) {
-                setText(Ms::Tid::POET, lyricist);
+                setText(Ms::TextStyleType::POET, lyricist);
             }
         } else if (nvb) {
             delete nvb;

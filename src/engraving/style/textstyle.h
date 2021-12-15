@@ -30,15 +30,15 @@ namespace Ms {
 
 typedef std::array<StyledProperty, TEXT_STYLE_SIZE> TextStyle;
 
-const TextStyle* textStyle(Tid);
+const TextStyle* textStyle(TextStyleType);
 const TextStyle* textStyle(const char*);
 
-const char* textStyleName(Tid);
-QString textStyleUserName(Tid);
-Tid textStyleFromName(const QString&);
+const char* textStyleName(TextStyleType);
+QString textStyleUserName(TextStyleType);
+TextStyleType textStyleFromName(const QString&);
 
-const std::vector<Tid>& allTextStyles();
-const std::vector<Tid>& primaryTextStyles();
+const std::vector<TextStyleType>& allTextStyles();
+const std::vector<TextStyleType>& primaryTextStyles();
 }
 
 #endif // MU_ENGRAVING_TEXTSTYLE_H

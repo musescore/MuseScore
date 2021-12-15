@@ -54,7 +54,7 @@ private:
 
 public:
     Marker(EngravingItem* parent);
-    Marker(EngravingItem* parent, Tid);
+    Marker(EngravingItem* parent, TextStyleType);
 
     void setMarkerType(Type t);
     Type markerType() const { return _markerType; }

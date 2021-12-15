@@ -58,7 +58,7 @@ static const ElementStyle tempoStyle {
 //---------------------------------------------------------
 
 TempoText::TempoText(Segment* parent)
-    : TextBase(ElementType::TEMPO_TEXT, parent, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
+    : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlags(ElementFlag::SYSTEM))
 {
     initElementStyle(&tempoStyle);
     _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
@@ -438,7 +438,7 @@ PropertyValue TempoText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::TEMPO;
+        return TextStyleType::TEMPO;
     case Pid::TEMPO:
         return 2.0;
     case Pid::TEMPO_FOLLOW_TEXT:

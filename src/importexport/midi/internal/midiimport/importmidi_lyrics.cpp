@@ -161,11 +161,11 @@ bool isTitlePrefix(const QString& text)
 
 void addTitleToScore(Score* score, const QString& string, int textCounter)
 {
-    Tid ssid = Tid::DEFAULT;
+    TextStyleType ssid = TextStyleType::DEFAULT;
     if (textCounter == 1) {
-        ssid = Tid::TITLE;
+        ssid = TextStyleType::TITLE;
     } else if (textCounter == 2) {
-        ssid = Tid::COMPOSER;
+        ssid = TextStyleType::COMPOSER;
     }
 
     MeasureBase* measure = score->first();

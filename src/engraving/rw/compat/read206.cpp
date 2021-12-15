@@ -264,50 +264,50 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
 
     struct StyleTable {
         const char* name;
-        Tid ss;
+        TextStyleType ss;
     } styleTable[] = {
-        { "",                        Tid::DEFAULT },
-        { "Title",                   Tid::TITLE },
-        { "Subtitle",                Tid::SUBTITLE },
-        { "Composer",                Tid::COMPOSER },
-        { "Lyricist",                Tid::POET },
-        { "Lyrics Odd Lines",        Tid::LYRICS_ODD },
-        { "Lyrics Even Lines",       Tid::LYRICS_EVEN },
-        { "Fingering",               Tid::FINGERING },
-        { "LH Guitar Fingering",     Tid::LH_GUITAR_FINGERING },
-        { "RH Guitar Fingering",     Tid::RH_GUITAR_FINGERING },
-        { "String Number",           Tid::STRING_NUMBER },
-        { "Instrument Name (Long)",  Tid::INSTRUMENT_LONG },
-        { "Instrument Name (Short)", Tid::INSTRUMENT_SHORT },
-        { "Instrument Name (Part)",  Tid::INSTRUMENT_EXCERPT },
-        { "Dynamics",                Tid::DYNAMICS },
-        { "Technique",               Tid::EXPRESSION },
-        { "Tempo",                   Tid::TEMPO },
-        { "Metronome",               Tid::METRONOME },
-        { "Measure Number",          Tid::MEASURE_NUMBER },
-        { "Translator",              Tid::TRANSLATOR },
-        { "Tuplet",                  Tid::TUPLET },
-        { "System",                  Tid::SYSTEM },
-        { "Staff",                   Tid::STAFF },
-        { "Chord Symbol",            Tid::HARMONY_A },
-        { "Rehearsal Mark",          Tid::REHEARSAL_MARK },
-        { "Repeat Text Left",        Tid::REPEAT_LEFT },
-        { "Repeat Text Right",       Tid::REPEAT_RIGHT },
-        { "Frame",                   Tid::FRAME },
-        { "Text Line",               Tid::TEXTLINE },
-        { "Glissando",               Tid::GLISSANDO },
-        { "Ottava",                  Tid::OTTAVA },
-        { "Pedal",                   Tid::PEDAL },
-        { "Hairpin",                 Tid::HAIRPIN },
-        { "Bend",                    Tid::BEND },
-        { "Header",                  Tid::HEADER },
-        { "Footer",                  Tid::FOOTER },
-        { "Instrument Change",       Tid::INSTRUMENT_CHANGE },
-        { "Repeat Text",             Tid::IGNORED_TYPES, },         // Repeat Text style no longer exists
-        { "Figured Bass",            Tid::IGNORED_TYPES, },         // F.B. data are in style properties
-        { "Volta",                   Tid::VOLTA },
+        { "",                        TextStyleType::DEFAULT },
+        { "Title",                   TextStyleType::TITLE },
+        { "Subtitle",                TextStyleType::SUBTITLE },
+        { "Composer",                TextStyleType::COMPOSER },
+        { "Lyricist",                TextStyleType::POET },
+        { "Lyrics Odd Lines",        TextStyleType::LYRICS_ODD },
+        { "Lyrics Even Lines",       TextStyleType::LYRICS_EVEN },
+        { "Fingering",               TextStyleType::FINGERING },
+        { "LH Guitar Fingering",     TextStyleType::LH_GUITAR_FINGERING },
+        { "RH Guitar Fingering",     TextStyleType::RH_GUITAR_FINGERING },
+        { "String Number",           TextStyleType::STRING_NUMBER },
+        { "Instrument Name (Long)",  TextStyleType::INSTRUMENT_LONG },
+        { "Instrument Name (Short)", TextStyleType::INSTRUMENT_SHORT },
+        { "Instrument Name (Part)",  TextStyleType::INSTRUMENT_EXCERPT },
+        { "Dynamics",                TextStyleType::DYNAMICS },
+        { "Technique",               TextStyleType::EXPRESSION },
+        { "Tempo",                   TextStyleType::TEMPO },
+        { "Metronome",               TextStyleType::METRONOME },
+        { "Measure Number",          TextStyleType::MEASURE_NUMBER },
+        { "Translator",              TextStyleType::TRANSLATOR },
+        { "Tuplet",                  TextStyleType::TUPLET },
+        { "System",                  TextStyleType::SYSTEM },
+        { "Staff",                   TextStyleType::STAFF },
+        { "Chord Symbol",            TextStyleType::HARMONY_A },
+        { "Rehearsal Mark",          TextStyleType::REHEARSAL_MARK },
+        { "Repeat Text Left",        TextStyleType::REPEAT_LEFT },
+        { "Repeat Text Right",       TextStyleType::REPEAT_RIGHT },
+        { "Frame",                   TextStyleType::FRAME },
+        { "Text Line",               TextStyleType::TEXTLINE },
+        { "Glissando",               TextStyleType::GLISSANDO },
+        { "Ottava",                  TextStyleType::OTTAVA },
+        { "Pedal",                   TextStyleType::PEDAL },
+        { "Hairpin",                 TextStyleType::HAIRPIN },
+        { "Bend",                    TextStyleType::BEND },
+        { "Header",                  TextStyleType::HEADER },
+        { "Footer",                  TextStyleType::FOOTER },
+        { "Instrument Change",       TextStyleType::INSTRUMENT_CHANGE },
+        { "Repeat Text",             TextStyleType::IGNORED_TYPES, },         // Repeat Text style no longer exists
+        { "Figured Bass",            TextStyleType::IGNORED_TYPES, },         // F.B. data are in style properties
+        { "Volta",                   TextStyleType::VOLTA },
     };
-    Tid ss = Tid::TEXT_TYPES;
+    TextStyleType ss = TextStyleType::TEXT_TYPES;
     for (const auto& i : styleTable) {
         if (name == i.name) {
             ss = i.ss;
@@ -315,19 +315,19 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         }
     }
 
-    if (ss == Tid::IGNORED_TYPES) {
+    if (ss == TextStyleType::IGNORED_TYPES) {
         return;
     }
 
     bool isExcessStyle = false;
-    if (ss == Tid::TEXT_TYPES) {
+    if (ss == TextStyleType::TEXT_TYPES) {
         ss = e.addUserTextStyle(name);
-        if (ss == Tid::TEXT_TYPES) {
+        if (ss == TextStyleType::TEXT_TYPES) {
             qDebug("unhandled substyle <%s>", qPrintable(name));
             isExcessStyle = true;
         } else {
-            int idx = int(ss) - int(Tid::USER1);
-            if ((int(ss) < int(Tid::USER1)) || (int(ss) > int(Tid::USER12))) {
+            int idx = int(ss) - int(TextStyleType::USER1);
+            if ((int(ss) < int(TextStyleType::USER1)) || (int(ss) > int(TextStyleType::USER12))) {
                 qDebug("User style index %d outside of range.", idx);
                 return;
             }
@@ -1181,7 +1181,7 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
             // Init the text with a style that can't be stored as a user style
             // due to the limit on the number of user styles possible.
             // Use User-1, since it has all the possible user style pids
-            t->initTid(Tid::DEFAULT);
+            t->initTid(TextStyleType::DEFAULT);
             std::map<Sid, PropertyValue> styleVals = excessTextStyles206[s];
             for (const StyledProperty& p : *textStyle("User-1")) {
                 if (t->getProperty(p.pid) == t->propertyDefault(p.pid) && styleVals.find(p.sid) != styleVals.end()) {
@@ -1189,12 +1189,12 @@ static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBas
                 }
             }
         } else {
-            Tid ss;
+            TextStyleType ss;
             ss = e.lookupUserTextStyle(s);
-            if (ss == Tid::TEXT_TYPES) {
+            if (ss == TextStyleType::TEXT_TYPES) {
                 ss = textStyleFromName(s);
             }
-            if (ss != Tid::TEXT_TYPES) {
+            if (ss != TextStyleType::TEXT_TYPES) {
                 t->initTid(ss);
             }
         }
@@ -2008,17 +2008,17 @@ static bool readTextLineProperties(XmlReader& e, const ReadContext& ctx, TextLin
     const QStringRef& tag(e.name());
 
     if (tag == "beginText") {
-        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
+        Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setBeginText(text->xmlText());
         delete text;
     } else if (tag == "continueText") {
-        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
+        Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setContinueText(text->xmlText());
         delete text;
     } else if (tag == "endText") {
-        Text* text = Factory::createText(ctx.dummy(), Tid::DEFAULT, false);
+        Text* text = Factory::createText(ctx.dummy(), TextStyleType::DEFAULT, false);
         readText206(e, ctx, text, tl);
         tl->setEndText(text->xmlText());
         delete text;
@@ -3281,7 +3281,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             }
             score->setScoreFont(ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString()));
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = Factory::createText(score->dummy(), Tid::DEFAULT, false);
+            Text* text = Factory::createText(score->dummy(), TextStyleType::DEFAULT, false);
             readText206(e, ctx, text, text);
             score->setMetaTag("copyright", text->xmlText());
             delete text;

@@ -174,7 +174,7 @@ public:
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
-    virtual void addText(TextType type) = 0;
+    virtual void addText(TextStyleType type) = 0;
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;

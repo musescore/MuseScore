@@ -510,38 +510,38 @@ int XmlReader::spannerId(const Spanner* s)
 //      (too many user text styles)
 //---------------------------------------------------------
 
-Tid XmlReader::addUserTextStyle(const QString& name)
+TextStyleType XmlReader::addUserTextStyle(const QString& name)
 {
     qDebug("%s", qPrintable(name));
-    Tid id = Tid::TEXT_TYPES;
+    TextStyleType id = TextStyleType::TEXT_TYPES;
     if (userTextStyles.size() == 0) {
-        id = Tid::USER1;
+        id = TextStyleType::USER1;
     } else if (userTextStyles.size() == 1) {
-        id = Tid::USER2;
+        id = TextStyleType::USER2;
     } else if (userTextStyles.size() == 2) {
-        id = Tid::USER3;
+        id = TextStyleType::USER3;
     } else if (userTextStyles.size() == 3) {
-        id = Tid::USER4;
+        id = TextStyleType::USER4;
     } else if (userTextStyles.size() == 4) {
-        id = Tid::USER5;
+        id = TextStyleType::USER5;
     } else if (userTextStyles.size() == 5) {
-        id = Tid::USER6;
+        id = TextStyleType::USER6;
     } else if (userTextStyles.size() == 6) {
-        id = Tid::USER7;
+        id = TextStyleType::USER7;
     } else if (userTextStyles.size() == 7) {
-        id = Tid::USER8;
+        id = TextStyleType::USER8;
     } else if (userTextStyles.size() == 8) {
-        id = Tid::USER9;
+        id = TextStyleType::USER9;
     } else if (userTextStyles.size() == 9) {
-        id = Tid::USER10;
+        id = TextStyleType::USER10;
     } else if (userTextStyles.size() == 10) {
-        id = Tid::USER11;
+        id = TextStyleType::USER11;
     } else if (userTextStyles.size() == 11) {
-        id = Tid::USER12;
+        id = TextStyleType::USER12;
     } else {
         qDebug("too many user defined textstyles");
     }
-    if (id != Tid::TEXT_TYPES) {
+    if (id != TextStyleType::TEXT_TYPES) {
         userTextStyles.push_back({ name, id });
     }
     return id;
@@ -551,14 +551,14 @@ Tid XmlReader::addUserTextStyle(const QString& name)
 //   lookupUserTextStyle
 //---------------------------------------------------------
 
-Tid XmlReader::lookupUserTextStyle(const QString& name) const
+TextStyleType XmlReader::lookupUserTextStyle(const QString& name) const
 {
     for (const auto& i : userTextStyles) {
         if (i.name == name) {
             return i.ss;
         }
     }
-    return Tid::TEXT_TYPES;         // not found
+    return TextStyleType::TEXT_TYPES;         // not found
 }
 
 //---------------------------------------------------------

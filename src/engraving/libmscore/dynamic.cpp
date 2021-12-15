@@ -117,7 +117,7 @@ static const ElementStyle dynamicsStyle {
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Segment* parent)
-    : TextBase(ElementType::DYNAMIC, parent, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::DYNAMIC, parent, TextStyleType::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _velocity    = -1;
     _dynRange    = DynamicRange::PART;
@@ -539,7 +539,7 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::DYNAMICS;
+        return TextStyleType::DYNAMICS;
     case Pid::DYNAMIC_RANGE:
         return DynamicRange::PART;
     case Pid::VELOCITY:

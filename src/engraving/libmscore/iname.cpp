@@ -51,7 +51,7 @@ static const ElementStyle shortInstrumentStyle {
 //---------------------------------------------------------
 
 InstrumentName::InstrumentName(System* s)
-    : TextBase(ElementType::INSTRUMENT_NAME, s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING)
+    : TextBase(ElementType::INSTRUMENT_NAME, s, TextStyleType::INSTRUMENT_LONG, ElementFlag::NOTHING)
 {
     setFlag(ElementFlag::MOVABLE, false);
     setInstrumentNameType(InstrumentNameType::LONG);
@@ -89,10 +89,10 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 {
     _instrumentNameType = st;
     if (st == InstrumentNameType::SHORT) {
-        setTid(Tid::INSTRUMENT_SHORT);
+        setTid(TextStyleType::INSTRUMENT_SHORT);
         initElementStyle(&shortInstrumentStyle);
     } else {
-        setTid(Tid::INSTRUMENT_LONG);
+        setTid(TextStyleType::INSTRUMENT_LONG);
         initElementStyle(&longInstrumentStyle);
     }
 }

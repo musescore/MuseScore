@@ -2907,12 +2907,12 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         }
     }
     if (!gp->title.isEmpty()) {
-        Text* s = Factory::createText(score->dummy(), Tid::TITLE);
+        Text* s = Factory::createText(score->dummy(), TextStyleType::TITLE);
         s->setPlainText(gp->title);
         m->add(s);
     }
     if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
-        Text* s = Factory::createText(score->dummy(), Tid::SUBTITLE);
+        Text* s = Factory::createText(score->dummy(), TextStyleType::SUBTITLE);
         QString str;
         if (!gp->subtitle.isEmpty()) {
             str.append(gp->subtitle);
@@ -2933,7 +2933,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         m->add(s);
     }
     if (!gp->composer.isEmpty()) {
-        Text* s = Factory::createText(score->dummy(), Tid::COMPOSER);
+        Text* s = Factory::createText(score->dummy(), TextStyleType::COMPOSER);
         s->setPlainText(gp->composer);
         m->add(s);
     }
@@ -3028,7 +3028,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             pscore->addMeasure(mb, measure);
             measure = mb;
         }
-        Text* txt = Factory::createText(pscore->dummy(), Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(pscore->dummy(), TextStyleName::INSTRUMENT_EXCERPT);
         txt->setPlainText(part->longName());
         measure->add(txt);
 

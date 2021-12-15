@@ -2171,7 +2171,7 @@ void Chord::layoutPitched()
         for (EngravingItem* e : note->el()) {
             if (e->isFingering() && e->autoplace()) {
                 Fingering* f = toFingering(e);
-                if (f->layoutType() == ElementType::NOTE && f->tid() == Tid::LH_GUITAR_FINGERING) {
+                if (f->layoutType() == ElementType::NOTE && f->tid() == TextStyleType::LH_GUITAR_FINGERING) {
                     alignNote.push_back(f);
                     if (!leftFound) {
                         leftFound = true;

@@ -49,7 +49,7 @@ TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
     setBoxHeight(Spatium(1));
-    _text  = Factory::createText(this, Tid::FRAME);
+    _text  = Factory::createText(this, TextStyleType::FRAME);
     _text->setLayoutToParentWidth(true);
     _text->setParent(this);
 }
@@ -164,7 +164,7 @@ void TBox::remove(EngravingItem* el)
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
         qDebug("TBox::remove() - replacing _text");
-        _text = Factory::createText(this, Tid::FRAME);
+        _text = Factory::createText(this, TextStyleType::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);
     } else {

@@ -38,7 +38,7 @@ static const ElementStyle systemStyle {
 //   SystemText
 //---------------------------------------------------------
 
-SystemText::SystemText(Segment* parent, Tid tid)
+SystemText::SystemText(Segment* parent, TextStyleType tid)
     : StaffTextBase(ElementType::SYSTEM_TEXT, parent, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&systemStyle);
@@ -52,7 +52,7 @@ engraving::PropertyValue SystemText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::SYSTEM;
+        return TextStyleType::SYSTEM;
     default:
         return TextBase::propertyDefault(id);
     }

@@ -189,7 +189,7 @@ void Tuplet::layout()
     qreal _spatium = spatium();
     if (_numberType != TupletNumberType::NO_TEXT) {
         if (_number == 0) {
-            _number = Factory::createText(this, Tid::TUPLET);
+            _number = Factory::createText(this, TextStyleType::TUPLET);
             _number->setComposition(true);
             _number->setTrack(track());
             _number->setParent(this);
@@ -878,7 +878,7 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {
-        _number = Factory::createText(this, Tid::TUPLET);
+        _number = Factory::createText(this, TextStyleType::TUPLET);
         _number->setComposition(true);
         _number->setParent(this);
         resetNumberProperty();
@@ -1201,7 +1201,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return Tid::TUPLET;
+        return TextStyleType::TUPLET;
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
@@ -1224,7 +1224,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
     {
-        PropertyValue v = EngravingObject::propertyDefault(id, Tid::DEFAULT);
+        PropertyValue v = EngravingObject::propertyDefault(id, TextStyleType::DEFAULT);
         if (v.isValid()) {
             return v;
         }

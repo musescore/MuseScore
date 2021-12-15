@@ -34,7 +34,7 @@ namespace Ms {
 //   StaffTextBase
 //---------------------------------------------------------
 
-StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, Tid tid, ElementFlags flags)
+StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags flags)
     : TextBase(type, parent, tid, flags)
 {
     setSwingParameters(Constant::division / 2, 60);

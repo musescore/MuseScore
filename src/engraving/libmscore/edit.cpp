@@ -584,16 +584,16 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     return slur;
 }
 
-TextBase* Score::addText(Tid type)
+TextBase* Score::addText(TextStyleType type)
 {
     TextBase* textBox = nullptr;
 
     switch (type) {
-    case Tid::TITLE:
-    case Tid::SUBTITLE:
-    case Tid::COMPOSER:
-    case Tid::POET:
-    case Tid::INSTRUMENT_EXCERPT: {
+    case TextStyleType::TITLE:
+    case TextStyleType::SUBTITLE:
+    case TextStyleType::COMPOSER:
+    case TextStyleType::POET:
+    case TextStyleType::INSTRUMENT_EXCERPT: {
         MeasureBase* measure = first();
         if (!measure || !measure->isVBox()) {
             insertMeasure(ElementType::VBOX, measure);
@@ -604,7 +604,7 @@ TextBase* Score::addText(Tid type)
         undoAddElement(textBox);
         break;
     }
-    case Tid::REHEARSAL_MARK: {
+    case TextStyleType::REHEARSAL_MARK: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
@@ -613,36 +613,36 @@ TextBase* Score::addText(Tid type)
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::STAFF: {
+    case TextStyleType::STAFF: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), Tid::STAFF);
+        textBox = new StaffText(this->dummy()->segment(), TextStyleType::STAFF);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::SYSTEM: {
+    case TextStyleType::SYSTEM: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
         }
-        textBox = new SystemText(this->dummy()->segment(), Tid::SYSTEM);
+        textBox = new SystemText(this->dummy()->segment(), TextStyleType::SYSTEM);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::EXPRESSION: {
+    case TextStyleType::EXPRESSION: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
         }
-        textBox = new StaffText(this->dummy()->segment(), Tid::EXPRESSION);
+        textBox = new StaffText(this->dummy()->segment(), TextStyleType::EXPRESSION);
         textBox->setPlacement(PlacementV::BELOW);
         textBox->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::INSTRUMENT_CHANGE: {
+    case TextStyleType::INSTRUMENT_CHANGE: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
@@ -651,7 +651,7 @@ TextBase* Score::addText(Tid type)
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::STICKING: {
+    case TextStyleType::STICKING: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
@@ -660,10 +660,10 @@ TextBase* Score::addText(Tid type)
         chordRest->undoAddAnnotation(textBox);
         break;
     }
-    case Tid::FINGERING:
-    case Tid::LH_GUITAR_FINGERING:
-    case Tid::RH_GUITAR_FINGERING:
-    case Tid::STRING_NUMBER: {
+    case TextStyleType::FINGERING:
+    case TextStyleType::LH_GUITAR_FINGERING:
+    case TextStyleType::RH_GUITAR_FINGERING:
+    case TextStyleType::STRING_NUMBER: {
         EngravingItem* element = getSelectedElement();
         if (!element || !element->isNote()) {
             break;
@@ -679,9 +679,9 @@ TextBase* Score::addText(Tid type)
         undoAddElement(textBox);
         break;
     }
-    case Tid::HARMONY_A:
-    case Tid::HARMONY_ROMAN:
-    case Tid::HARMONY_NASHVILLE: {
+    case TextStyleType::HARMONY_A:
+    case TextStyleType::HARMONY_ROMAN:
+    case TextStyleType::HARMONY_NASHVILLE: {
         int track = -1;
         Segment* newParent = nullptr;
         EngravingItem* element = selection().element();
@@ -705,10 +705,10 @@ TextBase* Score::addText(Tid type)
         harmony->setTrack(track);
         harmony->setParent(newParent);
 
-        static QMap<Tid, HarmonyType> harmonyTypes = {
-            { Tid::HARMONY_A, HarmonyType::STANDARD },
-            { Tid::HARMONY_ROMAN, HarmonyType::ROMAN },
-            { Tid::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }
+        static QMap<TextStyleType, HarmonyType> harmonyTypes = {
+            { TextStyleType::HARMONY_A, HarmonyType::STANDARD },
+            { TextStyleType::HARMONY_ROMAN, HarmonyType::ROMAN },
+            { TextStyleType::HARMONY_NASHVILLE, HarmonyType::NASHVILLE }
         };
         harmony->setHarmonyType(harmonyTypes[type]);
 
@@ -716,7 +716,7 @@ TextBase* Score::addText(Tid type)
         undoAddElement(textBox);
         break;
     }
-    case Tid::LYRICS_ODD: {
+    case TextStyleType::LYRICS_ODD: {
         EngravingItem* element = selection().element();
         if (element == 0 || (!element->isNote() && !element->isLyrics() && !element->isRest())) {
             break;
@@ -745,7 +745,7 @@ TextBase* Score::addText(Tid type)
         undoAddElement(textBox);
         break;
     }
-    case Tid::TEMPO: {
+    case TextStyleType::TEMPO: {
         ChordRest* chordRest = getSelectedChordRest();
         if (!chordRest) {
             break;
@@ -5167,7 +5167,7 @@ void Score::undoAddElement(EngravingItem* element)
         // don't link part name
         if (et == ElementType::TEXT) {
             Text* t = toText(element);
-            if (t->tid() == Tid::INSTRUMENT_EXCERPT) {
+            if (t->tid() == TextStyleType::INSTRUMENT_EXCERPT) {
                 links = 0;
             }
         }

@@ -1002,79 +1002,79 @@ const TextStyle user12TextStyle { {
 //   TextStyleName
 //---------------------------------------------------------
 
-struct TextStyleName {
+struct TextStyleItem {
     const char* name;
     const TextStyle* ts;
-    Tid tid;
+    TextStyleType tid;
 };
 
 // Must be in sync with Tid enum (in types.h)
 
-static constexpr std::array<TextStyleName, size_t(Tid::TEXT_TYPES)> textStyles { {
-    { QT_TRANSLATE_NOOP("TextStyle", "Default"),                 &defaultTextStyle,           Tid::DEFAULT },
+static constexpr std::array<TextStyleItem, size_t(TextStyleType::TEXT_TYPES)> textStyles { {
+    { QT_TRANSLATE_NOOP("TextStyle", "Default"),                 &defaultTextStyle,           TextStyleType::DEFAULT },
 // Page-orientde styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleTextStyle,             Tid::TITLE },
-    { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleTextStyle,          Tid::SUBTITLE },
-    { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerTextStyle,          Tid::COMPOSER },
-    { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistTextStyle,          Tid::POET },
-    { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorTextStyle,        Tid::TRANSLATOR },
-    { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameTextStyle,             Tid::FRAME },
-    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Part)"),  &partInstrumentTextStyle,    Tid::INSTRUMENT_EXCERPT },
-    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Long)"),  &longInstrumentTextStyle,    Tid::INSTRUMENT_LONG },
-    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Short)"), &shortInstrumentTextStyle,   Tid::INSTRUMENT_SHORT },
-    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeTextStyle,  Tid::INSTRUMENT_CHANGE },
-    { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerTextStyle,            Tid::HEADER },
-    { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerTextStyle,            Tid::FOOTER },
+    { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleTextStyle,             TextStyleType::TITLE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Subtitle"),                &subTitleTextStyle,          TextStyleType::SUBTITLE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Composer"),                &composerTextStyle,          TextStyleType::COMPOSER },
+    { QT_TRANSLATE_NOOP("TextStyle", "Lyricist"),                &lyricistTextStyle,          TextStyleType::POET },
+    { QT_TRANSLATE_NOOP("TextStyle", "Translator"),              &translatorTextStyle,        TextStyleType::TRANSLATOR },
+    { QT_TRANSLATE_NOOP("TextStyle", "Frame"),                   &frameTextStyle,             TextStyleType::FRAME },
+    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Part)"),  &partInstrumentTextStyle,    TextStyleType::INSTRUMENT_EXCERPT },
+    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Long)"),  &longInstrumentTextStyle,    TextStyleType::INSTRUMENT_LONG },
+    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Name (Short)"), &shortInstrumentTextStyle,   TextStyleType::INSTRUMENT_SHORT },
+    { QT_TRANSLATE_NOOP("TextStyle", "Instrument Change"),       &instrumentChangeTextStyle,  TextStyleType::INSTRUMENT_CHANGE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Header"),                  &headerTextStyle,            TextStyleType::HEADER },
+    { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerTextStyle,            TextStyleType::FOOTER },
 // Measure-oriented styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberTextStyle,     Tid::MEASURE_NUMBER },
-    { QT_TRANSLATE_NOOP("TextStyle", "Multimeasure Rest Range"), &mmRestRangeTextStyle,       Tid::MMREST_RANGE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberTextStyle,     TextStyleType::MEASURE_NUMBER },
+    { QT_TRANSLATE_NOOP("TextStyle", "Multimeasure Rest Range"), &mmRestRangeTextStyle,       TextStyleType::MMREST_RANGE },
 // Sytem-level styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoTextStyle,             Tid::TEMPO },
-    { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeTextStyle,         Tid::METRONOME },
-    { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftTextStyle,        Tid::REPEAT_LEFT },
-    { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightTextStyle,       Tid::REPEAT_RIGHT },
-    { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkTextStyle,     Tid::REHEARSAL_MARK },
-    { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemTextStyle,            Tid::SYSTEM },
+    { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoTextStyle,             TextStyleType::TEMPO },
+    { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeTextStyle,         TextStyleType::METRONOME },
+    { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Left"),        &repeatLeftTextStyle,        TextStyleType::REPEAT_LEFT },
+    { QT_TRANSLATE_NOOP("TextStyle", "Repeat Text Right"),       &repeatRightTextStyle,       TextStyleType::REPEAT_RIGHT },
+    { QT_TRANSLATE_NOOP("TextStyle", "Rehearsal Mark"),          &rehearsalMarkTextStyle,     TextStyleType::REHEARSAL_MARK },
+    { QT_TRANSLATE_NOOP("TextStyle", "System"),                  &systemTextStyle,            TextStyleType::SYSTEM },
 // Staff oriented styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffTextStyle,             Tid::STAFF },
-    { QT_TRANSLATE_NOOP("TextStyle", "Expression"),              &expressionTextStyle,        Tid::EXPRESSION },
-    { QT_TRANSLATE_NOOP("TextStyle", "Dynamics"),                &dynamicsTextStyle,          Tid::DYNAMICS },
-    { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinTextStyle,           Tid::HAIRPIN },
-    { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddTextStyle,         Tid::LYRICS_ODD },
-    { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenTextStyle,        Tid::LYRICS_EVEN },
-    { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolTextStyleA,      Tid::HARMONY_A },
-    { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol (Alternate)"), &chordSymbolTextStyleB,      Tid::HARMONY_B },
-    { QT_TRANSLATE_NOOP("TextStyle", "Roman Numeral Analysis"),  &romanNumeralTextStyle,      Tid::HARMONY_ROMAN },
-    { QT_TRANSLATE_NOOP("TextStyle", "Nashville Number"),        &nashvilleNumberTextStyle,   Tid::HARMONY_NASHVILLE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Staff"),                   &staffTextStyle,             TextStyleType::STAFF },
+    { QT_TRANSLATE_NOOP("TextStyle", "Expression"),              &expressionTextStyle,        TextStyleType::EXPRESSION },
+    { QT_TRANSLATE_NOOP("TextStyle", "Dynamics"),                &dynamicsTextStyle,          TextStyleType::DYNAMICS },
+    { QT_TRANSLATE_NOOP("TextStyle", "Hairpin"),                 &hairpinTextStyle,           TextStyleType::HAIRPIN },
+    { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Odd Lines"),        &lyricsOddTextStyle,         TextStyleType::LYRICS_ODD },
+    { QT_TRANSLATE_NOOP("TextStyle", "Lyrics Even Lines"),       &lyricsEvenTextStyle,        TextStyleType::LYRICS_EVEN },
+    { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol"),            &chordSymbolTextStyleA,      TextStyleType::HARMONY_A },
+    { QT_TRANSLATE_NOOP("TextStyle", "Chord Symbol (Alternate)"), &chordSymbolTextStyleB,      TextStyleType::HARMONY_B },
+    { QT_TRANSLATE_NOOP("TextStyle", "Roman Numeral Analysis"),  &romanNumeralTextStyle,      TextStyleType::HARMONY_ROMAN },
+    { QT_TRANSLATE_NOOP("TextStyle", "Nashville Number"),        &nashvilleNumberTextStyle,   TextStyleType::HARMONY_NASHVILLE },
 // Note oriented styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletTextStyle,            Tid::TUPLET },
-    { QT_TRANSLATE_NOOP("TextStyle", "Sticking"),                &stickingTextStyle,          Tid::STICKING },
-    { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringTextStyle,         Tid::FINGERING },
-    { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringTextStyle, Tid::LH_GUITAR_FINGERING },
-    { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringTextStyle, Tid::RH_GUITAR_FINGERING },
-    { QT_TRANSLATE_NOOP("TextStyle", "String Number"),           &stringNumberTextStyle,      Tid::STRING_NUMBER },
+    { QT_TRANSLATE_NOOP("TextStyle", "Tuplet"),                  &tupletTextStyle,            TextStyleType::TUPLET },
+    { QT_TRANSLATE_NOOP("TextStyle", "Sticking"),                &stickingTextStyle,          TextStyleType::STICKING },
+    { QT_TRANSLATE_NOOP("TextStyle", "Fingering"),               &fingeringTextStyle,         TextStyleType::FINGERING },
+    { QT_TRANSLATE_NOOP("TextStyle", "LH Guitar Fingering"),     &lhGuitarFingeringTextStyle, TextStyleType::LH_GUITAR_FINGERING },
+    { QT_TRANSLATE_NOOP("TextStyle", "RH Guitar Fingering"),     &rhGuitarFingeringTextStyle, TextStyleType::RH_GUITAR_FINGERING },
+    { QT_TRANSLATE_NOOP("TextStyle", "String Number"),           &stringNumberTextStyle,      TextStyleType::STRING_NUMBER },
 // Line-oriented styles
-    { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineTextStyle,          Tid::TEXTLINE },
-    { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaTextStyle,             Tid::VOLTA },
-    { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaTextStyle,            Tid::OTTAVA },
-    { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoTextStyle,         Tid::GLISSANDO },
-    { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalTextStyle,             Tid::PEDAL },
-    { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendTextStyle,              Tid::BEND },
-    { QT_TRANSLATE_NOOP("TextStyle", "Let Ring"),                &letRingTextStyle,           Tid::LET_RING },
-    { QT_TRANSLATE_NOOP("TextStyle", "Palm Mute"),               &palmMuteTextStyle,          Tid::PALM_MUTE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Text Line"),               &textLineTextStyle,          TextStyleType::TEXTLINE },
+    { QT_TRANSLATE_NOOP("TextStyle", "Volta"),                   &voltaTextStyle,             TextStyleType::VOLTA },
+    { QT_TRANSLATE_NOOP("TextStyle", "Ottava"),                  &ottavaTextStyle,            TextStyleType::OTTAVA },
+    { QT_TRANSLATE_NOOP("TextStyle", "Glissando"),               &glissandoTextStyle,         TextStyleType::GLISSANDO },
+    { QT_TRANSLATE_NOOP("TextStyle", "Pedal"),                   &pedalTextStyle,             TextStyleType::PEDAL },
+    { QT_TRANSLATE_NOOP("TextStyle", "Bend"),                    &bendTextStyle,              TextStyleType::BEND },
+    { QT_TRANSLATE_NOOP("TextStyle", "Let Ring"),                &letRingTextStyle,           TextStyleType::LET_RING },
+    { QT_TRANSLATE_NOOP("TextStyle", "Palm Mute"),               &palmMuteTextStyle,          TextStyleType::PALM_MUTE },
 // User styles
-    { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1TextStyle,             Tid::USER1 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2TextStyle,             Tid::USER2 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-3"),                  &user3TextStyle,             Tid::USER3 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-4"),                  &user4TextStyle,             Tid::USER4 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-5"),                  &user5TextStyle,             Tid::USER5 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-6"),                  &user6TextStyle,             Tid::USER6 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-7"),                  &user7TextStyle,             Tid::USER7 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-8"),                  &user8TextStyle,             Tid::USER8 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-9"),                  &user9TextStyle,             Tid::USER9 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-10"),                 &user10TextStyle,            Tid::USER10 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-11"),                 &user11TextStyle,            Tid::USER11 },
-    { QT_TRANSLATE_NOOP("TextStyle", "User-12"),                 &user12TextStyle,            Tid::USER12 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-1"),                  &user1TextStyle,             TextStyleType::USER1 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-2"),                  &user2TextStyle,             TextStyleType::USER2 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-3"),                  &user3TextStyle,             TextStyleType::USER3 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-4"),                  &user4TextStyle,             TextStyleType::USER4 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-5"),                  &user5TextStyle,             TextStyleType::USER5 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-6"),                  &user6TextStyle,             TextStyleType::USER6 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-7"),                  &user7TextStyle,             TextStyleType::USER7 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-8"),                  &user8TextStyle,             TextStyleType::USER8 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-9"),                  &user9TextStyle,             TextStyleType::USER9 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-10"),                 &user10TextStyle,            TextStyleType::USER10 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-11"),                 &user11TextStyle,            TextStyleType::USER11 },
+    { QT_TRANSLATE_NOOP("TextStyle", "User-12"),                 &user12TextStyle,            TextStyleType::USER12 },
 } };
 
 //---------------------------------------------------------
@@ -1092,7 +1092,7 @@ const TextStyle* textStyle(const char* name)
     return textStyles[0].ts;
 }
 
-const TextStyle* textStyle(Tid idx)
+const TextStyle* textStyle(TextStyleType idx)
 {
     Q_ASSERT(idx == textStyles[int(idx)].tid);
     return textStyles[int(idx)].ts;
@@ -1102,7 +1102,7 @@ const TextStyle* textStyle(Tid idx)
 //   TextStyleFromName
 //---------------------------------------------------------
 
-Tid textStyleFromName(const QString& name)
+TextStyleType textStyleFromName(const QString& name)
 {
     for (const auto& s : textStyles) {
         if (s.name == name) {
@@ -1110,18 +1110,18 @@ Tid textStyleFromName(const QString& name)
         }
     }
     if (name == "Technique") {                  // compatibility
-        return Tid::EXPRESSION;
+        return TextStyleType::EXPRESSION;
     }
 
     qWarning("text style <%s> not known", qPrintable(name));
-    return Tid::DEFAULT;
+    return TextStyleType::DEFAULT;
 }
 
 //---------------------------------------------------------
 //   textStyleName
 //---------------------------------------------------------
 
-const char* textStyleName(Tid idx)
+const char* textStyleName(TextStyleType idx)
 {
     Q_ASSERT(idx == textStyles[int(idx)].tid);
     return textStyles[int(idx)].name;
@@ -1131,67 +1131,67 @@ const char* textStyleName(Tid idx)
 //   textStyleUserName
 //---------------------------------------------------------
 
-QString textStyleUserName(Tid idx)
+QString textStyleUserName(TextStyleType idx)
 {
     Q_ASSERT(idx == textStyles[int(idx)].tid);
     return qtrc("TextStyle", textStyleName(idx));
 }
 
-static std::vector<Tid> _allTextStyles;
+static std::vector<TextStyleType> _allTextStyles;
 
-static const std::vector<Tid> _primaryTextStyles = {
-    Tid::TITLE,
-    Tid::SUBTITLE,
-    Tid::COMPOSER,
-    Tid::POET,
-    Tid::TRANSLATOR,
-    Tid::FRAME,
-    Tid::INSTRUMENT_EXCERPT,
-    Tid::INSTRUMENT_CHANGE,
-    Tid::HEADER,
-    Tid::FOOTER,
-    Tid::MEASURE_NUMBER,
-    Tid::MMREST_RANGE,
-    Tid::TEMPO,
-    Tid::REPEAT_LEFT,
-    Tid::REPEAT_RIGHT,
-    Tid::REHEARSAL_MARK,
-    Tid::SYSTEM,
-    Tid::STAFF,
-    Tid::EXPRESSION,
-    Tid::DYNAMICS,
-    Tid::HAIRPIN,
-    Tid::LYRICS_ODD,
-    Tid::LYRICS_EVEN,
-    Tid::HARMONY_A,
-    Tid::HARMONY_B,
-    Tid::HARMONY_ROMAN,
-    Tid::HARMONY_NASHVILLE,
-    Tid::STICKING,
-    Tid::USER1,
-    Tid::USER2,
-    Tid::USER3,
-    Tid::USER4,
-    Tid::USER5,
-    Tid::USER6,
-    Tid::USER7,
-    Tid::USER8,
-    Tid::USER9,
-    Tid::USER10,
-    Tid::USER11,
-    Tid::USER12,
+static const std::vector<TextStyleType> _primaryTextStyles = {
+    TextStyleType::TITLE,
+    TextStyleType::SUBTITLE,
+    TextStyleType::COMPOSER,
+    TextStyleType::POET,
+    TextStyleType::TRANSLATOR,
+    TextStyleType::FRAME,
+    TextStyleType::INSTRUMENT_EXCERPT,
+    TextStyleType::INSTRUMENT_CHANGE,
+    TextStyleType::HEADER,
+    TextStyleType::FOOTER,
+    TextStyleType::MEASURE_NUMBER,
+    TextStyleType::MMREST_RANGE,
+    TextStyleType::TEMPO,
+    TextStyleType::REPEAT_LEFT,
+    TextStyleType::REPEAT_RIGHT,
+    TextStyleType::REHEARSAL_MARK,
+    TextStyleType::SYSTEM,
+    TextStyleType::STAFF,
+    TextStyleType::EXPRESSION,
+    TextStyleType::DYNAMICS,
+    TextStyleType::HAIRPIN,
+    TextStyleType::LYRICS_ODD,
+    TextStyleType::LYRICS_EVEN,
+    TextStyleType::HARMONY_A,
+    TextStyleType::HARMONY_B,
+    TextStyleType::HARMONY_ROMAN,
+    TextStyleType::HARMONY_NASHVILLE,
+    TextStyleType::STICKING,
+    TextStyleType::USER1,
+    TextStyleType::USER2,
+    TextStyleType::USER3,
+    TextStyleType::USER4,
+    TextStyleType::USER5,
+    TextStyleType::USER6,
+    TextStyleType::USER7,
+    TextStyleType::USER8,
+    TextStyleType::USER9,
+    TextStyleType::USER10,
+    TextStyleType::USER11,
+    TextStyleType::USER12,
 };
 
 //---------------------------------------------------------
 //   allTextStyles
 //---------------------------------------------------------
 
-const std::vector<Tid>& allTextStyles()
+const std::vector<TextStyleType>& allTextStyles()
 {
     if (_allTextStyles.empty()) {
-        _allTextStyles.reserve(int(Tid::TEXT_TYPES));
+        _allTextStyles.reserve(int(TextStyleType::TEXT_TYPES));
         for (const auto& s : textStyles) {
-            if (s.tid == Tid::DEFAULT) {
+            if (s.tid == TextStyleType::DEFAULT) {
                 continue;
             }
             _allTextStyles.push_back(s.tid);
@@ -1204,7 +1204,7 @@ const std::vector<Tid>& allTextStyles()
 //   primaryTextStyles
 //---------------------------------------------------------
 
-const std::vector<Tid>& primaryTextStyles()
+const std::vector<TextStyleType>& primaryTextStyles()
 {
     return _primaryTextStyles;
 }

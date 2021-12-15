@@ -152,7 +152,7 @@ public:
 
     static Ms::System* createSystem(Ms::Page* parent, bool setupAccessible = true);
 
-    static Ms::Text* createText(Ms::EngravingItem* parent, Ms::Tid tid = Ms::Tid::DEFAULT, bool setupAccessible = true);
+    static Ms::Text* createText(Ms::EngravingItem* parent, Ms::TextStyleType tid = Ms::TextStyleType::DEFAULT, bool setupAccessible = true);
     static Ms::Text* copyText(const Ms::Text& src);
 
     static Ms::TimeSig* createTimeSig(Ms::Segment* parent, bool setupAccessible = true);

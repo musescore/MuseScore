@@ -1688,7 +1688,7 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, Tid tid, ElementFlags f)
+TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
     _cursor                 = new TextCursor(this);
@@ -1706,7 +1706,7 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, Tid t
 }
 
 TextBase::TextBase(const ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
-    : TextBase(type, parent, Tid::DEFAULT, f)
+    : TextBase(type, parent, TextStyleType::DEFAULT, f)
 {
 }
 
@@ -2772,13 +2772,13 @@ QString TextBase::accessibleInfo() const
 {
     QString rez;
     switch (tid()) {
-    case Tid::TITLE:
-    case Tid::SUBTITLE:
-    case Tid::COMPOSER:
-    case Tid::POET:
-    case Tid::TRANSLATOR:
-    case Tid::MEASURE_NUMBER:
-    case Tid::MMREST_RANGE:
+    case TextStyleType::TITLE:
+    case TextStyleType::SUBTITLE:
+    case TextStyleType::COMPOSER:
+    case TextStyleType::POET:
+    case TextStyleType::TRANSLATOR:
+    case TextStyleType::MEASURE_NUMBER:
+    case TextStyleType::MMREST_RANGE:
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
@@ -2802,13 +2802,13 @@ QString TextBase::screenReaderInfo() const
     QString rez;
 
     switch (tid()) {
-    case Tid::TITLE:
-    case Tid::SUBTITLE:
-    case Tid::COMPOSER:
-    case Tid::POET:
-    case Tid::TRANSLATOR:
-    case Tid::MEASURE_NUMBER:
-    case Tid::MMREST_RANGE:
+    case TextStyleType::TITLE:
+    case TextStyleType::SUBTITLE:
+    case TextStyleType::COMPOSER:
+    case TextStyleType::POET:
+    case TextStyleType::TRANSLATOR:
+    case TextStyleType::MEASURE_NUMBER:
+    case TextStyleType::MMREST_RANGE:
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
@@ -3018,7 +3018,7 @@ bool TextBase::setProperty(Pid pid, const mu::engraving::PropertyValue& v)
     bool rv = true;
     switch (pid) {
     case Pid::TEXT_STYLE:
-        initTid(Tid(v.toInt()));
+        initTid(TextStyleType(v.toInt()));
         break;
     case Pid::FONT_FACE:
         setFamily(v.toString());
@@ -3091,7 +3091,7 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
     PropertyValue v;
     switch (id) {
     case Pid::TEXT_STYLE:
-        v = Tid::DEFAULT;
+        v = TextStyleType::DEFAULT;
         break;
     case Pid::TEXT:
         v = QString();
@@ -3100,7 +3100,7 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
         v = static_cast<int>(VerticalAlignment::AlignNormal);
         break;
     default:
-        for (const StyledProperty& p : *textStyle(Tid::DEFAULT)) {
+        for (const StyledProperty& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
                 return styleValue(id, p.sid);
             }
@@ -3138,30 +3138,30 @@ int TextBase::getPropertyFlagsIdx(Pid id) const
 
 Sid TextBase::offsetSid() const
 {
-    Tid defaultTid = Tid(propertyDefault(Pid::TEXT_STYLE).toInt());
+    TextStyleType defaultTid = TextStyleType(propertyDefault(Pid::TEXT_STYLE).toInt());
     if (tid() != defaultTid) {
         return Sid::NOSTYLE;
     }
     bool above = placeAbove();
     switch (tid()) {
-    case Tid::DYNAMICS:
+    case TextStyleType::DYNAMICS:
         return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
-    case Tid::LYRICS_ODD:
-    case Tid::LYRICS_EVEN:
+    case TextStyleType::LYRICS_ODD:
+    case TextStyleType::LYRICS_EVEN:
         return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;
-    case Tid::REHEARSAL_MARK:
+    case TextStyleType::REHEARSAL_MARK:
         return above ? Sid::rehearsalMarkPosAbove : Sid::rehearsalMarkPosBelow;
-    case Tid::STAFF:
+    case TextStyleType::STAFF:
         return above ? Sid::staffTextPosAbove : Sid::staffTextPosBelow;
-    case Tid::STICKING:
+    case TextStyleType::STICKING:
         return above ? Sid::stickingPosAbove : Sid::stickingPosBelow;
-    case Tid::SYSTEM:
+    case TextStyleType::SYSTEM:
         return above ? Sid::systemTextPosAbove : Sid::systemTextPosBelow;
-    case Tid::TEMPO:
+    case TextStyleType::TEMPO:
         return above ? Sid::tempoPosAbove : Sid::tempoPosBelow;
-    case Tid::MEASURE_NUMBER:
+    case TextStyleType::MEASURE_NUMBER:
         return above ? Sid::measureNumberPosAbove : Sid::measureNumberPosBelow;
-    case Tid::MMREST_RANGE:
+    case TextStyleType::MMREST_RANGE:
         return above ? Sid::mmRestRangePosAbove : Sid::mmRestRangePosBelow;
     default:
         break;
@@ -3308,7 +3308,7 @@ void TextBase::initElementStyle(const ElementStyle* ss)
 //   initTid
 //---------------------------------------------------------
 
-void TextBase::initTid(Tid tid, bool preserveDifferent)
+void TextBase::initTid(TextStyleType tid, bool preserveDifferent)
 {
     if (!preserveDifferent) {
         initTid(tid);
@@ -3322,7 +3322,7 @@ void TextBase::initTid(Tid tid, bool preserveDifferent)
     }
 }
 
-void TextBase::initTid(Tid tid)
+void TextBase::initTid(TextStyleType tid)
 {
     setTid(tid);
     for (const StyledProperty& p : *textStyle(tid)) {

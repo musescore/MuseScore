@@ -154,19 +154,19 @@ enum class NoteHeadGroup {
 Q_ENUM_NS(NoteHeadGroup);
 
 enum class Tid {
-    DEFAULT = int(mu::engraving::Tid::DEFAULT),
-    TITLE = int(mu::engraving::Tid::TITLE),
-    SUBTITLE = int(mu::engraving::Tid::SUBTITLE),
-    COMPOSER = int(mu::engraving::Tid::COMPOSER),
-    POET = int(mu::engraving::Tid::POET),
-    TRANSLATOR = int(mu::engraving::Tid::TRANSLATOR),
-    FRAME = int(mu::engraving::Tid::FRAME),
-    INSTRUMENT_EXCERPT = int(mu::engraving::Tid::INSTRUMENT_EXCERPT),
-    INSTRUMENT_LONG = int(mu::engraving::Tid::INSTRUMENT_LONG),
-    INSTRUMENT_SHORT = int(mu::engraving::Tid::INSTRUMENT_SHORT),
-    INSTRUMENT_CHANGE = int(mu::engraving::Tid::INSTRUMENT_CHANGE),
-    HEADER = int(mu::engraving::Tid::HEADER),
-    FOOTER = int(mu::engraving::Tid::FOOTER),
+    DEFAULT = int(mu::engraving::TextStyleType::DEFAULT),
+    TITLE = int(mu::engraving::TextStyleType::TITLE),
+    SUBTITLE = int(mu::engraving::TextStyleType::SUBTITLE),
+    COMPOSER = int(mu::engraving::TextStyleType::COMPOSER),
+    POET = int(mu::engraving::TextStyleType::POET),
+    TRANSLATOR = int(mu::engraving::TextStyleType::TRANSLATOR),
+    FRAME = int(mu::engraving::TextStyleType::FRAME),
+    INSTRUMENT_EXCERPT = int(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT),
+    INSTRUMENT_LONG = int(mu::engraving::TextStyleType::INSTRUMENT_LONG),
+    INSTRUMENT_SHORT = int(mu::engraving::TextStyleType::INSTRUMENT_SHORT),
+    INSTRUMENT_CHANGE = int(mu::engraving::TextStyleType::INSTRUMENT_CHANGE),
+    HEADER = int(mu::engraving::TextStyleType::HEADER),
+    FOOTER = int(mu::engraving::TextStyleType::FOOTER),
 };
 Q_ENUM_NS(Tid);
 

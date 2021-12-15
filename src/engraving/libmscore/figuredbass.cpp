@@ -1138,7 +1138,7 @@ void FiguredBass::layout()
     TextBase::layout1();   // prepare structs and data expected by Text methods
     // if element could be parsed into items, layout each element
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
-    // TODO: consider disabling specific layout in case text style is changed (tid() != Tid::FIGURED_BASS).
+    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (items.size() > 0) {
         layoutLines();
         bbox().setRect(0, 0, _lineLengths.at(0), 0);
@@ -1279,7 +1279,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     }
     // if in edit mode or with custom style, use standard text drawing
 //      if (editMode() || subStyle() != ElementStyle::FIGURED_BASS)
-//      if (tid() != Tid::FIGURED_BASS)
+//      if (tid() != TextStyleName::FIGURED_BASS)
 //            TextBase::draw(painter);
 //      else
     {                                                        // not edit mode:

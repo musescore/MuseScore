@@ -58,7 +58,7 @@ struct SpannerValues {
 
 struct TextStyleMap {
     QString name;
-    Tid ss;
+    TextStyleType ss;
 };
 
 //---------------------------------------------------------
@@ -218,8 +218,8 @@ public:
     QMultiMap<int, int>& tracks() { return _tracks; }
 
     void checkTuplets();
-    Tid addUserTextStyle(const QString& name);
-    Tid lookupUserTextStyle(const QString& name) const;
+    TextStyleType addUserTextStyle(const QString& name);
+    TextStyleType lookupUserTextStyle(const QString& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
     QList<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }

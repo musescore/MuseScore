@@ -351,7 +351,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     titleFramePart->copyValues(titleFrameScore);
     QString partLabel = excerpt->title();       // parts.front()->longName();
     if (!partLabel.isEmpty()) {
-        Text* txt = Factory::createText(measure, Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
         measure->add(txt);
         score->setMetaTag("partName", partLabel);
@@ -914,7 +914,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             // layout breaks other than section were skipped above,
             // but section breaks do need to be cloned & linked
             // other measure-attached elements (?) are cloned but not linked
-            if (e->isText() && toText(e)->tid() == Tid::INSTRUMENT_EXCERPT) {
+            if (e->isText() && toText(e)->tid() == TextStyleType::INSTRUMENT_EXCERPT) {
                 // skip part name in score
                 continue;
             } else if (e->isTextBase() || e->isLayoutBreak()) {
