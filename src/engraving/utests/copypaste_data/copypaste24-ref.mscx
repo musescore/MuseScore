@@ -91,7 +91,7 @@
             <actualNotes>8</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>8</text>
               </Number>
             </Tuplet>
@@ -183,7 +183,7 @@
             <actualNotes>8</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>8</text>
               </Number>
             </Tuplet>

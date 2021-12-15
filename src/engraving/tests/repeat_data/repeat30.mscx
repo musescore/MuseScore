@@ -81,12 +81,12 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat30
 </text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>single-measure section at beginning of score, then section with end repeat
 </text>
           </Text>

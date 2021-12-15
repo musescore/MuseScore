@@ -250,7 +250,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text></text>
             </Text>
           </VBox>
@@ -407,7 +407,7 @@
             <indexDiff>-11</indexDiff>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text></text>
             </Text>
           </VBox>

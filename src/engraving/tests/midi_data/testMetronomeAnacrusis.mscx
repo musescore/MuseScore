@@ -76,11 +76,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>TestMetronomeAnacrusis</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>A measure is considered anacrusis if it has beats missing and is irregular (excluded from measure count).</text>
           </Text>
         </VBox>

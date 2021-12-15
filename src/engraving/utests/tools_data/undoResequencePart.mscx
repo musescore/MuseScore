@@ -370,7 +370,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>

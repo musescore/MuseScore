@@ -115,11 +115,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Test</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>measure</text>
           </Text>
         </VBox>
@@ -383,15 +383,15 @@
         <VBox>
           <height>10</height>
           <Text>
-            <style>Title</style>
+            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>measure</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -614,15 +614,15 @@
         <VBox>
           <height>10</height>
           <Text>
-            <style>Title</style>
+            <style>title</style>
             <text>Test</text>
             </Text>
           <Text>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>measure</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>

@@ -177,15 +177,15 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Wachet auf ruft uns die Stimme</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Kantata BWV 140</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>JS Bach</text>
           </Text>
         </VBox>

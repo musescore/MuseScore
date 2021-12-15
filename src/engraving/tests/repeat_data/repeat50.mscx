@@ -80,11 +80,11 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat50</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>D.S with playRepeats with ToCoda inside the repeat</text>
           </Text>
         </VBox>

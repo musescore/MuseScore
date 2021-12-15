@@ -1099,7 +1099,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1317,7 +1317,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1542,7 +1542,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -1767,7 +1767,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>
@@ -2385,7 +2385,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Drumset</text>
             </Text>
           </VBox>

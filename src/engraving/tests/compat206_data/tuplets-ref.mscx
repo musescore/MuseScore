@@ -77,7 +77,7 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Tuplets</text>
           </Text>
         </VBox>

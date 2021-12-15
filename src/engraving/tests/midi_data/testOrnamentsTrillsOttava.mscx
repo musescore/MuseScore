@@ -85,11 +85,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Ornaments and trills playback with ottavas</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <offset x="0" y="8"/>
           <text>Based on the test file from this bug report:
 https://musescore.org/en/node/274247</text>

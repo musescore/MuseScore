@@ -91,11 +91,11 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat56</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>2nd volta with start repeat</text>
           </Text>
         </VBox>

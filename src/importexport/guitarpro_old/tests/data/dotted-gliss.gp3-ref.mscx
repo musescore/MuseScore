@@ -58,18 +58,18 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>All God´s People</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Queen
 Innuendo</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Queen</text>
           </Text>
         </VBox>
@@ -243,24 +243,24 @@ Innuendo</text>
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>All God´s People</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>Queen
 Innuendo</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Queen</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar 1</text>
             </Text>
           </VBox>

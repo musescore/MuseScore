@@ -93,7 +93,7 @@ p, li { white-space: pre-wrap; }
       <VBox>
         <height>7.1335</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>vbox</text>
           </Text>
         </VBox>

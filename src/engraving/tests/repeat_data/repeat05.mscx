@@ -155,11 +155,11 @@ p, li { white-space: pre-wrap; }
         <height>12</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat5</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>multiple end repeat barlines for same start repeat barline
 measure 3 has a repeat count of 3
 </text>

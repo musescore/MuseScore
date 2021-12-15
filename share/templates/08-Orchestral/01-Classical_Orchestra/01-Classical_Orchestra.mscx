@@ -817,7 +817,7 @@
       <VBox>
         <height>7</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Classical Orchestra</text>
           </Text>
         </VBox>

@@ -146,7 +146,7 @@
             <baseNote>eighth</baseNote>
             <baseDots>1</baseDots>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -359,7 +359,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar</text>
             </Text>
           </VBox>
@@ -412,7 +412,7 @@
               <baseNote>eighth</baseNote>
               <baseDots>1</baseDots>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -548,7 +548,7 @@
               <baseNote>eighth</baseNote>
               <baseDots>1</baseDots>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>

@@ -278,7 +278,7 @@
           <height>10</height>
           <lid>1</lid>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Acoustic Guitar</text>
             </Text>
           </VBox>

@@ -56,11 +56,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <height>8</height>
         <bottomGap>23.01</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Reunion</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Marc Sabatella</text>
           </Text>
         </VBox>
@@ -2425,7 +2425,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <actualNotes>3</actualNotes>
           <baseNote>quarter</baseNote>
           <Number>
-            <style>Tuplet</style>
+            <style>tuplet</style>
             <text>3</text>
             </Number>
           <offset x="0" y="0.165365"/>

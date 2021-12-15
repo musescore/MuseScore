@@ -78,12 +78,12 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Title</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Composer</text>
           </Text>
         </VBox>
@@ -599,17 +599,17 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Title</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Composer</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>

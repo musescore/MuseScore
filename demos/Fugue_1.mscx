@@ -303,12 +303,12 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Fugue #1</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Marc Sabatella</text>
           </Text>
         </VBox>
@@ -10586,17 +10586,17 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Fugue #1</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Marc Sabatella</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Violin I</text>
             </Text>
           </VBox>
@@ -13988,7 +13988,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Fugue #1</text>
             </Text>
           <Text>
@@ -13997,11 +13997,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Marc Sabatella</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Violin II</text>
             </Text>
           </VBox>
@@ -17826,7 +17826,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Fugue #1</text>
             </Text>
           <Text>
@@ -17835,11 +17835,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Marc Sabatella</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Viola</text>
             </Text>
           </VBox>
@@ -20263,7 +20263,7 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-3</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Fugue #1</text>
             </Text>
           <Text>
@@ -20272,11 +20272,11 @@ Licensed under the Creative Commons Attribution 3.0 License</metaTag>
                 <staves>-3</staves>
                 </location>
               </linked>
-            <style>Composer</style>
+            <style>composer</style>
             <text>Marc Sabatella</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Violoncello</text>
             </Text>
           </VBox>

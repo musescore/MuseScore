@@ -121,7 +121,7 @@
       <VBox>
         <height>3.5</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <offset x="0" y="-0.0564445"/>
           <text><font size="24"/>Test measure-style/slash</text>
           </Text>

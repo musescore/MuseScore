@@ -127,7 +127,7 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Simplify tied eighth notes to indicate rhythms - Compound Meter
 6/8 N = 1</text>
             </StaffText>
@@ -166,7 +166,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 2</text>
             </StaffText>
           <Chord>
@@ -218,7 +218,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 3</text>
             </StaffText>
           <Chord>
@@ -324,7 +324,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 4</text>
             </StaffText>
           <Chord>
@@ -447,7 +447,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 5</text>
             </StaffText>
           <Chord>
@@ -530,7 +530,7 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -550,7 +550,7 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>9/8 N = 5</text>
             </StaffText>
           <Rest>
@@ -621,7 +621,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -791,7 +791,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 7</text>
             </StaffText>
           <Chord>
@@ -941,7 +941,7 @@
           </LayoutBreak>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 9</text>
             </StaffText>
           <Chord>
@@ -985,7 +985,7 @@
             <sigD>8</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>12/8 N = 6</text>
             </StaffText>
           <Chord>
@@ -1025,7 +1025,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 7</text>
             </StaffText>
           <Rest>
@@ -1116,7 +1116,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 8</text>
             </StaffText>
           <Rest>
@@ -1187,7 +1187,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 12</text>
             </StaffText>
           <Chord>

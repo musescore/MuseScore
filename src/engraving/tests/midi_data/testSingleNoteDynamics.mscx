@@ -86,7 +86,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>test single note dynamics</text>
           </Text>
         </VBox>

@@ -96,14 +96,14 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Vbox 1</text>
           </Text>
         </VBox>
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Vbox 2</text>
           </Text>
         </VBox>
@@ -148,7 +148,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Vbox 3</text>
           </Text>
         </VBox>
@@ -186,7 +186,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Vbox 4</text>
           </Text>
         </VBox>

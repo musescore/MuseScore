@@ -80,11 +80,11 @@
         <height>12</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat48</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Jump into first Volta:
 Assume the composer is 'right' and rewind that far for 'final' playthrough
 </text>
