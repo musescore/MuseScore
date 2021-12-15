@@ -647,6 +647,7 @@ TextStyleType TConv::fromXml(const QString& tag, TextStyleType def)
         return TextStyleType::EXPRESSION;
     }
 
+    LOGE() << "not found type for tag: " << tag;
     UNREACHABLE;
     return def;
 }

@@ -115,6 +115,8 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 {
     TRACEFUNC;
 
+    LOGD() << "try load: " << path;
+
     std::string suffix = io::suffix(path);
     if (!isMuseScoreFile(suffix)) {
         return doImport(path, stylePath, forceMode);

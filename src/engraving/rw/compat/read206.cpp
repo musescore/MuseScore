@@ -94,6 +94,8 @@
 #include "readchordlisthook.h"
 #include "readstyle.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -1151,14 +1153,18 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
 
 static QString ReadStyleName206(QString xmlTag)
 {
-    QString s;
-    if (xmlTag.contains("<style>")) {
-        QRegularExpression regex("<style>([^<]+)</style>");
-        QRegularExpressionMatch match = regex.match(xmlTag);
-        if (match.hasMatch()) {
-            s = match.captured();
-        }
+    int beginIdx = xmlTag.indexOf("<style>");
+    if (beginIdx == -1) {
+        return QString();
     }
+    beginIdx += QString("<style>").size();
+
+    int endIdx = xmlTag.indexOf("</style>");
+    IF_ASSERT_FAILED(endIdx > 0) {
+        return QString();
+    }
+
+    QString s = xmlTag.mid(beginIdx, (endIdx - beginIdx));
     return s;
 }
 
