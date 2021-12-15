@@ -37,7 +37,7 @@ fi
 
 #    - name: Generate _en.ts files
 #      run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
 
 #    - name: Update .ts files
 #      if: env.DO_UPDATE_TS == 'true'
