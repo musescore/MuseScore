@@ -105,15 +105,15 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Trois petites pieces de JS Bach</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>I Andate</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>JS Bach</text>
           </Text>
         </VBox>

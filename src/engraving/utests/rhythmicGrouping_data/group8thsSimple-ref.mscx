@@ -131,7 +131,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>Simplify tied eighth notes and eighth-note rests to indicate rhythm - Simple Meter
 N = 1 eighth note</text>
             </StaffText>
@@ -160,7 +160,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 2</text>
             </StaffText>
           <Chord>
@@ -195,7 +195,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 3</text>
             </StaffText>
           <Chord>
@@ -232,7 +232,7 @@ N = 1 eighth note</text>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 4</text>
             </StaffText>
           <Chord>
@@ -251,7 +251,7 @@ N = 1 eighth note</text>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>3/4 N = 1</text>
             </StaffText>
           <Chord>
@@ -289,7 +289,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 2</text>
             </StaffText>
           <Chord>
@@ -341,7 +341,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 3</text>
             </StaffText>
           <Chord>
@@ -402,7 +402,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 4</text>
             </StaffText>
           <Chord>
@@ -475,7 +475,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 5</text>
             </StaffText>
           <Chord>
@@ -556,7 +556,7 @@ N = 1 eighth note</text>
           </LayoutBreak>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -576,7 +576,7 @@ N = 1 eighth note</text>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>5/4 N = 2</text>
             </StaffText>
           <Rest>
@@ -643,7 +643,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 6</text>
             </StaffText>
           <Chord>
@@ -742,7 +742,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 7</text>
             </StaffText>
           <Chord>
@@ -828,7 +828,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 8</text>
             </StaffText>
           <Chord>
@@ -974,7 +974,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 9</text>
             </StaffText>
           <Chord>
@@ -1077,7 +1077,7 @@ N = 1 eighth note</text>
       <Measure>
         <voice>
           <StaffText>
-            <style>Instrument Change</style>
+            <style>instrument_change</style>
             <text>N = 10</text>
             </StaffText>
           <Chord>

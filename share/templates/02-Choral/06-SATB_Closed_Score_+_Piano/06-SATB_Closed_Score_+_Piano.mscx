@@ -236,7 +236,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>SATB Closed Score + Piano</text>
           </Text>
         </VBox>

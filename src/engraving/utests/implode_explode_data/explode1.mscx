@@ -233,7 +233,7 @@
         <lid>1</lid>
         <Text>
           <lid>2</lid>
-          <style>Title</style>
+          <style>title</style>
           <text>tst_ex</text>
           </Text>
         </VBox>
@@ -797,11 +797,11 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>tst_ex</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone</text>
             </Text>
           </VBox>
@@ -1250,11 +1250,11 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>tst_ex</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone-1</text>
             </Text>
           </VBox>
@@ -1385,11 +1385,11 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>tst_ex</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone-2</text>
             </Text>
           </VBox>
@@ -1512,11 +1512,11 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>tst_ex</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone-3</text>
             </Text>
           </VBox>

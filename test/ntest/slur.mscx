@@ -96,12 +96,12 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <subtype>Title</subtype>
           <text>slur</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <subtype>Subtitle</subtype>
           <text>test slur layout anchor points</text>
           </Text>

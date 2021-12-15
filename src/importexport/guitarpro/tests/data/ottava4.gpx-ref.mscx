@@ -669,7 +669,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar</text>
             </Text>
           </VBox>
@@ -1118,7 +1118,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Electric Guitar</text>
             </Text>
           </VBox>

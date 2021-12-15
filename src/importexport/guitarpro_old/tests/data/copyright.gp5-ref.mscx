@@ -170,7 +170,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 1</text>
             </Text>
           </VBox>

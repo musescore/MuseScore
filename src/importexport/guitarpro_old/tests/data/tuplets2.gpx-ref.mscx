@@ -107,12 +107,12 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Nardis</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Ralph Towner
 solo concert</text>
           </Text>
@@ -315,7 +315,7 @@ solo concert</text>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -387,7 +387,7 @@ solo concert</text>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -455,7 +455,7 @@ solo concert</text>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -852,18 +852,18 @@ solo concert</text>
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Nardis</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>Ralph Towner
 solo concert</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar</text>
             </Text>
           </VBox>
@@ -1096,7 +1096,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1176,7 +1176,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1252,7 +1252,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1770,7 +1770,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1850,7 +1850,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1923,7 +1923,7 @@ solo concert</text>
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>

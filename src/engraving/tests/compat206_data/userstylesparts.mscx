@@ -593,7 +593,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -839,7 +839,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute 1</text>
             </Text>
           </VBox>
@@ -1085,7 +1085,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute 2</text>
             </Text>
           </VBox>

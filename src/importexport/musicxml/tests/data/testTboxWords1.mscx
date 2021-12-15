@@ -98,11 +98,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Title on page 1</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Composer on page 1</text>
           </Text>
         <Text>
@@ -143,7 +143,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Title in vbox on page 2</text>
           </Text>
         <Text>
@@ -200,11 +200,11 @@
         <height>10</height>
         <bottomGap>22.5</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Title in vbox on page 3</text>
           </Text>
         <Text>
-          <style>Instrument Name (Part)</style>
+          <style>instrument_excerpt</style>
           <text>Part name on page 3</text>
           </Text>
         </VBox>

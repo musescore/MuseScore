@@ -81,15 +81,15 @@
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text><font face="Times New Roman"></font>Sonata No. 14, &quot;Moonlight&quot; </text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text><font face="Times New Roman"></font>Ludwig van Beethoven</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text><font face="Times New Roman"></font>Quasi una fantasia</text>
           </Text>
         </VBox>

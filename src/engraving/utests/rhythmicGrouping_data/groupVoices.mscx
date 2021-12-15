@@ -75,11 +75,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Grouping with multiple voices</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>To protect the user's manual adjustments, grouping works within voices but not between voices.</text>
           </Text>
         </VBox>

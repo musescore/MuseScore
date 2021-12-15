@@ -135,7 +135,7 @@
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>3</text>
               </Number>
             </Tuplet>
@@ -183,7 +183,7 @@
             <actualNotes>5</actualNotes>
             <baseNote>eighth</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>5</text>
               </Number>
             </Tuplet>
@@ -283,7 +283,7 @@
             <actualNotes>15</actualNotes>
             <baseNote>16th</baseNote>
             <Number>
-              <style>Tuplet</style>
+              <style>tuplet</style>
               <text>15:8</text>
               </Number>
             <numberType>1</numberType>
@@ -650,7 +650,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Guitar</text>
             </Text>
           </VBox>
@@ -692,7 +692,7 @@
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -747,7 +747,7 @@
               <actualNotes>5</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>5</text>
                 </Number>
               </Tuplet>
@@ -862,7 +862,7 @@
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>15:8</text>
                 </Number>
               <numberType>1</numberType>
@@ -1169,7 +1169,7 @@
               <actualNotes>3</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>3</text>
                 </Number>
               </Tuplet>
@@ -1226,7 +1226,7 @@
               <actualNotes>5</actualNotes>
               <baseNote>eighth</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>5</text>
                 </Number>
               </Tuplet>
@@ -1341,7 +1341,7 @@
               <actualNotes>15</actualNotes>
               <baseNote>16th</baseNote>
               <Number>
-                <style>Tuplet</style>
+                <style>tuplet</style>
                 <text>15:8</text>
                 </Number>
               <numberType>1</numberType>

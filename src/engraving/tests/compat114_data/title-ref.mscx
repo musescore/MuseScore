@@ -78,15 +78,15 @@
         <bottomMargin>5</bottomMargin>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text><font size="24"/><font face="Times New Roman"/>title</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text><font size="14"/><font face="Times New Roman"/>subtitle</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text><font size="12"/><font face="Times New Roman"/>Composer</text>
           </Text>
         <Text>

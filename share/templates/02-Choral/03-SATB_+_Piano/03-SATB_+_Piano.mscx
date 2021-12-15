@@ -333,7 +333,7 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>SATB + Piano</text>
           </Text>
         </VBox>

@@ -48,7 +48,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>标题</text>
           </Text>
         <Text>
@@ -56,7 +56,7 @@
           <text>注解</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>作者</text>
           </Text>
         </VBox>

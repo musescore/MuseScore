@@ -1479,11 +1479,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat14: Play It Again, Sam</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>More complex roadmap, combining voltas and D.S. al Coda</text>
           </Text>
         </VBox>

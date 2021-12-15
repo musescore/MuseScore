@@ -114,12 +114,12 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>Eh Ma</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Boria &amp; Freinds
 Puki Kuki</text>
           </Text>
@@ -442,18 +442,18 @@ Puki Kuki</text>
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>Eh Ma</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>Boria &amp; Freinds
 Puki Kuki</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Bass Guitar</text>
             </Text>
           </VBox>

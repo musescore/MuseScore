@@ -82,11 +82,11 @@
         <bottomGap>1</bottomGap>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat66</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Force Final Repeat should reset when crossing to next section.</text>
           </Text>
         </VBox>

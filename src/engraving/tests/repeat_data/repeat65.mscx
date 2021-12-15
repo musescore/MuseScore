@@ -81,11 +81,11 @@
         <bottomGap>1</bottomGap>
         <boxAutoSize>0</boxAutoSize>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat65</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Jump at volta end with end repeat interpretation order</text>
           </Text>
         </VBox>

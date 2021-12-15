@@ -76,11 +76,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>TestMetronomeCompound</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Below 60 BPM the metronome should indicate the simple beats as well as the compound beats.</text>
           </Text>
         </VBox>

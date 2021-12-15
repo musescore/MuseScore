@@ -155,11 +155,11 @@ p, li { white-space: pre-wrap; }
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat4</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>multiple end repeat barlines for same start repeat barline</text>
           </Text>
         </VBox>

@@ -87,7 +87,7 @@
       <VBox>
         <height>5.05053</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Fermata</text>
           </Text>
         </VBox>

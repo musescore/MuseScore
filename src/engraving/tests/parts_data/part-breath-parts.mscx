@@ -102,12 +102,12 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>test-part</text>
           </Text>
         <Text>
           <linkedMain/>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>breath</text>
           </Text>
         </VBox>
@@ -839,17 +839,17 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>test-part</text>
             </Text>
           <Text>
             <linked>
               </linked>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>breath</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1305,7 +1305,7 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>test-part</text>
             </Text>
           <Text>
@@ -1314,11 +1314,11 @@
                 <staves>-1</staves>
                 </location>
               </linked>
-            <style>Subtitle</style>
+            <style>subtitle</style>
             <text>breath</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Tenor</text>
             </Text>
           </VBox>

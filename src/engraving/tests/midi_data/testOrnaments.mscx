@@ -77,15 +77,15 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>x</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>x</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>x</text>
           </Text>
         <Text>

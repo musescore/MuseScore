@@ -95,11 +95,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Tie Test</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Andrei Tuicu</text>
           </Text>
         </VBox>

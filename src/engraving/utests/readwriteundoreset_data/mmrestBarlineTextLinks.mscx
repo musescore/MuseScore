@@ -91,7 +91,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>mmrest text links (see issue #296426)</text>
           </Text>
         </VBox>
