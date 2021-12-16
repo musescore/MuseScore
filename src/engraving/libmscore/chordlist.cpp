@@ -1959,6 +1959,9 @@ const ChordDescription* ChordList::description(int id) const
 
 void ChordList::checkChordList(const MStyle& style)
 {
+    bool custom = style.value(Sid::chordStyle).toString() == "custom";
+    setCustomChordList(custom);
+
     // make sure we have a chordlist
     if (!loaded()) {
         qreal emag = style.value(Sid::chordExtensionMag).toReal();
@@ -1966,9 +1969,11 @@ void ChordList::checkChordList(const MStyle& style)
         qreal mmag = style.value(Sid::chordModifierMag).toReal();
         qreal madjust = style.value(Sid::chordModifierAdjust).toReal();
         configureAutoAdjust(emag, eadjust, mmag, madjust);
+
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read("chords.xml");
         }
+
         read(style.value(Sid::chordDescriptionFile).toString());
     }
 }
