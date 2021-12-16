@@ -206,12 +206,20 @@ public:
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(ScoreConfig config) = 0;
 
-    virtual void nextLyrics(MoveDirection) = 0;
-    virtual void nextLyricsVerse(MoveDirection) = 0;
-    virtual void nextSyllable() = 0;
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 
+    // Text navigation
+    virtual void navigateToLyrics(MoveDirection direction) = 0;
+    virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
+
+    virtual void nagivateToNextSyllable() = 0;
+
+    virtual void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) = 0;
+    virtual void navigateToHarmonyInNearMeasure(MoveDirection direction) = 0;
+    virtual void navigateToHarmony(const Fraction& ticks) = 0;
+
+    // Text style
     virtual void toggleBold() = 0;
     virtual void toggleItalic() = 0;
     virtual void toggleUnderline() = 0;
