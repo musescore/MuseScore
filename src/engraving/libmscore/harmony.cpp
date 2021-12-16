@@ -850,6 +850,11 @@ bool Harmony::edit(EditData& ed)
         return false;
     }
 
+    if (ed.key == Qt::Key_Return || ed.key == Qt::Key_Enter) {
+        endEdit(ed);
+        return true;
+    }
+
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset

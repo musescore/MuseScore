@@ -2473,9 +2473,11 @@ static int findBracketIndex(Ms::EngravingItem* element)
 void NotationInteraction::editText(QKeyEvent* event)
 {
     m_editData.modifiers = event->modifiers();
+
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
     }
+
     bool wasEditing = m_editData.element != nullptr;
     if (!wasEditing && selection()->element()) {
         m_editData.element = selection()->element();
@@ -2487,19 +2489,29 @@ void NotationInteraction::editText(QKeyEvent* event)
 
     m_editData.key = event->key();
     m_editData.s = event->text();
-    startEdit();
+
     int systemIndex = findSystemIndex(m_editData.element);
     int bracketIndex = findBracketIndex(m_editData.element);
+
+    startEdit();
     bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
+
     if (!wasEditing) {
         m_editData.element = nullptr;
     }
+
     if (handled) {
         event->accept();
         apply();
+
+        if (needEndTextEdit()) {
+            endEditText();
+            return;
+        }
     } else {
         m_undoStack->rollbackChanges();
     }
+
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
     } else {
@@ -4437,6 +4449,16 @@ void NotationInteraction::doEndTextEdit()
     }
 
     m_editData.clearData();
+}
+
+bool NotationInteraction::needEndTextEdit() const
+{
+    if (isTextEditingStarted()) {
+        const Ms::TextBase* text = Ms::toTextBase(m_editData.element);
+        return !text || !text->cursor()->editing();
+    }
+
+    return false;
 }
 
 void NotationInteraction::toggleFontStyle(Ms::FontStyle style)
