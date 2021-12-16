@@ -3986,7 +3986,7 @@ void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, b
         score()->undoAddElement(segment);
     }
 
-    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
         nextHarmony = createHarmony(segment, track, harmony->harmonyType());
         score()->undoAddElement(nextHarmony);
@@ -4029,7 +4029,7 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
 
     int track = harmony->track();
 
-    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
         nextHarmony = createHarmony(segment, track, harmony->harmonyType());
 
@@ -4078,7 +4078,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 
     int track = harmony->track();
 
-    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->textStyleType());
     if (!nextHarmony) {
         nextHarmony = createHarmony(segment, track, harmony->harmonyType());
         score()->undoAddElement(nextHarmony);
@@ -4258,10 +4258,10 @@ Ms::Harmony* NotationInteraction::editedHarmony() const
     return harmony;
 }
 
-Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::Tid textId) const
+Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::TextStyleType textStyleType) const
 {
     for (Ms::EngravingItem* e : segment->annotations()) {
-        if (e->isHarmony() && e->track() == track && toHarmony(e)->tid() == textId) {
+        if (e->isHarmony() && e->track() == track && toHarmony(e)->textStyleType() == textStyleType) {
             return toHarmony(e);
         }
     }
