@@ -53,20 +53,22 @@ Item {
 
     function increment() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value + step
+        var newValue = Math.min(value + step, root.maxValue)
 
-        if (newValue > root.maxValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
 
     function decrement() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value - step
+        var newValue = Math.max(value - step, root.minValue)
 
-        if (newValue < root.minValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
@@ -137,6 +139,9 @@ Item {
             anchors.bottom: parent.bottom
 
             radius: textInputField.background.radius - anchors.margins
+
+            canIncrease: root.currentValue < root.maxValue
+            canDecrease: root.currentValue > root.minValue
 
             onIncreaseButtonClicked: { root.increment() }
             onDecreaseButtonClicked: { root.decrement() }
