@@ -270,9 +270,10 @@ private:
     Ms::Harmony* editedHarmony() const;
     Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::TextStyleType textStyleType) const;
     Ms::Harmony* createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const;
-    void startEditText(Ms::TextBase* text);
 
+    void startEditText(Ms::TextBase* text);
     void doEndTextEdit();
+    bool needEndTextEdit() const;
 
     Ms::Page* point2page(const PointF& p) const;
     QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;
