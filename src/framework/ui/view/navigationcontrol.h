@@ -26,11 +26,10 @@
 #include <QQuickItem>
 
 #include "abstractnavigation.h"
-#include "async/asyncable.h"
 
 namespace mu::ui {
 class NavigationPanel;
-class NavigationControl : public AbstractNavigation, public INavigationControl, public async::Asyncable
+class NavigationControl : public AbstractNavigation, public INavigationControl
 {
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel_property WRITE setPanel NOTIFY panelChanged)

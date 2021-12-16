@@ -321,6 +321,11 @@ bool NavigationController::isHighlight() const
     return m_isNavigatedByKeyboard;
 }
 
+mu::async::Notification NavigationController::highlightChanged() const
+{
+    return m_highlightChanged;
+}
+
 void NavigationController::setIsResetOnMousePress(bool arg)
 {
     m_isResetOnMousePress = arg;
@@ -339,6 +344,7 @@ void NavigationController::resetIfNeed(QObject* watched)
 #endif
 
     m_isNavigatedByKeyboard = false;
+    m_highlightChanged.notify();
 }
 
 bool NavigationController::eventFilter(QObject* watched, QEvent* event)
