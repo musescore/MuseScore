@@ -82,6 +82,7 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 
     emit titleChanged();
     emit isBlankChanged();
+    emit isActiveChanged();
 }
 
 QString InputResourceItem::title() const
@@ -92,6 +93,11 @@ QString InputResourceItem::title() const
 bool InputResourceItem::isBlank() const
 {
     return !m_currentInputParams.isValid();
+}
+
+bool InputResourceItem::isActive() const
+{
+    return m_currentInputParams.isValid();
 }
 
 bool InputResourceItem::hasNativeEditorSupport() const
@@ -153,6 +159,7 @@ void InputResourceItem::updateCurrentParams(const AudioResourceMeta& newMeta)
 
     emit titleChanged();
     emit isBlankChanged();
+    emit isActiveChanged();
     emit inputParamsChanged();
 
     requestToLaunchNativeEditorView();

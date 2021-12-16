@@ -33,7 +33,7 @@ bool AbstractAudioResourceItem::isBlank() const
 
 bool AbstractAudioResourceItem::isActive() const
 {
-    return true;
+    return false;
 }
 
 QVariantMap AbstractAudioResourceItem::buildMenuItem(const QString& itemId,
