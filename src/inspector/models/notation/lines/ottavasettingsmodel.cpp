@@ -35,6 +35,7 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setTitle(qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
+    setIcon(ui::IconCode::Code::OTTAVA);
 
     static const QList<HookTypeInfo> hookTypes {
         { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },

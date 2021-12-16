@@ -35,6 +35,7 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(qtrc("inspector", "Volta"));
+    setIcon(ui::IconCode::Code::VOLTA);
 
     static const QList<HookTypeInfo> hookTypes {
         { Ms::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },

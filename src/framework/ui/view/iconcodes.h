@@ -325,6 +325,11 @@ public:
         MUTE = 0xF3D5,
         SOLO = 0xF3D6,
 
+        OTTAVA = 0xF40D,
+        PALM_MUTE = 0xF40E,
+        LET_RING = 0xF40F,
+        VOLTA = 0xF410,
+        VIBRATO = 0xF411,
         DIMINUENDO = 0xF414,
         CRESCENDO = 0xF415,
 
