@@ -44,7 +44,6 @@ static QString makeId(const ActionCode& actionCode, int itemIndex)
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
-    qApp->installEventFilter(this);
 }
 
 void AppMenuModel::load()
@@ -71,19 +70,69 @@ void AppMenuModel::load()
     setupConnections();
 }
 
-bool AppMenuModel::active() const
+bool AppMenuModel::isNavigateKey(int key)
 {
-    return m_active;
+    static QList<Qt::Key> keys {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Down,
+        Qt::Key_Space
+    };
+
+    return keys.contains(static_cast<Qt::Key>(key));
 }
 
-void AppMenuModel::setActive(bool active)
+void AppMenuModel::navigate(int key)
 {
-    if (m_active == active) {
+    Qt::Key _key = static_cast<Qt::Key>(key);
+    switch (_key) {
+    case Qt::Key_Left: {
+        int newIndex = itemIndex(m_highlightedMenuId) - 1;
+        if (newIndex < 0) {
+            newIndex = rowCount() - 1;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Right: {
+        int newIndex = itemIndex(m_highlightedMenuId) + 1;
+        if (newIndex > rowCount() - 1) {
+            newIndex = 0;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Down:
+    case Qt::Key_Space:
+        emit openMenu(m_highlightedMenuId);
+        break;
+    default:
+        break;
+    }
+}
+
+bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
+{
+    return !menuIdByActivateSymbol(keySymbol).isEmpty();
+}
+
+void AppMenuModel::navigate(const QString& keySymbol)
+{
+    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
+    emit openMenu(m_highlightedMenuId);
+}
+
+void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
+{
+    if (m_highlightedMenuId == highlightedMenuId) {
         return;
     }
 
-    m_active = active;
-    emit activeChanged(m_active);
+    m_highlightedMenuId = highlightedMenuId;
+
+    emit highlightedMenuIdChanged(m_highlightedMenuId);
 }
 
 void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -94,10 +143,18 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 
 bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
 {
-    if (event->type() == QEvent::KeyPress && watched == mainWindow()->qWindow()) {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Alt) {
-            setActive(!active());
+    if (watched == mainWindow()->qWindow()) {
+        if (event->type() == QEvent::KeyRelease) {
+            QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Alt) {
+                if (!m_highlightedMenuId.isEmpty()) {
+                    resetNavigation();
+                } else {
+                    navigateToFirstMenu();
+                }
+            }
+        } else if (event->type() == QEvent::MouseButtonPress) {
+            resetNavigation();
         }
     }
 
@@ -114,7 +171,14 @@ MenuItem AppMenuModel::makeAppMenu(const ActionCode& actionCode, const ui::MenuI
 void AppMenuModel::setupConnections()
 {
     controller()->openMenuChannel().onReceive(this, [this](const std::string& menuId) {
+        setHighlightedMenuId(QString::fromStdString(menuId));
         emit openMenu(QString::fromStdString(menuId));
+    });
+
+    navigationController()->navigationChanged().onNotify(this, [this]() {
+        if (navigationController()->isHighlight()) {
+            resetNavigation();
+        }
     });
 
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
@@ -144,6 +208,8 @@ void AppMenuModel::setupConnections()
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
+
+    qApp->installEventFilter(this);
 }
 
 MenuItem AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
@@ -599,4 +665,38 @@ MenuItemList AppMenuModel::workspacesItems() const
           << makeMenuItem("configure-workspaces");
 
     return items;
+}
+
+void AppMenuModel::resetNavigation()
+{
+    setHighlightedMenuId("");
+}
+
+void AppMenuModel::navigateToFirstMenu()
+{
+    setHighlightedMenuId(item(0).id);
+}
+
+QString AppMenuModel::highlightedMenuId() const
+{
+    return m_highlightedMenuId;
+}
+
+QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
+{
+    for (int i = 0; i < rowCount(); i++) {
+        MenuItem menuItem = item(i);
+        QString title = menuItem.title;
+
+        int activateKeyIndex = title.indexOf('&');
+        if (activateKeyIndex == -1) {
+            continue;
+        }
+
+        if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
+            return menuItem.id;
+        }
+    }
+
+    return QString();
 }

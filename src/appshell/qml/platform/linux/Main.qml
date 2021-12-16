@@ -36,20 +36,6 @@ AppWindow {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-
-        navigation.section: navSec
-
-        NavigationSection {
-            id: navSec
-            name: "AppMenuBar"
-            order: 0
-
-            onActiveChanged: {
-                if (active) {
-                    appMenuBar.forceActiveFocus()
-                }
-            }
-        }
     }
 
     WindowContent {

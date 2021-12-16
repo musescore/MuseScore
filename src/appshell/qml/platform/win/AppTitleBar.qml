@@ -42,19 +42,6 @@ Rectangle {
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
 
-    NavigationSection {
-        id: navSec
-        name: "AppTitleBar"
-        enabled: root.enabled && root.visible
-        order: 0
-
-        onActiveChanged: {
-            if (active) {
-                root.forceActiveFocus()
-            }
-        }
-    }
-
     RowLayout {
         anchors.fill: parent
 
@@ -66,9 +53,6 @@ Rectangle {
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.preferredWidth: width
             Layout.preferredHeight: height
-
-            navigation.section: navSec
-            navigation.order: 0
         }
 
         StyledTextLabel {
@@ -113,9 +97,6 @@ Rectangle {
             Layout.alignment: Qt.RightLeft | Qt.AlignVCenter
             Layout.preferredWidth: width
             Layout.preferredHeight: height
-
-            navigationPanel.section: navSec
-            navigationPanel.order: 1
 
             onShowWindowMinimizedRequested: {
                 root.showWindowMinimizedRequested()

@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
+#include "ui/inavigationcontroller.h"
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
@@ -43,27 +44,33 @@ class AppMenuModel : public ui::AbstractMenuModel
 
     INJECT(appshell, ui::IMainWindow, mainWindow)
     INJECT(appshell, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(appshell, ui::INavigationController, navigationController)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
     INJECT(appshell, IAppMenuActionController, controller)
 
-    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+    Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
 
-    bool active() const;
+    // Custom navigation
+    Q_INVOKABLE bool isNavigateKey(int key);
+    Q_INVOKABLE void navigate(int key);
+
+    Q_INVOKABLE bool hasItemByActivateKey(const QString& keySymbol);
+    Q_INVOKABLE void navigate(const QString& keySymbol);
 
 public slots:
-    void setActive(bool active);
+    void setHighlightedMenuId(QString highlightedMenuId);
 
 signals:
     void openMenu(const QString& menuId);
-    void activeChanged(bool active);
+    void highlightedMenuIdChanged(QString highlightedMenuId);
 
 private:
     void setupConnections();
@@ -98,7 +105,14 @@ private:
     ui::MenuItemList toolbarsItems() const;
     ui::MenuItemList workspacesItems() const;
 
-    bool m_active = false;
+    void resetNavigation();
+    void navigateToFirstMenu();
+
+    QString highlightedMenuId() const;
+
+    QString menuIdByActivateSymbol(const QString& symbol);
+
+    QString m_highlightedMenuId;
 };
 }
 
