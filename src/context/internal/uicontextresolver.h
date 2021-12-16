@@ -49,15 +49,12 @@ public:
     bool match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const override;
     bool matchWithCurrent(const ui::UiContext& ctx) const override;
 
-    void onNotationViewFocuseChanged(bool focused) override;
-
     bool isShortcutContextAllowed(const std::string& scContext) const override;
 
 private:
     void notifyAboutContextChanged();
 
     async::Notification m_currentUiContextChanged;
-    int m_notationViewFocusedCounter = 0;
 };
 }
 
