@@ -27,6 +27,8 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
+    readonly property bool containsMouse: increaseMouseArea.containsMouse || decreaseMouseArea.containsMouse
+
     property alias canIncrease: increaseButton.enabled
     property alias canDecrease: decreaseButton.enabled
 
