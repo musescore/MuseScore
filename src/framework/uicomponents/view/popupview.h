@@ -198,7 +198,6 @@ protected:
     void setErrCode(Ret::Code code);
 
     QRect currentScreenGeometry() const;
-    void updateSize();
     void updatePosition();
     void updateContentPosition();
 
