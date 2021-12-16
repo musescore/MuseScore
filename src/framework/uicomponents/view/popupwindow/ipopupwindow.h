@@ -54,6 +54,9 @@ public:
     virtual QWindow* parentWindow() const = 0;
     virtual void setParentWindow(QWindow* window) = 0;
 
+    virtual bool resizable() const = 0;
+    virtual void setResizable(bool resizable) = 0;
+
     virtual void setPosition(const QPoint& position) const = 0;
 
     virtual void forceActiveFocus() = 0;
@@ -61,7 +64,6 @@ public:
     virtual void setOnHidden(const std::function<void()>& callback) = 0;
 
 signals:
-    void sizeChanged();
     void aboutToClose(QQuickCloseEvent* event);
 };
 }
