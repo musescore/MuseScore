@@ -556,7 +556,7 @@ bool ProjectActionsController::doSaveScore(const io::path& filePath, project::Sa
         return false;
     }
 
-    if (saveMode == SaveMode::SaveAs && oldPath != filePath) {
+    if (oldPath != filePath) {
         globalContext()->currentMasterNotationChanged().notify();
     }
 
