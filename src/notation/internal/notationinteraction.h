@@ -218,9 +218,15 @@ public:
     void setScoreConfig(ScoreConfig config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
-    void nextLyrics(MoveDirection) override;
-    void nextLyricsVerse(MoveDirection) override;
-    void nextSyllable() override;
+    void navigateToLyrics(MoveDirection direction) override;
+    void navigateToLyricsVerse(MoveDirection direction) override;
+
+    void nagivateToNextSyllable() override;
+
+    void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) override;
+    void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
+    void navigateToHarmony(const Fraction& ticks) override;
+
     void addMelisma() override;
     void addLyricsVerse() override;
 
@@ -255,7 +261,14 @@ private:
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(Ms::FontStyle);
-    void nextLyrics(bool, bool, bool);
+    void navigateToLyrics(bool, bool, bool);
+
+    Ms::Harmony* editedHarmony() const;
+    Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::Tid textId) const;
+    Ms::Harmony* createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const;
+    void startEditText(Ms::TextBase* text);
+
+    void doEndTextEdit();
 
     Ms::Page* point2page(const PointF& p) const;
     QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;

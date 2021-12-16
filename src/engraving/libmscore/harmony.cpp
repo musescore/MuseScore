@@ -842,9 +842,14 @@ void Harmony::startEdit(EditData& ed)
 
 bool Harmony::edit(EditData& ed)
 {
-    if (ed.key == Qt::Key_Return) {
-        return true;     // Harmony only single line
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
     }
+
+    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+        return false;
+    }
+
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset

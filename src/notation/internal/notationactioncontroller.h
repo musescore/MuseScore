@@ -170,9 +170,24 @@ private:
 
     FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
+    bool measureNavigationAvailable() const;
+
+    bool textNavigationAvailable() const;
+    bool textNavigationByFractionAvailable() const;
+
+    void nextTextElement();
+    void prevTextElement();
+    void nextBeatTextElement();
+    void prevBeatTextElement();
+    void navigateToTextElement(MoveDirection direction, bool noterest = false);
+    void navigateToTextElementByFraction(const Fraction& fraction);
+    void navigateToTextElementInNearMeasure(MoveDirection direction);
+
     void startNoteInputIfNeed();
 
     bool hasSelection() const;
+    Ms::EngravingItem* selectedElement() const;
+
     bool canUndo() const;
     bool canRedo() const;
     bool isNotationPage() const;

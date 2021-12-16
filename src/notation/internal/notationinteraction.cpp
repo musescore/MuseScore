@@ -2522,9 +2522,7 @@ void NotationInteraction::endEditText()
         return;
     }
 
-    m_editData.element->endEdit(m_editData);
-    m_editData.element = nullptr;
-    m_editData.clearData();
+    doEndTextEdit();
 
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChanged();
@@ -3635,7 +3633,7 @@ void NotationInteraction::resetGripEdit()
     resetAnchorLines();
 }
 
-void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
+void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
         qWarning("nextLyric called with invalid current element");
@@ -3758,12 +3756,12 @@ void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
     }
 }
 
-void NotationInteraction::nextLyrics(MoveDirection direction)
+void NotationInteraction::navigateToLyrics(MoveDirection direction)
 {
-    nextLyrics(direction == MoveDirection::Left, true, false);
+    navigateToLyrics(direction == MoveDirection::Left, true, false);
 }
 
-void NotationInteraction::nextSyllable()
+void NotationInteraction::nagivateToNextSyllable()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
         qWarning("nextSyllable called with invalid current element");
@@ -3858,7 +3856,7 @@ void NotationInteraction::nextSyllable()
     toLyrics->selectAll(toLyrics->cursor());
 }
 
-void NotationInteraction::nextLyricsVerse(MoveDirection direction)
+void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
         qWarning("nextLyricVerse called with invalid current element");
@@ -3907,6 +3905,187 @@ void NotationInteraction::nextLyricsVerse(MoveDirection direction)
     score()->update();
 
     lyrics->selectAll(lyrics->cursor());
+}
+
+//! NOTE: Copied from ScoreView::harmonyBeatsTab
+void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest)
+{
+    Ms::Harmony* harmony = editedHarmony();
+    Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    if (!segment) {
+        qDebug("no segment");
+        return;
+    }
+
+    Measure* measure = segment->measure();
+    Fraction tick = segment->tick();
+    int track = harmony->track();
+    bool backDirection = direction == MoveDirection::Left;
+
+    if (backDirection && tick == measure->tick()) {
+        // previous bar, if any
+        measure = measure->prevMeasure();
+        if (!measure) {
+            qDebug("no previous measure");
+            return;
+        }
+    }
+
+    Fraction f = measure->ticks();
+    int ticksPerBeat   = f.ticks()
+                         / ((f.numerator() > 3 && (f.numerator() % 3) == 0 && f.denominator() > 4) ? f.numerator() / 3 : f.numerator());
+    Fraction tickInBar = tick - measure->tick();
+    Fraction newTick   = measure->tick()
+                         + Fraction::fromTicks((
+                                                   (tickInBar.ticks() + (backDirection ? -1 : ticksPerBeat)) / ticksPerBeat
+                                                   )
+                                               * ticksPerBeat);
+
+    bool needAddSegment = false;
+
+    // look for next/prev beat, note, rest or chord
+    for (;;) {
+        segment = backDirection ? segment->prev1(Ms::SegmentType::ChordRest) : segment->next1(Ms::SegmentType::ChordRest);
+
+        if (!segment || (backDirection ? (segment->tick() < newTick) : (segment->tick() > newTick))) {
+            // no segment or moved past the beat - create new segment
+            if (!backDirection && newTick >= measure->tick() + f) {
+                // next bar, if any
+                measure = measure->nextMeasure();
+                if (!measure) {
+                    qDebug("no next measure");
+                    return;
+                }
+            }
+
+            segment = Factory::createSegment(measure, Ms::SegmentType::ChordRest, newTick - measure->tick());
+            if (!segment) {
+                qDebug("no prev segment");
+                return;
+            }
+            needAddSegment = true;
+            break;
+        }
+
+        if (segment->tick() == newTick) {
+            break;
+        }
+
+        if (noterest) {
+            int minTrack = (track / Ms::VOICES) * Ms::VOICES;
+            int maxTrack = minTrack + (Ms::VOICES - 1);
+            if (segment->hasAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack)) {
+                break;
+            }
+        }
+    }
+
+    startEdit();
+
+    if (needAddSegment) {
+        score()->undoAddElement(segment);
+    }
+
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    if (!nextHarmony) {
+        nextHarmony = createHarmony(segment, track, harmony->harmonyType());
+        score()->undoAddElement(nextHarmony);
+    }
+
+    apply();
+    startEditText(nextHarmony);
+}
+
+//! NOTE: Copied from ScoreView::harmonyTab
+void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction)
+{
+    Ms::Harmony* harmony = editedHarmony();
+    Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    if (!segment) {
+        qDebug("harmonyTicksTab: no segment");
+        return;
+    }
+
+    // moving to next/prev measure
+    Measure* measure = segment->measure();
+    if (measure) {
+        if (direction == MoveDirection::Left) {
+            measure = measure->prevMeasure();
+        } else {
+            measure = measure->nextMeasure();
+        }
+    }
+
+    if (!measure) {
+        qDebug("no prev/next measure");
+        return;
+    }
+
+    segment = measure->findSegment(Ms::SegmentType::ChordRest, measure->tick());
+    if (!segment) {
+        qDebug("no ChordRest segment as measure");
+        return;
+    }
+
+    int track = harmony->track();
+
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    if (!nextHarmony) {
+        nextHarmony = createHarmony(segment, track, harmony->harmonyType());
+
+        startEdit();
+        score()->undoAddElement(nextHarmony);
+        apply();
+    }
+
+    startEditText(nextHarmony);
+}
+
+//! NOTE: Copied from ScoreView::harmonyBeatsTab
+void NotationInteraction::navigateToHarmony(const Fraction& ticks)
+{
+    Ms::Harmony* harmony = editedHarmony();
+    Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    if (!segment) {
+        qDebug("no segment");
+        return;
+    }
+
+    Measure* measure = segment->measure();
+
+    Fraction newTick   = segment->tick() + ticks;
+
+    // find the measure containing the target tick
+    while (newTick >= measure->tick() + measure->ticks()) {
+        measure = measure->nextMeasure();
+        if (!measure) {
+            qDebug("no next measure");
+            return;
+        }
+    }
+
+    // look for a segment at this tick; if none, create one
+    while (segment && segment->tick() < newTick) {
+        segment = segment->next1(Ms::SegmentType::ChordRest);
+    }
+
+    startEdit();
+
+    if (!segment || segment->tick() > newTick) {      // no ChordRest segment at this tick
+        segment = Factory::createSegment(measure, Ms::SegmentType::ChordRest, newTick - measure->tick());
+        score()->undoAddElement(segment);
+    }
+
+    int track = harmony->track();
+
+    Ms::Harmony* nextHarmony = findHarmonyInSegment(segment, track, harmony->tid());
+    if (!nextHarmony) {
+        nextHarmony = createHarmony(segment, track, harmony->harmonyType());
+        score()->undoAddElement(nextHarmony);
+    }
+
+    apply();
+    startEditText(nextHarmony);
 }
 
 void NotationInteraction::addMelisma()
@@ -4062,6 +4241,61 @@ void NotationInteraction::addLyricsVerse()
 
     score()->select(lyrics, SelectType::SINGLE, 0);
     startEditText(lyrics, PointF());
+}
+
+Ms::Harmony* NotationInteraction::editedHarmony() const
+{
+    Harmony* harmony = static_cast<Harmony*>(m_editData.element);
+    if (!harmony) {
+        return nullptr;
+    }
+
+    if (!harmony->parent() || !harmony->parent()->isSegment()) {
+        qDebug("no segment parent");
+        return nullptr;
+    }
+
+    return harmony;
+}
+
+Ms::Harmony* NotationInteraction::findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::Tid textId) const
+{
+    for (Ms::EngravingItem* e : segment->annotations()) {
+        if (e->isHarmony() && e->track() == track && toHarmony(e)->tid() == textId) {
+            return toHarmony(e);
+        }
+    }
+
+    return nullptr;
+}
+
+Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const
+{
+    Ms::Harmony* harmony = Factory::createHarmony(score()->dummy()->segment());
+    harmony->setScore(score());
+    harmony->setParent(segment);
+    harmony->setTrack(track);
+    harmony->setHarmonyType(type);
+
+    return harmony;
+}
+
+void NotationInteraction::startEditText(Ms::TextBase* text)
+{
+    doEndTextEdit();
+    select({ text }, SelectType::SINGLE);
+    startEditText(text, PointF());
+    text->cursor()->moveCursorToEnd();
+}
+
+void NotationInteraction::doEndTextEdit()
+{
+    if (m_editData.element) {
+        m_editData.element->endEdit(m_editData);
+        m_editData.element = nullptr;
+    }
+
+    m_editData.clearData();
 }
 
 void NotationInteraction::toggleFontStyle(Ms::FontStyle style)

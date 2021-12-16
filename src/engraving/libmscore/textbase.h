@@ -467,6 +467,33 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 };
+
+// allow shortcut key controller to handle
+inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
+{
+    if (modifiers & Qt::ControlModifier) {
+        // Ctrl + Space inserts the space symbol
+        return key != Qt::Key_Space;
+    }
+
+    if (modifiers == 0 || modifiers == Qt::ShiftModifier) {
+        switch (key) {
+        case Qt::Key_Space:
+        case Qt::Key_Underscore:
+        case Qt::Key_Minus:
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        case Qt::Key_Tab:
+            return true;
+        default:
+            break;
+        }
+    }
+
+    return false;
+}
 }     // namespace Ms
 
 #endif
