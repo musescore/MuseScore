@@ -97,10 +97,6 @@ UiContext UiContextResolver::currentUiContext() const
             if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
                 return context::UiCtxNotationFocused;
             }
-        } else {
-            if (m_notationViewFocusedCounter > 0) {
-                return context::UiCtxNotationFocused;
-            }
         }
 
         return context::UiCtxNotationOpened;
@@ -136,17 +132,6 @@ bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
 mu::async::Notification UiContextResolver::currentUiContextChanged() const
 {
     return m_currentUiContextChanged;
-}
-
-void UiContextResolver::onNotationViewFocuseChanged(bool focused)
-{
-    if (focused) {
-        m_notationViewFocusedCounter++;
-    } else {
-        m_notationViewFocusedCounter--;
-    }
-
-    notifyAboutContextChanged();
 }
 
 bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) const

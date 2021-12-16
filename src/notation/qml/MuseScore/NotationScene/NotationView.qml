@@ -118,6 +118,10 @@ FocusScope {
                         }
                     }
 
+                    onActiveFocusRequested: {
+                        fakeNavCtrl.requestActive()
+                    }
+
                     onTextEdittingStarted: {
                         root.textEdittingStarted()
                     }
