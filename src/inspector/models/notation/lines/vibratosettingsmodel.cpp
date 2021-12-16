@@ -32,6 +32,7 @@ VibratoSettingsModel::VibratoSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_VIBRATO);
     setTitle(qtrc("inspector", "Vibrato"));
+    setIcon(ui::IconCode::Code::VIBRATO);
 
     createProperties();
 }
