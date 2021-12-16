@@ -27,6 +27,9 @@ import MuseScore.UiComponents 1.0
 Column {
     id: root
 
+    property alias canIncrease: increaseButton.enabled
+    property alias canDecrease: decreaseButton.enabled
+
     signal increaseButtonClicked
     signal decreaseButtonClicked
 
