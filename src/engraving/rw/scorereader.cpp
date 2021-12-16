@@ -50,13 +50,21 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
     ScoreLoad sl;
     masterScore->fileInfo()->setFile(mscReader.params().filePath);
 
-    Err retval;
     // Read style
     {
         QByteArray styleData = mscReader.readStyleFile();
         QBuffer buf(&styleData);
         buf.open(QIODevice::ReadOnly);
         masterScore->style().read(&buf);
+    }
+
+    // Read ChordList
+    {
+        QByteArray styleData = mscReader.readChordListFile();
+        QBuffer buf(&styleData);
+        buf.open(QIODevice::ReadOnly);
+        masterScore->chordList()->read(&buf);
+        masterScore->chordList()->checkChordList(masterScore->style());
     }
 
     // Read images
@@ -68,6 +76,8 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             }
         }
     }
+
+    Err retval = Err::NoError;
 
     // Read score
     {
@@ -112,14 +122,6 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
             masterScore->addExcerpt(ex);
         }
-    }
-
-    // Read ChordList
-    {
-        QByteArray styleData = mscReader.readChordListFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        masterScore->chordList()->read(&buf);
     }
 
     //  Read audio
