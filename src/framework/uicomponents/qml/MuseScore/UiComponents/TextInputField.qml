@@ -47,12 +47,15 @@ FocusScope {
     property real textSidePadding: 12
     property real accessoriesPadding: 4
 
-    property alias background: background
+    readonly property alias background: background
 
-    property alias navigation: navCtrl
-    property alias accessible: navCtrl.accessible
+    readonly property alias mouseArea: clickableArea
+    property bool containsMouse: clickableArea.containsMouse
 
-    property alias clearTextButton: clearTextButtonItem
+    readonly property alias navigation: navCtrl
+    readonly property alias accessible: navCtrl.accessible
+
+    readonly property alias clearTextButton: clearTextButtonItem
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
@@ -257,7 +260,7 @@ FocusScope {
     states: [
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !valueInput.activeFocus
+            when: root.containsMouse && !valueInput.activeFocus
             PropertyChanges { target: background; border.color: Utils.colorWithAlpha(ui.theme.accentColor, 0.6) }
         },
 

@@ -130,6 +130,8 @@ Item {
 
         validator: root.decimals > 0 ? doubleInputValidator : intInputValidator
 
+        containsMouse: mouseArea.containsMouse || valueAdjustControl.containsMouse
+
         ValueAdjustControl {
             id: valueAdjustControl
 
