@@ -27,7 +27,7 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
-    property alias navigationCtrl: focusBorder.navigationCtrl
+    property bool highlight: false
     property var mouseArea: null
 
     color: "transparent"
@@ -35,9 +35,18 @@ Rectangle {
     border.width: ui.theme.borderWidth
     border.color: ui.theme.strokeColor
 
-    NavigationFocusBorder {
+    Rectangle {
         id: focusBorder
-        drawOutsideParent: false
+
+        anchors.fill: parent
+
+        visible: root.highlight
+
+        color: "transparent"
+
+        border.color: ui.theme.fontPrimaryColor
+        border.width: ui.theme.navCtrlBorderWidth
+        radius: Number(parent.radius) > 0 ? parent.radius : 0
     }
 
     states: [

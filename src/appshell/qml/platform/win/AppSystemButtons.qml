@@ -10,11 +10,6 @@ Row {
 
     property bool windowIsMiximized: false
 
-    property NavigationPanel navigationPanel : NavigationPanel {
-        name: "AppControl"
-        accessible.name: qsTrc("appshell", "App control")
-    }
-
     spacing: 8
 
     signal showWindowMinimizedRequested()
@@ -28,13 +23,7 @@ Row {
         transparent: true
         drawFocusBorderInsideRect: true
 
-        navigation.name: "AppControl"
-        navigation.panel: root.navigationPanel
-        navigation.order: 1
-        accessible.name: qsTrc("appshell", "Minimize")
-
         backgroundItem: AppButtonBackground {
-            navigationCtrl: minimizeButton.navigation
             mouseArea: minimizeButton.mouseArea
         }
 
@@ -50,13 +39,7 @@ Row {
         transparent: true
         drawFocusBorderInsideRect: true
 
-        navigation.name: "AppControl"
-        navigation.panel: root.navigationPanel
-        navigation.order: 2
-        accessible.name: !root.windowIsMiximized ? qsTrc("appshell", "Maximize") : qsTrc("appshell", "Unmaximize")
-
         backgroundItem: AppButtonBackground {
-            navigationCtrl: maximizeButton.navigation
             mouseArea: maximizeButton.mouseArea
         }
 
@@ -72,13 +55,7 @@ Row {
         transparent: true
         drawFocusBorderInsideRect: true
 
-        navigation.name: "AppControl"
-        navigation.panel: root.navigationPanel
-        navigation.order: 3
-        accessible.name: qsTrc("appshell", "Quit")
-
         backgroundItem: AppButtonBackground {
-            navigationCtrl: closeButton.navigation
             mouseArea: closeButton.mouseArea
         }
 

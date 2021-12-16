@@ -60,7 +60,7 @@ ListItemBlank {
     navigation.name: titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
-        var text = titleLabel.text
+        var text = itemPrv.title
         if (itemPrv.isCheckable) {
             text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "unchecked"))
         } else if (itemPrv.isSelectable) {
@@ -122,6 +122,8 @@ ListItemBlank {
 
     QtObject {
         id: itemPrv
+
+        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
 
         property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
         property string shortcut: hasShortcut ? modelData.shortcut : ""
@@ -256,7 +258,7 @@ ListItemBlank {
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: Boolean(modelData) && Boolean(modelData.title) ? Utils.makeMnemonicText(modelData.title) : ""
+            text: Utils.makeMnemonicText(itemPrv.title)
             textFormat: Text.RichText
             horizontalAlignment: Text.AlignLeft
         }

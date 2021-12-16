@@ -28,8 +28,6 @@ import MuseScore.AppShell 1.0
 ListView {
     id: root
 
-    property alias navigation: navPanel
-
     height: contentItem.childrenRect.height
     width: contentWidth
     orientation: Qt.Horizontal
@@ -44,10 +42,6 @@ ListView {
         onOpenMenu: {
             prv.openMenu(menuId)
         }
-
-        onActiveChanged: {
-            prv.activeMenu()
-        }
     }
 
     Component.onCompleted: {
@@ -59,84 +53,19 @@ ListView {
 
         property var showedMenu: null
 
-        //! Navigation
-
         function openMenu(menuId) {
             for (var i = 0; i < root.count; ++i) {
                 var item = root.itemAtIndex(i)
                 if (Boolean(item) && item.menuId === menuId) {
-                    item.navigation.requestActive()
-                    item.navigation.triggered()
-                }
-            }
-        }
-
-        function activeMenu() {
-            if (appMenuModel.active) {
-                if (prv.hasNavigatedItem()) {
+                    item.toggleMenuOpened()
                     return
                 }
-
-                var firstItem = root.itemAtIndex(0)
-                firstItem.navigation.requestActive()
-            } else {
-                var _navigatedItem = navigatedItem()
-                _navigatedItem.navigation.requestDeactive()
             }
         }
 
         function hasNavigatedItem() {
-            return navigatedItem() !== null
+            return appMenuModel.highlightedMenuId !== ""
         }
-
-        function navigatedItem() {
-            for (var i = 0; i < root.count; ++i) {
-                var item = root.itemAtIndex(i)
-
-                if (!Boolean(item)) {
-                    continue
-                }
-
-                if (item.navigation.active) {
-                    return item
-                }
-            }
-
-            return null
-        }
-
-        function itemByKey(key) {
-            for (var i = 0; i < root.count; ++i) {
-                var item = root.itemAtIndex(i)
-
-                if (!Boolean(item)) {
-                    continue
-                }
-
-                var title = item.item.title
-                if (Boolean(title)) {
-                    title = title.toLowerCase()
-                    var index = title.indexOf('&')
-                    if (index === -1) {
-                        continue
-                    }
-
-                    var activateKey = title[index + 1]
-                    if (activateKey === key) {
-                        return item
-                    }
-                }
-            }
-
-            return null
-        }
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "AppMenuBar"
-        enabled: root.enabled && root.visible
-        accessible.name: qsTrc("appshell", "App menu bar")
     }
 
     delegate: FlatButton {
@@ -144,6 +73,15 @@ ListView {
 
         property var item: Boolean(modelData) ? modelData : null
         property string menuId: Boolean(item) ? item.id : ""
+
+        property bool highlight: appMenuModel.highlightedMenuId === menuId
+        onHighlightChanged: {
+            if (highlight) {
+                forceActiveFocus()
+            }
+        }
+
+        property int viewIndex: index
 
         narrowMargins: true
         drawFocusBorderInsideRect: true
@@ -186,33 +124,40 @@ ListView {
         }
 
         backgroundItem: AppButtonBackground {
-            navigationCtrl: radioButtonDelegate.navigation
             mouseArea: radioButtonDelegate.mouseArea
+
+            highlight: radioButtonDelegate.highlight
 
             color: radioButtonDelegate.normalColor
         }
 
-        navigation.name: text
-        navigation.panel: navPanel
-        navigation.order: index
-        accessible.name: {
-            return Utils.removeAmpersands(text)
-        }
+        Accessible.role: Accessible.Button
+        Accessible.name: Utils.removeAmpersands(text)
 
         Keys.onShortcutOverride: {
             if (!prv.hasNavigatedItem()) {
                 return
             }
 
-            var activatedItem = prv.itemByKey(event.text)
-            event.accepted = Boolean(activatedItem)
+            var accepted = false
+
+            if (appMenuModel.isNavigateKey(event.key)) {
+                accepted = true
+            } else {
+                accepted = appMenuModel.hasItemByActivateKey(event.text)
+            }
+
+            event.accepted = accepted
         }
 
         Keys.onPressed: {
-            var activatedItem = prv.itemByKey(event.text)
-            if (Boolean(activatedItem)) {
-                activatedItem.navigation.requestActive()
-                activatedItem.navigation.triggered()
+            if (appMenuModel.isNavigateKey(event.key)) {
+                appMenuModel.navigate(event.key)
+                return
+            }
+
+            if (appMenuModel.hasItemByActivateKey(event.text)) {
+                appMenuModel.navigate(event.text)
             }
         }
 
