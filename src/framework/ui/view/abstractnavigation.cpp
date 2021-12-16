@@ -44,6 +44,10 @@ void AbstractNavigation::componentComplete()
         m_accessible->setState(IAccessible::State::Active, active());
         m_accessible->componentComplete();
     }
+
+    navigationController()->highlightChanged().onNotify(this, [this](){
+        emit highlightChanged();
+    });
 }
 
 void AbstractNavigation::setName(QString name)
