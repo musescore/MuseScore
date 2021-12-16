@@ -73,17 +73,27 @@ Canvas {
 
     function roundRect(x1, y1, x2, y2)
     {
-        var context = root.getContext("2d")
-        var b = border.width / 2
-        var x1Inner = x1 + b
-        var y1Inner = y1 + b
-        var x2Inner = x2 - b
-        var y2Inner = y2 - b
+        const context = root.getContext("2d")
+
+        context.clearRect(0, 0, width, height)
+
+        let needsFill = color.a > 0
+        let needsStroke = border.width > 0 && border.color.a > 0
+
+        if (!needsFill && !needsStroke) {
+            return
+        }
 
         context.beginPath()
         context.fillStyle = root.color
         context.strokeStyle = root.border.color
         context.lineWidth = root.border.width
+
+        let b = border.width / 2
+        let x1Inner = x1 + b
+        let y1Inner = y1 + b
+        let x2Inner = x2 - b
+        let y2Inner = y2 - b
 
         context.moveTo(x1 + topLeftRadius, y1Inner)
 
@@ -115,7 +125,12 @@ Canvas {
             context.quadraticCurveTo(x1Inner, y1Inner, x1 + topLeftRadius, y1Inner)
         }
 
-        context.stroke()
-        context.fill()
+        if (needsFill) {
+            context.fill()
+        }
+
+        if (needsStroke) {
+            context.stroke()
+        }
     }
 }
