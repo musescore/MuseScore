@@ -131,13 +131,15 @@ Item {
         ValueAdjustControl {
             id: valueAdjustControl
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: textInputField.background.border.width
+            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
-            icon: IconCode.SMALL_ARROW_DOWN
+            radius: textInputField.background.radius - anchors.margins
 
-            onIncreaseButtonClicked: root.increment()
-            onDecreaseButtonClicked: root.decrement()
+            onIncreaseButtonClicked: { root.increment() }
+            onDecreaseButtonClicked: { root.decrement() }
         }
 
         onCurrentTextEdited: {

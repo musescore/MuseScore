@@ -46,7 +46,8 @@ FocusScope {
 
     property real textSidePadding: 12
     property real accessoriesPadding: 4
-    property alias radius: background.radius
+
+    property alias background: background
 
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
