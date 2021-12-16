@@ -85,10 +85,8 @@
     <SC>
       <key>nav-trigger-control</key>
       <seq>Return</seq>
-    </SC>
-    <SC>
-      <key>nav-trigger-control</key>
       <seq>Space</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-escape</key>
