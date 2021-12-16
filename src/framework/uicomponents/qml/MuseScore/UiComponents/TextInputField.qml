@@ -107,13 +107,13 @@ FocusScope {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: ui.theme.textFieldColor
-        radius: 3
 
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
+        color: ui.theme.textFieldColor
         border.color: ui.theme.strokeColor
-        border.width: ui.theme.borderWidth > 0 ? ui.theme.borderWidth : 1 //borderWidth of >0 suggests that an HC theme is active, in which case we don't want to make a change
+        border.width: Math.max(ui.theme.borderWidth, 1)
+        radius: 3
     }
 
     RowLayout {
@@ -257,13 +257,13 @@ FocusScope {
         State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !valueInput.activeFocus
-            PropertyChanges { target: background; opacity: 0.6 }
+            PropertyChanges { target: background; border.color: Utils.colorWithAlpha(ui.theme.accentColor, 0.6) }
         },
 
         State {
             name: "FOCUSED"
             when: valueInput.activeFocus
-            PropertyChanges { target: background; border.color: ui.theme.accentColor; border.width: 1; opacity: 1 }
+            PropertyChanges { target: background; border.color: ui.theme.accentColor }
         }
     ]
 
