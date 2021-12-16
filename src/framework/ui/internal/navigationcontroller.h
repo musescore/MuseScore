@@ -83,7 +83,6 @@ private:
         Right,
         Up,
         Down,
-        TriggerControl,
         FirstControl,
         LastControl,
         NextRowControl,

@@ -278,7 +278,7 @@ void NavigationController::init()
     dispatcher()->reg(this, "nav-next-tab", [this]() { navigateTo(NavigationType::NextPanel); });
     dispatcher()->reg(this, "nav-prev-tab", [this]() { navigateTo(NavigationType::PrevPanel); });
 
-    dispatcher()->reg(this, "nav-trigger-control", [this]() { navigateTo(NavigationType::TriggerControl); });
+    dispatcher()->reg(this, "nav-trigger-control", [this]() { doTriggerControl(); });
 
     dispatcher()->reg(this, "nav-right", [this]() { navigateTo(NavigationType::Right); });
     dispatcher()->reg(this, "nav-left", [this]() { navigateTo(NavigationType::Left); });
@@ -389,9 +389,6 @@ void NavigationController::navigateTo(NavigationController::NavigationType type)
         break;
     case NavigationType::Down:
         onDown();
-        break;
-    case NavigationType::TriggerControl:
-        doTriggerControl();
         break;
     case NavigationType::FirstControl:
         goToFirstControl();
