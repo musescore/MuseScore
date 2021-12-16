@@ -53,6 +53,7 @@ public:
 
     QString title() const override;
     bool isBlank() const override;
+    bool isActive() const override;
     bool hasNativeEditorSupport() const override;
 
 signals:

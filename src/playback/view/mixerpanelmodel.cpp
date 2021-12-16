@@ -34,10 +34,6 @@ MixerPanelModel::MixerPanelModel(QObject* parent)
     controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
         load(QVariant::fromValue(m_itemsNavigationSection));
     });
-
-    connect(this, &QAbstractItemModel::modelReset, this, &MixerPanelModel::rowCountChanged);
-    connect(this, &QAbstractItemModel::rowsInserted, this, &MixerPanelModel::rowCountChanged);
-    connect(this, &QAbstractItemModel::rowsRemoved, this, &MixerPanelModel::rowCountChanged);
 }
 
 void MixerPanelModel::load(const QVariant& navigationSection)
@@ -114,6 +110,7 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
     sortItems();
 
     endResetModel();
+    emit rowCountChanged();
 
     playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
         addItem(sequenceId, trackId);
@@ -132,6 +129,7 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
     sortItems();
 
     endResetModel();
+    emit rowCountChanged();
 }
 
 void MixerPanelModel::removeItem(const audio::TrackId trackId)
@@ -145,6 +143,7 @@ void MixerPanelModel::removeItem(const audio::TrackId trackId)
     sortItems();
 
     endResetModel();
+    emit rowCountChanged();
 }
 
 void MixerPanelModel::sortItems()
