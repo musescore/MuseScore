@@ -1959,9 +1959,6 @@ const ChordDescription* ChordList::description(int id) const
 
 void ChordList::checkChordList(const MStyle& style)
 {
-    bool custom = style.value(Sid::chordStyle).toString() == "custom";
-    setCustomChordList(custom);
-
     // make sure we have a chordlist
     if (!loaded()) {
         qreal emag = style.value(Sid::chordExtensionMag).toReal();
