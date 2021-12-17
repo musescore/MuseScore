@@ -80,6 +80,8 @@ public:
     static QString toUserName(ChangeMethod v);
     static QString toXml(ChangeMethod v);
     static ChangeMethod fromXml(const QString& tag, ChangeMethod def);
+
+    static QString toXml(const PitchValue& v);
 };
 }
 

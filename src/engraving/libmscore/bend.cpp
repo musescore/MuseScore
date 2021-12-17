@@ -26,6 +26,7 @@
 #include "draw/brush.h"
 #include "draw/fontmetrics.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "score.h"
 #include "undo.h"
@@ -55,31 +56,31 @@ static const ElementStyle bendStyle {
     { Sid::bendLineWidth,                      Pid::LINE_WIDTH },
 };
 
-static const QList<PitchValue> BEND_CURVE = { PitchValue(0, 0),
-                                              PitchValue(15, 100),
-                                              PitchValue(60, 100) };
+static const PitchValues BEND_CURVE = { PitchValue(0, 0),
+                                        PitchValue(15, 100),
+                                        PitchValue(60, 100) };
 
-static const QList<PitchValue> BEND_RELEASE_CURVE = { PitchValue(0, 0),
-                                                      PitchValue(10, 100),
-                                                      PitchValue(20, 100),
-                                                      PitchValue(30, 0),
-                                                      PitchValue(60, 0) };
+static const PitchValues BEND_RELEASE_CURVE = { PitchValue(0, 0),
+                                                PitchValue(10, 100),
+                                                PitchValue(20, 100),
+                                                PitchValue(30, 0),
+                                                PitchValue(60, 0) };
 
-static const QList<PitchValue> BEND_RELEASE_BEND_CURVE = { PitchValue(0, 0),
-                                                           PitchValue(10, 100),
-                                                           PitchValue(20, 100),
-                                                           PitchValue(30, 0),
-                                                           PitchValue(40, 0),
-                                                           PitchValue(50, 100),
-                                                           PitchValue(60, 100) };
+static const PitchValues BEND_RELEASE_BEND_CURVE = { PitchValue(0, 0),
+                                                     PitchValue(10, 100),
+                                                     PitchValue(20, 100),
+                                                     PitchValue(30, 0),
+                                                     PitchValue(40, 0),
+                                                     PitchValue(50, 100),
+                                                     PitchValue(60, 100) };
 
-static const QList<PitchValue> PREBEND_CURVE = { PitchValue(0, 100),
-                                                 PitchValue(60, 100) };
+static const PitchValues PREBEND_CURVE = { PitchValue(0, 100),
+                                           PitchValue(60, 100) };
 
-static const QList<PitchValue> PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
-                                                         PitchValue(15, 100),
-                                                         PitchValue(30, 0),
-                                                         PitchValue(60, 0) };
+static const PitchValues PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
+                                                   PitchValue(15, 100),
+                                                   PitchValue(30, 0),
+                                                   PitchValue(60, 0) };
 
 //---------------------------------------------------------
 //   Bend
@@ -361,8 +362,7 @@ void Bend::write(XmlWriter& xml) const
 {
     xml.startObject(this);
     for (const PitchValue& v : m_points) {
-        xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
-                 .arg(v.time).arg(v.pitch).arg(v.vibrato));
+        xml.tagE(TConv::toXml(v));
     }
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);
@@ -415,7 +415,7 @@ PropertyValue Bend::getProperty(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(parseBendTypeFromCurve());
     case Pid::BEND_CURVE:
-        return PropertyValue::fromValue(m_points);
+        return m_points;
     default:
         return EngravingItem::getProperty(id);
     }
@@ -468,7 +468,7 @@ PropertyValue Bend::propertyDefault(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(BendType::BEND);
     case Pid::BEND_CURVE:
-        return PropertyValue::fromValue(BEND_CURVE);
+        return BEND_CURVE;
     default:
         return EngravingItem::propertyDefault(id);
     }

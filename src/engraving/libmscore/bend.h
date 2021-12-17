@@ -27,7 +27,6 @@
 #include "style/style.h"
 
 #include "engravingitem.h"
-#include "pitchvalue.h"
 #include "property.h"
 
 namespace mu::engraving {
@@ -62,9 +61,9 @@ public:
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
-    QList<PitchValue>& points() { return m_points; }
-    const QList<PitchValue>& points() const { return m_points; }
-    void setPoints(const QList<PitchValue>& p) { m_points = p; }
+    PitchValues& points() { return m_points; }
+    const PitchValues& points() const { return m_points; }
+    void setPoints(const PitchValues& p) { m_points = p; }
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }
 
@@ -82,7 +81,7 @@ private:
     void updatePointsByBendType(const BendType bendType);
 
     bool m_playBend = true;
-    QList<PitchValue> m_points;
+    PitchValues m_points;
 
     mu::PointF m_notePos;
     qreal m_noteWidth;

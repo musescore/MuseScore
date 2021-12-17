@@ -513,7 +513,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
         if (!bend->playBend()) {
             break;
         }
-        const QList<PitchValue>& points = bend->points();
+        const PitchValues& points = bend->points();
         int pitchSize = points.size();
 
         double noteLen = note->playTicks();

@@ -33,7 +33,6 @@
 #include "types/symid.h"
 
 #include "libmscore/types.h"
-#include "libmscore/pitchvalue.h"
 #include "libmscore/mscore.h"
 
 #include "framework/global/logstream.h"
@@ -55,7 +54,7 @@ enum class P_TYPE {
     // Geometry
     POINT,              // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
-    PATH,
+    DRAW_PATH,
     SCALE,
     SPATIUM,
     MILLIMETRE,
@@ -80,6 +79,10 @@ enum class P_TYPE {
     // Duration
     FRACTION,
 
+    // Sound
+    CHANGE_METHOD,
+    PITCH_VALUES,
+
     // Types
     LAYOUTBREAK_TYPE,
     VELO_TYPE,
@@ -95,9 +98,6 @@ enum class P_TYPE {
     KEY_MODE,
     TEXT_STYLE,
 
-    //
-    CHANGE_METHOD,
-
     // not sorted
 
     TEMPO,
@@ -106,8 +106,6 @@ enum class P_TYPE {
     INT_LIST,
 
     ZERO_INT,           // displayed with offset +1
-
-    PITCH_VALUES,
 
     ACCIDENTAL_ROLE,
 
@@ -146,7 +144,7 @@ public:
         : m_type(P_TYPE::SIZE), m_data(make_data<SizeF>(v)) {}
 
     PropertyValue(const PainterPath& v)
-        : m_type(P_TYPE::PATH), m_data(make_data<PainterPath>(v)) {}
+        : m_type(P_TYPE::DRAW_PATH), m_data(make_data<PainterPath>(v)) {}
 
     PropertyValue(const Spatium& v)
         : m_type(P_TYPE::SPATIUM), m_data(make_data<Spatium>(v)) {}
@@ -194,6 +192,12 @@ public:
     PropertyValue(const Fraction& v)
         : m_type(P_TYPE::FRACTION), m_data(make_data<Fraction>(v)) {}
 
+    // Sound
+    PropertyValue(ChangeMethod v)
+        : m_type(P_TYPE::CHANGE_METHOD), m_data(make_data<ChangeMethod>(v)) {}
+    PropertyValue(const PitchValues& v)
+        : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<PitchValues>(v)) {}
+
     // Types
     PropertyValue(LayoutBreakType v)
         : m_type(P_TYPE::LAYOUTBREAK_TYPE), m_data(make_data<LayoutBreakType>(v)) {}
@@ -230,14 +234,7 @@ public:
     PropertyValue(TextStyleType v)
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
 
-    //
-    PropertyValue(ChangeMethod v)
-        : m_type(P_TYPE::CHANGE_METHOD), m_data(make_data<ChangeMethod>(v)) {}
-
     // not sorted
-
-    PropertyValue(const Ms::PitchValues& v)
-        : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<Ms::PitchValues>(v)) {}
 
     PropertyValue(const QList<int>& v)
         : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}

@@ -1978,7 +1978,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
 //   checkForHeld
 //---------------------------------------------------------
 
-bool checkForHold(Segment* segment, QList<PitchValue> points)
+bool checkForHold(Segment* segment, PitchValues points)
 {
     bool same        = false;
     Segment* prevSeg = segment->prev1(SegmentType::ChordRest);
@@ -1987,7 +1987,7 @@ bool checkForHold(Segment* segment, QList<PitchValue> points)
     }
     foreach (EngravingItem* e, prevSeg->annotations()) {
         if (e->type() == ElementType::TREMOLOBAR) {
-            QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
+            PitchValues prevPoints = ((TremoloBar*)e)->points();
             if (prevPoints.length() != points.length()) {
                 break;
             }
@@ -2019,7 +2019,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
     if ((whammyOrigin == whammyEnd) && (whammyOrigin != whammyMiddle) && whammyMiddle != -1) {
         /* we are dealing with a dip. We need the check for whammy middle
          * to be set as a predive has the same characteristics. */
-        QList<PitchValue> points;
+        PitchValues points;
         points.append(PitchValue(0, whammyOrigin, false));
         points.append(PitchValue(50, whammyMiddle, false));
         points.append(PitchValue(100, whammyEnd, false));
@@ -2029,7 +2029,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
         segment->add(b);
     } else if (whammyOrigin == 0) {
         // we're dealing with a dive that does not continue from a previous marking
-        QList<PitchValue> points;
+        PitchValues points;
         points.append(PitchValue(0, whammyOrigin, false));
         points.append(PitchValue(50, whammyMiddle, false));
         points.append(PitchValue(100, whammyEnd, false));
@@ -2039,7 +2039,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
         segment->add(b);
     } else if (whammyOrigin == whammyEnd && whammyMiddle == -1) {
         // this deals with a pre-dive
-        QList<PitchValue> points;
+        PitchValues points;
         points.append(PitchValue(0, 0, false));
         points.append(PitchValue(50, whammyOrigin, false));
         points.append(PitchValue(100, whammyEnd, false));
@@ -2055,8 +2055,8 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
         }
         foreach (EngravingItem* e, prevSeg->annotations()) {
             if (e->type() == ElementType::TREMOLOBAR) {
-                QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
-                QList<PitchValue> points;
+                PitchValues prevPoints = ((TremoloBar*)e)->points();
+                PitchValues points;
                 points.append(PitchValue(0, prevPoints[prevPoints.length() - 1].pitch, false));
                 points.append(PitchValue(50, whammyOrigin, false));
                 points.append(PitchValue(100, whammyEnd, false));
@@ -2068,7 +2068,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
         }
     } else {
         // a predive/dive
-        QList<PitchValue> points;
+        PitchValues points;
         points.append(PitchValue(0, 0, false));
         points.append(PitchValue(50, whammyOrigin, false));
         points.append(PitchValue(100, whammyEnd, false));

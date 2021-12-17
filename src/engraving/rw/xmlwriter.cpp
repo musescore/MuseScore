@@ -260,7 +260,7 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << QString("<%1 w=\"%2\" h=\"%3\"/>\n").arg(name).arg(s.width()).arg(s.height());
     }
     break;
-    case P_TYPE::PATH:
+    case P_TYPE::DRAW_PATH:
         UNREACHABLE; //! TODO
         break;
     case P_TYPE::SCALE:
@@ -451,7 +451,6 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
 //    case P_TYPE::INT_LIST,
 //    case P_TYPE::GLISS_STYLE,
 //    case P_TYPE::ZERO_INT,           // displayed with offset +1
-//    case P_TYPE::PITCH_VALUES,
     }
 }
 
