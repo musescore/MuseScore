@@ -95,6 +95,9 @@ enum class P_TYPE {
     KEY_MODE,
     TEXT_STYLE,
 
+    //
+    CHANGE_METHOD,
+
     // not sorted
 
     TEMPO,
@@ -103,8 +106,6 @@ enum class P_TYPE {
     INT_LIST,
 
     ZERO_INT,           // displayed with offset +1
-
-    CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
 
     PITCH_VALUES,
 
@@ -228,6 +229,10 @@ public:
 
     PropertyValue(TextStyleType v)
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
+
+    //
+    PropertyValue(ChangeMethod v)
+        : m_type(P_TYPE::CHANGE_METHOD), m_data(make_data<ChangeMethod>(v)) {}
 
     // not sorted
 

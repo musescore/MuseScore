@@ -732,7 +732,7 @@ void Hairpin::read(XmlReader& e)
         } else if (tag == "singleNoteDynamics") {
             _singleNoteDynamics = e.readBool();
         } else if (tag == "veloChangeMethod") {
-            _veloChangeMethod = ChangeMap::nameToChangeMethod(e.readElementText());
+            _veloChangeMethod = TConv::fromXml(e.readElementText(), ChangeMethod::NORMAL);
         } else if (!TextLineBase::readProperties(e)) {
             e.unknown();
         }
@@ -762,7 +762,7 @@ PropertyValue Hairpin::getProperty(Pid id) const
     case Pid::SINGLE_NOTE_DYNAMICS:
         return _singleNoteDynamics;
     case Pid::VELO_CHANGE_METHOD:
-        return int(_veloChangeMethod);
+        return _veloChangeMethod;
     default:
         return TextLineBase::getProperty(id);
     }
@@ -797,7 +797,7 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         _singleNoteDynamics = v.toBool();
         break;
     case Pid::VELO_CHANGE_METHOD:
-        _veloChangeMethod = ChangeMethod(v.toInt());
+        _veloChangeMethod = v.value<ChangeMethod>();
         break;
     default:
         return TextLineBase::setProperty(id, v);
@@ -874,7 +874,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         return true;
 
     case Pid::VELO_CHANGE_METHOD:
-        return int(ChangeMethod::NORMAL);
+        return ChangeMethod::NORMAL;
 
     case Pid::PLACEMENT:
         return score()->styleV(Sid::hairpinPlacement);

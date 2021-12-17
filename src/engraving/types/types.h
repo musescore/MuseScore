@@ -468,6 +468,20 @@ enum class TextStyleType {
     TEXT_TYPES,           // used for user-defined types
     IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
+
+// P_TYPE::CHANGE_METHOD
+enum class ChangeMethod : signed char {
+    NORMAL,
+    EXPONENTIAL,
+    EASE_IN,
+    EASE_OUT,
+    EASE_IN_OUT        // and shake it all about
+};
+
+enum class ChangeDirection : signed char {
+    INCREASING,
+    DECREASING
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -495,6 +509,8 @@ using DynamicSpeed = mu::engraving::DynamicSpeed;
 using HookType = mu::engraving::HookType;
 using KeyMode = mu::engraving::KeyMode;
 using TextStyleType = mu::engraving::TextStyleType;
+using ChangeMethod = mu::engraving::ChangeMethod;
+using ChangeDirection = mu::engraving::ChangeDirection;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
