@@ -74,7 +74,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     Fraction lcmTick = ctx.curMeasure->tick();
     system->setInstrumentNames(ctx, ctx.startWithLongNames, lcmTick);
 
-    qreal minWidth    = 0;
+    qreal curSysWidth    = 0;
     qreal layoutSystemMinWidth = 0;
     bool firstMeasure = true;
     bool createHeader = false;
@@ -99,7 +99,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
         // After appending a new measure, the shortest note in the system may change, in which case
         // we need to recompute the layout of the previous measures. When updating the width of these
-        // measures, minWidth must be updated accordingly.
+        // measures, curSysWidth must be updated accordingly.
         if (ctx.curMeasure->isMeasure()) {
             if (toMeasure(ctx.curMeasure)->computeTicks() < minTicks) {
                 prevMinTicks = minTicks; // We save the previous value in case we need to restore it (see later)
@@ -113,7 +113,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                         qreal prevWidth = toMeasure(mb)->width();
                         toMeasure(mb)->computeWidth(minTicks, 1);
                         qreal newWidth = toMeasure(mb)->width();
-                        minWidth += newWidth - prevWidth;
+                        curSysWidth += newWidth - prevWidth;
                     }
                 }
             } else {
@@ -124,9 +124,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         if (ctx.curMeasure->isMeasure()) {
             Measure* m = toMeasure(ctx.curMeasure);
             if (firstMeasure) {
-                layoutSystemMinWidth = minWidth;
-                system->layoutSystem(ctx, minWidth, ctx.firstSystem, ctx.firstSystemIndent);
-                minWidth += system->leftMargin();
+                layoutSystemMinWidth = curSysWidth;
+                system->layoutSystem(ctx, curSysWidth, ctx.firstSystem, ctx.firstSystemIndent);
+                curSysWidth += system->leftMargin();
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -168,7 +168,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         // check if lc.curMeasure fits, remove if not
         // collect at least one measure and the break
 
-        bool doBreak = (system->measures().size() > 1) && ((minWidth + ww) > systemWidth * 1.035);
+        bool doBreak = (system->measures().size() > 1) && ((curSysWidth + ww) > systemWidth * 1.025);
         if (doBreak) {
             breakMeasure = ctx.curMeasure;
             system->removeLastMeasure();
@@ -184,7 +184,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                 ctx.curMeasure  = ctx.prevMeasure;
                 ctx.prevMeasure = ctx.curMeasure->prevMeasure();
 
-                minWidth -= system->lastMeasure()->width();
+                curSysWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
                 ctx.curMeasure->setParent(oldSystem);
             }
@@ -197,7 +197,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                         qreal prevWidth = toMeasure(mb)->width();
                         toMeasure(mb)->computeWidth(minTicks, 1);
                         qreal newWidth = toMeasure(mb)->width();
-                        minWidth += newWidth - prevWidth;
+                        curSysWidth += newWidth - prevWidth;
                     }
                 }
             }
@@ -217,7 +217,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             if (m->trailer()) {
                 qreal ow = m->width();
                 m->removeSystemTrailer();
-                minWidth += m->width() - ow;
+                curSysWidth += m->width() - ow;
             }
             // if the prev measure is an end repeat and the cur measure
             // is an repeat, the createEndBarLines() created an start-end repeat barline
@@ -240,7 +240,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             // but at this point we have no choice but to assume it isn't
             // since we don't know yet if another true measure will fit
             // worst that happens is we don't get the automatic double bar before a courtesy key signature
-            minWidth += m->createEndBarLines(false);          // create final barLine
+            curSysWidth += m->createEndBarLines(false);          // create final barLine
         }
 
         MeasureBase* mb = ctx.curMeasure;
@@ -283,11 +283,11 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
         LayoutMeasure::getNextMeasure(options, ctx);
 
-        minWidth += ww;
+        curSysWidth += ww;
 
         // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
         mb = ctx.curMeasure;
-        bool tooWide = false;     // minWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
+        bool tooWide = false;     // curSysWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
         if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide) {
             break;
         }
@@ -344,15 +344,15 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
         LayoutBeams::breakCrossMeasureBeams(ctx, toMeasure(ctx.prevMeasure));
         qreal w = toMeasure(ctx.prevMeasure)->createEndBarLines(true);
-        minWidth += w;
+        curSysWidth += w;
     }
 
     hideEmptyStaves(score, system, ctx.firstSystem);
     // Relayout system decorations to reuse space properly for
     // hidden staves' instrument names or other hidden elements.
-    minWidth -= system->leftMargin();
+    curSysWidth -= system->leftMargin();
     system->layoutSystem(ctx, layoutSystemMinWidth, ctx.firstSystem, ctx.firstSystemIndent);
-    minWidth += system->leftMargin();
+    curSysWidth += system->leftMargin();
 
     //-------------------------------------------------------
     //    add system trailer if needed
@@ -368,7 +368,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             if (lm->trailer()) {
                 lm->computeWidth(minTicks, 1);
             }
-            minWidth += lm->width() - w;
+            curSysWidth += lm->width() - w;
         }
     }
 
@@ -376,9 +376,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     // Gradient descent method: calls the computeWidth() function with a stretch parameter
     // proportional to the difference between the current length and the target length.
     // After few iterations, the length will converge to the target length.
-    qreal newRest = systemWidth - minWidth;
-    if (ctx.curMeasure == 0 && ((minWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
-        // We do not stretch last system if minWidth is <= lastSystemFillLimit
+    qreal newRest = systemWidth - curSysWidth;
+    if (ctx.curMeasure == 0 && ((curSysWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
+        // We do not stretch last system if curSysWidth is <= lastSystemFillLimit
         newRest = 0;
     }
     if (MScore::noHorizontalStretch) { // Debug feature
@@ -388,19 +388,19 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal prevWidth = 0;
     int iter = 0;
     while (abs(newRest) > score->spatium() * 0.08 && iter < 200) { // spatium*0.08 is about the width of a note stem
-        stretchCoeff += 1.5 * newRest / minWidth;
+        stretchCoeff += 1.5 * newRest / curSysWidth;
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 Measure* m = toMeasure(mb);
                 prevWidth = m->width();
                 m->computeWidth(minTicks, stretchCoeff);
-                minWidth += m->width() - prevWidth;
+                curSysWidth += m->width() - prevWidth;
             }
         }
-        newRest = systemWidth - minWidth;
+        newRest = systemWidth - curSysWidth;
         iter++;
     }
-    
+
     // LAYOUT MEASURES
     PointF pos;
     firstMeasure = true;

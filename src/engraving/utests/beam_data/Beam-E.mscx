@@ -990,8 +990,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>46</l1>
-            <l2>48</l2>
+            <l1>52</l1>
+            <l2>46</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>
