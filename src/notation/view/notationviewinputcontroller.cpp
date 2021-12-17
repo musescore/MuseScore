@@ -674,8 +674,9 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (mimeData->hasUrls()) {
-        QUrl url = mimeData->urls().first();
+    QList<QUrl> urls = mimeData->urls();
+    if (urls.count() > 0) {
+        QUrl url = urls.first();
 
         if (viewInteraction()->startDrop(url)) {
             event->accept();

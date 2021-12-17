@@ -19,28 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
-#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
+#ifndef MU_APPSHELL_WINDOWDROPAREA_H
+#define MU_APPSHELL_WINDOWDROPAREA_H
 
-namespace mu::project {
-class IProjectFilesController : MODULE_EXPORT_INTERFACE
+#include <QQuickItem>
+
+#include "modularity/ioc.h"
+#include "iapplicationactioncontroller.h"
+
+namespace mu::appshell {
+class WindowDropArea : public QQuickItem
 {
-    INTERFACE_ID(IProjectFilesController)
-
+    INJECT(appshell, IApplicationActionController, applicationActionController)
 public:
-    virtual ~IProjectFilesController() = default;
+    explicit WindowDropArea(QQuickItem* parent = nullptr);
 
-    virtual bool isFileSupported(const io::path& path) const = 0;
-    virtual Ret openProject(const io::path& path) = 0;
-    virtual bool closeOpenedProject(bool quitApp = false) = 0;
-    virtual bool isProjectOpened(const io::path& path) const = 0;
-    virtual bool isAnyProjectOpened() const = 0;
-    virtual bool saveProject(const io::path& path = io::path()) = 0;
+protected:
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dragMoveEvent(QDragMoveEvent* event) override;
+    void dropEvent(QDropEvent*) override;
 };
 }
 
-#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#endif // MU_APPSHELL_WINDOWDROPAREA_H

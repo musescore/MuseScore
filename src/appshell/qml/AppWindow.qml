@@ -29,7 +29,11 @@ import MuseScore.AppShell 1.0
 ApplicationWindow {
     id: root
 
+    default property alias windowContent: windowContentItem.data
+
     objectName: "ApplicationWindow"
+
+    title: titleProvider.title
 
     width: 1150
     height: 800
@@ -40,6 +44,11 @@ ApplicationWindow {
     visible: false
 
     color: ui.theme.backgroundPrimaryColor
+
+    Component.onCompleted: {
+        ui.rootItem = root.contentItem
+        titleProvider.load()
+    }
 
     MainWindowTitleProvider {
         id: titleProvider
@@ -54,15 +63,17 @@ ApplicationWindow {
         fileModified: titleProvider.fileModified
     }
 
-    title: titleProvider.title
-
     ToolTipProvider { }
 
     //! NOTE Need only create
     Shortcuts { }
 
-    Component.onCompleted: {
-        ui.rootItem = root.contentItem
-        titleProvider.load()
+    Item {
+        id: windowContentItem
+        anchors.fill: parent
+    }
+
+    WindowDropArea {
+        anchors.fill: parent
     }
 }
