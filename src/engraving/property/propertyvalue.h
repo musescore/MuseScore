@@ -78,12 +78,11 @@ enum class P_TYPE {
     BEAM_MODE,
     ACCIDENTAL_ROLE,
 
-    // Duration
-    FRACTION,
-
     // Sound
+    FRACTION,
     CHANGE_METHOD,
     PITCH_VALUES,
+    TEMPO,
 
     // Types
     LAYOUTBREAK_TYPE,
@@ -102,7 +101,6 @@ enum class P_TYPE {
 
     // not sorted
 
-    TEMPO,
     GROUPS,
 
     ZERO_INT,           // displayed with offset +1
@@ -192,15 +190,15 @@ public:
     PropertyValue(const AccidentalRole& v)
         : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<AccidentalRole>(v)) {}
 
-    // Duration
+    // Sound
     PropertyValue(const Fraction& v)
         : m_type(P_TYPE::FRACTION), m_data(make_data<Fraction>(v)) {}
-
-    // Sound
     PropertyValue(ChangeMethod v)
         : m_type(P_TYPE::CHANGE_METHOD), m_data(make_data<ChangeMethod>(v)) {}
     PropertyValue(const PitchValues& v)
         : m_type(P_TYPE::PITCH_VALUES), m_data(make_data<PitchValues>(v)) {}
+    PropertyValue(const BeatsPerSecond& v)
+        : m_type(P_TYPE::TEMPO), m_data(make_data<BeatsPerSecond>(v)) {}
 
     // Types
     PropertyValue(LayoutBreakType v)
