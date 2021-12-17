@@ -3142,7 +3142,7 @@ QString Measure::accessibleInfo() const
 //-----------------------------------------------------------------------------
 //  layoutMeasureElements()
 //  lays out all the element of a measure
-//  LEGACY: this method used to be called stretchMeasure() and was used to 
+//  LEGACY: this method used to be called stretchMeasure() and was used to
 //  distribute the remaining space at the end of a system. That task is now
 //  performed elsewhere and only the layout tasks are kept.
 //-----------------------------------------------------------------------------
@@ -4104,7 +4104,14 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretc
 {
     qreal slope = userStretch() * score()->styleD(Sid::measureSpacing);
 
-    if (minTicks <= Fraction(1 , 32)) {
+    if (curTicks > m_timesig) { // This is the case of MM rests
+        curTicks = curTicks - m_timesig; // 2 bars MM rests is spaced same as 1 bar
+        if (curTicks > m_timesig * 20) { // To avoid excessive
+            curTicks = m_timesig * 20;
+        }
+    }
+
+    if (minTicks <= Fraction(1, 32)) {
         // Reduces the slope of the spacing curve in case very short notes are present.
         // Avoids having longer notes too wide.
         qreal reduction = qMax((1 - 0.2 * log2(qreal(Fraction(1, 16).ticks()) / qreal(minTicks.ticks()))), 0.3);
@@ -4119,7 +4126,7 @@ qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretc
     qreal str = 1 - 0.647 * slope + 0.647 * slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
 
     if (minTicks > Fraction(1, 16)) {
-        // This additional stretch avoids long notes being too narrow in the absense of shorter notes.
+        // Avoids long notes being too narrow in the absense of shorter notes.
         str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(Fraction(1, 16).ticks())));
     }
 
@@ -4182,13 +4189,12 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                 w = s->minHorizontalDistance(ns, false);
                 // New spacing algorithm: we apply an additional spacing which depends on the duration of
                 // the note with respect to the shortest note *of the system*.
-                Fraction t = s->ticks();
-                if (t > m_timesig) { // Avoids long MM rests being super wide
-                    t = 2 * m_timesig; 
+                if (s->isChordRestType()) {
+                    Fraction t = s->ticks();
+                    qreal str = stretchFormula(t, minTicks, stretchCoeff);
+                    qreal minStretchedWidth = minNoteSpace * str * stretch;
+                    w = qMax(w, minStretchedWidth);
                 }
-                qreal str = stretchFormula(t, minTicks, stretchCoeff);
-                qreal minStretchedWidth = minNoteSpace * str * stretch;
-                w = qMax(w, minStretchedWidth);
             }
             // look back for collisions with previous segments
             // this is time consuming (ca. +5%) and probably requires more optimization
