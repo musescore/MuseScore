@@ -458,7 +458,7 @@ QString propertyUserName(Pid id)
 //    propertyFromString
 //---------------------------------------------------------
 
-PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
+PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString)
 {
     switch (type) {
     case P_TYPE::ZERO_INT:
@@ -470,8 +470,6 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value)
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
         return PropertyValue();
-    case P_TYPE::CHANGE_METHOD:
-        return PropertyValue(int(ChangeMap::nameToChangeMethod(value)));
     default:
         break;
     }
@@ -560,6 +558,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::TEXT_STYLE:
         return PropertyValue(TConv::fromXml(e.readElementText(), TextStyleType::DEFAULT));
 
+    case P_TYPE::CHANGE_METHOD:
+        return PropertyValue(TConv::fromXml(e.readElementText(), ChangeMethod::NORMAL));
+
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
     case P_TYPE::GROUPS: {
@@ -608,8 +609,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     switch (propertyType(id)) {
     case P_TYPE::ZERO_INT:
         return QString::number(value.toInt());
-    case P_TYPE::CHANGE_METHOD:
-        return ChangeMap::changeMethodToName(ChangeMethod(value.toInt()));
+
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
     case P_TYPE::TEMPO:

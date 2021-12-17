@@ -33,8 +33,6 @@ namespace Ms {
 class Score;
 class Hairpin;
 
-enum class ChangeMethod : signed char;
-
 enum class HairpinType : signed char {
     INVALID = -1,
     CRESC_HAIRPIN,

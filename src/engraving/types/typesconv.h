@@ -76,6 +76,10 @@ public:
     static QString toUserName(TextStyleType v);
     static QString toXml(TextStyleType v);
     static TextStyleType fromXml(const QString& tag, TextStyleType def);
+
+    static QString toUserName(ChangeMethod v);
+    static QString toXml(ChangeMethod v);
+    static ChangeMethod fromXml(const QString& tag, ChangeMethod def);
 };
 }
 

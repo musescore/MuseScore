@@ -25,7 +25,7 @@
 
 #include <QMultiMap>
 
-#include "types/fraction.h"
+#include "types/types.h"
 
 /**
  \file
@@ -33,19 +33,6 @@
 */
 
 namespace Ms {
-enum class ChangeMethod : signed char {
-    NORMAL,
-    EXPONENTIAL,
-    EASE_IN,
-    EASE_OUT,
-    EASE_IN_OUT        // and shake it all about
-};
-
-enum class ChangeDirection : signed char {
-    INCREASING,
-    DECREASING
-};
-
 //---------------------------------------------------------
 ///   ChangeEvent
 ///   item in ChangeMap
@@ -111,13 +98,7 @@ public:
     void addRamp(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction);
     void cleanup();
 
-    void dump();
-
     static int interpolate(Fraction& eventTick, ChangeEvent& event, Fraction& tick);
-    static QString changeMethodToName(ChangeMethod method);
-    static ChangeMethod nameToChangeMethod(QString name);
-
-    static const std::vector<ChangeMethodItem> changeMethodTable;
 };
 }     // namespace Ms
 #endif
