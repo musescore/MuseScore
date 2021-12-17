@@ -50,7 +50,8 @@ public:
 
     io::path myFirstProjectPath() const override;
 
-    io::paths availableTemplatesPaths() const override;
+    io::paths availableTemplateDirs() const override;
+    io::path templateCategoriesJsonPath(const io::path& templatesDir) const override;
 
     io::path userTemplatesPath() const override;
     void setUserTemplatesPath(const io::path& path) override;

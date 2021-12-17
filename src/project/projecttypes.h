@@ -90,12 +90,10 @@ struct ProjectMeta
 
 using ProjectMetaList = QList<ProjectMeta>;
 
-struct Template : public ProjectMeta {
+struct Template
+{
     QString categoryTitle;
-
-    Template() = default;
-    Template(const ProjectMeta& meta)
-        : ProjectMeta(meta) {}
+    ProjectMeta meta;
 };
 
 using Templates = QList<Template>;
