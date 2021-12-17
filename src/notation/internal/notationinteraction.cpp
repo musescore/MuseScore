@@ -3083,8 +3083,8 @@ bool NotationInteraction::canAddTupletToSelecredChordRests() const
             continue;
         }
 
-        if (chordRest->durationType() < Ms::TDuration(Ms::TDuration::DurationType::V_512TH)
-            && chordRest->durationType() != Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE)) {
+        if (chordRest->durationType() < Ms::TDuration(Ms::DurationType::V_512TH)
+            && chordRest->durationType() != Ms::TDuration(Ms::DurationType::V_MEASURE)) {
             return false;
         }
     }

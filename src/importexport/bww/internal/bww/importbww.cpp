@@ -127,7 +127,7 @@ static void setTempo(Ms::Score* score, int tempo)
     Ms::TempoText* tt = new Ms::TempoText(segment);
     tt->setTempo(double(tempo) / 60.0);
     tt->setTrack(0);
-    QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
+    QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::DurationType::V_QUARTER);
     tempoText += QString(" = %1").arg(tempo);
     tt->setPlainText(tempoText);
     segment->add(tt);
@@ -347,9 +347,8 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
         ticks = 3 * ticks / 2;
     }
     qDebug() << "ticks:" << ticks;
-    Ms::TDuration durationType(Ms::TDuration::DurationType::V_INVALID);
+    Ms::TDuration durationType(Ms::DurationType::V_INVALID);
     durationType.setVal(ticks);
-    qDebug() << "duration:" << durationType.name();
     if (triplet != StartStop::ST_NONE) {
         ticks = 2 * ticks / 3;
     }
@@ -364,11 +363,11 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     cr->setTrack(0);
     if (grace) {
         cr->setNoteType(Ms::NoteType::GRACE32);
-        cr->setDurationType(Ms::TDuration::DurationType::V_32ND);
+        cr->setDurationType(Ms::DurationType::V_32ND);
         sd = Ms::DirectionV::UP;
     } else {
-        if (durationType.type() == Ms::TDuration::DurationType::V_INVALID) {
-            durationType.setType(Ms::TDuration::DurationType::V_QUARTER);
+        if (durationType.type() == Ms::DurationType::V_INVALID) {
+            durationType.setType(Ms::DurationType::V_QUARTER);
         }
         cr->setDurationType(durationType);
         sd = Ms::DirectionV::DOWN;

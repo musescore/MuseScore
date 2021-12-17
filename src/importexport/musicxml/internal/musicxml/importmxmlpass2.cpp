@@ -27,6 +27,7 @@
 #include <QRegularExpression>
 
 #include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/accidental.h"
@@ -279,9 +280,9 @@ static void fillGap(Measure* measure, int track, const Fraction& tstart, const F
     // Constant::division / 64 (#ticks in a 256th note) equals 7.5 but is rounded down to 7
     while (restLen > Fraction(1, 256)) {
         Fraction len = restLen;
-        TDuration d(TDuration::DurationType::V_INVALID);
+        TDuration d(DurationType::V_INVALID);
         if (measure->ticks() == restLen) {
-            d.setType(TDuration::DurationType::V_MEASURE);
+            d.setType(DurationType::V_MEASURE);
         } else {
             d.setVal(len.ticks());
         }
@@ -1323,7 +1324,7 @@ void MusicXMLParserPass2::addError(const QString& error)
 
 static void setChordRestDuration(ChordRest* cr, TDuration duration, const Fraction dura)
 {
-    if (duration.type() == TDuration::DurationType::V_MEASURE) {
+    if (duration.type() == DurationType::V_MEASURE) {
         cr->setDurationType(duration);
         cr->setTicks(dura);
     } else {
@@ -1856,8 +1857,8 @@ static void handleBeamAndStemDir(ChordRest* cr, const BeamMode bm, const Directi
         static_cast<Chord*>(cr)->setStemDirection(sd);
         // set beam to none if score has beaming information and note can get beam, otherwise
         // set to auto
-        bool canGetBeam = (cr->durationType().type() >= TDuration::DurationType::V_EIGHTH
-                           && cr->durationType().type() <= TDuration::DurationType::V_1024TH);
+        bool canGetBeam = (cr->durationType().type() >= DurationType::V_EIGHTH
+                           && cr->durationType().type() <= DurationType::V_1024TH);
         if (hasBeamingInfo && canGetBeam) {
             cr->setBeamMode(BeamMode::NONE);
         } else {
@@ -2130,7 +2131,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                 } else {
                     double tpo = tempo.toDouble() / 60;
                     TempoText* t = new TempoText(_score->dummy()->segment());
-                    t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)),
+                    t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
                                                          tempo));
                     t->setVisible(false);
                     t->setTempo(tpo);
@@ -2232,7 +2233,7 @@ void MusicXMLParserPass2::setMeasureRepeats(const int scoreRelStaff, Measure* me
                 _score->addMeasureRepeat(measure->tick(), track, _measureRepeatNumMeasures[i]);
             } else {
                 // measures that are part of group but do not contain the element have undisplayed whole rests
-                _score->addRest(measure->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                _score->addRest(measure->tick(), track, TDuration(DurationType::V_MEASURE), 0);
             }
         } else {
             // measureStyle() hit a "stop" element most recently
@@ -2622,7 +2623,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         } else {
             double tpo = _tpoSound / 60;
             TempoText* t = new TempoText(_score->dummy()->segment());
-            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER))).arg(
+            t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER))).arg(
                               _tpoSound));
             t->setVisible(false);
             t->setTempo(tpo);
@@ -3284,9 +3285,9 @@ QString MusicXMLParserDirection::metronome(double& r)
         if (_e.name() == "beat-unit") {
             // set first dur that is still invalid
             if (!dur1.isValid()) {
-                dur1.setType(txt);
+                dur1.setType(TConv::fromXml(txt, DurationType::V_INVALID));
             } else if (!dur2.isValid()) {
-                dur2.setType(txt);
+                dur2.setType(TConv::fromXml(txt, DurationType::V_INVALID));
             }
         } else if (_e.name() == "beat-unit-dot") {
             if (dur2.isValid()) {
@@ -4088,20 +4089,20 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
     TDuration res;
     if (rest) {
         if (isWholeMeasureRest(rest, type, dura, mDura)) {
-            res.setType(TDuration::DurationType::V_MEASURE);
+            res.setType(DurationType::V_MEASURE);
         } else if (type == "") {
             // If no type, set duration type based on duration.
             // Note that sometimes unusual duration (e.g. 261/256) are found.
             res.setVal(dura.ticks());
         } else {
-            res.setType(type);
+            res.setType(TConv::fromXml(type, DurationType::V_INVALID));
             res.setDots(dots);
         }
     } else {
-        res.setType(type);
+        res.setType(TConv::fromXml(type, DurationType::V_INVALID));
         res.setDots(dots);
-        if (res.type() == TDuration::DurationType::V_INVALID) {
-            res.setType(TDuration::DurationType::V_QUARTER);        // default, TODO: use dura ?
+        if (res.type() == DurationType::V_INVALID) {
+            res.setType(DurationType::V_QUARTER);        // default, TODO: use dura ?
         }
     }
 
@@ -4161,11 +4162,11 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
     if (slash) {
         nt = NoteType::ACCIACCATURA;
     }
-    if (duration.type() == TDuration::DurationType::V_QUARTER) {
+    if (duration.type() == DurationType::V_QUARTER) {
         nt = NoteType::GRACE4;
-    } else if (duration.type() == TDuration::DurationType::V_16TH) {
+    } else if (duration.type() == DurationType::V_16TH) {
         nt = NoteType::GRACE16;
-    } else if (duration.type() == TDuration::DurationType::V_32ND) {
+    } else if (duration.type() == DurationType::V_32ND) {
         nt = NoteType::GRACE32;
     }
     return nt;

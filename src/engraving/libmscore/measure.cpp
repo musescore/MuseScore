@@ -1916,16 +1916,16 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (rests == 1 && chords == 0) {
             // if measure value didn't change, stick to whole measure rest
             if (m_timesig == nf) {
-                rest->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue<Fraction>(nf * stretch));
-                rest->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue<TDuration>(TDuration::DurationType::V_MEASURE));
+                rest->undoChangeProperty(Pid::DURATION, nf * stretch);
+                rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                 // set the existing rest to the first value of the duration list
                 for (EngravingObject* e : rest->linkList()) {
-                    e->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue<Fraction>(durList[0].fraction()));
-                    e->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue<TDuration>(durList[0]));
+                    e->undoChangeProperty(Pid::DURATION, durList[0].fraction());
+                    e->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, durList[0].typeWithDots());
                 }
 
                 // add rests for any other duration list value
@@ -1960,7 +1960,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                         EngravingItem* e = segment->element(trk);
                         if (e && e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
-                            if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                            if (cr->durationType() == DurationType::V_MEASURE) {
                                 Fraction actualTicks = cr->actualTicks();
                                 n += actualTicks;
                                 cr->setDurationType(TDuration(actualTicks));
@@ -2496,7 +2496,7 @@ bool Measure::isFullMeasureRest() const
                 return false;
             }
             Rest* rest = toRest(e);
-            if (rest->durationType().type() != TDuration::DurationType::V_MEASURE) {
+            if (rest->durationType().type() != DurationType::V_MEASURE) {
                 return false;
             }
         }

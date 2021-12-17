@@ -448,7 +448,7 @@ void MTrack::fillGapWithRests(Score* score,
             // rest to the whole measure
             len = ReducedFraction(measure->ticks());
             if (voice == 0) {
-                TDuration duration(TDuration::DurationType::V_MEASURE);
+                TDuration duration(DurationType::V_MEASURE);
                 Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
                 Rest* rest = Factory::createRest(s, duration);
                 rest->setTicks(measure->ticks());

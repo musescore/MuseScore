@@ -60,11 +60,11 @@ TEST_F(EarlymusicTests, earlymusic01)
     EXPECT_EQ(chord->type(), ElementType::CHORD);
     EXPECT_EQ(chord->crossMeasure(), CrossMeasure::UNKNOWN);
     TDuration cmDur   = chord->crossMeasureDurationType();
-//    EXPECT_EQ(cmDur.type(), TDuration::DurationType::V_INVALID);    // irrelevant if crossMeasure() == UNKNOWN
+//    EXPECT_EQ(cmDur.type(), DurationType::V_INVALID);    // irrelevant if crossMeasure() == UNKNOWN
     TDuration acDur   = chord->actualDurationType();
-    EXPECT_EQ(acDur.type(), TDuration::DurationType::V_BREVE);
+    EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     TDuration dur     = chord->durationType();
-    EXPECT_EQ(dur.type(), TDuration::DurationType::V_BREVE);
+    EXPECT_EQ(dur.type(), DurationType::V_BREVE);
 
     // set crossMeasureValue flag ON: score should not change
     MStyle newStyle = score->style();
@@ -77,11 +77,11 @@ TEST_F(EarlymusicTests, earlymusic01)
     // verify crossMeasureDurationType did change
     EXPECT_EQ(chord->crossMeasure(), CrossMeasure::FIRST);
     cmDur = chord->crossMeasureDurationType();
-    EXPECT_EQ(cmDur.type(), TDuration::DurationType::V_LONG);
+    EXPECT_EQ(cmDur.type(), DurationType::V_LONG);
     acDur = chord->actualDurationType();
-    EXPECT_EQ(acDur.type(), TDuration::DurationType::V_BREVE);
+    EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
-    EXPECT_EQ(dur.type(), TDuration::DurationType::V_LONG);
+    EXPECT_EQ(dur.type(), DurationType::V_LONG);
     // verify score file did not change
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01-ref.mscx"));
 
@@ -91,11 +91,11 @@ TEST_F(EarlymusicTests, earlymusic01)
     score->doLayout();
     EXPECT_EQ(chord->crossMeasure(), CrossMeasure::UNKNOWN);
     cmDur = chord->crossMeasureDurationType();
-//      QVERIFY(cmDur.type() == TDuration::DurationType::V_LONG);    // irrelevant if crossMeasure() == UNKNOWN
+//      QVERIFY(cmDur.type() == DurationType::V_LONG);    // irrelevant if crossMeasure() == UNKNOWN
     acDur = chord->actualDurationType();
-    EXPECT_EQ(acDur.type(), TDuration::DurationType::V_BREVE);
+    EXPECT_EQ(acDur.type(), DurationType::V_BREVE);
     dur   = chord->durationType();
-    EXPECT_EQ(dur.type(), TDuration::DurationType::V_BREVE);
+    EXPECT_EQ(dur.type(), DurationType::V_BREVE);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mensurstrich01.mscx", EARLYMUSIC_DATA_DIR + "mensurstrich01.mscx"));
     delete score;
 }

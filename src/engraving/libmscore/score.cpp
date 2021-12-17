@@ -2114,7 +2114,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
                 }
             }
             if (f.isZero()) {
-                addRest(m->tick(), staffIdx * VOICES, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                addRest(m->tick(), staffIdx * VOICES, TDuration(DurationType::V_MEASURE), 0);
             }
         }
     }
@@ -2854,43 +2854,43 @@ void Score::padToggle(Pad p, const EditData& ed)
     int oldDots = _is.duration().dots();
     switch (p) {
     case Pad::NOTE00:
-        _is.setDuration(TDuration::DurationType::V_LONG);
+        _is.setDuration(DurationType::V_LONG);
         break;
     case Pad::NOTE0:
-        _is.setDuration(TDuration::DurationType::V_BREVE);
+        _is.setDuration(DurationType::V_BREVE);
         break;
     case Pad::NOTE1:
-        _is.setDuration(TDuration::DurationType::V_WHOLE);
+        _is.setDuration(DurationType::V_WHOLE);
         break;
     case Pad::NOTE2:
-        _is.setDuration(TDuration::DurationType::V_HALF);
+        _is.setDuration(DurationType::V_HALF);
         break;
     case Pad::NOTE4:
-        _is.setDuration(TDuration::DurationType::V_QUARTER);
+        _is.setDuration(DurationType::V_QUARTER);
         break;
     case Pad::NOTE8:
-        _is.setDuration(TDuration::DurationType::V_EIGHTH);
+        _is.setDuration(DurationType::V_EIGHTH);
         break;
     case Pad::NOTE16:
-        _is.setDuration(TDuration::DurationType::V_16TH);
+        _is.setDuration(DurationType::V_16TH);
         break;
     case Pad::NOTE32:
-        _is.setDuration(TDuration::DurationType::V_32ND);
+        _is.setDuration(DurationType::V_32ND);
         break;
     case Pad::NOTE64:
-        _is.setDuration(TDuration::DurationType::V_64TH);
+        _is.setDuration(DurationType::V_64TH);
         break;
     case Pad::NOTE128:
-        _is.setDuration(TDuration::DurationType::V_128TH);
+        _is.setDuration(DurationType::V_128TH);
         break;
     case Pad::NOTE256:
-        _is.setDuration(TDuration::DurationType::V_256TH);
+        _is.setDuration(DurationType::V_256TH);
         break;
     case Pad::NOTE512:
-        _is.setDuration(TDuration::DurationType::V_512TH);
+        _is.setDuration(DurationType::V_512TH);
         break;
     case Pad::NOTE1024:
-        _is.setDuration(TDuration::DurationType::V_1024TH);
+        _is.setDuration(DurationType::V_1024TH);
         break;
     case Pad::REST:
         if (noteEntryMode()) {
@@ -2898,7 +2898,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             _is.setAccidentalType(AccidentalType::NONE);
         } else if (selection().isNone()) {
             ed.view()->startNoteEntryMode();
-            _is.setDuration(TDuration::DurationType::V_QUARTER);
+            _is.setDuration(DurationType::V_QUARTER);
             _is.setRest(true);
         } else {
             for (ChordRest* cr : getSelectedChordRests()) {
@@ -2910,7 +2910,7 @@ void Score::padToggle(Pad p, const EditData& ed)
         }
         break;
     case Pad::DOT:
-        if ((_is.duration().dots() == 1) || (_is.duration() == TDuration::DurationType::V_1024TH)) {
+        if ((_is.duration().dots() == 1) || (_is.duration() == DurationType::V_1024TH)) {
             _is.setDots(0);
         } else {
             _is.setDots(1);
@@ -2918,8 +2918,8 @@ void Score::padToggle(Pad p, const EditData& ed)
         break;
     case Pad::DOT2:
         if ((_is.duration().dots() == 2)
-            || (_is.duration() == TDuration::DurationType::V_512TH)
-            || (_is.duration() == TDuration::DurationType::V_1024TH)) {
+            || (_is.duration() == DurationType::V_512TH)
+            || (_is.duration() == DurationType::V_1024TH)) {
             _is.setDots(0);
         } else {
             _is.setDots(2);
@@ -2927,9 +2927,9 @@ void Score::padToggle(Pad p, const EditData& ed)
         break;
     case Pad::DOT3:
         if ((_is.duration().dots() == 3)
-            || (_is.duration() == TDuration::DurationType::V_256TH)
-            || (_is.duration() == TDuration::DurationType::V_512TH)
-            || (_is.duration() == TDuration::DurationType::V_1024TH)) {
+            || (_is.duration() == DurationType::V_256TH)
+            || (_is.duration() == DurationType::V_512TH)
+            || (_is.duration() == DurationType::V_1024TH)) {
             _is.setDots(0);
         } else {
             _is.setDots(3);
@@ -2937,10 +2937,10 @@ void Score::padToggle(Pad p, const EditData& ed)
         break;
     case Pad::DOT4:
         if ((_is.duration().dots() == 4)
-            || (_is.duration() == TDuration::DurationType::V_128TH)
-            || (_is.duration() == TDuration::DurationType::V_256TH)
-            || (_is.duration() == TDuration::DurationType::V_512TH)
-            || (_is.duration() == TDuration::DurationType::V_1024TH)) {
+            || (_is.duration() == DurationType::V_128TH)
+            || (_is.duration() == DurationType::V_256TH)
+            || (_is.duration() == DurationType::V_512TH)
+            || (_is.duration() == DurationType::V_1024TH)) {
             _is.setDots(0);
         } else {
             _is.setDots(4);
@@ -3487,7 +3487,7 @@ void Score::collectNoteMatch(void* data, EngravingItem* e)
     if (p->notehead != NoteHeadGroup::HEAD_INVALID && p->notehead != n->headGroup()) {
         return;
     }
-    if (p->durationType.type() != TDuration::DurationType::V_INVALID && p->durationType != n->chord()->actualDurationType()) {
+    if (p->durationType.type() != DurationType::V_INVALID && p->durationType != n->chord()->actualDurationType()) {
         return;
     }
     if (p->durationTicks != Fraction(-1, 1) && p->durationTicks != n->chord()->actualTicks()) {

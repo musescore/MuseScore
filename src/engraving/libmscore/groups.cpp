@@ -107,12 +107,12 @@ BeamMode Groups::endBeam(ChordRest* cr, ChordRest* prev)
         // if current or previous cr is in tuplet (but not both in same tuplet):
         // consider it as if this were next shorter duration
         if (prev && (cr->tuplet() != prev->tuplet()) && (d == prev->durationType())) {
-            if (d >= TDuration::DurationType::V_EIGHTH) {
-                val = g.beamMode(tick.ticks(), TDuration::DurationType::V_16TH);
-            } else if (d == TDuration::DurationType::V_16TH) {
-                val = g.beamMode(tick.ticks(), TDuration::DurationType::V_32ND);
+            if (d >= DurationType::V_EIGHTH) {
+                val = g.beamMode(tick.ticks(), DurationType::V_16TH);
+            } else if (d == DurationType::V_16TH) {
+                val = g.beamMode(tick.ticks(), DurationType::V_32ND);
             } else {
-                val = g.beamMode(tick.ticks(), TDuration::DurationType::V_64TH);
+                val = g.beamMode(tick.ticks(), DurationType::V_64TH);
             }
         }
         // if there is a hole between previous and current cr, break beam
@@ -131,15 +131,15 @@ BeamMode Groups::endBeam(ChordRest* cr, ChordRest* prev)
 //    tick is relative to begin of measure
 //---------------------------------------------------------
 
-BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const
+BeamMode Groups::beamMode(int tick, DurationType d) const
 {
     int shift;
     switch (d) {
-    case TDuration::DurationType::V_EIGHTH: shift = 0;
+    case DurationType::V_EIGHTH: shift = 0;
         break;
-    case TDuration::DurationType::V_16TH:   shift = 4;
+    case DurationType::V_16TH:   shift = 4;
         break;
-    case TDuration::DurationType::V_32ND:   shift = 8;
+    case DurationType::V_32ND:   shift = 8;
         break;
     default:
         return BeamMode::AUTO;
@@ -243,15 +243,15 @@ void Groups::read(XmlReader& e)
 //   addStop
 //---------------------------------------------------------
 
-void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
+void Groups::addStop(int pos, DurationType d, BeamMode bm)
 {
     int shift;
     switch (d) {
-    case TDuration::DurationType::V_EIGHTH: shift = 0;
+    case DurationType::V_EIGHTH: shift = 0;
         break;
-    case TDuration::DurationType::V_16TH:   shift = 4;
+    case DurationType::V_16TH:   shift = 4;
         break;
-    case TDuration::DurationType::V_32ND:   shift = 8;
+    case DurationType::V_32ND:   shift = 8;
         break;
     default:
         return;

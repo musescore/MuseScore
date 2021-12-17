@@ -941,7 +941,7 @@ bool GuitarPro4::read(QFile* fp)
                 }
                 cr->setTicks(l);
                 if (cr->isRest() && (pause == 0 || l >= measure->ticks())) {
-                    cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                    cr->setDurationType(DurationType::V_MEASURE);
                     cr->setTicks(measure->ticks());
                 } else {
                     cr->setDurationType(d);

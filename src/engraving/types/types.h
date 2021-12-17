@@ -139,6 +139,24 @@ enum class BeamMode : signed char {
     AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
 };
 
+enum class DurationType : signed char {
+    V_LONG, V_BREVE, V_WHOLE, V_HALF, V_QUARTER, V_EIGHTH, V_16TH,
+    V_32ND, V_64TH, V_128TH, V_256TH, V_512TH, V_1024TH,
+    V_ZERO, V_MEASURE,  V_INVALID
+};
+
+// P_TYPE::DURATION_TYPE_WITH_DOTS
+struct DurationTypeWithDots
+{
+    DurationType type = DurationType::V_INVALID;
+    int dots = 0;
+    DurationTypeWithDots() = default;
+    DurationTypeWithDots(DurationType t, int d = 0)
+        : type(t), dots(d) {}
+
+    inline bool operator ==(const DurationTypeWithDots& other) const { return other.type == type && other.dots == dots; }
+};
+
 // --- Types ---
 
 // P_TYPE::LAYOUTBREAK_TYPE
@@ -521,6 +539,8 @@ using TextStyleType = mu::engraving::TextStyleType;
 using ChangeMethod = mu::engraving::ChangeMethod;
 using ChangeDirection = mu::engraving::ChangeDirection;
 using AccidentalRole = mu::engraving::AccidentalRole;
+using DurationType = mu::engraving::DurationType;
+using DurationTypeWithDots = mu::engraving::DurationTypeWithDots;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

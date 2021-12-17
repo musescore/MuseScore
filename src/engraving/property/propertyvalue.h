@@ -32,9 +32,6 @@
 #include "types/types.h"
 #include "types/symid.h"
 
-#include "libmscore/types.h"
-#include "libmscore/mscore.h"
-
 #include "framework/global/logstream.h"
 
 namespace Ms {
@@ -80,6 +77,7 @@ enum class P_TYPE {
 
     // Sound
     FRACTION,
+    DURATION_TYPE_WITH_DOTS,
     CHANGE_METHOD,
     PITCH_VALUES,
     TEMPO,
@@ -101,10 +99,6 @@ enum class P_TYPE {
 
     // Other
     GROUPS,
-
-    // not sorted
-
-    TDURATION
 };
 
 class PropertyValue
@@ -192,6 +186,8 @@ public:
     // Sound
     PropertyValue(const Fraction& v)
         : m_type(P_TYPE::FRACTION), m_data(make_data<Fraction>(v)) {}
+    PropertyValue(const DurationTypeWithDots& v)
+        : m_type(P_TYPE::DURATION_TYPE_WITH_DOTS), m_data(make_data<DurationTypeWithDots>(v)) {}
     PropertyValue(ChangeMethod v)
         : m_type(P_TYPE::CHANGE_METHOD), m_data(make_data<ChangeMethod>(v)) {}
     PropertyValue(const PitchValues& v)
@@ -238,10 +234,6 @@ public:
     // Other
     PropertyValue(const GroupNodes& v)
         : m_type(P_TYPE::GROUPS), m_data(make_data<GroupNodes>(v)) {}
-
-    // not sorted
-
-    PropertyValue(const Ms::TDuration& v);
 
     bool isValid() const;
 
@@ -335,8 +327,6 @@ public:
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
 
-    const Ms::TDuration& toTDuration() const;
-
     bool operator ==(const PropertyValue& v) const;
     inline bool operator !=(const PropertyValue& v) const { return !this->operator ==(v); }
 
@@ -401,9 +391,6 @@ private:
 
     P_TYPE m_type = P_TYPE::UNDEFINED;
     std::shared_ptr<IArg> m_data = nullptr;
-
-    //! HACK Temporary solution for some types
-    std::any m_any;
 };
 }
 

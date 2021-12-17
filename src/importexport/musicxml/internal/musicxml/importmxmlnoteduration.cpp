@@ -23,9 +23,12 @@
 #include <QXmlStreamReader>
 
 #include "engraving/types/fraction.h"
+#include "engraving/types/typesconv.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -252,7 +255,7 @@ void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
             // but would be accepted by setType()
             QString strNormalType = e.readElementText();
             if (strNormalType != "measure") {
-                _normalType.setType(strNormalType);
+                _normalType.setType(TConv::fromXml(strNormalType, DurationType::V_INVALID));
             }
         } else {
             _logger->logDebugInfo(QString("skipping '%1'").arg(e.name().toString()), &e);

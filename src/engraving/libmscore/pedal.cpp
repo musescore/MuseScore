@@ -236,7 +236,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->type() == ElementType::REST && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
             if (beginHookType() == HookType::HOOK_45) {
@@ -291,7 +291,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         } else if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->type() == ElementType::REST && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
         }

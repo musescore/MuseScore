@@ -34,7 +34,7 @@
 #include "translation.h"
 
 namespace Ms {
-Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords)
+Score* NoteGroups::createScore(int n, DurationType t, std::vector<Chord*>* chords)
 {
     MCursor c;
     c.setTimeSig(_sig);
@@ -118,11 +118,11 @@ void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const Q
     chords32.clear();
     Fraction f = _sig.reduced();
     int nn   = f.numerator() * (8 / f.denominator());
-    view8->setScore(createScore(nn, TDuration::DurationType::V_EIGHTH, &chords8));
+    view8->setScore(createScore(nn, DurationType::V_EIGHTH, &chords8));
     nn   = f.numerator() * (16 / f.denominator());
-    view16->setScore(createScore(nn, TDuration::DurationType::V_16TH, &chords16));
+    view16->setScore(createScore(nn, DurationType::V_16TH, &chords16));
     nn   = f.numerator() * (32 / f.denominator());
-    view32->setScore(createScore(nn, TDuration::DurationType::V_32ND, &chords32));
+    view32->setScore(createScore(nn, DurationType::V_32ND, &chords32));
     view8->resetMatrix();
     view16->resetMatrix();
     view32->resetMatrix();

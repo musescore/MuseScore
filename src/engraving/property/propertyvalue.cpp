@@ -23,21 +23,9 @@
 
 #include "realfn.h"
 
-#include "libmscore/groups.h"
-
 #include "log.h"
 
 using namespace mu::engraving;
-
-PropertyValue::PropertyValue(const Ms::TDuration& v)
-    : m_type(P_TYPE::TDURATION), m_any(v)
-{
-}
-
-const Ms::TDuration& PropertyValue::toTDuration() const
-{
-    return std::any_cast<const Ms::TDuration&>(m_any);
-}
 
 bool PropertyValue::isValid() const
 {
@@ -74,12 +62,6 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
     if (v.m_type == P_TYPE::FRACTION) {
         assert(m_type == P_TYPE::FRACTION);
         return v.value<Fraction>().identical(value<Fraction>());
-    }
-
-    //! HACK Temporary hack for TDURATION comparisons
-    if (v.m_type == P_TYPE::TDURATION) {
-        assert(m_type == P_TYPE::TDURATION);
-        return v.toTDuration() == toTDuration();
     }
 
     if (v.m_type == P_TYPE::REAL) {
@@ -140,11 +122,8 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
 
-    // Duration
-    case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
-    case P_TYPE::TDURATION:   return QVariant::fromValue(toTDuration());
-
     // Sound
+    case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
     case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
 
     // Types
@@ -211,10 +190,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));
-    case P_TYPE::TDURATION: {
-        UNREACHABLE; //! TODO
-    }
-    break;
 
     // Sound
     case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));

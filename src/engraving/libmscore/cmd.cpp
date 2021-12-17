@@ -542,7 +542,7 @@ void Score::expandVoice(Segment* s, int track)
     }
     ticks  = ns ? (ns->tick() - s->tick()) : (m->ticks() - s->rtick());
     if (ticks == m->ticks()) {
-        addRest(s, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+        addRest(s, track, TDuration(DurationType::V_MEASURE), 0);
     } else {
         setRest(s->tick(), track, ticks, false, 0);
     }
@@ -788,7 +788,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                 nr = ncr = Factory::createRest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
-                ncr->setTicks(d == TDuration::DurationType::V_MEASURE ? measure->ticks() : d.fraction());
+                ncr->setTicks(d == DurationType::V_MEASURE ? measure->ticks() : d.fraction());
             } else {
                 nr = note = Factory::createNote(this->dummy()->chord());
 
@@ -857,7 +857,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
         if (!cr) {
             if (track % VOICES) {
-                cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                cr = addRest(segment, track, TDuration(DurationType::V_MEASURE), 0);
             } else {
                 qDebug("no rest in voice 0");
                 break;
@@ -1245,7 +1245,7 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         int t  = cr->track();
         cr = toChordRest(s->element(t));
         if (!cr) {
-            addRest(s, t, TDuration(TDuration::DurationType::V_MEASURE), 0);
+            addRest(s, t, TDuration(DurationType::V_MEASURE), 0);
             cr = toChordRest(s->element(t));
         }
     }
@@ -1306,7 +1306,7 @@ QList<Fraction> Score::splitGapToMeasureBoundaries(ChordRest* cr, Fraction gap)
 void Score::changeCRlen(ChordRest* cr, const TDuration& d)
 {
     Fraction dstF;
-    if (d.type() == TDuration::DurationType::V_MEASURE) {
+    if (d.type() == DurationType::V_MEASURE) {
         dstF = cr->measure()->stretchedLen(cr->staff());
     } else {
         dstF = d.fraction();
@@ -1806,7 +1806,7 @@ void Score::toggleAccidental(AccidentalType at, const EditData& ed)
         if (selection().isNone()) {
             ed.view()->startNoteEntryMode();
             _is.setAccidentalType(at);
-            _is.setDuration(TDuration::DurationType::V_QUARTER);
+            _is.setDuration(DurationType::V_QUARTER);
             _is.setRest(false);
         } else {
             changeAccidental(at);
@@ -2682,7 +2682,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     // if measure rest is selected as input, then the correct initialDuration will be the
     // duration of the measure's time signature, else is just the input state's duration
     TDuration initialDuration
-        = (cr->durationType() == TDuration::DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
+        = (cr->durationType() == DurationType::V_MEASURE) ? TDuration(cr->measure()->timesig()) : _is.duration();
     TDuration d = initialDuration.shiftRetainDots(nSteps, stepDotted);
     if (!d.isValid()) {
         return;
@@ -3272,7 +3272,7 @@ void Score::cmdSlashFill()
                         continue;
                     }
                     // full measure rest == OK to use voice
-                    else if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                    else if (cr->durationType() == DurationType::V_MEASURE) {
                         break;
                     }
                     // no chordrest or ordinary rest == OK to use voice
@@ -3588,7 +3588,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
 
         if (!cr) {
             if (track % VOICES) {
-                cr = addRest(segment, track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                cr = addRest(segment, track, TDuration(DurationType::V_MEASURE), 0);
             } else {
                 qDebug("no rest in voice 0");
                 break;
@@ -3832,31 +3832,31 @@ void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
 //          case TDuration::V_LONG:
 //                padToggle(Pad::NOTE128, ed);
 //                break;
-    case TDuration::DurationType::V_BREVE:
+    case DurationType::V_BREVE:
         padToggle(Pad::NOTE00, ed);
         break;
-    case TDuration::DurationType::V_WHOLE:
+    case DurationType::V_WHOLE:
         padToggle(Pad::NOTE0, ed);
         break;
-    case TDuration::DurationType::V_HALF:
+    case DurationType::V_HALF:
         padToggle(Pad::NOTE1, ed);
         break;
-    case TDuration::DurationType::V_QUARTER:
+    case DurationType::V_QUARTER:
         padToggle(Pad::NOTE2, ed);
         break;
-    case TDuration::DurationType::V_EIGHTH:
+    case DurationType::V_EIGHTH:
         padToggle(Pad::NOTE4, ed);
         break;
-    case TDuration::DurationType::V_16TH:
+    case DurationType::V_16TH:
         padToggle(Pad::NOTE8, ed);
         break;
-    case TDuration::DurationType::V_32ND:
+    case DurationType::V_32ND:
         padToggle(Pad::NOTE16, ed);
         break;
-    case TDuration::DurationType::V_64TH:
+    case DurationType::V_64TH:
         padToggle(Pad::NOTE32, ed);
         break;
-    case TDuration::DurationType::V_128TH:
+    case DurationType::V_128TH:
         padToggle(Pad::NOTE64, ed);
         break;
     default:
@@ -3871,44 +3871,44 @@ void Score::cmdPadNoteIncreaseTAB(const EditData& ed)
 void Score::cmdPadNoteDecreaseTAB(const EditData& ed)
 {
     switch (_is.duration().type()) {
-    case TDuration::DurationType::V_LONG:
+    case DurationType::V_LONG:
         padToggle(Pad::NOTE0, ed);
         break;
-    case TDuration::DurationType::V_BREVE:
+    case DurationType::V_BREVE:
         padToggle(Pad::NOTE1, ed);
         break;
-    case TDuration::DurationType::V_WHOLE:
+    case DurationType::V_WHOLE:
         padToggle(Pad::NOTE2, ed);
         break;
-    case TDuration::DurationType::V_HALF:
+    case DurationType::V_HALF:
         padToggle(Pad::NOTE4, ed);
         break;
-    case TDuration::DurationType::V_QUARTER:
+    case DurationType::V_QUARTER:
         padToggle(Pad::NOTE8, ed);
         break;
-    case TDuration::DurationType::V_EIGHTH:
+    case DurationType::V_EIGHTH:
         padToggle(Pad::NOTE16, ed);
         break;
-    case TDuration::DurationType::V_16TH:
+    case DurationType::V_16TH:
         padToggle(Pad::NOTE32, ed);
         break;
-    case TDuration::DurationType::V_32ND:
+    case DurationType::V_32ND:
         padToggle(Pad::NOTE64, ed);
         break;
-    case TDuration::DurationType::V_64TH:
+    case DurationType::V_64TH:
         padToggle(Pad::NOTE128, ed);
         break;
-    case TDuration::DurationType::V_128TH:
+    case DurationType::V_128TH:
         padToggle(Pad::NOTE256, ed);
         break;
-    case TDuration::DurationType::V_256TH:
+    case DurationType::V_256TH:
         padToggle(Pad::NOTE512, ed);
         break;
-    case TDuration::DurationType::V_512TH:
+    case DurationType::V_512TH:
         padToggle(Pad::NOTE1024, ed);
         break;
 // cycle back from shortest to longest?
-//          case TDuration::DurationType::V_1024TH:
+//          case DurationType::V_1024TH:
 //                padToggle(Pad::NOTE00, ed);
 //                break;
     default:

@@ -25,6 +25,7 @@
 #include "draw/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "factory.h"
 #include "score.h"
@@ -790,7 +791,7 @@ void Tuplet::write(XmlWriter& xml) const
     writeProperty(xml, Pid::P1);
     writeProperty(xml, Pid::P2);
 
-    xml.tag("baseNote", _baseLen.name());
+    xml.tag("baseNote", TConv::toXml(_baseLen.type()));
     if (int dots = _baseLen.dots()) {
         xml.tag("baseDots", dots);
     }
@@ -874,7 +875,7 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "p2") {
         _p2 = e.readPoint() * score()->spatium();
     } else if (tag == "baseNote") {
-        _baseLen = TDuration(e.readElementText());
+        _baseLen = TDuration(TConv::fromXml(e.readElementText(), DurationType::V_INVALID));
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {

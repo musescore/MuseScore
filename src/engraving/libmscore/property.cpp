@@ -252,7 +252,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,           DUMMY_QT_TR_NOOP("propertyName", "mag") },
     { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "using drumset") },
     { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "duration") },
-    { Pid::DURATION_TYPE,           false, 0,                       P_TYPE::TDURATION,      DUMMY_QT_TR_NOOP("propertyName", "duration type") },
+    { Pid::DURATION_TYPE_WITH_DOTS, false, 0,                       P_TYPE::DURATION_TYPE_WITH_DOTS, DUMMY_QT_TR_NOOP("propertyName", "duration type") },
     { Pid::ACCIDENTAL_ROLE,         false, "role",                  P_TYPE::ACCIDENTAL_ROLE,DUMMY_QT_TR_NOOP("propertyName", "role") },
     { Pid::TRACK,                   false, 0,                       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "track") },
 
@@ -466,7 +466,7 @@ PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString)
     case P_TYPE::GROUPS:
         // unsupported
         return PropertyValue();
-    case P_TYPE::TDURATION:
+    case P_TYPE::DURATION_TYPE_WITH_DOTS:
     case P_TYPE::INT_LIST:
         return PropertyValue();
     default:
@@ -566,7 +566,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         g.read(e);
         return PropertyValue::fromValue(g.nodes());
     }
-    case P_TYPE::TDURATION:
+    case P_TYPE::DURATION_TYPE_WITH_DOTS:
     case P_TYPE::INT_LIST:
         return PropertyValue();
     default:
@@ -605,7 +605,7 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     switch (propertyType(id)) {
-    case P_TYPE::TDURATION:
+    case P_TYPE::DURATION_TYPE_WITH_DOTS:
         qFatal("unknown: TDURATION");
     case P_TYPE::TEMPO:
         qFatal("unknown: TEMPO");

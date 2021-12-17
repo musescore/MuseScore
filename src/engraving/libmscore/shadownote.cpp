@@ -42,7 +42,7 @@ ShadowNote::ShadowNote(Score* s)
     : EngravingItem(ElementType::SHADOW_NOTE, s), m_noteheadSymbol(SymId::noSym)
 {
     m_lineIndex = 1000;
-    m_duration = TDuration(TDuration::DurationType::V_INVALID);
+    m_duration = TDuration(DurationType::V_INVALID);
     m_isRest = false;
 }
 

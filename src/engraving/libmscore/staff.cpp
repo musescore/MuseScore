@@ -994,13 +994,13 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    QString unit = score()->styleSt(Sid::swingUnit);
+    DurationType unit = TConv::fromXml(score()->styleSt(Sid::swingUnit), DurationType::V_INVALID);
     int swingRatio = score()->styleI(Sid::swingRatio);
-    if (unit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
+    if (unit == DurationType::V_EIGHTH) {
         swingUnit = Constant::division / 2;
-    } else if (unit == TDuration(TDuration::DurationType::V_16TH).name()) {
+    } else if (unit == DurationType::V_16TH) {
         swingUnit = Constant::division / 4;
-    } else if (unit == TDuration(TDuration::DurationType::V_ZERO).name()) {
+    } else if (unit == DurationType::V_ZERO) {
         swingUnit = 0;
     }
     sp.swingRatio = swingRatio;
