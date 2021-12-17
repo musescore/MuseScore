@@ -251,7 +251,7 @@ enum class Pid {
     MAG,
     USE_DRUMSET,
     DURATION,
-    DURATION_TYPE,
+    DURATION_TYPE_WITH_DOTS,
     ACCIDENTAL_ROLE,
     TRACK,
 

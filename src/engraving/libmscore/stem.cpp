@@ -168,7 +168,7 @@ void Stem::draw(mu::draw::Painter* painter) const
     bool isUp = up();
 
     // slashed half note stem
-    if (chord()->durationType().type() == TDuration::DurationType::V_HALF
+    if (chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
         qreal y = isUp ? -length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp

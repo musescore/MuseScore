@@ -210,8 +210,8 @@ MeasureRepeat* Score::addMeasureRepeat(const Fraction& tick, int track, int numM
 
 Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType)
 {
-    if (destinationChordRest->durationType() < TDuration(TDuration::DurationType::V_512TH)
-        && destinationChordRest->durationType() != TDuration(TDuration::DurationType::V_MEASURE)) {
+    if (destinationChordRest->durationType() < TDuration(DurationType::V_512TH)
+        && destinationChordRest->durationType() != TDuration(DurationType::V_MEASURE)) {
         return nullptr;
     }
 
@@ -294,7 +294,7 @@ Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuple
 {
     Measure* measure = tick2measure(tick);
     Rest* rest = Factory::createRest(this->dummy()->segment(), d);
-    if (d.type() == TDuration::DurationType::V_MEASURE) {
+    if (d.type() == DurationType::V_MEASURE) {
         rest->setTicks(measure->stretchedLen(staff(track2staff(track))));
     } else {
         rest->setTicks(d.fraction());
@@ -312,7 +312,7 @@ Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuple
 Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
 {
     Rest* rest = Factory::createRest(s, d);
-    if (d.type() == TDuration::DurationType::V_MEASURE) {
+    if (d.type() == DurationType::V_MEASURE) {
         rest->setTicks(s->measure()->stretchedLen(staff(track / VOICES)));
     } else {
         rest->setTicks(d.fraction());
@@ -460,7 +460,7 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
             && (measure->stretchedLen(staff) == f)
             && !tuplet
             && (useFullMeasureRest)) {
-            Rest* rest = addRest(tick, track, TDuration(TDuration::DurationType::V_MEASURE), tuplet);
+            Rest* rest = addRest(tick, track, TDuration(DurationType::V_MEASURE), tuplet);
             tick += rest->actualTicks();
             if (r == 0) {
                 r = rest;
@@ -842,7 +842,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
                     if (!cr) {
                         continue;
                     }
-                    if (cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                    if (cr->isRest() && cr->durationType() == DurationType::V_MEASURE) {
                         cr->undoChangeProperty(Pid::DURATION, ns);
                     } else {
                         return false;
@@ -1046,7 +1046,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
                     Fraction fr(staff(staffIdx)->timeSig(fm->tick())->sig());
                     for (Measure* m = fm1; m; m = m->nextMeasure()) {
                         ChordRest* cr = m->findChordRest(m->tick(), staffIdx * VOICES);
-                        if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                        if (cr && cr->isRest() && cr->durationType() == DurationType::V_MEASURE) {
                             cr->undoChangeProperty(Pid::DURATION, fr);
                         } else {
                             break;
@@ -1395,7 +1395,7 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
                     }
                     // fix measure rest duration
                     ChordRest* cr = nm->findChordRest(nm->tick(), i * VOICES);
-                    if (cr && cr->isRest() && cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                    if (cr && cr->isRest() && cr->durationType() == DurationType::V_MEASURE) {
                         cr->undoChangeProperty(Pid::DURATION, nm->stretchedLen(staff(i)));
                     }
                     //cr->setTicks(nm->stretchedLen(staff(i)));
@@ -1619,7 +1619,7 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                         cr = toChordRest(segment->element(tr));
                         if (cr == 0) {
                             if (tr % VOICES) {
-                                cr = addRest(segment, tr, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                                cr = addRest(segment, tr, TDuration(DurationType::V_MEASURE), 0);
                             } else {
                                 break;
                             }
@@ -2307,7 +2307,7 @@ void Score::deleteItem(EngravingItem* el)
         MeasureRepeat* mr = toMeasureRepeat(el);
         removeChordRest(mr, false);
         Rest* rest = Factory::createRest(this->dummy()->segment());
-        rest->setDurationType(TDuration::DurationType::V_MEASURE);
+        rest->setDurationType(DurationType::V_MEASURE);
         rest->setTicks(mr->measure()->stretchedLen(mr->staff()));
         rest->setTrack(mr->track());
         rest->setParent(mr->explicitParent());
@@ -3242,10 +3242,10 @@ void Score::cmdFullMeasureRest()
                 ChordRest* cr = m->findChordRest(m->tick(), track);
                 if (cr) {
                     removeChordRest(cr, true);
-                    r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                    r = addRest(m->tick(), track, TDuration(DurationType::V_MEASURE), 0);
                 } else if (noteEntryMode()) {
                     // might be no cr at input position
-                    r = addRest(m->tick(), track, TDuration(TDuration::DurationType::V_MEASURE), 0);
+                    r = addRest(m->tick(), track, TDuration(DurationType::V_MEASURE), 0);
                 }
             }
             if (s2 && (m == s2->measure())) {
@@ -3753,7 +3753,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         // add rest to all staves and to all the staves linked to it
         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
-            Rest* rest = Factory::createRest(score->dummy()->segment(), TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(score->dummy()->segment(), TDuration(DurationType::V_MEASURE));
             Fraction timeStretch(score->staff(staffIdx)->timeStretch(om->tick()));
             rest->setTicks(om->ticks() * timeStretch);
             rest->setTrack(track);
@@ -4325,7 +4325,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
         if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
             Rest* rest = Factory::createRest(this->dummy()->segment());
             rest->setTicks(dm->ticks());
-            rest->setDurationType(TDuration::DurationType::V_MEASURE);
+            rest->setDurationType(DurationType::V_MEASURE);
             rest->setTrack(dtrack);
             if (link) {
                 Segment* segment = dm->getSegment(SegmentType::ChordRest, dm->tick());
@@ -4833,8 +4833,8 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
         if (!ncr) {
             continue;
         }
-        ncr->undoChangeProperty(Pid::DURATION_TYPE, PropertyValue::fromValue(d));
-        ncr->undoChangeProperty(Pid::DURATION, PropertyValue::fromValue(d.fraction()));
+        ncr->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, d.typeWithDots());
+        ncr->undoChangeProperty(Pid::DURATION, d.fraction());
     }
 }
 

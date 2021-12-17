@@ -190,7 +190,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         int track = staffIdx * VOICES;
         if (s->element(track) == 0) {
             MMRest* mmr = new MMRest(s);
-            mmr->setDurationType(TDuration::DurationType::V_MEASURE);
+            mmr->setDurationType(DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
             mmr->setParent(s);

@@ -123,8 +123,8 @@ void NotationNoteInput::startNoteInput()
     }
 
     Duration d(is.duration());
-    if (!d.isValid() || d.isZero() || d.type() == Duration::DurationType::V_MEASURE) {
-        is.setDuration(Duration(Duration::DurationType::V_QUARTER));
+    if (!d.isValid() || d.isZero() || d.type() == DurationType::V_MEASURE) {
+        is.setDuration(Duration(DurationType::V_QUARTER));
     }
     is.setAccidentalType(Ms::AccidentalType::NONE);
 

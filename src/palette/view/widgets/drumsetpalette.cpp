@@ -115,7 +115,7 @@ void DrumsetPalette::updateDrumset()
         }
 
         auto chord = Factory::makeChord(gpaletteScore->dummy()->segment());
-        chord->setDurationType(TDuration::DurationType::V_QUARTER);
+        chord->setDurationType(DurationType::V_QUARTER);
         chord->setStemDirection(dir);
         chord->setIsUiItem(true);
         chord->setTrack(voice);

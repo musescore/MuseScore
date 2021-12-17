@@ -372,7 +372,7 @@ TEST_F(NoteTests, tpc)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setDuration(DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
     score->cmdAddPitch(octave + 1, false, false);
@@ -428,7 +428,7 @@ TEST_F(NoteTests, tpcTranspose2)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setDuration(DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
     int octave = 5 * 7;
     score->cmdAddPitch(octave + 3, false, false);
@@ -452,7 +452,7 @@ TEST_F(NoteTests, noteLimits)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_QUARTER);
+    score->inputState().setDuration(DurationType::V_QUARTER);
     score->inputState().setNoteEntryMode(true);
 
     // over 127 shouldn't crash
@@ -525,15 +525,15 @@ TEST_F(NoteTests, LongNoteAfterShort_183746)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_128TH);
+    score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
-    score->cmdEnterRest(TDuration::DurationType::V_128TH);
+    score->cmdEnterRest(DurationType::V_128TH);
 
-    score->inputState().setDuration(TDuration::DurationType::V_BREVE);
+    score->inputState().setDuration(DurationType::V_BREVE);
     score->cmdAddPitch(47, 0, 0);
 
-    Segment* s = score->tick2segment(TDuration(TDuration::DurationType::V_128TH).ticks());
+    Segment* s = score->tick2segment(TDuration(DurationType::V_128TH).ticks());
     EXPECT_TRUE(s && s->segmentType() == SegmentType::ChordRest);
     EXPECT_TRUE(s->tick() == Fraction(1, 128));
 
@@ -546,6 +546,6 @@ TEST_F(NoteTests, LongNoteAfterShort_183746)
     for (Note* n : nl) {
         totalTicks += n->chord()->durationTypeTicks();
     }
-    Fraction breveTicks = TDuration(TDuration::DurationType::V_BREVE).ticks();
+    Fraction breveTicks = TDuration(DurationType::V_BREVE).ticks();
     EXPECT_TRUE(totalTicks == breveTicks);   // total duration same as a breve
 }

@@ -245,7 +245,7 @@ PointF LetRing::linePos(Grip grip, System** sys) const
         }
         s = c->segment()->system();
         x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-        if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE) {
+        if (c->isRest() && c->durationType() == DurationType::V_MEASURE) {
             x -= c->x();
         }
     } else {
@@ -288,7 +288,7 @@ PointF LetRing::linePos(Grip grip, System** sys) const
         } else if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->isRest() && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
         }

@@ -837,7 +837,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 // others say to start the text just to left of notehead
                 // some say to include accidental, others don't
                 // our compromise - left align, but account for accidental
-                if (cr->durationType() == TDuration::DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx())) {
+                if (cr->durationType() == DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx())) {
                     x = cr->x();                            // center for measure rests
                 }
 //TODO                              else if (cr->spaceLw > 0.0)
@@ -846,7 +846,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
         } else {
             cr = toChordRest(endElement());
             if (isOttava()) {
-                if (cr && cr->durationType() == TDuration::DurationType::V_MEASURE) {
+                if (cr && cr->durationType() == DurationType::V_MEASURE) {
                     x = cr->x() + cr->width() + sp;
                 } else if (cr) {
                     // lay out just past right edge of all notes for this segment on this staff
@@ -869,7 +869,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                             for (Note* n : toChord(cr1)->notes()) {
                                 width = qMax(width, n->shape().right() + n->pos().x() + cr1->pos().x());
                             }
-                        } else if (cr1->isRest() && (cr1->actualDurationType() != TDuration::DurationType::V_MEASURE)) {
+                        } else if (cr1->isRest() && (cr1->actualDurationType() != DurationType::V_MEASURE)) {
                             width = qMax(width, cr1->bbox().right() + cr1->pos().x());
                         }
                     }

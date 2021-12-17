@@ -1651,10 +1651,10 @@ static QString tick2xml(const Fraction& ticks, int* dots)
     TDuration t(ticks);
     *dots = t.dots();
     if (ticks == Fraction(0, 1)) {
-        t.setType("measure");
+        t.setType(DurationType::V_MEASURE);
         *dots = 0;
     }
-    return t.name();
+    return TConv::toXml(t.type());
 }
 
 //---------------------------------------------------------
@@ -3848,7 +3848,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 
     QString restTag { "rest" };
     const TDuration d = rest->durationType();
-    if (d.type() == TDuration::DurationType::V_MEASURE) {
+    if (d.type() == DurationType::V_MEASURE) {
         restTag += " measure=\"yes\"";
     }
     // Either <rest/>
@@ -3863,7 +3863,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     }
 
     Fraction tickLen = rest->actualTicks();
-    if (d.type() == TDuration::DurationType::V_MEASURE) {
+    if (d.type() == DurationType::V_MEASURE) {
         // to avoid forward since rest->ticklen=0 in this case.
         tickLen = rest->measure()->ticks();
     }
@@ -3883,8 +3883,8 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     _xml.tag("voice", voice);
 
     // do not output a "type" element for whole measure rest
-    if (d.type() != TDuration::DurationType::V_MEASURE) {
-        QString s = d.name();
+    if (d.type() != DurationType::V_MEASURE) {
+        QString s = TConv::toXml(d.type());
         int dots  = rest->dots();
         if (rest->isSmall()) {
             _xml.tag("type size=\"cue\"", s);
@@ -4103,15 +4103,15 @@ static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
 //   findUnit
 //---------------------------------------------------------
 
-static bool findUnit(TDuration::DurationType val, QString& unit)
+static bool findUnit(DurationType val, QString& unit)
 {
     unit = "";
     switch (val) {
-    case TDuration::DurationType::V_HALF: unit = "half";
+    case DurationType::V_HALF: unit = "half";
         break;
-    case TDuration::DurationType::V_QUARTER: unit = "quarter";
+    case DurationType::V_QUARTER: unit = "quarter";
         break;
-    case TDuration::DurationType::V_EIGHTH: unit = "eighth";
+    case DurationType::V_EIGHTH: unit = "eighth";
         break;
     default: qDebug("findUnit: unknown DurationType %d", int(val));
     }

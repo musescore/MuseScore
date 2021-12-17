@@ -118,27 +118,27 @@ static void SetCapGraceDuration(Chord* chord, ChordObj* o)
     ((Chord*)chord)->setNoteType(nt);
     if (o->t == TIMESTEP::D4) {
         ((Chord*)chord)->setNoteType(NoteType::GRACE4);
-        chord->setDurationType(TDuration::DurationType::V_QUARTER);
+        chord->setDurationType(DurationType::V_QUARTER);
     } else if (o->t == TIMESTEP::D_BREVE) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_BREVE);
+        ((Chord*)chord)->setDurationType(DurationType::V_BREVE);
     } else if (o->t == TIMESTEP::D1) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_WHOLE);
+        ((Chord*)chord)->setDurationType(DurationType::V_WHOLE);
     } else if (o->t == TIMESTEP::D2) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_HALF);
+        ((Chord*)chord)->setDurationType(DurationType::V_HALF);
     } else if (o->t == TIMESTEP::D16) {
         ((Chord*)chord)->setNoteType(NoteType::GRACE16);
-        chord->setDurationType(TDuration::DurationType::V_16TH);
+        chord->setDurationType(DurationType::V_16TH);
     } else if (o->t == TIMESTEP::D32) {
         ((Chord*)chord)->setNoteType(NoteType::GRACE32);
-        chord->setDurationType(TDuration::DurationType::V_32ND);
+        chord->setDurationType(DurationType::V_32ND);
     } else if (o->t == TIMESTEP::D64) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_64TH);
+        ((Chord*)chord)->setDurationType(DurationType::V_64TH);
     } else if (o->t == TIMESTEP::D128) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_128TH);
+        ((Chord*)chord)->setDurationType(DurationType::V_128TH);
     } else if (o->t == TIMESTEP::D256) {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_256TH);
+        ((Chord*)chord)->setDurationType(DurationType::V_256TH);
     } else {
-        ((Chord*)chord)->setDurationType(TDuration::DurationType::V_EIGHTH);
+        ((Chord*)chord)->setDurationType(DurationType::V_EIGHTH);
     }
 }
 
@@ -586,7 +586,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         Measure* m1 = score->getCreateMeasure(tick + (ft * i));
                         Segment* s = m1->getSegment(SegmentType::ChordRest, tick + (ft * i));
                         Rest* rest = Factory::createRest(s);
-                        rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
+                        rest->setDurationType(TDuration(DurationType::V_MEASURE));
                         rest->setTicks(m1->ticks());
                         rest->setTrack(staffIdx * VOICES + voice);
                         s->add(rest);
@@ -598,7 +598,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 Rest* rest = Factory::createRest(s);
                 TDuration d1;
                 if (o->fullMeasures) {
-                    d1.setType(TDuration::DurationType::V_MEASURE);
+                    d1.setType(DurationType::V_MEASURE);
                     rest->setTicks(m->ticks());
                 } else {
                     d1.setVal(ticks.ticks());
@@ -1375,7 +1375,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                 if ((m->ticks() == m->timesig())) {
                     Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
                     Rest* rest = Factory::createRest(s);
-                    rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                    rest->setDurationType(DurationType::V_MEASURE);
                     rest->setTicks(m->ticks());
                     rest->setTrack(staffIdx * VOICES);
                     s->add(rest);

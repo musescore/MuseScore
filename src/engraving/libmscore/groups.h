@@ -51,8 +51,8 @@ public:
     void write(XmlWriter&) const;
     void read(XmlReader&);
 
-    BeamMode beamMode(int tick, TDuration::DurationType d) const;
-    void addStop(int pos, TDuration::DurationType d, BeamMode bm);
+    BeamMode beamMode(int tick, DurationType d) const;
+    void addStop(int pos, DurationType d, BeamMode bm);
     bool operator==(const Groups& g) const
     {
         if (g.m_nodes.size() != m_nodes.size()) {

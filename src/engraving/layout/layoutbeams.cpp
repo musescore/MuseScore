@@ -208,7 +208,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
 
     for (ChordRest* cr : qAsConst(graceNotes)) {
         bm = Groups::endBeam(cr);
-        if ((cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+        if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
             if (beam) {
                 beam->layoutGraceNotes();
                 beam = 0;
@@ -324,7 +324,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                         if (!beamNoContinue(prevCR->beamMode())
                             && !pm->lineBreak() && !pm->pageBreak() && !pm->sectionBreak()
                             && lc.prevMeasure
-                            && !(prevCR->isChord() && prevCR->durationType().type() <= TDuration::DurationType::V_QUARTER)) {
+                            && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
                             beam = prevCR->beam();
                             //a1 = beam ? beam->elements().front() : prevCR;
                             a1 = beam ? nullptr : prevCR;               // when beam is found, a1 is no longer required.
@@ -383,7 +383,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 bm = BeamMode::NONE;
             }
 
-            if ((cr->isChord() && cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+            if ((cr->isChord() && cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
                     beam->layout1();

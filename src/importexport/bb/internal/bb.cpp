@@ -443,7 +443,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             }
             Measure* measure = (Measure*)mb;
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            Rest* rest = Factory::createRest(s, TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(s, TDuration(DurationType::V_MEASURE));
             rest->setTicks(measure->ticks());
             rest->setTrack(0);
             s->add(rest);
@@ -462,7 +462,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         Measure* measure = (Measure*)mb;
         Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
         if (s == 0) {
-            Rest* rest = Factory::createRest(s, TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(s, TDuration(DurationType::V_MEASURE));
             rest->setTicks(measure->ticks());
             rest->setTrack(0);
             Segment* s1 = measure->getSegment(SegmentType::ChordRest, measure->tick());

@@ -63,7 +63,7 @@ TEST_F(DurationTypeTests, halfDuration)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
+    score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
@@ -94,7 +94,7 @@ TEST_F(DurationTypeTests, doubleDuration)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_128TH);
+    score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
@@ -122,7 +122,7 @@ TEST_F(DurationTypeTests, decDurationDotted)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
+    score->inputState().setDuration(DurationType::V_WHOLE);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();
@@ -155,7 +155,7 @@ TEST_F(DurationTypeTests, incDurationDotted)
 
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
-    score->inputState().setDuration(TDuration::DurationType::V_128TH);
+    score->inputState().setDuration(DurationType::V_128TH);
     score->inputState().setNoteEntryMode(true);
 
     score->startCmd();

@@ -24,6 +24,7 @@
 #include <QMimeData>
 
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "articulation.h"
 #include "beam.h"
@@ -634,7 +635,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
     // and only if the lengths of the rest and measure match
     // otherwise, we need to convert to duration rest(s)
     // and potentially split the rest up (eg, 5/4 => whole + quarter)
-    bool convertMeasureRest = cr->isRest() && cr->durationType().type() == TDuration::DurationType::V_MEASURE
+    bool convertMeasureRest = cr->isRest() && cr->durationType().type() == DurationType::V_MEASURE
                               && (tick != measure->tick() || cr->ticks() != measure->ticks());
 
     Fraction measureEnd = measure->endTick();
@@ -1081,7 +1082,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
                 return false;
             }
             if (tag == "durationType") {
-                if (!TDuration(TDuration(reader.readElementText()).fraction() * scale).isValid()) {
+                if (!TDuration(TDuration(TConv::fromXml(reader.readElementText(), DurationType::V_INVALID)).fraction() * scale).isValid()) {
                     return false;
                 }
             }

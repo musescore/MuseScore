@@ -64,7 +64,7 @@ class InputState
     bool _noteEntryMode { false };
     NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
 
-    TDuration _duration { TDuration::DurationType::V_INVALID }; // currently duration
+    TDuration _duration { DurationType::V_INVALID }; // currently duration
     bool _rest { false }; // rest mode
 
     NoteType _noteType { NoteType::NORMAL };

@@ -91,6 +91,10 @@ public:
 
     static QString toXml(BeatsPerSecond v);
     static BeatsPerSecond fromXml(const QString& tag, BeatsPerSecond def);
+
+    static QString toUserName(DurationType v);
+    static QString toXml(DurationType v);
+    static DurationType fromXml(const QString& tag, DurationType def);
 };
 }
 

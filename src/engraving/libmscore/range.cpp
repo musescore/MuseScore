@@ -526,7 +526,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     Segment* seg = m->getSegmentR(SegmentType::ChordRest, m->ticks() - remains);
                     if ((_track % VOICES) == 0) {
                         // write only for voice 1
-                        Rest* r = Factory::createRest(seg, TDuration::DurationType::V_MEASURE);
+                        Rest* r = Factory::createRest(seg, DurationType::V_MEASURE);
                         // ideally we should be using stretchedLen
                         // but this is not valid during rewrite when adding time signatures
                         // since the time signature has not been added yet

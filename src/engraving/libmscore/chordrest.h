@@ -137,8 +137,7 @@ public:
     }
 
     const TDuration actualDurationType() const { return _durationType; }
-    void setDurationType(TDuration::DurationType t);
-    void setDurationType(const QString& s);
+    void setDurationType(DurationType t);
     void setDurationType(const Fraction& ticks);
     void setDurationType(TDuration v);
     void setDots(int n) { _durationType.setDots(n); }
@@ -206,7 +205,7 @@ public:
     virtual Shape shape() const override;
     virtual void computeUp() { _usesAutoUp = false; _up = true; }
 
-    bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
+    bool isFullMeasureRest() const { return _durationType == DurationType::V_MEASURE; }
     virtual void removeMarkings(bool keepTremolo = false);
 
     bool isBefore(const ChordRest*) const;

@@ -147,7 +147,7 @@ void Rest::setOffset(const mu::PointF& o)
 mu::RectF Rest::drag(EditData& ed)
 {
     // don't allow drag for Measure Rests, because they can't be easily laid out in correct position while dragging
-    if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE) {
+    if (measure() && durationType().type() == DurationType::V_MEASURE) {
         return RectF();
     }
 
@@ -200,7 +200,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TREMOLOBAR)
         || (type == ElementType::IMAGE)
         || (type == ElementType::SYMBOL)
-        || (type == ElementType::MEASURE_REPEAT && durationType().type() == TDuration::DurationType::V_MEASURE)
+        || (type == ElementType::MEASURE_REPEAT && durationType().type() == DurationType::V_MEASURE)
         ) {
         return true;
     }
@@ -256,7 +256,7 @@ EngravingItem* Rest::drop(EditData& data)
     case ElementType::MEASURE_REPEAT: {
         int numMeasures = toMeasureRepeat(e)->numMeasures();
         delete e;
-        if (durationType().type() == TDuration::DurationType::V_MEASURE) {
+        if (durationType().type() == DurationType::V_MEASURE) {
             score()->cmdAddMeasureRepeat(measure(), numMeasures, staffIdx());
         }
         break;
@@ -277,41 +277,41 @@ EngravingItem* Rest::drop(EditData& data)
 //   getSymbol
 //---------------------------------------------------------
 
-SymId Rest::getSymbol(TDuration::DurationType type, int line, int lines, int* yoffset)
+SymId Rest::getSymbol(DurationType type, int line, int lines, int* yoffset)
 {
     *yoffset = 2;
     switch (type) {
-    case TDuration::DurationType::V_LONG:
+    case DurationType::V_LONG:
         return SymId::restLonga;
-    case TDuration::DurationType::V_BREVE:
+    case DurationType::V_BREVE:
         return SymId::restDoubleWhole;
-    case TDuration::DurationType::V_MEASURE:
+    case DurationType::V_MEASURE:
         if (ticks() >= Fraction(2, 1)) {
             return SymId::restDoubleWhole;
         }
     // fall through
-    case TDuration::DurationType::V_WHOLE:
+    case DurationType::V_WHOLE:
         *yoffset = 1;
         return (line <= -2 || line >= (lines - 1)) ? SymId::restWholeLegerLine : SymId::restWhole;
-    case TDuration::DurationType::V_HALF:
+    case DurationType::V_HALF:
         return (line <= -3 || line >= (lines - 2)) ? SymId::restHalfLegerLine : SymId::restHalf;
-    case TDuration::DurationType::V_QUARTER:
+    case DurationType::V_QUARTER:
         return SymId::restQuarter;
-    case TDuration::DurationType::V_EIGHTH:
+    case DurationType::V_EIGHTH:
         return SymId::rest8th;
-    case TDuration::DurationType::V_16TH:
+    case DurationType::V_16TH:
         return SymId::rest16th;
-    case TDuration::DurationType::V_32ND:
+    case DurationType::V_32ND:
         return SymId::rest32nd;
-    case TDuration::DurationType::V_64TH:
+    case DurationType::V_64TH:
         return SymId::rest64th;
-    case TDuration::DurationType::V_128TH:
+    case DurationType::V_128TH:
         return SymId::rest128th;
-    case TDuration::DurationType::V_256TH:
+    case DurationType::V_256TH:
         return SymId::rest256th;
-    case TDuration::DurationType::V_512TH:
+    case DurationType::V_512TH:
         return SymId::rest512th;
-    case TDuration::DurationType::V_1024TH:
+    case DurationType::V_1024TH:
         return SymId::rest1024th;
     default:
         qDebug("unknown rest type %d", int(type));
@@ -338,10 +338,10 @@ void Rest::layout()
     if (stt && stt->isTabStaff()) {
         // if rests are shown and note values are shown as duration symbols
         if (stt->showRests() && stt->genDurations()) {
-            TDuration::DurationType type = durationType().type();
+            DurationType type = durationType().type();
             int dots = durationType().dots();
             // if rest is whole measure, convert into actual type and dot values
-            if (type == TDuration::DurationType::V_MEASURE && measure()) {
+            if (type == DurationType::V_MEASURE && measure()) {
                 Fraction ticks = measure()->ticks();
                 TDuration dur  = TDuration(ticks).type();
                 type           = dur.type();
@@ -439,18 +439,18 @@ NoteDot* Rest::dot(int n)
 //   getDotline
 //---------------------------------------------------------
 
-int Rest::getDotline(TDuration::DurationType durationType)
+int Rest::getDotline(DurationType durationType)
 {
     int dl = -1;
     switch (durationType) {
-    case TDuration::DurationType::V_64TH:
-    case TDuration::DurationType::V_32ND:
+    case DurationType::V_64TH:
+    case DurationType::V_32ND:
         dl = -3;
         break;
-    case TDuration::DurationType::V_1024TH:
-    case TDuration::DurationType::V_512TH:
-    case TDuration::DurationType::V_256TH:
-    case TDuration::DurationType::V_128TH:
+    case DurationType::V_1024TH:
+    case DurationType::V_512TH:
+    case DurationType::V_256TH:
+    case DurationType::V_128TH:
         dl = -5;
         break;
     default:
@@ -541,7 +541,7 @@ int Rest::computeLineOffset(int lines)
         if (qFuzzyIsNull(offset().y()) && autoplace()) {
             int firstTrack = staffIdx() * 4;
             int extraOffsetForFewLines = lines < 5 ? 2 : 0;
-            bool isMeasureRest = durationType().type() == TDuration::DurationType::V_MEASURE;
+            bool isMeasureRest = durationType().type() == DurationType::V_MEASURE;
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
                 for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
@@ -573,15 +573,15 @@ int Rest::computeLineOffset(int lines)
         }
 
         switch (durationType().type()) {
-        case TDuration::DurationType::V_LONG:
+        case DurationType::V_LONG:
             lineOffset = up ? -3 : 5;
             lineOffset += up ? (line < 5 ? line - 5 : 0) : (line > 5 ? line - 5 : 0);
             break;
-        case TDuration::DurationType::V_BREVE:
+        case DurationType::V_BREVE:
             lineOffset = up ? -3 : 5;
             lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 5 : 0);
             break;
-        case TDuration::DurationType::V_MEASURE:
+        case DurationType::V_MEASURE:
             if (ticks() >= Fraction(2, 1)) {     // breve symbol
                 lineOffset = up ? -3 : 5;
                 lineOffset += up ? (line < 3 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
@@ -590,41 +590,41 @@ int Rest::computeLineOffset(int lines)
                 lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
             }
             break;
-        case TDuration::DurationType::V_WHOLE:
+        case DurationType::V_WHOLE:
             lineOffset = up ? -4 : 6;
             lineOffset += up ? (line < 3 ? line - 2 : 0) : (line > 6 ? line - 5 : 0);
             break;
-        case TDuration::DurationType::V_HALF:
+        case DurationType::V_HALF:
             lineOffset = up ? -4 : 4;
             lineOffset += up ? (line < 2 ? line - 3 : 0) : (line > 5 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_QUARTER:
+        case DurationType::V_QUARTER:
             lineOffset = up ? -4 : 4;
             lineOffset += up ? (line < 5 ? line - 4 : 0) : (line > 3 ? line - 3 : 0);
             break;
-        case TDuration::DurationType::V_EIGHTH:
+        case DurationType::V_EIGHTH:
             lineOffset = up ? -4 : 4;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_16TH:
+        case DurationType::V_16TH:
             lineOffset = up ? -6 : 4;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_32ND:
+        case DurationType::V_32ND:
             lineOffset = up ? -6 : 6;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_64TH:
+        case DurationType::V_64TH:
             lineOffset = up ? -8 : 6;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_128TH:
+        case DurationType::V_128TH:
             lineOffset = up ? -8 : 8;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
-        case TDuration::DurationType::V_1024TH:
-        case TDuration::DurationType::V_512TH:
-        case TDuration::DurationType::V_256TH:
+        case DurationType::V_1024TH:
+        case DurationType::V_512TH:
+        case DurationType::V_256TH:
             lineOffset = up ? -10 : 6;
             lineOffset += up ? (line < 4 ? line - 4 : 0) : (line > 4 ? line - 4 : 0);
             break;
@@ -655,17 +655,17 @@ int Rest::computeLineOffset(int lines)
         }
         lineOffset = centerDiff;
         switch (durationType().type()) {
-        case TDuration::DurationType::V_LONG:
-        case TDuration::DurationType::V_BREVE:
-        case TDuration::DurationType::V_MEASURE:
-        case TDuration::DurationType::V_WHOLE:
+        case DurationType::V_LONG:
+        case DurationType::V_BREVE:
+        case DurationType::V_MEASURE:
+        case DurationType::V_WHOLE:
             if (lineOffset & 1) {
                 lineOffset += 1;                // always round to nearest line
             } else if (lines <= 3) {
                 lineOffset += 2;                // special case - move down for 1-line or 3-line staff
             }
             break;
-        case TDuration::DurationType::V_HALF:
+        case DurationType::V_HALF:
             if (lineOffset & 1) {
                 lineOffset += 1;                // always round to nearest line
             }
@@ -824,7 +824,7 @@ void Rest::setAccent(bool flag)
     if (voice() % 2 == 0) {
         if (flag) {
             qreal yOffset = -(bbox().bottom());
-            if (durationType() >= TDuration::DurationType::V_HALF) {
+            if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
             rypos() += yOffset;
@@ -1038,7 +1038,7 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
         setOffset(v.value<PointF>());
         layout();
         score()->addRefresh(canvasBoundingRect());
-        if (measure() && durationType().type() == TDuration::DurationType::V_MEASURE) {
+        if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();
         }
         triggerLayout();

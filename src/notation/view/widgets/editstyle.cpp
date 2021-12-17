@@ -1589,15 +1589,15 @@ void EditStyle::setValues()
 
     //TODO: convert the rest:
 
-    QString unit(styleValue(StyleId::swingUnit).toString());
+    Ms::DurationType unit = TConv::fromXml(styleValue(StyleId::swingUnit).toString(), Ms::DurationType::V_INVALID);
 
-    if (unit == Ms::TDuration(Ms::TDuration::DurationType::V_EIGHTH).name()) {
+    if (unit == Ms::DurationType::V_EIGHTH) {
         swingEighth->setChecked(true);
         swingBox->setEnabled(true);
-    } else if (unit == Ms::TDuration(Ms::TDuration::DurationType::V_16TH).name()) {
+    } else if (unit == Ms::DurationType::V_16TH) {
         swingSixteenth->setChecked(true);
         swingBox->setEnabled(true);
-    } else if (unit == Ms::TDuration(Ms::TDuration::DurationType::V_ZERO).name()) {
+    } else if (unit == Ms::DurationType::V_ZERO) {
         swingOff->setChecked(true);
         swingBox->setEnabled(false);
     }
@@ -1685,13 +1685,13 @@ void EditStyle::setSwingParams(bool checked)
     }
     QVariant val;
     if (swingOff->isChecked()) {
-        val = Ms::TDuration(Ms::TDuration::DurationType::V_ZERO).name();
+        val = TConv::toXml(DurationType::V_ZERO);
         swingBox->setEnabled(false);
     } else if (swingEighth->isChecked()) {
-        val = Ms::TDuration(Ms::TDuration::DurationType::V_EIGHTH).name();
+        val = TConv::toXml(DurationType::V_EIGHTH);
         swingBox->setEnabled(true);
     } else if (swingSixteenth->isChecked()) {
-        val = Ms::TDuration(Ms::TDuration::DurationType::V_16TH).name();
+        val = TConv::toXml(DurationType::V_16TH);
         swingBox->setEnabled(true);
     }
 
