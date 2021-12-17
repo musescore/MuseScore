@@ -29,16 +29,6 @@
 
 using namespace mu::engraving;
 
-PropertyValue::PropertyValue(const Ms::Groups& v)
-    : m_type(P_TYPE::GROUPS), m_any(v)
-{
-}
-
-const Ms::Groups& PropertyValue::toGroups() const
-{
-    return std::any_cast<const Ms::Groups&>(m_any);
-}
-
 PropertyValue::PropertyValue(const Ms::TDuration& v)
     : m_type(P_TYPE::TDURATION), m_any(v)
 {
@@ -90,12 +80,6 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
     if (v.m_type == P_TYPE::TDURATION) {
         assert(m_type == P_TYPE::TDURATION);
         return v.toTDuration() == toTDuration();
-    }
-
-    //! HACK Temporary hack for GROUPS comparisons
-    if (v.m_type == P_TYPE::GROUPS) {
-        assert(m_type == P_TYPE::GROUPS);
-        return v.toGroups() == toGroups();
     }
 
     if (v.m_type == P_TYPE::REAL) {

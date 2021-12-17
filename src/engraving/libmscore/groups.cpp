@@ -145,7 +145,7 @@ BeamMode Groups::beamMode(int tick, TDuration::DurationType d) const
         return BeamMode::AUTO;
     }
     const int dm = Constant::division / 8;
-    for (const GroupNode& e : *this) {
+    for (const GroupNode& e : m_nodes) {
         if (e.pos * dm < tick) {
             continue;
         }
@@ -200,7 +200,7 @@ const Groups& Groups::endings(const Fraction& f)
         GroupNode n;
         n.pos    = pos * i;
         n.action = 0x111;
-        g.endings.push_back(n);
+        g.endings.addNode(n);
     }
     return noteGroups.back().endings;
 }
@@ -212,7 +212,7 @@ const Groups& Groups::endings(const Fraction& f)
 void Groups::write(XmlWriter& xml) const
 {
     xml.startObject("Groups");
-    for (const GroupNode& n : *this) {
+    for (const GroupNode& n : m_nodes) {
         xml.tagE(QString("Node pos=\"%1\" action=\"%2\"")
                  .arg(n.pos).arg(n.action));
     }
@@ -231,7 +231,7 @@ void Groups::read(XmlReader& e)
             GroupNode n;
             n.pos    = e.intAttribute("pos");
             n.action = e.intAttribute("action");
-            push_back(n);
+            m_nodes.push_back(n);
             e.skipCurrentElement();
         } else {
             e.unknown();
@@ -270,8 +270,8 @@ void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
     pos    /= 60;
     action <<= shift;
 
-    auto i = begin();
-    for (; i != end(); ++i) {
+    auto i = m_nodes.begin();
+    for (; i != m_nodes.end(); ++i) {
         if (i->pos == pos) {
             i->action = (i->action & ~(0xf << shift)) | action;
             return;
@@ -280,7 +280,7 @@ void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
             break;
         }
     }
-    insert(i, GroupNode({ pos, action }));
+    m_nodes.insert(i, GroupNode({ pos, action }));
 }
 
 //---------------------------------------------------------
@@ -290,7 +290,7 @@ void Groups::addStop(int pos, TDuration::DurationType d, BeamMode bm)
 void Groups::dump(const char* m) const
 {
     qDebug("%s", m);
-    for (const GroupNode& n : *this) {
+    for (const GroupNode& n : m_nodes) {
         qDebug("  group tick %d action 0x%02x", n.pos * 60, n.action);
     }
 }

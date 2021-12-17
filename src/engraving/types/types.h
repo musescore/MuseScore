@@ -31,6 +31,7 @@
 #include "symid.h"
 #include "pitchvalue.h"
 #include "bps.h"
+#include "groupnode.h"
 
 #ifndef MU_ENGRAVING_TYPES_H
 #define MU_ENGRAVING_TYPES_H

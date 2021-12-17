@@ -279,7 +279,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(glissEaseIn,             GLISS_EASEIN)
     API_PROPERTY(glissEaseOut,            GLISS_EASEOUT)
     API_PROPERTY(diagonal,                DIAGONAL)
-    API_PROPERTY(groups,                  GROUPS)
+    API_PROPERTY(groups,                  GROUP_NODES)
     API_PROPERTY(lineStyle,               LINE_STYLE)
     API_PROPERTY(lineColor,               COLOR)
     API_PROPERTY(lineWidth,               LINE_WIDTH)
