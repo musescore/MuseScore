@@ -152,7 +152,7 @@ struct TablatureDurationFont {
     qreal gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     qreal gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
     // the note value with no beaming in 'grid'-style beaming
-    TDuration::DurationType zeroBeamLevel = TDuration::DurationType::V_QUARTER;
+    DurationType zeroBeamLevel = DurationType::V_QUARTER;
     QChar displayDot;                 // the char to use to draw a dot
     QChar displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
 
@@ -347,7 +347,7 @@ public:
     NoteHeadScheme noteHeadScheme() const { return _noteHeadScheme; }
 
     QString fretString(int fret, int string, bool ghost) const;     // returns a string with the text for fret
-    QString durationString(TDuration::DurationType type, int dots) const;
+    QString durationString(DurationType type, int dots) const;
 
     // functions to cope with historic TAB's peculiarities, like upside-down, bass string notations
     int     physStringToVisual(int strg) const;                   // return the string in visual order from physical string
@@ -451,7 +451,7 @@ class TabDurationSymbol final : public EngravingItem
 
 public:
     TabDurationSymbol(ChordRest* parent);
-    TabDurationSymbol(ChordRest* parent, const StaffType* tab, TDuration::DurationType type, int dots);
+    TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
     void draw(mu::draw::Painter*) const override;
@@ -460,7 +460,7 @@ public:
 
     TabBeamGrid beamGrid() { return _beamGrid; }
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
-    void setDuration(TDuration::DurationType type, int dots, const StaffType* tab)
+    void setDuration(DurationType type, int dots, const StaffType* tab)
     {
         _tab = tab;
         _text = tab->durationString(type, dots);

@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "factory.h"
 #include "chord.h"
@@ -162,7 +163,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     writeProperty(xml, Pid::STAFF_MOVE);
 
     if (actualDurationType().isValid()) {
-        xml.tag("durationType", actualDurationType().name());
+        xml.tag("durationType", TConv::toXml(actualDurationType().type()));
     }
 
     if (!ticks().isZero() && (!actualDurationType().fraction().isValid()
@@ -208,8 +209,8 @@ bool ChordRest::readProperties(XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "durationType") {
-        setDurationType(e.readElementText());
-        if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
+        setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        if (actualDurationType().type() != DurationType::V_MEASURE) {
             if (score()->mscVersion() < 112 && (type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
@@ -220,9 +221,9 @@ bool ChordRest::readProperties(XmlReader& e)
                 &&            // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                (actualDurationType() == TDuration::DurationType::V_WHOLE && ticks() <= Fraction(4, 4))) {
+                (actualDurationType() == DurationType::V_WHOLE && ticks() <= Fraction(4, 4))) {
                 // old pre 2.0 scores: convert
-                setDurationType(TDuration::DurationType::V_MEASURE);
+                setDurationType(DurationType::V_MEASURE);
             } else {    // not from old score: set duration fraction from duration type
                 setTicks(actualDurationType().fraction());
             }
@@ -253,7 +254,7 @@ bool ChordRest::readProperties(XmlReader& e)
             i = mticks;
         }
         if ((type() == ElementType::REST) && (mticks == i)) {
-            setDurationType(TDuration::DurationType::V_MEASURE);
+            setDurationType(DurationType::V_MEASURE);
             setTicks(Fraction::fromTicks(i));
         } else {
             Fraction f = Fraction::fromTicks(i);
@@ -627,15 +628,9 @@ void ChordRest::setBeam(Beam* b)
 //   setDurationType
 //---------------------------------------------------------
 
-void ChordRest::setDurationType(TDuration::DurationType t)
+void ChordRest::setDurationType(DurationType t)
 {
     _durationType.setType(t);
-    _crossMeasure = CrossMeasure::UNKNOWN;
-}
-
-void ChordRest::setDurationType(const QString& s)
-{
-    _durationType.setType(s);
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
@@ -695,19 +690,19 @@ QString ChordRest::durationUserName() const
 
     switch (dots()) {
     case 1:
-        dotString += QObject::tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 2:
-        dotString += QObject::tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Double dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 3:
-        dotString += QObject::tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Triple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 4:
-        dotString += QObject::tr("Quadruple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     default:
-        dotString += durationType().durationTypeUserName();
+        dotString += TConv::toUserName(durationType().type());
     }
     return QString("%1%2").arg(tupletType, dotString);
 }
@@ -851,8 +846,8 @@ PropertyValue ChordRest::getProperty(Pid propertyId) const
     case Pid::SMALL:      return PropertyValue::fromValue(isSmall());
     case Pid::BEAM_MODE:  return int(beamMode());
     case Pid::STAFF_MOVE: return staffMove();
-    case Pid::DURATION_TYPE: return PropertyValue::fromValue(actualDurationType());
-    default:               return DurationElement::getProperty(propertyId);
+    case Pid::DURATION_TYPE_WITH_DOTS: return actualDurationType().typeWithDots();
+    default:              return DurationElement::getProperty(propertyId);
     }
 }
 
@@ -876,8 +871,8 @@ bool ChordRest::setProperty(Pid propertyId, const PropertyValue& v)
         setVisible(v.toBool());
         measure()->checkMultiVoices(staffIdx());
         break;
-    case Pid::DURATION_TYPE:
-        setDurationType(v.toTDuration());
+    case Pid::DURATION_TYPE_WITH_DOTS:
+        setDurationType(v.value<DurationTypeWithDots>());
         break;
     default:
         return DurationElement::setProperty(propertyId, v);

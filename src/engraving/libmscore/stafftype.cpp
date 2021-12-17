@@ -618,7 +618,7 @@ qreal StaffType::chordRestStemPosY(const ChordRest* chordRest) const
     // if stems beside staff, position are fixed, but take into account delta for half notes
     qreal delta                                 // displacement for half note stems (if used)
         =   // if half notes have not a short stem OR not a half note => 0
-          (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != TDuration::DurationType::V_HALF)
+          (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != DurationType::V_HALF)
           ? 0.0
           :       // if stem is up, displace of half stem length down (positive)
                   // if stem is down, displace of half stem length up (negative)
@@ -679,7 +679,7 @@ qreal StaffType::chordStemLength(const Chord* chord) const
     }
     // if stems beside staff, length is fixed, but take into account shorter half note stems
     else {
-        bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == TDuration::DurationType::V_HALF);
+        bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == DurationType::V_HALF);
         stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
                   * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0);
     }
@@ -716,7 +716,7 @@ QString StaffType::fretString(int fret, int string, bool ghost) const
     }
 }
 
-QString StaffType::durationString(TDuration::DurationType type, int dots) const
+QString StaffType::durationString(DurationType type, int dots) const
 {
     QString s = _durationFonts[_durationFontIdx].displayValue[int(type)];
     for (int count=0; count < dots; count++) {
@@ -865,7 +865,7 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
     _text       = QString();
 }
 
-TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, TDuration::DurationType type, int dots)
+TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
@@ -1119,31 +1119,31 @@ bool TablatureDurationFont::read(XmlReader& e)
         } else if (tag == "zeroBeamValue") {
             QString val(e.readElementText());
             if (val == "longa") {
-                zeroBeamLevel = TDuration::DurationType::V_LONG;
+                zeroBeamLevel = DurationType::V_LONG;
             } else if (val == "brevis") {
-                zeroBeamLevel = TDuration::DurationType::V_BREVE;
+                zeroBeamLevel = DurationType::V_BREVE;
             } else if (val == "semibrevis") {
-                zeroBeamLevel = TDuration::DurationType::V_WHOLE;
+                zeroBeamLevel = DurationType::V_WHOLE;
             } else if (val == "minima") {
-                zeroBeamLevel = TDuration::DurationType::V_HALF;
+                zeroBeamLevel = DurationType::V_HALF;
             } else if (val == "semiminima") {
-                zeroBeamLevel = TDuration::DurationType::V_QUARTER;
+                zeroBeamLevel = DurationType::V_QUARTER;
             } else if (val == "fusa") {
-                zeroBeamLevel = TDuration::DurationType::V_EIGHTH;
+                zeroBeamLevel = DurationType::V_EIGHTH;
             } else if (val == "semifusa") {
-                zeroBeamLevel = TDuration::DurationType::V_16TH;
+                zeroBeamLevel = DurationType::V_16TH;
             } else if (val == "32") {
-                zeroBeamLevel = TDuration::DurationType::V_32ND;
+                zeroBeamLevel = DurationType::V_32ND;
             } else if (val == "64") {
-                zeroBeamLevel = TDuration::DurationType::V_64TH;
+                zeroBeamLevel = DurationType::V_64TH;
             } else if (val == "128") {
-                zeroBeamLevel = TDuration::DurationType::V_128TH;
+                zeroBeamLevel = DurationType::V_128TH;
             } else if (val == "256") {
-                zeroBeamLevel = TDuration::DurationType::V_256TH;
+                zeroBeamLevel = DurationType::V_256TH;
             } else if (val == "512") {
-                zeroBeamLevel = TDuration::DurationType::V_512TH;
+                zeroBeamLevel = DurationType::V_512TH;
             } else if (val == "1024") {
-                zeroBeamLevel = TDuration::DurationType::V_1024TH;
+                zeroBeamLevel = DurationType::V_1024TH;
             } else {
                 e.unknown();
             }

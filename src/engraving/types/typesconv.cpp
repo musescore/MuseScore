@@ -728,3 +728,37 @@ BeatsPerSecond TConv::fromXml(const QString& tag, BeatsPerSecond def)
     double v = tag.toDouble(&ok);
     return ok ? BeatsPerSecond(v) : def;
 }
+
+static const std::vector<Item<DurationType> > DURATION_TYPES = {
+    { DurationType::V_QUARTER,  "quarter",  QT_TRANSLATE_NOOP("engraving", "Quarter") },
+    { DurationType::V_EIGHTH,   "eighth",   QT_TRANSLATE_NOOP("engraving", "Eighth") },
+    { DurationType::V_1024TH,   "1024th",   QT_TRANSLATE_NOOP("engraving", "1024th") },
+    { DurationType::V_512TH,    "512th",    QT_TRANSLATE_NOOP("engraving", "512th") },
+    { DurationType::V_256TH,    "256th",    QT_TRANSLATE_NOOP("engraving", "256th") },
+    { DurationType::V_128TH,    "128th",    QT_TRANSLATE_NOOP("engraving", "128th") },
+    { DurationType::V_64TH,     "64th",     QT_TRANSLATE_NOOP("engraving", "64th") },
+    { DurationType::V_32ND,     "32nd",     QT_TRANSLATE_NOOP("engraving", "32nd") },
+    { DurationType::V_16TH,     "16th",     QT_TRANSLATE_NOOP("engraving", "16th") },
+    { DurationType::V_HALF,     "half",     QT_TRANSLATE_NOOP("engraving", "Half") },
+    { DurationType::V_WHOLE,    "whole",    QT_TRANSLATE_NOOP("engraving", "Whole") },
+    { DurationType::V_MEASURE,  "measure",  QT_TRANSLATE_NOOP("engraving", "Quarter") },
+    { DurationType::V_BREVE,    "breve",    QT_TRANSLATE_NOOP("engraving", "Breve") },
+    { DurationType::V_LONG,     "long",     QT_TRANSLATE_NOOP("engraving", "Longa") },
+    { DurationType::V_ZERO,     "",         QT_TRANSLATE_NOOP("engraving", "Zero") },
+    { DurationType::V_INVALID,  "",         QT_TRANSLATE_NOOP("engraving", "Invalid") },
+};
+
+QString TConv::toUserName(DurationType v)
+{
+    return findUserNameByType<DurationType>(DURATION_TYPES, v);
+}
+
+QString TConv::toXml(DurationType v)
+{
+    return findXmlTagByType<DurationType>(DURATION_TYPES, v);
+}
+
+DurationType TConv::fromXml(const QString& tag, DurationType def)
+{
+    return findTypeByXmlTag<DurationType>(DURATION_TYPES, tag, def);
+}

@@ -694,7 +694,7 @@ QString Tremolo::accessibleInfo() const
 bool Tremolo::customStyleApplicable() const
 {
     return twoNotes()
-           && (durationType().type() == TDuration::DurationType::V_HALF)
+           && (durationType().type() == DurationType::V_HALF)
            && (staffType()->group() != StaffGroup::TAB);
 }
 

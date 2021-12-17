@@ -277,7 +277,7 @@ void Beam::layout1()
 {
     resetExplicitParent();  // parent is System
 
-    _maxDuration.setType(TDuration::DurationType::V_INVALID);
+    _maxDuration.setType(DurationType::V_INVALID);
 
     // TAB's with stem beside staves have special layout
     bool isTabStaff = staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough();
@@ -402,7 +402,7 @@ void Beam::layout1()
 
 void Beam::layoutGraceNotes()
 {
-    _maxDuration.setType(TDuration::DurationType::V_INVALID);
+    _maxDuration.setType(DurationType::V_INVALID);
     Chord* c1 = 0;
     Chord* c2 = 0;
 

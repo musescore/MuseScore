@@ -1566,7 +1566,7 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
     } else if (tag == "p2") {
         de->setProperty(Pid::P2, PropertyValue::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "baseNote") {
-        de->setBaseLen(TDuration(e.readElementText()));
+        de->setBaseLen(TDuration(TConv::fromXml(e.readElementText(), DurationType::V_INVALID)));
     } else if (tag == "Number") {
         Text* _number = Factory::createText(de);
         de->setNumber(_number);
@@ -1595,8 +1595,8 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
     const QStringRef& tag(e.name());
 
     if (tag == "durationType") {
-        ch->setDurationType(e.readElementText());
-        if (ch->actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
+        ch->setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        if (ch->actualDurationType().type() != DurationType::V_MEASURE) {
             if (ctx.mscVersion() < 112 && (ch->type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
@@ -1607,9 +1607,9 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                 &&            // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                (ch->actualDurationType() == TDuration::DurationType::V_WHOLE && ch->ticks() <= Fraction(4, 4))) {
+                (ch->actualDurationType() == DurationType::V_WHOLE && ch->ticks() <= Fraction(4, 4))) {
                 // old pre 2.0 scores: convert
-                ch->setDurationType(TDuration::DurationType::V_MEASURE);
+                ch->setDurationType(DurationType::V_MEASURE);
             } else {    // not from old score: set duration fraction from duration type
                 ch->setTicks(ch->actualDurationType().fraction());
             }
@@ -1651,7 +1651,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             i = mticks;
         }
         if ((ch->type() == ElementType::REST) && (mticks == i)) {
-            ch->setDurationType(TDuration::DurationType::V_MEASURE);
+            ch->setDurationType(DurationType::V_MEASURE);
             ch->setTicks(Fraction::fromTicks(i));
         } else {
             Fraction f = Fraction::fromTicks(i);
@@ -2566,7 +2566,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
                 Rest* rest = Factory::createRest(segment);
-                rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(e.track());
                 rest->setParent(segment);

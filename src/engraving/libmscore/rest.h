@@ -71,13 +71,13 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
+    SymId getSymbol(DurationType type, int line, int lines,  int* yoffset);
 
     void checkDots();
     void layoutDots();
     NoteDot* dot(int n);
     int getDotline() const { return m_dotline; }
-    static int getDotline(TDuration::DurationType durationType);
+    static int getDotline(DurationType durationType);
     SymId sym() const { return m_sym; }
     bool accent();
     void setAccent(bool flag);

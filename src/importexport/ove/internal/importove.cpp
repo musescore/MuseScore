@@ -992,55 +992,55 @@ TDuration OveNoteType_To_Duration(ovebase::NoteType noteType)
     TDuration d;
     switch (noteType) {
     case ovebase::NoteType::Note_DoubleWhole: {
-        d.setType(TDuration::DurationType::V_BREVE);
+        d.setType(DurationType::V_BREVE);
         break;
     }
     case ovebase::NoteType::Note_Whole: {
-        d.setType(TDuration::DurationType::V_WHOLE);
+        d.setType(DurationType::V_WHOLE);
         break;
     }
     case ovebase::NoteType::Note_Half: {
-        d.setType(TDuration::DurationType::V_HALF);
+        d.setType(DurationType::V_HALF);
         break;
     }
     case ovebase::NoteType::Note_Quarter: {
-        d.setType(TDuration::DurationType::V_QUARTER);
+        d.setType(DurationType::V_QUARTER);
         break;
     }
     case ovebase::NoteType::Note_Eight: {
-        d.setType(TDuration::DurationType::V_EIGHTH);
+        d.setType(DurationType::V_EIGHTH);
         break;
     }
     case ovebase::NoteType::Note_Sixteen: {
-        d.setType(TDuration::DurationType::V_16TH);
+        d.setType(DurationType::V_16TH);
         break;
     }
     case ovebase::NoteType::Note_32: {
-        d.setType(TDuration::DurationType::V_32ND);
+        d.setType(DurationType::V_32ND);
         break;
     }
     case ovebase::NoteType::Note_64: {
-        d.setType(TDuration::DurationType::V_64TH);
+        d.setType(DurationType::V_64TH);
         break;
     }
     case ovebase::NoteType::Note_128: {
-        d.setType(TDuration::DurationType::V_128TH);
+        d.setType(DurationType::V_128TH);
         break;
     }
     case ovebase::NoteType::Note_256: {
-        d.setType(TDuration::DurationType::V_256TH);
+        d.setType(DurationType::V_256TH);
         break;
     }
 //  case ovebase::NoteType::Note_512: {
-//      d.setType(TDuration::DurationType::V_512TH);
+//      d.setType(DurationType::V_512TH);
 //      break;
 //  }
 //  case ovebase::NoteType::Note_1024: {
-//      d.setType(TDuration::DurationType::V_1024TH);
+//      d.setType(DurationType::V_1024TH);
 //      break;
 //  }
     default:
-        d.setType(TDuration::DurationType::V_QUARTER);
+        d.setType(DurationType::V_QUARTER);
         break;
     }
 
@@ -1509,7 +1509,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         cr = Factory::createRest(s);
         cr->setTicks(measure->ticks());
-        cr->setDurationType(TDuration::DurationType::V_MEASURE);
+        cr->setDurationType(DurationType::V_MEASURE);
         cr->setTrack(track);
         s->add(cr);
     }
@@ -1557,17 +1557,17 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     duration.setDots(container->getDot());
                     ((Ms::Chord*)cr)->setNoteType(NoteType::APPOGGIATURA);
 
-                    if (duration.type() == TDuration::DurationType::V_QUARTER) {
+                    if (duration.type() == DurationType::V_QUARTER) {
                         ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE4);
-                        cr->setDurationType(TDuration::DurationType::V_QUARTER);
-                    } else if (duration.type() == TDuration::DurationType::V_16TH) {
+                        cr->setDurationType(DurationType::V_QUARTER);
+                    } else if (duration.type() == DurationType::V_16TH) {
                         ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE16);
-                        cr->setDurationType(TDuration::DurationType::V_16TH);
-                    } else if (duration.type() == TDuration::DurationType::V_32ND) {
+                        cr->setDurationType(DurationType::V_16TH);
+                    } else if (duration.type() == DurationType::V_32ND) {
                         ((Ms::Chord*)cr)->setNoteType(NoteType::GRACE32);
-                        cr->setDurationType(TDuration::DurationType::V_32ND);
+                        cr->setDurationType(DurationType::V_32ND);
                     } else {
-                        cr->setDurationType(TDuration::DurationType::V_EIGHTH);
+                        cr->setDurationType(DurationType::V_EIGHTH);
                     }
 
                     // st = SegmentType::Grace;
@@ -1575,8 +1575,8 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     TDuration duration = OveNoteType_To_Duration(container->getNoteType());
                     duration.setDots(container->getDot());
 
-                    if (duration.type() == TDuration::DurationType::V_INVALID) {
-                        duration.setType(TDuration::DurationType::V_QUARTER);
+                    if (duration.type() == DurationType::V_INVALID) {
+                        duration.setType(DurationType::V_QUARTER);
                     }
                     cr->setDurationType(duration);
                     // append grace notes before

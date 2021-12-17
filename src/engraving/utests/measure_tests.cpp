@@ -336,7 +336,7 @@ TEST_F(MeasureTests, gap)
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/
+    /*&& toRest(tst)->durationType() == DurationType::V_QUARTER*/
 
     //Select and delete second quarter rest in third Measure (voice 4)
     score->startCmd();
@@ -352,7 +352,7 @@ TEST_F(MeasureTests, gap)
 
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/
+    /*&& toRest(tst)->durationType() == DurationType::V_QUARTER*/
 
     //Select and delete first quarter rest in third Measure (voice 4)
     score->startCmd();
@@ -368,7 +368,7 @@ TEST_F(MeasureTests, gap)
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
     EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(960));
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+    /*&& toRest(tst)->durationType() == DurationType::V_HALF*/
 
     delete score;
 }
@@ -395,14 +395,14 @@ TEST_F(MeasureTests, checkMeasure)
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
     EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(480));
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+    /*&& toRest(tst)->durationType() == DurationType::V_HALF*/
 
     m = m->nextMeasure();
 //      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(3840));
 //      tst = s->element(2);
 //      Q_ASSERT(tst);
 
-//      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/);
+//      QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == 480/*&& toRest(tst)->durationType() == DurationType::V_HALF*/);
 
     m = m->nextMeasure();
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6240));
@@ -412,7 +412,7 @@ TEST_F(MeasureTests, checkMeasure)
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
     EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(120));
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+    /*&& toRest(tst)->durationType() == DurationType::V_HALF*/
 
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6480));
     tst = s->element(1);
@@ -421,7 +421,7 @@ TEST_F(MeasureTests, checkMeasure)
     EXPECT_TRUE(tst->isRest());
     EXPECT_TRUE(toRest(tst)->isGap());
     EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(120));
-    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
+    /*&& toRest(tst)->durationType() == DurationType::V_HALF*/
 
     delete score;
 }

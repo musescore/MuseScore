@@ -98,7 +98,7 @@ ChordRest* InputState::cr() const
 void InputState::setDots(int n)
 {
     if (n && (!_duration.isValid() || _duration.isZero() || _duration.isMeasure())) {
-        _duration = TDuration::DurationType::V_QUARTER;
+        _duration = DurationType::V_QUARTER;
     }
     _duration.setDots(n);
 }
@@ -142,7 +142,7 @@ ChordRest* InputState::chordRest(EngravingItem* e)
 
 void InputState::update(Selection& selection)
 {
-    setDuration(TDuration::DurationType::V_INVALID);
+    setDuration(DurationType::V_INVALID);
     setRest(false);
     setAccidentalType(AccidentalType::NONE);
     Note* n1 = nullptr;
@@ -189,7 +189,7 @@ void InputState::update(Selection& selection)
         if (ChordRest* cr = chordRest(e)) {
             if (cr1) {
                 if (cr->durationType() != cr1->durationType()) {
-                    setDuration(TDuration::DurationType::V_INVALID);
+                    setDuration(DurationType::V_INVALID);
                     differentDurations = true;
                 }
                 if ((cr->isRest() && !cr1->isRest()) || (!cr->isRest() && cr1->isRest())) {

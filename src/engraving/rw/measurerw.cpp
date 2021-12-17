@@ -290,7 +290,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
             } else {
                 segment = measure->getSegment(SegmentType::ChordRest, e.tick());
                 Rest* rest = Factory::createRest(segment);
-                rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(measure->timesig() / timeStretch);
                 rest->setTrack(e.track());
                 rest->read(e);

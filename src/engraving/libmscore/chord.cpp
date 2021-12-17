@@ -1566,7 +1566,7 @@ bool Chord::shouldHaveStem() const
 
     return !_noStem
            && durationType().hasStem()
-           && !(durationType().type() == TDuration::DurationType::V_HALF && staffType && staffType->isTabStaff()
+           && !(durationType().type() == DurationType::V_HALF && staffType && staffType->isTabStaff()
                 && staffType->minimStyle() == TablatureMinimStyle::NONE)
            && !(measure() && measure()->stemless(staffIdx()))
            && !(staffType && staffType->isTabStaff() && staffType->stemless());
@@ -2508,19 +2508,19 @@ void Chord::layoutTablature()
         // get factor for start distance after main note. Values found by testing.
         qreal fc;
         switch (durationType().type()) {
-        case TDuration::DurationType::V_LONG:    fc = 3.8;
+        case DurationType::V_LONG:    fc = 3.8;
             break;
-        case TDuration::DurationType::V_BREVE:   fc = 3.8;
+        case DurationType::V_BREVE:   fc = 3.8;
             break;
-        case TDuration::DurationType::V_WHOLE:   fc = 3.8;
+        case DurationType::V_WHOLE:   fc = 3.8;
             break;
-        case TDuration::DurationType::V_HALF:    fc = 3.6;
+        case DurationType::V_HALF:    fc = 3.6;
             break;
-        case TDuration::DurationType::V_QUARTER: fc = 2.1;
+        case DurationType::V_QUARTER: fc = 2.1;
             break;
-        case TDuration::DurationType::V_EIGHTH:  fc = 1.4;
+        case DurationType::V_EIGHTH:  fc = 1.4;
             break;
-        case TDuration::DurationType::V_16TH:    fc = 1.2;
+        case DurationType::V_16TH:    fc = 1.2;
             break;
         default: fc = 1;
         }

@@ -209,7 +209,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                     if (linkedToPrevious && rest) {
                         rest = static_cast<Ms::Rest*>(rest->linkedClone());
                     } else {
-                        rest = mu::engraving::Factory::createRest(seg, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
+                        rest = mu::engraving::Factory::createRest(seg, Ms::TDuration(Ms::DurationType::V_MEASURE));
                     }
                     rest->setScore(_score);
                     rest->setTicks(measure->ticks());

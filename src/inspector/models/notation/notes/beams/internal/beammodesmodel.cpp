@@ -32,7 +32,7 @@ BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repos
 void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(Ms::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const Ms::Pid, const QVariant&) {}); //@note readonly property, there is no need to modify it
+    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE_WITH_DOTS, [](const Ms::Pid, const QVariant&) {}); //@note readonly property, there is no need to modify it
 }
 
 void BeamModesModel::requestElements()
@@ -48,15 +48,15 @@ void BeamModesModel::loadProperties()
         Ms::TDuration durationType = elementPropertyValue.value<Ms::TDuration>();
 
         switch (durationType.type()) {
-        case Ms::TDuration::DurationType::V_INVALID:
-        case Ms::TDuration::DurationType::V_MEASURE:
-        case Ms::TDuration::DurationType::V_ZERO:
-        case Ms::TDuration::DurationType::V_LONG:
-        case Ms::TDuration::DurationType::V_BREVE:
-        case Ms::TDuration::DurationType::V_WHOLE:
-        case Ms::TDuration::DurationType::V_HALF:
-        case Ms::TDuration::DurationType::V_QUARTER:
-        case Ms::TDuration::DurationType::V_EIGHTH:
+        case Ms::DurationType::V_INVALID:
+        case Ms::DurationType::V_MEASURE:
+        case Ms::DurationType::V_ZERO:
+        case Ms::DurationType::V_LONG:
+        case Ms::DurationType::V_BREVE:
+        case Ms::DurationType::V_WHOLE:
+        case Ms::DurationType::V_HALF:
+        case Ms::DurationType::V_QUARTER:
+        case Ms::DurationType::V_EIGHTH:
             return false;
 
         default:

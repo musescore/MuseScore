@@ -1756,7 +1756,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
             }
             cr->setTicks(l);
             if (cr->type() == ElementType::REST && l >= measure->ticks()) {
-                cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                cr->setDurationType(DurationType::V_MEASURE);
                 cr->setTicks(measure->ticks());
             } else {
                 TDuration d(l);
@@ -1912,7 +1912,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                     Rest* r = Factory::createRest(segment);
                     r->setTrack(staff2track(staffIdx));
                     r->setTicks(measure->ticks());
-                    r->setDurationType(TDuration::DurationType::V_MEASURE);
+                    r->setDurationType(DurationType::V_MEASURE);
                     segment->add(r);
                     measure->setMeasureRepeatCount(2, staffIdx);
                 } else {
@@ -1940,7 +1940,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                         ChordRest* cr = Factory::createRest(score->dummy()->segment());
                         cr->setTrack(staffIdx * VOICES + voiceNum);
                         cr->setTicks(l);
-                        cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                        cr->setDurationType(DurationType::V_MEASURE);
                         Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                         if (!segment->cr(staffIdx * VOICES + voiceNum)) {
                             segment->add(cr);

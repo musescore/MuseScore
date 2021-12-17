@@ -22,12 +22,15 @@
 
 #include "stafftextbase.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "system.h"
 #include "staff.h"
 #include "score.h"
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -68,16 +71,16 @@ void StaffTextBase::write(XmlWriter& xml) const
         }
     }
     if (swing()) {
-        QString swingUnit;
+        DurationType swingUnit;
         if (swingParameters()->swingUnit == Constant::division / 2) {
-            swingUnit = TDuration(TDuration::DurationType::V_EIGHTH).name();
+            swingUnit = DurationType::V_EIGHTH;
         } else if (swingParameters()->swingUnit == Constant::division / 4) {
-            swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
+            swingUnit = DurationType::V_16TH;
         } else {
-            swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
+            swingUnit = DurationType::V_ZERO;
         }
         int swingRatio = swingParameters()->swingRatio;
-        xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
+        xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(TConv::toXml(swingUnit)).arg(swingRatio));
     }
     if (capo() != 0) {
         xml.tagE(QString("capo fretId=\"%1\"").arg(capo()));
@@ -153,13 +156,13 @@ bool StaffTextBase::readProperties(XmlReader& e)
         }
         _setAeolusStops = true;
     } else if (tag == "swing") {
-        QString swingUnit = e.attribute("unit", "");
+        DurationType swingUnit = TConv::fromXml(e.attribute("unit", ""), DurationType::V_INVALID);
         int unit = 0;
-        if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
+        if (swingUnit == DurationType::V_EIGHTH) {
             unit = Constant::division / 2;
-        } else if (swingUnit == TDuration(TDuration::DurationType::V_16TH).name()) {
+        } else if (swingUnit == DurationType::V_16TH) {
             unit = Constant::division / 4;
-        } else if (swingUnit == TDuration(TDuration::DurationType::V_ZERO).name()) {
+        } else if (swingUnit == DurationType::V_ZERO) {
             unit = 0;
         }
         int ratio = e.intAttribute("ratio", 60);

@@ -1690,7 +1690,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             } else {
                 Segment* segment = m->getSegment(SegmentType::ChordRest, e.tick());
                 Rest* rest = Factory::createRest(segment);
-                rest->setDurationType(TDuration::DurationType::V_MEASURE);
+                rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(e.track());
                 readRest(m, rest, e, ctx);

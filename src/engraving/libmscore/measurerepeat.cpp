@@ -46,7 +46,7 @@ MeasureRepeat::MeasureRepeat(Segment* parent)
     : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0), m_symId(SymId::noSym)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure
-    setDurationType(TDuration::DurationType::V_MEASURE);
+    setDurationType(DurationType::V_MEASURE);
     if (parent) {
         initElementStyle(&measureRepeatStyle);
     }

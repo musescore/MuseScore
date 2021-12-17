@@ -2549,7 +2549,7 @@ bool GuitarPro3::read(QFile* fp)
                 cr->setTicks(l);
 
                 if (cr->type() == ElementType::REST && l >= measure->ticks()) {
-                    cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                    cr->setDurationType(DurationType::V_MEASURE);
                     cr->setTicks(measure->ticks());
                 } else {
                     cr->setDurationType(d);
@@ -2637,7 +2637,7 @@ bool GuitarPro3::read(QFile* fp)
                 removeRests = false;
                 if (counter == 1) {
                     lastRest->setTicks(measure->timesig());
-                    lastRest->setDurationType(TDuration::DurationType::V_MEASURE);
+                    lastRest->setDurationType(DurationType::V_MEASURE);
                 }
             }
             if (removeRests) {
@@ -2655,7 +2655,7 @@ bool GuitarPro3::read(QFile* fp)
                 }
                 auto cr = Factory::createRest(seg);
                 cr->setTicks(measure->timesig());
-                cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                cr->setDurationType(DurationType::V_MEASURE);
                 cr->setTrack(track);
                 seg->add(cr);
             }

@@ -129,7 +129,7 @@ struct TempoPattern {
     const char* pattern;
     qreal f;
     TDuration d;
-    TempoPattern(const char* s, qreal v, TDuration::DurationType val, int dots = 0)
+    TempoPattern(const char* s, qreal v, DurationType val, int dots = 0)
         : pattern(s), f(v), d(val)
     {
         d.setDots(dots);
@@ -139,28 +139,28 @@ struct TempoPattern {
 // note: findTempoDuration requires the longer patterns to be before the shorter patterns in tp
 
 static const TempoPattern tp[] = {
-    TempoPattern("\uECA5\\s*\uECB7\\s*\uECB7", 1.75 / 60.0,  TDuration::DurationType::V_QUARTER, 2), // double dotted 1/4
-    TempoPattern("\uECA5\\s*\uECB7",           1.5 / 60.0,   TDuration::DurationType::V_QUARTER, 1), // dotted 1/4
-    TempoPattern("\uECA5",                     1.0 / 60.0,   TDuration::DurationType::V_QUARTER),    // 1/4
-    TempoPattern("\uECA3\\s*\uECB7\\s*\uECB7", 1.75 / 30.0,  TDuration::DurationType::V_HALF, 2),    // double dotted 1/2
-    TempoPattern("\uECA3\\s*\uECB7",           1.5 / 30.0,   TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-    TempoPattern("\uECA3",                     1.0 / 30.0,   TDuration::DurationType::V_HALF),       // 1/2
-    TempoPattern("\uECA7\\s*\uECB7\\s*\uECB7", 1.75 / 120.0, TDuration::DurationType::V_EIGHTH, 2),  // double dotted 1/8
-    TempoPattern("\uECA7\\s*\uECB7",           1.5 / 120.0,  TDuration::DurationType::V_EIGHTH, 1),  // dotted 1/8
-    TempoPattern("\uECA7",                     1.0 / 120.0,  TDuration::DurationType::V_EIGHTH),     // 1/8
-    TempoPattern("\uECA2\\s*\uECB7",           1.5 / 15.0,   TDuration::DurationType::V_WHOLE, 1),   // dotted whole
-    TempoPattern("\uECA2",                     1.0 / 15.0,   TDuration::DurationType::V_WHOLE),      // whole
-    TempoPattern("\uECA9\\s*\uECB7",           1.5 / 240.0,  TDuration::DurationType::V_16TH, 1),    // dotted 1/16
-    TempoPattern("\uECA9",                     1.0 / 240.0,  TDuration::DurationType::V_16TH),       // 1/16
-    TempoPattern("\uECAB\\s*\uECB7",           1.5 / 480.0,  TDuration::DurationType::V_32ND, 1),    // dotted 1/32
-    TempoPattern("\uECAB",                     1.0 / 480.0,  TDuration::DurationType::V_32ND),       // 1/32
-    TempoPattern("\uECA1",                     1.0 / 7.5,    TDuration::DurationType::V_BREVE),      // longa
-    TempoPattern("\uECA0",                     1.0 / 7.5,    TDuration::DurationType::V_BREVE),      // double whole
-    TempoPattern("\uECAD",                     1.0 / 960.0,  TDuration::DurationType::V_64TH),       // 1/64
-    TempoPattern("\uECAF",                     1.0 / 1920.0, TDuration::DurationType::V_128TH),      // 1/128
-    TempoPattern("\uECB1",                     1.0 / 3840.0, TDuration::DurationType::V_256TH),      // 1/256
-    TempoPattern("\uECB3",                     1.0 / 7680.0, TDuration::DurationType::V_512TH),      // 1/512
-    TempoPattern("\uECB5",                     1.0 / 15360.0, TDuration::DurationType::V_1024TH),     // 1/1024
+    TempoPattern("\uECA5\\s*\uECB7\\s*\uECB7", 1.75 / 60.0,  DurationType::V_QUARTER, 2), // double dotted 1/4
+    TempoPattern("\uECA5\\s*\uECB7",           1.5 / 60.0,   DurationType::V_QUARTER, 1), // dotted 1/4
+    TempoPattern("\uECA5",                     1.0 / 60.0,   DurationType::V_QUARTER),    // 1/4
+    TempoPattern("\uECA3\\s*\uECB7\\s*\uECB7", 1.75 / 30.0,  DurationType::V_HALF, 2),    // double dotted 1/2
+    TempoPattern("\uECA3\\s*\uECB7",           1.5 / 30.0,   DurationType::V_HALF, 1),    // dotted 1/2
+    TempoPattern("\uECA3",                     1.0 / 30.0,   DurationType::V_HALF),       // 1/2
+    TempoPattern("\uECA7\\s*\uECB7\\s*\uECB7", 1.75 / 120.0, DurationType::V_EIGHTH, 2),  // double dotted 1/8
+    TempoPattern("\uECA7\\s*\uECB7",           1.5 / 120.0,  DurationType::V_EIGHTH, 1),  // dotted 1/8
+    TempoPattern("\uECA7",                     1.0 / 120.0,  DurationType::V_EIGHTH),     // 1/8
+    TempoPattern("\uECA2\\s*\uECB7",           1.5 / 15.0,   DurationType::V_WHOLE, 1),   // dotted whole
+    TempoPattern("\uECA2",                     1.0 / 15.0,   DurationType::V_WHOLE),      // whole
+    TempoPattern("\uECA9\\s*\uECB7",           1.5 / 240.0,  DurationType::V_16TH, 1),    // dotted 1/16
+    TempoPattern("\uECA9",                     1.0 / 240.0,  DurationType::V_16TH),       // 1/16
+    TempoPattern("\uECAB\\s*\uECB7",           1.5 / 480.0,  DurationType::V_32ND, 1),    // dotted 1/32
+    TempoPattern("\uECAB",                     1.0 / 480.0,  DurationType::V_32ND),       // 1/32
+    TempoPattern("\uECA1",                     1.0 / 7.5,    DurationType::V_BREVE),      // longa
+    TempoPattern("\uECA0",                     1.0 / 7.5,    DurationType::V_BREVE),      // double whole
+    TempoPattern("\uECAD",                     1.0 / 960.0,  DurationType::V_64TH),       // 1/64
+    TempoPattern("\uECAF",                     1.0 / 1920.0, DurationType::V_128TH),      // 1/128
+    TempoPattern("\uECB1",                     1.0 / 3840.0, DurationType::V_256TH),      // 1/256
+    TempoPattern("\uECB3",                     1.0 / 7680.0, DurationType::V_512TH),      // 1/512
+    TempoPattern("\uECB5",                     1.0 / 15360.0, DurationType::V_1024TH),     // 1/1024
 };
 
 //---------------------------------------------------------
@@ -198,32 +198,32 @@ TDuration TempoText::duration() const
 
 static const TempoPattern tpSym[] = {
     TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",
-                 1.75 / 60.0, TDuration::DurationType::V_QUARTER, 2),                                                                                                                          // double dotted 1/4
-    TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>",          1.5 / 60.0,  TDuration::DurationType::V_QUARTER,
+                 1.75 / 60.0, DurationType::V_QUARTER, 2),                                                                                                                          // double dotted 1/4
+    TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>",          1.5 / 60.0,  DurationType::V_QUARTER,
                  1),                                                                                                                           // dotted 1/4
-    TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0 / 60.0,  TDuration::DurationType::V_QUARTER),  // 1/4
+    TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0 / 60.0,  DurationType::V_QUARTER),  // 1/4
     TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",
-                 1.75 / 30.0, TDuration::DurationType::V_HALF, 2),                                                                                                                       // double dotted 1/2
-    TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 30.0,  TDuration::DurationType::V_HALF, 1),    // dotted 1/2
-    TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0 / 30.0,  TDuration::DurationType::V_HALF),     // 1/2
+                 1.75 / 30.0, DurationType::V_HALF, 2),                                                                                                                       // double dotted 1/2
+    TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 30.0,  DurationType::V_HALF, 1),    // dotted 1/2
+    TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0 / 30.0,  DurationType::V_HALF),     // 1/2
     TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",         1.75 / 120.0,
-                 TDuration::DurationType::V_EIGHTH, 2),                                                                                                                    // double dotted 1/8
-    TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 120.0, TDuration::DurationType::V_EIGHTH,
+                 DurationType::V_EIGHTH, 2),                                                                                                                    // double dotted 1/8
+    TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 120.0, DurationType::V_EIGHTH,
                  1),                                                                                                                           // dotted 1/8
-    TempoPattern("<sym>metNote8thUp</sym>",                                               1.0 / 120.0, TDuration::DurationType::V_EIGHTH),   // 1/8
-    TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 15.0,  TDuration::DurationType::V_WHOLE, 1),    // dotted whole
-    TempoPattern("<sym>metNoteWhole</sym>",                                               1.0 / 15.0,  TDuration::DurationType::V_WHOLE),    // whole
-    TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 240.0, TDuration::DurationType::V_16TH, 1),  // dotted 1/16
-    TempoPattern("<sym>metNote16thUp</sym>",                                              1.0 / 240.0, TDuration::DurationType::V_16TH),     // 1/16
-    TempoPattern("<sym>metNote32ndUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 480.0, TDuration::DurationType::V_32ND, 1),  // dotted 1/32
-    TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0 / 480.0, TDuration::DurationType::V_32ND),     // 1/32
-    TempoPattern("<sym>metNoteDoubleWholeSquare</sym>",                                   1.0 / 7.5,   TDuration::DurationType::V_BREVE),    // longa
-    TempoPattern("<sym>metNoteDoubleWhole</sym>",                                         1.0 / 7.5,   TDuration::DurationType::V_BREVE),    // double whole
-    TempoPattern("<sym>metNote64thUp</sym>",                                              1.0 / 960.0, TDuration::DurationType::V_64TH),     // 1/64
-    TempoPattern("<sym>metNote128thUp</sym>",                                             1.0 / 1920.0, TDuration::DurationType::V_128TH),    // 1/128
-    TempoPattern("<sym>metNote256thUp</sym>",                                             1.0 / 3840.0, TDuration::DurationType::V_256TH),    // 1/256
-    TempoPattern("<sym>metNote512thUp</sym>",                                             1.0 / 7680.0, TDuration::DurationType::V_512TH),    // 1/512
-    TempoPattern("<sym>metNote1024thUp</sym>",                                            1.0 / 15360.0, TDuration::DurationType::V_1024TH),  // 1/1024
+    TempoPattern("<sym>metNote8thUp</sym>",                                               1.0 / 120.0, DurationType::V_EIGHTH),   // 1/8
+    TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 15.0,  DurationType::V_WHOLE, 1),    // dotted whole
+    TempoPattern("<sym>metNoteWhole</sym>",                                               1.0 / 15.0,  DurationType::V_WHOLE),    // whole
+    TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 240.0, DurationType::V_16TH, 1),  // dotted 1/16
+    TempoPattern("<sym>metNote16thUp</sym>",                                              1.0 / 240.0, DurationType::V_16TH),     // 1/16
+    TempoPattern("<sym>metNote32ndUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 480.0, DurationType::V_32ND, 1),  // dotted 1/32
+    TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0 / 480.0, DurationType::V_32ND),     // 1/32
+    TempoPattern("<sym>metNoteDoubleWholeSquare</sym>",                                   1.0 / 7.5,   DurationType::V_BREVE),    // longa
+    TempoPattern("<sym>metNoteDoubleWhole</sym>",                                         1.0 / 7.5,   DurationType::V_BREVE),    // double whole
+    TempoPattern("<sym>metNote64thUp</sym>",                                              1.0 / 960.0, DurationType::V_64TH),     // 1/64
+    TempoPattern("<sym>metNote128thUp</sym>",                                             1.0 / 1920.0, DurationType::V_128TH),    // 1/128
+    TempoPattern("<sym>metNote256thUp</sym>",                                             1.0 / 3840.0, DurationType::V_256TH),    // 1/256
+    TempoPattern("<sym>metNote512thUp</sym>",                                             1.0 / 7680.0, DurationType::V_512TH),    // 1/512
+    TempoPattern("<sym>metNote1024thUp</sym>",                                            1.0 / 15360.0, DurationType::V_1024TH),  // 1/1024
 };
 
 //---------------------------------------------------------
@@ -487,16 +487,16 @@ QString TempoText::duration2userName(const TDuration t)
 {
     QString dots;
     switch (t.dots()) {
-    case 1: dots = QObject::tr("Dotted %1").arg(t.durationTypeUserName());
+    case 1: dots = QObject::tr("Dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 2: dots = QObject::tr("Double dotted %1").arg(t.durationTypeUserName());
+    case 2: dots = QObject::tr("Double dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 3: dots = QObject::tr("Triple dotted %1").arg(t.durationTypeUserName());
+    case 3: dots = QObject::tr("Triple dotted %1").arg(TConv::toUserName(t.type()));
         break;
-    case 4: dots = QObject::tr("Quadruple dotted %1").arg(t.durationTypeUserName());
+    case 4: dots = QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(t.type()));
         break;
     default:
-        dots = t.durationTypeUserName();
+        dots = TConv::toUserName(t.type());
         break;
     }
     return dots;

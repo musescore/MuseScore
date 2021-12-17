@@ -67,7 +67,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     type->setText(m_note->noteTypeUserName());
     sameType->setAccessibleName(sameType->text() + type->text());
 
-    durationType->setText(tr("%1 Note").arg(m_note->chord()->durationType().durationTypeUserName()));
+    durationType->setText(tr("%1 Note").arg(TConv::toUserName(m_note->chord()->durationType().type())));
     sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
 
     durationTicks->setText(m_note->chord()->durationUserName());

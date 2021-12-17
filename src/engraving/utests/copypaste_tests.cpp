@@ -290,7 +290,7 @@ TEST_F(CopyPasteTests, copypaste2Voice5)
     //paste to quarter rest
     EngravingItem* dest = m1->first()->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
     EXPECT_TRUE(dest->isRest());
-    EXPECT_EQ(static_cast<ChordRest*>(dest)->durationType(), TDuration::DurationType::V_QUARTER);
+    EXPECT_EQ(static_cast<ChordRest*>(dest)->durationType(), DurationType::V_QUARTER);
     score->select(dest);
 
     score->startCmd();
@@ -329,7 +329,7 @@ TEST_F(CopyPasteTests, copypaste2Voice6)
     EngravingItem* dest = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
 
     EXPECT_TRUE(dest->isRest());
-    EXPECT_EQ(static_cast<ChordRest*>(dest)->durationType(), TDuration::DurationType::V_16TH);
+    EXPECT_EQ(static_cast<ChordRest*>(dest)->durationType(), DurationType::V_16TH);
     score->select(dest);
 
     score->startCmd();
