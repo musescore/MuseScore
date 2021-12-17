@@ -65,7 +65,7 @@ const UiActionList ProjectUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in addition to the current file")
              ),
     UiAction("file-save-selection",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Save selection…"),
              QT_TRANSLATE_NOOP("action", "Save current selection as new score")
              ),

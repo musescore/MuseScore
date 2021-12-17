@@ -213,7 +213,18 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
 
 void PluginAPI::cmd(const QString& s)
 {
-    shortcuts()->activate(s.toStdString());
+    static const QMap<QString, QString> COMPAT_CMD_MAP = {
+        { "escape", "notation-escape" },
+        { "cut", "notation-cut" },
+        { "copy", "notation-copy" },
+        { "paste", "notation-paste" },
+        { "paste-half", "notation-paste-half" },
+        { "paste-double", "notation-paste-double" },
+        { "select-all", "notation-select-all" },
+        { "delete", "notation-delete" },
+    };
+
+    actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
 }
 
 //---------------------------------------------------------
