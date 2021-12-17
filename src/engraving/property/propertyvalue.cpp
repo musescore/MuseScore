@@ -128,7 +128,7 @@ QVariant PropertyValue::toQVariant() const
     // Geometry
     case P_TYPE::POINT:       return value<PointF>().toQPointF();
     case P_TYPE::SIZE:        return value<SizeF>().toQSizeF();
-    case P_TYPE::PATH: {
+    case P_TYPE::DRAW_PATH: {
         UNREACHABLE; //! TODO
     }
     break;
@@ -201,7 +201,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     // Geometry
     case P_TYPE::POINT:         return PropertyValue(PointF::fromQPointF(v.value<QPointF>()));
     case P_TYPE::SIZE:          return PropertyValue(SizeF::fromQSizeF(v.value<QSizeF>()));
-    case P_TYPE::PATH: {
+    case P_TYPE::DRAW_PATH: {
         UNREACHABLE; //! TODO
     }
     break;

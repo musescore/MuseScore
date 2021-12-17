@@ -24,7 +24,6 @@
 #define __TREMOLOBAR_H__
 
 #include "engravingitem.h"
-#include "pitchvalue.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -57,9 +56,9 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
 
-    QList<PitchValue>& points() { return m_points; }
-    const QList<PitchValue>& points() const { return m_points; }
-    void setPoints(const QList<PitchValue>& p) { m_points = p; }
+    PitchValues& points() { return m_points; }
+    const PitchValues& points() const { return m_points; }
+    void setPoints(const PitchValues& p) { m_points = p; }
 
     mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
@@ -79,14 +78,14 @@ private:
     friend class mu::engraving::Factory;
     TremoloBar(EngravingItem* parent);
 
-    TremoloBarType parseTremoloBarTypeFromCurve(const QList<PitchValue>& curve) const;
+    TremoloBarType parseTremoloBarTypeFromCurve(const PitchValues& curve) const;
     void updatePointsByTremoloBarType(const TremoloBarType type);
 
     Spatium m_lw;
     qreal m_userMag = 1.0;           // allowed 0.1 - 10.0
     bool m_play = true;
 
-    QList<PitchValue> m_points;
+    PitchValues m_points;
 
     mu::PolygonF m_polygon;                    // computed by layout
 };
