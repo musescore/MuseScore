@@ -24,6 +24,8 @@
 #include <QRegularExpression>
 
 #include "rw/xml.h"
+#include "types/typesconv.h"
+#include "types/constants.h"
 
 #include "measure.h"
 #include "musescoreCore.h"
@@ -74,7 +76,7 @@ TempoText::TempoText(Segment* parent)
 void TempoText::write(XmlWriter& xml) const
 {
     xml.startObject(this);
-    xml.tag("tempo", _tempo);
+    xml.tag("tempo", TConv::toXml(_tempo));
     if (_followText) {
         xml.tag("followText", _followText);
     }
@@ -91,7 +93,7 @@ void TempoText::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "tempo") {
-            setTempo(e.readDouble());
+            setTempo(TConv::fromXml(e.readElementText(), Constants::defaultTempo));
         } else if (tag == "followText") {
             _followText = e.readInt();
         } else if (!TextBase::readProperties(e)) {
@@ -100,7 +102,7 @@ void TempoText::read(XmlReader& e)
     }
     // check sanity
     if (xmlText().isEmpty()) {
-        setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * _tempo)));
+        setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(_tempo.toBPM().val)));
         setVisible(false);
     }
 }
@@ -260,7 +262,7 @@ void TempoText::updateScore()
 
 void TempoText::updateRelative()
 {
-    qreal tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
+    BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
     setTempo(tempoBefore * _relative);
 }
 
@@ -326,9 +328,9 @@ void TempoText::updateTempo()
         if (match.hasMatch()) {
             QStringList sl = match.capturedTexts();
             if (sl.size() == 2) {
-                qreal nt = qreal(sl[1].toDouble()) * pa.f;
+                BeatsPerSecond nt = BeatsPerSecond(sl[1].toDouble() * pa.f);
                 if (nt != _tempo) {
-                    undoChangeProperty(Pid::TEMPO, PropertyValue(qreal(sl[1].toDouble()) * pa.f), propertyFlags(Pid::TEMPO));
+                    undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
                     _relative = 1.0;
                     _isRelative = false;
                     updateScore();
@@ -361,11 +363,11 @@ void TempoText::updateTempo()
 //   setTempo
 //---------------------------------------------------------
 
-void TempoText::setTempo(qreal v)
+void TempoText::setTempo(BeatsPerSecond v)
 {
-    if (v < MIN_TEMPO) {
+    if (v.val < MIN_TEMPO) {
         v = MIN_TEMPO;
-    } else if (v > MAX_TEMPO) {
+    } else if (v.val > MAX_TEMPO) {
         v = MAX_TEMPO;
     }
     _tempo = v;
@@ -413,7 +415,7 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::TEMPO:
-        setTempo(v.toDouble());
+        setTempo(v.value<BeatsPerSecond>());
         score()->setTempo(segment(), _tempo);
         score()->fixTicks();
         break;
@@ -440,7 +442,7 @@ PropertyValue TempoText::propertyDefault(Pid id) const
     case Pid::TEXT_STYLE:
         return TextStyleType::TEMPO;
     case Pid::TEMPO:
-        return 2.0;
+        return BeatsPerSecond(2.0);
     case Pid::TEMPO_FOLLOW_TEXT:
         return false;
     default:

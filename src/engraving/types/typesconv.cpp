@@ -716,3 +716,15 @@ AccidentalRole TConv::fromXml(const QString& tag, AccidentalRole def)
     int r = tag.toInt(&ok);
     return ok ? static_cast<AccidentalRole>(r) : def;
 }
+
+QString TConv::toXml(BeatsPerSecond v)
+{
+    return QString::number(v.val);
+}
+
+BeatsPerSecond TConv::fromXml(const QString& tag, BeatsPerSecond def)
+{
+    bool ok = false;
+    double v = tag.toDouble(&ok);
+    return ok ? BeatsPerSecond(v) : def;
+}

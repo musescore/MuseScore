@@ -37,7 +37,7 @@ namespace Ms {
 
 class TempoText final : public TextBase
 {
-    qreal _tempo;             // beats per second
+    BeatsPerSecond _tempo;             // beats per second
     bool _followText;         // parse text to determine tempo
     qreal _relative;
     bool _isRelative;
@@ -58,9 +58,9 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
-    qreal tempo() const { return _tempo; }
+    BeatsPerSecond tempo() const { return _tempo; }
     qreal tempoBpm() const;
-    void setTempo(qreal v);
+    void setTempo(BeatsPerSecond v);
     void undoSetTempo(qreal v);
     bool isRelative() { return _isRelative; }
     void setRelative(qreal v) { _isRelative = true; _relative = v; }

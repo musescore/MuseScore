@@ -181,14 +181,14 @@ void ExportMidi::writeHeader()
     //--------------------------------------------
 
     TempoMap* tempomap = m_pauseMap.tempomapWithPauses;
-    qreal relTempo = tempomap->relTempo();
+    BeatsPerSecond relTempo = tempomap->relTempo();
     for (auto it = tempomap->cbegin(); it != tempomap->cend(); ++it) {
         MidiEvent ev;
         ev.setType(ME_META);
         //
         // compute midi tempo: microseconds / quarter note
         //
-        int tempo = lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0);
+        int tempo = lrint((1.0 / it->second.tempo.val * relTempo.val) * 1000000.0);
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);

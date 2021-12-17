@@ -32,6 +32,7 @@
 
 #include "style/style.h"
 #include "compat/midi/event.h"
+#include "types/constants.h"
 
 #include "score.h"
 #include "volta.h"
@@ -72,6 +73,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //int printNoteEventLists(NoteEventList el, int prefix, int j){
@@ -1497,7 +1499,7 @@ void renderArpeggio(Chord* chord, QList<NoteEventList>& ell)
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()) / Score::defaultTempo();
+        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::defaultTempo.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
 
@@ -1684,8 +1686,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     }
 
     Fraction tick = chord->tick();
-    qreal tempo = chord->score()->tempo(tick);
-    int ticksPerSecond = tempo * Constant::division;
+    BeatsPerSecond tempo = chord->score()->tempo(tick);
+    int ticksPerSecond = tempo.val * Constant::division;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);
     int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
@@ -2236,7 +2238,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const qreal ticksPerSecond = tempo(tick) * Constant::division;
+    const qreal ticksPerSecond = tempo(tick).val * Constant::division;
     const qreal chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms
@@ -2434,10 +2436,10 @@ void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset)
 {
     int msrTick         = m->tick().ticks();
-    qreal tempo         = score->tempomap()->tempo(msrTick);
+    BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
     TimeSigFrac timeSig = score->sigmap()->timesig(msrTick).nominal();
 
-    int clickTicks      = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+    int clickTicks      = timeSig.isBeatedCompound(tempo.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
     int endTick         = m->endTick().ticks();
 
     int rtick;

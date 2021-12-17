@@ -31,6 +31,7 @@
 
 using namespace mu;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::midi;
 
 MasterNotationMidiData::MasterNotationMidiData(IGetScore* getScore, async::Notification notationChanged)
@@ -269,7 +270,7 @@ TempoMap MasterNotationMidiData::makeTempoMap() const
     midi::TempoMap tempos;
 
     Ms::TempoMap* tempomap = score()->tempomap();
-    qreal relTempo = tempomap->relTempo();
+    BeatsPerSecond relTempo = tempomap->relTempo();
     for (const Ms::RepeatSegment* rs : score()->repeatList()) {
         int startTick = rs->tick, endTick = startTick + rs->len();
         int tickOffset = rs->utick - rs->tick;
@@ -280,7 +281,7 @@ TempoMap MasterNotationMidiData::makeTempoMap() const
             //
             // compute midi tempo: microseconds / quarter note
             //
-            tempo_t tempo = static_cast<tempo_t>(lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0));
+            tempo_t tempo = static_cast<tempo_t>(lrint((1.0 / (it->second.tempo.val * relTempo.val)) * 1000000.0));
 
             tempos.insert({ it->first + tickOffset, tempo });
         }

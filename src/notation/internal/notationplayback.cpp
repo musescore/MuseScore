@@ -394,7 +394,7 @@ Tempo NotationPlayback::tempo(tick_t tick) const
 
     if (!tempoText || !duration.isValid()) {
         tempo.duration = DurationType::V_QUARTER;
-        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)) * 60.);
+        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)).toBPM().val);
         return tempo;
     }
 

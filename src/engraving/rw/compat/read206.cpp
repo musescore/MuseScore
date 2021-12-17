@@ -1400,7 +1400,7 @@ static void readTempoText(TempoText* t, XmlReader& e, const ReadContext& ctx)
     }
     // check sanity
     if (t->xmlText().isEmpty()) {
-        t->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(60 * t->tempo())));
+        t->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(lrint(t->tempo().toBPM().val)));
         t->setVisible(false);
     } else {
         t->setXmlText(t->xmlText().replace("<sym>unicode", "<sym>met"));
