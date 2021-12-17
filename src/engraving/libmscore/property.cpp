@@ -374,16 +374,16 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HARMONY_TYPE,            true,  "harmonyType",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "harmony type") },
 
     { Pid::BEND_TYPE,               true,  "bendType",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "bend type") },
-    { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::PATH,           DUMMY_QT_TR_NOOP("propertyName", "bend curve") },
+    { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::PITCH_VALUES,   DUMMY_QT_TR_NOOP("propertyName", "bend curve") },
 
     { Pid::TREMOLOBAR_TYPE,         true,  "tremoloBarType",        P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "tremolobar type") },
-    { Pid::TREMOLOBAR_CURVE,        true,  "tremoloBarCurve",       P_TYPE::PATH,           DUMMY_QT_TR_NOOP("propertyName", "tremolobar curve") },
+    { Pid::TREMOLOBAR_CURVE,        true,  "tremoloBarCurve",       P_TYPE::PITCH_VALUES,   DUMMY_QT_TR_NOOP("propertyName", "tremolobar curve") },
 
     { Pid::START_WITH_LONG_NAMES,   false, "startWithLongNames",    P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "start with long names") },
     { Pid::START_WITH_MEASURE_ONE,  true,  "startWithMeasureOne",   P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "start with measure one") },
     { Pid::FIRST_SYSTEM_INDENTATION,true,  "firstSystemIndentation",P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "first system indentation") },
 
-    { Pid::PATH,                    false, "path",                  P_TYPE::PATH,           DUMMY_QT_TR_NOOP("propertyName", "path") },
+    { Pid::PATH,                    false, "path",                  P_TYPE::DRAW_PATH,           DUMMY_QT_TR_NOOP("propertyName", "path") },
 
     { Pid::PREFER_SHARP_FLAT,       true,  "preferSharpFlat",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "prefer sharps or flats") },
 

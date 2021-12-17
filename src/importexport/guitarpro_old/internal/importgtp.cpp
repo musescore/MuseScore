@@ -1995,7 +1995,7 @@ bool GuitarPro1::readNote(int string, Note* note)
 
                 //TODO: Add a 'slide' guitar effect when implemented
             } else if (transition == 2 && fretNumber >= 0 && fretNumber <= 255 && fretNumber != gn->fret()) {
-                /*QList<PitchValue> points;
+                /*PitchValues points;
                 points.append(PitchValue(0,0, false));
                 points.append(PitchValue(60,(fretNumber-gn->fret())*100, false));
 
@@ -2772,7 +2772,7 @@ void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
     /*int a4 =*/ readChar();
     /*int a5 =*/ readChar();
     int n  =  readInt();
-    QList<PitchValue> points;
+    PitchValues points;
     for (int i = 0; i < n; ++i) {
         int time    = readInt();
         int pitch   = readInt();

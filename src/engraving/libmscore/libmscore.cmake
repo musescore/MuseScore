@@ -209,7 +209,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.h
-    ${CMAKE_CURRENT_LIST_DIR}/pitchvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/pos.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pos.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp

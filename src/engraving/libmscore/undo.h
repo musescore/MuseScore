@@ -39,7 +39,6 @@
 #include "select.h"
 #include "instrument.h"
 #include "scoreorder.h"
-#include "pitchvalue.h"
 #include "timesig.h"
 #include "noteevent.h"
 #include "synthesizerstate.h"
@@ -966,12 +965,12 @@ public:
 class ChangeBend : public UndoCommand
 {
     Bend* bend;
-    QList<PitchValue> points;
+    PitchValues points;
 
     void flip(EditData*) override;
 
 public:
-    ChangeBend(Bend* b, QList<PitchValue> p)
+    ChangeBend(Bend* b, PitchValues p)
         : bend(b), points(p) {}
     UNDO_NAME("ChangeBend")
 };
@@ -983,12 +982,12 @@ public:
 class ChangeTremoloBar : public UndoCommand
 {
     TremoloBar* bend;
-    QList<PitchValue> points;
+    PitchValues points;
 
     void flip(EditData*) override;
 
 public:
-    ChangeTremoloBar(TremoloBar* b, QList<PitchValue> p)
+    ChangeTremoloBar(TremoloBar* b, PitchValues p)
         : bend(b), points(p) {}
     UNDO_NAME("ChangeTremoloBar")
 };

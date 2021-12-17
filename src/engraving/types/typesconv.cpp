@@ -674,3 +674,9 @@ ChangeMethod TConv::fromXml(const QString& tag, ChangeMethod def)
 {
     return findTypeByXmlTag<ChangeMethod>(CHANGE_METHODS, tag, def);
 }
+
+QString TConv::toXml(const PitchValue& v)
+{
+    return QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
+           .arg(v.time).arg(v.pitch).arg(v.vibrato);
+}

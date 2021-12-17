@@ -2202,7 +2202,7 @@ void ChangeExcerptTitle::flip(EditData*)
 
 void ChangeBend::flip(EditData*)
 {
-    QList<PitchValue> pv = bend->points();
+    PitchValues pv = bend->points();
     bend->score()->addRefresh(bend->canvasBoundingRect());
     bend->setPoints(points);
     points = pv;
@@ -2216,7 +2216,7 @@ void ChangeBend::flip(EditData*)
 
 void ChangeTremoloBar::flip(EditData*)
 {
-    QList<PitchValue> pv = bend->points();
+    PitchValues pv = bend->points();
     bend->setPoints(points);
     points = pv;
 }

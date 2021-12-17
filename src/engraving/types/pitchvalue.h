@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PITCHVALUE_H__
-#define __PITCHVALUE_H__
+#ifndef MU_ENGRAVING_PITCHVALUE_H
+#define MU_ENGRAVING_PITCHVALUE_H
 
-#include <QVariant>
+#include <QList>
 
-namespace Ms {
+namespace mu::engraving {
 //---------------------------------------------------------
 //   PitchValue
 //    used in class Bend, SquareCanvas
@@ -39,45 +39,21 @@ struct PitchValue {
     int time = 0;
     int pitch = 0;
     bool vibrato = false;
-    PitchValue() {}
+    PitchValue() = default;
     PitchValue(int a, int b, bool c = false)
         : time(a), pitch(b), vibrato(c) {}
-    inline bool operator==(const PitchValue& pv) const
-    {
-        return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato;
-    }
 
-    inline bool operator!=(const PitchValue& pv) const
-    {
-        return !operator==(pv);
-    }
+    inline bool operator==(const PitchValue& pv) const { return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato; }
+    inline bool operator!=(const PitchValue& pv) const { return !operator==(pv); }
 };
 
 using PitchValues = QList<PitchValue>;
-
-inline QVariant pitchValuesToVariant(const QList<PitchValue>& values)
-{
-    QVariantList result;
-
-    for (const PitchValue& value : values) {
-        result << QVariant::fromValue(value);
-    }
-
-    return result;
 }
 
-inline QList<PitchValue> pitchValuesFromVariant(const QVariant& values)
-{
-    QList<PitchValue> result;
-
-    for (const QVariant& value : values.toList()) {
-        result << value.value<PitchValue>();
-    }
-
-    return result;
+//! NOTE compat
+namespace Ms {
+using PitchValue = mu::engraving::PitchValue;
+using PitchValues = mu::engraving::PitchValues;
 }
-}     // namespace Ms
 
-Q_DECLARE_METATYPE(Ms::PitchValue)
-
-#endif
+#endif // MU_ENGRAVING_PITCHVALUE_H
