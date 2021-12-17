@@ -103,8 +103,6 @@ enum class P_TYPE {
 
     GROUPS,
 
-    ZERO_INT,           // displayed with offset +1
-
     TDURATION
 };
 

@@ -285,6 +285,10 @@ QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
 
 PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const
 {
+    if (Ms::Pid::VERSE == pid) {
+        return value.toInt() - 1;
+    }
+
     auto toPoint = [](const QVariant& v) {
         return PointF::fromQPointF(v.value<QPointF>());
     };
@@ -306,10 +310,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
         return Spatium(value.toReal());
 
     case P_TYPE::TEMPO:
-        return value.toReal() / 60.0;
-
-    case P_TYPE::ZERO_INT:
-        return value.toInt() - 1;
+        return BeatsPerSecond::fromBPM(BeatsPerMinute(value.toReal()));
 
     case P_TYPE::INT_LIST:
         return value.value<QList<int> >();
@@ -325,7 +326,9 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, co
 QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const PropertyValue& value,
                                                        const Ms::EngravingItem* element) const
 {
-    UNUSED(pid);
+    if (Ms::Pid::VERSE == pid) {
+        return value.toInt() + 1;
+    }
 
     switch (value.type()) {
     case P_TYPE::POINT: {
@@ -340,13 +343,10 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         return Spatium::fromMM(value.toReal(), element->spatium()).val();
 
     case P_TYPE::SPATIUM:
-        return value.value<Ms::Spatium>().val();
+        return value.value<Spatium>().val();
 
     case P_TYPE::TEMPO:
-        return value.toReal() * 60.0;
-
-    case P_TYPE::ZERO_INT:
-        return value.toInt() + 1;
+        return value.value<BeatsPerSecond>().toBPM().val;
 
     case P_TYPE::DIRECTION_V:
         return static_cast<int>(value.value<Ms::DirectionV>());
