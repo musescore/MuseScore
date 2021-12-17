@@ -97,10 +97,6 @@ UiContext UiContextResolver::currentUiContext() const
             if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
                 return context::UiCtxNotationFocused;
             }
-        } else {
-            if (m_notationViewFocusedCounter > 0) {
-                return context::UiCtxNotationFocused;
-            }
         }
 
         return context::UiCtxNotationOpened;
@@ -138,17 +134,6 @@ mu::async::Notification UiContextResolver::currentUiContextChanged() const
     return m_currentUiContextChanged;
 }
 
-void UiContextResolver::onNotationViewFocuseChanged(bool focused)
-{
-    if (focused) {
-        m_notationViewFocusedCounter++;
-    } else {
-        m_notationViewFocusedCounter--;
-    }
-
-    notifyAboutContextChanged();
-}
-
 bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) const
 {
     //! NOTE If (when) there are many different contexts here,
@@ -163,11 +148,14 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
 
     static const std::string CTX_ANY("any");
     static const std::string CTX_NOTATION_OPENED("notation-opened");
+    static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
     static const std::string CTX_NOTATION_STAFF_STANDARD("notation-staff-standard");
     static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
 
     if (CTX_NOTATION_OPENED == scContext) {
         return matchWithCurrent(context::UiCtxNotationOpened);
+    } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
+        return !matchWithCurrent(context::UiCtxNotationFocused);
     } else if (CTX_NOTATION_STAFF_STANDARD == scContext) {
         auto notation = globalContext()->currentNotation();
         if (!notation) {

@@ -41,8 +41,6 @@ public:
     virtual bool match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const = 0;
     virtual bool matchWithCurrent(const ui::UiContext& ctx) const = 0;
 
-    virtual void onNotationViewFocuseChanged(bool focused) = 0;
-
     virtual bool isShortcutContextAllowed(const std::string& scContext) const = 0;
 };
 
