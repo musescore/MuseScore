@@ -312,7 +312,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
     API_PROPERTY(mag,                     MAG)
     API_PROPERTY(useDrumset,              USE_DRUMSET)
     API_PROPERTY(durationType,            DURATION_TYPE)
-    API_PROPERTY(role,                    ROLE)
+    API_PROPERTY(role,                    ACCIDENTAL_ROLE)
     API_PROPERTY_T(int, track,            TRACK)
     API_PROPERTY(fretStrings,             FRET_STRINGS)
     API_PROPERTY(fretFrets,               FRET_FRETS)

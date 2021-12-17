@@ -253,7 +253,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "using drumset") },
     { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "duration") },
     { Pid::DURATION_TYPE,           false, 0,                       P_TYPE::TDURATION,      DUMMY_QT_TR_NOOP("propertyName", "duration type") },
-    { Pid::ROLE,                    false, "role",                  P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "role") },
+    { Pid::ACCIDENTAL_ROLE,         false, "role",                  P_TYPE::ACCIDENTAL_ROLE,DUMMY_QT_TR_NOOP("propertyName", "role") },
     { Pid::TRACK,                   false, 0,                       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "track") },
 
     { Pid::FRET_STRINGS,            true,  "strings",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "strings") },

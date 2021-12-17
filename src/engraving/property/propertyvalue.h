@@ -75,6 +75,7 @@ enum class P_TYPE {
     DIRECTION_H,
     ORIENTATION,
     BEAM_MODE,
+    ACCIDENTAL_ROLE,
 
     // Duration
     FRACTION,
@@ -106,8 +107,6 @@ enum class P_TYPE {
     INT_LIST,
 
     ZERO_INT,           // displayed with offset +1
-
-    ACCIDENTAL_ROLE,
 
     TDURATION
 };
@@ -188,6 +187,9 @@ public:
     PropertyValue(BeamMode v)
         : m_type(P_TYPE::BEAM_MODE), m_data(make_data<BeamMode>(v)) {}
 
+    PropertyValue(const AccidentalRole& v)
+        : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<AccidentalRole>(v)) {}
+
     // Duration
     PropertyValue(const Fraction& v)
         : m_type(P_TYPE::FRACTION), m_data(make_data<Fraction>(v)) {}
@@ -238,9 +240,6 @@ public:
 
     PropertyValue(const QList<int>& v)
         : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}
-
-    PropertyValue(const Ms::AccidentalRole& v)
-        : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<Ms::AccidentalRole>(v)) {}
 
     PropertyValue(const Ms::Groups& v);
     PropertyValue(const Ms::TDuration& v);

@@ -483,6 +483,12 @@ enum class ChangeDirection : signed char {
     INCREASING,
     DECREASING
 };
+
+// P_TYPE::ACCIDENTAL_ROLE
+enum class AccidentalRole : char {
+    AUTO,                 // layout created accidental
+    USER                  // user created accidental
+};
 } // mu::engraving
 
 //! NOTE compat
@@ -512,6 +518,7 @@ using KeyMode = mu::engraving::KeyMode;
 using TextStyleType = mu::engraving::TextStyleType;
 using ChangeMethod = mu::engraving::ChangeMethod;
 using ChangeDirection = mu::engraving::ChangeDirection;
+using AccidentalRole = mu::engraving::AccidentalRole;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
