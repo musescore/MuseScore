@@ -29,32 +29,32 @@ using namespace mu::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Play"),
              QT_TRANSLATE_NOOP("action", "Start or stop playback"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Stop"),
              QT_TRANSLATE_NOOP("action", "Stop playback"),
              IconCode::Code::STOP
              ),
     UiAction("rewind",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Rewind"),
              QT_TRANSLATE_NOOP("action", "Rewind to start position"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Loop playback"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Loop playback'"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
     UiAction("metronome",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Metronome"),
              QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
              IconCode::Code::METRONOME,

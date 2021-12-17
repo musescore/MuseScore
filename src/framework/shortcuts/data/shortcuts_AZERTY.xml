@@ -134,28 +134,34 @@
     <std>12</std>
     </SC>
   <SC>
-    <key>cut</key>
+    <key>notation-cut</key>
     <seq>Ctrl+X</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>copy</key>
+    <key>notation-copy</key>
     <seq>Ctrl+C</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>paste</key>
     <seq>Ctrl+V</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>paste-half</key>
+    <key>notation-paste-half</key>
     <seq>Ctrl+Shift+Q</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>paste-double</key>
+    <key>notation-paste-double</key>
     <seq>Ctrl+Shift+W</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>swap</key>
+    <key>notation-swap</key>
     <seq>Ctrl+Shift+X</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>instruments</key>
@@ -351,22 +357,27 @@
   <SC>
     <key>pitch-up-octave</key>
     <seq>Ctrl+Up</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>up-chord</key>
     <seq>Alt+Up</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>top-chord</key>
     <seq>Ctrl+Alt+Up</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>first-element</key>
     <seq>Ctrl+Home</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>last-element</key>
     <seq>Ctrl+End</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>next-segment-element</key>
@@ -379,10 +390,12 @@
   <SC>
     <key>next-element</key>
     <seq>Alt+Right</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>prev-element</key>
     <seq>Alt+Left</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>palette-search</key>
@@ -395,6 +408,7 @@
   <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>pitch-down</key>
@@ -408,34 +422,42 @@
   <SC>
     <key>pitch-down-octave</key>
     <seq>Ctrl+Down</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>down-chord</key>
     <seq>Alt+Down</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>bottom-chord</key>
     <seq>Ctrl+Alt+Down</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>move-down</key>
     <seq>Ctrl+Shift+Down</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>prev-chord</key>
     <seq>Left</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>prev-measure</key>
     <seq>Ctrl+Left</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>next-chord</key>
     <seq>Right</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>next-measure</key>
     <seq>Ctrl+Right</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>select-prev-chord</key>
@@ -535,9 +557,10 @@
     <ctx>notation-opened</ctx>
     </SC>
   <SC>
-    <key>delete</key>
+    <key>notation-delete</key>
     <seq>Del</seq>
     <seq>Backspace</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>time-delete</key>
@@ -735,6 +758,7 @@
   <SC>
     <key>play</key>
     <seq>Space</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>play-prev-chord</key>
@@ -761,8 +785,9 @@
     <seq>End</seq>
     </SC>
   <SC>
-    <key>select-all</key>
+    <key>notation-select-all</key>
     <seq>Ctrl+A</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>clef-violin</key>
@@ -775,6 +800,7 @@
   <SC>
     <key>system-break</key>
     <seq>Return</seq>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>page-break</key>

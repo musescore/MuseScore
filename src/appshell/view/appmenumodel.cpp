@@ -151,16 +151,16 @@ MenuItem AppMenuModel::editItem() const
         makeMenuItem("undo"),
         makeMenuItem("redo"),
         makeSeparator(),
-        makeMenuItem("cut"),
-        makeMenuItem("copy"),
-        makeMenuItem("paste"),
-        makeMenuItem("paste-half"),
-        makeMenuItem("paste-double"),
-        makeMenuItem("swap"),
-        makeMenuItem("delete"),
+        makeMenuItem("notation-cut"),
+        makeMenuItem("notation-copy"),
+        makeMenuItem("notation-paste"),
+        makeMenuItem("notation-paste-half"),
+        makeMenuItem("notation-paste-double"),
+        makeMenuItem("notation-swap"),
+        makeMenuItem("notation-delete"),
         makeSeparator(),
-        makeMenuItem("select-all"),
-        makeMenuItem("select-section"),
+        makeMenuItem("notation-select-all"),
+        makeMenuItem("notation-select-section"),
         makeMenuItem("find"),
         makeSeparator(),
         makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
@@ -198,7 +198,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("show-unprintable"),
         makeMenuItem("show-frames"),
         makeMenuItem("show-pageborders"),
-        makeMenuItem("mark-irregular"),
+        makeMenuItem("show-irregular"),
         makeSeparator(),
         makeMenuItem("fullscreen"),
         makeSeparator(),
@@ -285,7 +285,7 @@ MenuItem AppMenuModel::toolsItem() const
         makeMenuItem("unroll-repeats"),
         makeSeparator(),
         makeMenuItem("copy-lyrics-to-clipboard"),
-        makeMenuItem("fotomode"), // need implement
+        // makeMenuItem("fotomode"), // need implement
         makeMenuItem("del-empty-measures"),
     };
 

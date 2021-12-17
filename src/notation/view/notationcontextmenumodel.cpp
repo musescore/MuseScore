@@ -66,11 +66,11 @@ MenuItemList NotationContextMenuModel::pageItems() const
 MenuItemList NotationContextMenuModel::defaultCopyPasteItems() const
 {
     MenuItemList items {
-        makeMenuItem("cut"),
-        makeMenuItem("copy"),
-        makeMenuItem("paste"),
-        makeMenuItem("swap"),
-        makeMenuItem("delete"),
+        makeMenuItem("notation-cut"),
+        makeMenuItem("notation-copy"),
+        makeMenuItem("notation-paste"),
+        makeMenuItem("notation-swap"),
+        makeMenuItem("notation-delete"),
     };
 
     return items;

@@ -32,7 +32,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
-#include "framework/shortcuts/ishortcutscontroller.h"
+#include "framework/actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
@@ -77,7 +77,7 @@ class PluginAPI : public Ms::QmlPlugin
 {
     Q_OBJECT
 
-    INJECT(plugins, mu::shortcuts::IShortcutsController, shortcuts)
+    INJECT(plugins, mu::actions::IActionsDispatcher, actionsDispatcher)
     INJECT(plugins, mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */

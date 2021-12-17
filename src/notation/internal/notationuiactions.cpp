@@ -39,6 +39,11 @@ static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
 
+//! NOTE Each notation actions should has context is UiCtxNotationOpened.
+//! If you want what action to dispatch by shortcut only when notation is focused (ex next-chord by press Right key),
+//! then you should set the shortcut context accordingly, not the action context.
+//! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
+
 const UiActionList NotationUiActions::m_actions = {
     UiAction("notation-escape",
              mu::context::UiCtxNotationOpened,
@@ -49,81 +54,81 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Put note")
              ),
     UiAction("next-element",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next element"),
              QT_TRANSLATE_NOOP("action", "Accessibility: Next element")
              ),
     UiAction("prev-element",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Previous element"),
              QT_TRANSLATE_NOOP("action", "Accessibility: Previous element")
              ),
     UiAction("next-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next chord"),
              QT_TRANSLATE_NOOP("action", "Go to next chord or move text right")
              ),
     UiAction("prev-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Previous chord"),
              QT_TRANSLATE_NOOP("action", "Go to previous chord or move text left")
              ),
     UiAction("next-measure",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next measure"),
              QT_TRANSLATE_NOOP("action", "Go to next measure or move text right")
              ),
     UiAction("prev-measure",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Previous measure"),
              QT_TRANSLATE_NOOP("action", "Go to previous measure or move text left")
              ),
     UiAction("up-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Up note in chord"),
              QT_TRANSLATE_NOOP("action", "Go to higher pitched note in chord")
              ),
     UiAction("down-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Down note in chord"),
              QT_TRANSLATE_NOOP("action", "Go to lower pitched note in chord")
              ),
     UiAction("top-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Top note in chord"),
              QT_TRANSLATE_NOOP("action", "Go to top note in chord")
              ),
     UiAction("bottom-chord",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Bottom note in chord"),
              QT_TRANSLATE_NOOP("action", "Go bottom note in chord")
              ),
     UiAction("first-element",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "First element"),
              QT_TRANSLATE_NOOP("action", "Go to first element in score")
              ),
     UiAction("last-element",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Last element"),
              QT_TRANSLATE_NOOP("action", "Go to last element in score")
              ),
     UiAction("move-up",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Move up"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff above")
              ),
     UiAction("move-down",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Move down"),
              QT_TRANSLATE_NOOP("action", "Move chord/rest to staff below")
              ),
     UiAction("next-track",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Next staff or voice")
              ),
     UiAction("prev-track",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Previous staff or voice")
              ),
     UiAction("next-frame",
@@ -167,22 +172,22 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Move chord/rest right")
              ),
     UiAction("pitch-up",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Up"),
              QT_TRANSLATE_NOOP("action", "Pitch up or move text or articulation up")
              ),
     UiAction("pitch-down",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Down"),
              QT_TRANSLATE_NOOP("action", "Pitch down or move text or articulation down")
              ),
     UiAction("pitch-down-octave",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Down octave"),
              QT_TRANSLATE_NOOP("action", "Pitch down by an octave or move text or articulation down")
              ),
     UiAction("pitch-up-octave",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Up octave"),
              QT_TRANSLATE_NOOP("action", "Pitch up by an octave or move text or articulation up")
              ),
@@ -202,34 +207,34 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Decrease duration dotted")
              ),
-    UiAction("cut",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-cut",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Cut"),
              IconCode::Code::CUT
              ),
-    UiAction("copy",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-copy",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Copy"),
              IconCode::Code::COPY
              ),
-    UiAction("paste",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-paste",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Paste"),
              IconCode::Code::PASTE
              ),
-    UiAction("paste-half",
+    UiAction("notation-paste-half",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Paste half duration")
              ),
-    UiAction("paste-double",
+    UiAction("notation-paste-double",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Paste double duration")
              ),
-    UiAction("paste-special",
+    UiAction("notation-paste-special",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Paste special")
              ),
-    UiAction("swap",
+    UiAction("notation-swap",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Swap with clipboard")
              ),
@@ -237,11 +242,11 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Toggle visibility of elements")
              ),
-    UiAction("select-all",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-select-all",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Select all")
              ),
-    UiAction("select-section",
+    UiAction("notation-select-section",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Select section")
              ),
@@ -265,8 +270,8 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Select dialog"),
              QT_TRANSLATE_NOOP("action", "Select all similar elements with more options")
              ),
-    UiAction("delete",
-             mu::context::UiCtxNotationFocused,
+    UiAction("notation-delete",
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Delete"),
              QT_TRANSLATE_NOOP("action", "Delete the selected element(s)"),
              IconCode::Code::DELETE_TANK
@@ -446,7 +451,7 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Exchange voice 3-4")
              ),
     UiAction("system-break",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Toggle system break"),
              QT_TRANSLATE_NOOP("action", "Toggle 'system break'")
              ),
@@ -1327,11 +1332,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Diatonic pitch down")
              ),
     UiAction("top-staff",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Go to top staff")
              ),
     UiAction("empty-trailing-measure",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Go to first empty trailing measure")
              ),
     UiAction("mirror-note",
