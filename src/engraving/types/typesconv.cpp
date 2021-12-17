@@ -680,3 +680,15 @@ QString TConv::toXml(const PitchValue& v)
     return QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
            .arg(v.time).arg(v.pitch).arg(v.vibrato);
 }
+
+QString TConv::toXml(AccidentalRole v)
+{
+    return QString::number(static_cast<int>(v));
+}
+
+AccidentalRole TConv::fromXml(const QString& tag, AccidentalRole def)
+{
+    bool ok = false;
+    int r = tag.toInt(&ok);
+    return ok ? static_cast<AccidentalRole>(r) : def;
+}

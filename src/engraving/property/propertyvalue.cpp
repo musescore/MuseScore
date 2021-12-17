@@ -154,10 +154,14 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
     case P_TYPE::ORIENTATION: return static_cast<int>(value<Orientation>());
     case P_TYPE::BEAM_MODE:   return static_cast<int>(value<BeamMode>());
+    case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
 
     // Duration
     case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
     case P_TYPE::TDURATION:   return QVariant::fromValue(toTDuration());
+
+    // Sound
+    case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
@@ -174,11 +178,6 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
 
-    //
-    case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
-
-    // other
-    case P_TYPE::ACCIDENTAL_ROLE:  return static_cast<int>(value<Ms::AccidentalRole>());
     default:
         UNREACHABLE; //! TODO
     }
@@ -224,6 +223,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
     case P_TYPE::ORIENTATION:   return PropertyValue(Orientation(v.toInt()));
     case P_TYPE::BEAM_MODE:     return PropertyValue(BeamMode(v.toInt()));
+    case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(AccidentalRole(v.toInt()));
 
     // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));
@@ -231,6 +231,9 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
         UNREACHABLE; //! TODO
     }
     break;
+
+    // Sound
+    case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return PropertyValue(LayoutBreakType(v.toInt()));
@@ -247,11 +250,6 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
 
-    //
-    case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));
-
-    // other
-    case P_TYPE::ACCIDENTAL_ROLE:  return PropertyValue(Ms::AccidentalRole(v.toInt()));
     default:
         break;
     }
