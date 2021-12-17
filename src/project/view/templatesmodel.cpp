@@ -39,7 +39,7 @@ void TemplatesModel::load()
     }
 
     for (const Template& templ : templates.val) {
-        if (!templ.title.isEmpty()) {
+        if (!templ.meta.title.isEmpty()) {
             m_allTemplates << templ;
         }
     }
@@ -65,7 +65,7 @@ QString TemplatesModel::currentTemplatePath() const
         return QString();
     }
 
-    return m_visibleTemplates[m_currentTemplateIndex].filePath.toQString();
+    return m_visibleTemplates[m_currentTemplateIndex].meta.filePath.toQString();
 }
 
 QStringList TemplatesModel::templatesTitles() const
@@ -73,7 +73,7 @@ QStringList TemplatesModel::templatesTitles() const
     QStringList titles;
 
     for (const Template& templ: m_visibleTemplates) {
-        titles << templ.title;
+        titles << templ.meta.title;
     }
 
     return titles;
@@ -139,7 +139,7 @@ void TemplatesModel::updateTemplatesAndCategoriesBySearch()
     m_currentTemplateIndex = 0;
 
     for (const Template& templ: m_allTemplates) {
-        if (titleAccepted(templ.title) || titleAccepted(templ.categoryTitle)) {
+        if (titleAccepted(templ.meta.title) || titleAccepted(templ.categoryTitle)) {
             m_visibleTemplates << templ;
             if (!m_visibleCategoriesTitles.contains(templ.categoryTitle)) {
                 m_visibleCategoriesTitles << templ.categoryTitle;

@@ -36,7 +36,8 @@ public:
 
     MOCK_METHOD(io::path, myFirstProjectPath, (), (const, override));
 
-    MOCK_METHOD(io::paths, availableTemplatesPaths, (), (const, override));
+    MOCK_METHOD(io::paths, availableTemplateDirs, (), (const, override));
+    MOCK_METHOD(io::path, templateCategoriesJsonPath, (const io::path&), (const, override));
 
     MOCK_METHOD(io::path, userTemplatesPath, (), (const, override));
     MOCK_METHOD(void, setUserTemplatesPath, (const io::path&), (override));

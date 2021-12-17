@@ -22,66 +22,89 @@
 
 #include "templatesrepository.h"
 
+#include "io/path.h"
+#include "translation.h"
 #include "log.h"
 
-#include "io/path.h"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
-#include <QDir>
-
-using namespace mu;
 using namespace mu::project;
 
-RetVal<Templates> TemplatesRepository::templates() const
+mu::RetVal<Templates> TemplatesRepository::templates() const
 {
-    Templates result;
+    TRACEFUNC;
 
-    for (const io::path& dirPath: configuration()->availableTemplatesPaths()) {
-        QStringList filters { "*.mscz", "*.mscx" };
-        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, filters);
+    Templates templates;
 
+    for (const io::path& dir : configuration()->availableTemplateDirs()) {
+        templates << readTemplates(dir);
+    }
+
+    return RetVal<Templates>::make_ok(templates);
+}
+
+Templates TemplatesRepository::readTemplates(const io::path& dirPath) const
+{
+    TRACEFUNC;
+
+    io::path categoriesJsonPath = configuration()->templateCategoriesJsonPath(dirPath);
+
+    if (!fileSystem()->exists(categoriesJsonPath)) {
+        RetVal<io::paths> files = fileSystem()->scanFiles(dirPath, { "*.mscz", "*.mscx" });
         if (!files.ret) {
             LOGE() << files.ret.toString();
-            continue;
+            return Templates();
         }
 
-        result << loadTemplates(files.val);
+        return readTemplates(files.val, qtrc("project", "Other"));
     }
 
-    return RetVal<Templates>::make_ok(result);
+    RetVal<QByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
+    if (!categoriesJson.ret) {
+        LOGE() << categoriesJson.ret.toString();
+        return Templates();
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(categoriesJson.val);
+    QVariantList categoryObjList = document.array().toVariantList();
+
+    Templates templates;
+
+    for (const QVariant& obj : categoryObjList) {
+        QVariantMap map = obj.toMap();
+        QString categoryTitle = qtrc("project", map["title"].toString().toUtf8().data());
+        QStringList files = map["files"].toStringList();
+
+        templates << readTemplates(io::pathsFromStrings(files), categoryTitle, dirPath);
+    }
+
+    return templates;
 }
 
-Templates TemplatesRepository::loadTemplates(const io::paths& filePaths) const
+Templates TemplatesRepository::readTemplates(const io::paths& files, const QString& category, const io::path& dirPath) const
 {
-    Templates result;
+    TRACEFUNC;
 
-    for (const io::path& path : filePaths) {
+    Templates templates;
+
+    for (const io::path& file : files) {
+        io::path path = dirPath.empty() ? file : dirPath + "/" + file;
         RetVal<ProjectMeta> meta = mscReader()->readMeta(path);
         if (!meta.ret) {
-            LOGE() << "failed read template: " << path;
+            LOGE() << QString("failed read template %1: %2")
+                .arg(path.toQString())
+                .arg(QString::fromStdString(meta.ret.toString()));
             continue;
         }
 
-        //! FIXME: temporary solution, will be fixed soon
-        QDir dir(path.toQString());
-        dir.cdUp();
+        Template templ;
+        templ.categoryTitle = category;
+        templ.meta = std::move(meta.val);
 
-        Template templ(meta.val);
-        templ.categoryTitle = correctedTitle(io::dirname(io::path(dir.absolutePath())).toQString());
-
-        result << templ;
+        templates << templ;
     }
 
-    return result;
-}
-
-QString TemplatesRepository::correctedTitle(const QString& title) const
-{
-    QString corrected = title;
-
-    if (!corrected.isEmpty() && corrected[0].isNumber()) {
-        constexpr int NUMBER_LENGTH = 3;
-        corrected = corrected.mid(NUMBER_LENGTH);
-    }
-
-    return corrected.replace('_', ' ');
+    return templates;
 }

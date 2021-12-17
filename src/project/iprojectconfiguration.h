@@ -45,7 +45,8 @@ public:
 
     virtual io::path myFirstProjectPath() const = 0;
 
-    virtual io::paths availableTemplatesPaths() const = 0;
+    virtual io::paths availableTemplateDirs() const = 0;
+    virtual io::path templateCategoriesJsonPath(const io::path& templatesDir) const = 0;
 
     virtual io::path userTemplatesPath() const = 0;
     virtual void setUserTemplatesPath(const io::path& path) = 0;

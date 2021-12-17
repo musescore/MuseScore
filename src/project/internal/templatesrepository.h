@@ -41,8 +41,8 @@ public:
     RetVal<Templates> templates() const override;
 
 private:
-    Templates loadTemplates(const io::paths& filePaths) const;
-    QString correctedTitle(const QString& title) const;
+    Templates readTemplates(const io::path& dirPath) const;
+    Templates readTemplates(const io::paths& files, const QString& category, const io::path& dirPath = io::path()) const;
 };
 }
 
