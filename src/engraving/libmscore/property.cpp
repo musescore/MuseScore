@@ -243,7 +243,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SLUR_UOFF3,              false, "o3",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o3") },
     { Pid::SLUR_UOFF4,              false, "o4",                    P_TYPE::POINT,          DUMMY_QT_TR_NOOP("propertyName", "o4") },
     { Pid::STAFF_MOVE,              true,  "staffMove",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "staff move") },
-    { Pid::VERSE,                   true,  "no",                    P_TYPE::ZERO_INT,       DUMMY_QT_TR_NOOP("propertyName", "verse") },
+    { Pid::VERSE,                   true,  "no",                    P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "verse") },
 
     { Pid::SYLLABIC,                true,  "syllabic",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "syllabic") },
     { Pid::LYRIC_TICKS,             true,  "ticks_f",               P_TYPE::FRACTION,       DUMMY_QT_TR_NOOP("propertyName", "ticks") },
@@ -461,7 +461,6 @@ QString propertyUserName(Pid id)
 PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString)
 {
     switch (type) {
-    case P_TYPE::ZERO_INT:
     case P_TYPE::BEAM_MODE:
         return PropertyValue(int(0));
     case P_TYPE::GROUPS:
@@ -485,7 +484,6 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     switch (propertyType(id)) {
     case P_TYPE::BOOL:
         return PropertyValue(bool(e.readInt()));
-    case P_TYPE::ZERO_INT:
     case P_TYPE::INT:
         return PropertyValue(e.readInt());
     case P_TYPE::REAL:
@@ -607,9 +605,6 @@ QString propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     switch (propertyType(id)) {
-    case P_TYPE::ZERO_INT:
-        return QString::number(value.toInt());
-
     case P_TYPE::TDURATION:
         qFatal("unknown: TDURATION");
     case P_TYPE::TEMPO:
