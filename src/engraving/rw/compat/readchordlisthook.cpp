@@ -74,6 +74,9 @@ void ReadChordListHook::validate()
             qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
         }
 
+        bool custom = style.value(Sid::chordStyle).toString() == "custom";
+        chordList->setCustomChordList(custom);
+
         chordList->unload();
     }
 

@@ -64,7 +64,6 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         QBuffer buf(&styleData);
         buf.open(QIODevice::ReadOnly);
         masterScore->chordList()->read(&buf);
-        masterScore->chordList()->checkChordList(masterScore->style());
     }
 
     // Read images
@@ -175,6 +174,10 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 Score::FileError error = compat::Read302::read302(score, e, ctx);
                 err = scoreFileErrorToErr(error);
             } else {
+                //! NOTE: make sure we have a chord list
+                //! Load the default chord list otherwise
+                score->checkChordList();
+
                 err = doRead(score, e, ctx);
             }
 
