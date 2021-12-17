@@ -449,14 +449,6 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         UNREACHABLE; //! TODO
     }
     break;
-
-//    case P_TYPE::TDURATION,
-
-//    case P_TYPE::TEMPO,
-//    case P_TYPE::GROUPS,
-//    case P_TYPE::INT_LIST,
-//    case P_TYPE::GLISS_STYLE,
-//    case P_TYPE::ZERO_INT,           // displayed with offset +1
     }
 }
 

@@ -60,7 +60,8 @@ struct BeatsPerSecond // beats per second
     inline BeatsPerSecond operator*(const double& v) const { return BeatsPerSecond(val * v); }
     inline BeatsPerSecond operator/(const double& v) const { return BeatsPerSecond(val / v); }
 
-    BeatsPerMinute toBPM() const { return BeatsPerMinute(val * 60); }
+    BeatsPerMinute toBPM() const { return BeatsPerMinute(val * 60.0); }
+    static BeatsPerSecond fromBPM(const BeatsPerMinute& bmp) { return BeatsPerSecond(bmp.val / 60.0); }
 };
 }
 
