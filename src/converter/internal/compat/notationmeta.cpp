@@ -180,7 +180,7 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
         for (const Ms::EngravingItem* anotation : annotations) {
             if (anotation && anotation->isTempoText()) {
                 const Ms::TempoText* tt = toTempoText(anotation);
-                tempo = round(tt->tempo() * 60);
+                tempo = round(tt->tempo().toBPM().val);
                 tempoText = tt->xmlText();
             }
         }

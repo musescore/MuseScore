@@ -458,8 +458,6 @@ private:
 
     QMap<QString, QString> _metaTags;
 
-    constexpr static double _defaultTempo = 2.0;   //default tempo is equal 120 bpm
-
     Selection _selection;
     SelectionFilter _selectionFilter;
     Audio* _audio { nullptr };
@@ -953,11 +951,11 @@ public:
     virtual TempoMap* tempomap() const;
     virtual TimeSigMap* sigmap() const;
 
-    void setTempo(Segment*, qreal);
-    void setTempo(const Fraction& tick, qreal bps);
+    void setTempo(Segment*, BeatsPerSecond bps);
+    void setTempo(const Fraction& tick, BeatsPerSecond bps);
     void removeTempo(const Fraction& tick);
     void setPause(const Fraction& tick, qreal seconds);
-    qreal tempo(const Fraction& tick) const;
+    BeatsPerSecond tempo(const Fraction& tick) const;
 
     bool defaultsRead() const { return _defaultsRead; }
     void setDefaultsRead(bool b) { _defaultsRead = b; }
@@ -1230,8 +1228,6 @@ public:
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
-
-    constexpr static double defaultTempo() { return _defaultTempo; }
 
     friend class ChangeSynthesizerState;
     friend class Chord;

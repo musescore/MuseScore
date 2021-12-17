@@ -26,6 +26,8 @@
 #include <map>
 #include <QFlags>
 
+#include "types/types.h"
+
 namespace Ms {
 class XmlWriter;
 
@@ -42,13 +44,13 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TempoTypes);
 
 struct TEvent {
     TempoTypes type;
-    qreal tempo;       // beats per second
+    BeatsPerSecond tempo;       // beats per second
     qreal pause;       // pause in seconds
     qreal time;        // precomputed time for tick in sec
 
     TEvent();
     TEvent(const TEvent& e);
-    TEvent(qreal bps, qreal seconds, TempoType t);
+    TEvent(BeatsPerSecond bps, qreal seconds, TempoType t);
     bool valid() const;
 };
 
@@ -59,8 +61,8 @@ struct TEvent {
 class TempoMap : public std::map<int, TEvent>
 {
     int _tempoSN;             // serial no to track tempo changes
-    qreal _tempo;             // tempo if not using tempo list (beats per second)
-    qreal _relTempo;          // rel. tempo
+    BeatsPerSecond _tempo;    // tempo if not using tempo list (beats per second)
+    BeatsPerSecond _relTempo;          // rel. tempo
 
     void normalize();
     void del(int tick);
@@ -72,7 +74,7 @@ public:
 
     void dump() const;
 
-    qreal tempo(int tick) const;
+    BeatsPerSecond tempo(int tick) const;
 
     qreal tick2time(int tick, int* sn = 0) const;
     qreal tick2timeLC(int tick, int* sn) const;
@@ -81,12 +83,12 @@ public:
     int time2tick(qreal time, int tick, int* sn) const;
     int tempoSN() const { return _tempoSN; }
 
-    void setTempo(int t, qreal);
+    void setTempo(int t, BeatsPerSecond);
     void setPause(int t, qreal);
     void delTempo(int tick);
 
-    void setRelTempo(qreal val);
-    qreal relTempo() const { return _relTempo; }
+    void setRelTempo(BeatsPerSecond val);
+    BeatsPerSecond relTempo() const { return _relTempo; }
 };
 }     // namespace Ms
 #endif

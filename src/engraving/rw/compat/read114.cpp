@@ -3102,10 +3102,10 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
     masterScore->fixTicks();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
-        qreal tempo   = i.second.tempo;
+        BeatsPerSecond tempo   = i.second.tempo;
         if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
             TempoText* tt = new TempoText(masterScore->dummy()->segment());
-            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo * 60)));
+            tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo.toBPM().val)));
             tt->setTempo(tempo);
             tt->setTrack(0);
             tt->setVisible(false);

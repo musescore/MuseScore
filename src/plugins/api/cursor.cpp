@@ -565,7 +565,7 @@ double Cursor::time()
 
 qreal Cursor::tempo()
 {
-    return _score->tempo(Fraction::fromTicks(tick()));
+    return _score->tempo(Fraction::fromTicks(tick())).val;
 }
 
 //---------------------------------------------------------

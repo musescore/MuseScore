@@ -537,7 +537,7 @@ void Score::fixTicks()
     }
     // Now done in getNextMeasure(), do we keep?
     if (tempomap()->empty()) {
-        tempomap()->setTempo(0, _defaultTempo);
+        tempomap()->setTempo(0, Constants::defaultTempo);
     }
 }
 
@@ -619,8 +619,8 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {
-                qreal otempo = tempomap()->tempo(segment.tick().ticks());
-                qreal ntempo = otempo / stretch;
+                BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
+                BeatsPerSecond ntempo = otempo.val / stretch;
                 setTempo(segment.tick(), ntempo);
                 Fraction etick = segment.tick() + segment.ticks() - Fraction(1, 480 * 4);
                 auto e = tempomap()->find(etick.ticks());
@@ -3772,12 +3772,12 @@ void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
 //    convenience function to access TempoMap
 //---------------------------------------------------------
 
-void Score::setTempo(Segment* segment, qreal tempo)
+void Score::setTempo(Segment* segment, BeatsPerSecond tempo)
 {
     setTempo(segment->tick(), tempo);
 }
 
-void Score::setTempo(const Fraction& tick, qreal tempo)
+void Score::setTempo(const Fraction& tick, BeatsPerSecond tempo)
 {
     tempomap()->setTempo(tick.ticks(), tempo);
     setPlaylistDirty();
@@ -3813,7 +3813,7 @@ void Score::resetTempoRange(const Fraction& tick1, const Fraction& tick2)
     const bool zeroInRange = (tick1 <= Fraction(0, 1) && tick2 > Fraction(0, 1));
     tempomap()->clearRange(tick1.ticks(), tick2.ticks());
     if (zeroInRange) {
-        tempomap()->setTempo(0, _defaultTempo);
+        tempomap()->setTempo(0, Constants::defaultTempo);
     }
     sigmap()->clearRange(tick1.ticks(), tick2.ticks());
     if (zeroInRange) {
@@ -3838,7 +3838,7 @@ void Score::setPause(const Fraction& tick, qreal seconds)
 //   tempo
 //---------------------------------------------------------
 
-qreal Score::tempo(const Fraction& tick) const
+BeatsPerSecond Score::tempo(const Fraction& tick) const
 {
     return tempomap()->tempo(tick.ticks());
 }

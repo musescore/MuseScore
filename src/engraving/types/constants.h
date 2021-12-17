@@ -23,10 +23,13 @@
 #ifndef MU_ENGRAVING_CONSTANTS_H
 #define MU_ENGRAVING_CONSTANTS_H
 
+#include "bps.h"
+
 namespace mu::engraving {
 struct Constants
 {
     constexpr static int division = 480;
+    constexpr static BeatsPerSecond defaultTempo = 2.0; //default tempo is equal 120 bpm
 };
 }
 

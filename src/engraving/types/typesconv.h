@@ -88,6 +88,9 @@ public:
 
     static QString toXml(AccidentalRole v);
     static AccidentalRole fromXml(const QString& tag, AccidentalRole def);
+
+    static QString toXml(BeatsPerSecond v);
+    static BeatsPerSecond fromXml(const QString& tag, BeatsPerSecond def);
 };
 }
 
