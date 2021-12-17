@@ -32,6 +32,9 @@ class TConv
 public:
     TConv() = default;
 
+    static QString toXml(const QList<int>& v);
+    static QList<int> fromXml(const QString& tag, const QList<int>& def);
+
     static QString toUserName(SymId v);
     static QString toXml(SymId v);
     static SymId fromXml(const QString& tag, SymId def);
