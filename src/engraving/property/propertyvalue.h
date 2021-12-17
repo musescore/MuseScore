@@ -99,9 +99,10 @@ enum class P_TYPE {
     KEY_MODE,
     TEXT_STYLE,
 
-    // not sorted
-
+    // Other
     GROUPS,
+
+    // not sorted
 
     TDURATION
 };
@@ -234,9 +235,12 @@ public:
     PropertyValue(TextStyleType v)
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
 
+    // Other
+    PropertyValue(const GroupNodes& v)
+        : m_type(P_TYPE::GROUPS), m_data(make_data<GroupNodes>(v)) {}
+
     // not sorted
 
-    PropertyValue(const Ms::Groups& v);
     PropertyValue(const Ms::TDuration& v);
 
     bool isValid() const;
@@ -331,7 +335,6 @@ public:
     double toDouble() const { return value<qreal>(); }
     QString toString() const { return value<QString>(); }
 
-    const Ms::Groups& toGroups() const;
     const Ms::TDuration& toTDuration() const;
 
     bool operator ==(const PropertyValue& v) const;

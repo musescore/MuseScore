@@ -52,7 +52,7 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     }
     GroupNode node { 0, 0 };
     Groups ng;
-    ng.push_back(node);
+    ng.addNode(node);
     nts->setGroups(ng);
 
     for (int i = 0; i < n; ++i) {

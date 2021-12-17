@@ -212,7 +212,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::GLISS_EASEIN,            false, "easeInSpin",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName","ease in") },
     { Pid::GLISS_EASEOUT,           false, "easeOutSpin",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "ease out") },
     { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "diagonal") },
-    { Pid::GROUPS,                  false, 0,                       P_TYPE::GROUPS,         DUMMY_QT_TR_NOOP("propertyName", "groups") },
+    { Pid::GROUP_NODES,                  false, 0,                       P_TYPE::GROUPS,         DUMMY_QT_TR_NOOP("propertyName", "groups") },
     { Pid::LINE_STYLE,              false, "lineStyle",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "line style") },
     { Pid::LINE_WIDTH,              false, "lineWidth",             P_TYPE::MILLIMETRE,     DUMMY_QT_TR_NOOP("propertyName", "line width") },
     { Pid::LINE_WIDTH_SPATIUM,      false, "lineWidth",             P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "line width (spatium)") },
@@ -564,7 +564,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::GROUPS: {
         Groups g;
         g.read(e);
-        return PropertyValue::fromValue(g);
+        return PropertyValue::fromValue(g.nodes());
     }
     case P_TYPE::TDURATION:
     case P_TYPE::INT_LIST:
