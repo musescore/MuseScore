@@ -104,6 +104,8 @@ private:
     void resetNavigation();
     void navigateToFirstMenu();
 
+    void activateHighlightedMenu();
+
     QString highlightedMenuId() const;
 
     QString menuIdByActivateSymbol(const QString& symbol);
