@@ -172,10 +172,13 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::DYNAMIC_SPEED:    return static_cast<int>(value<DynamicSpeed>());
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
-    case P_TYPE::TEXT_STYLE:        return static_cast<int>(value<TextStyleType>());
+    case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
+
+    //
+    case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
 
     // other
-    case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<Ms::AccidentalRole>());
+    case P_TYPE::ACCIDENTAL_ROLE:  return static_cast<int>(value<Ms::AccidentalRole>());
     default:
         UNREACHABLE; //! TODO
     }
@@ -242,10 +245,13 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::DYNAMIC_SPEED:    return PropertyValue(DynamicSpeed(v.toInt()));
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
-    case P_TYPE::TEXT_STYLE:        return PropertyValue(TextStyleType(v.toInt()));
+    case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
+
+    //
+    case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));
 
     // other
-    case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(Ms::AccidentalRole(v.toInt()));
+    case P_TYPE::ACCIDENTAL_ROLE:  return PropertyValue(Ms::AccidentalRole(v.toInt()));
     default:
         break;
     }

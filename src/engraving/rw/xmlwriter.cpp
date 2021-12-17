@@ -433,30 +433,25 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<TextStyleType>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::CHANGE_METHOD: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<ChangeMethod>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }
     break;
 
 //    case P_TYPE::TDURATION,
-//    case P_TYPE::BEAM_MODE,
 
 //    case P_TYPE::TEMPO,
 //    case P_TYPE::GROUPS,
-//    case P_TYPE::SYMID,
 //    case P_TYPE::INT_LIST,
 //    case P_TYPE::GLISS_STYLE,
-//    case P_TYPE::BARLINE_TYPE,
 //    case P_TYPE::ZERO_INT,           // displayed with offset +1
-
-//    case P_TYPE::SUB_STYLE,
-
-//    case P_TYPE::CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-//    case P_TYPE::KEYMODE,            // enum class KeyMode
-//    case P_TYPE::ORIENTATION,        // enum class Orientation
-
 //    case P_TYPE::PITCH_VALUES,
-//    case P_TYPE::HOOK_TYPE
     }
 }
 

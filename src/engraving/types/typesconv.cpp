@@ -651,3 +651,26 @@ TextStyleType TConv::fromXml(const QString& tag, TextStyleType def)
     UNREACHABLE;
     return def;
 }
+
+static const std::vector<Item<ChangeMethod> > CHANGE_METHODS = {
+    { ChangeMethod::NORMAL,           "normal" },
+    { ChangeMethod::EASE_IN,          "ease-in" },
+    { ChangeMethod::EASE_OUT,         "ease-out" },
+    { ChangeMethod::EASE_IN_OUT,      "ease-in-out" },
+    { ChangeMethod::EXPONENTIAL,      "exponential" },
+};
+
+QString TConv::toUserName(ChangeMethod v)
+{
+    return findUserNameByType<ChangeMethod>(CHANGE_METHODS, v);
+}
+
+QString TConv::toXml(ChangeMethod v)
+{
+    return findXmlTagByType<ChangeMethod>(CHANGE_METHODS, v);
+}
+
+ChangeMethod TConv::fromXml(const QString& tag, ChangeMethod def)
+{
+    return findTypeByXmlTag<ChangeMethod>(CHANGE_METHODS, tag, def);
+}
