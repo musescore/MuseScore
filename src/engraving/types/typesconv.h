@@ -82,6 +82,9 @@ public:
     static ChangeMethod fromXml(const QString& tag, ChangeMethod def);
 
     static QString toXml(const PitchValue& v);
+
+    static QString toXml(AccidentalRole v);
+    static AccidentalRole fromXml(const QString& tag, AccidentalRole def);
 };
 }
 

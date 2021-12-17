@@ -24,6 +24,7 @@
 
 #include "rw/xml.h"
 #include "types/symnames.h"
+#include "types/typesconv.h"
 
 #include "note.h"
 #include "symbol.h"
@@ -264,10 +265,7 @@ void Accidental::read(XmlReader& e)
         } else if (tag == "subtype") {
             setSubtype(e.readElementText());
         } else if (tag == "role") {
-            AccidentalRole r = AccidentalRole(e.readInt());
-            if (r == AccidentalRole::AUTO || r == AccidentalRole::USER) {
-                _role = r;
-            }
+            _role = TConv::fromXml(e.readElementText(), AccidentalRole::AUTO);
         } else if (tag == "small") {
             m_isSmall = e.readInt();
         } else if (EngravingItem::readProperties(e)) {
@@ -285,7 +283,7 @@ void Accidental::write(XmlWriter& xml) const
 {
     xml.startObject(this);
     writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
-    writeProperty(xml, Pid::ROLE);
+    writeProperty(xml, Pid::ACCIDENTAL_ROLE);
     writeProperty(xml, Pid::SMALL);
     writeProperty(xml, Pid::ACCIDENTAL_TYPE);
     EngravingItem::writeProperties(xml);
@@ -600,7 +598,7 @@ PropertyValue Accidental::getProperty(Pid propertyId) const
     case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
     case Pid::SMALL:              return m_isSmall;
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
-    case Pid::ROLE:               return int(role());
+    case Pid::ACCIDENTAL_ROLE:    return role();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -616,7 +614,7 @@ PropertyValue Accidental::propertyDefault(Pid propertyId) const
     case Pid::ACCIDENTAL_TYPE:    return int(AccidentalType::NONE);
     case Pid::SMALL:              return false;
     case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
-    case Pid::ROLE:               return int(AccidentalRole::AUTO);
+    case Pid::ACCIDENTAL_ROLE:    return AccidentalRole::AUTO;
     default:
         return EngravingItem::propertyDefault(propertyId);
     }
@@ -638,7 +636,7 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::ACCIDENTAL_BRACKET:
         _bracket = AccidentalBracket(v.toInt());
         break;
-    case Pid::ROLE:
+    case Pid::ACCIDENTAL_ROLE:
         _role = v.value<AccidentalRole>();
         break;
     default:

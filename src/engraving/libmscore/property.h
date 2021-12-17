@@ -252,7 +252,7 @@ enum class Pid {
     USE_DRUMSET,
     DURATION,
     DURATION_TYPE,
-    ROLE,
+    ACCIDENTAL_ROLE,
     TRACK,
 
     FRET_STRINGS,
