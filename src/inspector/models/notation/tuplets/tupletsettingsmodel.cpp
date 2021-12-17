@@ -46,7 +46,7 @@ TupletSettingsModel::TupletSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_TUPLET);
     setTitle(qtrc("inspector", "Tuplet"));
-    setIcon(ui::IconCode::Code::NOTE_TUPLET);
+    setIcon(ui::IconCode::Code::TUPLET_NUMBER_WITH_BRACKETS);
     createProperties();
 }
 

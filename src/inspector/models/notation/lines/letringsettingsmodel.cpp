@@ -29,6 +29,7 @@ LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_LET_RING);
     setTitle(qtrc("inspector", "Let ring"));
+    setIcon(ui::IconCode::Code::LET_RING);
 
     createProperties();
 }
