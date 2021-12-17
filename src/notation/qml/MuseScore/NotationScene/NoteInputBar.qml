@@ -206,7 +206,7 @@ Item {
             StyledMenuLoader {
                 id: menuLoader
 
-                navigation: btn.navigation
+                navigationParentControl: btn.navigation
 
                 onHandleMenuItem: function(itemId) {
                     noteInputModel.handleMenuItem(itemId)

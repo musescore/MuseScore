@@ -35,7 +35,6 @@
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
 #include "project/irecentprojectsprovider.h"
-#include "internal/iappmenuactioncontroller.h"
 
 namespace mu::appshell {
 class AppMenuModel : public ui::AbstractMenuModel
@@ -49,7 +48,6 @@ class AppMenuModel : public ui::AbstractMenuModel
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
-    INJECT(appshell, IAppMenuActionController, controller)
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
@@ -57,13 +55,6 @@ public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
-
-    // Custom navigation
-    Q_INVOKABLE bool isNavigateKey(int key);
-    Q_INVOKABLE void navigate(int key);
-
-    Q_INVOKABLE bool hasItemByActivateKey(const QString& keySymbol);
-    Q_INVOKABLE void navigate(const QString& keySymbol);
 
 public slots:
     void setHighlightedMenuId(QString highlightedMenuId);
@@ -77,8 +68,6 @@ private:
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
     bool eventFilter(QObject* watched, QEvent* event) override;
-
-    ui::MenuItem makeAppMenu(const actions::ActionCode& actionCode, const ui::MenuItemList& items) const;
 
     using ui::AbstractMenuModel::makeMenuItem;
     ui::MenuItem makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;
@@ -104,6 +93,13 @@ private:
     ui::MenuItemList linesItems() const;
     ui::MenuItemList toolbarsItems() const;
     ui::MenuItemList workspacesItems() const;
+
+    // Custom navigation
+    bool isNavigateKey(int key) const;
+    void navigate(int key);
+
+    bool hasItemByActivateKey(const QString& keySymbol);
+    void navigate(const QString& keySymbol);
 
     void resetNavigation();
     void navigateToFirstMenu();

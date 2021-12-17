@@ -33,7 +33,6 @@
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
-#include "internal/appmenuuiactions.h"
 #include "internal/applicationactioncontroller.h"
 
 #include "view/devtools/settingslistmodel.h"
@@ -72,8 +71,6 @@ using namespace mu::dock;
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
-static std::shared_ptr<AppMenuActionController> s_appMenuActionController = std::make_shared<AppMenuActionController>();
-static std::shared_ptr<AppMenuUiActions> s_appMenuUiActions = std::make_shared<AppMenuUiActions>();
 
 static void appshell_init_qrc()
 {
@@ -96,7 +93,6 @@ void AppShellModule::registerExports()
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
-    ioc()->registerExport<IAppMenuActionController>(moduleName(), s_appMenuActionController);
 }
 
 void AppShellModule::resolveImports()
@@ -104,7 +100,6 @@ void AppShellModule::resolveImports()
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_applicationUiActions);
-        ar->reg(s_appMenuUiActions);
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -166,5 +161,4 @@ void AppShellModule::onInit(const IApplication::RunMode&)
     s_appShellConfiguration->init();
     s_applicationActionController->init();
     s_applicationUiActions->init();
-    s_appMenuActionController->init();
 }

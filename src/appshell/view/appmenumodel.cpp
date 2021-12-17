@@ -70,60 +70,6 @@ void AppMenuModel::load()
     setupConnections();
 }
 
-bool AppMenuModel::isNavigateKey(int key)
-{
-    static QList<Qt::Key> keys {
-        Qt::Key_Left,
-        Qt::Key_Right,
-        Qt::Key_Down,
-        Qt::Key_Space
-    };
-
-    return keys.contains(static_cast<Qt::Key>(key));
-}
-
-void AppMenuModel::navigate(int key)
-{
-    Qt::Key _key = static_cast<Qt::Key>(key);
-    switch (_key) {
-    case Qt::Key_Left: {
-        int newIndex = itemIndex(m_highlightedMenuId) - 1;
-        if (newIndex < 0) {
-            newIndex = rowCount() - 1;
-        }
-
-        setHighlightedMenuId(item(newIndex).id);
-        break;
-    }
-    case Qt::Key_Right: {
-        int newIndex = itemIndex(m_highlightedMenuId) + 1;
-        if (newIndex > rowCount() - 1) {
-            newIndex = 0;
-        }
-
-        setHighlightedMenuId(item(newIndex).id);
-        break;
-    }
-    case Qt::Key_Down:
-    case Qt::Key_Space:
-        emit openMenu(m_highlightedMenuId);
-        break;
-    default:
-        break;
-    }
-}
-
-bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
-{
-    return !menuIdByActivateSymbol(keySymbol).isEmpty();
-}
-
-void AppMenuModel::navigate(const QString& keySymbol)
-{
-    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
-    emit openMenu(m_highlightedMenuId);
-}
-
 void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
 {
     if (m_highlightedMenuId == highlightedMenuId) {
@@ -144,7 +90,7 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == mainWindow()->qWindow()) {
-        if (event->type() == QEvent::KeyRelease) {
+        if (event->type() == QEvent::KeyPress) {
             QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
             if (keyEvent->key() == Qt::Key_Alt) {
                 if (!m_highlightedMenuId.isEmpty()) {
@@ -155,26 +101,29 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
             }
         } else if (event->type() == QEvent::MouseButtonPress) {
             resetNavigation();
+        } else if (event->type() == QEvent::KeyPress
+                   || event->type() == QEvent::ShortcutOverride) {
+            QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+            if (isNavigateKey(keyEvent->key())) {
+                navigate(keyEvent->key());
+                event->setAccepted(true);
+            }
+
+            if ((!keyEvent->modifiers()
+                 || (keyEvent->modifiers() & Qt::AltModifier)) && keyEvent->text().length() == 1) {
+                if (hasItemByActivateKey(keyEvent->text())) {
+                    navigate(keyEvent->text());
+                    event->setAccepted(true);
+                }
+            }
         }
     }
 
     return AbstractMenuModel::eventFilter(watched, event);
 }
 
-MenuItem AppMenuModel::makeAppMenu(const ActionCode& actionCode, const ui::MenuItemList& items) const
-{
-    UiAction menuAction = uiActionsRegister()->action(actionCode);
-
-    return makeMenu(menuAction.title, items, QString::fromStdString(menuAction.code));
-}
-
 void AppMenuModel::setupConnections()
 {
-    controller()->openMenuChannel().onReceive(this, [this](const std::string& menuId) {
-        setHighlightedMenuId(QString::fromStdString(menuId));
-        emit openMenu(QString::fromStdString(menuId));
-    });
-
     navigationController()->navigationChanged().onNotify(this, [this]() {
         if (navigationController()->isHighlight()) {
             resetNavigation();
@@ -251,7 +200,7 @@ MenuItem AppMenuModel::fileItem() const
         makeMenuItem("quit", MenuItemRole::QuitRole)
     };
 
-    return makeAppMenu("menu-file", fileItems);
+    return makeMenu(qtrc("appshell", "&File"), fileItems, "menu-file");
 }
 
 MenuItem AppMenuModel::editItem() const
@@ -275,7 +224,7 @@ MenuItem AppMenuModel::editItem() const
         makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
     };
 
-    return makeAppMenu("menu-edit", editItems);
+    return makeMenu(qtrc("appshell", "&Edit"), editItems, "menu-edit");
 }
 
 MenuItem AppMenuModel::viewItem() const
@@ -314,7 +263,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("dock-restore-default-layout")
     };
 
-    return makeAppMenu("menu-view", viewItems);
+    return makeMenu(qtrc("appshell", "&View"), viewItems, "menu-view");
 }
 
 MenuItem AppMenuModel::addItem() const
@@ -330,7 +279,7 @@ MenuItem AppMenuModel::addItem() const
         makeMenu(qtrc("appshell", "&Lines"), linesItems()),
     };
 
-    return makeAppMenu("menu-add", addItems);
+    return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
 }
 
 MenuItem AppMenuModel::formatItem() const
@@ -356,7 +305,7 @@ MenuItem AppMenuModel::formatItem() const
         makeMenuItem("save-style") // need implement
     };
 
-    return makeAppMenu("menu-format", formatItems);
+    return makeMenu(qtrc("appshell", "F&ormat"), formatItems, "menu-format");
 }
 
 MenuItem AppMenuModel::toolsItem() const
@@ -398,7 +347,7 @@ MenuItem AppMenuModel::toolsItem() const
         makeMenuItem("del-empty-measures"),
     };
 
-    return makeAppMenu("menu-tools", toolsItems);
+    return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
 }
 
 MenuItem AppMenuModel::helpItem() const
@@ -422,7 +371,7 @@ MenuItem AppMenuModel::helpItem() const
               << makeSeparator()
               << makeMenuItem("revert-factory");
 
-    return makeAppMenu("menu-help", helpItems);
+    return makeMenu(qtrc("appshell", "&Help"), helpItems, "menu-help");
 }
 
 MenuItem AppMenuModel::diagnosticItem() const
@@ -453,7 +402,7 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenu(qtrc("appshell", "Autobot"), autobotItems),
     };
 
-    return makeAppMenu("menu-diagnostic", items);
+    return makeMenu(qtrc("appshell", "&Diagnostic"), items, "menu-diagnostic");
 }
 
 MenuItemList AppMenuModel::recentScores() const
@@ -665,6 +614,60 @@ MenuItemList AppMenuModel::workspacesItems() const
           << makeMenuItem("configure-workspaces");
 
     return items;
+}
+
+bool AppMenuModel::isNavigateKey(int key) const
+{
+    static QList<Qt::Key> keys {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Down,
+        Qt::Key_Space
+    };
+
+    return keys.contains(static_cast<Qt::Key>(key));
+}
+
+void AppMenuModel::navigate(int key)
+{
+    Qt::Key _key = static_cast<Qt::Key>(key);
+    switch (_key) {
+    case Qt::Key_Left: {
+        int newIndex = itemIndex(m_highlightedMenuId) - 1;
+        if (newIndex < 0) {
+            newIndex = rowCount() - 1;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Right: {
+        int newIndex = itemIndex(m_highlightedMenuId) + 1;
+        if (newIndex > rowCount() - 1) {
+            newIndex = 0;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Down:
+    case Qt::Key_Space:
+        emit openMenu(m_highlightedMenuId);
+        break;
+    default:
+        break;
+    }
+}
+
+bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
+{
+    return !menuIdByActivateSymbol(keySymbol).isEmpty();
+}
+
+void AppMenuModel::navigate(const QString& keySymbol)
+{
+    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
+    emit openMenu(m_highlightedMenuId);
 }
 
 void AppMenuModel::resetNavigation()
