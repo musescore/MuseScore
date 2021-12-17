@@ -69,6 +69,10 @@ PopupView {
         }
     }
 
+    onOpened: {
+        navSec.requestActive()
+    }
+
     onClosed: {
         rootContainer.focus = false
         if (root.isDoActiveParentOnClose && root.navigationParentControl) {

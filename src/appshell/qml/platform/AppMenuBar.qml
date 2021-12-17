@@ -52,12 +52,18 @@ ListView {
         id: prv
 
         property var showedMenu: null
+        property bool needRestoreNavigationAfterClose: false
+        property string lastOpenedMenuId: ""
 
         function openMenu(menuId) {
             for (var i = 0; i < root.count; ++i) {
                 var item = root.itemAtIndex(i)
                 if (Boolean(item) && item.menuId === menuId) {
+                    needRestoreNavigationAfterClose = true
+                    lastOpenedMenuId = menuId
+
                     item.toggleMenuOpened()
+
                     return
                 }
             }
@@ -165,6 +171,12 @@ ListView {
 
             onHandleMenuItem: {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)
+            }
+
+            onClosed: {
+                if (prv.needRestoreNavigationAfterClose) {
+                    appMenuModel.setHighlightedMenuId(prv.lastOpenedMenuId)
+                }
             }
         }
     }

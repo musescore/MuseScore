@@ -88,8 +88,6 @@ signals:
     void typeChanged(QmlType type);
 
 private:
-    QWindow* window() const;
-
     std::set<INavigationPanel*> m_panels;
     async::Notification m_panelsListChanged;
     QmlType m_type = Regular;

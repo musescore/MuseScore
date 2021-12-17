@@ -652,7 +652,7 @@ void AppMenuModel::navigate(int key)
     }
     case Qt::Key_Down:
     case Qt::Key_Space:
-        emit openMenu(m_highlightedMenuId);
+        activateHighlightedMenu();
         break;
     default:
         break;
@@ -667,7 +667,7 @@ bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
 void AppMenuModel::navigate(const QString& keySymbol)
 {
     setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
-    emit openMenu(m_highlightedMenuId);
+    activateHighlightedMenu();
 }
 
 void AppMenuModel::resetNavigation()
@@ -678,6 +678,12 @@ void AppMenuModel::resetNavigation()
 void AppMenuModel::navigateToFirstMenu()
 {
     setHighlightedMenuId(item(0).id);
+}
+
+void AppMenuModel::activateHighlightedMenu()
+{
+    emit openMenu(m_highlightedMenuId);
+    actionsDispatcher()->dispatch("nav-trigger-control");
 }
 
 QString AppMenuModel::highlightedMenuId() const
