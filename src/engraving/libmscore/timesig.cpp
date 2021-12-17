@@ -265,7 +265,7 @@ Pid TimeSig::propertyId(const QStringRef& name) const
         return Pid::TIMESIG_STRETCH;
     }
     if (name == "Groups") {
-        return Pid::GROUPS;
+        return Pid::GROUP_NODES;
     }
     return EngravingItem::propertyId(name);
 }
@@ -466,8 +466,8 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
         return numeratorString();
     case Pid::DENOMINATOR_STRING:
         return denominatorString();
-    case Pid::GROUPS:
-        return PropertyValue::fromValue(groups());
+    case Pid::GROUP_NODES:
+        return groups().nodes();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(_sig);
     case Pid::TIMESIG_GLOBAL:
@@ -502,8 +502,8 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::DENOMINATOR_STRING:
         setDenominatorString(v.toString());
         break;
-    case Pid::GROUPS:
-        setGroups(v.toGroups());
+    case Pid::GROUP_NODES:
+        setGroups(v.value<GroupNodes>());
         break;
     case Pid::TIMESIG:
         setSig(v.value<Fraction>());
