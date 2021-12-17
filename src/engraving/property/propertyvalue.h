@@ -48,6 +48,7 @@ enum class P_TYPE {
     // Base
     BOOL,
     INT,
+    INT_LIST,
     REAL,
     STRING,
 
@@ -104,8 +105,6 @@ enum class P_TYPE {
     TEMPO,
     GROUPS,
 
-    INT_LIST,
-
     ZERO_INT,           // displayed with offset +1
 
     TDURATION
@@ -122,6 +121,9 @@ public:
 
     PropertyValue(int v)
         : m_type(P_TYPE::INT), m_data(make_data<int>(v)) {}
+
+    PropertyValue(const QList<int>& v)
+        : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}
 
     PropertyValue(qreal v)
         : m_type(P_TYPE::REAL), m_data(make_data<qreal>(v)) {}
@@ -237,9 +239,6 @@ public:
         : m_type(P_TYPE::TEXT_STYLE), m_data(make_data<TextStyleType>(v)) {}
 
     // not sorted
-
-    PropertyValue(const QList<int>& v)
-        : m_type(P_TYPE::INT_LIST), m_data(make_data<QList<int> >(v)) {}
 
     PropertyValue(const Ms::Groups& v);
     PropertyValue(const Ms::TDuration& v);

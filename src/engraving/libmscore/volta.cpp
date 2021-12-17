@@ -26,6 +26,7 @@
 
 #include "style/style.h"
 #include "rw/xml.h"
+#include "types/typesconv.h"
 
 #include "changeMap.h"
 #include "measure.h"
@@ -157,12 +158,7 @@ void Volta::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "endings") {
             QString s = e.readElementText();
-            QStringList sl = s.split(",", Qt::SkipEmptyParts);
-            _endings.clear();
-            for (const QString& l : qAsConst(sl)) {
-                int i = l.simplified().toInt();
-                _endings.append(i);
-            }
+            _endings = TConv::fromXml(s, QList<int>());
         } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {
             e.unknown();
@@ -197,14 +193,7 @@ void Volta::write(XmlWriter& xml) const
 {
     xml.startObject(this);
     TextLineBase::writeProperties(xml);
-    QString s;
-    for (int i : _endings) {
-        if (!s.isEmpty()) {
-            s += ", ";
-        }
-        s += QString("%1").arg(i);
-    }
-    xml.tag("endings", s);
+    xml.tag("endings", TConv::toXml(_endings));
     xml.endObject();
 }
 

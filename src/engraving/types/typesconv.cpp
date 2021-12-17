@@ -99,6 +99,30 @@ static T findTypeByXmlTag(const std::vector<Item<T> >& cont, const QString& tag,
 }
 
 // ==========================================================
+QString TConv::toXml(const QList<int>& v)
+{
+    QStringList sl;
+    for (int i : v) {
+        sl << QString::number(i);
+    }
+    return sl.join(",");
+}
+
+QList<int> TConv::fromXml(const QString& tag, const QList<int>& def)
+{
+    QList<int> list;
+    QStringList sl = tag.split(",", Qt::SkipEmptyParts);
+    for (const QString& s : qAsConst(sl)) {
+        bool ok = false;
+        int i = s.simplified().toInt(&ok);
+        if (!ok) {
+            return def;
+        }
+        list << i;
+    }
+    return list;
+}
+
 QString TConv::toUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);
