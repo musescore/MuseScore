@@ -35,6 +35,7 @@
 #include "cloud/iuploadingservice.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
+#include "inotationreadersregister.h"
 
 #include "async/asyncable.h"
 
@@ -45,12 +46,14 @@
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
 {
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, INotationReadersRegister, readers)
+    INJECT(project, IProjectCreator, projectCreator)
+    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
+
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)
-    INJECT(project, IProjectCreator, projectCreator)
     INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project, cloud::IUploadingService, uploadingService)
     INJECT(project, playback::IPlaybackController, playbackController)
@@ -59,6 +62,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
 public:
     void init();
 
+    bool isFileSupported(const io::path& path) const override;
     Ret openProject(const io::path& projectPath) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path& scorePath) const override;
