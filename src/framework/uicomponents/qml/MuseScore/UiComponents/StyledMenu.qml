@@ -270,7 +270,10 @@ StyledPopupView {
                     }
 
                     onRequestParentItemActive: {
-                        root.navigationParentControl.requestActive()
+                        if (root.navigationParentControl) {
+                            root.navigationParentControl.requestActive()
+                        }
+
                         root.close()
                     }
                 }

@@ -134,33 +134,6 @@ ListView {
         Accessible.role: Accessible.Button
         Accessible.name: Utils.removeAmpersands(text)
 
-        Keys.onShortcutOverride: {
-            if (!prv.hasNavigatedItem()) {
-                return
-            }
-
-            var accepted = false
-
-            if (appMenuModel.isNavigateKey(event.key)) {
-                accepted = true
-            } else {
-                accepted = appMenuModel.hasItemByActivateKey(event.text)
-            }
-
-            event.accepted = accepted
-        }
-
-        Keys.onPressed: {
-            if (appMenuModel.isNavigateKey(event.key)) {
-                appMenuModel.navigate(event.key)
-                return
-            }
-
-            if (appMenuModel.hasItemByActivateKey(event.text)) {
-                appMenuModel.navigate(event.text)
-            }
-        }
-
         mouseArea.onContainsMouseChanged: {
             if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu === menuLoader.menu) {
                 return
@@ -189,8 +162,6 @@ ListView {
 
         StyledMenuLoader {
             id: menuLoader
-
-            navigation: radioButtonDelegate.navigation
 
             onHandleMenuItem: {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)

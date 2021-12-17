@@ -33,7 +33,7 @@ Loader {
 
     property alias isMenuOpened: loader.active
 
-    property var navigation: null
+    property var navigationParentControl: null
 
     QtObject {
         id: prv
@@ -62,7 +62,7 @@ Loader {
             Qt.callLater(prv.unloadMenu)
         }
 
-        onLoaded: {
+        onOpened: {
             focusOnOpenedMenuTimer.start()
         }
     }
@@ -74,8 +74,8 @@ Loader {
         menu.parent = loader.parent
         menu.anchorItem = menuAnchorItem
 
-        if (loader.navigation) {
-            menu.navigationParentControl = loader.navigation
+        if (loader.navigationParentControl) {
+            menu.navigationParentControl = loader.navigationParentControl
         }
 
         update(model, x, y)

@@ -622,7 +622,7 @@ GridView {
                 property var modelIndex: null
                 property bool canEdit: true
 
-                navigation: paletteCell.navigation
+                navigationParentControl: paletteCell.navigation
 
                 property var items: [
                     { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
