@@ -600,6 +600,11 @@ void PlaybackController::setupSequenceTracks()
     partList.onItemRemoved(this, [this](const Part* part) {
         removeTrack(part->id());
     });
+
+    partList.onItemChanged(this, [this](const Part* part) {
+        addTrack(part->id(), part->partName().toStdString());
+        removeTrack(part->id());
+    });
 }
 
 void PlaybackController::setupSequencePlayer()
