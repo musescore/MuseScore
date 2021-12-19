@@ -189,7 +189,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::smallStaffStemDirection, "smallStaffStemDirection", DirectionV::UP },
     { Sid::preferStemDirectionMatchContext, "preferStemDirectionMatchContext", false },
     { Sid::beginRepeatLeftMargin,   "beginRepeatLeftMargin",   Spatium(1.0) },
-    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.4) }, // was 0.2
+    { Sid::minNoteDistance,         "minNoteDistance",         Spatium(0.2) },
     { Sid::barNoteDistance,         "barNoteDistance",         Spatium(1.3) },     // was 1.2
 
     { Sid::barAccidentalDistance,   "barAccidentalDistance",   Spatium(0.65) },
