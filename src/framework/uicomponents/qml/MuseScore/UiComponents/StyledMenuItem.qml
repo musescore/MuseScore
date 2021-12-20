@@ -258,9 +258,16 @@ ListItemBlank {
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: Utils.makeMnemonicText(itemPrv.title)
-            textFormat: Text.RichText
             horizontalAlignment: Text.AlignLeft
+
+            text: Utils.makeMnemonicText(itemPrv.title)
+
+            textFormat: Text.RichText
+            //! If the rich text format is set, then the component intercepts the hover state
+            //  The hover state is required to open a submenu(see onHovered)
+            //  So, let's turn off the mouse hovering over the component
+            enabled: false
+            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
         }
 
         StyledTextLabel {
