@@ -4080,8 +4080,7 @@ static bool hasAccidental(Segment* s)
 
 Fraction Measure::minSysTicks()
 {
-    Fraction minTicks = Fraction(1, 8);
-    //System* sys = system();
+    Fraction minTicks = Fraction(10, 1);
     for (MeasureBase* mb : system()->measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
@@ -4155,7 +4154,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
     qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
-    qreal stretch = userStretch() * score()->styleD(Sid::measureSpacing);
+    qreal stretch = qMax(userStretch() * score()->styleD(Sid::measureSpacing), qreal(1));
 
     while (s) {
         s->rxpos() = x;
