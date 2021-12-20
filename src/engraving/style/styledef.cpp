@@ -570,6 +570,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tremoloDistance,         "tremoloDistance",         Spatium(0.8) },
     { Sid::tremoloStyle,            "tremoloStrokeStyle",      int(TremoloStyle::DEFAULT) },
     { Sid::tremoloStrokeLengthMultiplier, "tremoloStrokeLengthMultiplier", 0.62 },
+    { Sid::tremoloNoteSidePadding,  "tremoloNoteSidePadding",  Spatium(1.25) },
+    { Sid::tremoloOutSidePadding,   "tremoloOutSidePadding",   Spatium(0.5) },
 
     { Sid::linearStretch,           "linearStretch",           PropertyValue(qreal(1.5)) },
     { Sid::crossMeasureValues,      "crossMeasureValues",      false },
