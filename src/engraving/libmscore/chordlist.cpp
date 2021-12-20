@@ -1966,9 +1966,11 @@ void ChordList::checkChordList(const MStyle& style)
         qreal mmag = style.value(Sid::chordModifierMag).toReal();
         qreal madjust = style.value(Sid::chordModifierAdjust).toReal();
         configureAutoAdjust(emag, eadjust, mmag, madjust);
+
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read("chords.xml");
         }
+
         read(style.value(Sid::chordDescriptionFile).toString());
     }
 }
