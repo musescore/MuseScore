@@ -44,7 +44,7 @@ BaseSection {
         Dropdown {
             id: dropdown
 
-            width: 208
+            width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
             textRole: "name"

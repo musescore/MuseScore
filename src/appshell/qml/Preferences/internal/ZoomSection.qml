@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -40,77 +39,73 @@ BaseSection {
     signal defaultZoomLevelChangeRequested(int zoomLevel)
     signal mouseZoomPrecisionChangeRequested(int zoomPrecision)
 
-    Column {
-        spacing: 8
+    Row {
+        spacing: root.columnSpacing
 
-        Row {
-            spacing: 12
+        ComboBoxWithTitle {
+            id: defaultZoomTypesBox
 
-            ComboBoxWithTitle {
-                id: defaultZoomTypesBox
+            title: qsTrc("appshell", "Default zoom:")
+            columnWidth: root.columnWidth
 
-                title: qsTrc("appshell", "Default zoom:")
-                titleWidth: 210
+            control.textRole: "title"
+            control.valueRole: "value"
 
-                control.textRole: "title"
-                control.valueRole: "value"
+            currentIndex: control.indexOfValue(root.defaultZoom.type)
 
-                currentIndex: control.indexOfValue(root.defaultZoom.type)
+            navigation.name: "DefaultZoomBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 0
 
-                navigation.name: "DefaultZoomBox"
-                navigation.panel: root.navigation
-                navigation.row: 0
-                navigation.column: 0
-
-                onValueEdited: {
-                    root.defaultZoomTypeChangeRequested(newValue)
-                }
-            }
-
-            IncrementalPropertyControl {
-                id: defaultZoomControl
-                width: 64
-
-                maxValue: 1600
-                minValue: 10
-                step: 10
-                decimals: 0
-
-                measureUnitsSymbol: "%"
-
-                currentValue: root.defaultZoom.level
-                enabled: root.defaultZoom.isPercentage
-
-                navigation.name: "DefaultZoomControl"
-                navigation.panel: root.navigation
-                navigation.row: 0
-                navigation.column: 1
-
-                onValueEdited: {
-                    root.defaultZoomLevelChangeRequested(newValue)
-                }
+            onValueEdited: function(newValue) {
+                root.defaultZoomTypeChangeRequested(newValue)
             }
         }
 
-        IncrementalPropertyControlWithTitle {
-            id: mouseZoomPrecisionControl
+        IncrementalPropertyControl {
+            id: defaultZoomControl
+            width: 64
 
-            title: qsTrc("appshell", "Mouse zoom precision:")
+            maxValue: 1600
+            minValue: 10
+            step: 10
+            decimals: 0
 
-            titleWidth: 208
-            control.width: 60
+            measureUnitsSymbol: "%"
 
-            minValue: 1
-            maxValue: 16
+            currentValue: root.defaultZoom.level
+            enabled: root.defaultZoom.isPercentage
 
-            navigation.name: "MouseZoomPercisionControl"
+            navigation.name: "DefaultZoomControl"
             navigation.panel: root.navigation
-            navigation.row: 1
-            navigation.column: 0
+            navigation.row: 0
+            navigation.column: 1
 
-            onValueEdited: {
-                root.mouseZoomPrecisionChangeRequested(newValue)
+            onValueEdited: function(newValue) {
+                root.defaultZoomLevelChangeRequested(newValue)
             }
+        }
+    }
+
+    IncrementalPropertyControlWithTitle {
+        id: mouseZoomPrecisionControl
+
+        title: qsTrc("appshell", "Mouse zoom precision:")
+
+        columnWidth: root.columnWidth
+        control.width: 60
+
+        minValue: 1
+        maxValue: 16
+
+        navigation.name: "MouseZoomPercisionControl"
+        navigation.panel: root.navigation
+        navigation.row: 1
+        navigation.column: 0
+
+        onValueEdited: function(newValue) {
+            root.mouseZoomPrecisionChangeRequested(newValue)
         }
     }
 }

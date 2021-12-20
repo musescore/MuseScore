@@ -180,7 +180,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
 
     if (currentPageUri() == uri) {
         if (m_currentPage) {
-            m_currentPage->open(params);
+            m_currentPage->setParams(params);
         }
         return;
     }
@@ -201,7 +201,7 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     restorePageState(newPage->objectName());
     initDocks(newPage);
 
-    newPage->open(params);
+    newPage->setParams(params);
 
     m_currentPage = newPage;
     emit currentPageUriChanged(uri);

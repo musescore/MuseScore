@@ -25,21 +25,23 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Flickable {
+Rectangle {
     id: root
+    height: parent.height
+    color: ui.theme.backgroundSecondaryColor
 
-    contentWidth: width
+    default property alias contentData: content.data
 
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
-    interactive: height < contentHeight
+    // If false, the contentHeight of the Flickable is determined by the height of the content items.
+    // When necessary, the page becomes scrollable automatically.
+    // If true, the contentHeight of the Flickable is determined by the available height for the page.
+    property bool contentFillsAvailableHeight: false
 
-    ScrollBar.vertical: StyledScrollBar {}
+    readonly property int sectionsSpacing: 24
+    readonly property int sideMargin: 30
 
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
-
-    readonly property int sectionsSpacing: 24
 
     signal hideRequested()
 
@@ -48,10 +50,84 @@ Flickable {
     }
 
     function ensureContentVisibleRequested(contentRect) {
-        if (root.contentY + root.height < contentRect.y + contentRect.height) {
-            root.contentY += contentRect.y + contentRect.height - (root.contentY + root.height)
-        } else if (root.contentY > contentRect.y) {
-            root.contentY -= root.contentY - contentRect.y
+        if (flickable.contentY + flickable.height < contentRect.y + contentRect.height) {
+            flickable.contentY += contentRect.y + contentRect.height - (flickable.contentY + flickable.height)
+        } else if (flickable.contentY > contentRect.y) {
+            flickable.contentY -= flickable.contentY - contentRect.y
+        }
+    }
+
+    Flickable {
+        id: flickable
+        anchors.fill: parent
+
+        readonly property real availableWidth: width - leftMargin - rightMargin
+        readonly property real availableHeight: height - topMargin - bottomMargin
+
+        readonly property bool isScrollable: contentHeight > availableHeight
+
+        contentWidth: availableWidth
+        contentHeight: root.contentFillsAvailableHeight ? availableHeight : content.childrenRect.height
+
+        topMargin: root.sideMargin
+        leftMargin: root.sideMargin
+        rightMargin: root.sideMargin
+        bottomMargin: root.sideMargin
+
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+
+        ScrollBar.vertical: StyledScrollBar { id: scrollBar }
+
+        Item {
+            id: content
+            anchors.fill: parent
+        }
+    }
+
+    Rectangle {
+        id: topGradient
+        visible: flickable.isScrollable
+
+        anchors.top: flickable.top
+        anchors.left: flickable.left
+        anchors.right: flickable.right
+        anchors.rightMargin: scrollBar.width
+
+        height: root.sideMargin
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: root.color
+            }
+            GradientStop {
+                position: 1.0
+                color: "transparent"
+            }
+        }
+    }
+
+    Rectangle {
+        id: bottomGradient
+        visible: flickable.isScrollable
+
+        anchors.left: flickable.left
+        anchors.right: flickable.right
+        anchors.rightMargin: scrollBar.width
+        anchors.bottom: flickable.bottom
+
+        height: root.sideMargin
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0
+                color: "transparent"
+            }
+            GradientStop {
+                position: 1.0
+                color: root.color
+            }
         }
     }
 }

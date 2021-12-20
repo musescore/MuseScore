@@ -38,7 +38,8 @@ BaseSection {
 
         title: qsTrc("appshell", "Proximity for selecting elements:")
 
-        titleWidth: 208
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
         control.width: 60
 
         minValue: 1
@@ -50,7 +51,7 @@ BaseSection {
         navigation.row: 1
         navigation.column: 0
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.selectionProximityChangeRequested(newValue)
         }
     }

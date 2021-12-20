@@ -52,7 +52,7 @@ Item {
     signal handleItem(var index, var item)
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property real valueItemWidth: 126
         property real spacing: 4
@@ -116,7 +116,7 @@ Item {
         property NavigationPanel headerNavigation: NavigationPanel {
             name: "ValueListHeaderPanel"
             section: root.navigationSection
-            enabled: root.enabled && root.visible
+            enabled: header.enabled && header.visible
             direction: NavigationPanel.Horizontal
             order: root.navigationOrderStart
             accessible.name: qsTrc("uicomponents", "Value list header panel")
@@ -131,10 +131,10 @@ Item {
         ValueListHeaderItem {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.leftMargin: privateProperties.sideMargin
+            leftMargin: prv.sideMargin
 
             headerTitle: keyTitle
-            spacing: privateProperties.spacing
+            spacing: prv.spacing
             isSorterEnabled: keySorter.enabled
             sortOrder: keySorter.sortOrder
 
@@ -142,19 +142,19 @@ Item {
             navigation.column: 0
 
             onClicked: {
-                privateProperties.toggleSorter(keySorter)
-                privateProperties.setSorterEnabled(valueSorter, false)
+                prv.toggleSorter(keySorter)
+                prv.setSorterEnabled(valueSorter, false)
             }
         }
 
         ValueListHeaderItem {
-            Layout.preferredWidth: privateProperties.valueItemWidth
+            Layout.preferredWidth: prv.valueItemWidth + prv.sideMargin
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignRight
-            Layout.rightMargin: privateProperties.sideMargin
+            rightMargin: prv.sideMargin
 
             headerTitle: valueTitle
-            spacing: privateProperties.spacing
+            spacing: prv.spacing
             isSorterEnabled: valueSorter.enabled
             sortOrder: valueSorter.sortOrder
 
@@ -162,8 +162,8 @@ Item {
             navigation.column: 1
 
             onClicked: {
-                privateProperties.toggleSorter(valueSorter)
-                privateProperties.setSorterEnabled(keySorter, false)
+                prv.toggleSorter(valueSorter)
+                prv.setSorterEnabled(keySorter, false)
             }
         }
     }
@@ -201,70 +201,61 @@ Item {
 
         ScrollBar.vertical: StyledScrollBar {}
 
-        delegate: Item {
-            //! NOTE: Added to prevent components clipping when navigating
-            width: view.width
-            height: listItem.height + ui.theme.navCtrlBorderWidth * 2
+        delegate: ValueListItem {
+            id: listItem
 
-            ValueListItem {
-                id: listItem
+            item: model
 
-                anchors.centerIn: parent
-                width: view.width - ui.theme.navCtrlBorderWidth * 2
+            property var modelIndex: sortFilterProxyModel.index(model.index, 0)
 
-                item: model
+            keyRoleName: root.keyRoleName
+            valueRoleName: root.valueRoleName
+            valueTypeRole: root.valueTypeRole
+            valueEnabledRoleName: root.valueEnabledRoleName
+            iconRoleName: root.iconRoleName
 
-                property var modelIndex: sortFilterProxyModel.index(model.index, 0)
+            isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
+            readOnly: root.readOnly
 
-                keyRoleName: root.keyRoleName
-                valueRoleName: root.valueRoleName
-                valueTypeRole: root.valueTypeRole
-                valueEnabledRoleName: root.valueEnabledRoleName
-                iconRoleName: root.iconRoleName
+            spacing: prv.spacing
+            sideMargin: prv.sideMargin
+            valueItemWidth: prv.valueItemWidth
 
-                isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
-                readOnly: root.readOnly
+            navigation.panel: view.navigation
+            navigation.enabled: enabled
+            navigation.row: model.index
+            navigation.column: 0
 
-                spacing: privateProperties.spacing
-                sideMargin: privateProperties.sideMargin
-                valueItemWidth: privateProperties.valueItemWidth
-
-                navigation.panel: view.navigation
-                navigation.enabled: enabled
-                navigation.row: model.index
-                navigation.column: 0
-
-                navigation.onNavigationEvent: {
-                    switch (event.type) {
-                    case NavigationEvent.Up:
-                        if (model.index === 0) {
-                            event.accepted = true
-                        }
-                        break
-                    case NavigationEvent.Down:
-                        if (model.index === view.model.rowCount() - 1) {
-                            event.accepted = true
-                        }
-                        break
+            navigation.onNavigationEvent: {
+                switch (event.type) {
+                case NavigationEvent.Up:
+                    if (model.index === 0) {
+                        event.accepted = true
                     }
-                }
-
-                onClicked: {
-                    selectionModel.select(modelIndex)
-                }
-
-                onDoubleClicked: {
-                    root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
-                }
-
-                onNavigationTriggered: {
-                    root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
-                }
-
-                onFocusChanged: {
-                    if (activeFocus) {
-                        view.positionViewAtIndex(index, ListView.Contain)
+                    break
+                case NavigationEvent.Down:
+                    if (model.index === view.model.rowCount() - 1) {
+                        event.accepted = true
                     }
+                    break
+                }
+            }
+
+            onClicked: {
+                selectionModel.select(modelIndex)
+            }
+
+            onDoubleClicked: {
+                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+            }
+
+            onNavigationTriggered: {
+                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    view.positionViewAtIndex(index, ListView.Contain)
                 }
             }
         }

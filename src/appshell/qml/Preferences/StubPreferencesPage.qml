@@ -26,6 +26,8 @@ import MuseScore.UiComponents 1.0
 PreferencesPage {
     id: root
 
+    contentFillsAvailableHeight: true
+
     StyledTextLabel {
         anchors.centerIn: parent
 

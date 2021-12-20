@@ -39,7 +39,7 @@ BaseSection {
     signal portChanged(int port)
 
     Row {
-        spacing: 0
+        spacing: 12
 
         CheckBox {
             id: isOSCRemoteControlCheckBox
@@ -75,7 +75,7 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.column: 2
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.portChanged(newValue)
             }
         }

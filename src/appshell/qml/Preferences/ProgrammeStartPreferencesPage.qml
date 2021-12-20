@@ -35,7 +35,7 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
         spacing: root.sectionsSpacing
 
         ProgrammeStartSection {
@@ -46,15 +46,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onCurrentStartupModesChanged: {
+            onCurrentStartupModesChanged: function(index) {
                 programmeStartModel.setCurrentStartupMode(index)
             }
 
-            onStartupScorePathChanged: {
+            onStartupScorePathChanged: function(path) {
                 programmeStartModel.setStartupScorePath(path)
             }
 
-            onPanelsVisibleChanged: {
+            onPanelsVisibleChanged: function(panelIndex, visible) {
                 programmeStartModel.setPanelVisible(panelIndex, visible)
             }
         }

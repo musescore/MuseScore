@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -36,13 +36,13 @@ BaseSection {
 
     GridLayout {
         id: grid
+        width: parent.width
 
-        columnSpacing: parent.width / 8
-        rowSpacing: 20
+        columnSpacing: root.columnSpacing
+        rowSpacing: root.rowSpacing
         columns: 2
 
         Repeater {
-
             model: [
                 { textRole: "Accent color:", colorRole: ui.theme.accentColor, typeRole: AppearancePreferencesModel.AccentColor},
                 { textRole: "Text and icons:", colorRole: ui.theme.fontPrimaryColor, typeRole: AppearancePreferencesModel.TextAndIconsColor},
@@ -51,6 +51,8 @@ BaseSection {
             ]
 
             delegate: Row {
+                Layout.preferredWidth: (grid.width - grid.columnSpacing) / 2
+                spacing: root.columnSpacing
 
                 StyledTextLabel {
                     id: titleLabel
@@ -70,7 +72,7 @@ BaseSection {
                     navigation.column: index % grid.columns
                     navigation.accessible.name: titleLabel.text
 
-                    onNewColorSelected: {
+                    onNewColorSelected: function(newColor) {
                         root.colorChangeRequested(newColor, modelData.typeRole)
                     }
                 }

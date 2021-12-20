@@ -37,18 +37,19 @@ BaseSection {
         id: shortestNotesBox
 
         title: qsTrc("appshell", "Shortest note:")
-        titleWidth: 220
+        columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentShortestNote)
 
         control.textRole: "title"
         control.valueRole: "value"
+        control.width: 132
 
         navigation.name: "ShortestNoteBox"
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.currentShortestNoteChangeRequested(newValue)
         }
     }
