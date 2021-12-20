@@ -200,7 +200,8 @@ MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& i
 MenuItem AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
-    IF_ASSERT_FAILED(action.isValid()) {
+    if (!action.isValid()) {
+        LOGW() << "not found action: " << actionCode;
         return MenuItem();
     }
 
