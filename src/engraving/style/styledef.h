@@ -578,6 +578,8 @@ enum class Sid {
     tremoloDistance,
     tremoloStyle,
     tremoloStrokeLengthMultiplier,
+    tremoloNoteSidePadding,
+    tremoloOutSidePadding,
     // TODO tremoloMaxBeamLength,
 
     linearStretch,

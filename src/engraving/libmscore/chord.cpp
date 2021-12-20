@@ -1334,8 +1334,8 @@ int Chord::calcMinStemLength()
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
         minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
-        static const int outSidePadding = 2;
-        static const int noteSidePadding = 6;
+        static const int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
+        static const int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
         int line = _up ? upNote()->line() : downNote()->line();
         line *= 2; // convert to quarter spaces
         int outsideStaffOffset = 0;

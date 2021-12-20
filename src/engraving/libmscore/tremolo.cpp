@@ -282,7 +282,7 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium)
     bool up = chord()->up();
     int upValue = up ? -1 : 1;
 
-    qreal yOffset = h - 0.5 * spatium;
+    qreal yOffset = h - score()->styleMM(Sid::tremoloOutSidePadding).val();
 
     int beams = chord()->beams();
     if (chord()->hook()) {
@@ -501,7 +501,7 @@ void Tremolo::layout()
         return;
     }
 
-    Note* anchor1 = _chord1->upNote();
+    Note* anchor1 = _chord1->up() ? _chord1->upNote() : _chord1->downNote();
     Stem* stem    = _chord1->stem();
     qreal x, y, h;
     if (stem) {
@@ -510,12 +510,21 @@ void Tremolo::layout()
         h = stem->length();
     } else {
         // center tremolo above note
-        x = anchor1->x() + anchor1->headWidth() * .5;
-        y = anchor1->y();
-        h = 2.0 * spatium() + bbox().height();
-        if (anchor1->line() > 4) {
-            h *= -1;
+        x = anchor1->x() + anchor1->headWidth() * 0.5;
+        if (!twoNotes()) {
+            bool hasMirroredNote = false;
+            for (Note* n : _chord1->notes()) {
+                if (n->mirror()) {
+                    hasMirroredNote = true;
+                    break;
+                }
+            }
+            if (hasMirroredNote) {
+                x = _chord1->stemPosX();
+            }
         }
+        y = anchor1->y();
+        h = score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height();
     }
 
     if (twoNotes()) {
