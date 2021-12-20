@@ -129,6 +129,11 @@ void NotationInteraction::apply()
     }
 }
 
+void NotationInteraction::rollback()
+{
+    m_undoStack->rollbackChanges();
+}
+
 void NotationInteraction::notifyAboutDragChanged()
 {
     m_dragChanged.notify();
@@ -623,7 +628,7 @@ void NotationInteraction::clearSelection()
     }
     if (isDragStarted()) {
         doEndDrag();
-        m_undoStack->rollbackChanges();
+        rollback();
         notifyAboutNotationChanged();
     }
     if (selection()->isNone()) {
@@ -2509,7 +2514,7 @@ void NotationInteraction::editText(QKeyEvent* event)
             return;
         }
     } else {
-        m_undoStack->rollbackChanges();
+        rollback();
     }
 
     if (isTextEditingStarted()) {
@@ -2668,7 +2673,7 @@ void NotationInteraction::endEditElement()
     }
     if (isDragStarted()) {
         doEndDrag();
-        m_undoStack->rollbackChanges();
+        rollback();
         m_dragData.reset();
     }
     if (m_editData.curGrip == Ms::Grip::NO_GRIP) {
@@ -3299,13 +3304,16 @@ void NotationInteraction::addText(TextStyleType type)
 
 void NotationInteraction::addFiguredBass()
 {
+    startEdit();
     Ms::FiguredBass* figuredBass = score()->addFiguredBass();
 
     if (figuredBass) {
+        apply();
         startEditText(figuredBass, PointF());
+        notifyAboutSelectionChanged();
+    } else {
+        rollback();
     }
-
-    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::addStretch(qreal value)
