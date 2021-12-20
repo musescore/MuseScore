@@ -594,10 +594,10 @@ int Beam::getBeamCount(std::vector<ChordRest*> chordRests) const
 
 PointF Beam::chordBeamAnchor(Chord* chord) const
 {
-    Note* note = _up ? chord->downNote() : chord->upNote();
+    Note* note = chord->up() ? chord->downNote() : chord->upNote();
     PointF position = note->pos() + chord->segment()->pos() + chord->measure()->pos();
 
-    int upValue = _up ? -1 : 1;
+    int upValue = chord->up() ? -1 : 1;
     qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
     qreal beamOffset = beamWidth / 2 * upValue;
 
@@ -614,10 +614,9 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 
     int upValue = _up ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
-    qreal stemWidth = score()->styleMM(Sid::stemWidth).val() * startChord->mag();
 
-    qreal startOffsetX = _up ? -stemWidth : 0.0;
-    qreal endOffsetX = _up ? 0.0 : stemWidth;
+    qreal startOffsetX = startChord->up() ? -1 * startChord->stem()->lineWidth().val() * startChord->mag() : 0.0;
+    qreal endOffsetX = endChord->up() ? 0.0 : endChord->stem()->lineWidth().val() * endChord->mag();
 
     _beamSegments.push_back(
         new LineF(
@@ -713,13 +712,13 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
     qreal x2 = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
     qreal y2 = chordPos.y() + _slope * (x2 - chordPos.x());
 
-    int upValue = _up ? -1 : 1;
+    int upValue = chord->up() ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
-    qreal stemWidth = score()->styleMM(Sid::stemWidth).val() * chord->mag();
+    qreal stemWidth = chord->stem()->lineWidth().val() * chord->mag();
     qreal startOffsetX = 0;
-    if (isBefore && !_up) {
+    if (isBefore && !chord->up()) {
         startOffsetX = stemWidth;
-    } else if (!isBefore && _up) {
+    } else if (!isBefore && chord->up()) {
         startOffsetX = -stemWidth;
     }
 
@@ -819,17 +818,19 @@ void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int&
     }
 }
 
-void Beam::extendStems(std::vector<ChordRest*> chordRests, PointF start, PointF end)
+void Beam::extendStems(std::vector<ChordRest*> chordRests)
 {
+    ChordRest* startChordRest = chordRests[0];
+    ChordRest* endChordRest = chordRests[chordRests.size() - 1];
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord()) {
             continue;
         }
         Chord* chord = toChord(chordRest);
         PointF anchor = chordBeamAnchor(chord);
-        qreal proportionAlongX = (anchor.x() - start.x()) / (end.x() - start.x());
-        qreal desiredY = proportionAlongX * (end.y() - start.y()) + start.y();
-        if (_up) {
+        qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
+        qreal desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
+        if (chord->up()) {
             chord->setBeamExtension(anchor.y() - desiredY);
         } else {
             chord->setBeamExtension(desiredY - anchor.y());
@@ -1019,15 +1020,26 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     Chord* endChord = toChord(chordRests.back());
 
     // anchor represents the middle of the beam, not the tip of the stem
-    PointF startAnchor = chordBeamAnchor(startChord);
-    PointF endAnchor = chordBeamAnchor(endChord);
+    _startAnchor = chordBeamAnchor(startChord);
+    _endAnchor = chordBeamAnchor(endChord);
+
+    int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
+    if (_userModified[fragmentIndex]) {
+        _startAnchor.setY(fragments[frag]->py1[fragmentIndex]);
+        _endAnchor.setY(fragments[frag]->py2[fragmentIndex]);
+        _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
+        extendStems(chordRests);
+        createBeamSegments(chordRests);
+        return;
+    }
+
     const int startNote = _up ? startChord->upNote()->line() : startChord->downNote()->line();
     const int endNote = _up ? endChord->upNote()->line() : endChord->downNote()->line();
     const int interval = qAbs(startNote - endNote);
     const bool isStartDictator = _up ? startNote < endNote : startNote > endNote;
     const qreal quarterSpace = spatium() / 4;
-    int dictator = round((isStartDictator ? startAnchor.y() : endAnchor.y()) / quarterSpace);
-    int pointer = round((isStartDictator ? endAnchor.y() : startAnchor.y()) / quarterSpace);
+    int dictator = round((isStartDictator ? _startAnchor.y() : _endAnchor.y()) / quarterSpace);
+    int pointer = round((isStartDictator ? _endAnchor.y() : _startAnchor.y()) / quarterSpace);
 
     const int staffLines = startChord->staff()->lines(tick());
     const int middleLine = getMiddleStaffLine(startChord, endChord, staffLines);
@@ -1038,23 +1050,22 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     bool isAscending = startNote > endNote;
     int beamCount = getBeamCount(chordRests);
 
-    offsetBeamToRemoveCollisions(chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
+    offsetBeamToRemoveCollisions(chordRests, dictator, pointer, _startAnchor.x(), _endAnchor.x(), isFlat, isStartDictator);
     setValidBeamPositions(dictator, pointer, beamCount, staffLines, isStartDictator, isFlat, isAscending);
     addMiddleLineSlant(dictator, pointer, beamCount, middleLine, interval);
 
-    startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
-    endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
+    _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
+    _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
 
     _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
-    add8thSpaceSlant(isStartDictator ? startAnchor : endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
+    add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
-    int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
-    fragments[frag]->py1[fragmentIndex] = startAnchor.y();
-    fragments[frag]->py2[fragmentIndex] = endAnchor.y();
-    _slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
+    fragments[frag]->py1[fragmentIndex] = _startAnchor.y();
+    fragments[frag]->py2[fragmentIndex] = _endAnchor.y();
+    _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
 
-    extendStems(chordRests, startAnchor, endAnchor);
+    extendStems(chordRests);
     createBeamSegments(chordRests);
 }
 
