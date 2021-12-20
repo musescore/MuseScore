@@ -820,8 +820,6 @@ void Beam::offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int&
 
 void Beam::extendStems(std::vector<ChordRest*> chordRests)
 {
-    ChordRest* startChordRest = chordRests[0];
-    ChordRest* endChordRest = chordRests[chordRests.size() - 1];
     for (ChordRest* chordRest : chordRests) {
         if (!chordRest->isChord()) {
             continue;
@@ -1025,8 +1023,15 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {
-        _startAnchor.setY(fragments[frag]->py1[fragmentIndex]);
-        _endAnchor.setY(fragments[frag]->py2[fragmentIndex]);
+        qreal startY = fragments[frag]->py1[fragmentIndex];
+        qreal endY = fragments[frag]->py2[fragmentIndex];
+        if (score()->styleB(Sid::snapCustomBeamsToGrid)) {
+            const qreal quarterSpace = spatium() / 4;
+            startY = round(startY / quarterSpace) * quarterSpace;
+            endY = round(endY / quarterSpace) * quarterSpace;
+        }
+        _startAnchor.setY(startY);
+        _endAnchor.setY(endY);
         _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
         extendStems(chordRests);
         createBeamSegments(chordRests);

@@ -226,6 +226,7 @@ enum class Sid {
     useWideBeams,
     beamMinLen,
     beamNoSlope,
+    snapCustomBeamsToGrid,
 
     dotMag,
     dotNoteDistance,
