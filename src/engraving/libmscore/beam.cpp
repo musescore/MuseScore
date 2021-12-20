@@ -1007,8 +1007,6 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
         LayoutBeams::respace(&chordRests);
     }
 
-    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
-
     if (!chordRests.front()->isChord() || !chordRests.back()->isChord()) {
         NOT_IMPL_RETURN;
     }
@@ -1020,6 +1018,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
     // anchor represents the middle of the beam, not the tip of the stem
     _startAnchor = chordBeamAnchor(startChord);
     _endAnchor = chordBeamAnchor(endChord);
+    _beamSpacing = score()->styleB(Sid::useWideBeams) ? 4 : 3;
+    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {
@@ -1061,8 +1061,6 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     _startAnchor.setY(quarterSpace * (isStartDictator ? dictator : pointer));
     _endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator));
-
-    _beamDist = (_beamSpacing / 4.0) * spatium() * mag();
 
     add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 

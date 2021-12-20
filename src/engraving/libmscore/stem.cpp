@@ -111,6 +111,10 @@ void Stem::layout()
         if (chord()->hook() && !chord()->beam()) {
             y2 += chord()->hook()->smuflAnchor().y();
         }
+
+        if (chord()->beam()) {
+            y2 -= _up * point(score()->styleS(Sid::beamWidth)) * .5 * chord()->beam()->mag();
+        }
     }
 
     double lineWidthCorrection = lineWidthMag() * 0.5;
