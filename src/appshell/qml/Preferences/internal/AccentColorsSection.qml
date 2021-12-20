@@ -35,9 +35,9 @@ Row {
 
     property NavigationPanel navigation: NavigationPanel {
         name: titleLabel.text
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.name: titleLabel.text
-        enabled: root.enabled && root.visible
 
         onActiveChanged: {
             if (active) {
@@ -46,16 +46,16 @@ Row {
         }
     }
 
-    property int firstColumnWidth: 0
+    property int columnWidth: 0
 
     signal accentColorChangeRequested(var newColorIndex)
 
     height: colorsList.height
-    spacing: 0
+    spacing: 12
 
     StyledTextLabel {
         id: titleLabel
-        width: root.firstColumnWidth
+        width: root.columnWidth
 
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Qt.AlignLeft

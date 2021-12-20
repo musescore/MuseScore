@@ -37,30 +37,28 @@ BaseSection {
     ListView {
         id: view
 
-        anchors.left: parent.left
-        anchors.right: parent.right
-
+        width: parent.width
         height: contentHeight
 
         spacing: 4
+        interactive: false
+        boundsBehavior: Flickable.StopAtBounds
 
         delegate: RowLayout {
             width: ListView.view.width
             height: 30
 
-            spacing: 20
+            spacing: root.columnSpacing
 
             StyledTextLabel {
                 id: titleLabel
-
-                Layout.alignment: Qt.AlignLeft
-
+                Layout.preferredWidth: root.columnWidth
                 text: model.title + ":"
+                horizontalAlignment: Text.AlignLeft
             }
 
             FilePicker {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 380
+                Layout.fillWidth: true
 
                 dialogTitle: model.chooseTitle
                 filter: model.pathFilter
@@ -72,7 +70,7 @@ BaseSection {
                 navigationRowOrderStart: model.index
                 pathFieldTitle: titleLabel.text
 
-                onPathEdited: {
+                onPathEdited: function(newPath) {
                     model.path = newPath
                 }
             }

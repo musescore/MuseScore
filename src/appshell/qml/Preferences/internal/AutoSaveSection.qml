@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -39,7 +38,7 @@ BaseSection {
     signal intervalChanged(int minutes)
 
     Row {
-        spacing: 0
+        spacing: 12
 
         CheckBox {
             id: autoSaveCheckBox
@@ -77,7 +76,7 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.column: 2
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.intervalChanged(newValue)
             }
         }

@@ -40,7 +40,7 @@ DockPage {
     objectName: "Home"
     uri: "musescore://home"
 
-    onOpenRequested: function(params) {
+    onSetParamsRequested: function(params) {
         if (Boolean(params["section"])) {
             setCurrentCentral(params["section"])
 

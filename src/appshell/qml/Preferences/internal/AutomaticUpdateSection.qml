@@ -38,6 +38,7 @@ BaseSection {
 
     CheckBox {
         id: needCheckBox
+        width: parent.width
 
         text: qsTrc("appshell", "Check for new version of MuseScore")
 
@@ -54,8 +55,7 @@ BaseSection {
 
     CheckBox {
         id: needCheckForNewExtensionsVersionBox
-
-        width: 200
+        width: parent.width
 
         text: qsTrc("appshell", "Check for new version of MuseScore extensions")
 

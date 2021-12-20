@@ -35,7 +35,7 @@ BaseSection {
     CheckBox {
         id:  isShowMIDIControlsBox
 
-        width: 216
+        width: parent.width
         text: qsTrc("appshell", "Show MIDI controls in mixer")
 
         navigation.name: "ShowMIDIControlsBox"

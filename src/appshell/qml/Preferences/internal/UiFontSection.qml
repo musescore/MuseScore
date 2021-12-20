@@ -36,41 +36,38 @@ BaseSection {
     signal fontChangeRequested(var newFontIndex)
     signal bodyTextSizeChangeRequested(var newBodyTextSize)
 
-    Column {
-        spacing: 8
+    ComboBoxWithTitle {
+        id: selectFontControl
 
-        ComboBoxWithTitle {
-            id: selectFontControl
+        title: qsTrc("appshell", "Font face:")
+        columnWidth: root.columnWidth
 
-            title: qsTrc("appshell", "Font face:")
-            titleWidth: root.columnWidth
+        navigation.name: "FontFaceBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
-            navigation.name: "FontFaceBox"
-            navigation.panel: root.navigation
-            navigation.row: 1
-
-            onValueEdited: {
-                root.fontChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.fontChangeRequested(currentIndex)
         }
+    }
 
-        IncrementalPropertyControlWithTitle {
-            id: bodyTextSizeControl
+    IncrementalPropertyControlWithTitle {
+        id: bodyTextSizeControl
 
-            title: qsTrc("appshell", "Body text size:")
-            titleWidth: root.columnWidth
+        title: qsTrc("appshell", "Body text size:")
+        columnWidth: root.columnWidth
+        control.width: 112
 
-            minValue: 8
-            maxValue: 24
-            measureUnitsSymbol: qsTrc("appshell", "pt")
+        minValue: 8
+        maxValue: 24
+        measureUnitsSymbol: qsTrc("appshell", "pt")
 
-            navigation.name: "BodyTextControl"
-            navigation.panel: root.navigation
-            navigation.row: 2
+        navigation.name: "BodyTextControl"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
-            onValueEdited: {
-                root.bodyTextSizeChangeRequested(newValue)
-            }
+        onValueEdited: function(newValue) {
+            root.bodyTextSizeChangeRequested(newValue)
         }
     }
 }

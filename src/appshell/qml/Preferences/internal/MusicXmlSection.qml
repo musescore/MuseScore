@@ -38,8 +38,8 @@ BaseSection {
 
     CheckBox {
         id: importLayoutBox
+        width: parent.width
 
-        width: 208
         text: qsTrc("appshell", "Import layout")
 
         navigation.name: "ImportLayoutBox"
@@ -53,8 +53,8 @@ BaseSection {
 
     CheckBox {
         id: importBreaksBox
+        width: parent.width
 
-        width: 208
         text: qsTrc("appshell", "Import system and page breaks")
 
         navigation.name: "ImportBreaksBox"
@@ -68,8 +68,8 @@ BaseSection {
 
     CheckBox {
         id: needUseDefaultFontBox
+        width: parent.width
 
-        width: 208
         text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
 
         navigation.name: "UseDefaultFontBox"

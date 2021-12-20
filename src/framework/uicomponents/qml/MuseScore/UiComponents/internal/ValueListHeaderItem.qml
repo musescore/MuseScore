@@ -29,12 +29,16 @@ Item {
 
     property string headerTitle: ""
     property alias spacing: row.spacing
+    property real leftMargin: 0
+    property real rightMargin: 0
     property bool isSorterEnabled: false
     property int sortOrder: Qt.AscendingOrder
 
     property alias navigation: navCtrl
 
     signal clicked()
+
+    implicitWidth: leftMargin + row.implicitWidth + rightMargin
 
     NavigationControl {
         id: navCtrl
@@ -64,6 +68,8 @@ Item {
         id: row
 
         anchors.fill: parent
+        anchors.leftMargin: root.leftMargin
+        anchors.rightMargin: root.rightMargin
 
         spacing: root.spacing
 
@@ -90,17 +96,13 @@ Item {
     }
 
     NavigationFocusBorder {
-        anchors.leftMargin: -4
-        anchors.rightMargin: -4
-
         navigationCtrl: navCtrl
+        drawOutsideParent: false
     }
 
     MouseArea {
         id: mouseArea
-
         anchors.fill: parent
-
         hoverEnabled: true
 
         onClicked: {

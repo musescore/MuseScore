@@ -40,21 +40,23 @@ BaseSection {
     signal startupScorePathChanged(string path)
     signal panelsVisibleChanged(int panelIndex, bool visible)
 
+    rowSpacing: 16
+
     RadioButtonGroup {
         id: startupModesBox
 
-        spacing: 16
+        spacing: root.rowSpacing
         orientation: Qt.Vertical
 
         width: parent.width
 
         delegate: Row {
-            spacing: 0
+            spacing: root.columnSpacing
 
             RoundedRadioButton {
                 anchors.verticalCenter: parent.verticalCenter
 
-                width: 220
+                width: root.columnWidth
 
                 checked: modelData.checked
                 text: modelData.title
@@ -70,7 +72,8 @@ BaseSection {
             }
 
             FilePicker {
-                width: 240
+                pathFieldWidth: root.columnWidth
+                spacing: root.columnSpacing
 
                 dialogTitle: qsTrc("appshell", "Choose starting score")
                 filter: root.scorePathFilter
@@ -82,7 +85,7 @@ BaseSection {
                 navigationRowOrderStart: model.index
                 navigationColumnOrderStart: 1
 
-                onPathEdited: {
+                onPathEdited: function(newPath) {
                     root.startupScorePathChanged(newPath)
                 }
             }
@@ -92,7 +95,7 @@ BaseSection {
     ListView {
         id: panelsView
 
-        spacing: 16
+        spacing: root.rowSpacing
         interactive: false
 
         width: parent.width

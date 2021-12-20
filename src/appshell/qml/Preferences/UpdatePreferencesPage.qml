@@ -35,7 +35,7 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
         spacing: root.sectionsSpacing
 
         AutomaticUpdateSection {
@@ -46,11 +46,11 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onNeedCheckForNewAppVersionChangeRequested: {
+            onNeedCheckForNewAppVersionChangeRequested: function(check) {
                 updateModel.needCheckForNewAppVersion = check
             }
 
-            onNeedCheckForNewExtensionsVersionChangeRequested: {
+            onNeedCheckForNewExtensionsVersionChangeRequested: function(check) {
                 updateModel.needCheckForNewExtensionsVersion = check
             }
         }

@@ -29,8 +29,6 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     Component.onCompleted: {
         importPreferencesModel.load()
     }
@@ -40,11 +38,7 @@ PreferencesPage {
     }
 
     Column {
-        id: content
-
         width: parent.width
-        height: childrenRect.height
-
         spacing: root.sectionsSpacing
 
         ImportStyleSection {
@@ -56,7 +50,7 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onStyleFileImportPathChangeRequested: {
+            onStyleFileImportPathChangeRequested: function(path) {
                 importPreferencesModel.styleFileImportPath = path
             }
 
@@ -77,11 +71,11 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onGuitarProCharsetChangeRequested: {
+            onGuitarProCharsetChangeRequested: function(charset) {
                 importPreferencesModel.currentGuitarProCharset = charset
             }
 
-            onOvertuneCharsetChangeRequested: {
+            onOvertuneCharsetChangeRequested: function(charset) {
                 importPreferencesModel.currentOvertuneCharset = charset
             }
 
@@ -102,15 +96,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
-            onImportLayoutChangeRequested: {
+            onImportLayoutChangeRequested: function(importLayout) {
                 importPreferencesModel.importLayout = importLayout
             }
 
-            onImportBreaksChangeRequested: {
+            onImportBreaksChangeRequested: function(importBreaks) {
                 importPreferencesModel.importBreaks = importBreaks
             }
 
-            onUseDefaultFontChangeRequested: {
+            onUseDefaultFontChangeRequested: function(use) {
                 importPreferencesModel.needUseDefaultFont = use
             }
 
@@ -130,7 +124,7 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
 
-            onCurrentShortestNoteChangeRequested: {
+            onCurrentShortestNoteChangeRequested: function(note) {
                 importPreferencesModel.currentShortestNote = note
             }
 

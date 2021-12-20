@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -36,7 +35,7 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
         spacing: root.sectionsSpacing
 
         NoteInputSection {
@@ -47,15 +46,15 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
-            onAdvanceToNextNoteChangeRequested: {
+            onAdvanceToNextNoteChangeRequested: function(advance) {
                 noteInputModel.advanceToNextNoteOnKeyRelease = advance
             }
 
-            onColorNotesChangeRequested: {
+            onColorNotesChangeRequested: function(color) {
                 noteInputModel.colorNotesOusideOfUsablePitchRange = color
             }
 
-            onDelayBetweenNotesChangeRequested: {
+            onDelayBetweenNotesChangeRequested: function(delay) {
                 noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = delay
             }
         }
@@ -71,19 +70,19 @@ PreferencesPage {
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
-            onPlayNotesWhenEditingChangeRequested: {
+            onPlayNotesWhenEditingChangeRequested: function(play) {
                 noteInputModel.playChordWhenEditing = play
             }
 
-            onPlayChordWhenEditingChangeRequested: {
+            onPlayChordWhenEditingChangeRequested: function(play) {
                 noteInputModel.playChordWhenEditing = play
             }
 
-            onPlayChordSymbolWhenEditingChangeRequested: {
+            onPlayChordSymbolWhenEditingChangeRequested: function(play) {
                 noteInputModel.playChordSymbolWhenEditing = play
             }
 
-            onNotePlayDurationChangeRequested: {
+            onNotePlayDurationChangeRequested: function(duration) {
                 noteInputModel.notePlayDurationMilliseconds = duration
             }
         }

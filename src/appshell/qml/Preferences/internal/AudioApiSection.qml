@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
@@ -29,36 +28,30 @@ BaseSection {
 
     title: qsTrc("appshell", "Audio")
 
-    property int firstColumnWidth: 0
-
     property alias currentAudioApiIndex: apiComboBox.currentIndex
     property alias audioApiList: apiComboBox.model
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
 
-    Column {
-        spacing: 12
+    ComboBoxWithTitle {
+        id: apiComboBox
 
-        ComboBoxWithTitle {
-            id: apiComboBox
+        title: qsTrc("appshell", "Audio API:")
+        columnWidth: root.columnWidth
 
-            title: qsTrc("appshell", "Audio API:")
-            titleWidth: root.columnWidth
+        navigation.name: "AudioApiBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
-            navigation.name: "AudioApiBox"
-            navigation.panel: root.navigation
-            navigation.row: 1
-
-            onValueEdited: {
-                root.currentAudioApiIndexChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.currentAudioApiIndexChangeRequested(currentIndex)
         }
+    }
 
-        CommonAudioApiConfiguration {
-            firstColumnWidth: root.columnWidth
+    CommonAudioApiConfiguration {
+        columnWidth: root.columnWidth
 
-            navigation: root.navigation
-            navigationOrderStart: 2
-        }
+        navigation: root.navigation
+        navigationOrderStart: 2
     }
 }

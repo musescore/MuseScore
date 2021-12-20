@@ -37,7 +37,7 @@ BaseSection {
 
     ComboBoxWithTitle {
         title: qsTrc("appshell", "Guitar Pro import character set:")
-        titleWidth: 220
+        columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentGuitarProCharset)
         model: root.charsets
@@ -46,14 +46,14 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.guitarProCharsetChangeRequested(newValue)
         }
     }
 
     ComboBoxWithTitle {
         title: qsTrc("appshell", "Overture import character set:")
-        titleWidth: 220
+        columnWidth: root.columnWidth
 
         currentIndex: control.indexOfValue(root.currentOvertuneCharset)
         model: root.charsets
@@ -62,7 +62,7 @@ BaseSection {
         navigation.panel: root.navigation
         navigation.row: 1
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.overtuneCharsetChangeRequested(newValue)
         }
     }
