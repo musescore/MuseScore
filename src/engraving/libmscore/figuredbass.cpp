@@ -1293,11 +1293,6 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
             }
         }
     }
-/* DEBUG
-      QString str = QString();
-      str.setNum(_ticks);
-      painter->drawText(0, (_onNote ? 40 : 30), str);
-*/
 }
 
 //---------------------------------------------------------
@@ -1477,20 +1472,6 @@ PropertyValue FiguredBass::propertyDefault(Pid id) const
     return TextBase::propertyDefault(id);
 }
 
-//---------------------------------------------------------
-//   TEMPORARY HACK!!!
-//---------------------------------------------------------
-/*
-FiguredBassItem * FiguredBass::addItem()
-      {
-      int line = items.size();
-      FiguredBassItem* fib = new FiguredBassItem(score(), line);
-      // tell QML not to garbage collect this item
-      QQmlEngine::setObjectOwnership(fib, QQmlEngine::CppOwnership);
-      items.push_back(fib);
-      return fib;
-      }
-*/
 //---------------------------------------------------------
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;

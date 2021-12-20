@@ -254,6 +254,7 @@ private:
 
     void startEdit();
     void apply();
+    void rollback();
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
