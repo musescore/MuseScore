@@ -182,14 +182,15 @@ void NotationActionController::init()
     registerAction("inc-duration-dotted", &Interaction::increaseDecreaseDuration, -1, true);
     registerAction("dec-duration-dotted", &Interaction::increaseDecreaseDuration, 1, true);
 
-    registerAction("cut", &Controller::cutSelection, &Controller::hasSelection);
-    registerAction("copy", &Interaction::copySelection, &Controller::hasSelection);
-    registerAction("paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
-    registerAction("paste-half", [this]() { pasteSelection(PastingType::Half); });
-    registerAction("paste-double", [this]() { pasteSelection(PastingType::Double); });
-    registerAction("paste-special", [this]() { pasteSelection(PastingType::Special); });
-    registerAction("swap", &Interaction::swapSelection, &Controller::hasSelection);
-    registerAction("delete", &Interaction::deleteSelection, &Controller::hasSelection);
+    registerAction("notation-cut", &Controller::cutSelection, &Controller::hasSelection);
+    registerAction("notation-copy", &Interaction::copySelection, &Controller::hasSelection);
+    registerAction("notation-paste", [this]() { pasteSelection(PastingType::Default); }, &Controller::isNotationPage);
+    registerAction("notation-paste-half", [this]() { pasteSelection(PastingType::Half); });
+    registerAction("notation-paste-double", [this]() { pasteSelection(PastingType::Double); });
+    registerAction("notation-paste-special", [this]() { pasteSelection(PastingType::Special); });
+    registerAction("notation-swap", &Interaction::swapSelection, &Controller::hasSelection);
+    registerAction("notation-delete", &Interaction::deleteSelection, &Controller::hasSelection);
+
     registerAction("flip", &Interaction::flipSelection, &Controller::hasSelection);
     registerAction("tie", &Controller::addTie);
     registerAction("chord-tie", &Controller::chordTie);
@@ -206,8 +207,8 @@ void NotationActionController::init()
     registerAction("select-similar-staff", &Controller::selectAllSimilarElementsInStaff);
     registerAction("select-similar-range", &Controller::selectAllSimilarElementsInRange);
     registerAction("select-dialog", &Controller::openSelectionMoreOptions);
-    registerAction("select-all", &Interaction::selectAll);
-    registerAction("select-section", &Interaction::selectSection);
+    registerAction("notation-select-all", &Interaction::selectAll);
+    registerAction("notation-select-section", &Interaction::selectSection);
     registerAction("first-element", &Interaction::selectFirstElement, false, PlayMode::PlayChord);
     registerAction("last-element", &Interaction::selectLastElement, PlayMode::PlayChord);
     registerAction("top-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Up); }, &Controller::hasSelection);
