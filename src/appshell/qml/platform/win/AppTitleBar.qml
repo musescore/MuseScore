@@ -38,6 +38,8 @@ Rectangle {
 
     property alias windowIsMiximized: systemButtons.windowIsMiximized
 
+    property alias appWindow: menu.appWindow
+
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()

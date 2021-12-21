@@ -60,6 +60,8 @@ AppWindow {
 
         windowIsMiximized: root.visibility === Window.Maximized
 
+        appWindow: root
+
         onShowWindowMinimizedRequested: {
             root.showMinimized()
         }
