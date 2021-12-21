@@ -33,6 +33,7 @@
 #include "draw/pen.h"
 #include "style/style.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
@@ -759,7 +760,11 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         Location loc = Location::positionForElement(this);
         if (me == this) {
             xml.tagE("linkedMain");
-            xml.setLidLocalIndex(_links->lid(), xml.assignLocalIndex(loc));
+
+            if (WriteContext* ctx = xml.context()) {
+                int index = ctx->assignLocalIndex(loc);
+                ctx->setLidLocalIndex(_links->lid(), index);
+            }
         } else {
             if (s->links()) {
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
@@ -775,13 +780,14 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
                         name(), _links->lid());
                 }
             }
+            WriteContext* ctx = xml.context();
             Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = xml.assignLocalIndex(mainLoc);
+            const int guessedLocalIndex = ctx ? ctx->assignLocalIndex(mainLoc) : 0;
             if (loc != mainLoc) {
                 mainLoc.toRelative(loc);
                 mainLoc.write(xml);
             }
-            const int indexDiff = xml.lidLocalIndex(_links->lid()) - guessedLocalIndex;
+            const int indexDiff = ctx ? ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex : 0;
             xml.tag("indexDiff", indexDiff, 0);
             xml.endObject();       // </linked>
         }
@@ -844,7 +850,11 @@ bool EngravingItem::readProperties(XmlReader& e)
         if (tag == "linkedMain") {
             _links = new LinkedObjects(score());
             _links->push_back(this);
-            e.context()->addLink(s, _links, e.location(true));
+
+            if (ReadContext* ctx = e.context()) {
+                ctx->addLink(s, _links, e.location(true));
+            }
+
             e.readNext();
         } else {
             Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
@@ -877,7 +887,8 @@ bool EngravingItem::readProperties(XmlReader& e)
             if (!locationRead) {
                 mainLoc = loc;
             }
-            LinkedObjects* link = e.context()->getLink(linkedIsMaster, mainLoc, localIndexDiff);
+            ReadContext* ctx = e.context();
+            LinkedObjects* link = ctx ? ctx->getLink(linkedIsMaster, mainLoc, localIndexDiff) : nullptr;
             if (link) {
                 EngravingObject* linked = link->mainElement();
                 if (linked->type() == type()) {

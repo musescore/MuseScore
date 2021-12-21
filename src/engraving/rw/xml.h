@@ -35,7 +35,10 @@
 #include "libmscore/engravingitem.h"
 #include "libmscore/select.h"
 
-#include "readcontext.h"
+namespace mu::engraving {
+class ReadContext;
+class WriteContext;
+}
 
 namespace Ms {
 class Spanner;
@@ -109,14 +112,16 @@ class XmlReader : public QXmlStreamReader
 public:
     XmlReader(QFile* f)
         : QXmlStreamReader(f), docName(f->fileName()) {}
-    XmlReader(const QByteArray& d, const QString& st = QString())
-        : QXmlStreamReader(d), docName(st) {}
-    XmlReader(QIODevice* d, const QString& st = QString())
-        : QXmlStreamReader(d), docName(st) {}
-    XmlReader(const QString& d, const QString& st = QString())
-        : QXmlStreamReader(d), docName(st) {}
+    XmlReader(const QByteArray& d)
+        : QXmlStreamReader(d) {}
+    XmlReader(QIODevice* d)
+        : QXmlStreamReader(d) {}
+    XmlReader(const QString& d)
+        : QXmlStreamReader(d) {}
+
     XmlReader(const XmlReader&) = delete;
     XmlReader& operator=(const XmlReader&) = delete;
+
     ~XmlReader();
 
     bool hasAccidental { false };                       // used for userAccidental backward compatibility
@@ -241,11 +246,10 @@ class XmlWriter : public QTextStream
     bool _writeTrack     { false };
     bool _writePosition  { false };
 
-    LinksIndexer _linksIndexer;
-    QMap<int, int> _lidLocalIndices;
-
     std::vector<std::pair<const EngravingObject*, QString> > _elements;
     bool _recordElements = false;
+
+    mu::engraving::WriteContext* m_context = nullptr;
 
     void putLevel();
 
@@ -277,10 +281,6 @@ public:
     void setIsMsczMode(bool v) { _msczMode = v; }
     void setWriteTrack(bool v) { _writeTrack= v; }
     void setWritePosition(bool v) { _writePosition = v; }
-
-    int assignLocalIndex(const Location& mainElementLocation);
-    void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
-    int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
     const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
@@ -316,6 +316,9 @@ public:
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
     bool canWriteVoice(int track) const;
+
+    mu::engraving::WriteContext* context() const;
+    void setContext(mu::engraving::WriteContext* context);
 
     static QString xmlString(const QString&);
     static QString xmlString(ushort c);

@@ -645,15 +645,6 @@ void XmlWriter::writeXml(const QString& name, QString s)
 }
 
 //---------------------------------------------------------
-//   assignLocalIndex
-//---------------------------------------------------------
-
-int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
-{
-    return _linksIndexer.assignLocalIndex(mainElementLocation);
-}
-
-//---------------------------------------------------------
 //   canWrite
 //---------------------------------------------------------
 
@@ -675,5 +666,15 @@ bool XmlWriter::canWriteVoice(int track) const
         return true;
     }
     return _filter.canSelectVoice(track);
+}
+
+mu::engraving::WriteContext* XmlWriter::context() const
+{
+    return m_context;
+}
+
+void XmlWriter::setContext(WriteContext* context)
+{
+    m_context = context;
 }
 }
