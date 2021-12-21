@@ -227,7 +227,14 @@ inline SizeX<T> operator/(const SizeX<T>& s, T c) { Q_ASSERT(!isEqual(c, T())); 
 
 using Size = SizeX<int>;
 using SizeF = SizeX<qreal>;
-using ScaleF = SizeX<qreal>;
+
+class ScaleF : public SizeX<qreal>
+{
+public:
+    ScaleF() = default;
+    ScaleF(qreal w, qreal h)
+        : SizeX<qreal>(w, h) {}
+};
 
 // ====================================
 // Rect

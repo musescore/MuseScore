@@ -172,6 +172,16 @@ SizeF XmlReader::readSize()
     return p;
 }
 
+ScaleF XmlReader::readScale()
+{
+    Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
+    ScaleF p;
+    p.setWidth(doubleAttribute("w", 0.0));
+    p.setHeight(doubleAttribute("h", 0.0));
+    skipCurrentElement();
+    return p;
+}
+
 //---------------------------------------------------------
 //   readRect
 //---------------------------------------------------------

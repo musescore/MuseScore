@@ -518,7 +518,7 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
         _timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = v.value<SizeF>();
+        _scale = v.value<ScaleF>();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
