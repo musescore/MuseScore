@@ -147,6 +147,7 @@ public:
     bool readBool();
     mu::PointF readPoint();
     mu::SizeF readSize();
+    mu::ScaleF readScale();
     mu::RectF readRect();
     mu::draw::Color readColor();
     Fraction readFraction();

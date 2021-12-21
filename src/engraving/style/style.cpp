@@ -148,6 +148,11 @@ bool MStyle::readProperties(XmlReader& e)
                 qreal y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readElementText();
+            } else if (P_TYPE::SCALE == type) {
+                qreal sx = e.doubleAttribute("w", 0.0);
+                qreal sy = e.doubleAttribute("h", 0.0);
+                set(idx, ScaleF(sx, sy));
+                e.readElementText();
             } else if (P_TYPE::COLOR == type) {
                 mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));

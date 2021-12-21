@@ -89,21 +89,20 @@ QVariant PropertyValue::toQVariant() const
     // Base
     case P_TYPE::BOOL:        return value<bool>();
     case P_TYPE::INT:         return value<int>();
+    case P_TYPE::INT_LIST:    return QVariant::fromValue(value<QList<int> >());
     case P_TYPE::REAL:        return value<qreal>();
     case P_TYPE::STRING:      return value<QString>();
+
     // Geometry
     case P_TYPE::POINT:       return value<PointF>().toQPointF();
     case P_TYPE::SIZE:        return value<SizeF>().toQSizeF();
     case P_TYPE::DRAW_PATH: {
-        UNREACHABLE; //! TODO
+        NOT_SUPPORTED;
     }
     break;
-    case P_TYPE::SCALE: {
-        UNREACHABLE; //! TODO
-    }
-    break;
+    case P_TYPE::SCALE:       return value<ScaleF>().toQSizeF();
     case P_TYPE::SPATIUM:     return value<Spatium>().val();
-    case P_TYPE::MILLIMETRE:  return qreal(value<Millimetre>());
+    case P_TYPE::MILLIMETRE:  return value<Millimetre>().val();
     case P_TYPE::PAIR_REAL:   return QVariant::fromValue(value<PairF>().toQPairF());
 
     // Draw
@@ -116,6 +115,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::ALIGN:       return static_cast<int>(value<Align>());
     case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
+    case P_TYPE::TEXT_PLACE:  return static_cast<int>(value<TextPlace>());
     case P_TYPE::DIRECTION_V: return static_cast<int>(value<DirectionV>());
     case P_TYPE::DIRECTION_H: return static_cast<int>(value<DirectionH>());
     case P_TYPE::ORIENTATION: return static_cast<int>(value<Orientation>());
@@ -123,12 +123,17 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::ACCIDENTAL_ROLE: return static_cast<int>(value<AccidentalRole>());
 
     // Sound
-    case P_TYPE::FRACTION:    return QVariant::fromValue(value<Fraction>().toString());
+    case P_TYPE::FRACTION:    return value<Fraction>().toString();
     case P_TYPE::DURATION_TYPE_WITH_DOTS: {
         DurationTypeWithDots d = value<DurationTypeWithDots>();
         return QVariantMap({ { "type", static_cast<int>(d.type) }, { "dots", d.dots } });
     }
     case P_TYPE::CHANGE_METHOD:    return static_cast<int>(value<ChangeMethod>());
+    case P_TYPE::PITCH_VALUES: {
+        NOT_SUPPORTED;
+    }
+    break;
+    case P_TYPE::TEMPO:       return value<BeatsPerSecond>().val;
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return static_cast<int>(value<LayoutBreakType>());
@@ -145,8 +150,11 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
 
-    default:
-        UNREACHABLE; //! TODO
+    // Other
+    case P_TYPE::GROUPS: {
+        NOT_SUPPORTED;
+    }
+    break;
     }
 
     return QVariant();
@@ -155,12 +163,13 @@ QVariant PropertyValue::toQVariant() const
 PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 {
     switch (type) {
-    case P_TYPE::UNDEFINED:  // try by QVariant type
+    case P_TYPE::UNDEFINED:
         break;
 
     // Base
     case P_TYPE::BOOL:          return PropertyValue(v.toBool());
     case P_TYPE::INT:           return PropertyValue(v.toInt());
+    case P_TYPE::INT_LIST:      return PropertyValue(v.value<QList<int> >());
     case P_TYPE::REAL:          return PropertyValue(v.toReal());
     case P_TYPE::STRING:        return PropertyValue(v.toString());
 
@@ -168,7 +177,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::POINT:         return PropertyValue(PointF::fromQPointF(v.value<QPointF>()));
     case P_TYPE::SIZE:          return PropertyValue(SizeF::fromQSizeF(v.value<QSizeF>()));
     case P_TYPE::DRAW_PATH: {
-        UNREACHABLE; //! TODO
+        NOT_SUPPORTED;
     }
     break;
     case P_TYPE::SCALE:         return PropertyValue(ScaleF::fromQSizeF(v.value<QSizeF>()));
@@ -186,6 +195,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
     case P_TYPE::PLACEMENT_V:   return PropertyValue(PlacementV(v.toInt()));
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
+    case P_TYPE::TEXT_PLACE:    return PropertyValue(TextPlace(v.toInt()));
     case P_TYPE::DIRECTION_V:   return PropertyValue(DirectionV(v.toInt()));
     case P_TYPE::DIRECTION_H:   return PropertyValue(DirectionH(v.toInt()));
     case P_TYPE::ORIENTATION:   return PropertyValue(Orientation(v.toInt()));
@@ -194,9 +204,16 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
 
     // Duration
     case P_TYPE::FRACTION:      return PropertyValue(Fraction::fromString(v.toString()));
-
-    // Sound
+    case P_TYPE::DURATION_TYPE_WITH_DOTS: {
+        NOT_SUPPORTED;
+    }
+    break;
     case P_TYPE::CHANGE_METHOD:    return PropertyValue(ChangeMethod(v.toInt()));
+    case P_TYPE::PITCH_VALUES: {
+        NOT_SUPPORTED;
+    }
+    break;
+    case P_TYPE::TEMPO:            return PropertyValue(BeatsPerSecond(v.toDouble()));
 
     // Types
     case P_TYPE::LAYOUTBREAK_TYPE: return PropertyValue(LayoutBreakType(v.toInt()));
@@ -213,12 +230,11 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
 
-    // other
-    case P_TYPE::ACCIDENTAL_ROLE: return PropertyValue(Ms::AccidentalRole(v.toInt()));
-    case P_TYPE::SUB_STYLE:       return PropertyValue(v.toInt());
-    default:
-        UNREACHABLE;
-        break;
+    // Other
+    case P_TYPE::GROUPS: {
+        NOT_SUPPORTED;
+    }
+    break;
     }
 
     //! NOTE Try determinate type by QVariant type
@@ -236,11 +252,10 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case QVariant::SizeF:       return PropertyValue(SizeF::fromQSizeF(v.toSizeF()));
     case QVariant::Point:       return PropertyValue(PointF::fromQPointF(QPointF(v.toPoint())));
     case QVariant::PointF:      return PropertyValue(PointF::fromQPointF(v.toPointF()));
-    case QVariant::Color:       return PropertyValue(draw::Color::fromQColor(v.value<QColor>()));
+    case QVariant::Color:       return PropertyValue(Color::fromQColor(v.value<QColor>()));
     default:
         break;
     }
 
-    UNREACHABLE;
     return PropertyValue();
 }
