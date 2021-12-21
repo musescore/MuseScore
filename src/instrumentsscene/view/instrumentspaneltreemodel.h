@@ -48,7 +48,6 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(instruments, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY isRemovingAvailableChanged)
@@ -66,7 +65,6 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    QItemSelectionModel* selectionModel() const;
     bool isMovingUpAvailable() const;
     bool isMovingDownAvailable() const;
     bool isRemovingAvailable() const;
@@ -75,7 +73,7 @@ public:
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
-    Q_INVOKABLE bool isSelected(const QModelIndex& rowIndex) const;
+    Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
     Q_INVOKABLE void moveSelectedRowsUp();
     Q_INVOKABLE void moveSelectedRowsDown();
@@ -84,8 +82,9 @@ public:
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
 
+    Q_INVOKABLE QItemSelectionModel* selectionModel() const;
+
 signals:
-    void selectionChanged();
     void isMovingUpAvailableChanged(bool isMovingUpAvailable);
     void isMovingDownAvailableChanged(bool isMovingDownAvailable);
     void isAddingAvailableChanged(bool isAddingAvailable);
@@ -116,7 +115,7 @@ private:
 
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
-    void listenSelectionChanged();
+    void listenNotationSelectionChanged();
 
     void clear();
     void deleteItems();
@@ -124,6 +123,8 @@ private:
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
+
+    void setItemsSelected(const QModelIndexList& indexes, bool selected);
 
     AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);

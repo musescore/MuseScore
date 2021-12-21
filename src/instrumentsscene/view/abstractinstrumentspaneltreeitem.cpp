@@ -72,6 +72,11 @@ bool AbstractInstrumentsPanelTreeItem::isSelectable() const
     return false;
 }
 
+bool AbstractInstrumentsPanelTreeItem::isSelected() const
+{
+    return m_isSelected;
+}
+
 bool AbstractInstrumentsPanelTreeItem::isExpandable() const
 {
     return m_isExpandable;
@@ -276,6 +281,20 @@ void AbstractInstrumentsPanelTreeItem::setIsRemovable(bool removable)
 
     m_isRemovable = removable;
     emit isRemovableChanged(removable);
+}
+
+void AbstractInstrumentsPanelTreeItem::setIsSelected(bool selected)
+{
+    if (m_isSelected == selected) {
+        return;
+    }
+
+    for (AbstractInstrumentsPanelTreeItem* child: m_children) {
+        child->setIsSelected(selected);
+    }
+
+    m_isSelected = selected;
+    emit isSelectedChanged(selected);
 }
 
 IMasterNotationPtr AbstractInstrumentsPanelTreeItem::masterNotation() const
