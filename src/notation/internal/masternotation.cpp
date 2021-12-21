@@ -348,59 +348,83 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
         double bpm = scoreOptions.tempo.valueBpm;
         switch (ts.denominator()) {
         case 1:
-            text = "<sym>metNoteWhole</sym> = %1";
             bpm /= 4;
             break;
         case 2:
-            text = "<sym>metNoteHalfUp</sym> = %1";
             bpm /= 2;
             break;
         case 4:
-            text = "<sym>metNoteQuarterUp</sym> = %1";
             break;
         case 8:
             if (ts.numerator() % 3 == 0) {
-                text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                 bpm /= 1.5;
             } else {
-                text = "<sym>metNote8thUp</sym> = %1";
                 bpm *= 2;
             }
             break;
         case 16:
             if (ts.numerator() % 3 == 0) {
-                text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                 bpm *= 1.5;
             } else {
-                text = "<sym>metNote16thUp</sym> = %1";
                 bpm *= 4;
             }
             break;
         case 32:
             if (ts.numerator() % 3 == 0) {
-                text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                 bpm *= 3;
             } else {
-                text = "<sym>metNote32ndUp</sym> = %1";
                 bpm *= 8;
             }
             break;
         case 64:
             if (ts.numerator() % 3 == 0) {
-                text = "<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                 bpm *= 6;
             } else {
-                text = "<sym>metNote64thUp</sym> = %1";
                 bpm *= 16;
             }
             break;
         case 128:
             if (ts.numerator() % 3 == 0) {
-                text = "<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
                 bpm *= 6;
             } else {
-                text = "<sym>metNote128thUp</sym> = %1";
                 bpm *= 16;
+            }
+            break;
+        default:
+            break;
+        }
+
+        bool withDot = scoreOptions.tempo.withDot;
+        switch (scoreOptions.tempo.duration) {
+        case DurationType::V_WHOLE:
+            text = "<sym>metNoteWhole</sym> = %1";
+            break;
+        case DurationType::V_HALF:
+            if (withDot) {
+                text = "<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+            } else {
+                text = "<sym>metNoteHalfUp</sym> = %1";
+            }
+            break;
+        case DurationType::V_QUARTER:
+            if (withDot) {
+                text = "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+            } else {
+                text = "<sym>metNoteQuarterUp</sym> = %1";
+            }
+            break;
+        case DurationType::V_EIGHTH:
+            if (withDot) {
+                text = "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+            } else {
+                text = "<sym>metNote8thUp</sym> = %1";
+            }
+            break;
+        case DurationType::V_16TH:
+            if (withDot) {
+                text = "<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+            } else {
+                text = "<sym>metNote16thUp</sym> = %1";
             }
             break;
         default:
