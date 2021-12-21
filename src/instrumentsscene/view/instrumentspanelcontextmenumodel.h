@@ -46,6 +46,7 @@ public:
 
 private:
     void loadItems();
+    void buildMenu();
     void setInstrumentsOrder(const actions::ActionData& args);
     void updateOrderingMenu(const QString& newOrderId);
 

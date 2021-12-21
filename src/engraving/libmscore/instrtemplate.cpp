@@ -45,6 +45,19 @@ QList<InstrumentFamily*> instrumentFamilies;
 QList<ScoreOrder> instrumentOrders;
 
 //---------------------------------------------------------
+//   InstrumentIndex
+//---------------------------------------------------------
+
+InstrumentIndex::InstrumentIndex(int g, int i, InstrumentTemplate* it)
+    : groupIndex{g}, instrIndex{i}, instrTemplate{it}
+{
+    templateCount = 0;
+    for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
+        templateCount += g->instrumentTemplates.size();
+    }
+}
+
+//---------------------------------------------------------
 //   searchInstrumentGenre
 //---------------------------------------------------------
 
@@ -851,7 +864,7 @@ InstrumentIndex searchTemplateIndexForId(const QString& id)
         }
         ++grpIndex;
     }
-    return InstrumentIndex(-1, -1, nullptr);
+    return InstrumentIndex(-1, instIndex, nullptr);
 }
 
 //---------------------------------------------------------
