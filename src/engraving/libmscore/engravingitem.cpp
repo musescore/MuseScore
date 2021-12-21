@@ -744,6 +744,11 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
 
     // copy paste should not keep links
     if (_links && (_links->size() > 1) && !xml.clipboardmode()) {
+        WriteContext* ctx = xml.context();
+        IF_ASSERT_FAILED(ctx) {
+            return;
+        }
+
         if (MScore::debugMode) {
             xml.tag("lid", _links->lid());
         }
@@ -760,11 +765,8 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
         Location loc = Location::positionForElement(this);
         if (me == this) {
             xml.tagE("linkedMain");
-
-            if (WriteContext* ctx = xml.context()) {
-                int index = ctx->assignLocalIndex(loc);
-                ctx->setLidLocalIndex(_links->lid(), index);
-            }
+            int index = ctx->assignLocalIndex(loc);
+            ctx->setLidLocalIndex(_links->lid(), index);
         } else {
             if (s->links()) {
                 Staff* linkedStaff = toStaff(s->links()->mainElement());
@@ -780,14 +782,14 @@ void EngravingItem::writeProperties(XmlWriter& xml) const
                         name(), _links->lid());
                 }
             }
-            WriteContext* ctx = xml.context();
+
             Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx ? ctx->assignLocalIndex(mainLoc) : 0;
+            const int guessedLocalIndex = ctx->assignLocalIndex(mainLoc);
             if (loc != mainLoc) {
                 mainLoc.toRelative(loc);
                 mainLoc.write(xml);
             }
-            const int indexDiff = ctx ? ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex : 0;
+            const int indexDiff = ctx->lidLocalIndex(_links->lid()) - guessedLocalIndex;
             xml.tag("indexDiff", indexDiff, 0);
             xml.endObject();       // </linked>
         }
@@ -838,6 +840,11 @@ bool EngravingItem::readProperties(XmlReader& e)
     } else if (tag == "selected") { // obsolete
         e.readInt();
     } else if ((tag == "linked") || (tag == "linkedMain")) {
+        ReadContext* ctx = e.context();
+        IF_ASSERT_FAILED(ctx) {
+            return false;
+        }
+
         Staff* s = staff();
         if (!s) {
             s = score()->staff(e.track() / VOICES);
@@ -851,9 +858,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             _links = new LinkedObjects(score());
             _links->push_back(this);
 
-            if (ReadContext* ctx = e.context()) {
-                ctx->addLink(s, _links, e.location(true));
-            }
+            ctx->addLink(s, _links, e.location(true));
 
             e.readNext();
         } else {
@@ -887,8 +892,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             if (!locationRead) {
                 mainLoc = loc;
             }
-            ReadContext* ctx = e.context();
-            LinkedObjects* link = ctx ? ctx->getLink(linkedIsMaster, mainLoc, localIndexDiff) : nullptr;
+            LinkedObjects* link = ctx->getLink(linkedIsMaster, mainLoc, localIndexDiff);
             if (link) {
                 EngravingObject* linked = link->mainElement();
                 if (linked->type() == type()) {
