@@ -120,7 +120,7 @@ public:
 
     void setLargeParentheses(bool v) { _largeParentheses = v; }
 
-    void setScale(const mu::SizeF& s) { _scale = s; }
+    void setScale(const mu::ScaleF& s) { _scale = s; }
 
     void setFrom(const TimeSig*);
 

@@ -138,6 +138,9 @@ public:
     PropertyValue(const PainterPath& v)
         : m_type(P_TYPE::DRAW_PATH), m_data(make_data<PainterPath>(v)) {}
 
+    PropertyValue(const ScaleF& v)
+        : m_type(P_TYPE::SCALE), m_data(make_data<ScaleF>(v)) {}
+
     PropertyValue(const Spatium& v)
         : m_type(P_TYPE::SPATIUM), m_data(make_data<Spatium>(v)) {}
 

@@ -504,7 +504,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::POINT:
         return PropertyValue::fromValue(e.readPoint());
     case P_TYPE::SCALE:
-        return PropertyValue::fromValue(ScaleF(e.readSize()));
+        return PropertyValue::fromValue(e.readScale());
     case P_TYPE::SIZE:
         return PropertyValue::fromValue(e.readSize());
     case P_TYPE::STRING:
