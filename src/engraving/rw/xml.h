@@ -35,6 +35,8 @@
 #include "libmscore/engravingitem.h"
 #include "libmscore/select.h"
 
+#include "readcontext.h"
+
 namespace Ms {
 class Spanner;
 class Beam;
@@ -59,19 +61,6 @@ struct SpannerValues {
 struct TextStyleMap {
     QString name;
     TextStyleType ss;
-};
-
-//---------------------------------------------------------
-//   LinksIndexer
-//---------------------------------------------------------
-
-class LinksIndexer
-{
-    int _lastLocalIndex              { -1 };
-    Location _lastLinkedElementLoc   { Location::absolute() };
-
-public:
-    int assignLocalIndex(const Location& mainElementInfo);
 };
 
 //---------------------------------------------------------
@@ -106,8 +95,6 @@ class XmlReader : public QXmlStreamReader
     void htmlToString(int level, QString*);
     Interval _transpose;
     QMap<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
-    QMap<int, QList<QPair<LinkedObjects*, Location> > > _staffLinkedElements; // one list per staff
-    LinksIndexer _linksIndexer;
     QMultiMap<int, int> _tracks;
 
     QList<TextStyleMap> userTextStyles;
@@ -116,6 +103,8 @@ class XmlReader : public QXmlStreamReader
     void removeConnector(const ConnectorInfoReader*);   // Removes the whole ConnectorInfo chain from the connectors list.
 
     qint64 _offsetLines { 0 };
+
+    mu::engraving::ReadContext* m_context = nullptr;
 
 public:
     XmlReader(QFile* f)
@@ -212,8 +201,6 @@ public:
     void setTransposeChromatic(int v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
-    LinkedObjects* getLink(bool masterScore, const Location& l, int localIndexDiff);
-    void addLink(Staff* staff, LinkedObjects* link);
     QMap<int, LinkedObjects*>& linkIds() { return _elinks; }
     QMultiMap<int, int>& tracks() { return _tracks; }
 
@@ -225,8 +212,10 @@ public:
     QList<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
-    QMap<int, QList<QPair<LinkedObjects*, Location> > >& staffLinkedElements() { return _staffLinkedElements; }
     void setOffsetLines(qint64 val) { _offsetLines = val; }
+
+    mu::engraving::ReadContext* context() const;
+    void setContext(mu::engraving::ReadContext* context);
 };
 
 //---------------------------------------------------------

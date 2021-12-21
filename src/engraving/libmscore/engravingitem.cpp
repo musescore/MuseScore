@@ -844,7 +844,7 @@ bool EngravingItem::readProperties(XmlReader& e)
         if (tag == "linkedMain") {
             _links = new LinkedObjects(score());
             _links->push_back(this);
-            e.addLink(s, _links);
+            e.context()->addLink(s, _links, e.location(true));
             e.readNext();
         } else {
             Staff* ls = s->links() ? toStaff(s->links()->mainElement()) : nullptr;
@@ -877,7 +877,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             if (!locationRead) {
                 mainLoc = loc;
             }
-            LinkedObjects* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
+            LinkedObjects* link = e.context()->getLink(linkedIsMaster, mainLoc, localIndexDiff);
             if (link) {
                 EngravingObject* linked = link->mainElement();
                 if (linked->type() == type()) {
