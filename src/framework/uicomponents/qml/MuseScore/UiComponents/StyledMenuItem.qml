@@ -92,14 +92,17 @@ ListItemBlank {
 
             var focused = itemPrv.showedSubMenu.requestFocus()
 
-            if (focused) {
-                event.accepted = true
+            event.accepted = true
+            if (!focused) {
+                root.forceActiveFocus()
             }
 
             break
         case NavigationEvent.Left:
             if (itemPrv.showedSubMenu) {
                 itemPrv.closeSubMenu()
+                event.accepted = true
+                return
             }
 
             //! NOTE Go to parent item

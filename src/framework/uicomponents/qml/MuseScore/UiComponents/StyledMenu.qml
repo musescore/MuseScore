@@ -251,6 +251,15 @@ StyledPopupView {
                     onSubMenuClosed: {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
                         prv.showedSubMenu = null
+
+                        if (!root.activeFocus) {
+                            root.forceActiveFocus()
+                        }
+
+                        if (!item.activeFocus) {
+                            item.forceActiveFocus()
+                        }
+
                     }
 
                     onHandleMenuItem: {
