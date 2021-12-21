@@ -28,6 +28,7 @@
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
 #include "rw/scorereader.h"
@@ -229,6 +230,8 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         mscWriter.writeStyleFile(styleData);
     }
 
+    WriteContext ctx;
+
     // Write MasterScore
     {
         QByteArray scoreData;
@@ -236,7 +239,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         scoreBuf.open(QIODevice::ReadWrite);
 
         compat::WriteScoreHook hook;
-        Score::writeScore(&scoreBuf, false, onlySelection, hook);
+        Score::writeScore(&scoreBuf, false, onlySelection, hook, ctx);
 
         mscWriter.writeScoreFile(scoreData);
     }
@@ -264,7 +267,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
                         excerptBuf.open(QIODevice::ReadWrite);
 
                         compat::WriteScoreHook hook;
-                        excerpt->partScore()->writeScore(&excerptBuf, false, onlySelection, hook);
+                        excerpt->partScore()->writeScore(&excerptBuf, false, onlySelection, hook, ctx);
 
                         mscWriter.addExcerptFile(excerpt->title(), excerptData);
                     }
