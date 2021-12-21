@@ -43,7 +43,7 @@ void ShortcutsController::activate(const std::string& sequence)
         return;
     }
 
-    for (const Shortcut& sc: shortcuts) {
+    for (const Shortcut& sc : shortcuts) {
         //! NOTE Check if the shortcut itself is allowed
         if (!uiContextResolver()->isShortcutContextAllowed(sc.context)) {
             continue;
