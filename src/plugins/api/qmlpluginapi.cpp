@@ -222,6 +222,9 @@ void PluginAPI::cmd(const QString& s)
         { "paste-double", "notation-paste-double" },
         { "select-all", "notation-select-all" },
         { "delete", "notation-delete" },
+        { "next-chord", "notation-move-right" },
+        { "prev-chord", "notation-move-left" },
+        { "prev-measure", "notation-move-left-quickly" }
     };
 
     actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());

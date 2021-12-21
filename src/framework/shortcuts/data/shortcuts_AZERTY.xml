@@ -450,22 +450,22 @@
     <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>prev-chord</key>
+    <key>notation-move-left</key>
     <seq>Left</seq>
     <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>prev-measure</key>
+    <key>notation-move-left-quickly</key>
     <seq>Ctrl+Left</seq>
     <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>next-chord</key>
+    <key>notation-move-right</key>
     <seq>Right</seq>
     <ctx>notation-focused</ctx>
     </SC>
   <SC>
-    <key>next-measure</key>
+    <key>notation-move-right-quickly</key>
     <seq>Ctrl+Right</seq>
     <ctx>notation-focused</ctx>
     </SC>
