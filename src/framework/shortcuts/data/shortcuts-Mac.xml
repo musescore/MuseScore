@@ -18,69 +18,78 @@
         <seq>Ctrl+F8</seq>
     </SC>
 <!-- Keyboard navigation -->
+<!-- NOTE special context for navigation shortcuts because the notation has its own navigation system -->
     <SC>
         <key>nav-next-section</key>
         <seq>F6</seq>
+        <seq>`</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
-    </SC>
-    <SC>
-        <key>nav-next-section</key>
-        <seq>`</seq>
-    </SC>
-    <SC>
-        <key>nav-prev-section</key>
         <seq>Shift+`</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-next-panel</key>
         <seq>Tab</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-prev-panel</key>
         <seq>Shift+Tab</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-next-tab</key>
         <seq>Ctrl+Tab</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-prev-tab</key>
         <seq>Ctrl+Shift+Tab</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-right</key>
         <seq>Right</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-left</key>
         <seq>Left</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-up</key>
         <seq>Up</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-down</key>
         <seq>Down</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-first-control</key>
       <seq>Home</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-last-control</key>
       <seq>End</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-nextrow-control</key>
       <seq>PgDown</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-prevrow-control</key>
       <seq>PgUp</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-trigger-control</key>
@@ -91,6 +100,7 @@
     <SC>
       <key>nav-escape</key>
       <seq>Esc</seq>
+      <ctx>not-notation-focused</ctx>
     </SC>
 <!-- end Keyboard navigation -->
 
