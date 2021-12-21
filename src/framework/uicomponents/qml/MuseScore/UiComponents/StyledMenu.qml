@@ -208,6 +208,8 @@ StyledPopupView {
 
                     property string title: modelData.title
 
+                    parentWindow: root.window()
+
                     navigation.panel: root.navigationPanel
                     navigation.row: model.index
 
@@ -259,7 +261,6 @@ StyledPopupView {
                         if (!item.activeFocus) {
                             item.forceActiveFocus()
                         }
-
                     }
 
                     onHandleMenuItem: {

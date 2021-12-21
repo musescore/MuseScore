@@ -106,6 +106,9 @@ public:
     Q_INVOKABLE void close();
     Q_INVOKABLE void toggleOpened();
 
+    Q_INVOKABLE void setParentWindow(QWindow* window);
+    Q_INVOKABLE QWindow* window();
+
     ClosePolicy closePolicy() const;
     QObject* navigationParentControl() const;
 
