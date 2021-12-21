@@ -65,10 +65,9 @@ Column {
 
             verticalOffset: root.model ? root.model.verticalOffset : null
 
-            verticalOffsetControl.step: 0.1
-            verticalOffsetControl.decimals: 2
-            verticalOffsetControl.minValue: 0.1
-            verticalOffsetControl.maxValue: 5
+            verticalOffsetControl.decimals: 1
+            verticalOffsetControl.maxValue: 20
+            verticalOffsetControl.minValue: -20
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1
