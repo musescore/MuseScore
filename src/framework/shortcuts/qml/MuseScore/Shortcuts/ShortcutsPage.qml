@@ -38,7 +38,7 @@ Item {
     ShortcutsModel {
         id: shortcutsModel
 
-        selection: shortcutsView.selection
+        selection: shortcutsView.sourceSelection
     }
 
     function apply() {

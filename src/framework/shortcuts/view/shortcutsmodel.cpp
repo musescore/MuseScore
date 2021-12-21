@@ -45,7 +45,7 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    Shortcut shortcut = m_shortcuts[index.row()];
+    const Shortcut& shortcut = m_shortcuts.at(index.row());
 
     switch (role) {
     case RoleTitle: return this->action(shortcut.action).title;
@@ -113,7 +113,7 @@ bool ShortcutsModel::apply()
 {
     ShortcutList shortcuts;
 
-    for (const Shortcut& shortcut: m_shortcuts) {
+    for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
         shortcuts.push_back(shortcut);
     }
 
@@ -238,7 +238,7 @@ QVariantList ShortcutsModel::shortcuts() const
 {
     QVariantList result;
 
-    for (const Shortcut& shortcut: m_shortcuts) {
+    for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
         QVariantMap obj;
         obj["title"] = actionTitle(shortcut.action);
         obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());

@@ -37,9 +37,12 @@ ValueList {
     property var sourceModel: null
     property string searchText: ""
 
+    readonly property var sourceSelection: filterModel.mapSelectionToSource(root.selection)
+
     signal startEditCurrentShortcutRequested()
 
     model: SortFilterProxyModel {
+        id: filterModel
         sourceModel: root.sourceModel
 
         filters: [
