@@ -31,6 +31,8 @@ ListItemBlank {
 
     property var modelData
 
+    property var parentWindow: null
+
     enum IconAndCheckMarkMode {
         None,
         ShowOne,
@@ -152,6 +154,8 @@ ListItemBlank {
             menu.navigationParentControl = root.navigation
 
             menu.model = modelData.subitems
+
+            menu.setParentWindow(root.parentWindow)
 
             menu.handleMenuItem.connect(function(itemId) {
                 Qt.callLater(root.handleMenuItem, itemId)
