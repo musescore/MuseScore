@@ -40,7 +40,7 @@ static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
 
 //! NOTE Each notation actions should has context is UiCtxNotationOpened.
-//! If you want what action to dispatch by shortcut only when notation is focused (ex next-chord by press Right key),
+//! If you want what action to dispatch by shortcut only when notation is focused (ex notation-move-right by press Right key),
 //! then you should set the shortcut context accordingly, not the action context.
 //! Because actions can be dispatched not only shortcuts, but another way, ex by click Button, Menu and etc
 
@@ -63,25 +63,25 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Previous element"),
              QT_TRANSLATE_NOOP("action", "Accessibility: Previous element")
              ),
-    UiAction("next-chord",
+    UiAction("notation-move-right",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Next chord"),
-             QT_TRANSLATE_NOOP("action", "Go to next chord or move text right")
+             QT_TRANSLATE_NOOP("action", "Next chord / Shift text right"),
+             QT_TRANSLATE_NOOP("action", "Go to next chord or shift text right")
              ),
-    UiAction("prev-chord",
+    UiAction("notation-move-left",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Previous chord"),
-             QT_TRANSLATE_NOOP("action", "Go to previous chord or move text left")
+             QT_TRANSLATE_NOOP("action", "Previous chord / Shift text left"),
+             QT_TRANSLATE_NOOP("action", "Go to previous chord or shift text left")
              ),
-    UiAction("next-measure",
+    UiAction("notation-move-right-quickly",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Next measure"),
-             QT_TRANSLATE_NOOP("action", "Go to next measure or move text right")
+             QT_TRANSLATE_NOOP("action", "Next measure / Shift text right quickly"),
+             QT_TRANSLATE_NOOP("action", "Go to next measure or shift text right quickly")
              ),
-    UiAction("prev-measure",
+    UiAction("notation-move-left-quickly",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Previous measure"),
-             QT_TRANSLATE_NOOP("action", "Go to previous measure or move text left")
+             QT_TRANSLATE_NOOP("action", "Previous measure / Shift text left quickly"),
+             QT_TRANSLATE_NOOP("action", "Go to previous measure or shift text left quickly")
              ),
     UiAction("up-chord",
              mu::context::UiCtxNotationOpened,

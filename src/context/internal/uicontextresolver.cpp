@@ -163,7 +163,7 @@ bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) c
     } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
         return !matchWithCurrent(context::UiCtxNotationFocused);
     } else if (CTX_NOTATION_STAFF_STANDARD == scContext) {
-        if (matchWithCurrent(context::UiCtxNotationFocused)) {
+        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
             return false;
         }
         auto notation = globalContext()->currentNotation();

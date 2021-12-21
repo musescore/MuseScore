@@ -165,10 +165,10 @@ void NotationActionController::init()
                    PlayMode::PlayNote);
     registerAction("prev-element", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::EngravingItem,
                    PlayMode::PlayNote);
-    registerAction("next-chord", &Controller::move, MoveDirection::Right, false);
-    registerAction("prev-chord", &Controller::move, MoveDirection::Left, false);
-    registerAction("next-measure", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
-    registerAction("prev-measure", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
+    registerAction("notation-move-right", &Controller::move, MoveDirection::Right, false);
+    registerAction("notation-move-left", &Controller::move, MoveDirection::Left, false);
+    registerAction("notation-move-right-quickly", &Controller::move, MoveDirection::Right, true, &Controller::measureNavigationAvailable);
+    registerAction("notation-move-left-quickly", &Controller::move, MoveDirection::Left, true, &Controller::measureNavigationAvailable);
     registerAction("next-track", &Interaction::moveSelection, MoveDirection::Right, MoveSelectionType::Track, PlayMode::PlayChord);
     registerAction("prev-track", &Interaction::moveSelection, MoveDirection::Left, MoveSelectionType::Track, PlayMode::PlayChord);
     registerAction("pitch-up", &Controller::move, MoveDirection::Up, false);
