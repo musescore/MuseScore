@@ -502,6 +502,19 @@ bool Lyrics::edit(EditData& ed)
         return false;
     }
 
+    if (ed.modifiers == Qt::NoModifier || ed.modifiers == Qt::ShiftModifier) {
+        static const QList<int> lyricsNavigationKeys {
+            Qt::Key_Underscore,
+            Qt::Key_Minus,
+            Qt::Key_Enter,
+            Qt::Key_Return
+        };
+
+        if (lyricsNavigationKeys.contains(ed.key)) {
+            return false;
+        }
+    }
+
     return TextBase::edit(ed);
 }
 

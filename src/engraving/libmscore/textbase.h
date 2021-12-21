@@ -476,23 +476,14 @@ inline bool isTextNavigationKey(int key, Qt::KeyboardModifiers modifiers)
         return key != Qt::Key_Space;
     }
 
-    if (modifiers == 0 || modifiers == Qt::ShiftModifier) {
-        switch (key) {
-        case Qt::Key_Space:
-        case Qt::Key_Underscore:
-        case Qt::Key_Minus:
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-        case Qt::Key_Up:
-        case Qt::Key_Down:
-        case Qt::Key_Tab:
-            return true;
-        default:
-            break;
-        }
-    }
+    static const QList<int> navigationKeys {
+        Qt::Key_Space,
+        Qt::Key_Up,
+        Qt::Key_Down,
+        Qt::Key_Tab
+    };
 
-    return false;
+    return navigationKeys.contains(key);
 }
 }     // namespace Ms
 

@@ -1293,11 +1293,6 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
             }
         }
     }
-/* DEBUG
-      QString str = QString();
-      str.setNum(_ticks);
-      painter->drawText(0, (_onNote ? 40 : 30), str);
-*/
 }
 
 //---------------------------------------------------------
@@ -1312,10 +1307,21 @@ void FiguredBass::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
+bool FiguredBass::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+        return false;
+    }
+
+    return TextBase::edit(ed);
+}
+
 void FiguredBass::endEdit(EditData& ed)
 {
-    int idx;
-
     TextBase::endEdit(ed);
     // as the standard text editor keeps inserting spurious HTML formatting and styles
     // retrieve and work only on the plain text
@@ -1329,7 +1335,7 @@ void FiguredBass::endEdit(EditData& ed)
     qDeleteAll(items);
     items.clear();
     QString normalizedText = QString();
-    idx = 0;
+    int idx = 0;
     for (QString str : qAsConst(list)) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
@@ -1466,20 +1472,6 @@ PropertyValue FiguredBass::propertyDefault(Pid id) const
     return TextBase::propertyDefault(id);
 }
 
-//---------------------------------------------------------
-//   TEMPORARY HACK!!!
-//---------------------------------------------------------
-/*
-FiguredBassItem * FiguredBass::addItem()
-      {
-      int line = items.size();
-      FiguredBassItem* fib = new FiguredBassItem(score(), line);
-      // tell QML not to garbage collect this item
-      QQmlEngine::setObjectOwnership(fib, QQmlEngine::CppOwnership);
-      items.push_back(fib);
-      return fib;
-      }
-*/
 //---------------------------------------------------------
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;

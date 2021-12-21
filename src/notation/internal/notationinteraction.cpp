@@ -129,6 +129,11 @@ void NotationInteraction::apply()
     }
 }
 
+void NotationInteraction::rollback()
+{
+    m_undoStack->rollbackChanges();
+}
+
 void NotationInteraction::notifyAboutDragChanged()
 {
     m_dragChanged.notify();
@@ -623,7 +628,7 @@ void NotationInteraction::clearSelection()
     }
     if (isDragStarted()) {
         doEndDrag();
-        m_undoStack->rollbackChanges();
+        rollback();
         notifyAboutNotationChanged();
     }
     if (selection()->isNone()) {
@@ -2473,9 +2478,11 @@ static int findBracketIndex(Ms::EngravingItem* element)
 void NotationInteraction::editText(QKeyEvent* event)
 {
     m_editData.modifiers = event->modifiers();
+
     if (isDragStarted()) {
         return; // ignore all key strokes while dragging
     }
+
     bool wasEditing = m_editData.element != nullptr;
     if (!wasEditing && selection()->element()) {
         m_editData.element = selection()->element();
@@ -2487,19 +2494,29 @@ void NotationInteraction::editText(QKeyEvent* event)
 
     m_editData.key = event->key();
     m_editData.s = event->text();
-    startEdit();
+
     int systemIndex = findSystemIndex(m_editData.element);
     int bracketIndex = findBracketIndex(m_editData.element);
+
+    startEdit();
     bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
+
     if (!wasEditing) {
         m_editData.element = nullptr;
     }
+
     if (handled) {
         event->accept();
         apply();
+
+        if (needEndTextEdit()) {
+            endEditText();
+            return;
+        }
     } else {
-        m_undoStack->rollbackChanges();
+        rollback();
     }
+
     if (isTextEditingStarted()) {
         notifyAboutTextEditingChanged();
     } else {
@@ -2656,7 +2673,7 @@ void NotationInteraction::endEditElement()
     }
     if (isDragStarted()) {
         doEndDrag();
-        m_undoStack->rollbackChanges();
+        rollback();
         m_dragData.reset();
     }
     if (m_editData.curGrip == Ms::Grip::NO_GRIP) {
@@ -3287,13 +3304,16 @@ void NotationInteraction::addText(TextStyleType type)
 
 void NotationInteraction::addFiguredBass()
 {
+    startEdit();
     Ms::FiguredBass* figuredBass = score()->addFiguredBass();
 
     if (figuredBass) {
+        apply();
         startEditText(figuredBass, PointF());
+        notifyAboutSelectionChanged();
+    } else {
+        rollback();
     }
-
-    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::addStretch(qreal value)
@@ -4088,6 +4108,147 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
     startEditText(nextHarmony);
 }
 
+//! NOTE: Copied from ScoreView::figuredBassTab
+void NotationInteraction::navigateToFiguredBassInNearBeat(MoveDirection direction)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    Ms::Segment* segm = fb->segment();
+    int track = fb->track();
+    bool backDirection = direction == MoveDirection::Left;
+
+    if (!segm) {
+        qDebug("figuredBassTab: no segment");
+        return;
+    }
+
+    // search next chord segment in same staff
+    Ms::Segment* nextSegm = backDirection ? segm->prev1(Ms::SegmentType::ChordRest) : segm->next1(Ms::SegmentType::ChordRest);
+    int minTrack = (track / Ms::VOICES) * Ms::VOICES;
+    int maxTrack = minTrack + (Ms::VOICES - 1);
+
+    while (nextSegm) { // look for a ChordRest in the compatible track range
+        if (nextSegm->hasAnnotationOrElement(ElementType::FIGURED_BASS, minTrack, maxTrack)) {
+            break;
+        }
+        nextSegm = backDirection ? nextSegm->prev1(Ms::SegmentType::ChordRest) : nextSegm->next1(Ms::SegmentType::ChordRest);
+    }
+
+    if (!nextSegm) {
+        qDebug("figuredBassTab: no prev/next segment");
+        return;
+    }
+
+    bool bNew = false;
+    // add a (new) FB element, using chord duration as default duration
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, track, Fraction(0, 1), &bNew);
+    if (bNew) {
+        startEdit();
+        score()->undoAddElement(fbNew);
+        apply();
+    }
+
+    startEditText(fbNew);
+}
+
+//! NOTE: Copied from ScoreView::figuredBassTab
+void NotationInteraction::navigateToFiguredBassInNearMeasure(MoveDirection direction)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    Ms::Segment* segm = fb->segment();
+
+    if (!segm) {
+        qDebug("figuredBassTab: no segment");
+        return;
+    }
+
+    // if moving to next/prev measure
+    Measure* meas = segm->measure();
+    if (meas) {
+        if (direction == MoveDirection::Left) {
+            meas = meas->prevMeasure();
+        } else {
+            meas = meas->nextMeasure();
+        }
+    }
+    if (!meas) {
+        qDebug("figuredBassTab: no prev/next measure");
+        return;
+    }
+    // find initial ChordRest segment
+    Ms::Segment* nextSegm = meas->findSegment(Ms::SegmentType::ChordRest, meas->tick());
+    if (!nextSegm) {
+        qDebug("figuredBassTab: no ChordRest segment at measure");
+        return;
+    }
+
+    bool bNew = false;
+    // add a (new) FB element, using chord duration as default duration
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, fb->track(), Fraction(0, 1), &bNew);
+    if (bNew) {
+        startEdit();
+        score()->undoAddElement(fbNew);
+        apply();
+    }
+
+    startEditText(fbNew);
+}
+
+//! NOTE: Copied from ScoreView::figuredBassTicksTab
+void NotationInteraction::navigateToFiguredBass(const Fraction& ticks)
+{
+    Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
+    int track = fb->track();
+    Ms::Segment* segm = fb->segment();
+    if (!segm) {
+        qDebug("figuredBassTicksTab: no segment");
+        return;
+    }
+    Measure* measure = segm->measure();
+
+    Fraction nextSegTick   = segm->tick() + ticks;
+
+    // find the measure containing the target tick
+    while (nextSegTick >= measure->tick() + measure->ticks()) {
+        measure = measure->nextMeasure();
+        if (!measure) {
+            qDebug("figuredBassTicksTab: no next measure");
+            return;
+        }
+    }
+
+    // look for a segment at this tick; if none, create one
+    Ms::Segment* nextSegm = segm;
+    while (nextSegm && nextSegm->tick() < nextSegTick) {
+        nextSegm = nextSegm->next1(Ms::SegmentType::ChordRest);
+    }
+
+    bool needAddSegment = false;
+
+    if (!nextSegm || nextSegm->tick() > nextSegTick) {      // no ChordRest segm at this tick
+        nextSegm = Factory::createSegment(measure, Ms::SegmentType::ChordRest, nextSegTick - measure->tick());
+        if (!nextSegm) {
+            qDebug("figuredBassTicksTab: no next segment");
+            return;
+        }
+        needAddSegment = true;
+    }
+
+    startEdit();
+
+    if (needAddSegment) {
+        score()->undoAddElement(nextSegm);
+    }
+
+    bool bNew = false;
+    Ms::FiguredBass* fbNew = Ms::FiguredBass::addFiguredBassToSegment(nextSegm, track, ticks, &bNew);
+    if (bNew) {
+        score()->undoAddElement(fbNew);
+    }
+
+    apply();
+    startEditText(fbNew);
+}
+
 void NotationInteraction::addMelisma()
 {
     if (!m_editData.element || !m_editData.element->isLyrics()) {
@@ -4296,6 +4457,16 @@ void NotationInteraction::doEndTextEdit()
     }
 
     m_editData.clearData();
+}
+
+bool NotationInteraction::needEndTextEdit() const
+{
+    if (isTextEditingStarted()) {
+        const Ms::TextBase* text = Ms::toTextBase(m_editData.element);
+        return !text || !text->cursor()->editing();
+    }
+
+    return false;
 }
 
 void NotationInteraction::toggleFontStyle(Ms::FontStyle style)

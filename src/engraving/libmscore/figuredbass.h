@@ -282,31 +282,18 @@ public:
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 
     void      draw(mu::draw::Painter* painter) const override;
-    void      endEdit(EditData&) override;
     void      layout() override;
     void      read(XmlReader&) override;
     void      setSelected(bool f) override;
     void      setVisible(bool f) override;
     void      startEdit(EditData&) override;
+    bool      edit(EditData&) override;
+    void      endEdit(EditData&) override;
     void      write(XmlWriter& xml) const override;
 
     // read / write MusicXML
     void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
-//DEBUG
-//Q_INVOKABLE Ms::FiguredBassItem* addItem();
-
-    // getters / setters / properties
-//      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
-//                                                {     list->append(pItem);
-//                                                      items.append(&pItem);
-//                                                }
-//      QDeclarativeListProperty<FiguredBassItem> qmlItems()
-//                                                {     QList<FiguredBassItem*> list;
-//                                                      foreach(FiguredBassItem item, items)
-//                                                            list.append(&item);
-//                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
-//                                                }
     qreal lineLength(size_t idx) const
     {
         if (idx < _lineLengths.size()) {

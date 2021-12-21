@@ -227,6 +227,10 @@ public:
     void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
     void navigateToHarmony(const Fraction& ticks) override;
 
+    void navigateToFiguredBassInNearBeat(MoveDirection direction) override;
+    void navigateToFiguredBassInNearMeasure(MoveDirection direction) override;
+    void navigateToFiguredBass(const Fraction& ticks) override;
+
     void addMelisma() override;
     void addLyricsVerse() override;
 
@@ -250,6 +254,7 @@ private:
 
     void startEdit();
     void apply();
+    void rollback();
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
@@ -266,9 +271,10 @@ private:
     Ms::Harmony* editedHarmony() const;
     Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::TextStyleType textStyleType) const;
     Ms::Harmony* createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const;
-    void startEditText(Ms::TextBase* text);
 
+    void startEditText(Ms::TextBase* text);
     void doEndTextEdit();
+    bool needEndTextEdit() const;
 
     Ms::Page* point2page(const PointF& p) const;
     QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;
