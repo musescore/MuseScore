@@ -1363,12 +1363,7 @@ void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derive
 
     derived.linkIds() = original.linkIds();
 
-    ReadContext* derivedCtx = derived.context();
-    ReadContext* originalCtx = original.context();
-
-    if (derivedCtx && originalCtx) {
-        derivedCtx->staffLinkedElements() = originalCtx->staffLinkedElements();
-    }
+    derived.setContext(original.context());
 }
 
 //---------------------------------------------------------

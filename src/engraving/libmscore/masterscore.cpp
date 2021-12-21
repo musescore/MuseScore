@@ -438,7 +438,10 @@ MasterScore* MasterScore::clone()
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
+
+    WriteContext writeCtx;
     XmlWriter xml(this, &buffer);
+    xml.setContext(&writeCtx);
     xml.writeHeader();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
@@ -450,12 +453,15 @@ MasterScore* MasterScore::clone()
     buffer.close();
 
     QByteArray scoreData = buffer.buffer();
-    XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);
 
-    ReadContext ctx(score);
-    ctx.setIgnoreVersionError(true);
-    ScoreReader().read(score, r, ctx);
+    ReadContext readCtx(score);
+    readCtx.setIgnoreVersionError(true);
+
+    XmlReader r(scoreData);
+    r.setContext(&readCtx);
+
+    ScoreReader().read(score, r, readCtx);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
