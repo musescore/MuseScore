@@ -87,7 +87,13 @@ bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVaria
     switch (role) {
     case RoleIsSoloist:
         instrument->isSoloist = value.toBool();
-        updateInstrumentsOrder();
+        {
+            ItemList items = this->items();
+            items.removeAll(instrument);
+            insertInstrument(items, instrument);
+            setItems(items);
+        }
+        verifyScoreOrder();
         return true;
     case RoleName:
         break;
@@ -112,7 +118,7 @@ QStringList InstrumentsOnScoreListModel::orders() const
     QStringList result;
 
     for (const ScoreOrder& order: m_scoreOrders) {
-        result << order.name;
+        result << order.getName();
     }
 
     return result;
@@ -134,17 +140,19 @@ void InstrumentsOnScoreListModel::load()
 
     for (const Part* part : parts) {
         InstrumentItem* instrument = new InstrumentItem(this);
-        instrument->id = part->id();
+        instrument->id = part->instrument()->id();
         instrument->partId = part->id();
         instrument->isExistingPart = true;
         instrument->name = part->partName();
         instrument->isSoloist = part->soloist();
         instrument->familyId = part->familyId();
+        instrument->instrumentTemplate.sequenceOrder = resolveInstrumentSequenceNumber(instrument->id);
 
         instruments << instrument;
     }
 
     setItems(instruments);
+
     loadOrders();
 }
 
@@ -153,17 +161,42 @@ void InstrumentsOnScoreListModel::loadOrders()
     TRACEFUNC;
 
     m_scoreOrders = repository()->orders();
-    emit ordersChanged();
+    if (m_scoreOrders.isEmpty() || !m_scoreOrders.contains(customOrder())) {
+        m_scoreOrders.append(customOrder());
+    }
 
     INotationPtr notation = context()->currentNotation();
-    QString currentOrderId = notation ? notation->parts()->scoreOrder().id : QString();
+    ScoreOrder currentOrder = notation ? notation->parts()->scoreOrder() : m_scoreOrders[0];
+    bool orderCustomized = currentOrder.customized;
+
+    if (!m_scoreOrders.contains(currentOrder)) {
+        currentOrder.customized = false;
+        m_scoreOrders.append(currentOrder);
+    }
+
+    emit ordersChanged();
 
     for (int i = 0; i < m_scoreOrders.size(); ++i) {
-        if (m_scoreOrders[i].id == currentOrderId) {
+        if (m_scoreOrders[i].id == currentOrder.id) {
             doSetCurrentOrderIndex(i);
             break;
         }
     }
+
+    if (orderCustomized) {
+        doSetCurrentOrderIndex(createCustomizedScoreOrder(currentOrder));
+    }
+}
+
+int InstrumentsOnScoreListModel::resolveInstrumentSequenceNumber(const QString& instrumentId) const
+{
+    const InstrumentTemplateList& templates = repository()->instrumentTemplates();
+    for (const InstrumentTemplate* templ : templates) {
+        if (templ->id == instrumentId) {
+            return templ->sequenceOrder;
+        }
+    }
+    return templates.size();
 }
 
 void InstrumentsOnScoreListModel::addInstruments(const QVariantList& instruments)
@@ -184,11 +217,11 @@ void InstrumentsOnScoreListModel::addInstruments(const QVariantList& instruments
         instrument->familyId = templ.familyId();
         instrument->instrumentTemplate = templ;
 
-        items << instrument;
+        insertInstrument(items, instrument);
     }
 
-    sortInstruments(items);
     setItems(items);
+    verifyScoreOrder();
 }
 
 QVariant InstrumentsOnScoreListModel::currentOrder() const
@@ -250,58 +283,31 @@ void InstrumentsOnScoreListModel::sortInstruments(ItemList& instruments)
 
     const ScoreOrder& currentOrder = currentScoreOrder();
 
-    std::sort(instruments.begin(), instruments.end(), [this, currentOrder](const Item* item1, const Item* item2) {
+    std::sort(instruments.begin(), instruments.end(), [currentOrder](const Item* item1, const Item* item2) {
         auto instrument1 = dynamic_cast<const InstrumentItem*>(item1);
         auto instrument2 = dynamic_cast<const InstrumentItem*>(item2);
 
-        int index1 = sortInstrumentsIndex(currentOrder, *instrument1);
-        int index2 = sortInstrumentsIndex(currentOrder, *instrument2);
+        int index1 = currentOrder.instrumentSortingIndex(instrument1->id, instrument1->isSoloist);
+        int index2 = currentOrder.instrumentSortingIndex(instrument2->id, instrument2->isSoloist);
 
         return index1 < index2;
     });
 }
 
-int InstrumentsOnScoreListModel::sortInstrumentsIndex(const ScoreOrder& order, const InstrumentItem& instrument) const
+void InstrumentsOnScoreListModel::insertInstrument(ItemList& instruments, InstrumentItem* newInstrument)
 {
-    static const QString SoloistsGroup("<soloists>");
-    static const QString UnsortedGroup("<unsorted>");
+    const ScoreOrder& currentOrder = currentScoreOrder();
+    const int newIndex = currentOrder.instrumentSortingIndex(newInstrument->id, newInstrument->isSoloist);
 
-    enum class Priority {
-        Undefined,
-        Unsorted,
-        UnsortedGroup,
-        Family,
-        Soloist
-    };
+    for (int index = 0; index < instruments.size(); ++index) {
+        auto instrument = dynamic_cast<const InstrumentItem*>(instruments[index]);
 
-    auto calculateIndex = [this, &instrument](int index) {
-        const InstrumentTemplateList& templates = repository()->instrumentTemplates();
-        return index * templates.size() + instrument.instrumentTemplate.sequenceOrder;
-    };
-
-    QString family = order.instrumentMap.contains(instrument.id) ? order.instrumentMap[instrument.id].id : instrument.familyId;
-    int index = order.groups.size();
-    Priority priority = Priority::Undefined;
-
-    for (int i = 0; i < order.groups.size(); ++i) {
-        const ScoreOrderGroup& sg = order.groups[i];
-
-        if ((sg.family == SoloistsGroup) && instrument.isSoloist) {
-            return calculateIndex(i);
-        } else if ((priority < Priority::Family) && (sg.family == family)) {
-            index = i;
-            priority = Priority::Family;
-        } else if ((priority < Priority::UnsortedGroup) && (sg.family == UnsortedGroup)
-                   && (sg.unsorted == instrument.instrumentTemplate.groupId)) {
-            index = i;
-            priority = Priority::UnsortedGroup;
-        } else if ((priority < Priority::Unsorted) && (sg.family == UnsortedGroup)) {
-            index = i;
-            priority = Priority::Unsorted;
+        if (currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist) > newIndex) {
+            instruments.insert(index, newInstrument);
+            return;
         }
     }
-
-    return calculateIndex(index);
+    instruments << newInstrument;
 }
 
 InstrumentsOnScoreListModel::InstrumentItem* InstrumentsOnScoreListModel::modelIndexToItem(const QModelIndex& index) const
@@ -321,16 +327,70 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
 
 void InstrumentsOnScoreListModel::onRowsMoved()
 {
-    const ScoreOrder& customOrder = notation::customOrder();
+    verifyScoreOrder();
+}
 
-    if (!m_scoreOrders.contains(customOrder)) {
-        m_scoreOrders << customOrder;
-        emit ordersChanged();
+void InstrumentsOnScoreListModel::onRowsRemoved()
+{
+    verifyScoreOrder();
+}
+
+bool InstrumentsOnScoreListModel::matchesScoreOrder() const
+{
+    const ScoreOrder currentOrder = currentScoreOrder();
+
+    QList<int> instrumentIndices;
+    for (const Item* item : items()) {
+        auto instrument = dynamic_cast<const InstrumentItem*>(item);
+        if (!instrument) {
+            continue;
+        }
+        instrumentIndices << currentOrder.instrumentSortingIndex(instrument->id, instrument->isSoloist);
     }
 
-    int customOrderIndex = m_scoreOrders.size() - 1;
+    return currentOrder.isScoreOrder(instrumentIndices);
+}
 
-    if (m_currentOrderIndex != customOrderIndex) {
-        doSetCurrentOrderIndex(customOrderIndex);
+void InstrumentsOnScoreListModel::verifyScoreOrder()
+{
+    const ScoreOrder currentOrder = currentScoreOrder();
+    bool matchingScoreOrder = matchesScoreOrder();
+
+    if (matchingScoreOrder == currentOrder.customized) {
+        if (matchingScoreOrder) {
+            removeCustomizedScoreOrder(currentOrder);
+        } else {
+            doSetCurrentOrderIndex(createCustomizedScoreOrder(currentOrder));
+        }
+    }
+}
+
+int InstrumentsOnScoreListModel::createCustomizedScoreOrder(const ScoreOrder& order)
+{
+    ScoreOrder customizedOrder = order.clone();
+    customizedOrder.customized = true;
+    int customizedIndex = m_currentOrderIndex + 1;
+    m_scoreOrders.insert(customizedIndex, customizedOrder);
+
+    emit ordersChanged();
+
+    return customizedIndex;
+}
+
+void InstrumentsOnScoreListModel::removeCustomizedScoreOrder(const ScoreOrder& order)
+{
+    if (!order.customized) {
+        return;
+    }
+
+    for (int i = 0; i < m_scoreOrders.size(); ++i) {
+        if (!m_scoreOrders[i].customized && (m_scoreOrders[i].id == order.id)) {
+            doSetCurrentOrderIndex(i);
+            m_scoreOrders.removeAt(i + 1);
+
+            emit ordersChanged();
+
+            break;
+        }
     }
 }

@@ -3713,7 +3713,9 @@ qreal Score::maxSystemDistance() const
 
 ScoreOrder Score::scoreOrder() const
 {
-    return _scoreOrder;
+    ScoreOrder order = _scoreOrder;
+    order.customized = !order.isScoreOrder(this);
+    return order;
 }
 
 //---------------------------------------------------------
