@@ -61,10 +61,12 @@
     <SC>
         <key>nav-up</key>
         <seq>Up</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-down</key>
         <seq>Down</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-first-control</key>
@@ -399,7 +401,7 @@
   <SC>
     <key>move-up</key>
     <seq>Ctrl+Shift+Up</seq>
-    <ctx>notation-focused</ctx>
+    <ctx>notation-staff-standard</ctx>
     </SC>
   <SC>
     <key>pitch-down</key>

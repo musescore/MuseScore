@@ -61,10 +61,12 @@
     <SC>
         <key>nav-up</key>
         <seq>Up</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
         <key>nav-down</key>
         <seq>Down</seq>
+        <ctx>not-notation-focused</ctx>
     </SC>
     <SC>
       <key>nav-first-control</key>
