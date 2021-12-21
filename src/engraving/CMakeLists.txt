@@ -44,6 +44,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/read400.cpp

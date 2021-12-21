@@ -24,13 +24,16 @@
 #define MU_ENGRAVING_READCONTEXT_H
 
 #include "libmscore/mscore.h"
+#include "libmscore/location.h"
 #include "compat/dummyelement.h"
+#include "linksindexer.h"
 
 namespace Ms {
 class Score;
 class TimeSigMap;
 class Staff;
 class Spanner;
+class LinkedObjects;
 }
 
 namespace mu::engraving {
@@ -63,9 +66,17 @@ public:
 
     bool isSameScore(const Ms::EngravingObject* obj) const;
 
+    void initLinks(const ReadContext& ctx);
+    void addLink(Ms::Staff* staff, Ms::LinkedObjects* link, const Ms::Location& location);
+    Ms::LinkedObjects* getLink(bool isMasterScore, const Ms::Location& location, int localIndexDiff);
+    QMap<int, QList<QPair<Ms::LinkedObjects*, Ms::Location>>>& staffLinkedElements();
+
 private:
     Ms::Score* m_score = nullptr;
     bool m_ignoreVersionError = false;
+
+    QMap<int /*staffIndex*/, QList<QPair<Ms::LinkedObjects*, Ms::Location>>> m_staffLinkedElements; // one list per staff
+    Ms::LinksIndexer m_linksIndexer;
 };
 }
 

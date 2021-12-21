@@ -674,84 +674,6 @@ void XmlReader::reconnectBrokenConnectors()
 }
 
 //---------------------------------------------------------
-//   addLink
-//---------------------------------------------------------
-
-void XmlReader::addLink(Staff* s, LinkedObjects* link)
-{
-    int staff = s->idx();
-    const bool masterScore = s->score()->isMaster();
-    if (!masterScore) {
-        staff *= -1;
-    }
-
-    QList<QPair<LinkedObjects*, Location> >& staffLinks = _staffLinkedElements[staff];
-    if (!masterScore) {
-        if (!staffLinks.empty()
-            && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
-            ) {
-            staffLinks.clear();
-        }
-    }
-
-    Location l = location(true);
-    _linksIndexer.assignLocalIndex(l);
-    staffLinks.push_back(qMakePair(link, l));
-}
-
-//---------------------------------------------------------
-//   getLink
-//---------------------------------------------------------
-
-LinkedObjects* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
-{
-    int staff = l.staff();
-    if (!masterScore) {
-        staff *= -1;
-    }
-    const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
-    QList<QPair<LinkedObjects*, Location> >& staffLinks = _staffLinkedElements[staff];
-
-    if (!staffLinks.isEmpty() && staffLinks.constLast().second == l) {
-        // This element potentially affects local index for "main"
-        // elements that may go afterwards at the same tick, so
-        // append it to staffLinks as well.
-        staffLinks.push_back(staffLinks.constLast());     // nothing should reference exactly this local index, so it shouldn't matter what to append
-    }
-
-    for (int i = 0; i < staffLinks.size(); ++i) {
-        if (staffLinks[i].second == l) {
-            if (localIndex == 0) {
-                return staffLinks[i].first;
-            }
-            i += localIndex;
-            if ((i < 0) || (i >= staffLinks.size())) {
-                return nullptr;
-            }
-            if (staffLinks[i].second == l) {
-                return staffLinks[i].first;
-            }
-            return nullptr;
-        }
-    }
-    return nullptr;
-}
-
-//---------------------------------------------------------
-//   assignLocalIndex
-//---------------------------------------------------------
-
-int LinksIndexer::assignLocalIndex(const Location& mainElementLocation)
-{
-    if (_lastLinkedElementLoc == mainElementLocation) {
-        return ++_lastLocalIndex;
-    }
-    _lastLocalIndex = 0;
-    _lastLinkedElementLoc = mainElementLocation;
-    return 0;
-}
-
-//---------------------------------------------------------
 //   rtick
 //    return relative position in measure
 //---------------------------------------------------------
@@ -780,5 +702,15 @@ void XmlReader::incTick(const Fraction& f)
     _tick += f;
     _tick.reduce();
     _intTick += f.ticks();
+}
+
+engraving::ReadContext* XmlReader::context() const
+{
+    return m_context;
+}
+
+void XmlReader::setContext(mu::engraving::ReadContext* context)
+{
+    m_context = context;
 }
 }
