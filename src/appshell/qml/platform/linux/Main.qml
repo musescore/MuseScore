@@ -36,6 +36,8 @@ AppWindow {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+
+        appWindow: root
     }
 
     WindowContent {

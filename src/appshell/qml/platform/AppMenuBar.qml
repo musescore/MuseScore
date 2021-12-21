@@ -30,6 +30,9 @@ ListView {
 
     height: contentItem.childrenRect.height
     width: contentWidth
+
+    property alias appWindow: appMenuModel.appWindow
+
     orientation: Qt.Horizontal
 
     interactive: false

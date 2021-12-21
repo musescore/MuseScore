@@ -51,6 +51,8 @@ class AppMenuModel : public ui::AbstractMenuModel
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
+    Q_PROPERTY(QWindow * appWindow WRITE setAppWindow CONSTANT)
+
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
@@ -58,6 +60,7 @@ public:
 
 public slots:
     void setHighlightedMenuId(QString highlightedMenuId);
+    void setAppWindow(QWindow* appWindow);
 
 signals:
     void openMenu(const QString& menuId);
@@ -111,6 +114,7 @@ private:
     QString menuIdByActivateSymbol(const QString& symbol);
 
     QString m_highlightedMenuId;
+    QWindow* m_appWindow = nullptr;
 };
 }
 
