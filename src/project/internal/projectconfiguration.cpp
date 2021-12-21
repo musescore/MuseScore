@@ -145,7 +145,7 @@ io::path ProjectConfiguration::appTemplatesPath() const
     return globalConfiguration()->appDataPath() + "/templates";
 }
 
-io::paths ProjectConfiguration::availableTemplatesPaths() const
+io::paths ProjectConfiguration::availableTemplateDirs() const
 {
     io::paths dirs;
 
@@ -161,6 +161,11 @@ io::paths ProjectConfiguration::availableTemplatesPaths() const
     dirs.insert(dirs.end(), temps.begin(), temps.end());
 
     return dirs;
+}
+
+io::path ProjectConfiguration::templateCategoriesJsonPath(const io::path& templatesDir) const
+{
+    return templatesDir + "/categories.json";
 }
 
 io::path ProjectConfiguration::userTemplatesPath() const

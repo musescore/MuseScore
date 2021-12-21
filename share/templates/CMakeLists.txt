@@ -27,6 +27,7 @@ install(FILES
       orchestral.drm
       My_First_Score.mscx
       Create_New_Score.mscz
+      categories.json
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}templates
       )
 install(DIRECTORY
