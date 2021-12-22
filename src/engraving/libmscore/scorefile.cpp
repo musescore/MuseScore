@@ -175,6 +175,19 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         order.write(xml);
     }
 
+    if (!systemObjectStaves.isEmpty()) {
+        // write which staves currently have system objects above them
+        xml.startObject("SystemObjects");
+        for (Staff* s : systemObjectStaves) {
+            // TODO: when we add more granularity to system object display, construct this string per staff
+            QString sysObjForStaff = "barNumbers=\"false\"";
+            // for now, everything except bar numbers is shown on system object staves
+            // (also, the code to display bar numbers on system staves other than the first currently does not exist!)
+            xml.tagE(QString("Instance staffId=\"%1\" %2").arg(s->idx() + 1).arg(sysObjForStaff));
+        }
+        xml.endObject();
+    }
+
     xml.setCurTrack(0);
     int staffStart;
     int staffEnd;
@@ -499,7 +512,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             continue;
         }
         // don't write voltas to clipboard
-        if (clip && s->isVolta()) {
+        if (clip && s->isVolta() && s->systemFlag()) {
             continue;
         }
         spanners.push_back(s);
@@ -544,7 +557,23 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 }
             }
             for (EngravingItem* e1 : segment->annotations()) {
-                if (e1->track() != track || e1->generated() || (e1->systemFlag() && !writeSystemElements)) {
+                if (e1->generated()) {
+                    continue;
+                }
+                bool writeSystem = writeSystemElements;
+                if (!writeSystem) {
+                    ElementType et = e1->type();
+                    if ((et == ElementType::REHEARSAL_MARK)
+                        || (et == ElementType::SYSTEM_TEXT)
+                        || (et == ElementType::JUMP)
+                        || (et == ElementType::MARKER)
+                        || (et == ElementType::TEMPO_TEXT)
+                        || (et == ElementType::VOLTA)
+                        || (et == ElementType::TEXTLINE)) {
+                        writeSystem = (e1->track() == track); // always show these on appropriate staves
+                    }
+                }
+                if (e1->track() != track || (e1->systemFlag() && !writeSystem)) {
                     continue;
                 }
                 if (needMove) {

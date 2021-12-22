@@ -212,6 +212,7 @@ class EngravingItem : public EngravingObject
 protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
+    bool _skipDraw{ false };
 
     friend class mu::engraving::Factory;
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
@@ -310,6 +311,7 @@ public:
     qreal& rxpos() { return _pos.rx(); }
     qreal& rypos() { return _pos.ry(); }
     virtual void move(const mu::PointF& s) { _pos += s; }
+    bool skipDraw() const { return _skipDraw; }
 
     virtual mu::PointF pagePos() const;            ///< position in page coordinates
     virtual mu::PointF canvasPos() const;          ///< position in canvas coordinates
@@ -421,6 +423,7 @@ public:
 
     int staffIdx() const;
     void setStaffIdx(int val);
+    int staffIdxOrNextVisible() const; // for system objects migrating
     virtual int vStaffIdx() const;
     int voice() const;
     void setVoice(int v);

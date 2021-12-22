@@ -1033,9 +1033,9 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
         ++partIndex;
     }
 
-    if (sortingNeeded) {
-        score()->undo(new Ms::SortStaves(score(), staffMapping));
-    }
+    //if (sortingNeeded) {
+    score()->undo(new Ms::SortStaves(score(), staffMapping));
+    //}
 
     score()->undo(new Ms::MapExcerptTracks(score(), trackMapping));
 }

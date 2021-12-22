@@ -2829,7 +2829,7 @@ void Score::deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int 
     auto spanners = _spanner.findOverlapping(t1.ticks(), t2.ticks() - 1);
     for (auto i : spanners) {
         Spanner* sp = i.value;
-        if (sp->isVolta()) {
+        if (sp->isVolta() && sp->systemFlag()) {
             continue;
         }
         if (!filter.canSelectVoice(sp->track())) {
@@ -5091,7 +5091,7 @@ void Score::undoChangeInvisible(EngravingItem* e, bool v)
 //   undoAddElement
 //---------------------------------------------------------
 
-void Score::undoAddElement(EngravingItem* element)
+void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
 {
     QList<Staff* > staffList;
     Staff* ostaff = element->staff();
@@ -5118,23 +5118,30 @@ void Score::undoAddElement(EngravingItem* element)
         || (et == ElementType::VOLTA)
         || ((et == ElementType::TEXTLINE) && element->systemFlag())
         ) {
-        for (Score* s : scoreList()) {
-            staffList.append(s->staff(0));
+        if (ctrlModifier && (et == ElementType::VOLTA || et == ElementType::TEXTLINE)) {
+            element->setSystemFlag(false);
+            staffList.append(element->staff());
+        } else {
+            staffList.append(staff(0)); // system objects always appear on the top staff
+            for (Score* s : scoreList()) {
+                for (Staff* staff : s->getSystemObjectStaves()) {
+                    staffList.append(staff);
+                }
+            }
         }
-
+        bool originalAdded = false;
         for (Staff* staff : staffList) {
             Score* score  = staff->score();
             int staffIdx  = staff->idx();
             int ntrack    = staffIdx * VOICES;
             EngravingItem* ne;
 
-            if (ostaff && staff->score() == ostaff->score()) {
+            if (ostaff && staff->score() == ostaff->score() && staff == staffList[0] && !originalAdded) {
+                // add the element itself to the first system object staff in the score
                 ne = element;
+                originalAdded = true;
             } else {
-                // only create linked volta/systemTextLine for first staff
-                if (((et == ElementType::VOLTA) || (et == ElementType::TEXTLINE)) && element->track() != 0) {
-                    continue;
-                }
+                // add linked clones to the other staves
                 ne = element->linkedClone();
                 ne->setScore(score);
                 ne->setSelected(false);
@@ -5152,7 +5159,7 @@ void Score::undoAddElement(EngravingItem* element)
             } else if (et == ElementType::MARKER || et == ElementType::JUMP) {
                 Measure* om = toMeasure(element->explicitParent());
                 Measure* m  = score->tick2measure(om->tick());
-                ne->setTrack(element->track());
+                ne->setTrack(ntrack);
                 ne->setParent(m);
                 undo(new AddElement(ne));
             } else if (et == ElementType::MEASURE_NUMBER) {

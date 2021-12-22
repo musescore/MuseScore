@@ -520,7 +520,7 @@ void MasterScore::initEmptyExcerpt(Excerpt* excerpt)
 static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
 {
     // don’t clone voltas for track != 0
-    if ((s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag())) && s->track() != 0) {
+    if (((s->isVolta() || s->isTextLine()) && s->systemFlag()) && s->track() != 0) {
         return;
     }
 
@@ -994,7 +994,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
         int dstTrack  = -1;
         int dstTrack2 = -1;
 
-        if (s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag())) {
+        if ((s->isVolta() || s->isTextLine()) && s->systemFlag()) {
             //always export voltas to first staff in part
             dstTrack  = 0;
             dstTrack2 = 0;
@@ -1234,7 +1234,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
         int staffIdx = s->staffIdx();
         int dstTrack = -1;
         int dstTrack2 = -1;
-        if (!(s->isVolta() || (s->isTextLine() && toTextLine(s)->systemFlag()))) {
+        if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
             //export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
                 dstTrack = dstStaffIdx * VOICES + s->voice();
@@ -1435,7 +1435,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         int staffIdx = s->staffIdx();
         int dstTrack = -1;
         int dstTrack2 = -1;
-        if (!(s->isVolta() || (s->isTextLine() && s->systemFlag()))) {
+        if (!((s->isVolta() || s->isTextLine()) && s->systemFlag())) {
             //export other spanner if staffidx matches
             if (srcStaffIdx == staffIdx) {
                 dstTrack  = dstStaffIdx * VOICES + s->voice();
