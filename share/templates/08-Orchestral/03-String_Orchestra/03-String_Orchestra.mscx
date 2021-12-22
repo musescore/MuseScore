@@ -35,7 +35,7 @@
       <instrument id="violoncellos">
         <family id="orchestral-strings">Orchestral Strings</family>
         </instrument>
-      <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+      <section id="woodwind" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
         <family>flutes</family>
         <family>oboes</family>
         <family>clarinets</family>
