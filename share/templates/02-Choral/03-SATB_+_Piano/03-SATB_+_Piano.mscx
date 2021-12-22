@@ -44,6 +44,9 @@
       <family>organs</family>
       <unsorted/>
       </Order>
+    <SystemObjects>
+      <Instance staffId="5" barNumbers="false"/>
+      </SystemObjects>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
