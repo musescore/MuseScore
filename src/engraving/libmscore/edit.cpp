@@ -5122,8 +5122,8 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             element->setSystemFlag(false);
             staffList.append(element->staff());
         } else {
-            staffList.append(staff(0)); // system objects always appear on the top staff
             for (Score* s : scoreList()) {
+                staffList.append(s->staff(0)); // system objects always appear on the top staff
                 for (Staff* staff : s->getSystemObjectStaves()) {
                     staffList.append(staff);
                 }
