@@ -934,19 +934,29 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
     staff->setDefaultClefType(templ.clefType(cleffIndex));
 }
 
-void NotationParts::removeMissingParts(const PartInstrumentList& parts)
+void NotationParts::removeMissingParts(const PartInstrumentList& newParts)
 {
     TRACEFUNC;
 
-    IDList partsToRemove;
+    auto needRemove = [&newParts](const Part* part) {
+        for (const PartInstrument& pi : newParts) {
+            if (pi.partId == part->id()) {
+                return false;
+            }
+        }
 
-    for (const PartInstrument& pi: parts) {
-        if (!pi.isExistingPart) {
-            partsToRemove.push_back(pi.partId);
+        return true;
+    };
+
+    std::vector<Part*> partsToRemove;
+
+    for (Part* part: score()->parts()) {
+        if (needRemove(part)) {
+            partsToRemove.push_back(part);
         }
     }
 
-    doRemoveParts(this->parts(partsToRemove));
+    doRemoveParts(partsToRemove);
 }
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)
