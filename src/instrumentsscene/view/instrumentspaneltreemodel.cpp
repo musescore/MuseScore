@@ -55,11 +55,13 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     m_selectionModel = new ItemMultiSelectionModel(this);
     m_selectionModel->setAllowedModifiers(Qt::ShiftModifier);
 
-    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged, [this](const QItemSelection&, const QItemSelection&) {
+    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged,
+            [this](const QItemSelection& selected, const QItemSelection& deselected) {
+        setItemsSelected(deselected.indexes(), false);
+        setItemsSelected(selected.indexes(), true);
+
         updateRearrangementAvailability();
         updateRemovingAvailability();
-
-        emit selectionChanged();
     });
 
     dispatcher()->reg(this, "instruments", this, &InstrumentsPanelTreeModel::addInstruments);
@@ -220,7 +222,7 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
     });
 }
 
-void InstrumentsPanelTreeModel::listenSelectionChanged()
+void InstrumentsPanelTreeModel::listenNotationSelectionChanged()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
@@ -291,7 +293,7 @@ void InstrumentsPanelTreeModel::load()
     endResetModel();
 
     setupPartsConnections();
-    listenSelectionChanged();
+    listenNotationSelectionChanged();
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
@@ -326,6 +328,11 @@ void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
 void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 {
     m_selectionModel->select(rowIndex);
+}
+
+void InstrumentsPanelTreeModel::clearSelection()
+{
+    m_selectionModel->clear();
 }
 
 void InstrumentsPanelTreeModel::addInstruments()
@@ -426,22 +433,9 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     return true;
 }
 
-bool InstrumentsPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
+QItemSelectionModel* InstrumentsPanelTreeModel::selectionModel() const
 {
-    if (!m_selectionModel->hasSelection()) {
-        return false;
-    }
-
-    if (m_selectionModel->isSelected(rowIndex)) {
-        return true;
-    }
-
-    QModelIndex parentIndex = parent(rowIndex);
-    if (m_selectionModel->isSelected(parentIndex)) {
-        return true;
-    }
-
-    return false;
+    return m_selectionModel;
 }
 
 QModelIndex InstrumentsPanelTreeModel::index(int row, int column, const QModelIndex& parent) const
@@ -516,11 +510,6 @@ QVariant InstrumentsPanelTreeModel::data(const QModelIndex& index, int role) con
 QHash<int, QByteArray> InstrumentsPanelTreeModel::roleNames() const
 {
     return { { ItemRole, "itemRole" } };
-}
-
-QItemSelectionModel* InstrumentsPanelTreeModel::selectionModel() const
-{
-    return m_selectionModel;
 }
 
 void InstrumentsPanelTreeModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
@@ -646,6 +635,15 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
     }
 
     setIsRemovingAvailable(isRemovingAvailable);
+}
+
+void InstrumentsPanelTreeModel::setItemsSelected(const QModelIndexList& indexes, bool selected)
+{
+    for (const QModelIndex& index : indexes) {
+        if (AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index)) {
+            item->setIsSelected(selected);
+        }
+    }
 }
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(const Part* masterPart)

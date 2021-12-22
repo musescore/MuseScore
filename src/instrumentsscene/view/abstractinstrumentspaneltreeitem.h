@@ -44,6 +44,7 @@ class AbstractInstrumentsPanelTreeItem : public QObject
     Q_PROPERTY(bool isEditable READ isEditable NOTIFY isEditableChanged)
     Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
     Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
+    Q_PROPERTY(bool isSelected READ isSelected NOTIFY isSelectedChanged)
 
 public:
     AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
@@ -60,6 +61,7 @@ public:
     bool isRemovable() const;
 
     virtual bool isSelectable() const;
+    bool isSelected() const;
 
     Q_INVOKABLE virtual bool canAcceptDrop(int type) const;
     Q_INVOKABLE virtual void appendNewItem();
@@ -88,6 +90,7 @@ public slots:
     void setIsExpandable(bool expandable);
     void setIsEditable(bool editable);
     void setIsRemovable(bool removable);
+    void setIsSelected(bool selected);
 
 signals:
     void typeChanged(InstrumentsTreeItemType::ItemType type);
@@ -96,6 +99,7 @@ signals:
     void isExpandableChanged(bool isExpandable);
     void isEditableChanged(bool isEditable);
     void isRemovableChanged(bool isRemovable);
+    void isSelectedChanged(bool isSelected);
 
 protected:
     notation::IMasterNotationPtr masterNotation() const;
@@ -114,6 +118,7 @@ private:
     bool m_isExpandable = false;
     bool m_isEditable = false;
     bool m_isRemovable = false;
+    bool m_isSelected = false;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     notation::INotationPtr m_notation = nullptr;
