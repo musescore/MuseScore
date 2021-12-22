@@ -223,11 +223,11 @@ public:
 
     void nagivateToNextSyllable() override;
 
-    void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) override;
+    void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) override;
     void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
     void navigateToHarmony(const Fraction& ticks) override;
 
-    void navigateToFiguredBassInNearBeat(MoveDirection direction) override;
+    void navigateToNearFiguredBass(MoveDirection direction) override;
     void navigateToFiguredBassInNearMeasure(MoveDirection direction) override;
     void navigateToFiguredBass(const Fraction& ticks) override;
 

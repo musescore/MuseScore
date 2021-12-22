@@ -3925,7 +3925,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 }
 
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
-void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest)
+void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest)
 {
     Ms::Harmony* harmony = editedHarmony();
     Ms::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
@@ -3988,7 +3988,7 @@ void NotationInteraction::navigateToHarmonyInNearBeat(MoveDirection direction, b
             break;
         }
 
-        if (noterest) {
+        if (nearNoteOrRest) {
             int minTrack = (track / Ms::VOICES) * Ms::VOICES;
             int maxTrack = minTrack + (Ms::VOICES - 1);
             if (segment->hasAnnotationOrElement(ElementType::HARMONY, minTrack, maxTrack)) {
@@ -4106,7 +4106,7 @@ void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 }
 
 //! NOTE: Copied from ScoreView::figuredBassTab
-void NotationInteraction::navigateToFiguredBassInNearBeat(MoveDirection direction)
+void NotationInteraction::navigateToNearFiguredBass(MoveDirection direction)
 {
     Ms::FiguredBass* fb = Ms::toFiguredBass(m_editData.element);
     Ms::Segment* segm = fb->segment();
