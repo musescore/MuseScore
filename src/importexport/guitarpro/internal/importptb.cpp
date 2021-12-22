@@ -42,7 +42,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/symbol.h"
-#include "libmscore/symid.h"
+#include "types/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
@@ -675,7 +675,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 auto note = Factory::createNote(chord);
                 chord->add(note);
                 if (n.dead) {
-                    note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                    note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                     note->setGhost(true);
                 }
 
@@ -698,7 +698,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (false && n.slide) {
-                    Text* st = Factory::createText(chord->notes().front(), Tid::HARMONY_A);
+                    Text* st = Factory::createText(chord->notes().front(), TextStyleType::HARMONY_A);
                     st->setXmlText(QString("SLIDE %1").arg(n.slide));
                     st->setTrack(staff * VOICES);
                     chord->notes().front()->add(st);
@@ -728,7 +728,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 slur->setTrack2(staff * VOICES);
                 score->addElement(slur);
 
-                Text* st = Factory::createText(chord->notes().front(), Tid::HARMONY_A);
+                Text* st = Factory::createText(chord->notes().front(), TextStyleType::HARMONY_A);
                 st->setXmlText("H");
                 st->setTrack(staff * VOICES);
                 cr1->notes().front()->add(st);
@@ -1275,7 +1275,7 @@ Score::FileError PowerTab::read()
     // create title
     std::string name = song.info.name;
     if (!name.empty()) {
-        Text* s = Factory::createText(m, Tid::TITLE);
+        Text* s = Factory::createText(m, TextStyleType::TITLE);
         s->setPlainText(QString::fromUtf8(name.data(), int(name.size())));
         m->add(s);
     }
@@ -1354,7 +1354,7 @@ Score::FileError PowerTab::read()
             pscore->addMeasure(mb, measure);
             measure = mb;
         }
-        Text* txt = Factory::createText(measure, Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(part->longName());
         measure->add(txt);
 

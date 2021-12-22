@@ -28,11 +28,11 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
-    libmscore
+    engraving
     fonts
-    instruments
+    instrumentsscene
+    ui
     uicomponents
-    system
     iex_guitarpro
     )
 
