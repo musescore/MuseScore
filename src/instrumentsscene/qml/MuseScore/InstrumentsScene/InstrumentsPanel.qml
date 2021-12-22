@@ -49,7 +49,7 @@ Item {
             anchors.fill: parent
 
             onClicked: {
-                instrumentsTreeModel.selectionModel.clear()
+                instrumentsTreeModel.clearSelection()
             }
         }
     }
@@ -152,7 +152,7 @@ Item {
                     id: instrumentsTreeModel
                 }
 
-                selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel : null
+                selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel() : null
 
                 alternatingRowColors: false
                 backgroundVisible: false
@@ -203,7 +203,6 @@ Item {
                 itemDelegate: DropArea {
                     id: dropArea
 
-                    property bool isSelectable: model ? model.itemRole.isSelectable : false
 
                     Loader {
                         id: treeItemDelegateLoader
@@ -211,26 +210,14 @@ Item {
                         property var delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
                         property bool isExpandable: model ? model.itemRole.isExpandable : false
                         property bool isEditable: model ? model.itemRole.isEditable : false
+                        property bool isSelectable: model ? model.itemRole.isSelectable : false
+                        property bool isSelected: model ? model.itemRole.isSelected : false
 
                         height: parent.height
                         width: parent.width
 
                         sourceComponent: instrumentsTreeView.isControl(delegateType) ?
                                              controlItemDelegateComponent : treeItemDelegateComponent
-
-                        property bool isSelected: false
-
-                        function updateIsSelected() {
-                            treeItemDelegateLoader.isSelected = (Boolean(styleData.index.row) && instrumentsTreeModel.isSelected(styleData.index))
-                        }
-
-                        Connections {
-                            target: instrumentsTreeModel
-
-                            function onSelectionChanged() {
-                                treeItemDelegateLoader.updateIsSelected()
-                            }
-                        }
 
                         Component {
                             id: treeItemDelegateComponent
@@ -239,8 +226,8 @@ Item {
                                 treeView: instrumentsTreeView
 
                                 type: treeItemDelegateLoader.delegateType
+                                isDragAvailable: treeItemDelegateLoader.isSelectable
                                 isSelected: treeItemDelegateLoader.isSelected
-                                isDragAvailable: dropArea.isSelectable
                                 isExpandable: treeItemDelegateLoader.isExpandable
                                 isEditable: treeItemDelegateLoader.isEditable
 
@@ -270,10 +257,6 @@ Item {
                                     } else {
                                         instrumentsTreeView.collapse(styleData.index)
                                     }
-                                }
-
-                                onVisibleChanged: {
-                                    treeItemDelegateLoader.updateIsSelected()
                                 }
 
                                 property real contentYBackup: 0
@@ -309,10 +292,6 @@ Item {
 
                                 onClicked: {
                                     styleData.value.appendNewItem()
-                                }
-
-                                onVisibleChanged: {
-                                    treeItemDelegateLoader.updateIsSelected()
                                 }
                             }
                         }
