@@ -549,6 +549,10 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
 
 void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
 {
+    if (score->noStaves()) {
+        return;
+    }
+
     //-------------------------------------------------------------
     //    create cr segment list to speed up computations
     //-------------------------------------------------------------
