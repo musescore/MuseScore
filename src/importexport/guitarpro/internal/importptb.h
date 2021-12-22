@@ -23,7 +23,7 @@
 
 #include <libmscore/score.h>
 #include <libmscore/mscore.h>
-#include <libmscore/fraction.h>
+#include <types/fraction.h>
 #include <libmscore/fret.h>
 #include <libmscore/chordrest.h>
 #include <libmscore/slur.h>

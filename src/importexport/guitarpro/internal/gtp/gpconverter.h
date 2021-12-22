@@ -8,7 +8,7 @@
 #include "gpbar.h"
 #include "gpbeat.h"
 #include "gpmastertracks.h"
-#include "libmscore/fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class GPNote;

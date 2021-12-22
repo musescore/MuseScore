@@ -34,7 +34,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/staff.h"
-#include "libmscore/symid.h"
+#include "types/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
@@ -311,21 +311,21 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
         Chord* grChord = static_cast<Chord*>(cr);
 
         if (GPBeat::GraceNotes::OnBeat == beat->graceNotes()) {
-            if (grChord->durationType() == TDuration("16th")) {
+            if (grChord->durationType() == TDuration(DurationType::V_16TH)) {
                 grChord->setNoteType(NoteType::GRACE8_AFTER);
-            } else if (grChord->durationType() == TDuration("32th")) {
+            } else if (grChord->durationType() == TDuration(DurationType::V_32ND)) {
                 grChord->setNoteType(NoteType::GRACE16_AFTER);
             } else {
                 grChord->setNoteType(NoteType::GRACE32_AFTER);
             }
         } else {
-            if (grChord->durationType() == TDuration("eighth")) {
+            if (grChord->durationType() == TDuration(DurationType::V_EIGHTH)) {
                 grChord->setNoteType(NoteType::GRACE4);
-            } else if (grChord->durationType() == TDuration("16th")) {
+            } else if (grChord->durationType() == TDuration(DurationType::V_16TH)) {
                 //grChord->setNoteType(NoteType::GRACE8);
-            } else if (grChord->durationType() == TDuration("32th")) {
+            } else if (grChord->durationType() == TDuration(DurationType::V_32ND)) {
                 grChord->setNoteType(NoteType::GRACE16);
-            } else if (grChord->durationType() == TDuration("64th")) {
+            } else if (grChord->durationType() == TDuration(DurationType::V_64TH)) {
                 grChord->setNoteType(NoteType::GRACE32);
             } else {
                 grChord->setNoteType(NoteType::ACCIACCATURA);
@@ -470,7 +470,7 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 
         Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
         StaffText* st = new StaffText(_score->dummy()->segment());
-        st->setTid(Tid::STAFF);
+        st->setTextStyleType(TextStyleType::STAFF);
         st->setXmlText(scoreDirection(mB->direction().jump));
         if (mB->direction().target == "Fine") {
             st->setXmlText("fine");
@@ -494,7 +494,7 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
         }
         if (mB->direction().target == "Fine") {
             StaffText* st = new StaffText(_score->dummy()->segment());
-            st->setTid(Tid::STAFF);
+            st->setTextStyleType(TextStyleType::STAFF);
             st->setXmlText("fine");
             st->setParent(s);
             st->setTrack(0);
@@ -1945,7 +1945,7 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
         return;
     }
 
-    auto lyr = new Lyrics(_score->dummy());
+    Lyrics* lyr = Factory::createLyrics(_score->dummy()->chord());
     lyr->setPlainText(QString::fromUtf8(lyrStr.c_str()));
     cr->add(lyr);
 }

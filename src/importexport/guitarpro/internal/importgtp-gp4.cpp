@@ -55,7 +55,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
-#include "libmscore/symid.h"
+#include "types/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/tie.h"
@@ -191,7 +191,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     //    1 - Time-independent duration
 
     if (noteBits & BEAT_TREMOLO) {
-        //note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        //note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
 
@@ -206,7 +206,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             slides[staffIdx * VOICES] = -2;
             tieNote = true;
         } else if (variant == 3) {                   // dead notes = ghost note
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         } else {
             qDebug("unknown note variant: %d", variant);
@@ -308,18 +308,18 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             int transition = readUChar();             // grace transition
             int duration = readUChar();               // grace duration
 
-            int grace_len = MScore::division / 8;
+            int grace_len = Constant::division / 8;
             if (duration == 1) {
-                grace_len = MScore::division / 8;       //32nd
+                grace_len = Constant::division / 8;       //32nd
             } else if (duration == 2) {
-                grace_len = MScore::division / 6;       //24th
+                grace_len = Constant::division / 6;       //24th
             } else if (duration == 3) {
-                grace_len = MScore::division / 4;       //16th
+                grace_len = Constant::division / 4;       //16th
             }
             Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
-                gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                 gn->setGhost(true);
             }
             if (fret == 255) {
@@ -338,7 +338,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
             TDuration d;
             d.setVal(grace_len);
-            if (grace_len == MScore::division / 6) {
+            if (grace_len == Constant::division / 6) {
                 d.setDots(1);
             }
             gc->setDurationType(d);
@@ -436,7 +436,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     Staff* staff = note->staff();
     if (fretNumber == 255) {
         fretNumber = 0;
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
     // dead note represented as high numbers - fix to zero
@@ -870,7 +870,7 @@ bool GuitarPro4::read(QFile* fp)
 
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = new Lyrics(score->dummy());
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     auto str = readDelphiString();
                     //TODO-ws					str.erase(std::remove_if(str.begin(), str.end(), [](char c){return c == '_'; }), str.end());
                     lyrics->setPlainText(str);
@@ -879,7 +879,7 @@ bool GuitarPro4::read(QFile* fp)
                 if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx + 1) {
                     int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
                     if (index < gpLyrics.lyrics.size()) {
-                        lyrics = new Lyrics(score->dummy());
+                        lyrics = Factory::createLyrics(score->dummy()->chord());
                         lyrics->setPlainText(gpLyrics.lyrics[index]);
                     }
                 }
@@ -942,7 +942,7 @@ bool GuitarPro4::read(QFile* fp)
                 }
                 cr->setTicks(l);
                 if (cr->isRest() && (pause == 0 || l >= measure->ticks())) {
-                    cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                    cr->setDurationType(DurationType::V_MEASURE);
                     cr->setTicks(measure->ticks());
                 } else {
                     cr->setDurationType(d);
