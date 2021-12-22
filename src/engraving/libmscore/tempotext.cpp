@@ -60,7 +60,7 @@ static const ElementStyle tempoStyle {
 //---------------------------------------------------------
 
 TempoText::TempoText(Segment* parent)
-    : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlags(ElementFlag::SYSTEM))
+    : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tempoStyle);
     _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();

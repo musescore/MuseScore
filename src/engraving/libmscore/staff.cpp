@@ -89,6 +89,11 @@ Staff::Staff(const Staff& staff)
 Staff::~Staff()
 {
     qDeleteAll(brackets());
+    QList<Staff*> sysStaves = m_score->getSystemObjectStaves();
+    for (Staff* s : sysStaves) {
+        if (s == this) {
+        }
+    }
 }
 
 //---------------------------------------------------------

@@ -412,12 +412,12 @@ void Score::deletePostponed()
 //        HAIRPIN, LET_RING, VIBRATO and TEXTLINE
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool firstStaffOnly)
+void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStavesOnly)
 {
-    int staffIdx;
+    int staffIdx = spanner->staffIdx();
     Segment* segment;
     MeasureBase* mb = pos2measure(pos, &staffIdx, 0, &segment, 0);
-    if (firstStaffOnly) {
+    if (systemStavesOnly) {
         staffIdx = 0;
     }
     // ignore if we do not have a measure
@@ -450,7 +450,9 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool firstStaffOn
     }
     spanner->eraseSpannerSegments();
 
-    undoAddElement(spanner);
+    ElementType et = spanner->type();
+    bool ctrlModifier = (et == ElementType::VOLTA || et == ElementType::TEXTLINE) && spanner->systemFlag() && !systemStavesOnly;
+    undoAddElement(spanner, ctrlModifier);
     spanner->setParent(mb);
     select(spanner, SelectType::SINGLE, 0);
 }

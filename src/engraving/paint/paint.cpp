@@ -36,6 +36,9 @@ using namespace Ms;
 
 void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element)
 {
+    if (element->skipDraw()) {
+        return;
+    }
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
 

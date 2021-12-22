@@ -85,6 +85,7 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     TRACEFUNC;
 
     setScore(score);
+    score->setSystemObjectStaves();
     initExcerptNotations(masterScore()->excerpts());
     m_notationMidiData->init(m_parts);
 }
@@ -271,6 +272,7 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
+        score->setSystemObjectStaves(); // use the template to determine where system objects go
     }
 
     score->setName(qtrc("notation", "Untitled"));

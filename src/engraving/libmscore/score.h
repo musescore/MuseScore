@@ -420,6 +420,7 @@ private:
     MeasureBaseList _measures;            // here are the notes
     QList<Part*> _parts;
     QList<Staff*> _staves;
+    QList<Staff*> systemObjectStaves;
 
     SpannerMap _spanner;
     std::set<Spanner*> _unmanagedSpanner;
@@ -645,10 +646,14 @@ public:
     Staff* staffById(const ID& staffId) const;
     Part* partById(const ID& partId) const;
 
+    void clearSystemObjectStaves() { systemObjectStaves.clear(); }
+    void addSystemObjectStaff(Staff* staff) { systemObjectStaves.push_back(staff); }
+    QList<Staff*> getSystemObjectStaves() { return systemObjectStaves; }
+
     Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
-    void undoAddElement(EngravingItem* element);
+    void undoAddElement(EngravingItem* element, bool ctrlModifier = false);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
     void undoRemoveElement(EngravingItem* element);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
@@ -785,6 +790,7 @@ public:
 
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
+    void sortSystemObjects(QList<int>& dst);
     void sortStaves(QList<int>& dst);
     void mapExcerptTracks(QList<int>& l);
 
@@ -971,6 +977,7 @@ public:
     ScoreOrder scoreOrder() const;
     void setScoreOrder(ScoreOrder order);
     void setBracketsAndBarlines();
+    void setSystemObjectStaves();
 
     void lassoSelect(const mu::RectF&);
     void lassoSelectEnd(bool);
@@ -1147,7 +1154,7 @@ public:
     bool isSpannerStartEnd(const Fraction& tick, int track) const;
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
-    void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool firstStaffOnly = false);
+    void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
     void cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment, Segment* endSegment);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick);
     const std::set<Spanner*> unmanagedSpanners() { return _unmanagedSpanner; }

@@ -2717,11 +2717,109 @@ void Score::cmdRemoveStaff(int staffIdx)
 }
 
 //---------------------------------------------------------
+//   sortSystemStaves
+//---------------------------------------------------------
+
+void Score::sortSystemObjects(QList<int>& dst)
+{
+    QList<int> moveTo;
+    for (Staff* staff : systemObjectStaves) {
+        moveTo.push_back(staff->idx());
+    }
+    // rebuild system object staves
+    for (int i = 0; i < _staves.count(); i++) {
+        int newLocation = dst.indexOf(i);
+        if (newLocation == -1) { //!dst.contains(_staves[i]->idx())) {
+            // this staff was removed
+            for (int j = 0; j < systemObjectStaves.count(); j++) {
+                if (_staves[i]->idx() == moveTo[j]) {
+                    // the removed staff was a system object staff
+                    if (i == _staves.count() - 1 || moveTo.contains(_staves[i + 1]->idx())) {
+                        // this staff is at the end of the score, or is right before a new system object staff
+                        moveTo[j] = -1;
+                    } else {
+                        moveTo[j] = i + 1;
+                    }
+                }
+            }
+        } else if (newLocation != _staves[i]->idx() && systemObjectStaves.contains(_staves[i])) {
+            // system object staff was moved somewhere, put the system objects at the top of its new group
+            int topOfGroup = newLocation;
+            QString family = _staves[dst[newLocation]]->part()->familyId();
+            while (topOfGroup > 0) {
+                if (_staves[dst[topOfGroup - 1]]->part()->familyId() != family) {
+                    // the staff above is of a different instrument family, current topOfGroup is destination
+                    break;
+                } else {
+                    topOfGroup--;
+                }
+            }
+            moveTo[systemObjectStaves.indexOf(_staves[i])] = dst[topOfGroup];
+        }
+    }
+    for (int i = 0; i < systemObjectStaves.count(); i++) {
+        if (moveTo[i] == systemObjectStaves[i]->idx()) {
+            // this sysobj staff doesn't move
+            continue;
+        } else {
+            // move all system objects from systemObjectStaves[i] to _staves[moveTo[i]]
+            for (MeasureBase* mb = measures()->first(); mb; mb = mb->next()) {
+                if (!mb->isMeasure()) {
+                    continue;
+                }
+                Measure* m = toMeasure(mb);
+                for (EngravingItem* e : m->el()) {
+                    if ((e->isJump() || e->isMarker()) && e->isLinked() && e->track() == staff2track(systemObjectStaves[i]->idx())) {
+                        if (moveTo[i] < 0) {
+                            // delete this clone
+                            m->remove(e);
+                            e->unlink();
+                            delete e;
+                        } else {
+                            e->setTrack(staff2track(_staves[moveTo[i]]->idx()));
+                        }
+                    }
+                }
+                for (Segment* s = m->first(); s; s = s->next()) {
+                    if (s->isChordRest() || !s->annotations().empty()) {
+                        for (EngravingItem* e : s->annotations()) {
+                            if (e->isRehearsalMark()
+                                || e->isSystemText()
+                                || e->isTempoText()
+                                || (e->isVolta() && e->systemFlag())
+                                || (e->isTextLine() && e->systemFlag())) {
+                                if (e->track() == staff2track(systemObjectStaves[i]->idx()) && e->isLinked()) {
+                                    if (moveTo[i] < 0) {
+                                        s->removeAnnotation(e);
+                                        e->unlink();
+                                        delete e;
+                                    } else {
+                                        e->setTrack(staff2track(_staves[moveTo[i]]->idx()));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // update systemObjectStaves with the correct staff
+            if (moveTo[i] < 0) {
+                systemObjectStaves.removeAt(i);
+                moveTo.removeAt(i);
+            } else {
+                systemObjectStaves.replace(i, _staves[moveTo[i]]);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   sortStaves
 //---------------------------------------------------------
 
 void Score::sortStaves(QList<int>& dst)
 {
+    sortSystemObjects(dst);
     qDeleteAll(systems());
     systems().clear();    //??
     _parts.clear();
@@ -2752,9 +2850,6 @@ void Score::sortStaves(QList<int>& dst)
     }
     for (auto i : _spanner.map()) {
         Spanner* sp = i.second;
-        if (sp->systemFlag()) {
-            continue;
-        }
         int voice    = sp->voice();
         int staffIdx = sp->staffIdx();
         int idx = dst.indexOf(staffIdx);
@@ -3637,6 +3732,15 @@ void Score::setScoreOrder(ScoreOrder order)
 void Score::setBracketsAndBarlines()
 {
     scoreOrder().setBracketsAndBarlines(this);
+}
+
+//---------------------------------------------------------
+//   setSystemObjectStaves
+//---------------------------------------------------------
+
+void Score::setSystemObjectStaves()
+{
+    scoreOrder().setSystemObjectStaves(this);
 }
 
 //---------------------------------------------------------

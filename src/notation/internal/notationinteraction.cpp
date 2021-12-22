@@ -1031,19 +1031,19 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     m_dropData.ed.modifiers = modifiers;
     m_dropData.ed.dropElement->styleChanged();
 
-    bool firstStaffOnly = false;
+    bool systemStavesOnly = false;
     bool applyUserOffset = false;
 
     startEdit();
     score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
-
-    switch (m_dropData.ed.dropElement->type()) {
+    ElementType et = m_dropData.ed.dropElement->type();
+    switch (et) {
     case ElementType::TEXTLINE:
-        firstStaffOnly = m_dropData.ed.dropElement->systemFlag();
+        systemStavesOnly = m_dropData.ed.dropElement->systemFlag();
     // fall-thru
     case ElementType::VOLTA:
-        // voltas drop to first staff by default, or closest staff if Control is held
-        firstStaffOnly = firstStaffOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
+        // voltas drop to system staves by default, or closest staff if Control is held
+        systemStavesOnly = systemStavesOnly || !(m_dropData.ed.modifiers & Qt::ControlModifier);
     // fall-thru
     case ElementType::OTTAVA:
     case ElementType::TRILL:
@@ -1054,7 +1054,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::HAIRPIN:
     {
         Ms::Spanner* spanner = ptr::checked_cast<Ms::Spanner>(m_dropData.ed.dropElement);
-        score()->cmdAddSpanner(spanner, pos, firstStaffOnly);
+        score()->cmdAddSpanner(spanner, pos, systemStavesOnly);
         score()->setUpdateAll();
         accepted = true;
     }
@@ -1081,6 +1081,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
                 if (applyUserOffset) {
                     m_dropData.ed.dropElement->setOffset(offset);
                 }
+
                 score()->undoAddElement(m_dropData.ed.dropElement);
             } else {
                 qDebug("cannot drop here");
