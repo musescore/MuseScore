@@ -76,6 +76,9 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
         }
     }
 
+    ReadContext masterScoreCtx(masterScore);
+    masterScoreCtx.setIgnoreVersionError(ignoreVersionError);
+
     Err retval = Err::NoError;
 
     // Read score
@@ -87,9 +90,9 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
 
         XmlReader xml(scoreData);
         xml.setDocName(completeBaseName);
-        ReadContext ctx(masterScore);
-        ctx.setIgnoreVersionError(ignoreVersionError);
-        retval = read(masterScore, xml, ctx, &styleHook);
+        xml.setContext(&masterScoreCtx);
+
+        retval = read(masterScore, xml, masterScoreCtx, &styleHook);
     }
 
     // Read excerpts
@@ -109,9 +112,14 @@ Err ScoreReader::loadMscz(Ms::MasterScore* masterScore, const mu::engraving::Msc
             partScore->style().read(&excerptStyleBuf);
 
             QByteArray excerptData = mscReader.readExcerptFile(excerptName);
+
+            ReadContext ctx(partScore);
+            ctx.initLinks(masterScoreCtx);
+
             XmlReader xml(excerptData);
             xml.setDocName(excerptName);
-            ReadContext ctx(partScore);
+            xml.setContext(&ctx);
+
             Read400::read400(partScore, xml, ctx);
 
             partScore->linkMeasures(masterScore);
