@@ -36,7 +36,9 @@ public:
 
     virtual void setSessionType(const QString& sessionType) = 0;
     virtual void setStartupScorePath(const io::path& path) = 0;
+
     virtual void run() = 0;
+    virtual bool startupCompleted() const = 0;
 };
 }
 
