@@ -500,8 +500,15 @@ void RepeatList::collectRepeatListElements()
                             ) {
                             // The previous volta was supposed to end before us
                             // or open volta ends together with us -> insert the end
-                            sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, toMeasure(mb)));
-                            volta = nullptr;
+                            if (!mb->repeatEnd()) {
+                                // But only do so if this measure doesn't also have an end repeat: see #327681
+                                sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, toMeasure(mb)));
+                                volta = nullptr;
+                            }
+                            //else {
+                            //    The measure also has an end repeat which should be included in the volta
+                            //    We can't abort the volta here, and leave it to the end repeat to do so
+                            //}
                         }
                         //else { // Volta is spanning past this jump instruction }
                     }
@@ -859,7 +866,10 @@ void RepeatList::unwind()
                     && ((*repeatListElementIt)->getRepeatCount() < (*repeatListElementIt)->measure->repeatCount())
                     ) {
                     // Honor the repeat
-                    push_back(rs);
+                    Q_ASSERT(rs != nullptr);
+                    if ((rs != nullptr) && (!rs->isEmpty())) {
+                        push_back(rs);
+                    }
                     rs = nullptr;
                     do {                 // rewind
                         --repeatListElementIt;
