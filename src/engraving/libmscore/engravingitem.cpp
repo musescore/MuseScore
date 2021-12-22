@@ -456,8 +456,8 @@ int EngravingItem::staffIdxOrNextVisible() const
         return si;
     }
     int firstVis = m->system()->firstVisibleStaff();
-    if (!isLinked()) {
-        // original, put on the top of the score
+    if (track() == 0) {
+        // original OR first system object in excerpt, put on the top of the score
         return firstVis;
     }
     if (si <= firstVis) {
