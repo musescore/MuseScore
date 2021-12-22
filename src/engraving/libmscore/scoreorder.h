@@ -80,6 +80,7 @@ struct ScoreOrder
     ScoreGroup getGroup(const QString family, const QString instrumentGroup) const;
 
     void setBracketsAndBarlines(Score* score);
+    void setSystemObjectStaves(Score* score);
 
     void read(Ms::XmlReader& reader);
     void write(Ms::XmlWriter& xml) const;

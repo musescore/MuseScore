@@ -602,9 +602,28 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
     int strack = staff * VOICES;
     int etrack = strack + VOICES;
     for (const EngravingItem* e : measure->el()) {
-        if (!e->generated() && ((e->staffIdx() == staff) || (e->systemFlag() && writeSystemElements))) {
-            e->write(xml);
+        if (e->generated()) {
+            continue;
         }
+        bool writeSystem = writeSystemElements;
+        if (e->systemFlag()) {
+            ElementType et = e->type();
+            if ((et == ElementType::REHEARSAL_MARK)
+                || (et == ElementType::SYSTEM_TEXT)
+                || (et == ElementType::JUMP)
+                || (et == ElementType::MARKER)
+                || (et == ElementType::TEMPO_TEXT)
+                || (et == ElementType::VOLTA)
+                || (et == ElementType::TEXTLINE && e->systemFlag())) {
+                writeSystem = (e->staffIdx() == staff); // always show these on appropriate staves
+            }
+        }
+        if (e->staffIdx() != staff) {
+            if (e->systemFlag() && !writeSystem) {
+                continue;
+            }
+        }
+        e->write(xml);
     }
     Q_ASSERT(measure->first());
     Q_ASSERT(measure->last());

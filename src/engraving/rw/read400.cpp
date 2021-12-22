@@ -85,6 +85,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         score->style().set(Sid::harmonyPlay, false);
     }
 
+    std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
@@ -154,6 +155,21 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
             order.read(e);
             if (order.isValid()) {
                 score->setScoreOrder(order);
+            }
+        } else if (tag == "SystemObjects") {
+            // the staves to show system objects
+            score->clearSystemObjectStaves();
+            while (e.readNextStartElement()) {
+                if (e.name() == "Instance") {
+                    int staffIdx = e.attribute("staffId").toInt() - 1;
+                    // TODO: read the other attributes from this element when we begin treating different classes
+                    // of system objects differently. ex:
+                    // bool showBarNumbers = !(e.hasAttribute("barNumbers") && e.attribute("barNumbers") == "false");
+                    sysStaves.push_back(staffIdx);
+                    e.skipCurrentElement();
+                } else {
+                    e.skipCurrentElement();
+                }
             }
         } else if (tag == "Part") {
             Part* part = new Part(score);
@@ -238,6 +254,9 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
+    }
+    for (int idx : sysStaves) {
+        score->addSystemObjectStaff(score->staff(idx));
     }
 
 //      createPlayEvents();

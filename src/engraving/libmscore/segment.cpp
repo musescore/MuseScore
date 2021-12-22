@@ -496,7 +496,7 @@ void Segment::insertStaff(int staff)
 
     for (EngravingItem* e : _annotations) {
         int staffIdx = e->staffIdx();
-        if (staffIdx >= staff && !e->systemFlag()) {
+        if (staffIdx >= staff) {
             e->setTrack(e->track() + VOICES);
         }
     }
@@ -856,7 +856,15 @@ void Segment::sortStaves(QList<int>& dst)
         map.insert(dst[k], k);
     }
     for (EngravingItem* e : _annotations) {
-        if (!e->systemFlag()) {
+        ElementType et = e->type();
+        if (!e->systemFlag()
+            || (et == ElementType::REHEARSAL_MARK)
+            || (et == ElementType::SYSTEM_TEXT)
+            || (et == ElementType::JUMP)
+            || (et == ElementType::MARKER)
+            || (et == ElementType::TEMPO_TEXT)
+            || (et == ElementType::VOLTA)
+            || (et == ElementType::TEXTLINE && e->systemFlag())) {
             e->setTrack(map[e->staffIdx()] * VOICES + e->voice());
         }
     }

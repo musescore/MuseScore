@@ -1415,7 +1415,7 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
         seg = m->mmRestFirst()->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     }
 
-    a->setTrack(a->systemFlag() ? 0 : track());
+    a->setTrack(/*a->systemFlag() ? 0 : */ track());
     a->setParent(seg);
     score()->undoAddElement(a);
 }

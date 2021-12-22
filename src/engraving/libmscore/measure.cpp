@@ -1546,9 +1546,6 @@ EngravingItem* Measure::drop(EditData& data)
     Segment* seg;
     score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
 
-    if (e->systemFlag()) {
-        staffIdx = 0;
-    }
     if (staffIdx < 0) {
         return 0;
     }
@@ -2232,7 +2229,7 @@ void Measure::sortStaves(QList<int>& dst)
     }
 
     for (EngravingItem* e : el()) {
-        if (e->track() == -1 || e->systemFlag()) {
+        if (e->track() == -1 /* || e->systemFlag()*/) {
             continue;
         }
         int voice    = e->voice();

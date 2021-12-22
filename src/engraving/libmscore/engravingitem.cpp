@@ -434,6 +434,65 @@ void EngravingItem::setStaffIdx(int val)
     _track = staff2track(val, voice());
 }
 
+int EngravingItem::staffIdxOrNextVisible() const
+{
+    // for system objects, sometimes the staff they're on is hidden so we have to find the next
+    // best staff for them
+    if (!staff()) {
+        return -1;
+    }
+    int si = staff()->idx();
+    if (!systemFlag()) {
+        return si;
+    }
+    Measure* m = nullptr;
+    if (parent() && parent()->isSegment()) {
+        Segment* s = parent() ? toSegment(parent()) : nullptr;
+        m = s ? s->measure() : nullptr;
+    } else if (parent() && parent()->isMeasure()) {
+        m = parent() ? toMeasure(parent()) : nullptr;
+    }
+    if (!m || !m->system() || !m->system()->staff(si)) {
+        return si;
+    }
+    int firstVis = m->system()->firstVisibleStaff();
+    if (!isLinked()) {
+        // original, put on the top of the score
+        return firstVis;
+    }
+    if (si <= firstVis) {
+        // we already know this staff will be replaced by the original
+        return -1;
+    }
+    bool foundStaff = false;
+    if (!m->system()->staff(si)->show()) {
+        QList<Staff*> soStaves = score()->getSystemObjectStaves();
+        for (int i = 0; i < soStaves.size(); ++i) {
+            int idxOrig = soStaves[i]->idx();
+            if (idxOrig == si) {
+                // this is the staff we are supposed to be on
+                for (int idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
+                    if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
+                        // This is the flag to not show this element
+                        si = -1;
+                        break;
+                    } else if (m->system()->staff(idxNew)->show()) {
+                        // Move current element to this staff and finish
+                        foundStaff = true;
+                        si = idxNew;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    } else {
+        // the staff this object should be on is visible, so npnp
+        foundStaff = true;
+    }
+    return foundStaff ? si : -1;
+}
+
 int EngravingItem::vStaffIdx() const
 {
     return staffIdx();
@@ -594,6 +653,13 @@ PointF EngravingItem::pagePos() const
     if (explicitParent() == 0) {
         return p;
     }
+    int idx = vStaffIdx();
+    if (systemFlag()) {
+        idx = staffIdxOrNextVisible();
+        if (idx == -1) {
+            idx = vStaffIdx();
+        }
+    }
 
     if (_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
@@ -611,13 +677,13 @@ PointF EngravingItem::pagePos() const
         }
         if (measure) {
             system = measure->system();
-            p.ry() += measure->staffLines(vStaffIdx())->y();
+            p.ry() += measure->staffLines(idx)->y();
         }
         if (system) {
-            if (system->staves()->size() <= vStaffIdx()) {
+            if (system->staves()->size() <= idx) {
                 qDebug("staffIdx out of bounds: %s", name());
             }
-            p.ry() += system->staffYpage(vStaffIdx());
+            p.ry() += system->staffYpage(idx);
         }
         p.rx() = pageX();
     } else {
@@ -637,6 +703,13 @@ PointF EngravingItem::canvasPos() const
     PointF p(pos());
     if (explicitParent() == nullptr) {
         return p;
+    }
+    int idx = vStaffIdx();
+    if (systemFlag()) {
+        idx = staffIdxOrNextVisible();
+        if (idx == -1) {
+            idx = vStaffIdx();
+        }
     }
 
     if (_flags & ElementFlag::ON_STAFF) {
@@ -658,7 +731,7 @@ PointF EngravingItem::canvasPos() const
             qFatal("this %s parent %s\n", name(), explicitParent()->name());
         }
         if (measure) {
-            const StaffLines* lines = measure->staffLines(vStaffIdx());
+            const StaffLines* lines = measure->staffLines(idx);
             p.ry() += lines ? lines->y() : 0;
 
             system = measure->system();
@@ -671,7 +744,7 @@ PointF EngravingItem::canvasPos() const
             }
         }
         if (system) {
-            p.ry() += system->staffYpage(vStaffIdx());
+            p.ry() += system->staffYpage(idx);
         }
         p.rx() = canvasX();
     } else {
@@ -2160,9 +2233,13 @@ QVector<LineF> EngravingItem::genericDragAnchorLines() const
         xp += e->x();
     }
     qreal yp;
-    if (explicitParent()->isSegment()) {
-        System* system = toSegment(explicitParent())->measure()->system();
-        const int stIdx = staffIdx();
+    if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
+        Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
+        System* system = meas->system();
+        const int stIdx = staffIdxOrNextVisible();
+        if (stIdx < 0) {
+            return { LineF() };
+        }
         yp = system ? system->staffCanvasYpage(stIdx) : 0.0;
         if (placement() == PlacementV::BELOW) {
             yp += system ? system->staff(stIdx)->bbox().height() : 0.0;
@@ -2429,16 +2506,17 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         Measure* m = s->measure();
 
         qreal sp = score()->spatium();
-        int si = staffIdx();
-        if (systemFlag()) {
-            const int firstVis = m->system()->firstVisibleStaff();
-            if (firstVis < score()->nstaves()) {
-                si = firstVis;
-            }
-        } else {
-            qreal mag = staff()->staffMag(this);
-            sp *= mag;
+        int si = staffIdxOrNextVisible();
+
+        // if there's no good staff for this object, obliterate it
+        _skipDraw = (si == -1);
+        setSelectable(!_skipDraw);
+        if (_skipDraw) {
+            return;
         }
+
+        qreal mag = staff()->staffMag(this);
+        sp *= mag;
         qreal minDistance = _minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
@@ -2497,7 +2575,14 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
 
     if (autoplace() && explicitParent()) {
         Measure* m = toMeasure(explicitParent());
-        int si     = staffIdx();
+        int si = staffIdxOrNextVisible();
+
+        // if there's no good staff for this object, obliterate it
+        _skipDraw = (si == -1);
+        setSelectable(!_skipDraw);
+        if (_skipDraw) {
+            return;
+        }
 
         qreal sp = score()->spatium();
         qreal minDistance = _minDistance.val() * sp;

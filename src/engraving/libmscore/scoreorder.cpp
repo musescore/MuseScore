@@ -325,6 +325,36 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 }
 
 //---------------------------------------------------------
+//   setSystemObjectStaves
+//---------------------------------------------------------
+
+void ScoreOrder::setSystemObjectStaves(Score* score)
+{
+    // the cool thing is that the template is populated by both the full template used
+    // and also orders.xml. If we want to do some jiggery-pokery with adding system object
+    // staves in the situation where the user has added the instruments manually, orders.xml
+    // is the place to go, and will likely need special handling here.
+    if (!score->getSystemObjectStaves().isEmpty()) {
+        return;
+    }
+    score->clearSystemObjectStaves();
+
+    QString prvSection = "";
+    for (Part* part : score->parts()) {
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
+        if (!ii.instrTemplate) {
+            continue;
+        }
+        QString family{ getFamilyName(ii.instrTemplate, part->soloist()) };
+        const ScoreGroup sg = getGroup(family, instrumentGroups[ii.groupIndex]->id);
+        if (sg.section != prvSection && sg.showSystemMarkings) {
+            score->addSystemObjectStaff(part->staff(0));
+        }
+        prvSection = sg.section;
+    }
+}
+
+//---------------------------------------------------------
 //   read
 //---------------------------------------------------------
 
