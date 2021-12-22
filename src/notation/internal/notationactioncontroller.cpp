@@ -32,7 +32,7 @@ using namespace mu::framework;
 
 static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
-static constexpr bool NOTEREST = true;
+static constexpr bool NEAR_NOTE_OR_REST = true;
 
 static const ActionCode UNDO_ACTION_CODE = "undo";
 static const ActionCode REDO_ACTION_CODE = "redo";
@@ -113,8 +113,8 @@ void NotationActionController::init()
 
     registerAction("next-text-element", &Controller::nextTextElement, &Controller::textNavigationAvailable);
     registerAction("prev-text-element", &Controller::prevTextElement, &Controller::textNavigationAvailable);
-    registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationAvailable);
-    registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationAvailable);
+    registerAction("next-beat-TEXT", &Controller::nextBeatTextElement, &Controller::textNavigationByBeatsAvailable);
+    registerAction("prev-beat-TEXT", &Controller::prevBeatTextElement, &Controller::textNavigationByBeatsAvailable);
 
     for (auto it = DURATIONS_FOR_TEXT_NAVIGATION.cbegin(); it != DURATIONS_FOR_TEXT_NAVIGATION.cend(); ++it) {
         registerAction(it.key(), [=]() { navigateToTextElementByFraction(it.value()); }, &Controller::textNavigationByFractionAvailable);
@@ -1290,16 +1290,26 @@ bool NotationActionController::measureNavigationAvailable() const
 
 bool NotationActionController::textNavigationAvailable() const
 {
+    return resolveTextNavigationAvailable(TextNavigationType::NearNoteOrRest);
+}
+
+bool NotationActionController::textNavigationByBeatsAvailable() const
+{
+    return resolveTextNavigationAvailable(TextNavigationType::NearBeat);
+}
+
+bool NotationActionController::textNavigationByFractionAvailable() const
+{
+    return resolveTextNavigationAvailable(TextNavigationType::Fraction);
+}
+
+bool NotationActionController::resolveTextNavigationAvailable(TextNavigationType type) const
+{
     if (!isEditingText()) {
         return false;
     }
 
-    const Ms::EngravingItem* element = selectedElement();
-    if (!element) {
-        return false;
-    }
-
-    static const QList<Ms::ElementType> allowedElements {
+    static const QList<Ms::ElementType> allowedElementsForTextNavigation {
         Ms::ElementType::LYRICS,
         Ms::ElementType::HARMONY,
         Ms::ElementType::FIGURED_BASS,
@@ -1307,36 +1317,38 @@ bool NotationActionController::textNavigationAvailable() const
         Ms::ElementType::FINGERING
     };
 
-    return allowedElements.contains(element->type());
-}
+    static const QList<Ms::ElementType> allowedElementsForBeatsNavigation {
+        Ms::ElementType::HARMONY
+    };
 
-bool NotationActionController::textNavigationByFractionAvailable() const
-{
-    if (!isEditingText()) {
-        return false;
-    }
-
-    const Ms::EngravingItem* element = selectedElement();
-    if (!element) {
-        return false;
-    }
-
-    static const QList<Ms::ElementType> allowedElements {
+    static const QList<Ms::ElementType> allowedElementsForFractionNavigation {
         Ms::ElementType::HARMONY,
         Ms::ElementType::FIGURED_BASS
     };
 
-    return allowedElements.contains(element->type());
+    const Ms::EngravingItem* element = selectedElement();
+    Ms::ElementType elementType = element ? element->type() : Ms::ElementType::INVALID;
+
+    switch (type) {
+    case TextNavigationType::NearNoteOrRest:
+        return allowedElementsForTextNavigation.contains(elementType);
+    case TextNavigationType::NearBeat:
+        return allowedElementsForBeatsNavigation.contains(elementType);
+    case TextNavigationType::Fraction:
+        return allowedElementsForFractionNavigation.contains(elementType);
+    }
+
+    return false;
 }
 
 void NotationActionController::nextTextElement()
 {
-    navigateToTextElement(MoveDirection::Right, NOTEREST);
+    navigateToTextElement(MoveDirection::Right, NEAR_NOTE_OR_REST);
 }
 
 void NotationActionController::prevTextElement()
 {
-    navigateToTextElement(MoveDirection::Left, NOTEREST);
+    navigateToTextElement(MoveDirection::Left, NEAR_NOTE_OR_REST);
 }
 
 void NotationActionController::nextBeatTextElement()
@@ -1349,7 +1361,7 @@ void NotationActionController::prevBeatTextElement()
     navigateToTextElement(MoveDirection::Left);
 }
 
-void NotationActionController::navigateToTextElement(MoveDirection direction, bool noterest)
+void NotationActionController::navigateToTextElement(MoveDirection direction, bool nearNoteOrRest)
 {
     const Ms::EngravingItem* element = selectedElement();
     if (!element) {
@@ -1359,9 +1371,9 @@ void NotationActionController::navigateToTextElement(MoveDirection direction, bo
     if (element->isLyrics()) {
         currentNotationInteraction()->navigateToLyrics(direction);
     } else if (element->isHarmony()) {
-        currentNotationInteraction()->navigateToHarmonyInNearBeat(direction, noterest);
+        currentNotationInteraction()->navigateToNearHarmony(direction, nearNoteOrRest);
     } else if (element->isFiguredBass()) {
-        currentNotationInteraction()->navigateToFiguredBassInNearBeat(direction);
+        currentNotationInteraction()->navigateToNearFiguredBass(direction);
     } else {
         currentNotationInteraction()->navigateToNearText(direction);
     }
