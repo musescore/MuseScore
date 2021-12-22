@@ -2,7 +2,7 @@
 <museScore>
     <Order id="orchestral">
         <name>Orchestral</name>
-        <section id="woodwind" showSystemMarkings="true">
+        <section id="woodwind">
             <family>flutes</family>
             <family>oboes</family>
             <family>clarinets</family>
