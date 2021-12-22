@@ -30,6 +30,10 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
+#include "compat/scoreaccess.h"
+#include "compat/mscxcompat.h"
+#include "compat/writescorehook.h"
+
 namespace Ms {
 extern Score::FileError importGTP(MasterScore* score, const QString& name);
 }
@@ -43,7 +47,7 @@ MTest::MTest()
 MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     QFileInfo fi(path);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
@@ -51,7 +55,7 @@ MasterScore* MTest::readScore(const QString& name)
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(path, false);
+        rv = mu::engraving::compat::loadMsczOrMscx(score, path, false);
     } else if (csl == "gp3" || csl == "gp4" || csl == "gp5" || csl == "gpx" || csl == "gp" || csl == "ptb") {
         rv = importGTP(score, path);
     } else {
@@ -72,9 +76,16 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    mu::engraving::compat::WriteScoreHook hook;
+    return score->writeScore(&file, false, false, hook);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

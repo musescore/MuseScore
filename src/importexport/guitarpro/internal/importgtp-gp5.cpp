@@ -54,7 +54,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
-#include "libmscore/symid.h"
+#include "types/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/tie.h"
@@ -310,7 +310,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
 
         cr->setTicks(l);
         if (cr->isRest() && (pause == 0 || l >= measure->ticks())) {
-            cr->setDurationType(TDuration::DurationType::V_MEASURE);
+            cr->setDurationType(DurationType::V_MEASURE);
             cr->setTicks(measure->ticks());
         } else {
             cr->setDurationType(d);
@@ -382,9 +382,9 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
             applyBeatEffects(chord, beatEffects % 100);
         } while (beatEffects /= 100);
         if (rr == ARPEGGIO_DOWN) {
-            chord->setStemDirection(Direction::DOWN);
+            chord->setStemDirection(DirectionV::DOWN);
         } else if (rr == ARPEGGIO_UP) {
-            chord->setStemDirection(Direction::UP);
+            chord->setStemDirection(DirectionV::UP);
         }
     }
     int r = readChar();
@@ -649,7 +649,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
                 auto cr = seg->cr(gpLyrics.lyricTrack);
                 if (cr) {
                     if (str[0] != '-') {
-                        auto lyr = new Lyrics(score->dummy());
+                        Lyrics* lyr = Factory::createLyrics(score->dummy()->chord());
 
                         std::string text;
                         auto pos = str.find('-');
@@ -985,7 +985,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         }
 
         int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
-        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, MScore::division / 2);
+        auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, Constant::division / 2);
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();
         gnote->setFret(grace_pitch - sd->stringList().at(sd->stringList().size() - note->string() - 1).pitch);
@@ -1201,7 +1201,7 @@ bool GuitarPro5::readNote(int string, Note* note)
     //    0 - Time-independent duration
 
     if (noteBits & NOTE_GHOST) {
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
 
@@ -1214,7 +1214,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         else if (noteType == 2) {
             tieNote = true;
         } else if (noteType == 3) {                   // dead notes
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         } else {
             qDebug("unknown note type: %d", noteType);
@@ -1297,7 +1297,7 @@ bool GuitarPro5::readNote(int string, Note* note)
     Staff* staff = note->staff();
     if (fretNumber == 255 || fretNumber < 0) {
         fretNumber = 0;
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
     int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);

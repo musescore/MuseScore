@@ -24,18 +24,19 @@
 
 #include "log.h"
 #include "framework/fonts/fontsmodule.h"
-#include "instruments/instrumentsmodule.h"
+#include "instrumentsscene/instrumentsscenemodule.h"
 #include "framework/system/systemmodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
+#include "engraving/engravingmodule.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
+    new mu::engraving::EngravingModule(),
     new mu::fonts::FontsModule(), // needs for libmscore
-    new mu::instruments::InstrumentsModule(),
-    new mu::system::SystemModule(),
+    new mu::instrumentsscene::InstrumentsSceneModule(),
     new mu::iex::guitarpro::GuitarProModule()
 },
     []() {

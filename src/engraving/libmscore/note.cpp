@@ -89,7 +89,7 @@ namespace Ms {
 //    notehead groups
 //---------------------------------------------------------
 
-//int(NoteHead::Group::HEAD_GROUPS) - 1: "-1" is needed to prevent building CUSTOM_GROUP noteheads set, since it is built by users and keep a specific set of existing noteheads
+//int(NoteHeadGroup::HEAD_GROUPS) - 1: "-1" is needed to prevent building CUSTOM_GROUP noteheads set, since it is built by users and keep a specific set of existing noteheads
 static const SymId noteHeads[2][int(NoteHeadGroup::HEAD_GROUPS) - 1][int(NoteHeadType::HEAD_TYPES)] = {
     {    // down stem
         { SymId::noteheadWhole,               SymId::noteheadHalf,                SymId::noteheadBlack,
