@@ -63,6 +63,7 @@ class QMimeData;
 namespace mu::engraving {
 class AccessibleScore;
 class Read400;
+class WriteContext;
 }
 
 namespace mu::engraving::compat {
@@ -629,6 +630,8 @@ public:
 
     void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook,
+                    mu::engraving::WriteContext& ctx);
 
     bool read400(XmlReader& e);
     bool readScore400(XmlReader& e);

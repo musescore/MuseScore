@@ -1362,7 +1362,8 @@ void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derive
     derived.setCurrentMeasureIndex(original.currentMeasureIndex());
 
     derived.linkIds() = original.linkIds();
-    derived.staffLinkedElements() = original.staffLinkedElements();
+
+    derived.setContext(original.context());
 }
 
 //---------------------------------------------------------

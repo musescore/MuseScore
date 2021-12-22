@@ -29,6 +29,7 @@
 
 #include "compat/writescorehook.h"
 #include "rw/xml.h"
+#include "rw/writecontext.h"
 #include "rw/staffrw.h"
 
 #include "score.h"
@@ -353,10 +354,17 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
+bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook)
+{
+    WriteContext ctx;
+    return writeScore(f, msczFormat, onlySelection, hook, ctx);
+}
+
+bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook, WriteContext& ctx)
 {
     XmlWriter xml(this, f);
     xml.setIsMsczMode(msczFormat);
+    xml.setContext(&ctx);
     xml.writeHeader();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
