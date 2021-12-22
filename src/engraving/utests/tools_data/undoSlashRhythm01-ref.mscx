@@ -532,8 +532,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -569,8 +569,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -647,8 +647,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>56</l1>
-            <l2>56</l2>
+            <l1>48</l1>
+            <l2>48</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -684,8 +684,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>56</l1>
-            <l2>56</l2>
+            <l1>48</l1>
+            <l2>48</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -946,8 +946,8 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -981,8 +981,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>-16</l1>
+            <l2>-16</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -1052,8 +1052,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>16</l1>
-            <l2>16</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <small>1</small>
@@ -1087,8 +1087,8 @@
               </Note>
             </Chord>
           <Beam>
-            <l1>16</l1>
-            <l2>16</l2>
+            <l1>18</l1>
+            <l2>18</l2>
             </Beam>
           <Chord>
             <small>1</small>

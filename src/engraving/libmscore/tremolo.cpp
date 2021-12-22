@@ -281,20 +281,21 @@ void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
     bool up = chord()->up();
     int upValue = up ? -1 : 1;
+    qreal _mag = chord()->relativeMag();
+    spatium *= _mag;
 
-    qreal yOffset = h - score()->styleMM(Sid::tremoloOutSidePadding).val();
+    qreal yOffset = h - score()->styleMM(Sid::tremoloOutSidePadding).val() * _mag;
 
     int beams = chord()->beams();
     if (chord()->hook()) {
-        yOffset -= up ? 1.5 * spatium : 1 * spatium;
+        yOffset -= up ? 1.75 * spatium : 1.25 * spatium;
         yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
     } else if (beams) {
-        yOffset -= beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium;
-        yOffset += beams == 0 ? 0.0 : 0.25 * spatium;
+        yOffset -= (beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
     yOffset -= isBuzzRoll() && up ? 0.5 * spatium : 0.0;
+    yOffset -= up ? 0.0 : minHeight() * spatium / _mag;
     yOffset *= upValue;
-    yOffset -= up ? 0.0 : minHeight() * spatium;
 
     y += yOffset;
 
@@ -524,7 +525,7 @@ void Tremolo::layout()
             }
         }
         y = anchor1->y();
-        h = score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height();
+        h = (score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height()) * _chord1->relativeMag();
     }
 
     if (twoNotes()) {

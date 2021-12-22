@@ -1330,8 +1330,8 @@ int Chord::calcMinStemLength()
         // so we need to multiply it by 2 to get the actual height
         int buzzRollMultiplier = _tremolo->isBuzzRoll() ? 2 : 1;
         minStemLength += ceil(_tremolo->minHeight() * 4.0 * buzzRollMultiplier);
-        static const int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
-        static const int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
+        int outSidePadding = score()->styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0 * _relativeMag;
+        int noteSidePadding = score()->styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0 * _relativeMag;
         int line = _up ? upNote()->line() : downNote()->line();
         line *= 2; // convert to quarter spaces
         int outsideStaffOffset = 0;
@@ -1347,7 +1347,7 @@ int Chord::calcMinStemLength()
         int hookOffset = (_hook->height() - qAbs(_hook->smuflAnchor().y())) / _spatium * 4 - 2;
         // TODO: when the SMuFL metadata includes a cutout for flags, replace this with that metadata
         // https://github.com/w3c/smufl/issues/203
-        int cutout = up() ? 6 : 8;
+        int cutout = up() ? 4 * _relativeMag : 6 * _relativeMag;
         if (beams() >= 2) {
             cutout -= 2;
         }
@@ -1359,16 +1359,17 @@ int Chord::calcMinStemLength()
         } else {
             minStemLength += hookOffset - cutout;
         }
+        if (isGrace()) {
+            minStemLength += 2;
+        }
         // ceils to the nearest half-space (returned as pixels)
         minStemLength = ceil(minStemLength / 2.0) * 2;
-    } else {
+    } else if (beams()) {
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
-        minStemLength = qMax(minStemLength, minInnerStemLengths[qMin(beams(), 3)]);
-        // add beam lengths
-        minStemLength += beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3);
-        if (beams() > 0) {
-            minStemLength -= 1;
-        }
+        int innerStemLength = minInnerStemLengths[qMin(beams(), 3)] * _relativeMag;
+        int beamsHeight = beams() * (score()->styleB(Sid::useWideBeams) ? 4 : 3) - 1;
+        minStemLength = qMax(minStemLength, innerStemLength);
+        minStemLength += beamsHeight * _relativeMag;
     }
     return minStemLength;
 }
@@ -1392,13 +1393,15 @@ int Chord::stemLengthBeamAddition() const
     }
 }
 
-int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams)
+int Chord::minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams, bool isFullSize)
 {
     int beamOverlap = 8;
-    if (beamCount == 3 && !hasHook) {
-        beamOverlap = 12;
-    } else if (beamCount >= 4 && !hasHook) {
-        beamOverlap = (beamCount - 4) * beamSpacing + (useWideBeams ? 16 : 14);
+    if (isFullSize) {
+        if (beamCount == 3 && !hasHook) {
+            beamOverlap = 12;
+        } else if (beamCount >= 4 && !hasHook) {
+            beamOverlap = (beamCount - 4) * beamSpacing + (useWideBeams ? 16 : 14);
+        }
     }
 
     int staffOverlap = qMin(beamOverlap, (staffLines - 1) * 4);
@@ -1429,6 +1432,9 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     }
     if (_hook) {
         return maxReductions[0][extensionHalfSpaces];
+    }
+    if (_relativeMag != 1) {
+        return qAbs(maxReductions[beamCount][extensionHalfSpaces]);
     }
     return maxReductions[beamCount][extensionHalfSpaces];
 }
@@ -1484,10 +1490,6 @@ qreal Chord::calcDefaultStemLength()
     }
 
     qreal _spatium = spatium();
-    int defaultStemLength = (isSmall() ? score()->styleD(Sid::stemLengthSmall) : score()->styleD(Sid::stemLength)) * 4;
-    defaultStemLength += stemLengthBeamAddition();
-    int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
-    int stemLength = defaultStemLength;
 
     const Staff* staffItem = staff();
     const StaffType* staffType = staffItem ? staffItem->staffTypeForElement(this) : nullptr;
@@ -1496,9 +1498,18 @@ qreal Chord::calcDefaultStemLength()
     bool isBesideTabStaff = tab && !tab->stemless() && !tab->stemThrough();
     if (isBesideTabStaff) {
         return tab->chordStemLength(this) * _spatium;
-    } else if (tab) {
+    }
+
+    int defaultStemLength = score()->styleD(Sid::stemLength) * 4;
+    defaultStemLength += stemLengthBeamAddition();
+    if (tab) {
         defaultStemLength *= 1.5;
     }
+    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : score()->styleD(Sid::shortestStem) * 4;
+    shortestStem *= _relativeMag;
+    defaultStemLength *= _relativeMag;
+    int chordHeight = (downLine() - upLine()) * 2; // convert to quarter spaces
+    int stemLength = defaultStemLength;
 
     int minStemLengthQuarterSpaces = calcMinStemLength();
     _minStemLength = minStemLengthQuarterSpaces / 4.0 * _spatium;
@@ -1506,11 +1517,8 @@ qreal Chord::calcDefaultStemLength()
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = score()->styleI(Sid::shortStemStartLocation) * 2 + 1;
     bool useWideBeams = score()->styleB(Sid::useWideBeams);
-    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams);
-    int shortestStem = score()->styleB(Sid::useWideBeams) ? 12 : score()->styleD(Sid::shortestStem) * 4;
-    if (isGrace()) {
-        stemLength = qMax(static_cast<int>(defaultStemLength * score()->styleD(Sid::graceNoteMag)), minStemLengthQuarterSpaces);
-    } else if (up()) {
+    int middleLine = minStaffOverlap(_up, staffLineCount, beams(), !!_hook, useWideBeams ? 4 : 3, useWideBeams, !(isGrace() || isSmall()));
+    if (up()) {
         int stemEndPosition = upLine() * 2 - defaultStemLength;
         int idealStemLength = defaultStemLength;
 
@@ -1622,6 +1630,17 @@ void Chord::layoutHook()
     _hook->layout();
 }
 
+void Chord::calcRelativeMag()
+{
+    _relativeMag = 1;
+    if (isSmall()) {
+        _relativeMag *= score()->styleD(Sid::smallNoteMag);
+    }
+    if (isGrace()) {
+        _relativeMag *= score()->styleD(Sid::graceNoteMag);
+    }
+}
+
 //! May be called again when the chord is added to or removed from a beam.
 void Chord::layoutStem()
 {
@@ -1629,7 +1648,7 @@ void Chord::layoutStem()
         removeStem();
         return;
     }
-
+    calcRelativeMag();
     if (!_stem) {
         createStem();
     }
@@ -1874,6 +1893,7 @@ void Chord::layout()
     if (_notes.empty()) {
         return;
     }
+    calcRelativeMag();
     if (onTabStaff()) {
         layoutTablature();
     } else {

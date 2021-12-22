@@ -93,6 +93,7 @@ class Chord final : public ChordRest
 
     qreal _defaultStemLength;
     qreal _minStemLength;
+    qreal _relativeMag = 1; ///< mag() but relative to the staff size
 
     bool _isUiItem = false;
 
@@ -146,6 +147,8 @@ public:
     void setScore(Score* s) override;
     qreal chordMag() const;
     qreal mag() const override;
+    void calcRelativeMag();
+    qreal relativeMag() const { return _relativeMag; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -163,7 +166,7 @@ public:
     qreal defaultStemLength() const { return _defaultStemLength; }
     qreal minStemLength() const { return _minStemLength; }
     void setBeamExtension(qreal extension);
-    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams, bool isFullSize);
 
     void layoutStem();
     void layoutArpeggio2();

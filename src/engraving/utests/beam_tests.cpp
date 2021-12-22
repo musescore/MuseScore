@@ -118,6 +118,11 @@ TEST_F(BeamTests, flatBeams)
     beam("flatBeams.mscx");
 }
 
+TEST_F(BeamTests, graceNotes)
+{
+    beam("beamGrace.mscx");
+}
+
 // cross staff beaming is not yet supported
 // in the new beams code
 // TEST_F(BeamTests, beamCrossMeasure2)

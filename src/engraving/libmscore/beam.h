@@ -64,6 +64,7 @@ class Beam final : public EngravingItem
     qreal _grow2            { 1.0f };
     qreal _beamDist         { 0.0f };
     int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+    qreal _beamWidth        { 0.0f }; // how wide each beam is
 
     // for tabs
     bool _isBesideTabStaff  { false };
@@ -139,7 +140,6 @@ public:
     System* system() const { return toSystem(explicitParent()); }
 
     void layout1();
-    void layoutGraceNotes();
     void layout() override;
 
     const QVector<ChordRest*>& elements() const { return _elements; }
@@ -189,7 +189,8 @@ public:
     bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
     mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    bool isGrace() const { return _isGrace; }    // for debugger
+    void setIsGrace(bool val) { _isGrace = val; }
+
     bool cross() const { return _cross; }
 
     void addSkyline(Skyline&);
