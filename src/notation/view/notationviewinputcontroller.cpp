@@ -523,7 +523,7 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
     return result;
 }
 
-bool NotationViewInputController::isDragAllowed() const
+bool NotationViewInputController::isDragObjectsAllowed() const
 {
     if (m_view->isNoteEnterMode()) {
         return false;
@@ -538,11 +538,6 @@ bool NotationViewInputController::isDragAllowed() const
 
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
-    bool middleButton = event->buttons() == Qt::MiddleButton;
-    if (!isDragAllowed() && !middleButton) {
-        return;
-    }
-
     PointF logicPos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers keyState = event->modifiers();
 
@@ -553,36 +548,40 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    const EngravingItem* hitElement = this->hitElement();
+    //! NOTE Otherwise, only drag canvas
+    if (isDragObjectsAllowed()) {
+        const EngravingItem* hitElement = this->hitElement();
 
-    // drag element
-    if (!middleButton && ((hitElement && (hitElement->isMovable() || viewInteraction()->isElementEditStarted()))
-                          || viewInteraction()->isGripEditStarted())) {
-        if (hitElement && !viewInteraction()->isDragStarted()) {
-            startDragElements(hitElement->type(), hitElement->offset());
-        }
+        // drag element
+        if ((hitElement && (hitElement->isMovable() || viewInteraction()->isElementEditStarted()))
+            || viewInteraction()->isGripEditStarted()) {
+            if (hitElement && !viewInteraction()->isDragStarted()) {
+                startDragElements(hitElement->type(), hitElement->offset());
+            }
 
-        if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
-            EngravingItem* selectedElement = viewInteraction()->selection()->element();
-            startDragElements(selectedElement->type(), selectedElement->offset());
-        }
+            if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
+                EngravingItem* selectedElement = viewInteraction()->selection()->element();
+                startDragElements(selectedElement->type(), selectedElement->offset());
+            }
 
-        DragMode mode = DragMode::BothXY;
-        if (keyState & Qt::ShiftModifier) {
-            mode = DragMode::OnlyY;
-        } else if (keyState & Qt::ControlModifier) {
-            mode = DragMode::OnlyX;
-        }
+            DragMode mode = DragMode::BothXY;
+            if (keyState & Qt::ShiftModifier) {
+                mode = DragMode::OnlyY;
+            } else if (keyState & Qt::ControlModifier) {
+                mode = DragMode::OnlyX;
+            }
 
-        viewInteraction()->drag(m_beginPoint, logicPos, mode);
-        return;
-    } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
-        if (!viewInteraction()->isDragStarted()) {
-            viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
+            viewInteraction()->drag(m_beginPoint, logicPos, mode);
+
+            return;
+        } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
+            if (!viewInteraction()->isDragStarted()) {
+                viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
+            }
+            viewInteraction()->drag(m_beginPoint, logicPos, keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
+
+            return;
         }
-        viewInteraction()->drag(m_beginPoint, logicPos,
-                                keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
-        return;
     }
 
     // move canvas
