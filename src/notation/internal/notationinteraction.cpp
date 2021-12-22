@@ -619,14 +619,16 @@ void NotationInteraction::selectSection()
 
 void NotationInteraction::selectFirstElement(bool frame)
 {
-    EngravingItem* element = score()->firstElement(frame);
-    select({ element }, SelectType::SINGLE, element->staffIdx());
+    if (EngravingItem* element = score()->firstElement(frame)) {
+        select({ element }, SelectType::SINGLE, element->staffIdx());
+    }
 }
 
 void NotationInteraction::selectLastElement()
 {
-    EngravingItem* element = score()->lastElement();
-    select({ element }, SelectType::SINGLE, element->staffIdx());
+    if (EngravingItem* element = score()->lastElement()) {
+        select({ element }, SelectType::SINGLE, element->staffIdx());
+    }
 }
 
 INotationSelectionPtr NotationInteraction::selection() const
