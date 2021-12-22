@@ -37,6 +37,7 @@
 #include "iappshellconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "project/iprojectfilescontroller.h"
+#include "istartupscenario.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
@@ -49,6 +50,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell, project::IProjectFilesController, projectFilesController)
+    INJECT(appshell, IStartupScenario, startupScenario)
 
 public:
     void init();

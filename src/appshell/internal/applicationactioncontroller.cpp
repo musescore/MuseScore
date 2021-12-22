@@ -23,6 +23,7 @@
 
 #include <QCoreApplication>
 #include <QCloseEvent>
+#include <QFileOpenEvent>
 #include <QWindow>
 #include <QMimeData>
 
@@ -90,10 +91,23 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
 
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    QCloseEvent* closeEvent = dynamic_cast<QCloseEvent*>(event);
-    if (closeEvent && watched == mainWindow()->qWindow()) {
+    if (event->type() == QEvent::Close && watched == mainWindow()->qWindow()) {
         quit(false);
-        closeEvent->ignore();
+        event->ignore();
+
+        return true;
+    }
+
+    if (event->type() == QEvent::FileOpen && watched == qApp) {
+        const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
+        QString filePath = openEvent->file();
+
+        if (startupScenario()->startupCompleted()) {
+            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(filePath));
+        } else {
+            startupScenario()->setStartupScorePath(filePath);
+        }
+
         return true;
     }
 
