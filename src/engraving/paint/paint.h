@@ -28,7 +28,6 @@
 
 namespace Ms {
 class EngravingItem;
-class Page;
 }
 
 namespace mu::engraving {

@@ -266,7 +266,6 @@ public:
 class TextBase : public EngravingItem
 {
     // sorted by size to allow for most compact memory layout
-    M_PROPERTY(Align,      align,                  setAlign)
     M_PROPERTY(FrameType,  frameType,              setFrameType)
     M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
     M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
@@ -274,6 +273,8 @@ class TextBase : public EngravingItem
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
+
+    Align _align = Align::LEFT;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
@@ -328,6 +329,9 @@ public:
     virtual void draw(mu::draw::Painter*) const override;
     virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
     static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const QString& text);
+
+    Align align() const { return _align; }
+    void setAlign(Align a) { _align = a; }
 
     static QString plainToXmlText(const QString& s) { return s.toHtmlEscaped(); }
     void setPlainText(const QString& t) { setXmlText(plainToXmlText(t)); }
