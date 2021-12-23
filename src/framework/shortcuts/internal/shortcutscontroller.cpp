@@ -39,8 +39,7 @@ void ShortcutsController::activate(const std::string& sequence)
     LOGD() << sequence;
 
     ShortcutList shortcuts = shortcutsRegister()->shortcutsForSequence(sequence);
-    if (shortcuts.empty()) {
-        LOGD() << "========= empty";
+    IF_ASSERT_FAILED(!shortcuts.empty()) {
         return;
     }
 
