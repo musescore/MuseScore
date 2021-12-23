@@ -73,4 +73,8 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*
 
         paintElement(painter, element);
     }
+
+#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
+    DebugPaint::paintElementsDebug(painter, sortedElements);
+#endif
 }
