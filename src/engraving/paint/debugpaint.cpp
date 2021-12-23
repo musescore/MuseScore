@@ -35,80 +35,48 @@ using namespace Ms;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
-void DebugPaint::paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page)
+void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const Ms::EngravingItem* item, std::shared_ptr<PaintDebugger>& debugger)
 {
-    TRACEFUNC;
+    // Elements tree
+    bool isDiagnosticSelected = elementsProvider()->isSelected(item);
+    if (isDiagnosticSelected) {
+        // Overriding pen
+        debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
+    }
 
+    PointF pos(item->pagePos());
+    painter.translate(pos);
+
+    if (isDiagnosticSelected) {
+        static draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
+
+        // Draw bbox
+        painter.setPen(borderPen);
+        painter.setBrush(draw::BrushStyle::NoBrush);
+        painter.drawRect(item->bbox());
+    }
+
+    painter.translate(-pos);
+
+    debugger->restorePenColor();
+}
+
+void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements)
+{
     // Setup debug provider
     auto originalProvider = painter.provider();
     std::shared_ptr<PaintDebugger> debugger = std::make_shared<PaintDebugger>(originalProvider);
     painter.setProvider(debugger, false);
 
-    // Get children
-    const mu::diagnostics::EngravingObjectList& elements = elementsProvider()->elements();
-
-    std::list<const Ms::EngravingItem*> children;
-    for (const Ms::EngravingObject* el : elements) {
-        if (!el->isEngravingItem()) {
+    for (const EngravingItem* element : elements) {
+        if (!element->isInteractionAvailable()) {
             continue;
         }
 
-        const Ms::EngravingObject* p = el->parent();
-        while (p) {
-            if (p == page) {
-                children.push_back(Ms::toEngravingItem(el));
-                break;
-            }
-            p = p->parent();
-        }
+        paintElementDebug(painter, element, debugger);
     }
-
-    // Draw children
-    paintItems(painter, children, debugger);
 
     // Restore provider
     debugger->restorePenColor();
     painter.setProvider(debugger->realProvider(), false);
-}
-
-void DebugPaint::paintItems(mu::draw::Painter& painter, const std::list<const Ms::EngravingItem*>& items,
-                            std::shared_ptr<PaintDebugger>& debugger)
-{
-    TRACEFUNC;
-    for (const Ms::EngravingItem* item : items) {
-        //! NOTE Here we can configure the debugger depending on the conditions
-
-        // Elements tree
-        bool isDiagnosticSelected = elementsProvider()->isSelected(item);
-        if (isDiagnosticSelected) {
-            // Overriding pen
-            debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
-        }
-
-        // Accessible
-//        AccessibleItem* accessible = item->accessible();
-//        if (accessible) {
-//            if (accessible->registred() && accessible->accessibleState(IAccessible::State::Focused)) {
-//                debugger->setDebugPenColor(draw::Color(255, 0, 0));
-//            }
-//        }
-        // ----------
-
-        PointF pos(item->pagePos());
-        painter.translate(pos);
-        item->draw(&painter);
-
-        if (isDiagnosticSelected) {
-            static draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
-
-            // Draw bbox
-            painter.setPen(borderPen);
-            painter.setBrush(draw::BrushStyle::NoBrush);
-            painter.drawRect(item->bbox());
-        }
-
-        painter.translate(-pos);
-
-        debugger->restorePenColor();
-    }
 }
