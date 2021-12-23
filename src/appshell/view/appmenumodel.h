@@ -51,7 +51,7 @@ class AppMenuModel : public ui::AbstractMenuModel
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
-    Q_PROPERTY(QWindow * appWindow WRITE setAppWindow CONSTANT)
+    Q_PROPERTY(QWindow * appWindow WRITE setAppWindow)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

@@ -85,12 +85,6 @@ Rectangle {
                 elide: Qt.ElideRight
                 elideWidth: titleLabel.width
             }
-
-            Item {
-                id: titleMoveArea
-
-                anchors.fill: parent
-            }
         }
 
         AppSystemButtons {
@@ -112,5 +106,14 @@ Rectangle {
                 root.closeWindowRequested()
             }
         }
+    }
+
+    Item {
+        id: titleMoveArea
+
+        x: titleLabel.x
+        y: titleLabel.y
+        width: titleLabel.width
+        height: titleLabel.height
     }
 }
