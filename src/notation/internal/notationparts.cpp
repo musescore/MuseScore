@@ -177,10 +177,8 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 {
     std::vector<Staff*> staves;
 
-    for (const ID& staffId: stavesIds) {
-        Staff* staff = staffModifiable(staffId);
-
-        if (staff) {
+    for (Staff* staff : score()->staves()) {
+        if (std::find(stavesIds.cbegin(), stavesIds.cend(), staff->id()) != stavesIds.cend()) {
             staves.push_back(staff);
         }
     }
@@ -192,10 +190,8 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
 {
     std::vector<Part*> parts;
 
-    for (const ID& partId: partsIds) {
-        Part* part = partModifiable(partId);
-
-        if (part) {
+    for (Part* part : score()->parts()) {
+        if (std::find(partsIds.cbegin(), partsIds.cend(), part->id()) != partsIds.cend()) {
             parts.push_back(part);
         }
     }
