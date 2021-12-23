@@ -144,7 +144,7 @@ ListView {
         Accessible.name: Utils.removeAmpersands(text)
 
         mouseArea.onContainsMouseChanged: {
-            if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu === menuLoader.menu) {
+            if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu == menuLoader.menu) {
                 return
             }
 
@@ -156,7 +156,7 @@ ListView {
         }
 
         function toggleMenuOpened() {
-            if (prv.showedMenu && prv.showedMenu !== menuLoader.menu) {
+            if (prv.showedMenu && prv.showedMenu != menuLoader.menu) {
                 prv.showedMenu.close()
             }
 
