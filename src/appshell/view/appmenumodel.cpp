@@ -77,7 +77,6 @@ void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
     }
 
     m_highlightedMenuId = highlightedMenuId;
-
     emit highlightedMenuIdChanged(m_highlightedMenuId);
 }
 
@@ -642,7 +641,8 @@ bool AppMenuModel::isNavigateKey(int key) const
         Qt::Key_Left,
         Qt::Key_Right,
         Qt::Key_Down,
-        Qt::Key_Space
+        Qt::Key_Space,
+        Qt::Key_Escape
     };
 
     return keys.contains(static_cast<Qt::Key>(key));
@@ -673,6 +673,9 @@ void AppMenuModel::navigate(int key)
     case Qt::Key_Down:
     case Qt::Key_Space:
         activateHighlightedMenu();
+        break;
+    case Qt::Key_Escape:
+        resetNavigation();
         break;
     default:
         break;

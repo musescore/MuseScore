@@ -75,6 +75,10 @@ ListView {
         function hasNavigatedItem() {
             return appMenuModel.highlightedMenuId !== ""
         }
+
+        function hasNavigatedItemForRestoreAfterClose() {
+            return prv.lastOpenedMenuId !== ""
+        }
     }
 
     delegate: FlatButton {
@@ -152,6 +156,14 @@ ListView {
         }
 
         onClicked: {
+            if (prv.hasNavigatedItem()
+                    || prv.hasNavigatedItemForRestoreAfterClose()) {
+                appMenuModel.setHighlightedMenuId(radioButtonDelegate.menuId)
+
+                prv.needRestoreNavigationAfterClose = false
+                prv.lastOpenedMenuId = radioButtonDelegate.menuId
+            }
+
             toggleMenuOpened()
         }
 
