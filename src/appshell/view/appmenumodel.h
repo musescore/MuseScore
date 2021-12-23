@@ -98,6 +98,7 @@ private:
     ui::MenuItemList workspacesItems() const;
 
     // Custom navigation
+    bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
     void navigate(int key);
 

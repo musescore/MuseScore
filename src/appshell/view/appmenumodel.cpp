@@ -120,7 +120,7 @@ bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
     }
     case QEvent::ShortcutOverride: {
         QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (isNavigateKey(keyEvent->key())) {
+        if (isNavigationStarted() && isNavigateKey(keyEvent->key())) {
             navigate(keyEvent->key());
             event->setAccepted(true);
         }
@@ -175,6 +175,12 @@ void AppMenuModel::setupConnections()
         MenuItem& workspacesItem = findMenu("menu-select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
+    });
+
+    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
+        if (state != Qt::ApplicationActive) {
+            resetNavigation();
+        }
     });
 
     qApp->installEventFilter(this);
@@ -635,6 +641,11 @@ MenuItemList AppMenuModel::workspacesItems() const
     return items;
 }
 
+bool AppMenuModel::isNavigationStarted() const
+{
+    return !m_highlightedMenuId.isEmpty();
+}
+
 bool AppMenuModel::isNavigateKey(int key) const
 {
     static QList<Qt::Key> keys {
@@ -642,7 +653,8 @@ bool AppMenuModel::isNavigateKey(int key) const
         Qt::Key_Right,
         Qt::Key_Down,
         Qt::Key_Space,
-        Qt::Key_Escape
+        Qt::Key_Escape,
+        Qt::Key_Return
     };
 
     return keys.contains(static_cast<Qt::Key>(key));
@@ -672,6 +684,7 @@ void AppMenuModel::navigate(int key)
     }
     case Qt::Key_Down:
     case Qt::Key_Space:
+    case Qt::Key_Return:
         activateHighlightedMenu();
         break;
     case Qt::Key_Escape:
