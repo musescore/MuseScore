@@ -118,6 +118,8 @@ Item {
             width: gridView.cellWidth
             height: gridView.cellWidth
 
+            enabled: item.enabled
+
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             transparent: !accentButton
 
