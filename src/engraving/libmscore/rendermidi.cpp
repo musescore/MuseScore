@@ -689,8 +689,9 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
     Staff* staff = m->score()->staff(h->track() / VOICES);
     const Channel* channel = staff->part()->harmonyChannel();
-    IF_ASSERT_FAILED(channel)
-    return;
+    IF_ASSERT_FAILED(channel) {
+        return;
+    }
 
     events->registerChannel(channel->channel());
     if (!staff->isPrimaryStaff()) {
