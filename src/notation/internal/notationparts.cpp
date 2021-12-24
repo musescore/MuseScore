@@ -203,6 +203,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 {
     TRACEFUNC;
 
+    endInteractionWithScore();
     startEdit();
 
     doSetScoreOrder(order);
@@ -645,6 +646,7 @@ void NotationParts::removeParts(const IDList& partsIds)
         return;
     }
 
+    endInteractionWithScore();
     startEdit();
 
     doRemoveParts(partsToRemove);
@@ -662,7 +664,6 @@ void NotationParts::removeParts(const IDList& partsIds)
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 
     for (const Part* part : partsToRemove) {
         notifyAboutPartRemoved(part);
@@ -770,6 +771,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         return;
     }
 
+    endInteractionWithScore();
     startEdit();
 
     for (Staff* staff: stavesToRemove) {
@@ -779,7 +781,6 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 
     for (const Staff* staff : stavesToRemove) {
         notifyAboutStaffRemoved(staff);
@@ -822,6 +823,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         parts << pi;
     }
 
+    deselectAll();
     startEdit();
 
     if (scoreOrder() != customOrder()) {
@@ -833,7 +835,6 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
@@ -858,6 +859,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
+    deselectAll();
     startEdit();
 
     doMoveStaves(staves, destinationStaffIndex, destinationPart);
@@ -865,7 +867,6 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 }
 
 void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
@@ -1080,6 +1081,12 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
 void NotationParts::setBracketsAndBarlines()
 {
     score()->setBracketsAndBarlines();
+}
+
+void NotationParts::endInteractionWithScore()
+{
+    deselectAll();
+    m_interaction->noteInput()->endNoteInput();
 }
 
 void NotationParts::deselectAll()
