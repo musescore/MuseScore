@@ -469,7 +469,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     for (EngravingItem* e : m->el()) {
         if (e->isMarker()) {
             Marker* mark = toMarker(e);
-            if (!(mark->align() & Align::RIGHT)) {
+            if (!(mark->align() == AlignH::RIGHT)) {
                 return true;
             }
         }
@@ -483,7 +483,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                 return true;
             } else if (e->isMarker()) {
                 Marker* mark = toMarker(e);
-                if (mark->align() & Align::RIGHT) {
+                if (mark->align() == AlignH::RIGHT) {
                     return true;
                 }
             }

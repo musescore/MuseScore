@@ -25,6 +25,8 @@
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
 #include "rw/xml.h"
+#include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "libmscore/mscore.h"
 
@@ -34,6 +36,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace Ms;
 
 const PropertyValue& MStyle::value(Sid idx) const
@@ -111,32 +114,7 @@ bool MStyle::readProperties(XmlReader& e)
             } else if (P_TYPE::STRING == type) {
                 set(idx, e.readElementText());
             } else if (P_TYPE::ALIGN == type) {
-                QStringList sl = e.readElementText().split(',');
-                if (sl.size() != 2) {
-                    qDebug("bad align text <%s>", qPrintable(e.readElementText()));
-                    return true;
-                }
-                Align align = Align::LEFT;
-                if (sl[0] == "center") {
-                    align = align | Align::HCENTER;
-                } else if (sl[0] == "right") {
-                    align = align | Align::RIGHT;
-                } else if (sl[0] == "left") {
-                } else {
-                    qDebug("bad align text <%s>", qPrintable(sl[0]));
-                    return true;
-                }
-                if (sl[1] == "center") {
-                    align = align | Align::VCENTER;
-                } else if (sl[1] == "bottom") {
-                    align = align | Align::BOTTOM;
-                } else if (sl[1] == "baseline") {
-                    align = align | Align::BASELINE;
-                } else if (sl[1] == "top") {
-                } else {
-                    qDebug("bad align text <%s>", qPrintable(sl[1]));
-                    return true;
-                }
+                Align align = TConv::fromXml(e.readElementText(), Align());
                 set(idx, align);
             } else if (P_TYPE::POINT == type) {
                 qreal x = e.doubleAttribute("x", 0.0);
@@ -362,23 +340,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             if (optimize && a == st.defaultValue().value<Align>()) {
                 continue;
             }
-            QString horizontal = "left";
-            QString vertical = "top";
-            if (a & Align::HCENTER) {
-                horizontal = "center";
-            } else if (a & Align::RIGHT) {
-                horizontal = "right";
-            }
-
-            if (a & Align::VCENTER) {
-                vertical = "center";
-            } else if (a & Align::BOTTOM) {
-                vertical = "bottom";
-            } else if (a & Align::BASELINE) {
-                vertical = "baseline";
-            }
-
-            xml.tag(st.name(), horizontal + "," + vertical);
+            xml.tag(st.name(), TConv::toXml(a));
         } else {
             xml.tag(st.name(), value(idx).toQVariant());
         }

@@ -112,7 +112,10 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::GLISS_STYLE: return static_cast<int>(value<GlissandoStyle>());
 
     // Layout
-    case P_TYPE::ALIGN:       return static_cast<int>(value<Align>());
+    case P_TYPE::ALIGN: {
+        Align a = value<Align>();
+        return QVariantList({ static_cast<int>(a.horizontal), static_cast<int>(a.vertical) });
+    } break;
     case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::TEXT_PLACE:  return static_cast<int>(value<TextPlace>());
@@ -192,7 +195,13 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::GLISS_STYLE:   return PropertyValue(GlissandoStyle(v.toInt()));
 
     // Layout
-    case P_TYPE::ALIGN:         return PropertyValue(Align(v.toInt()));
+    case P_TYPE::ALIGN: {
+        QVariantList l = v.toList();
+        IF_ASSERT_FAILED(l.size() == 2) {
+            return PropertyValue();
+        }
+        return PropertyValue(Align(AlignH(l.at(0).toInt()), AlignV(l.at(1).toInt())));
+    } break;
     case P_TYPE::PLACEMENT_V:   return PropertyValue(PlacementV(v.toInt()));
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::TEXT_PLACE:    return PropertyValue(TextPlace(v.toInt()));

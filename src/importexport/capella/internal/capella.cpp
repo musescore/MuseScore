@@ -301,20 +301,20 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
             // qDebug("setText %s (%f %f)(%f %f) <%s>",
             //            qPrintable(st->font().family()),
             //            st->pos().x(), st->pos().y(), p.x(), p.y(), qPrintable(st->text()));
-            Align textalign;
+            AlignH textalign;
             switch (st->textalign()) {
             default:
             case 0:
-                textalign = Align::LEFT;
+                textalign = AlignH::LEFT;
                 break;
             case 1:
-                textalign = Align::HCENTER;
+                textalign = AlignH::HCENTER;
                 break;
             case 2:
-                textalign = Align::RIGHT;
+                textalign = AlignH::RIGHT;
                 break;
             }
-            text->setAlign(textalign | Align::BASELINE);
+            text->setAlign(Align(textalign, AlignV::BASELINE));
             text->setOffset(mu::PointF(0.0, 2.0));
             text->setTrack(track);
             s->add(text);

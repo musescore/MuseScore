@@ -1126,9 +1126,9 @@ void TextBlock::layout(TextBase* t)
     _lineSpacing *= t->textLineSpacing();
 
     qreal rx = 0;
-    if (t->align() & Align::RIGHT) {
+    if (t->align() == AlignH::RIGHT) {
         rx = layoutWidth - _bbox.right();
-    } else if (t->align() & Align::HCENTER) {
+    } else if (t->align() == AlignH::HCENTER) {
         rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
     } else { // Align::LEFT
         rx = -_bbox.left();
@@ -1699,7 +1699,7 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextS
     _textStyleType                    = tid;
     _bgColor                = mu::draw::Color::transparent;
     _frameColor             = mu::draw::Color::black;
-    _align                  = Align::LEFT;
+    _align                  = { AlignH::LEFT, AlignV::TOP };
     _frameType              = FrameType::NO_FRAME;
     _frameWidth             = Spatium(0.1);
     _paddingWidth           = Spatium(0.2);
@@ -2052,7 +2052,7 @@ void TextBase::layout1()
         if (layoutToParentWidth()) {
             if (explicitParent()->isTBox()) {
                 // hack: vertical alignment is always TOP
-                _align = Align(((char)_align) & ((char)Align::HMASK)) | Align::TOP;
+                _align = AlignV::TOP;
             } else if (explicitParent()->isBox()) {
                 // consider inner margins of frame
                 Box* b = toBox(explicitParent());
@@ -2076,11 +2076,11 @@ void TextBase::layout1()
         setPos(PointF());
     }
 
-    if (align() & Align::BOTTOM) {
+    if (align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();
-    } else if (align() & Align::VCENTER) {
+    } else if (align() == AlignV::VCENTER) {
         yoff +=  (h - (bb.top() + bb.bottom())) * .5;
-    } else if (align() & Align::BASELINE) {
+    } else if (align() == AlignV::BASELINE) {
         yoff += h * .5 - _layout.front().lineSpacing();
     } else {
         yoff += -bb.top();

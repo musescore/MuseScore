@@ -30,6 +30,7 @@
 #include "io/htmlparser.h"
 #include "rw/xml.h"
 #include "rw/xmlvalue.h"
+#include "types/typesconv.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -390,31 +391,13 @@ static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
         t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
         t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
-        Align align = Align(int(t->align()) & int(~Align::HMASK));
-        const QString& val(e.readElementText());
-        if (val == "center") {
-            align = align | Align::HCENTER;
-        } else if (val == "right") {
-            align = align | Align::RIGHT;
-        } else if (val == "left") {
-        } else {
-            qDebug("readText: unknown alignment: <%s>", qPrintable(val));
-        }
+        Align align = t->align();
+        align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "valign") {
-        Align align = Align(int(t->align()) & int(~Align::VMASK));
-        const QString& val(e.readElementText());
-        if (val == "bottom") {
-            align = align | Align::BOTTOM;
-        } else if (val == "top") {
-        } else if (val == "vcenter") {
-            align = align | Align::VCENTER;
-        } else if (val == "baseline") {
-            align = align | Align::BASELINE;
-        } else {
-            qDebug("readText: unknown alignment: <%s>", qPrintable(val));
-        }
+        Align align = t->align();
+        align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "rxoffset") {

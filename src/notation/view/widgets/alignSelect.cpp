@@ -66,18 +66,18 @@ void AlignSelect::_alignChanged()
 
 Ms::Align AlignSelect::align() const
 {
-    Ms::Align a = Ms::Align::LEFT;
+    Ms::Align a = { Ms::AlignH::LEFT, Ms::AlignV::TOP };
     if (alignHCenter->isChecked()) {
-        a = a | Ms::Align::HCENTER;
+        a = Ms::AlignH::HCENTER;
     } else if (alignRight->isChecked()) {
-        a = a | Ms::Align::RIGHT;
+        a = Ms::AlignH::RIGHT;
     }
     if (alignVCenter->isChecked()) {
-        a = a | Ms::Align::VCENTER;
+        a = Ms::AlignV::VCENTER;
     } else if (alignBottom->isChecked()) {
-        a = a | Ms::Align::BOTTOM;
+        a = Ms::AlignV::BOTTOM;
     } else if (alignBaseline->isChecked()) {
-        a = a | Ms::Align::BASELINE;
+        a = Ms::AlignV::BASELINE;
     }
     return a;
 }
@@ -85,18 +85,18 @@ Ms::Align AlignSelect::align() const
 void AlignSelect::setAlign(Ms::Align a)
 {
     blockAlign(true);
-    if (a & Ms::Align::HCENTER) {
+    if (a == Ms::AlignH::HCENTER) {
         alignHCenter->setChecked(true);
-    } else if (a & Ms::Align::RIGHT) {
+    } else if (a == Ms::AlignH::RIGHT) {
         alignRight->setChecked(true);
     } else {
         alignLeft->setChecked(true);
     }
-    if (a & Ms::Align::VCENTER) {
+    if (a == Ms::AlignV::VCENTER) {
         alignVCenter->setChecked(true);
-    } else if (a & Ms::Align::BOTTOM) {
+    } else if (a == Ms::AlignV::BOTTOM) {
         alignBottom->setChecked(true);
-    } else if (a & Ms::Align::BASELINE) {
+    } else if (a == Ms::AlignV::BASELINE) {
         alignBaseline->setChecked(true);
     } else {
         alignTop->setChecked(true);

@@ -181,8 +181,8 @@ void HairpinSegment::layout()
     } else {
         twoLines  = true;
 
-        hairpin()->setBeginTextAlign(Align::LEFT | Align::VCENTER);
-        hairpin()->setEndTextAlign(Align::RIGHT | Align::VCENTER);
+        hairpin()->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
+        hairpin()->setEndTextAlign({ AlignH::RIGHT, AlignV::VCENTER });
 
         qreal x1 = 0.0;
         TextLineBaseSegment::layout();

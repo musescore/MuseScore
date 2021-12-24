@@ -322,7 +322,7 @@ void Lyrics::layout()
 
     ChordRest* cr = chordRest();
 
-    if (align() & Align::HCENTER) {
+    if (align() == AlignH::HCENTER) {
         //
         // center under notehead, not origin
         // however, lyrics that are melismas or have verse numbers will be forced to left alignment
@@ -330,7 +330,7 @@ void Lyrics::layout()
         // center under note head
         qreal nominalWidth = symWidth(SymId::noteheadBlack);
         x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
-    } else if (!(align() & Align::RIGHT)) {
+    } else if (!(align() == AlignH::RIGHT)) {
         // even for left aligned syllables, ignore leading verse numbers and/or punctuation
         x -= leftAdjust;
     }

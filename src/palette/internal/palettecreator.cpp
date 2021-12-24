@@ -961,7 +961,7 @@ PalettePtr PaletteCreator::newLinesPalette()
     gabel4->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel4->setBeginText("<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel4->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    gabel4->setBeginTextAlign(Align::VCENTER);
+    gabel4->setBeginTextAlign({ AlignH::LEFT, AlignV::VCENTER });
     gabel4->setPropertyFlags(Pid::BEGIN_TEXT_ALIGN, PropertyFlags::UNSTYLED);
     gabel4->setLen(w);
     sp->appendElement(gabel4, QT_TRANSLATE_NOOP("palette", "Dynamic + hairpin"));

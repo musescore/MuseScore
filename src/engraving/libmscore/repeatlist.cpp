@@ -503,21 +503,18 @@ void RepeatList::collectRepeatListElements()
                     // them from left to right. The only way available to guess their order is to look at their
                     // text alignment and order them left to right
                     // At the same time, we should ensure Markers are evaluated before Jumps
-                    Align markerRLEalignmentH
-                        = static_cast<Align>(static_cast<char>(toMarker(e)->align()) & static_cast<char>(Align::HMASK));
+                    Align markerRLEalignmentH = toMarker(e)->align();
                     auto insertionIt = sectionRLElements->end() - 1;
                     while ((*insertionIt)->measure == markerRLE->measure) {
                         bool markerShouldGoBefore = false;
                         if (((*insertionIt)->repeatListElementType == RepeatListElementType::MARKER)
-                            && (markerRLEalignmentH != Align::RIGHT) // We can be the end when right aligned
+                            && (markerRLEalignmentH != AlignH::RIGHT) // We can be the end when right aligned
                             ) {
-                            Align storedMarkerAlignmentH
-                                = static_cast<Align>(static_cast<char>(toMarker((*insertionIt)->element)->align())
-                                                     & static_cast<char>(Align::HMASK));
-                            if (markerRLEalignmentH == Align::HCENTER) {
-                                markerShouldGoBefore = (storedMarkerAlignmentH == Align::RIGHT);
+                            Align storedMarkerAlignmentH = toMarker((*insertionIt)->element)->align();
+                            if (markerRLEalignmentH == AlignH::HCENTER) {
+                                markerShouldGoBefore = (storedMarkerAlignmentH == AlignH::RIGHT);
                             } else { //(markerRLEalignmentH == Align::LEFT)
-                                markerShouldGoBefore = (storedMarkerAlignmentH != Align::LEFT);
+                                markerShouldGoBefore = (storedMarkerAlignmentH != AlignH::LEFT);
                             }
                         }
                         if (markerShouldGoBefore

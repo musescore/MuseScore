@@ -1431,10 +1431,10 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
     QString just;
     QString val;
 
-    if (al & Align::RIGHT) {
+    if (al == AlignH::RIGHT) {
         just = "right";
         tx   = w - rm;
-    } else if (al & Align::HCENTER) {
+    } else if (al == AlignH::HCENTER) {
         just = "center";
         // tx already set correctly
     } else {
@@ -1442,13 +1442,13 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
         tx   = lm;
     }
 
-    if (al & Align::BOTTOM) {
+    if (al == AlignV::BOTTOM) {
         val = "bottom";
         ty -= ph;
-    } else if (al & Align::VCENTER) {
+    } else if (al == AlignV::VCENTER) {
         val = "middle";
         ty -= ph / 2;
-    } else if (al & Align::BASELINE) {
+    } else if (al == AlignV::BASELINE) {
         val = "baseline";
         ty -= ph / 2;
     } else {

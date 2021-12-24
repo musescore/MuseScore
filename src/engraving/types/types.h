@@ -62,46 +62,45 @@ enum class GlissandoStyle {
 
 // --- Layout ---
 
-//---------------------------------------------------------
-///   Align
-///   Because the Align enum has Top = 0 and Left = 0,
-///   align() & Align::Top will always return false.
-///   @warning Do not use if (align() & Align::Top) { doSomething(); }
-///   because doSomething() will never be executed!
-///   use this instead:
-///   `if ((static_cast<char>(align()) & static_cast<char>(Align::VMASK)) == Align::Top) { doSomething(); }`
-///   Same applies to Align::Left.
-//---------------------------------------------------------
 // P_TYPE::ALIGN
-enum class Align : char {
-    ///.\{
-    LEFT     = 0,
-    RIGHT    = 1,
-    HCENTER  = 2,
-    TOP      = 0,
-    BOTTOM   = 4,
-    VCENTER  = 8,
-    BASELINE = 16,
-    CENTER = Align::HCENTER | Align::VCENTER,
-    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
-    VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
-             ///.\}
+enum class AlignV {
+    TOP,
+    VCENTER,
+    BOTTOM,
+    BASELINE
 };
 
-constexpr Align operator|(Align a1, Align a2)
-{
-    return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
-}
+enum class AlignH {
+    LEFT,
+    RIGHT,
+    HCENTER
+};
 
-constexpr bool operator&(Align a1, Align a2)
-{
-    return static_cast<char>(a1) & static_cast<char>(a2);
-}
+struct Align {
+    AlignH horizontal = AlignH::LEFT;
+    AlignV vertical = AlignV::TOP;
 
-constexpr Align operator~(Align a)
-{
-    return static_cast<Align>(~static_cast<char>(a));
-}
+    Align() = default;
+    Align(AlignH ah, AlignV av)
+        : horizontal(ah), vertical(av) {}
+
+    Align(AlignH a)
+        : horizontal(a) {}
+    Align(AlignV a)
+        : vertical(a) {}
+
+    inline Align& operator =(AlignH a) { horizontal = a; return *this; }
+    inline Align& operator =(AlignV a) { vertical = a; return *this; }
+
+    inline bool operator ==(const Align& a) const { return a.vertical == vertical && a.horizontal == horizontal; }
+    inline bool operator !=(const Align& a) const { return !operator ==(a); }
+
+    inline bool operator ==(const AlignV& a) const { return a == vertical; }
+    inline bool operator !=(const AlignV& a) const { return !operator ==(a); }
+
+    inline bool operator ==(const AlignH& a) const { return a == horizontal; }
+    inline bool operator !=(const AlignH& a) const { return !operator ==(a); }
+};
 
 // P_TYPE::PLACEMENT_V
 enum class PlacementV {
@@ -514,6 +513,8 @@ enum class AccidentalRole : char {
 //! NOTE compat
 namespace Ms {
 using OrnamentStyle = mu::engraving::OrnamentStyle;
+using AlignV = mu::engraving::AlignV;
+using AlignH = mu::engraving::AlignH;
 using Align = mu::engraving::Align;
 using PlacementV = mu::engraving::PlacementV;
 using PlacementH = mu::engraving::PlacementH;

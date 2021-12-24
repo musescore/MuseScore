@@ -605,12 +605,12 @@ static void findYMinYMaxInWords(const std::vector<const CreditWords*>& words, in
 
 static Align alignForCreditWords(const CreditWords* const w, const int pageWidth)
 {
-    Align align = Align::LEFT;
+    Align align = AlignH::LEFT;
     if (w->defaultX > (pageWidth / 3)) {
         if (w->defaultX < (2 * pageWidth / 3)) {
-            align = Align::HCENTER;
+            align = AlignH::HCENTER;
         } else {
-            align = Align::RIGHT;
+            align = AlignH::RIGHT;
         }
     }
     return align;

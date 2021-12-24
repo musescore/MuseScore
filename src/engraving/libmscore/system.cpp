@@ -424,18 +424,18 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
         for (InstrumentName* t : qAsConst(s->instrumentNames)) {
             // reset align layout
             Align originAlign = t->align();
-            t->setAlign(Align(int(t->align()) & int(~Align::HMASK)) | Align::LEFT);
+            t->setAlign(Align(AlignH::LEFT, originAlign.vertical));
             t->layout();
             t->setAlign(originAlign);
 
-            switch (int(t->align()) & int(Align::HMASK)) {
-            case int(Align::LEFT):
+            switch (t->align().horizontal) {
+            case AlignH::LEFT:
                 t->rxpos() = 0 - bracketsWidth;
                 break;
-            case int(Align::HCENTER):
+            case AlignH::HCENTER:
                 t->rxpos() = (maxNamesWidth - t->width()) / 2 - bracketsWidth;
                 break;
-            case int(Align::RIGHT):
+            case AlignH::RIGHT:
             default:
                 t->rxpos() = maxNamesWidth - t->width() - bracketsWidth;
                 break;
