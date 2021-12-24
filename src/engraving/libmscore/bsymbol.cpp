@@ -44,7 +44,7 @@ namespace Ms {
 BSymbol::BSymbol(const Ms::ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
-    _align = Align::LEFT | Align::BASELINE;
+    _align = { AlignH::LEFT, AlignV::BASELINE };
 }
 
 BSymbol::BSymbol(const BSymbol& s)

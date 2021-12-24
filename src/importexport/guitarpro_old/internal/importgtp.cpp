@@ -537,7 +537,7 @@ void GuitarPro::addVibrato(Note* note, Vibrato::Type type)
 
 void GuitarPro::addTap(Note* note)
 {
-    addTextToNote("T", Align::CENTER, note);
+    addTextToNote("T", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------
@@ -546,7 +546,7 @@ void GuitarPro::addTap(Note* note)
 
 void GuitarPro::addSlap(Note* note)
 {
-    addTextToNote("S", Align::CENTER, note);
+    addTextToNote("S", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------
@@ -555,7 +555,7 @@ void GuitarPro::addSlap(Note* note)
 
 void GuitarPro::addPop(Note* note)
 {
-    addTextToNote("P", Align::CENTER, note);
+    addTextToNote("P", { AlignH::HCENTER, AlignV::VCENTER }, note);
 }
 
 //---------------------------------------------------------

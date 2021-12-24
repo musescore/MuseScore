@@ -40,13 +40,13 @@ enum class OrnamentStyle : char {
 Q_ENUM_NS(OrnamentStyle);
 
 enum class Align : char {
-    LEFT     = char(mu::engraving::Align::LEFT),
-    RIGHT    = char(mu::engraving::Align::RIGHT),
-    HCENTER  = char(mu::engraving::Align::HCENTER),
-    TOP      = char(mu::engraving::Align::TOP),
-    BOTTOM   = char(mu::engraving::Align::BOTTOM),
-    VCENTER  = char(mu::engraving::Align::VCENTER),
-    BASELINE = char(mu::engraving::Align::BASELINE),
+    LEFT     = char(mu::engraving::AlignH::LEFT),
+    RIGHT    = char(mu::engraving::AlignH::RIGHT),
+    HCENTER  = char(mu::engraving::AlignH::HCENTER),
+    TOP      = char(mu::engraving::AlignV::TOP),
+    BOTTOM   = char(mu::engraving::AlignV::BOTTOM),
+    VCENTER  = char(mu::engraving::AlignV::VCENTER),
+    BASELINE = char(mu::engraving::AlignV::BASELINE),
     CENTER = Align::HCENTER | Align::VCENTER,
     HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
     VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE

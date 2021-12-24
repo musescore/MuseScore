@@ -195,7 +195,7 @@ void Marker::layout()
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
 
-    if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER))) {
+    if (layoutToParentWidth() && align() == AlignH::LEFT) {
         rxpos() -= width() * 0.5;
     }
 

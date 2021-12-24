@@ -45,63 +45,6 @@ OrnamentStyle XmlValue::fromXml(const QString& str, OrnamentStyle def)
     return def;
 }
 
-QString XmlValue::toXml(Align a)
-{
-    const char* h;
-    if (a & Align::HCENTER) {
-        h = "center";
-    } else if (a & Align::RIGHT) {
-        h = "right";
-    } else {
-        h = "left";
-    }
-    const char* v;
-    if (a & Align::BOTTOM) {
-        v = "bottom";
-    } else if (a & Align::VCENTER) {
-        v = "center";
-    } else if (a & Align::BASELINE) {
-        v = "baseline";
-    } else {
-        v = "top";
-    }
-    return QString("%1,%2").arg(h, v);
-}
-
-Align XmlValue::fromXml(const QString& str, Align def)
-{
-    QStringList sl = str.split(',');
-    if (sl.size() != 2) {
-        LOGD() << "bad align value: " << str;
-        return def;
-    }
-
-    Align align = Align::LEFT;
-    if (sl[0] == "center") {
-        align = align | Align::HCENTER;
-    } else if (sl[0] == "right") {
-        align = align | Align::RIGHT;
-    } else if (sl[0] == "left") {
-    } else {
-        LOGD() << "bad align value: " << str;
-        return def;
-    }
-
-    if (sl[1] == "center") {
-        align = align | Align::VCENTER;
-    } else if (sl[1] == "bottom") {
-        align = align | Align::BOTTOM;
-    } else if (sl[1] == "baseline") {
-        align = align | Align::BASELINE;
-    } else if (sl[1] == "top") {
-    } else {
-        LOGD() << "bad align value: " << str;
-        return def;
-    }
-
-    return align;
-}
-
 QString XmlValue::toXml(PlacementV v)
 {
     switch (v) {

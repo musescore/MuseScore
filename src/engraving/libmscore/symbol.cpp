@@ -91,16 +91,16 @@ void Symbol::layout()
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
     qreal w = width();
     PointF p;
-    if (align() & Align::BOTTOM) {
+    if (align() == AlignV::BOTTOM) {
         p.setY(-height());
-    } else if (align() & Align::VCENTER) {
+    } else if (align() == AlignV::VCENTER) {
         p.setY((-height()) * .5);
-    } else if (align() & Align::BASELINE) {
+    } else if (align() == AlignV::BASELINE) {
         p.setY(-baseLine());
     }
-    if (align() & Align::RIGHT) {
+    if (align() == AlignH::RIGHT) {
         p.setX(-w);
-    } else if (align() & Align::HCENTER) {
+    } else if (align() == AlignH::HCENTER) {
         p.setX(-(w * .5));
     }
     setPos(p);

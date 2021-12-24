@@ -1202,7 +1202,7 @@ void FretDiagram::add(EngravingItem* e)
             _harmony->resetProperty(Pid::OFFSET);
         }
 
-        _harmony->setProperty(Pid::ALIGN, int(Align::HCENTER | Align::TOP));
+        _harmony->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
         _harmony->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else {
         qWarning("FretDiagram: cannot add <%s>\n", e->name());

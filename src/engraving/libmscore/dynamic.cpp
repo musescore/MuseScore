@@ -282,7 +282,7 @@ void Dynamic::layout()
             if (!e) {
                 continue;
             }
-            if (e->isChord() && (align() & Align::HCENTER)) {
+            if (e->isChord() && (align() == AlignH::HCENTER)) {
                 SymId symId = TConv::symId(dynamicType());
 
                 // this value is different than chord()->mag() or mag()

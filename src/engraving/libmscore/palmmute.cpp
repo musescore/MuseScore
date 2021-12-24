@@ -181,7 +181,7 @@ PropertyValue PalmMute::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
-        return PropertyValue::fromValue(Align::LEFT | Align::BASELINE);
+        return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::palmMuteLineStyle);

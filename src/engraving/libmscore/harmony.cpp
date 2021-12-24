@@ -1455,17 +1455,17 @@ PointF Harmony::calculateBoundingRect()
         qreal xx = 0.0;
         qreal yy = 0.0;
         if (fd) {
-            if (align() & Align::RIGHT) {
+            if (align() == AlignH::RIGHT) {
                 xx = fd->width() / 2.0;
             }
             yy = rypos();
         } else {
-            if (align() & Align::RIGHT) {
+            if (align() == AlignH::RIGHT) {
                 xx = cw;
-            } else if (align() & Align::HCENTER) {
+            } else if (align() == AlignH::HCENTER) {
                 xx = cw / 2.0;
             }
-            yy = ypos - ((align() & Align::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
+            yy = ypos - ((align() == AlignV::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
         }
 
         newx = xx;
@@ -1477,28 +1477,28 @@ PointF Harmony::calculateBoundingRect()
         }
 
         qreal yy = -bb.y();      // Align::TOP
-        if (align() & Align::VCENTER) {
+        if (align() == AlignV::VCENTER) {
             yy = -bb.y() / 2.0;
-        } else if (align() & Align::BASELINE) {
+        } else if (align() == AlignV::BASELINE) {
             yy = 0.0;
-        } else if (align() & Align::BOTTOM) {
+        } else if (align() == AlignV::BOTTOM) {
             yy = -bb.height() - bb.y();
         }
 
-        qreal xx = -bb.x();     // Align::LEFT
+        qreal xx = -bb.x();     // AlignH::LEFT
         if (fd) {
-            if (align() & Align::RIGHT) {
+            if (align() == AlignH::RIGHT) {
                 xx = fd->bbox().width() - bb.width();
-            } else if (align() & Align::HCENTER) {
+            } else if (align() == AlignH::HCENTER) {
                 xx = fd->centerX() - bb.width() / 2.0;
             }
 
             newx = 0.0;
             newy = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
         } else {
-            if (align() & Align::RIGHT) {
+            if (align() == AlignH::RIGHT) {
                 xx = -bb.x() - bb.width() + cw;
-            } else if (align() & Align::HCENTER) {
+            } else if (align() == AlignH::HCENTER) {
                 xx = -bb.x() - bb.width() / 2.0 + cw / 2.0;
             }
 

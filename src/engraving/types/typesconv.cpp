@@ -123,6 +123,51 @@ QList<int> TConv::fromXml(const QString& tag, const QList<int>& def)
     return list;
 }
 
+static const std::vector<Item<AlignH> > ALIGN_H = {
+    { AlignH::LEFT,     "left" },
+    { AlignH::RIGHT,    "right" },
+    { AlignH::HCENTER,  "center" },
+};
+
+static const std::vector<Item<AlignV> > ALIGN_V = {
+    { AlignV::TOP,      "top" },
+    { AlignV::VCENTER,  "center" },
+    { AlignV::BOTTOM,   "bottom" },
+    { AlignV::BASELINE, "baseline" },
+};
+
+AlignH TConv::fromXml(const QString& tag, AlignH def)
+{
+    return findTypeByXmlTag<AlignH>(ALIGN_H, tag, def);
+}
+
+AlignV TConv::fromXml(const QString& tag, AlignV def)
+{
+    return findTypeByXmlTag<AlignV>(ALIGN_V, tag, def);
+}
+
+QString TConv::toXml(Align v)
+{
+    QStringList sl;
+    sl << findXmlTagByType<AlignH>(ALIGN_H, v.horizontal);
+    sl << findXmlTagByType<AlignV>(ALIGN_V, v.vertical);
+    return sl.join(",");
+}
+
+Align TConv::fromXml(const QString& str, Align def)
+{
+    QStringList sl = str.split(',');
+    if (sl.size() != 2) {
+        LOGD() << "bad align value: " << str;
+        return def;
+    }
+
+    Align a;
+    a.horizontal = findTypeByXmlTag<AlignH>(ALIGN_H, sl.at(0), def.horizontal);
+    a.vertical = findTypeByXmlTag<AlignV>(ALIGN_V, sl.at(1), def.vertical);
+    return a;
+}
+
 QString TConv::toUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);
