@@ -1125,7 +1125,7 @@ void TextBlock::layout(TextBase* t)
     // Apply style/custom line spacing
     _lineSpacing *= t->textLineSpacing();
 
-    qreal rx;
+    qreal rx = 0;
     if (t->align() & Align::RIGHT) {
         rx = layoutWidth - _bbox.right();
     } else if (t->align() & Align::HCENTER) {

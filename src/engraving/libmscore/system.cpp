@@ -377,7 +377,6 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     qreal maxBracketsWidth = totalBracketOffset(ctx);
     qreal bracketsWidth = layoutBrackets(ctx);
     qreal bracketWidthDifference = maxBracketsWidth - bracketsWidth;
-    qreal nameOffset = 0.0;
     if (maxNamesWidth == 0.0) {
         if (score()->styleB(Sid::alignSystemToMargin)) {
             _leftMargin = bracketWidthDifference;
@@ -386,7 +385,6 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
         }
     } else {
         _leftMargin = maxNamesWidth + bracketWidthDifference + instrumentNameOffset;
-        nameOffset = _leftMargin - bracketsWidth - instrumentNameOffset;
     }
 
     int nVisible = 0;
@@ -424,16 +422,22 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
 
     for (SysStaff* s : qAsConst(_staves)) {
         for (InstrumentName* t : qAsConst(s->instrumentNames)) {
+            // reset align layout
+            Align originAlign = t->align();
+            t->setAlign(Align(int(t->align()) & int(~Align::HMASK)) | Align::LEFT);
+            t->layout();
+            t->setAlign(originAlign);
+
             switch (int(t->align()) & int(Align::HMASK)) {
             case int(Align::LEFT):
-                t->rxpos() = t->width() - maxNamesWidth + nameOffset + xo1;
+                t->rxpos() = 0 - bracketsWidth;
                 break;
             case int(Align::HCENTER):
-                t->rxpos() = (t->width() - maxNamesWidth) / 2 + nameOffset + xo1;
+                t->rxpos() = (maxNamesWidth - t->width()) / 2 - bracketsWidth;
                 break;
             case int(Align::RIGHT):
             default:
-                t->rxpos() = nameOffset + xo1;
+                t->rxpos() = maxNamesWidth - t->width() - bracketsWidth;
                 break;
             }
         }
