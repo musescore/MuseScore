@@ -72,8 +72,6 @@ public:
 private:
     void setupConnections();
 
-    bool eventFilter(QObject* watched, QEvent* event) override;
-
     project::INotationProjectPtr currentNotationProject() const;
     notation::IMasterNotationPtr currentMasterNotation() const;
     notation::INotationPtr currentNotation() const;

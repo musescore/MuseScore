@@ -41,7 +41,9 @@ public:
 
     void setSessionType(const QString& sessionType) override;
     void setStartupScorePath(const io::path& path) override;
+
     void run() override;
+    bool startupCompleted() const override;
 
 private:
     void onStartupPageOpened(StartupSessionType sessionType);
@@ -53,6 +55,7 @@ private:
 
     QString m_sessionType;
     io::path m_startupScorePath;
+    bool m_startupCompleted = false;
 };
 }
 

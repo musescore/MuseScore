@@ -22,7 +22,6 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
-#include <QFileOpenEvent>
 
 #include "translation.h"
 #include "defer.h"
@@ -43,8 +42,6 @@ static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
 
 void ProjectActionsController::init()
 {
-    qApp->installEventFilter(this);
-
     dispatcher()->reg(this, "file-open", this, &ProjectActionsController::openProject);
     dispatcher()->reg(this, "file-new", this, &ProjectActionsController::newProject);
 
@@ -67,16 +64,6 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "clear-recent", this, &ProjectActionsController::clearRecentScores);
 
     dispatcher()->reg(this, "continue-last-session", this, &ProjectActionsController::continueLastSession);
-}
-
-bool ProjectActionsController::eventFilter(QObject* watched, QEvent* event)
-{
-    if (watched == qApp && event->type() == QEvent::FileOpen) {
-        QFileOpenEvent* openEvent = static_cast<QFileOpenEvent*>(event);
-        openProject(openEvent->file());
-    }
-
-    return QObject::eventFilter(watched, event);
 }
 
 INotationProjectPtr ProjectActionsController::currentNotationProject() const
