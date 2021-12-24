@@ -160,7 +160,7 @@ PropertyValue LetRing::propertyDefault(Pid propertyId) const
         return score()->styleV(Sid::letRingLineWidth);
 
     case Pid::ALIGN:
-        return PropertyValue::fromValue(Align::LEFT | Align::BASELINE);
+        return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::letRingLineStyle);

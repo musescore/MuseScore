@@ -303,7 +303,7 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
     case P_TYPE::ALIGN: {
         putLevel();
         *this << "<" << name << ">";
-        *this << XmlValue::toXml(data.value<Align>());
+        *this << TConv::toXml(data.value<Align>());
         *this << "</" << ename << ">\n";
     }
     break;

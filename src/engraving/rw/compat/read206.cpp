@@ -119,7 +119,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     double size = 10;
     bool sizeIsSpatiumDependent = false;
     FontStyle fontStyle = FontStyle::Normal;
-    Align align = Align::LEFT;
+    Align align = { AlignH::LEFT, AlignV::TOP };
     PointF offset;
     OffsetType offsetType = OffsetType::SPATIUM;
 
@@ -165,32 +165,14 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
                 fontStyle = fontStyle + FontStyle::Strike;
             }
 #endif
-        } else if (tag == "align") {
-            align = Align(e.readInt());
+        } else if (tag == "align") {      // obsolete
+            e.skipCurrentElement();
         } else if (tag == "anchor") {     // obsolete
             e.skipCurrentElement();
         } else if (tag == "halign") {
-            const QString& val(e.readElementText());
-            if (val == "center") {
-                align = align | Align::HCENTER;
-            } else if (val == "right") {
-                align = align | Align::RIGHT;
-            } else if (val == "left") {
-            } else {
-                qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
-            }
+            align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
         } else if (tag == "valign") {
-            const QString& val(e.readElementText());
-            if (val == "center") {
-                align = align | Align::VCENTER;
-            } else if (val == "bottom") {
-                align = align | Align::BOTTOM;
-            } else if (val == "baseline") {
-                align = align | Align::BASELINE;
-            } else if (val == "top") {
-            } else {
-                qDebug("Text::readProperties: unknown alignment: <%s>", qPrintable(val));
-            }
+            align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
         } else if (tag == "xoffset") {
             qreal xo = e.readDouble();
             if (offsetType == OffsetType::ABS) {
@@ -1243,36 +1225,18 @@ static bool readTextProperties206(XmlReader& e, const ReadContext& ctx, TextBase
     } else if (tag == "backgroundColor") {
         t->readProperty(e, Pid::FRAME_BG_COLOR);
     } else if (tag == "halign") {
-        Align align = Align(int(t->align()) & int(~Align::HMASK));
-        const QString& val(e.readElementText());
-        if (val == "center") {
-            align = align | Align::HCENTER;
-        } else if (val == "right") {
-            align = align | Align::RIGHT;
-        } else if (val == "left") {
-        } else {
-            qDebug("unknown alignment: <%s>", qPrintable(val));
-        }
+        Align align = t->align();
+        align.horizontal = TConv::fromXml(e.readElementText(), AlignH::LEFT);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "valign") {
-        Align align = Align(int(t->align()) & int(~Align::VMASK));
-        const QString& val(e.readElementText());
-        if (val == "center") {
-            align = align | Align::VCENTER;
-        } else if (val == "bottom") {
-            align = align | Align::BOTTOM;
-        } else if (val == "baseline") {
-            align = align | Align::BASELINE;
-        } else if (val == "top") {
-        } else {
-            qDebug("unknown alignment: <%s>", qPrintable(val));
-        }
+        Align align = t->align();
+        align.vertical = TConv::fromXml(e.readElementText(), AlignV::TOP);
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
     } else if (tag == "pos") {
         t->readProperty(e, Pid::OFFSET);
-        if ((char(t->align()) & char(Align::VMASK)) == char(Align::TOP)) {
+        if (t->align() == AlignV::TOP) {
             t->ryoffset() += .5 * ctx.spatium();           // HACK: bbox is different in 2.x
         }
         adjustPlacement(t);

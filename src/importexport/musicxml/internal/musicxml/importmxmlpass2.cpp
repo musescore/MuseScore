@@ -3153,7 +3153,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
     } else {
         // TBD: what happens when an unknown pedal type is found ?
         Symbol* s = new Symbol(_score->dummy());
-        s->setAlign(Align::LEFT | Align::BASELINE);
+        s->setAlign({ AlignH::LEFT, AlignV::BASELINE });
         //s->setOffsetType(OffsetType::SPATIUM);
         if (type == "start") {
             s->setSym(SymId::keyboardPedalPed);

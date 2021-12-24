@@ -274,7 +274,7 @@ class TextBase : public EngravingItem
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
 
-    Align _align = Align::LEFT;
+    Align _align;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it

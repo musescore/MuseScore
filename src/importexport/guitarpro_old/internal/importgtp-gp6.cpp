@@ -1210,7 +1210,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                             if (use_harmonic) {
                                                 harmonicText += "\\";
                                             }
-                                            addTextToNote(harmonicText, Align::CENTER, harmonicNote);
+                                            addTextToNote(harmonicText, { AlignH::HCENTER, AlignV::VCENTER }, harmonicNote);
                                         }
                                     }
                                 }
@@ -1414,9 +1414,9 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 if (barreFret.compare("") && lastChord != note->chord()) {
                                     lastChord = note->chord();
                                     if (halfBarre) {
-                                        addTextToNote("1/2B " + barreFret, Align::CENTER, note);
+                                        addTextToNote("1/2B " + barreFret, { AlignH::HCENTER, AlignV::VCENTER }, note);
                                     } else {
-                                        addTextToNote("B " + barreFret, Align::CENTER, note);
+                                        addTextToNote("B " + barreFret, { AlignH::HCENTER, AlignV::VCENTER }, note);
                                     }
                                 }
                             }
@@ -1636,7 +1636,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                 //int time    = currentNode.toElement().text().toInt();
                 //int minutes = time / 60;
                 //int seconds = time % 60;
-                //addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), Align::CENTER, note); //TODO
+                //addTextToNote(QString::number(minutes) + ":" + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), { AlignH::HCENTER, AlignV::VCENTER }, note); //TODO
             } else if (currentNode.nodeName() == "Rhythm") {
                 // we have found a rhythm
                 QString refString     = currentNode.attributes().namedItem("ref").toAttr().value();
@@ -1707,7 +1707,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                         ChordRest* cr1 = segment->cr(track);
                         if (cr1 && cr1->isChord()) {
                             Chord* c = toChord(cr1);
-                            addTextToNote("rasg.", Align::LEFT, c->upNote());
+                            addTextToNote("rasg.", { AlignH::LEFT, AlignV::TOP }, c->upNote());
                         }
                     }
                     currentProperty = currentProperty.nextSibling();

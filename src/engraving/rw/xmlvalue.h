@@ -35,9 +35,6 @@ public:
     static QString toXml(OrnamentStyle v);
     static OrnamentStyle fromXml(const QString& str, OrnamentStyle def);
 
-    static QString toXml(Align v);
-    static Align fromXml(const QString& str, Align def);
-
     static QString toXml(PlacementV v);
     static PlacementV fromXml(const QString& str, PlacementV def);
     static QString toXml(PlacementH v);

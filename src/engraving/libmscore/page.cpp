@@ -212,22 +212,22 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
         }
     }
     text->setParent((Page*)this);
-    Align flags = Align::LEFT;
+    Align align = { AlignH::LEFT, AlignV::TOP };
     switch (area) {
-    case 0: flags = Align::LEFT | Align::TOP;
+    case 0: align = { AlignH::LEFT, AlignV::TOP };
         break;
-    case 1: flags = Align::HCENTER | Align::TOP;
+    case 1: align = { AlignH::HCENTER, AlignV::TOP };
         break;
-    case 2: flags = Align::RIGHT | Align::TOP;
+    case 2: align = { AlignH::RIGHT, AlignV::TOP };
         break;
-    case 3: flags = Align::LEFT | Align::BOTTOM;
+    case 3: align = { AlignH::LEFT, AlignV::BOTTOM };
         break;
-    case 4: flags = Align::HCENTER | Align::BOTTOM;
+    case 4: align = { AlignH::HCENTER, AlignV::BOTTOM };
         break;
-    case 5: flags = Align::RIGHT | Align::BOTTOM;
+    case 5: align = { AlignH::RIGHT, AlignV::BOTTOM };
         break;
     }
-    text->setAlign(flags);
+    text->setAlign(align);
     text->setXmlText(s);
     text->layout();
     return text;

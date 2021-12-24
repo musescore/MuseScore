@@ -31,6 +31,7 @@
 #include "types/texttypes.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -50,10 +51,10 @@ void TextSettingsModel::createProperties()
     m_fontStyle = buildPropertyItem(Ms::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(Ms::Pid::FONT_SIZE);
     m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toInt() | m_verticalAlignment->value().toInt());
+        onPropertyValueChanged(pid, QVariantList({ newValue.toList().at(0), m_verticalAlignment->value().toList().at(1) }));
     });
     m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toInt() | m_horizontalAlignment->value().toInt());
+        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toList().at(0), newValue.toList().at(1) }));
     });
 
     m_isSizeSpatiumDependent = buildPropertyItem(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
@@ -97,31 +98,8 @@ void TextSettingsModel::loadProperties()
                ? QVariant() : elementPropertyValue.toInt();
     });
 
-    loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        Ms::Align alignment = static_cast<Ms::Align>(elementPropertyValue.toInt());
-
-        if (alignment & Ms::Align::RIGHT) {
-            return static_cast<int>(Ms::Align::RIGHT);
-        } else if (alignment & Ms::Align::HCENTER) {
-            return static_cast<int>(Ms::Align::HCENTER);
-        } else {
-            return static_cast<int>(Ms::Align::LEFT);
-        }
-    });
-
-    loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        Ms::Align alignment = static_cast<Ms::Align>(elementPropertyValue.toInt());
-
-        if (alignment & Ms::Align::BASELINE) {
-            return static_cast<int>(Ms::Align::BASELINE);
-        } else if (alignment & Ms::Align::VCENTER) {
-            return static_cast<int>(Ms::Align::VCENTER);
-        } else if (alignment & Ms::Align::BOTTOM) {
-            return static_cast<int>(Ms::Align::BOTTOM);
-        } else {
-            return static_cast<int>(Ms::Align::TOP);
-        }
-    });
+    loadPropertyItem(m_horizontalAlignment);
+    loadPropertyItem(m_verticalAlignment);
 
     loadPropertyItem(m_isSizeSpatiumDependent);
 

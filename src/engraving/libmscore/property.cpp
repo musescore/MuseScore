@@ -511,7 +511,7 @@ PropertyValue readProperty(Pid id, XmlReader& e)
         return PropertyValue(e.readElementText());
 
     case P_TYPE::ALIGN:
-        return PropertyValue(XmlValue::fromXml(e.readElementText(), Align::LEFT));
+        return PropertyValue(TConv::fromXml(e.readElementText(), Align()));
     case P_TYPE::PLACEMENT_V:
         return PropertyValue(XmlValue::fromXml(e.readElementText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:

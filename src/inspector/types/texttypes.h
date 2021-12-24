@@ -47,9 +47,9 @@ public:
 
     enum class FontVerticalAlignment {
         FONT_ALIGN_V_TOP = 0,
-        FONT_ALIGN_V_BOTTOM = 4,
-        FONT_ALIGN_V_CENTER = 8,
-        FONT_ALIGN_V_BASELINE = 16
+        FONT_ALIGN_V_CENTER = 1,
+        FONT_ALIGN_V_BOTTOM = 2,
+        FONT_ALIGN_V_BASELINE = 3
     };
 
     enum class FrameType {

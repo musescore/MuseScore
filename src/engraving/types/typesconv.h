@@ -35,6 +35,11 @@ public:
     static QString toXml(const QList<int>& v);
     static QList<int> fromXml(const QString& tag, const QList<int>& def);
 
+    static QString toXml(Align v);
+    static Align fromXml(const QString& str, Align def);
+    static AlignH fromXml(const QString& str, AlignH def);
+    static AlignV fromXml(const QString& str, AlignV def);
+
     static QString toUserName(SymId v);
     static QString toXml(SymId v);
     static SymId fromXml(const QString& tag, SymId def);
