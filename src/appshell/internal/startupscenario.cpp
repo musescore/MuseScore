@@ -67,6 +67,10 @@ void StartupScenario::run()
 {
     TRACEFUNC;
 
+    if (m_startupCompleted) {
+        return;
+    }
+
     StartupSessionType sessionType = resolveStartupSessionType();
     Uri startupUri = startupPageUri(sessionType);
 
@@ -83,10 +87,16 @@ void StartupScenario::run()
         async::Async::call(this, [this, opened]() {
             async::Channel<Uri> mut = opened;
             mut.resetOnReceive(this);
+            m_startupCompleted = true;
         });
     });
 
     interactive()->open(startupUri);
+}
+
+bool StartupScenario::startupCompleted() const
+{
+    return m_startupCompleted;
 }
 
 StartupSessionType StartupScenario::resolveStartupSessionType() const
