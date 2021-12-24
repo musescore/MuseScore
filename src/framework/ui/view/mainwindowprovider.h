@@ -55,7 +55,7 @@ public:
 
     bool isFullScreen() const override;
     void toggleFullScreen() override;
-    const QScreen* screen() const override;
+    QScreen* screen() const override;
 
 signals:
     void windowChanged();
