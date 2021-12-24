@@ -119,6 +119,10 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     m_orgStaff = s;
 
+    if (!m_orgStaff) {
+        return;
+    }
+
     Part* part = m_orgStaff->part();
     Ms::Score* score = part->score();
 
@@ -424,9 +428,10 @@ void EditStaff::initStaff()
     const INotationPtr notation = this->notation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     auto context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
-    const EngravingItem* element = Ms::toMeasure(context.element);
+    const EngravingItem* element = context.element;
+    Staff* staff = context.staff;
 
-    if (!element || !context.staff) {
+    if (!element) {
         return;
     }
 
@@ -440,13 +445,14 @@ void EditStaff::initStaff()
     } else if (element->isInstrumentName()) {
         const Ms::System* system = Ms::toSystem(Ms::toInstrumentName(element)->explicitParent());
         const Measure* measure = system ? system->firstMeasure() : nullptr;
+        staff = element->staff();
 
         if (measure) {
             tick = measure->tick();
         }
     }
 
-    setStaff(context.staff, tick);
+    setStaff(staff, tick);
 }
 
 Instrument EditStaff::instrument() const

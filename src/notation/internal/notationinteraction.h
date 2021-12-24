@@ -94,7 +94,6 @@ public:
     bool isDragStarted() const override;
     void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
     void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
-    void doEndDrag();
     void endDrag() override;
     async::Notification dragChanged() const override;
 
@@ -128,24 +127,22 @@ public:
     bool isTextSelected() const override;
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
-    void startEditText(EngravingItem* element, const PointF& cursorPos) override;
-    void editText(QKeyEvent* event) override;
+    void startEditText(EngravingItem* element, const PointF& cursorPos = PointF()) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
-    bool handleKeyPress(QKeyEvent* event);
 
     // Grip edit
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
-    void startEditGrip(Ms::Grip grip);
 
     bool isElementEditStarted() const override;
+    void startEditElement(EngravingItem* element) override;
+    void editElement(QKeyEvent* event) override;
     void endEditElement() override;
-    void startEditElement() override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -256,6 +253,9 @@ private:
     void apply();
     void rollback();
 
+    bool handleKeyPress(QKeyEvent* event);
+    void doEndDrag();
+
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
@@ -313,6 +313,7 @@ private:
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
+    void startEditGrip(Ms::Grip grip);
     void updateGripEdit();
     void resetGripEdit();
 

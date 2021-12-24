@@ -86,8 +86,6 @@ private:
     void moveWithinChord(MoveDirection direction);
     void selectTopOrBottomOfChord(MoveDirection direction);
 
-    void increaseDecreaseDuration(int steps, bool stepByDots);
-
     void changeVoice(int voiceIndex);
 
     void cutSelection();
@@ -99,27 +97,9 @@ private:
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
     void openSelectionMoreOptions();
-    void selectSection();
-    void firstElement();
-    void lastElement();
 
-    void nextLyrics();
-    void previousLyrics();
-    void nextLyricsVerse();
-    void previousLyricsVerse();
-    void nextSyllable();
-    void addMelisma();
-    void addLyricsVerse();
-
-    void toggleBold();
-    void toggleItalic();
-    void toggleUnderline();
-    void toggleStrike();
-
-    void toggleLayoutBreak(LayoutBreakType breakType);
-
-    void splitMeasure();
-    void joinSelectedMeasures();
+    void startEditSelectedElement();
+    void startEditSelectedText();
 
     void selectMeasuresCountAndInsert();
     void selectMeasuresCountAndAppend();
