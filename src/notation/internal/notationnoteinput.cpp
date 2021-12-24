@@ -161,6 +161,7 @@ void NotationNoteInput::endNoteInput()
 {
     Ms::InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
+
     if (is.slur()) {
         const std::vector<Ms::SpannerSegment*>& el = is.slur()->spannerSegments();
         if (!el.empty()) {
@@ -169,7 +170,7 @@ void NotationNoteInput::endNoteInput()
         is.setSlur(0);
     }
 
-    notifyAboutStateChanged();
+    updateInputState();
 }
 
 void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
