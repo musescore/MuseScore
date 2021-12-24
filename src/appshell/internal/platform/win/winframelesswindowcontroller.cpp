@@ -102,8 +102,17 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
 bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result) const
 {
     NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(message->lParam);
-    if (params.rgrc[0].top != 0) {
-        params.rgrc[0].top -= 1;
+
+    WINDOWPLACEMENT placement = {};
+    placement.length = sizeof(WINDOWPLACEMENT);
+    GetWindowPlacement(s_hwnd, &placement);
+
+    if (placement.showCmd == SW_SHOWMAXIMIZED) {
+        qreal borderWidth = this->borderWidth();
+        params.rgrc[0].left += borderWidth;
+        params.rgrc[0].top += borderWidth;
+        params.rgrc[0].right -= borderWidth;
+        params.rgrc[0].bottom -= borderWidth;
     }
 
     /// NOTE: remove window frame
@@ -129,11 +138,7 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, long* resul
     auto minMaxInfo = reinterpret_cast<MINMAXINFO*>(message->lParam);
 
     minMaxInfo->ptMaxSize.x = availableGeometry.width() * scaleFactor;
-
-    // NOTE: Qt doesn't work well with windows that don't have title bar but have native frames.
-    // When maximized they go out of bounds and the title bar is clipped,
-    // so decreasing the height by 1 fixes the window size
-    minMaxInfo->ptMaxSize.y = availableGeometry.height() * scaleFactor - 1;
+    minMaxInfo->ptMaxSize.y = availableGeometry.height() * scaleFactor;
 
     if (windowScreen == QGuiApplication::primaryScreen()) {
         minMaxInfo->ptMaxPosition.x = availableGeometry.x();

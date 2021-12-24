@@ -115,7 +115,7 @@ void PopupWindow_QQuickView::show(QPoint p)
 {
     m_view->setPosition(p);
     m_view->setScreen(mainWindow()->screen());
-    
+
     QWindow* parent = m_parentWindow ? m_parentWindow : interactiveProvider()->topWindow();
     m_view->setTransientParent(parent);
 
