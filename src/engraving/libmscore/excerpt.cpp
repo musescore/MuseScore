@@ -349,7 +349,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     VBox* titleFramePart = toVBox(measure);
     titleFramePart->copyValues(titleFrameScore);
-    QString partLabel = excerpt->title();       // parts.front()->longName();
+    QString partLabel = excerpt->title();
     if (!partLabel.isEmpty()) {
         Text* txt = Factory::createText(measure, TextStyleType::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
