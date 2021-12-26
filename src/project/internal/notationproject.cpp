@@ -258,6 +258,8 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
     m_masterNotation->setMasterScore(project->masterScore());
 
+    m_masterNotation->score()->setCreated(true);
+
     m_projectAudioSettings = audioSettings;
     m_viewSettings = viewSettings;
 
