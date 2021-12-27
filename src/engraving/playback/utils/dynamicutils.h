@@ -28,7 +28,6 @@
 #include "types/types.h"
 
 namespace mu::engraving {
-
 inline mpe::DynamicTypeList dynamicType(const DynamicType type)
 {
     switch (type) {
