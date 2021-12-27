@@ -35,6 +35,14 @@ using namespace mu;
 using namespace mu::mpe;
 using namespace mu::async;
 
+static const std::map<ArticulationFamily, io::path> DEFAULT_ARTICULATION_PROFILES =
+{
+    { ArticulationFamily::KeyboardsArticulation, io::path(":/mpe/general_keyboard_articulations_profile.json") },
+    { ArticulationFamily::StringsArticulation, io::path(":/mpe/general_strings_articulations_profile.json") },
+    { ArticulationFamily::WindsArticulation, io::path(":/mpe/general_winds_articulations_profile.json") },
+    { ArticulationFamily::PercussionsArticulation, io::path(":/mpe/general_percussion_articulations_profile.json") }
+};
+
 static const QString SUPPORTED_FAMILIES = "supportedFamilies";
 static const QString PATTERNS_KEY = "patterns";
 static const QString PATTERN_POS_KEY = "patternPosition";
@@ -63,9 +71,23 @@ ArticulationsProfilePtr ArticulationProfilesRepository::createNew() const
 
 ArticulationsProfilePtr ArticulationProfilesRepository::defaultProfile(const ArticulationFamily family) const
 {
-    NOT_IMPLEMENTED;
-    UNUSED(family);
-    return nullptr;
+    auto search = m_defaultProfiles.find(family);
+
+    if (search != m_defaultProfiles.cend()) {
+        return search->second;
+    }
+
+    auto pathSearch = DEFAULT_ARTICULATION_PROFILES.find(family);
+
+    if (pathSearch == DEFAULT_ARTICULATION_PROFILES.cend()) {
+        LOGE() << "Unable to find path for undefined articulations family";
+        return nullptr;
+    }
+
+    ArticulationsProfilePtr result = loadProfile(pathSearch->second);
+    m_defaultProfiles.emplace(family, result);
+
+    return result;
 }
 
 ArticulationsProfilePtr ArticulationProfilesRepository::loadProfile(const io::path& path) const

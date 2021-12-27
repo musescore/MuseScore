@@ -59,6 +59,8 @@ private:
     ExpressionPattern expressionPatternFromJson(const QJsonObject& obj) const;
     QJsonObject expressionPatternToJson(const ExpressionPattern& pattern) const;
 
+    mutable std::unordered_map<ArticulationFamily, ArticulationsProfilePtr> m_defaultProfiles;
+
     async::Channel<io::path> m_profileChanged;
 };
 }
