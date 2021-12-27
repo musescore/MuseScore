@@ -28,7 +28,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const ArticulationTypeSet& TremoloRenderer::supportedTypes() const
+const ArticulationTypeSet& TremoloRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Tremolo8th, mpe::ArticulationType::Tremolo16th,
@@ -39,7 +39,7 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes() const
 }
 
 void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
-                               mpe::PlaybackEventList& result) const
+                               mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
     IF_ASSERT_FAILED(chord) {
@@ -88,7 +88,7 @@ void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articul
     }
 }
 
-int TremoloRenderer::stepDurationTicksByType(const mpe::ArticulationType& type) const
+int TremoloRenderer::stepDurationTicksByType(const mpe::ArticulationType& type)
 {
     static constexpr int QUAVER_NOTE_DURATION_TICKS = Constants::division / 2;
     static constexpr int SEMI_QUAVER_NOTE_DURATION_TICKS = QUAVER_NOTE_DURATION_TICKS / 2;
@@ -106,7 +106,7 @@ int TremoloRenderer::stepDurationTicksByType(const mpe::ArticulationType& type) 
 
 void TremoloRenderer::buildAndAppendEvents(const Ms::Chord* chord, const ArticulationType type, const mpe::duration_t stepDuration,
                                            const mpe::timestamp_t timestampOffset, const PlaybackContext& context,
-                                           mpe::PlaybackEventList& result) const
+                                           mpe::PlaybackEventList& result)
 {
     for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
         NominalNoteCtx noteCtx(chord->notes().at(noteIdx), context);

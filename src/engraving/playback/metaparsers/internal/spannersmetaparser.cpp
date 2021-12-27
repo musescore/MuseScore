@@ -33,7 +33,7 @@
 using namespace mu::engraving;
 
 void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                 mpe::ArticulationMetaMap& result) const
+                                 mpe::ArticulationMetaMap& result)
 {
     IF_ASSERT_FAILED(item->isSpanner() && ctx.isValid()) {
         return;

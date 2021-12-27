@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const ArticulationTypeSet& ArpeggioRenderer::supportedTypes() const
+const ArticulationTypeSet& ArpeggioRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Arpeggio, mpe::ArticulationType::ArpeggioDown,
@@ -39,7 +39,7 @@ const ArticulationTypeSet& ArpeggioRenderer::supportedTypes() const
 }
 
 void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
-                                mpe::PlaybackEventList& result) const
+                                mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
 
@@ -71,7 +71,7 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
     }
 }
 
-bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type) const
+bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
 {
     switch (type) {
     case mpe::ArticulationType::Arpeggio:

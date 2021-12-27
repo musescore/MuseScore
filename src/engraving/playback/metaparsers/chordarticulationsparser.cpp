@@ -40,7 +40,7 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 
 void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                                         mpe::ArticulationMap& result) const
+                                                         mpe::ArticulationMap& result)
 {
     if (!chord) {
         LOGE() << "Unable to render playback events of invalid chord";
@@ -64,7 +64,7 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
 }
 
 void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                       mpe::ArticulationMetaMap& result) const
+                                       mpe::ArticulationMetaMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;
@@ -81,7 +81,7 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Play
 }
 
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result) const
+                                             mpe::ArticulationMetaMap& result)
 {
     for (const auto& pair : chord->score()->spanner()) {
         const Ms::Spanner* spanner = pair.second;
@@ -105,28 +105,28 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Playb
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
-        SpannersMetaParser::instance()->parse(spanner, std::move(spannerContext), result);
+        SpannersMetaParser::parse(spanner, std::move(spannerContext), result);
     }
 }
 
 void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                                        mpe::ArticulationMetaMap& result) const
+                                                        mpe::ArticulationMetaMap& result)
 {
     for (const Ms::Articulation* articulation : chord->articulations()) {
-        SymbolsMetaParser::instance()->parse(articulation, ctx, result);
+        SymbolsMetaParser::parse(articulation, ctx, result);
     }
 }
 
 void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                                mpe::ArticulationMetaMap& result) const
+                                                mpe::ArticulationMetaMap& result)
 {
     for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
-        AnnotationsMetaParser::instance()->parse(annotation, ctx, result);
+        AnnotationsMetaParser::parse(annotation, ctx, result);
     }
 }
 
 void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result) const
+                                            mpe::ArticulationMetaMap& result)
 {
     const Ms::Tremolo* tremolo = chord->tremolo();
 
@@ -134,11 +134,11 @@ void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const Playba
         return;
     }
 
-    TremoloMetaParser::instance()->parse(tremolo, ctx, result);
+    TremoloMetaParser::parse(tremolo, ctx, result);
 }
 
 void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result) const
+                                             mpe::ArticulationMetaMap& result)
 {
     const Ms::Arpeggio* arpeggio = chord->arpeggio();
 
@@ -150,13 +150,13 @@ void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const Playb
         return;
     }
 
-    ArpeggioMetaParser::instance()->parse(arpeggio, ctx, result);
+    ArpeggioMetaParser::parse(arpeggio, ctx, result);
 }
 
 void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                               mpe::ArticulationMetaMap& result) const
+                                               mpe::ArticulationMetaMap& result)
 {
     for (const Ms::Chord* graceChord : chord->graceNotes()) {
-        GraceNotesMetaParser::instance()->parse(graceChord, ctx, result);
+        GraceNotesMetaParser::parse(graceChord, ctx, result);
     }
 }

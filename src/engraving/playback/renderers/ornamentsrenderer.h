@@ -46,19 +46,19 @@ struct DisclosureRule {
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 {
 public:
-    const mpe::ArticulationTypeSet& supportedTypes() const;
+    static const mpe::ArticulationTypeSet& supportedTypes();
 
-    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
-                  mpe::PlaybackEventList& result) const;
+    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+                         mpe::PlaybackEventList& result);
 
 private:
-    void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result) const;
+    static void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result);
 
-    int alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks) const;
+    static int alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks);
 
-    void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
-                      const int availableDurationTicks, const int overallDurationTicks, const std::vector<mpe::pitch_level_t>& pitchOffsets,
-                      mpe::PlaybackEventList& result) const;
+    static void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
+                             const int availableDurationTicks, const int overallDurationTicks,
+                             const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result);
 };
 }
 

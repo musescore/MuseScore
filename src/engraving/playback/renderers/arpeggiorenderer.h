@@ -29,13 +29,13 @@ namespace mu::engraving {
 class ArpeggioRenderer : public RenderBase<ArpeggioRenderer>
 {
 public:
-    const mpe::ArticulationTypeSet& supportedTypes() const;
+    static const mpe::ArticulationTypeSet& supportedTypes();
 
-    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
-                  mpe::PlaybackEventList& result) const;
+    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+                         mpe::PlaybackEventList& result);
 
 private:
-    bool isDirectionUp(const mpe::ArticulationType type) const;
+    static bool isDirectionUp(const mpe::ArticulationType type);
 };
 }
 
