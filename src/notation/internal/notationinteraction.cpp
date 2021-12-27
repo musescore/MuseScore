@@ -2436,15 +2436,17 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     qreal vRaster = Ms::MScore::vRaster(), hRaster = Ms::MScore::hRaster();
     switch (event->key()) {
     case Qt::Key_Tab:
-        if (!m_editData.element->nextGrip(m_editData)) {
+        if (!m_editData.element->gripsCount()) {
             return false;
         }
+        m_editData.element->nextGrip(m_editData);
         updateAnchorLines();
         return true;
     case Qt::Key_Backtab:
-        if (!m_editData.element->prevGrip(m_editData)) {
+        if (!m_editData.element->gripsCount()) {
             return false;
         }
+        m_editData.element->prevGrip(m_editData);
         updateAnchorLines();
         return true;
     case Qt::Key_Left:
@@ -2471,6 +2473,7 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     if (m_editData.curGrip != Ms::Grip::NO_GRIP && int(m_editData.curGrip) < m_editData.grips) {
         m_editData.pos = m_editData.grip[int(m_editData.curGrip)].center() + m_editData.delta;
     }
+    m_scoreCallbacks.setScore(score());
     m_editData.element->startEditDrag(m_editData);
     m_editData.element->editDrag(m_editData);
     m_editData.element->endEditDrag(m_editData);
@@ -2658,7 +2661,10 @@ void NotationInteraction::editElement(QKeyEvent* event)
     startEdit();
     int systemIndex = findSystemIndex(m_editData.element);
     int bracketIndex = findBracketIndex(m_editData.element);
-    bool handled = m_editData.element->edit(m_editData) || (wasEditing && handleKeyPress(event));
+    bool handled = m_editData.element->edit(m_editData);
+    if (!handled && (wasEditing || selection()->element() != nullptr && selection()->element()->gripsCount() > 0)) {
+        handled = handleKeyPress(event);
+    }
     if (!wasEditing) {
         m_editData.element = nullptr;
     }

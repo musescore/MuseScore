@@ -223,6 +223,7 @@ private:
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
     bool m_publishMode = false;
+    int m_acceptedKey = -1;
 };
 }
 

@@ -174,6 +174,8 @@ bool SlurSegment::edit(EditData& ed)
         Part* part     = e->part();
         int endTrack   = part->endTrack();
         cr = searchCR(e->segment(), startTrack, endTrack);
+    } else {
+        return false;
     }
     if (cr && cr != e1) {
         changeAnchor(ed, cr);

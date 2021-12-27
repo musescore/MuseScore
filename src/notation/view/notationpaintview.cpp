@@ -858,9 +858,21 @@ void NotationPaintView::shortcutOverride(QKeyEvent* event)
 bool NotationPaintView::event(QEvent* ev)
 {
     if (ev->type() == QEvent::Type::ShortcutOverride) {
-        shortcutOverride(dynamic_cast<QKeyEvent*>(ev));
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(ev);
+        shortcutOverride(keyEvent);
+        if (ev->isAccepted()) {
+            m_acceptedKey = keyEvent->key();
+        }
     }
 
+    if (ev->type() == QEvent::Type::KeyPress) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(ev);
+        if (keyEvent->key() == m_acceptedKey) {
+            m_acceptedKey = -1;
+            // required to prevent Qt-Quick from changing focus on tab
+            return true;
+        }
+    }
     return QQuickPaintedItem::event(ev);
 }
 
