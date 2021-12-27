@@ -519,19 +519,6 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
     return result;
 }
 
-bool NotationViewInputController::isDragObjectsAllowed() const
-{
-    if (m_view->isNoteEnterMode()) {
-        return false;
-    }
-
-    if (playbackController()->isPlaying()) {
-        return false;
-    }
-
-    return true;
-}
-
 void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 {
     PointF logicPos = m_view->toLogical(event->pos());
@@ -544,8 +531,9 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    //! NOTE Otherwise, only drag canvas
-    if (isDragObjectsAllowed()) {
+    bool isNoteEnterMode = m_view->isNoteEnterMode();
+    bool isDragObjectsAllowed = !(isNoteEnterMode || playbackController()->isPlaying());
+    if (isDragObjectsAllowed) {
         const EngravingItem* hitElement = this->hitElement();
 
         // drag element
@@ -581,8 +569,10 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     }
 
     // move canvas
-    m_view->moveCanvas(dragDelta.x(), dragDelta.y());
-    m_isCanvasDragged = true;
+    if (!isNoteEnterMode) {
+        m_view->moveCanvas(dragDelta.x(), dragDelta.y());
+        m_isCanvasDragged = true;
+    }
 }
 
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
