@@ -34,6 +34,7 @@
 #include "internal/midiinputcontroller.h"
 #include "internal/notationuiactions.h"
 #include "internal/positionswriter.h"
+#include "internal/mscnotationwriter.h"
 #include "internal/instrumentsrepository.h"
 
 #include "view/notationpaintview.h"
@@ -111,6 +112,8 @@ void NotationModule::resolveImports()
     if (writers) {
         writers->reg({ "sposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::SEGMENT));
         writers->reg({ "mposXML" }, std::make_shared<PositionsWriter>(PositionsWriter::ElementType::MEASURE));
+        writers->reg({ "mscz" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Zip));
+        writers->reg({ "mscx" }, std::make_shared<MscNotationWriter>(engraving::MscIoMode::Dir));
     }
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());

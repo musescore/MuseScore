@@ -295,6 +295,12 @@ bool MscWriter::DirWriter::open(QIODevice* device, const QString& filePath)
     }
 
     QFileInfo fi(filePath);
+
+    if (fi.absolutePath().isEmpty()) {
+        LOGE() << "file path is empty";
+        return false;
+    }
+
     m_rootPath = fi.absolutePath() + "/" + fi.completeBaseName();
 
     QDir dir(m_rootPath);

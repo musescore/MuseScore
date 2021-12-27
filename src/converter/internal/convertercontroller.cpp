@@ -187,6 +187,8 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
         };
 
+        file.setProperty("path", out.toQString());
+
         Ret ret = writer->write(notation, file, options);
         if (!ret) {
             LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
@@ -206,6 +208,7 @@ mu::Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INot
         return make_ret(Err::OutFileFailedOpen);
     }
 
+    file.setProperty("path", out.toQString());
     Ret ret = writer->write(notation, file);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
