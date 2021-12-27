@@ -84,6 +84,7 @@ public:
     Q_ENUM(Type)
 
     explicit Palette(Type t = Type::Custom, QObject* parent = nullptr);
+    ~Palette();
 
     QString id() const;
 

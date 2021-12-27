@@ -26,6 +26,7 @@
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 
+#include "translation.h"
 #include "mimedatautils.h"
 
 #include "engraving/infrastructure/draw/geometry.h"
@@ -38,7 +39,7 @@
 #include "engraving/libmscore/imageStore.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "translation.h"
+#include "palettecell.h"
 
 using namespace mu;
 using namespace mu::palette;
@@ -49,6 +50,18 @@ Palette::Palette(Type t, QObject* parent)
 {
     static int id = 0;
     m_id = QString::number(++id);
+}
+
+Palette::~Palette()
+{
+    //! NOTE Prevent double free
+    //! 1. Deleting by deleting children of QObject
+    //! 2. Deleting by deleting share pointer
+    for (PaletteCellPtr& c : m_cells) {
+        if (c->parent() == this) {
+            c->setParent(nullptr);
+        }
+    }
 }
 
 QString Palette::id() const
