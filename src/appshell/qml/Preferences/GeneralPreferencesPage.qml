@@ -57,6 +57,10 @@ PreferencesPage {
                 root.hideRequested()
                 preferencesModel.openUpdateTranslationsPage()
             }
+
+            onChangeCurrentLanguage: function(newLanguage) {
+                preferencesModel.currentLanguageCode(newLanguage);
+            }
         }
 
         SeparatorLine { }

@@ -37,6 +37,9 @@ BaseSection {
 
     signal languageSelected(string languageCode)
     signal updateTranslationsRequested()
+    signal changeCurrentLanguage(string newLanguage)
+
+    property string fallbackLanguage: "en_US";
 
     Row {
         spacing: 12
@@ -50,7 +53,7 @@ BaseSection {
             textRole: "name"
             valueRole: "code"
 
-            currentIndex: dropdown.indexOfValue(root.currentLanguageCode)
+            currentIndex: findIndexOfValue(root.currentLanguageCode)
 
             navigation.name: "LanguagesBox"
             navigation.panel: root.navigation
@@ -58,6 +61,15 @@ BaseSection {
 
             onCurrentValueChanged: {
                 root.languageSelected(dropdown.currentValue)
+            }
+
+            function findIndexOfValue(languageCode) {
+                var index = dropdown.indexOfValue(languageCode)
+                if (index < 0) {
+                    changeCurrentLanguage(root.fallbackLanguage)
+                    index = dropdown.indexOfValue(root.fallbackLanguage)
+                }
+                return index
             }
         }
 
