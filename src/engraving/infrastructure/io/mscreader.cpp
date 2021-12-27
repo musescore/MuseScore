@@ -233,7 +233,7 @@ bool MscReader::ZipReader::open(QIODevice* device, const QString& filePath)
 
     if (!m_device->isOpen()) {
         if (!m_device->open(QIODevice::ReadOnly)) {
-            LOGD() << "failed open file: " << filePath;
+            LOGD() << QString("failed open %1: %2").arg(filePath).arg(m_device->errorString());
             return false;
         }
     }

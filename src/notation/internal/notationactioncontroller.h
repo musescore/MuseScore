@@ -152,14 +152,22 @@ private:
 
     bool measureNavigationAvailable() const;
 
+    enum class TextNavigationType {
+        NearNoteOrRest,
+        NearBeat,
+        Fraction
+    };
+
     bool textNavigationAvailable() const;
+    bool textNavigationByBeatsAvailable() const;
     bool textNavigationByFractionAvailable() const;
+    bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
 
     void nextTextElement();
     void prevTextElement();
     void nextBeatTextElement();
     void prevBeatTextElement();
-    void navigateToTextElement(MoveDirection direction, bool noterest = false);
+    void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false);
     void navigateToTextElementByFraction(const Fraction& fraction);
     void navigateToTextElementInNearMeasure(MoveDirection direction);
 

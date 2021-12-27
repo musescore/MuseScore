@@ -1314,7 +1314,7 @@ bool FiguredBass::edit(EditData& ed)
     }
 
     if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
-        return false;
+        return true;
     }
 
     return TextBase::edit(ed);
