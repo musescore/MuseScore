@@ -24,6 +24,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/articulationutils.h
     ${CMAKE_CURRENT_LIST_DIR}/singlenotearticulationstest.cpp
     ${CMAKE_CURRENT_LIST_DIR}/multinotearticulationstest.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/articulationprofilesrepositorymock.h
     )
 
 set(MODULE_TEST_LINK mpe)
