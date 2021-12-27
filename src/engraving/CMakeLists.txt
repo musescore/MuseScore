@@ -147,8 +147,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/renderbase.h

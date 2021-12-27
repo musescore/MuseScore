@@ -32,7 +32,7 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 
 void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const PlaybackContext& ctx,
-                                                                mpe::ArticulationMap& result) const
+                                                       mpe::ArticulationMap& result) const
 {
     if (!note) {
         LOGE() << "Unable to render playback events of invalid note";
@@ -57,7 +57,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
 }
 
 void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                               mpe::ArticulationMetaMap& result) const
+                                      mpe::ArticulationMetaMap& result) const
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE && ctx.isValid()) {
         return;
@@ -98,7 +98,7 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
 }
 
 void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx,
-                                                      mpe::ArticulationMetaMap& result) const
+                                             mpe::ArticulationMetaMap& result) const
 {
     if (!note->ghost()) {
         return;
@@ -111,7 +111,7 @@ void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const Playbac
 }
 
 void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx,
-                                                     mpe::ArticulationMetaMap& result) const
+                                            mpe::ArticulationMetaMap& result) const
 {
     mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
 
@@ -126,7 +126,7 @@ void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const Playback
 }
 
 void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const PlaybackContext& ctx,
-                                                     mpe::ArticulationMetaMap& result) const
+                                            mpe::ArticulationMetaMap& result) const
 {
     for (const Ms::Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();

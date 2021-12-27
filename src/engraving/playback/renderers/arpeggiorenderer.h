@@ -31,7 +31,7 @@ class ArpeggioRenderer : public RenderBase<ArpeggioRenderer>
 public:
     const mpe::ArticulationTypeSet& supportedTypes() const;
 
-    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext &&context,
+    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
                   mpe::PlaybackEventList& result) const;
 
 private:
