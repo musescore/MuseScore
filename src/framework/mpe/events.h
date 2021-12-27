@@ -123,7 +123,8 @@ struct NoteEvent
     }
 
 private:
-    void setUp() {
+    void setUp()
+    {
         calculateActualDuration(m_expressionCtx.articulations);
         calculateActualTimestamp(m_expressionCtx.articulations);
 
