@@ -636,6 +636,8 @@ INotationSelectionPtr NotationInteraction::selection() const
 
 void NotationInteraction::clearSelection()
 {
+    TRACEFUNC;
+
     if (isElementEditStarted()) {
         endEditElement();
     } else if (m_editData.element) {

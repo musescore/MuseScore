@@ -602,15 +602,18 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!hitElement() && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
-        && !viewInteraction()->isDragStarted()) {
-        viewInteraction()->clearSelection();
+    INotationInteractionPtr interaction = viewInteraction();
+    INotationNoteInputPtr noteInput = interaction->noteInput();
+
+    if (!hitElement() && !m_isCanvasDragged && !interaction->isGripEditStarted()
+        && !interaction->isDragStarted() && !noteInput->isNoteInputMode()) {
+        interaction->clearSelection();
     }
 
     m_isCanvasDragged = false;
 
-    if (viewInteraction()->isDragStarted()) {
-        viewInteraction()->endDrag();
+    if (interaction->isDragStarted()) {
+        interaction->endDrag();
     }
 }
 

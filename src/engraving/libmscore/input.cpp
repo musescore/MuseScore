@@ -62,13 +62,16 @@ StaffGroup InputState::staffGroup() const
         return StaffGroup::STANDARD;
     }
 
-    StaffGroup staffGroup = _segment->score()->staff(_track / VOICES)->staffType(_segment->tick())->group();
-    Instrument* instrument = _segment->score()->staff(_track / VOICES)->part()->instrument(_segment->tick());
+    Fraction tick = _segment->tick();
+    const Staff* staff = _segment->score()->staff(_track / VOICES);
+    StaffGroup staffGroup = staff->staffType(tick)->group();
+    const Instrument* instrument = staff->part()->instrument(tick);
 
     // if not tab, pitched/unpitched input depends on instrument, not staff (override StaffGroup)
     if (staffGroup != StaffGroup::TAB) {
         staffGroup = instrument->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
     }
+
     return staffGroup;
 }
 

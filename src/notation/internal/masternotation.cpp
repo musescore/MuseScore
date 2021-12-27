@@ -111,8 +111,6 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
 {
     TRACEFUNC;
 
-    clearMeasures(score);
-
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
     score->sigmap()->add(0, timesig);
     bool pickupMeasure = scoreOptions.withPickupMeasure;
@@ -257,6 +255,8 @@ void MasterNotation::applyOptions(Ms::MasterScore* score, const ScoreCreateOptio
     Ms::VBox* nvb = nullptr;
 
     if (createdFromTemplate) {
+        clearMeasures(score);
+
         Ms::MeasureBase* mb = score->first();
         if (mb && mb->isVBox()) {
             Ms::VBox* tvb = toVBox(mb);
