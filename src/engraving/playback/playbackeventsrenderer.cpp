@@ -96,16 +96,6 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, mpe::Playbac
 
 void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, PlaybackContext&& ctx, mpe::PlaybackEventList& result) const
 {
-    if (renderChordArticulations(chord, std::forward<PlaybackContext>(ctx), result)) {
-        return;
-    }
-
-    renderNoteArticulations(chord, std::forward<PlaybackContext>(ctx), result);
-}
-
-bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, PlaybackContext&& ctx,
-                                                      mpe::PlaybackEventList& result) const
-{
     TRACEFUNC;
 
     for (const auto& pair : ctx.commonArticulations.data()) {
@@ -113,32 +103,24 @@ bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, Pl
 
         if (OrnamentsRenderer::isAbleToRender(type)) {
             OrnamentsRenderer::render(chord, type, std::move(ctx), result);
-            return true;
+            return;
         }
 
         if (TremoloRenderer::isAbleToRender(type)) {
             TremoloRenderer::render(chord, type, std::move(ctx), result);
-            return true;
+            return;
         }
 
         if (ArpeggioRenderer::isAbleToRender(type)) {
             ArpeggioRenderer::render(chord, type, std::move(ctx), result);
-            return true;
+            return;
         }
 
         if (GraceNotesRenderer::isAbleToRender(type)) {
             GraceNotesRenderer::render(chord, type, std::move(ctx), result);
-            return true;
+            return;
         }
     }
-
-    return false;
-}
-
-void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, PlaybackContext&& ctx,
-                                                     mpe::PlaybackEventList& result) const
-{
-    TRACEFUNC;
 
     for (const Ms::Note* note : chord->notes()) {
         NominalNoteCtx noteCtx(note, ctx);
