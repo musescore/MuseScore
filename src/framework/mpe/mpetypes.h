@@ -59,7 +59,7 @@ using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
 
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
-                                                const duration_t overallDuration)
+                                                          const duration_t overallDuration)
 {
     return percentageFromFactor(timestamp / overallDuration);
 }
@@ -99,7 +99,7 @@ constexpr inline pitch_level_t pitchLevel(const PitchClass pitchClass, const oct
 }
 
 constexpr inline pitch_level_t pitchLevelDiff(const PitchClass fClass, const octave_t fOctave,
-                                    const PitchClass sClass, const octave_t sOctave)
+                                              const PitchClass sClass, const octave_t sOctave)
 {
     return pitchLevel(fClass, fOctave) - pitchLevel(sClass, sOctave);
 }
@@ -539,14 +539,14 @@ struct ArticulationMap
 
     void insert(const ArticulationType type, ArticulationAppliedData&& data)
     {
-        m_data.insert_or_assign(type,std::forward<ArticulationAppliedData>(data));
+        m_data.insert_or_assign(type, std::forward<ArticulationAppliedData>(data));
 
         preCalculateAverageData();
     }
 
     void emplace(const ArticulationType type, ArticulationAppliedData&& data)
     {
-        m_data.emplace(type,std::forward<ArticulationAppliedData>(data));
+        m_data.emplace(type, std::forward<ArticulationAppliedData>(data));
 
         preCalculateAverageData();
     }
@@ -761,7 +761,6 @@ private:
     dynamic_level_t m_averageDynamicRange = 0;
     PitchPattern::PitchOffsetMap m_averagePitchOffsetMap;
     ExpressionPattern::DynamicOffsetMap m_averageDynamicOffsetMap;
-
 
     std::unordered_map<ArticulationType, ArticulationAppliedData> m_data;
 };
