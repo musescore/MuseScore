@@ -58,7 +58,7 @@ public:
 
     virtual void layout() override;
     virtual QString accessibleExtraInfo() const override;
-    Text* text() { return _text; }
+    Text* text() const { return _text; }
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
 };
