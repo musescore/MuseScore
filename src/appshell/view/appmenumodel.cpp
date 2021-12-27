@@ -91,64 +91,8 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
     emit itemsChanged();
 }
 
-bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
-{
-#ifdef Q_OS_MACOS
-    return AbstractMenuModel::eventFilter(watched, event);
-#endif
-
-    if (watched != m_appWindow) {
-        return AbstractMenuModel::eventFilter(watched, event);
-    }
-
-    switch (event->type()) {
-    case QEvent::KeyPress: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (keyEvent->key() == Qt::Key_Alt) {
-            if (!m_highlightedMenuId.isEmpty()) {
-                resetNavigation();
-            } else {
-                navigateToFirstMenu();
-            }
-        }
-
-        break;
-    }
-    case QEvent::MouseButtonPress: {
-        resetNavigation();
-        break;
-    }
-    case QEvent::ShortcutOverride: {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if (isNavigationStarted() && isNavigateKey(keyEvent->key())) {
-            navigate(keyEvent->key());
-            event->setAccepted(true);
-        }
-
-        if ((!keyEvent->modifiers()
-             || (keyEvent->modifiers() & Qt::AltModifier)) && keyEvent->text().length() == 1) {
-            if (hasItemByActivateKey(keyEvent->text())) {
-                navigate(keyEvent->text());
-                event->setAccepted(true);
-            }
-        }
-        break;
-    }
-    default:
-        break;
-    }
-
-    return AbstractMenuModel::eventFilter(watched, event);
-}
-
 void AppMenuModel::setupConnections()
 {
-    navigationController()->navigationChanged().onNotify(this, [this]() {
-        if (navigationController()->isHighlight()) {
-            resetNavigation();
-        }
-    });
-
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
@@ -641,6 +585,84 @@ MenuItemList AppMenuModel::workspacesItems() const
     return items;
 }
 
+bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
+{
+#ifdef Q_OS_MACOS
+    return AbstractMenuModel::eventFilter(watched, event);
+#endif
+
+    if (watched != m_appWindow) {
+        return AbstractMenuModel::eventFilter(watched, event);
+    }
+
+    switch (event->type()) {
+    case QEvent::KeyPress: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Alt) {
+            m_needActivateHighlight = true;
+        }
+
+        break;
+    }
+    case QEvent::KeyRelease: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Alt) {
+            if (isNavigationStarted()) {
+                resetNavigation();
+                restoreMUNavigationSystemState();
+            } else {
+                if (m_needActivateHighlight) {
+                    saveMUNavigationSystemState();
+                    navigateToFirstMenu();
+                } else {
+                    m_needActivateHighlight = true;
+                }
+            }
+        }
+
+        break;
+    }
+    case QEvent::ShortcutOverride: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        bool isNavigationStarted = this->isNavigationStarted();
+        if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
+            navigate(keyEvent->key());
+            m_needActivateHighlight = false;
+
+            event->accept();
+        } else if ((!keyEvent->modifiers() && isNavigationStarted)
+                   || ((keyEvent->modifiers() & Qt::AltModifier) && keyEvent->text().length() == 1)) {
+            if (hasItemByActivateKey(keyEvent->text())) {
+                navigate(keyEvent->text());
+                m_needActivateHighlight = true;
+
+                event->accept();
+            } else {
+                m_needActivateHighlight = false;
+                resetNavigation();
+                restoreMUNavigationSystemState();
+
+                event->ignore();
+            }
+        } else {
+            m_needActivateHighlight = false;
+
+            event->ignore();
+        }
+
+        break;
+    }
+    case QEvent::MouseButtonPress: {
+        resetNavigation();
+        break;
+    }
+    default:
+        break;
+    }
+
+    return AbstractMenuModel::eventFilter(watched, event);
+}
+
 bool AppMenuModel::isNavigationStarted() const
 {
     return !m_highlightedMenuId.isEmpty();
@@ -689,6 +711,7 @@ void AppMenuModel::navigate(int key)
         break;
     case Qt::Key_Escape:
         resetNavigation();
+        restoreMUNavigationSystemState();
         break;
     default:
         break;
@@ -702,6 +725,8 @@ bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
 
 void AppMenuModel::navigate(const QString& keySymbol)
 {
+    saveMUNavigationSystemState();
+
     setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
     activateHighlightedMenu();
 }
@@ -716,10 +741,30 @@ void AppMenuModel::navigateToFirstMenu()
     setHighlightedMenuId(item(0).id);
 }
 
+void AppMenuModel::saveMUNavigationSystemState()
+{
+    if (!navigationController()->isHighlight()) {
+        return;
+    }
+
+    ui::INavigationControl* activeControl = navigationController()->activeControl();
+    if (activeControl) {
+        m_lastActiveNavigationControl = activeControl;
+        activeControl->setActive(false);
+    }
+}
+
+void AppMenuModel::restoreMUNavigationSystemState()
+{
+    if (m_lastActiveNavigationControl) {
+        m_lastActiveNavigationControl->requestActive();
+    }
+}
+
 void AppMenuModel::activateHighlightedMenu()
 {
     emit openMenu(m_highlightedMenuId);
-    actionsDispatcher()->dispatch("nav-next-panel");
+    actionsDispatcher()->dispatch("nav-first-control");
 }
 
 QString AppMenuModel::highlightedMenuId() const

@@ -152,10 +152,6 @@ ListView {
                 return
             }
 
-            toggleMenuOpened()
-        }
-
-        onClicked: {
             if (prv.hasNavigatedItem()
                     || prv.hasNavigatedItemForRestoreAfterClose()) {
                 appMenuModel.setHighlightedMenuId(radioButtonDelegate.menuId)
@@ -163,6 +159,13 @@ ListView {
                 prv.needRestoreNavigationAfterClose = false
                 prv.lastOpenedMenuId = radioButtonDelegate.menuId
             }
+
+            toggleMenuOpened()
+        }
+
+        onClicked: {
+            prv.needRestoreNavigationAfterClose = false
+            prv.lastOpenedMenuId = ""
 
             toggleMenuOpened()
         }

@@ -70,8 +70,6 @@ private:
     void setupConnections();
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
-    bool eventFilter(QObject* watched, QEvent* event) override;
-
     using ui::AbstractMenuModel::makeMenuItem;
     ui::MenuItem makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;
 
@@ -98,6 +96,8 @@ private:
     ui::MenuItemList workspacesItems() const;
 
     // Custom navigation
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     bool isNavigationStarted() const;
     bool isNavigateKey(int key) const;
     void navigate(int key);
@@ -108,6 +108,9 @@ private:
     void resetNavigation();
     void navigateToFirstMenu();
 
+    void saveMUNavigationSystemState();
+    void restoreMUNavigationSystemState();
+
     void activateHighlightedMenu();
 
     QString highlightedMenuId() const;
@@ -116,6 +119,9 @@ private:
 
     QString m_highlightedMenuId;
     QWindow* m_appWindow = nullptr;
+
+    bool m_needActivateHighlight = true;
+    ui::INavigationControl* m_lastActiveNavigationControl = nullptr;
 };
 }
 
