@@ -25,7 +25,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-const ArticulationTypeSet& GlissandosRenderer::supportedTypes() const
+const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::DiscreteGlissando, mpe::ArticulationType::ContinuousGlissando
@@ -35,7 +35,7 @@ const ArticulationTypeSet& GlissandosRenderer::supportedTypes() const
 }
 
 void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, PlaybackContext&& context,
-                                  mpe::PlaybackEventList& result) const
+                                  mpe::PlaybackEventList& result)
 {
     const Ms::Note* note = Ms::toNote(item);
 
@@ -51,7 +51,7 @@ void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::Arti
 }
 
 void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, PlaybackContext&& context,
-                                                 mpe::PlaybackEventList& result) const
+                                                 mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
     int stepsCount = pitchStepsCount(articulationData.meta.overallPitchChangesRange);
@@ -73,7 +73,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, PlaybackC
 }
 
 void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, PlaybackContext&& context,
-                                                   mpe::PlaybackEventList& result) const
+                                                   mpe::PlaybackEventList& result)
 {
     result.push_back(buildNoteEvent(note, std::move(context)));
 }

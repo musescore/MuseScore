@@ -189,7 +189,7 @@ static const std::unordered_map<ArticulationType, DisclosureRule> DISCLOSURE_RUL
     },
 };
 
-const ArticulationTypeSet& OrnamentsRenderer::supportedTypes() const
+const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
 {
     static const ArticulationTypeSet types = {
         ArticulationType::Trill, ArticulationType::TrillBaroque,
@@ -205,7 +205,7 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes() const
 }
 
 void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, PlaybackContext&& context,
-                                 mpe::PlaybackEventList& result) const
+                                 mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
 
@@ -215,13 +215,13 @@ void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const Articulati
 
     for (const Ms::Note* note : chord->notes()) {
         NominalNoteCtx noteCtx(note, context);
-        NoteArticulationsParser::instance()->buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
 
         convert(preferredType, std::move(noteCtx), result);
     }
 }
 
-void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result) const
+void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result)
 {
     auto search = DISCLOSURE_RULES.find(type);
     if (search == DISCLOSURE_RULES.end()) {
@@ -262,7 +262,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& no
     }
 }
 
-int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks) const
+int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks)
 {
     float ratio = principalNoteDurationTicks / static_cast<float>(CROTCHET_TICKS);
 
@@ -283,7 +283,7 @@ int OrnamentsRenderer::alterationsNumberByTempo(const qreal beatsPerSeconds, con
 
 void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                                      const int availableDurationTicks, const int overallDurationTicks,
-                                     const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result) const
+                                     const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result)
 {
     float availableDurationRatio = availableDurationTicks / static_cast<float>(overallDurationTicks);
 

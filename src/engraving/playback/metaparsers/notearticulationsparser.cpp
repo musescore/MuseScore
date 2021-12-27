@@ -32,7 +32,7 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 
 void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const PlaybackContext& ctx,
-                                                       mpe::ArticulationMap& result) const
+                                                       mpe::ArticulationMap& result)
 {
     if (!note) {
         LOGE() << "Unable to render playback events of invalid note";
@@ -57,7 +57,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
 }
 
 void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                      mpe::ArticulationMetaMap& result) const
+                                      mpe::ArticulationMetaMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE && ctx.isValid()) {
         return;
@@ -74,7 +74,7 @@ void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const Playb
     parseSpanners(note, ctx, result);
 }
 
-ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteHeadGroup noteheadGroup) const
+ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteHeadGroup noteheadGroup)
 {
     switch (noteheadGroup) {
     case NoteHeadGroup::HEAD_CROSS:
@@ -98,7 +98,7 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
 }
 
 void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result) const
+                                             mpe::ArticulationMetaMap& result)
 {
     if (!note->ghost()) {
         return;
@@ -111,7 +111,7 @@ void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const Playbac
 }
 
 void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result) const
+                                            mpe::ArticulationMetaMap& result)
 {
     mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
 
@@ -126,7 +126,7 @@ void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const Playback
 }
 
 void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result) const
+                                            mpe::ArticulationMetaMap& result)
 {
     for (const Ms::Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();
@@ -139,6 +139,6 @@ void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const Playback
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
-        SpannersMetaParser::instance()->parse(spanner, std::move(ctx), result);
+        SpannersMetaParser::parse(spanner, std::move(ctx), result);
     }
 }

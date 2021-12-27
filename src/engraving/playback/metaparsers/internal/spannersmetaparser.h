@@ -31,7 +31,7 @@ class SpannersMetaParser : public MetaParserBase<SpannersMetaParser>
 protected:
     friend MetaParserBase;
 
-    void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
+    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
 };
 }
 

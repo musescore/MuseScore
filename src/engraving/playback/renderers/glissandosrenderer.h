@@ -33,14 +33,14 @@ namespace mu::engraving {
 class GlissandosRenderer : public RenderBase<GlissandosRenderer>
 {
 public:
-    const mpe::ArticulationTypeSet& supportedTypes() const;
+    static const mpe::ArticulationTypeSet& supportedTypes();
 
-    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, PlaybackContext&& context,
-                  mpe::PlaybackEventList& result) const;
+    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, PlaybackContext&& context,
+                  mpe::PlaybackEventList& result);
 
 private:
-    void renderDiscreteGlissando(const Ms::Note* note, PlaybackContext&& context, mpe::PlaybackEventList& result) const;
-    void renderContinuousGlissando(const Ms::Note* note, PlaybackContext&& context, mpe::PlaybackEventList& result) const;
+    static void renderDiscreteGlissando(const Ms::Note* note, PlaybackContext&& context, mpe::PlaybackEventList& result);
+    static void renderContinuousGlissando(const Ms::Note* note, PlaybackContext&& context, mpe::PlaybackEventList& result);
 };
 }
 

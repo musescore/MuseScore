@@ -32,35 +32,27 @@ template<class T>
 class RenderBase
 {
 public:
-    static T* instance()
+    static bool isAbleToRender(const mpe::ArticulationType& type)
     {
-        static T s;
-        return &s;
-    }
-
-    bool isAbleToRender(const mpe::ArticulationType& type) const
-    {
-        const T* renderImpl = static_cast<const T*>(this);
-        const mpe::ArticulationTypeSet& supportedTypes = renderImpl->supportedTypes();
+        const mpe::ArticulationTypeSet& supportedTypes = T::supportedTypes();
 
         return supportedTypes.find(type) != supportedTypes.cend();
     }
 
-    void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
-                mpe::PlaybackEventList& result) const
+    static void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+                       mpe::PlaybackEventList& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
         }
 
-        const T* renderImpl = static_cast<const T*>(this);
-        renderImpl->doRender(item, preferredType, std::move(context), result);
+        T::doRender(item, preferredType, std::move(context), result);
     }
 
 protected:
-    void updateArticulationBoundaries(const mpe::ArticulationType type, const mpe::timestamp_t nominalTimestamp,
-                                      const mpe::duration_t nominalDuration,
-                                      mpe::ArticulationMap& noteArticulationMap) const
+    static void updateArticulationBoundaries(const mpe::ArticulationType type, const mpe::timestamp_t nominalTimestamp,
+                                             const mpe::duration_t nominalDuration,
+                                             mpe::ArticulationMap& noteArticulationMap)
     {
         const mpe::ArticulationAppliedData& articulationData = noteArticulationMap.at(type);
 

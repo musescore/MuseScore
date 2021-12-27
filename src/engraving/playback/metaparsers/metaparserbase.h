@@ -37,21 +37,13 @@ template<class T>
 class MetaParserBase
 {
 public:
-    static T* instance()
-    {
-        static T s;
-        return &s;
-    }
-
-    void parse(const Ms::EngravingItem* item, const PlaybackContext& context, mpe::ArticulationMetaMap& result) const
+    static void parse(const Ms::EngravingItem* item, const PlaybackContext& context, mpe::ArticulationMetaMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
         }
 
-        const T* parserImpl = static_cast<const T*>(this);
-
-        parserImpl->doParse(item, context, result);
+        T::doParse(item, context, result);
     }
 };
 }
