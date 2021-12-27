@@ -39,6 +39,7 @@ using namespace mu::framework;
 using namespace mu::actions;
 
 static mu::Uri NOTATION_PAGE_URI("musescore://notation");
+static mu::Uri HOME_PAGE_URI("musescore://home");
 static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
 
 void ProjectActionsController::init()
@@ -153,7 +154,7 @@ Ret ProjectActionsController::openProject(const io::path& projectPath_)
 
     //! Step 2. If the project is already open in the current window, then just switch to showing the notation
     if (isProjectOpened(projectPath)) {
-        return openNotationPageIfNeed();
+        return openPageIfNeed(NOTATION_PAGE_URI);
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
@@ -200,16 +201,16 @@ Ret ProjectActionsController::doOpenProject(const io::path& filePath)
 
     prependToRecentScoreList(filePath);
 
-    return openNotationPageIfNeed();
+    return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-mu::Ret ProjectActionsController::openNotationPageIfNeed()
+Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
 {
-    if (interactive()->isOpened(NOTATION_PAGE_URI).val) {
+    if (interactive()->isOpened(pageUri).val) {
         return make_ret(Ret::Code::Ok);
     }
 
-    return interactive()->open(NOTATION_PAGE_URI).ret;
+    return interactive()->open(pageUri).ret;
 }
 
 bool ProjectActionsController::isProjectOpened(const io::path& scorePath) const
@@ -271,7 +272,7 @@ void ProjectActionsController::newProject()
     Ret ret = interactive()->open(NEW_SCORE_URI).ret;
 
     if (ret) {
-        ret = openNotationPageIfNeed();
+        ret = openPageIfNeed(NOTATION_PAGE_URI);
     }
 
     if (!ret) {
@@ -309,6 +310,11 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
 
         if (quitApp) {
             dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+        } else {
+            Ret ret = openPageIfNeed(HOME_PAGE_URI);
+            if (!ret) {
+                LOGE() << ret.toString();
+            }
         }
     }
 
