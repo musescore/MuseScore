@@ -288,6 +288,16 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
     notifyAboutStateChanged();
 }
 
+void NotationNoteInput::resetInputPosition()
+{
+    Ms::InputState& inputState = score()->inputState();
+
+    inputState.setTrack(-1);
+    inputState.setSegment(nullptr);
+
+    notifyAboutStateChanged();
+}
+
 void NotationNoteInput::addTuplet(const TupletOptions& options)
 {
     TRACEFUNC;

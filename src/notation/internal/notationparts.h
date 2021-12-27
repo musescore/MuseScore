@@ -116,7 +116,6 @@ private:
     void setBracketsAndBarlines();
 
     void endInteractionWithScore();
-    void deselectAll();
 
     void notifyAboutPartChanged(const Part* part) const;
     void notifyAboutPartAdded(const Part* part) const;
