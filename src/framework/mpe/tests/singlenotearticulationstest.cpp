@@ -75,19 +75,24 @@ TEST_F(SingleNoteArticulationsTest, StandardPattern)
     ArticulationPattern scope;
     scope.emplace(0, m_standardPattern);
 
-    ArticulationData standardArticulationApplied(ArticulationType::Standard, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta standardMeta;
+    standardMeta.type = ArticulationType::Staccato;
+    standardMeta.pattern = scope;
+    standardMeta.timestamp = m_nominalTimestamp;
+    standardMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData standardArticulationApplied(std::move(standardMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations;
-    appliedArticulations.emplace(ArticulationType::Standard, standardArticulationApplied);
+    appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect that expression curve will be using default curve from standard patterns
     EXPECT_EQ(event.expressionCtx().expressionCurve,
@@ -118,19 +123,24 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData staccatoApplied(ArticulationType::Staccato, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta staccatoMeta;
+    staccatoMeta.type = ArticulationType::Staccato;
+    staccatoMeta.pattern = scope;
+    staccatoMeta.timestamp = m_nominalTimestamp;
+    staccatoMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations = {};
-    appliedArticulations.emplace(ArticulationType::Staccato, staccatoApplied);
+    appliedArticulations.emplace(ArticulationType::Staccato, std::move(staccatoApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the nominal duration of a note to be unchanged
     EXPECT_EQ(event.arrangementCtx().nominalDuration, m_nominalDuration);
@@ -158,19 +168,24 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData accentApplied(ArticulationType::Accent, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta accentMeta;
+    accentMeta.type = ArticulationType::Accent;
+    accentMeta.pattern = scope;
+    accentMeta.timestamp = m_nominalTimestamp;
+    accentMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations = {};
-    appliedArticulations.emplace(ArticulationType::Accent, accentApplied);
+    appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the nominal duration of a note to be unchanged,
     //        since accent doesn't affect any arrangement data
@@ -207,19 +222,24 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData accentApplied(ArticulationType::Accent, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta accentMeta;
+    accentMeta.type = ArticulationType::Accent;
+    accentMeta.pattern = scope;
+    accentMeta.timestamp = m_nominalTimestamp;
+    accentMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations = {};
-    appliedArticulations.emplace(ArticulationType::Accent, accentApplied);
+    appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the nominal duration of a note to be unchanged,
     //        since accent doesn't affect any arrangement data
@@ -263,21 +283,32 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData staccatoApplied(ArticulationType::Staccato, staccatoScope, 0, HUNDRED_PERCENTS);
-    appliedArticulations.emplace(ArticulationType::Staccato, staccatoApplied);
+    ArticulationMeta staccatoMeta;
+    staccatoMeta.type = ArticulationType::Staccato;
+    staccatoMeta.pattern = staccatoScope;
+    staccatoMeta.timestamp = m_nominalTimestamp;
+    staccatoMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENTS);
+    appliedArticulations.emplace(ArticulationType::Staccato, std::move(staccatoApplied));
+
+    ArticulationMeta tenutoMeta;
+    tenutoMeta.type = ArticulationType::Tenuto;
+    tenutoMeta.pattern = tenutoScope;
+    tenutoMeta.timestamp = m_nominalTimestamp;
+    tenutoMeta.overallDuration = m_nominalDuration;
 
     // [GIVEN] Tenuto articulation applied on the note
-    ArticulationData tenutoApplied(ArticulationType::Tenuto, tenutoScope, 0, HUNDRED_PERCENTS);
-    appliedArticulations.emplace(ArticulationType::Tenuto, tenutoApplied);
+    ArticulationAppliedData tenutoApplied(std::move(tenutoMeta), 0, HUNDRED_PERCENTS);
+    appliedArticulations.emplace(ArticulationType::Tenuto, std::move(tenutoApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the nominal duration of a note to be unchanged
     EXPECT_EQ(event.arrangementCtx().nominalDuration, m_nominalDuration);
@@ -309,19 +340,24 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData quickFallApplied(ArticulationType::QuickFall, quickFallScope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta quickFallMeta;
+    quickFallMeta.type = ArticulationType::QuickFall;
+    quickFallMeta.pattern = quickFallScope;
+    quickFallMeta.timestamp = m_nominalTimestamp;
+    quickFallMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData quickFallApplied(std::move(quickFallMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations = {};
-    appliedArticulations.emplace(ArticulationType::QuickFall, quickFallApplied);
+    appliedArticulations.emplace(ArticulationType::QuickFall, std::move(quickFallApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the pitch curve of the note marked by quick fall articulation to be equal to the pitch curve from corresponding pattern
     EXPECT_EQ(event.pitchCtx().pitchCurve, quickFallPattern.pitchPattern.pitchOffsetMap);
@@ -353,19 +389,24 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
 
     // [GIVEN] Staccato articulation applied on the note, since staccato is a single-note articulation
     //         occupied range is from 0% to 100%
-    ArticulationData scoopApplied(ArticulationType::Scoop, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta scoopMeta;
+    scoopMeta.type = ArticulationType::Scoop;
+    scoopMeta.pattern = scope;
+    scoopMeta.timestamp = m_nominalTimestamp;
+    scoopMeta.overallDuration = m_nominalDuration;
+
+    ArticulationAppliedData scoopApplied(std::move(scoopMeta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations = {};
-    appliedArticulations.emplace(ArticulationType::Scoop, scoopApplied);
+    appliedArticulations.emplace(ArticulationType::Scoop, std::move(scoopApplied));
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
-                    m_pitchClass,
-                    m_octave,
+                    pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
-                    appliedArticulations);
+                    std::move(appliedArticulations));
 
     // [THEN] We expect the pitch curve of the note marked by scoop articulation to be equal to the pitch curve from corresponding pattern
     EXPECT_EQ(event.pitchCtx().pitchCurve, scoopPattern.pitchPattern.pitchOffsetMap);
