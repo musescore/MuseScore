@@ -351,6 +351,8 @@ public:
         GRACE16_AFTER = 0xF42D,
         GRACE32_AFTER = 0xF42E,
 
+        MEASURE_REPEAT = 0xF431,
+
         NONE = 0xFFFF
     };
 
