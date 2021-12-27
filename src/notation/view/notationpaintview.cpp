@@ -877,12 +877,26 @@ void NotationPaintView::shortcutOverride(QKeyEvent* event)
 
 bool NotationPaintView::event(QEvent* event)
 {
-    if (event->type() == QEvent::Type::ShortcutOverride) {
-        shortcutOverride(dynamic_cast<QKeyEvent*>(event));
-    }
+    QEvent::Type eventType = event->type();
 
-    if (hasFocus() && event->type() == QEvent::Type::ContextMenu) {
+    if (eventType == QEvent::Type::ShortcutOverride) {
+        auto keyEvent = dynamic_cast<QKeyEvent*>(event);
+        shortcutOverride(keyEvent);
+
+        if (keyEvent->isAccepted()) {
+            m_lastAcceptedKey = keyEvent->key();
+        }
+    } else if (eventType == QEvent::Type::KeyPress) {
+        auto keyEvent = dynamic_cast<const QKeyEvent*>(event);
+
+        if (keyEvent->key() == m_lastAcceptedKey) {
+            m_lastAcceptedKey = -1;
+            // required to prevent Qt-Quick from changing focus on tab
+            return true;
+        }
+    } else if (eventType == QEvent::Type::ContextMenu && hasFocus()) {
         QPointF contextMenuPosition;
+
         if (m_inputController->selectionType() == ElementType::PAGE) {
             contextMenuPosition = QPointF(width() / 2, height() / 2);
         } else {
