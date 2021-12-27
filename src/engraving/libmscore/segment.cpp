@@ -212,11 +212,16 @@ Segment::~Segment()
         if (!e) {
             continue;
         }
-        if (e->isTimeSig()) {
-            e->staff()->removeTimeSig(toTimeSig(e));
+
+        Staff* staff = e->staff();
+
+        if (e->isTimeSig() && staff) {
+            staff->removeTimeSig(toTimeSig(e));
         }
+
         delete e;
     }
+
     qDeleteAll(_annotations);
 }
 

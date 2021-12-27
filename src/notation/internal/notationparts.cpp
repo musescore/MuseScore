@@ -177,10 +177,8 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
 {
     std::vector<Staff*> staves;
 
-    for (const ID& staffId: stavesIds) {
-        Staff* staff = staffModifiable(staffId);
-
-        if (staff) {
+    for (Staff* staff : score()->staves()) {
+        if (std::find(stavesIds.cbegin(), stavesIds.cend(), staff->id()) != stavesIds.cend()) {
             staves.push_back(staff);
         }
     }
@@ -192,10 +190,8 @@ std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
 {
     std::vector<Part*> parts;
 
-    for (const ID& partId: partsIds) {
-        Part* part = partModifiable(partId);
-
-        if (part) {
+    for (Part* part : score()->parts()) {
+        if (std::find(partsIds.cbegin(), partsIds.cend(), part->id()) != partsIds.cend()) {
             parts.push_back(part);
         }
     }
@@ -207,6 +203,7 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 {
     TRACEFUNC;
 
+    endInteractionWithScore();
     startEdit();
 
     doSetScoreOrder(order);
@@ -649,6 +646,7 @@ void NotationParts::removeParts(const IDList& partsIds)
         return;
     }
 
+    endInteractionWithScore();
     startEdit();
 
     doRemoveParts(partsToRemove);
@@ -666,7 +664,6 @@ void NotationParts::removeParts(const IDList& partsIds)
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 
     for (const Part* part : partsToRemove) {
         notifyAboutPartRemoved(part);
@@ -774,6 +771,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         return;
     }
 
+    endInteractionWithScore();
     startEdit();
 
     for (Staff* staff: stavesToRemove) {
@@ -783,7 +781,6 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 
     for (const Staff* staff : stavesToRemove) {
         notifyAboutStaffRemoved(staff);
@@ -826,6 +823,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         parts << pi;
     }
 
+    deselectAll();
     startEdit();
 
     if (scoreOrder() != customOrder()) {
@@ -837,7 +835,6 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
@@ -862,6 +859,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
+    deselectAll();
     startEdit();
 
     doMoveStaves(staves, destinationStaffIndex, destinationPart);
@@ -869,7 +867,6 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     setBracketsAndBarlines();
 
     apply();
-    deselectAll();
 }
 
 void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
@@ -934,19 +931,29 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
     staff->setDefaultClefType(templ.clefType(cleffIndex));
 }
 
-void NotationParts::removeMissingParts(const PartInstrumentList& parts)
+void NotationParts::removeMissingParts(const PartInstrumentList& newParts)
 {
     TRACEFUNC;
 
-    IDList partsToRemove;
+    auto needRemove = [&newParts](const Part* part) {
+        for (const PartInstrument& pi : newParts) {
+            if (pi.partId == part->id()) {
+                return false;
+            }
+        }
 
-    for (const PartInstrument& pi: parts) {
-        if (!pi.isExistingPart) {
-            partsToRemove.push_back(pi.partId);
+        return true;
+    };
+
+    std::vector<Part*> partsToRemove;
+
+    for (Part* part: score()->parts()) {
+        if (needRemove(part)) {
+            partsToRemove.push_back(part);
         }
     }
 
-    doRemoveParts(this->parts(partsToRemove));
+    doRemoveParts(partsToRemove);
 }
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)
@@ -1074,6 +1081,12 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
 void NotationParts::setBracketsAndBarlines()
 {
     score()->setBracketsAndBarlines();
+}
+
+void NotationParts::endInteractionWithScore()
+{
+    deselectAll();
+    m_interaction->noteInput()->endNoteInput();
 }
 
 void NotationParts::deselectAll()

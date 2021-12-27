@@ -33,6 +33,8 @@
 
 #include "scorecallbacks.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 using namespace mu::async;
 
@@ -79,6 +81,12 @@ NoteInputState NotationNoteInput::state() const
 
 void NotationNoteInput::startNoteInput()
 {
+    TRACEFUNC;
+
+    if (isNoteInputMode()) {
+        return;
+    }
+
     //! NOTE Coped from `void ScoreView::startNoteEntry()`
     Ms::InputState& is = score()->inputState();
     is.setSegment(0);
@@ -136,7 +144,7 @@ void NotationNoteInput::startNoteInput()
     score()->update();
     //! ---
 
-    Staff* staff = score()->staff(is.track() / Ms::VOICES);
+    const Staff* staff = score()->staff(is.track() / Ms::VOICES);
     switch (staff->staffType(is.tick())->group()) {
     case Ms::StaffGroup::STANDARD:
         break;
@@ -159,8 +167,15 @@ void NotationNoteInput::startNoteInput()
 
 void NotationNoteInput::endNoteInput()
 {
+    TRACEFUNC;
+
+    if (!isNoteInputMode()) {
+        return;
+    }
+
     Ms::InputState& is = score()->inputState();
     is.setNoteEntryMode(false);
+
     if (is.slur()) {
         const std::vector<Ms::SpannerSegment*>& el = is.slur()->spannerSegments();
         if (!el.empty()) {
@@ -169,19 +184,22 @@ void NotationNoteInput::endNoteInput()
         is.setSlur(0);
     }
 
-    notifyAboutStateChanged();
+    updateInputState();
 }
 
 void NotationNoteInput::toggleNoteInputMethod(NoteInputMethod method)
 {
-    Ms::InputState& inputState = score()->inputState();
-    inputState.setNoteEntryMethod(method);
+    TRACEFUNC;
+
+    score()->inputState().setNoteEntryMethod(method);
 
     notifyAboutStateChanged();
 }
 
 void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 {
+    TRACEFUNC;
+
     Ms::EditData editData(m_scoreCallbacks);
 
     startEdit();
@@ -196,6 +214,8 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
 
 void NotationNoteInput::padNote(const Pad& pad)
 {
+    TRACEFUNC;
+
     Ms::EditData editData(m_scoreCallbacks);
 
     startEdit();
@@ -207,6 +227,8 @@ void NotationNoteInput::padNote(const Pad& pad)
 
 void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 {
+    TRACEFUNC;
+
     startEdit();
     score()->putNote(pos, replace, insert);
     apply();
@@ -217,6 +239,8 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 {
+    TRACEFUNC;
+
     Ms::EditData editData(m_scoreCallbacks);
 
     score()->toggleAccidental(accidentalType, editData);
@@ -226,6 +250,8 @@ void NotationNoteInput::setAccidental(AccidentalType accidentalType)
 
 void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 {
+    TRACEFUNC;
+
     Ms::InputState& inputState = score()->inputState();
 
     std::set<SymbolId> articulations = Ms::updateArticulations(
@@ -237,12 +263,16 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
 
 void NotationNoteInput::setDrumNote(int note)
 {
+    TRACEFUNC;
+
     score()->inputState().setDrumNote(note);
     notifyAboutStateChanged();
 }
 
 void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
 {
+    TRACEFUNC;
+
     if (!isVoiceIndexValid(voiceIndex)) {
         return;
     }
@@ -260,7 +290,9 @@ void NotationNoteInput::setCurrentVoiceIndex(int voiceIndex)
 
 void NotationNoteInput::addTuplet(const TupletOptions& options)
 {
-    Ms::InputState& inputState = score()->inputState();
+    TRACEFUNC;
+
+    const Ms::InputState& inputState = score()->inputState();
 
     startEdit();
     score()->expandVoice();
@@ -276,12 +308,14 @@ void NotationNoteInput::addTuplet(const TupletOptions& options)
 
 mu::RectF NotationNoteInput::cursorRect() const
 {
+    TRACEFUNC;
+
     if (!isNoteInputMode()) {
         return {};
     }
 
     const Ms::InputState& inputState = score()->inputState();
-    Ms::Segment* segment = inputState.segment();
+    const Ms::Segment* segment = inputState.segment();
     if (!segment) {
         return {};
     }
@@ -294,7 +328,7 @@ mu::RectF NotationNoteInput::cursorRect() const
     int track = inputState.track() == -1 ? 0 : inputState.track();
     int staffIdx = track / Ms::VOICES;
 
-    Staff* staff = score()->staff(staffIdx);
+    const Staff* staff = score()->staff(staffIdx);
     if (!staff) {
         return {};
     }
@@ -335,6 +369,8 @@ mu::RectF NotationNoteInput::cursorRect() const
 
 void NotationNoteInput::addSlur(Ms::Slur* slur)
 {
+    TRACEFUNC;
+
     Ms::InputState& inputState = score()->inputState();
     inputState.setSlur(slur);
 
@@ -350,6 +386,8 @@ void NotationNoteInput::addSlur(Ms::Slur* slur)
 
 void NotationNoteInput::resetSlur()
 {
+    TRACEFUNC;
+
     Ms::InputState& inputState = score()->inputState();
     Ms::Slur* slur = inputState.slur();
     if (!slur) {
@@ -363,6 +401,8 @@ void NotationNoteInput::resetSlur()
 
 void NotationNoteInput::addTie()
 {
+    TRACEFUNC;
+
     startEdit();
     score()->cmdAddTie();
     apply();
@@ -397,6 +437,8 @@ void NotationNoteInput::apply()
 
 void NotationNoteInput::updateInputState()
 {
+    TRACEFUNC;
+
     score()->inputState().update(score()->selection());
 
     notifyAboutStateChanged();
@@ -414,12 +456,14 @@ void NotationNoteInput::notifyNoteAddedChanged()
 
 std::set<SymbolId> NotationNoteInput::articulationIds() const
 {
-    Ms::InputState& inputState = score()->inputState();
+    const Ms::InputState& inputState = score()->inputState();
     return Ms::splitArticulations(inputState.articulationIds());
 }
 
 void NotationNoteInput::doubleNoteInputDuration()
 {
+    TRACEFUNC;
+
     Ms::EditData editData(m_scoreCallbacks);
     score()->cmdPadNoteIncreaseTAB(editData);
     notifyAboutStateChanged();
@@ -427,6 +471,8 @@ void NotationNoteInput::doubleNoteInputDuration()
 
 void NotationNoteInput::halveNoteInputDuration()
 {
+    TRACEFUNC;
+
     Ms::EditData editData(m_scoreCallbacks);
     score()->cmdPadNoteDecreaseTAB(editData);
     notifyAboutStateChanged();
