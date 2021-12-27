@@ -215,13 +215,15 @@ public:
 
     virtual void nagivateToNextSyllable() = 0;
 
-    virtual void navigateToHarmonyInNearBeat(MoveDirection direction, bool noterest) = 0;
+    virtual void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) = 0;
     virtual void navigateToHarmonyInNearMeasure(MoveDirection direction) = 0;
     virtual void navigateToHarmony(const Fraction& ticks) = 0;
 
-    virtual void navigateToFiguredBassInNearBeat(MoveDirection direction) = 0;
+    virtual void navigateToNearFiguredBass(MoveDirection direction) = 0;
     virtual void navigateToFiguredBassInNearMeasure(MoveDirection direction) = 0;
     virtual void navigateToFiguredBass(const Fraction& ticks) = 0;
+
+    virtual void navigateToNearText(MoveDirection direction) = 0;
 
     // Text style
     virtual void toggleBold() = 0;
