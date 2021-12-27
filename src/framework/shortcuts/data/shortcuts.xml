@@ -23,33 +23,33 @@
         <key>nav-next-section</key>
         <seq>F6</seq>
         <seq>`</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
         <seq>Shift+`</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-next-panel</key>
         <seq>Tab</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-panel</key>
         <seq>Shift+Tab</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-next-tab</key>
         <seq>Ctrl+Tab</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-prev-tab</key>
         <seq>Ctrl+Shift+Tab</seq>
-        <ctx>not-notation-focused</ctx>
+        <ctx>any</ctx>
     </SC>
     <SC>
         <key>nav-right</key>
