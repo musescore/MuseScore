@@ -564,7 +564,7 @@
   <SC>
     <key>notation-escape</key>
     <seq>Esc</seq>
-    <ctx>notation-opened</ctx>
+    <ctx>notation-focused</ctx>
     </SC>
   <SC>
     <key>notation-delete</key>
