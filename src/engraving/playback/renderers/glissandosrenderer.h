@@ -36,7 +36,7 @@ public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
     static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, PlaybackContext&& context,
-                  mpe::PlaybackEventList& result);
+                         mpe::PlaybackEventList& result);
 
 private:
     static void renderDiscreteGlissando(const Ms::Note* note, PlaybackContext&& context, mpe::PlaybackEventList& result);
