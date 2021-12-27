@@ -129,7 +129,6 @@ private:
 
     void setViewMode(const ViewMode& viewMode);
 
-    bool isDragObjectsAllowed() const;
     void startDragElements(ElementType elementsType, const PointF& elementsOffset);
 
     float hitWidth() const;
