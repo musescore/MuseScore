@@ -23,10 +23,19 @@
 #ifndef MU_MPE_EVENTS_H
 #define MU_MPE_EVENTS_H
 
-#include "mpetypes.h"
+#include <variant>
+#include <vector>
+
 #include "realfn.h"
 
+#include "mpetypes.h"
+
 namespace mu::mpe {
+struct NoteEvent;
+struct RestEvent;
+using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
+using PlaybackEventList = std::vector<PlaybackEvent>;
+
 struct ArrangementContext
 {
     timestamp_t nominalTimestamp = 0;
@@ -38,8 +47,7 @@ struct ArrangementContext
 
 struct PitchContext
 {
-    PitchClass pitchClass = PitchClass::Undefined;
-    octave_t octave = 0;
+    pitch_level_t nominalPitchLevel = 0;
     PitchCurve pitchCurve;
 };
 
@@ -64,8 +72,26 @@ struct NoteEvent
     explicit NoteEvent(const timestamp_t nominalTimestamp,
                        const duration_t nominalDuration,
                        const voice_layer_idx_t voiceIdx,
-                       const PitchClass pitchClass,
-                       const octave_t octave,
+                       const pitch_level_t nominalPitchLevel,
+                       const dynamic_level_t nominalDynamicLevel,
+                       ArticulationMap&& articulationsApplied)
+    {
+        m_arrangementCtx.nominalDuration = nominalDuration;
+        m_arrangementCtx.nominalTimestamp = nominalTimestamp;
+        m_arrangementCtx.voiceLayerIndex = voiceIdx;
+
+        m_pitchCtx.nominalPitchLevel = nominalPitchLevel;
+
+        m_expressionCtx.articulations = std::move(articulationsApplied);
+        m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
+
+        setUp();
+    }
+
+    explicit NoteEvent(const timestamp_t nominalTimestamp,
+                       const duration_t nominalDuration,
+                       const voice_layer_idx_t voiceIdx,
+                       const pitch_level_t nominalPitchLevel,
                        const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied)
     {
@@ -73,18 +99,12 @@ struct NoteEvent
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
         m_arrangementCtx.voiceLayerIndex = voiceIdx;
 
-        m_pitchCtx.pitchClass = pitchClass;
-        m_pitchCtx.octave = octave;
+        m_pitchCtx.nominalPitchLevel = nominalPitchLevel;
 
         m_expressionCtx.articulations = articulationsApplied;
         m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
 
-        calculateActualDuration(articulationsApplied);
-        calculateActualTimestamp(articulationsApplied);
-
-        calculatePitchCurve(articulationsApplied);
-
-        calculateExpressionCurve(articulationsApplied);
+        setUp();
     }
 
     const ArrangementContext& arrangementCtx() const
@@ -103,11 +123,20 @@ struct NoteEvent
     }
 
 private:
+    void setUp() {
+        calculateActualDuration(m_expressionCtx.articulations);
+        calculateActualTimestamp(m_expressionCtx.articulations);
+
+        calculatePitchCurve(m_expressionCtx.articulations);
+
+        calculateExpressionCurve(m_expressionCtx.articulations);
+    }
+
     void calculateActualTimestamp(const ArticulationMap& articulationsApplied)
     {
         m_arrangementCtx.actualTimestamp = m_arrangementCtx.nominalTimestamp;
 
-        if (articulationsApplied.empty()) {
+        if (articulationsApplied.isEmpty()) {
             return;
         }
 
@@ -119,7 +148,7 @@ private:
     {
         m_arrangementCtx.actualDuration = m_arrangementCtx.nominalDuration;
 
-        if (articulationsApplied.empty()) {
+        if (articulationsApplied.isEmpty()) {
             return;
         }
 
@@ -128,7 +157,7 @@ private:
 
     void calculatePitchCurve(const ArticulationMap& articulationsApplied)
     {
-        PitchPattern::PitchOffsetMap appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
+        const PitchPattern::PitchOffsetMap& appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
 
         for (const auto& pair : appliedOffsetMap) {
             m_pitchCtx.pitchCurve.emplace(pair.first, pair.second);
@@ -137,7 +166,7 @@ private:
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied)
     {
-        ExpressionPattern::DynamicOffsetMap appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
+        const ExpressionPattern::DynamicOffsetMap& appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
 
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
@@ -167,6 +196,17 @@ struct RestEvent
 {
     explicit RestEvent(ArrangementContext&& arrangement)
         : m_arrangementCtx(arrangement) {}
+
+    explicit RestEvent(const timestamp_t nominalTimestamp,
+                       const duration_t nominalDuration,
+                       const voice_layer_idx_t voiceIdx)
+    {
+        m_arrangementCtx.nominalTimestamp = nominalTimestamp;
+        m_arrangementCtx.actualTimestamp = nominalTimestamp;
+        m_arrangementCtx.nominalDuration = nominalDuration;
+        m_arrangementCtx.actualDuration = nominalDuration;
+        m_arrangementCtx.voiceLayerIndex = voiceIdx;
+    }
 
     const ArrangementContext& arrangementCtx() const
     {
