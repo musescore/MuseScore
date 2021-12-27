@@ -148,7 +148,7 @@ public:
     }
 
     int actualDots() const { return _durationType.dots(); }
-    Fraction durationTypeTicks()
+    Fraction durationTypeTicks() const
     {
         return _crossMeasure == CrossMeasure::FIRST ? _crossMeasureTDur.ticks() : _durationType.ticks();
     }
