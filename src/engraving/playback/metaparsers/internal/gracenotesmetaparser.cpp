@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const
+void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;

@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const
+void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::TREMOLO && ctx.isValid()) {
         return;

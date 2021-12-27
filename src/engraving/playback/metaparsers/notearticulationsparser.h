@@ -34,19 +34,19 @@ namespace mu::engraving {
 class NoteArticulationsParser : public MetaParserBase<NoteArticulationsParser>
 {
 public:
-    void buildNoteArticulationMap(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMap& result) const;
+    static void buildNoteArticulationMap(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMap& result);
 
 protected:
     friend MetaParserBase;
 
-    void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
+    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
 
 private:
-    mpe::ArticulationType articulationTypeByNotehead(const NoteHeadGroup noteheadGroup) const;
+    static mpe::ArticulationType articulationTypeByNotehead(const NoteHeadGroup noteheadGroup);
 
-    void parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseSpanners(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
+    static void parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseSpanners(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
 };
 }
 

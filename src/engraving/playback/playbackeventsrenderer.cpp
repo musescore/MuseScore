@@ -73,7 +73,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const mpe:
     ctx.nominalDynamicLevel = nominalDynamicLevel;
     ctx.profile = profile;
 
-    ChordArticulationsParser::instance()->buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
+    ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
     renderArticulations(chord, std::move(ctx), result);
 }
@@ -96,11 +96,11 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, mpe::Playbac
 
 void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, PlaybackContext&& ctx, mpe::PlaybackEventList& result) const
 {
-    if (renderChordArticulations(chord, std::move(ctx), result)) {
+    if (renderChordArticulations(chord, std::forward<PlaybackContext>(ctx), result)) {
         return;
     }
 
-    renderNoteArticulations(chord, std::move(ctx), result);
+    renderNoteArticulations(chord, std::forward<PlaybackContext>(ctx), result);
 }
 
 bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, PlaybackContext&& ctx,
@@ -111,23 +111,23 @@ bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, Pl
     for (const auto& pair : ctx.commonArticulations.data()) {
         const ArticulationType type = pair.first;
 
-        if (OrnamentsRenderer::instance()->isAbleToRender(type)) {
-            OrnamentsRenderer::instance()->render(chord, type, std::move(ctx), result);
+        if (OrnamentsRenderer::isAbleToRender(type)) {
+            OrnamentsRenderer::render(chord, type, std::move(ctx), result);
             return true;
         }
 
-        if (TremoloRenderer::instance()->isAbleToRender(type)) {
-            TremoloRenderer::instance()->render(chord, type, std::move(ctx), result);
+        if (TremoloRenderer::isAbleToRender(type)) {
+            TremoloRenderer::render(chord, type, std::move(ctx), result);
             return true;
         }
 
-        if (ArpeggioRenderer::instance()->isAbleToRender(type)) {
-            ArpeggioRenderer::instance()->render(chord, type, std::move(ctx), result);
+        if (ArpeggioRenderer::isAbleToRender(type)) {
+            ArpeggioRenderer::render(chord, type, std::move(ctx), result);
             return true;
         }
 
-        if (GraceNotesRenderer::instance()->isAbleToRender(type)) {
-            GraceNotesRenderer::instance()->render(chord, type, std::move(ctx), result);
+        if (GraceNotesRenderer::isAbleToRender(type)) {
+            GraceNotesRenderer::render(chord, type, std::move(ctx), result);
             return true;
         }
     }
@@ -143,15 +143,15 @@ void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, Pla
     for (const Ms::Note* note : chord->notes()) {
         NominalNoteCtx noteCtx(note, ctx);
 
-        NoteArticulationsParser::instance()->buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
-            GlissandosRenderer::instance()->render(note, ArticulationType::DiscreteGlissando, std::move(noteCtx.chordCtx), result);
+            GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, std::move(noteCtx.chordCtx), result);
             continue;
         }
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::ContinuousGlissando)) {
-            GlissandosRenderer::instance()->render(note, ArticulationType::ContinuousGlissando, std::move(noteCtx.chordCtx), result);
+            GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, std::move(noteCtx.chordCtx), result);
             continue;
         }
 

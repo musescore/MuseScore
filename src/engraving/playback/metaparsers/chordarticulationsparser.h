@@ -33,20 +33,20 @@ namespace mu::engraving {
 class ChordArticulationsParser : public MetaParserBase<ChordArticulationsParser>
 {
 public:
-    void buildChordArticulationMap(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result) const;
+    static void buildChordArticulationMap(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
 
 protected:
     friend MetaParserBase;
 
-    void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
+    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
 
 private:
-    void parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
-    void parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result) const;
+    static void parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
 };
 }
 
