@@ -28,7 +28,6 @@
 #include "playback/playbackcontext.h"
 
 namespace mu::engraving {
-
 template<class T>
 class RenderBase
 {

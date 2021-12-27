@@ -48,16 +48,15 @@ class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 public:
     const mpe::ArticulationTypeSet& supportedTypes() const;
 
-    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext &&context,
+    void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
                   mpe::PlaybackEventList& result) const;
 
 private:
-    void convert(const mpe::ArticulationType type, NominalNoteCtx &&noteCtx,
-                 mpe::PlaybackEventList& result) const;
+    void convert(const mpe::ArticulationType type, NominalNoteCtx&& noteCtx, mpe::PlaybackEventList& result) const;
 
     int alterationsNumberByTempo(const qreal beatsPerSeconds, const int principalNoteDurationTicks) const;
 
-    void createEvents(const mpe::ArticulationType type, NominalNoteCtx &noteCtx, const int alterationsCount,
+    void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                       const int availableDurationTicks, const int overallDurationTicks, const std::vector<mpe::pitch_level_t>& pitchOffsets,
                       mpe::PlaybackEventList& result) const;
 };

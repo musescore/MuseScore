@@ -42,10 +42,8 @@ public:
 private:
     bool isPlacedBeforePrincipalNote(const mpe::ArticulationType type) const;
 
-    void renderPrependedGraceNotes(const Ms::Chord* chord, PlaybackContext&& context,
-                                   mpe::PlaybackEventList& result) const;
-    void renderAppendedGraceNotes(const Ms::Chord* chord, PlaybackContext&& context,
-                                  mpe::PlaybackEventList& result) const;
+    void renderPrependedGraceNotes(const Ms::Chord* chord, PlaybackContext&& context, mpe::PlaybackEventList& result) const;
+    void renderAppendedGraceNotes(const Ms::Chord* chord, PlaybackContext&& context, mpe::PlaybackEventList& result) const;
 
     mpe::duration_t graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList) const;
     float graceNotesDurationRatio(const mpe::duration_t totalDuration, const mpe::duration_t maxAvailableDuration) const;
