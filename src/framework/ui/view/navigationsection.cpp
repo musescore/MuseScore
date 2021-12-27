@@ -74,13 +74,6 @@ bool NavigationSection::enabled() const
         return false;
     }
 
-    QWindow* sectionWindow = window();
-    QWindow* topWindow = interactiveProvider()->topWindow();
-
-    if (sectionWindow && (topWindow != sectionWindow)) {
-        return false;
-    }
-
     bool enbl = false;
     for (INavigationPanel* p : m_panels) {
         if (p->enabled()) {
@@ -184,16 +177,4 @@ const std::set<INavigationPanel*>& NavigationSection::panels() const
 mu::async::Notification NavigationSection::panelsListChanged() const
 {
     return m_panelsListChanged;
-}
-
-QWindow* NavigationSection::window() const
-{
-    QQuickItem* parentItem = qobject_cast<QQuickItem*>(parent());
-
-    if (!parentItem) {
-        LOGW() << "Navigation Section must be inside QQuickItem to be able to start navigation in the dialog";
-        return nullptr;
-    }
-
-    return qobject_cast<QWindow*>(parentItem->window());
 }

@@ -27,11 +27,10 @@
 
 #include "abstractnavigation.h"
 #include "navigationcontrol.h"
-#include "async/asyncable.h"
 
 namespace mu::ui {
 class NavigationSection;
-class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
+class NavigationPanel : public AbstractNavigation, public INavigationPanel
 {
     Q_OBJECT
     Q_PROPERTY(mu::ui::NavigationSection * section READ section_property WRITE setSection_property NOTIFY sectionChanged)

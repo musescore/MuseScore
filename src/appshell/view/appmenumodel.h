@@ -22,9 +22,15 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
+#include <memory>
+
 #include "ui/view/abstractmenumodel.h"
 
+#include "actions/actionable.h"
 #include "modularity/ioc.h"
+#include "ui/imainwindow.h"
+#include "ui/iuiactionsregister.h"
+#include "ui/inavigationcontroller.h"
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
@@ -35,15 +41,30 @@ class AppMenuModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
+    INJECT(appshell, ui::IMainWindow, mainWindow)
+    INJECT(appshell, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(appshell, ui::INavigationController, navigationController)
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
 
+    Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
+
+    Q_PROPERTY(QWindow * appWindow WRITE setAppWindow)
+
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+
+public slots:
+    void setHighlightedMenuId(QString highlightedMenuId);
+    void setAppWindow(QWindow* appWindow);
+
+signals:
+    void openMenu(const QString& menuId);
+    void highlightedMenuIdChanged(QString highlightedMenuId);
 
 private:
     void setupConnections();
@@ -73,6 +94,34 @@ private:
     ui::MenuItemList linesItems() const;
     ui::MenuItemList toolbarsItems() const;
     ui::MenuItemList workspacesItems() const;
+
+    // Custom navigation
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
+    bool isNavigationStarted() const;
+    bool isNavigateKey(int key) const;
+    void navigate(int key);
+
+    bool hasItemByActivateKey(const QString& keySymbol);
+    void navigate(const QString& keySymbol);
+
+    void resetNavigation();
+    void navigateToFirstMenu();
+
+    void saveMUNavigationSystemState();
+    void restoreMUNavigationSystemState();
+
+    void activateHighlightedMenu();
+
+    QString highlightedMenuId() const;
+
+    QString menuIdByActivateSymbol(const QString& symbol);
+
+    QString m_highlightedMenuId;
+    QWindow* m_appWindow = nullptr;
+
+    bool m_needActivateHighlight = true;
+    ui::INavigationControl* m_lastActiveNavigationControl = nullptr;
 };
 }
 

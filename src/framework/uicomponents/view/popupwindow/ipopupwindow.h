@@ -51,6 +51,9 @@ public:
     virtual bool isVisible() const = 0;
     virtual QRect geometry() const = 0;
 
+    virtual QWindow* parentWindow() const = 0;
+    virtual void setParentWindow(QWindow* window) = 0;
+
     virtual void setPosition(const QPoint& position) const = 0;
 
     virtual void forceActiveFocus() = 0;

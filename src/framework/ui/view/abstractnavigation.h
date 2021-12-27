@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QQmlParserStatus>
 
+#include "async/asyncable.h"
 #include "../inavigation.h"
 #include "qmlaccessible.h"
 #include "navigationevent.h"
@@ -33,7 +34,7 @@
 #include "../inavigationcontroller.h"
 
 namespace mu::ui {
-class AbstractNavigation : public QObject, public QQmlParserStatus
+class AbstractNavigation : public QObject, public QQmlParserStatus, public async::Asyncable
 {
     Q_OBJECT
 

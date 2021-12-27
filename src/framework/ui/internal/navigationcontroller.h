@@ -65,6 +65,8 @@ public:
     async::Notification navigationChanged() const override;
 
     bool isHighlight() const override;
+    async::Notification highlightChanged() const override;
+
     void setIsResetOnMousePress(bool arg) override;
 
     void dump() const override;
@@ -129,6 +131,7 @@ private:
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
+    async::Notification m_highlightChanged;
     bool m_isNavigatedByKeyboard = false;
     bool m_isResetOnMousePress = true;
 };

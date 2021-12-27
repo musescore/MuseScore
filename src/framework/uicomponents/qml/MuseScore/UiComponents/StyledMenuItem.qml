@@ -31,6 +31,8 @@ ListItemBlank {
 
     property var modelData
 
+    property var parentWindow: null
+
     enum IconAndCheckMarkMode {
         None,
         ShowOne,
@@ -60,7 +62,7 @@ ListItemBlank {
     navigation.name: titleLabel.text
     navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
-        var text = titleLabel.text
+        var text = itemPrv.title
         if (itemPrv.isCheckable) {
             text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "unchecked"))
         } else if (itemPrv.isSelectable) {
@@ -75,7 +77,7 @@ ListItemBlank {
             text += " " + qsTrc("appshell", "menu")
         }
 
-        return text.replace('&', '')
+        return Utils.removeAmpersands(text)
     }
 
     navigation.onNavigationEvent: {
@@ -92,14 +94,17 @@ ListItemBlank {
 
             var focused = itemPrv.showedSubMenu.requestFocus()
 
-            if (focused) {
-                event.accepted = true
+            event.accepted = true
+            if (!focused) {
+                root.forceActiveFocus()
             }
 
             break
         case NavigationEvent.Left:
             if (itemPrv.showedSubMenu) {
                 itemPrv.closeSubMenu()
+                event.accepted = true
+                return
             }
 
             //! NOTE Go to parent item
@@ -119,6 +124,8 @@ ListItemBlank {
 
     QtObject {
         id: itemPrv
+
+        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
 
         property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
         property string shortcut: hasShortcut ? modelData.shortcut : ""
@@ -147,6 +154,8 @@ ListItemBlank {
             menu.navigationParentControl = root.navigation
 
             menu.model = modelData.subitems
+
+            menu.setParentWindow(root.parentWindow)
 
             menu.handleMenuItem.connect(function(itemId) {
                 Qt.callLater(root.handleMenuItem, itemId)
@@ -253,8 +262,16 @@ ListItemBlank {
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
             horizontalAlignment: Text.AlignLeft
+
+            text: Utils.makeMnemonicText(itemPrv.title)
+
+            textFormat: Text.RichText
+            //! If the rich text format is set, then the component intercepts the hover state
+            //  The hover state is required to open a submenu(see onHovered)
+            //  So, let's turn off the mouse hovering over the component
+            enabled: false
+            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
         }
 
         StyledTextLabel {

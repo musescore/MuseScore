@@ -53,6 +53,9 @@ public:
     bool isVisible() const override;
     QRect geometry() const override;
 
+    QWindow* parentWindow() const override;
+    void setParentWindow(QWindow* window) override;
+
     void setPosition(const QPoint& position) const override;
 
     void forceActiveFocus() override;
@@ -65,6 +68,8 @@ private:
 
     QQuickView* m_view = nullptr;
     std::function<void()> m_onHidden;
+
+    QWindow* m_parentWindow = nullptr;
 };
 }
 #endif // POPUPWINDOW_QQUICKVIEW_H
