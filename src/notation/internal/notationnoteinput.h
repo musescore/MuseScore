@@ -68,6 +68,8 @@ public:
     void halveNoteInputDuration() override;
     void setCurrentVoiceIndex(int voiceIndex) override;
 
+    void resetInputPosition() override;
+
     RectF cursorRect() const override;
 
     async::Notification noteAdded() const override;

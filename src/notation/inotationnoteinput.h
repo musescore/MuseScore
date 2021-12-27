@@ -56,6 +56,8 @@ public:
 
     virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
 
+    virtual void resetInputPosition() = 0;
+
     virtual RectF cursorRect() const = 0;
 
     virtual async::Notification noteAdded() const = 0;
