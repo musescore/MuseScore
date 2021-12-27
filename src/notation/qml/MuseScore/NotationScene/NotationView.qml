@@ -160,7 +160,7 @@ FocusScope {
                         StyledMenuLoader {
                             id: contextMenuLoader
 
-                            navigation: fakeNavCtrl
+                            navigationParentControl: fakeNavCtrl
 
                             onHandleMenuItem: function (itemId) {
                                 contextMenuModel.handleMenuItem(itemId)

@@ -223,6 +223,16 @@ void PopupView::toggleOpened()
     }
 }
 
+void PopupView::setParentWindow(QWindow* window)
+{
+    m_window->setParentWindow(window);
+}
+
+QWindow* PopupView::window()
+{
+    return qWindow();
+}
+
 bool PopupView::isOpened() const
 {
     return m_window ? m_window->isVisible() : false;

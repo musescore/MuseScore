@@ -20,130 +20,100 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
-import "../../"
+import "../"
 
 Rectangle {
     id: root
 
     color: ui.theme.backgroundPrimaryColor
 
-    property alias title: titleLabel.text
+    property alias title: titleTextmetrics.text
     property rect titleMoveAreaRect: Qt.rect(titleMoveArea.x, titleMoveArea.y, titleMoveArea.width, titleMoveArea.height)
+
+    property alias windowIsMiximized: systemButtons.windowIsMiximized
+
+    property alias appWindow: menu.appWindow
 
     signal showWindowMinimizedRequested()
     signal toggleWindowMaximizedRequested()
     signal closeWindowRequested()
 
-    NavigationSection {
-        id: navSec
-        name: "AppTitleBar"
-        enabled: root.enabled && root.visible
-        order: 0
+    RowLayout {
+        anchors.fill: parent
 
-        onActiveChanged: {
-            if (active) {
-                root.forceActiveFocus()
+        spacing: 8
+
+        AppMenuBar {
+            id: menu
+
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            Layout.preferredWidth: width
+            Layout.preferredHeight: height
+        }
+
+        StyledTextLabel {
+            id: titleLabel
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            horizontalAlignment: Text.AlignLeft
+            leftPadding: {
+                var parentCenterX = parent.width / 2
+                var expectedTextCenterX = parentCenterX - titleTextmetrics.width / 2
+                if (expectedTextCenterX > x) {
+                    return expectedTextCenterX - x
+                }
+
+                return 0
+            }
+
+            text: titleTextmetrics.elidedText
+            textFormat: Text.RichText
+
+            TextMetrics {
+                id: titleTextmetrics
+
+                text: qsTrc("appshell", "MuseScore 4")
+                font: titleLabel.font
+                elide: Qt.ElideRight
+                elideWidth: titleLabel.width
+            }
+        }
+
+        AppSystemButtons {
+            id: systemButtons
+
+            Layout.alignment: Qt.RightLeft | Qt.AlignVCenter
+            Layout.preferredWidth: width
+            Layout.preferredHeight: height
+
+            onShowWindowMinimizedRequested: {
+                root.showWindowMinimizedRequested()
+            }
+
+            onToggleWindowMaximizedRequested: {
+                root.toggleWindowMaximizedRequested()
+            }
+
+            onCloseWindowRequested: {
+                root.closeWindowRequested()
             }
         }
     }
 
     Item {
-        anchors.fill: parent
+        id: titleMoveArea
 
-        AppMenuBar {
-            id: menu
-
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-
-            navigation.section: navSec
-            navigation.order: 0
-        }
-
-        Item {
-            id: titleMoveArea
-
-            anchors.top: parent.top
-            anchors.left: menu.right
-            anchors.right: systemButtons.left
-            anchors.bottom: parent.bottom
-        }
-
-        StyledTextLabel {
-            id: titleLabel
-            anchors.centerIn: parent
-
-            horizontalAlignment: Text.AlignLeft
-            text: qsTrc("appshell", "MuseScore 4")
-
-            textFormat: Text.RichText
-        }
-
-        Row {
-            id: systemButtons
-
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-
-            NavigationPanel {
-                id: navAppControlPanel
-                name: "AppControl"
-                enabled: systemButtons.enabled && systemButtons.visible
-                section: navSec
-                order: 1
-                accessible.name: qsTrc("appshell", "App control")
-            }
-
-            FlatButton {
-                icon: IconCode.MINUS
-                transparent: true
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 1
-                accessible.name: qsTrc("appshell", "Minimize")
-
-                onClicked: {
-                    root.showWindowMinimizedRequested()
-                }
-            }
-
-            FlatButton {
-                icon: IconCode.SPLIT_OUT_ARROWS
-                transparent: true
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 2
-                accessible.name: qsTrc("appshell", "Maximize") // todo
-
-                onClicked: {
-                    root.toggleWindowMaximizedRequested()
-                }
-            }
-
-            FlatButton {
-                icon: IconCode.CLOSE_X_ROUNDED
-                transparent: true
-                hoverHitColor: "red"
-                drawFocusBorderInsideRect: true
-
-                navigation.name: "AppControl"
-                navigation.panel: navAppControlPanel
-                navigation.order: 3
-                accessible.name: qsTrc("appshell", "Quit")
-
-                onClicked: {
-                    root.closeWindowRequested()
-                }
-            }
-        }
+        x: titleLabel.x
+        y: titleLabel.y
+        width: titleLabel.width
+        height: titleLabel.height
     }
 }

@@ -186,8 +186,8 @@ MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
     return menu(m_items, menuId);
 }
 
-MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items, bool enabled,
-                                     const QString& menuId) const
+MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items,
+                                     const QString& menuId, bool enabled) const
 {
     MenuItem item;
     item.id = menuId;

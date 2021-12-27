@@ -21,6 +21,10 @@
  */
 #include "appmenumodel.h"
 
+#include <QApplication>
+#include <QWindow>
+#include <QKeyEvent>
+
 #include "translation.h"
 
 #include "log.h"
@@ -66,6 +70,21 @@ void AppMenuModel::load()
     setupConnections();
 }
 
+void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
+{
+    if (m_highlightedMenuId == highlightedMenuId) {
+        return;
+    }
+
+    m_highlightedMenuId = highlightedMenuId;
+    emit highlightedMenuIdChanged(m_highlightedMenuId);
+}
+
+void AppMenuModel::setAppWindow(QWindow* appWindow)
+{
+    m_appWindow = appWindow;
+}
+
 void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 {
     AbstractMenuModel::onActionsStateChanges(codes);
@@ -101,6 +120,14 @@ void AppMenuModel::setupConnections()
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
+
+    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
+        if (state != Qt::ApplicationActive) {
+            resetNavigation();
+        }
+    });
+
+    qApp->installEventFilter(this);
 }
 
 MenuItem AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
@@ -122,7 +149,7 @@ MenuItem AppMenuModel::fileItem() const
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
+        makeMenu(qtrc("appshell", "Open &recent"), recentScoresList, "menu-file-open", openRecentEnabled),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -142,7 +169,7 @@ MenuItem AppMenuModel::fileItem() const
         makeMenuItem("quit", MenuItemRole::QuitRole)
     };
 
-    return makeMenu(qtrc("appshell", "&File"), fileItems);
+    return makeMenu(qtrc("appshell", "&File"), fileItems, "menu-file");
 }
 
 MenuItem AppMenuModel::editItem() const
@@ -166,7 +193,7 @@ MenuItem AppMenuModel::editItem() const
         makeMenuItem("preference-dialog", MenuItemRole::PreferencesRole)
     };
 
-    return makeMenu(qtrc("appshell", "&Edit"), editItems);
+    return makeMenu(qtrc("appshell", "&Edit"), editItems, "menu-edit");
 }
 
 MenuItem AppMenuModel::viewItem() const
@@ -187,8 +214,8 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("zoomin"),
         makeMenuItem("zoomout"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems()),
-        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "menu-select-workspace"),
+        makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems(), "menu-toolbars"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), "menu-select-workspace"),
         makeMenuItem("toggle-statusbar"),
         makeSeparator(),
         makeMenuItem("split-h"), // need implement
@@ -205,7 +232,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("dock-restore-default-layout")
     };
 
-    return makeMenu(qtrc("appshell", "&View"), viewItems);
+    return makeMenu(qtrc("appshell", "&View"), viewItems, "menu-view");
 }
 
 MenuItem AppMenuModel::addItem() const
@@ -221,7 +248,7 @@ MenuItem AppMenuModel::addItem() const
         makeMenu(qtrc("appshell", "&Lines"), linesItems()),
     };
 
-    return makeMenu(qtrc("appshell", "&Add"), addItems);
+    return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
 }
 
 MenuItem AppMenuModel::formatItem() const
@@ -247,7 +274,7 @@ MenuItem AppMenuModel::formatItem() const
         makeMenuItem("save-style") // need implement
     };
 
-    return makeMenu(qtrc("appshell", "F&ormat"), formatItems);
+    return makeMenu(qtrc("appshell", "F&ormat"), formatItems, "menu-format");
 }
 
 MenuItem AppMenuModel::toolsItem() const
@@ -289,7 +316,7 @@ MenuItem AppMenuModel::toolsItem() const
         makeMenuItem("del-empty-measures"),
     };
 
-    return makeMenu(qtrc("appshell", "&Tools"), toolsItems);
+    return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
 }
 
 MenuItem AppMenuModel::helpItem() const
@@ -313,7 +340,7 @@ MenuItem AppMenuModel::helpItem() const
               << makeSeparator()
               << makeMenuItem("revert-factory");
 
-    return makeMenu(qtrc("appshell", "&Help"), helpItems);
+    return makeMenu(qtrc("appshell", "&Help"), helpItems, "menu-help");
 }
 
 MenuItem AppMenuModel::diagnosticItem() const
@@ -344,7 +371,7 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenu(qtrc("appshell", "Autobot"), autobotItems),
     };
 
-    return makeMenu(qtrc("appshell", "Diagnostic"), items);
+    return makeMenu(qtrc("appshell", "&Diagnostic"), items, "menu-diagnostic");
 }
 
 MenuItemList AppMenuModel::recentScores() const
@@ -556,4 +583,210 @@ MenuItemList AppMenuModel::workspacesItems() const
           << makeMenuItem("configure-workspaces");
 
     return items;
+}
+
+bool AppMenuModel::eventFilter(QObject* watched, QEvent* event)
+{
+#ifdef Q_OS_MACOS
+    return AbstractMenuModel::eventFilter(watched, event);
+#endif
+
+    if (watched != m_appWindow) {
+        return AbstractMenuModel::eventFilter(watched, event);
+    }
+
+    switch (event->type()) {
+    case QEvent::KeyPress: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Alt) {
+            m_needActivateHighlight = true;
+        }
+
+        break;
+    }
+    case QEvent::KeyRelease: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Alt) {
+            if (isNavigationStarted()) {
+                resetNavigation();
+                restoreMUNavigationSystemState();
+            } else {
+                if (m_needActivateHighlight) {
+                    saveMUNavigationSystemState();
+                    navigateToFirstMenu();
+                } else {
+                    m_needActivateHighlight = true;
+                }
+            }
+        }
+
+        break;
+    }
+    case QEvent::ShortcutOverride: {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        bool isNavigationStarted = this->isNavigationStarted();
+        if (isNavigationStarted && isNavigateKey(keyEvent->key())) {
+            navigate(keyEvent->key());
+            m_needActivateHighlight = false;
+
+            event->accept();
+        } else if ((!keyEvent->modifiers() && isNavigationStarted)
+                   || ((keyEvent->modifiers() & Qt::AltModifier) && keyEvent->text().length() == 1)) {
+            if (hasItemByActivateKey(keyEvent->text())) {
+                navigate(keyEvent->text());
+                m_needActivateHighlight = true;
+
+                event->accept();
+            } else {
+                m_needActivateHighlight = false;
+                resetNavigation();
+                restoreMUNavigationSystemState();
+
+                event->ignore();
+            }
+        } else {
+            m_needActivateHighlight = false;
+
+            event->ignore();
+        }
+
+        break;
+    }
+    case QEvent::MouseButtonPress: {
+        resetNavigation();
+        break;
+    }
+    default:
+        break;
+    }
+
+    return AbstractMenuModel::eventFilter(watched, event);
+}
+
+bool AppMenuModel::isNavigationStarted() const
+{
+    return !m_highlightedMenuId.isEmpty();
+}
+
+bool AppMenuModel::isNavigateKey(int key) const
+{
+    static QList<Qt::Key> keys {
+        Qt::Key_Left,
+        Qt::Key_Right,
+        Qt::Key_Down,
+        Qt::Key_Space,
+        Qt::Key_Escape,
+        Qt::Key_Return
+    };
+
+    return keys.contains(static_cast<Qt::Key>(key));
+}
+
+void AppMenuModel::navigate(int key)
+{
+    Qt::Key _key = static_cast<Qt::Key>(key);
+    switch (_key) {
+    case Qt::Key_Left: {
+        int newIndex = itemIndex(m_highlightedMenuId) - 1;
+        if (newIndex < 0) {
+            newIndex = rowCount() - 1;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Right: {
+        int newIndex = itemIndex(m_highlightedMenuId) + 1;
+        if (newIndex > rowCount() - 1) {
+            newIndex = 0;
+        }
+
+        setHighlightedMenuId(item(newIndex).id);
+        break;
+    }
+    case Qt::Key_Down:
+    case Qt::Key_Space:
+    case Qt::Key_Return:
+        activateHighlightedMenu();
+        break;
+    case Qt::Key_Escape:
+        resetNavigation();
+        restoreMUNavigationSystemState();
+        break;
+    default:
+        break;
+    }
+}
+
+bool AppMenuModel::hasItemByActivateKey(const QString& keySymbol)
+{
+    return !menuIdByActivateSymbol(keySymbol).isEmpty();
+}
+
+void AppMenuModel::navigate(const QString& keySymbol)
+{
+    saveMUNavigationSystemState();
+
+    setHighlightedMenuId(menuIdByActivateSymbol(keySymbol));
+    activateHighlightedMenu();
+}
+
+void AppMenuModel::resetNavigation()
+{
+    setHighlightedMenuId("");
+}
+
+void AppMenuModel::navigateToFirstMenu()
+{
+    setHighlightedMenuId(item(0).id);
+}
+
+void AppMenuModel::saveMUNavigationSystemState()
+{
+    if (!navigationController()->isHighlight()) {
+        return;
+    }
+
+    ui::INavigationControl* activeControl = navigationController()->activeControl();
+    if (activeControl) {
+        m_lastActiveNavigationControl = activeControl;
+        activeControl->setActive(false);
+    }
+}
+
+void AppMenuModel::restoreMUNavigationSystemState()
+{
+    if (m_lastActiveNavigationControl) {
+        m_lastActiveNavigationControl->requestActive();
+    }
+}
+
+void AppMenuModel::activateHighlightedMenu()
+{
+    emit openMenu(m_highlightedMenuId);
+    actionsDispatcher()->dispatch("nav-first-control");
+}
+
+QString AppMenuModel::highlightedMenuId() const
+{
+    return m_highlightedMenuId;
+}
+
+QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
+{
+    for (int i = 0; i < rowCount(); i++) {
+        MenuItem menuItem = item(i);
+        QString title = menuItem.title;
+
+        int activateKeyIndex = title.indexOf('&');
+        if (activateKeyIndex == -1) {
+            continue;
+        }
+
+        if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
+            return menuItem.id;
+        }
+    }
+
+    return QString();
 }

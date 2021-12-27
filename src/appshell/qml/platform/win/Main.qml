@@ -58,6 +58,10 @@ AppWindow {
         height: 32
         title: root.title
 
+        windowIsMiximized: root.visibility === Window.Maximized
+
+        appWindow: root
+
         onShowWindowMinimizedRequested: {
             root.showMinimized()
         }

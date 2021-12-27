@@ -161,6 +161,32 @@ StyledPopupView {
         spacing: 0
         interactive: false
 
+        function itemByKey(key) {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+
+                if (!Boolean(loader) || loader.isSeparator) {
+                    continue
+                }
+
+                var title = loader.item.title
+                if (Boolean(title)) {
+                    title = title.toLowerCase()
+                    var index = title.indexOf('&')
+                    if (index === -1) {
+                        continue
+                    }
+
+                    var activateKey = title[index + 1]
+                    if (activateKey === key) {
+                        return loader.item
+                    }
+                }
+            }
+
+            return null
+        }
+
         delegate: Loader {
             id: loader
 
@@ -180,6 +206,10 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
+                    property string title: modelData.title
+
+                    parentWindow: root.window()
+
                     navigation.panel: root.navigationPanel
                     navigation.row: model.index
 
@@ -189,6 +219,19 @@ StyledPopupView {
                         menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
+
+                    Keys.onShortcutOverride: {
+                        var activatedItem = view.itemByKey(event.text)
+                        event.accepted = Boolean(activatedItem)
+                    }
+
+                    Keys.onPressed: {
+                        var activatedItem = view.itemByKey(event.text)
+                        if (Boolean(activatedItem)) {
+                            activatedItem.navigation.requestActive()
+                            activatedItem.navigation.triggered()
+                        }
+                    }
 
                     onOpenSubMenuRequested: {
                         if (prv.showedSubMenu){
@@ -210,6 +253,14 @@ StyledPopupView {
                     onSubMenuClosed: {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
                         prv.showedSubMenu = null
+
+                        if (!root.activeFocus) {
+                            root.forceActiveFocus()
+                        }
+
+                        if (!item.activeFocus) {
+                            item.forceActiveFocus()
+                        }
                     }
 
                     onHandleMenuItem: {
@@ -220,7 +271,10 @@ StyledPopupView {
                     }
 
                     onRequestParentItemActive: {
-                        root.navigationParentControl.requestActive()
+                        if (root.navigationParentControl) {
+                            root.navigationParentControl.requestActive()
+                        }
+
                         root.close()
                     }
                 }

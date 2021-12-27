@@ -113,10 +113,11 @@ void PopupWindow_QQuickView::forceActiveFocus()
 
 void PopupWindow_QQuickView::show(QPoint p)
 {
-    QWindow* top = interactiveProvider()->topWindow();
-
     m_view->setPosition(p);
-    m_view->setTransientParent(top);
+
+    QWindow* parent = m_parentWindow ? m_parentWindow : interactiveProvider()->topWindow();
+    m_view->setTransientParent(parent);
+
     m_view->show();
 
     m_view->requestActivate();
@@ -158,6 +159,16 @@ QRect PopupWindow_QQuickView::geometry() const
     return m_view ? m_view->geometry() : QRect();
 }
 
+QWindow* PopupWindow_QQuickView::parentWindow() const
+{
+    return m_parentWindow;
+}
+
+void PopupWindow_QQuickView::setParentWindow(QWindow* window)
+{
+    m_parentWindow = window;
+}
+
 void PopupWindow_QQuickView::setPosition(const QPoint& position) const
 {
     m_view->setPosition(position);
@@ -183,6 +194,17 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 
         if (event->type() == QEvent::MouseButtonPress) {
             forceActiveFocus();
+        }
+
+        if (event->type() == QEvent::Close) {
+            event->setAccepted(false);
+
+            auto parent = m_view->transientParent();
+            if (parent) {
+                parent->requestActivate();
+            }
+
+            m_view->destroy();
         }
     }
 

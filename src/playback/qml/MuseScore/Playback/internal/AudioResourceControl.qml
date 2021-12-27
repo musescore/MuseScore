@@ -319,7 +319,7 @@ Item {
                     id: menuLoader
 
                     menuAnchorItem: root.menuAnchorItem ? root.menuAnchorItem : ui.rootItem
-                    navigation: menuButton.navigation
+                    navigationParentControl: menuButton.navigation
 
                     onHandleMenuItem: {
                         if (root.resourceItemModel) {

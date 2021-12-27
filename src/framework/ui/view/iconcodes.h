@@ -333,6 +333,11 @@ public:
         DIMINUENDO = 0xF414,
         CRESCENDO = 0xF415,
 
+        APP_MINIMIZE = 0xF41C,
+        APP_MAXIMIZE = 0xF41D,
+        APP_UNMAXIMIZE = 0xF41E,
+        APP_CLOSE = 0xF41F,
+
         NOTEFLAGS_TRADITIONAL = 0xF420,
         NOTEFLAGS_STRAIGHT = 0xF421,
 

@@ -33,6 +33,7 @@
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
+#include "internal/applicationactioncontroller.h"
 
 #include "view/devtools/settingslistmodel.h"
 #include "view/appmenumodel.h"
