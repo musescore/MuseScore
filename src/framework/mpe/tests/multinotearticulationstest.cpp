@@ -40,8 +40,7 @@ protected:
         firstNoteData.nominalTimestamp = 0;
         firstNoteData.nominalDuration = 500;
         firstNoteData.voiceIdx = 0; // first voice
-        firstNoteData.pitchClass = PitchClass::A;
-        firstNoteData.octave = 3;
+        firstNoteData.nominalPitchLevel = pitchLevel(PitchClass::A, 3);
         firstNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
         // [GIVEN] Rendering data of the second quarter note on the score, with the 120BPM tempo and 4/4 time signature
@@ -49,8 +48,7 @@ protected:
         secondNoteData.nominalTimestamp = 500;
         secondNoteData.nominalDuration = 500;
         secondNoteData.voiceIdx = 0; // first voice
-        secondNoteData.pitchClass = PitchClass::C;
-        secondNoteData.octave = 4;
+        secondNoteData.nominalPitchLevel = pitchLevel(PitchClass::C, 4);
         secondNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
         // [GIVEN] Rendering data of the second quarter note on the score, with the 120BPM tempo and 4/4 time signature
@@ -58,8 +56,7 @@ protected:
         thirdNoteData.nominalTimestamp = 1000;
         thirdNoteData.nominalDuration = 500;
         thirdNoteData.voiceIdx = 0; // first voice
-        thirdNoteData.pitchClass = PitchClass::A;
-        thirdNoteData.octave = 3;
+        thirdNoteData.nominalPitchLevel = pitchLevel(PitchClass::A, 3);
         thirdNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
         // [GIVEN] Rendering data of the second quarter note on the score, with the 120BPM tempo and 4/4 time signature
@@ -67,8 +64,7 @@ protected:
         fourthNoteData.nominalTimestamp = 1500;
         fourthNoteData.nominalDuration = 500;
         fourthNoteData.voiceIdx = 0; // first voice
-        fourthNoteData.pitchClass = PitchClass::C;
-        fourthNoteData.octave = 4;
+        fourthNoteData.nominalPitchLevel = pitchLevel(PitchClass::C, 4);
         fourthNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
         // [GIVEN] Articulation pattern "Standard", which means that note should be played without any modifications
@@ -82,8 +78,7 @@ protected:
         duration_t nominalDuration = 0;
         voice_layer_idx_t voiceIdx = 0;
 
-        PitchClass pitchClass = PitchClass::Undefined;
-        octave_t octave = 0;
+        pitch_level_t nominalPitchLevel = 0;
 
         dynamic_level_t nominalDynamicLevel = 0;
     };
@@ -102,13 +97,19 @@ protected:
 TEST_F(MultiNoteArticulationsTest, StandardPattern)
 {
     // [GIVEN] No articulations applied on the top of the note
-    ArticulationPattern scope;
-    scope.emplace(0, m_standardPattern);
+    ArticulationPattern pattern;
+    pattern.emplace(0, m_standardPattern);
 
-    ArticulationData standardArticulationApplied(ArticulationType::Standard, scope, 0, HUNDRED_PERCENTS);
+    ArticulationMeta meta;
+    meta.type = ArticulationType::Standard;
+    meta.pattern = std::move(pattern);
+    meta.timestamp = m_initialData.at(0).nominalTimestamp;
+    meta.overallDuration = m_initialData.at(0).nominalDuration;
+
+    ArticulationAppliedData standardArticulationApplied(std::move(meta), 0, HUNDRED_PERCENTS);
 
     ArticulationMap appliedArticulations;
-    appliedArticulations.emplace(ArticulationType::Standard, standardArticulationApplied);
+    appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
 
     // [WHEN] Notes sequence with given parameters being built
     std::map<size_t, NoteEvent> noteEvents;
@@ -117,8 +118,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
-                            pair.second.pitchClass,
-                            pair.second.octave,
+                            pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations);
 
@@ -156,8 +156,7 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     // [GIVEN] Articulation pattern "Glissando", which instructs a performer to start on the pitch/rhythm
     //         and slide the pitch up/down to land on the next pitch/rhythm
 
-    pitch_level_t pitchDiff = pitchLevelDiff(m_initialData[0].pitchClass, m_initialData[0].octave,
-                                             m_initialData[1].pitchClass, m_initialData[1].octave);
+    pitch_level_t pitchDiff = m_initialData[0].nominalPitchLevel - m_initialData[1].nominalPitchLevel;
 
     ArticulationPatternSegment glissandoPattern;
     glissandoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
@@ -168,24 +167,42 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     ArticulationPattern glissandoScope;
     glissandoScope.emplace(0, glissandoPattern);
 
+    ArticulationMeta glissandoMeta;
+    glissandoMeta.type = ArticulationType::DiscreteGlissando;
+    glissandoMeta.pattern = glissandoScope;
+    glissandoMeta.timestamp = m_initialData.at(0).nominalTimestamp;
+    glissandoMeta.overallDuration = m_initialData.at(0).nominalDuration + m_initialData.at(1).nominalDuration;
+
     ArticulationPattern standardScope;
     standardScope.emplace(0, m_standardPattern);
 
+    ArticulationMeta thirdNoteStandardMeta;
+    thirdNoteStandardMeta.type = ArticulationType::Standard;
+    thirdNoteStandardMeta.pattern = standardScope;
+    thirdNoteStandardMeta.timestamp = m_initialData.at(2).nominalTimestamp;
+    thirdNoteStandardMeta.overallDuration = m_initialData.at(0).nominalDuration;
+
+    ArticulationMeta fourthNoteStandardMeta;
+    fourthNoteStandardMeta.type = ArticulationType::Standard;
+    fourthNoteStandardMeta.pattern = standardScope;
+    fourthNoteStandardMeta.timestamp = m_initialData.at(3).nominalTimestamp;
+    fourthNoteStandardMeta.overallDuration = m_initialData.at(0).nominalDuration;
+
     // [GIVEN] Glissando articulation applied on the first note, occupied range is from 0% to 50% of the entire articulation range
-    ArticulationData glissandoAppliedOnTheFirstNote(ArticulationType::Glissando, glissandoScope, 0, 5 * TEN_PERCENTS);
-    appliedArticulations[0].emplace(ArticulationType::Glissando, glissandoAppliedOnTheFirstNote);
+    ArticulationAppliedData glissandoAppliedOnTheFirstNote(glissandoMeta, 0, 5 * TEN_PERCENTS);
+    appliedArticulations[0].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheFirstNote));
 
     // [GIVEN] Glissando articulation applied on the second note, occupied range is from 50% to 100% of the entire articulation range
-    ArticulationData glissandoAppliedOnTheSecondNote(ArticulationType::Glissando, glissandoScope, 50, HUNDRED_PERCENTS);
-    appliedArticulations[1].emplace(ArticulationType::Glissando, glissandoAppliedOnTheSecondNote);
+    ArticulationAppliedData glissandoAppliedOnTheSecondNote(glissandoMeta, 50, HUNDRED_PERCENTS);
+    appliedArticulations[1].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheSecondNote));
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
-    ArticulationData thirdNoteStandardArticulation(ArticulationType::Standard, standardScope, 0, HUNDRED_PERCENTS);
-    appliedArticulations[2].emplace(ArticulationType::Standard, thirdNoteStandardArticulation);
+    ArticulationAppliedData thirdNoteStandardArticulation(thirdNoteStandardMeta, 0, HUNDRED_PERCENTS);
+    appliedArticulations[2].emplace(ArticulationType::Standard, std::move(thirdNoteStandardArticulation));
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
-    ArticulationData fourthNoteStandardArticulation(ArticulationType::Standard, standardScope, 0, HUNDRED_PERCENTS);
-    appliedArticulations[3].emplace(ArticulationType::Standard, thirdNoteStandardArticulation);
+    ArticulationAppliedData fourthNoteStandardArticulation(fourthNoteStandardMeta, 0, HUNDRED_PERCENTS);
+    appliedArticulations[3].emplace(ArticulationType::Standard, std::move(fourthNoteStandardArticulation));
 
     // [WHEN] Notes sequence with given parameters being built
     std::map<size_t, NoteEvent> noteEvents;
@@ -194,8 +211,7 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
-                            pair.second.pitchClass,
-                            pair.second.octave,
+                            pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations[pair.first]);
 
@@ -252,11 +268,21 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         crescendoScope.emplace(25 * ONE_PERCENT * static_cast<int>(i), std::move(crescendoPattern));
     }
 
+    ArticulationMeta crescendoMeta;
+    crescendoMeta.type = ArticulationType::DiscreteGlissando;
+    crescendoMeta.pattern = crescendoScope;
+    crescendoMeta.timestamp = m_initialData.at(0).nominalTimestamp;
+    crescendoMeta.overallDuration = m_initialData.at(1).nominalTimestamp + m_initialData.at(1).nominalDuration;
+    crescendoMeta.overallDynamicChangesRange = dynamicLevelDiff;
+
+    for (const auto& pair : m_initialData) {
+        crescendoMeta.overallDuration += pair.second.nominalDuration;
+    }
+
     for (size_t i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
-        ArticulationData crescendoApplied(ArticulationType::Crescendo, crescendoScope, 25 * ONE_PERCENT * static_cast<int>(i),
-                                          25 * ONE_PERCENT * (static_cast<int>(i) + 1), 0, dynamicLevelDiff);
-        appliedArticulations[i].emplace(ArticulationType::Crescendo, crescendoApplied);
+        ArticulationAppliedData crescendoApplied(crescendoMeta, 25 * ONE_PERCENT * i, 25 * ONE_PERCENT * (i + 1));
+        appliedArticulations[i].emplace(ArticulationType::Crescendo, std::move(crescendoApplied));
     }
 
     // [WHEN] Notes sequence with given parameters being built
@@ -266,8 +292,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
-                            pair.second.pitchClass,
-                            pair.second.octave,
+                            pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations[pair.first]);
 
