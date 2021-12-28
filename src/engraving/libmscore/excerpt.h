@@ -92,7 +92,7 @@ public:
 
     static void createExcerpt(Excerpt*);
     static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& allTracks);
-    static void cloneMeasures(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes = QList<int>(), const QMultiMap<int, int>& allTracks = QMultiMap<int, int>());
+    static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 

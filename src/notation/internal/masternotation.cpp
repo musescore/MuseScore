@@ -620,6 +620,10 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
+        if (excerpt->isEmpty()) {
+            masterScore()->initEmptyExcerpt(excerpt);
+        }
+
         auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
         excerptNotation->setIsCreated(true);
         excerptNotation->notation()->setOpened(true);
