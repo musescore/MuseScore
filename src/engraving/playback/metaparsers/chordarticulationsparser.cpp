@@ -52,7 +52,7 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
 
     for (auto&& pair : metaMap) {
         if (isSingleNoteArticulation(pair.first)) {
-            result.emplace(pair.first, ArticulationAppliedData(std::move(pair.second), 0, HUNDRED_PERCENTS));
+            result.emplace(pair.first, ArticulationAppliedData(std::move(pair.second), 0, HUNDRED_PERCENT));
             continue;
         }
 

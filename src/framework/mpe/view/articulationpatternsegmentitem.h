@@ -55,11 +55,11 @@ class ArticulationPatternSegmentItem : public QObject
 
 public:
     explicit ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment, const int scopePositionFrom = 0,
-                                            const int scopePositionTo = HUNDRED_PERCENTS);
+                                            const int scopePositionTo = HUNDRED_PERCENT);
 
     ArticulationPatternSegment patternSegmentData() const;
 
-    void load(const ArticulationPatternSegment& segment, const int scopePositionFrom = 0, const int scopePositionTo = HUNDRED_PERCENTS);
+    void load(const ArticulationPatternSegment& segment, const int scopePositionFrom = 0, const int scopePositionTo = HUNDRED_PERCENT);
 
     int durationFactor() const;
     void setDurationFactor(int newDurationFactor);

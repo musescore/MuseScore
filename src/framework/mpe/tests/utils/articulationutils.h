@@ -41,7 +41,7 @@ inline PitchPattern createSimplePitchPattern(const pitch_level_t incrementDiff =
     PitchPattern result;
 
     for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-        result.pitchOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENTS, static_cast<int>(i) * incrementDiff);
+        result.pitchOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, static_cast<int>(i) * incrementDiff);
     }
 
     return result;
@@ -54,9 +54,9 @@ inline ExpressionPattern createSimpleExpressionPattern(const dynamic_level_t amp
     float amplitudeSqrt = std::sqrt(amplitudeLevel);
 
     for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-        duration_percentage_t currentPos = static_cast<int>(i) * TEN_PERCENTS;
+        duration_percentage_t currentPos = static_cast<int>(i) * TEN_PERCENT;
         dynamic_level_t value = amplitudeLevel - std::pow(
-            (2 * (amplitudeSqrt / static_cast<float>(HUNDRED_PERCENTS)) * currentPos) - amplitudeSqrt, 2);
+            (2 * (amplitudeSqrt / static_cast<float>(HUNDRED_PERCENT)) * currentPos) - amplitudeSqrt, 2);
 
         result.dynamicOffsetMap.insert_or_assign(currentPos, value);
     }
