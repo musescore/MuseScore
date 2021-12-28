@@ -234,6 +234,10 @@ public:
     ScaleF() = default;
     ScaleF(qreal w, qreal h)
         : SizeX<qreal>(w, h) {}
+
+#ifndef NO_QT_SUPPORT
+    static ScaleF fromQSizeF(const QSizeF& s) { return ScaleF(s.width(), s.height()); }
+#endif
 };
 
 // ====================================
