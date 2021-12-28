@@ -39,17 +39,17 @@ namespace mu::mpe {
 using msecs_t = uint64_t;
 using percentage_t = int_fast16_t;
 constexpr percentage_t ONE_PERCENT = 100;
-constexpr percentage_t HUNDRED_PERCENTS = ONE_PERCENT * 100;
-constexpr percentage_t TEN_PERCENTS = ONE_PERCENT * 10;
+constexpr percentage_t HUNDRED_PERCENT = ONE_PERCENT * 100;
+constexpr percentage_t TEN_PERCENT = ONE_PERCENT * 10;
 
 constexpr inline float percentageToFactor(const percentage_t percents)
 {
-    return percents / static_cast<float>(HUNDRED_PERCENTS);
+    return percents / static_cast<float>(HUNDRED_PERCENT);
 }
 
 constexpr inline percentage_t percentageFromFactor(const float factor)
 {
-    return factor * HUNDRED_PERCENTS;
+    return factor * HUNDRED_PERCENT;
 }
 
 // Arrangement
@@ -87,10 +87,10 @@ using octave_t = uint_fast8_t;
 using pitch_level_t = percentage_t;
 using PitchCurve = std::map<duration_percentage_t, pitch_level_t>;
 
-constexpr size_t EXPECTED_SIZE = (HUNDRED_PERCENTS / TEN_PERCENTS) + 1;
+constexpr size_t EXPECTED_SIZE = (HUNDRED_PERCENT / TEN_PERCENT) + 1;
 
 constexpr octave_t MAX_SUPPORTED_OCTAVE = 12; // 0 - 12
-constexpr pitch_level_t MAX_PITCH_LEVEL = HUNDRED_PERCENTS;
+constexpr pitch_level_t MAX_PITCH_LEVEL = HUNDRED_PERCENT;
 constexpr pitch_level_t PITCH_LEVEL_STEP = MAX_PITCH_LEVEL / (MAX_SUPPORTED_OCTAVE * (static_cast<int>(PitchClass::Last) - 1));
 
 constexpr inline pitch_level_t pitchLevel(const PitchClass pitchClass, const octave_t octave)
@@ -254,7 +254,7 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
 }
 
 using dynamic_level_t = percentage_t;
-constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENTS;
+constexpr dynamic_level_t MAX_DYNAMIC_LEVEL = HUNDRED_PERCENT;
 constexpr dynamic_level_t MIN_DYNAMIC_LEVEL = 0;
 constexpr dynamic_level_t DYNAMIC_LEVEL_STEP = 5 * ONE_PERCENT;
 
@@ -509,7 +509,7 @@ struct ArticulationAppliedData {
     ArticulationPatternSegment appliedPatternSegment;
 
     duration_percentage_t occupiedFrom = 0;
-    duration_percentage_t occupiedTo = HUNDRED_PERCENTS;
+    duration_percentage_t occupiedTo = HUNDRED_PERCENT;
 
     pitch_level_t occupiedPitchChangesRange = 0;
     dynamic_level_t occupiedDynamicChangesRange = 0;
@@ -618,7 +618,7 @@ private:
     void calculateAverageDurationFactor()
     {
         if (m_data.empty()) {
-            m_averageDurationFactor = HUNDRED_PERCENTS;
+            m_averageDurationFactor = HUNDRED_PERCENT;
             return;
         }
 
@@ -754,7 +754,7 @@ private:
         }
     }
 
-    duration_percentage_t m_averageDurationFactor = HUNDRED_PERCENTS;
+    duration_percentage_t m_averageDurationFactor = HUNDRED_PERCENT;
     duration_percentage_t m_averageTimestampOffset = 0;
     pitch_level_t m_averagePitchRange = 0;
     dynamic_level_t m_averageMaxAmplitudeLevel = 0;

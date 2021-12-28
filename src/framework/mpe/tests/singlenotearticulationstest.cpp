@@ -47,7 +47,7 @@ protected:
         m_nominalDynamic = dynamicLevelFromType(DynamicType::Natural);
 
         // [GIVEN] Articulation pattern "None", which means that note should be played without any modifications
-        m_standardPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+        m_standardPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_standardPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
         m_standardPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural));
     }
@@ -81,7 +81,7 @@ TEST_F(SingleNoteArticulationsTest, StandardPattern)
     standardMeta.timestamp = m_nominalTimestamp;
     standardMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData standardArticulationApplied(std::move(standardMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData standardArticulationApplied(std::move(standardMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations;
     appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
@@ -113,7 +113,7 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
     ArticulationPatternSegment staccatoArticulation;
-    staccatoArticulation.arrangementPattern = createArrangementPattern(5 * TEN_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    staccatoArticulation.arrangementPattern = createArrangementPattern(5 * TEN_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     staccatoArticulation.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     staccatoArticulation.expressionPattern
         = createSimpleExpressionPattern(m_nominalDynamic /* no dynamic changes comparing to the standard one*/);
@@ -129,7 +129,7 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
     staccatoMeta.timestamp = m_nominalTimestamp;
     staccatoMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Staccato, std::move(staccatoApplied));
@@ -158,7 +158,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
 {
     // [GIVEN] Articulation pattern "Accent", which instructs a performer to play a note louder (usually on 1 dynamic level)
     ArticulationPatternSegment accentArticulation;
-    accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     accentArticulation.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     accentArticulation.expressionPattern = createSimpleExpressionPattern(
         dynamicLevelFromType(DynamicType::mf) /* increasing a note's dynamic on a single level from Natural dynamic*/);
@@ -174,7 +174,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
     accentMeta.timestamp = m_nominalTimestamp;
     accentMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
@@ -212,7 +212,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
 
     // [GIVEN] Articulation pattern "Accent", which instructs a performer to play a note louder (usually on 1 dynamic level)
     ArticulationPatternSegment accentArticulation;
-    accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    accentArticulation.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     accentArticulation.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     accentArticulation.expressionPattern = createSimpleExpressionPattern(
         dynamicLevelFromType(DynamicType::mf) /* increasing a note's dynamic on a single level from Natural dynamic*/);
@@ -228,7 +228,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
     accentMeta.timestamp = m_nominalTimestamp;
     accentMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData accentApplied(std::move(accentMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
@@ -262,7 +262,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
 {
     // [GIVEN] Articulation pattern "Staccato", which instructs a performer to shorten duration of a note
     ArticulationPatternSegment staccatoPattern;
-    staccatoPattern.arrangementPattern = createArrangementPattern(5 * TEN_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    staccatoPattern.arrangementPattern = createArrangementPattern(5 * TEN_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     staccatoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     staccatoPattern.expressionPattern
         = createSimpleExpressionPattern(m_nominalDynamic /* no dynamic changes comparing to the standard one*/);
@@ -272,7 +272,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
 
     // [GIVEN] Articulation pattern "Tenuto", which instructs a performer to play a note for the whole nominal duration
     ArticulationPatternSegment tenutoPattern;
-    tenutoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    tenutoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
     tenutoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
     tenutoPattern.expressionPattern = createSimpleExpressionPattern(m_nominalDynamic /* no dynamic changes comparing to the standard one*/);
 
@@ -289,7 +289,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
     staccatoMeta.timestamp = m_nominalTimestamp;
     staccatoMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData staccatoApplied(std::move(staccatoMeta), 0, HUNDRED_PERCENT);
     appliedArticulations.emplace(ArticulationType::Staccato, std::move(staccatoApplied));
 
     ArticulationMeta tenutoMeta;
@@ -299,7 +299,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
     tenutoMeta.overallDuration = m_nominalDuration;
 
     // [GIVEN] Tenuto articulation applied on the note
-    ArticulationAppliedData tenutoApplied(std::move(tenutoMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData tenutoApplied(std::move(tenutoMeta), 0, HUNDRED_PERCENT);
     appliedArticulations.emplace(ArticulationType::Tenuto, std::move(tenutoApplied));
 
     // [WHEN] Note event with given parameters being built
@@ -327,11 +327,11 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
 {
     // [GIVEN] Articulation pattern "Tenuto", which instructs a performer to play a note for the whole nominal duration
     ArticulationPatternSegment quickFallPattern;
-    quickFallPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+    quickFallPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
 
     // Linear decreasing pitch
     quickFallPattern.pitchPattern
-        = createSimplePitchPattern(-PITCH_LEVEL_STEP / (MAX_PITCH_LEVEL / TEN_PERCENTS) /*increment_pitch_diff*/);
+        = createSimplePitchPattern(-PITCH_LEVEL_STEP / (MAX_PITCH_LEVEL / TEN_PERCENT) /*increment_pitch_diff*/);
     quickFallPattern.expressionPattern
         = createSimpleExpressionPattern(m_nominalDynamic /* no dynamic changes comparing to the standard one*/);
 
@@ -346,7 +346,7 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
     quickFallMeta.timestamp = m_nominalTimestamp;
     quickFallMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData quickFallApplied(std::move(quickFallMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData quickFallApplied(std::move(quickFallMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::QuickFall, std::move(quickFallApplied));
@@ -373,11 +373,11 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
 {
     // [GIVEN] Articulation pattern "Scoop", which instructs a performer to play ahead of a nominal duration,
     //         starting at a lower pitch, and then placing it on the note being played.
-    duration_percentage_t timestampOffset = -2.5 * TEN_PERCENTS;
+    duration_percentage_t timestampOffset = -2.5 * TEN_PERCENT;
     m_nominalTimestamp = 1000; //msecs
 
     ArticulationPatternSegment scoopPattern;
-    scoopPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, timestampOffset /*timestamp_offset*/);
+    scoopPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, timestampOffset /*timestamp_offset*/);
 
     // Linear increasing pitch
     scoopPattern.pitchPattern
@@ -395,7 +395,7 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
     scoopMeta.timestamp = m_nominalTimestamp;
     scoopMeta.overallDuration = m_nominalDuration;
 
-    ArticulationAppliedData scoopApplied(std::move(scoopMeta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData scoopApplied(std::move(scoopMeta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Scoop, std::move(scoopApplied));

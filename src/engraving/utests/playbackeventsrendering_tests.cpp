@@ -45,7 +45,7 @@ protected:
     void SetUp() override
     {
         m_dummyPatternSegment.arrangementPattern
-            = tests::createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+            = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
         m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mu::mpe::DynamicType::Natural));
         m_dummyPattern.emplace(0, m_dummyPatternSegment);

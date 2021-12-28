@@ -68,7 +68,7 @@ protected:
         fourthNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
         // [GIVEN] Articulation pattern "Standard", which means that note should be played without any modifications
-        m_standardPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+        m_standardPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_standardPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
         m_standardPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural));
     }
@@ -106,7 +106,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
     meta.timestamp = m_initialData.at(0).nominalTimestamp;
     meta.overallDuration = m_initialData.at(0).nominalDuration;
 
-    ArticulationAppliedData standardArticulationApplied(std::move(meta), 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData standardArticulationApplied(std::move(meta), 0, HUNDRED_PERCENT);
 
     ArticulationMap appliedArticulations;
     appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
@@ -159,8 +159,8 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     pitch_level_t pitchDiff = m_initialData[0].nominalPitchLevel - m_initialData[1].nominalPitchLevel;
 
     ArticulationPatternSegment glissandoPattern;
-    glissandoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
-    glissandoPattern.pitchPattern = createSimplePitchPattern(pitchDiff / (MAX_PITCH_LEVEL / TEN_PERCENTS) /*increment_pitch_diff*/);
+    glissandoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
+    glissandoPattern.pitchPattern = createSimplePitchPattern(pitchDiff / (MAX_PITCH_LEVEL / TEN_PERCENT) /*increment_pitch_diff*/);
     glissandoPattern.expressionPattern
         = createSimpleExpressionPattern(dynamicLevelFromType(DynamicType::Natural) /* no dynamic changes comparing to the natural one*/);
 
@@ -189,19 +189,19 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     fourthNoteStandardMeta.overallDuration = m_initialData.at(0).nominalDuration;
 
     // [GIVEN] Glissando articulation applied on the first note, occupied range is from 0% to 50% of the entire articulation range
-    ArticulationAppliedData glissandoAppliedOnTheFirstNote(glissandoMeta, 0, 5 * TEN_PERCENTS);
+    ArticulationAppliedData glissandoAppliedOnTheFirstNote(glissandoMeta, 0, 5 * TEN_PERCENT);
     appliedArticulations[0].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheFirstNote));
 
     // [GIVEN] Glissando articulation applied on the second note, occupied range is from 50% to 100% of the entire articulation range
-    ArticulationAppliedData glissandoAppliedOnTheSecondNote(glissandoMeta, 50, HUNDRED_PERCENTS);
+    ArticulationAppliedData glissandoAppliedOnTheSecondNote(glissandoMeta, 50, HUNDRED_PERCENT);
     appliedArticulations[1].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheSecondNote));
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
-    ArticulationAppliedData thirdNoteStandardArticulation(thirdNoteStandardMeta, 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData thirdNoteStandardArticulation(thirdNoteStandardMeta, 0, HUNDRED_PERCENT);
     appliedArticulations[2].emplace(ArticulationType::Standard, std::move(thirdNoteStandardArticulation));
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
-    ArticulationAppliedData fourthNoteStandardArticulation(fourthNoteStandardMeta, 0, HUNDRED_PERCENTS);
+    ArticulationAppliedData fourthNoteStandardArticulation(fourthNoteStandardMeta, 0, HUNDRED_PERCENT);
     appliedArticulations[3].emplace(ArticulationType::Standard, std::move(fourthNoteStandardArticulation));
 
     // [WHEN] Notes sequence with given parameters being built
@@ -259,7 +259,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
 
     for (int i = 0; i <= dynamicSegmentsCount; ++i) {
         ArticulationPatternSegment crescendoPattern;
-        crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
+        crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
         crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(
                                                                                DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP
