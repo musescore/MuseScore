@@ -52,7 +52,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
     }
 
     for (auto& pair : perNoteArticulationsMetaMap) {
-        result.emplace(pair.first, mpe::ArticulationAppliedData(std::move(pair.second), 0, mpe::HUNDRED_PERCENTS));
+        result.emplace(pair.first, mpe::ArticulationAppliedData(std::move(pair.second), 0, mpe::HUNDRED_PERCENT));
     }
 }
 

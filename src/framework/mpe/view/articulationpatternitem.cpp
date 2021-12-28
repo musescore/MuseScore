@@ -76,9 +76,9 @@ void ArticulationPatternItem::updateType(const ArticulationType type)
 
 ArticulationPatternSegment ArticulationPatternItem::buildBlankPatternSegment() const
 {
-    return ArticulationPatternSegment(ArrangementPattern(HUNDRED_PERCENTS /*durationFactor*/, 0 /*timestampOffset*/),
-                                      PitchPattern(EXPECTED_SIZE, TEN_PERCENTS, 0),
-                                      ExpressionPattern(EXPECTED_SIZE, TEN_PERCENTS, 0));
+    return ArticulationPatternSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
+                                      PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
+                                      ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
 }
 
 ArticulationPatternSegmentItem* ArticulationPatternItem::currentPatternSegment() const
@@ -106,7 +106,7 @@ void ArticulationPatternItem::load(const ArticulationPattern& pattern)
         auto next = std::next(it, 1);
 
         float scopePositionFrom = it->first;
-        float scopePositionTo = HUNDRED_PERCENTS;
+        float scopePositionTo = HUNDRED_PERCENT;
 
         if (next != pattern.end()) {
             scopePositionTo = next->first;
@@ -116,7 +116,7 @@ void ArticulationPatternItem::load(const ArticulationPattern& pattern)
     }
 
     if (pattern.empty()) {
-        m_items << new ArticulationPatternSegmentItem(this, buildBlankPatternSegment(), 0, HUNDRED_PERCENTS);
+        m_items << new ArticulationPatternSegmentItem(this, buildBlankPatternSegment(), 0, HUNDRED_PERCENT);
     }
 
     endResetModel();
