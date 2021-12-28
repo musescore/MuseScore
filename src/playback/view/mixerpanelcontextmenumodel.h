@@ -75,7 +75,7 @@ signals:
 private:
     bool isSectionVisible(MixerSectionType sectionType) const;
 
-    ui::MenuItem buildViewMenuItem(MixerSectionType sectionType) const;
+    ui::MenuItem* buildViewMenuItem(MixerSectionType sectionType) const;
 
     void toggleMixerSection(const actions::ActionData& args);
 };

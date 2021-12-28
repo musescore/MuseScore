@@ -115,18 +115,24 @@ bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) 
     return configuration()->isMixerSectionVisible(sectionType);
 }
 
-MenuItem MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionType) const
+MenuItem* MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionType) const
 {
     int sectionTypeInt = static_cast<int>(sectionType);
 
-    MenuItem item;
-    item.id = QString::number(sectionTypeInt);
-    item.title = mixerSectionTitle(sectionType);
-    item.code = TOGGLE_MIXER_SECTION_ACTION;
-    item.state.enabled = true;
-    item.state.checked = isSectionVisible(sectionType);
-    item.args = ActionData::make_arg1<int>(sectionTypeInt);
-    item.checkable = Checkable::Yes;
+    MenuItem* item = new MenuItem();
+    item->setId(QString::number(sectionTypeInt));
+    item->setArgs(ActionData::make_arg1<int>(sectionTypeInt));
+
+    UiAction action;
+    action.title = mixerSectionTitle(sectionType);
+    action.code = TOGGLE_MIXER_SECTION_ACTION;
+    action.checkable = Checkable::Yes;
+    item->setAction(action);
+
+    UiActionState state;
+    state.enabled = true;
+    state.checked = isSectionVisible(sectionType);
+    item->setState(state);
 
     return item;
 }
@@ -173,14 +179,14 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
     }
 
     QString sectionItemId = QString::number(sectionTypeInt);
-    MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
+    MenuItem* viewMenu = findMenu(VIEW_MENU_ID);
 
-    for (MenuItem& item : viewMenu.subitems) {
-        if (item.id == sectionItemId) {
-            item.state.checked = newVisibilityValue;
+    for (MenuItem* item : viewMenu->subitems()) {
+        if (item->id() == sectionItemId) {
+            UiActionState state = item->state();
+            state.checked = newVisibilityValue;
+            item->setState(state);
             break;
         }
     }
-
-    emit itemChanged(viewMenu);
 }
