@@ -38,9 +38,11 @@ void mu::strings::split(const std::string& str, std::vector<std::string>& out, c
 {
     std::size_t current, previous = 0;
     current = str.find(delim);
+    std::size_t delimLen = delim.length();
+
     while (current != std::string::npos) {
         out.push_back(str.substr(previous, current - previous));
-        previous = current + 1;
+        previous = current + delimLen;
         current = str.find(delim, previous);
     }
     out.push_back(str.substr(previous, current - previous));
