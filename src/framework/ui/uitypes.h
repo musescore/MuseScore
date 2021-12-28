@@ -32,6 +32,7 @@
 #include "val.h"
 #include "actions/actiontypes.h"
 #include "view/iconcodes.h"
+#include "shortcuts/shortcutstypes.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;
@@ -280,13 +281,9 @@ struct MenuItem : public UiAction
         id = QString::fromStdString(a.code);
     }
 
-    QString shortcutsAsString() const
+    QString shortcutsTitle() const
     {
-        QStringList list;
-        for (const std::string& sc : shortcuts) {
-            list << QString::fromStdString(sc);
-        }
-        return list.join("; ");
+        return mu::shortcuts::sequencesToNativeText(shortcuts);
     }
 
     QVariantMap toMap() const
@@ -299,7 +296,7 @@ struct MenuItem : public UiAction
         return {
             { "id", id },
             { "code", QString::fromStdString(code) },
-            { "shortcut", shortcutsAsString() },
+            { "shortcut", shortcutsTitle() },
             { "title", title },
             { "description", description },
             { "section", section },

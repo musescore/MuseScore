@@ -49,6 +49,8 @@ private slots:
 private:
     void onNotationSetup() override;
 
+    QString shortcutsTitleByActionCode(const actions::ActionCode& code) const;
+
     void adjustCanvas();
     qreal resolveDefaultScaling() const;
 
