@@ -69,6 +69,8 @@ void PaletteWorkspaceSetup::setup()
         return;
     }
 
+    paletteProvider()->setDefaultPaletteTree(PaletteCreator::newDefaultPaletteTree());
+
     paletteProvider()->userPaletteTreeChanged().onNotify(this, [this]() {
         PaletteTreePtr tree = paletteProvider()->userPaletteTree();
 
@@ -88,8 +90,6 @@ void PaletteWorkspaceSetup::setup()
             LOGD() << "no palette data in workspace, will use default";
             tree = PaletteCreator::newDefaultPaletteTree();
         }
-
-        paletteProvider()->setDefaultPaletteTree(tree);
         paletteProvider()->setUserPaletteTree(tree);
     };
 
