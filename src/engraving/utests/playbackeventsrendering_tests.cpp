@@ -360,9 +360,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    std::vector<pitch_level_t> expectedPitches = { nominalPitchLevel + PITCH_LEVEL_STEP,
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
+    std::vector<pitch_level_t> expectedPitches = { plus,
                                                    nominalPitchLevel,
-                                                   nominalPitchLevel - PITCH_LEVEL_STEP,
+                                                   minus,
                                                    nominalPitchLevel };
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -414,9 +416,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    std::vector<pitch_level_t> expectedPitches = { nominalPitchLevel - PITCH_LEVEL_STEP,
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
+    std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
-                                                   nominalPitchLevel + PITCH_LEVEL_STEP,
+                                                   plus,
                                                    nominalPitchLevel };
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -470,9 +474,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
     int expectedSubNotesCount = 4;
     duration_t expectedDuration = QUARTER_NOTE_DURATION / expectedSubNotesCount;
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
-    std::vector<pitch_level_t> expectedPitches = { nominalPitchLevel - PITCH_LEVEL_STEP,
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
+    pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
+    std::vector<pitch_level_t> expectedPitches = { minus,
                                                    nominalPitchLevel,
-                                                   nominalPitchLevel + PITCH_LEVEL_STEP,
+                                                   plus,
                                                    nominalPitchLevel };
 
     // [GIVEN] Fulfill articulations profile with dummy patterns
@@ -536,10 +542,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     };
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
+    pitch_level_t plus = nominalPitchLevel + PITCH_LEVEL_STEP;
 
     std::vector<pitch_level_t> expectedPitches = {
         nominalPitchLevel,
-        nominalPitchLevel + PITCH_LEVEL_STEP,
+        plus,
         nominalPitchLevel
     };
 
@@ -604,10 +611,11 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
     };
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::F, 4);
+    pitch_level_t minus = nominalPitchLevel - PITCH_LEVEL_STEP;
 
     std::vector<pitch_level_t> expectedPitches = {
         nominalPitchLevel,
-        nominalPitchLevel - PITCH_LEVEL_STEP,
+        minus,
         nominalPitchLevel
     };
 
