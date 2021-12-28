@@ -1125,7 +1125,8 @@ public:
         bool addToAllScores = true;
     };
 
-    Ms::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr, const InsertMeasureOptions& options = InsertMeasureOptions());
+    Ms::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                                   const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }

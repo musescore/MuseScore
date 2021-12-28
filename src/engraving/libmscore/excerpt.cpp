@@ -508,6 +508,11 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
     Excerpt::createExcerpt(excerpt);
 }
 
+void MasterScore::initEmptyExcerpt(Excerpt* excerpt)
+{
+    Excerpt::cloneMeasures(this, excerpt->partScore());
+}
+
 //---------------------------------------------------------
 //   cloneSpanner
 //---------------------------------------------------------
@@ -617,7 +622,8 @@ static void processLinkedClone(EngravingItem* ne, Score* score, int strack)
     ne->setScore(score);
 }
 
-static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& trackList, TieMap& tieMap)
+static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, const Ms::Score* oscore, const QList<int>& sourceStavesIndexes,
+                                     const QMultiMap<int, int>& trackList, TieMap& tieMap)
 {
     Ms::MeasureBase* nmb = nullptr;
 
@@ -1027,13 +1033,13 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
     }
 }
 
-void Excerpt::cloneMeasures(Score *oscore, Score *score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& allTracks)
+void Excerpt::cloneMeasures(Score* oscore, Score* score)
 {
     MeasureBaseList* measures = score->measures();
     TieMap tieMap;
 
     for (MeasureBase* mb = oscore->firstMeasure(); mb; mb = mb->next()) {
-        MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, sourceStavesIndexes, allTracks, tieMap);
+        MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
         measures->add(newMeasure);
     }
 }
