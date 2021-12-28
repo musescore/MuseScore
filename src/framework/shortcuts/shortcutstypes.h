@@ -165,6 +165,17 @@ inline std::pair<int, Qt::KeyboardModifiers> correctKeyInput(int key, Qt::Keyboa
 
     return { key, modifiers };
 }
+
+inline QString sequencesToNativeText(const std::vector<std::string>& sequences)
+{
+    QList<QKeySequence> keySequenceList;
+
+    for (const std::string& sequence : sequences) {
+        keySequenceList << QKeySequence(QString::fromStdString(sequence));
+    }
+
+    return QKeySequence::listToString(keySequenceList, QKeySequence::NativeText);
+}
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
