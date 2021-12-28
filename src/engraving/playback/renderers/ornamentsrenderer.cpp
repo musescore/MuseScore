@@ -287,7 +287,7 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
 {
     float availableDurationRatio = availableDurationTicks / static_cast<float>(overallDurationTicks);
 
-    int totalNotesCount = alterationsCount * pitchOffsets.size();
+    size_t totalNotesCount = alterationsCount * pitchOffsets.size();
     float durationStep = (noteCtx.duration * availableDurationRatio) / totalNotesCount;
 
     for (int alterationStep = 0; alterationStep < alterationsCount; ++alterationStep) {
