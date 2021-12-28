@@ -250,22 +250,22 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
     // [GIVEN] Articulation pattern "Crescendo", which instructs a performer to gradually increase a volume of every note,
     //         using a certain range of dynamics. In our case there will be a crescendo from forte up to fortissimo
 
-    size_t noteCount = m_initialData.size();
-    size_t dynamicSegmentsCount = noteCount - 1;
+    int noteCount = static_cast<int>(m_initialData.size());
+    int dynamicSegmentsCount = noteCount - 1;
 
     dynamic_level_t dynamicLevelDiff = dynamicLevelFromType(DynamicType::ff) - dynamicLevelFromType(DynamicType::f);
 
     ArticulationPattern crescendoScope;
 
-    for (size_t i = 0; i <= dynamicSegmentsCount; ++i) {
+    for (int i = 0; i <= dynamicSegmentsCount; ++i) {
         ArticulationPatternSegment crescendoPattern;
         crescendoPattern.arrangementPattern = createArrangementPattern(HUNDRED_PERCENTS /*duration_factor*/, 0 /*timestamp_offset*/);
         crescendoPattern.pitchPattern = createSimplePitchPattern(0 /*increment_pitch_diff*/);
         crescendoPattern.expressionPattern = createSimpleExpressionPattern(dynamicLevelFromType(
-                                                                               DynamicType::Natural) + static_cast<int>(i) * DYNAMIC_LEVEL_STEP
-                                                                           / static_cast<dynamic_level_t>(dynamicSegmentsCount));
+                                                                               DynamicType::Natural) + i * DYNAMIC_LEVEL_STEP
+                                                                           / dynamicSegmentsCount);
 
-        crescendoScope.emplace(25 * ONE_PERCENT * static_cast<int>(i), std::move(crescendoPattern));
+        crescendoScope.emplace(25 * ONE_PERCENT * i, std::move(crescendoPattern));
     }
 
     ArticulationMeta crescendoMeta;
@@ -279,7 +279,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         crescendoMeta.overallDuration += pair.second.nominalDuration;
     }
 
-    for (size_t i = 0; i < noteCount; ++i) {
+    for (int i = 0; i < noteCount; ++i) {
         // [GIVEN] Crescendo articulation applied on the note
         ArticulationAppliedData crescendoApplied(crescendoMeta, 25 * ONE_PERCENT * i, 25 * ONE_PERCENT * (i + 1));
         appliedArticulations[i].emplace(ArticulationType::Crescendo, std::move(crescendoApplied));
@@ -299,7 +299,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         noteEvents.emplace(pair.first, std::move(noteEvent));
     }
 
-    for (size_t i = 0; i < noteCount; ++i) {
+    for (int i = 0; i < noteCount; ++i) {
         // [THEN] We expect that ExpressionCurve of every note will be adapted to the applied CrescendoPattern
         //        That means that every note will be played louder on 125% than the previous one
 

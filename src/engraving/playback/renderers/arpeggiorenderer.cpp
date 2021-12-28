@@ -47,7 +47,7 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
         return;
     }
 
-    int stepsCount = chord->notes().size();
+    int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENTS / stepsCount;
 
     auto buildEvent = [&](const int noteIdx) {
