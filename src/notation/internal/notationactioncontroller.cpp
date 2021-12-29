@@ -252,6 +252,8 @@ void NotationActionController::init()
     registerAction("system-text-properties", &Controller::openStaffTextPropertiesDialog);
     registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
     registerAction("config-raster", &Controller::openEditGridSizeDialog);
+    registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
+
     registerAction("load-style", &Controller::loadStyle);
     registerAction("save-style", &Controller::saveStyle);
 
@@ -305,7 +307,6 @@ void NotationActionController::init()
 
     registerAction("explode", &Interaction::explodeSelectedStaff);
     registerAction("implode", &Interaction::implodeSelectedStaff);
-    registerAction("realize-chord-symbols", &Interaction::realizeSelectedChordSymbols);
     registerAction("time-delete", &Interaction::removeSelectedRange);
     registerAction("del-empty-measures", &Interaction::removeEmptyTrailingMeasures);
     registerAction("slash-fill", &Interaction::fillSelectionWithSlashes);
@@ -1515,6 +1516,11 @@ void NotationActionController::openMeasurePropertiesDialog()
 void NotationActionController::openEditGridSizeDialog()
 {
     interactive()->open("musescore://notation/editgridsize");
+}
+
+void NotationActionController::openRealizeChordSymbolsDialog()
+{
+    interactive()->open("musescore://notation/realizechordsymbols");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)

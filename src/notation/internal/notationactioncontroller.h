@@ -129,6 +129,7 @@ private:
     void openStaffTextPropertiesDialog();
     void openMeasurePropertiesDialog();
     void openEditGridSizeDialog();
+    void openRealizeChordSymbolsDialog();
     mu::io::path selectStyleFile(bool forLoad);
     void loadStyle();
     void saveStyle();
