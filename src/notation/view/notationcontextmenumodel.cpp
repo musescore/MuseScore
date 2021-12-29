@@ -45,6 +45,8 @@ MenuItemList NotationContextMenuModel::itemsByElementType(ElementType elementTyp
         return systemTextItems();
     case ElementType::TIMESIG:
         return timeSignatureItems();
+    case ElementType::HARMONY:
+        return harmonyItems();
     default:
         break;
     }
@@ -115,6 +117,15 @@ MenuItemList NotationContextMenuModel::timeSignatureItems() const
     MenuItemList items = elementItems();
     items << makeSeparator();
     items << makeMenuItem("time-signature-properties");
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::harmonyItems() const
+{
+    MenuItemList items = elementItems();
+    items << makeSeparator();
+    items << makeMenuItem("realize-chord-symbols");
 
     return items;
 }

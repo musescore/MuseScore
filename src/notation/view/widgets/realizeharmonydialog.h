@@ -19,41 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
-#define MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
+
+#ifndef __REALIZEHARMONYDIALOG_H__
+#define __REALIZEHARMONYDIALOG_H__
+
+#include "ui_realizeharmonydialog.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-#include "ui/view/abstractmenumodel.h"
-#include "notation/notationtypes.h"
+namespace Ms {
+class Harmony;
+}
 
 namespace mu::notation {
-class NotationContextMenuModel : public ui::AbstractMenuModel
+class RealizeHarmonyDialog : public QDialog, Ui::RealizeHarmonyDialogBase
 {
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
-    Q_INVOKABLE void loadItems(int elementType);
+    RealizeHarmonyDialog(QWidget* parent = nullptr);
+    RealizeHarmonyDialog(const RealizeHarmonyDialog& dialog);
 
-private:
-    ui::MenuItemList itemsByElementType(ElementType type) const;
+private slots:
+    INotationInteractionPtr interaction() const;
 
-    ui::MenuItemList pageItems() const;
-    ui::MenuItemList defaultCopyPasteItems() const;
-    ui::MenuItemList measureItems() const;
-    ui::MenuItemList staffTextItems() const;
-    ui::MenuItemList systemTextItems() const;
-    ui::MenuItemList timeSignatureItems() const;
-    ui::MenuItemList harmonyItems() const;
-    ui::MenuItemList selectItems() const;
-    ui::MenuItemList elementItems() const;
+    void accept() override;
 
-    bool isSingleSelection() const;
-    bool isDrumsetStaff() const;
+    void toggleChordTable();
+
+    void setChordList(const QList<Ms::Harmony*>& hlist);
 };
 }
 
-#endif // MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
+#endif // REALIZEHARMONYDIALOG_H
