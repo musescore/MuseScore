@@ -69,28 +69,31 @@ Item {
         model: toolbarModel
 
         delegate: FlatButton {
-            text: model.title
-            icon: model.icon
-            iconFont: ui.theme.toolbarIconsFont
-
             height: 30
 
-            toolTipTitle: model.title
-            toolTipDescription: model.description
-            toolTipShortcut: model.shortcut
+            property var item: Boolean(model) ? model.itemRole : null
 
-            enabled: model.enabled
+            text: Boolean(item) ? item.title : ""
+            icon: Boolean(item) ? item.icon : IconCode.NONE
+            iconFont: ui.theme.toolbarIconsFont
+
+            toolTipTitle: Boolean(item) ? item.title : ""
+            toolTipDescription: Boolean(item) ? item.description : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
+
+            enabled: Boolean(item) ? item.enabled : false
+
             textFont: ui.theme.largeBodyFont
 
             navigation.panel: keynavSub
-            navigation.name: model.title
+            navigation.name: toolTipTitle
             navigation.order: model.index
 
             transparent: true
             orientation: Qt.Horizontal
 
             onClicked: {
-                toolbarModel.handleAction(model.code)
+                toolbarModel.handleMenuItem(item.id)
             }
         }
     }
