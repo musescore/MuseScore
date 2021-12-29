@@ -72,6 +72,9 @@ public:
     int musicalFontSize() const override;
     async::Notification musicalFontChanged() const override;
 
+    std::string defaultFontFamily() const override;
+    int defaultFontSize() const override;
+
     double guiScaling() const override;
     double dpi() const override;
 
