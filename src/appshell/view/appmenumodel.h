@@ -73,16 +73,16 @@ private:
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
     using ui::AbstractMenuModel::makeMenuItem;
-    ui::MenuItem makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;
+    ui::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;
 
-    ui::MenuItem fileItem() const;
-    ui::MenuItem editItem() const;
-    ui::MenuItem viewItem() const;
-    ui::MenuItem addItem() const;
-    ui::MenuItem formatItem() const;
-    ui::MenuItem toolsItem() const;
-    ui::MenuItem helpItem() const;
-    ui::MenuItem diagnosticItem() const;
+    ui::MenuItem* fileItem() const;
+    ui::MenuItem* editItem() const;
+    ui::MenuItem* viewItem() const;
+    ui::MenuItem* addItem() const;
+    ui::MenuItem* formatItem() const;
+    ui::MenuItem* toolsItem() const;
+    ui::MenuItem* helpItem() const;
+    ui::MenuItem* diagnosticItem() const;
 
     ui::MenuItemList recentScores() const;
     ui::MenuItemList appendClearRecentSection(const ui::MenuItemList& recentScores) const;

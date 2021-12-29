@@ -99,7 +99,7 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 void AppMenuModel::setupConnections()
 {
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
-        MenuItem& recentScoreListItem = findMenu("menu-file-open");
+        MenuItem* recentScoreListItem = findMenu("menu-file-open");
 
         MenuItemList recentScoresList = recentScores();
         bool openRecentEnabled = !recentScoresList.empty();
@@ -108,22 +108,21 @@ void AppMenuModel::setupConnections()
             recentScoresList = appendClearRecentSection(recentScoresList);
         }
 
-        recentScoreListItem.state.enabled = openRecentEnabled;
-        recentScoreListItem.subitems = recentScoresList;
+        UiActionState state = recentScoreListItem->state();
+        state.enabled = openRecentEnabled;
+        recentScoreListItem->setState(state);
 
-        emit itemsChanged();
+        recentScoreListItem->setSubitems(recentScoresList);
     });
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem.subitems = workspacesItems();
-        emit itemsChanged();
+        MenuItem* workspacesItem = findMenu("menu-select-workspace");
+        workspacesItem->setSubitems(workspacesItems());
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem.subitems = workspacesItems();
-        emit itemsChanged();
+        MenuItem* workspacesItem = findMenu("menu-select-workspace");
+        workspacesItem->setSubitems(workspacesItems());
     });
 
     connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
@@ -135,14 +134,14 @@ void AppMenuModel::setupConnections()
     qApp->installEventFilter(this);
 }
 
-MenuItem AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
+MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
 {
-    MenuItem item = makeMenuItem(actionCode);
-    item.role = menuRole;
+    MenuItem* item = makeMenuItem(actionCode);
+    item->setRole(menuRole);
     return item;
 }
 
-MenuItem AppMenuModel::fileItem() const
+MenuItem* AppMenuModel::fileItem() const
 {
     MenuItemList recentScoresList = recentScores();
     bool openRecentEnabled = !recentScoresList.isEmpty();
@@ -177,7 +176,7 @@ MenuItem AppMenuModel::fileItem() const
     return makeMenu(qtrc("appshell", "&File"), fileItems, "menu-file");
 }
 
-MenuItem AppMenuModel::editItem() const
+MenuItem* AppMenuModel::editItem() const
 {
     MenuItemList editItems {
         makeMenuItem("undo"),
@@ -201,7 +200,7 @@ MenuItem AppMenuModel::editItem() const
     return makeMenu(qtrc("appshell", "&Edit"), editItems, "menu-edit");
 }
 
-MenuItem AppMenuModel::viewItem() const
+MenuItem* AppMenuModel::viewItem() const
 {
     MenuItemList viewItems {
         makeMenuItem("toggle-palettes"),
@@ -240,7 +239,7 @@ MenuItem AppMenuModel::viewItem() const
     return makeMenu(qtrc("appshell", "&View"), viewItems, "menu-view");
 }
 
-MenuItem AppMenuModel::addItem() const
+MenuItem* AppMenuModel::addItem() const
 {
     MenuItemList addItems {
         makeMenu(qtrc("appshell", "N&otes"), notesItems()),
@@ -256,7 +255,7 @@ MenuItem AppMenuModel::addItem() const
     return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
 }
 
-MenuItem AppMenuModel::formatItem() const
+MenuItem* AppMenuModel::formatItem() const
 {
     MenuItemList stretchItems {
         makeMenuItem("stretch+"),
@@ -282,7 +281,7 @@ MenuItem AppMenuModel::formatItem() const
     return makeMenu(qtrc("appshell", "F&ormat"), formatItems, "menu-format");
 }
 
-MenuItem AppMenuModel::toolsItem() const
+MenuItem* AppMenuModel::toolsItem() const
 {
     MenuItemList voicesItems {
         makeMenuItem("voice-x12"),
@@ -324,7 +323,7 @@ MenuItem AppMenuModel::toolsItem() const
     return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
 }
 
-MenuItem AppMenuModel::helpItem() const
+MenuItem* AppMenuModel::helpItem() const
 {
     MenuItemList helpItems {
         makeMenuItem("online-handbook"),
@@ -348,7 +347,7 @@ MenuItem AppMenuModel::helpItem() const
     return makeMenu(qtrc("appshell", "&Help"), helpItems, "menu-help");
 }
 
-MenuItem AppMenuModel::diagnosticItem() const
+MenuItem* AppMenuModel::diagnosticItem() const
 {
     MenuItemList systemItems {
         makeMenuItem("diagnostic-show-paths"),
@@ -386,13 +385,21 @@ MenuItemList AppMenuModel::recentScores() const
 
     int index = 0;
     for (const ProjectMeta& meta : recentProjects) {
-        MenuItem item;
-        item.id = makeId(item.code, index++);
-        item.code = "file-open";
-        item.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
-        item.args = ActionData::make_arg1<io::path>(meta.filePath);
-        item.state.enabled = true;
-        item.selectable = true;
+        MenuItem* item = new MenuItem();
+
+        UiAction action;
+        action.code = "file-open";
+        action.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
+        item->setAction(action);
+
+        item->setId(makeId(item->action().code, index++));
+
+        UiActionState state;
+        state.enabled = true;
+        item->setState(state);
+
+        item->setSelectable(true);
+        item->setArgs(ActionData::make_arg1<io::path>(meta.filePath));
 
         items << item;
     }
@@ -572,14 +579,19 @@ MenuItemList AppMenuModel::workspacesItems() const
 
     int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
-        MenuItem item = uiactionsRegister()->action("select-workspace");
-        item.id = makeId(item.code, index++);
-        item.title = QString::fromStdString(workspace->title());
-        item.args = ActionData::make_arg1<std::string>(workspace->name());
+        MenuItem* item = new MenuItem(uiactionsRegister()->action("select-workspace"));
+        item->setId(makeId(item->action().code, index++));
 
-        item.selectable = true;
-        item.selected = (workspace == currentWorkspace);
-        item.state.enabled = true;
+        UiAction action = item->action();
+        action.title = QString::fromStdString(workspace->title());
+
+        item->setArgs(ActionData::make_arg1<std::string>(workspace->name()));
+        item->setSelectable(true);
+        item->setSelected(workspace == currentWorkspace);
+
+        UiActionState state;
+        state.enabled = true;
+        item->setState(state);
 
         items << item;
     }
@@ -697,7 +709,7 @@ void AppMenuModel::navigate(int key)
             newIndex = rowCount() - 1;
         }
 
-        setHighlightedMenuId(item(newIndex).id);
+        setHighlightedMenuId(item(newIndex)->id());
         break;
     }
     case Qt::Key_Right: {
@@ -706,7 +718,7 @@ void AppMenuModel::navigate(int key)
             newIndex = 0;
         }
 
-        setHighlightedMenuId(item(newIndex).id);
+        setHighlightedMenuId(item(newIndex)->id());
         break;
     }
     case Qt::Key_Down:
@@ -743,7 +755,7 @@ void AppMenuModel::resetNavigation()
 
 void AppMenuModel::navigateToFirstMenu()
 {
-    setHighlightedMenuId(item(0).id);
+    setHighlightedMenuId(item(0)->id());
 }
 
 void AppMenuModel::saveMUNavigationSystemState()
@@ -780,8 +792,8 @@ QString AppMenuModel::highlightedMenuId() const
 QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
 {
     for (int i = 0; i < rowCount(); i++) {
-        MenuItem menuItem = item(i);
-        QString title = menuItem.title;
+        MenuItem* menuItem = item(i);
+        QString title = menuItem->action().title;
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {
@@ -789,7 +801,7 @@ QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
         }
 
         if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
-            return menuItem.id;
+            return menuItem->id();
         }
     }
 
