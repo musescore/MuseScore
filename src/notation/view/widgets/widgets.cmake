@@ -18,6 +18,7 @@ set (WIDGETS_UI
     ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.ui
     ${CMAKE_CURRENT_LIST_DIR}/voicing_select.ui
     ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.ui
+    ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.ui
     )
 
 set(WIDGETS_SRC
@@ -63,4 +64,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timelineview.h
     ${CMAKE_CURRENT_LIST_DIR}/timeline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timeline.h
+    ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.h
     )

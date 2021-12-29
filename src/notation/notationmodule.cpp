@@ -64,6 +64,7 @@
 #include "view/widgets/tupletdialog.h"
 #include "view/widgets/stafftextpropertiesdialog.h"
 #include "view/widgets/timelineview.h"
+#include "view/widgets/realizeharmonydialog.h"
 #include "view/notationcontextmenumodel.h"
 #include "view/internal/undoredomodel.h"
 
@@ -159,6 +160,9 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/editgridsize"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/EditGridSizeDialog.qml"));
+
+        ir->registerUri(Uri("musescore://notation/realizechordsymbols"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<RealizeHarmonyDialog>("RealizeHarmonyDialog")));
     }
 }
 
