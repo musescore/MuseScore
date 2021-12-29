@@ -22,82 +22,30 @@
 
 #include "notationtoolbarmodel.h"
 
-#include "log.h"
-
-#include "translation.h"
-
 using namespace mu::notation;
 using namespace mu::ui;
 
-NotationToolBarModel::NotationToolBarModel(QObject* parent)
-    : QAbstractListModel(parent)
-{
-}
-
-int NotationToolBarModel::rowCount(const QModelIndex&) const
-{
-    return m_items.size();
-}
-
-QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
-{
-    if (!index.isValid()) {
-        return QVariant();
-    }
-
-    MenuItem item = m_items[index.row()];
-
-    switch (role) {
-    case TitleRole: return item.title;
-    case CodeRole: return QString::fromStdString(item.code);
-    case IconRole: return static_cast<int>(item.iconCode);
-    case EnabledRole: return item.state.enabled;
-    case DescriptionRole: return item.description;
-    case ShortcutRole: return item.shortcutsTitle();
-    }
-
-    return QVariant();
-}
-
-QHash<int, QByteArray> NotationToolBarModel::roleNames() const
-{
-    static const QHash<int, QByteArray> roles {
-        { TitleRole, "title" },
-        { CodeRole, "code" },
-        { IconRole, "icon" },
-        { EnabledRole, "enabled" },
-        { DescriptionRole, "description" },
-        { ShortcutRole, "shortcut" }
-    };
-
-    return roles;
-}
-
 void NotationToolBarModel::load()
 {
-    beginResetModel();
+    MenuItemList items = {
+        makeItem("parts"),
+        makeItem("toggle-mixer")
+    };
 
-    m_items.clear();
-
-    m_items << makeItem("parts");
-    m_items << makeItem("toggle-mixer");
-
-    endResetModel();
+    setItems(items);
 
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         load();
     });
 }
 
-void NotationToolBarModel::handleAction(const QString& actionCode)
+MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const
 {
-    dispatcher()->dispatch(actions::codeFromQString(actionCode));
-}
+    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode));
 
-MenuItem NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const
-{
-    MenuItem item = actionsRegister()->action(actionCode);
-    item.state.enabled = context()->currentNotation() != nullptr;
+    UiActionState state;
+    state.enabled = context()->currentNotation() != nullptr;
+    item->setState(state);
 
     return item;
 }
