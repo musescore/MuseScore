@@ -584,7 +584,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     return slur;
 }
 
-TextBase* Score::addText(TextStyleType type)
+TextBase* Score::addText(TextStyleType type, bool addToAllScores)
 {
     TextBase* textBox = nullptr;
 
@@ -595,10 +595,14 @@ TextBase* Score::addText(TextStyleType type)
     case TextStyleType::POET:
     case TextStyleType::INSTRUMENT_EXCERPT: {
         MeasureBase* measure = first();
+
         if (!measure || !measure->isVBox()) {
-            insertMeasure(ElementType::VBOX, measure);
-            measure = measure->prev();
+            InsertMeasureOptions options;
+            options.addToAllScores = addToAllScores;
+
+            measure = insertMeasure(ElementType::VBOX, measure, options);
         }
+
         textBox = Factory::createText(measure, type);
         textBox->setParent(measure);
         undoAddElement(textBox);
@@ -3561,24 +3565,24 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
 //    If measure is zero, append new MeasureBase.
 //---------------------------------------------------------
 
-void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmptyMeasures, bool moveSignaturesClef, bool needDeselectAll)
+MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, const InsertMeasureOptions& options)
 {
     Fraction tick;
-    if (measure) {
-        if (measure->isMeasure()) {
-            if (toMeasure(measure)->isMMRest()) {
-                measure = toMeasure(measure)->prev();
-                measure = measure ? measure->next() : firstMeasure();
+    if (beforeMeasure) {
+        if (beforeMeasure->isMeasure()) {
+            if (toMeasure(beforeMeasure)->isMMRest()) {
+                beforeMeasure = toMeasure(beforeMeasure)->prev();
+                beforeMeasure = beforeMeasure ? beforeMeasure->next() : firstMeasure();
                 deselectAll();
             }
             for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-                if (toMeasure(measure)->isMeasureRepeatGroupWithPrevM(staffIdx)) {
+                if (toMeasure(beforeMeasure)->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                     MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
-                    return;
+                    return nullptr;
                 }
             }
         }
-        tick = measure->tick();
+        tick = beforeMeasure->tick();
     } else {
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
@@ -3588,21 +3592,30 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
     MeasureBase* rmb = 0;                                         // measure base in root score (for linking)
     Fraction ticks   = { 0, 1 };
 
-    for (Score* score : scoreList()) {
+    MeasureBase* result = nullptr;
+
+    QList<Score*> scores;
+    if (options.addToAllScores) {
+        scores = scoreList();
+    } else {
+        scores << this;
+    }
+
+    for (Score* score : scores) {
         MeasureBase* im = 0;
-        if (measure) {
-            if (measure->isMeasure()) {
+        if (beforeMeasure) {
+            if (beforeMeasure->isMeasure()) {
                 im = score->tick2measure(tick);
             } else {
-                if (!measure->links()) {
-                    if (measure->score() == score) {
-                        im = measure;
+                if (!beforeMeasure->links()) {
+                    if (beforeMeasure->score() == score) {
+                        im = beforeMeasure;
                     } else {
                         qDebug("no links");
                     }
                 } else {
-                    for (EngravingObject* m : *measure->links()) {
-                        if (measure->score() == score) {
+                    for (EngravingObject* m : *beforeMeasure->links()) {
+                        if (beforeMeasure->score() == score) {
                             im = toMeasureBase(m);
                             break;
                         }
@@ -3615,6 +3628,10 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         }
         MeasureBase* mb = toMeasureBase(Factory::createItem(type, score->dummy()));
         mb->setTick(tick);
+
+        if (score == this) {
+            result = mb;
+        }
 
         if (im) {
             im = im->top();       // don't try to insert in front of nested frame
@@ -3652,7 +3669,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             //
             // remove clef, time and key signatures
             //
-            if (moveSignaturesClef && mi) {
+            if (options.moveSignaturesClef && mi) {
                 for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                     Measure* pm = mi->prevMeasure();
                     if (pm) {
@@ -3744,7 +3761,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
 
     undoInsertTime(tick, ticks);
 
-    if (om && !createEmptyMeasures) {
+    if (om && !options.createEmptyMeasures) {
         //
         // fill measure with rest
         //
@@ -3761,9 +3778,11 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         }
     }
 
-    if (needDeselectAll) {
+    if (options.needDeselectAll) {
         deselectAll();
     }
+
+    return result;
 }
 
 //---------------------------------------------------------

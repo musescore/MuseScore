@@ -86,7 +86,7 @@ void ExcerptNotation::fillWithDefaultInfo()
         TextBase* textBox = excerptScore->getText(textType);
 
         if (!textBox) {
-            textBox = excerptScore->addText(textType);
+            textBox = excerptScore->addText(textType, false /*addToAllScores*/);
         }
 
         if (textBox) {
@@ -96,7 +96,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     };
 
     setText(TextStyleType::TITLE, qtrc("notation", "Title"));
-    setText(TextStyleType::COMPOSER, qtrc("notation", "Composer"));
+    setText(TextStyleType::COMPOSER, qtrc("notation", "Composer / arranger"));
     setText(TextStyleType::SUBTITLE, "");
     setText(TextStyleType::POET, "");
 

@@ -1233,7 +1233,9 @@ bool Score::makeGapVoice(Segment* seg, int track, Fraction len, const Fraction& 
         Measure* m = cr->measure()->nextMeasure();
         if (!m) {
             qDebug("EOS reached");
-            insertMeasure(ElementType::MEASURE, 0, false);
+            InsertMeasureOptions options;
+            options.createEmptyMeasures = false;
+            insertMeasure(ElementType::MEASURE, nullptr, options);
             m = cr->measure()->nextMeasure();
             if (!m) {
                 qDebug("===EOS reached");
