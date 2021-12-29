@@ -86,7 +86,7 @@ void NotationNoteInput::startNoteInput()
     //! TODO Find out what does and why.
     EngravingItem* el = score()->selection().element();
     if (!el) {
-        el = score()->selection().firstChordRest();
+        el = m_lastInputedItem ? m_lastInputedItem : score()->selection().firstChordRest();
     }
 
     if (el == nullptr
@@ -213,6 +213,8 @@ void NotationNoteInput::putNote(const PointF& pos, bool replace, bool insert)
 
     notifyNoteAddedChanged();
     notifyAboutStateChanged();
+
+    m_lastInputedItem = score()->selection().element();
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)

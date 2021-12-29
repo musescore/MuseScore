@@ -92,6 +92,8 @@ private:
     async::Notification m_stateChanged;
     async::Notification m_noteAdded;
 
+    EngravingItem* m_lastInputedItem = nullptr;
+
     ScoreCallbacks* m_scoreCallbacks = nullptr;
 };
 }
