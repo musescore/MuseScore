@@ -1926,17 +1926,23 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 
 void NotationInteraction::drawGripPoints(draw::Painter* painter)
 {
-    if (!selection()->element()) {
+    Ms::EngravingItem* selectedElement = selection()->element();
+    int gripsCount = selectedElement ? selectedElement->gripsCount() : 0;
+
+    if (gripsCount == 0) {
         return;
     }
+
     bool editingElement = m_editData.element != nullptr;
     if (!editingElement) {
-        m_editData.element = selection()->element();
+        m_editData.element = selectedElement;
+
         if (!m_editData.element->isTextBase() && !m_editData.getData(m_editData.element)) {
             m_editData.element->startEdit(m_editData);
         }
     }
-    m_editData.grips = m_editData.element->gripsCount();
+
+    m_editData.grips = gripsCount;
     m_editData.grip.resize(m_editData.grips);
 
     constexpr qreal DEFAULT_GRIP_SIZE = 8;
@@ -1944,7 +1950,7 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
     qreal gripSize = DEFAULT_GRIP_SIZE / scaling;
     RectF newRect(-gripSize / 2, -gripSize / 2, gripSize, gripSize);
 
-    EngravingItem* page = m_editData.element->findAncestor(ElementType::PAGE);
+    const EngravingItem* page = m_editData.element->findAncestor(ElementType::PAGE);
     PointF pageOffset = page ? page->pos() : m_editData.element->pos();
 
     for (RectF& gripRect: m_editData.grip) {
@@ -1953,6 +1959,7 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
 
     m_editData.element->updateGrips(m_editData);
     m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
+
     if (!editingElement) {
         m_editData.element = nullptr;
     }
