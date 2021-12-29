@@ -37,7 +37,7 @@ ListView {
 
     interactive: false
 
-    model: appMenuModel.items
+    model: appMenuModel
 
     AppMenuModel {
         id: appMenuModel
@@ -84,7 +84,7 @@ ListView {
     delegate: FlatButton {
         id: radioButtonDelegate
 
-        property var item: Boolean(modelData) ? modelData : null
+        property var item: model ? model.itemRole : null
         property string menuId: Boolean(item) ? item.id : ""
 
         property bool highlight: appMenuModel.highlightedMenuId === menuId
