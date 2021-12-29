@@ -29,7 +29,7 @@ import MuseScore.UiComponents 1.0
 ListItemBlank {
     id: root
 
-    property var modelData
+    property var modelData: null
 
     property var parentWindow: null
 
@@ -40,7 +40,7 @@ ListItemBlank {
     }
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
-    property bool reserveSpaceForShortcutOrSubmenuIndicator: itemPrv.hasShortcut || itemPrv.hasSubMenu
+    property bool reserveSpaceForShortcutsOrSubmenuIndicator: itemPrv.hasShortcuts || itemPrv.hasSubMenu
 
     property int padding: 0
 
@@ -69,8 +69,8 @@ ListItemBlank {
             text += " " + (itemPrv.isSelected ? qsTrc("appshell", "selected") : qsTrc("appshell", "not selected"))
         }
 
-        if (itemPrv.hasShortcut) {
-            text += " " + itemPrv.shortcut
+        if (itemPrv.hasShortcuts) {
+            text += " " + itemPrv.shortcuts
         }
 
         if (itemPrv.hasSubMenu) {
@@ -127,8 +127,8 @@ ListItemBlank {
 
         property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
 
-        property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
-        property string shortcut: hasShortcut ? modelData.shortcut : ""
+        property bool hasShortcuts: Boolean(modelData) && Boolean(modelData.shortcuts)
+        property string shortcuts: hasShortcuts ? modelData.shortcuts : ""
 
         property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
         property var showedSubMenu: null
@@ -207,9 +207,9 @@ ListItemBlank {
     function calculatedRightPartWidth() {
         let result = 0
 
-        if (shortcutLabel.visible) {
+        if (shortcutsLabel.visible) {
             result += rowLayout.spacing
-            result += Math.ceil(shortcutLabel.width)
+            result += Math.ceil(shortcutsLabel.width)
         }
 
         if (submenuIndicator.visible) {
@@ -275,11 +275,11 @@ ListItemBlank {
         }
 
         StyledTextLabel {
-            id: shortcutLabel
+            id: shortcutsLabel
             Layout.alignment: Qt.AlignRight
-            text: itemPrv.shortcut
+            text: itemPrv.shortcuts
             horizontalAlignment: Text.AlignRight
-            visible: !itemPrv.hasShortcut || (root.reserveSpaceForShortcutOrSubmenuIndicator)
+            visible: !itemPrv.hasShortcuts || (root.reserveSpaceForShortcutsOrSubmenuIndicator)
         }
 
         StyledIconLabel {
@@ -287,7 +287,7 @@ ListItemBlank {
             Layout.alignment: Qt.AlignRight
             width: 16
             iconCode: itemPrv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
-            visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator && !shortcutLabel.visible)
+            visible: !isEmpty || (root.reserveSpaceForShortcutsOrSubmenuIndicator && !shortcutsLabel.visible)
         }
     }
 

@@ -96,8 +96,9 @@ StyledPopupView {
         //  (by default, the delegate height is taken as the menu item height).
         //  Let's manually adjust the height of the content
         var sepCount = 0
-        for (let k = 0; k < model.length; k++) {
-            if (!Boolean(Utils.getItem(model, k).title)) {
+        for (let i = 0; i < model.length; i++) {
+            let item = Boolean(model.get) ? model.get(i).itemRole : model[i]
+            if (!Boolean(item.title)) {
                 sepCount++
             }
         }
@@ -190,8 +191,8 @@ StyledPopupView {
         delegate: Loader {
             id: loader
 
-            property var itemData: Boolean(root.model.get) ? model : modelData
-            property bool isSeparator: !Boolean(itemData.title) || itemData.title === ""
+            property var itemData: Boolean(root.model.get) ? model.itemRole : modelData
+            property bool isSeparator: !Boolean(itemData) || !Boolean(itemData.title) || itemData.title === ""
 
             sourceComponent: isSeparator ? separatorComp : menuItemComp
 
@@ -206,7 +207,7 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
-                    property string title: modelData.title
+                    property string title: Boolean (loader.itemData) ? loader.itemData.title : ""
 
                     parentWindow: root.window
 
@@ -215,7 +216,7 @@ StyledPopupView {
 
                     iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
 
-                    reserveSpaceForShortcutOrSubmenuIndicator:
+                    reserveSpaceForShortcutsOrSubmenuIndicator:
                         menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
