@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "ui/uitypes.h"
+#include "ui/view/menuitem.h"
 #include "ui/iuiactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 
@@ -58,22 +59,13 @@ public:
 
 signals:
     void itemsChanged();
-    void itemChanged(const MenuItem& item);
+    void itemChanged(MenuItem* item);
 
 protected:
     enum Roles {
-        CodeRole = Qt::UserRole + 1,
-        IdRole,
-        TitleRole,
-        DescriptionRole,
-        ShortcutRole,
-        IconRole,
-        CheckedRole,
-        EnabledRole,
-        SubitemsRole,
-        SectionRole,
+        ItemRole,
 
-        UserRole,
+        UserRole
     };
 
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
@@ -84,24 +76,24 @@ protected:
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const QString& itemId) const;
 
-    MenuItem& item(int index);
+    MenuItem* item(int index);
 
-    MenuItem& findItem(const QString& itemId);
-    MenuItem& findItem(const actions::ActionCode& actionCode);
-    MenuItem& findMenu(const QString& menuId);
+    MenuItem* findItem(const QString& itemId);
+    MenuItem* findItem(const actions::ActionCode& actionCode);
+    MenuItem* findMenu(const QString& menuId);
 
-    MenuItem makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
+    MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
 
-    MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
-    MenuItem makeSeparator() const;
+    MenuItem* makeMenuItem(const actions::ActionCode& actionCode) const;
+    MenuItem* makeSeparator() const;
 
     bool isIndexValid(int index) const;
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
-    MenuItem& item(MenuItemList& items, const QString& itemId);
-    MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
-    MenuItem& menu(MenuItemList& items, const QString& menuId);
+    MenuItem* item(MenuItemList& items, const QString& itemId);
+    MenuItem* item(MenuItemList& items, const actions::ActionCode& actionCode);
+    MenuItem* menu(MenuItemList& items, const QString& menuId);
 
     MenuItemList m_items;
 };
