@@ -53,20 +53,22 @@ Item {
 
     function increment() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value + step
+        var newValue = Math.min(value + step, root.maxValue)
 
-        if (newValue > root.maxValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
 
     function decrement() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value - step
+        var newValue = Math.max(value - step, root.minValue)
 
-        if (newValue < root.minValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
@@ -128,16 +130,23 @@ Item {
 
         validator: root.decimals > 0 ? doubleInputValidator : intInputValidator
 
+        containsMouse: mouseArea.containsMouse || valueAdjustControl.containsMouse
+
         ValueAdjustControl {
             id: valueAdjustControl
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: textInputField.background.border.width
+            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
-            icon: IconCode.SMALL_ARROW_DOWN
+            radius: textInputField.background.radius - anchors.margins
 
-            onIncreaseButtonClicked: root.increment()
-            onDecreaseButtonClicked: root.decrement()
+            canIncrease: root.currentValue < root.maxValue
+            canDecrease: root.currentValue > root.minValue
+
+            onIncreaseButtonClicked: { root.increment() }
+            onDecreaseButtonClicked: { root.decrement() }
         }
 
         onCurrentTextEdited: {

@@ -48,6 +48,8 @@ MixerPanelSection {
             width: 46
 
             textHorizontalAlignment: Qt.AlignHCenter
+            textSidePadding: 0
+            background.radius: 2
 
             navigation.name: "VolumeInputField"
             navigation.panel: item.panel
