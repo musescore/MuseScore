@@ -62,7 +62,7 @@ QtObject {
         //! - all selectable items that are selected get an accent color background
 
         for (let i = 0; i < model.length; i++) {
-            let item = Utils.getItem(model,i)
+            let item = Boolean(model.get) ? model.get(i).itemRole : model[i]
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
             if (item.checkable && hasIcon) {
@@ -85,7 +85,7 @@ QtObject {
         let rightWidth = 0
 
         for (let j = 0; j < model.length; j++) {
-            testItem.modelData = Utils.getItem(model, j)
+            testItem.modelData = Boolean(model.get) ? model.get(j).itemRole : model[j]
             leftWidth = Math.max(leftWidth, testItem.calculatedLeftPartWidth())
             rightWidth = Math.max(rightWidth, testItem.calculatedRightPartWidth())
         }
@@ -97,7 +97,7 @@ QtObject {
     property StyledMenuItem testItem: StyledMenuItem {
         iconAndCheckMarkMode: root.iconAndCheckMarkMode
 
-        reserveSpaceForShortcutOrSubmenuIndicator:
+        reserveSpaceForShortcutsOrSubmenuIndicator:
             root.hasItemsWithShortcut || root.hasItemsWithSubmenu
     }
 }
