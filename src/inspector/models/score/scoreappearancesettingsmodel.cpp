@@ -21,18 +21,71 @@
  */
 #include "scoreappearancesettingsmodel.h"
 
-#include "log.h"
 #include "translation.h"
-#include "dataformatter.h"
-#include "types/scoreappearancetypes.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 
 ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
     setTitle(qtrc("inspector", "Score appearance"));
+
+    auto onCurrentNotationChanged = [this]() {
+        emit styleChanged();
+
+        if (style()) {
+            style()->styleChanged().onNotify(this, [this]() {
+                emit styleChanged();
+            });
+        }
+    };
+
+    onCurrentNotationChanged();
+    context()->currentNotationChanged().onNotify(this, onCurrentNotationChanged);
+}
+
+bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
+{
+    return style() ? style()->styleValue(StyleId::hideEmptyStaves).toBool() : false;
+}
+
+void ScoreAppearanceSettingsModel::setHideEmptyStaves(bool hide)
+{
+    if (hide == hideEmptyStaves() || !style()) {
+        return;
+    }
+
+    style()->setStyleValue(StyleId::hideEmptyStaves, hide);
+}
+
+bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
+{
+    return style() ? style()->styleValue(StyleId::dontHideStavesInFirstSystem).toBool() : false;
+}
+
+void ScoreAppearanceSettingsModel::setDontHideEmptyStavesInFirstSystem(bool dont)
+{
+    if (dont == dontHideEmptyStavesInFirstSystem() || !style()) {
+        return;
+    }
+
+    style()->setStyleValue(StyleId::dontHideStavesInFirstSystem, dont);
+}
+
+bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
+{
+    return style() ? style()->styleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden).toBool() : false;
+}
+
+void ScoreAppearanceSettingsModel::setShowBracketsWhenSpanningSingleStaff(bool show)
+{
+    if (show == showBracketsWhenSpanningSingleStaff() || !style()) {
+        return;
+    }
+
+    style()->setStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show);
 }
 
 bool ScoreAppearanceSettingsModel::isEmpty() const
