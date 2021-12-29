@@ -103,8 +103,12 @@ void PlaybackToolBarModel::updateActions()
         }
     }
 
-    MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
-    settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
+    MenuItem* settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
+
+    UiAction action = settingsItem->action();
+    action.iconCode = IconCode::Code::SETTINGS_COG;
+    settingsItem->setAction(action);
+
     result << settingsItem;
 
     setItems(result);
@@ -116,7 +120,11 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
 
     if (isPlayAllowed() && containsAction(codes, PLAY_ACTION_CODE)) {
         bool isPlaying = playbackController()->isPlaying();
-        findItem(PLAY_ACTION_CODE).iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
+
+        MenuItem* item = findItem(PLAY_ACTION_CODE);
+        UiAction action = item->action();
+        action.iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
+        item->setAction(action);
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
@@ -127,10 +135,14 @@ bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionC
     return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
 }
 
-MenuItem PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
+MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
 {
-    MenuItem item = makeMenuItem(actionCode);
-    item.title = item.description;
+    MenuItem* item = makeMenuItem(actionCode);
+
+    UiAction action = item->action();
+    action.title = item->action().description;
+    item->setAction(action);
+
     return item;
 }
 

@@ -88,7 +88,7 @@ private:
 
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
-    ui::MenuItem makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const;
+    ui::MenuItem* makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const;
 
     QTime totalPlayTime() const;
     uint64_t totalPlayTimeMilliseconds() const;
