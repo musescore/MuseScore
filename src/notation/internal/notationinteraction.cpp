@@ -3351,14 +3351,14 @@ void NotationInteraction::implodeSelectedStaff()
     notifyAboutNotationChanged();
 }
 
-void NotationInteraction::realizeSelectedChordSymbols()
+void NotationInteraction::realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType)
 {
     if (selection()->isNone()) {
         return;
     }
 
     startEdit();
-    score()->cmdRealizeChordSymbols();
+    score()->cmdRealizeChordSymbols(literal, voicing, durationType);
     apply();
 
     notifyAboutNotationChanged();
