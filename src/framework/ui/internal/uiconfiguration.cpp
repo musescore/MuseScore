@@ -576,6 +576,7 @@ double UiConfiguration::dpi() const
     }
 
     const QScreen* screen = mainWindow()->screen();
+
     return screen ? screen->logicalDotsPerInch() : 100;
 }
 
