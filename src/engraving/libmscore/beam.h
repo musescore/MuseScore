@@ -99,9 +99,10 @@ class Beam final : public EngravingItem
     void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
     void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
     mu::PointF chordBeamAnchor(Chord* chord) const;
-    bool calcIsBeamletBefore(Chord* chord, int i, int level) const;
+    bool calcIsBeamletBefore(Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break) const;
     void createBeamSegment(Chord* startChord, Chord* endChord, int level);
     void createBeamletSegment(Chord* chord, bool isBefore, int level);
+    void calcBeamBreaks(Chord* chord, int level, bool& isBroken32, bool& isBroken64) const;
     void createBeamSegments(std::vector<ChordRest*> chordRests);
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
     void addChordRest(ChordRest* a);
