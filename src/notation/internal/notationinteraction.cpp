@@ -619,14 +619,16 @@ void NotationInteraction::selectSection()
 
 void NotationInteraction::selectFirstElement(bool frame)
 {
-    EngravingItem* element = score()->firstElement(frame);
-    select({ element }, SelectType::SINGLE, element->staffIdx());
+    if (EngravingItem* element = score()->firstElement(frame)) {
+        select({ element }, SelectType::SINGLE, element->staffIdx());
+    }
 }
 
 void NotationInteraction::selectLastElement()
 {
-    EngravingItem* element = score()->lastElement();
-    select({ element }, SelectType::SINGLE, element->staffIdx());
+    if (EngravingItem* element = score()->lastElement()) {
+        select({ element }, SelectType::SINGLE, element->staffIdx());
+    }
 }
 
 INotationSelectionPtr NotationInteraction::selection() const
@@ -1711,19 +1713,19 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
     if (e->isActionIcon()) {
         switch (Ms::toActionIcon(e)->actionType()) {
         case Ms::ActionIconType::VFRAME:
-            score()->insertMeasure(ElementType::VBOX, 0);
+            score()->insertMeasure(ElementType::VBOX);
             break;
         case Ms::ActionIconType::HFRAME:
-            score()->insertMeasure(ElementType::HBOX, 0);
+            score()->insertMeasure(ElementType::HBOX);
             break;
         case Ms::ActionIconType::TFRAME:
-            score()->insertMeasure(ElementType::TBOX, 0);
+            score()->insertMeasure(ElementType::TBOX);
             break;
         case Ms::ActionIconType::FFRAME:
-            score()->insertMeasure(ElementType::FBOX, 0);
+            score()->insertMeasure(ElementType::FBOX);
             break;
         case Ms::ActionIconType::MEASURE:
-            score()->insertMeasure(ElementType::MEASURE, 0);
+            score()->insertMeasure(ElementType::MEASURE);
             break;
         default:
             return false;
@@ -2759,13 +2761,16 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
     Ms::MeasureBase* beforeBox = beforeBoxIndex >= 0 ? score()->measure(beforeBoxIndex) : nullptr;
 
     startEdit();
-    for (int i = 0; i < count; ++i) {
-        constexpr bool createEmptyMeasures = false;
-        constexpr bool moveSignaturesClef = true;
-        constexpr bool needDeselectAll = false;
 
-        score()->insertMeasure(elementType, beforeBox, createEmptyMeasures, moveSignaturesClef, needDeselectAll);
+    Ms::Score::InsertMeasureOptions options;
+    options.createEmptyMeasures = false;
+    options.moveSignaturesClef = true;
+    options.needDeselectAll = false;
+
+    for (int i = 0; i < count; ++i) {
+        score()->insertMeasure(elementType, beforeBox, options);
     }
+
     apply();
 
     notifyAboutNotationChanged();

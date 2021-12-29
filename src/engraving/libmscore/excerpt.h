@@ -91,13 +91,13 @@ public:
     static Excerpt* createExcerptFromPart(Part* part);
 
     static void createExcerpt(Excerpt*);
-    static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, QMultiMap<int, int>& allTracks);
+    static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& allTracks);
+    static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
     static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
-    static void processLinkedClone(EngravingItem* ne, Score* score, int strack);
 };
 }     // namespace Ms
 #endif

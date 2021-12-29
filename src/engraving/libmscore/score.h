@@ -731,7 +731,7 @@ public:
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(TextStyleType type);
+    TextBase* addText(TextStyleType type, bool addToAllScores = true);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
@@ -1116,8 +1116,17 @@ public:
     void transposeSemitone(int semitone);
     void transposeDiatonicAlterations(TransposeDirection direction);
 
-    void insertMeasure(ElementType type, MeasureBase*, bool createEmptyMeasures = false, bool moveSignaturesClef = true,
-                       bool needDeselectAll = true);
+    struct InsertMeasureOptions {
+        InsertMeasureOptions() {}
+
+        bool createEmptyMeasures = false;
+        bool moveSignaturesClef = true;
+        bool needDeselectAll = true;
+        bool addToAllScores = true;
+    };
+
+    Ms::MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                                   const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return _audio; }
     void setAudio(Audio* a) { _audio = a; }

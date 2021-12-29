@@ -823,7 +823,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         parts << pi;
     }
 
-    deselectAll();
+    endInteractionWithScore();
     startEdit();
 
     if (scoreOrder() != customOrder()) {
@@ -859,7 +859,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
-    deselectAll();
+    endInteractionWithScore();
     startEdit();
 
     doMoveStaves(staves, destinationStaffIndex, destinationPart);
@@ -1085,13 +1085,8 @@ void NotationParts::setBracketsAndBarlines()
 
 void NotationParts::endInteractionWithScore()
 {
-    deselectAll();
-    m_interaction->noteInput()->endNoteInput();
-}
-
-void NotationParts::deselectAll()
-{
     m_interaction->clearSelection();
+    m_interaction->noteInput()->resetInputPosition();
 }
 
 void NotationParts::notifyAboutPartChanged(const Part* part) const

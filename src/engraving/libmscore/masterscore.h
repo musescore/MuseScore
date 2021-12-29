@@ -207,7 +207,9 @@ public:
     void addExcerpt(Excerpt*, int index=-1);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
+
     void initAndAddExcerpt(Excerpt*, bool);
+    void initEmptyExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }
