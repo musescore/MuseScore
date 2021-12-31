@@ -414,6 +414,21 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     return true;
 }
 
+void InstrumentsPanelTreeModel::toggleVisibilityOfSelectedRows(bool visible)
+{
+    if (!m_selectionModel || !m_selectionModel->hasSelection()) {
+        return;
+    }
+
+    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+
+    for (QModelIndex index : selectedIndexes) {
+        AbstractInstrumentsPanelTreeItem* item = modelIndexToItem(index);
+
+        item->setIsVisible(visible);
+    }
+}
+
 QItemSelectionModel* InstrumentsPanelTreeModel::selectionModel() const
 {
     return m_selectionModel;
