@@ -12160,21 +12160,16 @@ Get %2help%3 with the program or %4contribute%5 to its development.</source>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="156"/>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
+        <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiereg &amp;copy; 1999-2022 MuseScore BVBA en andere.
+Gepubliseer ingevolge die %1GNU General Public License version 2%2.</translation>
     </message>
     <message>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
 Support MuseScore with your %3donation%4.</source>
         <translation type="vanished">Besoek %1www.musescore.org%2 vir nuwe weergawes en meer inligting.
 Ondersteun MuseScore met jou %3skenking%4.</translation>
-    </message>
-    <message>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the GNU General Public License.</source>
-        <translation type="vanished">Kopiereg &amp;copy; 1999-2021 MuseScore BVBA en andere.
-Gepubliseer ingevolge die GNU General Public License.</translation>
     </message>
 </context>
 <context>

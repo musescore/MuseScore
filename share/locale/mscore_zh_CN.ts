@@ -12169,9 +12169,9 @@ Support MuseScore with your %3donation%4.</source>
 用您的%3捐赠%4来支持MuseScore的开发。</translation>
     </message>
     <message>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
+        <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the GNU General Public License.</source>
-        <translation type="vanished">版权所有 &amp;copy; 1999-2021 MuseScore BVBA及他人。
+        <translation type="vanished">版权所有 &amp;copy; 1999-2022 MuseScore BVBA及他人。
 按照GNU通用公共许可协议发布。</translation>
     </message>
 </context>

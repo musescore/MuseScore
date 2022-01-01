@@ -12164,28 +12164,16 @@ Suchen Sie %2Hilfe%3 für das Programm oder %4unterstützen%5 dessen Entwicklung
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="156"/>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="unfinished">Urheberrecht &amp;copy; 1999-2022 MuseScore BVBA und Andere.
-Veröffentlicht unter der %1GNU General Public License version 2%2. {1999-2021 ?} {1G?} {2%2.?}</translation>
-    </message>
-    <message>
         <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="vanished">Urheberrecht &amp;copy; 1999-2022 MuseScore BVBA und Andere.
-Veröffentlicht unter der %1GNU General Public License version 2%2.</translation>
+        <translation>Urheberrecht &amp;copy; 1999-2022 MuseScore BVBA und Andere.
+Veröffentlicht unter der %1GNU General Public License Version 2%2.</translation>
     </message>
     <message>
         <source>Visit %1www.musescore.org%2 for new versions and more information.
 Support MuseScore with your %3donation%4.</source>
         <translation type="vanished">Besuchen Sie %1www.musescore.org%2 für neuere Versionen und weitere Information.
 Suchen Sie &lt;a href=&quot;https://www.musescore.org/forum&quot;&gt;Hilfe&lt;/a&gt; für das Programm oder &lt;a href=&quot;https://www.musescore.org/contribute&quot;&gt;unterstützen&lt;/a&gt; dessen Entwicklung.</translation>
-    </message>
-    <message>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the GNU General Public License.</source>
-        <translation type="vanished">Urheberrecht &amp;copy; 1999-2021 MuseScore BVBA und Andere.
-Veröffentlicht unter der &lt;a href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&quot;&gt;GNU General Public License Version 2&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>

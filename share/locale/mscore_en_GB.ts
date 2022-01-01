@@ -12164,15 +12164,9 @@ Get %2help%3 with the programme or %4contribute%5 to its development.</translati
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="156"/>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="unfinished">Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
-Published under the %1GNU General Public Licence version 2%2. {1999-2021 ?} {1G?} {2%2.?}</translation>
-    </message>
-    <message>
         <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
-        <translation type="vanished">Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
+        <translation>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public Licence version 2%2.</translation>
     </message>
     <message>
@@ -12180,12 +12174,6 @@ Published under the %1GNU General Public Licence version 2%2.</translation>
 Support MuseScore with your %3donation%4.</source>
         <translation type="vanished">Visit %1www.musescore.org%2 for new versions and more information.
 Get &lt;a href=&quot;https://www.musescore.org/forum&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;https://www.musescore.org/contribute&quot;&gt;contribute&lt;/a&gt; to its development.</translation>
-    </message>
-    <message>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the GNU General Public License.</source>
-        <translation type="vanished">Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the &lt;a href=&quot;https://www.gnu.org/licenses/old-licenses/gpl-2.0.html&quot;&gt;GNU General Public Licence version 2&lt;/a&gt;.</translation>
     </message>
 </context>
 <context>

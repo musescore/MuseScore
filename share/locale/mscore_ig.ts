@@ -12045,7 +12045,7 @@ Support MuseScore with your %3donation%4.</source>
     </message>
     <message>
         <location filename="../../mscore/musescoredialogs.cpp" line="157"/>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
+        <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the GNU General Public License.</source>
         <translation type="unfinished"/>
     </message>
