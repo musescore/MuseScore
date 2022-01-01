@@ -35,6 +35,8 @@ Item {
 
     property NavigationSection navigationSection: null
 
+    signal done
+
     TemplatesModel {
         id: model
 
@@ -86,6 +88,11 @@ Item {
 
             onTitleClicked: {
                 model.setCurrentTemplate(index)
+            }
+
+            onDoubleClicked: {
+                model.setCurrentTemplate(index)
+                root.done()
             }
 
             onSearchTextChanged: {
