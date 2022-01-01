@@ -53,7 +53,7 @@ FocusableItem {
         color: "#373737"
 
         onLinkActivated: {
-            root.linkActivated()
+            root.linkActivated(link)
         }
     }
 }
