@@ -12090,6 +12090,8 @@ Get %2help%3 with the program or %4contribute%5 to its development.</source>
         <location filename="../../mscore/musescoredialogs.cpp" line="156"/>
         <source>Copyright &amp;copy; 1999-2022 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
+        <translation>Karapatang-ari &amp;copy; 1999-2022 MuseScore BVBA and others.
+Inilathala sa ilalim ng %1GNU General Public License version 2%2.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -12097,12 +12099,6 @@ Published under the %1GNU General Public License version 2%2.</source>
 Support MuseScore with your %3donation%4.</source>
         <translation type="vanished">Bumisita sa %1www.musescore.org%2 para sa mga bagong bersyon at mga bagong impormasyon.
 Suportahan ang MuseScore ng iyong %3donasyon%4.</translation>
-    </message>
-    <message>
-        <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
-Published under the GNU General Public License.</source>
-        <translation type="vanished">Karapatang-ari &amp;copy; 1999-2021 MuseScore BVBA and others.
-Inilathala sa ilalim ng GNU General Public License.</translation>
     </message>
     <message>
         <source>Copyright &amp;copy; 1999-2021 MuseScore BVBA and others.
