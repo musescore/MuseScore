@@ -90,7 +90,7 @@ Item {
                 model.setCurrentTemplate(index)
             }
 
-            onDoubleClicked: {
+            onDoubleClicked: function(index) {
                 model.setCurrentTemplate(index)
                 root.done()
             }

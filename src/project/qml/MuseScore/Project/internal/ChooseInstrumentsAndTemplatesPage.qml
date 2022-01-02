@@ -152,10 +152,10 @@ Item {
         ChooseTemplatePage {
             id: templatePage
             navigationSection: root.navigationSection
-        }
 
-        Component.onCompleted: {
-            templatePage.done.connect(root.done)
+            onDone: {
+                root.done()
+            }
         }
     }
 }
