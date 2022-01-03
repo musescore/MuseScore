@@ -27,11 +27,11 @@
 #include <QLayoutItem>
 
 namespace mu::notation {
+
     //---------------------------------------------------------
-    //  Model class for Score Property Items
+    //  Class for Score Property Items
     //  Used in the Score Properties UI to get name value pairs 
     //---------------------------------------------------------
-
     class ScorePropertiesItem
     {
     public:

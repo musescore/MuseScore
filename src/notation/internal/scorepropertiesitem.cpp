@@ -25,26 +25,53 @@
 
 using namespace mu::notation;
 
+/// <summary>
+/// Create a new instance of a ScorePropertiesItem using a label and value widget from the ScoreProperty screen
+/// </summary>
+/// <param name="label">The label widget</param>
+/// <param name="value">The value widget</param>
 ScorePropertiesItem::ScorePropertiesItem(QWidget* label, QWidget* value)
 {
 	this->label = label;
 	this->value = value;
 }
 
+/// <summary>
+/// Get the string value of the label
+/// </summary>
+/// <returns>The name of property</returns>
 QString ScorePropertiesItem::Label()
 {
-    QLineEdit* tag = static_cast<QLineEdit*>(this->label);
-    return tag->text();
+    // Label could be a line edit (for none standard properties) or a label widget (for standard properties)
+    QLineEdit* lineEditItem = dynamic_cast<QLineEdit*>(this->label);
+    if (lineEditItem)
+    {
+        return lineEditItem->text();
+    }
+    
+    QLabel* labelItem = dynamic_cast<QLabel*>(this->label);
+    if (labelItem)
+    {
+        return labelItem->text();
+    }
+
+    return "";
 }
 
+/// <summary>
+/// Get the value of the property
+/// </summary>
+/// <returns>Value</returns>
 QString ScorePropertiesItem::Value()
 {
     QLineEdit* val = static_cast<QLineEdit*>(this->value);
     return val->text();
 }
 
+/// <summary>
+/// Set focus to the widget
+/// </summary>
 void ScorePropertiesItem::SetFocus()
 {
-    QLineEdit* tag = static_cast<QLineEdit*>(this->label);
-    tag->setFocus();
+    this->label->setFocus();
 }
