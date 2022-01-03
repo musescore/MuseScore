@@ -76,6 +76,14 @@ FlatButton {
                 id: bar
                 Layout.alignment: Qt.AlignHCenter
 
+                onCurrentItemChanged: {
+                    if (currentItem && currentItem.navigation) {
+                        currentItemNavigationIndex = [currentItem.navigation.row, currentItem.navigation.column]
+                    }
+                }
+
+                property var currentItemNavigationIndex: []
+
                 property NavigationPanel navigationPanel: NavigationPanel {
                     name: "KeySignatureTabPanel"
                     section: popup.navigationSection
@@ -89,8 +97,6 @@ FlatButton {
                     }
                 }
 
-                property var currentItemNavigationIndex: []
-
                 StyledTabButton {
                     id: majorTab
                     text: qsTrc("project", "Major")
@@ -98,10 +104,6 @@ FlatButton {
                     navigation.name: "MajorTab"
                     navigation.panel: bar.navigationPanel
                     navigation.column: 0
-                    onNavigationTriggered: {
-                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
-                        bar.currentIndex = 0
-                    }
                 }
 
                 StyledTabButton {
@@ -110,10 +112,6 @@ FlatButton {
                     navigation.name: "MinorTab"
                     navigation.panel: bar.navigationPanel
                     navigation.column: 1
-                    onNavigationTriggered: {
-                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
-                        bar.currentIndex = 1
-                    }
                 }
             }
 

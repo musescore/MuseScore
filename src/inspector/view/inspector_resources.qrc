@@ -12,13 +12,13 @@
         <file>qml/MuseScore/Inspector/notation/notes/BeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml</file>
-        <file>qml/MuseScore/Inspector/general/playback/GeneralSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/general/playback/PlaybackGeneralSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/FermataExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml</file>
-        <file>qml/MuseScore/Inspector/general/playback/DynamicsSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/general/playback/PlaybackDynamicsSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
@@ -26,6 +26,8 @@
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/common/PopupViewButton.qml</file>
+        <file>qml/MuseScore/Inspector/common/InspectorTabBar.qml</file>
+        <file>qml/MuseScore/Inspector/common/InspectorTabButton.qml</file>
         <file>qml/MuseScore/Inspector/common/OffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
