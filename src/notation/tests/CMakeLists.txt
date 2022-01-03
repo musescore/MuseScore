@@ -21,10 +21,13 @@
 set(MODULE_TEST notation_test)
 
 set(MODULE_TEST_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/mocks/msczreadermock.h
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scorepropertiesitem_tests.cpp
 )
 
 set(MODULE_TEST_LINK notation)
 
-include(${PROJECT_SOURCE_DIR}/framework/utests_base/utests_base.cmake)
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
+
+include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 

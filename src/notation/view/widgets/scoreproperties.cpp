@@ -28,6 +28,7 @@
 #include "ui/view/widgetutils.h"
 
 #include "translation.h"
+#include "notation/internal/scorepropertiesitem.h"
 
 using namespace mu::notation;
 using namespace mu::project;
@@ -248,14 +249,14 @@ bool ScorePropertiesDialog::save()
         QLayoutItem* tagItem   = scrollAreaLayout->itemAtPosition(i, 0);
         QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
         if (tagItem && valueItem) {
-            QLineEdit* tag   = static_cast<QLineEdit*>(tagItem->widget());
-            QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
 
-            QString tagText = tag->text();
+            ScorePropertiesItem item(tagItem->widget(), valueItem->widget());
+
+            QString tagText = item.Label();
             if (tagText.isEmpty()) {
                 interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "Tags can't have empty names."));
-                tag->setFocus();
+                item.SetFocus();
                 return false;
             }
             if (map.contains(tagText)) {
@@ -263,16 +264,16 @@ bool ScorePropertiesDialog::save()
                     interactive()->warning(trc("notation", "MuseScore"),
                                            qtrc("notation",
                                                 "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
-                    tag->setFocus();
+                    item.SetFocus();
                     return false;
                 }
 
                 interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "You have multiple tags with the same name."));
-                tag->setFocus();
+                item.SetFocus();
                 return false;
             }
-            map.insert(tagText, value->text());
+            map.insert(tagText, item.Value());
         } else {
             qDebug("MetaEditDialog: abnormal configuration: %i", i);
         }

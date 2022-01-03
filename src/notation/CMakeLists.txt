@@ -100,6 +100,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationparts.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scorepropertiesitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scorepropertiesitem.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.h
