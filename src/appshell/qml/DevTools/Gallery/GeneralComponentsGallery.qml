@@ -20,9 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
-import QtQuick.Controls 1.5
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -76,7 +75,7 @@ Rectangle {
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
-                    { textRole: "TabPanel", componentRole: tabPanelSample },
+                    { textRole: "StyledTabBar", componentRole: tabBarSample },
                     { textRole: "PageTabButton", componentRole: pageTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
                     { textRole: "StyledSlider", componentRole: slidersSample },
@@ -690,59 +689,50 @@ Rectangle {
     }
 
     Component {
-        id: tabPanelSample
+        id: tabBarSample
 
-        TabPanel {
-            id: tabPanel
-
-            height: 40
+        Column {
             width: 200
+            spacing: 0
 
-            Tab {
-                id: firstTab
+            StyledTabBar {
+                id: tabBar
+                width: parent.width
+                spacing: 12
 
-                title: "Tab 1"
+                StyledTabButton {
+                    fillWidth: true
+                    text: "Tab 1"
+                }
 
-                Rectangle {
-                    anchors.top: parent.top
-                    anchors.topMargin: 4
+                StyledTabButton {
+                    fillWidth: true
+                    text: "Tab 2"
+                }
 
-                    height: 40
-                    width: tabPanel.width
-
-                    color: "blue"
+                StyledTabButton {
+                    fillWidth: true
+                    text: "Tab 3"
                 }
             }
 
-            Tab {
-                id: secondTab
-
-                title: "Tab 2"
+            StackLayout {
+                width: parent.width
+                currentIndex: tabBar.currentIndex
 
                 Rectangle {
-                    anchors.top: parent.top
-                    anchors.topMargin: 4
-
                     height: 40
-                    width: tabPanel.width
-
-                    color: "gray"
+                    color: "lightblue"
                 }
-            }
-
-            Tab {
-                id: thirdTab
-
-                title: "Tab 3"
 
                 Rectangle {
-                    anchors.top: parent.top
-                    anchors.topMargin: 4
-
                     height: 40
-                    width: tabPanel.width
+                    color: "lightgreen"
+                }
 
-                    color: "black"
+                Rectangle {
+                    height: 40
+                    color: "orange"
                 }
             }
         }

@@ -20,22 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 import "../../common"
 
-TabPanel {
+Column {
     id: root
 
     property QtObject proxyModel: null
 
     property NavigationPanel navigationPanel: null
 
-    implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
-                             dynamicsTab.visible ? dynamicsTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent.width
+    spacing: 12
 
     Connections {
         target: proxyModel
@@ -45,69 +45,56 @@ TabPanel {
             var hasDynamicsSettings = proxyModel.hasDynamicsSettings
 
             if (hasGeneralSettings && !hasDynamicsSettings) {
-                root.currentIndex = 0
+                tabBar.currentIndex = 0
             } else if (!hasGeneralSettings && hasDynamicsSettings) {
-                root.currentIndex = 1
+                tabBar.currentIndex = 1
             }
         }
     }
 
     function focusOnCurrentTab() {
-        focusOnTab(root.currentIndex)
+        tabBar.focusOnCurrentTab()
     }
 
-    TabItem {
-        id: generalTab
+    InspectorTabBar {
+        id: tabBar
 
-        height: implicitHeight
-        width: root.width
+        InspectorTabButton {
+            text: qsTrc("inspector", "General")
 
-        title: qsTrc("inspector", "General")
-        checked: root.currentIndex === 0
+            navigation.name: "GeneralSettingsTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: 1
+        }
 
-        navigation.name: "GeneralSettingsTab"
-        navigation.panel: root.navigationPanel
-        navigation.row: 1
-        onNavigationTriggered: root.currentIndex = 0
+        InspectorTabButton {
+            text: qsTrc("inspector", "Dynamics")
 
-        GeneralSettingsTab {
-            id: generalSettings
+            navigation.name: "DynamicsSettingsTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: 2
+        }
+    }
 
-            anchors.top: parent.top
-            anchors.topMargin: 24
-            width: root.width
+    StackLayout {
+        width: parent.width
+        currentIndex: tabBar.currentIndex
+
+        height: itemAt(currentIndex).implicitHeight
+
+        PlaybackGeneralSettings {
+            height: implicitHeight
 
             proxyModel: root.proxyModel
-            enabled: generalTab.checked
 
             navigationPanel: root.navigationPanel
             navigationRowStart: 1000
         }
-    }
 
-    TabItem {
-        id: dynamicsTab
-
-        height: implicitHeight
-        width: root.width
-
-        title: qsTrc("inspector", "Dynamics")
-        checked: root.currentIndex === 1
-
-        navigation.name: "DynamicsSettingsTab"
-        navigation.panel: root.navigationPanel
-        navigation.row: 2
-        onNavigationTriggered: root.currentIndex = 1
-
-        DynamicsSettingsTab {
-            id: dynamicsSettings
-
-            anchors.top: parent.top
-            anchors.topMargin: 24
-            width: root.width
+        PlaybackDynamicsSettings {
+            height: implicitHeight
 
             proxyModel: root.proxyModel
-            enabled: dynamicsTab.checked
 
             navigationPanel: root.navigationPanel
             navigationRowStart: 2000

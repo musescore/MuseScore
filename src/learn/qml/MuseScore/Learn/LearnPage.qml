@@ -167,7 +167,6 @@ FocusScope {
             navigation.name: "Get started"
             navigation.panel: navTabPanel
             navigation.column: 1
-            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
@@ -176,7 +175,6 @@ FocusScope {
             navigation.name: "Advanced"
             navigation.panel: navTabPanel
             navigation.column: 2
-            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
@@ -185,7 +183,6 @@ FocusScope {
             navigation.name: "Classes"
             navigation.panel: navTabPanel
             navigation.column: 3
-            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 

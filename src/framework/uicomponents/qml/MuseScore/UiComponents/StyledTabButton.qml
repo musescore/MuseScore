@@ -28,16 +28,29 @@ import MuseScore.UiComponents 1.0
 TabButton {
     id: root
 
-    property bool isCurrent: TabBar.tabBar && (TabBar.tabBar.currentItem === this)
+    property bool fillWidth: false
+
+    readonly property TabBar tabBar: TabBar.tabBar
+    property bool isCurrent: tabBar && (tabBar.currentItem === this)
 
     property alias navigation: navCtrl
 
     signal navigationTriggered()
 
-    width: implicitWidth
+    onNavigationTriggered: {
+        if (tabBar) {
+            tabBar.currentIndex = TabBar.index
+        }
+    }
+
+    width: fillWidth && tabBar
+           ? (tabBar.width - (tabBar.count - 1) * tabBar.spacing) / tabBar.count
+           : implicitWidth
 
     leftPadding: 0
     rightPadding: 0
+
+    font: isCurrent ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
 
     onIsCurrentChanged: {
         if (root.isCurrent) {
@@ -75,7 +88,7 @@ TabButton {
     contentItem: StyledTextLabel {
         id: textLabel
         text: root.text
-        font: ui.theme.largeBodyFont
+        font: root.font
         opacity: 0.75
     }
 
@@ -101,7 +114,7 @@ TabButton {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered && !isCurrent
+            when: root.hovered && !root.isCurrent
 
             PropertyChanges {
                 target: contentItem
@@ -111,12 +124,11 @@ TabButton {
 
         State {
             name: "SELECTED"
-            when: isCurrent
+            when: root.isCurrent
 
             PropertyChanges {
                 target: textLabel
                 opacity: 1
-                font: ui.theme.largeBodyBoldFont
             }
         }
     ]
