@@ -899,7 +899,7 @@ static Ms::MeasureBase* cloneMeasure(Ms::MeasureBase* mb, Ms::Score* score, cons
             track = trackList.value(e->track(), -1);
             if (track == -1) {
                 // even if track not in excerpt, we need to clone system elements
-                if (e->systemFlag()) {
+                if (e->systemFlag() && e->track() == 0) {
                     track = 0;
                 } else {
                     continue;
