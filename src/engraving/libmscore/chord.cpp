@@ -242,14 +242,10 @@ std::vector<int> Chord::noteDistances() const
     Q_ASSERT(staffType);
     bool isTabStaff = staffType->isTabStaff();
     int staffMiddleLine = staffType->middleLine();
-    int upStringAmount = 0;
-    if (isTabStaff) {
-        upStringAmount = upString() * 2;
-    }
 
     std::vector<int> distances;
     for (Note* note : _notes) {
-        int noteLine = isTabStaff ? upStringAmount : note->line();
+        int noteLine = isTabStaff ? note->string() : note->line();
         distances.push_back(noteLine - staffMiddleLine);
     }
     return distances;
@@ -1500,6 +1496,8 @@ qreal Chord::calcDefaultStemLength()
     bool isBesideTabStaff = tab && !tab->stemless() && !tab->stemThrough();
     if (isBesideTabStaff) {
         return tab->chordStemLength(this) * _spatium;
+    } else if (tab) {
+        defaultStemLength *= 1.5;
     }
 
     int minStemLengthQuarterSpaces = calcMinStemLength();
@@ -1518,6 +1516,9 @@ qreal Chord::calcDefaultStemLength()
 
         if (stemEndPosition <= -shortStemStart) {
             int reduction = maxReduction(qAbs(stemEndPosition + shortStemStart));
+            if (tab) {
+                reduction *= 2;
+            }
             if (_hook) {
                 reduction = reduction / 2 * 2; // transforms to only half steps positions
             }
@@ -1535,6 +1536,9 @@ qreal Chord::calcDefaultStemLength()
         int downShortStemStart = (staffLineCount - 1) * 4 + shortStemStart;
         if (stemEndPosition >= downShortStemStart) {
             int reduction = maxReduction(stemEndPosition - downShortStemStart);
+            if (tab) {
+                reduction *= 2;
+            }
             idealStemLength = qMax(idealStemLength - reduction, shortestStem);
         } else if (stemEndPosition < middleLine) {
             idealStemLength += middleLine - stemEndPosition;
