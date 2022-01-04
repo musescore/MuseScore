@@ -44,14 +44,12 @@ QString ScorePropertiesItem::Label()
 {
     // Label could be a line edit (for none standard properties) or a label widget (for standard properties)
     QLineEdit* lineEditItem = dynamic_cast<QLineEdit*>(this->label);
-    if (lineEditItem)
-    {
+    if (lineEditItem) {
         return lineEditItem->text();
     }
     
     QLabel* labelItem = dynamic_cast<QLabel*>(this->label);
-    if (labelItem)
-    {
+    if (labelItem) {
         return labelItem->text();
     }
 
