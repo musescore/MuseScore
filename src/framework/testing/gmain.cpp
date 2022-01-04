@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
+#include <QApplication>
 #include <gmock/gmock.h>
 
 #include "framework/global/runtime.h"
@@ -28,7 +28,7 @@
 
 GTEST_API_ int main(int argc, char** argv)
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 

@@ -39,23 +39,24 @@ public:
 TEST_F(ScorePropertiesItemTests, StandardProperty)
 {
     //! CASE When assembling a property item with a non editable label
-    QLabel label("MyLabel");
+    QLabel *label = new QLabel("MyLabel");
 
-    ScorePropertiesItem item(&label, nullptr);
+    ScorePropertiesItem item(label, nullptr);
 
     //! GIVEN I get the label name
     QString labelName = item.Label();
 
     //! CHECK It is what I expect it to be
     EXPECT_TRUE(labelName == "MyLabel");
+    delete label;
 }
 
 TEST_F(ScorePropertiesItemTests, NonStandardProperty)
 {
     //! CASE When assembling a property item with a editable label
-    QLineEdit label("MyLabel");
+    QLineEdit *label = new QLineEdit("MyLabel");
 
-    ScorePropertiesItem item(&label, nullptr);
+    ScorePropertiesItem item(label, nullptr);
  
     //! GIVEN I get the label name
     QString labelName = item.Label();
@@ -63,4 +64,5 @@ TEST_F(ScorePropertiesItemTests, NonStandardProperty)
 
     //! CHECK It is what I expect it to be
     EXPECT_TRUE(labelName == "MyLabel");
+    delete label;
 }
