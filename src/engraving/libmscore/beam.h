@@ -23,9 +23,13 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 #include "property.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class ChordRest;
@@ -34,7 +38,7 @@ class Chord;
 class System;
 class Skyline;
 
-enum class IconType : signed char;
+enum class ActionIconType;
 enum class SpannerSegmentType;
 
 struct BeamFragment;
@@ -43,63 +47,77 @@ struct BeamFragment;
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam final : public Element
+class Beam final : public EngravingItem
 {
-    Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
-    QVector<mu::LineF*> beamSegments;
-    Direction _direction;
+    QVector<mu::LineF*> _beamSegments;
+    DirectionV _direction    { DirectionV::AUTO };
 
-    bool _up;
-    bool _distribute;                     // equal spacing of elements
-    bool _noSlope;
+    bool _up                { true };
+    bool _distribute        { false };                    // equal spacing of elements
 
-    bool _userModified[2];                // 0: auto/down  1: up
-    bool _isGrace;
-    bool _cross;
+    bool _userModified[2]   { false };                // 0: auto/down  1: up
+    bool _isGrace           { false };
+    bool _cross             { false };
 
-    qreal _grow1;                         // define "feather" beams
-    qreal _grow2;
-    qreal _beamDist;
+    qreal _grow1            { 1.0f };                     // define "feather" beams
+    qreal _grow2            { 1.0f };
+    qreal _beamDist         { 0.0f };
+    int _beamSpacing        { 3 }; // how far apart beams are spaced in quarter spaces
+
+    // for tabs
+    bool _isBesideTabStaff  { false };
+    StaffType const* _tab         { nullptr };
 
     QVector<BeamFragment*> fragments;       // beam splits across systems
 
-    mutable int _id;            // used in read()/write()
+    mutable int _id         { 0 };          // used in read()/write()
 
-    int minMove;                // set in layout1()
-    int maxMove;
-    TDuration maxDuration;
-    qreal slope { 0.0 };
+    int _minMove             { 0 };                // set in layout1()
+    int _maxMove             { 0 };
+    TDuration _maxDuration;
+    qreal _slope             { 0.0 };
+    std::vector<int> _notes;
 
+    friend class mu::engraving::Factory;
+    Beam(System* parent);
+    Beam(const Beam&);
+
+    int getMiddleStaffLine(ChordRest* startChord, ChordRest* endChord, int staffLines) const;
+    int computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const;
+    int getBeamCount(std::vector<ChordRest*> chordRests) const;
+    void offsetBeamToRemoveCollisions(std::vector<ChordRest*> chordRests, int& dictator, int& pointer, qreal startX, qreal endX,
+                                      bool isFlat, bool isStartDictator) const;
+    bool isBeamInsideStaff(int yPos, int staffLines) const;
+    int getOuterBeamPosOffset(int innerBeam, int beamCount, int staffLines) const;
+    bool isValidBeamPosition(int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines) const;
+    bool is64thBeamPositionException(int& yPos, int staffLines) const;
+    int findValidBeamOffset(int outer, int beamCount, int staffLines, bool isStart, bool isAscending, bool isFlat) const;
+    void setValidBeamPositions(int& dictator, int& pointer, int beamCount, int staffLines, bool isStartDictator, bool isFlat,
+                               bool isAscending);
+    void addMiddleLineSlant(int& dictator, int& pointer, int beamCount, int middleLine, int interval);
+    void add8thSpaceSlant(mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval, int middleLine, bool Flat);
+    void extendStems(std::vector<ChordRest*> chordRests, mu::PointF start, mu::PointF end);
+    mu::PointF chordBeamAnchor(Chord* chord) const;
+    bool calcIsBeamletBefore(Chord* chord, int i, int level) const;
+    void createBeamSegment(Chord* startChord, Chord* endChord, int level);
+    void createBeamletSegment(Chord* chord, bool isBefore, int level);
+    void createBeamSegments(std::vector<ChordRest*> chordRests);
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
-    bool twoBeamedNotes();
-    void computeStemLen(const std::vector<ChordRest*>& crl, qreal& py1, int beamLevels);
-    bool slopeZero(const std::vector<ChordRest*>& crl);
-    bool hasNoSlope();
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
 public:
-    enum class Mode : signed char {
-        ///.\{
-        AUTO, BEGIN, MID, END, NONE, BEGIN32, BEGIN64, INVALID = -1
-                                                                 ///\}
-    };
-    Q_ENUM(Mode);
-
-    Beam(Score* = 0);
-    Beam(const Beam&);
     ~Beam();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Beam* clone() const override { return new Beam(*this); }
-    ElementType type() const override { return ElementType::BEAM; }
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
 
@@ -118,7 +136,7 @@ public:
 
     void reset() override;
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     void layout1();
     void layoutGraceNotes();
@@ -132,8 +150,8 @@ public:
         return std::find(_elements.begin(), _elements.end(), cr) != _elements.end();
     }
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     void move(const mu::PointF&) override;
     void draw(mu::draw::Painter*) const override;
@@ -142,16 +160,14 @@ public:
     void setUp(bool v) { _up = v; }
     void setId(int i) const { _id = i; }
     int id() const { return _id; }
-    bool isNoSlope() const;
-    void alignBeamPosition();
 
-    void setBeamDirection(Direction d);
-    Direction beamDirection() const { return _direction; }
+    void setBeamDirection(DirectionV d);
+    DirectionV beamDirection() const { return _direction; }
 
-    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this localy
+    //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int BeamMode enum, so we'll handle this locally
     void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     qreal growLeft() const { return _grow1; }
     qreal growRight() const { return _grow2; }
@@ -164,14 +180,14 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    mu::PointF beamPos() const;
-    void setBeamPos(const mu::PointF& bp);
+    mu::engraving::PairF beamPos() const;
+    void setBeamPos(const mu::engraving::PairF& bp);
 
     qreal beamDist() const { return _beamDist; }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     bool isGrace() const { return _isGrace; }    // for debugger
     bool cross() const { return _cross; }
@@ -186,7 +202,7 @@ public:
     Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    static IconType iconType(Mode);
+    static ActionIconType actionIconTypeForBeamMode(BeamMode);
 
     mu::RectF drag(EditData&) override;
     bool isMovable() const override;

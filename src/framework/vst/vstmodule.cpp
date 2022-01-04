@@ -24,25 +24,34 @@
 #include <QQmlEngine>
 
 #include "ui/iinteractiveuriregister.h"
-#include "audio/isynthesizersregister.h"
 #include "ui/iuiengine.h"
 #include "log.h"
 #include "settings.h"
 #include "modularity/ioc.h"
+#include "audio/isynthresolver.h"
+#include "audio/ifxresolver.h"
 
 #include "internal/vstconfiguration.h"
-#include "internal/vstpluginrepository.h"
+#include "internal/vstpluginsregister.h"
+#include "internal/vstmodulesrepository.h"
 #include "internal/synth/vstsynthesiser.h"
+#include "internal/synth/vstiresolver.h"
+#include "internal/fx/vstfxresolver.h"
 
 #include "devtools/vstpluginlistmodelexample.h"
-#include "view/vstplugineditorview.h"
+#include "view/vstieditorview.h"
+#include "view/vstfxeditorview.h"
 
 using namespace mu::vst;
 using namespace mu::modularity;
+using namespace mu::audio::synth;
+using namespace mu::audio::fx;
+using namespace mu::audio;
 using namespace mu::ui;
 
-static std::shared_ptr<IVstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
-static std::shared_ptr<IVstPluginRepository> s_pluginRepo = std::make_shared<VstPluginRepository>();
+static std::shared_ptr<VstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
+static std::shared_ptr<VstModulesRepository> s_pluginModulesRepo = std::make_shared<VstModulesRepository>();
+static std::shared_ptr<VstPluginsRegister> s_pluginsRegister = std::make_shared<VstPluginsRegister>();
 
 static void vst_init_qrc()
 {
@@ -57,15 +66,29 @@ std::string VSTModule::moduleName() const
 void VSTModule::registerExports()
 {
     ioc()->registerExport<IVstConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IVstPluginRepository>(moduleName(), s_pluginRepo);
+    ioc()->registerExport<IVstModulesRepository>(moduleName(), s_pluginModulesRepo);
+    ioc()->registerExport<IVstPluginsRegister>(moduleName(), s_pluginsRegister);
 }
 
 void VSTModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://vst/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstPluginEditorView>("VstPluginEditorView")));
+        ir->registerUri(Uri("musescore://vsti/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstiEditorView>("VstiEditorView")));
+
+        ir->registerUri(Uri("musescore://vstfx/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
+    }
+
+    auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
+    if (synthResolver) {
+        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>());
+    }
+
+    auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
+    if (fxResolver) {
+        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>());
     }
 }
 
@@ -87,12 +110,10 @@ void VSTModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_pluginRepo->loadAvailablePlugins();
+    s_pluginModulesRepo->init();
+}
 
-    //!Note Please, don't remove this code, needed for tests of VST implementation
-    /*auto sreg = ioc()->resolve<audio::synth::ISynthesizersRegister>(moduleName());
-
-    if (sreg) {
-        sreg->registerSynthesizer("Vst", std::make_shared<VstSynthesiser>(s_pluginRepo->pluginsMetaList().val.at(0)));
-    }*/
+void VSTModule::onDeinit()
+{
+    s_pluginModulesRepo->deInit();
 }

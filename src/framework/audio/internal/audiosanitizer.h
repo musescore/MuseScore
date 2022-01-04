@@ -33,6 +33,7 @@ class AudioSanitizer
 public:
 
     static void setupMainThread();
+    static std::thread::id mainThread();
     static bool isMainThread();
 
     static void setupWorkerThread();

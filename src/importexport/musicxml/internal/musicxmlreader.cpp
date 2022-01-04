@@ -22,7 +22,7 @@
 #include "musicxmlreader.h"
 
 #include "io/path.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "notation/notationerrors.h"
 
 namespace Ms {
@@ -35,7 +35,7 @@ using namespace mu::iex::musicxml;
 mu::Ret MusicXmlReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
 {
     Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::syffix(path);
+    std::string syffix = mu::io::suffix(path);
     if (syffix == "xml" || syffix == "musicxml") {
         err = Ms::importMusicXml(score, path.toQString());
     } else if (syffix == "mxl") {

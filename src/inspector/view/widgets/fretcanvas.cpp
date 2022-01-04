@@ -27,7 +27,7 @@
 #include "libmscore/fret.h"
 #include "libmscore/measure.h"
 #include "libmscore/system.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
@@ -35,21 +35,15 @@
 
 using namespace mu::inspector;
 
-//---------------------------------------------------------
-//   FretCanvas
-//---------------------------------------------------------
-
 FretCanvas::FretCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
+    setAcceptHoverEvents(true);
+
     m_cstring = -2;
     m_cfret   = -2;
 }
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
 
 void FretCanvas::draw(QPainter* painter)
 {
@@ -80,6 +74,7 @@ void FretCanvas::draw(QPainter* painter)
     QPen pen(painter->pen());
     pen.setWidthF(lw2);
     pen.setCapStyle(Qt::FlatCap);
+    pen.setColor(color());
     painter->setPen(pen);
     painter->setBrush(pen.color());
     double x2 = (_strings - 1) * stringDist;
@@ -180,10 +175,6 @@ void FretCanvas::draw(QPainter* painter)
     }
 }
 
-//---------------------------------------------------------
-//   paintDotSymbol
-//---------------------------------------------------------
-
 void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal dotd, Ms::FretDotType dtype)
 {
     switch (dtype) {
@@ -209,10 +200,6 @@ void FretCanvas::paintDotSymbol(QPainter* p, QPen& pen, qreal x, qreal y, qreal 
     }
 }
 
-//---------------------------------------------------------
-//   getPosition
-//---------------------------------------------------------
-
 void FretCanvas::getPosition(const QPointF& p, int* string, int* fret)
 {
     double mag = 1.5;
@@ -230,10 +217,6 @@ void FretCanvas::getPosition(const QPointF& p, int* string, int* fret)
     *string = (p.x() - xo + stringDist * .5) / stringDist;
 }
 
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
-
 void FretCanvas::mousePressEvent(QMouseEvent* ev)
 {
     int string;
@@ -246,7 +229,7 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         return;
     }
 
-    m_diagram->score()->startCmd();
+    globalContext()->currentNotation()->undoStack()->prepareChanges();
 
     // Click above the fret diagram, so change the open/closed string marker
     if (fret == 0) {
@@ -318,29 +301,23 @@ void FretCanvas::mousePressEvent(QMouseEvent* ev)
         }
     }
     m_diagram->triggerLayout();
-    m_diagram->score()->endCmd();
+    globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
+
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
-//---------------------------------------------------------
-//   mouseMoveEvent
-//---------------------------------------------------------
-
-void FretCanvas::mouseMoveEvent(QMouseEvent* ev)
+void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
 {
     int string;
     int fret;
     getPosition(ev->pos(), &string, &fret);
-    if (string != m_cstring || m_cfret != fret) {
+    if (m_cstring != string || m_cfret != fret) {
         m_cfret = fret;
         m_cstring = string;
         update();
     }
 }
-
-//---------------------------------------------------------
-//   setFretDiagram
-//---------------------------------------------------------
 
 void FretCanvas::setFretDiagram(QVariant fd)
 {
@@ -358,16 +335,14 @@ void FretCanvas::setFretDiagram(QVariant fd)
     update();
 }
 
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
 void FretCanvas::clear()
 {
-    m_diagram->score()->startCmd();
+    globalContext()->currentNotation()->undoStack()->prepareChanges();
     m_diagram->undoFretClear();
-    m_diagram->score()->endCmd();
+    globalContext()->currentNotation()->undoStack()->commitChanges();
     update();
+
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 void FretCanvas::paint(QPainter* painter)
@@ -393,6 +368,11 @@ bool FretCanvas::isBarreModeOn() const
 bool FretCanvas::isMultipleDotsModeOn() const
 {
     return m_multidotMode;
+}
+
+QColor FretCanvas::color() const
+{
+    return m_color;
 }
 
 void FretCanvas::setCurrentFretDotType(int currentFretDotType)
@@ -425,4 +405,15 @@ void FretCanvas::setIsMultipleDotsModeOn(bool isMultipleDotsModeOn)
 
     m_multidotMode = isMultipleDotsModeOn;
     emit isMultipleDotsModeOnChanged(m_multidotMode);
+}
+
+void FretCanvas::setColor(QColor color)
+{
+    if (m_color == color) {
+        return;
+    }
+
+    m_color = color;
+    update();
+    emit colorChanged(m_color);
 }

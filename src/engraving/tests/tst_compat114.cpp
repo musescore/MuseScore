@@ -24,7 +24,7 @@
 
 #include "testbase.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 static const QString COMPAT114_DATA_DIR("compat114_data/");
 

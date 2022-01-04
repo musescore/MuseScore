@@ -27,6 +27,15 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/learnmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/learnmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/learnerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/ilearnconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/ilearnservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/learnconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/learnconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/learnservice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/learnservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

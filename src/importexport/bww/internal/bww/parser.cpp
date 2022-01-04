@@ -27,18 +27,18 @@
  uinterrupted sequences of notes.
  */
 
-// #include <iostream>
-
-#include <QtCore/QStringList>
-#include <QtCore/QtDebug>
-#include <QtCore/QMap>
+#include <QMap>
+#include <QRegularExpression>
+#include <QStringList>
+#include <QtDebug>
 
 #include "lexer.h"
 #include "parser.h"
 #include "writer.h"
+#include "log.h"
 
 // Duration of a whole measure in ticks
-static const int WHOLE_MEASURE_DURATION = 192;
+static constexpr int WHOLE_MEASURE_DURATION = 192;
 
 /**
  Determine if symbol is part of a note sequence
@@ -138,15 +138,14 @@ static void dumpMeasures(QList<Bww::MeasureDescription> const& measures)
                  << "irregular" << measures.at(j).mbf.irregular
         ;
         for (int i = 0; i < measures.at(j).notes.size(); ++i) {
-            qDebug()
-                << measures.at(j).notes.at(i).pitch
-                << measures.at(j).notes.at(i).beam
-                << measures.at(j).notes.at(i).type
-                << measures.at(j).notes.at(i).dots
-                << measures.at(j).notes.at(i).tieStart
-                << measures.at(j).notes.at(i).tieStop
-                << static_cast<int>(measures.at(j).notes.at(i).triplet)
-                << measures.at(j).notes.at(i).grace
+            qDebug() << measures.at(j).notes.at(i).pitch
+                     << measures.at(j).notes.at(i).beam
+                     << measures.at(j).notes.at(i).type
+                     << measures.at(j).notes.at(i).dots
+                     << measures.at(j).notes.at(i).tieStart
+                     << measures.at(j).notes.at(i).tieStop
+                     << static_cast<int>(measures.at(j).notes.at(i).triplet)
+                     << measures.at(j).notes.at(i).grace
             ;
         }
         qDebug() << "mef:"
@@ -570,15 +569,9 @@ void Parser::parse()
    Display error \a s.
    */
 
-void Parser::errorHandler(QString /*s*/)
+void Parser::errorHandler(const QString& err)
 {
-#if 0 // WS
-    std::cerr << "Parse error line "
-              << lex.symLineNumber() + 1
-              << ": "
-              << qPrintable(s)
-              << std::endl;
-#endif
+    LOGE() << err;
 }
 
 /**
@@ -602,11 +595,12 @@ void Parser::parseNote()
 {
     qDebug() << "Parser::parseNote() value:" << qPrintable(lex.symValue());
 
-    QRegExp rNotes("(LG|LA|[B-F]|HG|HA)([lr]?)_(1|2|4|8|16|32)");
+    QRegularExpression rNotes(QRegularExpression::anchoredPattern("(LG|LA|[B-F]|HG|HA)([lr]?)_(1|2|4|8|16|32)"));
+    QRegularExpressionMatch rNotesMatch = rNotes.match(lex.symValue());
 
     QStringList caps;
-    if (rNotes.exactMatch(lex.symValue())) {
-        caps = rNotes.capturedTexts();
+    if (rNotesMatch.hasMatch()) {
+        caps = rNotesMatch.capturedTexts();
         qDebug() << " match" << caps.size();
         if (caps.size() == 4) {
             qDebug()
@@ -845,10 +839,11 @@ void Parser::parseString()
 {
     qDebug() << "Parser::parseString() value:" << qPrintable(lex.symValue());
 
-    QRegExp rString("\\\"(.*)\\\",\\(([A-Z]),.*\\)");
+    QRegularExpression rString(QRegularExpression::anchoredPattern("\\\"(.*)\\\",\\(([A-Z]),.*\\)"));
+    QRegularExpressionMatch rStringMatch = rString.match(lex.symValue());
 
-    if (rString.exactMatch(lex.symValue())) {
-        QStringList caps = rString.capturedTexts();
+    if (rStringMatch.hasMatch()) {
+        QStringList caps = rStringMatch.capturedTexts();
         if (caps.size() == 3) {
             if (caps.at(2) == "T") {
                 title = caps.at(1);
@@ -875,10 +870,11 @@ void Parser::parseTempo()
 {
     qDebug() << "Parser::parseTempo() value:" << qPrintable(lex.symValue());
 
-    QRegExp rTempo("^TuneTempo,(\\d+)");
+    QRegularExpression rTempo(QRegularExpression::anchoredPattern("^TuneTempo,(\\d+)"));
+    QRegularExpressionMatch rTempoMatch = rTempo.match(lex.symValue());
 
-    if (rTempo.exactMatch(lex.symValue())) {
-        QStringList caps = rTempo.capturedTexts();
+    if (rTempoMatch.hasMatch()) {
+        QStringList caps = rTempoMatch.capturedTexts();
         if (caps.size() == 2) {
             tempo = caps.at(1).toInt();
         }
@@ -894,10 +890,11 @@ void Parser::parseTSig()
 {
     qDebug() << "Parser::parseTSig() value:" << qPrintable(lex.symValue());
 
-    QRegExp rTSig("(\\d+)_(1|2|4|8|16|32)");
+    QRegularExpression rTSig(QRegularExpression::anchoredPattern("(\\d+)_(1|2|4|8|16|32)"));
+    QRegularExpressionMatch rTSigMatch = rTSig.match(lex.symValue());
 
-    if (rTSig.exactMatch(lex.symValue())) {
-        QStringList caps = rTSig.capturedTexts();
+    if (rTSigMatch.hasMatch()) {
+        QStringList caps = rTSigMatch.capturedTexts();
         if (caps.size() == 3) {
             beats = caps.at(1).toInt();
             beat  = caps.at(2).toInt();

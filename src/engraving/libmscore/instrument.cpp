@@ -22,9 +22,11 @@
 
 #include "instrument.h"
 
-#include <QTextDocumentFragment>
+#include "rw/xml.h"
+#include "io/htmlparser.h"
+#include "types/typesconv.h"
+#include "compat/midi/midipatch.h"
 
-#include "xml.h"
 #include "drumset.h"
 #include "articulation.h"
 #include "utils.h"
@@ -33,11 +35,12 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "masterscore.h"
 
-#include "framework/midi_old/midipatch.h"
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //: Channel name for otherwise unamed channels
@@ -95,14 +98,14 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 
 void NamedEventList::write(XmlWriter& xml, const QString& n) const
 {
-    xml.stag(QString("%1 name=\"%2\"").arg(n, name));
+    xml.startObject(QString("%1 name=\"%2\"").arg(n, name));
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
         midi_event_write(e, xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -186,6 +189,7 @@ Instrument::Instrument(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _trait = i._trait;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -216,6 +220,7 @@ void Instrument::operator=(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _trait = i._trait;
 }
 
 //---------------------------------------------------------
@@ -226,6 +231,7 @@ Instrument::~Instrument()
 {
     qDeleteAll(_channel);
     delete _drumset;
+    _drumset = nullptr;
 }
 
 //---------------------------------------------------------
@@ -263,7 +269,7 @@ void StaffName::read(XmlReader& e)
     _name = e.readXml();
     if (_name.startsWith("<html>")) {
         // compatibility to old html implementation:
-        _name = QTextDocumentFragment::fromHtml(_name).toPlainText();
+        _name = mu::engraving::HtmlParser::parse(_name);
     }
 }
 
@@ -274,9 +280,9 @@ void StaffName::read(XmlReader& e)
 void Instrument::write(XmlWriter& xml, const Part* part) const
 {
     if (_id.isEmpty()) {
-        xml.stag("Instrument");
+        xml.startObject("Instrument");
     } else {
-        xml.stag(QString("Instrument id=\"%1\"").arg(_id));
+        xml.startObject(QString("Instrument id=\"%1\"").arg(_id));
     }
     _longNames.write(xml, "longName");
     _shortNames.write(xml, "shortName");
@@ -311,7 +317,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
         ClefTypeList ct = _clefType[i];
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
-                QString tag = ClefInfo::tag(ct._concertClef);
+                QString tag = TConv::toXml(ct._concertClef);
                 if (i) {
                     xml.tag(QString("clef staff=\"%1\"").arg(i + 1), tag);
                 } else {
@@ -319,8 +325,8 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
                 }
             }
         } else {
-            QString tag1 = ClefInfo::tag(ct._concertClef);
-            QString tag2 = ClefInfo::tag(ct._transposingClef);
+            QString tag1 = TConv::toXml(ct._concertClef);
+            QString tag2 = TConv::toXml(ct._transposingClef);
             if (i) {
                 xml.tag(QString("concertClef staff=\"%1\"").arg(i + 1), tag1);
                 xml.tag(QString("transposingClef staff=\"%1\"").arg(i + 1), tag2);
@@ -347,7 +353,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     for (const Channel* a : _channel) {
         a->write(xml, part);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 QString Instrument::recognizeInstrumentId() const
@@ -521,17 +527,14 @@ bool Instrument::readProperties(XmlReader& e, Part* part, bool* customDrumset)
         _channel.append(a);
     } else if (tag == "clef") {           // sets both transposing and concert clef
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        ClefType ct = Clef::clefType(val);
+        ClefType ct = TConv::fromXml(e.readElementText(), ClefType::G);
         setClefType(idx, ClefTypeList(ct, ct));
     } else if (tag == "concertClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        setClefType(idx, ClefTypeList(Clef::clefType(val), clefType(idx)._transposingClef));
+        setClefType(idx, ClefTypeList(TConv::fromXml(e.readElementText(), ClefType::G), clefType(idx)._transposingClef));
     } else if (tag == "transposingClef") {
         int idx = e.intAttribute("staff", 1) - 1;
-        QString val(e.readElementText());
-        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, Clef::clefType(val)));
+        setClefType(idx, ClefTypeList(clefType(idx)._concertClef, TConv::fromXml(e.readElementText(), ClefType::G)));
     } else {
         return false;
     }
@@ -793,9 +796,9 @@ void Channel::setUserBankController(bool val)
 void Channel::write(XmlWriter& xml, const Part* part) const
 {
     if (_name.isEmpty() || _name == DEFAULT_NAME) {
-        xml.stag("Channel");
+        xml.startObject("Channel");
     } else {
-        xml.stag(QString("Channel name=\"%1\"").arg(_name));
+        xml.startObject(QString("Channel name=\"%1\"").arg(_name));
     }
     if (!_descr.isEmpty()) {
         xml.tag("descr", _descr);
@@ -853,7 +856,7 @@ void Channel::write(XmlWriter& xml, const Part* part) const
     for (const MidiArticulation& a : articulation) {
         a.write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1224,16 +1227,16 @@ int Instrument::channelIdx(const QString& s) const
 void MidiArticulation::write(XmlWriter& xml) const
 {
     if (name.isEmpty()) {
-        xml.stag("Articulation");
+        xml.startObject("Articulation");
     } else {
-        xml.stag(QString("Articulation name=\"%1\"").arg(name));
+        xml.startObject(QString("Articulation name=\"%1\"").arg(name));
     }
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     xml.tag("velocity", velocity);
     xml.tag("gateTime", gateTime);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1367,6 +1370,11 @@ bool Instrument::operator==(const Instrument& i) const
            && i._trackName == _trackName
            && *i.stringData() == *stringData()
            && i._singleNoteDynamics == _singleNoteDynamics;
+}
+
+bool Instrument::operator!=(const Instrument& i) const
+{
+    return !(*this == i);
 }
 
 //---------------------------------------------------------
@@ -1682,35 +1690,56 @@ QString Instrument::abbreviature() const
 //   fromTemplate
 //---------------------------------------------------------
 
-Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
+Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 {
-    Instrument instr(t->id);
-    instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
-    instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
-    for (const StaffName& sn : t->longNames) {
-        instr.addLongName(StaffName(sn.name(), sn.pos()));
+    Instrument instrument(templ->id);
+    instrument.setAmateurPitchRange(templ->minPitchA, templ->maxPitchA);
+    instrument.setProfessionalPitchRange(templ->minPitchP, templ->maxPitchP);
+
+    for (const StaffName& sn : templ->longNames) {
+        instrument.addLongName(StaffName(sn.name(), sn.pos()));
     }
-    for (const StaffName& sn : t->shortNames) {
-        instr.addShortName(StaffName(sn.name(), sn.pos()));
+
+    for (const StaffName& sn : templ->shortNames) {
+        instrument.addShortName(StaffName(sn.name(), sn.pos()));
     }
-    instr.setTrackName(t->trackName);
-    instr.setTranspose(t->transpose);
-    instr.setInstrumentId(t->musicXMLid);
-    if (t->useDrumset) {
-        instr.setDrumset(t->drumset ? t->drumset : smDrumset);
+
+    instrument.setTrackName(templ->trackName);
+    instrument.setTranspose(templ->transpose);
+    instrument.setInstrumentId(templ->musicXMLid);
+    instrument._useDrumset = templ->useDrumset;
+
+    if (templ->useDrumset) {
+        instrument.setDrumset(templ->drumset ? templ->drumset : smDrumset);
     }
-    for (int i = 0; i < t->nstaves(); ++i) {
-        instr.setClefType(i, t->clefTypes[i]);
+
+    for (int i = 0; i < templ->staffCount; ++i) {
+        instrument.setClefType(i, templ->clefTypes[i]);
     }
-    instr.setMidiActions(t->midiActions);
-    instr.setArticulation(t->articulation);
-    instr._channel.clear();
-    for (const Channel& c : t->channel) {
-        instr._channel.append(new Channel(c));
+
+    instrument.setMidiActions(templ->midiActions);
+    instrument.setArticulation(templ->articulation);
+    instrument._channel.clear();
+
+    for (const Channel& c : templ->channel) {
+        instrument._channel.append(new Channel(c));
     }
-    instr.setStringData(t->stringData);
-    instr.setSingleNoteDynamics(t->singleNoteDynamics);
-    return instr;
+
+    instrument.setStringData(templ->stringData);
+    instrument.setSingleNoteDynamics(templ->singleNoteDynamics);
+    instrument.setTrait(templ->trait);
+
+    return instrument;
+}
+
+Trait Instrument::trait() const
+{
+    return _trait;
+}
+
+void Instrument::setTrait(const Trait& trait)
+{
+    _trait = trait;
 }
 
 //---------------------------------------------------------
@@ -1730,31 +1759,53 @@ void Instrument::updateInstrumentId()
     // because there are multiple instrument using this same id.
     // For these instruments, use the value of controller 32 of the "arco"
     // channel to find the correct instrument.
+    // There are some duplicate MusicXML IDs among other instruments too. In
+    // that case we check the pitch range and use the shortest ID that matches.
     const QString arco = QString("arco");
     const bool groupHack = instrumentId() == QString("strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
     QString fallback;
+    int bestMatchStrength = 0; // higher when fallback ID provides better match for instrument data
 
     for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
-            if (it->musicXMLid == instrumentId()) {
-                if (groupHack) {
-                    if (fallback.isEmpty()) {
-                        // Instrument "Strings" doesn't have bank defined so
-                        // if no "strings.group" instrument with requested bank
-                        // is found, assume "Strings".
-                        fallback = it->id;
+            if (it->musicXMLid != instrumentId()) {
+                continue;
+            }
+            if (groupHack) {
+                if (fallback.isEmpty()) {
+                    // Instrument "Strings" doesn't have bank defined so
+                    // if no "strings.group" instrument with requested bank
+                    // is found, assume "Strings".
+                    fallback = it->id;
+                }
+                foreach (const Channel& chan, it->channel) {
+                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
+                        _id = it->id;
+                        return;
                     }
-                    for (const Channel& chan : it->channel) {
-                        if ((chan.name() == arco) && (chan.bank() == val32ref)) {
-                            _id = it->id;
-                            return;
-                        }
+                }
+            } else {
+                int matchStrength = 0
+                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
+                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
+                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
+                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
+                const int perfectMatchStrength = 4;
+                Q_ASSERT(matchStrength <= perfectMatchStrength);
+                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
+                    // Set a fallback ID or update it because we've found a better one.
+                    fallback = it->id;
+                    bestMatchStrength = matchStrength;
+                    if (bestMatchStrength == perfectMatchStrength) {
+                        break; // stop looking for matches
                     }
-                } else {
-                    _id = it->id;
-                    return;
+                } else if ((matchStrength == bestMatchStrength) && (it->id.length() < fallback.length())) {
+                    // Update fallback ID because we've found a shorter one that is equally good.
+                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
+                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
+                    fallback = it->id;
                 }
             }
         }

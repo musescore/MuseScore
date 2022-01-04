@@ -46,7 +46,7 @@ AlsaMidiInPort::~AlsaMidiInPort()
 
 void AlsaMidiInPort::init()
 {
-    m_alsa = std::unique_ptr<Alsa>(new Alsa());
+    m_alsa = std::make_shared<Alsa>();
 
     m_devicesListener.startWithCallback([this]() {
         return devices();
@@ -140,7 +140,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
         disconnect();
     }
 
-    int err = snd_seq_open(&m_alsa->midiIn, "default", SND_SEQ_OPEN_INPUT, 0 /*block mode*/);
+    int err = snd_seq_open(&m_alsa->midiIn, "default", SND_SEQ_OPEN_INPUT, SND_SEQ_NONBLOCK);
     if (err < 0) {
         return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
     }
@@ -159,7 +159,8 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return Ret(true);
+
+    return run();
 }
 
 void AlsaMidiInPort::disconnect()
@@ -171,12 +172,12 @@ void AlsaMidiInPort::disconnect()
     snd_seq_disconnect_to(m_alsa->midiIn, 0, m_alsa->client, m_alsa->port);
     snd_seq_close(m_alsa->midiIn);
 
+    stop();
+
     m_alsa->client = -1;
     m_alsa->port = -1;
     m_alsa->midiIn = nullptr;
     m_deviceID.clear();
-
-    stop();
 }
 
 bool AlsaMidiInPort::isConnected() const
@@ -205,6 +206,18 @@ mu::Ret AlsaMidiInPort::run()
     return Ret(true);
 }
 
+void AlsaMidiInPort::stop()
+{
+    if (!m_thread) {
+        LOGW() << "already stoped";
+        return;
+    }
+
+    m_running.store(false);
+    m_thread->join();
+    m_thread = nullptr;
+}
+
 void AlsaMidiInPort::process(AlsaMidiInPort* self)
 {
     self->doProcess();
@@ -220,7 +233,12 @@ void AlsaMidiInPort::doProcess()
     while (m_running.load() && isConnected()) {
         snd_seq_event_input(m_alsa->midiIn, &ev);
 
+        auto sleep = []() {
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        };
+
         if (!ev) {
+            sleep();
             continue;
         }
 
@@ -283,28 +301,8 @@ void AlsaMidiInPort::doProcess()
             m_eventReceived.send(static_cast<tick_t>(ev->time.tick), e);
         }
 
-        snd_seq_free_event(ev);
+        sleep();
     }
-}
-
-void AlsaMidiInPort::stop()
-{
-    if (!m_thread) {
-        LOGW() << "already stoped";
-        return;
-    }
-
-    m_running.store(false);
-    m_thread->join();
-    m_thread = nullptr;
-}
-
-bool AlsaMidiInPort::isRunning() const
-{
-    if (m_thread) {
-        return true;
-    }
-    return false;
 }
 
 mu::async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const

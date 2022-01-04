@@ -51,15 +51,13 @@ option(BUILD_PORTABLEAPPS "Windows build for PortableApps.com" OFF)
 option(BUILD_FOR_WINSTORE "Build for the Windows Store." OFF)
 option(BUILD_AUTOUPDATE "Build with autoupdate support" OFF)
 
-option(BUILD_TELEMETRY_MODULE "Build with telemetry module" ON)
-set(TELEMETRY_TRACK_ID "" CACHE STRING "Telemetry track id")
 set(CRASH_REPORT_URL "" CACHE STRING "URL where to send crash reports")
+option(LOGGER_DEBUGLEVEL_ENABLED "Enable logging debug level" ON)
 
 option(BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
 option(BUILD_SYSTEM_MODULE "Build system module" ON)
 option(BUILD_NETWORK_MODULE "Build network module" ON)
 option(BUILD_AUDIO_MODULE "Build audio module" ON)
-option(BUILD_USERSCORES_MODULE "Build userscores module" ON)
 option(BUILD_LEARN_MODULE "Build learn module" ON)
 option(BUILD_WORKSPACE_MODULE "Build workspace module" ON)
 option(BUILD_CLOUD_MODULE "Build cloud module" ON)
@@ -68,17 +66,27 @@ option(BUILD_LANGUAGES_MODULE "Build languages module" ON)
 option(BUILD_PLUGINS_MODULE "Build plugins module" ON)
 option(BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(BUILD_PALETTE_MODULE "Build palette module" ON)
-option(BUILD_INSTRUMENTS_MODULE "Build instruments module" ON)
+option(BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
 option(BUILD_INSPECTOR_MODULE "Build inspector module" ON)
-option(BUILD_AUTOBOT_MODULE "Build autobot module" OFF)
+option(BUILD_AUTOBOT_MODULE "Build autobot module" ON)
 option(BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
+option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
+set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
-option(USE_SCORE_ACCESSIBLE_TREE "Use score accessible tree" OFF)
+option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
+# Temporary flags for MU3 compatibility to make testing easier.
+option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" ON)
+option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)
+# -----
+
+option(UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
+
+option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
 
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
-option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
+option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
 option(TRY_USE_CCACHE "Try use ccache" ON)
@@ -148,26 +156,6 @@ if (OS_IS_WIN)
     include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
 endif(OS_IS_WIN)
 
-if (OS_IS_MAC)
-    find_library(AudioToolboxFW        NAMES AudioToolbox)
-    find_library(AudioUnitFW           NAMES AudioUnit)
-    find_library(CoreAudioFW           NAMES CoreAudio)
-    find_library(CoreMidiFW            NAMES CoreMIDI)
-    find_library(SystemConfigurationFW NAMES SystemConfiguration)
-    find_library(CoreServicesFW        NAMES CoreServices)
-    find_library(AppKit                NAMES AppKit)
-
-    set(OsxFrameworks
-        ${AudioToolboxFW}
-        ${AudioUnitFW}
-        ${CoreAudioFW}
-        ${CoreMidiFW}
-        ${SystemConfigurationFW}
-        ${CoreServicesFW}
-        ${AppKit}
-        )
-endif(OS_IS_MAC)
-
 include(SetupFreetype)
 
 include(FindSndFile)
@@ -181,11 +169,6 @@ if (BUILD_JACK)
 endif(BUILD_JACK)
 
 if (BUILD_AUTOUPDATE)
-
-    if (OS_IS_MAC)
-        set(MAC_APPCAST_URL "")
-    endif (OS_IS_MAC)
-
     include(SetupSparkle)
 endif(BUILD_AUTOUPDATE)
 
@@ -249,8 +232,6 @@ add_custom_target(lupdate
    COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/mscore.pro
    COMMAND ${PROJECT_SOURCE_DIR}/build/gen-instruments-projectfile ${PROJECT_SOURCE_DIR}/share/instruments > instruments.pro
    COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/instruments.pro
-   COMMAND ${PROJECT_SOURCE_DIR}/build/gen-tours-projectfile ${PROJECT_SOURCE_DIR}/share/tours > tours.pro
-   COMMAND Qt5::lupdate ${PROJECT_BINARY_DIR}/tours.pro
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
    )
 
@@ -261,9 +242,6 @@ file(GLOB INSTRUMENTS_TS_FILES
 file(GLOB MSCORE_TS_FILES
    "share/locale/mscore*.ts"
 )
-file(GLOB TOURS_TS_FILES
-   "share/locale/tours*.ts"
-)
 file(GLOB QT_TS_FILES
    "share/locale/qt*.ts"
 )
@@ -271,7 +249,6 @@ file(GLOB QT_TS_FILES
 add_custom_target(lrelease
    COMMAND Qt5::lrelease ${INSTRUMENTS_TS_FILES}
    COMMAND Qt5::lrelease ${MSCORE_TS_FILES}
-   COMMAND Qt5::lrelease ${TOURS_TS_FILES}
    COMMAND Qt5::lrelease ${QT_TS_FILES}
    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
 )

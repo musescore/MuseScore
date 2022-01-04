@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "userscores/iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
@@ -34,7 +34,7 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
-    INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
+    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
@@ -42,6 +42,9 @@ class AppShellConfiguration : public IAppShellConfiguration, public async::Async
 
 public:
     void init();
+
+    bool hasCompletedFirstLaunchSetup() const override;
+    void setHasCompletedFirstLaunchSetup(bool has) override;
 
     StartupSessionType startupSessionType() const override;
     void setStartupSessionType(StartupSessionType type) override;
@@ -67,17 +70,12 @@ public:
     std::string museScoreVersion() const override;
     std::string museScoreRevision() const override;
 
-    ValCh<io::paths> recentScorePaths() const override;
-
     bool isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
     async::Notification isNotationNavigatorVisibleChanged() const override;
 
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
-
-    bool needShowTours() const override;
-    void setNeedShowTours(bool show) override;
 
     void startEditSettings() override;
     void applySettings() override;

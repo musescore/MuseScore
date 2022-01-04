@@ -26,12 +26,14 @@
 #include "barline.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(qtrc("inspector", "Barline"));
+    setIcon(ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }
 
@@ -42,6 +44,8 @@ void BarlineSettingsModel::createProperties()
     m_spanFrom = buildPropertyItem(Ms::Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Ms::Pid::BARLINE_SPAN_TO);
     m_hasToShowTips = buildPropertyItem(Ms::Pid::BARLINE_SHOW_TIPS);
+
+    connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
 }
 
 void BarlineSettingsModel::requestElements()
@@ -79,12 +83,6 @@ void BarlineSettingsModel::resetProperties()
     m_hasToShowTips->resetToDefault();
 }
 
-void BarlineSettingsModel::applyToAllStaffs()
-{
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
-    onPropertyValueChanged(Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
-}
-
 void BarlineSettingsModel::applySpanPreset(const int presetType)
 {
     BarlineTypes::SpanPreset type = static_cast<BarlineTypes::SpanPreset>(presetType);
@@ -119,6 +117,41 @@ void BarlineSettingsModel::applySpanPreset(const int presetType)
     }
 }
 
+void BarlineSettingsModel::setSpanIntervalAsStaffDefault()
+{
+    undoStack()->prepareChanges();
+
+    std::vector<Ms::EngravingItem*> staves;
+
+    auto undoChangeProperty = [](Ms::EngravingObject* o, Ms::Pid pid, const QVariant& val)
+    {
+        o->undoChangeProperty(pid, PropertyValue::fromQVariant(val, Ms::propertyType(pid)));
+    };
+
+    for (Ms::EngravingItem* item : m_elementList) {
+        if (!item->isBarLine()) {
+            continue;
+        }
+
+        Ms::BarLine* barline = Ms::toBarLine(item);
+        Ms::Staff* staff = barline->staff();
+
+        if (std::find(staves.cbegin(), staves.cend(), staff) == staves.cend()) {
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN, m_isSpanToNextStaff->value());
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_FROM, m_spanFrom->value());
+            undoChangeProperty(staff, Ms::Pid::STAFF_BARLINE_SPAN_TO, m_spanTo->value());
+            staves.push_back(staff);
+        }
+
+        if (barline->barLineType() == Ms::BarLineType::NORMAL) {
+            barline->setGenerated(true);
+        }
+    }
+
+    undoStack()->commitChanges();
+    updateNotation();
+}
+
 PropertyItem* BarlineSettingsModel::type() const
 {
     return m_type;
@@ -142,4 +175,18 @@ PropertyItem* BarlineSettingsModel::spanTo() const
 PropertyItem* BarlineSettingsModel::hasToShowTips() const
 {
     return m_hasToShowTips;
+}
+
+bool BarlineSettingsModel::isRepeatStyleChangingAllowed() const
+{
+    using LineType = BarlineTypes::LineType;
+
+    static const QList<LineType> allowedLineTypes {
+        LineType::TYPE_START_REPEAT,
+        LineType::TYPE_END_REPEAT,
+        LineType::TYPE_END_START_REPEAT
+    };
+
+    LineType currentType = static_cast<LineType>(m_type->value().toInt());
+    return allowedLineTypes.contains(currentType);
 }

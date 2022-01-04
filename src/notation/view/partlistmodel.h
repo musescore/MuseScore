@@ -25,7 +25,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "inotationcreator.h"
 #include "iinteractive.h"
 
 namespace mu::uicomponents {
@@ -38,7 +37,6 @@ class PartListModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, INotationCreator, notationCreator)
     INJECT(notation, framework::IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
@@ -58,12 +56,11 @@ public:
     Q_INVOKABLE void createNewPart();
     Q_INVOKABLE void removeSelectedParts();
     Q_INVOKABLE void openSelectedParts();
-    Q_INVOKABLE void apply();
 
     Q_INVOKABLE void selectPart(int partIndex);
     Q_INVOKABLE void removePart(int partIndex);
     Q_INVOKABLE void setPartTitle(int partIndex, const QString& title);
-    Q_INVOKABLE void setVoiceVisible(int partIndex, int voiceIndex, bool visible);
+    Q_INVOKABLE void validatePartTitle(int partIndex);
     Q_INVOKABLE void copyPart(int partIndex);
 
 signals:
@@ -71,34 +68,26 @@ signals:
     void partAdded(int index);
 
 private:
-    bool isMainNotation(INotationPtr notation) const;
-
-    QString formatVoicesTitle(INotationPtr notation) const;
-    QVariantList voicesVisibility(INotationPtr notation) const;
-
     void setTitle(INotationPtr notation, const QString& title);
 
-    bool isNotationIndexValid(int index) const;
+    bool isExcerptIndexValid(int index) const;
 
     bool userAgreesToRemoveParts(int partCount) const;
     void doRemovePart(int partIndex);
 
     IMasterNotationPtr masterNotation() const;
-    QList<int> selectedRows() const;
 
-    void insertNotation(int destinationIndex, INotationPtr notation);
+    void insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
     void notifyAboutNotationChanged(int index);
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleIsMain,
-        RoleVoicesVisibility,
-        RoleVoicesTitle
+        RoleIsCreated
     };
 
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
-    QList<INotationPtr> m_notations;
+    QList<IExcerptNotationPtr> m_excerpts;
     INotationPtr m_currentNotation;
 };
 }

@@ -32,9 +32,23 @@ static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Master Palette"),
+             QT_TRANSLATE_NOOP("action", "Master palette"),
              Checkable::Yes
              ),
+    UiAction("palette-search",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Palette Search")
+             ),
+    UiAction("time-signature-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Time Signature Properties…"),
+             QT_TRANSLATE_NOOP("action", "Time signature properties")
+             ),
+    UiAction("edit-drumset",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Edit Drumset…"),
+             QT_TRANSLATE_NOOP("action", "Edit drumset")
+             )
 };
 
 PaletteUiActions::PaletteUiActions(std::shared_ptr<PaletteActionsController> controller)

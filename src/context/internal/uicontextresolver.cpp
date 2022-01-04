@@ -21,7 +21,9 @@
  */
 #include "uicontextresolver.h"
 
+#include "diagnostics/diagnosticutils.h"
 #include "log.h"
+#include "config.h"
 
 using namespace mu::context;
 using namespace mu::ui;
@@ -29,7 +31,7 @@ using namespace mu::ui;
 static const mu::Uri HOME_PAGE_URI("musescore://home");
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
 
-static const QString NOTATION_NAVIGATION_SECTION("NotationView");
+static const QString NOTATION_NAVIGATION_PANEL("ScoreView");
 
 void UiContextResolver::init()
 {
@@ -66,19 +68,23 @@ void UiContextResolver::init()
 
 void UiContextResolver::notifyAboutContextChanged()
 {
-    TRACEFUNC;
     m_currentUiContextChanged.notify();
 }
 
 UiContext UiContextResolver::currentUiContext() const
 {
     TRACEFUNC;
-    ValCh<Uri> currentUri = interactive()->currentUri();
-    if (currentUri.val == HOME_PAGE_URI) {
+    Uri currentUri = interactive()->currentUri().val;
+
+#ifdef BUILD_DIAGNOSTICS
+    currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
+#endif
+
+    if (currentUri == HOME_PAGE_URI) {
         return context::UiCtxHomeOpened;
     }
 
-    if (currentUri.val == NOTATION_PAGE_URI) {
+    if (currentUri == NOTATION_PAGE_URI) {
         auto notation = globalContext()->currentNotation();
         if (!notation) {
             //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.
@@ -86,9 +92,11 @@ UiContext UiContextResolver::currentUiContext() const
             return context::UiCtxUnknown;
         }
 
-        ui::INavigationSection* activeSection = navigationController()->activeSection();
-        if (!activeSection || activeSection->name() == NOTATION_NAVIGATION_SECTION) {
-            return context::UiCtxNotationFocused;
+        INavigationPanel* activePanel = navigationController()->activePanel();
+        if (activePanel) {
+            if (activePanel->name() == NOTATION_NAVIGATION_PANEL) {
+                return context::UiCtxNotationFocused;
+            }
         }
 
         return context::UiCtxNotationOpened;
@@ -124,4 +132,59 @@ bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
 mu::async::Notification UiContextResolver::currentUiContextChanged() const
 {
     return m_currentUiContextChanged;
+}
+
+bool UiContextResolver::isShortcutContextAllowed(const std::string& scContext) const
+{
+    //! NOTE If (when) there are many different contexts here,
+    //! then the implementation of this method will need to be changed
+    //! so that it does not become spaghetti-code.
+    //! It would be nice if this context as part of the UI context,
+    //! for this we should complicate the implementation of the UI context,
+    //! probably make a tree, for example:
+    //! NotationOpened
+    //!     NotationFocused
+    //!         NotationStaffTab
+
+    static const std::string CTX_ANY("any");
+    static const std::string CTX_NOTATION_OPENED("notation-opened");
+    static const std::string CTX_NOTATION_FOCUSED("notation-focused");
+
+    //! NOTE special context for navigation shortcuts because the notation has its own navigation system
+    static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
+
+    static const std::string CTX_NOTATION_STAFF_STANDARD("notation-staff-standard");
+    static const std::string CTX_NOTATION_STAFF_TAB("notation-staff-tab");
+
+    if (CTX_NOTATION_OPENED == scContext) {
+        return matchWithCurrent(context::UiCtxNotationOpened);
+    } else if (CTX_NOTATION_FOCUSED == scContext) {
+        return matchWithCurrent(context::UiCtxNotationFocused);
+    } else if (CTX_NOT_NOTATION_FOCUSED == scContext) {
+        return !matchWithCurrent(context::UiCtxNotationFocused);
+    } else if (CTX_NOTATION_STAFF_STANDARD == scContext) {
+        if (!matchWithCurrent(context::UiCtxNotationFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+
+        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::STANDARD;
+    } else if (CTX_NOTATION_STAFF_TAB == scContext) {
+        if (matchWithCurrent(context::UiCtxNotationFocused)) {
+            return false;
+        }
+        auto notation = globalContext()->currentNotation();
+        if (!notation) {
+            return false;
+        }
+        return notation->interaction()->noteInput()->state().staffGroup == Ms::StaffGroup::TAB;
+    }
+
+    IF_ASSERT_FAILED(CTX_ANY == scContext) {
+        return true;
+    }
+    return true;
 }

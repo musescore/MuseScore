@@ -19,70 +19,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
-Item {
+Column {
     id: root
 
-    height: view.height
-
-    property string title: ""
+    property alias title: titleLabel.text
 
     property alias model: filterModel.sourceModel
+    readonly property alias count: view.count
 
     property alias filters: filterModel.filters
 
     property string selectedExtensionCode: ""
 
-    property int count: view.count
+    property var flickableItem: null
+    property int headerHeight: titleLabel.height + spacing
 
-    signal clicked(int index, var extension)
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "ExtensionsListView"
+        direction: NavigationPanel.Both
+        accessible.name: root.title
+    }
+
+    function focusOnFirst() {
+        view.itemAtIndex(0).requestActive()
+    }
+
+    signal clicked(int index, var extension, var navigationControl)
+    signal navigationActivated(var itemRect)
 
     SortFilterProxyModel {
         id: filterModel
     }
 
+    StyledTextLabel {
+        id: titleLabel
+        width: parent.width
+        font: ui.theme.tabBoldFont
+        horizontalAlignment: Text.AlignLeft
+    }
+
+    spacing: 24
+
     GridView {
         id: view
 
-        readonly property int sideMargin: 24
+        readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
 
         anchors.left: parent.left
-        anchors.leftMargin: -sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: -sideMargin
+        anchors.leftMargin: -spacingBetweenColumns / 2
+        anchors.rightMargin: -spacingBetweenColumns / 2
 
-        height: contentHeight
+        height: contentHeight - spacingBetweenRows
 
         model: filterModel
 
-        clip: true
+        // We don't want this GridView to be scrollable; it would conflict with the containing Flickable.
+        interactive: false
+        highlightFollowsCurrentItem: false // prevent automatic scrolling
 
-        cellHeight: 272
-        cellWidth: 650
+        readonly property real spacingBetweenColumns: 40
+        readonly property real spacingBetweenRows: 24
 
-        boundsBehavior: Flickable.StopAtBounds
+        readonly property real actualCellWidth: 656
+        readonly property real actualCellHeight: 224
 
-        header: Item {
-            height: titleLabel.height
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            StyledTextLabel {
-                id: titleLabel
-
-                anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.left: parent.left
-                anchors.leftMargin: view.sideMargin
-
-                text: root.title
-                font: ui.theme.tabBoldFont
-            }
-        }
+        cellWidth: actualCellWidth + spacingBetweenColumns
+        cellHeight: actualCellHeight + spacingBetweenRows
 
         delegate: Item {
             id: item
@@ -90,11 +99,18 @@ Item {
             height: view.cellHeight
             width: view.cellWidth
 
-            ExtensionItem {
-                anchors.centerIn: parent
+            function requestActive() {
+                _item.navigation.requestActive()
+            }
 
-                height: 224
-                width: 602
+            ExtensionItem {
+                id: _item
+
+                width: view.actualCellWidth
+                height: view.actualCellHeight
+
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 code: model.code
                 name: model.name
@@ -103,11 +119,18 @@ Item {
 
                 selected: selectedExtensionCode === model.code
 
+                navigation.panel: root.navigationPanel
+                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
+                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    var pos = mapToItem(root.flickableItem, 0, 0)
+                    var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
+                    root.navigationActivated(rect)
+                }
+
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
-                    root.clicked(index, model)
+                    root.clicked(index, model, navigation)
                 }
             }
         }

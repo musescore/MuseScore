@@ -64,7 +64,7 @@ WinMidiInPort::~WinMidiInPort()
 
 void WinMidiInPort::init()
 {
-    m_win = std::unique_ptr<Win>(new Win());
+    m_win = std::make_shared<Win>();
 
     m_devicesListener.startWithCallback([this]() {
         return devices();
@@ -149,7 +149,7 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return Ret(true);
+    return run();
 }
 
 void WinMidiInPort::disconnect()
@@ -160,12 +160,12 @@ void WinMidiInPort::disconnect()
 
     midiInClose(m_win->midiIn);
 
+    stop();
+
     m_win->midiIn = nullptr;
     m_win->deviceID = -1;
 
     m_deviceID.clear();
-
-    stop();
 }
 
 bool WinMidiInPort::isConnected() const
@@ -208,11 +208,6 @@ void WinMidiInPort::stop()
 
     midiInStop(m_win->midiIn);
     m_running = false;
-}
-
-bool WinMidiInPort::isRunning() const
-{
-    return m_running;
 }
 
 mu::async::Channel<tick_t, Event> WinMidiInPort::eventReceived() const

@@ -26,8 +26,7 @@
 #include <thread>
 #include <functional>
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class Invoker : public QObject
 {
     Q_OBJECT
@@ -53,7 +52,6 @@ private:
 
     static std::thread::id m_mainThreadId;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_INVOKER_H

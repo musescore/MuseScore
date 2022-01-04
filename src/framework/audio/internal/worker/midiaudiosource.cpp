@@ -37,48 +37,41 @@ using namespace mu::midi;
 
 static tick_t MINIMAL_REQUIRED_LOOKAHEAD = 480 * 4 * 10; // about 10 measures of 4/4 time signature
 
-MidiAudioSource::MidiAudioSource(const MidiData& midiData, async::Channel<AudioInputParams> inputParamsChanged)
-    : m_stream(midiData.stream), m_mapping(midiData.mapping)
+MidiAudioSource::MidiAudioSource(const TrackId trackId, const MidiData& midiData)
+    : m_trackId(trackId), m_stream(midiData.stream), m_mapping(midiData.mapping)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    inputParamsChanged.onReceive(this, [this](const AudioInputParams& params) {
-        MidiData newMidiData = std::get<MidiData>(params);
-
-        m_stream = newMidiData.stream;
-        m_mapping = newMidiData.mapping;
-
-        resolveSynth(newMidiData.mapping.synthName);
-        setupChannels();
-    });
-
-    resolveSynth(m_mapping.synthName);
-
     m_stream.backgroundStream.onReceive(this, [this](Events events, tick_t endTick) {
-        invalidateCaches(m_backgroundStreamEvents);
+        invalidateCaches(m_backgroundStreamEventsBuffer);
 
-        m_backgroundStreamEvents.endTick = std::move(endTick);
-        m_backgroundStreamEvents.push(std::move(events));
+        m_backgroundStreamEventsBuffer.endTick = std::move(endTick);
+        m_backgroundStreamEventsBuffer.push(std::move(events));
     });
 
     m_stream.mainStream.onReceive(this, [this](Events events, tick_t endTick) {
-        m_mainStreamEvents.endTick = std::move(endTick);
-        m_mainStreamEvents.push(std::move(events));
+        m_mainStreamEventsBuffer.endTick = std::move(endTick);
+        m_mainStreamEventsBuffer.push(std::move(events));
 
         m_hasActiveRequest = false;
     });
 
-    setupChannels();
     buildTempoMap();
 
     requestNextEvents(MINIMAL_REQUIRED_LOOKAHEAD);
+}
+
+MidiAudioSource::~MidiAudioSource()
+{
+    m_stream.backgroundStream.resetOnReceive(this);
+    m_stream.mainStream.resetOnReceive(this);
 }
 
 bool MidiAudioSource::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    if (!m_synth) {
         return false;
     }
 
@@ -95,7 +88,7 @@ void MidiAudioSource::setIsActive(const bool active)
 
     // invalidate cached events when we stop playing
     if (!active) {
-        invalidateCaches(m_mainStreamEvents);
+        invalidateCaches(m_mainStreamEventsBuffer);
     }
 
     m_synth->setIsActive(active);
@@ -104,6 +97,10 @@ void MidiAudioSource::setIsActive(const bool active)
 void MidiAudioSource::setupChannels()
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
 
     m_synth->setupMidiChannels(m_stream.controlEventsStream.val);
 }
@@ -124,19 +121,33 @@ void MidiAudioSource::requestNextEvents(const tick_t nextTicksNumber)
         return;
     }
 
-    tick_t maxAvailablePositionTick = m_mainStreamEvents.endTick;
-    tick_t newPositionTick = m_mainStreamEvents.currentTick + nextTicksNumber;
-    tick_t remainingTicks = maxAvailablePositionTick == 0 ? 0 : maxAvailablePositionTick - newPositionTick;
-
-    if (remainingTicks > MINIMAL_REQUIRED_LOOKAHEAD) {
+    if (m_mainStreamEventsBuffer.isEmpty()) {
+        sendRequestFromTick(m_mainStreamEventsBuffer.currentTick);
         return;
     }
 
-    tick_t requestFromTick = maxAvailablePositionTick;
-    tick_t requestUpToTick = maxAvailablePositionTick + std::min(m_stream.lastTick - maxAvailablePositionTick, MINIMAL_REQUIRED_LOOKAHEAD);
+    tick_t newPositionTick = m_mainStreamEventsBuffer.currentTick + nextTicksNumber;
 
-    m_stream.eventsRequest.send(requestFromTick, requestUpToTick);
+    if (newPositionTick > m_stream.lastTick) {
+        return;
+    }
 
+    tick_t remainingTicks = m_mainStreamEventsBuffer.endTick - newPositionTick;
+
+    if (remainingTicks < MINIMAL_REQUIRED_LOOKAHEAD) {
+        if (m_mainStreamEventsBuffer.endTick == m_stream.lastTick) {
+            return;
+        }
+
+        sendRequestFromTick(m_mainStreamEventsBuffer.endTick);
+    }
+}
+
+void MidiAudioSource::sendRequestFromTick(const tick_t from)
+{
+    tick_t to = std::min(m_stream.lastTick, from + MINIMAL_REQUIRED_LOOKAHEAD);
+
+    m_stream.eventsRequest.send(from, to);
     m_hasActiveRequest = true;
 }
 
@@ -146,7 +157,10 @@ void MidiAudioSource::findAndSendNextEvents(MidiAudioSource::EventsBuffer& event
         return;
     }
 
-    for (tick_t tick = eventsBuffer.currentTick; tick <= nextTicks; ++tick) {
+    tick_t from = eventsBuffer.currentTick;
+    tick_t to = eventsBuffer.currentTick + nextTicks;
+
+    for (tick_t tick = from; tick <= to; ++tick) {
         eventsBuffer.currentTick = tick;
 
         if (!eventsBuffer.hasEventsForTick(tick)) {
@@ -159,22 +173,21 @@ void MidiAudioSource::findAndSendNextEvents(MidiAudioSource::EventsBuffer& event
 
 void MidiAudioSource::handleBackgroundStream(const msecs_t nextMsecsNumber)
 {
-    tick_t nextTicksNumber = m_backgroundStreamEvents.currentTick + tickFromMsec(nextMsecsNumber);
+    tick_t nextTicksNumber = m_backgroundStreamEventsBuffer.currentTick + tickFromMsec(nextMsecsNumber);
 
-    findAndSendNextEvents(m_backgroundStreamEvents, nextTicksNumber);
+    findAndSendNextEvents(m_backgroundStreamEventsBuffer, nextTicksNumber);
 }
 
 void MidiAudioSource::handleMainStream(const msecs_t nextMsecsNumber)
 {
-    if (m_mainStreamEvents.endTick == m_stream.lastTick) {
+    if (m_mainStreamEventsBuffer.currentTick == m_stream.lastTick) {
         return;
     }
 
-    tick_t nextTicksNumber = m_mainStreamEvents.currentTick + tickFromMsec(nextMsecsNumber);
+    tick_t nextTicksNumber = tickFromMsec(nextMsecsNumber);
 
     requestNextEvents(nextTicksNumber);
-
-    findAndSendNextEvents(m_mainStreamEvents, nextTicksNumber);
+    findAndSendNextEvents(m_mainStreamEventsBuffer, nextTicksNumber);
 }
 
 void MidiAudioSource::handleNextMsecs(const msecs_t nextMsecsNumber)
@@ -192,11 +205,12 @@ void MidiAudioSource::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    m_sampleRate = sampleRate;
+
+    if (!m_synth) {
         return;
     }
 
-    m_sampleRate = sampleRate;
     m_synth->setSampleRate(sampleRate);
 }
 
@@ -204,7 +218,7 @@ unsigned int MidiAudioSource::audioChannelsCount() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    if (!m_synth) {
         return 0;
     }
 
@@ -222,17 +236,24 @@ async::Channel<unsigned int> MidiAudioSource::audioChannelsCountChanged() const
     return m_synth->audioChannelsCountChanged();
 }
 
-void MidiAudioSource::process(float* buffer, unsigned int sampleCount)
+samples_t MidiAudioSource::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
-        return;
+    if (!m_synth) {
+        return 0;
     }
 
-    m_synth->process(buffer, sampleCount);
+    samples_t processedSamplesCount = 0;
+    msecs_t nextMsecsNumber = samplesPerChannel * 1000 / m_sampleRate;
 
-    handleNextMsecs(sampleCount * 1000 / m_sampleRate);
+    if (hasAnythingToPlayback(nextMsecsNumber)) {
+        processedSamplesCount = m_synth->process(buffer, samplesPerChannel);
+    }
+
+    handleNextMsecs(nextMsecsNumber);
+
+    return processedSamplesCount;
 }
 
 bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
@@ -249,25 +270,47 @@ bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
     return true;
 }
 
-void MidiAudioSource::resolveSynth(const SynthName& synthName)
-{
-    if (m_synth && m_synth->name() == synthName) {
-        return;
-    }
-
-    m_synth = std::make_shared<FluidSynth>();
-    m_synth->init();
-    m_synth->addSoundFonts(soundFontsProvider()->soundFontPathsForSynth(synthName));
-}
-
 void MidiAudioSource::seek(const msecs_t newPositionMsecs)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    invalidateCaches(m_mainStreamEvents);
-    m_mainStreamEvents.currentTick = tickFromMsec(newPositionMsecs);
+    invalidateCaches(m_mainStreamEventsBuffer);
+    m_mainStreamEventsBuffer.currentTick = tickFromMsec(newPositionMsecs);
 
     requestNextEvents(MINIMAL_REQUIRED_LOOKAHEAD);
+}
+
+const AudioInputParams& MidiAudioSource::inputParams() const
+{
+    return m_params;
+}
+
+void MidiAudioSource::applyInputParams(const AudioInputParams& requiredParams)
+{
+    if (m_params.isValid() && m_params == requiredParams) {
+        return;
+    }
+
+    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams);
+
+    if (!m_synth) {
+        m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
+    }
+
+    m_synth->paramsChanged().onReceive(this, [this](const AudioInputParams& params) {
+        m_paramsChanges.send(params);
+    });
+
+    m_synth->setSampleRate(m_sampleRate);
+    setupChannels();
+
+    m_params = m_synth->params();
+    m_paramsChanges.send(m_params);
+}
+
+async::Channel<AudioInputParams> MidiAudioSource::inputParamsChanged() const
+{
+    return m_paramsChanges;
 }
 
 void MidiAudioSource::buildTempoMap()
@@ -311,4 +354,15 @@ tick_t MidiAudioSource::tickFromMsec(const msecs_t msec) const
     msecs_t delta = msec - t.startMsec;
     tick_t ticks = static_cast<tick_t>(delta / t.onetickMsec);
     return t.startTicks + ticks;
+}
+
+bool MidiAudioSource::hasAnythingToPlayback(const msecs_t nextMsecsNumber) const
+{
+    if (isActive()) {
+        return true;
+    }
+
+    tick_t nextTicksNumber = tickFromMsec(nextMsecsNumber);
+
+    return m_backgroundStreamEventsBuffer.hasEventsForNextTicks(nextTicksNumber);
 }

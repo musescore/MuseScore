@@ -28,8 +28,10 @@
 #include "internal/globalconfiguration.h"
 
 #include "log.h"
+#include "logremover.h"
 #include "thirdparty/haw_logger/logger/logdefdest.h"
 #include "version.h"
+#include "config.h"
 
 #include "internal/application.h"
 #include "internal/interactive.h"
@@ -42,7 +44,10 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
+#include "config.h"
+
 using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
 
@@ -79,6 +84,10 @@ void GlobalModule::onInit(const IApplication::RunMode&)
 
     io::path logPath = s_globalConf->userAppDataPath() + "/logs";
     fileSystem()->makePath(logPath);
+
+    //! Remove old logs
+    LogRemover::removeLogs(logPath, 7, "MuseScore_yyMMdd_HHmmss.log");
+
     //! File, this creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
     io::path logFilePath = logPath + "/MuseScore_"
                            + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
@@ -90,11 +99,13 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     LOGI() << "log path: " << logFile->filePath();
     logger->addDest(logFile);
 
-#ifndef NDEBUG
+#ifdef LOGGER_DEBUGLEVEL_ENABLED
     logger->setLevel(haw::logger::Debug);
+#else
+    logger->setLevel(haw::logger::Normal);
 #endif
 
-    LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << " ===";
+    LOGI() << "=== Started MuseScore " << framework::Version::fullVersion() << ", build number " << BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace haw::profiler;

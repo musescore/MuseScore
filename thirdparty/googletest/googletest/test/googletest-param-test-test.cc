@@ -37,6 +37,7 @@
 # include <algorithm>
 # include <iostream>
 # include <list>
+# include <set>
 # include <sstream>
 # include <string>
 # include <vector>
@@ -489,16 +490,17 @@ TEST(CombineTest, CombineWithMaxNumberOfParameters) {
 class NonDefaultConstructAssignString {
  public:
   NonDefaultConstructAssignString(const std::string& s) : str_(s) {}
+  NonDefaultConstructAssignString() = delete;
+  NonDefaultConstructAssignString(const NonDefaultConstructAssignString&) =
+      default;
+  NonDefaultConstructAssignString& operator=(
+      const NonDefaultConstructAssignString&) = delete;
+  ~NonDefaultConstructAssignString() = default;
 
   const std::string& str() const { return str_; }
 
  private:
   std::string str_;
-
-  // Not default constructible
-  NonDefaultConstructAssignString();
-  // Not assignable
-  void operator=(const NonDefaultConstructAssignString&);
 };
 
 TEST(CombineTest, NonDefaultConstructAssign) {
@@ -802,7 +804,7 @@ TEST_P(PREFIX_WITH_MACRO(NamingTest), PREFIX_WITH_FOO(SomeTestName)) {
      ::testing::UnitTest::GetInstance()->current_test_info();
 
   EXPECT_STREQ("FortyTwo/MacroNamingTest", test_info->test_suite_name());
-  EXPECT_STREQ("FooSomeTestName", test_info->name());
+  EXPECT_STREQ("FooSomeTestName/0", test_info->name());
 }
 
 INSTANTIATE_TEST_SUITE_P(FortyTwo, MacroNamingTest, Values(42));
@@ -817,6 +819,36 @@ TEST_F(PREFIX_WITH_MACRO(NamingTestNonParametrized),
 
   EXPECT_STREQ("MacroNamingTestNonParametrized", test_info->test_suite_name());
   EXPECT_STREQ("FooSomeTestName", test_info->name());
+}
+
+TEST(MacroNameing, LookupNames) {
+  std::set<std::string> know_suite_names, know_test_names;
+
+  auto ins = testing::UnitTest::GetInstance();
+  int ts = 0;
+  while (const testing::TestSuite* suite = ins->GetTestSuite(ts++)) {
+    know_suite_names.insert(suite->name());
+
+    int ti = 0;
+    while (const testing::TestInfo* info = suite->GetTestInfo(ti++)) {
+      know_test_names.insert(std::string(suite->name()) + "." + info->name());
+    }
+  }
+
+  // Check that the expected form of the test suit name actually exists.
+  EXPECT_NE(  //
+      know_suite_names.find("FortyTwo/MacroNamingTest"),
+      know_suite_names.end());
+  EXPECT_NE(
+      know_suite_names.find("MacroNamingTestNonParametrized"),
+      know_suite_names.end());
+  // Check that the expected form of the test name actually exists.
+  EXPECT_NE(  //
+      know_test_names.find("FortyTwo/MacroNamingTest.FooSomeTestName/0"),
+      know_test_names.end());
+  EXPECT_NE(
+      know_test_names.find("MacroNamingTestNonParametrized.FooSomeTestName"),
+      know_test_names.end());
 }
 
 // Tests that user supplied custom parameter names are working correctly.
@@ -1036,6 +1068,38 @@ class MyEnumTest : public testing::TestWithParam<MyEnums> {};
 TEST_P(MyEnumTest, ChecksParamMoreThanZero) { EXPECT_GE(10, GetParam()); }
 INSTANTIATE_TEST_SUITE_P(MyEnumTests, MyEnumTest,
                          ::testing::Values(ENUM1, ENUM2, 0));
+
+namespace works_here {
+// Never used not instantiated, this should work.
+class NotUsedTest : public testing::TestWithParam<int> {};
+
+///////
+// Never used not instantiated, this should work.
+template <typename T>
+class NotUsedTypeTest : public testing::Test {};
+TYPED_TEST_SUITE_P(NotUsedTypeTest);
+
+// Used but not instantiated, this would fail. but...
+class NotInstantiatedTest : public testing::TestWithParam<int> {};
+// ... we mark is as allowed.
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(NotInstantiatedTest);
+
+TEST_P(NotInstantiatedTest, Used) { }
+
+using OtherName = NotInstantiatedTest;
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(OtherName);
+TEST_P(OtherName, Used) { }
+
+// Used but not instantiated, this would fail. but...
+template <typename T>
+class NotInstantiatedTypeTest : public testing::Test {};
+TYPED_TEST_SUITE_P(NotInstantiatedTypeTest);
+// ... we mark is as allowed.
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(NotInstantiatedTypeTest);
+
+TYPED_TEST_P(NotInstantiatedTypeTest, Used) { }
+REGISTER_TYPED_TEST_SUITE_P(NotInstantiatedTypeTest, Used);
+}  // namespace works_here
 
 int main(int argc, char **argv) {
   // Used in TestGenerationTest test suite.

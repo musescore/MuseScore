@@ -43,6 +43,7 @@ public:
     void resume() override;
     void seek(const msecs_t msecs) override;
 
+    void setTimeDuration(const msecs_t duration) override;
     Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetTimeLoop() override;
 
@@ -55,7 +56,8 @@ public:
 private:
 
     ValCh<PlaybackStatus> m_status;
-    msecs_t m_time = 0;
+    msecs_t m_currentTime = 0;
+    msecs_t m_timeDuration = 0;
     msecs_t m_timeLoopStart = 0;
     msecs_t m_timeLoopEnd = 0;
 

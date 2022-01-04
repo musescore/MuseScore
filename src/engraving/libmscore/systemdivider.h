@@ -41,11 +41,10 @@ private:
     Type _dividerType;
 
 public:
-    SystemDivider(Score* s = 0);
+    SystemDivider(System* parent = 0);
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
-    ElementType type() const override { return ElementType::SYSTEM_DIVIDER; }
 
     Type dividerType() const { return _dividerType; }
     void setDividerType(Type v);
@@ -58,7 +57,7 @@ public:
     void layout() override;
 
     Segment* segment() const override { return nullptr; }
-    System* system() const { return (System*)parent(); }
+    System* system() const { return (System*)explicitParent(); }
 };
 } // namespace Ms
 

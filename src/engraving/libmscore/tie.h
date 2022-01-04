@@ -34,26 +34,28 @@ namespace Ms {
 class TieSegment final : public SlurTieSegment
 {
     mu::PointF autoAdjustOffset;
+    qreal shoulderHeightMin = 0.4;
+    qreal shoulderHeightMax = 1.3;
 
     void setAutoAdjust(const mu::PointF& offset);
     void setAutoAdjust(qreal x, qreal y) { setAutoAdjust(mu::PointF(x, y)); }
     mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
-    void changeAnchor(EditData&, Element*) override;
+    void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
-    TieSegment(Score* s)
-        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
-    TieSegment(const TieSegment& s)
-        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
+    TieSegment(System* parent);
+    TieSegment(const TieSegment& s);
 
     TieSegment* clone() const override { return new TieSegment(*this); }
-    ElementType type() const override { return ElementType::TIE_SEGMENT; }
+
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustY(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustX();
+    void finalizeSegment();
 
     bool isEdited() const;
     void editDrag(EditData&) override;
@@ -74,16 +76,20 @@ class Tie final : public SlurTie
     static Note* editStartNote;
     static Note* editEndNote;
 
+private:
+    bool _isInside{ false };
+
 public:
-    Tie(Score* = 0);
+    Tie(EngravingItem* parent = 0);
 
     Tie* clone() const override { return new Tie(*this); }
-    ElementType type() const override { return ElementType::TIE; }
 
     void setStartNote(Note* note);
-    void setEndNote(Note* note) { setEndElement((Element*)note); }
+    void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
     Note* startNote() const;
     Note* endNote() const;
+
+    bool isInside() const { return _isInside; }
 
     void calculateDirection();
     void write(XmlWriter& xml) const override;
@@ -99,7 +105,7 @@ public:
     TieSegment* segmentAt(int n) { return toTieSegment(Spanner::segmentAt(n)); }
     const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment() override { return new TieSegment(score()); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
 };
 }     // namespace Ms
 #endif

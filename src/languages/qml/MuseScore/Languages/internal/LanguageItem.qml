@@ -25,7 +25,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Languages 1.0
 
-Rectangle {
+ListItemBlank {
     id: root
 
     property string title: ""
@@ -34,17 +34,9 @@ Rectangle {
     property real headerWidth: width / 2
     property real sideMargin: 0.0
 
-    property alias navigation: navCtrl
-
-    signal clicked()
-    signal navigationActive()
-
     height: 48
 
-    color: ui.theme.backgroundPrimaryColor
-
-    border.width: navCtrl.active ? 2 : 0
-    border.color: ui.theme.focusColor
+    navigation.accessible.name: root.title + " " + root.statusTitle
 
     function ensureActiveFocus() {
         if (!root.activeFocus) {
@@ -52,31 +44,16 @@ Rectangle {
         }
     }
 
-    NavigationControl {
-        id: navCtrl
-        name: root.title
-        accessible.role: MUAccessible.ListItem
-        accessible.name: root.title + " " + root.statusTitle
-
-        onActiveChanged: {
-            if (navCtrl.active) {
-                root.navigationActive()
-            }
-        }
-
-        onTriggered: root.clicked()
-    }
-
     Row {
         anchors.left: parent.left
-        anchors.leftMargin: sideMargin
+        anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
-        anchors.rightMargin: sideMargin
+        anchors.rightMargin: root.sideMargin
 
         anchors.verticalCenter: parent.verticalCenter
 
         Row {
-            width: headerWidth
+            width: root.headerWidth
 
             spacing: 12
 
@@ -85,27 +62,18 @@ Rectangle {
             }
 
             StyledTextLabel {
-                text: title
+                text: root.title
                 font: ui.theme.largeBodyFont
                 horizontalAlignment: Text.AlignLeft
             }
         }
 
         StyledTextLabel {
-            width: headerWidth
+            width: root.headerWidth
 
-            text: statusTitle
+            text: root.statusTitle
             font: ui.theme.largeBodyFont
             horizontalAlignment: Text.AlignLeft
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            root.ensureActiveFocus()
-            root.clicked()
         }
     }
 }

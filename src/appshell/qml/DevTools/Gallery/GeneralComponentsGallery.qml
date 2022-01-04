@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
@@ -31,6 +31,13 @@ Rectangle {
     id: root
 
     color: ui.theme.backgroundSecondaryColor
+
+    NavigationSection {
+        id: navSec
+        name: "GeneralComponentsGallery"
+        enabled: root.visible
+        order: 4
+    }
 
     Flickable {
         id: flickableWrapper
@@ -51,11 +58,12 @@ Rectangle {
                 width: parent.width
 
                 model: [
-                    { textRole: "StyledComboBox", componentRole: comboboxSample },
+                    { textRole: "Dropdown", componentRole: dropdownSample },
                     { textRole: "StyledPopup", componentRole: popupSample },
                     { textRole: "StyledPopupView", componentRole: styledPopupViewComponent },
                     { textRole: "StyledMenu", componentRole: styledMenuComponent },
                     { textRole: "CheckBox", componentRole: checkBoxSample },
+                    { textRole: "VisibilityBox", componentRole: visibilityBoxSample },
                     { textRole: "ColorPicker", componentRole: colorPickerSample },
                     { textRole: "ExpandableBlank", componentRole: expandableBlankSample },
                     { textRole: "FlatButton", componentRole: flatButtonSample },
@@ -69,7 +77,7 @@ Rectangle {
                     { textRole: "SearchField", componentRole: searchFieldSample },
                     { textRole: "FilePicker", componentRole: filePickerSample },
                     { textRole: "TabPanel", componentRole: tabPanelSample },
-                    { textRole: "GradientTabButton", componentRole: gradientTabButtonsSample },
+                    { textRole: "PageTabButton", componentRole: pageTabButtonsSample },
                     { textRole: "GridView", componentRole: gridViewVertical },
                     { textRole: "StyledSlider", componentRole: slidersSample },
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
@@ -99,35 +107,57 @@ Rectangle {
     }
 
     Component {
-        id: comboboxSample
+        id: dropdownSample
 
-        StyledComboBox {
+        Row {
+            spacing: 16
 
-            property var currValue
+            NavigationPanel {
+                id: dropdownNav
+                name: "Dropdowns"
+                section: navSec
+                order: 1
+            }
 
-            width: 400
+            Dropdown {
+                navigation.name: "Dropdown 1"
+                navigation.panel: dropdownNav
+                navigation.order: 1
+                currentIndex: 0
+                model: [
+                    { text: "1 Option 1", value: 1 },
+                    { text: "2 Option 2", value: 2 },
+                    { text: "3 Option 3", value: 3 },
+                    { text: "4 Option 4", value: 4 },
+                    { text: "5 Option 5", value: 5 },
+                    { text: "6 Option 6", value: 6 },
+                    { text: "7 Option 7", value: 7 },
+                    { text: "8 Option 8", value: 8 },
+                    { text: "9 Option 9", value: 9 },
+                    { text: "10 Option 10", value: 10 },
+                    { text: "11 Option 11", value: 11 }
+                ]
+            }
 
-            textRoleName: "text"
-            valueRoleName: "value"
-
-            model: [
-                { text: "Option 1", value: 1 },
-                { text: "Option 2", value: 2 },
-                { text: "Option 3", value: 3 },
-                { text: "Option 4", value: 4 },
-                { text: "Option 5", value: 5 },
-                { text: "Option 6", value: 6 },
-                { text: "Option 7", value: 7 },
-                { text: "Option 8", value: 8 },
-                { text: "Option 9", value: 9 },
-                { text: "Option 10", value: 10 },
-                { text: "Option 11", value: 11 }
-            ]
-
-            currentIndex: indexOfValue(currValue)
-
-            onValueChanged: {
-                currValue = value
+            Dropdown {
+                navigation.name: "Dropdown 2"
+                navigation.panel: dropdownNav
+                navigation.order: 2
+                currentIndex: 10
+                popupWidth: 200
+                model: [
+                    { text: "Option 1", value: 1 },
+                    { text: "Option 2", value: 2 },
+                    { text: "Option 3", value: 3 },
+                    { text: "Option 4", value: 4 },
+                    { text: "Option 5", value: 5 },
+                    { text: "Option 6", value: 6 },
+                    { text: "Option 7", value: 7 },
+                    { text: "Option 8", value: 8 },
+                    { text: "Option 9", value: 9 },
+                    { text: "Option 10", value: 10 },
+                    { text: "Option 11", value: 11 }
+                ]
             }
         }
     }
@@ -258,23 +288,23 @@ Rectangle {
 
                 onClicked: {
                     var _subitems = [
-                                {code: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
-                                {code: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
-                                        {code: "4", title: "first action", enabled: true, selectable: true},
-                                        {code: "5", title: "second action", enabled: true, selectable: true, selected: true},
-                                        {code: "6", title: "third action", enabled: true, selectable: true},
+                                {id: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
+                                {id: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
+                                        {id: "4", title: "first action", enabled: true, selectable: true},
+                                        {id: "5", title: "second action", enabled: true, selectable: true, selected: true},
+                                        {id: "6", title: "third action", enabled: true, selectable: true},
                                         {},
-                                        {code: "7", title: "clear"}
+                                        {id: "7", title: "clear"}
                                     ]}
                             ]
 
                     var items = [
-                                {code: "0", icon: IconCode.PAGE, title: "enabled action", enabled: true},
-                                {code: "1", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
+                                {id: "00", icon: IconCode.PAGE, title: "enabled action", enabled: true},
+                                {id: "01", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
                                 {},
-                                {code: "5", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
-                                {code: "6", icon: IconCode.PAGE, title: "disabled action", enabled: false},
-                                {code: "7", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
+                                {id: "02", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
+                                {id: "03", icon: IconCode.PAGE, title: "disabled action", enabled: false},
+                                {id: "04", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
                             ]
 
                     menuLoader.toggleOpened(items)
@@ -282,8 +312,9 @@ Rectangle {
 
                 StyledMenuLoader {
                     id: menuLoader
-                    onHandleAction: {
-                        console.log("selected " + actionCode + " index " + actionIndex)
+
+                    onHandleMenuItem: {
+                        console.log("selected " + itemId)
                     }
                 }
             }
@@ -299,6 +330,24 @@ Rectangle {
             text: "Option"
             onClicked: {
                 checked = !checked
+            }
+        }
+    }
+
+    Component {
+        id: visibilityBoxSample
+
+        Column {
+            spacing: 8
+
+            width: 200
+
+            VisibilityBox {
+                text: "Visibility Box"
+
+                onVisibleToggled: {
+                    isVisible = !isVisible
+                }
             }
         }
     }
@@ -345,20 +394,16 @@ Rectangle {
 
         Column {
             spacing: 8
-
             width: 200
 
             FlatButton {
                 icon: IconCode.SAVE
-
                 text: "Text with icon"
             }
 
             FlatButton {
                 icon: IconCode.SAVE
-
                 text: "Text with icon"
-
                 orientation: Qt.Horizontal
             }
 
@@ -372,20 +417,15 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.SAVE
-
-                accentButton: true
-
                 text: "Accent button"
+                accentButton: true
             }
 
             FlatButton {
                 icon: IconCode.SAVE
-
-                normalStateColor: "transparent"
-
-                text: "Transparent button"
+                text: "Flat button"
+                transparent: true
             }
-
         }
     }
 
@@ -431,12 +471,12 @@ Rectangle {
             RadioButtonGroup {
                 id: iconButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
                 model: [
-                    { iconRole: IconCode.AUTO, valueRole: 0 },
+                    { iconRole: IconCode.SETTINGS_COG, valueRole: 0 },
                     { iconRole: IconCode.ARROW_DOWN, valueRole: 1 },
                     { iconRole: IconCode.ARROW_UP, valueRole: 2 }
                 ]
@@ -444,14 +484,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: iconButtonList.radioButtonGroup
 
-                    checked: iconButtonList.currentValue === modelData["valueRole"]
+                    iconCode: modelData["iconRole"]
 
+                    checked: iconButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         iconButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -459,7 +496,7 @@ Rectangle {
             RadioButtonGroup {
                 id: textButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
@@ -472,14 +509,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: textButtonList.radioButtonGroup
 
-                    checked: textButtonList.currentValue === modelData["valueRole"]
+                    text: modelData["textRole"]
 
+                    checked: textButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         textButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
                     }
                 }
             }
@@ -515,7 +549,20 @@ Rectangle {
             width: 200
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
+                currentValue: 0
+
+                maxValue: 999
+                minValue: 0
+                step: 0.5
+
+                onValueEdited: {
+                    currentValue = newValue
+                }
+            }
+
+            IncrementalPropertyControl {
+                icon: IconCode.AUDIO
+                iconMode: IncrementalPropertyControl.Right
 
                 currentValue: 0
 
@@ -530,22 +577,6 @@ Rectangle {
 
             IncrementalPropertyControl {
                 icon: IconCode.AUDIO
-                iconMode: iconModeEnum.right
-
-                currentValue: 0
-
-                maxValue: 999
-                minValue: 0
-                step: 0.5
-
-                onValueEdited: {
-                    currentValue = newValue
-                }
-            }
-
-            IncrementalPropertyControl {
-                icon: IconCode.AUDIO
-                iconMode: iconModeEnum.left
 
                 currentValue: 0
 
@@ -718,13 +749,13 @@ Rectangle {
     }
 
     Component {
-        id: gradientTabButtonsSample
+        id: pageTabButtonsSample
 
         Row {
             spacing: 30
 
             Column {
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 1"
 
                     orientation: Qt.Horizontal
@@ -738,7 +769,7 @@ Rectangle {
                     checked: true
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 2"
 
                     width: 200
@@ -746,7 +777,7 @@ Rectangle {
                     orientation: Qt.Horizontal
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 3"
 
                     width: 200
@@ -756,7 +787,7 @@ Rectangle {
             }
 
             Column {
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 1"
 
                     width: 200
@@ -768,13 +799,13 @@ Rectangle {
                     checked: true
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 2"
 
                     width: 200
                 }
 
-                GradientTabButton {
+                PageTabButton {
                     title: "Tab 3"
 
                     width: 200

@@ -44,6 +44,7 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
 
 public:
     void init();
+    void refreshLanguages();
 
     ValCh<LanguagesHash> languages() const override;
     RetCh<LanguageProgress> install(const QString& languageCode) override;

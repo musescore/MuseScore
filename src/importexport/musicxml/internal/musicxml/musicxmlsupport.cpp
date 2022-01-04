@@ -29,7 +29,6 @@
 #include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
-#include "libmscore/symid.h"
 
 #include "musicxmlsupport.h"
 
@@ -279,6 +278,32 @@ void domNotImplemented(const QDomElement& e)
 }
 
 //---------------------------------------------------------
+//   xmlReaderLocation
+//---------------------------------------------------------
+
+QString xmlReaderLocation(const QXmlStreamReader& e)
+{
+    return QObject::tr("line %1 column %2").arg(e.lineNumber()).arg(e.columnNumber());
+}
+
+//---------------------------------------------------------
+//   checkAtEndElement
+//---------------------------------------------------------
+
+QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
+{
+    if (e.isEndElement() && e.name() == expName) {
+        return "";
+    }
+
+    QString res = QObject::tr("expected token type and name 'EndElement %1', actual '%2 %3'")
+                  .arg(expName)
+                  .arg(e.tokenString())
+                  .arg(e.name().toString());
+    return res;
+}
+
+//---------------------------------------------------------
 //   stringToInt
 //---------------------------------------------------------
 
@@ -320,7 +345,7 @@ Fraction MxmlSupport::durationAsFraction(const int divisions, const QDomElement 
         f = Fraction(val, 4 * divisions);     // note divisions = ticks / quarter note
         f.reduce();
     } else {
-        qDebug() << "durationAsFraction tagname error" << f.print();
+        qDebug() << "durationAsFraction tagname error" << f.toString();
     }
     return f;
 }
@@ -768,7 +793,7 @@ AccidentalType microtonalGuess(double val)
     } else if (isAppr(val, 2, eps)) {
         return AccidentalType::SHARP2;
     } else {
-        qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);            // TODO
+        qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
     }
     // default
     return AccidentalType::NONE;
@@ -784,18 +809,18 @@ bool isLaissezVibrer(const SymId id)
 }
 
 //---------------------------------------------------------
-//   hasLaissezVibrer
+//   findLaissezVibrer
 //---------------------------------------------------------
 
 // TODO: there should be a lambda hiding somewhere ...
 
-bool hasLaissezVibrer(const Chord* const chord)
+const Articulation* findLaissezVibrer(const Chord* const chord)
 {
     for (const Articulation* a : chord->articulations()) {
         if (isLaissezVibrer(a->symId())) {
-            return true;
+            return a;
         }
     }
-    return false;
+    return nullptr;
 }
 }

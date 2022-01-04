@@ -26,6 +26,14 @@
 using namespace mu::shortcuts;
 using namespace mu::actions;
 
+void ShortcutsController::init()
+{
+    interactiveProvider()->currentUri().ch.onReceive(this, [this](const Uri&) {
+        //! NOTE: enable process shortcuts only for non-widget objects
+        shortcutsRegister()->setActive(!interactiveProvider()->topWindowIsWidget());
+    });
+}
+
 void ShortcutsController::activate(const std::string& sequence)
 {
     LOGD() << sequence;
@@ -35,7 +43,13 @@ void ShortcutsController::activate(const std::string& sequence)
         return;
     }
 
-    for (const Shortcut& sc: shortcuts) {
+    for (const Shortcut& sc : shortcuts) {
+        //! NOTE Check if the shortcut itself is allowed
+        if (!uiContextResolver()->isShortcutContextAllowed(sc.context)) {
+            continue;
+        }
+
+        //! NOTE Check if the action is allowed
         ui::UiActionState st = aregister()->actionState(sc.action);
         if (!st.enabled) {
             continue;
@@ -43,4 +57,9 @@ void ShortcutsController::activate(const std::string& sequence)
 
         dispatcher()->dispatch(sc.action);
     }
+}
+
+bool ShortcutsController::isRegistered(const std::string& sequence) const
+{
+    return shortcutsRegister()->isRegistered(sequence);
 }

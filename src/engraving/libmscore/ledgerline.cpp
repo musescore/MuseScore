@@ -21,12 +21,14 @@
  */
 
 #include "ledgerline.h"
+
+#include "rw/xml.h"
+
 #include "chord.h"
 #include "measure.h"
 #include "staff.h"
 #include "system.h"
 #include "score.h"
-#include "xml.h"
 
 using namespace mu;
 
@@ -36,12 +38,16 @@ namespace Ms {
 //---------------------------------------------------------
 
 LedgerLine::LedgerLine(Score* s)
-    : Element(s)
+    : EngravingItem(ElementType::LEDGER_LINE, s)
 {
     setSelectable(false);
     _width      = 0.;
     _len        = 0.;
     _next       = 0;
+}
+
+LedgerLine::~LedgerLine()
+{
 }
 
 //---------------------------------------------------------
@@ -73,7 +79,7 @@ qreal LedgerLine::measureXPos() const
 
 void LedgerLine::layout()
 {
-    setLineWidth(score()->styleP(Sid::ledgerLineWidth) * chord()->mag());
+    setLineWidth(score()->styleMM(Sid::ledgerLineWidth) * chord()->mag());
     if (staff()) {
         setColor(staff()->staffType(tick())->color());
     }
@@ -158,12 +164,12 @@ bool LedgerLine::readProperties(XmlReader& e)
 //   scanElements
 //---------------------------------------------------------
 
-void LedgerLine::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void LedgerLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Staff* st = chord()->staff();
     if (st && !st->showLedgerLines(tick())) {
         return;
     }
-    Element::scanElements(data, func, all);
+    EngravingItem::scanElements(data, func, all);
 }
 }

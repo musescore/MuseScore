@@ -22,7 +22,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/mscore.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/undo.h"

@@ -41,6 +41,7 @@ public:
     void pause() override;
     void resume() override;
 
+    void setDuration(const msecs_t duration) override;
     Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop() override;
 

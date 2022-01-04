@@ -21,13 +21,13 @@
  */
 #include "braillemodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
+#include "project/inotationwritersregister.h"
 
-#include "notation/inotationwritersregister.h"
+#include "log.h"
 
 using namespace mu::iex::braille;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string BrailleModule::moduleName() const
 {

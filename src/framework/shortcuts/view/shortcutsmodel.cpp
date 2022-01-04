@@ -46,15 +46,12 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     }
 
     Shortcut shortcut = m_shortcuts[index.row()];
-    QString sequence = QString::fromStdString(shortcut.sequence);
-    const UiAction& action = this->action(shortcut.action);
-    QString title = action.title;
 
     switch (role) {
-    case RoleTitle: return title;
-    case RoleIcon: return static_cast<int>(action.iconCode);
-    case RoleSequence: return sequence;
-    case RoleSearchKey: return title + sequence;
+    case RoleTitle: return this->action(shortcut.action).title;
+    case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
+    case RoleSequence: return QString::fromStdString(shortcut.sequencesAsString());
+    case RoleSearchKey: return this->action(shortcut.action).title + QString::fromStdString(shortcut.sequencesAsString());
     }
 
     return QVariant();
@@ -134,15 +131,20 @@ QItemSelection ShortcutsModel::selection() const
     return m_selection;
 }
 
-QString ShortcutsModel::currentSequence() const
+QVariant ShortcutsModel::currentShortcut() const
 {
     QModelIndex index = currentShortcutIndex();
-
-    if (index.isValid()) {
-        return QString::fromStdString(m_shortcuts[index.row()].sequence);
+    if (!index.isValid()) {
+        return QVariant();
     }
 
-    return QString();
+    const Shortcut& sc = m_shortcuts.at(index.row());
+
+    QVariantMap obj;
+    obj["title"] = actionTitle(sc.action);
+    obj["sequence"] = QString::fromStdString(sc.sequencesAsString());
+    obj["context"] = QString::fromStdString(sc.context);
+    return obj;
 }
 
 QModelIndex ShortcutsModel::currentShortcutIndex() const
@@ -167,7 +169,7 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
 void ShortcutsModel::importShortcutsFromFile()
 {
     io::path path = interactive()->selectOpeningFile(
-        qtrc("shortcuts", "Import Shortcuts"),
+        qtrc("shortcuts", "Import shortcuts"),
         globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
@@ -179,7 +181,7 @@ void ShortcutsModel::importShortcutsFromFile()
 void ShortcutsModel::exportShortcutsToFile()
 {
     io::path path = interactive()->selectSavingFile(
-        qtrc("shortcuts", "Export Shortcuts"),
+        qtrc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
         shorcutsFileFilter());
 
@@ -201,7 +203,7 @@ void ShortcutsModel::applySequenceToCurrentShortcut(const QString& newSequence)
     }
 
     int row = index.row();
-    m_shortcuts[row].sequence = newSequence.toStdString();
+    m_shortcuts[row].sequences = Shortcut::sequencesFromString(newSequence.toStdString());
 
     notifyAboutShortcutChanged(index);
 }
@@ -210,7 +212,7 @@ void ShortcutsModel::clearSelectedShortcuts()
 {
     for (const QModelIndex& index : m_selection.indexes()) {
         Shortcut& shortcut = m_shortcuts[index.row()];
-        shortcut.sequence.clear();
+        shortcut.sequences.clear();
         shortcut.standardKey = QKeySequence::StandardKey::UnknownKey;
 
         notifyAboutShortcutChanged(index);
@@ -239,7 +241,8 @@ QVariantList ShortcutsModel::shortcuts() const
     for (const Shortcut& shortcut: m_shortcuts) {
         QVariantMap obj;
         obj["title"] = actionTitle(shortcut.action);
-        obj["sequence"] = QString::fromStdString(shortcut.sequence);
+        obj["sequence"] = QString::fromStdString(shortcut.sequencesAsString());
+        obj["context"] = QString::fromStdString(shortcut.context);
 
         result << obj;
     }

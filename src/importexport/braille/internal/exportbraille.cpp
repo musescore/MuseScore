@@ -21,8 +21,11 @@
  */
 
 #include <QDebug>
+#include <QRegularExpression>
 
-#include "libmscore/score.h"
+#include "engraving/style/style.h"
+
+#include "libmscore/masterscore.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
 #include "libmscore/sig.h"
@@ -32,7 +35,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
-#include "libmscore/style.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/dynamic.h"
@@ -49,13 +51,12 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/symid.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/utils.h"
 #include "libmscore/articulation.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/glissando.h"
 #include "libmscore/navigate.h"
 #include "libmscore/spanner.h"
@@ -325,7 +326,6 @@ namespace Ms {
 //https://www.teachingvisuallyimpaired.com/uploads/1/4/1/2/14122361/ueb_braille_chart.pdf
 class TextToUEBBraille
 {
-    const int MAX_CHARS_PER_LINE = 40;
     const QString ASCII_PREFIX_CAPITAL_LETTER = QString(",");
     const QString ASCII_PREFIX_CAPITAL_WORD = QString(",,");
     const QString ASCII_PREFIX_NUMBER = QString("#");
@@ -501,7 +501,7 @@ class ExportBraille
     QString brailleOctave(int octave);
     QString brailleChord(Chord* chord);
     QString brailleChordRootNote(Chord* chord, Note* rootNote);
-    QString brailleNote(QString pitchName, TDuration::DurationType durationType, int dots);
+    QString brailleNote(QString pitchName, DurationType durationType, int dots);
     QString brailleChordInterval(Note* rootNote, QList<Note*>* notes, Note* note);
     QString brailleGraceNoteMarking(Chord* chord);
     QString brailleAccidentalType(AccidentalType accidental);
@@ -592,7 +592,7 @@ void ExportBraille::credits(QIODevice* dev)
         for (const auto system : page->systems()) {
             for (const auto mb : system->measures()) {
                 if (mb->isVBox()) {
-                    for (const Element* element : mb->el()) {
+                    for (const EngravingItem* element : mb->el()) {
                         if (element->isText()) {
                             const Text* text = toText(element);
                             out << TextToUEBBraille().braille(text->plainText()).toUtf8() << Qt::endl;
@@ -867,13 +867,6 @@ QString ExportBraille::brailleTimeSig(TimeSig* timeSig)
     } else if (timeSig->timeSigType() == TimeSigType::ALLA_BREVE) {
         return QString("_c");
     }
-#if 0 //ToDo
-    else if (timeSig->timeSigType() == TimeSigType::CUT_BACH) {
-        return QString("_c"); // this is basically a Cut time, so ALLA_BREVE, but an alternatove glyph for it
-    } else if (timeSig->timeSigType() == TimeSigType::CUT_TRIPLE) {
-        return QString("#i8 "); // this is an 9/8 timesig with an alternative glyph so "#i8 "?
-    }
-#endif
     QMap<QString, QString> numeratorToBraille;
     numeratorToBraille["1"] = 'a';
     numeratorToBraille["2"] = 'b';
@@ -932,37 +925,37 @@ QString ExportBraille::brailleRest(Rest* rest)
 {
     QString restBraille;
     switch (rest->durationType().type()) {
-    case TDuration::DurationType::V_LONG:      restBraille = BRAILLE_REST_LONG;
+    case DurationType::V_LONG:      restBraille = BRAILLE_REST_LONG;
         break;
-    case TDuration::DurationType::V_BREVE:     restBraille = BRAILLE_REST_BREVE;
+    case DurationType::V_BREVE:     restBraille = BRAILLE_REST_BREVE;
         break;
-    case TDuration::DurationType::V_WHOLE:     restBraille = BRAILLE_REST_WHOLE;
+    case DurationType::V_WHOLE:     restBraille = BRAILLE_REST_WHOLE;
         break;
-    case TDuration::DurationType::V_HALF:      restBraille = BRAILLE_REST_HALF;
+    case DurationType::V_HALF:      restBraille = BRAILLE_REST_HALF;
         break;
-    case TDuration::DurationType::V_QUARTER:   restBraille = BRAILLE_REST_QUARTER;
+    case DurationType::V_QUARTER:   restBraille = BRAILLE_REST_QUARTER;
         break;
-    case TDuration::DurationType::V_EIGHTH:    restBraille = BRAILLE_REST_EIGHTH;
+    case DurationType::V_EIGHTH:    restBraille = BRAILLE_REST_EIGHTH;
         break;
-    case TDuration::DurationType::V_16TH:      restBraille = BRAILLE_REST_16TH;
+    case DurationType::V_16TH:      restBraille = BRAILLE_REST_16TH;
         break;
-    case TDuration::DurationType::V_32ND:      restBraille = BRAILLE_REST_32ND;
+    case DurationType::V_32ND:      restBraille = BRAILLE_REST_32ND;
         break;
-    case TDuration::DurationType::V_64TH:      restBraille = BRAILLE_REST_64TH;
+    case DurationType::V_64TH:      restBraille = BRAILLE_REST_64TH;
         break;
-    case TDuration::DurationType::V_128TH:     restBraille = BRAILLE_REST_128TH;
+    case DurationType::V_128TH:     restBraille = BRAILLE_REST_128TH;
         break;
-    case TDuration::DurationType::V_256TH:     restBraille = BRAILLE_REST_256TH;
+    case DurationType::V_256TH:     restBraille = BRAILLE_REST_256TH;
         break;
-    case TDuration::DurationType::V_512TH:     restBraille = QString();
+    case DurationType::V_512TH:     restBraille = QString();
         break;                                                                                //not supported in braille
-    case TDuration::DurationType::V_1024TH:    restBraille = QString();
+    case DurationType::V_1024TH:    restBraille = QString();
         break;                                                                                //not supported in braille
-    case TDuration::DurationType::V_ZERO:      restBraille = QString();
+    case DurationType::V_ZERO:      restBraille = QString();
         break;                                                                                //not sure what this means
-    case TDuration::DurationType::V_MEASURE:   restBraille = BRAILLE_REST_MEASURE;
+    case DurationType::V_MEASURE:   restBraille = BRAILLE_REST_MEASURE;
         break;
-    case TDuration::DurationType::V_INVALID:   restBraille = QString();
+    case DurationType::V_INVALID:   restBraille = QString();
         break;
     }
 
@@ -971,7 +964,7 @@ QString ExportBraille::brailleRest(Rest* rest)
     }
 
     QString fermata = QString();
-    for (Element* el : rest->segment()->annotations()) {
+    for (EngravingItem* el : rest->segment()->annotations()) {
         if (el->isFermata()) {
             fermata = brailleFermata(toFermata(el));
         }
@@ -1023,7 +1016,7 @@ QString ExportBraille::brailleBreath(Breath* breath)
 BarLine* ExportBraille::lastBarline(Measure* measure, int track)
 {
     for (Segment* seg = measure->last(); seg; seg = seg->prev()) {
-        Element* el = seg->element(track);
+        EngravingItem* el = seg->element(track);
         if (el && el->isBarLine()) {
             return toBarLine(el);
         }
@@ -1034,7 +1027,7 @@ BarLine* ExportBraille::lastBarline(Measure* measure, int track)
 BarLine* ExportBraille::firstBarline(Measure* measure, int track)
 {
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
-        Element* el = seg->element(track);
+        EngravingItem* el = seg->element(track);
         if (el && el->isChordRest()) {
             return nullptr;
         }
@@ -1051,16 +1044,16 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     QTextStream out(&rez);
 
     //Render all repeats and jumps that are on the left
-    for (Element* el : measure->el()) {
+    for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
-            if (marker->tid() == Tid::REPEAT_LEFT) {
+            if (marker->textStyleType() == TextStyleType::REPEAT_LEFT) {
                 out << brailleMarker(toMarker(el));
             }
         }
         if (el->isJump()) {
             Jump* jump = toJump(el);
-            if (jump->tid() == Tid::REPEAT_LEFT) {
+            if (jump->textStyleType() == TextStyleType::REPEAT_LEFT) {
                 out << brailleJump(toJump(el));
             }
         }
@@ -1076,7 +1069,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
 
     //Render everything that is in Voice 1
     for (auto seg = measure->first(); seg; seg = seg->next()) {
-        for (Element* annotation : seg->annotations()) {
+        for (EngravingItem* annotation : seg->annotations()) {
             if (annotation->isTempoText()) {
                 out << brailleTempoText(toTempoText(annotation), staffCount);
             }
@@ -1087,7 +1080,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             }
         }
 
-        Element* el = seg->element(staffCount * VOICES);
+        EngravingItem* el = seg->element(staffCount * VOICES);
         if (!el) {
             continue;
         }
@@ -1134,7 +1127,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             resetOctave(staffCount);
             out << BRAILLE_FULL_MEASURE_IN_ACORD;
             for (auto seg = measure->first(); seg; seg = seg->next()) {
-                Element* el = seg->element(staffCount * VOICES + i);
+                EngravingItem* el = seg->element(staffCount * VOICES + i);
                 if (!el) {
                     continue;
                 }
@@ -1162,16 +1155,16 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     out << brailleBarline(lastBarline(measure, staffCount * VOICES));
 
     //Render repeats and jumps that are on the right
-    for (Element* el : measure->el()) {
+    for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
-            if (marker->tid() == Tid::REPEAT_RIGHT) {
+            if (marker->textStyleType() == TextStyleType::REPEAT_RIGHT) {
                 out << brailleMarker(toMarker(el));
             }
         }
         if (el->isJump()) {
             Jump* jump = toJump(el);
-            if (jump->tid() == Tid::REPEAT_RIGHT) {
+            if (jump->textStyleType() == TextStyleType::REPEAT_RIGHT) {
                 out << brailleJump(toJump(el));
             }
         }
@@ -1251,107 +1244,107 @@ QString ExportBraille::brailleAccidentalType(AccidentalType accidental)
     return QString();
 }
 
-QString ExportBraille::brailleNote(QString pitchName, TDuration::DurationType durationType, int dots)
+QString ExportBraille::brailleNote(QString pitchName, DurationType durationType, int dots)
 {
     QString noteBraille = QString();
-    static QMap<TDuration::DurationType, QMap<QString, QString> > noteToBraille;
+    static QMap<DurationType, QMap<QString, QString> > noteToBraille;
     if (noteToBraille.isEmpty()) {
         //8th and 128th notes have the same representation in Braille
-        noteToBraille[TDuration::DurationType::V_128TH]["C"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["C"] = BRAILLE_C_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["D"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["D"] = BRAILLE_D_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["E"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["E"] = BRAILLE_E_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["F"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["F"] = BRAILLE_F_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["G"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["G"] = BRAILLE_G_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["A"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["A"] = BRAILLE_A_8TH_128TH;
-        noteToBraille[TDuration::DurationType::V_128TH]["B"] = noteToBraille[TDuration::DurationType::V_EIGHTH]["B"] = BRAILLE_B_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["C"] = noteToBraille[DurationType::V_EIGHTH]["C"] = BRAILLE_C_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["D"] = noteToBraille[DurationType::V_EIGHTH]["D"] = BRAILLE_D_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["E"] = noteToBraille[DurationType::V_EIGHTH]["E"] = BRAILLE_E_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["F"] = noteToBraille[DurationType::V_EIGHTH]["F"] = BRAILLE_F_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["G"] = noteToBraille[DurationType::V_EIGHTH]["G"] = BRAILLE_G_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["A"] = noteToBraille[DurationType::V_EIGHTH]["A"] = BRAILLE_A_8TH_128TH;
+        noteToBraille[DurationType::V_128TH]["B"] = noteToBraille[DurationType::V_EIGHTH]["B"] = BRAILLE_B_8TH_128TH;
 
         //64th and quarter notes have the same representation in Braille
-        noteToBraille[TDuration::DurationType::V_64TH]["C"] = noteToBraille[TDuration::DurationType::V_QUARTER]["C"]
-                                                                  = BRAILLE_C_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["D"] = noteToBraille[TDuration::DurationType::V_QUARTER]["D"]
-                                                                  = BRAILLE_D_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["E"] = noteToBraille[TDuration::DurationType::V_QUARTER]["E"]
-                                                                  = BRAILLE_E_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["F"] = noteToBraille[TDuration::DurationType::V_QUARTER]["F"]
-                                                                  = BRAILLE_F_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["G"] = noteToBraille[TDuration::DurationType::V_QUARTER]["G"]
-                                                                  = BRAILLE_G_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["A"] = noteToBraille[TDuration::DurationType::V_QUARTER]["A"]
-                                                                  = BRAILLE_A_64TH_QUARTER;
-        noteToBraille[TDuration::DurationType::V_64TH]["B"] = noteToBraille[TDuration::DurationType::V_QUARTER]["B"]
-                                                                  = BRAILLE_B_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["C"] = noteToBraille[DurationType::V_QUARTER]["C"]
+                                                       = BRAILLE_C_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["D"] = noteToBraille[DurationType::V_QUARTER]["D"]
+                                                       = BRAILLE_D_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["E"] = noteToBraille[DurationType::V_QUARTER]["E"]
+                                                       = BRAILLE_E_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["F"] = noteToBraille[DurationType::V_QUARTER]["F"]
+                                                       = BRAILLE_F_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["G"] = noteToBraille[DurationType::V_QUARTER]["G"]
+                                                       = BRAILLE_G_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["A"] = noteToBraille[DurationType::V_QUARTER]["A"]
+                                                       = BRAILLE_A_64TH_QUARTER;
+        noteToBraille[DurationType::V_64TH]["B"] = noteToBraille[DurationType::V_QUARTER]["B"]
+                                                       = BRAILLE_B_64TH_QUARTER;
 
         //32nd and half notes have the same representation in Braille
-        noteToBraille[TDuration::DurationType::V_32ND]["C"] = noteToBraille[TDuration::DurationType::V_HALF]["C"] = BRAILLE_C_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["D"] = noteToBraille[TDuration::DurationType::V_HALF]["D"] = BRAILLE_D_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["E"] = noteToBraille[TDuration::DurationType::V_HALF]["E"] = BRAILLE_E_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["F"] = noteToBraille[TDuration::DurationType::V_HALF]["F"] = BRAILLE_F_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["G"] = noteToBraille[TDuration::DurationType::V_HALF]["G"] = BRAILLE_G_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["A"] = noteToBraille[TDuration::DurationType::V_HALF]["A"] = BRAILLE_A_32ND_HALF;
-        noteToBraille[TDuration::DurationType::V_32ND]["B"] = noteToBraille[TDuration::DurationType::V_HALF]["B"] = BRAILLE_B_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["C"] = noteToBraille[DurationType::V_HALF]["C"] = BRAILLE_C_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["D"] = noteToBraille[DurationType::V_HALF]["D"] = BRAILLE_D_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["E"] = noteToBraille[DurationType::V_HALF]["E"] = BRAILLE_E_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["F"] = noteToBraille[DurationType::V_HALF]["F"] = BRAILLE_F_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["G"] = noteToBraille[DurationType::V_HALF]["G"] = BRAILLE_G_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["A"] = noteToBraille[DurationType::V_HALF]["A"] = BRAILLE_A_32ND_HALF;
+        noteToBraille[DurationType::V_32ND]["B"] = noteToBraille[DurationType::V_HALF]["B"] = BRAILLE_B_32ND_HALF;
 
         //16th and whole notes have the same representation in Braille.
         // Breve has the same representation, but with an extra suffix;
         // 256th has the same represantation, but with an extra prefix;
-        noteToBraille[TDuration::DurationType::V_256TH]["C"] = noteToBraille[TDuration::DurationType::V_16TH]["C"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["C"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["C"]
-                                                                       = BRAILLE_C_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["C"] = noteToBraille[DurationType::V_16TH]["C"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["C"]
+                                                          = noteToBraille[DurationType::V_BREVE]["C"]
+                                                            = BRAILLE_C_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["D"] = noteToBraille[TDuration::DurationType::V_16TH]["D"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["D"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["D"]
-                                                                       = BRAILLE_D_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["D"] = noteToBraille[DurationType::V_16TH]["D"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["D"]
+                                                          = noteToBraille[DurationType::V_BREVE]["D"]
+                                                            = BRAILLE_D_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["E"] = noteToBraille[TDuration::DurationType::V_16TH]["E"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["E"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["E"]
-                                                                       = BRAILLE_E_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["E"] = noteToBraille[DurationType::V_16TH]["E"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["E"]
+                                                          = noteToBraille[DurationType::V_BREVE]["E"]
+                                                            = BRAILLE_E_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["F"] = noteToBraille[TDuration::DurationType::V_16TH]["F"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["F"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["F"]
-                                                                       = BRAILLE_F_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["F"] = noteToBraille[DurationType::V_16TH]["F"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["F"]
+                                                          = noteToBraille[DurationType::V_BREVE]["F"]
+                                                            = BRAILLE_F_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["G"] = noteToBraille[TDuration::DurationType::V_16TH]["G"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["G"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["G"]
-                                                                       = BRAILLE_G_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["G"] = noteToBraille[DurationType::V_16TH]["G"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["G"]
+                                                          = noteToBraille[DurationType::V_BREVE]["G"]
+                                                            = BRAILLE_G_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["A"] = noteToBraille[TDuration::DurationType::V_16TH]["A"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["A"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["A"]
-                                                                       = BRAILLE_A_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["A"] = noteToBraille[DurationType::V_16TH]["A"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["A"]
+                                                          = noteToBraille[DurationType::V_BREVE]["A"]
+                                                            = BRAILLE_A_16TH_WHOLE;
 
-        noteToBraille[TDuration::DurationType::V_256TH]["B"] = noteToBraille[TDuration::DurationType::V_16TH]["B"]
-                                                                   =noteToBraille[TDuration::DurationType::V_WHOLE]["B"]
-                                                                     = noteToBraille[TDuration::DurationType::V_BREVE]["B"]
-                                                                       = BRAILLE_B_16TH_WHOLE;
+        noteToBraille[DurationType::V_256TH]["B"] = noteToBraille[DurationType::V_16TH]["B"]
+                                                        =noteToBraille[DurationType::V_WHOLE]["B"]
+                                                          = noteToBraille[DurationType::V_BREVE]["B"]
+                                                            = BRAILLE_B_16TH_WHOLE;
     }
 
     switch (durationType) {
-    case TDuration::DurationType::V_LONG:      break;     //TODO
-    case TDuration::DurationType::V_BREVE:
-        noteBraille = noteToBraille[TDuration::DurationType::V_BREVE][pitchName] + BRAILLE_BREVE_SUFFIX;
+    case DurationType::V_LONG:      break;     //TODO
+    case DurationType::V_BREVE:
+        noteBraille = noteToBraille[DurationType::V_BREVE][pitchName] + BRAILLE_BREVE_SUFFIX;
         break;
-    case TDuration::DurationType::V_WHOLE:
-    case TDuration::DurationType::V_HALF:
-    case TDuration::DurationType::V_QUARTER:
-    case TDuration::DurationType::V_EIGHTH:
-    case TDuration::DurationType::V_16TH:
-    case TDuration::DurationType::V_32ND:
-    case TDuration::DurationType::V_64TH:
-    case TDuration::DurationType::V_128TH:
+    case DurationType::V_WHOLE:
+    case DurationType::V_HALF:
+    case DurationType::V_QUARTER:
+    case DurationType::V_EIGHTH:
+    case DurationType::V_16TH:
+    case DurationType::V_32ND:
+    case DurationType::V_64TH:
+    case DurationType::V_128TH:
         noteBraille = QString(noteToBraille[durationType][pitchName]);
         break;
-    case TDuration::DurationType::V_256TH:
-        noteBraille = BRAILLE_256TH_PREFIX + QString(noteToBraille[TDuration::DurationType::V_256TH][pitchName]);
+    case DurationType::V_256TH:
+        noteBraille = BRAILLE_256TH_PREFIX + QString(noteToBraille[DurationType::V_256TH][pitchName]);
         break;
-    case TDuration::DurationType::V_512TH:     break;     //TODO not supported in braille?
-    case TDuration::DurationType::V_1024TH:    break;     //TODO not supported in braille?
-    case TDuration::DurationType::V_ZERO:      break;     //TODO
-    case TDuration::DurationType::V_MEASURE:   break;     //TODO
-    case TDuration::DurationType::V_INVALID:   break;
+    case DurationType::V_512TH:     break;     //TODO not supported in braille?
+    case DurationType::V_1024TH:    break;     //TODO not supported in braille?
+    case DurationType::V_ZERO:      break;     //TODO
+    case DurationType::V_MEASURE:   break;     //TODO
+    case DurationType::V_INVALID:   break;
     }
 
     for (int i = 0; i < dots; ++i) {
@@ -1395,7 +1388,7 @@ QString ExportBraille::brailleChordRootNote(Chord* chord, Note* rootNote)
     QString noteTieBraille = brailleTie(rootNote);
 
     QString fingeringAfterBraille = QString();
-    for (Element* el : rootNote->el()) {
+    for (EngravingItem* el : rootNote->el()) {
         if (el->isFingering()) {
             fingeringAfterBraille += brailleFingeringAfter(toFingering(el));
         }
@@ -1506,7 +1499,7 @@ QString ExportBraille::brailleChordInterval(Note* rootNote, QList<Note*>* notes,
     QString noteTieBraille = brailleTie(note);
 
     QString fingeringAfterBraille = QString();
-    for (Element* el : rootNote->el()) {
+    for (EngravingItem* el : rootNote->el()) {
         if (el->isFingering()) {
             fingeringAfterBraille += brailleFingeringAfter(toFingering(el));
         }
@@ -1569,7 +1562,7 @@ QString ExportBraille::brailleChord(Chord* chord)
     QString chordTieBraille = brailleTie(chord);
 
     QString fermata = QString();
-    for (Element* el : chord->segment()->annotations()) {
+    for (EngravingItem* el : chord->segment()->annotations()) {
         if (el->isFermata()) {
             fermata = brailleFermata(toFermata(el));
         }
@@ -1620,7 +1613,7 @@ QString ExportBraille::brailleGraceNoteMarking(Chord* chord)
     // TODO: doubling the grace note sign where there are more than 4 grace notes.
     //       the book is not very clear how this doubling is done and how the user
     //       understands where do grace notes end.
-    if (!chord->isGrace() || !chord->parent()->isChord()) {
+    if (!chord->isGrace() || !chord->explicitParent()->isChord()) {
         return QString();
     }
 
@@ -1699,7 +1692,7 @@ QString ExportBraille::brailleBarline(BarLine* barline)
     }
 
     QString fermataBraille = QString();
-    for (Element* el : barline->segment()->annotations()) {
+    for (EngravingItem* el : barline->segment()->annotations()) {
         if (el->isFermata()) {
             fermataBraille = brailleFermata(toFermata(el));
         }
@@ -2095,8 +2088,8 @@ QString ExportBraille::brailleFingeringAfter(Fingering* fingering)
     // 15.1 - 15.2. Page 108. Music Braille Code 2015.
     // TODO: 15.3 - 15.4. Page 108. Music Braille Code 2015.
     QString result = QString();
-    if (fingering->tid() == Tid::FINGERING
-        || fingering->tid() == Tid::LH_GUITAR_FINGERING) {
+    if (fingering->textStyleType() == TextStyleType::FINGERING
+        || fingering->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
         for (QChar c : fingering->plainText()) {
             if (c == QChar('0')) {
                 result += BRAILLE_FINGERING_OPEN;
@@ -2156,9 +2149,8 @@ QString ExportBraille::brailleVolta(Measure* measure, Volta* volta, int staffCou
     }
 
     // 17.1.1. Page 121. Music Braille Code 2015.
-    const QRegExp separator("(,|\\.| )");
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().split(separator);
+    QStringList voltaNumbers = volta->text().split(QRegularExpression("(,|\\.| )"));
     QString result = QString();
     for (QString voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {

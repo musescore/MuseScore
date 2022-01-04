@@ -193,6 +193,14 @@ bool CoreAudioDriver::isOpened() const
 
 void logError(HRESULT hr)
 {
+    static HRESULT lastError = S_OK;
+
+    if (hr == lastError) {
+        return;
+    }
+
+    lastError = hr;
+
     switch (hr) {
     case S_OK: return;
     case AUDCLNT_E_NOT_INITIALIZED: LOGE() << "AUDCLNT_E_NOT_INITIALIZED";

@@ -30,6 +30,7 @@ TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
     setTitle(qtrc("inspector", "Text frame"));
+    setIcon(ui::IconCode::Code::TEXT_FRAME);
     createProperties();
 }
 

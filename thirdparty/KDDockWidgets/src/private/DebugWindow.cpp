@@ -39,8 +39,8 @@
 #include <QTimer>
 
 #ifdef Q_OS_WIN
-# include <windows.h>
-# include <winuser.h>
+#include <windows.h>
+#include <winuser.h>
 #endif
 
 // clazy:excludeall=range-loop
@@ -51,7 +51,9 @@ using namespace KDDockWidgets::Debug;
 class DebugAppEventFilter : public QAbstractNativeEventFilter
 {
 public:
-    DebugAppEventFilter() {}
+    DebugAppEventFilter()
+    {
+    }
     ~DebugAppEventFilter();
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *) override
@@ -75,7 +77,9 @@ public:
     }
 };
 
-DebugAppEventFilter::~DebugAppEventFilter() {}
+DebugAppEventFilter::~DebugAppEventFilter()
+{
+}
 
 DebugWindow::DebugWindow(QWidget *parent)
     : QWidget(parent)
@@ -178,7 +182,6 @@ DebugWindow::DebugWindow(QWidget *parent)
     button->setText(QStringLiteral("Pick Widget"));
     layout->addWidget(button);
     connect(button, &QPushButton::clicked, this, [this] {
-
         qApp->setOverrideCursor(Qt::CrossCursor);
         grabMouse();
 
@@ -278,11 +281,10 @@ void DebugWindow::dumpWindow(QWidget *w)
                  << QStringLiteral(" WindowRect=%1,%2 %3x%4").arg(rect.left).arg(rect.top).arg(rect.right - rect.left + 1).arg(rect.bottom - rect.top + 1)
                  << "; geo=" << w->geometry()
                  << "; frameGeo=" << w->frameGeometry();
-
     }
 
     for (QObject *child : w->children()) {
-        if (auto childW = qobject_cast<QWidget*>(child)) {
+        if (auto childW = qobject_cast<QWidget *>(child)) {
             dumpWindow(childW);
         }
     }
@@ -291,8 +293,10 @@ void DebugWindow::dumpWindow(QWidget *w)
 
 void DebugWindow::dumpWindows()
 {
-    for (QWidget *w : qApp->topLevelWidgets())
-        dumpWindow(w);
+    for (QWidget *w : qApp->topLevelWidgets()) {
+        if (w != window())
+            dumpWindow(w);
+    }
 }
 
 #endif
@@ -301,7 +305,7 @@ void DebugWindow::repaintWidgetRecursive(QWidget *w)
 {
     w->repaint();
     for (QObject *child : w->children()) {
-        if (auto childW = qobject_cast<QWidget*>(child)) {
+        if (auto childW = qobject_cast<QWidget *>(child)) {
             repaintWidgetRecursive(childW);
         }
     }
@@ -309,7 +313,7 @@ void DebugWindow::repaintWidgetRecursive(QWidget *w)
 
 void DebugWindow::dumpDockWidgetInfo()
 {
-    const QVector<FloatingWindow*> floatingWindows = DockRegistry::self()->floatingWindows();
+    const QVector<FloatingWindow *> floatingWindows = DockRegistry::self()->floatingWindows();
     const MainWindowBase::List mainWindows = DockRegistry::self()->mainwindows();
     const DockWidgetBase::List dockWidgets = DockRegistry::self()->dockwidgets();
 

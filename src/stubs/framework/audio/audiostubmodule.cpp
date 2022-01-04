@@ -28,7 +28,6 @@
 #include "audiodriverstub.h"
 #include "synthesizersregisterstub.h"
 #include "soundfontsproviderstub.h"
-#include "internal/rpc/rpcchannelstub.h"
 
 using namespace mu::modularity;
 using namespace mu::audio;
@@ -50,8 +49,6 @@ void AudioStubModule::registerExports()
 
     ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), new synth::SynthesizersRegisterStub());
     ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProviderStub());
-
-    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), new rpc::RpcChannelStub());
 }
 
 void AudioStubModule::registerResources()

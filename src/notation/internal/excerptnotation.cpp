@@ -22,13 +22,16 @@
 
 #include "excerptnotation.h"
 
+#include "log.h"
+
 #include "libmscore/excerpt.h"
 
 using namespace mu::notation;
 
 ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
-    : Notation(excerpt->partScore()), m_excerpt(excerpt)
+    : Notation(), m_excerpt(excerpt)
 {
+    m_title = excerpt ? excerpt->title() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -48,9 +51,56 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
-INotationPtr ExcerptNotation::notation()
+bool ExcerptNotation::isCreated() const
 {
-    return shared_from_this();
+    return m_isCreated;
+}
+
+void ExcerptNotation::setIsCreated(bool created)
+{
+    m_isCreated = created;
+
+    if (!created) {
+        return;
+    }
+
+    setScore(m_excerpt->partScore());
+    setTitle(m_title);
+
+    if (isEmpty()) {
+        fillWithDefaultInfo();
+    }
+}
+
+void ExcerptNotation::fillWithDefaultInfo()
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(m_excerpt || m_excerpt->partScore()) {
+        return;
+    }
+
+    Ms::Score* excerptScore = m_excerpt->partScore();
+
+    auto setText = [&excerptScore](TextStyleType textType, const QString& text) {
+        TextBase* textBox = excerptScore->getText(textType);
+
+        if (!textBox) {
+            textBox = excerptScore->addText(textType, false /*addToAllScores*/);
+        }
+
+        if (textBox) {
+            textBox->unlink();
+            textBox->setPlainText(text);
+        }
+    };
+
+    setText(TextStyleType::TITLE, qtrc("notation", "Title"));
+    setText(TextStyleType::COMPOSER, qtrc("notation", "Composer / arranger"));
+    setText(TextStyleType::SUBTITLE, "");
+    setText(TextStyleType::POET, "");
+
+    excerptScore->doLayout();
 }
 
 Ms::Excerpt* ExcerptNotation::excerpt() const
@@ -58,35 +108,53 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
     return m_excerpt;
 }
 
-void ExcerptNotation::setExcerpt(Ms::Excerpt* excerpt)
+bool ExcerptNotation::isEmpty() const
 {
-    m_excerpt = excerpt;
-    setScore(m_excerpt->partScore());
-    setMetaInfo(m_metaInfo);
+    return m_excerpt ? m_excerpt->parts().isEmpty() : true;
 }
 
-Meta ExcerptNotation::metaInfo() const
+QString ExcerptNotation::title() const
 {
-    return isInited() ? Notation::metaInfo() : m_metaInfo;
+    return m_excerpt ? m_excerpt->title() : m_title;
 }
 
-void ExcerptNotation::setMetaInfo(const Meta& meta)
+void ExcerptNotation::setTitle(const QString& title)
 {
-    m_metaInfo = meta;
+    m_title = title;
 
-    if (isInited()) {
-        m_excerpt->setTitle(meta.title);
-        Notation::setMetaInfo(meta);
+    if (!m_excerpt) {
+        return;
     }
+
+    m_excerpt->setTitle(title);
+
+    if (!score()) {
+        return;
+    }
+
+    Ms::Text* excerptTitle = score()->getText(Ms::TextStyleType::INSTRUMENT_EXCERPT);
+    if (!excerptTitle) {
+        return;
+    }
+
+    excerptTitle->setPlainText(title);
+    score()->setMetaTag("partName", title);
+    score()->doLayout();
+
+    notifyAboutNotationChanged();
 }
 
-bool ExcerptNotation::isInited() const
+INotationPtr ExcerptNotation::notation()
 {
-    return m_excerpt;
+    return shared_from_this();
 }
 
-INotationPtr ExcerptNotation::clone() const
+IExcerptNotationPtr ExcerptNotation::clone() const
 {
+    if (!m_excerpt) {
+        return nullptr;
+    }
+
     Ms::Excerpt* copy = new Ms::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }

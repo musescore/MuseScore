@@ -19,24 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: accidentalPopup.model
+    property QtObject model: null
 
-    icon: IconCode.ACCIDENTAL_SHARP
-    text: qsTrc("inspector", "Accidentals")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "AccidentalSettings"
 
-    AccidentalPopup {
-        id: accidentalPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        breacketType.focusOnFirst()
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: breacketType
+        titleText: qsTrc("inspector", "Bracket type")
+        propertyItem: root.model ? root.model.bracketType : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
+
+        model: [
+            { text: qsTrc("inspector", "None"), value: AccidentalTypes.BRACKET_TYPE_NONE },
+            { iconCode: IconCode.BRACKET_PARENTHESES, value: AccidentalTypes.BRACKET_TYPE_PARENTHESIS, title: qsTrc("inspector", "Parentheses") },
+            { iconCode: IconCode.BRACKET_PARENTHESES_SQUARE, value: AccidentalTypes.BRACKET_TYPE_SQUARE, title: qsTrc("inspector", "Brackets") }
+        ]
     }
 }

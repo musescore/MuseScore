@@ -21,30 +21,30 @@
  */
 
 #include "spacer.h"
+#include "draw/pen.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "staff.h"
-#include "mscore.h"
-#include "xml.h"
 #include "measure.h"
-#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   LayoutBreak
 //---------------------------------------------------------
 
-Spacer::Spacer(Score* score)
-    : Element(score)
+Spacer::Spacer(Measure* parent)
+    : EngravingItem(ElementType::SPACER, parent)
 {
     _spacerType = SpacerType::UP;
     _gap = 0.0;
 }
 
 Spacer::Spacer(const Spacer& s)
-    : Element(s)
+    : EngravingItem(s)
 {
     _gap        = s._gap;
     path        = s.path;
@@ -61,7 +61,7 @@ void Spacer::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
             spatium() * 0.3);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -79,7 +79,7 @@ void Spacer::layout0()
     path    = PainterPath();
     qreal w = _spatium;
     qreal b = w * .5;
-    qreal h = parent() ? _gap : qMin(_gap, spatium() * 4.0);      // limit length for palette
+    qreal h = explicitParent() ? _gap : qMin(_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -118,7 +118,7 @@ void Spacer::layout0()
 //   setGap
 //---------------------------------------------------------
 
-void Spacer::setGap(qreal sp)
+void Spacer::setGap(Millimetre sp)
 {
     _gap = sp;
     layout0();
@@ -161,8 +161,8 @@ void Spacer::editDrag(EditData& ed)
         _gap -= s;
         break;
     }
-    if (_gap < spatium() * 2.0) {
-        _gap = spatium() * 2;
+    if (_gap.val() < spatium() * 2.0) {
+        _gap = Millimetre(spatium() * 2);
     }
     layout0();
     triggerLayout();
@@ -194,11 +194,11 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
 
 void Spacer::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", int(_spacerType));
-    Element::writeProperties(xml);
-    xml.tag("space", _gap / spatium());
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.tag("space", _gap.val() / spatium());
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -213,7 +213,7 @@ void Spacer::read(XmlReader& e)
             _spacerType = SpacerType(e.readInt());
         } else if (tag == "space") {
             _gap = e.readDouble() * spatium();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -224,13 +224,13 @@ void Spacer::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Spacer::getProperty(Pid propertyId) const
+PropertyValue Spacer::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SPACE:
         return gap();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -238,14 +238,14 @@ QVariant Spacer::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Spacer::setProperty(Pid propertyId, const QVariant& v)
+bool Spacer::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPACE:
-        setGap(v.toDouble());
+        setGap(v.value<Millimetre>());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -260,13 +260,13 @@ bool Spacer::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Spacer::propertyDefault(Pid id) const
+PropertyValue Spacer::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SPACE:
-        return QVariant(0.0);
+        return Millimetre(0.0);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -274,7 +274,7 @@ QVariant Spacer::propertyDefault(Pid id) const
 //   scanElements
 //---------------------------------------------------------
 
-void Spacer::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Spacer::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
         func(data, this);

@@ -36,7 +36,7 @@ QmlDialog {
 
         StyledTextLabel {
             anchors.centerIn: parent
-            text: "New Workspace Dialog Stub"
+            text: "New workspace Dialog Stub"
         }
     }
 }

@@ -40,6 +40,7 @@ public:
     virtual void pause() = 0;
     virtual void resume() = 0;
 
+    virtual void setDuration(const msecs_t duration) = 0;
     virtual Ret setLoop(const msecs_t fromMsec, const msecs_t toMsec) = 0;
     virtual void resetLoop() = 0;
 

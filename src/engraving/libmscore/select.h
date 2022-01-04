@@ -32,7 +32,7 @@ class Score;
 class Page;
 class System;
 class ChordRest;
-class Element;
+class EngravingItem;
 class Segment;
 class Note;
 class Measure;
@@ -43,7 +43,7 @@ class Chord;
 //---------------------------------------------------------
 
 struct ElementPattern {
-    QList<Element*> el;
+    QList<EngravingItem*> el;
     int type = 0;
     int subtype = 0;
     int staffStart = 0;
@@ -63,9 +63,9 @@ struct ElementPattern {
 struct NotePattern {
     QList<Note*> el;
     int pitch = -1;
-    int string = STRING_NONE;
+    int string = INVALID_STRING_INDEX;
     int tpc = Tpc::TPC_INVALID;
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
+    NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;
     TDuration durationType = TDuration();
     Fraction durationTicks;
     NoteType type = NoteType::INVALID;
@@ -90,11 +90,11 @@ enum class SelState : char {
 
 //---------------------------------------------------------
 //   SelectionFilterType
-//   see also `static const char* labels[]` in mscore/selectionwindow.cpp
-//   need to keep those in sync!
 //---------------------------------------------------------
 
-enum class SelectionFilterType {
+static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
+
+enum class SelectionFilterType : unsigned int {
     NONE                    = 0,
     FIRST_VOICE             = 1 << 0,
     SECOND_VOICE            = 1 << 1,
@@ -119,7 +119,7 @@ enum class SelectionFilterType {
     BREATH                  = 1 << 20,
     TREMOLO                 = 1 << 21,
     GRACE_NOTE              = 1 << 22,
-    ALL                     = -1
+    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
 };
 
 //---------------------------------------------------------
@@ -128,19 +128,19 @@ enum class SelectionFilterType {
 
 class SelectionFilter
 {
-    Score* _score;
-    int _filtered;
-
 public:
-    SelectionFilter() { _score = 0; _filtered = (int)SelectionFilterType::ALL; }
-    SelectionFilter(SelectionFilterType f)
-        : _score(nullptr), _filtered(int(f)) {}
-    SelectionFilter(Score* score) { _score = score; _filtered = (int)SelectionFilterType::ALL; }
-    int& filtered() { return _filtered; }
-    void setFiltered(SelectionFilterType type, bool set);
-    bool isFiltered(SelectionFilterType type) const { return _filtered & (int)type; }
-    bool canSelect(const Element*) const;
+    SelectionFilter() = default;
+    SelectionFilter(SelectionFilterType type);
+
+    int filteredTypes() const;
+    bool isFiltered(SelectionFilterType type) const;
+    void setFiltered(SelectionFilterType type, bool filtered);
+
+    bool canSelect(const EngravingItem* element) const;
     bool canSelectVoice(int track) const;
+
+private:
+    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
 };
 
 //-------------------------------------------------------------------
@@ -153,7 +153,7 @@ class Selection
 {
     Score* _score;
     SelState _state;
-    QList<Element*> _el;            // valid in mode SelState::LIST
+    QList<EngravingItem*> _el;            // valid in mode SelState::LIST
 
     int _staffStart = 0;            // valid if selState is SelState::RANGE
     int _staffEnd = 0;
@@ -176,9 +176,9 @@ class Selection
     QByteArray staffMimeData() const;
     QByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
-    bool canSelect(Element* e) const { return selectionFilter().canSelect(e); }
+    bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
     bool canSelectVoice(int track) const { return selectionFilter().canSelectVoice(track); }
-    void appendFiltered(Element* e);
+    void appendFiltered(EngravingItem* e);
     void appendChord(Chord* chord);
 
 public:
@@ -197,19 +197,19 @@ public:
     bool isLocked() const { return !_lockReason.isEmpty(); }
     const QString& lockReason() const { return _lockReason; }
 
-    const QList<Element*>& elements() const { return _el; }
+    const QList<EngravingItem*>& elements() const { return _el; }
     std::vector<Note*> noteList(int track = -1) const;
 
-    const QList<Element*> uniqueElements() const;
+    const QList<EngravingItem*> uniqueElements() const;
     QList<Note*> uniqueNotes(int track = -1) const;
 
     bool isSingle() const { return (_state == SelState::LIST) && (_el.size() == 1); }
 
-    void add(Element*);
+    void add(EngravingItem*);
     void deselectAll();
-    void remove(Element*);
+    void remove(EngravingItem*);
     void clear();
-    Element* element() const;
+    EngravingItem* element() const;
     ChordRest* cr() const;
     Segment* firstChordRestSegment() const;
     ChordRest* firstChordRest(int track = -1) const;

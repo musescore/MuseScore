@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -80,11 +80,11 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat39</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Alternating Volta</text>
           </Text>
         </VBox>

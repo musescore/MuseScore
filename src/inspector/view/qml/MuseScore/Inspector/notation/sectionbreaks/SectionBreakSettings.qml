@@ -19,24 +19,61 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: sectionBreakPopup.model
+    property QtObject model: null
 
-    icon: IconCode.SECTION_BREAK
-    text: qsTrc("inspector", "Section breaks")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "SectionBreakSettings"
 
-    SectionBreakPopup {
-        id: sectionBreakPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        pauseBeforStartsSection.focusOnFirst()
+    }
+
+    SpinBoxPropertyView {
+        id: pauseBeforStartsSection
+        titleText: qsTrc("inspector", "Pause before new section starts")
+        propertyItem: root.model ? root.model.pauseDuration : null
+
+        maxValue: 999
+        minValue: 0
+        step: 0.5
+        measureUnitsSymbol: qsTrc("inspector", "s")
+
+        navigationName: "PauseBeforeStarts"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
+    }
+
+    CheckBoxPropertyView {
+        id: startWithLongInstrNames
+        text: qsTrc("inspector", "Start new section with long instrument names")
+        propertyItem: root.model ? root.model.shouldStartWithLongInstrNames : null
+
+        navigation.name: "StartWithLong"
+        navigation.panel: root.navigationPanel
+        navigation.row: pauseBeforStartsSection.navigationRowEnd + 1
+    }
+
+    CheckBoxPropertyView {
+        text: qsTrc("inspector", "Reset bar numbers for new section")
+        propertyItem: root.model ? root.model.shouldResetBarNums : null
+
+        navigation.name: "ResetBarNumbers"
+        navigation.panel: root.navigationPanel
+        navigation.row: startWithLongInstrNames.navigation.row + 1
     }
 }

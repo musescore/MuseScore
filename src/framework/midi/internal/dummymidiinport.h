@@ -38,15 +38,10 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    Ret run() override;
-    void stop() override;
-    bool isRunning() const override;
     async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
-
     MidiDeviceID m_deviceID;
-    bool m_running = false;
     async::Channel<tick_t, Event> m_eventReceived;
 };
 }

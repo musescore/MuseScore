@@ -41,7 +41,7 @@ void InspectorDockWidget::update()
     update(m_score);
 }
 
-const QList<Ms::Element*>* InspectorDockWidget::selectedElementList() const
+const QList<Ms::EngravingItem*>* InspectorDockWidget::selectedElementList() const
 {
     return m_score ? &m_score->selection().elements() : nullptr;
 }

@@ -30,12 +30,18 @@
 
 #include <QVector>
 
-#include "element.h"
+#include "engravingitem.h"
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "shape.h"
 #include "key.h"
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Tie;
@@ -61,131 +67,13 @@ static constexpr int MAX_DOTS = 4;
 
 class NoteHead final : public Symbol
 {
-    Q_GADGET
 public:
-    // keep in sync with noteHeadSchemeNames array in note.cpp
-    enum class Scheme : signed char {
-        ///.\{
-        HEAD_AUTO = -1,
-        HEAD_NORMAL,
-        HEAD_PITCHNAME,
-        HEAD_PITCHNAME_GERMAN,
-        HEAD_SOLFEGE,
-        HEAD_SOLFEGE_FIXED,
-        HEAD_SHAPE_NOTE_4,
-        HEAD_SHAPE_NOTE_7_AIKIN,
-        HEAD_SHAPE_NOTE_7_FUNK,
-        HEAD_SHAPE_NOTE_7_WALKER,
-        HEAD_SCHEMES
-        ///\}
-    };
-    // keep in sync with noteHeadGroupNames array in note.cpp
-    enum class Group : signed char {
-        ///.\{
-        HEAD_NORMAL = 0,
-        HEAD_CROSS,
-        HEAD_PLUS,
-        HEAD_XCIRCLE,
-        HEAD_WITHX,
-        HEAD_TRIANGLE_UP,
-        HEAD_TRIANGLE_DOWN,
-        HEAD_SLASHED1,
-        HEAD_SLASHED2,
-        HEAD_DIAMOND,
-        HEAD_DIAMOND_OLD,
-        HEAD_CIRCLED,
-        HEAD_CIRCLED_LARGE,
-        HEAD_LARGE_ARROW,
-        HEAD_BREVIS_ALT,
 
-        HEAD_SLASH,
-
-        HEAD_SOL,
-        HEAD_LA,
-        HEAD_FA,
-        HEAD_MI,
-        HEAD_DO,
-        HEAD_RE,
-        HEAD_TI,
-        // not exposed from here
-        HEAD_DO_WALKER,
-        HEAD_RE_WALKER,
-        HEAD_TI_WALKER,
-        HEAD_DO_FUNK,
-        HEAD_RE_FUNK,
-        HEAD_TI_FUNK,
-
-        HEAD_DO_NAME,
-        HEAD_RE_NAME,
-        HEAD_MI_NAME,
-        HEAD_FA_NAME,
-        HEAD_SOL_NAME,
-        HEAD_LA_NAME,
-        HEAD_TI_NAME,
-        HEAD_SI_NAME,
-
-        HEAD_A_SHARP,
-        HEAD_A,
-        HEAD_A_FLAT,
-        HEAD_B_SHARP,
-        HEAD_B,
-        HEAD_B_FLAT,
-        HEAD_C_SHARP,
-        HEAD_C,
-        HEAD_C_FLAT,
-        HEAD_D_SHARP,
-        HEAD_D,
-        HEAD_D_FLAT,
-        HEAD_E_SHARP,
-        HEAD_E,
-        HEAD_E_FLAT,
-        HEAD_F_SHARP,
-        HEAD_F,
-        HEAD_F_FLAT,
-        HEAD_G_SHARP,
-        HEAD_G,
-        HEAD_G_FLAT,
-        HEAD_H,
-        HEAD_H_SHARP,
-
-        HEAD_CUSTOM,
-        HEAD_GROUPS,
-        HEAD_INVALID = -1
-                       ///\}
-    };
-    // keep in sync with noteHeadTypeNames array in note.cpp
-    enum class Type : signed char {
-        ///.\{
-        HEAD_AUTO    = -1,
-        HEAD_WHOLE   = 0,
-        HEAD_HALF    = 1,
-        HEAD_QUARTER = 2,
-        HEAD_BREVIS  = 3,
-        HEAD_TYPES
-        ///\}
-    };
-
-    Q_ENUM(Scheme);
-    Q_ENUM(Group);
-    Q_ENUM(Type);
-
-    NoteHead(Score* s = 0)
-        : Symbol(s) {}
+    NoteHead(Note* parent = 0);
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
-    ElementType type() const override { return ElementType::NOTEHEAD; }
 
-    Group headGroup() const;
-
-    static QString scheme2userName(Scheme scheme);
-    static QString group2userName(Group group);
-    static QString type2userName(Type type);
-    static QString scheme2name(Scheme scheme);
-    static QString group2name(Group group);
-    static QString type2name(Type type);
-    static Scheme name2scheme(const QString& s);
-    static Group name2group(const QString& s);
-    static Type name2type(const QString& s);
+    NoteHeadGroup headGroup() const;
 };
 
 //---------------------------------------------------------
@@ -198,9 +86,9 @@ struct NoteVal {
     int pitch                 { -1 };
     int tpc1                  { Tpc::TPC_INVALID };
     int tpc2                  { Tpc::TPC_INVALID };
-    int fret                  { FRET_NONE };
-    int string                { STRING_NONE };
-    NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
+    int fret                  { INVALID_FRET_INDEX };
+    int string                { INVALID_STRING_INDEX };
+    NoteHeadGroup headGroup { NoteHeadGroup::HEAD_NORMAL };
 
     NoteVal() {}
     NoteVal(int p)
@@ -217,7 +105,7 @@ static const int INVALID_LINE = -10000;
 //   @P accidentalType   int              note accidental type
 //   @P dots             array[NoteDot]   list of note dots (some can be null, read only)
 //   @P dotsCount        int              number of note dots (read only)
-//   @P elements         array[Element]   list of elements attached to notehead
+//   @P elements         array[EngravingItem]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
 //   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
@@ -229,7 +117,7 @@ static const int INVALID_LINE = -10000;
 //   @P pitch            int              midi pitch
 //   @P play             bool             play note
 //   @P ppitch           int              actual played midi pitch (honoring ottavas) (read only)
-//   @P small            bool             small notehead
+//   @P isSmall          bool             small notehead
 //   @P string           int              string number in tablature
 //   @P subchannel       int              midi subchannel (for midi articulation) (read only)
 //   @P tieBack          Tie              note backward tie (null if none, read only)
@@ -244,15 +132,8 @@ static const int INVALID_LINE = -10000;
 //   @P veloType         enum (Note.OFFSET_VAL, Note.USER_VAL)
 //---------------------------------------------------------------------------------------
 
-class Note final : public Element
+class Note final : public EngravingItem
 {
-    Q_GADGET
-public:
-    enum class ValueType : char {
-        OFFSET_VAL, USER_VAL
-    };
-    Q_ENUM(ValueType);
-
 private:
     bool _ghost         { false };        ///< ghost note (guitar: death note)
     bool _hidden        { false };        ///< marks this note as the hidden one if there are
@@ -264,19 +145,19 @@ private:
                                           ///< two or more notes on the same string
     bool dragMode       { false };
     bool _mirror        { false };        ///< True if note is mirrored at stem.
-    bool _small         { false };
+    bool m_isSmall      { false };
     bool _play          { true };         // note is not played if false
     mutable bool _mark  { false };        // for use in sequencer
     bool _fixed         { false };        // for slash notation
 
-    MScore::DirectionH _userMirror { MScore::DirectionH::AUTO };        ///< user override of mirror
-    Direction _userDotPosition     { Direction::AUTO };                 ///< user override of dot position
+    DirectionH _userMirror { DirectionH::AUTO };        ///< user override of mirror
+    DirectionV _userDotPosition { DirectionV::AUTO };                 ///< user override of dot position
 
-    NoteHead::Scheme _headScheme { NoteHead::Scheme::HEAD_AUTO };
-    NoteHead::Group _headGroup { NoteHead::Group::HEAD_NORMAL };
-    NoteHead::Type _headType  { NoteHead::Type::HEAD_AUTO };
+    NoteHeadScheme _headScheme { NoteHeadScheme::HEAD_AUTO };
+    NoteHeadGroup _headGroup { NoteHeadGroup::HEAD_NORMAL };
+    NoteHeadType _headType  { NoteHeadType::HEAD_AUTO };
 
-    ValueType _veloType { ValueType::OFFSET_VAL };
+    VeloType _veloType { VeloType::OFFSET_VAL };
 
     char _offTimeType    { 0 };      // compatibility only 1 - user(absolute), 2 - offset (%)
     char _onTimeType     { 0 };      // compatibility only 1 - user, 2 - offset
@@ -308,6 +189,10 @@ private:
 
     QString _fretString;
 
+    friend class mu::engraving::Factory;
+    Note(Chord* ch = 0);
+    Note(const Note&, bool link = false);
+
     void startDrag(EditData&) override;
     mu::RectF drag(EditData& ed) override;
     void endDrag(EditData&) override;
@@ -328,29 +213,30 @@ private:
     static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
 public:
-    Note(Score* s = 0);
-    Note(const Note&, bool link = false);
-    ~Note();
 
-    // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    ~Note();
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
-    ElementType type() const override { return ElementType::NOTE; }
+
+    Chord* chord() const { return (Chord*)explicitParent(); }
+    void setParent(Chord* ch);
+
+    // Score Tree functions
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     void undoUnlink() override;
 
     qreal mag() const override;
-    Element* elementBase() const override;
+    EngravingItem* elementBase() const override;
 
     void layout() override;
     void layout2();
     //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
     void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; }
-    void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
     void setTrack(int val) override;
 
     int playTicks() const;
@@ -366,14 +252,15 @@ public:
     qreal noteheadCenterX() const;
     qreal bboxRightPos() const;
     qreal headBodyWidth() const;
+    qreal outsideTieAttachX(bool up) const;
 
-    NoteHead::Scheme headScheme() const { return _headScheme; }
-    void updateHeadGroup(const NoteHead::Group headGroup);
-    NoteHead::Group headGroup() const { return _headGroup; }
-    NoteHead::Type headType() const { return _headType; }
-    void setHeadScheme(NoteHead::Scheme val);
-    void setHeadGroup(NoteHead::Group val);
-    void setHeadType(NoteHead::Type t);
+    NoteHeadScheme headScheme() const { return _headScheme; }
+    void updateHeadGroup(const NoteHeadGroup headGroup);
+    NoteHeadGroup headGroup() const { return _headGroup; }
+    NoteHeadType headType() const { return _headType; }
+    void setHeadScheme(NoteHeadScheme val);
+    void setHeadGroup(NoteHeadGroup val);
+    void setHeadType(NoteHeadType t);
 
     int subtype() const override { return int(_headGroup); }
     QString subtypeName() const override;
@@ -415,7 +302,6 @@ public:
 
     int line() const;
     void setLine(int n) { _line = n; }
-    int physicalLine() const;
 
     int fret() const { return _fret; }
     void setFret(int val) { _fret = val; }
@@ -426,13 +312,13 @@ public:
     bool fretConflict() const { return _fretConflict; }
     void setFretConflict(bool val) { _fretConflict = val; }
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     bool mirror() const { return _mirror; }
     void setMirror(bool val) { _mirror = val; }
 
-    bool small() const { return _small; }
+    bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
 
     bool play() const { return _play; }
@@ -449,8 +335,6 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    Chord* chord() const { return (Chord*)parent(); }
-    void setChord(Chord* a) { setParent((Element*)a); }
     void draw(mu::draw::Painter*) const override;
 
     void read(XmlReader&) override;
@@ -459,7 +343,7 @@ public:
     void write(XmlWriter&) const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     bool hidden() const { return _hidden; }
     void setHidden(bool val) { _hidden = val; }
@@ -475,17 +359,17 @@ public:
     int subchannel() const { return _subchannel; }
     void setSubchannel(int val) { _subchannel = val; }
 
-    MScore::DirectionH userMirror() const { return _userMirror; }
-    void setUserMirror(MScore::DirectionH d) { _userMirror = d; }
+    DirectionH userMirror() const { return _userMirror; }
+    void setUserMirror(DirectionH d) { _userMirror = d; }
 
-    Direction userDotPosition() const { return _userDotPosition; }
-    void setUserDotPosition(Direction d) { _userDotPosition = d; }
+    DirectionV userDotPosition() const { return _userDotPosition; }
+    void setUserDotPosition(DirectionV d) { _userDotPosition = d; }
     bool dotIsUp() const;                 // actual dot position
 
     void reset() override;
 
-    ValueType veloType() const { return _veloType; }
-    void setVeloType(ValueType v) { _veloType = v; }
+    VeloType veloType() const { return _veloType; }
+    void setVeloType(VeloType v) { _veloType = v; }
     int veloOffset() const { return _veloOffset; }
     void setVeloOffset(int v) { _veloOffset = v; }
 
@@ -529,29 +413,28 @@ public:
     void transposeDiatonic(int interval, bool keepAlterations, bool useDoubleAccidentals);
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
-    QString propertyUserValue(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     bool mark() const { return _mark; }
     void setMark(bool v) const { _mark = v; }
     void setScore(Score* s) override;
-    void setDotY(Direction);
+    void setDotY(DirectionV);
 
     void addParentheses();
 
-    static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHead::Scheme scheme);
-    static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
+    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
+    static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
     NoteVal noteVal() const;
 
-    Element* nextInEl(Element* e);
-    Element* prevInEl(Element* e);
-    Element* nextElement() override;
-    Element* prevElement() override;
-    virtual Element* lastElementBeforeSegment();
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextInEl(EngravingItem* e);
+    EngravingItem* prevInEl(EngravingItem* e);
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+    virtual EngravingItem* lastElementBeforeSegment();
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;

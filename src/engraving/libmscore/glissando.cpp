@@ -36,6 +36,8 @@ NICE-TO-HAVE TODO:
 #include "translation.h"
 #include "draw/fontmetrics.h"
 #include "draw/pen.h"
+#include "style/style.h"
+#include "rw/xml.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -48,13 +50,12 @@ NICE-TO-HAVE TODO:
 #include "scorefont.h"
 #include "segment.h"
 #include "staff.h"
-#include "style.h"
 #include "system.h"
-#include "xml.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle glissandoElementStyle {
@@ -76,6 +77,11 @@ const std::array<const char*, 2> Glissando::glissandoTypeNames = {
 //=========================================================
 //   GlisandoSegment
 //=========================================================
+
+GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent)
+{
+}
 
 //---------------------------------------------------------
 //   layout
@@ -112,7 +118,6 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     qreal h     = pos2().y();
     qreal l     = sqrt(w * w + h * h);
     qreal wi    = asin(-h / l) * 180.0 / M_PI;
-    qreal scale = painter->worldTransform().m11();
     painter->rotate(-wi);
 
     if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
@@ -122,20 +127,21 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
         qreal a  = symAdvance(SymId::wiggleTrill);
         int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
         qreal x  = (l - n * a) * 0.5;     // centre line in available space
-        std::vector<SymId> ids;
+        SymIdList ids;
         for (int i = 0; i < n; ++i) {
             ids.push_back(SymId::wiggleTrill);
         }
 
-        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)), scale);
+        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
     }
 
     if (glissando()->showText()) {
         mu::draw::Font f(glissando()->fontFace());
-        f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio* _spatium / SPATIUM20);
+        f.setPointSizeF(glissando()->fontSize() * MScore::pixelRatio * _spatium / SPATIUM20);
         f.setBold(glissando()->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
+        f.setStrike(glissando()->fontStyle() & FontStyle::Strike);
         mu::draw::FontMetrics fm(f);
         RectF r = fm.boundingRect(glissando()->text());
 
@@ -156,7 +162,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* GlissandoSegment::propertyDelegate(Pid pid)
+EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
 {
     switch (pid) {
     case Pid::GLISS_TYPE:
@@ -180,8 +186,8 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(Score* s)
-    : SLine(s, ElementFlag::MOVABLE)
+Glissando::Glissando(EngravingItem* parent)
+    : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
     setAnchor(Spanner::Anchor::NOTE);
     setDiagonal(true);
@@ -221,9 +227,9 @@ QString Glissando::glissandoTypeName() const
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Glissando::createLineSegment()
+LineSegment* Glissando::createLineSegment(System* parent)
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, score());
+    GlissandoSegment* seg = new GlissandoSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -237,9 +243,9 @@ void Glissando::layout()
 {
     qreal _spatium = spatium();
 
-    if (score() == gscore || !startElement() || !endElement()) {    // for use in palettes or while dragging
+    if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
         if (spannerSegments().empty()) {
-            add(createLineSegment());
+            add(createLineSegment(score()->dummy()->system()));
         }
         LineSegment* s = frontSegment();
         s->setPos(PointF());
@@ -306,7 +312,7 @@ void Glissando::layout()
         && !(cr2->noteType() == NoteType::GRACE8_AFTER
              || cr2->noteType() == NoteType::GRACE16_AFTER || cr2->noteType() == NoteType::GRACE32_AFTER)
         // also ignore if cr1 is a child of cr2, which means cr1 is a grace-before of cr2
-        && !(cr1->parent() == cr2)) {
+        && !(cr1->explicitParent() == cr2)) {
         // in theory we should be reserving space for the gliss prior to the first note of a system
         // but in practice we are not (and would be difficult to get right in current layout algorithms)
         // so, a compromise is to at least use the available space to the left -
@@ -409,7 +415,7 @@ void Glissando::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     if (_showText && !_text.isEmpty()) {
         xml.tag("text", _text);
     }
@@ -422,7 +428,7 @@ void Glissando::write(XmlWriter& xml) const
     }
 
     SLine::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -485,8 +491,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE16:
     case NoteType::GRACE32:
         // move unto parent chord and proceed to standard case
-        if (chord->parent() && chord->parent()->isChord()) {
-            chord = toChord(chord->parent());
+        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
+            chord = toChord(chord->explicitParent());
         } else {
             return 0;
         }
@@ -495,8 +501,8 @@ Note* Glissando::guessInitialNote(Chord* chord)
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        if (chord->parent() && chord->parent()->isChord()) {
-            return toChord(chord->parent())->upNote();
+        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
+            return toChord(chord->explicitParent())->upNote();
         } else {                                // no parent or parent is not a chord?
             return nullptr;
         }
@@ -516,7 +522,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
     // standard case (NORMAL or grace before chord)
 
     // if parent not a segment, can't locate a target note
-    if (!chord->parent()->isSegment()) {
+    if (!chord->explicitParent()->isSegment()) {
         return 0;
     }
 
@@ -534,7 +540,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
             if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
                 target = toChord(segm->element(chordTrack));
             } else {                 // if no same track, look for other chords in the same instrument
-                for (Element* currChord : segm->elist()) {
+                for (EngravingItem* currChord : segm->elist()) {
                     if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
                         target = toChord(currChord);
                         break;
@@ -583,8 +589,8 @@ Note* Glissando::guessFinalNote(Chord* chord)
     case NoteType::GRACE4:
     case NoteType::GRACE16:
     case NoteType::GRACE32:
-        if (chord->parent() && chord->parent()->isChord()) {
-            return toChord(chord->parent())->upNote();
+        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
+            return toChord(chord->explicitParent())->upNote();
         } else {                                // no parent or parent is not a chord?
             return nullptr;
         }
@@ -594,8 +600,8 @@ Note* Glissando::guessFinalNote(Chord* chord)
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
         // move unto parent chord and proceed to standard case
-        if (chord->parent() && chord->parent()->isChord()) {
-            chord = toChord(chord->parent());
+        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
+            chord = toChord(chord->explicitParent());
         } else {
             return 0;
         }
@@ -616,7 +622,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
     // standard case (NORMAL or grace after chord)
 
     // if parent not a segment, can't locate a target note
-    if (!chord->parent()->isSegment()) {
+    if (!chord->explicitParent()->isSegment()) {
         return 0;
     }
 
@@ -633,7 +639,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
             if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
                 target = toChord(segm->element(chordTrack));
             } else {                  // if no same track, look for other chords in the same instrument
-                for (Element* currChord : segm->elist()) {
+                for (EngravingItem* currChord : segm->elist()) {
                     if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
                         target = toChord(currChord);
                         break;
@@ -661,7 +667,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Glissando::getProperty(Pid propertyId) const
+PropertyValue Glissando::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
@@ -671,7 +677,7 @@ QVariant Glissando::getProperty(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return showText();
     case Pid::GLISS_STYLE:
-        return int(glissandoStyle());
+        return glissandoStyle();
     case Pid::GLISS_EASEIN:
         return easeIn();
     case Pid::GLISS_EASEOUT:
@@ -694,7 +700,7 @@ QVariant Glissando::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Glissando::setProperty(Pid propertyId, const QVariant& v)
+bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
@@ -707,7 +713,7 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
         setShowText(v.toBool());
         break;
     case Pid::GLISS_STYLE:
-        setGlissandoStyle(GlissandoStyle(v.toInt()));
+        setGlissandoStyle(v.value<GlissandoStyle>());
         break;
     case Pid::GLISS_EASEIN:
         setEaseIn(v.toInt());
@@ -741,7 +747,7 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Glissando::propertyDefault(Pid propertyId) const
+PropertyValue Glissando::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::GLISS_TYPE:
@@ -749,7 +755,7 @@ QVariant Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return int(GlissandoStyle::CHROMATIC);
+        return GlissandoStyle::CHROMATIC;
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;

@@ -87,49 +87,26 @@ StyledDialogView {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
-            onClicked: menu.popup()
+            onClicked: {
+                var items = [
+                            {id: "undo", title: "Undo", shortcut: "Ctrl+Z", icon: IconCode.UNDO},
+                            {id: "redo", title: "Redo", shortcut: "Shift+Ctrl+Z", enabled: false, icon: IconCode.REDO},
+                            {},
+                            {id: "zoomin", title: "Zoom in", icon: IconCode.ZOOM_IN},
+                            {id: "zoomout", title: "Zoom out", icon: IconCode.ZOOM_OUT},
+                            {},
+                            {id: "checkable", title: "Checkable", checkable: true, checked: false}
+                        ]
+
+                menuLoader.toggleOpened(items, mouseX, mouseY)
+            }
         }
 
-        ContextMenu {
-            id: menu
+        StyledMenuLoader {
+            id: menuLoader
 
-            StyledContextMenuItem {
-                hintIcon: IconCode.UNDO
-
-                text: "Undo"
-                shortcut: "Ctrl+Z"
-            }
-
-            StyledContextMenuItem {
-                hintIcon: IconCode.REDO
-
-                text: "Redo"
-                shortcut: "Shift+Ctrl+Z"
-
-                enabled: false
-            }
-
-            SeparatorLine {}
-
-            StyledContextMenuItem {
-                hintIcon: IconCode.ZOOM_IN
-
-                text: "Zoom in"
-            }
-
-            StyledContextMenuItem {
-                hintIcon: IconCode.ZOOM_OUT
-
-                text: "Zoom out"
-            }
-
-            SeparatorLine {}
-
-            StyledContextMenuItem {
-                text: "Checkable"
-
-                checkable: true
-                checked: false
+            onHandleMenuItem: {
+                console.log("selected " + itemId)
             }
         }
     }

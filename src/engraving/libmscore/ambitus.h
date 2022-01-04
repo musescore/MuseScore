@@ -23,23 +23,28 @@
 #ifndef __AMBITUS_H__
 #define __AMBITUS_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "note.h"
 #include "accidental.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 //---------------------------------------------------------
 //   @@ Ambitus
 //---------------------------------------------------------
 
-class Ambitus final : public Element
+class Ambitus final : public EngravingItem
 {
-    NoteHead::Group _noteHeadGroup;
-    NoteHead::Type _noteHeadType;
-    MScore::DirectionH _dir;
+    NoteHeadGroup _noteHeadGroup;
+    NoteHeadType _noteHeadType;
+    DirectionH _dir;
     bool _hasLine;
     Spatium _lineWidth;
-    Accidental _topAccid, _bottomAccid;
+    Accidental* _topAccid = nullptr;
+    Accidental* _bottomAccid = nullptr;
     int _topPitch, _bottomPitch;
     int _topTpc, _bottomTpc;
 
@@ -48,27 +53,30 @@ class Ambitus final : public Element
     mu::PointF _bottomPos;    // position of bottom note symbol
     mu::LineF _line;          // the drawn line
 
+    friend class mu::engraving::Factory;
+    Ambitus(Segment* parent);
+    Ambitus(const Ambitus& a);
+
     void normalize();
 
 public:
-    Ambitus(Score* s);
+    ~Ambitus();
 
-    ElementType type() const override { return ElementType::AMBITUS; }
     Ambitus* clone() const override { return new Ambitus(*this); }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     qreal mag() const override;
 
     void initFrom(Ambitus* a);
 
     // getters and setters
-    NoteHead::Group noteHeadGroup() const { return _noteHeadGroup; }
-    NoteHead::Type noteHeadType() const { return _noteHeadType; }
-    MScore::DirectionH direction() const { return _dir; }
+    NoteHeadGroup noteHeadGroup() const { return _noteHeadGroup; }
+    NoteHeadType noteHeadType() const { return _noteHeadType; }
+    DirectionH direction() const { return _dir; }
     bool hasLine() const { return _hasLine; }
     Spatium lineWidth() const { return _lineWidth; }
     int topOctave() const { return (_topPitch / 12) - 1; }
@@ -78,9 +86,9 @@ public:
     int topTpc() const { return _topTpc; }
     int bottomTpc() const { return _bottomTpc; }
 
-    void setNoteHeadGroup(NoteHead::Group val) { _noteHeadGroup = val; }
-    void setNoteHeadType(NoteHead::Type val) { _noteHeadType  = val; }
-    void setDirection(MScore::DirectionH val) { _dir = val; }
+    void setNoteHeadGroup(NoteHeadGroup val) { _noteHeadGroup = val; }
+    void setNoteHeadType(NoteHeadType val) { _noteHeadType  = val; }
+    void setDirection(DirectionH val) { _dir = val; }
     void setHasLine(bool val) { _hasLine = val; }
     void setLineWidth(Spatium val) { _lineWidth = val; }
     void setTopPitch(int val);
@@ -89,7 +97,7 @@ public:
     void setBottomTpc(int val);
 
     // some utility functions
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     SymId noteHead() const;
     qreal headWidth() const;
 
@@ -98,19 +106,21 @@ public:
     void      layout() override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void      read(XmlReader&) override;
-    void      scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void      setTrack(int val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
     QString   accessibleInfo() const override;
 
-    // properties
-    QVariant getProperty(Pid) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    void remove(EngravingItem*) override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    // properties
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
 private:
 

@@ -41,10 +41,13 @@ public:
     virtual void toggleNoteInputMethod(NoteInputMethod method) = 0;
     virtual void addNote(NoteName noteName, NoteAddingMode addingMode) = 0;
     virtual void padNote(const Pad& pad)  = 0;
-    virtual void putNote(const QPointF& pos, bool replace, bool insert) = 0;
+    virtual void putNote(const PointF& pos, bool replace, bool insert) = 0;
     virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
+    virtual void setDrumNote(int note) = 0;
     virtual void addTuplet(const TupletOptions& options) = 0;
+    virtual void doubleNoteInputDuration() = 0;
+    virtual void halveNoteInputDuration() = 0;
 
     virtual void addSlur(Ms::Slur* slur) = 0;
     virtual void resetSlur() = 0;
@@ -53,7 +56,9 @@ public:
 
     virtual void setCurrentVoiceIndex(int voiceIndex) = 0;
 
-    virtual QRectF cursorRect() const = 0;
+    virtual void resetInputPosition() = 0;
+
+    virtual RectF cursorRect() const = 0;
 
     virtual async::Notification noteAdded() const = 0;
     virtual async::Notification stateChanged() const = 0;

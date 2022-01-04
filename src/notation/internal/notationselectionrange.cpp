@@ -21,7 +21,7 @@
  */
 #include "notationselectionrange.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 #include "libmscore/system.h"
@@ -82,6 +82,9 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 
     Ms::Segment* startSegment = rangeStartSegment();
     Ms::Segment* endSegment = rangeEndSegment();
+    if (!endSegment) {
+        endSegment = score()->lastSegment();
+    }
 
     if (!startSegment || !endSegment || startSegment->tick() > endSegment->tick()) {
         return {};
@@ -118,6 +121,17 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
     }
 
     return result;
+}
+
+bool NotationSelectionRange::containsPoint(const PointF& point) const
+{
+    for (const mu::RectF& area : boundingArea()) {
+        if (area.contains(point)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 Ms::Score* NotationSelectionRange::score() const

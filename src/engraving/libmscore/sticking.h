@@ -33,20 +33,21 @@ namespace Ms {
 
 class Sticking final : public TextBase
 {
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    Sticking(Score*);
+    Sticking(Segment* parent);
 
     Sticking* clone() const override { return new Sticking(*this); }
-    ElementType type() const override { return ElementType::STICKING; }
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     void layout() override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
+
+    bool edit(EditData&) override;
 };
 }     // namespace Ms
 #endif

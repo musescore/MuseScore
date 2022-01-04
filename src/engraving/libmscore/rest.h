@@ -25,7 +25,6 @@
 
 #include "chordrest.h"
 #include "notedot.h"
-#include "symid.h"
 
 namespace Ms {
 class TDuration;
@@ -38,50 +37,47 @@ class TDuration;
 class Rest : public ChordRest
 {
 public:
-    Rest(Score* s = 0);
-    Rest(Score*, const TDuration&);
-    Rest(const Rest&, bool link = false);
+
     ~Rest() { qDeleteAll(m_dots); }
 
-    // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    void hack_toRestType();
 
-    virtual ElementType type() const override { return ElementType::REST; }
+    // Score Tree functions
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
+
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }
-    Element* linkedClone() override { return new Rest(*this, true); }
-    Measure* measure() const override { return parent() ? toMeasure(parent()->parent()) : 0; }
+    EngravingItem* linkedClone() override { return new Rest(*this, true); }
+    Measure* measure() const override { return explicitParent() ? toMeasure(explicitParent()->explicitParent()) : 0; }
     qreal mag() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
     void setTrack(int val) override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
 
     bool isGap() const { return m_gap; }
     virtual void setGap(bool v) { m_gap = v; }
 
-    void reset() override;
-
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    SymId getSymbol(TDuration::DurationType type, int line, int lines,  int* yoffset);
+    SymId getSymbol(DurationType type, int line, int lines,  int* yoffset);
 
     void checkDots();
     void layoutDots();
     NoteDot* dot(int n);
     int getDotline() const { return m_dotline; }
-    static int getDotline(TDuration::DurationType durationType);
+    static int getDotline(DurationType durationType);
     SymId sym() const { return m_sym; }
     bool accent();
     void setAccent(bool flag);
@@ -95,14 +91,14 @@ public:
     qreal rightEdge() const override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
 
-    Element* nextElement() override;
-    Element* prevElement() override;
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;
     Shape shape() const override;
@@ -111,10 +107,18 @@ public:
     bool shouldNotBeDrawn() const;
 
 protected:
+    Rest(const ElementType& type, Segment* parent = 0);
+    Rest(const ElementType& type, Segment* parent, const TDuration&);
+    Rest(const Rest&, bool link = false);
+
     Sid getPropertyStyle(Pid pid) const override;
     virtual mu::RectF numberRect() const { return mu::RectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
+
+    friend class mu::engraving::Factory;
+    Rest(Segment* parent);
+    Rest(Segment* parent, const TDuration&);
 
     // values calculated by layout:
     SymId m_sym;

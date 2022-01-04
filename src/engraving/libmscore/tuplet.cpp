@@ -21,22 +21,29 @@
  */
 
 #include "tuplet.h"
+
+#include "draw/pen.h"
+#include "style/style.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
+#include "factory.h"
 #include "score.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
 #include "staff.h"
-#include "style.h"
 #include "text.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "undo.h"
 #include "stem.h"
 #include "beam.h"
 #include "measure.h"
 #include "system.h"
-#include "draw/pen.h"
+
+#include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -60,10 +67,10 @@ static const ElementStyle tupletStyle {
 //   Tuplet
 //---------------------------------------------------------
 
-Tuplet::Tuplet(Score* s)
-    : DurationElement(s)
+Tuplet::Tuplet(Measure* parent)
+    : DurationElement(ElementType::TUPLET, parent)
 {
-    _direction    = Direction::AUTO;
+    _direction    = DirectionV::AUTO;
     _numberType   = TupletNumberType::SHOW_NUMBER;
     _bracketType  = TupletBracketType::AUTO_BRACKET;
     _ratio        = Fraction(1, 1);
@@ -110,13 +117,18 @@ Tuplet::~Tuplet()
     delete _number;
 }
 
+void Tuplet::setParent(Measure* parent)
+{
+    EngravingItem::setParent(parent);
+}
+
 //---------------------------------------------------------
 //   setSelected
 //---------------------------------------------------------
 
 void Tuplet::setSelected(bool f)
 {
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
     if (_number) {
         _number->setSelected(f);
     }
@@ -128,33 +140,11 @@ void Tuplet::setSelected(bool f)
 
 void Tuplet::setVisible(bool f)
 {
-    Element::setVisible(f);
+    EngravingItem::setVisible(f);
     if (_number) {
         _number->setVisible(f);
     }
 }
-
-#if 0
-//---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-Fraction Tuplet::tick() const
-{
-    std::vector<DurationElement*> _elements;
-
-    const DurationElement* de = this;
-    while (de->isTuplet()) {
-        const Tuplet* t = toTuplet(de);
-        if (t->_elements.empty()) {
-            return Fraction(0, 1);
-        }
-        de = t->_elements.front();
-    }
-    return toChordRest(de)->tick();
-}
-
-#endif
 
 //---------------------------------------------------------
 //   rtick
@@ -200,7 +190,7 @@ void Tuplet::layout()
     qreal _spatium = spatium();
     if (_numberType != TupletNumberType::NO_TEXT) {
         if (_number == 0) {
-            _number = new Text(score(), Tid::TUPLET);
+            _number = Factory::createText(this, TextStyleType::TUPLET);
             _number->setComposition(true);
             _number->setTrack(track());
             _number->setParent(this);
@@ -219,14 +209,14 @@ void Tuplet::layout()
             _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
         }
 
-        bool small = true;
+        _isSmall = true;
         for (const DurationElement* e : _elements) {
-            if (e->isChordRest() && !toChordRest(e)->small()) {
-                small = false;
+            if ((e->isChordRest() && !toChordRest(e)->isSmall()) || (e->isTuplet() && !toTuplet(e)->isSmall())) {
+                _isSmall = false;
                 break;
             }
         }
-        _number->setMag(small ? score()->styleD(Sid::smallNoteMag) : 1.0);
+        _number->setMag(_isSmall ? score()->styleD(Sid::smallNoteMag) : 1.0);
     } else {
         if (_number) {
             if (_number->selected()) {
@@ -239,13 +229,13 @@ void Tuplet::layout()
     //
     // find out main direction
     //
-    if (_direction == Direction::AUTO) {
+    if (_direction == DirectionV::AUTO) {
         int up = 1;
         for (const DurationElement* e : _elements) {
             if (e->isChord()) {
                 const Chord* c = toChord(e);
-                if (c->stemDirection() != Direction::AUTO) {
-                    up += c->stemDirection() == Direction::UP ? 1000 : -1000;
+                if (c->stemDirection() != DirectionV::AUTO) {
+                    up += c->stemDirection() == DirectionV::UP ? 1000 : -1000;
                 } else {
                     up += c->up() ? 1 : -1;
                 }
@@ -255,21 +245,19 @@ void Tuplet::layout()
         }
         _isUp = up > 0;
     } else {
-        _isUp = _direction == Direction::UP;
+        _isUp = _direction == DirectionV::UP;
     }
 
     //
     // find first and last chord of tuplet
     // (tuplets can be nested)
     //
-    bool nested = false;
     const DurationElement* cr1 = _elements.front();
     while (cr1->isTuplet()) {
         const Tuplet* t = toTuplet(cr1);
         if (t->elements().empty()) {
             break;
         }
-        nested = true;
         cr1 = t->elements().front();
     }
     const DurationElement* cr2 = _elements.back();
@@ -278,7 +266,6 @@ void Tuplet::layout()
         if (t->elements().empty()) {
             break;
         }
-        nested = true;
         cr2 = t->elements().back();
     }
 
@@ -311,20 +298,19 @@ void Tuplet::layout()
     //
     qreal maxSlope      = score()->styleD(Sid::tupletMaxSlope);
     bool outOfStaff     = score()->styleB(Sid::tupletOufOfStaff);
-    qreal vHeadDistance = score()->styleP(Sid::tupletVHeadDistance);
-    qreal vStemDistance = score()->styleP(Sid::tupletVStemDistance);
-    qreal stemLeft      = score()->styleP(Sid::tupletStemLeftDistance);
-    qreal stemRight     = score()->styleP(Sid::tupletStemRightDistance);
-    qreal noteLeft      = score()->styleP(Sid::tupletNoteLeftDistance);
-    qreal noteRight     = score()->styleP(Sid::tupletNoteRightDistance);
+    qreal vHeadDistance = score()->styleMM(Sid::tupletVHeadDistance);
+    qreal vStemDistance = score()->styleMM(Sid::tupletVStemDistance);
+    qreal stemLeft      = score()->styleMM(Sid::tupletStemLeftDistance);
+    qreal stemRight     = score()->styleMM(Sid::tupletStemRightDistance);
+    qreal noteLeft      = score()->styleMM(Sid::tupletNoteLeftDistance);
+    qreal noteRight     = score()->styleMM(Sid::tupletNoteRightDistance);
 
     int move = 0;
     setStaffIdx(cr1->vStaffIdx());
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
         // account for staff move when adjusting bracket to avoid staff
         // but don't attempt adjustment unless both endpoints are in same staff
-        // and not a nested tuplet
-        if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove() && !tuplet() && !nested) {
+        if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
             move = toChordRest(cr1)->staffMove();
             if (move == 1) {
                 setStaffIdx(cr1->vStaffIdx());
@@ -334,7 +320,7 @@ void Tuplet::layout()
         }
     }
 
-    qreal l1  =  score()->styleP(Sid::tupletBracketHookHeight);
+    qreal l1  =  score()->styleMM(Sid::tupletBracketHookHeight);
     qreal l2l = vHeadDistance;      // left bracket vertical distance
     qreal l2r = vHeadDistance;      // right bracket vertical distance right
 
@@ -452,7 +438,7 @@ void Tuplet::layout()
         if (n >= 3) {
             d = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                Element* e = _elements[i];
+                EngravingItem* e = _elements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -563,7 +549,7 @@ void Tuplet::layout()
         if (n >= 3) {
             d  = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                Element* e = _elements[i];
+                EngravingItem* e = _elements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -584,9 +570,9 @@ void Tuplet::layout()
     }
 
     setPos(0.0, 0.0);
-    PointF mp(parent()->pagePos());
-    if (parent()->isMeasure()) {
-        System* s = toMeasure(parent())->system();
+    PointF mp(parentItem()->pagePos());
+    if (explicitParent()->isMeasure()) {
+        System* s = toMeasure(explicitParent())->system();
         if (s) {
             mp.ry() += s->staff(staffIdx())->y();
         }
@@ -715,7 +701,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QColor color(curColor());
+    Color color(curColor());
     if (_number) {
         painter->setPen(color);
         PointF pos(_number->pos());
@@ -777,9 +763,10 @@ Shape Tuplet::shape() const
 //   scanElements
 //---------------------------------------------------------
 
-void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (ScoreElement* child : *this) {
+    for (int i = 0; i < scanChildCount(); ++i) {
+        EngravingObject* child = scanChild(i);
         if (child == _number && !all) {
             continue; // don't scan number unless all is true
         }
@@ -796,29 +783,29 @@ void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
 
 void Tuplet::write(XmlWriter& xml) const
 {
-    xml.stag(this);
-    Element::writeProperties(xml);
+    xml.startObject(this);
+    EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::NORMAL_NOTES);
     writeProperty(xml, Pid::ACTUAL_NOTES);
     writeProperty(xml, Pid::P1);
     writeProperty(xml, Pid::P2);
 
-    xml.tag("baseNote", _baseLen.name());
+    xml.tag("baseNote", TConv::toXml(_baseLen.type()));
     if (int dots = _baseLen.dots()) {
         xml.tag("baseDots", dots);
     }
 
     if (_number) {
-        xml.stag("Number", _number);
-        _number->writeProperty(xml, Pid::SUB_STYLE);
+        xml.startObject("Number", _number);
+        _number->writeProperty(xml, Pid::TEXT_STYLE);
         _number->writeProperty(xml, Pid::TEXT);
-        xml.etag();
+        xml.endObject();
     }
 
     writeStyledProperties(xml);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -871,6 +858,14 @@ bool Tuplet::readProperties(XmlReader& e)
         if (isStyled(Pid::FONT_STYLE)) {
             setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
         }
+    } else if (tag == "strike") {
+        bool val = e.readInt();
+        if (_number) {
+            _number->setStrike(val);
+        }
+        if (isStyled(Pid::FONT_STYLE)) {
+            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+        }
     } else if (tag == "normalNotes") {
         _ratio.setDenominator(e.readInt());
     } else if (tag == "actualNotes") {
@@ -880,11 +875,11 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "p2") {
         _p2 = e.readPoint() * score()->spatium();
     } else if (tag == "baseNote") {
-        _baseLen = TDuration(e.readElementText());
+        _baseLen = TDuration(TConv::fromXml(e.readElementText(), DurationType::V_INVALID));
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {
-        _number = new Text(score(), Tid::TUPLET);
+        _number = Factory::createText(this, TextStyleType::TUPLET);
         _number->setComposition(true);
         _number->setParent(this);
         resetNumberProperty();
@@ -905,7 +900,7 @@ bool Tuplet::readProperties(XmlReader& e)
 //   add
 //---------------------------------------------------------
 
-void Tuplet::add(Element* e)
+void Tuplet::add(EngravingItem* e)
 {
 #ifndef NDEBUG
     for (DurationElement* el : _elements) {
@@ -949,7 +944,7 @@ void Tuplet::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Tuplet::remove(Element* e)
+void Tuplet::remove(EngravingItem* e)
 {
     switch (e->type()) {
 //            case ElementType::TEXT:
@@ -1031,7 +1026,7 @@ void Tuplet::reset()
 {
     undoChangeProperty(Pid::P1, PointF());
     undoChangeProperty(Pid::P2, PointF());
-    Element::reset();
+    EngravingItem::reset();
 }
 
 //---------------------------------------------------------
@@ -1040,8 +1035,8 @@ void Tuplet::reset()
 
 void Tuplet::dump() const
 {
-    Element::dump();
-    qDebug("ratio %s", qPrintable(_ratio.print()));
+    EngravingItem::dump();
+    LOGD() << "ratio: " << _ratio.toString();
 }
 
 //---------------------------------------------------------
@@ -1056,7 +1051,7 @@ void Tuplet::setTrack(int val)
     if (_number) {
         _number->setTrack(val);
     }
-    Element::setTrack(val);
+    EngravingItem::setTrack(val);
 }
 
 //---------------------------------------------------------
@@ -1118,11 +1113,11 @@ Fraction Tuplet::elementsDuration()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Tuplet::getProperty(Pid propertyId) const
+PropertyValue Tuplet::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return QVariant::fromValue<Direction>(_direction);
+        return PropertyValue::fromValue<DirectionV>(_direction);
     case Pid::NUMBER_TYPE:
         return int(_numberType);
     case Pid::BRACKET_TYPE:
@@ -1142,7 +1137,7 @@ QVariant Tuplet::getProperty(Pid propertyId) const
     case Pid::FONT_STYLE:
     case Pid::ALIGN:
     case Pid::SIZE_SPATIUM_DEPENDENT:
-        return _number ? _number->getProperty(propertyId) : QVariant();
+        return _number ? _number->getProperty(propertyId) : PropertyValue();
     default:
         break;
     }
@@ -1153,11 +1148,11 @@ QVariant Tuplet::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
+bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        setDirection(v.value<Direction>());
+        setDirection(v.value<DirectionV>());
         break;
     case Pid::NUMBER_TYPE:
         setNumberType(TupletNumberType(v.toInt()));
@@ -1166,7 +1161,7 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
         setBracketType(TupletBracketType(v.toInt()));
         break;
     case Pid::LINE_WIDTH:
-        setBracketWidth(v.value<Spatium>());
+        setBracketWidth(v.value<Millimetre>());
         break;
     case Pid::NORMAL_NOTES:
         _ratio.setDenominator(v.toInt());
@@ -1203,11 +1198,11 @@ bool Tuplet::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Tuplet::propertyDefault(Pid id) const
+PropertyValue Tuplet::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::TUPLET);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::TUPLET;
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
@@ -1230,7 +1225,7 @@ QVariant Tuplet::propertyDefault(Pid id) const
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
     {
-        QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
+        PropertyValue v = EngravingObject::propertyDefault(id, TextStyleType::DEFAULT);
         if (v.isValid()) {
             return v;
         }
@@ -1313,12 +1308,13 @@ Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& en
         return Fraction::fromTicks(0);
     }
     f = d.fraction();
-    Rest* rest = new Rest(score());
+    Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
+    Rest* rest = Factory::createRest(segment);
     rest->setDurationType(d);
     rest->setTicks(f);
     rest->setTrack(track());
     rest->setVisible(false);
-    Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
+
     segment->add(rest);
     add(rest);
     return f;

@@ -50,7 +50,7 @@ public:
 private:
 
     struct Win;
-    std::unique_ptr<Win> m_win;
+    std::shared_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
 
     async::Notification m_devicesChanged;

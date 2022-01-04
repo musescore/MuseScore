@@ -26,9 +26,9 @@
 #include "libmscore/drumset.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "importmidi_operations.h"
-#include "framework/midi_old/midiinstrument.h"
+#include "engraving/compat/midi/midiinstrument.h"
 
 #include <set>
 

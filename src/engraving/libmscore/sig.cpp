@@ -21,7 +21,7 @@
  */
 
 #include "sig.h"
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -32,8 +32,8 @@ namespace Ms {
 
 int ticks_beat(int n)
 {
-    int m = (MScore::division * 4) / n;
-    if ((MScore::division* 4) % n) {
+    int m = (Constant::division * 4) / n;
+    if ((Constant::division* 4) % n) {
         qFatal("Mscore: ticks_beat(): bad divisor %d", n);
     }
     return m;
@@ -45,7 +45,7 @@ int ticks_beat(int n)
 
 static int ticks_measure(const Fraction& f)
 {
-    return (MScore::division* 4 * f.numerator()) / f.denominator();
+    return (Constant::division * 4 * f.numerator()) / f.denominator();
 }
 
 //---------------------------------------------------------
@@ -331,7 +331,7 @@ void TimeSigMap::tickValues(int t, int* bar, int* beat, int* tick) const
     int ticksB = ticks_beat(e->second.timesig().denominator());   // ticks in beat
     int ticksM = ticksB * e->second.timesig().numerator();        // ticks in measure (bar)
     if (ticksM == 0) {
-        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().print()));
+        qDebug("TimeSigMap::tickValues: at %d %s", t, qPrintable(e->second.timesig().toString()));
         *bar  = 0;
         *beat = 0;
         *tick = 0;
@@ -392,11 +392,11 @@ int TimeSigMap::bar2tick(int bar, int beat) const
 
 void TimeSigMap::write(XmlWriter& xml) const
 {
-    xml.stag("siglist");
+    xml.startObject("siglist");
     for (auto i = begin(); i != end(); ++i) {
         i->second.write(xml, i->first);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -424,10 +424,10 @@ void TimeSigMap::read(XmlReader& e, int fileDivision)
 
 void SigEvent::write(XmlWriter& xml, int tick) const
 {
-    xml.stag(QString("sig tick=\"%1\"").arg(tick));
+    xml.startObject(QString("sig tick=\"%1\"").arg(tick));
     xml.tag("nom",   _timesig.numerator());
     xml.tag("denom", _timesig.denominator());
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -437,7 +437,7 @@ void SigEvent::write(XmlWriter& xml, int tick) const
 int SigEvent::read(XmlReader& e, int fileDivision)
 {
     int tick  = e.intAttribute("tick", 0);
-    tick      = tick * MScore::division / fileDivision;
+    tick      = tick * Constant::division / fileDivision;
 
     int numerator = 1;
     int denominator = 1;
@@ -566,7 +566,7 @@ void TimeSigMap::dump() const
     qDebug("TimeSigMap:");
     for (auto i = begin(); i != end(); ++i) {
         qDebug("%6d timesig: %s measure: %d",
-               i->first, qPrintable(i->second.timesig().print()), i->second.bar());
+               i->first, qPrintable(i->second.timesig().toString()), i->second.bar());
     }
 }
 
@@ -576,6 +576,6 @@ void TimeSigMap::dump() const
 
 int TimeSigFrac::dUnitTicks() const
 {
-    return (4 * MScore::division) / denominator();
+    return (4 * Constant::division) / denominator();
 }
 }

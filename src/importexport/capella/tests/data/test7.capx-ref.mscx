@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -63,8 +63,8 @@
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
-            <l1>8</l1>
-            <l2>4</l2>
+            <l1>10</l1>
+            <l2>8</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

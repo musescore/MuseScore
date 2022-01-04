@@ -32,13 +32,14 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_TEMPO);
     setTitle(qtrc("inspector", "Tempo"));
+    setIcon(ui::IconCode::Code::METRONOME);
     createProperties();
 }
 
 void TempoSettingsModel::createProperties()
 {
-    m_isDefaultTempoForced = buildPropertyItem(Ms::Pid::TEMPO_FOLLOW_TEXT, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_isDefaultTempoForced = buildPropertyItem(Ms::Pid::TEMPO_FOLLOW_TEXT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -55,7 +56,7 @@ void TempoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isDefaultTempoForced);
     loadPropertyItem(m_tempo, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

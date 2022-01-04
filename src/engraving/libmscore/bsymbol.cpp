@@ -22,34 +22,37 @@
 
 #include <cmath>
 
+#include "rw/xml.h"
+
 #include "score.h"
 #include "image.h"
-#include "xml.h"
 #include "staff.h"
 #include "segment.h"
 #include "page.h"
 #include "system.h"
 #include "measure.h"
+#include "factory.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(Score* s, ElementFlags f)
-    : Element(s, f)
+BSymbol::BSymbol(const Ms::ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
-    _align = Align::LEFT | Align::BASELINE;
+    _align = { AlignH::LEFT, AlignV::BASELINE };
 }
 
 BSymbol::BSymbol(const BSymbol& s)
-    : Element(s)
+    : EngravingItem(s)
 {
     _align = s._align;
-    for (Element* e : s._leafs) {
-        Element* ee = e->clone();
+    for (EngravingItem* e : s._leafs) {
+        EngravingItem* ee = e->clone();
         ee->setParent(this);
         _leafs.append(ee);
     }
@@ -61,10 +64,10 @@ BSymbol::BSymbol(const BSymbol& s)
 
 void BSymbol::writeProperties(XmlWriter& xml) const
 {
-    for (const Element* e : leafs()) {
+    for (const EngravingItem* e : leafs()) {
         e->write(xml);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 }
 
 //---------------------------------------------------------
@@ -75,19 +78,19 @@ bool BSymbol::readProperties(XmlReader& e)
 {
     const QStringRef& tag = e.name();
 
-    if (Element::readProperties(e)) {
+    if (EngravingItem::readProperties(e)) {
         return true;
     } else if (tag == "systemFlag") {
         setSystemFlag(e.readInt());
     } else if (tag == "Symbol" || tag == "FSymbol") {
-        Element* element = name2Element(tag, score());
+        EngravingItem* element = Factory::createItemByName(tag, this);
         element->read(e);
         add(element);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            Element* element = name2Element(tag, score());
+            EngravingItem* element = Factory::createItemByName(tag, this);
             element->read(e);
             add(element);
         }
@@ -101,7 +104,7 @@ bool BSymbol::readProperties(XmlReader& e)
 //   add
 //---------------------------------------------------------
 
-void BSymbol::add(Element* e)
+void BSymbol::add(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
         e->setParent(this);
@@ -117,7 +120,7 @@ void BSymbol::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void BSymbol::remove(Element* e)
+void BSymbol::remove(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
         if (!_leafs.removeOne(e)) {
@@ -141,9 +144,9 @@ bool BSymbol::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* BSymbol::drop(EditData& data)
+EngravingItem* BSymbol::drop(EditData& data)
 {
-    Element* el = data.dropElement;
+    EngravingItem* el = data.dropElement;
     if (el->isSymbol() || el->isImage()) {
         el->setParent(this);
         PointF p = data.pos - pagePos() - data.dragOffset;
@@ -165,11 +168,11 @@ void BSymbol::layout()
     if (staff()) {
         setMag(staff()->staffMag(tick()));
     }
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(.0, .0);
         setPos(.0, .0);
     }
-    for (Element* e : qAsConst(_leafs)) {
+    for (EngravingItem* e : qAsConst(_leafs)) {
         e->layout();
     }
 }
@@ -181,7 +184,7 @@ void BSymbol::layout()
 mu::RectF BSymbol::drag(EditData& ed)
 {
     RectF r(canvasBoundingRect());
-    foreach (const Element* e, _leafs) {
+    foreach (const EngravingItem* e, _leafs) {
         r.unite(e->canvasBoundingRect());
     }
 
@@ -203,7 +206,7 @@ mu::RectF BSymbol::drag(EditData& ed)
     setOffset(PointF(x, y));
 
     r.unite(canvasBoundingRect());
-    foreach (const Element* e, _leafs) {
+    foreach (const EngravingItem* e, _leafs) {
         r.unite(e->canvasBoundingRect());
     }
     return r;
@@ -224,7 +227,7 @@ QVector<mu::LineF> BSymbol::dragAnchorLines() const
 
 mu::PointF BSymbol::pagePos() const
 {
-    if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+    if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
         mu::PointF p(pos());
         System* system = segment()->measure()->system();
         if (system) {
@@ -233,7 +236,7 @@ mu::PointF BSymbol::pagePos() const
         p.rx() = pageX();
         return p;
     } else {
-        return Element::pagePos();
+        return EngravingItem::pagePos();
     }
 }
 
@@ -243,9 +246,9 @@ mu::PointF BSymbol::pagePos() const
 
 mu::PointF BSymbol::canvasPos() const
 {
-    if (parent() && (parent()->type() == ElementType::SEGMENT)) {
+    if (explicitParent() && (explicitParent()->type() == ElementType::SEGMENT)) {
         mu::PointF p(pos());
-        Segment* s = toSegment(parent());
+        Segment* s = toSegment(explicitParent());
 
         System* system = s->measure()->system();
         if (system) {
@@ -259,7 +262,7 @@ mu::PointF BSymbol::canvasPos() const
         p.rx() = canvasX();
         return p;
     } else {
-        return Element::canvasPos();
+        return EngravingItem::canvasPos();
     }
 }
 }

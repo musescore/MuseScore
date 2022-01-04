@@ -401,11 +401,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Brassed Up</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>James Thistlewood
 </text>
           </Text>

@@ -33,10 +33,12 @@ class IAccessibilityController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAccessibilityController() = default;
 
-    virtual const IAccessible* accessibleRoot() const = 0;
-
     virtual void reg(IAccessible* item) = 0;
     virtual void unreg(IAccessible* item) = 0;
+
+    virtual const IAccessible* accessibleRoot() const = 0;
+
+    virtual const IAccessible* lastFocused() const = 0;
 };
 }
 

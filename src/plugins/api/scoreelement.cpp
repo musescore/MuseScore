@@ -24,8 +24,11 @@
 #include "elements.h"
 #include "score.h"
 #include "fraction.h"
-#include "libmscore/score.h"
-#include "libmscore/scoreElement.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/engravingobject.h"
+
+using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 namespace PluginAPI {
@@ -68,7 +71,7 @@ QString ScoreElement::userName() const
 
 qreal ScoreElement::spatium() const
 {
-    return e->isElement() ? toElement(e)->spatium() : e->score()->spatium();
+    return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->spatium();
 }
 
 //---------------------------------------------------------
@@ -80,23 +83,22 @@ QVariant ScoreElement::get(Ms::Pid pid) const
     if (!e) {
         return QVariant();
     }
-    const QVariant val = e->getProperty(pid);
-    switch (propertyType(pid)) {
+    const PropertyValue val = e->getProperty(pid);
+    switch (val.type()) {
     case P_TYPE::FRACTION: {
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
     }
-    case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM:
-        return val.toPointF() / spatium();
-    case P_TYPE::SP_REAL:
+    case P_TYPE::POINT:
+        return val.value<PointF>().toQPointF() / spatium();
+    case P_TYPE::MILLIMETRE:
         return val.toReal() / spatium();
     case P_TYPE::SPATIUM:
         return val.value<Spatium>().val();
     default:
         break;
     }
-    return val;
+    return val.toQVariant();
 }
 
 //---------------------------------------------------------
@@ -116,18 +118,14 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
             qWarning("ScoreElement::set: trying to assign value of wrong type to fractional property");
             return;
         }
-        val = QVariant::fromValue(f->fraction());
+        val = f->fraction().toString();
     }
     break;
-    case P_TYPE::POINT_SP:
-    case P_TYPE::POINT_SP_MM:
+    case P_TYPE::POINT:
         val = val.toPointF() * spatium();
         break;
-    case P_TYPE::SP_REAL:
+    case P_TYPE::MILLIMETRE:
         val = val.toReal() * spatium();
-        break;
-    case P_TYPE::SPATIUM:
-        val = QVariant::fromValue(Spatium(val.toReal()));
         break;
     default:
         break;
@@ -137,9 +135,9 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
     if (_ownership == Ownership::SCORE) {
-        e->undoChangeProperty(pid, val, newFlags);
+        e->undoChangeProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)), newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
-        e->setProperty(pid, val);
+        e->setProperty(pid, PropertyValue::fromQVariant(val, propertyType(pid)));
         e->setPropertyFlags(pid, newFlags);
     }
 }
@@ -151,13 +149,13 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
 ///   type at runtime based on the actual element type.
 //---------------------------------------------------------
 
-ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
+ScoreElement* wrap(Ms::EngravingObject* se, Ownership own)
 {
     if (!se) {
         return nullptr;
     }
-    if (se->isElement()) {
-        return wrap(toElement(se), own);
+    if (se->isEngravingItem()) {
+        return wrap(toEngravingItem(se), own);
     }
 
     using Ms::ElementType;

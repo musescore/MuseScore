@@ -20,33 +20,87 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.15
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 FlatButton {
     id: root
 
-    default property StyledPopupView popup
+    property alias popup: popup
+    property alias popupContent: popup.contentData
+    property alias popupNavigationPanel: popup.navigationPanel
 
-    property var popupPositionX
-    property var popupPositionY: height
-    property var popupAvailableWidth
-    readonly property int popupContentHeight: popup.isOpened ? popup.contentHeight + popup.arrowHeight : 0
+    property int popupAvailableWidth: parent ? parent.width : 0
+    property var anchorItem: null
+
+    signal ensureContentVisibleRequested(int invisibleContentHeight)
+    signal popupOpened()
 
     Layout.fillWidth: true
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
 
-    onVisibleChanged: {
-        if (!visible) {
-            popup.close()
-        }
+    function closePopup() {
+        popup.close()
+    }
+
+    InspectorPopupController {
+        id: popupController
+
+        visualControl: root
+        popup: popup
+    }
+
+    Component.onCompleted: {
+        popupController.load()
     }
 
     onClicked: {
-        if (!popup.isOpened) {
-            popup.open()
-        } else {
-            popup.close()
+        popup.toggleOpened()
+    }
+
+    StyledPopupView {
+        id: popup
+
+        anchorItem: root.anchorItem
+        contentWidth: root.popupAvailableWidth - 2 * margins
+
+        navigationParentControl: root.navigation
+
+        closePolicy: PopupView.NoAutoClose
+
+        onContentHeightChanged: {
+            checkForInsufficientSpace()
+        }
+
+        onOpened: {
+            checkForInsufficientSpace()
+            root.popupOpened()
+        }
+
+        onClosed: {
+            root.ensureContentVisibleRequested(root.anchorItem.height) // reset contentY
+        }
+
+        function checkForInsufficientSpace() {
+            if (!isOpened) {
+                return
+            }
+
+            var buttonGlobalPos = root.mapToItem(root.anchorItem, Qt.point(0, 0))
+            var popupHeight = contentHeight + padding*2 + margins*2
+            var invisibleContentHeight = root.anchorItem.height - (buttonGlobalPos.y + root.height + popupHeight)
+
+            root.ensureContentVisibleRequested(invisibleContentHeight)
+        }
+
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: root.navigation.name + " Popup"
+            section: popup.navigationSection
+            order: 1
+            direction: NavigationPanel.Vertical
         }
     }
 }

@@ -35,6 +35,7 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+    void onDestroy() override;
 };
 }
 

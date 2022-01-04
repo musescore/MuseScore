@@ -21,19 +21,22 @@
  */
 
 #include "bend.h"
+
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "draw/fontmetrics.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -53,38 +56,38 @@ static const ElementStyle bendStyle {
     { Sid::bendLineWidth,                      Pid::LINE_WIDTH },
 };
 
-static const QList<PitchValue> BEND_CURVE = { PitchValue(0, 0),
-                                              PitchValue(15, 100),
-                                              PitchValue(60, 100) };
+static const PitchValues BEND_CURVE = { PitchValue(0, 0),
+                                        PitchValue(15, 100),
+                                        PitchValue(60, 100) };
 
-static const QList<PitchValue> BEND_RELEASE_CURVE = { PitchValue(0, 0),
-                                                      PitchValue(10, 100),
-                                                      PitchValue(20, 100),
-                                                      PitchValue(30, 0),
-                                                      PitchValue(60, 0) };
+static const PitchValues BEND_RELEASE_CURVE = { PitchValue(0, 0),
+                                                PitchValue(10, 100),
+                                                PitchValue(20, 100),
+                                                PitchValue(30, 0),
+                                                PitchValue(60, 0) };
 
-static const QList<PitchValue> BEND_RELEASE_BEND_CURVE = { PitchValue(0, 0),
-                                                           PitchValue(10, 100),
-                                                           PitchValue(20, 100),
-                                                           PitchValue(30, 0),
-                                                           PitchValue(40, 0),
-                                                           PitchValue(50, 100),
-                                                           PitchValue(60, 100) };
+static const PitchValues BEND_RELEASE_BEND_CURVE = { PitchValue(0, 0),
+                                                     PitchValue(10, 100),
+                                                     PitchValue(20, 100),
+                                                     PitchValue(30, 0),
+                                                     PitchValue(40, 0),
+                                                     PitchValue(50, 100),
+                                                     PitchValue(60, 100) };
 
-static const QList<PitchValue> PREBEND_CURVE = { PitchValue(0, 100),
-                                                 PitchValue(60, 100) };
+static const PitchValues PREBEND_CURVE = { PitchValue(0, 100),
+                                           PitchValue(60, 100) };
 
-static const QList<PitchValue> PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
-                                                         PitchValue(15, 100),
-                                                         PitchValue(30, 0),
-                                                         PitchValue(60, 0) };
+static const PitchValues PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
+                                                   PitchValue(15, 100),
+                                                   PitchValue(30, 0),
+                                                   PitchValue(60, 0) };
 
 //---------------------------------------------------------
 //   Bend
 //---------------------------------------------------------
 
-Bend::Bend(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+Bend::Bend(Note* parent)
+    : EngravingItem(ElementType::BEND, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&bendStyle);
 }
@@ -99,6 +102,7 @@ mu::draw::Font Bend::font(qreal sp) const
     f.setBold(_fontStyle & FontStyle::Bold);
     f.setItalic(_fontStyle & FontStyle::Italic);
     f.setUnderline(_fontStyle & FontStyle::Underline);
+    f.setStrike(_fontStyle & FontStyle::Strike);
     qreal m = _fontSize;
     m *= sp / SPATIUM20;
 
@@ -160,14 +164,14 @@ void Bend::layout()
     qreal _spatium = spatium();
 
     if (staff() && !staff()->isTabStaff(tick())) {
-        if (!parent()) {
+        if (!explicitParent()) {
             m_noteWidth = -_spatium * 2;
             m_notePos   = PointF(0.0, _spatium * 3);
         }
     }
 
     qreal _lw = _lineWidth;
-    Note* note = toNote(parent());
+    Note* note = toNote(explicitParent());
     if (note == 0) {
         m_noteWidth = 0.0;
         m_notePos = PointF();
@@ -277,7 +281,7 @@ void Bend::draw(mu::draw::Painter* painter) const
     qreal y  = -_spatium * .8;
     qreal x2, y2;
 
-    qreal aw = score()->styleP(Sid::bendArrowWidth);
+    qreal aw = score()->styleMM(Sid::bendArrowWidth);
     PolygonF arrowUp;
     arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
     PolygonF arrowDown;
@@ -356,15 +360,14 @@ void Bend::draw(mu::draw::Painter* painter) const
 
 void Bend::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     for (const PitchValue& v : m_points) {
-        xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
-                 .arg(v.time).arg(v.pitch).arg(v.vibrato));
+        xml.tagE(TConv::toXml(v));
     }
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -386,7 +389,7 @@ void Bend::read(XmlReader& e)
             e.readNext();
         } else if (tag == "play") {
             setPlayBend(e.readBool());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -396,7 +399,7 @@ void Bend::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Bend::getProperty(Pid id) const
+PropertyValue Bend::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::FONT_FACE:
@@ -412,9 +415,9 @@ QVariant Bend::getProperty(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(parseBendTypeFromCurve());
     case Pid::BEND_CURVE:
-        return QVariant::fromValue(m_points);
+        return m_points;
     default:
-        return Element::getProperty(id);
+        return EngravingItem::getProperty(id);
     }
 }
 
@@ -422,7 +425,7 @@ QVariant Bend::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Bend::setProperty(Pid id, const QVariant& v)
+bool Bend::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::FONT_FACE:
@@ -438,16 +441,16 @@ bool Bend::setProperty(Pid id, const QVariant& v)
         setPlayBend(v.toBool());
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.toReal();
+        _lineWidth = v.value<Millimetre>();
         break;
     case Pid::BEND_TYPE:
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
         break;
     case Pid::BEND_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue> >());
+        setPoints(v.value<PitchValues>());
         break;
     default:
-        return Element::setProperty(id, v);
+        return EngravingItem::setProperty(id, v);
     }
     triggerLayout();
     return true;
@@ -457,7 +460,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Bend::propertyDefault(Pid id) const
+PropertyValue Bend::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PLAY:
@@ -465,9 +468,9 @@ QVariant Bend::propertyDefault(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(BendType::BEND);
     case Pid::BEND_CURVE:
-        return QVariant::fromValue(BEND_CURVE);
+        return BEND_CURVE;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

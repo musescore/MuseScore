@@ -29,8 +29,6 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     IOPreferencesModel {
         id: ioModel
     }
@@ -40,19 +38,17 @@ PreferencesPage {
     }
 
     Column {
-        id: content
-
         width: parent.width
-        spacing: 24
-
-        readonly property int firstColumnWidth: 220
+        spacing: root.sectionsSpacing
 
         AudioApiSection {
             currentAudioApiIndex: ioModel.currentAudioApiIndex
             audioApiList: ioModel.audioApiList()
-            firstColumnWidth: content.firstColumnWidth
 
-            onCurrentAudioApiIndexChangeRequested: {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onCurrentAudioApiIndexChangeRequested: function(newIndex) {
                 ioModel.currentAudioApiIndex = newIndex
             }
         }
@@ -64,13 +60,15 @@ PreferencesPage {
             currentOutputDeviceIndex: ioModel.currentMidiOutputDeviceIndex
             inputDevices: ioModel.midiInputDevices
             outputDevices: ioModel.midiOutputDevices
-            firstColumnWidth: content.firstColumnWidth
 
-            onCurrentInputDeviceIndexChangeRequested: {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onCurrentInputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiInputDeviceIndex = newIndex
             }
 
-            onCurrentOuputDeviceIndexChangeRequested: {
+            onCurrentOuputDeviceIndexChangeRequested: function(newIndex) {
                 ioModel.currentMidiOutputDeviceIndex = newIndex
             }
         }
@@ -78,6 +76,9 @@ PreferencesPage {
         SeparatorLine {}
 
         AudioEngineSection {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
             onRestartAudioAndMidiDevicesRequested: {
                 ioModel.restartAudioAndMidiDevices()
             }

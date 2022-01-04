@@ -30,9 +30,9 @@
 
 #include "config.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/mscoreview.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/utils.h"
 
 namespace Ms {

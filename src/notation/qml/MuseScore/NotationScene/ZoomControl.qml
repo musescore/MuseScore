@@ -33,18 +33,28 @@ RowLayout {
     property alias maxZoomPercentage: zoomInputField.maxValue
     property var availableZoomList: []
 
+    property NavigationPanel navigationPanel: null
+    property int navigationOrderMin: 0
+    readonly property int navigationOrderMax: menuButton.navigation.order
+
     signal changeZoomPercentageRequested(var newZoomPercentage)
-    signal changeZoomRequested(var newZoomIndex)
+    signal changeZoomRequested(var zoomId)
     signal zoomInRequested()
     signal zoomOutRequested()
 
     spacing: 0
 
     FlatButton {
+        id: zoomInButton
         icon: IconCode.ZOOM_IN
         iconFont: ui.theme.toolbarIconsFont
 
-        normalStateColor: "transparent"
+        width: height
+        height: 28
+        transparent: true
+
+        navigation.panel: root.navigationPanel
+        navigation.order: root.navigationOrderMin
 
         onClicked: {
             root.zoomInRequested()
@@ -52,12 +62,18 @@ RowLayout {
     }
 
     FlatButton {
+        id: zoomOutButton
         Layout.leftMargin: 4
 
         icon: IconCode.ZOOM_OUT
         iconFont: ui.theme.toolbarIconsFont
 
-        normalStateColor: "transparent"
+        width: height
+        height: 28
+        transparent: true
+
+        navigation.panel: root.navigationPanel
+        navigation.order: zoomInButton.navigation.order + 1
 
         onClicked: {
             root.zoomOutRequested()
@@ -78,6 +94,9 @@ RowLayout {
             addLeadingZeros: false
             font: ui.theme.bodyFont
 
+            navigation.panel: root.navigationPanel
+            navigation.order: zoomOutButton.navigation.order + 1
+
             onValueEdited: {
                 root.changeZoomPercentageRequested(newValue)
             }
@@ -90,26 +109,21 @@ RowLayout {
         }
     }
 
-    FlatButton {
+    MenuButton {
+        id: menuButton
         Layout.leftMargin: 4
         Layout.preferredWidth: 20
+        height: 28
 
         icon: IconCode.SMALL_ARROW_DOWN
 
-        normalStateColor: menuLoader.isMenuOpened ? ui.theme.accentColor : "transparent"
+        navigation.panel: root.navigationPanel
+        navigation.order: zoomInputField.navigation.order + 1
 
-        StyledMenuLoader {
-            id: menuLoader
-
-            menuAnchorItem: ui.rootItem
-
-            onHandleAction: {
-                root.changeZoomRequested(actionIndex)
-            }
-        }
-
-        onClicked: {
-            menuLoader.toggleOpened(root.availableZoomList, parent.navigation)
+        menuModel: root.availableZoomList
+        menuAnchorItem: ui.rootItem
+        onHandleMenuItem: {
+            root.changeZoomRequested(itemId)
         }
     }
 }

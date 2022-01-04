@@ -23,8 +23,13 @@
 
 #include <QCoreApplication>
 #include <QCloseEvent>
+#include <QFileOpenEvent>
+#include <QWindow>
+#include <QMimeData>
 
 #include "translation.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -32,7 +37,10 @@ using namespace mu::actions;
 
 void ApplicationActionController::init()
 {
-    dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
+    dispatcher()->reg(this, "quit", [this](const ActionData& args) {
+        bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
+        quit(isAllInstances);
+    });
 
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
@@ -50,12 +58,56 @@ void ApplicationActionController::init()
     qApp->installEventFilter(this);
 }
 
+void ApplicationActionController::onDragEnterEvent(QDragEnterEvent* event)
+{
+    onDragMoveEvent(event);
+}
+
+void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
+{
+    const QMimeData* mime = event->mimeData();
+    QList<QUrl> urls = mime->urls();
+    if (urls.count() > 0) {
+        QString file = urls.first().toLocalFile();
+        LOGD() << file;
+        if (projectFilesController()->isFileSupported(io::path(file))) {
+            event->setDropAction(Qt::LinkAction);
+            event->acceptProposedAction();
+        }
+    }
+}
+
+void ApplicationActionController::onDropEvent(QDropEvent* event)
+{
+    const QMimeData* mime = event->mimeData();
+    QList<QUrl> urls = mime->urls();
+    if (urls.count() > 0) {
+        QString file = urls.first().toLocalFile();
+        LOGD() << file;
+        projectFilesController()->openProject(io::path(file));
+        event->ignore();
+    }
+}
+
 bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
-    QCloseEvent* closeEvent = dynamic_cast<QCloseEvent*>(event);
-    if (closeEvent && watched == mainWindow()->qWindow()) {
-        quit();
-        closeEvent->ignore();
+    if (event->type() == QEvent::Close && watched == mainWindow()->qWindow()) {
+        quit(false);
+        event->ignore();
+
+        return true;
+    }
+
+    if (event->type() == QEvent::FileOpen && watched == qApp) {
+        const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
+        QString filePath = openEvent->file();
+
+        if (startupScenario()->startupCompleted()) {
+            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(filePath));
+        } else {
+            startupScenario()->setStartupScorePath(filePath);
+        }
+
         return true;
     }
 
@@ -71,9 +123,13 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
     return result;
 }
 
-void ApplicationActionController::quit()
+void ApplicationActionController::quit(bool isAllInstances)
 {
-    if (fileScoreController()->closeOpenedScore()) {
+    if (projectFilesController()->closeOpenedProject()) {
+        if (isAllInstances) {
+            multiInstancesProvider()->quitForAll();
+        }
+
         QCoreApplication::quit();
     }
 }
@@ -146,7 +202,7 @@ void ApplicationActionController::revertToFactorySettings()
         IInteractive::Button::No
     });
 
-    if (result.standartButton() == IInteractive::Button::Yes) {
+    if (result.standardButton() == IInteractive::Button::Yes) {
         configuration()->revertToFactorySettings();
     }
 }

@@ -23,27 +23,22 @@
 #ifndef __CAPELLA_H__
 #define __CAPELLA_H__
 
-#include "libmscore/xml.h"
+#include "engraving/rw/xml.h"
+#include "engraving/types/types.h"
 
 namespace Ms {
 enum class TIMESTEP : char {
     D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE
 };
 
-#if 0
-static const char* timeNames[] = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64",
-                                   "1/128", "1/256", "breve" };
-#endif
-
 class Capella;
-enum class ClefType : signed char;
 
 enum class CapellaNoteObjectType : char {
     REST, CHORD, CLEF, KEY, METER, EXPL_BARLINE, IMPL_BARLINE,
     PAGE_BKGR
 };
 
-enum class BeamMode : unsigned char {
+enum class CapBeamMode : unsigned char {
     AUTO, FORCE, SPLIT
 };
 
@@ -233,7 +228,7 @@ struct CapSystem {
     bool bBarCountReset;
     unsigned char explLeftIndent;        // < 0 --> Einrückung gemäß Stimmenbezeichnungen
                                          // >=  --> explizite Einrückung
-    BeamMode beamMode;
+    CapBeamMode beamMode;
     unsigned tempo;
     QColor color;                   // fuer Systemklammern
     bool bJustified;                // Randausgleich (Blocksatz)
@@ -620,7 +615,7 @@ public:
     enum class StemDir : signed char {
         DOWN = -1, AUTO = 0, UP = 1, NONE = 3
     };
-    BeamMode beamMode;
+    CapBeamMode beamMode;
     signed char notationStave;
     char dStemLength;
     unsigned char nTremoloBars;

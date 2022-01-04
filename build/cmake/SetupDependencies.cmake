@@ -14,25 +14,3 @@ if (OS_IS_WIN)
     include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
 
 endif(OS_IS_WIN)
-
-if (OS_IS_MAC)
-
-    find_library(AudioToolboxFW        NAMES AudioToolbox)
-    find_library(AudioUnitFW           NAMES AudioUnit)
-    find_library(CoreAudioFW           NAMES CoreAudio)
-    find_library(CoreMidiFW            NAMES CoreMIDI)
-    find_library(SystemConfigurationFW NAMES SystemConfiguration)
-    find_library(CoreServicesFW        NAMES CoreServices)
-    find_library(AppKit                NAMES AppKit)
-
-    set(OsxFrameworks
-        ${AudioToolboxFW}
-        ${AudioUnitFW}
-        ${CoreAudioFW}
-        ${CoreMidiFW}
-        ${SystemConfigurationFW}
-        ${CoreServicesFW}
-        ${AppKit}
-        )
-
-endif(OS_IS_MAC)

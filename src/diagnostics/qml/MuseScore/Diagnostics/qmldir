@@ -1,4 +1,9 @@
 module MuseScore.Diagnostics
-DiagnosticsDialog 1.0 DiagnosticsDialog.qml
-DiagnosticsPanel 1.0 DiagnosticsPanel.qml
-DiagnosticsPaths 1.0 DiagnosticsPaths.qml
+DiagnosticPathsDialog 1.0 DiagnosticPathsDialog.qml
+DiagnosticPathsPanel 1.0 DiagnosticPathsPanel.qml
+DiagnosticNavigationDialog 1.0 DiagnosticNavigationDialog.qml
+DiagnosticNavigationPanel 1.0 DiagnosticNavigationPanel.qml
+EngravingElementsDialog 1.0 EngravingElementsDialog.qml
+EngravingElementsPanel 1.0 EngravingElementsPanel.qml
+DiagnosticProfilerDialog 1.0 DiagnosticProfilerDialog.qml
+DiagnosticProfilerPanel 1.0 DiagnosticProfilerPanel.qml

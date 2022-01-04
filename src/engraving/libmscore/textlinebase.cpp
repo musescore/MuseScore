@@ -24,29 +24,32 @@
 
 #include <cmath>
 
-#include "style.h"
+#include "draw/pen.h"
+#include "style/style.h"
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "system.h"
 #include "measure.h"
-#include "xml.h"
 #include "utils.h"
 #include "score.h"
 #include "text.h"
 #include "mscore.h"
 #include "staff.h"
-#include "draw/pen.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(Spanner* sp, Score* score, ElementFlags f)
-    : LineSegment(sp, score, f)
+TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
+    : LineSegment(type, sp, parent, f)
 {
-    _text    = new Text(score);
-    _endText = new Text(score);
+    _text    = Factory::createText(this, TextStyleType::DEFAULT, false);
+    _endText = Factory::createText(this, TextStyleType::DEFAULT, false);
     _text->setParent(this);
     _endText->setParent(this);
     _text->setFlag(ElementFlag::MOVABLE, false);
@@ -56,8 +59,8 @@ TextLineBaseSegment::TextLineBaseSegment(Spanner* sp, Score* score, ElementFlags
 TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     : LineSegment(seg)
 {
-    _text    = new Text(*seg._text);
-    _endText = new Text(*seg._endText);
+    _text    = seg._text->clone();
+    _endText = seg._endText->clone();
     _text->setParent(this);
     _endText->setParent(this);
     layout();      // set the right _text
@@ -109,15 +112,7 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     }
 
     // color for line (text color comes from the text properties)
-#if 0
-    QColor color;
-    if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible()) {
-        color = curColor(tl->visible() && tl->lineVisible());
-    } else {
-        color = tl->lineColor();
-    }
-#endif
-    QColor color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
+    Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
     qreal textlineLineWidth = tl->lineWidth();
     if (staff()) {
@@ -164,11 +159,11 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
         int end = npoints;
         //draw centered hooks as solid
         painter->setPen(solidPen);
-        if (tl->beginHookType() == HookType::HOOK_90T) {
+        if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
             painter->drawLines(&points[0], 1);
             start++;
         }
-        if (tl->endHookType() == HookType::HOOK_90T) {
+        if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
             painter->drawLines(&points[npoints - 1], 1);
             end--;
         }
@@ -240,10 +235,10 @@ Shape TextLineBaseSegment::shape() const
     return shape;
 }
 
-bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
+bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {
-        QColor color = v.value<QColor>();
+        mu::draw::Color color = v.value<mu::draw::Color>();
 
         if (_text) {
             _text->setColor(color);
@@ -291,6 +286,7 @@ void TextLineBaseSegment::layout()
         _text->setBold(tl->beginFontStyle() & FontStyle::Bold);
         _text->setItalic(tl->beginFontStyle() & FontStyle::Italic);
         _text->setUnderline(tl->beginFontStyle() & FontStyle::Underline);
+        _text->setStrike(tl->beginFontStyle() & FontStyle::Strike);
         break;
     case SpannerSegmentType::MIDDLE:
     case SpannerSegmentType::END:
@@ -302,10 +298,10 @@ void TextLineBaseSegment::layout()
         _text->setBold(tl->continueFontStyle() & FontStyle::Bold);
         _text->setItalic(tl->continueFontStyle() & FontStyle::Italic);
         _text->setUnderline(tl->continueFontStyle() & FontStyle::Underline);
-
+        _text->setStrike(tl->continueFontStyle() & FontStyle::Strike);
         break;
     }
-    _text->setPlacement(Placement::ABOVE);
+    _text->setPlacement(PlacementV::ABOVE);
     _text->setTrack(track());
     _text->layout();
 
@@ -318,7 +314,8 @@ void TextLineBaseSegment::layout()
         _endText->setBold(tl->endFontStyle() & FontStyle::Bold);
         _endText->setItalic(tl->endFontStyle() & FontStyle::Italic);
         _endText->setUnderline(tl->endFontStyle() & FontStyle::Underline);
-        _endText->setPlacement(Placement::ABOVE);
+        _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
+        _endText->setPlacement(PlacementV::ABOVE);
         _endText->setTrack(track());
         _endText->layout();
     } else {
@@ -353,14 +350,14 @@ void TextLineBaseSegment::layout()
     if (!_text->empty()) {
         qreal textlineTextDistance = _spatium * .5;
         if (((isSingleType() || isBeginType())
-             && (tl->beginTextPlace() == PlaceText::LEFT || tl->beginTextPlace() == PlaceText::AUTO))
-            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == PlaceText::LEFT))) {
+             && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
+            || ((isMiddleType() || isEndType()) && (tl->continueTextPlace() == TextPlace::LEFT))) {
             l = _text->pos().x() + _text->bbox().width() + textlineTextDistance;
         }
         qreal h = _text->height();
-        if (textLineBase()->beginTextPlace() == PlaceText::ABOVE) {
+        if (textLineBase()->beginTextPlace() == TextPlace::ABOVE) {
             y1 = qMin(y1, -h);
-        } else if (textLineBase()->beginTextPlace() == PlaceText::BELOW) {
+        } else if (textLineBase()->beginTextPlace() == TextPlace::BELOW) {
             y2 = qMax(y2, h);
         } else {
             y1 = qMin(y1, -h * .5);
@@ -465,7 +462,7 @@ void TextLineBaseSegment::spatiumChanged(qreal ov, qreal nv)
     _endText->spatiumChanged(ov, nv);
 }
 
-static constexpr std::array<Pid, 26> pids = { {
+static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
     Pid::LINE_VISIBLE,
     Pid::BEGIN_HOOK_TYPE,
     Pid::BEGIN_HOOK_HEIGHT,
@@ -498,9 +495,9 @@ static constexpr std::array<Pid, 26> pids = { {
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TextLineBaseSegment::propertyDelegate(Pid pid)
+EngravingItem* TextLineBaseSegment::propertyDelegate(Pid pid)
 {
-    for (Pid id : pids) {
+    for (Pid id : TextLineBasePropertyId) {
         if (pid == id) {
             return spanner();
         }
@@ -512,8 +509,8 @@ Element* TextLineBaseSegment::propertyDelegate(Pid pid)
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(Score* s, ElementFlags f)
-    : SLine(s, f)
+TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : SLine(type, parent, f)
 {
     setBeginHookHeight(Spatium(1.9));
     setEndHookHeight(Spatium(1.9));
@@ -528,9 +525,9 @@ void TextLineBase::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -567,7 +564,7 @@ void TextLineBase::spatiumChanged(qreal /*ov*/, qreal /*nv*/)
 
 void TextLineBase::writeProperties(XmlWriter& xml) const
 {
-    for (Pid pid : pids) {
+    for (Pid pid : TextLineBasePropertyId) {
         if (!isStyled(pid)) {
             writeProperty(xml, pid);
         }
@@ -582,7 +579,7 @@ void TextLineBase::writeProperties(XmlWriter& xml) const
 bool TextLineBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
-    for (Pid i : pids) {
+    for (Pid i : TextLineBasePropertyId) {
         if (readProperty(tag, e, i)) {
             setPropertyFlags(i, PropertyFlags::UNSTYLED);
             return true;
@@ -597,7 +594,7 @@ bool TextLineBase::readProperties(XmlReader& e)
 
 Pid TextLineBase::propertyId(const QStringRef& name) const
 {
-    for (Pid pid : pids) {
+    for (Pid pid : TextLineBasePropertyId) {
         if (propertyName(pid) == name) {
             return pid;
         }
@@ -609,17 +606,17 @@ Pid TextLineBase::propertyId(const QStringRef& name) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TextLineBase::getProperty(Pid id) const
+PropertyValue TextLineBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::BEGIN_TEXT:
         return beginText();
     case Pid::BEGIN_TEXT_ALIGN:
-        return QVariant::fromValue(beginTextAlign());
+        return PropertyValue::fromValue(beginTextAlign());
     case Pid::CONTINUE_TEXT_ALIGN:
-        return QVariant::fromValue(continueTextAlign());
+        return PropertyValue::fromValue(continueTextAlign());
     case Pid::END_TEXT_ALIGN:
-        return QVariant::fromValue(endTextAlign());
+        return PropertyValue::fromValue(endTextAlign());
     case Pid::BEGIN_TEXT_PLACE:
         return int(_beginTextPlace);
     case Pid::BEGIN_HOOK_TYPE:
@@ -673,11 +670,11 @@ QVariant TextLineBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLineBase::setProperty(Pid id, const QVariant& v)
+bool TextLineBase::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::BEGIN_TEXT_PLACE:
-        _beginTextPlace = PlaceText(v.toInt());
+        _beginTextPlace = v.value<TextPlace>();
         break;
     case Pid::BEGIN_TEXT_ALIGN:
         _beginTextAlign = v.value<Align>();
@@ -689,10 +686,10 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
         _endTextAlign = v.value<Align>();
         break;
     case Pid::CONTINUE_TEXT_PLACE:
-        _continueTextPlace = PlaceText(v.toInt());
+        _continueTextPlace = v.value<TextPlace>();
         break;
     case Pid::END_TEXT_PLACE:
-        _endTextPlace = PlaceText(v.toInt());
+        _endTextPlace = v.value<TextPlace>();
         break;
     case Pid::BEGIN_HOOK_HEIGHT:
         _beginHookHeight = v.value<Spatium>();
@@ -701,10 +698,10 @@ bool TextLineBase::setProperty(Pid id, const QVariant& v)
         _endHookHeight = v.value<Spatium>();
         break;
     case Pid::BEGIN_HOOK_TYPE:
-        _beginHookType = HookType(v.toInt());
+        _beginHookType = v.value<HookType>();
         break;
     case Pid::END_HOOK_TYPE:
-        _endHookType = HookType(v.toInt());
+        _endHookType = v.value<HookType>();
         break;
     case Pid::BEGIN_TEXT:
         setBeginText(v.toString());

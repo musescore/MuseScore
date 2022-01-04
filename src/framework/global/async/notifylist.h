@@ -25,14 +25,12 @@
 #include "thirdparty/deto_async/async/notifylist.h"
 #include "thirdparty/deto_async/async/changednotify.h"
 
-namespace mu {
-namespace async {
+namespace mu::async {
 template<typename T>
 using NotifyList = deto::async::NotifyList<T>;
 
 template<typename T>
 using ChangedNotifier = deto::async::ChangedNotifier<T>;
-}
 }
 
 #endif // MU_ASYNC_NOTIFYLIST_H

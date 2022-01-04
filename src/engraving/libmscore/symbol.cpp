@@ -21,9 +21,12 @@
  */
 
 #include "symbol.h"
-#include "sym.h"
+
+#include "draw/fontmetrics.h"
+#include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "scorefont.h"
-#include "xml.h"
 #include "system.h"
 #include "staff.h"
 #include "measure.h"
@@ -31,19 +34,23 @@
 #include "score.h"
 #include "image.h"
 
-#include "draw/fontmetrics.h"
-
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(Score* s, ElementFlags f)
-    : BSymbol(s, f)
+Symbol::Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : BSymbol(type, parent, f)
 {
     _sym = SymId::accidentalSharp;          // arbitrary valid default
+}
+
+Symbol::Symbol(EngravingItem* parent, ElementFlags f)
+    : Symbol(ElementType::SYMBOL, parent, f)
+{
 }
 
 Symbol::Symbol(const Symbol& s)
@@ -59,7 +66,16 @@ Symbol::Symbol(const Symbol& s)
 
 QString Symbol::symName() const
 {
-    return Sym::id2name(_sym);
+    return SymNames::nameForSymId(_sym);
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+QString Symbol::accessibleInfo() const
+{
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::userNameForSymId(_sym));
 }
 
 //---------------------------------------------------------
@@ -70,21 +86,21 @@ QString Symbol::symName() const
 
 void Symbol::layout()
 {
-    // foreach(Element* e, leafs())     done in BSymbol::layout() ?
+    // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
     //      e->layout();
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
     qreal w = width();
     PointF p;
-    if (align() & Align::BOTTOM) {
+    if (align() == AlignV::BOTTOM) {
         p.setY(-height());
-    } else if (align() & Align::VCENTER) {
+    } else if (align() == AlignV::VCENTER) {
         p.setY((-height()) * .5);
-    } else if (align() & Align::BASELINE) {
+    } else if (align() == AlignV::BASELINE) {
         p.setY(-baseLine());
     }
-    if (align() & Align::RIGHT) {
+    if (align() == AlignH::RIGHT) {
         p.setX(-w);
-    } else if (align() & Align::HCENTER) {
+    } else if (align() == AlignH::HCENTER) {
         p.setX(-(w * .5));
     }
     setPos(p);
@@ -114,13 +130,13 @@ void Symbol::draw(mu::draw::Painter* painter) const
 
 void Symbol::write(XmlWriter& xml) const
 {
-    xml.stag(this);
-    xml.tag("name", Sym::id2name(_sym));
+    xml.startObject(this);
+    xml.tag("name", SymNames::nameForSymId(_sym));
     if (_scoreFont) {
         xml.tag("font", _scoreFont->name());
     }
     BSymbol::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -134,31 +150,29 @@ void Symbol::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "name") {
             QString val(e.readElementText());
-            SymId symId = Sym::name2id(val);
-            if (val != "noSym") {
+            SymId symId = SymNames::symIdByName(val);
+            if (val != "noSym" && symId == SymId::noSym) {
+                // if symbol name not found, fall back to user names
+                // TODO: does it make sense? user names are probably localized
+                symId = SymNames::symIdByUserName(val);
                 if (symId == SymId::noSym) {
-                    // if symbol name not found, fall back to user names
-                    // TODO : does it make sense? user names are probably localized
-                    symId = Sym::userName2id(val);
-                    if (symId == SymId::noSym) {
-                        qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
-                        // set a default symbol, or layout() will crash
-                        symId = SymId::noSym;
-                    }
+                    qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
+                    // set a default symbol, or layout() will crash
+                    symId = SymId::noSym;
                 }
             }
             setSym(symId);
         } else if (tag == "font") {
             _scoreFont = ScoreFont::fontByName(e.readElementText());
         } else if (tag == "Symbol") {
-            Symbol* s = new Symbol(score());
+            Symbol* s = new Symbol(this);
             s->read(e);
             add(s);
         } else if (tag == "Image") {
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Image* image = new Image(score());
+                Image* image = new Image(this);
                 image->read(e);
                 add(image);
             }
@@ -174,12 +188,11 @@ void Symbol::read(XmlReader& e)
 //---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
-
-QVariant Symbol::getProperty(Pid propertyId) const
+PropertyValue Symbol::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return QVariant::fromValue(_sym);
+        return PropertyValue::fromValue(_sym);
     default:
         break;
     }
@@ -190,7 +203,7 @@ QVariant Symbol::getProperty(Pid propertyId) const
 //   Symbol::setProperty
 //---------------------------------------------------------
 
-bool Symbol::setProperty(Pid propertyId, const QVariant& v)
+bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:
@@ -206,8 +219,8 @@ bool Symbol::setProperty(Pid propertyId, const QVariant& v)
 //   FSymbol
 //---------------------------------------------------------
 
-FSymbol::FSymbol(Score* s)
-    : BSymbol(s)
+FSymbol::FSymbol(EngravingItem* parent)
+    : BSymbol(ElementType::FSYMBOL, parent)
 {
     _code = 0;
     _font.setNoFontMerging(true);
@@ -246,12 +259,12 @@ void FSymbol::draw(mu::draw::Painter* painter) const
 
 void FSymbol::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("font",     _font.family());
     xml.tag("fontsize", _font.pointSizeF());
     xml.tag("code",     _code);
     BSymbol::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

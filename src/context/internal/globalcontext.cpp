@@ -21,58 +21,47 @@
  */
 #include "globalcontext.h"
 
+#include "notation/imasternotation.h"
+
 using namespace mu::context;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::async;
 
-void GlobalContext::addMasterNotation(const IMasterNotationPtr& notation)
+void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
 {
-    m_masterNotations.push_back(notation);
-}
-
-void GlobalContext::removeMasterNotation(const IMasterNotationPtr& notation)
-{
-    m_masterNotations.erase(std::remove(m_masterNotations.begin(), m_masterNotations.end(), notation), m_masterNotations.end());
-}
-
-const std::vector<IMasterNotationPtr>& GlobalContext::masterNotations() const
-{
-    return m_masterNotations;
-}
-
-bool GlobalContext::containsMasterNotation(const io::path& path) const
-{
-    for (const auto& n : m_masterNotations) {
-        if (n->path() == path) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void GlobalContext::setCurrentMasterNotation(const IMasterNotationPtr& masterNotation)
-{
-    if (m_currentMasterNotation == masterNotation) {
+    if (m_currentProject == project) {
         return;
     }
 
-    m_currentMasterNotation = masterNotation;
+    m_currentProject = project;
 
-    INotationPtr notation = masterNotation ? masterNotation->notation() : nullptr;
+    INotationPtr notation = project ? project->masterNotation()->notation() : nullptr;
     doSetCurrentNotation(notation);
 
-    m_currentMasterNotationChanged.notify();
+    m_currentProjectChanged.notify();
     m_currentNotationChanged.notify();
+}
+
+INotationProjectPtr GlobalContext::currentProject() const
+{
+    return m_currentProject;
+}
+
+Notification GlobalContext::currentProjectChanged() const
+{
+    return m_currentProjectChanged;
 }
 
 IMasterNotationPtr GlobalContext::currentMasterNotation() const
 {
-    return m_currentMasterNotation;
+    return m_currentProject ? m_currentProject->masterNotation() : nullptr;
 }
 
 Notification GlobalContext::currentMasterNotationChanged() const
 {
-    return m_currentMasterNotationChanged;
+    //! NOTE Same as project
+    return m_currentProjectChanged;
 }
 
 void GlobalContext::setCurrentNotation(const INotationPtr& notation)

@@ -26,6 +26,8 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::actions;
+using namespace mu::framework;
 
 static constexpr int REARRANGE_ORDER_STEP = 100;
 
@@ -45,12 +47,12 @@ void AppearanceSettingsModel::createProperties()
     m_color = buildPropertyItem(Ms::Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Ms::Pid::Z);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
@@ -62,7 +64,7 @@ void AppearanceSettingsModel::requestElements()
 void AppearanceSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_leadingSpace, formatDoubleFunc);
@@ -73,12 +75,14 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_arrangeOrder);
 
     loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
+
+    emit isSnappedToGridChanged(isSnappedToGrid());
 }
 
 void AppearanceSettingsModel::resetProperties()
@@ -104,7 +108,7 @@ void AppearanceSettingsModel::pushFrontInOrder()
 
 void AppearanceSettingsModel::configureGrid()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("config-raster");
 }
 
 PropertyItem* AppearanceSettingsModel::leadingSpace() const
@@ -144,7 +148,10 @@ PropertyItem* AppearanceSettingsModel::verticalOffset() const
 
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
-    return m_horizontallySnapToGrid && m_verticallySnapToGrid;
+    bool isSnapped = notationConfiguration()->isSnappedToGrid(framework::Orientation::Horizontal);
+    isSnapped &= notationConfiguration()->isSnappedToGrid(framework::Orientation::Vertical);
+
+    return isSnapped;
 }
 
 void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
@@ -153,12 +160,8 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
         return;
     }
 
-    m_horizontallySnapToGrid = isSnapped;
-    m_verticallySnapToGrid = isSnapped;
-
-    NOT_IMPLEMENTED;
-    //updateHorizontalGridSnapping(isSnapped);
-    //updateVerticalGridSnapping(isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Horizontal, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

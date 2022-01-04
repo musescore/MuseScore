@@ -21,10 +21,12 @@
  */
 
 #include "text.h"
-#include "xml.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -39,8 +41,8 @@ static const ElementStyle defaultStyle {
 //   Text
 //---------------------------------------------------------
 
-Text::Text(Score* s, Tid tid)
-    : TextBase(s, tid)
+Text::Text(EngravingItem* parent, TextStyleType tid)
+    : TextBase(ElementType::TEXT, parent, tid)
 {
     initElementStyle(&defaultStyle);
 }
@@ -55,11 +57,11 @@ void Text::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "style") {
             QString sn = e.readElementText();
-            if (sn == "Tuplet") {              // ugly hack for compatibility
+            TextStyleType s = TConv::fromXml(sn, TextStyleType::DEFAULT);
+            if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
                 continue;
             }
-            Tid s = textStyleFromName(sn);
-            initTid(s);
+            initTextStyleType(s);
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -70,13 +72,20 @@ void Text::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Text::propertyDefault(Pid id) const
+engraving::PropertyValue Text::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::DEFAULT);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
     }
+}
+
+QString Text::readXmlText(XmlReader& r, Score* score)
+{
+    Text t(score->dummy());
+    t.read(r);
+    return t.xmlText();
 }
 }

@@ -35,8 +35,7 @@ class DockWidgetBase;
 class Frame;
 class Button;
 
-class DOCKS_EXPORT TitleBar : public QWidgetAdapter
-    , public Draggable
+class DOCKS_EXPORT TitleBar : public QWidgetAdapter, public Draggable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
@@ -44,6 +43,7 @@ class DOCKS_EXPORT TitleBar : public QWidgetAdapter
     Q_PROPERTY(bool closeButtonEnabled READ closeButtonEnabled WRITE setCloseButtonEnabled NOTIFY closeButtonEnabledChanged)
     Q_PROPERTY(bool floatButtonVisible READ floatButtonVisible WRITE setFloatButtonVisible NOTIFY floatButtonVisibleChanged)
     Q_PROPERTY(QString floatButtonToolTip READ floatButtonToolTip NOTIFY floatButtonToolTipChanged)
+    Q_PROPERTY(bool isFocused READ isFocused NOTIFY isFocusedChanged)
 public:
     typedef QVector<TitleBar *> List;
 
@@ -52,7 +52,10 @@ public:
     ~TitleBar() override;
 
     void setTitle(const QString &title);
-    QString title() const { return m_title; }
+    QString title() const
+    {
+        return m_title;
+    }
 
     void setIcon(const QIcon &icon);
     std::unique_ptr<WindowBeingDragged> makeWindow() override;
@@ -94,10 +97,16 @@ public:
     Q_INVOKABLE bool onDoubleClicked();
 
     ///@brief getter for m_frame
-    Frame *frame() const { return m_frame; }
+    Frame *frame() const
+    {
+        return m_frame;
+    }
 
     ///@brief getter for m_floatingWindow
-    FloatingWindow *floatingWindow() const { return m_floatingWindow; }
+    FloatingWindow *floatingWindow() const
+    {
+        return m_floatingWindow;
+    }
 
     ///@brief If this title bar belongs to a dock widget docked into the main window, returns the main window
     ///Returns nullptr otherwise
@@ -120,7 +129,6 @@ Q_SIGNALS:
     void floatButtonToolTipChanged(const QString &);
 
 protected:
-
     Q_INVOKABLE void onCloseClicked();
     Q_INVOKABLE void onFloatClicked();
     Q_INVOKABLE void onMaximizeClicked();
@@ -132,9 +140,15 @@ protected:
     bool floatButtonVisible() const;
     QString floatButtonToolTip() const;
 
-    virtual void updateMaximizeButton() {}
-    virtual void updateMinimizeButton() {}
-    virtual void updateAutoHideButton() {}
+    virtual void updateMaximizeButton()
+    {
+    }
+    virtual void updateMinimizeButton()
+    {
+    }
+    virtual void updateAutoHideButton()
+    {
+    }
 
 #ifdef DOCKS_DEVELOPER_MODE
     // The following are needed for the unit-tests
@@ -146,9 +160,11 @@ protected:
 
     void focusInEvent(QFocusEvent *event) override;
     bool isOverlayed() const;
+
 private:
     friend class ::TestDocks;
     friend class FloatingWindowWidget;
+    friend class TabWidgetWidget;
     void updateFloatButton();
     void updateCloseButton();
     void setCloseButtonEnabled(bool);

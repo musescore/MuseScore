@@ -29,8 +29,10 @@
 */
 
 #include <set>
-
 #include <functional>
+#include <vector>
+
+#include "infrastructure/draw/color.h"
 #include "chordrest.h"
 #include "articulation.h"
 
@@ -69,19 +71,19 @@ enum class TremoloChordType : char {
 class Chord final : public ChordRest
 {
     std::vector<Note*> _notes;           // sorted to decreasing line step
-    LedgerLine* _ledgerLines;            // single linked list
+    LedgerLine* _ledgerLines = nullptr;  // single linked list
 
-    Stem* _stem;
-    Hook* _hook;
-    StemSlash* _stemSlash;               // for acciacatura
+    Stem* _stem = nullptr;
+    Hook* _hook = nullptr;
+    StemSlash* _stemSlash = nullptr;     // for acciacatura
 
-    Arpeggio* _arpeggio;
-    Tremolo* _tremolo;
+    Arpeggio* _arpeggio = nullptr;
+    Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
     QVector<Chord*> _graceNotes;
     int _graceIndex;                     ///< if this is a grace note, index in parent list
 
-    Direction _stemDirection;
+    DirectionV _stemDirection;
     NoteType _noteType;                  ///< mark grace notes: acciaccatura and appoggiatura
     bool _noStem;
     PlayEventType _playEventType;        ///< play events were modified by user
@@ -89,53 +91,80 @@ class Chord final : public ChordRest
     qreal _spaceLw;
     qreal _spaceRw;
 
+    qreal _defaultStemLength;
+    qreal _minStemLength;
+
+    bool _isUiItem = false;
+
     QVector<Articulation*> _articulations;
+
+    friend class mu::engraving::Factory;
+    Chord(Segment* parent = 0);
+    Chord(const Chord&, bool link = false);
 
     qreal upPos()   const override;
     qreal downPos() const override;
     qreal centerX() const;
     void addLedgerLines();
-    void processSiblings(std::function<void(Element*)> func) const;
+    void processSiblings(std::function<void(EngravingItem*)> func) const;
 
     void layoutPitched();
     void layoutTablature();
     qreal noteHeadWidth() const;
 
+    bool shouldHaveStem() const;
+    bool shouldHaveHook() const;
+
+    void createStem();
+    void removeStem();
+    void createHook();
+    void layoutHook();
+
+    int stemLengthBeamAddition() const;
+    int maxReduction(int extensionOutsideStaff) const;
+    int stemOpticalAdjustment(int stemEndPosition) const;
+    int calcMinStemLength();
+    int calc4BeamsException(int stemLength) const;
+    qreal calcDefaultStemLength();
+
+    bool computeUpContext();
+
 public:
-    Chord(Score* s = 0);
-    Chord(const Chord&, bool link = false);
+
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     Chord* clone() const override { return new Chord(*this, false); }
-    Element* linkedClone() override { return new Chord(*this, true); }
+    EngravingItem* linkedClone() override { return new Chord(*this, true); }
     void undoUnlink() override;
 
     void setScore(Score* s) override;
-    ElementType type() const override { return ElementType::CHORD; }
     qreal chordMag() const;
     qreal mag() const override;
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
-    void setColor(const QColor& c) override;
-    void setStemDirection(Direction d) { _stemDirection = d; }
-    Direction stemDirection() const { return _stemDirection; }
+    void setColor(const mu::draw::Color& c) override;
+    void setStemDirection(DirectionV d, DirectionV beamDir = DirectionV::AUTO);
+    DirectionV stemDirection() const { return _stemDirection; }
+
+    void setIsUiItem(bool val) { _isUiItem = val; }
 
     LedgerLine* ledgerLines() { return _ledgerLines; }
 
-    qreal defaultStemLength() const;
-    qreal minAbsStemLength() const;
+    qreal defaultStemLength() const { return _defaultStemLength; }
+    qreal minStemLength() const { return _minStemLength; }
+    void setBeamExtension(qreal extension);
+    static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, qreal beamSpacing, bool useWideBeams);
 
-    void layoutStem1() override;
     void layoutStem();
     void layoutArpeggio2();
     void layoutSpanners();
@@ -152,6 +181,7 @@ public:
     Note* downNote() const;
     int upString() const;
     int downString() const;
+    std::vector<int> noteDistances() const;
 
     qreal maxHeadWidth() const;
 
@@ -189,9 +219,9 @@ public:
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(Ms::Element*) override;
+    Q_INVOKABLE void add(Ms::EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(Ms::Element*) override;
+    Q_INVOKABLE void remove(Ms::EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;
@@ -207,6 +237,7 @@ public:
     void setTrack(int val) override;
 
     void computeUp() override;
+    static int computeAutoStemDirection(const std::vector<int>* noteDistances);
 
     qreal dotPosX() const;
 
@@ -236,9 +267,9 @@ public:
     void crossMeasureSetup(bool on) override;
 
     void localSpatiumChanged(qreal oldValue, qreal newValue) override;
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     void reset() override;
 
@@ -249,16 +280,16 @@ public:
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
 
-    Element* nextElement() override;
-    Element* prevElement() override;
-    Element* nextSegmentElement() override;
-    Element* lastElementBeforeSegment();
-    Element* prevSegmentElement() override;
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* lastElementBeforeSegment();
+    EngravingItem* prevSegmentElement() override;
     QString accessibleExtraInfo() const override;
 
     Shape shape() const override;
-    void undoChangeProperty(Pid id, const QVariant& newValue);
-    void undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue& newValue, PropertyFlags ps) override;
 };
 }     // namespace Ms
 #endif

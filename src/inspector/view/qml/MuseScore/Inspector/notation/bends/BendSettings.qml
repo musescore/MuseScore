@@ -19,24 +19,85 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: bendPopup.model
+    property QtObject model: null
 
-    icon: IconCode.GUITAR_BEND
-    text: qsTrc("inspector", "Guitar bends")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "BendSettings"
 
-    BendPopup {
-        id: bendPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        bendTypeSection.focusOnFirst()
+    }
+
+    DropdownPropertyView {
+        id: bendTypeSection
+        titleText: qsTrc("inspector", "Bend type")
+        propertyItem: root.model ? root.model.bendType : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+
+        model: [
+            { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
+            { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
+            { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
+            { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
+            { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
+            { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
+        ]
+    }
+
+    InspectorPropertyView {
+        id: bendCurve
+        titleText: qsTrc("inspector", "Click to add or remove points")
+        propertyItem: root.model ? root.model.bendCurve : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: bendTypeSection.navigationRowEnd + 1
+
+        GridCanvas {
+            height: 200
+            width: parent.width
+
+            pointList: root.model && root.model.bendCurve.isEnabled ? root.model.bendCurve.value : undefined
+
+            rowCount: 13
+            columnCount: 13
+            rowSpacing: 4
+            columnSpacing: 3
+
+            onCanvasChanged: {
+                if (root.model) {
+                    root.model.bendCurve.value = pointList
+                }
+            }
+        }
+    }
+
+    SpinBoxPropertyView {
+        titleText: qsTrc("inspector", "Line thickness")
+        propertyItem: root.model ? root.model.lineThickness : null
+
+        maxValue: 10
+        minValue: 0.1
+        step: 0.1
+        decimals: 2
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: bendCurve.navigationRowEnd + 1
     }
 }

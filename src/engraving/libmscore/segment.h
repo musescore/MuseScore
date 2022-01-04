@@ -23,9 +23,13 @@
 #ifndef __SEGMENT_H__
 #define __SEGMENT_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "shape.h"
 #include "mscore.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Measure;
@@ -39,7 +43,7 @@ class System;
 //    A segment holds all vertical aligned staff elements.
 //    Segments are typed and contain only Elements of the same type.
 //
-//    All Elements in a segment start at the same tick. The Segment can store one Element for
+//    All Elements in a segment start at the same tick. The Segment can store one EngravingItem for
 //    each voice in each staff in the score.
 //    Some elements (Clef, KeySig, TimeSig etc.) are assumed to always have voice zero
 //    and can be found in _elist[staffIdx * VOICES];
@@ -47,7 +51,7 @@ class System;
 //    Segments are children of Measures and store Clefs, KeySigs, TimeSigs,
 //    BarLines and ChordRests.
 //
-//   @P annotations     array[Element]    the list of annotations (read only)
+//   @P annotations     array[EngravingItem]    the list of annotations (read only)
 //   @P next            Segment           the next segment in the whole score; null at last score segment (read-only)
 //   @P nextInMeasure   Segment           the next segment in measure; null at last measure segment (read-only)
 //   @P prev            Segment           the previous segment in the whole score; null at first score segment (read-only)
@@ -56,7 +60,7 @@ class System;
 //   @P tick            int               midi tick position (read only)
 //------------------------------------------------------------------------
 
-class Segment final : public Element
+class Segment final : public EngravingItem
 {
     SegmentType _segmentType { SegmentType::Invalid };
     Fraction _tick;    // { Fraction(0, 1) };
@@ -67,32 +71,37 @@ class Segment final : public Element
     Segment* _next = nullptr;                       // linked list of segments inside a measure
     Segment* _prev = nullptr;
 
-    std::vector<Element*> _annotations;
-    std::vector<Element*> _elist;         // Element storage, size = staves * VOICES.
+    std::vector<EngravingItem*> _annotations;
+    std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
     std::vector<qreal> _dotPosX;          // size = staves
+    qreal m_spacing{ 0 };
 
-    void init();
-    void checkEmpty() const;
-    void checkElement(Element*, int track);
-    void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
-
-protected:
-    Element* getElement(int staff);       //??
-
-public:
+    friend class mu::engraving::Factory;
     Segment(Measure* m = 0);
     Segment(Measure*, SegmentType, const Fraction&);
     Segment(const Segment&);
+
+    void init();
+    void checkEmpty() const;
+    void checkElement(EngravingItem*, int track);
+    void setEmpty(bool val) const { setFlag(ElementFlag::EMPTY, val); }
+
+protected:
+    EngravingItem* getElement(int staff);       //??
+
+public:
+
     ~Segment();
 
+    void setParent(Measure* parent);
+
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     Segment* clone() const override { return new Segment(*this); }
-    ElementType type() const override { return ElementType::SEGMENT; }
 
     void setScore(Score*) override;
 
@@ -128,21 +137,21 @@ public:
 
     ChordRest* nextChordRest(int track, bool backwards = false) const;
 
-    Element* element(int track) const;
+    EngravingItem* element(int track) const;
 
     // a variant of the above function, specifically designed to be called from QML
     //@ returns the element at track 'track' (null if none)
-    Ms::Element* elementAt(int track) const;
+    Ms::EngravingItem* elementAt(int track) const;
 
-    const std::vector<Element*>& elist() const { return _elist; }
-    std::vector<Element*>& elist() { return _elist; }
+    const std::vector<EngravingItem*>& elist() const { return _elist; }
+    std::vector<EngravingItem*>& elist() { return _elist; }
 
     void removeElement(int track);
-    void setElement(int track, Element* el);
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void setElement(int track, EngravingItem* el);
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    Measure* measure() const { return toMeasure(parent()); }
-    System* system() const { return toSystem(parent()->parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
+    System* system() const { return toSystem(explicitParent()->explicitParent()); }
     qreal x() const override { return ipos().x(); }
     void setX(qreal v) { rxpos() = v; }
 
@@ -151,8 +160,8 @@ public:
     void insertStaff(int staff);
     void removeStaff(int staff);
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     void swapElements(int i1, int i2);
 
     void sortStaves(QList<int>& dst);
@@ -185,12 +194,12 @@ public:
 
     bool splitsTuplet() const;
 
-    const std::vector<Element*>& annotations() const { return _annotations; }
+    const std::vector<EngravingItem*>& annotations() const { return _annotations; }
     void clearAnnotations();
-    void removeAnnotation(Element* e);
+    void removeAnnotation(EngravingItem* e);
     bool hasAnnotationOrElement(ElementType type, int minTrack, int maxTrack) const;
-    Element* findAnnotation(ElementType type, int minTrack, int maxTrack);
-    std::vector<Element*> findAnnotations(ElementType type, int minTrack, int maxTrack);
+    EngravingItem* findAnnotation(ElementType type, int minTrack, int maxTrack);
+    std::vector<EngravingItem*> findAnnotations(ElementType type, int minTrack, int maxTrack);
     bool hasElements() const;
     bool hasElements(int minTrack, int maxTrack) const;
     bool allElementsInvisible() const;
@@ -204,34 +213,34 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     bool operator<(const Segment&) const;
     bool operator>(const Segment&) const;
 
     virtual QString accessibleExtraInfo() const override;
 
-    Element* firstInNextSegments(int activeStaff);   //<
-    Element* lastInPrevSegments(int activeStaff);     //<
-    Element* firstElement(int staff);                //<  These methods are used for navigation
-    Element* lastElement(int staff);                 //<  for next-element and prev-element
-    Element* firstElementOfSegment(Segment* s, int activeStaff);
-    Element* nextElementOfSegment(Segment* s, Element* e, int activeStaff);
-    Element* prevElementOfSegment(Segment* s, Element* e, int activeStaff);
-    Element* lastElementOfSegment(Segment* s, int activeStaff);
-    Element* nextAnnotation(Element* e);
-    Element* prevAnnotation(Element* e);
-    Element* firstAnnotation(Segment* s, int activeStaff);
-    Element* lastAnnotation(Segment* s, int activeStaff);
+    EngravingItem* firstInNextSegments(int activeStaff);   //<
+    EngravingItem* lastInPrevSegments(int activeStaff);     //<
+    EngravingItem* firstElement(int staff);                //<  These methods are used for navigation
+    EngravingItem* lastElement(int staff);                 //<  for next-element and prev-element
+    EngravingItem* firstElementOfSegment(Segment* s, int activeStaff);
+    EngravingItem* nextElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
+    EngravingItem* prevElementOfSegment(Segment* s, EngravingItem* e, int activeStaff);
+    EngravingItem* lastElementOfSegment(Segment* s, int activeStaff);
+    EngravingItem* nextAnnotation(EngravingItem* e);
+    EngravingItem* prevAnnotation(EngravingItem* e);
+    EngravingItem* firstAnnotation(Segment* s, int activeStaff);
+    EngravingItem* lastAnnotation(Segment* s, int activeStaff);
     Spanner* firstSpanner(int activeStaff);
     Spanner* lastSpanner(int activeStaff);
     bool notChordRestType(Segment* s);
-    using Element::nextElement;
-    Element* nextElement(int activeStaff);
-    using Element::prevElement;
-    Element* prevElement(int activeStaff);
+    using EngravingItem::nextElement;
+    EngravingItem* nextElement(int activeStaff);
+    using EngravingItem::prevElement;
+    EngravingItem* prevElement(int activeStaff);
 
     std::vector<Shape> shapes() { return _shapes; }
     const std::vector<Shape>& shapes() const { return _shapes; }
@@ -247,6 +256,20 @@ public:
 
     qreal elementsTopOffsetFromSkyline(int staffIndex) const;
     qreal elementsBottomOffsetFromSkyline(int staffIndex) const;
+
+    /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
+     *  \return pair of {spacing, width}
+     */
+    std::pair<qreal, qreal> computeCellWidth(const std::vector<int>& visibleParts) const;
+
+    /*! \brief get among all ChordRests of segment the ChordRest with minimun ticks,
+    * take into account visibleParts
+    */
+    static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
+
+    //! spacing is additional width of segment, for example accidental needs this spacing to avoid overlapping
+    void setSpacing(qreal);
+    qreal spacing() const;
 
     // some helper function
     ChordRest* cr(int track) const { return toChordRest(_elist[track]); }

@@ -30,22 +30,17 @@ ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
 {
 }
 
-void ShortcutsInstanceModel::load()
+void ShortcutsInstanceModel::init()
 {
-    m_shortcuts.clear();
+    shortcutsRegister()->shortcutsChanged().onNotify(this, [this](){
+        loadShortcuts();
+    });
 
-    const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
-    for (const Shortcut& sc : shortcuts) {
-        QString sequence = QString::fromStdString(sc.sequence);
+    shortcutsRegister()->activeChanged().onNotify(this, [this](){
+        emit activeChanged();
+    });
 
-        //! NOTE There may be several identical shortcuts for different contexts.
-        //! We only need a list of unique ones.
-        if (!m_shortcuts.contains(sequence)) {
-            m_shortcuts << sequence;
-        }
-    }
-
-    emit shortcutsChanged();
+    loadShortcuts();
 }
 
 QStringList ShortcutsInstanceModel::shortcuts() const
@@ -53,7 +48,32 @@ QStringList ShortcutsInstanceModel::shortcuts() const
     return m_shortcuts;
 }
 
+bool ShortcutsInstanceModel::active() const
+{
+    return shortcutsRegister()->active();
+}
+
 void ShortcutsInstanceModel::activate(const QString& key)
 {
     controller()->activate(key.toStdString());
+}
+
+void ShortcutsInstanceModel::loadShortcuts()
+{
+    m_shortcuts.clear();
+
+    const ShortcutList& shortcuts = shortcutsRegister()->shortcuts();
+    for (const Shortcut& sc : shortcuts) {
+        for (const std::string& seq : sc.sequences) {
+            QString sequence = QString::fromStdString(seq);
+
+            //! NOTE There may be several identical shortcuts for different contexts.
+            //! We only need a list of unique ones.
+            if (!m_shortcuts.contains(sequence)) {
+                m_shortcuts << sequence;
+            }
+        }
+    }
+
+    emit shortcutsChanged();
 }

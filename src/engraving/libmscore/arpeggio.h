@@ -23,9 +23,11 @@
 #ifndef __ARPEGGIO_H__
 #define __ARPEGGIO_H__
 
-#include <QGuiApplication>
+#include "engravingitem.h"
 
-#include "element.h"
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Chord;
@@ -38,44 +40,53 @@ enum class ArpeggioType : char {
 //   @@ Arpeggio
 //---------------------------------------------------------
 
-class Arpeggio final : public Element
+class Arpeggio final : public EngravingItem
 {
     ArpeggioType _arpeggioType;
     qreal _userLen1;
     qreal _userLen2;
     qreal _height;
     int _span;                // spanning staves
-    std::vector<SymId> symbols;
+    SymIdList symbols;
     bool _playArpeggio;
 
     qreal _stretch;
 
     bool _hidden = false;   // set in layout, will skip draw if true
 
+    friend class mu::engraving::Factory;
+    Arpeggio(Chord* parent);
+
     void symbolLine(SymId start, SymId fill);
-    void symbolLine2(SymId end, SymId fill);
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     QVector<mu::LineF> dragAnchorLines() const override;
     QVector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
+    qreal calcTop() const;
+    qreal calcBottom() const;
+
     static const std::array<const char*, 6> arpeggioTypeNames;
 
+private:
+
+    qreal insetTop() const;
+    qreal insetBottom() const;
+    qreal insetWidth() const;
+
 public:
-    Arpeggio(Score* s);
 
     Arpeggio* clone() const override { return new Arpeggio(*this); }
-    ElementType type() const override { return ElementType::ARPEGGIO; }
 
     ArpeggioType arpeggioType() const { return _arpeggioType; }
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }
     QString arpeggioTypeName() const;
 
-    Chord* chord() const { return (Chord*)parent(); }
+    Chord* chord() const { return (Chord*)explicitParent(); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }
@@ -95,15 +106,17 @@ public:
     void setUserLen1(qreal v) { _userLen1 = v; }
     void setUserLen2(qreal v) { _userLen2 = v; }
 
+    qreal insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const;
+
     bool playArpeggio() { return _playArpeggio; }
     void setPlayArpeggio(bool p) { _playArpeggio = p; }
 
     qreal Stretch() const { return _stretch; }
     void setStretch(qreal val) { _stretch = val; }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     // TODO: add a grip for moving the entire arpeggio

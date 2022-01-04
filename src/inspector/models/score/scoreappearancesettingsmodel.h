@@ -24,57 +24,43 @@
 
 #include "models/abstractinspectormodel.h"
 
-#include "internal/pagetypelistmodel.h"
+#include "async/asyncable.h"
 
 namespace mu::inspector {
-class ScoreAppearanceSettingsModel : public AbstractInspectorModel
+class ScoreAppearanceSettingsModel : public AbstractInspectorModel, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(PageTypeListModel * pageTypeListModel READ pageTypeListModel CONSTANT)
-    Q_PROPERTY(int orientationType READ orientationType WRITE setOrientationType NOTIFY orientationTypeChanged)
-    Q_PROPERTY(qreal staffSpacing READ staffSpacing WRITE setStaffSpacing NOTIFY staffSpacingChanged)
-    Q_PROPERTY(qreal staffDistance READ staffDistance WRITE setStaffDistance NOTIFY staffDistanceChanged)
+    Q_PROPERTY(bool hideEmptyStaves READ hideEmptyStaves WRITE setHideEmptyStaves NOTIFY styleChanged)
+    Q_PROPERTY(
+        bool dontHideEmptyStavesInFirstSystem READ dontHideEmptyStavesInFirstSystem WRITE setDontHideEmptyStavesInFirstSystem NOTIFY styleChanged)
+    Q_PROPERTY(
+        bool showBracketsWhenSpanningSingleStaff READ showBracketsWhenSpanningSingleStaff WRITE setShowBracketsWhenSpanningSingleStaff NOTIFY styleChanged)
 
 public:
     explicit ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
+    bool hideEmptyStaves() const;
+    void setHideEmptyStaves(bool hide);
+
+    bool dontHideEmptyStavesInFirstSystem() const;
+    void setDontHideEmptyStavesInFirstSystem(bool dont);
+
+    bool showBracketsWhenSpanningSingleStaff() const;
+    void setShowBracketsWhenSpanningSingleStaff(bool show);
+
     Q_INVOKABLE void showPageSettings();
     Q_INVOKABLE void showStyleSettings();
 
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
+    virtual void createProperties() override { }
+    virtual void requestElements() override { }
+    virtual void loadProperties() override { }
+    virtual void resetProperties() override { }
 
-    bool hasAcceptableElements() const override;
-
-    PageTypeListModel* pageTypeListModel() const;
-
-    int orientationType() const;
-    qreal staffSpacing() const;
-    qreal staffDistance() const;
-
-public slots:
-    void setPageTypeListModel(PageTypeListModel* pageTypeListModel);
-    void setOrientationType(int orientationType);
-    void setStaffSpacing(qreal staffSpacing);
-    void setStaffDistance(qreal staffDistance);
+    bool isEmpty() const override;
 
 signals:
-    void orientationTypeChanged(int orientationType);
-    void staffSpacingChanged(qreal staffSpacing);
-    void staffDistanceChanged(qreal staffDistance);
-
-private:
-    void updatePageSize();
-
-    int m_currentPageSizeId = -1;
-    int m_orientationType = 0;
-    qreal m_staffSpacing = 0.0;
-    qreal m_staffDistance = 0.0;
-
-    PageTypeListModel* m_pageTypeListModel = nullptr;
+    void styleChanged();
 };
 }
 

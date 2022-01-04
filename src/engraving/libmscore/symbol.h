@@ -24,9 +24,8 @@
 #define __SYMBOL_H__
 
 #include "bsymbol.h"
-#include "symid.h"
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
 
 namespace Ms {
 class Segment;
@@ -46,28 +45,30 @@ protected:
     const ScoreFont* _scoreFont = nullptr;
 
 public:
-    Symbol(Score* s, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(const Symbol&);
 
     Symbol& operator=(const Symbol&) = delete;
 
     Symbol* clone() const override { return new Symbol(*this); }
-    ElementType type() const override { return ElementType::SYMBOL; }
 
     void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
     QString symName() const;
+
+    QString accessibleInfo() const override;
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     void layout() override;
 
-    QVariant getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
 
     qreal baseLine() const override { return 0.0; }
-    virtual Segment* segment() const { return (Segment*)parent(); }
+    virtual Segment* segment() const { return (Segment*)explicitParent(); }
 };
 
 //---------------------------------------------------------
@@ -81,11 +82,10 @@ class FSymbol final : public BSymbol
     int _code;
 
 public:
-    FSymbol(Score* s);
+    FSymbol(EngravingItem* parent);
     FSymbol(const FSymbol&);
 
     FSymbol* clone() const override { return new FSymbol(*this); }
-    ElementType type() const override { return ElementType::FSYMBOL; }
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;
@@ -93,7 +93,7 @@ public:
     void layout() override;
 
     qreal baseLine() const override { return 0.0; }
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
     mu::draw::Font font() const { return _font; }
     int code() const { return _code; }
     void setFont(const mu::draw::Font& f);

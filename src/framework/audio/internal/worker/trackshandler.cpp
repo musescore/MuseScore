@@ -58,49 +58,69 @@ Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId
     }, AudioThread::ID);
 }
 
-Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                         midi::MidiData&& inParams, AudioOutputParams&& outParams)
+Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return Promise<TrackId>([this, sequenceId, trackName, inParams, outParams](Promise<TrackId>::Resolve resolve,
-                                                                               Promise<TrackId>::Reject reject) {
+    return Promise<TrackName>([this, sequenceId, trackId](Promise<TrackName>::Resolve resolve, Promise<TrackName>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
-        if (!s) {
+        if (s) {
+            resolve(s->trackName(trackId));
+        } else {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
         }
-
-        RetVal<TrackId> result = s->addTrack(trackName, inParams, outParams);
-
-        if (!result.ret) {
-            reject(result.ret.code(), result.ret.text());
-        }
-
-        resolve(result.val);
     }, AudioThread::ID);
 }
 
-Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                         io::path&& inParams, AudioOutputParams&& outParams)
+Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                      midi::MidiData&& playbackData,
+                                                      AudioParams&& params)
 {
-    return Promise<TrackId>([this, sequenceId, trackName, inParams, outParams](Promise<TrackId>::Resolve resolve,
-                                                                               Promise<TrackId>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
+                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
 
         if (!s) {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
         }
 
-        RetVal<TrackId> result = s->addTrack(trackName, inParams, outParams);
+        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val);
+        resolve(result.val1, result.val2);
+    }, AudioThread::ID);
+}
+
+Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                      io::Device* playbackData,
+                                                      AudioParams&& params)
+{
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
+                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (!s) {
+            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
+        }
+
+        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
+
+        if (!result.ret) {
+            reject(result.ret.code(), result.ret.text());
+            return;
+        }
+
+        resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
@@ -150,6 +170,16 @@ Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
     return m_trackRemoved;
 }
 
+Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
+{
+    return Promise<AudioResourceMetaList>([this](Promise<AudioResourceMetaList>::Resolve resolve,
+                                                 Promise<AudioResourceMetaList>::Reject /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        resolve(resolver()->resolveAvailableResources());
+    }, AudioThread::ID);
+}
+
 Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
     return Promise<AudioInputParams>([this, sequenceId, trackId](Promise<AudioInputParams>::Resolve resolve,
@@ -160,12 +190,14 @@ Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId seque
 
         if (!s) {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
         }
 
         RetVal<AudioInputParams> result = s->audioIO()->inputParams(trackId);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
+            return;
         }
 
         resolve(result.val);
@@ -214,21 +246,23 @@ void TracksHandler::ensureSubscriptions(const ITrackSequencePtr s) const
         return;
     }
 
+    TrackSequenceId sequenceId = s->id();
+
     if (!s->audioIO()->inputParamsChanged().isConnected()) {
-        s->audioIO()->inputParamsChanged().onReceive(this, [this, s](const TrackId trackId, const AudioInputParams& params) {
-            m_inputParamsChanged.send(s->id(), trackId, params);
+        s->audioIO()->inputParamsChanged().onReceive(this, [this, sequenceId](const TrackId trackId, const AudioInputParams& params) {
+            m_inputParamsChanged.send(sequenceId, trackId, params);
         });
     }
 
     if (!s->trackAdded().isConnected()) {
-        s->trackAdded().onReceive(this, [this, s](const TrackId trackId) {
-            m_trackAdded.send(s->id(), trackId);
+        s->trackAdded().onReceive(this, [this, sequenceId](const TrackId trackId) {
+            m_trackAdded.send(sequenceId, trackId);
         });
     }
 
     if (!s->trackRemoved().isConnected()) {
-        s->trackRemoved().onReceive(this, [this, s](const TrackId trackId) {
-            m_trackRemoved.send(s->id(), trackId);
+        s->trackRemoved().onReceive(this, [this, sequenceId](const TrackId trackId) {
+            m_trackRemoved.send(sequenceId, trackId);
         });
     }
 }

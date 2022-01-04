@@ -23,7 +23,7 @@
 #define MU_NOTATION_INOTATIONSELECTIONRANGE_H
 
 #include <vector>
-#include <QRectF>
+
 #include "../notationtypes.h"
 
 namespace mu::notation {
@@ -42,6 +42,7 @@ public:
     virtual int endMeasureIndex() const = 0;
 
     virtual std::vector<RectF> boundingArea() const = 0;
+    virtual bool containsPoint(const PointF& point) const = 0;
 };
 
 using INotationSelectionRangePtr = std::shared_ptr<INotationSelectionRange>;

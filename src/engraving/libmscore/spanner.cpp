@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "spanner.h"
+
+#include "rw/xml.h"
 
 #include "connector.h"
 #include "score.h"
-#include "spanner.h"
 #include "system.h"
 #include "chordrest.h"
 #include "chord.h"
@@ -34,6 +36,7 @@
 #include "musescoreCore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //-----------------------------------------------------------------------------
@@ -46,7 +49,7 @@ class SpannerWriter : public ConnectorInfoWriter
 protected:
     const char* tagName() const override { return "Spanner"; }
 public:
-    SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* spanner, int track, Fraction frac, bool start);
+    SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* spanner, int track, Fraction frac, bool start);
 
     static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
 };
@@ -55,22 +58,22 @@ public:
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
-    : Element(s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     _spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
-SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
-    : Element(s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
     _spanner = 0;
 }
 
 SpannerSegment::SpannerSegment(const SpannerSegment& s)
-    : Element(s)
+    : EngravingItem(s)
 {
     _spanner            = s._spanner;
     _spannerSegmentType = s._spannerSegmentType;
@@ -108,7 +111,7 @@ void SpannerSegment::setSystem(System* s)
         if (s) {
             s->add(this);
         } else {
-            setParent(0);
+            resetExplicitParent();
         }
     }
 }
@@ -119,7 +122,7 @@ void SpannerSegment::setSystem(System* s)
 
 void SpannerSegment::spatiumChanged(qreal ov, qreal nv)
 {
-    Element::spatiumChanged(ov, nv);
+    EngravingItem::spatiumChanged(ov, nv);
     if (offsetIsSpatiumDependent()) {
         _offset2 *= (nv / ov);
     }
@@ -134,14 +137,14 @@ QByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
     if (dragOffset.isNull()) { // where is dragOffset used?
         return spanner()->mimeData(dragOffset);
     }
-    return Element::mimeData(dragOffset);
+    return EngravingItem::mimeData(dragOffset);
 }
 
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* SpannerSegment::propertyDelegate(Pid pid)
+EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT) {
         return spanner();
@@ -153,16 +156,16 @@ Element* SpannerSegment::propertyDelegate(Pid pid)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SpannerSegment::getProperty(Pid pid) const
+engraving::PropertyValue SpannerSegment::getProperty(Pid pid) const
 {
-    if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->getProperty(pid);
     }
     switch (pid) {
     case Pid::OFFSET2:
         return _offset2;
     default:
-        return Element::getProperty(pid);
+        return EngravingItem::getProperty(pid);
     }
 }
 
@@ -170,9 +173,9 @@ QVariant SpannerSegment::getProperty(Pid pid) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
+bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (Element* e = propertyDelegate(pid)) {
+    if (EngravingItem* e = propertyDelegate(pid)) {
         return e->setProperty(pid, v);
     }
     switch (pid) {
@@ -181,7 +184,7 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
         triggerLayoutAll();
         break;
     default:
-        return Element::setProperty(pid, v);
+        return EngravingItem::setProperty(pid, v);
     }
     return true;
 }
@@ -190,16 +193,16 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SpannerSegment::propertyDefault(Pid pid) const
+PropertyValue SpannerSegment::propertyDefault(Pid pid) const
 {
-    if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->propertyDefault(pid);
     }
     switch (pid) {
     case Pid::OFFSET2:
-        return QVariant();
+        return PropertyValue();
     default:
-        return Element::propertyDefault(pid);
+        return EngravingItem::propertyDefault(pid);
     }
 }
 
@@ -209,10 +212,10 @@ QVariant SpannerSegment::propertyDefault(Pid pid) const
 
 Sid SpannerSegment::getPropertyStyle(Pid pid) const
 {
-    if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->getPropertyStyle(pid);
     }
-    return Element::getPropertyStyle(pid);
+    return EngravingItem::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------
@@ -221,10 +224,10 @@ Sid SpannerSegment::getPropertyStyle(Pid pid) const
 
 PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
 {
-    if (Element* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
+    if (EngravingItem* e = const_cast<SpannerSegment*>(this)->propertyDelegate(pid)) {
         return e->propertyFlags(pid);
     }
-    return Element::propertyFlags(pid);
+    return EngravingItem::propertyFlags(pid);
 }
 
 //---------------------------------------------------------
@@ -233,10 +236,10 @@ PropertyFlags SpannerSegment::propertyFlags(Pid pid) const
 
 void SpannerSegment::resetProperty(Pid pid)
 {
-    if (Element* e = propertyDelegate(pid)) {
+    if (EngravingItem* e = propertyDelegate(pid)) {
         return e->resetProperty(pid);
     }
-    return Element::resetProperty(pid);
+    return EngravingItem::resetProperty(pid);
 }
 
 //---------------------------------------------------------
@@ -255,7 +258,7 @@ void SpannerSegment::styleChanged()
 void SpannerSegment::reset()
 {
     undoChangeProperty(Pid::OFFSET2, PointF());
-    Element::reset();
+    EngravingItem::reset();
     spanner()->reset();
 }
 
@@ -263,15 +266,15 @@ void SpannerSegment::reset()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void SpannerSegment::undoChangeProperty(Pid pid, const PropertyValue& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
         // placement properties to undo stack.
         undoPushProperty(Pid::OFFSET2);
-        // other will be saved in Element::undoChangeProperty
+        // other will be saved in EngravingItem::undoChangeProperty
     }
-    Element::undoChangeProperty(pid, val, ps);
+    EngravingItem::undoChangeProperty(pid, val, ps);
 }
 
 //---------------------------------------------------------
@@ -281,7 +284,7 @@ void SpannerSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFl
 void SpannerSegment::setSelected(bool f)
 {
     for (SpannerSegment* ss : _spanner->spannerSegments()) {
-        ss->Element::setSelected(f);
+        ss->EngravingItem::setSelected(f);
     }
     _spanner->setSelected(f);
 }
@@ -294,11 +297,11 @@ void SpannerSegment::setVisible(bool f)
 {
     if (_spanner) {
         for (SpannerSegment* ss : _spanner->spannerSegments()) {
-            ss->Element::setVisible(f);
+            ss->EngravingItem::setVisible(f);
         }
         _spanner->setVisible(f);
     } else {
-        Element::setVisible(f);
+        EngravingItem::setVisible(f);
     }
 }
 
@@ -306,7 +309,7 @@ void SpannerSegment::setVisible(bool f)
 //   setColor
 //---------------------------------------------------------
 
-void SpannerSegment::setColor(const QColor& col)
+void SpannerSegment::setColor(const mu::draw::Color& col)
 {
     if (_spanner) {
         for (SpannerSegment* ss : _spanner->spannerSegments()) {
@@ -322,7 +325,7 @@ void SpannerSegment::setColor(const QColor& col)
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* SpannerSegment::nextSegmentElement()
+EngravingItem* SpannerSegment::nextSegmentElement()
 {
     return spanner()->nextSegmentElement();
 }
@@ -331,7 +334,7 @@ Element* SpannerSegment::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* SpannerSegment::prevSegmentElement()
+EngravingItem* SpannerSegment::prevSegmentElement()
 {
     return spanner()->prevSegmentElement();
 }
@@ -360,7 +363,7 @@ void SpannerSegment::triggerLayout() const
 //   scanElements
 //---------------------------------------------------------
 
-void SpannerSegment::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || spanner()->eitherEndVisible()) {
         func(data, this);
@@ -371,13 +374,13 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, Element*), bo
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(Score* s, ElementFlags f)
-    : Element(s, f)
+Spanner::Spanner(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
 }
 
 Spanner::Spanner(const Spanner& s)
-    : Element(s)
+    : EngravingItem(s)
 {
     _anchor       = s._anchor;
     _startElement = s._startElement;
@@ -385,6 +388,11 @@ Spanner::Spanner(const Spanner& s)
     _tick         = s._tick;
     _ticks        = s._ticks;
     _track2       = s._track2;
+    if (!s.startElement() && !spannerSegments().size()) {
+        for (auto* segment : s.spannerSegments()) {
+            add(segment->clone());
+        }
+    }
 }
 
 Spanner::~Spanner()
@@ -409,7 +417,7 @@ qreal Spanner::mag() const
 //   add
 //---------------------------------------------------------
 
-void Spanner::add(Element* e)
+void Spanner::add(EngravingItem* e)
 {
     SpannerSegment* ls = toSpannerSegment(e);
     ls->setSpanner(this);
@@ -423,7 +431,7 @@ void Spanner::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Spanner::remove(Element* e)
+void Spanner::remove(EngravingItem* e)
 {
     SpannerSegment* ss = toSpannerSegment(e);
     if (ss->system()) {
@@ -476,8 +484,8 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
         Fraction toTick = fromTick - len;
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point
-                if (parent()) {
-                    parent()->remove(this);
+                if (explicitParent()) {
+                    parentItem()->remove(this);
                     return;
                 } else {
                     newTick1 = fromTick;
@@ -497,8 +505,8 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
     // update properties as required
     if (newTick2 <= newTick1) {                 // if no longer any span: remove it
-        if (parent()) {
-            parent()->remove(this);
+        if (explicitParent()) {
+            parentItem()->remove(this);
         }
     } else {                                    // if either TICKS or TICK did change, update property
         if (newTick2 - newTick1 != tick2() - tick()) {
@@ -514,10 +522,11 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 //   scanElements
 //---------------------------------------------------------
 
-void Spanner::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (ScoreElement* el : *this) {
-        if (treeParent() && el->isSpannerSegment()) {
+    for (int i = 0; i < scanChildCount(); ++i) {
+        EngravingObject* el = scanChild(i);
+        if (scanParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system
                       // except in the palette (in which case treeParent() == nullptr)
         }
@@ -529,7 +538,7 @@ void Spanner::scanElements(void* data, void (* func)(void*, Element*), bool all)
 //   isVisbleCR
 //---------------------------------------------------------
 
-static bool isVisibleCR(Element* e)
+static bool isVisibleCR(EngravingItem* e)
 {
     if (!e || !e->isChordRest()) {
         return true;  // assume visible
@@ -559,7 +568,7 @@ bool Spanner::eitherEndVisible() const
 
 void Spanner::setScore(Score* s)
 {
-    Element::setScore(s);
+    EngravingItem::setScore(s);
     foreach (SpannerSegment* seg, segments) {
         seg->setScore(s);
     }
@@ -569,7 +578,7 @@ void Spanner::setScore(Score* s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Spanner::getProperty(Pid propertyId) const
+PropertyValue Spanner::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SPANNER_TICK:
@@ -593,14 +602,14 @@ QVariant Spanner::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Spanner::setProperty(Pid propertyId, const QVariant& v)
+bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPANNER_TICK:
@@ -629,7 +638,7 @@ bool Spanner::setProperty(Pid propertyId, const QVariant& v)
         setAnchor(Anchor(v.toInt()));
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -639,7 +648,7 @@ bool Spanner::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Spanner::propertyDefault(Pid propertyId) const
+PropertyValue Spanner::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ANCHOR:
@@ -647,7 +656,7 @@ QVariant Spanner::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -689,7 +698,7 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
 {
-    if (score()->isPalette()) {
+    if (score()->isPaletteScore()) {
         // return immediately to prevent lots of
         // "no element found" messages from appearing
         _endElement = nullptr;
@@ -701,7 +710,7 @@ void Spanner::computeEndElement()
         if (track2() == -1) {
             setTrack2(track());
         }
-        if (ticks().isZero() && isTextLine() && parent()) {           // special case palette
+        if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
             setTicks(score()->lastSegment()->tick() - _tick);
         }
 
@@ -754,9 +763,14 @@ void Spanner::computeEndElement()
             _endElement = score()->lastMeasure();
         }
         break;
-
-    case Anchor::CHORD:
     case Anchor::NOTE:
+        if (!_endElement) {
+            ChordRest* cr = score()->findCR(tick2(), track2());
+            if (cr && cr->isChord()) {
+                _endElement = toChord(cr)->upNote();
+            }
+        }
+    case Anchor::CHORD:
         break;
     }
 }
@@ -773,7 +787,7 @@ void Spanner::computeEndElement()
 //                      (for instance, while cloning staves)
 //---------------------------------------------------------
 
-Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
+Note* Spanner::startElementFromSpanner(Spanner* sp, EngravingItem* newEnd)
 {
     if (sp->anchor() != Anchor::NOTE) {
         return nullptr;
@@ -790,7 +804,7 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
     int newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
     // look in notes linked to oldStart for a note with the
     // same score as new score and appropriate track
-    for (ScoreElement* newEl : oldStart->linkList()) {
+    for (EngravingObject* newEl : oldStart->linkList()) {
         if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
             newStart = toNote(newEl);
             break;
@@ -809,7 +823,7 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
 //    NOTES:      Only spanners with Anchor::NOTE are currently supported.
 //---------------------------------------------------------
 
-Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
+Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
 {
     if (sp->anchor() != Anchor::NOTE) {
         return nullptr;
@@ -826,7 +840,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
     int newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
     // look in notes linked to oldEnd for a note with the
     // same score as new score and appropriate track
-    for (ScoreElement* newEl : oldEnd->linkList()) {
+    for (EngravingObject* newEl : oldEnd->linkList()) {
         if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
             newEnd = toNote(newEl);
             break;
@@ -1002,9 +1016,9 @@ Measure* Spanner::endMeasure() const
 void Spanner::setSelected(bool f)
 {
     for (SpannerSegment* ss : spannerSegments()) {
-        ss->Element::setSelected(f);
+        ss->EngravingItem::setSelected(f);
     }
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -1014,9 +1028,9 @@ void Spanner::setSelected(bool f)
 void Spanner::setVisible(bool f)
 {
     for (SpannerSegment* ss : spannerSegments()) {
-        ss->Element::setVisible(f);
+        ss->EngravingItem::setVisible(f);
     }
-    Element::setVisible(f);
+    EngravingItem::setVisible(f);
 }
 
 //---------------------------------------------------------
@@ -1026,16 +1040,16 @@ void Spanner::setVisible(bool f)
 void Spanner::setAutoplace(bool f)
 {
     for (SpannerSegment* ss : spannerSegments()) {
-        ss->Element::setAutoplace(f);
+        ss->EngravingItem::setAutoplace(f);
     }
-    Element::setAutoplace(f);
+    EngravingItem::setAutoplace(f);
 }
 
 //---------------------------------------------------------
 //   setColor
 //---------------------------------------------------------
 
-void Spanner::setColor(const QColor& col)
+void Spanner::setColor(const mu::draw::Color& col)
 {
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setColor(col);
@@ -1047,7 +1061,7 @@ void Spanner::setColor(const QColor& col)
 //   setStartElement
 //---------------------------------------------------------
 
-void Spanner::setStartElement(Element* e)
+void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
@@ -1061,7 +1075,7 @@ void Spanner::setStartElement(Element* e)
 //   setEndElement
 //---------------------------------------------------------
 
-void Spanner::setEndElement(Element* e)
+void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
     if (_anchor == Anchor::NOTE) {
@@ -1069,13 +1083,16 @@ void Spanner::setEndElement(Element* e)
     }
 #endif
     _endElement = e;
+    if (e && ticks() == Fraction() && _tick >= Fraction()) {
+        setTicks(e->tick() - _tick);
+    }
 }
 
 //---------------------------------------------------------
 //   nextSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
+Spanner* Spanner::nextSpanner(EngravingItem* e, int activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1088,42 +1105,19 @@ Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
                         return nullptr;
                     }
                     Spanner* s =  i->second;
-                    Element* st = s->startElement();
+                    EngravingItem* st = s->startElement();
                     if (!st) {
                         continue;
                     }
                     if (s->startSegment() == toSpanner(e)->startSegment()) {
                         if (st->staffIdx() == activeStaff) {
                             return s;
-                        }
-#if 1
-                        else if (st->isMeasure() && activeStaff == 0) {
+                        } else if (st->isMeasure() && activeStaff == 0) {
                             return s;
                         }
-#else
-                        // TODO: when navigating system spanners, check firstVisibleStaff()?
-                        // currently, information about which staves are hidden
-                        // is not exposed through navigation,
-                        // so it may make more sense to continue to navigate systems elements
-                        // only when actually on staff 0
-                        // see also https://musescore.org/en/node/301496
-                        // and https://github.com/musescore/MuseScore/pull/5755
-                        else if (st->isMeasure()) {
-                            SpannerSegment* ss = s->frontSegment();
-                            int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
-                            if (activeStaff == top) {
-                                return s;
-                            }
-                        }
-#endif
                     }
-                    //else
-                    //return nullptr;
                 }
                 break;
-                /* else {
-                       break;
-                       }*/
             }
         }
     }
@@ -1134,7 +1128,7 @@ Spanner* Spanner::nextSpanner(Element* e, int activeStaff)
 //   prevSpanner
 //---------------------------------------------------------
 
-Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
+Spanner* Spanner::prevSpanner(EngravingItem* e, int activeStaff)
 {
     std::multimap<int, Spanner*> mmap = score()->spanner();
     auto range = mmap.equal_range(tick().ticks());
@@ -1147,25 +1141,13 @@ Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
                 while (i != range.first) {
                     --i;
                     Spanner* s =  i->second;
-                    Element* st = s->startElement();
+                    EngravingItem* st = s->startElement();
                     if (s->startSegment() == toSpanner(e)->startSegment()) {
                         if (st->staffIdx() == activeStaff) {
                             return s;
-                        }
-#if 1
-                        else if (st->isMeasure() && activeStaff == 0) {
+                        } else if (st->isMeasure() && activeStaff == 0) {
                             return s;
                         }
-#else
-                        // TODO: see nextSpanner()
-                        else if (st->isMeasure()) {
-                            SpannerSegment* ss = s->frontSegment();
-                            int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
-                            if (activeStaff == top) {
-                                return s;
-                            }
-                        }
-#endif
                     }
                 }
                 break;
@@ -1179,7 +1161,7 @@ Spanner* Spanner::prevSpanner(Element* e, int activeStaff)
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Spanner::nextSegmentElement()
+EngravingItem* Spanner::nextSegmentElement()
 {
     Segment* s = startSegment();
     if (s) {
@@ -1192,7 +1174,7 @@ Element* Spanner::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Spanner::prevSegmentElement()
+EngravingItem* Spanner::prevSegmentElement()
 {
     Segment* s = endSegment();
     if (s) {
@@ -1326,7 +1308,7 @@ int Spanner::reuseSegments(int number)
 //    Previously unused segments are added via reuse() call
 //---------------------------------------------------------
 
-void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment)
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System* parent)> createSegment)
 {
     const int diff = targetNumber - int(nsegments());
     if (diff == 0) {
@@ -1335,7 +1317,7 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
     if (diff > 0) {
         const int ncreate = reuseSegments(diff);
         for (int i = 0; i < ncreate; ++i) {
-            add(createSegment());
+            add(createSegment(score()->dummy()->system()));
         }
     } else { // diff < 0
         const int nremove = -diff;
@@ -1375,7 +1357,7 @@ SpannerSegment* Spanner::layoutSystem(System*)
 //   getNextLayoutSystemSegment
 //---------------------------------------------------------
 
-SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* ()> createSegment)
+SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System* parent)> createSegment)
 {
     SpannerSegment* seg = nullptr;
     for (SpannerSegment* ss : spannerSegments()) {
@@ -1388,7 +1370,7 @@ SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::functio
         if ((seg = popUnusedSegment())) {
             reuse(seg);
         } else {
-            seg = createSegment();
+            seg = createSegment(system);
             Q_ASSERT(seg);
             add(seg);
         }
@@ -1423,7 +1405,7 @@ void Spanner::layoutSystemsDone()
 //   fraction
 //---------------------------------------------------------
 
-static Fraction fraction(const XmlWriter& xml, const Element* current, const Fraction& t)
+static Fraction fraction(const XmlWriter& xml, const EngravingItem* current, const Fraction& t)
 {
     Fraction tick(t);
     if (!xml.clipboardmode()) {
@@ -1448,7 +1430,7 @@ bool Spanner::readProperties(XmlReader& e)
             return true;
         }
     }
-    return Element::readProperties(e);
+    return EngravingItem::readProperties(e);
 }
 
 //---------------------------------------------------------
@@ -1460,14 +1442,14 @@ void Spanner::writeProperties(XmlWriter& xml) const
     if (xml.clipboardmode()) {
         xml.tag("ticks_f", ticks());
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 }
 
 //--------------------------------------------------
 //   Spanner::writeSpannerStart
 //---------------------------------------------------------
 
-void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction tick) const
+void Spanner::writeSpannerStart(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
     SpannerWriter w(xml, current, this, track, frac, true);
@@ -1478,7 +1460,7 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int trac
 //   Spanner::writeSpannerEnd
 //---------------------------------------------------------
 
-void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction tick) const
+void Spanner::writeSpannerEnd(XmlWriter& xml, const EngravingItem* current, int track, Fraction tick) const
 {
     Fraction frac = fraction(xml, current, tick);
     SpannerWriter w(xml, current, this, track, frac, false);
@@ -1489,7 +1471,7 @@ void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track,
 //   Spanner::readSpanner
 //---------------------------------------------------------
 
-void Spanner::readSpanner(XmlReader& e, Element* current, int track)
+void Spanner::readSpanner(XmlReader& e, EngravingItem* current, int track)
 {
     std::unique_ptr<ConnectorInfoReader> info(new ConnectorInfoReader(e, current, track));
     ConnectorInfoReader::readConnector(std::move(info), e);
@@ -1530,7 +1512,7 @@ void SpannerWriter::fillSpannerPosition(Location& l, const MeasureBase* m, const
 //   SpannerWriter::SpannerWriter
 //---------------------------------------------------------
 
-SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spanner* sp, int track, Fraction frac, bool start)
+SpannerWriter::SpannerWriter(XmlWriter& xml, const EngravingItem* current, const Spanner* sp, int track, Fraction frac, bool start)
     : ConnectorInfoWriter(xml, current, sp, track, frac)
 {
     const bool clipboardmode = xml.clipboardmode();
@@ -1571,7 +1553,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, const Element* current, const Spann
 
 void SpannerSegment::autoplaceSpannerSegment()
 {
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(PointF());
         return;
     }
@@ -1629,10 +1611,10 @@ void SpannerSegment::autoplaceSpannerSegment()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Spanner::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::PLACEMENT) {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
         // change offset of all segments if styled
 
         for (SpannerSegment* s : segments) {
@@ -1643,6 +1625,6 @@ void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         }
         return;
     }
-    Element::undoChangeProperty(id, v, ps);
+    EngravingItem::undoChangeProperty(id, v, ps);
 }
 }

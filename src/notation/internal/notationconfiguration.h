@@ -29,12 +29,14 @@
 #include "iglobalconfiguration.h"
 #include "settings.h"
 #include "system/ifilesystem.h"
+#include "engraving/iengravingconfiguration.h"
 
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(notation, system::IFileSystem, fileSystem)
 
 public:
@@ -44,6 +46,7 @@ public:
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
+    void resetCurrentBackgroundColorToDefault() override;
 
     io::path backgroundWallpaperPath() const override;
     void setBackgroundWallpaperPath(const io::path& path) override;
@@ -74,10 +77,6 @@ public:
     int cursorOpacity() const override;
 
     QColor selectionColor(int voiceIndex = 0) const override;
-    void setSelectionColor(int voiceIndex, const QColor& color) override;
-    async::Channel<int> selectionColorChanged() override;
-
-    QColor layoutBreakColor() const override;
 
     int selectionProximity() const override;
     void setSelectionProximity(int proxymity) override;
@@ -124,8 +123,8 @@ public:
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
 
-    float guiScaling() const override;
-    float notationScaling() const override;
+    double guiScaling() const override;
+    double notationScaling() const override;
 
     std::string notationRevision() const override;
     int notationDivision() const override;
@@ -135,6 +134,7 @@ public:
 
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited) override;
+    async::Notification isLimitCanvasScrollAreaChanged() const override;
 
     bool colorNotesOusideOfUsablePitchRange() const override;
     void setColorNotesOusideOfUsablePitchRange(bool value) override;
@@ -148,14 +148,45 @@ public:
     void setTemplateModeEnalbed(bool enabled) override;
     void setTestModeEnabled(bool enabled) override;
 
+    io::paths instrumentListPaths() const override;
+    async::Notification instrumentListPathsChanged() const override;
+
+    io::paths userInstrumentListPaths() const override;
+    void setUserInstrumentListPaths(const io::paths& paths) override;
+
+    io::paths scoreOrderListPaths() const override;
+    async::Notification scoreOrderListPathsChanged() const override;
+
+    io::paths userScoreOrderListPaths() const override;
+    void setUserScoreOrderListPaths(const io::paths& paths) override;
+
+    bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
+    void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
+
+    int gridSizeSpatium(framework::Orientation gridOrientation) const override;
+    void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) override;
+
 private:
+    io::path firstInstrumentListPath() const;
+    void setFirstInstrumentListPath(const io::path& path);
+
+    io::path secondInstrumentListPath() const;
+    void setSecondInstrumentListPath(const io::path& path);
+
+    io::path firstScoreOrderListPath() const;
+    void setFirstScoreOrderListPath(const io::path& path);
+
+    io::path secondScoreOrderListPath() const;
+    void setSecondScoreOrderListPath(const io::path& path);
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path> m_userStylesPathChanged;
-    async::Channel<int> m_selectionColorChanged;
+    async::Notification m_instrumentListPathsChanged;
+    async::Notification m_scoreOrderListPathsChanged;
+    async::Notification m_isLimitCanvasScrollAreaChanged;
 };
 }
 

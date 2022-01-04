@@ -22,14 +22,13 @@
 #ifndef MU_NOTATION_NOTEINPUTCURSOR_H
 #define MU_NOTATION_NOTEINPUTCURSOR_H
 
-#include <QRect>
 #include <QColor>
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 
-class QPainter;
+#include "engraving/infrastructure/draw/geometry.h"
 
 namespace mu::notation {
 class NoteInputCursor
@@ -38,7 +37,6 @@ class NoteInputCursor
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-
     NoteInputCursor() = default;
 
     void paint(draw::Painter* painter);
@@ -47,7 +45,7 @@ private:
     INotationNoteInputPtr currentNoteInput() const;
 
     bool isNoteInputMode() const;
-    QRectF rect() const;
+    RectF rect() const;
     QColor cursorColor() const;
     QColor fillColor() const;
 };

@@ -51,7 +51,7 @@ private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Alsa;
-    std::unique_ptr<Alsa> m_alsa;
+    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
 
     async::Notification m_devicesChanged;

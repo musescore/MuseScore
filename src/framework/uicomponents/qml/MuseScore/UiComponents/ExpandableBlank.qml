@@ -27,6 +27,7 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
+    property alias contentItem: contentLoader.item
     property alias contentItemComponent: contentLoader.sourceComponent
     property alias menuItemComponent: expandableSection.menuItemComponent
 
@@ -55,7 +56,6 @@ FocusScope {
     Column {
         id: contentColumn
 
-        height: childrenRect.height
         width: root.width
 
         spacing: 12
@@ -68,13 +68,8 @@ FocusScope {
             id: contentLoader
 
             property alias yScale: scalingFactor.yScale
-            property int contentHorizontalPadding: 4
 
-            function getContentHeight() {
-                return implicitHeight === 0 ? implicitHeight : implicitHeight + contentHorizontalPadding * 2
-            }
-
-            height: getContentHeight() * yScale
+            height: root.isExpanded ? implicitHeight : 0
             width: root.width
 
             enabled: root.isExpanded
@@ -107,7 +102,7 @@ FocusScope {
 
     transitions: Transition {
         NumberAnimation {
-            properties: "opacity, yScale"
+            properties: "opacity"
             duration: 100
         }
     }

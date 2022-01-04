@@ -20,20 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "measurenumberbase.h"
+#include "rw/xml.h"
+#include "score.h"
 #include "measure.h"
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   MeasureNumberBase
 //---------------------------------------------------------
 
-MeasureNumberBase::MeasureNumberBase(Score* s, Tid tid)
-    : TextBase(s, tid)
+MeasureNumberBase::MeasureNumberBase(const ElementType& type, Measure* parent, TextStyleType tid)
+    : TextBase(type, parent, tid)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -54,7 +56,7 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureNumberBase::getProperty(Pid id) const
+engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::HPLACEMENT:
@@ -68,11 +70,11 @@ QVariant MeasureNumberBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureNumberBase::setProperty(Pid id, const QVariant& val)
+bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::HPLACEMENT:
-        setHPlacement(HPlacement(val.toInt()));
+        setHPlacement(val.value<PlacementH>());
         setLayoutInvalid();
         triggerLayout();
         return true;
@@ -85,11 +87,11 @@ bool MeasureNumberBase::setProperty(Pid id, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureNumberBase::propertyDefault(Pid id) const
+PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::DEFAULT);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::DEFAULT;
     default:
         return TextBase::propertyDefault(id);
     }
@@ -115,7 +117,7 @@ bool MeasureNumberBase::readProperties(XmlReader& xml)
 void MeasureNumberBase::layout()
 {
     setPos(PointF());
-    if (!parent()) {
+    if (!explicitParent()) {
         setOffset(0.0, 0.0);
     }
 
@@ -124,7 +126,7 @@ void MeasureNumberBase::layout()
     TextBase::layout1();
     // this could be if (!measure()) but it is the same as current and slower
     // See implementation of MeasureNumberBase::measure().
-    if (!parent()) {
+    if (!explicitParent()) {
         return;
     }
 
@@ -150,7 +152,7 @@ void MeasureNumberBase::layout()
         rypos() = yoff;
     }
 
-    if (hPlacement() == HPlacement::CENTER) {
+    if (hPlacement() == PlacementH::CENTER) {
         // measure numbers should be centered over where there can be notes.
         // This means that header and trailing segments should be ignored,
         // which includes all timesigs, clefs, keysigs, etc.
@@ -191,7 +193,7 @@ void MeasureNumberBase::layout()
         qreal x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
 
         rxpos() = (x1 + x2) * 0.5;
-    } else if (hPlacement() == HPlacement::RIGHT) {
+    } else if (hPlacement() == PlacementH::RIGHT) {
         rxpos() = measure()->width();
     }
 }

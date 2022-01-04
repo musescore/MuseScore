@@ -21,63 +21,79 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+import "../../shared"
+
+BaseSection {
     id: root
 
-    property alias currentThemeIndex: view.currentIndex
-    property alias themes: view.model
+    title: highContrastEnabled ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+    navigation.direction: NavigationPanel.Both
 
-    signal themeChangeRequested(var newThemeIndex)
+    property bool highContrastEnabled: false
 
-    spacing: 18
+    property alias themes: themeSamplesList.themes
+    property alias currentThemeCode: themeSamplesList.currentThemeCode
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "Themes")
-        font: ui.theme.bodyBoldFont
+    property alias accentColors: accentColorsSection.colors
+    property alias currentAccentColorIndex: accentColorsSection.currentColorIndex
+
+    signal themeChangeRequested(var newThemeCode)
+    signal highContrastChangeRequested(bool enabled)
+    signal accentColorChangeRequested(var newColorIndex)
+
+    signal ensureContentVisibleRequested(var contentRect)
+
+    CheckBox {
+        width: parent.height
+
+        text: qsTrc("appshell", "Enable high-contrast")
+
+        checked: root.highContrastEnabled
+
+        navigation.name: "EnableHighContrastBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+        navigation.column: 0
+
+        onClicked: {
+            root.highContrastChangeRequested(!checked)
+        }
     }
 
-    ListView {
-        id: view
-
+    ThemeSamplesList {
+        id: themeSamplesList
         width: parent.width
-        height: contentHeight
-        contentHeight: 120
+        spacing: root.columnWidth + root.columnSpacing - sampleWidth
 
-        orientation: Qt.Horizontal
-        interactive: false
+        navigationPanel: root.navigation
+        navigationRow: 1
 
-        spacing: 106
+        onThemeChangeRequested: function(newThemeCode) {
+            root.themeChangeRequested(newThemeCode)
+        }
+    }
 
-        delegate: Column {
-            width: 112
-            height: 120
+    AccentColorsSection {
+        id: accentColorsSection
 
-            spacing: 16
+        columnWidth: root.columnWidth
+        spacing: root.columnSpacing
 
-            ThemeSample {
-                strokeColor: modelData.strokeColor
-                backgroundPrimaryColor: modelData.backgroundPrimaryColor
-                backgroundSecondaryColor: modelData.backgroundSecondaryColor
-                fontPrimaryColor: modelData.fontPrimaryColor
-                buttonColor: modelData.buttonColor
-                accentColor: modelData.accentColor
+        visible: !root.highContrastEnabled
 
-                onClicked: {
-                    root.themeChangeRequested(model.index)
-                }
-            }
+        navigation.section: root.navigation.section
+        navigation.order: root.navigation.order + 1
 
-            RoundedRadioButton {
-                width: parent.width
+        onAccentColorChangeRequested: function(newColorIndex) {
+            root.accentColorChangeRequested(newColorIndex)
+        }
 
-                checked: view.currentIndex === model.index
-                text: modelData.title
-
-                onClicked: {
-                    root.themeChangeRequested(model.index)
-                }
+        onFocusChanged: {
+            if (activeFocus) {
+                root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
             }
         }
     }

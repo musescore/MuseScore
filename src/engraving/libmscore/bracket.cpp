@@ -21,8 +21,12 @@
  */
 
 #include "bracket.h"
-#include "xml.h"
-#include "style.h"
+
+#include "draw/brush.h"
+#include "style/style.h"
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "utils.h"
 #include "measure.h"
 #include "staff.h"
@@ -31,9 +35,9 @@
 #include "system.h"
 #include "mscore.h"
 #include "bracketItem.h"
-#include "draw/brush.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
@@ -41,8 +45,8 @@ namespace Ms {
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(Score* s)
-    : Element(s)
+Bracket::Bracket(EngravingItem* parent)
+    : EngravingItem(ElementType::BRACKET, parent)
 {
     ay1          = 0;
     h2           = 3.5 * spatium();
@@ -95,19 +99,19 @@ qreal Bracket::width() const
     switch (bracketType()) {
     case BracketType::BRACE:
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
-            w = score()->styleP(Sid::akkoladeWidth) + score()->styleP(Sid::akkoladeBarDistance);
+            w = score()->styleMM(Sid::akkoladeWidth) + score()->styleMM(Sid::akkoladeBarDistance);
         } else {
-            w = (symWidth(_braceSymbol) * _magx) + score()->styleP(Sid::akkoladeBarDistance);
+            w = (symWidth(_braceSymbol) * _magx) + score()->styleMM(Sid::akkoladeBarDistance);
         }
         break;
     case BracketType::NORMAL:
-        w = score()->styleP(Sid::bracketWidth) + score()->styleP(Sid::bracketDistance);
+        w = score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::SQUARE:
-        w = score()->styleP(Sid::staffLineWidth) + spatium() * .5;
+        w = score()->styleMM(Sid::staffLineWidth) + spatium() * .5;
         break;
     case BracketType::LINE:
-        w = 0.67f * score()->styleP(Sid::bracketWidth) + score()->styleP(Sid::bracketDistance);
+        w = 0.67 * score()->styleMM(Sid::bracketWidth) + score()->styleMM(Sid::bracketDistance);
         break;
     case BracketType::NO_BRACKET:
     default:
@@ -129,13 +133,21 @@ void Bracket::setStaffSpan(int a, int b)
     if (bracketType() == BracketType::BRACE
         && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
         int v = _lastStaff - _firstStaff + 1;
+
+        // if staves inner staves are hidden, decrease span
+        for (int staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
+            if (system() && !system()->staff(staffIndex)->show()) {
+                --v;
+            }
+        }
+
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") {
             v = qMin(4, v);
         }
-        // total default height of a system of n staves / height of a 5 line staff
-        qreal dist = score()->enableVerticalSpread() ? score()->styleS(Sid::maxAkkoladeDistance).val() : score()->styleS(
-            Sid::akkoladeDistance).val();
-        _magx = v + ((v - 1) * dist / 4.0);
+
+        // 1.625 is a "magic" number based on akkoladeDistance/4.0 (default value 6.5).
+        _magx = v + ((v - 1) * 1.625);
+
         if (v == 1) {
             _braceSymbol = SymId::braceSmall;
         } else if (v <= 2) {
@@ -164,7 +176,7 @@ void Bracket::layout()
     case BracketType::BRACE: {
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Emmentaler" || score()->styleSt(Sid::MusicalSymbolFont) == "Gonville") {
             _braceSymbol = SymId::noSym;
-            qreal w = score()->styleP(Sid::akkoladeWidth);
+            qreal w = score()->styleMM(Sid::akkoladeWidth);
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * h2 / 7100
@@ -205,7 +217,7 @@ void Bracket::layout()
     break;
     case BracketType::NORMAL: {
         qreal _spatium = spatium();
-        qreal w = score()->styleP(Sid::bracketWidth) * .5;
+        qreal w = score()->styleMM(Sid::bracketWidth) * .5;
         qreal x = -w;
 
         qreal bd   = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
@@ -220,7 +232,7 @@ void Bracket::layout()
     }
     break;
     case BracketType::SQUARE: {
-        qreal w = score()->styleP(Sid::staffLineWidth) * .5;
+        qreal w = score()->styleMM(Sid::staffLineWidth) * .5;
         qreal x = -w;
         qreal y = -w;
         qreal h = (h2 + w) * 2;
@@ -231,7 +243,7 @@ void Bracket::layout()
     break;
     case BracketType::LINE: {
         qreal _spatium = spatium();
-        qreal w = 0.67 * score()->styleP(Sid::bracketWidth) * .5;
+        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth) * .5;
         qreal x = -w;
         qreal bd = _spatium * .25;
         qreal y = -bd;
@@ -275,7 +287,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::NORMAL: {
         qreal h        = 2 * h2;
         qreal _spatium = spatium();
-        qreal w        = score()->styleP(Sid::bracketWidth);
+        qreal w        = score()->styleMM(Sid::bracketWidth);
         qreal bd       = (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -290,7 +302,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
     case BracketType::SQUARE: {
         qreal h = 2 * h2;
         qreal _spatium = spatium();
-        qreal w = score()->styleP(Sid::staffLineWidth);
+        qreal w = score()->styleMM(Sid::staffLineWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::SquareCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
@@ -300,10 +312,10 @@ void Bracket::draw(mu::draw::Painter* painter) const
     break;
     case BracketType::LINE: {
         qreal h = 2 * h2;
-        qreal w = 0.67 * score()->styleP(Sid::bracketWidth);
+        qreal w = 0.67 * score()->styleMM(Sid::bracketWidth);
         Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
-        qreal bd = score()->styleP(Sid::staffLineWidth) * 0.5;
+        qreal bd = score()->styleMM(Sid::staffLineWidth) * 0.5;
         painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
     }
     break;
@@ -318,7 +330,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
 
 void Bracket::startEdit(EditData& ed)
 {
-    Element::startEdit(ed);
+    EngravingItem::startEdit(ed);
     ay1 = pagePos().y();
 }
 
@@ -341,6 +353,7 @@ void Bracket::endEdit(EditData& ed)
     triggerLayoutAll();
     score()->update();
     ed.element = 0;           // score layout invalidates element
+    ed.clearData();
 }
 
 //---------------------------------------------------------
@@ -368,7 +381,7 @@ void Bracket::endEditDrag(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        qreal ay  = parent()->pagePos().y();
+        qreal ay  = parentItem()->pagePos().y();
         System* s = system();
         qreal y   = s->staff(staffIdx1)->y() + ay;
         qreal h1  = staff()->height();
@@ -387,9 +400,6 @@ void Bracket::endEditDrag(EditData&)
     qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
     h2 = (ey - sy) * .5;
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
-    // brackets do not survive layout
-    // make sure layout is not called:
-    score()->cmdState()._setUpdateMode(UpdateMode::Update);
 }
 
 //---------------------------------------------------------
@@ -405,9 +415,9 @@ bool Bracket::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Bracket::drop(EditData& data)
+EngravingItem* Bracket::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Bracket* b = 0;
     if (e->isBracket()) {
         b = toBracket(e);
@@ -424,6 +434,15 @@ Element* Bracket::drop(EditData& data)
 
 bool Bracket::edit(EditData& ed)
 {
+    if (ed.key == Qt::Key_Up && span() > 1) {
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() - 1);
+        return true;
+    }
+    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() + 1);
+        return true;
+    }
+
     if (!(ed.modifiers & Qt::ShiftModifier)) {
         return false;
     }
@@ -446,9 +465,9 @@ bool Bracket::edit(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Bracket::getProperty(Pid id) const
+PropertyValue Bracket::getProperty(Pid id) const
 {
-    QVariant v = Element::getProperty(id);
+    PropertyValue v = EngravingItem::getProperty(id);
     if (!v.isValid()) {
         v = _bi->getProperty(id);
     }
@@ -459,7 +478,7 @@ QVariant Bracket::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Bracket::setProperty(Pid id, const QVariant& v)
+bool Bracket::setProperty(Pid id, const PropertyValue& v)
 {
     return _bi->setProperty(id, v);
 }
@@ -468,12 +487,12 @@ bool Bracket::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Bracket::propertyDefault(Pid id) const
+PropertyValue Bracket::propertyDefault(Pid id) const
 {
     if (id == Pid::BRACKET_COLUMN) {
         return 0;
     }
-    QVariant v = Element::propertyDefault(id);
+    PropertyValue v = EngravingItem::propertyDefault(id);
     if (!v.isValid()) {
         v = _bi->propertyDefault(id);
     }
@@ -484,10 +503,10 @@ QVariant Bracket::propertyDefault(Pid id) const
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Bracket::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::COLOR) {
-        setColor(v.value<QColor>());
+        setColor(v.value<draw::Color>());
     }
 
     // brackets do not survive layout() and therefore cannot be on
@@ -503,7 +522,7 @@ void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 void Bracket::setSelected(bool f)
 {
 //      _bi->setSelected(f);
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -541,12 +560,12 @@ void Bracket::write(XmlWriter& xml) const
     case BracketType::LINE:
     {
         const char* type = bracketTypeName(_bi->bracketType());
-        xml.stag(this, QString("type=\"%1\"").arg(type));
+        xml.startObject(this, QString("type=\"%1\"").arg(type));
         isStartTag = true;
     }
     break;
     case BracketType::NORMAL:
-        xml.stag(this);
+        xml.startObject(this);
         isStartTag = true;
         break;
     case BracketType::NO_BRACKET:
@@ -558,9 +577,9 @@ void Bracket::write(XmlWriter& xml) const
             xml.tag("level", _bi->column());
         }
 
-        Element::writeProperties(xml);
+        EngravingItem::writeProperties(xml);
 
-        xml.etag();
+        xml.endObject();
     }
 }
 
@@ -572,7 +591,7 @@ void Bracket::write(XmlWriter& xml) const
 void Bracket::read(XmlReader& e)
 {
     QString t(e.attribute("type", "Normal"));
-    _bi = new BracketItem(score());
+    _bi = Factory::createBracketItem(score()->dummy());
 
     if (t == "Normal") {
         _bi->setBracketType(BracketType::NORMAL);
@@ -591,7 +610,7 @@ void Bracket::read(XmlReader& e)
     while (e.readNextStartElement()) {
         if (e.name() == "level") {
             _bi->setColumn(e.readInt());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }

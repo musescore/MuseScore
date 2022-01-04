@@ -21,10 +21,13 @@
  */
 
 #include "part.h"
+
+#include "style/style.h"
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "staff.h"
-#include "xml.h"
 #include "score.h"
-#include "style.h"
 #include "note.h"
 #include "drumset.h"
 #include "instrtemplate.h"
@@ -34,8 +37,11 @@
 #include "stafftype.h"
 #include "chordrest.h"
 #include "fret.h"
+#include "masterscore.h"
+#include "linkedobjects.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -43,11 +49,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
-    : ScoreElement(s)
+    : EngravingObject(ElementType::PART, s)
 {
-    static std::atomic_int currentId { 0 };
-    _id = QString::number(++currentId);
-
     _color   = DEFAULT_COLOR;
     _show    = true;
     _soloist = false;
@@ -63,6 +66,21 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
     _partName = t->trackName;
     setInstrument(Instrument::fromTemplate(t));
+}
+
+ID Part::id() const
+{
+    return _id;
+}
+
+void Part::setId(const ID& id)
+{
+    _id = id;
+}
+
+Part* Part::clone() const
+{
+    return new Part(*this);
 }
 
 //---------------------------------------------------------
@@ -102,12 +120,12 @@ const Part* Part::masterPart() const
     }
 
     Staff* st = _staves[0];
-    LinkedElements* links = st->links();
+    LinkedObjects* links = st->links();
     if (!links) {
         return this;
     }
 
-    for (ScoreElement* le : *links) {
+    for (EngravingObject* le : *links) {
         if (le->isStaff() && toStaff(le)->score()->isMaster()) {
             if (Part* p = toStaff(le)->part()) {
                 return p;
@@ -134,10 +152,8 @@ bool Part::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "Staff") {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
-        score()->staves().push_back(staff);
-        _staves.push_back(staff);
+        Staff* staff = Factory::createStaff(this);
+        score()->appendStaff(staff);
         staff->read(e);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
@@ -186,7 +202,8 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
+
     for (const Staff* staff : _staves) {
         staff->write(xml);
     }
@@ -205,7 +222,28 @@ void Part::write(XmlWriter& xml) const
                 _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
     instrument()->write(xml, this);
-    xml.etag();
+
+    xml.endObject();
+}
+
+int Part::nstaves() const
+{
+    return _staves.size();
+}
+
+const QList<Staff*>* Part::staves() const
+{
+    return &_staves;
+}
+
+void Part::appendStaff(Staff* staff)
+{
+    _staves.push_back(staff);
+}
+
+void Part::clearStaves()
+{
+    _staves.clear();
 }
 
 //---------------------------------------------------------
@@ -233,12 +271,13 @@ void Part::setStaves(int n)
         qDebug("Part::setStaves(): remove staves not implemented!");
         return;
     }
+
     int staffIdx = score()->staffIdx(this) + ns;
     for (int i = ns; i < n; ++i) {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
+        Staff* staff = Factory::createStaff(this);
         _staves.push_back(staff);
-        score()->staves().insert(staffIdx, staff);
+        const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
+
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             m->insertStaff(staff, staffIdx);
             if (m->hasMMRest()) {
@@ -276,7 +315,6 @@ void Part::removeStaff(Staff* staff)
 
 //---------------------------------------------------------
 //   setMidiProgram
-//    TODO
 //---------------------------------------------------------
 
 void Part::setMidiProgram(int program, int bank)
@@ -284,7 +322,6 @@ void Part::setMidiProgram(int program, int bank)
     Channel* c = instrument()->channel(0);
     c->setProgram(program);
     c->setBank(bank);
-//      instrument()->setChannel(0, c);
 }
 
 //---------------------------------------------------------
@@ -341,6 +378,11 @@ void Part::setMidiChannel(int ch, int port, const Fraction& tick)
 void Part::setInstrument(Instrument* i, Fraction tick)
 {
     _instruments.setInstrument(i, tick.ticks());
+}
+
+void Part::setInstrument(Instrument* i, int tick)
+{
+    _instruments.setInstrument(i, tick);
 }
 
 void Part::setInstrument(const Instrument&& i, Fraction tick)
@@ -413,18 +455,13 @@ const InstrumentList* Part::instruments() const
     return &_instruments;
 }
 
-bool Part::isDoublingInstrument(const QString& instrumentId) const
-{
-    return instrument()->getId() != instrumentId;
-}
-
 //---------------------------------------------------------
 //   instrumentId
 //---------------------------------------------------------
 
 QString Part::instrumentId(const Fraction& tick) const
 {
-    return instrument(tick)->getId();
+    return instrument(tick)->id();
 }
 
 //---------------------------------------------------------
@@ -496,17 +533,17 @@ void Part::setPlainShortName(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Part::getProperty(Pid id) const
+PropertyValue Part::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::VISIBLE:
-        return QVariant(_show);
+        return PropertyValue(_show);
     case Pid::USE_DRUMSET:
         return instrument()->useDrumset();
     case Pid::PREFER_SHARP_FLAT:
         return int(preferSharpFlat());
     default:
-        return QVariant();
+        return PropertyValue();
     }
 }
 
@@ -514,7 +551,7 @@ QVariant Part::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Part::setProperty(Pid id, const QVariant& property)
+bool Part::setProperty(Pid id, const PropertyValue& property)
 {
     switch (id) {
     case Pid::VISIBLE:
@@ -628,7 +665,7 @@ int Part::harmonyCount() const
     SegmentType st = SegmentType::ChordRest;
     int count = 0;
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack()
                 && e->track() < endTrack()) {
                 count++;

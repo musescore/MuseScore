@@ -41,8 +41,8 @@ static const ElementStyle rehearsalMarkStyle {
 //   RehearsalMark
 //---------------------------------------------------------
 
-RehearsalMark::RehearsalMark(Score* s)
-    : TextBase(s, Tid::REHEARSAL_MARK)
+RehearsalMark::RehearsalMark(Segment* parent)
+    : TextBase(ElementType::REHEARSAL_MARK, parent, TextStyleType::REHEARSAL_MARK)
 {
     initElementStyle(&rehearsalMarkStyle);
     setSystemFlag(true);
@@ -76,13 +76,13 @@ void RehearsalMark::layout()
             } else {
                 // header at start of system
                 // align to a point just after the header
-                Element* e = header->element(track());              // TODO: firstVisibleStaff
+                EngravingItem* e = header->element(track());
                 qreal w = e ? e->width() : header->width();
                 rxpos() = header->x() + w - s->x();
 
                 // special case for right aligned rehearsal marks at start of system
                 // left align with start of measure if that is further left
-                if (align() & Align::RIGHT) {
+                if (align() == AlignH::RIGHT) {
                     rxpos() = qMin(rpos().x(), measureX + width());
                 }
             }
@@ -95,11 +95,11 @@ void RehearsalMark::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant RehearsalMark::propertyDefault(Pid id) const
+engraving::PropertyValue RehearsalMark::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::REHEARSAL_MARK);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::REHEARSAL_MARK;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::rehearsalMarkPlacement);
     default:

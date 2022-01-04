@@ -32,16 +32,16 @@ Dialog {
 
     signal applySequenceRequested(var newSequence)
 
-    function startEdit(sequence, allShortcuts) {
+    function startEdit(shortcut, allShortcuts) {
         open()
-        model.load(sequence, allShortcuts)
+        model.load(shortcut, allShortcuts)
         content.forceActiveFocus()
     }
 
     height: 240
     width: 538
 
-    title: qsTrc("shortcuts", "Enter Shortcut Sequence")
+    title: qsTrc("shortcuts", "Enter shortcut sequence")
 
     standardButtons: Dialog.NoButton
 
@@ -68,7 +68,9 @@ Dialog {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 width: parent.width
-                text: qsTrc("shortcuts", "Define Keyboard Shortcut.")
+                text: qsTrc("shortcuts", "Define keyboard shortcut")
+                horizontalAlignment: Text.AlignLeft
+                font:ui.theme.headerBoldFont
             }
 
             Column {

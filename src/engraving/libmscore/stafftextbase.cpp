@@ -20,24 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "stafftextbase.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "system.h"
 #include "staff.h"
-#include "xml.h"
+#include "score.h"
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   StaffTextBase
 //---------------------------------------------------------
 
-StaffTextBase::StaffTextBase(Score* s, Tid tid, ElementFlags flags)
-    : TextBase(s, tid, flags)
+StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags flags)
+    : TextBase(type, parent, tid, flags)
 {
-    setSwingParameters(MScore::division / 2, 60);
+    setSwingParameters(Constant::division / 2, 60);
 }
 
 //---------------------------------------------------------
@@ -49,7 +52,7 @@ void StaffTextBase::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
 
     for (const ChannelActions& s : _channelActions) {
         int channel = s.channel;
@@ -68,23 +71,23 @@ void StaffTextBase::write(XmlWriter& xml) const
         }
     }
     if (swing()) {
-        QString swingUnit;
-        if (swingParameters()->swingUnit == MScore::division / 2) {
-            swingUnit = TDuration(TDuration::DurationType::V_EIGHTH).name();
-        } else if (swingParameters()->swingUnit == MScore::division / 4) {
-            swingUnit = TDuration(TDuration::DurationType::V_16TH).name();
+        DurationType swingUnit;
+        if (swingParameters()->swingUnit == Constant::division / 2) {
+            swingUnit = DurationType::V_EIGHTH;
+        } else if (swingParameters()->swingUnit == Constant::division / 4) {
+            swingUnit = DurationType::V_16TH;
         } else {
-            swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
+            swingUnit = DurationType::V_ZERO;
         }
         int swingRatio = swingParameters()->swingRatio;
-        xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
+        xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(TConv::toXml(swingUnit)).arg(swingRatio));
     }
     if (capo() != 0) {
         xml.tagE(QString("capo fretId=\"%1\"").arg(capo()));
     }
     TextBase::writeProperties(xml);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -153,13 +156,13 @@ bool StaffTextBase::readProperties(XmlReader& e)
         }
         _setAeolusStops = true;
     } else if (tag == "swing") {
-        QString swingUnit = e.attribute("unit", "");
+        DurationType swingUnit = TConv::fromXml(e.attribute("unit", ""), DurationType::V_INVALID);
         int unit = 0;
-        if (swingUnit == TDuration(TDuration::DurationType::V_EIGHTH).name()) {
-            unit = MScore::division / 2;
-        } else if (swingUnit == TDuration(TDuration::DurationType::V_16TH).name()) {
-            unit = MScore:: division / 4;
-        } else if (swingUnit == TDuration(TDuration::DurationType::V_ZERO).name()) {
+        if (swingUnit == DurationType::V_EIGHTH) {
+            unit = Constant::division / 2;
+        } else if (swingUnit == DurationType::V_16TH) {
+            unit = Constant::division / 4;
+        } else if (swingUnit == DurationType::V_ZERO) {
             unit = 0;
         }
         int ratio = e.intAttribute("ratio", 60);
@@ -215,11 +218,11 @@ bool StaffTextBase::getAeolusStop(int group, int idx) const
 
 Segment* StaffTextBase::segment() const
 {
-    if (!parent()->isSegment()) {
-        qDebug("parent %s", parent()->name());
+    if (!explicitParent()->isSegment()) {
+        qDebug("parent %s", explicitParent()->name());
         return 0;
     }
-    Segment* s = toSegment(parent());
+    Segment* s = toSegment(explicitParent());
     return s;
 }
 }

@@ -23,7 +23,12 @@
 #ifndef __SPACER_H__
 #define __SPACER_H__
 
-#include "element.h"
+#include "engravingitem.h"
+#include "infrastructure/draw/painterpath.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 //---------------------------------------------------------
@@ -39,22 +44,23 @@ enum class SpacerType : char {
 ///    Vertical spacer element to adjust the distance of staves.
 //-------------------------------------------------------------------
 
-class Spacer final : public Element
+class Spacer final : public EngravingItem
 {
     SpacerType _spacerType;
-    qreal _gap;
+    Millimetre _gap;
 
     mu::PainterPath path;
+
+    friend class mu::engraving::Factory;
+    Spacer(Measure* parent);
+    Spacer(const Spacer&);
 
     void layout0();
 
 public:
-    Spacer(Score*);
-    Spacer(const Spacer&);
 
     Spacer* clone() const override { return new Spacer(*this); }
-    ElementType type() const override { return ElementType::SPACER; }
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     SpacerType spacerType() const { return _spacerType; }
     void setSpacerType(SpacerType t) { _spacerType = t; }
@@ -64,15 +70,15 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
     void spatiumChanged(qreal, qreal) override;
 
-    void setGap(qreal sp);
-    qreal gap() const { return _gap; }
+    void setGap(Millimetre sp);
+    Millimetre gap() const { return _gap; }
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
     int gripsCount() const override { return 1; }
@@ -80,9 +86,9 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }     // namespace Ms
 #endif

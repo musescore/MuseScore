@@ -26,8 +26,8 @@
 #include <QDockWidget>
 #include <QQmlEngine>
 
-#include "libmscore/element.h"
-#include "libmscore/score.h"
+#include "libmscore/engravingitem.h"
+#include "libmscore/masterscore.h"
 
 class InspectorFormWidget;
 
@@ -47,12 +47,12 @@ protected:
     void changeEvent(QEvent* event) override;
 
 signals:
-    void propertyEditStarted(Ms::Element* element);
-    void selectionChanged(const QList<Ms::Element*>& elementList);
+    void propertyEditStarted(Ms::EngravingItem* element);
+    void selectionChanged(const QList<Ms::EngravingItem*>& elementList);
     void layoutUpdateRequested();
 
 private:
-    const QList<Ms::Element*>* selectedElementList() const;
+    const QList<Ms::EngravingItem*>* selectedElementList() const;
 
     Ms::Score* m_score = nullptr;
     QQmlEngine* m_qmlEngine = nullptr;

@@ -28,10 +28,12 @@
 #include "clef.h"
 
 #include "translation.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
 
+#include "factory.h"
 #include "measure.h"
 #include "ambitus.h"
-#include "xml.h"
 #include "symbol.h"
 #include "system.h"
 #include "score.h"
@@ -41,105 +43,59 @@
 #include "part.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 // table must be in sync with enum ClefType
 const ClefInfo ClefInfo::clefTable[] = {
-// tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|  symbol                           | name                                   | valid in staff group
-    { "G",    "G",         2,  0, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef"),                                StaffGroup::STANDARD },
-// { "G15mb","G",         2, -2, 59, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,
-//    QT_TRANSLATE_NOOP("clefTable", "Treble clef 15ma bassa"),                  StaffGroup::STANDARD  },
-    { "G15mb", "G",         2, -2, 31, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef 15ma bassa"),                     StaffGroup::STANDARD },
-    { "G8vb", "G",         2, -1, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vb,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef 8va bassa"),                      StaffGroup::STANDARD },
-    { "G8va", "G",         2,  1, 52, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef 8va alta"),                       StaffGroup::STANDARD },
-    { "G15ma", "G",         2,  2, 59, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef 15ma alta"),                      StaffGroup::STANDARD },
-    { "G8vbo", "G",         2, -1, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbOld,
-      QT_TRANSLATE_NOOP("clefTable", "Double treble clef 8va bassa on 2nd line"),   StaffGroup::STANDARD },
-    { "G8vbp", "G",         2,  0, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbParens,
-      QT_TRANSLATE_NOOP("clefTable", "Treble clef optional 8va bassa"),             StaffGroup::STANDARD },
-    { "G1",   "G",         1,  0, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::gClef,
-      QT_TRANSLATE_NOOP("clefTable", "French violin clef"),                         StaffGroup::STANDARD },
-    { "C1",   "C",         1,  0, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClef,
-      QT_TRANSLATE_NOOP("clefTable", "Soprano clef"),                               StaffGroup::STANDARD },
-    { "C2",   "C",         2,  0, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 }, SymId::cClef,
-      QT_TRANSLATE_NOOP("clefTable", "Mezzo-soprano clef"),                         StaffGroup::STANDARD },
-    { "C3",   "C",         3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, SymId::cClef,
-      QT_TRANSLATE_NOOP("clefTable", "Alto clef"),                                  StaffGroup::STANDARD },
-    { "C4",   "C",         4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClef,
-      QT_TRANSLATE_NOOP("clefTable", "Tenor clef"),                                 StaffGroup::STANDARD },
-    { "C5",   "C",         5,  0, 35, { 4, 0, 3, -1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, SymId::cClef,
-      QT_TRANSLATE_NOOP("clefTable", "Baritone clef (C clef)"),                     StaffGroup::STANDARD },
-    { "C_19C", "G",        2,  0, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::cClefSquare,
-      QT_TRANSLATE_NOOP("clefTable", "C clef, H shape (19th century)"),             StaffGroup::STANDARD },
-    { "C1_F18C", "C",      1,  0, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClefFrench,
-      QT_TRANSLATE_NOOP("clefTable", "Soprano clef (French, 18th century)"),        StaffGroup::STANDARD },
-    { "C3_F18C", "C",      3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, SymId::cClefFrench,
-      QT_TRANSLATE_NOOP("clefTable", "Alto clef (French, 18th century)"),           StaffGroup::STANDARD },
-    { "C4_F18C", "C",      4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClefFrench,
-      QT_TRANSLATE_NOOP("clefTable", "Tenor clef (French, 18th century)"),          StaffGroup::STANDARD },
-    { "C1_F20C", "C",      1,  0, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClefFrench20C,
-      QT_TRANSLATE_NOOP("clefTable", "Soprano clef (French, 20th century)"),        StaffGroup::STANDARD },
-    { "C3_F20C", "C",      3,  0, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 }, SymId::cClefFrench20C,
-      QT_TRANSLATE_NOOP("clefTable", "Alto clef (French, 20th century)"),           StaffGroup::STANDARD },
-    { "C4_F20C", "C",      4,  0, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClefFrench20C,
-      QT_TRANSLATE_NOOP("clefTable", "Tenor clef (French, 20th century)"),          StaffGroup::STANDARD },
-    { "F",    "F",         4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef,
-      QT_TRANSLATE_NOOP("clefTable", "Bass clef"),                                  StaffGroup::STANDARD },
-    { "F15mb", "F",         4, -2, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15mb,
-      QT_TRANSLATE_NOOP("clefTable", "Bass clef 15ma bassa"),                       StaffGroup::STANDARD },
-    { "F8vb", "F",         4, -1, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8vb,
-      QT_TRANSLATE_NOOP("clefTable", "Bass clef 8va bassa"),                        StaffGroup::STANDARD },
-    { "F8va", "F",         4,  1, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef8va,
-      QT_TRANSLATE_NOOP("clefTable", "Bass clef 8va alta"),                         StaffGroup::STANDARD },
-    { "F15ma", "F",         4,  2, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef15ma,
-      QT_TRANSLATE_NOOP("clefTable", "Bass clef 15ma alta"),                        StaffGroup::STANDARD },
-    { "F3",   "F",         3,  0, 35, { 4, 0, 3, -1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, SymId::fClef,
-      QT_TRANSLATE_NOOP("clefTable", "Baritone clef (F clef)"),                     StaffGroup::STANDARD },
-    { "F5",   "F",         5,  0, 31, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fClef,
-      QT_TRANSLATE_NOOP("clefTable", "Subbass clef"),                               StaffGroup::STANDARD },
-    { "F_F18C", "F",        4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClefFrench,
-      QT_TRANSLATE_NOOP("clefTable", "F clef (French, 18th century)"),              StaffGroup::STANDARD },
-    { "F_19C", "F",         4,  0, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 }, SymId::fClef19thCentury,
-      QT_TRANSLATE_NOOP("clefTable", "F clef (19th century)"),                      StaffGroup::STANDARD },
-    { "PERC", "percussion", 2,  0, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef1,
-      QT_TRANSLATE_NOOP("clefTable", "Percussion"),                                 StaffGroup::PERCUSSION },
-    { "PERC2", "percussion", 2,  0, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef2,
-      QT_TRANSLATE_NOOP("clefTable", "Percussion 2"),                               StaffGroup::PERCUSSION },
-    { "TAB",  "TAB",       5,  0,  0, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClef,
-      QT_TRANSLATE_NOOP("clefTable", "Tablature"),                                  StaffGroup::TAB },
-    { "TAB4", "TAB",       5,  0,  0, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,
-      QT_TRANSLATE_NOOP("clefTable", "Tablature 4 lines"),                          StaffGroup::TAB },
-    { "TAB2", "TAB",       5,  0,  0, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,
-      QT_TRANSLATE_NOOP("clefTable", "Tablature Serif"),                            StaffGroup::TAB },
-    { "TAB4_SERIF", "TAB", 5,  0,  0, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif,
-      QT_TRANSLATE_NOOP("clefTable", "Tablature Serif 4 lines"),                    StaffGroup::TAB },
+//                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
+    { ClefType::G,       2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,            StaffGroup::STANDARD },
+    { ClefType::G15_MB,  2, 31, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15mb,        StaffGroup::STANDARD },
+    { ClefType::G8_VB,   2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vb,         StaffGroup::STANDARD },
+    { ClefType::G8_VA,   2, 52, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8va,         StaffGroup::STANDARD },
+    { ClefType::G15_MA,  2, 59, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef15ma,        StaffGroup::STANDARD },
+    { ClefType::G8_VB_O, 2, 38, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbOld,      StaffGroup::STANDARD },
+    { ClefType::G8_VB_P, 2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef8vbParens,   StaffGroup::STANDARD },
+    { ClefType::G_1,     1, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::gClef,            StaffGroup::STANDARD },
+
+    { ClefType::C1,      1, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClef,            StaffGroup::STANDARD },
+    { ClefType::C2,      2, 41, { 3, 6, 2, 5, 1, 4, 0, 0, 4, 1, 5, 2, 6, 3 },  SymId::cClef,            StaffGroup::STANDARD },
+    { ClefType::C3,      3, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 },  SymId::cClef,            StaffGroup::STANDARD },
+    { ClefType::C4,      4, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClef,            StaffGroup::STANDARD },
+    { ClefType::C5,      5, 35, { 4, 0, 3, -1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, SymId::cClef,            StaffGroup::STANDARD },
+    { ClefType::C_19C,   2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::cClefSquare,      StaffGroup::STANDARD },
+    { ClefType::C1_F18C, 1, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClefFrench,      StaffGroup::STANDARD },
+    { ClefType::C3_F18C, 3, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 },  SymId::cClefFrench,      StaffGroup::STANDARD },
+    { ClefType::C4_F18C, 4, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClefFrench,      StaffGroup::STANDARD },
+    { ClefType::C3_F20C, 1, 43, { 5, 1, 4, 0, 3, -1, 2, 2, 6, 3, 7, 4, 8, 5 }, SymId::cClefFrench20C,   StaffGroup::STANDARD },
+    { ClefType::C1_F20C, 3, 39, { 1, 4, 0, 3, 6, 2, 5, 5, 2, 6, 3, 7, 4, 8 },  SymId::cClefFrench20C,   StaffGroup::STANDARD },
+    { ClefType::C4_F20C, 4, 37, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClefFrench20C,   StaffGroup::STANDARD },
+
+    { ClefType::F,       4, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef,            StaffGroup::STANDARD },
+    { ClefType::F15_MB,  4, 19, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef15mb,        StaffGroup::STANDARD },
+    { ClefType::F8_VB,   4, 26, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef8vb,         StaffGroup::STANDARD },
+    { ClefType::F_8VA,   4, 40, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef8va,         StaffGroup::STANDARD },
+    { ClefType::F_15MA,  4, 47, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef15ma,        StaffGroup::STANDARD },
+    { ClefType::F_B,     3, 35, { 4, 0, 3, -1, 2, 5, 1, 1, 5, 2, 6, 3, 7, 4 }, SymId::fClef,            StaffGroup::STANDARD },
+    { ClefType::F_C,     5, 31, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fClef,            StaffGroup::STANDARD },
+    { ClefType::F_F18C,  4, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClefFrench,      StaffGroup::STANDARD },
+    { ClefType::F_19C,   4, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef19thCentury, StaffGroup::STANDARD },
+
+    { ClefType::PERC,    2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef1, StaffGroup::PERCUSSION },
+    { ClefType::PERC2,   2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef2, StaffGroup::PERCUSSION },
+
+    { ClefType::TAB,     5, 0,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClef,         StaffGroup::TAB },
+    { ClefType::TAB4,    5, 0,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,        StaffGroup::TAB },
+    { ClefType::TAB_SERIF, 5, 0,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,  StaffGroup::TAB },
+    { ClefType::TAB4_SERIF, 5, 0,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif, StaffGroup::TAB },
 };
-
-//---------------------------------------------------------
-//   tag2type
-//---------------------------------------------------------
-
-ClefType ClefInfo::tag2type(const QString& s)
-{
-    for (unsigned i = 0; i < sizeof(ClefInfo::clefTable) / sizeof(*ClefInfo::clefTable); ++i) {
-        if (clefTable[i]._tag == s) {
-            return ClefType(i);
-        }
-    }
-    return ClefType::G;
-}
 
 //---------------------------------------------------------
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Score* s)
-    : Element(s, ElementFlag::ON_STAFF), symId(SymId::noSym)
+Clef::Clef(Segment* parent)
+    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
 {}
 
 //---------------------------------------------------------
@@ -149,7 +105,7 @@ Clef::Clef(Score* s)
 qreal Clef::mag() const
 {
     qreal mag = staff() ? staff()->staffMag(tick()) : 1.0;
-    if (_small) {
+    if (m_isSmall) {
         mag *= score()->styleD(Sid::smallClefMag);
     }
     return mag;
@@ -292,9 +248,9 @@ bool Clef::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Clef::drop(EditData& data)
+EngravingItem* Clef::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Clef* c = 0;
     if (e->isClef()) {
         Clef* clef = toClef(e);
@@ -311,7 +267,7 @@ Element* Clef::drop(EditData& data)
             if (segm->element(track())) {
                 score()->undoRemoveElement(segm->element(track()));
             }
-            Ambitus* r = new Ambitus(score());
+            Ambitus* r = Factory::createAmbitus(segm);
             r->setParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);
@@ -327,8 +283,8 @@ Element* Clef::drop(EditData& data)
 
 void Clef::setSmall(bool val)
 {
-    if (val != _small) {
-        _small = val;
+    if (val != m_isSmall) {
+        m_isSmall = val;
     }
 }
 
@@ -341,14 +297,14 @@ void Clef::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "concertClefType") {
-            _clefTypes._concertClef = Clef::clefType(e.readElementText());
+            _clefTypes._concertClef = TConv::fromXml(e.readElementText(), ClefType::G);
         } else if (tag == "transposingClefType") {
-            _clefTypes._transposingClef = Clef::clefType(e.readElementText());
+            _clefTypes._transposingClef = TConv::fromXml(e.readElementText(), ClefType::G);
         } else if (tag == "showCourtesyClef") {
             _showCourtesy = e.readInt();
         } else if (tag == "forInstrumentChange") {
             _forInstrumentChange = e.readBool();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -363,7 +319,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
     if (!_showCourtesy) {
@@ -372,40 +328,8 @@ void Clef::write(XmlWriter& xml) const
     if (_forInstrumentChange) {
         xml.tag("forInstrumentChange", _forInstrumentChange);
     }
-    Element::writeProperties(xml);
-    xml.etag();
-}
-
-//---------------------------------------------------------
-//   setClefType
-//---------------------------------------------------------
-
-void Clef::setClefType(const QString& s)
-{
-    ClefType ct = clefType(s);
-    if (ct == ClefType::INVALID) {
-        qDebug("Clef::setSubtype: unknown: <%s>", qPrintable(s));
-        ct = ClefType::G;
-    }
-    setClefType(ct);
-}
-
-//---------------------------------------------------------
-//   clefTypeName
-//---------------------------------------------------------
-
-const char* Clef::clefTypeName()
-{
-    return ClefInfo::tag(clefType());
-}
-
-//---------------------------------------------------------
-//   clefType
-//---------------------------------------------------------
-
-ClefType Clef::clefType(const QString& s)
-{
-    return ClefInfo::tag2type(s);
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -464,7 +388,7 @@ ClefType Clef::clefType() const
 
 void Clef::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     layout();
 }
 
@@ -485,14 +409,14 @@ void Clef::undoSetShowCourtesy(bool v)
 Clef* Clef::otherClef()
 {
     // if not in a clef-segment-measure hierarchy, do nothing
-    if (!parent() || !parent()->isSegment()) {
+    if (!explicitParent() || !explicitParent()->isSegment()) {
         return nullptr;
     }
-    Segment* segm = toSegment(parent());
-    if (!segm->parent() || !segm->parent()->isMeasure()) {
+    Segment* segm = toSegment(explicitParent());
+    if (!segm->explicitParent() || !segm->explicitParent()->isMeasure()) {
         return 0;
     }
-    Measure* meas = toMeasure(segm->parent());
+    Measure* meas = toMeasure(segm->explicitParent());
     Measure* otherMeas = nullptr;
     Segment* otherSegm = nullptr;
     Fraction segmTick  = segm->tick();
@@ -519,15 +443,15 @@ Clef* Clef::otherClef()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Clef::getProperty(Pid propertyId) const
+PropertyValue Clef::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::CLEF_TYPE_CONCERT:     return int(_clefTypes._concertClef);
-    case Pid::CLEF_TYPE_TRANSPOSING: return int(_clefTypes._transposingClef);
+    case Pid::CLEF_TYPE_CONCERT:     return _clefTypes._concertClef;
+    case Pid::CLEF_TYPE_TRANSPOSING: return _clefTypes._transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
-    case Pid::SMALL:         return small();
+    case Pid::SMALL:         return isSmall();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -535,21 +459,21 @@ QVariant Clef::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Clef::setProperty(Pid propertyId, const QVariant& v)
+bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::CLEF_TYPE_CONCERT:
-        setConcertClef(ClefType(v.toInt()));
+        setConcertClef(v.value<ClefType>());
         break;
     case Pid::CLEF_TYPE_TRANSPOSING:
-        setTransposingClef(ClefType(v.toInt()));
+        setTransposingClef(v.value<ClefType>());
         break;
     case Pid::SHOW_COURTESY: _showCourtesy = v.toBool();
         break;
     case Pid::SMALL:         setSmall(v.toBool());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -559,14 +483,14 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Clef::propertyDefault(Pid id) const
+PropertyValue Clef::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::CLEF_TYPE_CONCERT:     return int(ClefType::INVALID);
-    case Pid::CLEF_TYPE_TRANSPOSING: return int(ClefType::INVALID);
+    case Pid::CLEF_TYPE_CONCERT:     return ClefType::INVALID;
+    case Pid::CLEF_TYPE_TRANSPOSING: return ClefType::INVALID;
     case Pid::SHOW_COURTESY: return true;
     case Pid::SMALL:         return false;
-    default:              return Element::propertyDefault(id);
+    default:              return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -574,7 +498,7 @@ QVariant Clef::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::nextSegmentElement()
+EngravingItem* Clef::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -583,7 +507,7 @@ Element* Clef::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::prevSegmentElement()
+EngravingItem* Clef::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -594,7 +518,11 @@ Element* Clef::prevSegmentElement()
 
 QString Clef::accessibleInfo() const
 {
-    return qtrc("clefTable", ClefInfo::name(clefType()));
+    ClefType type = clefType();
+    if (type == ClefType::INVALID) {
+        return QString();
+    }
+    return qtrc("engraving", TConv::toUserName(clefType()).toUtf8().constData());
 }
 
 //---------------------------------------------------------

@@ -21,6 +21,8 @@
 set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accidental.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accidental.h
+    ${CMAKE_CURRENT_LIST_DIR}/actionicon.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/actionicon.h
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.cpp
@@ -80,14 +82,18 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/edit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/element.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
-    ${CMAKE_CURRENT_LIST_DIR}/element.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingobject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingobject.h
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.cpp
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.h
+    ${CMAKE_CURRENT_LIST_DIR}/factory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/factory.h
     ${CMAKE_CURRENT_LIST_DIR}/fermata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fermata.h
     ${CMAKE_CURRENT_LIST_DIR}/fifo.cpp
@@ -96,7 +102,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/figuredbass.h
     ${CMAKE_CURRENT_LIST_DIR}/fingering.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fingering.h
-    ${CMAKE_CURRENT_LIST_DIR}/fraction.h
     ${CMAKE_CURRENT_LIST_DIR}/fret.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fret.h
     ${CMAKE_CURRENT_LIST_DIR}/glissando.cpp
@@ -109,8 +114,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/hook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hook.h
-    ${CMAKE_CURRENT_LIST_DIR}/icon.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/icon.h
     ${CMAKE_CURRENT_LIST_DIR}/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/image.h
     ${CMAKE_CURRENT_LIST_DIR}/imageStore.cpp
@@ -140,15 +143,14 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lasso.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layoutlinear.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.h
     ${CMAKE_CURRENT_LIST_DIR}/letring.cpp
     ${CMAKE_CURRENT_LIST_DIR}/letring.h
     ${CMAKE_CURRENT_LIST_DIR}/line.cpp
     ${CMAKE_CURRENT_LIST_DIR}/line.h
+    ${CMAKE_CURRENT_LIST_DIR}/linkedobjects.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/linkedobjects.h
     ${CMAKE_CURRENT_LIST_DIR}/location.cpp
     ${CMAKE_CURRENT_LIST_DIR}/location.h
     ${CMAKE_CURRENT_LIST_DIR}/lyrics.cpp
@@ -156,6 +158,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lyricsline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/marker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/marker.h
+    ${CMAKE_CURRENT_LIST_DIR}/masterscore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/masterscore.h
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/measurebase.cpp
@@ -190,8 +194,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/noteline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/noteline.h
     ${CMAKE_CURRENT_LIST_DIR}/notifier.hpp
-    ${CMAKE_CURRENT_LIST_DIR}/ossia.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/ossia.h
     ${CMAKE_CURRENT_LIST_DIR}/ottava.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ottava.h
     ${CMAKE_CURRENT_LIST_DIR}/page.cpp
@@ -207,19 +209,12 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitch.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchspelling.h
-    ${CMAKE_CURRENT_LIST_DIR}/pitchvalue.h
     ${CMAKE_CURRENT_LIST_DIR}/pos.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pos.h
-    ${CMAKE_CURRENT_LIST_DIR}/preferences.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/preferences.h
     ${CMAKE_CURRENT_LIST_DIR}/property.cpp
     ${CMAKE_CURRENT_LIST_DIR}/property.h
     ${CMAKE_CURRENT_LIST_DIR}/range.cpp
     ${CMAKE_CURRENT_LIST_DIR}/range.h
-    ${CMAKE_CURRENT_LIST_DIR}/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/read206.h
-    ${CMAKE_CURRENT_LIST_DIR}/read302.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.h
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.cpp
@@ -232,11 +227,11 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rest.h
     ${CMAKE_CURRENT_LIST_DIR}/revisions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/revisions.h
+    ${CMAKE_CURRENT_LIST_DIR}/rootitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rootitem.h
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorediff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorediff.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoreElement.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoreElement.h
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.h
@@ -250,7 +245,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.h
     ${CMAKE_CURRENT_LIST_DIR}/select.cpp
     ${CMAKE_CURRENT_LIST_DIR}/select.h
-    ${CMAKE_CURRENT_LIST_DIR}/sequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
     ${CMAKE_CURRENT_LIST_DIR}/shape.cpp
@@ -269,7 +263,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/spanner.h
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spannermap.h
-    ${CMAKE_CURRENT_LIST_DIR}/spatium.h
     ${CMAKE_CURRENT_LIST_DIR}/splitMeasure.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staff.h
@@ -295,14 +288,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/sticking.h
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/style.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/style.h
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
-    ${CMAKE_CURRENT_LIST_DIR}/symid.h
-    ${CMAKE_CURRENT_LIST_DIR}/sym.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/sym.h
-    ${CMAKE_CURRENT_LIST_DIR}/symnames.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.h
     ${CMAKE_CURRENT_LIST_DIR}/system.cpp
@@ -352,7 +339,4 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vibrato.h
     ${CMAKE_CURRENT_LIST_DIR}/volta.cpp
     ${CMAKE_CURRENT_LIST_DIR}/volta.h
-    ${CMAKE_CURRENT_LIST_DIR}/xml.h
-    ${CMAKE_CURRENT_LIST_DIR}/xmlreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.cpp
 )

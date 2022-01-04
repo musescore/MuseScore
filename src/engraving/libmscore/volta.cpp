@@ -22,19 +22,22 @@
 
 #include "volta.h"
 
+#include <algorithm>
+
+#include "style/style.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "changeMap.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
-#include "style.h"
 #include "system.h"
 #include "tempo.h"
 #include "text.h"
-#include "xml.h"
-
-#include <algorithm>
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle voltaStyle {
@@ -64,8 +67,8 @@ static const ElementStyle voltaStyle {
 //   VoltaSegment
 //---------------------------------------------------------
 
-VoltaSegment::VoltaSegment(Spanner* sp, Score* s)
-    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+VoltaSegment::VoltaSegment(Volta* sp, System* parent)
+    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
 }
 
@@ -83,7 +86,7 @@ void VoltaSegment::layout()
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* VoltaSegment::propertyDelegate(Pid pid)
+EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
         return spanner();
@@ -95,14 +98,14 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 //   Volta
 //---------------------------------------------------------
 
-Volta::Volta(Score* s)
-    : TextLineBase(s, ElementFlag::SYSTEM)
+Volta::Volta(EngravingItem* parent)
+    : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
-    setPlacement(Placement::ABOVE);
+    setPlacement(PlacementV::ABOVE);
     initElementStyle(&voltaStyle);
 
-    setBeginTextPlace(PlaceText::BELOW);
-    setContinueTextPlace(PlaceText::BELOW);
+    setBeginTextPlace(TextPlace::BELOW);
+    setContinueTextPlace(TextPlace::BELOW);
     setLineVisible(true);
     resetProperty(Pid::BEGIN_TEXT);
     resetProperty(Pid::CONTINUE_TEXT);
@@ -155,12 +158,7 @@ void Volta::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "endings") {
             QString s = e.readElementText();
-            QStringList sl = s.split(",", Qt::SkipEmptyParts);
-            _endings.clear();
-            for (const QString& l : qAsConst(sl)) {
-                int i = l.simplified().toInt();
-                _endings.append(i);
-            }
+            _endings = TConv::fromXml(s, QList<int>());
         } else if (readStyledProperty(e, tag)) {
         } else if (!readProperties(e)) {
             e.unknown();
@@ -193,17 +191,10 @@ bool Volta::readProperties(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     TextLineBase::writeProperties(xml);
-    QString s;
-    for (int i : _endings) {
-        if (!s.isEmpty()) {
-            s += ", ";
-        }
-        s += QString("%1").arg(i);
-    }
-    xml.tag("endings", s);
-    xml.etag();
+    xml.tag("endings", TConv::toXml(_endings));
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -215,9 +206,9 @@ static const ElementStyle voltaSegmentStyle {
     { Sid::voltaMinDistance,                   Pid::MIN_DISTANCE },
 };
 
-LineSegment* Volta::createLineSegment()
+LineSegment* Volta::createLineSegment(System* parent)
 {
-    VoltaSegment* vs = new VoltaSegment(this, score());
+    VoltaSegment* vs = new VoltaSegment(this, parent);
     vs->setTrack(track());
     vs->initElementStyle(&voltaSegmentStyle);
     return vs;
@@ -265,11 +256,11 @@ int Volta::lastEnding() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Volta::getProperty(Pid propertyId) const
+PropertyValue Volta::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
-        return QVariant::fromValue(endings());
+        return PropertyValue::fromValue(endings());
     default:
         break;
     }
@@ -280,7 +271,7 @@ QVariant Volta::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Volta::setProperty(Pid propertyId, const QVariant& val)
+bool Volta::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
@@ -300,17 +291,17 @@ bool Volta::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Volta::propertyDefault(Pid propertyId) const
+PropertyValue Volta::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::VOLTA_ENDING:
-        return QVariant::fromValue(QList<int>());
+        return PropertyValue::fromValue(QList<int>());
     case Pid::ANCHOR:
         return int(VOLTA_ANCHOR);
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::HOOK_90);
+        return HookType::HOOK_90;
     case Pid::END_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
     case Pid::END_TEXT:
@@ -320,10 +311,10 @@ QVariant Volta::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::ABOVE);
+        return TextPlace::ABOVE;
 
     case Pid::PLACEMENT:
-        return int(Placement::ABOVE);
+        return PlacementV::ABOVE;
 
     default:
         return TextLineBase::propertyDefault(propertyId);
@@ -407,7 +398,7 @@ void Volta::setTempo() const
         }
         Fraction startTick = startMeasure->tick() - Fraction::fromTicks(1);
         Fraction endTick  = endMeasure->endTick() - Fraction::fromTicks(1);
-        qreal tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
+        BeatsPerSecond tempoBeforeVolta = score()->tempomap()->tempo(startTick.ticks());
         score()->setTempo(endTick, tempoBeforeVolta);
     }
 }
@@ -418,7 +409,7 @@ void Volta::setTempo() const
 
 QString Volta::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), text());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), text());
 }
 
 //---------------------------------------------------------

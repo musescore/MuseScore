@@ -21,14 +21,15 @@
  */
 #include "bwwmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/notationbwwreader.h"
 
+#include "log.h"
+
 using namespace mu::iex::bww;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string BwwModule::moduleName() const
 {

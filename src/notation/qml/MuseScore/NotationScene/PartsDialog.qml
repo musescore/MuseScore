@@ -53,86 +53,67 @@ StyledDialogView {
         partsModel.load()
     }
 
+    onOpened: {
+        view.focusOnFirst()
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
-        Item {
+        PartsTopPanel {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
             Layout.topMargin: privateProperties.sideMargin
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.leftMargin: privateProperties.sideMargin
+            sideMargin: privateProperties.sideMargin
+            buttonsMargin: privateProperties.buttonsMargin
 
-                text: qsTrc("notation", "Parts")
-                font: ui.theme.headerBoldFont
+            isRemovingAvailable: partsModel.isRemovingAvailable
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
+
+            onCreateNewPartRequested: {
+                partsModel.createNewPart()
             }
 
-            FlatButton {
-                text: qsTrc("notation", "Create new part")
-
-                anchors.right: deleteButton.left
-                anchors.rightMargin: 8
-
-                onClicked: {
-                    partsModel.createNewPart()
-                }
-            }
-
-            FlatButton {
-                id: deleteButton
-
-                anchors.right: parent.right
-                anchors.rightMargin: privateProperties.buttonsMargin
-
-                icon: IconCode.DELETE_TANK
-
-                enabled: partsModel.isRemovingAvailable
-
-                onClicked: {
-                    partsModel.removeSelectedParts()
-                }
+            onRemoveSelectedPartsRequested: {
+                partsModel.removeSelectedParts()
             }
         }
 
         PartsView {
+            id: view
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.topMargin: 38
             Layout.bottomMargin: 24
 
             model: partsModel
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
         }
 
-        Row {
+        PartsBottomPanel {
             Layout.preferredHeight: childrenRect.height
-            Layout.bottomMargin: privateProperties.buttonsMargin
             Layout.rightMargin: privateProperties.buttonsMargin
+            Layout.bottomMargin: privateProperties.buttonsMargin
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            spacing: 12
+            canOpen: partsModel.hasSelection
 
-            FlatButton {
-                text: qsTrc("global", "Close")
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
 
-                onClicked: {
-                    partsModel.apply()
-                    root.hide()
-                }
+            onCloseRequested: {
+                root.hide()
             }
 
-            FlatButton {
-                text: qsTrc("global", "Open")
-
-                enabled: partsModel.hasSelection
-
-                onClicked: {
-                    partsModel.openSelectedParts()
-                    partsModel.apply()
-                    root.hide()
-                }
+            onOpenSelectedPartsRequested: {
+                partsModel.openSelectedParts()
+                root.hide()
             }
         }
     }

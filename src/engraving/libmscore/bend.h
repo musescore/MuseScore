@@ -23,12 +23,15 @@
 #ifndef __BEND_H__
 #define __BEND_H__
 
-#include "element.h"
-#include "pitchvalue.h"
-#include "property.h"
-#include "style.h"
+#include "infrastructure/draw/font.h"
+#include "style/style.h"
 
-#include "draw/font.h"
+#include "engravingitem.h"
+#include "property.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 //---------------------------------------------------------
@@ -44,40 +47,41 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend final : public Element
+class Bend final : public EngravingItem
 {
-    M_PROPERTY(QString,   fontFace,  setFontFace)
-    M_PROPERTY(qreal,     fontSize,  setFontSize)
-    M_PROPERTY(FontStyle, fontStyle, setFontStyle)
-    M_PROPERTY(qreal,     lineWidth, setLineWidth)
+    M_PROPERTY(QString,    fontFace,  setFontFace)
+    M_PROPERTY(qreal,      fontSize,  setFontSize)
+    M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
+    M_PROPERTY(Millimetre, lineWidth, setLineWidth)
 
 public:
-    Bend(Score* s);
-
     Bend* clone() const override { return new Bend(*this); }
-    ElementType type() const override { return ElementType::BEND; }
+
     void layout() override;
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
-    QList<PitchValue>& points() { return m_points; }
-    const QList<PitchValue>& points() const { return m_points; }
-    void setPoints(const QList<PitchValue>& p) { m_points = p; }
+    PitchValues& points() { return m_points; }
+    const PitchValues& points() const { return m_points; }
+    void setPoints(const PitchValues& p) { m_points = p; }
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }
 
     // property methods
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
 private:
+    friend class mu::engraving::Factory;
+    Bend(Note* parent);
+
     mu::draw::Font font(qreal) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);
 
     bool m_playBend = true;
-    QList<PitchValue> m_points;
+    PitchValues m_points;
 
     mu::PointF m_notePos;
     qreal m_noteWidth;

@@ -20,24 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "equaliser.h"
-#include "log.h"
+
 #include <cmath>
+
+#include "log.h"
+
 using namespace mu::audio;
-
-Equaliser::Equaliser()
-{
-}
-
-FxProcessorId Equaliser::id() const
-{
-    static std::string id = "InternalEqualiser";
-    return id;
-}
-
-unsigned int Equaliser::streamCount() const
-{
-    return 1;
-}
 
 void Equaliser::setSampleRate(unsigned int sampleRate)
 {
@@ -55,18 +43,18 @@ void Equaliser::setActive(bool active)
     m_active = active;
 }
 
-void Equaliser::process(float* input, float* output, unsigned int sampleCount)
+void Equaliser::process(float* buffer, unsigned int sampleCount)
 {
     for (unsigned int i = 0; i < sampleCount; ++i) {
         m_x[2] = m_x[1];
         m_x[1] = m_x[0];
-        m_x[0] = input[i];
+        m_x[0] = buffer[i];
 
         m_y[2] = m_y[1];
         m_y[1] = m_y[0];
         m_y[0] = (m_b[2] * m_x[2] + m_b[1] * m_x[1] + m_b[0] * m_x[0] - m_a[1] * m_y[1] - m_a[2] * m_y[2]) / m_a[0];
 
-        output[i] = m_y[0];
+        buffer[i] = m_y[0];
     }
 }
 

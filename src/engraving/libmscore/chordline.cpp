@@ -21,7 +21,7 @@
  */
 
 #include "chordline.h"
-#include "xml.h"
+#include "rw/xml.h"
 #include "chord.h"
 #include "measure.h"
 #include "system.h"
@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 const char* scorelineNames[] = {
@@ -42,8 +43,8 @@ const char* scorelineNames[] = {
 //   ChordLine
 //---------------------------------------------------------
 
-ChordLine::ChordLine(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+ChordLine::ChordLine(Chord* parent)
+    : EngravingItem(ElementType::CHORDLINE, parent, ElementFlag::MOVABLE)
 {
     modified = false;
     _chordLineType = ChordLineType::NOTYPE;
@@ -53,7 +54,7 @@ ChordLine::ChordLine(Score* s)
 }
 
 ChordLine::ChordLine(const ChordLine& cl)
-    : Element(cl)
+    : EngravingItem(cl)
 {
     path     = cl.path;
     modified = cl.modified;
@@ -124,7 +125,7 @@ void ChordLine::layout()
     }
 
     qreal _spatium = spatium();
-    if (parent()) {
+    if (explicitParent()) {
         Note* note = chord()->upNote();
         PointF p(note->pos());
         // chordlines to the right of the note
@@ -173,18 +174,18 @@ void ChordLine::read(XmlReader& e)
                     qreal x  = e.doubleAttribute("x");
                     qreal y  = e.doubleAttribute("y");
                     switch (PainterPath::ElementType(type)) {
-                    case PainterPath::MoveToElement:
+                    case PainterPath::ElementType::MoveToElement:
                         path.moveTo(x, y);
                         break;
-                    case PainterPath::LineToElement:
+                    case PainterPath::ElementType::LineToElement:
                         path.lineTo(x, y);
                         break;
-                    case PainterPath::CurveToElement:
+                    case PainterPath::ElementType::CurveToElement:
                         curveTo.rx() = x;
                         curveTo.ry() = y;
                         state = 1;
                         break;
-                    case PainterPath::CurveToDataElement:
+                    case PainterPath::ElementType::CurveToDataElement:
                         if (state == 1) {
                             p1.rx() = x;
                             p1.ry() = y;
@@ -195,7 +196,7 @@ void ChordLine::read(XmlReader& e)
                         }
                         break;
                     }
-                    e.skipCurrentElement();           //needed to go to next Element in Path
+                    e.skipCurrentElement();           //needed to go to next EngravingItem in Path
                 } else {
                     e.unknown();
                 }
@@ -209,7 +210,7 @@ void ChordLine::read(XmlReader& e)
             setLengthX(e.readInt());
         } else if (tag == "lengthY") {
             setLengthY(e.readInt());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -221,23 +222,23 @@ void ChordLine::read(XmlReader& e)
 
 void ChordLine::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::CHORD_LINE_TYPE);
     writeProperty(xml, Pid::CHORD_LINE_STRAIGHT);
     xml.tag("lengthX", _lengthX, 0.0);
     xml.tag("lengthY", _lengthY, 0.0);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     if (modified) {
-        int n = path.elementCount();
-        xml.stag("Path");
-        for (int i = 0; i < n; ++i) {
+        size_t n = path.elementCount();
+        xml.startObject("Path");
+        for (size_t i = 0; i < n; ++i) {
             const PainterPath::Element& e = path.elementAt(i);
             xml.tagE(QString("Element type=\"%1\" x=\"%2\" y=\"%3\"")
                      .arg(int(e.type)).arg(e.x).arg(e.y));
         }
-        xml.etag();
+        xml.endObject();
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -284,7 +285,7 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 
 void ChordLine::startEditDrag(EditData& ed)
 {
-    Element::startEditDrag(ed);
+    EngravingItem::startEditDrag(ed);
     ElementEditData* eed = ed.getData(this);
 
     eed->pushProperty(Pid::PATH);
@@ -296,7 +297,7 @@ void ChordLine::startEditDrag(EditData& ed)
 
 void ChordLine::editDrag(EditData& ed)
 {
-    int n = path.elementCount();
+    auto n = path.elementCount();
     PainterPath p;
     qreal sp = spatium();
     _lengthX += ed.delta.x();
@@ -316,7 +317,7 @@ void ChordLine::editDrag(EditData& ed)
 
     qreal dx = ed.delta.x() / sp;
     qreal dy = ed.delta.y() / sp;
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
         if (_straight) {
             if (i > 0) {
@@ -339,15 +340,15 @@ void ChordLine::editDrag(EditData& ed)
             y += dy;
         }
         switch (e.type) {
-        case PainterPath::CurveToDataElement:
+        case PainterPath::ElementType::CurveToDataElement:
             break;
-        case PainterPath::MoveToElement:
+        case PainterPath::ElementType::MoveToElement:
             p.moveTo(x, y);
             break;
-        case PainterPath::LineToElement:
+        case PainterPath::ElementType::LineToElement:
             p.lineTo(x, y);
             break;
-        case PainterPath::CurveToElement:
+        case PainterPath::ElementType::CurveToElement:
         {
             qreal x2 = path.elementAt(i + 1).x;
             qreal y2 = path.elementAt(i + 1).y;
@@ -377,7 +378,7 @@ void ChordLine::editDrag(EditData& ed)
 std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
     qreal sp = spatium();
-    int n    = path.elementCount();
+    auto n   = path.elementCount();
     PointF cp(pagePos());
     if (_straight) {
         // limit the number of grips to one
@@ -399,7 +400,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return { p };
     } else {
         std::vector<PointF> grips(n);
-        for (int i = 0; i < n; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             grips[i] = cp + PointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
         }
         return grips;
@@ -412,7 +413,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 
 QString ChordLine::accessibleInfo() const
 {
-    QString rez = Element::accessibleInfo();
+    QString rez = EngravingItem::accessibleInfo();
     if (chordLineType() != ChordLineType::NOTYPE) {
         rez = QString("%1: %2").arg(rez, scorelineNames[static_cast<int>(chordLineType()) - 1]);
     }
@@ -423,11 +424,11 @@ QString ChordLine::accessibleInfo() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant ChordLine::getProperty(Pid propertyId) const
+PropertyValue ChordLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PATH:
-        return QVariant::fromValue(path);
+        return PropertyValue::fromValue(path);
     case Pid::CHORD_LINE_TYPE:
         return int(_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
@@ -435,14 +436,14 @@ QVariant ChordLine::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
+bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PATH:
@@ -455,7 +456,7 @@ bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
         setStraight(val.toBool());
         break;
     default:
-        return Element::setProperty(propertyId, val);
+        return EngravingItem::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
@@ -465,7 +466,7 @@ bool ChordLine::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ChordLine::propertyDefault(Pid pid) const
+PropertyValue ChordLine::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::CHORD_LINE_STRAIGHT:
@@ -473,7 +474,7 @@ QVariant ChordLine::propertyDefault(Pid pid) const
     default:
         break;
     }
-    return Element::propertyDefault(pid);
+    return EngravingItem::propertyDefault(pid);
 }
 
 //---------------------------------------------------------
@@ -487,6 +488,6 @@ Pid ChordLine::propertyId(const QStringRef& name) const
     } else if (name == "straight") {
         return Pid::CHORD_LINE_STRAIGHT;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 }

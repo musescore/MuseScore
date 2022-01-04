@@ -14,7 +14,7 @@
 
 #include "DropArea_p.h"
 
-#include "QWidgetAdapter.h"
+#include "kddockwidgets/QWidgetAdapter.h"
 
 namespace KDDockWidgets {
 class DOCKS_EXPORT DropAreaWithCentralFrame : public DropArea
@@ -24,9 +24,11 @@ public:
     explicit DropAreaWithCentralFrame(QWidgetOrQuick *parent = {}, MainWindowOptions options = MainWindowOption_HasCentralFrame);
     ~DropAreaWithCentralFrame();
 
-    static Frame* createCentralFrame(MainWindowOptions options);
+    static Frame *createCentralFrame(MainWindowOptions options);
+
 private:
     friend class MainWindowBase;
+    friend class Frame;
     Frame *const m_centralFrame = nullptr;
 };
 

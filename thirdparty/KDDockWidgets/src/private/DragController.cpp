@@ -30,8 +30,7 @@
 #include <QScopedValueRollback>
 
 #if defined(Q_OS_WIN)
-# include <QWindow>
-# include <windows.h>
+#include <windows.h>
 #endif
 
 using namespace KDDockWidgets;
@@ -93,7 +92,9 @@ public:
     QPointer<QWidgetOrQuick> m_target;
 };
 
-FallbackMouseGrabber::~FallbackMouseGrabber() {}
+FallbackMouseGrabber::~FallbackMouseGrabber()
+{
+}
 
 }
 
@@ -258,8 +259,8 @@ StateDragging::StateDragging(DragController *parent)
         const bool mouseButtonIsReallyDown = (GetKeyState(VK_LBUTTON) & 0x8000);
         if (!mouseButtonIsReallyDown && isLeftButtonPressed()) {
             qCDebug(state) << "Canceling drag, Qt thinks mouse button is pressed"
-                << "but Windows knows it's not";
-           Q_EMIT q->dragCanceled();
+                           << "but Windows knows it's not";
+            Q_EMIT q->dragCanceled();
         }
     });
 #endif
@@ -301,7 +302,7 @@ void StateDragging::onEntry()
             window->startSystemMove();
         }
 #else
-    Q_UNUSED(needsUndocking);
+        Q_UNUSED(needsUndocking);
 #endif
 
         qCDebug(state) << "StateDragging entered. m_draggable=" << q->m_draggable->asWidget()
@@ -384,7 +385,15 @@ bool StateDragging::handleMouseMove(QPoint globalPos)
         return true;
     }
 
-    DropArea *dropArea = q->dropAreaUnderCursor();
+    DropArea *dropArea = nullptr;
+    ResolveDropAreaFunc resolveDropArea = q->resolveDropAreaFunc();
+
+    if (resolveDropArea) {
+        dropArea = resolveDropArea(globalPos);
+    } else {
+        dropArea = q->dropAreaUnderCursor();
+    }
+
     if (q->m_currentDropArea && dropArea != q->m_currentDropArea)
         q->m_currentDropArea->removeHover();
 
@@ -466,7 +475,7 @@ bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos)
 
     // Let's not allow the MDI window to go outside of its parent
 
-    QPoint newLocalPosBounded = {qMax(0, newLocalPos.x()), qMax(0, newLocalPos.y())};
+    QPoint newLocalPosBounded = { qMax(0, newLocalPos.x()), qMax(0, newLocalPos.y()) };
     newLocalPosBounded.setX(qMin(newLocalPosBounded.x(), parentSize.width() - frame->width()));
     newLocalPosBounded.setY(qMin(newLocalPosBounded.y(), parentSize.height() - frame->height()));
 
@@ -535,7 +544,7 @@ bool StateDraggingWayland::handleMouseButtonRelease(QPoint /*globalPos*/)
 
 bool StateDraggingWayland::handleDragEnter(QDragEnterEvent *ev, DropArea *dropArea)
 {
-    auto mimeData = qobject_cast<const WaylandMimeData*>(ev->mimeData());
+    auto mimeData = qobject_cast<const WaylandMimeData *>(ev->mimeData());
     if (!mimeData || !q->m_windowBeingDragged)
         return false; // Not for us, some other user drag.
 
@@ -558,7 +567,7 @@ bool StateDraggingWayland::handleDragLeave(DropArea *dropArea)
 
 bool StateDraggingWayland::handleDrop(QDropEvent *ev, DropArea *dropArea)
 {
-    auto mimeData = qobject_cast<const WaylandMimeData*>(ev->mimeData());
+    auto mimeData = qobject_cast<const WaylandMimeData *>(ev->mimeData());
     if (!mimeData || !q->m_windowBeingDragged)
         return false; // Not for us, some other user drag.
 
@@ -576,7 +585,7 @@ bool StateDraggingWayland::handleDrop(QDropEvent *ev, DropArea *dropArea)
 
 bool StateDraggingWayland::handleDragMove(QDragMoveEvent *ev, DropArea *dropArea)
 {
-    auto mimeData = qobject_cast<const WaylandMimeData*>(ev->mimeData());
+    auto mimeData = qobject_cast<const WaylandMimeData *>(ev->mimeData());
     if (!mimeData || !q->m_windowBeingDragged)
         return false; // Not for us, some other user drag.
 
@@ -681,6 +690,16 @@ void DragController::enableFallbackMouseGrabber()
         m_fallbackMouseGrabber = new FallbackMouseGrabber(this);
 }
 
+ResolveDropAreaFunc DragController::resolveDropAreaFunc() const
+{
+    return m_resolveDropAreaFunc;
+}
+
+void DragController::setResolveDropAreaFunc(ResolveDropAreaFunc func)
+{
+    m_resolveDropAreaFunc = func;
+}
+
 WindowBeingDragged *DragController::windowBeingDragged() const
 {
     return m_windowBeingDragged.get();
@@ -697,10 +716,10 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
 
     if (isWayland()) {
         // Wayland is very different. It uses QDrag for the dragging of a window.
-        if (auto dropArea = qobject_cast<DropArea*>(o)) {
+        if (auto dropArea = qobject_cast<DropArea *>(o)) {
             switch (int(e->type())) {
             case QEvent::DragEnter:
-                if (activeState()->handleDragEnter(static_cast<QDragEnterEvent*>(e), dropArea))
+                if (activeState()->handleDragEnter(static_cast<QDragEnterEvent *>(e), dropArea))
                     return true;
                 break;
             case QEvent::DragLeave:
@@ -708,11 +727,11 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
                     return true;
                 break;
             case QEvent::DragMove:
-                if (activeState()->handleDragMove(static_cast<QDragMoveEvent*>(e), dropArea))
+                if (activeState()->handleDragMove(static_cast<QDragMoveEvent *>(e), dropArea))
                     return true;
                 break;
             case QEvent::Drop:
-                if (activeState()->handleDrop(static_cast<QDropEvent*>(e), dropArea))
+                if (activeState()->handleDrop(static_cast<QDropEvent *>(e), dropArea))
                     return true;
                 break;
             }
@@ -723,7 +742,7 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
     if (!me)
         return MinimalStateMachine::eventFilter(o, e);
 
-    auto w = qobject_cast<QWidgetOrQuick*>(o);
+    auto w = qobject_cast<QWidgetOrQuick *>(o);
     if (!w)
         return MinimalStateMachine::eventFilter(o, e);
 
@@ -732,7 +751,7 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
 
     switch (e->type()) {
     case QEvent::NonClientAreaMouseButtonPress: {
-        if (auto fw = qobject_cast<FloatingWindow*>(o)) {
+        if (auto fw = qobject_cast<FloatingWindow *>(o)) {
             if (KDDockWidgets::usesNativeTitleBar() || fw->isInDragArea(Qt5Qt6Compat::eventGlobalPos(me))) {
                 m_nonClientDrag = true;
                 return activeState()->handleMouseButtonPress(draggableForQObject(o), Qt5Qt6Compat::eventGlobalPos(me), me->pos());
@@ -746,8 +765,8 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
         if (!KDDockWidgets::usesNativeDraggingAndResizing() || !w->isWindow()) {
             Q_ASSERT(activeState());
             return activeState()->handleMouseButtonPress(draggableForQObject(o), Qt5Qt6Compat::eventGlobalPos(me), me->pos());
-        }
-        else break;
+        } else
+            break;
     case QEvent::MouseButtonRelease:
     case QEvent::NonClientAreaMouseButtonRelease:
         return activeState()->handleMouseButtonRelease(Qt5Qt6Compat::eventGlobalPos(me));
@@ -772,34 +791,46 @@ StateBase *DragController::activeState() const
 #if defined(Q_OS_WIN)
 static QWidgetOrQuick *qtTopLevelForHWND(HWND hwnd)
 {
-    const QList<QWindow*> windows = qApp->topLevelWindows();
+    const QList<QWindow *> windows = qApp->topLevelWindows();
     for (QWindow *window : windows) {
-        if (!window->isVisible()) {
+        if (!window->isVisible())
             continue;
-        }
 
-        if (hwnd == (HWND)window->winId()) {
-            return DockRegistry::self()->topLevelForHandle(window);
+        if (hwnd == ( HWND )window->winId()) {
+            if (auto result = DockRegistry::self()->topLevelForHandle(window))
+                return result;
+#ifdef KDDOCKWIDGETS_QTWIDGETS
+            // It's not a KDDW window, but we still return something, as the KDDW main window
+            // might be embedded into another non-kddw QMainWindow
+            // Case not supported for QtQuick.
+            const QWidgetList widgets = qApp->topLevelWidgets();
+            for (QWidget *widget : widgets) {
+                if (hwnd == ( HWND )widget->winId()) {
+                    return widget;
+                }
+            }
+#endif
         }
     }
 
     qCDebug(toplevels) << Q_FUNC_INFO << "Couldn't find hwnd for top-level" << hwnd;
     return nullptr;
 }
-#endif
 
-static QRect topLevelGeometry(const QWidgetOrQuick* topLevel)
+static QRect topLevelGeometry(const QWidgetOrQuick *topLevel)
 {
-    if (auto mainWindow = qobject_cast<const MainWindowBase*>(topLevel))
+    if (auto mainWindow = qobject_cast<const MainWindowBase *>(topLevel))
         return mainWindow->windowGeometry();
 
     return topLevel->geometry();
 }
 
-template <typename T>
-static WidgetType* qtTopLevelUnderCursor_impl(QPoint globalPos, const QVector<QWindow*> &windows, T windowBeingDragged)
+#endif
+
+template<typename T>
+static WidgetType *qtTopLevelUnderCursor_impl(QPoint globalPos, const QVector<QWindow *> &windows, T windowBeingDragged)
 {
-    for (auto i = windows.size() -1; i >= 0; --i) {
+    for (auto i = windows.size() - 1; i >= 0; --i) {
         QWindow *window = windows.at(i);
         auto tl = KDDockWidgets::Private::widgetForWindow(window);
 
@@ -848,7 +879,7 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
                     return tl;
                 }
             } else {
-# ifdef KDDOCKWIDGETS_QTWIDGETS // Maybe it's embedded in a QWinWidget:
+#ifdef KDDOCKWIDGETS_QTWIDGETS // Maybe it's embedded in a QWinWidget:
                 auto topLevels = qApp->topLevelWidgets();
                 for (auto topLevel : topLevels) {
                     if (QLatin1String(topLevel->metaObject()->className()) == QLatin1String("QWinWidget")) {
@@ -860,8 +891,7 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
                         }
                     }
                 }
-# endif // QtWidgets
-                // A window belonging to another app is below the cursor
+#endif // QtWidgets A window belonging to another app is below the cursor
                 qCDebug(toplevels) << Q_FUNC_INFO << "Window from another app is under cursor" << hwnd;
                 return nullptr;
             }
@@ -878,16 +908,16 @@ WidgetType *DragController::qtTopLevelUnderCursor() const
         if (auto tl = qtTopLevelUnderCursor_impl(globalPos, DockRegistry::self()->floatingQWindows(), tlwBeingDragged))
             return tl;
 
-        return qtTopLevelUnderCursor_impl<WidgetType*>(globalPos,
-                                                       DockRegistry::self()->topLevels(/*excludeFloating=*/true),
-                                                       tlwBeingDragged);
+        return qtTopLevelUnderCursor_impl<WidgetType *>(globalPos,
+                                                        DockRegistry::self()->topLevels(/*excludeFloating=*/true),
+                                                        tlwBeingDragged);
     }
 
     qCDebug(toplevels) << Q_FUNC_INFO << "No top-level found";
     return nullptr;
 }
 
-static DropArea* deepestDropAreaInTopLevel(WidgetType *topLevel, QPoint globalPos,
+static DropArea *deepestDropAreaInTopLevel(WidgetType *topLevel, QPoint globalPos,
                                            const QStringList &affinities)
 {
     const auto localPos = topLevel->mapFromGlobal(globalPos);

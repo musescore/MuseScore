@@ -19,59 +19,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject frameLeftMargin: undefined
-    property QtObject frameRightMargin: undefined
+    property PropertyItem frameLeftMargin: null
+    property PropertyItem frameRightMargin: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: rightMarginsSection.navigationRowEnd
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: leftMarginsSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Left margin")
-        propertyItem: frameLeftMargin
+        propertyItem: root.frameLeftMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.LEFT_MARGIN
+        icon: IconCode.LEFT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
 
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: frameLeftMargin ? frameLeftMargin.isEnabled : false
-            isIndeterminate: frameLeftMargin && enabled ? frameLeftMargin.isUndefined : false
-            currentValue: frameLeftMargin ? frameLeftMargin.value : 0
-
-            onValueEdited: { frameLeftMargin.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: rightMarginsSection
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Right margin")
-        propertyItem: frameRightMargin
+        propertyItem: root.frameRightMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.RIGHT_MARGIN
+        icon: IconCode.RIGHT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
 
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: frameRightMargin ? frameRightMargin.isEnabled : false
-            isIndeterminate: frameRightMargin && enabled ? frameRightMargin.isUndefined : false
-            currentValue: frameRightMargin ? frameRightMargin.value : 0
-
-            onValueEdited: { frameRightMargin.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: leftMarginsSection.navigationRowEnd + 1
     }
 }

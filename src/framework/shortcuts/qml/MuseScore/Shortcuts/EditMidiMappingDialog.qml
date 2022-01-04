@@ -32,7 +32,7 @@ Dialog {
 
     signal mapToEventRequested(var event)
 
-    title: qsTrc("shortcuts", "MIDI Remote Control")
+    title: qsTrc("shortcuts", "MIDI remote control")
 
     height: 220
     width: 538
@@ -90,7 +90,7 @@ Dialog {
                 spacing: 10
 
                 StyledTextLabel {
-                    text: qsTrc("shortcuts", "MIDI Mapping:")
+                    text: qsTrc("shortcuts", "MIDI mapping:")
                 }
 
                 TextInputField {
@@ -101,7 +101,7 @@ Dialog {
                     readOnly: true
 
                     currentText: model.mappingTitle
-                    hint: qsTrc("global", "Waiting...")
+                    hint: qsTrc("global", "Waiting…")
                 }
             }
 

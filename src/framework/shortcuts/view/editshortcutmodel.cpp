@@ -22,8 +22,11 @@
 
 #include "editshortcutmodel.h"
 
-#include "log.h"
+#include <QKeySequence>
+
 #include "translation.h"
+#include "shortcutstypes.h"
+#include "log.h"
 
 using namespace mu::shortcuts;
 
@@ -32,13 +35,13 @@ EditShortcutModel::EditShortcutModel(QObject* parent)
 {
 }
 
-void EditShortcutModel::load(const QString& sequence, const QVariantList& allShortcuts)
+void EditShortcutModel::load(const QVariant& shortcut, const QVariantList& allShortcuts)
 {
     clear();
 
     m_allShortcuts = allShortcuts;
-    m_originSequence = sequence;
-    emit originSequenceChanged(sequence);
+    m_originShortcut = shortcut.toMap();
+    emit originSequenceChanged(originSequence());
 }
 
 void EditShortcutModel::clear()
@@ -51,24 +54,34 @@ void EditShortcutModel::clear()
 
 void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 {
-    if (needIgnoreKey(key)) {
+    std::pair<int, Qt::KeyboardModifiers> correctedKeyInput = correctKeyInput(key, modifiers);
+    int newKey = correctedKeyInput.first;
+    int newModifiers = correctedKeyInput.second;
+
+    if (needIgnoreKey(newKey)) {
         return;
     }
 
-    key += modifiers;
+    newKey += newModifiers;
+
+    for (int i = 0; i < m_inputedSequence.count(); i++) {
+        if (m_inputedSequence[i] == key) {
+            return;
+        }
+    }
 
     switch (m_inputedSequence.count()) {
     case 0:
-        m_inputedSequence = QKeySequence(key);
+        m_inputedSequence = QKeySequence(newKey);
         break;
     case 1:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], newKey);
         break;
     case 2:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], newKey);
         break;
     case 3:
-        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], m_inputedSequence[2], key);
+        m_inputedSequence = QKeySequence(m_inputedSequence[0], m_inputedSequence[1], m_inputedSequence[2], newKey);
         break;
     }
 
@@ -77,36 +90,20 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
     emit inputedSequenceChanged(inputedSequence());
 }
 
-bool EditShortcutModel::needIgnoreKey(int key) const
-{
-    if (key == 0) {
-        return true;
-    }
-
-    static const QSet<Qt::Key> ignoredKeys {
-        Qt::Key_Shift,
-        Qt::Key_Control,
-        Qt::Key_Meta,
-        Qt::Key_Alt,
-        Qt::Key_AltGr,
-        Qt::Key_CapsLock,
-        Qt::Key_NumLock,
-        Qt::Key_ScrollLock,
-        Qt::Key_unknown
-    };
-
-    return ignoredKeys.contains(static_cast<Qt::Key>(key));
-}
-
 void EditShortcutModel::validateInputedSequence()
 {
     m_errorMessage.clear();
 
-    for (const QVariant& shortcut: m_allShortcuts) {
-        QVariantMap map = shortcut.toMap();
+    QString input = inputedSequence();
+    QVariant context = m_originShortcut.value("context");
+    for (const QVariant& shortcut : m_allShortcuts) {
+        QVariantMap sc = shortcut.toMap();
+        if (sc.value("context") != context) {
+            continue;
+        }
 
-        if (map["sequence"].toString() == inputedSequence()) {
-            QString title = map["title"].toString();
+        if (sc.value("sequence").toString() == input) {
+            QString title = sc.value("title").toString();
             m_errorMessage = qtrc("shortcuts", "Shortcut conflicts with %1").arg(title);
             return;
         }
@@ -115,7 +112,7 @@ void EditShortcutModel::validateInputedSequence()
 
 QString EditShortcutModel::originSequence() const
 {
-    return m_originSequence;
+    return m_originShortcut.value("sequence").toString();
 }
 
 QString EditShortcutModel::inputedSequence() const
@@ -135,10 +132,10 @@ bool EditShortcutModel::canApplySequence() const
 
 QString EditShortcutModel::unitedSequence() const
 {
-    QStringList sequences {
-        m_originSequence,
-        inputedSequence()
-    };
-
-    return sequences.join(", ");
+    QString united = originSequence();
+    if (!united.isEmpty()) {
+        united += "; ";
+    }
+    united += inputedSequence();
+    return united;
 }

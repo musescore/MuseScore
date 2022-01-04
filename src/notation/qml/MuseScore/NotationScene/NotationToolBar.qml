@@ -20,18 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
 
-Rectangle {
+Item {
     id: root
 
     property alias navigation: keynavSub
 
     signal activeFocusRequested()
 
-    color: ui.theme.backgroundPrimaryColor
+    width: view.width
+    height: view.height
 
     Component.onCompleted: {
         toolbarModel.load()
@@ -40,6 +42,8 @@ Rectangle {
     NavigationPanel {
         id: keynavSub
         name: "NotationToolBar"
+        enabled: root.enabled && root.visible
+        accessible.name: qsTrc("notation", "Notation toolbar")
         onActiveChanged: {
             if (active) {
                 root.activeFocusRequested()
@@ -55,8 +59,6 @@ Rectangle {
     ListView {
         id: view
 
-        anchors.verticalCenter: parent.verticalCenter
-
         width: contentWidth
         height: contentItem.childrenRect.height
 
@@ -71,19 +73,20 @@ Rectangle {
             icon: model.icon
             iconFont: ui.theme.toolbarIconsFont
 
+            height: 30
+
             toolTipTitle: model.title
             toolTipDescription: model.description
             toolTipShortcut: model.shortcut
 
             enabled: model.enabled
-            textFont: ui.theme.tabFont
+            textFont: ui.theme.largeBodyFont
 
             navigation.panel: keynavSub
             navigation.name: model.title
             navigation.order: model.index
-            navigation.enabled: model.enabled
 
-            normalStateColor: "transparent"
+            transparent: true
             orientation: Qt.Horizontal
 
             onClicked: {

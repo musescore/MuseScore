@@ -33,6 +33,9 @@ public:
     MOCK_METHOD(Ret, exists, (const io::path&), (const, override));
     MOCK_METHOD(Ret, remove, (const io::path&), (const, override));
     MOCK_METHOD(Ret, copy, (const io::path& src, const io::path& dst, bool replace), (const, override));
+    MOCK_METHOD(Ret, move, (const io::path& src, const io::path& dst, bool replace), (const, override));
+
+    MOCK_METHOD(RetVal<uint64_t>, fileSize, (const io::path& path), (const, override));
 
     MOCK_METHOD(RetVal<QByteArray>, readFile, (const io::path&), (const, override));
     MOCK_METHOD(Ret, writeToFile, (const io::path&, const QByteArray&), (const, override));
@@ -40,6 +43,8 @@ public:
     MOCK_METHOD(Ret, makePath, (const io::path&), (const, override));
 
     MOCK_METHOD(RetVal<io::paths>, scanFiles, (const io::path&, const QStringList&, ScanMode), (const, override));
+
+    MOCK_METHOD(void, setAttribute, (const io::path& path, Attribute attribute), (const, override));
 };
 }
 

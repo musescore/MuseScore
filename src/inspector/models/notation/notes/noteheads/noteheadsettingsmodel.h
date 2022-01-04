@@ -23,14 +23,12 @@
 #define MU_INSPECTOR_NOTEHEADSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
-#include "noteheadtypesmodel.h"
 
 namespace mu::inspector {
 class NoteheadSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QObject * noteheadTypesModel READ noteheadTypesModel NOTIFY noteheadTypesModelChanged)
     Q_PROPERTY(PropertyItem * isHeadHidden READ isHeadHidden CONSTANT)
     Q_PROPERTY(PropertyItem * headDirection READ headDirection CONSTANT)
     Q_PROPERTY(PropertyItem * headGroup READ headGroup CONSTANT)
@@ -42,10 +40,6 @@ class NoteheadSettingsModel : public AbstractInspectorModel
 public:
     explicit NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-public:
-
-    QObject* noteheadTypesModel() const;
-
     PropertyItem* isHeadHidden() const;
     PropertyItem* headDirection() const;
     PropertyItem* headGroup() const;
@@ -54,12 +48,6 @@ public:
     PropertyItem* horizontalOffset() const;
     PropertyItem* verticalOffset() const;
 
-public slots:
-    void setNoteheadTypesModel(NoteheadTypesModel* noteheadTypesModel);
-
-signals:
-    void noteheadTypesModelChanged(QObject* noteheadTypesModel);
-
 protected:
     void createProperties() override;
     void requestElements() override;
@@ -67,8 +55,6 @@ protected:
     void resetProperties() override;
 
 private:
-    NoteheadTypesModel* m_noteheadTypesModel = nullptr;
-
     PropertyItem* m_isHeadHidden = nullptr;
     PropertyItem* m_headDirection = nullptr;
     PropertyItem* m_headGroup = nullptr;

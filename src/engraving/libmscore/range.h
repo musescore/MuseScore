@@ -23,10 +23,10 @@
 #ifndef __DURATIONLIST_H__
 #define __DURATIONLIST_H__
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Measure;
 class Tuplet;
 class Segment;
@@ -39,14 +39,14 @@ class Score;
 //   TrackList
 //---------------------------------------------------------
 
-class TrackList : public QList<Element*>
+class TrackList : public QList<EngravingItem*>
 {
     Fraction _duration;
     ScoreRange* _range;
     int _track { 0 };
 
     Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
-    void append(Element*);
+    void append(EngravingItem*);
     void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
     void combineTuplet(Tuplet* dst, Tuplet* src);
 
@@ -63,7 +63,7 @@ public:
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
 
-    void appendGap(const Fraction&);
+    void appendGap(const Fraction&, Ms::Score* score);
     bool truncate(const Fraction&);
     void dump() const;
 };
@@ -74,7 +74,7 @@ public:
 
 struct Annotation {
     Fraction tick;
-    Element* e;
+    EngravingItem* e;
 };
 
 //---------------------------------------------------------

@@ -24,14 +24,16 @@
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/box.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/measurebase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/midifile.h"
 
 #include <set>
 
@@ -159,19 +161,19 @@ bool isTitlePrefix(const QString& text)
 
 void addTitleToScore(Score* score, const QString& string, int textCounter)
 {
-    Tid ssid = Tid::DEFAULT;
+    TextStyleType ssid = TextStyleType::DEFAULT;
     if (textCounter == 1) {
-        ssid = Tid::TITLE;
+        ssid = TextStyleType::TITLE;
     } else if (textCounter == 2) {
-        ssid = Tid::COMPOSER;
+        ssid = TextStyleType::COMPOSER;
     }
 
-    Text* text = new Text(score, ssid);
+    MeasureBase* measure = score->first();
+    Text* text = mu::engraving::Factory::createText(measure, ssid);
     text->setPlainText(string.right(string.size() - int(TEXT_PREFIX.size())));
 
-    MeasureBase* measure = score->first();
     if (!measure->isVBox()) {
-        measure = new VBox(score);
+        measure = new VBox(score->dummy()->system());
         measure->setTick(Fraction(0, 1));
         measure->setNext(score->first());
         score->measures()->add(measure);

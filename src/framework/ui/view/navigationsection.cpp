@@ -23,6 +23,8 @@
 
 #include <algorithm>
 
+#include <QQuickWindow>
+
 #include "log.h"
 
 using namespace mu::ui;
@@ -116,18 +118,9 @@ void NavigationSection::addPanel(NavigationPanel* panel)
 
     m_panels.insert(panel);
 
-    panel->activeRequested().onReceive(this, [this](const PanelControl& subcon) {
-        m_forceActiveRequested.send(std::make_tuple(this, std::get<0>(subcon), std::get<1>(subcon)));
-    });
-
     if (m_panelsListChanged.isConnected()) {
         m_panelsListChanged.notify();
     }
-}
-
-mu::async::Channel<SectionPanelControl> NavigationSection::activeRequested() const
-{
-    return m_forceActiveRequested;
 }
 
 void NavigationSection::removePanel(NavigationPanel* panel)
@@ -138,10 +131,21 @@ void NavigationSection::removePanel(NavigationPanel* panel)
     }
 
     m_panels.erase(panel);
-    panel->activeRequested().resetOnReceive(this);
 
     if (m_panelsListChanged.isConnected()) {
         m_panelsListChanged.notify();
+    }
+}
+
+void NavigationSection::setOnActiveRequested(const OnActiveRequested& func)
+{
+    m_onActiveRequested = func;
+}
+
+void NavigationSection::requestActive(INavigationPanel* panel, INavigationControl* control)
+{
+    if (m_onActiveRequested) {
+        m_onActiveRequested(this, panel, control);
     }
 }
 

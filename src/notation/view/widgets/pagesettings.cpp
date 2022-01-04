@@ -21,16 +21,18 @@
  */
 #include "pagesettings.h"
 
-#include "widgetstatestore.h"
-#include "libmscore/page.h"
-#include "libmscore/style.h"
-#include "libmscore/score.h"
-#include "libmscore/mscore.h"
-#include "libmscore/excerpt.h"
-
 #include <QPageSize>
 
+#include "engraving/libmscore/page.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/mscore.h"
+#include "engraving/libmscore/excerpt.h"
+#include "engraving/style/pagestyle.h"
+
+#include "ui/view/widgetstatestore.h"
+
 using namespace mu::notation;
+using namespace mu::ui;
 using namespace Ms;
 
 PageSettings::PageSettings(QWidget* parent)
@@ -56,26 +58,41 @@ PageSettings::PageSettings(QWidget* parent)
         pageGroup->addItem(QPageSize::name(QPageSize::PageSizeId(i)), i);
     }
 
-    connect(mmButton,             SIGNAL(clicked()),            SLOT(mmClicked()));
-    connect(inchButton,           SIGNAL(clicked()),            SLOT(inchClicked()));
-    connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(buttonBoxClicked(QAbstractButton*)));
-    connect(buttonApplyToAllParts, SIGNAL(clicked()),            SLOT(applyToAllParts()));
-    connect(portraitButton,       SIGNAL(clicked()),            SLOT(orientationClicked()));
-    connect(landscapeButton,      SIGNAL(clicked()),            SLOT(orientationClicked()));
-    connect(twosided,             SIGNAL(toggled(bool)),        SLOT(twosidedToggled(bool)));
-    connect(pageHeight,           SIGNAL(valueChanged(double)), SLOT(pageHeightChanged(double)));
-    connect(pageWidth,            SIGNAL(valueChanged(double)), SLOT(pageWidthChanged(double)));
-    connect(oddPageTopMargin,     SIGNAL(valueChanged(double)), SLOT(otmChanged(double)));
-    connect(oddPageBottomMargin,  SIGNAL(valueChanged(double)), SLOT(obmChanged(double)));
-    connect(oddPageLeftMargin,    SIGNAL(valueChanged(double)), SLOT(olmChanged(double)));
-    connect(oddPageRightMargin,   SIGNAL(valueChanged(double)), SLOT(ormChanged(double)));
-    connect(evenPageTopMargin,    SIGNAL(valueChanged(double)), SLOT(etmChanged(double)));
-    connect(evenPageBottomMargin, SIGNAL(valueChanged(double)), SLOT(ebmChanged(double)));
-    connect(evenPageRightMargin,  SIGNAL(valueChanged(double)), SLOT(ermChanged(double)));
-    connect(evenPageLeftMargin,   SIGNAL(valueChanged(double)), SLOT(elmChanged(double)));
-    connect(pageGroup,            SIGNAL(activated(int)),       SLOT(pageFormatSelected(int)));
-    connect(spatiumEntry,         SIGNAL(valueChanged(double)), SLOT(spatiumChanged(double)));
-    connect(pageOffsetEntry,      SIGNAL(valueChanged(int)),    SLOT(pageOffsetChanged(int)));
+    connect(mmButton,        &QRadioButton::clicked, this, &PageSettings::mmClicked);
+    connect(inchButton,      &QRadioButton::clicked, this, &PageSettings::inchClicked);
+    connect(buttonBox,       &QDialogButtonBox::clicked, this, &PageSettings::buttonBoxClicked);
+    connect(buttonApplyToAllParts, &QPushButton::clicked, this, &PageSettings::applyToAllParts);
+    connect(portraitButton,  &QRadioButton::clicked, this, &PageSettings::orientationClicked);
+    connect(landscapeButton, &QRadioButton::clicked, this, &PageSettings::orientationClicked);
+    connect(twosided,        &QCheckBox::toggled,    this, &PageSettings::twosidedToggled);
+
+    connect(pageHeight,           QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::pageHeightChanged);
+    connect(pageWidth,            QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::pageWidthChanged);
+    connect(oddPageTopMargin,     QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::otmChanged);
+    connect(oddPageBottomMargin,  QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::obmChanged);
+    connect(oddPageLeftMargin,    QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::olmChanged);
+    connect(oddPageRightMargin,   QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::ormChanged);
+    connect(evenPageTopMargin,    QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::etmChanged);
+    connect(evenPageBottomMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::ebmChanged);
+    connect(evenPageRightMargin,  QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::ermChanged);
+    connect(evenPageLeftMargin,   QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::elmChanged);
+    connect(spatiumEntry,         QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this,                 &PageSettings::spatiumChanged);
+
+    connect(pageGroup,            QOverload<int>::of(&QComboBox::activated),
+            this, &PageSettings::pageFormatSelected);
+    connect(pageOffsetEntry,      QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &PageSettings::pageOffsetChanged);
 }
 
 PageSettings::PageSettings(const PageSettings& other)
@@ -130,7 +147,7 @@ bool PageSettings::styleValueBool(StyleId styleId) const
     return globalContext()->currentNotation()->style()->styleValue(styleId).toBool();
 }
 
-void PageSettings::setStyleValue(StyleId styleId, const QVariant& newValue) const
+void PageSettings::setStyleValue(StyleId styleId, const PropertyValue& newValue) const
 {
     globalContext()->currentNotation()->style()->setStyleValue(styleId, newValue);
 }
@@ -309,7 +326,7 @@ void PageSettings::applyToAllParts()
     if (!_changeFlag) {
         return;
     }
-    for (Excerpt* e : score()->excerpts()) {
+    for (Excerpt* e : score()->masterScore()->excerpts()) {
         applyToScore(e->partScore());
     }
     _changeFlag = false;

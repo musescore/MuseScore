@@ -25,7 +25,15 @@
 #include "ret.h"
 #include "translation.h"
 #include "io/path.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
+#include "engraving/engravingerrors.h"
+
+namespace mu {
+inline Ret make_ret(engraving::Err e)
+{
+    return Ret(static_cast<int>(e));
+}
+}
 
 namespace mu::notation {
 // 1000 - 1299

@@ -21,14 +21,14 @@
  */
 
 #include "letring.h"
-#include "xml.h"
+#include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
-
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle letRingStyle {
@@ -54,6 +54,11 @@ static const ElementStyle letRingStyle {
     //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
 };
 
+LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
+    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -68,8 +73,8 @@ void LetRingSegment::layout()
 //   LetRing
 //---------------------------------------------------------
 
-LetRing::LetRing(Score* s)
-    : TextLineBase(s)
+LetRing::LetRing(EngravingItem* parent)
+    : TextLineBase(ElementType::LET_RING, parent)
 {
     initElementStyle(&letRingStyle);
     resetProperty(Pid::LINE_VISIBLE);
@@ -136,9 +141,9 @@ static const ElementStyle letRingSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment()
+LineSegment* LetRing::createLineSegment(System* parent)
 {
-    LetRingSegment* lr = new LetRingSegment(this, score());
+    LetRingSegment* lr = new LetRingSegment(this, parent);
     lr->setTrack(track());
     lr->initElementStyle(&letRingSegmentStyle);
     return lr;
@@ -148,14 +153,14 @@ LineSegment* LetRing::createLineSegment()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LetRing::propertyDefault(Pid propertyId) const
+PropertyValue LetRing::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
         return score()->styleV(Sid::letRingLineWidth);
 
     case Pid::ALIGN:
-        return QVariant::fromValue(Align::LEFT | Align::BASELINE);
+        return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::letRingLineStyle);
@@ -165,7 +170,7 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
 
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF(0, 0));
+        return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
         return score()->styleV(Sid::letRingFontStyle);
@@ -177,12 +182,12 @@ QVariant LetRing::propertyDefault(Pid propertyId) const
         return "";
 
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::AUTO);
+        return TextPlace::AUTO;
 
     default:
         return TextLineBase::propertyDefault(propertyId);
@@ -240,11 +245,11 @@ PointF LetRing::linePos(Grip grip, System** sys) const
         }
         s = c->segment()->system();
         x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-        if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE) {
+        if (c->isRest() && c->durationType() == DurationType::V_MEASURE) {
             x -= c->x();
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // pedal marking on single note or ends with non-angled hook:
@@ -283,7 +288,7 @@ PointF LetRing::linePos(Grip grip, System** sys) const
         } else if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->isRest() && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
         }

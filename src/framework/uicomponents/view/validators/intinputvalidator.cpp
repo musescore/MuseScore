@@ -48,14 +48,14 @@ QValidator::State IntInputValidator::validate(QString& inputStr, int& cursorPos)
 {
     QValidator::State state = Invalid;
 
-    if (inputStr.contains(QRegExp("^\\-?\\d{1,3}$"))) {
-        if (inputStr.contains(QRegExp("^\\-?0{2,3}"))
+    if (inputStr.contains(QRegularExpression("^\\-?\\d{1,3}$"))) {
+        if (inputStr.contains(QRegularExpression("^\\-?0{2,3}"))
             || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
             state = Intermediate;
         } else {
             state = Acceptable;
         }
-    } else if (inputStr.contains(QRegExp("^\\-?$"))) {
+    } else if (inputStr.contains(QRegularExpression("^\\-?$"))) {
         state = Intermediate;
     } else {
         cursorPos = 0;

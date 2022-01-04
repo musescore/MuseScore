@@ -32,19 +32,18 @@ SynthsSettingsModel::SynthsSettingsModel(QObject* parent)
 
 void SynthsSettingsModel::load()
 {
-    m_state = configuration()->synthesizerState();
+    playback()->tracks()->availableInputResources().onResolve(this, [this](const AudioResourceMetaList& resources) {
+        QString name("Fluid");
 
-    auto doLoad = [this](const QString& name) {
-        auto synth = synthRegister()->synthesizer(name.toStdString());
-        std::vector<io::path> avalaibleSFPaths = sfprovider()->soundFontPaths(synth->soundFontFormats());
-        for (const io::path& path : avalaibleSFPaths) {
-            m_avalaibleSoundFonts[name] << io::filename(path).toQString();
+        for (const auto& meta : resources) {
+            if (meta.type == AudioResourceType::FluidSoundfont) {
+                m_avalaibleSoundFonts[name] << QString::fromStdString(meta.id);
+            }
         }
+
         emit avalaibleChanged(name);
         emit selectedChanged(name);
-    };
-
-    doLoad("Fluid");
+    });
 }
 
 void SynthsSettingsModel::apply()

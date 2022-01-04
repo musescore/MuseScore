@@ -26,9 +26,10 @@
 #include <QPainterPath>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QPaintEngine>
 
 #include "svggenerator.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/image.h"
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
@@ -126,17 +127,15 @@ static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QS
 }
 
 // Gets the contents of the SVG class attribute, based on element type/name
-static QString getClass(const Ms::Element* e)
+static QString getClass(const Ms::EngravingItem* e)
 {
-    Ms::ElementType eType;
     QString eName;
 
     // Add element type as "class"
     if (e == NULL) {
         return eName; // e should never be null, this is extra-cautious
     }
-    eType = e->type();
-    eName = e->name(eType);
+    eName = e->name();
 
     // Future sub-typing code goes here
 
@@ -176,7 +175,7 @@ public:
 
     QBrush brush;
     QPen pen;
-    QMatrix matrix;
+    QTransform transform;
 //    QFont font;  // UNUSED
 
 // GRADIENTS NOT IMPLEMENTED (YET)
@@ -229,8 +228,8 @@ private:
     qreal _dy { 0.0 };
 
 protected:
-// The Ms::Element being generated right now
-    const Ms::Element* _element = NULL;
+// The Ms::EngravingItem being generated right now
+    const Ms::EngravingItem* _element = NULL;
 
     void writeImage(const QRectF& r, const QByteArray& imageData, const QString& mimeFormat);
 
@@ -1001,7 +1000,7 @@ int SvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
     Sets the _element variable in SvgPaintEngine.
     Called by saveSVG() in mscore/file.cpp.
 */
-void SvgGenerator::setElement(const Ms::Element* e)
+void SvgGenerator::setElement(const Ms::EngravingItem* e)
 {
     static_cast<SvgPaintEngine*>(paintEngine())->_element = e;
 }

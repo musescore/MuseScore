@@ -27,26 +27,41 @@
 #include <QQuickItem>
 #include "ui/iuiconfiguration.h"
 
+class QQuickCloseEvent;
+
 namespace mu::uicomponents {
-class IPopupWindow
+class IPopupWindow : public QObject
 {
+    Q_OBJECT
+
 public:
-    virtual ~IPopupWindow() = default;
+    explicit IPopupWindow(QObject* parent = nullptr)
+        : QObject(parent) {}
 
     virtual void init(QQmlEngine* engine, std::shared_ptr<ui::IUiConfiguration> uiConfiguration, bool isDialogMode) = 0;
 
     virtual void setContent(QQuickItem* item) = 0;
 
     virtual void show(QPoint p) = 0;
-    virtual void hide() = 0;
+    virtual void close() = 0;
+    virtual void raise() = 0;
+    virtual void setPosition(QPoint p) = 0;
 
     virtual QWindow* qWindow() const = 0;
     virtual bool isVisible() const = 0;
     virtual QRect geometry() const = 0;
 
+    virtual QWindow* parentWindow() const = 0;
+    virtual void setParentWindow(QWindow* window) = 0;
+
+    virtual void setPosition(const QPoint& position) const = 0;
+
     virtual void forceActiveFocus() = 0;
 
     virtual void setOnHidden(const std::function<void()>& callback) = 0;
+
+signals:
+    void aboutToClose(QQuickCloseEvent* event);
 };
 }
 #endif // MU_UICOMPONENTS_IPOPUPWINDOW_H

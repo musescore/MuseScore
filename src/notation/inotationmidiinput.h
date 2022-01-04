@@ -25,8 +25,7 @@
 #include "midi/miditypes.h"
 #include "async/notification.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationMidiInput
 {
 public:
@@ -37,7 +36,6 @@ public:
 };
 
 using INotationMidiInputPtr = std::shared_ptr<INotationMidiInput>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONMIDIINPUT_H

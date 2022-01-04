@@ -26,7 +26,6 @@
 #include "mscore.h"
 #include "tremolo.h"
 #include "note.h"
-#include "symid.h"
 
 namespace Ms {
 class XmlWriter;
@@ -51,18 +50,18 @@ struct DrumInstrument {
     QString name;
 
     // if notehead = HEAD_CUSTOM, custom, use noteheads
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;   ///< notehead symbol set
-    SymId noteheads[int(NoteHead::Type::HEAD_TYPES)]
+    NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;   ///< notehead symbol set
+    SymId noteheads[int(NoteHeadType::HEAD_TYPES)]
         = { SymId::noteheadWhole, SymId::noteheadHalf, SymId::noteheadBlack, SymId::noteheadDoubleWhole };
 
     int line = 0;               ///< place notehead onto this line
-    Direction stemDirection = Direction::AUTO;
+    DirectionV stemDirection = DirectionV::AUTO;
     int voice = 0;
     char shortcut = '\0';      ///< accelerator key (CDEFGAB)
     QList<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
-    DrumInstrument(const char* s, NoteHead::Group nh, int l, Direction d,
+    DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
                    int v = 0, char sc = 0)
         : name(s), notehead(nh), line(l), stemDirection(d), voice(v), shortcut(sc) {}
     void addVariant(DrumInstrumentVariant v) { variants.append(v); }
@@ -82,11 +81,11 @@ class Drumset
 
 public:
     bool isValid(int pitch) const { return !_drum[pitch].name.isEmpty(); }
-    NoteHead::Group noteHead(int pitch) const { return _drum[pitch].notehead; }
-    SymId noteHeads(int pitch, NoteHead::Type t) const { return _drum[pitch].noteheads[int(t)]; }
+    NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
+    SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return _drum[pitch].line; }
     int voice(int pitch) const { return _drum[pitch].voice; }
-    Direction stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
+    DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
     const QString& name(int pitch) const { return _drum[pitch].name; }
     int shortcut(int pitch) const { return _drum[pitch].shortcut; }
     QList<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
@@ -100,10 +99,10 @@ public:
     DrumInstrument& drum(int i) { return _drum[i]; }
     const DrumInstrument& drum(int i) const { return _drum[i]; }
     DrumInstrumentVariant findVariant(int pitch, const QVector<Articulation*> articulations, Tremolo* tremolo) const;
+    int pitch(int element, int variation, const QString& name) const;
 };
 
 extern Drumset* smDrumset;
-extern Drumset* gpDrumset;
 extern void initDrumset();
 }     // namespace Ms
 #endif

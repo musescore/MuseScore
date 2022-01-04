@@ -31,8 +31,9 @@ import "internal"
 StyledDialogView {
     id: root
 
-    contentWidth: 552
-    contentHeight: 286
+    contentWidth: 664
+    contentHeight: 558
+    resizable: true
 
     WorkspaceListModel {
         id: workspacesModel
@@ -42,55 +43,39 @@ StyledDialogView {
         workspacesModel.load()
     }
 
+    onOpened: {
+        Qt.callLater(activateNavigation)
+    }
+
+    function activateNavigation() {
+        view.focusOnSelected()
+        topPanel.readInfo()
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 24
         spacing: 0
 
-        Item {
+        WorkspacesTopPanel {
+            id: topPanel
+
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            StyledTextLabel {
-                anchors.left: parent.left
+            firstWorkspaceTitle: view.firstWorkspaceTitle
+            canRemove: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
 
-                text: qsTrc("workspace", "Workspaces")
-                font: ui.theme.headerBoldFont
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
+
+            onCreateNewWorkspaceRequested: {
+                workspacesModel.createNewWorkspace()
             }
 
-            FlatButton {
-                text: qsTrc("workspace", "Create new workspace")
-
-                anchors.right: deleteButton.left
-                anchors.rightMargin: 8
-
-                onClicked: {
-                    workspacesModel.createNewWorkspace()
-                }
+            onRemoveSelectedWorkspaceRequested: {
+                workspacesModel.removeWorkspace(workspacesModel.selectedWorkspace.index)
             }
-
-            FlatButton {
-                id: deleteButton
-
-                anchors.right: parent.right
-
-                icon: IconCode.DELETE_TANK
-
-                enabled: Boolean(workspacesModel.selectedWorkspace) && workspacesModel.selectedWorkspace.isRemovable
-
-                onClicked: {
-                    workspacesModel.removeWorkspace(workspacesModel.selectedWorkspace.index)
-                }
-            }
-        }
-
-        StyledTextLabel {
-            Layout.topMargin: 20
-            Layout.fillWidth: true
-
-            text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore interface")
-
-            horizontalAlignment: Qt.AlignLeft
         }
 
         SeparatorLine {
@@ -100,6 +85,7 @@ StyledDialogView {
         }
 
         WorkspacesView {
+            id: view
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.leftMargin: -parent.anchors.leftMargin
@@ -107,36 +93,32 @@ StyledDialogView {
             leftPadding: parent.anchors.leftMargin
 
             model: workspacesModel
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
         }
 
-        Row {
+        WorkspacesBottomPanel {
             Layout.topMargin: 20
-            Layout.preferredHeight: childrenRect.height
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+            Layout.preferredHeight: childrenRect.height
 
-            spacing: 12
+            canSelect: Boolean(workspacesModel.selectedWorkspace)
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
-                onClicked: {
-                    root.reject()
-                }
+            onCancelRequested: {
+                root.reject()
             }
 
-            FlatButton {
-                text: qsTrc("global", "Select")
-
-                enabled: Boolean(workspacesModel.selectedWorkspace)
-
-                onClicked: {
-                    if (!workspacesModel.apply()) {
-                        return
-                    }
-
-                    root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
-                    root.hide()
+            onSelectRequested: {
+                if (!workspacesModel.apply()) {
+                    return
                 }
+
+                root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
+                root.hide()
             }
         }
     }

@@ -21,66 +21,76 @@
  */
 #include "scoreappearancesettingsmodel.h"
 
-#include <QPageSize>
-#include <QSize>
-
-#include "log.h"
 #include "translation.h"
-#include "dataformatter.h"
-#include "types/scoreappearancetypes.h"
 
 using namespace mu::inspector;
+using namespace mu::notation;
 
 ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
     setTitle(qtrc("inspector", "Score appearance"));
-    createProperties();
+
+    auto onCurrentNotationChanged = [this]() {
+        emit styleChanged();
+
+        if (style()) {
+            style()->styleChanged().onNotify(this, [this]() {
+                emit styleChanged();
+            });
+        }
+    };
+
+    onCurrentNotationChanged();
+    context()->currentNotationChanged().onNotify(this, onCurrentNotationChanged);
 }
 
-void ScoreAppearanceSettingsModel::createProperties()
+bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
 {
-    setPageTypeListModel(new PageTypeListModel(this));
+    return style() ? style()->styleValue(StyleId::hideEmptyStaves).toBool() : false;
 }
 
-void ScoreAppearanceSettingsModel::requestElements()
+void ScoreAppearanceSettingsModel::setHideEmptyStaves(bool hide)
 {
-    //!Note the model work only with the parent score, no need to request other child elements
-}
-
-bool ScoreAppearanceSettingsModel::hasAcceptableElements() const
-{
-    if (isNotationExisting()) {
-        return true;
+    if (hide == hideEmptyStaves() || !style()) {
+        return;
     }
 
-    return false;
+    style()->setStyleValue(StyleId::hideEmptyStaves, hide);
 }
 
-void ScoreAppearanceSettingsModel::loadProperties()
+bool ScoreAppearanceSettingsModel::dontHideEmptyStavesInFirstSystem() const
 {
-    QSizeF pageSize = QSizeF(styleValue(Ms::Sid::pageWidth).toDouble(), styleValue(Ms::Sid::pageHeight).toDouble());
-
-    m_currentPageSizeId = static_cast<int>(QPageSize::id(pageSize, QPageSize::Inch, QPageSize::FuzzyOrientationMatch));
-    m_pageTypeListModel->setCurrentPageSizeId(m_currentPageSizeId);
-
-    ScoreAppearanceTypes::OrientationType pageOrientationType = pageSize.width() > pageSize.height()
-                                                                ? ScoreAppearanceTypes::OrientationType::ORIENTATION_LANDSCAPE
-                                                                : ScoreAppearanceTypes::OrientationType::ORIENTATION_PORTRAIT;
-
-    setOrientationType(static_cast<int>(pageOrientationType));
-    setStaffSpacing(DataFormatter::formatDouble(styleValue(Ms::Sid::spatium).toDouble() / Ms::DPMM, 3));
-    setStaffDistance(styleValue(Ms::Sid::staffDistance).toDouble());
+    return style() ? style()->styleValue(StyleId::dontHideStavesInFirstSystem).toBool() : false;
 }
 
-void ScoreAppearanceSettingsModel::resetProperties()
+void ScoreAppearanceSettingsModel::setDontHideEmptyStavesInFirstSystem(bool dont)
 {
+    if (dont == dontHideEmptyStavesInFirstSystem() || !style()) {
+        return;
+    }
+
+    style()->setStyleValue(StyleId::dontHideStavesInFirstSystem, dont);
 }
 
-PageTypeListModel* ScoreAppearanceSettingsModel::pageTypeListModel() const
+bool ScoreAppearanceSettingsModel::showBracketsWhenSpanningSingleStaff() const
 {
-    return m_pageTypeListModel;
+    return style() ? style()->styleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden).toBool() : false;
+}
+
+void ScoreAppearanceSettingsModel::setShowBracketsWhenSpanningSingleStaff(bool show)
+{
+    if (show == showBracketsWhenSpanningSingleStaff() || !style()) {
+        return;
+    }
+
+    style()->setStyleValue(StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden, show);
+}
+
+bool ScoreAppearanceSettingsModel::isEmpty() const
+{
+    return !isNotationExisting();
 }
 
 void ScoreAppearanceSettingsModel::showPageSettings()
@@ -91,80 +101,4 @@ void ScoreAppearanceSettingsModel::showPageSettings()
 void ScoreAppearanceSettingsModel::showStyleSettings()
 {
     dispatcher()->dispatch("edit-style");
-}
-
-int ScoreAppearanceSettingsModel::orientationType() const
-{
-    return m_orientationType;
-}
-
-qreal ScoreAppearanceSettingsModel::staffSpacing() const
-{
-    return m_staffSpacing;
-}
-
-qreal ScoreAppearanceSettingsModel::staffDistance() const
-{
-    return m_staffDistance;
-}
-
-void ScoreAppearanceSettingsModel::setPageTypeListModel(PageTypeListModel* pageTypeListModel)
-{
-    m_pageTypeListModel = pageTypeListModel;
-
-    connect(m_pageTypeListModel, &PageTypeListModel::currentPageSizeIdChanged, this, [this](const int newCurrentPageSizeId) {
-        if (m_currentPageSizeId == newCurrentPageSizeId) {
-            return;
-        }
-        QSizeF pageSize = QPageSize::size(QPageSize::PageSizeId(newCurrentPageSizeId), QPageSize::Inch);
-
-        updateStyleValue(Ms::Sid::pageWidth, pageSize.width());
-        updateStyleValue(Ms::Sid::pageHeight, pageSize.height());
-
-        double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
-        double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
-        updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.width() - (oddLeftMargin + evenLeftMargin));
-    });
-}
-
-void ScoreAppearanceSettingsModel::setOrientationType(int orientationType)
-{
-    if (m_orientationType == orientationType) {
-        return;
-    }
-
-    m_orientationType = orientationType;
-
-    QSizeF pageSize(styleValue(Ms::Sid::pageWidth).toDouble(), styleValue(Ms::Sid::pageHeight).toDouble());
-
-    updateStyleValue(Ms::Sid::pageWidth, pageSize.height());
-    updateStyleValue(Ms::Sid::pageHeight, pageSize.width());
-
-    double oddLeftMargin = styleValue(Ms::Sid::pageOddLeftMargin).toDouble();
-    double evenLeftMargin = styleValue(Ms::Sid::pageEvenLeftMargin).toDouble();
-    updateStyleValue(Ms::Sid::pagePrintableWidth, pageSize.height() - (oddLeftMargin + evenLeftMargin));
-
-    emit orientationTypeChanged(m_orientationType);
-}
-
-void ScoreAppearanceSettingsModel::setStaffSpacing(qreal staffSpacing)
-{
-    if (qFuzzyCompare(m_staffSpacing, staffSpacing)) {
-        return;
-    }
-
-    m_staffSpacing = staffSpacing;
-    updateStyleValue(Ms::Sid::spatium, staffSpacing * Ms::DPMM);
-    emit staffSpacingChanged(m_staffSpacing);
-}
-
-void ScoreAppearanceSettingsModel::setStaffDistance(qreal staffDistance)
-{
-    if (qFuzzyCompare(m_staffDistance, staffDistance)) {
-        return;
-    }
-
-    m_staffDistance = staffDistance;
-    updateStyleValue(Ms::Sid::staffDistance, staffDistance);
-    emit staffDistanceChanged(m_staffDistance);
 }

@@ -313,7 +313,7 @@ bool isPowerOfTwo(unsigned int x)
 
 bool isSimpleNoteDuration(const ReducedFraction& duration)
 {
-    const auto division = ReducedFraction::fromTicks(MScore::division);
+    const auto division = ReducedFraction::fromTicks(Constant::division);
     auto div = (duration > division) ? duration / division : division / duration;
     if (div > ReducedFraction(0, 1)) {
         div.reduce();
@@ -416,7 +416,7 @@ collectDurations(const std::map<ReducedFraction, Node>& nodes,
         }
         const auto tupletRatio = findTupletRatio(it1->first, it2->first, tupletsInBar);
         const auto duration = tupletRatio * (it2->first - it1->first);
-        auto list = toDurationList(duration.fraction(), useDots, 1, printRestRemains);
+        auto list = Ms::toDurationList(duration.fraction(), useDots, 1, printRestRemains);
         for (const auto& dur : list) {
             resultDurations.push_back({ tupletRatio, dur });
         }
@@ -433,7 +433,7 @@ bool badLevelCondition(int startLevelDiff, int endLevelDiff, int tol)
 int noteCount(const ReducedFraction& duration,
               bool useDots)
 {
-    return int(toDurationList(duration.fraction(), useDots, 1, false).size());
+    return int(Ms::toDurationList(duration.fraction(), useDots, 1, false).size());
 }
 
 bool isLessNoteCount(const ReducedFraction& t1,

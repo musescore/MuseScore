@@ -28,19 +28,19 @@
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
-#include "inotationpagestate.h"
-
-namespace mu::dock {
-class DockWindow;
-}
+#include "context/iglobalcontext.h"
+#include "iappshellconfiguration.h"
+#include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
 class NotationPageModel : public QObject, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(appshell, INotationPageState, pageState)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+    INJECT(appshell, context::IGlobalContext, globalContext)
+    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
 
@@ -49,31 +49,34 @@ public:
 
     bool isNavigatorVisible() const;
 
-    Q_INVOKABLE void setNotationToolBarDockName(const QString& dockName);
-    Q_INVOKABLE void setPlaybackToolBarDockName(const QString& dockName);
-    Q_INVOKABLE void setUndoRedoToolBarDockName(const QString& dockName);
-    Q_INVOKABLE void setNoteInputBarDockName(const QString& dockName);
+    Q_INVOKABLE void init();
 
-    Q_INVOKABLE void setPalettePanelDockName(const QString& dockName);
-    Q_INVOKABLE void setInstrumentsPanelDockName(const QString& dockName);
-    Q_INVOKABLE void setInspectorPanelDockName(const QString& dockName);
+    Q_INVOKABLE QString notationToolBarName() const;
+    Q_INVOKABLE QString playbackToolBarName() const;
+    Q_INVOKABLE QString undoRedoToolBarName() const;
+    Q_INVOKABLE QString noteInputBarName() const;
 
-    Q_INVOKABLE void setPianoRollDockName(const QString& dockName);
-    Q_INVOKABLE void setMixerDockName(const QString& dockName);
+    Q_INVOKABLE QString palettesPanelName() const;
+    Q_INVOKABLE QString instrumentsPanelName() const;
+    Q_INVOKABLE QString inspectorPanelName() const;
+    Q_INVOKABLE QString selectionFiltersPanelName() const;
 
-    Q_INVOKABLE void setStatusBarDockName(const QString& dockName);
+    Q_INVOKABLE QString pianoPanelName() const;
+    Q_INVOKABLE QString mixerPanelName() const;
+    Q_INVOKABLE QString timelinePanelName() const;
+    Q_INVOKABLE QString drumsetPanelName() const;
 
-    Q_INVOKABLE void init(QQuickItem* dockWindow);
+    Q_INVOKABLE QString statusBarName() const;
 
 signals:
     void isNavigatorVisibleChanged();
 
 private:
-    void setPanelDockName(PanelType type, const QString& dockName);
-    void togglePanel(PanelType type);
+    void onNotationChanged();
 
-    QMap<PanelType, QString /* dockName */> m_panelTypeToDockName;
-    dock::DockWindow* m_window = nullptr;
+    void toggleDock(const QString& name);
+
+    void updateDrumsetPanelVisibility();
 };
 }
 

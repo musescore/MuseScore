@@ -28,10 +28,13 @@
  Definition of classes SysStaff and System
 */
 
-#include "element.h"
-#include "spatium.h"
+#include "engravingitem.h"
 #include "symbol.h"
 #include "skyline.h"
+
+namespace mu::engraving {
+class LayoutContext;
+}
 
 namespace Ms {
 class Staff;
@@ -97,7 +100,7 @@ public:
 ///    a complete piece of the timeline.
 //---------------------------------------------------------
 
-class System final : public Element
+class System final : public EngravingItem
 {
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
@@ -112,48 +115,57 @@ class System final : public Element
     qreal _distance                { 0.0 };     /// temp. variable used during layout
     qreal _systemHeight            { 0.0 };
 
+    friend class mu::engraving::Factory;
+    System(Page* parent);
+
     int firstVisibleSysStaff() const;
     int lastVisibleSysStaff() const;
 
     int getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure);
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
+                           Measure* measure);
+
+    qreal systemNamesWidth();
+    qreal layoutBrackets(const mu::engraving::LayoutContext& ctx);
+    qreal totalBracketOffset(const mu::engraving::LayoutContext& ctx);
 
 public:
-    System(Score*);
+
     ~System();
 
+    void moveToPage(Page* parent);
+
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     System* clone() const override { return new System(*this); }
-    ElementType type() const override { return ElementType::SYSTEM; }
 
-    void add(Element*) override;
-    void remove(Element*) override;
-    void change(Element* o, Element* n) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    void change(EngravingItem* o, EngravingItem* n) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void appendMeasure(MeasureBase*);
     void removeMeasure(MeasureBase*);
     void removeLastMeasure();
 
-    Page* page() const { return (Page*)parent(); }
+    Page* page() const { return (Page*)explicitParent(); }
 
-    void layoutSystem(qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(qreal height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
-    void addBrackets(Measure* measure);
+    void addBrackets(const mu::engraving::LayoutContext& ctx, Measure* measure);
 
-    void layout2();                       ///< Called after Measure layout.
+    void layout2(const mu::engraving::LayoutContext& ctx);                       ///< Called after Measure layout.
     void restoreLayout2();
     void clear();                         ///< Clear measure list.
 
@@ -172,7 +184,7 @@ public:
 
     int y2staff(qreal y) const;
     int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
-    void setInstrumentNames(bool longName, Fraction tick = { 0, 1 });
+    void setInstrumentNames(const mu::engraving::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 
@@ -196,8 +208,8 @@ public:
     SystemDivider* systemDividerLeft() const { return _systemDividerLeft; }
     SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     qreal minDistance(System*) const;
     qreal topDistance(int staffIdx, const SkylineLine&) const;
@@ -209,8 +221,8 @@ public:
     Spacer* downSpacer(int staffIdx) const;
 
     qreal firstNoteRestSegmentX(bool leading = false);
+    qreal lastNoteRestSegmentX(bool trailing = false);
 
-    void moveBracket(int staffIdx, int srcCol, int dstCol);
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     int firstVisibleStaff() const;
     int nextVisibleStaff(int) const;

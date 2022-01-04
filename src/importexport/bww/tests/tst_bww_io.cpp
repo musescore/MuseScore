@@ -27,7 +27,7 @@
 
 #include "testbase.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 // start includes required for fixupScore()
 #include "libmscore/measure.h"
@@ -116,7 +116,7 @@ static void fixupScore(Score* score)
                 if (!s->element(track)) {
                     continue;
                 }
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e->generated()) {
                     continue;
                 }

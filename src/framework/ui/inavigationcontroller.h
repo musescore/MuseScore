@@ -39,13 +39,21 @@ public:
 
     virtual const std::set<INavigationSection*>& sections() const = 0;
 
-    virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& control) = 0;
+    virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) = 0;
+    virtual bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) = 0;
 
     virtual INavigationSection* activeSection() const = 0;
     virtual INavigationPanel* activePanel() const = 0;
     virtual INavigationControl* activeControl() const = 0;
 
     virtual async::Notification navigationChanged() const = 0;
+
+    virtual bool isHighlight() const = 0;
+    virtual async::Notification highlightChanged() const = 0;
+
+    virtual void setIsResetOnMousePress(bool arg) = 0;
+
+    virtual void dump() const = 0;
 };
 }
 

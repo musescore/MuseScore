@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
+import QtQuick 2.15
 import QtGraphicalEffects 1.0
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Item {
@@ -33,13 +34,26 @@ Item {
 
     signal clicked()
 
+    property NavigationControl navigation: NavigationControl {
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.name
+        enabled: root.enabled && root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.clicked()
+    }
+
     Image {
         id: thumbnail
-
         anchors.top: parent.top
 
         width: parent.width
-        height: 142
+        height: 144
 
         fillMode: Image.PreserveAspectCrop
 
@@ -51,16 +65,21 @@ Item {
                 radius: 10
             }
         }
-    }
 
-    Rectangle {
-        anchors.fill: thumbnail
+        Rectangle {
+            id: borderRect
+            anchors.fill: parent
 
-        color: "transparent"
-        radius: 10
+            color: "transparent"
+            radius: 10
 
-        border.color: ui.theme.fontPrimaryColor
-        border.width: root.selected ? 2 : 0
+            border.color: ui.theme.fontPrimaryColor
+            border.width: root.selected ? 2 : 0
+
+            NavigationFocusBorder {
+                navigationCtrl: root.navigation
+            }
+        }
     }
 
     StyledTextLabel {
@@ -77,7 +96,7 @@ Item {
             when: mouseArea.containsMouse && !mouseArea.pressed
 
             PropertyChanges {
-                target: root
+                target: thumbnail
                 opacity: 0.7
             }
         },
@@ -87,7 +106,7 @@ Item {
             when: mouseArea.pressed
 
             PropertyChanges {
-                target: root
+                target: thumbnail
                 opacity: 0.5
             }
         }

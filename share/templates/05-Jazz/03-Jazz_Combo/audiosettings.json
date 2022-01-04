@@ -1,0 +1,172 @@
+{
+    "master": {
+        "balance": 0,
+        "fxChain": {
+        },
+        "muted": false,
+        "solo": false,
+        "volumeDb": 0
+    },
+    "tracks": {
+        "1": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "2": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "3": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "4": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "5": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "6": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "7": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "8": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        }
+    }
+}

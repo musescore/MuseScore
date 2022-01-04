@@ -44,17 +44,18 @@ FocusScope {
     NavigationControl {
         id: navCtrl
         name: root.title
-        enabled: root.enabled
+        enabled: root.enabled && root.visible
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.title
+
         onTriggered: {
             root.isExpanded = !root.isExpanded
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
-        color: "transparent"
+    NavigationFocusBorder{
+        navigationCtrl: navCtrl
+        anchors.margins: 0
     }
 
     Row {

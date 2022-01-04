@@ -22,15 +22,26 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
-Rectangle {
+Item {
     id: root
 
-    color: ui.theme.backgroundPrimaryColor
+    property alias navigation: navPanel
+
+    width: content.width
+    height: content.height
 
     Component.onCompleted: {
         model.load()
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "UndoRedoToolBar"
+        enabled: root.enabled && root.visible
+        accessible.name: qsTrc("notation", "Undo Redo toolbar")
     }
 
     UndoRedoModel {
@@ -38,12 +49,23 @@ Rectangle {
     }
 
     Row {
-        anchors.centerIn: parent
+        id: content
 
+        readonly property int padding: 6
+
+        //! NOTE padding - 1 to compensate for the dock separator width.
+        //! The separator is hidden, but the space for it is still allocated.
+        //! That should be solved in KDDW.
+        width: padding - 1 + childrenRect.width + padding
         height: childrenRect.height
-        spacing: 2
+        x: padding - 1
+
+        spacing: 0
 
         FlatButton {
+            width: 30
+            height: width
+
             icon: model.undoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
@@ -52,7 +74,10 @@ Rectangle {
             toolTipShortcut: model.undoItem.shortcut
 
             enabled: model.undoItem.enabled
-            normalStateColor: "transparent"
+            transparent: true
+
+            navigation.panel: navPanel
+            navigation.order: 1
 
             onClicked: {
                 model.undo()
@@ -60,6 +85,9 @@ Rectangle {
         }
 
         FlatButton {
+            width: 30
+            height: width
+
             icon: model.redoItem.icon
             iconFont: ui.theme.toolbarIconsFont
 
@@ -68,7 +96,10 @@ Rectangle {
             toolTipShortcut: model.redoItem.shortcut
 
             enabled: model.redoItem.enabled
-            normalStateColor: "transparent"
+            transparent: true
+
+            navigation.panel: navPanel
+            navigation.order: 2
 
             onClicked: {
                 model.redo()

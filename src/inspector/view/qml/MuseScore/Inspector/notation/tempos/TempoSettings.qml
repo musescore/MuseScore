@@ -19,24 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: tempoPopup.model
+    property QtObject model: null
 
-    icon: IconCode.METRONOME
-    text: qsTrc("inspector", "Tempos")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "TempoSettings"
 
-    TempoPopup {
-        id: tempoPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        followWrittenTempoCheckbox.navigation.requestActive()
+    }
+
+    CheckBoxPropertyView {
+        id: followWrittenTempoCheckbox
+        text: qsTrc("inspector", "Follow written tempo")
+        propertyItem: root.model ? root.model.isDefaultTempoForced : null
+
+        navigation.name: "FollowCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+    }
+
+    SpinBoxPropertyView {
+        titleText: qsTrc("inspector", "Override written tempo")
+        propertyItem: root.model ? root.model.tempo : null
+        enabled: root.model ? !root.model.isEmpty && !followWrittenTempoCheckbox.checked : false
+
+        measureUnitsSymbol: qsTrc("inspector", "BPM")
+
+        navigationName: "Override"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: followWrittenTempoCheckbox.navigation.row + 1
     }
 }

@@ -67,7 +67,7 @@ void ImageStoreItem::reference(Image* image)
 bool ImageStoreItem::isUsed(Score* score) const
 {
     foreach (Image* image, _references) {
-        if (image->score() == score && image->parent() && image->parent()->treeChildIdx(image) != -1) {
+        if (image->score() == score && image->explicitParent()) {
             return true;
         }
     }
@@ -133,25 +133,6 @@ inline static int toInt(char c)
     }
     return c - 'a' + 10;
 }
-
-#if 0
-//---------------------------------------------------------
-//   dumpHash
-//---------------------------------------------------------
-
-static void dumpHash(const QByteArray& _hash)
-{
-    const char hex[17] = "0123456789abcdef";
-    char p[33];
-    for (int i = 0; i < 16; ++i) {
-        p[i * 2]     = hex[(_hash[i] >> 4) & 0xf];
-        p[i * 2 + 1] = hex[_hash[i] & 0xf];
-    }
-    p[32] = 0;
-    qDebug("   <%s>", p);
-}
-
-#endif
 
 //---------------------------------------------------------
 //   ~ImageStore

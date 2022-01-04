@@ -21,7 +21,6 @@
  */
 #include "notationconfiguration.h"
 
-#include "libmscore/preferences.h"
 #include "libmscore/mscore.h"
 
 #include "log.h"
@@ -44,7 +43,10 @@ QString revision;
 
 static const std::string module_name("notation");
 
-static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
+static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/lightTheme_score_background_color");
+static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/darkTheme_score_background_color");
+static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_black_score_background_color");
+static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_white_score_background_color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
@@ -61,8 +63,6 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
-static const Settings::Key DEFAULT_STYLE_FILE_PATH(module_name, "score/style/defaultStyleFile");
-static const Settings::Key PART_STYLE_FILE_PATH(module_name, "score/style/partStyleFile");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -79,17 +79,17 @@ static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
-static const Settings::Key VOICE1_COLOR_KEY(module_name, "ui/score/voice1/color");
-static const Settings::Key VOICE2_COLOR_KEY(module_name, "ui/score/voice2/color");
-static const Settings::Key VOICE3_COLOR_KEY(module_name, "ui/score/voice3/color");
-static const Settings::Key VOICE4_COLOR_KEY(module_name, "ui/score/voice4/color");
+static const Settings::Key FIRST_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList1");
+static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList2");
+static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
+static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
 
-static std::map<int, Settings::Key> voicesKeys {
-    { 0, VOICE1_COLOR_KEY },
-    { 1, VOICE2_COLOR_KEY },
-    { 2, VOICE3_COLOR_KEY },
-    { 3, VOICE4_COLOR_KEY }
-};
+static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToVerticalGrid");
+static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToHorizontalGrid");
+static const Settings::Key HORIZONTAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/horizontal");
+static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/vertical");
+
+static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 void NotationConfiguration::init()
 {
@@ -98,8 +98,28 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
-    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
+    {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(QColor("#385f94")));
+    settings()->valueChanged(LIGHT_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(DARK_SCORE_BACKGROUND_COLOR, Val(QColor("#385f94")));
+    settings()->valueChanged(DARK_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR, Val(QColor("#000000")));
+    settings()->valueChanged(HC_BLACK_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_backgroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR, Val(QColor("#000000")));
+    settings()->valueChanged(HC_WHITE_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
     });
 
@@ -138,7 +158,7 @@ void NotationConfiguration::init()
     });
     fileSystem()->makePath(userStylesPath());
 
-    settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
+    settings()->setDefaultValue(SELECTION_PROXIMITY, Val(2));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(false));
@@ -151,35 +171,44 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
+    settings()->valueChanged(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).onReceive(this, [this](const Val&) {
+        m_isLimitCanvasScrollAreaChanged.notify();
+    });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
 
-    std::vector<std::pair<Settings::Key, QColor> > voicesColors {
-        { VOICE1_COLOR_KEY, QColor(0x0065BF) },
-        { VOICE2_COLOR_KEY, QColor(0x007F00) },
-        { VOICE3_COLOR_KEY, QColor(0xC53F00) },
-        { VOICE4_COLOR_KEY, QColor(0xC31989) }
-    };
+    settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
+    settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
 
-    for (int i = 0; i < static_cast<int>(voicesColors.size()); ++i) {
-        Settings::Key key = voicesColors[i].first;
-        QColor color = voicesColors[i].second;
-        settings()->setDefaultValue(key, Val(color));
-        settings()->setCanBeMannualyEdited(key, true);
-        settings()->valueChanged(key).onReceive(nullptr, [this, i](const Val& color) {
-            Ms::MScore::selectColor[i] = color.toQColor();
-            m_selectionColorChanged.send(i);
-        });
-    }
+    settings()->setDefaultValue(SECOND_INSTRUMENT_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
 
-    // libmscore
-    preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
-    preferences().setDefaultStyleFilePath(defaultStyleFilePath().toQString());
+    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
+    settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(SECOND_SCORE_ORDER_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(HORIZONTAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
+    settings()->setDefaultValue(VERTICAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
+
+    Ms::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
+    Ms::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -189,12 +218,41 @@ QColor NotationConfiguration::anchorLineColor() const
 
 QColor NotationConfiguration::backgroundColor() const
 {
-    return settings()->value(BACKGROUND_COLOR).toQColor();
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        return settings()->value(LIGHT_SCORE_BACKGROUND_COLOR).toQColor();
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        return settings()->value(DARK_SCORE_BACKGROUND_COLOR).toQColor();
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        return settings()->value(HC_BLACK_SCORE_BACKGROUND_COLOR).toQColor();
+    } else {
+        return settings()->value(HC_WHITE_SCORE_BACKGROUND_COLOR).toQColor();
+    }
 }
 
 void NotationConfiguration::setBackgroundColor(const QColor& color)
 {
-    settings()->setSharedValue(BACKGROUND_COLOR, Val(color));
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(color));
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, Val(color));
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, Val(color));
+    } else {
+        settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, Val(color));
+    }
+}
+
+void NotationConfiguration::resetCurrentBackgroundColorToDefault()
+{
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, settings()->defaultValue(LIGHT_SCORE_BACKGROUND_COLOR));
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(DARK_SCORE_BACKGROUND_COLOR));
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR));
+    } else {
+        settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR));
+    }
 }
 
 io::path NotationConfiguration::backgroundWallpaperPath() const
@@ -224,7 +282,11 @@ async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    return settings()->value(FOREGROUND_COLOR).toQColor();
+    if (engravingConfiguration()->scoreInversionEnabled()) {
+        return QColorConstants::Black;
+    } else {
+        return settings()->value(FOREGROUND_COLOR).toQColor();
+    }
 }
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
@@ -264,12 +326,20 @@ io::path NotationConfiguration::wallpapersDefaultDirPath() const
 
 QColor NotationConfiguration::borderColor() const
 {
-    return QColor(0, 0, 0, 102);
+    if (uiConfiguration()->isHighContrast()) {
+        return QColorConstants::White;
+    } else {
+        return QColor(0, 0, 0, 102);
+    }
 }
 
 int NotationConfiguration::borderWidth() const
 {
-    return 1;
+    if (uiConfiguration()->isHighContrast()) {
+        return 10;
+    } else {
+        return 1;
+    }
 }
 
 QColor NotationConfiguration::playbackCursorColor() const
@@ -287,32 +357,9 @@ QColor NotationConfiguration::loopMarkerColor() const
     return QColor(0x2456AA);
 }
 
-QColor NotationConfiguration::layoutBreakColor() const
-{
-    return QColor(0xA0A0A4);
-}
-
 QColor NotationConfiguration::selectionColor(int voiceIndex) const
 {
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return QColor();
-    }
-
-    return settings()->value(voicesKeys[voiceIndex]).toQColor();
-}
-
-void NotationConfiguration::setSelectionColor(int voiceIndex, const QColor& color)
-{
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return;
-    }
-
-    settings()->setSharedValue(voicesKeys[voiceIndex], Val(color));
-}
-
-async::Channel<int> NotationConfiguration::selectionColorChanged()
-{
-    return m_selectionColorChanged;
+    return engravingConfiguration()->selectionColor(voiceIndex).toQColor();
 }
 
 int NotationConfiguration::selectionProximity() const
@@ -403,23 +450,22 @@ async::Channel<io::path> NotationConfiguration::userStylesPathChanged() const
 
 io::path NotationConfiguration::defaultStyleFilePath() const
 {
-    return settings()->value(DEFAULT_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->defaultStyleFilePath();
 }
 
 void NotationConfiguration::setDefaultStyleFilePath(const io::path& path)
 {
-    preferences().setDefaultStyleFilePath(path.toQString());
-    settings()->setSharedValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
 io::path NotationConfiguration::partStyleFilePath() const
 {
-    return settings()->value(PART_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->partStyleFilePath();
 }
 
 void NotationConfiguration::setPartStyleFilePath(const io::path& path)
 {
-    settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setPartStyleFilePath(path.toQString());
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
@@ -440,7 +486,6 @@ bool NotationConfiguration::isAutomaticallyPanEnabled() const
 void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
-    Ms::MScore::panPlayback = enabled;
 }
 
 bool NotationConfiguration::isPlayRepeatsEnabled() const
@@ -474,14 +519,14 @@ void NotationConfiguration::setIsCountInEnabled(bool enabled)
     settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
 }
 
-float NotationConfiguration::guiScaling() const
+double NotationConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();
 }
 
-float NotationConfiguration::notationScaling() const
+double NotationConfiguration::notationScaling() const
 {
-    return uiConfiguration()->physicalDotsPerInch() / Ms::DPI;
+    return uiConfiguration()->dpi() / Ms::DPI;
 }
 
 std::string NotationConfiguration::notationRevision() const
@@ -491,22 +536,22 @@ std::string NotationConfiguration::notationRevision() const
 
 int NotationConfiguration::notationDivision() const
 {
-    return Ms::MScore::division;
+    return Ms::Constant::division;
 }
 
-ValCh<Orientation> NotationConfiguration::canvasOrientation() const
+ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const
 {
-    ValCh<Orientation> orientation;
+    ValCh<framework::Orientation> orientation;
     orientation.ch = m_canvasOrientationChanged;
     bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
-    orientation.val = isVertical ? Orientation::Vertical : Orientation::Horizontal;
+    orientation.val = isVertical ? framework::Orientation::Vertical : framework::Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setCanvasOrientation(Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(framework::Orientation orientation)
 {
-    bool isVertical = orientation == Orientation::Vertical;
+    bool isVertical = orientation == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
@@ -520,6 +565,11 @@ bool NotationConfiguration::isLimitCanvasScrollArea() const
 void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
 {
     settings()->setSharedValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
+}
+
+Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
+{
+    return m_isLimitCanvasScrollAreaChanged;
 }
 
 bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
@@ -562,4 +612,182 @@ void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
 void NotationConfiguration::setTestModeEnabled(bool enabled)
 {
     Ms::MScore::testMode = enabled;
+}
+
+io::paths NotationConfiguration::instrumentListPaths() const
+{
+    io::paths paths;
+
+    io::path firstInstrumentListPath = this->firstInstrumentListPath();
+    paths.push_back(firstInstrumentListPath);
+
+    io::path secondInstrumentListPath = this->secondInstrumentListPath();
+    if (!secondInstrumentListPath.empty()) {
+        paths.push_back(secondInstrumentListPath);
+    }
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::instrumentListPathsChanged() const
+{
+    return m_instrumentListPathsChanged;
+}
+
+io::paths NotationConfiguration::userInstrumentListPaths() const
+{
+    io::paths paths = {
+        firstInstrumentListPath(),
+        secondInstrumentListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserInstrumentListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstInstrumentListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondInstrumentListPath(paths[1]);
+    }
+}
+
+io::path NotationConfiguration::firstInstrumentListPath() const
+{
+    return settings()->value(FIRST_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondInstrumentListPath() const
+{
+    return settings()->value(SECOND_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::paths NotationConfiguration::scoreOrderListPaths() const
+{
+    io::paths paths;
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
+{
+    return m_scoreOrderListPathsChanged;
+}
+
+io::paths NotationConfiguration::userScoreOrderListPaths() const
+{
+    io::paths paths = {
+        firstScoreOrderListPath(),
+        secondScoreOrderListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstScoreOrderListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondScoreOrderListPath(paths[1]);
+    }
+}
+
+bool NotationConfiguration::isSnappedToGrid(framework::Orientation gridOrientation) const
+{
+    switch (gridOrientation) {
+    case framework::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
+    case framework::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
+    }
+
+    return false;
+}
+
+void NotationConfiguration::setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped)
+{
+    switch (gridOrientation) {
+    case framework::Orientation::Horizontal:
+        settings()->setSharedValue(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY, Val(isSnapped));
+        break;
+    case framework::Orientation::Vertical:
+        settings()->setSharedValue(IS_SNAPPED_TO_VERTICAL_GRID_KEY, Val(isSnapped));
+        break;
+    }
+}
+
+int NotationConfiguration::gridSizeSpatium(framework::Orientation gridOrientation) const
+{
+    switch (gridOrientation) {
+    case framework::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
+    case framework::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
+    }
+
+    return DEFAULT_GRID_SIZE_SPATIUM;
+}
+
+void NotationConfiguration::setGridSize(framework::Orientation gridOrientation, int sizeSpatium)
+{
+    switch (gridOrientation) {
+    case framework::Orientation::Horizontal:
+        Ms::MScore::setHRaster(sizeSpatium);
+        settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
+        break;
+    case framework::Orientation::Vertical:
+        Ms::MScore::setVRaster(sizeSpatium);
+        settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
+        break;
+    }
+}
+
+io::path NotationConfiguration::firstScoreOrderListPath() const
+{
+    return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondScoreOrderListPath() const
+{
+    return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }

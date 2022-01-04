@@ -30,8 +30,7 @@ namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput
 {
 public:
@@ -49,7 +48,6 @@ private:
     INotationUndoStackPtr m_undoStack;
     async::Notification m_noteChanged;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONMIDIINPUT_H

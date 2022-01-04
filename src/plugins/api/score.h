@@ -27,7 +27,7 @@
 #include "part.h"
 #include "style.h"
 #include "excerpt.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace Ms {
 class InstrumentTemplate;
@@ -56,13 +56,13 @@ class Score : public Ms::PluginAPI::ScoreElement
     /** List of the excerpts (linked parts) (read only) */
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Excerpt> excerpts READ excerpts)
     /** First measure of the score (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Measure* firstMeasure READ firstMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * firstMeasure READ firstMeasure)
     /**
      * First multimeasure rest measure of the score (read only).
      * \see \ref Measure.nextMeasureMM
      * \since MuseScore 3.2
      */
-    Q_PROPERTY(Ms::PluginAPI::Measure* firstMeasureMM READ firstMeasureMM)
+    Q_PROPERTY(Ms::PluginAPI::Measure * firstMeasureMM READ firstMeasureMM)
     /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(int harmonyCount READ harmonyCount)
     /** Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2 */
@@ -73,15 +73,15 @@ class Score : public Ms::PluginAPI::ScoreElement
     /// negative for flats, postitive for sharps (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int keysig READ keysig)
     /** Last measure of the score (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Measure* lastMeasure READ lastMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * lastMeasure READ lastMeasure)
     /**
      * Last multimeasure rest measure of the score (read only).
      * \see \ref Measure.prevMeasureMM
      * \since MuseScore 3.2
      */
-    Q_PROPERTY(Ms::PluginAPI::Measure* lastMeasureMM READ lastMeasureMM)
+    Q_PROPERTY(Ms::PluginAPI::Measure * lastMeasureMM READ lastMeasureMM)
     /** Last score segment (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Segment* lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
+    Q_PROPERTY(Ms::PluginAPI::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
     /** Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(int lyricCount READ lyricCount)
     /** Name of the score, without path leading to it and extension.\n \since MuseScore 3.2 */
@@ -107,9 +107,9 @@ class Score : public Ms::PluginAPI::ScoreElement
     /** MuseScore revision the score has been last saved with (includes autosave) (read only) */
     Q_PROPERTY(QString mscoreRevision READ mscoreRevision)
     /** Current selections for the score. \since MuseScore 3.3 */
-    Q_PROPERTY(Ms::PluginAPI::Selection* selection READ selection)
+    Q_PROPERTY(Ms::PluginAPI::Selection * selection READ selection)
     /** Style settings for this score. \since MuseScore 3.5 */
-    Q_PROPERTY(Ms::PluginAPI::MStyle* style READ style)
+    Q_PROPERTY(Ms::PluginAPI::MStyle * style READ style)
     /**
      * Page numbering offset. The user-visible number of the given \p page is defined as
      * \code
@@ -241,7 +241,7 @@ public:
     QString mscoreRevision() { return QString::number(score()->mscoreRevision(), /* base */ 16); }
 
     QQmlListProperty<Part> parts() { return wrapContainerProperty<Part>(this, score()->parts()); }
-    QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->excerpts()); }
+    QQmlListProperty<Excerpt> excerpts() { return wrapExcerptsContainerProperty<Excerpt>(this, score()->masterScore()->excerpts()); }
     QQmlListProperty<Staff> staves();
 
     static const Ms::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()

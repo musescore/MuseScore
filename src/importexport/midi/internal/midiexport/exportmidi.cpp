@@ -22,7 +22,7 @@
 
 #include "exportmidi.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/tempo.h"
@@ -32,9 +32,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
-
-#include "framework/midi_old/midifile.h"
-#include "framework/midi_old/event.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -108,7 +105,7 @@ void ExportMidi::writeHeader()
             default:
                 n = 2;
                 qDebug("ExportMidi: unknown time signature %s",
-                       qPrintable(ts.print()));
+                       qPrintable(ts.toString()));
                 break;
             }
             data[1] = n;
@@ -184,14 +181,14 @@ void ExportMidi::writeHeader()
     //--------------------------------------------
 
     TempoMap* tempomap = m_pauseMap.tempomapWithPauses;
-    qreal relTempo = tempomap->relTempo();
+    BeatsPerSecond relTempo = tempomap->relTempo();
     for (auto it = tempomap->cbegin(); it != tempomap->cend(); ++it) {
         MidiEvent ev;
         ev.setType(ME_META);
         //
         // compute midi tempo: microseconds / quarter note
         //
-        int tempo = lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0);
+        int tempo = lrint((1.0 / it->second.tempo.val * relTempo.val) * 1000000.0);
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);
@@ -218,7 +215,7 @@ void ExportMidi::writeHeader()
 
 bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const SynthesizerState& synthState)
 {
-    m_midiFile.setDivision(MScore::division);
+    m_midiFile.setDivision(Constant::division);
     m_midiFile.setFormat(1);
     QList<MidiTrack>& tracks = m_midiFile.tracks();
 
@@ -411,7 +408,7 @@ void ExportMidi::PauseMap::calculate(const Score* s)
                 if (tick != startTick) {
                     Fraction timeSig(sigmap->timesig(tick).timesig());
                     qreal quarterNotesPerMeasure = (4.0 * timeSig.numerator()) / timeSig.denominator();
-                    int ticksPerMeasure =  quarterNotesPerMeasure * MScore::division;           // store a full measure of ticks to keep barlines in same places
+                    int ticksPerMeasure =  quarterNotesPerMeasure * Constant::division;           // store a full measure of ticks to keep barlines in same places
                     tempomapWithPauses->setTempo(this->addPauseTicks(utick), quarterNotesPerMeasure / it->second.pause);           // new tempo for pause
                     this->insert(std::pair<const int, int>(utick, ticksPerMeasure + this->offsetAtUTick(utick)));            // store running total of extra ticks
                     tempomapWithPauses->setTempo(this->addPauseTicks(utick), it->second.tempo);           // restore previous tempo

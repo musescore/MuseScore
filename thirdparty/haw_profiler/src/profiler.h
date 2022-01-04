@@ -116,7 +116,8 @@ public:
         virtual void printTraceEnd(const std::string& func, double calltimeMs, long callcount, double sumtimeMs, size_t stackCounter);
         virtual void printData(const Data& data, Data::Mode mode, int maxcount);
         virtual std::string formatData(const Data& data, Data::Mode mode, int maxcount) const;
-        virtual void funcsToStream(std::stringstream& stream, const std::string& title, const std::list<Data::Func>& funcs,int count) const;
+        virtual void funcsToStream(std::stringstream& stream, const std::string& title, const std::list<Data::Func>& funcs,
+                                   int count) const;
     };
 
     struct ElapsedTimer {
@@ -203,7 +204,7 @@ private:
     Printer* m_printer{ nullptr };
 
     StepsData m_steps;
-    FuncsData m_funcs;
+    mutable FuncsData m_funcs;
 
     size_t m_stackCounter{ 0 };
 };

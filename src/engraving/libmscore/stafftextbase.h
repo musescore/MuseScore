@@ -52,7 +52,7 @@ class StaffTextBase : public TextBase
     int _capo            { 0 };
 
 public:
-    StaffTextBase(Score*, Tid tid, ElementFlags = ElementFlag::NOTHING);
+    StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags = ElementFlag::NOTHING);
 
     virtual void write(XmlWriter& xml) const override;
     virtual void read(XmlReader&) override;

@@ -23,14 +23,12 @@
 #define MU_INSPECTOR_AMBITUSSETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
-#include "models/notation/notes/noteheads/noteheadtypesmodel.h"
 
 namespace mu::inspector {
 class AmbitusSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(NoteheadTypesModel * noteheadGroupsModel READ noteheadGroupsModel NOTIFY noteheadGroupsModelChanged)
     Q_PROPERTY(PropertyItem * noteheadGroup READ noteheadGroup CONSTANT)
     Q_PROPERTY(PropertyItem * noteheadType READ noteheadType CONSTANT)
 
@@ -54,7 +52,6 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    NoteheadTypesModel* noteheadGroupsModel() const;
     PropertyItem* noteheadGroup() const;
     PropertyItem* noteheadType() const;
 
@@ -68,14 +65,7 @@ public:
     PropertyItem* direction() const;
     PropertyItem* lineThickness() const;
 
-public slots:
-    void setNoteheadGroupsModel(NoteheadTypesModel* noteheadGroupsModel);
-
-signals:
-    void noteheadGroupsModelChanged(NoteheadTypesModel* noteheadGroupsModel);
-
 private:
-    NoteheadTypesModel* m_noteheadGroupsModel = nullptr;
     PropertyItem* m_noteheadGroup = nullptr;
     PropertyItem* m_noteheadType = nullptr;
 

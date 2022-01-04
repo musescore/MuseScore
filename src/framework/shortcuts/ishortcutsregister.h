@@ -43,10 +43,19 @@ public:
 
     virtual const Shortcut& shortcut(const std::string& actionCode) const = 0;
     virtual const Shortcut& defaultShortcut(const std::string& actionCode) const = 0;
+
+    virtual bool isRegistered(const std::string& sequence) const = 0;
     virtual ShortcutList shortcutsForSequence(const std::string& sequence) const = 0;
 
     virtual Ret importFromFile(const io::path& filePath) = 0;
     virtual Ret exportToFile(const io::path& filePath) const = 0;
+
+    virtual bool active() = 0;
+    virtual void setActive(bool active) = 0;
+    virtual async::Notification activeChanged() const = 0;
+
+    // for autobot tests
+    virtual void reload(bool onlyDef = false) = 0;
 };
 }
 

@@ -21,7 +21,7 @@
  */
 
 #include "synthesizerstate.h"
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -36,17 +36,17 @@ void SynthesizerState::write(XmlWriter& xml, bool force /* = false */) const
         return;
     }
 
-    xml.stag("Synthesizer");
+    xml.startObject("Synthesizer");
     for (const SynthesizerGroup& g : *this) {
         if (!g.name().isEmpty()) {
-            xml.stag(g.name());
+            xml.startObject(g.name());
             for (const IdValue& v : g) {
                 xml.tag(QString("val id=\"%1\"").arg(v.id), v.data);
             }
-            xml.etag();
+            xml.endObject();
         }
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -22,65 +22,81 @@
 #include "abstractinspectormodel.h"
 
 #include "libmscore/musescoreCore.h"
+
 #include "log.h"
+#include "types/texttypes.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
+using namespace mu::engraving;
 
-static const QList<Ms::ElementType> NOTATION_ELEMENT_TYPES = {
-    Ms::ElementType::NOTE,
-    Ms::ElementType::STEM,
-    Ms::ElementType::NOTEDOT,
-    Ms::ElementType::NOTEHEAD,
-    Ms::ElementType::NOTELINE,
-    Ms::ElementType::SHADOW_NOTE,
-    Ms::ElementType::HOOK,
-    Ms::ElementType::BEAM,
-    Ms::ElementType::GLISSANDO,
-    Ms::ElementType::GLISSANDO_SEGMENT,
-    Ms::ElementType::TEMPO_TEXT,
-    Ms::ElementType::FERMATA,
-    Ms::ElementType::LAYOUT_BREAK,
-    Ms::ElementType::BAR_LINE,
-    Ms::ElementType::MARKER,
-    Ms::ElementType::JUMP,
-    Ms::ElementType::KEYSIG,
-    Ms::ElementType::ACCIDENTAL,
-    Ms::ElementType::FRET_DIAGRAM,
-    Ms::ElementType::PEDAL,
-    Ms::ElementType::PEDAL_SEGMENT,
-    Ms::ElementType::SPACER,
-    Ms::ElementType::CLEF,
-    Ms::ElementType::HAIRPIN,
-    Ms::ElementType::HAIRPIN_SEGMENT,
-    Ms::ElementType::STAFFTYPE_CHANGE,
-    Ms::ElementType::TBOX, // text frame
-    Ms::ElementType::VBOX, // vertical frame
-    Ms::ElementType::HBOX, // horizontal frame
-    Ms::ElementType::ARTICULATION,
-    Ms::ElementType::IMAGE,
-    Ms::ElementType::HARMONY,
-    Ms::ElementType::AMBITUS,
-    Ms::ElementType::BRACKET,
-    Ms::ElementType::TIMESIG,
-    Ms::ElementType::MMREST,
-    Ms::ElementType::BEND,
-    Ms::ElementType::TREMOLOBAR,
-    Ms::ElementType::TREMOLO,
-    Ms::ElementType::MEASURE_REPEAT
+static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
+    { Ms::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::STEM, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::NOTEDOT, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::NOTELINE, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::SHADOW_NOTE, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::HOOK, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::BEAM, InspectorModelType::TYPE_NOTE },
+    { Ms::ElementType::GLISSANDO, InspectorModelType::TYPE_GLISSANDO },
+    { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
+    { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
+    { Ms::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
+    { Ms::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
+    { Ms::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
+    { Ms::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
+    { Ms::ElementType::BAR_LINE, InspectorModelType::TYPE_BARLINE },
+    { Ms::ElementType::MARKER, InspectorModelType::TYPE_MARKER },
+    { Ms::ElementType::JUMP, InspectorModelType::TYPE_JUMP },
+    { Ms::ElementType::KEYSIG, InspectorModelType::TYPE_KEYSIGNATURE },
+    { Ms::ElementType::ACCIDENTAL, InspectorModelType::TYPE_ACCIDENTAL },
+    { Ms::ElementType::FRET_DIAGRAM, InspectorModelType::TYPE_FRET_DIAGRAM },
+    { Ms::ElementType::PEDAL, InspectorModelType::TYPE_PEDAL },
+    { Ms::ElementType::PEDAL_SEGMENT, InspectorModelType::TYPE_PEDAL },
+    { Ms::ElementType::SPACER, InspectorModelType::TYPE_SPACER },
+    { Ms::ElementType::CLEF, InspectorModelType::TYPE_CLEF },
+    { Ms::ElementType::HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::ElementType::HAIRPIN_SEGMENT, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::ElementType::OTTAVA, InspectorModelType::TYPE_OTTAVA },
+    { Ms::ElementType::OTTAVA_SEGMENT, InspectorModelType::TYPE_OTTAVA },
+    { Ms::ElementType::VOLTA, InspectorModelType::TYPE_VOLTA },
+    { Ms::ElementType::VOLTA_SEGMENT, InspectorModelType::TYPE_VOLTA },
+    { Ms::ElementType::PALM_MUTE, InspectorModelType::TYPE_PALM_MUTE },
+    { Ms::ElementType::PALM_MUTE_SEGMENT, InspectorModelType::TYPE_PALM_MUTE },
+    { Ms::ElementType::LET_RING, InspectorModelType::TYPE_LET_RING },
+    { Ms::ElementType::LET_RING_SEGMENT, InspectorModelType::TYPE_LET_RING },
+    { Ms::ElementType::STAFFTYPE_CHANGE, InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
+    { Ms::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
+    { Ms::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
+    { Ms::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { Ms::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
+    { Ms::ElementType::IMAGE, InspectorModelType::TYPE_IMAGE },
+    { Ms::ElementType::HARMONY, InspectorModelType::TYPE_CHORD_SYMBOL },
+    { Ms::ElementType::AMBITUS, InspectorModelType::TYPE_AMBITUS },
+    { Ms::ElementType::BRACKET, InspectorModelType::TYPE_BRACKET },
+    { Ms::ElementType::TIMESIG, InspectorModelType::TYPE_TIME_SIGNATURE },
+    { Ms::ElementType::MMREST, InspectorModelType::TYPE_MMREST },
+    { Ms::ElementType::BEND, InspectorModelType::TYPE_BEND },
+    { Ms::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
+    { Ms::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
+    { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
+    { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET }
 };
 
-static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
-    Ms::ElementType::TEXT,
-    Ms::ElementType::TEXTLINE,
-    Ms::ElementType::TEXTLINE_BASE,
-    Ms::ElementType::TEXTLINE_SEGMENT,
-    Ms::ElementType::STAFF_TEXT,
-    Ms::ElementType::SYSTEM_TEXT
+static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
+    { Ms::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
+    { Ms::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
-AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
-    : QObject(parent)
+static QMap<Ms::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
+    { Ms::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
+};
+
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
+    : QObject(parent), m_elementType(elementType)
 {
     m_repository = repository;
 
@@ -88,7 +104,7 @@ AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementReposito
         return;
     }
 
-    connect(m_repository->getQObject(), SIGNAL(elementsUpdated()), this, SLOT(updateProperties()));
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this, SLOT(updateProperties()));
     connect(this, &AbstractInspectorModel::requestReloadPropertyItems, this, &AbstractInspectorModel::updateProperties);
 }
 
@@ -102,48 +118,67 @@ QString AbstractInspectorModel::title() const
     return m_title;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionType() const
+int AbstractInspectorModel::icon() const
+{
+    return static_cast<int>(m_icon);
+}
+
+InspectorSectionType AbstractInspectorModel::sectionType() const
 {
     return m_sectionType;
 }
 
-AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() const
+InspectorModelType AbstractInspectorModel::modelType() const
 {
     return m_modelType;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(
-    const Ms::ElementType elementType)
+InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
-    if (NOTATION_ELEMENT_TYPES.contains(elementType)) {
-        return InspectorSectionType::SECTION_NOTATION;
-    } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
-        return InspectorSectionType::SECTION_TEXT;
+    if (elementKey.type == Ms::ElementType::HAIRPIN || elementKey.type == Ms::ElementType::HAIRPIN_SEGMENT) {
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype), InspectorModelType::TYPE_UNDEFINED);
     }
 
-    return InspectorSectionType::SECTION_UNDEFINED;
+    if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreakType>(elementKey.subtype),
+                                                      InspectorModelType::TYPE_UNDEFINED);
+    }
+
+    return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
+}
+
+InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const ElementKeySet& elementKeySet)
+{
+    InspectorModelTypeSet types;
+
+    for (const ElementKey& key : elementKeySet) {
+        types << modelTypeByElementKey(key);
+    }
+
+    return types;
+}
+
+InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const ElementKeySet& elementKeySet)
+{
+    InspectorSectionTypeSet types;
+
+    for (const ElementKey& key : elementKeySet) {
+        if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(key.type)
+            && (modelTypeByElementKey(key) != InspectorModelType::TYPE_UNDEFINED)) {
+            types << InspectorSectionType::SECTION_NOTATION;
+        }
+
+        if (TEXT_ELEMENT_TYPES.contains(key.type)) {
+            types << InspectorSectionType::SECTION_TEXT;
+        }
+    }
+
+    return types;
 }
 
 bool AbstractInspectorModel::isEmpty() const
 {
-    return m_isEmpty;
-}
-
-QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(
-    const AbstractInspectorModel::InspectorSectionType sectionType)
-{
-    switch (sectionType) {
-    case InspectorSectionType::SECTION_GENERAL:
-        return { Ms::ElementType::MAXTYPE };
-    case InspectorSectionType::SECTION_NOTATION: {
-        return NOTATION_ELEMENT_TYPES;
-    }
-    case InspectorSectionType::SECTION_TEXT: {
-        return TEXT_ELEMENT_TYPES;
-    }
-    default:
-        return QList<Ms::ElementType>();
-    }
+    return m_elementList.isEmpty();
 }
 
 void AbstractInspectorModel::setTitle(QString title)
@@ -153,29 +188,33 @@ void AbstractInspectorModel::setTitle(QString title)
     }
 
     m_title = title;
+    emit titleChanged();
 }
 
-void AbstractInspectorModel::setSectionType(AbstractInspectorModel::InspectorSectionType sectionType)
+void AbstractInspectorModel::setIcon(mu::ui::IconCode::Code icon)
+{
+    m_icon = icon;
+}
+
+void AbstractInspectorModel::setSectionType(InspectorSectionType sectionType)
 {
     m_sectionType = sectionType;
 }
 
-void AbstractInspectorModel::setModelType(AbstractInspectorModel::InspectorModelType modelType)
+void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 {
     m_modelType = modelType;
 }
 
 void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
 {
-    if (!hasAcceptableElements()) {
+    if (isEmpty()) {
         return;
     }
 
     beginCommand();
 
-    QVariant convertedValue;
-
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
@@ -186,9 +225,8 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
             ps = Ms::PropertyFlags::UNSTYLED;
         }
 
-        convertedValue = valueToElementUnits(pid, newValue, element);
-
-        element->undoChangeProperty(pid, convertedValue, ps);
+        PropertyValue propValue = valueToElementUnits(pid, newValue, element);
+        element->undoChangeProperty(pid, propValue, ps);
     }
 
     updateNotation();
@@ -197,24 +235,21 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
     emit elementsModified();
 }
 
-void AbstractInspectorModel::setIsEmpty(bool isEmpty)
-{
-    if (m_isEmpty == isEmpty) {
-        return;
-    }
-
-    m_isEmpty = isEmpty;
-    emit isEmptyChanged(m_isEmpty);
-}
-
 void AbstractInspectorModel::updateProperties()
 {
     requestElements();
 
-    setIsEmpty(!hasAcceptableElements());
+    emit isEmptyChanged();
 
     if (!isEmpty()) {
         loadProperties();
+    }
+}
+
+void AbstractInspectorModel::requestElements()
+{
+    if (m_elementType != Ms::ElementType::INVALID) {
+        m_elementList = m_repository->findElementsByType(m_elementType);
     }
 }
 
@@ -222,7 +257,7 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 {
     Ms::Sid result = Ms::Sid::NOSTYLE;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (const Ms::EngravingItem* element : m_elementList) {
         result = element->getPropertyStyle(pid);
 
         if (result != Ms::Sid::NOSTYLE) {
@@ -235,125 +270,88 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 
 void AbstractInspectorModel::updateStyleValue(const Ms::Sid& sid, const QVariant& newValue)
 {
-    if (style() && style()->styleValue(sid) != newValue) {
+    PropertyValue newVal = PropertyValue::fromQVariant(newValue, Ms::MStyle::valueType(sid));
+    if (style() && style()->styleValue(sid) != newVal) {
         beginCommand();
-        style()->setStyleValue(sid, newValue);
+        style()->setStyleValue(sid, newVal);
         endCommand();
     }
 }
 
 QVariant AbstractInspectorModel::styleValue(const Ms::Sid& sid) const
 {
-    return style() ? style()->styleValue(sid) : QVariant();
+    return style() ? style()->styleValue(sid).toQVariant() : QVariant();
 }
 
-void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
+PropertyValue AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const
 {
-    if (isEmpty()) {
-        return;
-    }
-
-    beginCommand();
-
-    for (Ms::Element* element : m_elementList) {
-        IF_ASSERT_FAILED(element) {
-            continue;
-        }
-
-        for (const Ms::Pid pid : pidList) {
-            element->elementBase()->undoResetProperty(pid);
-        }
-    }
-
-    endCommand();
-    updateNotation();
-
-    emit elementsModified();
-    emit modelReseted();
-}
-
-QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
-                                                     const Ms::Element* element) const
-{
-    switch (Ms::propertyType(pid)) {
-    case Ms::P_TYPE::POINT_SP:
-        return value.toPointF() * element->spatium();
-
-    case Ms::P_TYPE::POINT_SP_MM: {
-        if (element->sizeIsSpatiumDependent()) {
-            return value.toPointF() * element->spatium();
-        } else {
-            return value.toPointF() * Ms::DPMM;
-        }
-    }
-
-    case Ms::P_TYPE::SP_REAL:
-        return value.toDouble() * element->spatium();
-
-    case Ms::P_TYPE::TEMPO:
-        return value.toDouble() / 60.0;
-
-    case Ms::P_TYPE::ZERO_INT:
+    if (Ms::Pid::VERSE == pid) {
         return value.toInt() - 1;
-
-    case Ms::P_TYPE::POINT_MM:
-        return value.toPointF() * Ms::DPMM;
-
-    case Ms::P_TYPE::SIZE_MM:
-        return value.toSizeF() * Ms::DPMM;
-
-    case Ms::P_TYPE::DIRECTION:
-        return static_cast<int>(value.value<Ms::Direction>());
-
-    case Ms::P_TYPE::INT_LIST: {
-        QStringList strList;
-
-        for (const int i : value.value<QList<int> >()) {
-            strList << QString("%1").arg(i);
-        }
-
-        return strList.join(",");
     }
 
-    default:
-        return value;
-    }
-}
+    auto toPoint = [](const QVariant& v) {
+        return PointF::fromQPointF(v.value<QPointF>());
+    };
 
-QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value,
-                                                       const Ms::Element* element) const
-{
-    switch (Ms::propertyType(pid)) {
-    case Ms::P_TYPE::POINT_SP:
-        return value.toPointF() / element->spatium();
-
-    case Ms::P_TYPE::POINT_SP_MM: {
+    P_TYPE type = Ms::propertyType(pid);
+    switch (type) {
+    case P_TYPE::POINT: {
         if (element->sizeIsSpatiumDependent()) {
-            return value.toPointF() / element->spatium();
+            return toPoint(value) * element->spatium();
         } else {
-            return value.toPointF() / Ms::DPMM;
+            return toPoint(value) * Ms::DPMM;
         }
     }
 
-    case Ms::P_TYPE::SP_REAL:
-        return value.toDouble() / element->spatium();
+    case P_TYPE::MILLIMETRE:
+        return Spatium(value.toReal()).toMM(element->spatium());
 
-    case Ms::P_TYPE::TEMPO:
-        return value.toDouble() * 60.0;
+    case P_TYPE::SPATIUM:
+        return Spatium(value.toReal());
 
-    case Ms::P_TYPE::ZERO_INT:
+    case P_TYPE::TEMPO:
+        return BeatsPerSecond::fromBPM(BeatsPerMinute(value.toReal()));
+
+    case P_TYPE::INT_LIST:
+        return value.value<QList<int> >();
+
+    case P_TYPE::COLOR:
+        return Color::fromQColor(value.value<QColor>());
+
+    default:
+        return PropertyValue::fromQVariant(value, type);
+    }
+}
+
+QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const PropertyValue& value,
+                                                       const Ms::EngravingItem* element) const
+{
+    if (Ms::Pid::VERSE == pid) {
         return value.toInt() + 1;
+    }
 
-    case Ms::P_TYPE::POINT_MM:
-        return value.toPointF() / Ms::DPMM;
+    switch (value.type()) {
+    case P_TYPE::POINT: {
+        if (element->sizeIsSpatiumDependent()) {
+            return value.value<PointF>().toQPointF() / element->spatium();
+        } else {
+            return value.value<PointF>().toQPointF() / Ms::DPMM;
+        }
+    }
 
-    case Ms::P_TYPE::SIZE_MM:
-        return value.toSizeF() / Ms::DPMM;
+    case P_TYPE::MILLIMETRE:
+        return Spatium::fromMM(value.toReal(), element->spatium()).val();
 
-    case Ms::P_TYPE::DIRECTION:
-        return static_cast<int>(value.value<Ms::Direction>());
+    case P_TYPE::SPATIUM:
+        return value.value<Spatium>().val();
 
-    case Ms::P_TYPE::INT_LIST: {
+    case P_TYPE::TEMPO:
+        return value.value<BeatsPerSecond>().toBPM().val;
+
+    case P_TYPE::DIRECTION_V:
+        return static_cast<int>(value.value<Ms::DirectionV>());
+
+    case P_TYPE::INT_LIST: {
         QStringList strList;
 
         for (const int i : value.value<QList<int> >()) {
@@ -362,28 +360,29 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 
         return strList.join(",");
     }
-
+    case P_TYPE::COLOR:
+        return value.value<mu::draw::Color>().toQColor();
     default:
-        return value;
+        return value.toQVariant();
     }
 }
 
-PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const int propertyId,
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const Ms::Pid propertyId,
                                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
 {
-    PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(propertyId), this);
+    PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
     auto callback = onPropertyChangedCallBack;
 
     if (!callback) {
-        callback = [this](const int propertyId, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
+        callback = [this](const Ms::Pid propertyId, const QVariant& newValue) {
+            onPropertyValueChanged(propertyId, newValue);
         };
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const int sid, const QVariant& newStyleValue) {
-        updateStyleValue(static_cast<Ms::Sid>(sid), newStyleValue);
+    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const Ms::Sid sid, const QVariant& newStyleValue) {
+        updateStyleValue(sid, newStyleValue);
 
         emit requestReloadPropertyItems();
     });
@@ -391,25 +390,24 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyI
     return newPropertyItem;
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(
-                                                                                            const QVariant&)> convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
+                                              std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc)
 {
     if (!propertyItem || m_elementList.isEmpty()) {
         return;
     }
 
-    Ms::Pid pid = static_cast<Ms::Pid>(propertyItem->propertyId());
+    Ms::Pid pid = propertyItem->propertyId();
 
     Ms::Sid styleId = styleIdByPropertyId(pid);
-    propertyItem->setStyleId(static_cast<int>(styleId));
-    propertyItem->setIsStyled(styleId != Ms::Sid::NOSTYLE);
+    propertyItem->setStyleId(styleId);
 
     QVariant propertyValue;
     QVariant defaultPropertyValue;
 
     bool isUndefined = false;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (const Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
@@ -453,12 +451,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
 
 bool AbstractInspectorModel::isNotationExisting() const
 {
-    return !context()->masterNotations().empty();
-}
-
-bool AbstractInspectorModel::hasAcceptableElements() const
-{
-    return !m_elementList.isEmpty();
+    return context()->currentProject() != nullptr;
 }
 
 INotationStylePtr AbstractInspectorModel::style() const

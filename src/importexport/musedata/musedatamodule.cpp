@@ -24,11 +24,11 @@
 #include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/musedatareader.h"
 
 using namespace mu::iex::musedata;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string MuseDataModule::moduleName() const
 {

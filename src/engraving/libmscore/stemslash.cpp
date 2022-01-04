@@ -28,6 +28,11 @@
 using namespace mu;
 
 namespace Ms {
+StemSlash::StemSlash(Chord* parent)
+    : EngravingItem(ElementType::STEM_SLASH, parent)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -36,7 +41,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    qreal lw = score()->styleP(Sid::stemWidth);
+    qreal lw = score()->styleMM(Sid::stemWidth);
     painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 }
@@ -48,7 +53,7 @@ void StemSlash::draw(mu::draw::Painter* painter) const
 void StemSlash::setLine(const LineF& l)
 {
     line = l;
-    qreal w = score()->styleP(Sid::stemWidth) * .5;
+    qreal w = score()->styleMM(Sid::stemWidth) * .5;
     setbbox(RectF(line.p1(), line.p2()).normalized().adjusted(-w, -w, 2.0 * w, 2.0 * w));
 }
 
@@ -62,7 +67,7 @@ void StemSlash::layout()
     qreal h2;
     qreal _spatium = spatium();
     qreal l = chord()->up() ? _spatium : -_spatium;
-    PointF p(stem->hookPos());
+    PointF p(stem->flagPosition());
     qreal x = p.x() + _spatium * .1;
     qreal y = p.y();
 

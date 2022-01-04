@@ -28,7 +28,7 @@
  Definition of MeasureBase class.
 */
 
-#include "element.h"
+#include "engravingitem.h"
 #include "layoutbreak.h"
 
 namespace Ms {
@@ -70,7 +70,7 @@ constexpr bool operator&(Repeat t1, Repeat t2)
 //   @P prevMeasureMM   Measure     the previous multi-measure rest Measure (read-only)
 //---------------------------------------------------------
 
-class MeasureBase : public Element
+class MeasureBase : public EngravingItem
 {
     MeasureBase* _next    { 0 };
     MeasureBase* _prev    { 0 };
@@ -83,18 +83,24 @@ class MeasureBase : public Element
     qreal m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 
 protected:
+
+    MeasureBase(const ElementType& type, System* system = 0);
+    MeasureBase(const MeasureBase&);
+
     Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
     void cleanupLayoutBreaks(bool undo);
 
 public:
-    MeasureBase(Score* score = 0);
+
     ~MeasureBase();
-    MeasureBase(const MeasureBase&);
+
+    System* system() const { return (System*)explicitParent(); }
+    void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     virtual void setScore(Score* s) override;
 
@@ -118,22 +124,20 @@ public:
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
-    System* system() const { return (System*)parent(); }
-    void setSystem(System* s) { setParent((Element*)s); }
 
     const MeasureBase* findPotentialSectionBreak() const;
     LayoutBreak* sectionBreakElement() const;
 
-    void undoSetBreak(bool v, LayoutBreak::Type type);
-    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::LINE); }
-    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::PAGE); }
-    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::SECTION); }
-    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreak::Type::NOBREAK); }
+    void undoSetBreak(bool v, LayoutBreakType type);
+    void undoSetLineBreak(bool v) { undoSetBreak(v, LayoutBreakType::LINE); }
+    void undoSetPageBreak(bool v) { undoSetBreak(v, LayoutBreakType::PAGE); }
+    void undoSetSectionBreak(bool v) { undoSetBreak(v, LayoutBreakType::SECTION); }
+    void undoSetNoBreak(bool v) { undoSetBreak(v, LayoutBreakType::NOBREAK); }
 
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
     virtual void writeProperties(XmlWriter&) const override;
     virtual bool readProperties(XmlReader&) override;
 
@@ -149,9 +153,9 @@ public:
 
     qreal pause() const;
 
-    virtual QVariant getProperty(Pid) const override;
-    virtual bool setProperty(Pid, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     void clearElements();
     ElementList takeElements();

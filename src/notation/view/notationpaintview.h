@@ -27,15 +27,17 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationconfiguration.h"
-#include "inotationcontextmenu.h"
 
 #include "actions/iactionsdispatcher.h"
+#include "ui/iuiconfiguration.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
 #include "playback/iplaybackcontroller.h"
-#include "shortcuts/ishortcutsregister.h"
+#include "ui/iuicontextresolver.h"
+#include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
+#include "ui/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
@@ -48,25 +50,28 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_OBJECT
 
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, INotationContextMenu, notationContextMenu)
-    INJECT(notation, mu::shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(notation, ui::IUiContextResolver, uiContextResolver)
+    INJECT(notation, ui::IMainWindow, mainWindow)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
-    Q_PROPERTY(qreal horizontalScrollSize READ horizontalScrollSize NOTIFY horizontalScrollChanged)
+    Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal startVerticalScrollPosition READ startVerticalScrollPosition NOTIFY verticalScrollChanged)
-    Q_PROPERTY(qreal verticalScrollSize READ verticalScrollSize NOTIFY verticalScrollChanged)
+    Q_PROPERTY(qreal verticalScrollbarSize READ verticalScrollbarSize NOTIFY verticalScrollChanged)
 
-    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY backgroundColorChanged)
-    Q_PROPERTY(QRect viewport READ viewport NOTIFY viewportChanged)
+    Q_PROPERTY(QRectF viewport READ viewport_property NOTIFY viewportChanged)
+
+    Q_PROPERTY(bool publishMode READ publishMode WRITE setPublishMode NOTIFY publishModeChanged)
 
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
 
-    Q_INVOKABLE virtual void load();
+    Q_INVOKABLE void load();
 
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
@@ -74,44 +79,59 @@ public:
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 
+    Q_INVOKABLE void selectOnNavigationActive();
+
+    Q_INVOKABLE void forceFocusIn();
+
     qreal width() const override;
     qreal height() const override;
 
-    PointF toLogical(const QPoint& point) const override;
+    PointF canvasPos() const override;
 
-    Q_INVOKABLE void moveCanvas(int dx, int dy) override;
-    void moveCanvasVertical(int dy) override;
-    void moveCanvasHorizontal(int dx) override;
+    PointF toLogical(const PointF& point) const override;
+    PointF toLogical(const QPointF& point) const override;
+
+    Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
+    void moveCanvasVertical(qreal dy) override;
+    void moveCanvasHorizontal(qreal dx) override;
 
     qreal currentScaling() const override;
-    void scale(qreal scaling, const QPoint& pos) override;
+    void setScaling(qreal scaling, const PointF& pos) override;
+    void scale(qreal factor, const PointF& pos);
+    Q_INVOKABLE void scale(qreal factor, const QPointF& pos);
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
+    void hideContextMenu() override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
     qreal startHorizontalScrollPosition() const;
-    qreal horizontalScrollSize() const;
+    qreal horizontalScrollbarSize() const;
     qreal startVerticalScrollPosition() const;
-    qreal verticalScrollSize() const;
+    qreal verticalScrollbarSize() const;
 
-    QColor backgroundColor() const;
-    QRect viewport() const;
+    RectF viewport() const;
+    QRectF viewport_property() const;
+
+    bool publishMode() const;
+    void setPublishMode(bool arg);
 
 signals:
-    void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void showContextMenuRequested(int elementType, const QPointF& viewPos);
+    void hideContextMenuRequested();
+
     void textEdittingStarted();
 
     void horizontalScrollChanged();
     void verticalScrollChanged();
 
     void backgroundColorChanged(QColor color);
-    void viewportChanged(QRect viewport);
+    void viewportChanged();
+    void publishModeChanged();
 
     void activeFocusRequested();
 
@@ -120,15 +140,18 @@ protected:
     void setReadonly(bool readonly);
 
     void moveCanvasToCenter();
-    void moveCanvasToPosition(const QPoint& logicPos);
-    double guiScaling() const;
+    void moveCanvasToPosition(const PointF& logicPos);
 
-    QRectF notationContentRect() const;
+    RectF notationContentRect() const override;
 
-    RectF toLogical(const QRect& rect) const;
+    RectF toLogical(const RectF& rect) const;
+    PointF fromLogical(const PointF& point) const;
+    RectF fromLogical(const RectF& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;
+
+    virtual void onNotationSetup();
 
 protected slots:
     virtual void onViewSizeChanged();
@@ -161,15 +184,16 @@ private:
     void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
-    QRectF canvasRect() const;
+    void ensureViewportInsideScrollableArea();
 
-    qreal horizontalScrollableAreaSize() const;
+    RectF scrollableAreaRect() const;
+
     qreal horizontalScrollableSize() const;
-    qreal verticalScrollableAreaSize() const;
     qreal verticalScrollableSize() const;
 
-    void adjustCanvasPosition(const QRectF& logicRect);
+    void adjustCanvasPosition(const RectF& logicRect);
 
     void onNoteInputChanged();
     void onSelectionChanged();
@@ -180,15 +204,16 @@ private:
     void updateLoopMarkers(const LoopBoundaries& boundaries);
 
     const Page* pointToPage(const PointF& point) const;
-    QPointF alignToCurrentPageBorder(const QRectF& showRect, const QPointF& pos) const;
+    PointF alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const;
 
     void paintBackground(const RectF& rect, draw::Painter* painter);
 
     PointF canvasCenter() const;
-    std::pair<int, int> constraintCanvas(int dx, int dy) const;
+    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
     notation::INotationPtr m_notation;
-    QTransform m_matrix;
+    Transform m_matrix;
+
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
@@ -197,6 +222,7 @@ private:
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
+    bool m_publishMode = false;
 };
 }
 

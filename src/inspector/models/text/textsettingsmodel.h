@@ -25,10 +25,15 @@
 #include "async/asyncable.h"
 #include "models/abstractinspectormodel.h"
 
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+
 namespace mu::inspector {
 class TextSettingsModel : public AbstractInspectorModel, public mu::async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(inspector, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(PropertyItem * fontFamily READ fontFamily CONSTANT)
     Q_PROPERTY(PropertyItem * fontStyle READ fontStyle CONSTANT)

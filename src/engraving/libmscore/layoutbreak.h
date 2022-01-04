@@ -23,59 +23,36 @@
 #ifndef __LAYOUTBREAK_H__
 #define __LAYOUTBREAK_H__
 
-#include "element.h"
-#include "draw/drawtypes.h"
+#include "engravingitem.h"
+#include "infrastructure/draw/painterpath.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
-// layout break subtypes:
-
 //---------------------------------------------------------
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
 //---------------------------------------------------------
-
-class LayoutBreak final : public Element
+class LayoutBreak final : public EngravingItem
 {
-    Q_GADGET
 public:
-    enum class Type {
-        ///.\{
-        PAGE, LINE, SECTION, NOBREAK
-        ///\}
-    };
-private:
-    Q_ENUM(Type);
 
-    qreal lw;
-    mu::PainterPath path;
-    mu::PainterPath path2;
-    qreal _pause;
-    bool _startWithLongNames;
-    bool _startWithMeasureOne;
-    bool _firstSystemIdentation;
-    Type _layoutBreakType;
-
-    void draw(mu::draw::Painter*) const override;
-    void layout0();
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-
-public:
-    LayoutBreak(Score* = 0);
-    LayoutBreak(const LayoutBreak&);
+    void setParent(MeasureBase* parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
-    ElementType type() const override { return ElementType::LAYOUT_BREAK; }
     int subtype() const override { return static_cast<int>(_layoutBreakType); }
 
-    void setLayoutBreakType(Type);
-    Type layoutBreakType() const { return _layoutBreakType; }
+    void setLayoutBreakType(LayoutBreakType);
+    LayoutBreakType layoutBreakType() const { return _layoutBreakType; }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    MeasureBase* measure() const { return (MeasureBase*)parent(); }
+    MeasureBase* measure() const { return (MeasureBase*)explicitParent(); }
     qreal pause() const { return _pause; }
     void setPause(qreal v) { _pause = v; }
     bool startWithLongNames() const { return _startWithLongNames; }
@@ -85,15 +62,34 @@ public:
     bool firstSystemIdentation() const { return _firstSystemIdentation; }
     void setFirstSystemIdentation(bool v) { _firstSystemIdentation = v; }
 
-    bool isPageBreak() const { return _layoutBreakType == Type::PAGE; }
-    bool isLineBreak() const { return _layoutBreakType == Type::LINE; }
-    bool isSectionBreak() const { return _layoutBreakType == Type::SECTION; }
-    bool isNoBreak() const { return _layoutBreakType == Type::NOBREAK; }
+    bool isPageBreak() const { return _layoutBreakType == LayoutBreakType::PAGE; }
+    bool isLineBreak() const { return _layoutBreakType == LayoutBreakType::LINE; }
+    bool isSectionBreak() const { return _layoutBreakType == LayoutBreakType::SECTION; }
+    bool isNoBreak() const { return _layoutBreakType == LayoutBreakType::NOBREAK; }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
+
+private:
+
+    friend class mu::engraving::Factory;
+    LayoutBreak(MeasureBase* parent = 0);
+    LayoutBreak(const LayoutBreak&);
+
+    void draw(mu::draw::Painter*) const override;
+    void layout0();
+    void spatiumChanged(qreal oldValue, qreal newValue) override;
+
+    qreal lw;
+    mu::RectF m_iconBorderRect;
+    mu::PainterPath m_iconPath;
+    qreal _pause;
+    bool _startWithLongNames;
+    bool _startWithMeasureOne;
+    bool _firstSystemIdentation;
+    LayoutBreakType _layoutBreakType;
 };
 }     // namespace Ms
 

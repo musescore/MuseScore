@@ -26,6 +26,8 @@
 
 #include "modularity/ioc.h"
 
+class QKeySequence;
+
 namespace mu::shortcuts {
 class EditShortcutModel : public QObject
 {
@@ -44,7 +46,7 @@ public:
     QString errorMessage() const;
     bool canApplySequence() const;
 
-    Q_INVOKABLE void load(const QString& sequence, const QVariantList& allShortcuts);
+    Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
     Q_INVOKABLE void clear();
 
     Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
@@ -56,12 +58,11 @@ signals:
     void inputedSequenceChanged(const QString& sequence);
 
 private:
-    bool needIgnoreKey(int key) const;
     void validateInputedSequence();
 
     QVariantList m_allShortcuts;
     QKeySequence m_inputedSequence;
-    QString m_originSequence;
+    QVariantMap m_originShortcut;
     QString m_errorMessage;
 };
 }

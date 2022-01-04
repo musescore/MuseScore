@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -559,7 +559,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -822,7 +822,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute 1</text>
             </Text>
           </VBox>
@@ -1085,7 +1085,7 @@
             <text>Text6</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Flute 2</text>
             </Text>
           </VBox>

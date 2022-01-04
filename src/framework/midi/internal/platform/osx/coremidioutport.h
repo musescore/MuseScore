@@ -30,7 +30,7 @@ namespace mu::midi {
 class CoreMidiOutPort : public IMidiOutPort
 {
 public:
-    CoreMidiOutPort() = default;
+    CoreMidiOutPort();
     ~CoreMidiOutPort() override;
 
     void init();

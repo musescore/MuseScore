@@ -37,10 +37,8 @@ class PedalSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    PedalSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    PedalSegment(Pedal* sp, System* parent);
 
-    ElementType type() const override { return ElementType::PEDAL_SEGMENT; }
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
     void layout() override;
@@ -60,16 +58,18 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    Pedal(Score* s);
+    static const QString PEDAL_SYMBOL;
+    static const QString STAR_SYMBOL;
+
+    Pedal(EngravingItem* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
-    ElementType type() const override { return ElementType::PEDAL; }
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    LineSegment* createLineSegment() override;
-    QVariant propertyDefault(Pid propertyId) const override;
+    LineSegment* createLineSegment(System* parent) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
 
     friend class PedalLine;
 };

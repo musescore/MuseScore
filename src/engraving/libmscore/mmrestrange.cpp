@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "mmrestrange.h"
+#include "rw/xml.h"
+#include "score.h"
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -37,8 +39,8 @@ static const ElementStyle mmRestRangeStyle {
     { Sid::mmRestRangeHPlacement,  Pid::HPLACEMENT }
 };
 
-MMRestRange::MMRestRange(Score* s)
-    : MeasureNumberBase(s, Tid::MMREST_RANGE)
+MMRestRange::MMRestRange(Measure* parent)
+    : MeasureNumberBase(ElementType::MMREST_RANGE, parent, TextStyleType::MMREST_RANGE)
 {
     initElementStyle(&mmRestRangeStyle);
 }
@@ -54,7 +56,7 @@ MMRestRange::MMRestRange(const MMRestRange& other)
     initElementStyle(&mmRestRangeStyle);
 }
 
-QVariant MMRestRange::getProperty(Pid id) const
+PropertyValue MMRestRange::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
@@ -64,7 +66,7 @@ QVariant MMRestRange::getProperty(Pid id) const
     }
 }
 
-bool MMRestRange::setProperty(Pid id, const QVariant& val)
+bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
 {
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
@@ -77,11 +79,11 @@ bool MMRestRange::setProperty(Pid id, const QVariant& val)
     }
 }
 
-QVariant MMRestRange::propertyDefault(Pid id) const
+PropertyValue MMRestRange::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::MMREST_RANGE);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::MMREST_RANGE;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::mmRestRangeVPlacement);
     case Pid::HPLACEMENT:

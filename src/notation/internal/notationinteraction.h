@@ -31,9 +31,9 @@
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
 #include "inotationundostack.h"
-#include "iinteractive.h"
+#include "iselectinstrumentscenario.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/elementgroup.h"
 #include "scorecallbacks.h"
 
@@ -44,10 +44,11 @@ class Lasso;
 
 namespace mu::notation {
 class Notation;
+class NotationSelection;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -66,50 +67,70 @@ public:
     // Visibility
     void toggleVisible() override;
 
+    // Hit
+    EngravingItem* hitElement(const PointF& pos, float width) const override;
+    Staff* hitStaff(const PointF& pos) const override;
+    const HitElementContext& hitElementContext() const override;
+    void setHitElementContext(const HitElementContext& context) override;
+
     // Select
-    Element* hitElement(const PointF& pos, float width) const override;
-    int hitStaffIndex(const PointF& pos) const override;
-    void addChordToSelection(MoveDirection d) override;
     void moveChordNoteSelection(MoveDirection d) override;
-    void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
+    void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;
-    void selectFirstElement() override;
+    void selectFirstElement(bool frame = false) override;
     void selectLastElement() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     async::Notification selectionChanged() const override;
+    void selectTopOrBottomOfChord(MoveDirection d) override;
+    void moveSegmentSelection(MoveDirection d) override;
+
+    // SelectionFilter
+    bool isSelectionTypeFiltered(SelectionFilterType type) const override;
+    void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
 
     // Drag
     bool isDragStarted() const override;
-    void startDrag(const std::vector<Element*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
+    void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
     void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
     void endDrag() override;
     async::Notification dragChanged() const override;
 
     // Drop
     void startDrop(const QByteArray& edata) override;
+    bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     void endDrop() override;
     async::Notification dropChanged() const override;
 
-    bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) override;
+    bool applyPaletteElement(Ms::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
     void redo() override;
 
-    // Move
-    //! NOTE Perform operations on selected elements
+    // Change selection
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
-    void movePitch(MoveDirection d, PitchMode mode) override; //! NOTE Requires a note to be selected
-    void moveText(MoveDirection d, bool quickly) override;    //! NOTE Requires a text element to be selected
+    void expandSelection(ExpandSelectionMode mode) override;
+    void addToSelection(MoveDirection d, MoveSelectionType type) override;
+    void selectTopStaff() override;
+    void selectEmptyTrailingMeasure() override;
+
+    // Move
+    void movePitch(MoveDirection d, PitchMode mode) override;
+    void nudge(MoveDirection d, bool quickly) override;
+    void moveChordRestToStaff(MoveDirection d) override;
+    void moveLyrics(MoveDirection d) override;
+    void swapChordRest(MoveDirection d) override;
 
     // Text edit
+    bool isTextSelected() const override;
     bool isTextEditingStarted() const override;
-    void startEditText(Element* element, const PointF& cursorPos) override;
-    void editText(QKeyEvent* event) override;
+    bool textEditingAllowed(const EngravingItem* element) const override;
+    void startEditText(EngravingItem* element, const PointF& cursorPos = PointF()) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
+    const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
@@ -117,7 +138,11 @@ public:
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
-    void endEditGrip() override;
+
+    bool isElementEditStarted() const override;
+    void startEditElement(EngravingItem* element) override;
+    void editElement(QKeyEvent* event) override;
+    void endEditElement() override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -142,6 +167,7 @@ public:
     void addBracketsToSelection(BracketsType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
+    bool canAddTupletToSelecredChordRests() const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
@@ -156,38 +182,83 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
-    void addText(TextType type) override;
+    void addText(TextStyleType type) override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
 
+    void addTimeSignature(Measure* measure, int staffIndex, TimeSignature* timeSignature) override;
+
     void explodeSelectedStaff() override;
     void implodeSelectedStaff() override;
 
-    void realizeSelectedChordSymbols() override;
+    void realizeSelectedChordSymbols(bool literal, Voicing voicing, HarmonyDurationType durationType) override;
     void removeSelectedRange() override;
     void removeEmptyTrailingMeasures() override;
 
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
 
+    void repeatSelection() override;
+    void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
     void unrollRepeats() override;
 
-    void resetToDefault(ResettableValueType type) override;
+    void resetStretch() override;
+    void resetTextStyleOverrides() override;
+    void resetBeamMode() override;
+    void resetShapesAndPosition() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(ScoreConfig config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
+
+    void navigateToLyrics(MoveDirection direction) override;
+    void navigateToLyricsVerse(MoveDirection direction) override;
+
+    void nagivateToNextSyllable() override;
+
+    void navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest) override;
+    void navigateToHarmonyInNearMeasure(MoveDirection direction) override;
+    void navigateToHarmony(const Fraction& ticks) override;
+
+    void navigateToNearFiguredBass(MoveDirection direction) override;
+    void navigateToFiguredBassInNearMeasure(MoveDirection direction) override;
+    void navigateToFiguredBass(const Fraction& ticks) override;
+
+    void navigateToNearText(MoveDirection direction) override;
+
+    void addMelisma() override;
+    void addLyricsVerse() override;
+
+    void toggleBold() override;
+    void toggleItalic() override;
+    void toggleUnderline() override;
+    void toggleStrike() override;
+    void toggleArticulation(Ms::SymId) override;
+    void toggleAutoplace(bool) override;
+
+    void insertClef(Ms::ClefType) override;
+    void changeAccidental(Ms::AccidentalType) override;
+    void transposeSemitone(int) override;
+    void transposeDiatonicAlterations(Ms::TransposeDirection) override;
+    void toggleGlobalOrLocalInsert() override;
+    void getLocation() override;
+    void execute(void (Ms::Score::*)()) override;
 
 private:
     Ms::Score* score() const;
 
     void startEdit();
     void apply();
+    void rollback();
 
+    bool handleKeyPress(QKeyEvent* event);
+    void doEndDrag();
+
+    void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChanged();
@@ -196,30 +267,44 @@ private:
     void notifyAboutTextEditingChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
+    void toggleFontStyle(Ms::FontStyle);
+    void navigateToLyrics(bool, bool, bool);
+
+    Ms::Harmony* editedHarmony() const;
+    Ms::Harmony* findHarmonyInSegment(const Ms::Segment* segment, int track, Ms::TextStyleType textStyleType) const;
+    Ms::Harmony* createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const;
+
+    void startEditText(Ms::TextBase* text);
+    void doEndTextEdit();
+    bool needEndTextEdit() const;
 
     Ms::Page* point2page(const PointF& p) const;
-    QList<Element*> hitElements(const PointF& p_in, float w) const;
-    QList<Element*> elementsAt(const PointF& p) const;
-    Element* elementAt(const PointF& p) const;
-    static bool elementIsLess(const Ms::Element* e1, const Ms::Element* e2);
+    QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;
+    QList<EngravingItem*> elementsAt(const PointF& p) const;
+    EngravingItem* elementAt(const PointF& p) const;
+    static bool elementIsLess(const Ms::EngravingItem* e1, const Ms::EngravingItem* e2);
 
+    void updateAnchorLines();
     void setAnchorLines(const std::vector<LineF>& anchorList);
     void resetAnchorLines();
+    double currentScaling(draw::Painter* painter) const;
     void drawAnchorLines(draw::Painter* painter);
     void drawTextEditMode(mu::draw::Painter* painter);
     void drawSelectionRange(mu::draw::Painter* painter);
     void drawGripPoints(mu::draw::Painter* painter);
     void moveElementSelection(MoveDirection d);
+    void moveStringSelection(MoveDirection d);
 
-    Element* dropTarget(Ms::EditData& ed) const;
+    EngravingItem* dropTarget(Ms::EditData& ed) const;
     bool dragMeasureAnchorElement(const PointF& pos);
     bool dragTimeAnchorElement(const PointF& pos);
-    void setDropTarget(Element* el);
-    bool dropCanvas(Element* e);
+    void setDropTarget(EngravingItem* el);
+    bool dropCanvas(EngravingItem* e);
+    void resetDropElement();
 
     void selectInstrument(Ms::InstrumentChange* instrumentChange);
 
-    void applyDropPaletteElement(Ms::Score* score, Ms::Element* target, Ms::Element* e, Qt::KeyboardModifiers modifiers,
+    void applyDropPaletteElement(Ms::Score* score, Ms::EngravingItem* target, Ms::EngravingItem* e, Qt::KeyboardModifiers modifiers,
                                  PointF pt = PointF(), bool pasteMode = false);
 
     void doAddSlur(const Ms::Slur* slurTemplate = nullptr);
@@ -228,20 +313,19 @@ private:
     bool scoreHasMeasure() const;
     bool notesHaveActiculation(const std::vector<Note*>& notes, SymbolId articulationSymbolId) const;
 
-    bool needEndTextEditing(const std::vector<Element*>& newSelectedElements) const;
+    bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
-    void updateGripEdit(const std::vector<Element*>& elements);
+    void startEditGrip(Ms::Grip grip);
+    void updateGripEdit();
     void resetGripEdit();
 
-    void resetStretch();
-    void resetTextStyleOverrides();
-    void resetBeamMode();
-    void resetShapesAndPosition();
+    template<typename P>
+    void execute(void (Ms::Score::* function)(P), P param);
 
     struct HitMeasureData
     {
-        int staffIndex = -1;
-        Ms::Measure* measure = nullptr;
+        Measure* measure = nullptr;
+        Staff* staff = nullptr;
     };
 
     HitMeasureData hitMeasure(const PointF& pos) const;
@@ -251,7 +335,7 @@ private:
         PointF beginMove;
         PointF elementOffset;
         Ms::EditData ed;
-        std::vector<Element*> elements;
+        std::vector<EngravingItem*> elements;
         std::vector<std::unique_ptr<Ms::ElementGroup> > dragGroups;
         DragMode mode { DragMode::BothXY };
         void reset();
@@ -260,7 +344,7 @@ private:
     struct DropData
     {
         Ms::EditData ed;
-        Element* dropTarget = nullptr;
+        EngravingItem* dropTarget = nullptr;
     };
 
     ScoreCallbacks m_scoreCallbacks;
@@ -270,18 +354,17 @@ private:
     INotationNoteInputPtr m_noteInput = nullptr;
     Ms::ShadowNote* m_shadowNote = nullptr;
 
-    INotationSelectionPtr m_selection = nullptr;
+    std::shared_ptr<NotationSelection> m_selection = nullptr;
     async::Notification m_selectionChanged;
 
     DragData m_dragData;
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
 
-    Ms::EditData m_textEditData;
+    Ms::EditData m_editData;
+
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
-
-    Ms::EditData m_gripEditData;
 
     DropData m_dropData;
     async::Notification m_dropChanged;
@@ -291,6 +374,8 @@ private:
     Ms::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
+    HitElementContext m_hitElementContext;
+    Ms::SelState m_selectionState;
 };
 }
 

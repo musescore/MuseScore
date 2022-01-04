@@ -28,18 +28,15 @@
 #define SCRIPT_INTERFACE
 /* #undef HAS_AUDIOFILE */
 
-#define CRASH_REPORT_URL        ""
-#define MUSESCORE_NAME_VERSION  "MuseScore 4 (4.0.0 unstable)"
-#define MUSESCORE_REVISION      ""
-#define INSTALL_NAME            "mscore-4.0/"
-#define INSTPREFIX              "/home/igor/Dev/MuseScore/build.debug/install"
-#define VERSION                 "4.0.0"
-#define VERSION_LABEL           "Development"
-#define BUILD_NUMBER            ""
-#define WIN_SPARKLE_APPCAST_URL ""
-
-#define BUILD_TELEMETRY_MODULE
-#define TELEMETRY_TRACK_ID ""
+#define CRASH_REPORT_URL       ""
+#define MUSESCORE_NAME_VERSION "MuseScore 4 (4.0.0 unstable)"
+#define MUSESCORE_REVISION     ""
+#define INSTALL_NAME           "mscore-4.0/"
+#define INSTPREFIX             "/home/igor/Dev/MuseScore/build.debug/install"
+#define VERSION                "4.0.0"
+#define VERSION_LABEL          "Development"
+#define BUILD_NUMBER           ""
+#define SPARKLE_APPCAST_URL    ""
 
 #define BUILD_SHORTCUTS_MODULE
 #define BUILD_SYSTEM_MODULE
@@ -54,16 +51,15 @@
 #define BUILD_PLUGINS_MODULE
 #define BUILD_PLAYBACK_MODULE
 #define BUILD_PALETTE_MODULE
-#define BUILD_INSTRUMENTS_MODULE
+#define BUILD_INSTRUMENTSSCENE_MODULE
 #define BUILD_INSPECTOR_MODULE
 #define BUILD_AUTOBOT_MODULE
 #define BUILD_MULTIINSTANCES_MODULE
 #define BUILD_VST
 
-/* #undef USE_SCORE_ACCESSIBLE_TREE */
+/* #undef ENGRAVING_BUILD_ACCESSIBLE_TREE */
 
-/* #undef WIN_SPARKLE_ENABLED */
-/* #undef MAC_SPARKLE_ENABLED */
+/* #undef SPARKLE_ENABLED */
 /* #undef OPENGL */
 #define SOUNDFONT3
 /* #undef WIN_PORTABLE */

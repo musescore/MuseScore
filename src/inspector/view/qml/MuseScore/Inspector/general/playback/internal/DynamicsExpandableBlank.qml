@@ -20,15 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 ExpandableBlank {
     id: root
 
     property QtObject model: null
+
+    property int navigationRowEnd: contentItem.navigationRowEnd
 
     enabled: model ? !model.isEmpty : false
 
@@ -39,175 +42,86 @@ ExpandableBlank {
     contentItemComponent: Column {
         id: contentLayout
 
+        property int navigationRowEnd: changeSpeed.navigationRowEnd
+
         height: implicitHeight
         width: root.width
 
-        spacing: 16
+        spacing: 12
 
-        InspectorPropertyView {
+        DropdownPropertyView {
+            id: appliesToSection
             titleText: qsTrc("inspector", "Applies to")
             propertyItem: root.model ? root.model.scopeType : null
 
-            navigation.name: "Dynamic Applies Menu"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 1
+            navigationName: "Dynamic Applies to"
+            navigationPanel: root.navigation.panel
+            navigationRowStart: root.navigation.row + 1
 
-            StyledComboBox {
-                width: parent.width
-
-                navigation.name: "Dynamic Applies Value"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 2
-
-                textRoleName: "text"
-                valueRoleName: "value"
-
-                model: [
-                    { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
-                    { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
-                    { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
-                ]
-
-                currentIndex: root.model && !root.model.scopeType.isUndefined ? indexOfValue(root.model.scopeType.value) : -1
-
-                onValueChanged: {
-                    root.model.scopeType.value = value
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
+                { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
+                { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
+            ]
         }
 
         Item {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: velocitySection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.name: "Velocity Menu"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 3
+                navigationName: "Velocity"
+                navigationPanel: root.navigation.panel
+                navigationRowStart: appliesToSection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Velocity")
-                propertyItem: model ? model.velocity : null
+                propertyItem: root.model ? root.model.velocity : null
 
-                IncrementalPropertyControl {
-                    id: velocityControl
-                    iconMode: iconModeEnum.hidden
-
-                    navigation.name: "Velocity Value"
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 4
-
-                    step: 1
-                    decimals: 0
-                    maxValue: 127
-                    minValue: 0
-                    validator: IntInputValidator {
-                        top: velocityControl.maxValue
-                        bottom: velocityControl.minValue
-                    }
-
-                    isIndeterminate: model ? model.velocity.isUndefined : false
-                    currentValue: model ? model.velocity.value : 0
-
-                    onValueEdited: { model.velocity.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 127
+                minValue: 0
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: velocityChangeSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                navigation.name: "Velocity change Menu"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 5
+                navigationName: "Velocity change"
+                navigationPanel: root.navigation.panel
+                navigationRowStart: velocitySection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Velocity change")
-                propertyItem: model ? model.velocityChange : null
+                propertyItem: root.model ? root.model.velocityChange : null
 
-                IncrementalPropertyControl {
-                    id: velocityChangeControl
-                    iconMode: iconModeEnum.hidden
-
-                    navigation.name: "Velocity change Value"
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 6
-
-                    enabled: model ? model.velocityChange.isEnabled : false
-
-                    step: 1
-                    decimals: 0
-                    maxValue: 127
-                    minValue: -127
-                    validator: IntInputValidator {
-                        top: velocityChangeControl.maxValue
-                        bottom: velocityChangeControl.minValue
-                    }
-
-                    isIndeterminate: model && enabled ? model.velocityChange.isUndefined : false
-                    currentValue: model ? model.velocityChange.value : 0
-
-                    onValueEdited: { model.velocityChange.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 127
+                minValue: -127
             }
         }
 
-        InspectorPropertyView {
+        FlatRadioButtonGroupPropertyView {
+            id: changeSpeed
             titleText: qsTrc("inspector", "Change speed")
-
-            navigation.name: "Change speed Menu"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 7
-
             propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
-            RadioButtonGroup {
-                id: radioButtonList
+            navigationName: "Change speed Menu"
+            navigationPanel: root.navigation.panel
+            navigationRowStart: velocityChangeSection.navigationRowEnd + 1
 
-                height: 30
-                width: parent.width
-
-                model: [
-                    { textRole: "Slow", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
-                    { textRole: "Normal", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
-                    { textRole: "Fast", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
-                ]
-
-                delegate: FlatRadioButton {
-                    id: radioButtonDelegate
-
-                    navigation.name: "Change speed Value " + model.index
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 8 + model.index
-
-                    ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                    checked: root.model && !root.model.velocityChangeSpeed.isUndefined ? root.model.velocityChangeSpeed.value === modelData["valueRole"]
-                                                                                       : false
-                    onToggled: {
-                        root.model.velocityChangeSpeed.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-                }
-            }
+            model: [
+                { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
+                { text: "Normal", value: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
+                { text: "Fast", value: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
+            ]
         }
     }
 }

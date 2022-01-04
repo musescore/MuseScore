@@ -17,16 +17,15 @@ public:
 
     virtual ~Asyncable()
     {
-        auto copy = m_connects;
-        for (IConnectable* c : copy) {
-            c->disconnectAsync(this);
-        }
+        disconnectAll();
     }
 
     struct IConnectable {
         virtual ~IConnectable() {}
         virtual void disconnectAsync(Asyncable* a) = 0;
     };
+
+    bool isConnectedAsync() const { return !m_connects.empty(); }
 
     void connectAsync(IConnectable* c)
     {
@@ -38,6 +37,14 @@ public:
     void disconnectAsync(IConnectable* c)
     {
         m_connects.erase(c);
+    }
+
+    void disconnectAll()
+    {
+        auto copy = m_connects;
+        for (IConnectable* c : copy) {
+            c->disconnectAsync(this);
+        }
     }
 
 private:

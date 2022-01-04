@@ -24,6 +24,9 @@
 
 #include <cmath>
 
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "textframe.h"
 #include "text.h"
 #include "score.h"
@@ -36,12 +39,12 @@
 #include "fret.h"
 #include "mscore.h"
 #include "stafftext.h"
-#include "icon.h"
-#include "xml.h"
+#include "actionicon.h"
 #include "measure.h"
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
@@ -57,8 +60,8 @@ static const ElementStyle hBoxStyle {
 //   Box
 //---------------------------------------------------------
 
-Box::Box(Score* score)
-    : MeasureBase(score)
+Box::Box(const ElementType& type, System* parent)
+    : MeasureBase(type, parent)
 {
 }
 
@@ -69,7 +72,7 @@ Box::Box(Score* score)
 void Box::layout()
 {
     MeasureBase::layout();
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (!e->isLayoutBreak()) {
             e->layout();
         }
@@ -80,9 +83,9 @@ void Box::layout()
 //   scanElements
 //---------------------------------------------------------
 
-void Box::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Box::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
         func(data, this);
     }
@@ -107,31 +110,24 @@ void Box::draw(mu::draw::Painter* painter) const
     if (score() && score()->printing()) {
         return;
     }
-    if (!(selected() || editMode || dropTarget() || score()->showFrames())) {
-        qreal w = spatium() * .15;
-        QPainterPathStroker stroker;
-        stroker.setWidth(w);
-        stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
-        stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
 
-        stroker.setDashPattern({ 1, 3 });
-        PainterPath path;
-        w *= .5;
-        path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
-        PainterPath stroke = stroker.createStroke(path);
+    const bool showHighlightedFrame = selected() || dropTarget();
+    const bool showFrame = showHighlightedFrame || (score() ? score()->showFrames() : false);
+
+    if (showFrame) {
+        qreal lineWidth = spatium() * .15;
+        Pen pen;
+        pen.setWidthF(lineWidth);
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setColor(showHighlightedFrame ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+        pen.setDashPattern({ 1, 3 });
+
         painter->setBrush(BrushStyle::NoBrush);
-        painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
+        painter->setPen(pen);
+        lineWidth *= 0.5;
+        painter->drawRect(bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
     }
-}
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Box::startEdit(EditData& ed)
-{
-    Element::startEdit(ed);
-    editMode   = true;
 }
 
 //---------------------------------------------------------
@@ -191,7 +187,6 @@ void Box::editDrag(EditData& ed)
 
 void Box::endEdit(EditData&)
 {
-    editMode = false;
     layout();
 }
 
@@ -217,9 +212,9 @@ std::vector<PointF> VBox::gripsPositions(const EditData&) const
 
 void Box::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -233,8 +228,8 @@ void Box::writeProperties(XmlWriter& xml) const
             Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
         writeProperty(xml, id);
     }
-    Element::writeProperties(xml);
-    for (const Element* e : el()) {
+    EngravingItem::writeProperties(xml);
+    for (const EngravingItem* e : el()) {
         e->write(xml);
     }
 }
@@ -296,7 +291,7 @@ bool Box::readProperties(XmlReader& e)
             t = toTBox(this)->text();
             t->read(e);
         } else {
-            t = new Text(score());
+            t = Factory::createText(this);
             t->read(e);
             if (t->empty()) {
                 qDebug("read empty text");
@@ -305,29 +300,41 @@ bool Box::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "Symbol") {
-        Symbol* s = new Symbol(score());
+        Symbol* s = new Symbol(this);
         s->read(e);
         add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            Image* image = new Image(score());
+            Image* image = new Image(this);
             image->setTrack(e.track());
             image->read(e);
             add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = new FretDiagram(score());
+        FretDiagram* f = Factory::createFretDiagram(this->score()->dummy()->segment());
         f->read(e);
+        //! TODO Looks like a bug.
+        //! The FretDiagram parent must be Segment
+        //! there is a method: `Segment* segment() const { return toSegment(parent()); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(f);
     } else if (tag == "HBox") {
-        HBox* hb = new HBox(score());
+        HBox* hb = new HBox(this->system());
         hb->read(e);
+        //! TODO Looks like a bug.
+        //! The HBox parent must be System
+        //! there is a method: `System* system() const { return (System*)parent(); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = new VBox(score());
+        VBox* vb = new VBox(this->system());
         vb->read(e);
+        //! TODO Looks like a bug.
+        //! The VBox parent must be System
+        //! there is a method: `System* system() const { return (System*)parent(); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(vb);
     } else if (MeasureBase::readProperties(e)) {
     } else {
@@ -338,10 +345,10 @@ bool Box::readProperties(XmlReader& e)
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to Box
+///   Add new EngravingItem \a el to Box
 //---------------------------------------------------------
 
-void Box::add(Element* e)
+void Box::add(EngravingItem* e)
 {
     if (e->isText()) {
         toText(e)->setLayoutToParentWidth(true);
@@ -353,7 +360,7 @@ RectF Box::contentRect() const
 {
     RectF result;
 
-    for (const Element* element : el()) {
+    for (const EngravingItem* element : el()) {
         result = result.united(element->bbox());
     }
 
@@ -364,7 +371,7 @@ RectF Box::contentRect() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Box::getProperty(Pid propertyId) const
+PropertyValue Box::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BOX_HEIGHT:
@@ -394,7 +401,7 @@ QVariant Box::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Box::setProperty(Pid propertyId, const QVariant& v)
+bool Box::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     switch (propertyId) {
@@ -405,10 +412,10 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
         _boxWidth = v.value<Spatium>();
         break;
     case Pid::TOP_GAP:
-        _topGap = v.toDouble();
+        _topGap = v.value<Millimetre>();
         break;
     case Pid::BOTTOM_GAP:
-        _bottomGap = v.toDouble();
+        _bottomGap = v.value<Millimetre>();
         break;
     case Pid::LEFT_MARGIN:
         _leftMargin = v.toDouble();
@@ -436,7 +443,7 @@ bool Box::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Box::propertyDefault(Pid id) const
+PropertyValue Box::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::BOX_HEIGHT:
@@ -444,9 +451,9 @@ QVariant Box::propertyDefault(Pid id) const
         return Spatium(0.0);
 
     case Pid::TOP_GAP:
-        return isHBox() ? 0.0 : score()->styleP(Sid::systemFrameDistance);
+        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::systemFrameDistance);
     case Pid::BOTTOM_GAP:
-        return isHBox() ? 0.0 : score()->styleP(Sid::frameSystemDistance);
+        return isHBox() ? Millimetre(0.0) : score()->styleMM(Sid::frameSystemDistance);
 
     case Pid::LEFT_MARGIN:
     case Pid::RIGHT_MARGIN:
@@ -482,8 +489,8 @@ void Box::copyValues(Box* origin)
 //   HBox
 //---------------------------------------------------------
 
-HBox::HBox(Score* score)
-    : Box(score)
+HBox::HBox(System* parent)
+    : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
     setBoxWidth(Spatium(5.0));
@@ -495,8 +502,8 @@ HBox::HBox(Score* score)
 
 void HBox::layout()
 {
-    if (parent() && parent()->isVBox()) {
-        VBox* vb = toVBox(parent());
+    if (explicitParent() && explicitParent()->isVBox()) {
+        VBox* vb = toVBox(explicitParent());
         qreal x = vb->leftMargin() * DPMM;
         qreal y = vb->topMargin() * DPMM;
         qreal w = point(boxWidth());
@@ -541,13 +548,13 @@ bool Box::acceptDrop(EditData& data) const
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
         return true;
-    case ElementType::ICON:
-        switch (toIcon(data.dropElement)->iconType()) {
-        case IconType::VFRAME:
-        case IconType::TFRAME:
-        case IconType::FFRAME:
-        case IconType::HFRAME:
-        case IconType::MEASURE:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(data.dropElement)->actionType()) {
+        case ActionIconType::VFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::MEASURE:
             return true;
         default:
             break;
@@ -565,9 +572,9 @@ bool Box::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Box::drop(EditData& data)
+EngravingItem* Box::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->flag(ElementFlag::ON_STAFF)) {
         return 0;
     }
@@ -590,7 +597,7 @@ Element* Box::drop(EditData& data)
                 delete lb;
                 break;
             }
-            for (Element* elem : el()) {
+            for (EngravingItem* elem : el()) {
                 if (elem->type() == ElementType::LAYOUT_BREAK) {
                     score()->undoChangeElement(elem, e);
                     break;
@@ -606,7 +613,7 @@ Element* Box::drop(EditData& data)
 
     case ElementType::STAFF_TEXT:
     {
-        Text* text = new Text(score(), Tid::FRAME);
+        Text* text = Factory::createText(this, TextStyleType::FRAME);
         text->setParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
@@ -614,21 +621,21 @@ Element* Box::drop(EditData& data)
         return text;
     }
 
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, this);
             break;
-        case IconType::TFRAME:
+        case ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, this);
             break;
-        case IconType::FFRAME:
+        case ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, this);
             break;
-        case IconType::HFRAME:
+        case ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, this);
             break;
-        case IconType::MEASURE:
+        case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         default:
@@ -657,9 +664,9 @@ RectF HBox::drag(EditData& data)
     RectF r(canvasBoundingRect());
     qreal diff = data.evtDelta.x();
     qreal x1   = offset().x() + diff;
-    if (parent()->type() == ElementType::VBOX) {
-        VBox* vb = toVBox(parent());
-        qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+    if (explicitParent()->type() == ElementType::VBOX) {
+        VBox* vb = toVBox(explicitParent());
+        qreal x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {
@@ -687,7 +694,7 @@ void HBox::endEditDrag(EditData&)
 
 bool HBox::isMovable() const
 {
-    return parent() && (parent()->isHBox() || parent()->isVBox());
+    return explicitParent() && (explicitParent()->isHBox() || explicitParent()->isVBox());
 }
 
 //---------------------------------------------------------
@@ -719,7 +726,7 @@ bool HBox::readProperties(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant HBox::getProperty(Pid propertyId) const
+PropertyValue HBox::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::CREATE_SYSTEM_HEADER:
@@ -733,7 +740,7 @@ QVariant HBox::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool HBox::setProperty(Pid propertyId, const QVariant& v)
+bool HBox::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::CREATE_SYSTEM_HEADER:
@@ -750,7 +757,7 @@ bool HBox::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant HBox::propertyDefault(Pid id) const
+PropertyValue HBox::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::CREATE_SYSTEM_HEADER:
@@ -764,12 +771,17 @@ QVariant HBox::propertyDefault(Pid id) const
 //   VBox
 //---------------------------------------------------------
 
-VBox::VBox(Score* score)
-    : Box(score)
+VBox::VBox(const ElementType& type, System* parent)
+    : Box(type, parent)
 {
     initElementStyle(&boxStyle);
     setBoxHeight(Spatium(10.0));
     setLineBreak(true);
+}
+
+VBox::VBox(System* parent)
+    : VBox(ElementType::VBOX, parent)
+{
 }
 
 qreal VBox::minHeight() const
@@ -782,7 +794,7 @@ qreal VBox::maxHeight() const
     return point(Spatium(30));
 }
 
-QVariant VBox::getProperty(Pid propertyId) const
+PropertyValue VBox::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::BOX_AUTOSIZE:
@@ -806,7 +818,7 @@ void VBox::layout()
         bbox().setRect(0.0, 0.0, 50, 50);
     }
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (!e->isLayoutBreak()) {
             e->layout();
         }
@@ -823,6 +835,28 @@ void VBox::layout()
     }
 
     MeasureBase::layout();
+
+    if (MScore::noImages) {
+        adjustLayoutWithoutImages();
+    }
+}
+
+void VBox::adjustLayoutWithoutImages()
+{
+    qreal calcuatedVBoxHeight = 0;
+    const int padding = score()->spatium();
+    auto elementList = el();
+
+    for (auto pElement : elementList) {
+        if (pElement->isText()) {
+            Text* txt = toText(pElement);
+            txt->bbox().moveTop(0);
+            calcuatedVBoxHeight += txt->height() + padding;
+        }
+    }
+
+    setHeight(calcuatedVBoxHeight);
+    Box::layout();
 }
 
 //---------------------------------------------------------
@@ -851,10 +885,10 @@ void FBox::layout()
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a e to fret diagram box
+///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
-void FBox::add(Element* e)
+void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
@@ -874,7 +908,7 @@ void FBox::add(Element* e)
 QString Box::accessibleExtraInfo() const
 {
     QString rez = "";
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         rez += " " + e->screenReaderInfo();
     }
     return rez;

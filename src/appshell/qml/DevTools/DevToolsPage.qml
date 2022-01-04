@@ -27,11 +27,12 @@ import MuseScore.Dock 1.0
 
 import MuseScore.Plugins 1.0
 import MuseScore.Audio 1.0
+import MuseScore.Mpe 1.0
 
 import "./Gallery"
 import "./Interactive"
 import "./NotationDialogs"
-import "./Telemetry"
+import "./CrashHandler"
 import "./VST"
 import "./KeyNav"
 import "./Preferences"
@@ -50,11 +51,12 @@ DockPage {
         case "gallery": root.central = galleryComp; break
         case "interactive": root.central = interactiveComp; break
         case "mu3dialogs": root.central = notationDialogs; break
-        case "telemetry": root.central = telemetryComp; break
+        case "crashhandler": root.central = crashhandlerComp; break
         case "audio": root.central = audioComp; break
         case "synth": root.central = synthSettingsComp; break
         case "midiports": root.central = midiPortsComp; break
         case "vst": root.central = vstComponent; break
+        case "mpe": root.central = mpeComponent; break
         case "plugins": root.central = pluginsComp; break
         case "autobot": root.central = autobotComp; break
         case "navigation": root.central = keynavComp; break
@@ -67,10 +69,11 @@ DockPage {
 
             objectName: "devtoolsPanel"
 
+            width: maximumWidth
             minimumWidth: 200
-            maximumWidth: 292
+            maximumWidth: 280
 
-            allowedAreas: Qt.NoDockWidgetArea
+            persistent: true
 
             Rectangle {
                 anchors.fill: parent
@@ -84,11 +87,12 @@ DockPage {
                         { "name": "gallery", "title": "UI Gallery" },
                         { "name": "interactive", "title": "Interactive" },
                         { "name": "mu3dialogs", "title": "MU3Dialogs" },
-                        { "name": "telemetry", "title": "Telemetry" },
+                        { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "audio", "title": "Audio" },
                         { "name": "synth", "title": "Synth" },
                         { "name": "midiports", "title": "MIDI ports" },
                         { "name": "vst", "title": "VST" },
+                        { "name": "mpe", "title": "MPE" },
                         { "name": "plugins", "title": "Plugins" },
                         { "name": "autobot", "title": "Autobot" },
                         { "name": "navigation", "title": "KeyNav" }
@@ -129,11 +133,9 @@ DockPage {
     }
 
     Component {
-        id: telemetryComp
+        id: crashhandlerComp
 
-        Loader {
-            source: "qrc:/qml/DevTools/Telemetry/TelemetryInfo.qml"
-        }
+        CrashHandlerDevTools {}
     }
 
     Component {
@@ -160,6 +162,14 @@ DockPage {
         //safe if VST is not available
         Loader {
             source: "qrc:/qml/DevTools/VST/VSTTests.qml"
+        }
+    }
+
+    Component {
+        id: mpeComponent
+
+        Loader {
+            source: "qrc:/qml/DevTools/MPE/ArticulationsProfileEditorView.qml"
         }
     }
 

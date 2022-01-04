@@ -23,35 +23,39 @@
 #ifndef __BRACKET_ITEM_H__
 #define __BRACKET_ITEM_H__
 
-#include "scoreElement.h"
+#include "engravingobject.h"
 #include "mscore.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 //---------------------------------------------------------
 //   BracketItem
 //---------------------------------------------------------
 
-class BracketItem final : public ScoreElement
+class BracketItem final : public EngravingItem
 {
     BracketType _bracketType { BracketType::NO_BRACKET };
     int _column              { 0 };
     int _bracketSpan        { 0 };
     Staff* _staff            { 0 };
 
-public:
-    BracketItem(Score* s)
-        : ScoreElement(s) {}
-    BracketItem(Score* s, BracketType a, int b)
-        : ScoreElement(s), _bracketType(a), _bracketSpan(b) { }
-    virtual ElementType type() const override { return ElementType::BRACKET_ITEM; }
-    virtual QVariant getProperty(Pid) const override;
-    virtual bool setProperty(Pid, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    friend class mu::engraving::Factory;
 
-//      bool selected() const              { return _selected;    }
+    BracketItem(EngravingItem* parent);
+    BracketItem(EngravingItem* parent, BracketType a, int b);
+
+public:
+    Ms::EngravingItem* clone() const override;
+
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+
     int bracketSpan() const { return _bracketSpan; }
     BracketType bracketType() const { return _bracketType; }
-//      void setSelected(bool v)           { _selected = v;       }
     void setBracketSpan(int v) { _bracketSpan = v; }
     void setBracketType(BracketType v) { _bracketType = v; }
     Staff* staff() { return _staff; }

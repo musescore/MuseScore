@@ -28,7 +28,7 @@ QmlDialog {
     width: 280
     height: 370
 
-    title: qsTrc("palette", "Palette Properties")
+    title: qsTrc("palette", "Palette properties")
 
     property var properties
 
@@ -39,7 +39,7 @@ QmlDialog {
 
         StyledTextLabel {
             anchors.centerIn: parent
-            text: "Palette Properties Dialog Stub"
+            text: "Palette properties Dialog Stub"
         }
     }
 }

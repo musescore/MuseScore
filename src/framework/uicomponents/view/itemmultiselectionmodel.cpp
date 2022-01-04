@@ -29,12 +29,32 @@ using namespace mu::uicomponents;
 ItemMultiSelectionModel::ItemMultiSelectionModel(QAbstractItemModel* parent)
     : QItemSelectionModel(parent)
 {
-    m_allowedModifiers = (Qt::ShiftModifier | Qt::ControlModifier);
+    setSingleItemSelectionMode(false);
 }
 
 void ItemMultiSelectionModel::setAllowedModifiers(Qt::KeyboardModifiers modifiers)
 {
     m_allowedModifiers = modifiers;
+}
+
+void ItemMultiSelectionModel::setSingleItemSelectionMode(bool on)
+{
+    if (on) {
+        m_allowedModifiers = {};
+    } else {
+        m_allowedModifiers = (Qt::ShiftModifier | Qt::ControlModifier);
+    }
+}
+
+QList<int> ItemMultiSelectionModel::selectedRows() const
+{
+    QList<int> rows;
+
+    for (const QModelIndex& index : selectedIndexes()) {
+        rows << index.row();
+    }
+
+    return rows;
 }
 
 void ItemMultiSelectionModel::select(const QModelIndex& index)

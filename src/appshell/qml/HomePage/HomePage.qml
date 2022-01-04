@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
-import MuseScore.UserScores 1.0
+import MuseScore.Project 1.0
 import MuseScore.Cloud 1.0
 import MuseScore.Learn 1.0
 
@@ -35,22 +34,32 @@ import "../dockwindow"
 DockPage {
     id: root
 
-    property string item: "scores"
-    property string subItem: ""
+    property string section: "scores"
+    property string subSection: ""
 
     objectName: "Home"
     uri: "musescore://home"
 
-    onItemChanged: {
-        Qt.callLater(root.setCurrentCentral, item)
+    onSetParamsRequested: function(params) {
+        if (Boolean(params["section"])) {
+            setCurrentCentral(params["section"])
+
+            if (Boolean(params["subSection"])) {
+                subSection = params["subSection"]
+            }
+        }
+    }
+
+    onSectionChanged: {
+        Qt.callLater(root.setCurrentCentral, section)
     }
 
     function setCurrentCentral(name) {
-        if (item === name || !Boolean(name)) {
+        if (section === name || !Boolean(name)) {
             return
         }
 
-        item = name
+        section = name
 
         switch (name) {
         case "scores": root.central = scoresComp; break
@@ -67,13 +76,14 @@ DockPage {
         DockPanel {
             objectName: "homeMenu"
 
+            width: maximumWidth
             minimumWidth: 76
-            maximumWidth: 292
+            maximumWidth: 280
 
-            allowedAreas: Qt.NoDockWidgetArea
+            persistent: true
 
             HomeMenu {
-                currentPageName: root.item
+                currentPageName: root.section
 
                 onSelected: {
                     root.setCurrentCentral(name)
@@ -100,7 +110,7 @@ DockPage {
         id: addonsComp
 
         AddonsContent {
-            item: root.subItem
+            section: root.subSection
         }
     }
 
@@ -125,7 +135,9 @@ DockPage {
     Component {
         id: learnComp
 
-        LearnPage {}
+        LearnPage {
+            section: root.subSection
+        }
     }
 
     Component {

@@ -23,7 +23,7 @@
 #define MU_NOTATION_ALIGNSELECT_H
 
 #include "ui_align_select.h"
-#include "libmscore/types.h"
+#include "engraving/types/types.h"
 
 namespace mu::notation {
 class AlignSelect : public QWidget, public Ui::AlignSelect

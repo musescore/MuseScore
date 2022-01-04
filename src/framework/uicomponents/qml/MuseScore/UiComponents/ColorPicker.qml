@@ -24,6 +24,8 @@ import QtQuick.Dialogs 1.2
 
 import MuseScore.Ui 1.0
 
+import "Utils.js" as Utils
+
 Rectangle {
     id: root
 
@@ -41,13 +43,18 @@ Rectangle {
     radius: 3
     color: "#000000"
 
-    border.width: navCtrl.active ? 2 : 1
-    border.color: navCtrl.active ? ui.theme.focusColor : "#000000"
+    NavigationFocusBorder { navigationCtrl: navCtrl }
+
+    border.width: ui.theme.borderWidth
+    border.color: ui.theme.strokeColor
 
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ColorPicker"
         enabled: root.enabled && root.visible
+        accessible.role: MUAccessible.Button
+        accessible.name: Utils.colorToString(root.color)
+
         onTriggered: colorDialog.open()
     }
 
@@ -79,13 +86,6 @@ Rectangle {
     }
 
     states: [
-        State {
-            name: "NORMAL"
-            when: !clickableArea.containsMouse && !colorDialog.visible
-
-            PropertyChanges { target: root; border.color: ui.theme.buttonColor }
-        },
-
         State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !clickableArea.pressed && !colorDialog.visible

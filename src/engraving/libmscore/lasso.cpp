@@ -21,12 +21,11 @@
  */
 
 #include "lasso.h"
-#include "mscore.h"
-#include "mscoreview.h"
 #include "score.h"
 #include "draw/brush.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -34,7 +33,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Lasso::Lasso(Score* s)
-    : Element(s)
+    : EngravingItem(ElementType::LASSO, s)
 {
     setVisible(false);
 }
@@ -47,10 +46,10 @@ void Lasso::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
     using namespace mu::draw;
-    painter->setBrush(Brush(QColor(0, 0, 50, 50)));
+    painter->setBrush(Brush(engravingConfiguration()->lassoColor()));
     // always 2 pixel width
-    qreal w = 2.0 / painter->worldTransform().m11();
-    painter->setPen(Pen(MScore::selectColor[0], w));
+    qreal w = 2.0 / painter->worldTransform().m11() * engravingConfiguration()->guiScaling();
+    painter->setPen(Pen(engravingConfiguration()->selectionColor(), w));
     painter->drawRect(bbox());
 }
 
@@ -60,42 +59,43 @@ void Lasso::draw(mu::draw::Painter* painter) const
 
 void Lasso::editDrag(EditData& ed)
 {
-    Qt::CursorShape cursorShape = ed.view()->cursor().shape();
+    //Qt::CursorShape cursorShape = Qt::ArrowCursor;
     switch (int(ed.curGrip)) {
     case 0:
-        cursorShape = Qt::SizeFDiagCursor;
+        //cursorShape = Qt::SizeFDiagCursor;
         bbox().setTopLeft(bbox().topLeft() + ed.delta);
         break;
     case 1:
-        cursorShape = Qt::SizeBDiagCursor;
+        //cursorShape = Qt::SizeBDiagCursor;
         bbox().setTopRight(bbox().topRight() + ed.delta);
         break;
     case 2:
-        cursorShape = Qt::SizeFDiagCursor;
+        //cursorShape = Qt::SizeFDiagCursor;
         bbox().setBottomRight(bbox().bottomRight() + ed.delta);
         break;
     case 3:
-        cursorShape = Qt::SizeBDiagCursor;
+        //cursorShape = Qt::SizeBDiagCursor;
         bbox().setBottomLeft(bbox().bottomLeft() + ed.delta);
         break;
     case 4:
-        cursorShape = Qt::SizeVerCursor;
+        //cursorShape = Qt::SizeVerCursor;
         bbox().setTop(bbox().top() + ed.delta.y());
         break;
     case 5:
-        cursorShape = Qt::SizeHorCursor;
+        //cursorShape = Qt::SizeHorCursor;
         bbox().setRight(bbox().right() + ed.delta.x());
         break;
     case 6:
-        cursorShape = Qt::SizeVerCursor;
+        //cursorShape = Qt::SizeVerCursor;
         bbox().setBottom(bbox().bottom() + ed.delta.y());
         break;
     case 7:
-        cursorShape = Qt::SizeHorCursor;
+        //cursorShape = Qt::SizeHorCursor;
         bbox().setLeft(bbox().left() + ed.delta.x());
         break;
     }
-    ed.view()->setCursor(QCursor(cursorShape));
+
+    // ed.view()->setCursor(QCursor(cursorShape));
 }
 
 //---------------------------------------------------------
@@ -115,45 +115,5 @@ std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
         PointF(box.x() + box.width() * .5, box.bottom()),
         PointF(box.left(), box.y() + box.height() * .5)
     };
-}
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool Lasso::setProperty(Pid propertyId, const QVariant& v)
-{
-    switch (propertyId) {
-    case Pid::LASSO_POS:
-        bbox().moveTo(PointF::fromVariant(v));
-        break;
-    case Pid::LASSO_SIZE:
-        bbox().setSize(SizeF::fromVariant(v));
-        break;
-    default:
-        if (!Element::setProperty(propertyId, v)) {
-            return false;
-        }
-        break;
-    }
-    score()->setUpdateAll();
-    return true;
-}
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-QVariant Lasso::getProperty(Pid propertyId) const
-{
-    switch (propertyId) {
-    case Pid::LASSO_POS:
-        return QVariant::fromValue(bbox().topLeft());
-    case Pid::LASSO_SIZE:
-        return QVariant::fromValue(bbox().size());
-    default:
-        break;
-    }
-    return Element::getProperty(propertyId);
 }
 }

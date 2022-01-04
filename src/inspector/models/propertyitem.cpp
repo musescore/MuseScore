@@ -21,12 +21,22 @@
  */
 #include "propertyitem.h"
 
-using namespace mu::inspector;
+#include "property.h"
 
-PropertyItem::PropertyItem(const int propertyId, QObject* parent)
-    : QObject(parent)
+using namespace mu::inspector;
+using namespace mu::engraving;
+
+PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
+    : QObject(parent), m_isVisible(true)
 {
     m_propertyId = propertyId;
+
+    P_TYPE propertyType = Ms::propertyType(propertyId);
+
+    if (propertyType != P_TYPE::COLOR) {
+        m_currentValue = 0;
+        m_defaultValue = 0;
+    }
 }
 
 void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defaultValue)
@@ -56,7 +66,7 @@ void PropertyItem::applyToStyle()
     emit applyToStyleRequested(m_styleId, m_currentValue);
 }
 
-int PropertyItem::propertyId() const
+Ms::Pid PropertyItem::propertyId() const
 {
     return m_propertyId;
 }
@@ -81,9 +91,14 @@ bool PropertyItem::isEnabled() const
     return m_isEnabled;
 }
 
+bool PropertyItem::isVisible() const
+{
+    return m_isVisible;
+}
+
 bool PropertyItem::isStyled() const
 {
-    return m_isStyled;
+    return m_styleId != Ms::Sid::NOSTYLE;
 }
 
 bool PropertyItem::isModified() const
@@ -91,9 +106,14 @@ bool PropertyItem::isModified() const
     return m_currentValue != m_defaultValue;
 }
 
-void PropertyItem::setStyleId(const int styleId)
+void PropertyItem::setStyleId(const Ms::Sid styleId)
 {
+    if (m_styleId == styleId) {
+        return;
+    }
+
     m_styleId = styleId;
+    emit isStyledChanged();
 }
 
 void PropertyItem::setValue(const QVariant& value)
@@ -124,12 +144,12 @@ void PropertyItem::setIsEnabled(bool isEnabled)
     emit isEnabledChanged(m_isEnabled);
 }
 
-void PropertyItem::setIsStyled(bool isStyled)
+void PropertyItem::setIsVisible(bool isVisible)
 {
-    if (m_isStyled == isStyled) {
+    if (m_isVisible == isVisible) {
         return;
     }
 
-    m_isStyled = isStyled;
-    emit isStyledChanged(m_isStyled);
+    m_isVisible = isVisible;
+    emit isVisibleChanged(isVisible);
 }

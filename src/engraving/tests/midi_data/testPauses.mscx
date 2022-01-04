@@ -85,7 +85,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Test Pauses - Section Break</text>
           </Text>
         </VBox>

@@ -23,14 +23,15 @@
 #ifndef __TEXTLINEBASE_H__
 #define __TEXTLINEBASE_H__
 
+#include "style/style.h"
+#include "types/types.h"
+
 #include "line.h"
-#include "style.h"
 #include "property.h"
 
 namespace Ms {
-enum class Align : char;
 class TextLineBase;
-class Element;
+class EngravingItem;
 class Text;
 
 //---------------------------------------------------------
@@ -48,31 +49,23 @@ protected:
     bool twoLines { false };
 
 public:
-    TextLineBaseSegment(Spanner*, Score* s, ElementFlags f = ElementFlag::NOTHING);
+    TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
     TextLineBaseSegment(const TextLineBaseSegment&);
     ~TextLineBaseSegment();
 
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
-    virtual void draw(mu::draw::Painter*) const override;
+    void draw(mu::draw::Painter*) const override;
 
-    virtual void layout() override;
-    virtual void setSelected(bool f) override;
+    void layout() override;
+    void setSelected(bool f) override;
 
-    virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    virtual Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
-    virtual Shape shape() const override;
+    Shape shape() const override;
 
-    virtual bool setProperty(Pid id, const QVariant& v) override;
-};
-
-//---------------------------------------------------------
-//   HookType
-//---------------------------------------------------------
-
-enum class HookType : char {
-    NONE, HOOK_90, HOOK_45, HOOK_90T
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
 };
 
 //---------------------------------------------------------
@@ -81,17 +74,13 @@ enum class HookType : char {
 
 class TextLineBase : public SLine
 {
-    enum class LineType : char {
-        CRESCENDO, DECRESCENDO
-    };
-
     M_PROPERTY(bool,      lineVisible,           setLineVisible)
     M_PROPERTY2(HookType, beginHookType,         setBeginHookType,          HookType::NONE)
     M_PROPERTY2(HookType, endHookType,           setEndHookType,            HookType::NONE)
     M_PROPERTY(Spatium,   beginHookHeight,       setBeginHookHeight)
     M_PROPERTY(Spatium,   endHookHeight,         setEndHookHeight)
 
-    M_PROPERTY(PlaceText, beginTextPlace,        setBeginTextPlace)
+    M_PROPERTY(TextPlace, beginTextPlace,        setBeginTextPlace)
     M_PROPERTY(QString,   beginText,             setBeginText)
     M_PROPERTY(Align,     beginTextAlign,        setBeginTextAlign)
     M_PROPERTY(QString,   beginFontFamily,       setBeginFontFamily)
@@ -99,7 +88,7 @@ class TextLineBase : public SLine
     M_PROPERTY(FontStyle, beginFontStyle,        setBeginFontStyle)
     M_PROPERTY(mu::PointF,   beginTextOffset,       setBeginTextOffset)
 
-    M_PROPERTY(PlaceText, continueTextPlace,     setContinueTextPlace)
+    M_PROPERTY(TextPlace, continueTextPlace,     setContinueTextPlace)
     M_PROPERTY(QString,   continueText,          setContinueText)
     M_PROPERTY(Align,     continueTextAlign,     setContinueTextAlign)
     M_PROPERTY(QString,   continueFontFamily,    setContinueFontFamily)
@@ -107,7 +96,7 @@ class TextLineBase : public SLine
     M_PROPERTY(FontStyle, continueFontStyle,     setContinueFontStyle)
     M_PROPERTY(mu::PointF,   continueTextOffset,    setContinueTextOffset)
 
-    M_PROPERTY(PlaceText, endTextPlace,          setEndTextPlace)
+    M_PROPERTY(TextPlace, endTextPlace,          setEndTextPlace)
     M_PROPERTY(QString,   endText,               setEndText)
     M_PROPERTY(Align,     endTextAlign,          setEndTextAlign)
     M_PROPERTY(QString,   endFontFamily,         setEndFontFamily)
@@ -119,21 +108,20 @@ protected:
     friend class TextLineBaseSegment;
 
 public:
-    TextLineBase(Score* s, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
-    virtual void write(XmlWriter& xml) const override;
-    virtual void read(XmlReader&) override;
+    void write(XmlWriter& xml) const override;
+    void read(XmlReader&) override;
 
-    virtual void writeProperties(XmlWriter& xml) const override;
-    virtual bool readProperties(XmlReader& node) override;
+    void writeProperties(XmlWriter& xml) const override;
+    bool readProperties(XmlReader& node) override;
 
-    virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
+    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual Pid propertyId(const QStringRef& xmlName) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    Pid propertyId(const QStringRef& xmlName) const override;
 };
 }     // namespace Ms
-Q_DECLARE_METATYPE(Ms::HookType);
 
 #endif

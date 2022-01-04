@@ -23,8 +23,12 @@
 #ifndef __BARLINE_H__
 #define __BARLINE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class MuseScoreView;
@@ -54,7 +58,6 @@ static const int BARLINE_SPAN_SHORT2_TO         = -1;
 struct BarLineTableItem {
     BarLineType type;
     const char* userName;         // user name, translatable
-    const char* name;
 };
 
 //---------------------------------------------------------
@@ -63,7 +66,7 @@ struct BarLineTableItem {
 //   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .END_START_REPEAT, .DOTTED)
 //---------------------------------------------------------
 
-class BarLine final : public Element
+class BarLine final : public EngravingItem
 {
     int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int _spanFrom           { 0 };         // line number on start and end staves
@@ -73,26 +76,31 @@ class BarLine final : public Element
     mutable qreal y2;
     ElementList _el;          ///< fermata or other articulations
 
+    friend class mu::engraving::Factory;
+    BarLine(Segment* parent);
+    BarLine(const BarLine&);
+
     void getY() const;
     void drawDots(mu::draw::Painter* painter, qreal x) const;
     void drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const;
     bool isTop() const;
     bool isBottom() const;
-    void drawEditMode(mu::draw::Painter*, EditData&) override;
+    void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
 
 public:
-    BarLine(Score* s = 0);
+
     virtual ~BarLine();
-    BarLine(const BarLine&);
+
     BarLine& operator=(const BarLine&) = delete;
 
+    void setParent(Segment* parent);
+
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
-    ElementType type() const override { return ElementType::BAR_LINE; }
     Fraction playTick() const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -101,17 +109,16 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void layout() override;
     void layout2();
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(int t) override;
-    void setScore(Score* s) override;
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     bool isEditable() const override { return true; }
 
-    Segment* segment() const { return toSegment(parent()); }
-    Measure* measure() const { return toMeasure(parent()->parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
+    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
     void setSpanStaff(int val) { _spanStaff = val; }
     void setSpanFrom(int val) { _spanFrom = val; }
@@ -123,45 +130,40 @@ public:
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
-    void endEdit(EditData&) override;
+    bool edit(EditData& ed) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
     Shape shape() const override;
 
-    ElementList* el() { return &_el; }
     const ElementList* el() const { return &_el; }
 
     static QString userTypeName(BarLineType);
     static const BarLineTableItem* barLineTableItem(unsigned);
 
-    QString barLineTypeName() const;
-    static QString barLineTypeName(BarLineType t);
-    void setBarLineType(const QString& s);
     void setBarLineType(BarLineType i) { _barLineType = i; }
     BarLineType barLineType() const { return _barLineType; }
-    static BarLineType barLineType(const QString&);
 
     int subtype() const override { return int(_barLineType); }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);
     mu::RectF layoutRect() const;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     QString accessibleInfo() const override;
     QString accessibleExtraInfo() const override;
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
-    int gripsCount() const override { return 2; }
-    Grip initialEditModeGrip() const override { return Grip::END; }
+    int gripsCount() const override { return 1; }
+    Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 

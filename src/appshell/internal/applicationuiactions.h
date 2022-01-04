@@ -26,15 +26,17 @@
 #include "applicationactioncontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
-#include "inotationpagestate.h"
 #include "async/asyncable.h"
+
+#include "view/dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
 class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
-    INJECT(appshell, INotationPageState, notationPageState)
-public:
+    INJECT(appshell, dock::IDockWindowProvider, dockWindowProvider)
+    INJECT(appshell, IAppShellConfiguration, configuration)
 
+public:
     ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller);
 
     void init();
@@ -47,13 +49,12 @@ public:
     bool actionChecked(const ui::UiAction& act) const override;
     async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
-private:
+    static const QMap<actions::ActionCode, DockName>& toggleDockActions();
 
-    PanelType panelType(const actions::ActionCode& code) const;
-    actions::ActionCode panelTypeToAction(const PanelType& type) const;
+private:
+    void listenOpenedDocksChanged(dock::IDockWindow* window);
 
     static const ui::UiActionList m_actions;
-    static const std::vector<std::pair<actions::ActionCode, PanelType> > m_panels;
 
     std::shared_ptr<ApplicationActionController> m_controller;
     async::Channel<actions::ActionCodeList> m_actionEnabledChanged;

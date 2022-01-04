@@ -11,7 +11,7 @@
 
 import PyKDDockWidgets
 
-from PySide import QtWidgets, QtGui
+from PySide2 import QtWidgets, QtGui
 
 from MyWidget import MyWidget
 

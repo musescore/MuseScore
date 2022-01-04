@@ -35,7 +35,6 @@ It is best to use a tool to determine the most commonly used inclusions.
 See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-use
 */
 
-
 // Std includes
 #include <memory> //413
 #include <vector> //401
@@ -91,7 +90,6 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <QFileInfo> //40
 #include <QSizeF> //39
 #include <QSet> //39
-#include <QRegExp> //38
 #include <QRect> //38
 #include <QDebug> //35
 #include <QSize> //34
@@ -109,4 +107,3 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <QXmlStreamAttributes> //22
 
 #endif //MU_PCH_H
-

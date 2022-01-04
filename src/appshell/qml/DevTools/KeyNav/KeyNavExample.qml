@@ -56,6 +56,8 @@ Rectangle {
         height: 64
         color: "#fce94f"
 
+        anchors.margins: ui.theme.navCtrlBorderWidth
+
         sectionName: "mainMenu"
         sectionOrder: 101
 
@@ -92,6 +94,8 @@ Rectangle {
         height: 64
         color: "#e9b96e"
 
+        anchors.margins: ui.theme.navCtrlBorderWidth
+
         sectionName: "topTools"
         sectionOrder: 102
 
@@ -120,6 +124,8 @@ Rectangle {
         width: 120
         color: "#729fcf"
 
+        anchors.margins: ui.theme.navCtrlBorderWidth
+
         sectionName: "leftPanel"
         sectionOrder: 103
 
@@ -147,6 +153,8 @@ Rectangle {
         width: 120
         color: "#8ae234"
 
+        anchors.margins: ui.theme.navCtrlBorderWidth
+
         sectionName: "rightPanel"
         sectionOrder: 105
 
@@ -173,6 +181,8 @@ Rectangle {
         anchors.top: topTools.bottom
         anchors.bottom: parent.bottom
         color: "#ef2929"
+
+        anchors.margins: ui.theme.navCtrlBorderWidth
 
         sectionName: "centerPanel"
         sectionOrder: 104

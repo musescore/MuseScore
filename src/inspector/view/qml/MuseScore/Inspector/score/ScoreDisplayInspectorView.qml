@@ -41,48 +41,56 @@ InspectorSectionView {
         rowSpacing: 12
         columnSpacing: 4
 
-        CheckBox {
+        VisibilityBox {
             Layout.fillWidth: true
-            Layout.maximumWidth: parent.width/2
+            Layout.maximumWidth: parent.width / 2
+
             navigation.panel: root.navigationPanel
             navigation.name: "Invisible"
             navigation.row: root.navigationRow(2)
+
             text: qsTrc("inspector", "Invisible")
-            checked: model ? model.shouldShowInvisible : false
-            onClicked: { model.shouldShowInvisible = !model.shouldShowInvisible }
+            isVisible: model ? model.shouldShowInvisible : false
+            onVisibleToggled: { model.shouldShowInvisible = !model.shouldShowInvisible }
         }
 
-        CheckBox {
+        VisibilityBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
+
             navigation.panel: root.navigationPanel
-            navigation.name: "Unprintable"
+            navigation.name: "Formatting"
             navigation.row: root.navigationRow(3)
-            text: qsTrc("inspector", "Unprintable")
-            checked: model ? model.shouldShowUnprintable : false
-            onClicked: { model.shouldShowUnprintable = !model.shouldShowUnprintable }
+
+            text: qsTrc("inspector", "Formatting")
+            isVisible: model ? model.shouldShowFormatting : false
+            onVisibleToggled: { model.shouldShowFormatting = !model.shouldShowFormatting }
         }
 
-        CheckBox {
+        VisibilityBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
+
             navigation.panel: root.navigationPanel
             navigation.name: "Frames"
             navigation.row: root.navigationRow(4)
+
             text: qsTrc("inspector", "Frames")
-            checked: model ? model.shouldShowFrames : false
-            onClicked: { model.shouldShowFrames = !model.shouldShowFrames }
+            isVisible: model ? model.shouldShowFrames : false
+            onVisibleToggled: { model.shouldShowFrames = !model.shouldShowFrames }
         }
 
-        CheckBox {
+        VisibilityBox {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width/2
+
             navigation.panel: root.navigationPanel
             navigation.name: "Page margins"
             navigation.row: root.navigationRow(5)
+
             text: qsTrc("inspector", "Page margins")
-            checked: model ? model.shouldShowPageMargins : false
-            onClicked: { model.shouldShowPageMargins = !model.shouldShowPageMargins }
+            isVisible: model ? model.shouldShowPageMargins : false
+            onVisibleToggled: { model.shouldShowPageMargins = !model.shouldShowPageMargins }
         }
     }
 }

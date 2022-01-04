@@ -26,23 +26,43 @@
 #include <list>
 #include <QKeySequence>
 
+#include "stringutils.h"
 #include "midi/midievent.h"
 
 namespace mu::shortcuts {
 struct Shortcut
 {
     std::string action;
-    std::string sequence;
+    std::vector<std::string> sequences;
+    std::string context;
     QKeySequence::StandardKey standardKey = QKeySequence::UnknownKey;
+
+    Shortcut() = default;
+    Shortcut(const std::string& a)
+        : action(a) {}
 
     bool isValid() const
     {
-        return !action.empty() && (!sequence.empty() || standardKey != QKeySequence::UnknownKey);
+        return !action.empty() && (!sequences.empty() || standardKey != QKeySequence::UnknownKey);
     }
 
     bool operator ==(const Shortcut& sc) const
     {
-        return action == sc.action && sequence == sc.sequence && standardKey == sc.standardKey;
+        return action == sc.action && sequences == sc.sequences && standardKey == sc.standardKey;
+    }
+
+    std::string sequencesAsString() const { return sequencesToString(sequences); }
+
+    static std::string sequencesToString(const std::vector<std::string>& seqs)
+    {
+        return strings::join(seqs, "; ");
+    }
+
+    static std::vector<std::string> sequencesFromString(const std::string& str)
+    {
+        std::vector<std::string> seqs;
+        strings::split(str, seqs, "; ");
+        return seqs;
     }
 };
 
@@ -70,6 +90,11 @@ struct RemoteEvent {
     bool operator ==(const RemoteEvent& other) const
     {
         return type == other.type && value == other.value;
+    }
+
+    bool operator !=(const RemoteEvent& other) const
+    {
+        return !operator==(other);
     }
 };
 
@@ -108,6 +133,37 @@ inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
     }
 
     return event;
+}
+
+inline bool needIgnoreKey(int key)
+{
+    if (key == 0) {
+        return true;
+    }
+
+    static const std::set<Qt::Key> ignoredKeys {
+        Qt::Key_Shift,
+        Qt::Key_Control,
+        Qt::Key_Meta,
+        Qt::Key_Alt,
+        Qt::Key_AltGr,
+        Qt::Key_CapsLock,
+        Qt::Key_NumLock,
+        Qt::Key_ScrollLock,
+        Qt::Key_unknown
+    };
+
+    return ignoredKeys.find(static_cast<Qt::Key>(key)) != ignoredKeys.end();
+}
+
+inline std::pair<int, Qt::KeyboardModifiers> correctKeyInput(int key, Qt::KeyboardModifiers modifiers)
+{
+    // replace Backtab with Shift+Tab
+    if (key == Qt::Key_Backtab && modifiers == Qt::ShiftModifier) {
+        key = Qt::Key_Tab;
+    }
+
+    return { key, modifiers };
 }
 }
 

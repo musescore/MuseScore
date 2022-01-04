@@ -21,74 +21,88 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Dock 1.0 as Dock
+import MuseScore.Dock 1.0
 
-Dock.DockPage {
+DockPageView {
     id: root
 
-    property alias central: central.sourceComponent
+    property Component central: null
 
-    centralDock: Dock.DockCentral {
+    property var toolBarLeftDropDestination: { "dock": toolBarLeftDockingHolder, "dropLocation": Location.Top }
+    property var toolBarRightDropDestination: { "dock": toolBarRightDockingHolder, "dropLocation": Location.Top }
+    property var toolBarTopDropDestination: { "dock": toolBarTopDockingHolder, "dropLocation": Location.Left }
+    property var toolBarBottomDropDestination: { "dock": toolBarBottomDockingHolder, "dropLocation": Location.Left }
+
+    property var panelLeftDropDestination: { "dock": panelLeftDockingHolder, "dropLocation": Location.Top }
+    property var panelRightDropDestination: { "dock": panelRightDockingHolder, "dropLocation": Location.Top }
+    property var panelTopDropDestination: { "dock": panelTopDockingHolder, "dropLocation": Location.Left }
+    property var panelBottomDropDestination: { "dock": panelBottomDockingHolder, "dropLocation": Location.Left }
+
+    property bool complited: false
+    Component.onCompleted: root.complited = true
+    Component.onDestruction: root.complited = false
+
+    centralDock: DockCentralView {
         objectName: root.objectName + "_central"
 
         Loader {
             id: central
-
             anchors.fill: parent
+            sourceComponent: (root.complited && central.visible) ? root.central : null
         }
     }
 
     toolBarsDockingHolders: [
-        Dock.DockToolBarHolder {
+        DockingHolder {
+            id: toolBarLeftDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderLeft"
-            location: Dock.DockBase.Left
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Left
         },
-        Dock.DockToolBarHolder {
+        DockingHolder {
+            id: toolBarRightDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderRight"
-            location: Dock.DockBase.Right
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Right
         },
-        Dock.DockToolBarHolder {
+        DockingHolder {
+            id: toolBarTopDockingHolder
+
             objectName: root.objectName + "_toolBarsDockingHolderTop"
-            location: Dock.DockBase.Top
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Top
         },
-        Dock.DockToolBarHolder {
-            objectName: root.objectName + "_toolBarsDockingHolderBottom"
-            location: Dock.DockBase.Bottom
+        DockingHolder {
+            id: toolBarBottomDockingHolder
 
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            objectName: root.objectName + "_toolBarsDockingHolderBottom"
+            location: Location.Bottom
         }
     ]
 
     panelsDockingHolders: [
-        Dock.DockPanelHolder {
+        DockingHolder {
+            id: panelLeftDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderLeft"
-            location: Dock.DockBase.Left
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Left
         },
-        Dock.DockPanelHolder {
+        DockingHolder {
+            id: panelRightDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderRight"
-            location: Dock.DockBase.Right
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Right
         },
-        Dock.DockPanelHolder {
+        DockingHolder {
+            id: panelTopDockingHolder
+
             objectName: root.objectName + "_panelsDockingHolderTop"
-            location: Dock.DockBase.Top
-
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            location: Location.Top
         },
-        Dock.DockPanelHolder {
-            objectName: root.objectName + "_panelsDockingHolderBottom"
-            location: Dock.DockBase.Bottom
+        DockingHolder {
+            id: panelBottomDockingHolder
 
-            Rectangle { color: ui.theme.backgroundPrimaryColor }
+            objectName: root.objectName + "_panelsDockingHolderBottom"
+            location: Location.Bottom
         }
     ]
 }

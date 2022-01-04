@@ -55,7 +55,8 @@ public:
 
     const std::set<INavigationSection*>& sections() const override;
 
-    bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& control) override;
+    bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) override;
+    bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) override;
 
     INavigationSection* activeSection() const override;
     INavigationPanel* activePanel() const override;
@@ -63,13 +64,36 @@ public:
 
     async::Notification navigationChanged() const override;
 
+    bool isHighlight() const override;
+    async::Notification highlightChanged() const override;
+
+    void setIsResetOnMousePress(bool arg) override;
+
+    void dump() const override;
+
     void init();
 
 private:
 
+    enum class NavigationType {
+        NextSection,
+        PrevSection,
+        PrevSectionActiveLastPanel,
+        NextPanel,
+        PrevPanel,
+        Left,
+        Right,
+        Up,
+        Down,
+        FirstControl,
+        LastControl,
+        NextRowControl,
+        PrevRowControl
+    };
+
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void devShowControls();
+    void navigateTo(NavigationType type);
 
     void goToNextSection();
     void goToPrevSection(bool isActivateLastPanel = false);
@@ -90,7 +114,7 @@ private:
     void onEscape();
 
     void doTriggerControl();
-    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl);
+    void onActiveRequested(INavigationSection* sect, INavigationPanel* panel, INavigationControl* ctrl, bool force = false);
 
     void doActivateSection(INavigationSection* sect, bool isActivateLastPanel = false);
     void doDeactivateSection(INavigationSection* sect);
@@ -102,10 +126,14 @@ private:
     void doActivateFirst();
     void doActivateLast();
 
+    void resetIfNeed(QObject* watched);
     void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;
+    async::Notification m_highlightChanged;
+    bool m_isNavigatedByKeyboard = false;
+    bool m_isResetOnMousePress = true;
 };
 }
 

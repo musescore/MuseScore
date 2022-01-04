@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,10 +32,8 @@ import MuseScore.Plugins 1.0
 FocusScope {
     id: root
 
-    property var color: ui.theme.backgroundSecondaryColor
-    property string item: ""
-
-    signal requestActiveFocus()
+    property alias color: background.color
+    property string section: ""
 
     QtObject {
         id: prv
@@ -45,27 +43,28 @@ FocusScope {
 
     NavigationSection {
         id: navSec
-        name: "Addons"
-        enabled: root.visible
+        name: "Add-ons"
+        enabled: root.enabled && root.visible
         order: 3
         onActiveChanged: {
             if (active) {
-                root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
 
-    onItemChanged: {
-        if (!Boolean(root.item)) {
+    onSectionChanged: {
+        if (!Boolean(root.section)) {
             return
         }
 
-        bar.selectPage(root.item)
+        tabBar.selectPage(root.section)
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
-        color: root.color
+        color: ui.theme.backgroundSecondaryColor
     }
 
     RowLayout {
@@ -83,99 +82,89 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "AddonsSearch"
+            enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
-            accessible.name: qsTrc("appshell", "Addons")
+            accessible.name: qsTrc("appshell", "Add-ons")
         }
 
         StyledTextLabel {
             id: addonsLabel
+            Layout.fillWidth: true
 
             text: qsTrc("appshell", "Add-ons")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
         }
 
-        Item {
-            Layout.preferredWidth: topLayout.width - addonsLabel.width - serchAndCategoryLayout.width - topLayout.spacing * 2
-            Layout.fillHeight: true
+        SearchField {
+            id: searchField
+
+            Layout.preferredWidth: 220
+
+            navigation.name: "AddonsSearch"
+            navigation.panel: navSearchPanel
+            navigation.order: 1
+            accessible.name: qsTrc("appshell", "Add-ons search")
+
+            onSearchTextChanged: {
+                categoryComboBox.selectedCategory = ""
+            }
         }
 
-        Row {
-            id: serchAndCategoryLayout
+        Dropdown {
+            id: categoryComboBox
 
-            spacing: 12
+            width: searchField.width
 
-            SearchField {
-                id: searchField
+            navigation.name: "CategoryComboBox"
+            navigation.panel: navSearchPanel
+            navigation.order: 2
 
-                navigation.name: "AddonsSearch"
-                navigation.panel: navSearchPanel
-                navigation.order: 1
-                accessible.name: qsTrc("appshell", "Addons search")
+            visible: tabBar.canFilterByCategories
 
-                onSearchTextChanged: {
-                    categoryComboBox.selectedCategory = ""
+            readonly property string allCategoryValue: "ALL_CATEGORY"
+            property string selectedCategory: (currentValue !== allCategoryValue) ? currentValue : ""
+
+            displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
+            currentIndex: indexOfValue(allCategoryValue)
+
+            function initModel() {
+                var categories = tabBar.categories()
+                var result = []
+
+                result.push({ "text": qsTrc("appshell", "All"), "value": allCategoryValue })
+
+                for (var i = 0; i < categories.length; ++i) {
+                    var category = categories[i]
+                    result.push({ "text": category, "value": category })
                 }
+
+                model = result
             }
 
-            StyledComboBox {
-                id: categoryComboBox
-
-                width: searchField.width
-
-                navigation.name: "CategoryComboBox"
-                navigation.panel: navSearchPanel
-                navigation.order: 2
-
-                textRoleName: "text"
-                valueRoleName: "value"
-
-                visible: bar.canFilterByCategories
-
-                property string selectedCategory: Boolean(value) ? value : ""
-
-                displayText: qsTrc("appshell", "Category: ") + currentText
-
-                function initModel() {
-                    var categories = bar.categories()
-                    var result = []
-
-                    result.push({ "text": qsTrc("appshell", "All"), "value": "" })
-
-                    for (var i = 0; i < categories.length; ++i) {
-                        var category = categories[i]
-                        result.push({ "text": category, "value": category })
-                    }
-
-                    model = result
-                }
-
-                Component.onCompleted: {
-                    initModel()
-                }
+            Component.onCompleted: {
+                initModel()
             }
         }
     }
 
-    TabBar {
-        id: bar
+    StyledTabBar {
+        id: tabBar
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 36
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - itemSideMargin
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
 
-        contentHeight: 32
-        spacing: 0
-
-        property bool canFilterByCategories: bar.currentIndex === 0 || bar.currentIndex === 1
-        readonly property int itemSideMargin: 22
+        property bool canFilterByCategories: tabBar.currentIndex === 0 || tabBar.currentIndex === 1
 
         function categories() {
             var result = []
 
-            if (bar.currentIndex === 0) {
+            if (tabBar.currentIndex === 0) {
                 result = pluginsComp.categories()
             }
 
@@ -199,62 +188,54 @@ FocusScope {
         NavigationPanel {
             id: navTabPanel
             name: "AddonsTabs"
+            enabled: tabBar.enabled && tabBar.visible
             section: navSec
             order: 2
-            accessible.name: qsTrc("appshell", "Addons tabs")
+            accessible.name: qsTrc("appshell", "Add-ons tabs")
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", bar.currentItem.navigation.name)
+                    event.setData("controlName", tabBar.currentItem.navigation.name)
                 }
             }
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Plugins")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
 
             navigation.name: "Plugins"
             navigation.panel: navTabPanel
             navigation.order: 1
-            onNavigationTriggered: bar.currentIndex = 0
+            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Extensions")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Extensions"
             navigation.panel: navTabPanel
             navigation.order: 2
-            onNavigationTriggered: bar.currentIndex = 1
+            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
             text: qsTrc("appshell", "Languages")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Languages"
             navigation.panel: navTabPanel
             navigation.order: 3
-            onNavigationTriggered: bar.currentIndex = 2
+            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 
     StackLayout {
-        anchors.top: bar.bottom
-        anchors.topMargin: 24
+        anchors.top: tabBar.bottom
+        anchors.topMargin: 36
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        currentIndex: bar.currentIndex
+        currentIndex: tabBar.currentIndex
 
         PluginsPage {
             id: pluginsComp
@@ -264,6 +245,8 @@ FocusScope {
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
 
         ExtensionsPage {
@@ -273,18 +256,19 @@ FocusScope {
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
 
         LanguagesPage {
             id: languagesComp
 
-            navigation.section: navSec
-            navigation.order: 3
             search: searchField.searchText
             backgroundColor: root.color
 
             sideMargin: prv.sideMargin
+
+            navigationSection: navSec
         }
     }
 }
-

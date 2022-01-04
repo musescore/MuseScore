@@ -62,13 +62,16 @@ StaffGroup InputState::staffGroup() const
         return StaffGroup::STANDARD;
     }
 
-    StaffGroup staffGroup = _segment->score()->staff(_track / VOICES)->staffType(_segment->tick())->group();
-    Instrument* instrument = _segment->score()->staff(_track / VOICES)->part()->instrument(_segment->tick());
+    Fraction tick = _segment->tick();
+    const Staff* staff = _segment->score()->staff(_track / VOICES);
+    StaffGroup staffGroup = staff->staffType(tick)->group();
+    const Instrument* instrument = staff->part()->instrument(tick);
 
     // if not tab, pitched/unpitched input depends on instrument, not staff (override StaffGroup)
     if (staffGroup != StaffGroup::TAB) {
         staffGroup = instrument->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
     }
+
     return staffGroup;
 }
 
@@ -98,7 +101,7 @@ ChordRest* InputState::cr() const
 void InputState::setDots(int n)
 {
     if (n && (!_duration.isValid() || _duration.isZero() || _duration.isMeasure())) {
-        _duration = TDuration::DurationType::V_QUARTER;
+        _duration = DurationType::V_QUARTER;
     }
     _duration.setDots(n);
 }
@@ -107,7 +110,7 @@ void InputState::setDots(int n)
 //   note
 //---------------------------------------------------------
 
-Note* InputState::note(Element* e)
+Note* InputState::note(EngravingItem* e)
 {
     return e && e->isNote() ? toNote(e) : nullptr;
 }
@@ -116,7 +119,7 @@ Note* InputState::note(Element* e)
 //   chordRest
 //---------------------------------------------------------
 
-ChordRest* InputState::chordRest(Element* e)
+ChordRest* InputState::chordRest(EngravingItem* e)
 {
     if (!e) {
         return nullptr;
@@ -142,7 +145,7 @@ ChordRest* InputState::chordRest(Element* e)
 
 void InputState::update(Selection& selection)
 {
-    setDuration(TDuration::DurationType::V_INVALID);
+    setDuration(DurationType::V_INVALID);
     setRest(false);
     setAccidentalType(AccidentalType::NONE);
     Note* n1 = nullptr;
@@ -152,7 +155,7 @@ void InputState::update(Selection& selection)
     bool chordsAndRests = false;
 
     std::set<SymId> articulationSymbolIds;
-    for (Element* e : selection.elements()) {
+    for (EngravingItem* e : selection.elements()) {
         if (Note* n = note(e)) {
             if (n1) {
                 if (n->accidentalType() != n1->accidentalType()) {
@@ -161,12 +164,12 @@ void InputState::update(Selection& selection)
                 }
 
                 std::set<SymId> articulationsIds;
-                for (Articulation* articulation: n->chord()->articulations()) {
-                    articulationsIds.insert(articulation->symId());
+                for (Articulation* artic: n->chord()->articulations()) {
+                    articulationsIds.insert(artic->symId());
                 }
 
                 articulationsIds = Ms::splitArticulations(articulationsIds);
-                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+                articulationsIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
                 for (const SymId& articulationSymbolId: articulationsIds) {
                     if (std::find(articulationSymbolIds.begin(), articulationSymbolIds.end(),
                                   articulationSymbolId) == articulationSymbolIds.end()) {
@@ -177,10 +180,10 @@ void InputState::update(Selection& selection)
                 setAccidentalType(n->accidentalType());
 
                 std::set<SymId> articulationsIds;
-                for (Articulation* articulation: n->chord()->articulations()) {
-                    articulationsIds.insert(articulation->symId());
+                for (Articulation* artic: n->chord()->articulations()) {
+                    articulationsIds.insert(artic->symId());
                 }
-                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
+                articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::PlacementV::ABOVE);
 
                 n1 = n;
             }
@@ -189,7 +192,7 @@ void InputState::update(Selection& selection)
         if (ChordRest* cr = chordRest(e)) {
             if (cr1) {
                 if (cr->durationType() != cr1->durationType()) {
-                    setDuration(TDuration::DurationType::V_INVALID);
+                    setDuration(DurationType::V_INVALID);
                     differentDurations = true;
                 }
                 if ((cr->isRest() && !cr1->isRest()) || (!cr->isRest() && cr1->isRest())) {
@@ -210,7 +213,7 @@ void InputState::update(Selection& selection)
 
     setArticulationIds(joinArticulations(articulationSymbolIds));
 
-    Element* e = selection.element();
+    EngravingItem* e = selection.element();
     if (e == 0) {
         setTrack(selection.activeTrack());
         setSegment(selection.startSegment());
@@ -242,7 +245,7 @@ void InputState::update(Selection& selection)
 //   moveInputPos
 //---------------------------------------------------------
 
-void InputState::moveInputPos(Element* e)
+void InputState::moveInputPos(EngravingItem* e)
 {
     if (e == 0) {
         return;

@@ -28,16 +28,28 @@ import "../../../common"
 TabPanel {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
+
+    property int navigationRowStart: 1
 
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              advancedTab.visible ? advancedTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
-    Tab {
+    function focusOnFirst() {
+        generalTab.navigation.requestActive()
+    }
+
+    TabItem {
         id: generalTab
 
         title: qsTrc("inspector", "General")
+        checked: root.currentIndex === 0
+
+        navigation.name: "GeneralTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+        onNavigationTriggered: root.currentIndex = 0
 
         FretGeneralSettingsTab {
             anchors.top: parent.top
@@ -45,16 +57,27 @@ TabPanel {
 
             width: root.width
 
+            enabled: generalTab.checked
+
             model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1000
         }
     }
 
-    Tab {
+    TabItem {
         id: advancedTab
 
         title: qsTrc("inspector", "Settings")
+        checked: root.currentIndex === 1
 
         enabled: root.model ? root.model.areSettingsAvailable : false
+
+        navigation.name: "SettingsTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart + 1
+        onNavigationTriggered: root.currentIndex = 1
 
         FretAdvancedSettingsTab {
             anchors.top: parent.top
@@ -62,7 +85,12 @@ TabPanel {
 
             width: root.width
 
+            enabled: advancedTab.checked
+
             model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 2000
         }
     }
 }

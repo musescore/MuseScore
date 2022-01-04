@@ -20,7 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -36,95 +35,55 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
+        spacing: root.sectionsSpacing
 
-        spacing: 22
+        NoteInputSection {
+            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
+            colorNotes: noteInputModel.colorNotesOusideOfUsablePitchRange
+            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "Note Input")
-            font: ui.theme.bodyBoldFont
-        }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-        CheckBox {
-            text: qsTrc("appshell", "Advance to next note on key release (MIDI)")
-
-            checked: noteInputModel.advanceToNextNoteOnKeyRelease
-
-            onClicked: {
-                noteInputModel.advanceToNextNoteOnKeyRelease = !checked
+            onAdvanceToNextNoteChangeRequested: function(advance) {
+                noteInputModel.advanceToNextNoteOnKeyRelease = advance
             }
-        }
 
-        CheckBox {
-            width: 170
-            text: qsTrc("appshell", "Colour notes outside of usable pitch range")
-
-            checked: noteInputModel.colorNotesOusideOfUsablePitchRange
-
-            onClicked: {
-                noteInputModel.colorNotesOusideOfUsablePitchRange = !checked
+            onColorNotesChangeRequested: function(color) {
+                noteInputModel.colorNotesOusideOfUsablePitchRange = color
             }
-        }
 
-        IncrementalPropertyControlWithTitle {
-            title: qsTrc("appshell", "Delay between notes in automatic real time mode:")
-
-            titleWidth: 173
-            spacing: 46
-
-            currentValue: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
-            measureUnitsSymbol: qsTrc("appshell", "ms")
-
-            onValueEdited: {
-                noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = newValue
+            onDelayBetweenNotesChangeRequested: function(delay) {
+                noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = delay
             }
         }
 
         SeparatorLine {}
 
-        CheckBox {
-            text: qsTrc("appshell", "Play Notes When Editing")
-            font: ui.theme.bodyBoldFont
+        NoteInputPlaySection {
+            playNotesWhenEditing: noteInputModel.playNotesWhenEditing
+            playChordWhenEditing: noteInputModel.playChordWhenEditing
+            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
+            notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
 
-            checked: noteInputModel.playNotesWhenEditing
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
 
-            onClicked: {
-                noteInputModel.playNotesWhenEditing = !checked
+            onPlayNotesWhenEditingChangeRequested: function(play) {
+                noteInputModel.playChordWhenEditing = play
             }
-        }
 
-        IncrementalPropertyControlWithTitle {
-            title: qsTrc("appshell", "Default duration:")
-
-            spacing: 126
-
-            currentValue: noteInputModel.notePlayDurationMilliseconds
-            measureUnitsSymbol: qsTrc("appshell", "ms")
-
-            onValueEdited: {
-                noteInputModel.notePlayDurationMilliseconds = newValue
+            onPlayChordWhenEditingChangeRequested: function(play) {
+                noteInputModel.playChordWhenEditing = play
             }
-        }
 
-        CheckBox {
-            text: qsTrc("appshell", "Play chord when editing")
-
-            checked: noteInputModel.playChordWhenEditing
-            enabled: noteInputModel.playNotesWhenEditing
-
-            onClicked: {
-                noteInputModel.playChordWhenEditing = !checked
+            onPlayChordSymbolWhenEditingChangeRequested: function(play) {
+                noteInputModel.playChordSymbolWhenEditing = play
             }
-        }
 
-        CheckBox {
-            text: qsTrc("appshell", "Play chord symbol when editing")
-
-            checked: noteInputModel.playChordSymbolWhenEditing
-            enabled: noteInputModel.playNotesWhenEditing
-
-            onClicked: {
-                noteInputModel.playChordSymbolWhenEditing = !checked
+            onNotePlayDurationChangeRequested: function(duration) {
+                noteInputModel.notePlayDurationMilliseconds = duration
             }
         }
     }

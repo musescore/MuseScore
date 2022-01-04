@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+#include "../iapplicationactioncontroller.h"
+
 #include "modularity/ioc.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
@@ -34,10 +36,11 @@
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "userscores/ifilescorecontroller.h"
+#include "project/iprojectfilescontroller.h"
+#include "istartupscenario.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public QObject, public actions::Actionable, public async::Asyncable
+class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
 {
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
@@ -46,19 +49,24 @@ class ApplicationActionController : public QObject, public actions::Actionable, 
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, userscores::IFileScoreController, fileScoreController)
+    INJECT(appshell, project::IProjectFilesController, projectFilesController)
+    INJECT(appshell, IStartupScenario, startupScenario)
 
 public:
     void init();
 
     ValCh<bool> isFullScreen() const;
 
+    void onDragEnterEvent(QDragEnterEvent* event) override;
+    void onDragMoveEvent(QDragMoveEvent* event) override;
+    void onDropEvent(QDropEvent* event) override;
+
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void setupConnections();
 
-    void quit();
+    void quit(bool isAllInstances);
     void toggleFullScreen();
     void openAboutDialog();
     void openAboutQtDialog();

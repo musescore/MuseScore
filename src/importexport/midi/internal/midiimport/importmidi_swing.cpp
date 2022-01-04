@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_swing.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
@@ -68,7 +68,7 @@ void SwingDetector::add(ChordRest* cr)
             return;
         }
         const int tickInBar = (cr->tick() - cr->measure()->tick()).ticks();
-        if (tickInBar % MScore::division == 0) {
+        if (tickInBar % Constant::division == 0) {
             append(cr);
         }
     } else {
@@ -154,7 +154,7 @@ void SwingDetector::applySwing()
 
     Tuplet* tuplet = nullptr;
     for (ChordRest* el: elements) {
-        el->setDurationType(TDuration::DurationType::V_EIGHTH);
+        el->setDurationType(DurationType::V_EIGHTH);
         el->setTicks(Fraction(1, 8));
         el->setDots(0);
         if (el->tuplet()) {
@@ -170,7 +170,7 @@ void SwingDetector::applySwing()
     const int startTick = first->segment()->tick().ticks();
     ChordRest* last = elements.back();
     last->segment()->remove(last);
-    Segment* s = last->measure()->getSegment(SegmentType::ChordRest, Fraction::fromTicks(startTick + MScore::division / 2));
+    Segment* s = last->measure()->getSegment(SegmentType::ChordRest, Fraction::fromTicks(startTick + Constant::division / 2));
     s->add(last);
 
     if (elements.size() == 3) {
@@ -246,9 +246,9 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     }
     if (swingDetector.wasSwingApplied()) {
         // add swing label to the score
-        StaffText* st = new StaffText(score, Tid::STAFF);
-        st->setPlainText(swingCaption(swingType));
         Segment* seg = score->firstSegment(SegmentType::ChordRest);
+        StaffText* st = new StaffText(seg, TextStyleType::STAFF);
+        st->setPlainText(swingCaption(swingType));
         st->setParent(seg);
         st->setTrack(strack);       // voice == 0
         score->addElement(st);

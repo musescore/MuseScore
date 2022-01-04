@@ -23,19 +23,21 @@
 #define MU_INSPECTOR_INSPECTORLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "libmscore/element.h"
-#include "models/abstractinspectormodel.h"
-#include "internal/services/elementrepositoryservice.h"
+
+#include "libmscore/engravingitem.h"
+
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
 #include "async/asyncable.h"
+#include "context/iglobalcontext.h"
+#include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
+class IElementRepositoryService;
 class InspectorListModel : public QAbstractListModel, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(inspector, mu::context::IGlobalContext, context)
+    INJECT(inspector, context::IGlobalContext, context)
 
 public:
     explicit InspectorListModel(QObject* parent = nullptr);
@@ -51,29 +53,30 @@ signals:
 
 private:
     enum RoleNames {
-        InspectorDataRole = Qt::UserRole + 1,
-        InspectorTitleRole
+        InspectorSectionModelRole = Qt::UserRole + 1
     };
 
-    void setElementList(const QList<Ms::Element*>& selectedElementList);
+    void onNotationChanged();
 
-    void buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet);
-    void buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet);
+    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
 
-    void createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList);
-    void removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
-                            const QList<AbstractInspectorModel::InspectorSectionType>& exclusions = QList<AbstractInspectorModel::InspectorSectionType>());
+    void buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet);
+    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet);
+
+    void createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList, const ElementKeySet& selectedElementKeySet = {});
+    void removeUnusedModels(const ElementKeySet& newElementKeySet,
+                            const QList<InspectorSectionType>& exclusions = QList<InspectorSectionType>());
+
+    bool isModelAllowed(const AbstractInspectorModel* model, const InspectorModelTypeSet& allowedModelTypes,
+                        const InspectorSectionTypeSet& allowedSectionTypes) const;
+
     void sortModels();
 
-    bool isModelAlreadyExists(const AbstractInspectorModel::InspectorSectionType modelType) const;
+    AbstractInspectorModel* modelBySectionType(InspectorSectionType sectionType) const;
 
-    void subscribeOnSelectionChanges();
-
-    QHash<int, QByteArray> m_roleNames;
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
-    notation::INotationPtr m_notation;
 };
 }
 

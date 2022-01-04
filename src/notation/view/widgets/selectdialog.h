@@ -66,9 +66,9 @@ private:
     void apply() const;
     FilterElementsOptions elementOptions() const;
 
-    Ms::System* elementSystem(const Element* element) const;
+    Ms::System* elementSystem(const EngravingItem* element) const;
 
-    const Element* m_element = nullptr;
+    const EngravingItem* m_element = nullptr;
 };
 } // namespace Ms
 #endif

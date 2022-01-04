@@ -24,7 +24,7 @@
 
 #include <QButtonGroup>
 
-#include "ui/view/iconcodes.h"
+#include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -45,16 +45,18 @@ AlignSelect::AlignSelect(QWidget* parent)
     g2->addButton(alignBaseline);
     g2->addButton(alignBottom);
 
-    alignLeft->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_LEFT));
-    alignRight->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_RIGHT));
-    alignHCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_CENTER));
-    alignVCenter->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_MIDDLE));
-    alignTop->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_ABOVE));
-    alignBaseline->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_BASELINE));
-    alignBottom->setText(iconCodeToChar(IconCode::Code::TEXT_ALIGN_UNDER));
+    WidgetUtils::setWidgetIcon(alignLeft, IconCode::Code::TEXT_ALIGN_LEFT);
+    WidgetUtils::setWidgetIcon(alignRight, IconCode::Code::TEXT_ALIGN_RIGHT);
+    WidgetUtils::setWidgetIcon(alignHCenter, IconCode::Code::TEXT_ALIGN_CENTER);
+    WidgetUtils::setWidgetIcon(alignVCenter, IconCode::Code::TEXT_ALIGN_MIDDLE);
+    WidgetUtils::setWidgetIcon(alignTop, IconCode::Code::TEXT_ALIGN_ABOVE);
+    WidgetUtils::setWidgetIcon(alignBaseline, IconCode::Code::TEXT_ALIGN_BASELINE);
+    WidgetUtils::setWidgetIcon(alignBottom, IconCode::Code::TEXT_ALIGN_UNDER);
 
-    connect(g1, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
-    connect(g2, SIGNAL(buttonToggled(int,bool)), SLOT(_alignChanged()));
+    connect(g1, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
+            this, &AlignSelect::_alignChanged);
+    connect(g2, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
+            this, &AlignSelect::_alignChanged);
 }
 
 void AlignSelect::_alignChanged()
@@ -64,18 +66,18 @@ void AlignSelect::_alignChanged()
 
 Ms::Align AlignSelect::align() const
 {
-    Ms::Align a = Ms::Align::LEFT;
+    Ms::Align a = { Ms::AlignH::LEFT, Ms::AlignV::TOP };
     if (alignHCenter->isChecked()) {
-        a = a | Ms::Align::HCENTER;
+        a = Ms::AlignH::HCENTER;
     } else if (alignRight->isChecked()) {
-        a = a | Ms::Align::RIGHT;
+        a = Ms::AlignH::RIGHT;
     }
     if (alignVCenter->isChecked()) {
-        a = a | Ms::Align::VCENTER;
+        a = Ms::AlignV::VCENTER;
     } else if (alignBottom->isChecked()) {
-        a = a | Ms::Align::BOTTOM;
+        a = Ms::AlignV::BOTTOM;
     } else if (alignBaseline->isChecked()) {
-        a = a | Ms::Align::BASELINE;
+        a = Ms::AlignV::BASELINE;
     }
     return a;
 }
@@ -83,18 +85,18 @@ Ms::Align AlignSelect::align() const
 void AlignSelect::setAlign(Ms::Align a)
 {
     blockAlign(true);
-    if (a & Ms::Align::HCENTER) {
+    if (a == Ms::AlignH::HCENTER) {
         alignHCenter->setChecked(true);
-    } else if (a & Ms::Align::RIGHT) {
+    } else if (a == Ms::AlignH::RIGHT) {
         alignRight->setChecked(true);
     } else {
         alignLeft->setChecked(true);
     }
-    if (a & Ms::Align::VCENTER) {
+    if (a == Ms::AlignV::VCENTER) {
         alignVCenter->setChecked(true);
-    } else if (a & Ms::Align::BOTTOM) {
+    } else if (a == Ms::AlignV::BOTTOM) {
         alignBottom->setChecked(true);
-    } else if (a & Ms::Align::BASELINE) {
+    } else if (a == Ms::AlignV::BASELINE) {
         alignBaseline->setChecked(true);
     } else {
         alignTop->setChecked(true);

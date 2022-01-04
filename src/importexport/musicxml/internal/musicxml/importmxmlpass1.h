@@ -23,7 +23,7 @@
 #ifndef __IMPORTMXMLPASS1_H__
 #define __IMPORTMXMLPASS1_H__
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
@@ -119,6 +119,7 @@ public:
     void initPartState(const QString& partId);
     Score::FileError parse(QIODevice* device);
     Score::FileError parse();
+    QString errors() const { return _errors; }
     void scorePartwise();
     void identification();
     void credit(CreditWordsList& credits);
@@ -161,7 +162,7 @@ public:
     Part* getPart(const QString& id) const { return _partMap.value(id); }
     MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
     MusicXMLInstruments getInstruments(const QString& id) const { return _instruments.value(id); }
-    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
+    void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const QString id) const;
     MusicXmlIntervalList getIntervals(const QString id) const;
     Fraction getMeasureStart(const int i) const;
@@ -171,7 +172,7 @@ public:
 
 private:
     // functions
-    // none
+    void addError(const QString& error);        ///< Add an error to be shown in the GUI
 
     // generic pass 1 data
     QXmlStreamReader _e;
@@ -186,6 +187,7 @@ private:
     QMap<QString, MusicXMLInstruments> _instruments;   ///< instruments for each part, mapped on part id
     Score* _score;                              ///< MuseScore score
     MxmlLogger* _logger;                        ///< Error logger
+    QString _errors;                            ///< Errors to present to the user
     bool _hasBeamingInfo;                       ///< Whether the score supports or contains beaming info
 
     // part specific data (TODO: move to part-specific class)

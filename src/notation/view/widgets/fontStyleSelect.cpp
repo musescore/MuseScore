@@ -22,7 +22,7 @@
 
 #include "fontStyleSelect.h"
 
-#include "ui/view/iconcodes.h"
+#include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -32,13 +32,15 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
 {
     setupUi(this);
 
-    bold->setText(iconCodeToChar(IconCode::Code::TEXT_BOLD));
-    italic->setText(iconCodeToChar(IconCode::Code::TEXT_ITALIC));
-    underline->setText(iconCodeToChar(IconCode::Code::TEXT_UNDERLINE));
+    WidgetUtils::setWidgetIcon(bold, IconCode::Code::TEXT_BOLD);
+    WidgetUtils::setWidgetIcon(italic, IconCode::Code::TEXT_ITALIC);
+    WidgetUtils::setWidgetIcon(underline, IconCode::Code::TEXT_UNDERLINE);
+    WidgetUtils::setWidgetIcon(strike, IconCode::Code::TEXT_STRIKE);
 
-    connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-    connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-    connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+    connect(bold, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
+    connect(italic, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
+    connect(underline, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
+    connect(strike, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
 }
 
 void FontStyleSelect::_fontStyleChanged()
@@ -59,6 +61,9 @@ Ms::FontStyle FontStyleSelect::fontStyle() const
     if (underline->isChecked()) {
         fs = fs + Ms::FontStyle::Underline;
     }
+    if (strike->isChecked()) {
+        fs = fs + Ms::FontStyle::Strike;
+    }
 
     return fs;
 }
@@ -68,4 +73,5 @@ void FontStyleSelect::setFontStyle(Ms::FontStyle fs)
     bold->setChecked(fs & Ms::FontStyle::Bold);
     italic->setChecked(fs & Ms::FontStyle::Italic);
     underline->setChecked(fs & Ms::FontStyle::Underline);
+    strike->setChecked(fs & Ms::FontStyle::Strike);
 }

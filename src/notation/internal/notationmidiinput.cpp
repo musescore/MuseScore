@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 
 using namespace mu::notation;
@@ -47,7 +47,16 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
 {
     LOGI() << e.to_string();
 
-    if (e.type() == midi::EventType::ME_NOTEON || e.type() == midi::EventType::ME_NOTEOFF) {
+    if (e.isChannelVoice20()) {
+        auto events = e.toMIDI10();
+        for (auto& event : events) {
+            onMidiEventReceived(event);
+        }
+
+        return;
+    }
+
+    if (e.opcode() == midi::Event::Opcode::NoteOn || e.opcode() == midi::Event::Opcode::NoteOff) {
         onNoteReceived(e);
     }
 }
@@ -67,7 +76,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         return inputEv.pitch == val.pitch;
     });
 
-    if (e.type() == midi::EventType::ME_NOTEOFF || e.velocity() == 0) {
+    if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
         return;
     }
 
@@ -84,7 +93,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
-        Ms::Element* cr = is.lastSegment()->element(is.track());
+        Ms::EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             inputEv.chord = true;
         }

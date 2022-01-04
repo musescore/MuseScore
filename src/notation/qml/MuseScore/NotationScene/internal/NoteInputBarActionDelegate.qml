@@ -31,6 +31,11 @@ Item {
     height: parent ? parent.height : implicitHeight
     width: parent ? parent.width : implicitWidth
 
+    property var item
+
+    property var navigationPanel: null
+    property int navigationRow: 0
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 6
@@ -38,16 +43,21 @@ Item {
 
         spacing: 16
 
-        FlatButton {
+        VisibilityBox {
+            id: visibilityButton
+
             Layout.alignment: Qt.AlignLeft
 
-            normalStateColor: "transparent"
-            pressedStateColor: ui.theme.accentColor
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRow
+            navigation.column: 1
+            navigation.accessible.name: titleLabel.text + " " + qsTrc("uicomponents", "visibility") + " "
+                                        + (visibilityButton.isVisible ? qsTrc("uicomponents", "on") : qsTrc("uicomponents", "off"))
 
-            icon: Boolean(itemRole) && itemRole.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            isVisible: root.item.checked
 
-            onClicked: {
-                itemRole.checked = !itemRole.checked
+            onVisibleToggled: {
+                root.item.checked = !root.item.checked
             }
         }
 
@@ -57,14 +67,16 @@ Item {
             width: 36
             height: width
 
-            iconCode: Boolean(itemRole) ? itemRole.icon : IconCode.NONE
+            iconCode: Boolean(root.item) ? root.item.icon : IconCode.NONE
         }
 
         StyledTextLabel {
+            id: titleLabel
+
             Layout.fillWidth: true
 
             horizontalAlignment: Qt.AlignLeft
-            text: Boolean(itemRole) ? itemRole.title : ""
+            text: Boolean(root.item) ? root.item.title : ""
         }
     }
 }

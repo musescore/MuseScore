@@ -35,7 +35,7 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
 {
     m_clock->seekOccurred().onNotify(this, [this]() {
         for (auto& pair : tracks()) {
-            pair.second->audioSource->seek(m_clock->currentTime());
+            pair.second->inputHandler->seek(m_clock->currentTime());
         }
     });
 }
@@ -47,7 +47,7 @@ void SequencePlayer::play()
     m_clock->start();
 
     for (auto& pair : tracks()) {
-        pair.second->audioSource->setIsActive(true);
+        pair.second->inputHandler->setIsActive(true);
     }
 }
 
@@ -58,7 +58,7 @@ void SequencePlayer::seek(const msecs_t newPositionMsecs)
     m_clock->seek(newPositionMsecs);
 
     for (auto& pair : tracks()) {
-        pair.second->audioSource->seek(newPositionMsecs);
+        pair.second->inputHandler->seek(newPositionMsecs);
     }
 }
 
@@ -69,7 +69,7 @@ void SequencePlayer::stop()
     m_clock->stop();
 
     for (auto& pair : tracks()) {
-        pair.second->audioSource->setIsActive(false);
+        pair.second->inputHandler->setIsActive(false);
     }
 }
 
@@ -80,7 +80,7 @@ void SequencePlayer::pause()
     m_clock->pause();
 
     for (auto& pair : tracks()) {
-        pair.second->audioSource->setIsActive(false);
+        pair.second->inputHandler->setIsActive(false);
     }
 }
 
@@ -91,8 +91,15 @@ void SequencePlayer::resume()
     m_clock->resume();
 
     for (auto& pair : tracks()) {
-        pair.second->audioSource->setIsActive(true);
+        pair.second->inputHandler->setIsActive(true);
     }
+}
+
+void SequencePlayer::setDuration(const msecs_t duration)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_clock->setTimeDuration(duration);
 }
 
 Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)

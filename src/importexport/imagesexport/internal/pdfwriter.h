@@ -23,7 +23,7 @@
 #ifndef MU_IMPORTEXPORT_PDFWRITER_H
 #define MU_IMPORTEXPORT_PDFWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "abstractimagewriter.h"
 
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
@@ -31,19 +31,17 @@
 class QPdfWriter;
 
 namespace mu::iex::imagesexport {
-class PdfWriter : public notation::AbstractNotationWriter
+class PdfWriter : public AbstractImageWriter
 {
     INJECT(iex_imagesexport, IImagesExportConfiguration, configuration)
 
 public:
-    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes() const override;
+    std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
 
 private:
-    QString documentTitle(const Ms::Score& score) const;
     void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title) const;
-    void doWrite(QPdfWriter& pdfWriter, mu::draw::Painter& painter, Ms::Score* score) const;
 };
 }
 

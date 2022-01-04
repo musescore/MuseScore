@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/Telemetry/TelemetryPermissionDialog.qml</file>
-    </qresource>
-</RCC>

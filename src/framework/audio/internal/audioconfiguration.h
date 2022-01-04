@@ -40,13 +40,16 @@ public:
     std::string currentAudioApi() const override;
     void setCurrentAudioApi(const std::string& name) override;
 
-    int audioChannelsCount() const override;
+    audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
-    std::vector<io::path> soundFontPaths() const override;
+    io::paths soundFontDirectories() const override;
+    async::Channel<io::paths> soundFontDirectoriesChanged() const override;
 
     bool isShowControlsInMixer() const override;
     void setIsShowControlsInMixer(bool show) override;
+
+    AudioInputParams defaultAudioInputParams() const override;
 
     const synth::SynthesizerState& defaultSynthesizerState() const;
     const synth::SynthesizerState& synthesizerState() const override;
@@ -55,6 +58,7 @@ public:
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
 private:
+    async::Channel<io::paths> m_soundFontDirsChanged;
 
     io::path stateFilePath() const;
     bool readState(const io::path& path, synth::SynthesizerState& state) const;

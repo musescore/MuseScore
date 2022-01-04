@@ -27,8 +27,8 @@
 #include "importmidi_fraction.h"
 #include "importmidi_inner.h"
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
-#include "libmscore/fraction.h"
+#include "libmscore/masterscore.h"
+#include "engraving/types/fraction.h"
 #include "libmscore/duration.h"
 #include "libmscore/measure.h"
 #include "libmscore/tuplet.h"
@@ -74,7 +74,8 @@ void createTupletNotes(
             continue;
         }
 
-        Tuplet* tuplet = new Tuplet(score);
+        Measure* measure = score->tick2measure(tupletData.onTime.fraction());
+        Tuplet* tuplet = new Tuplet(measure);
         const auto& tupletRatio = tupletLimits(tupletData.tupletNumber).ratio;
         tuplet->setRatio(tupletRatio.fraction());
 
@@ -85,7 +86,6 @@ void createTupletNotes(
         tuplet->setTrack(track);
 //            tuplet->setTick(tupletData.onTime.ticks());
         tuplet->setVoice(tupletData.voice);
-        Measure* measure = score->tick2measure(tupletData.onTime.fraction());
         tuplet->setParent(measure);
 
         for (DurationElement* el: tupletData.elements) {

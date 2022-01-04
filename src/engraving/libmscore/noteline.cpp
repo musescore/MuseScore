@@ -24,8 +24,8 @@
 #include "textline.h"
 
 namespace Ms {
-NoteLine::NoteLine(Score* s)
-    : TextLineBase(s)
+NoteLine::NoteLine(EngravingItem* parent)
+    : TextLineBase(ElementType::NOTELINE, parent)
 {
 //TODO-ws      init();
 }
@@ -39,9 +39,9 @@ NoteLine::NoteLine(const NoteLine& nl)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* NoteLine::createLineSegment()
+LineSegment* NoteLine::createLineSegment(System* parent)
 {
-    TextLineSegment* seg = new TextLineSegment(this, score());
+    TextLineSegment* seg = new TextLineSegment(this, parent);
     seg->setTrack(track());
     return seg;
 }

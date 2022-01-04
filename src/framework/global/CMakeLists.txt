@@ -47,8 +47,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/device.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/logstream.h
+    ${CMAKE_CURRENT_LIST_DIR}/logremover.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/logremover.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
+    ${CMAKE_CURRENT_LIST_DIR}/id.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/id.h
     ${CMAKE_CURRENT_LIST_DIR}/val.cpp
     ${CMAKE_CURRENT_LIST_DIR}/val.h
     ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
@@ -74,14 +78,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.cpp
     ${CMAKE_CURRENT_LIST_DIR}/smuflranges.h
-    ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/widgetstatestore.h
     ${CMAKE_CURRENT_LIST_DIR}/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmlwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/defer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp

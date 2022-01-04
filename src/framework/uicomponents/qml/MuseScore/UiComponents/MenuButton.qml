@@ -28,31 +28,44 @@ FlatButton {
 
     property var menuModel
     property alias isMenuOpened: menuLoader.isMenuOpened
+    property alias menuAnchorItem: menuLoader.menuAnchorItem
 
-    signal handleAction(string actionCode, int actionIndex)
+    property int menuOffsetX: 0
+    property int menuOffsetY: 0
+    property int menuAlign: 0
+
+    signal handleMenuItem(string itemId)
 
     function toggleMenu(item, x, y) {
         menuLoader.parent = item
-        menuLoader.toggleOpened(menuModel, null, x, y)
+        menuLoader.toggleOpened(menuModel, x, y)
     }
 
     enabled: visible
 
     icon: IconCode.MENU_THREE_DOTS
-    normalStateColor: isMenuOpened ? ui.theme.accentColor : "transparent"
+    transparent: !isMenuOpened
+    accentButton: isMenuOpened
+
+    navigation.accessible.name: qsTrc("uicomponents", "Menu")
 
     StyledMenuLoader {
         id: menuLoader
 
-        menuAnchorItem: ui.rootItem
+        navigationParentControl: root.navigation
 
-        onHandleAction: {
-            root.handleAction(actionCode, actionIndex)
+        onHandleMenuItem: {
+            root.handleMenuItem(itemId)
         }
     }
 
     onClicked: {
         menuLoader.parent = root
-        menuLoader.toggleOpened(root.menuModel, root.navigation)
+
+        if (root.menuAlign !== 0) {
+            menuLoader.toggleOpenedWithAlign(root.menuModel, root.menuAlign)
+        } else {
+            menuLoader.toggleOpened(root.menuModel, root.menuOffsetX, root.menuOffsetY)
+        }
     }
 }

@@ -28,13 +28,17 @@ if (OS_IS_MAC)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.h
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.h
     )
     # Don't mix C++ and Objective-C++ in Unity Build
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
-
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-                                PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        SKIP_PRECOMPILE_HEADERS ON
+        )
 elseif(OS_IS_WIN)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
@@ -96,8 +100,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgetdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnavigation.cpp
@@ -114,21 +116,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationevent.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/focuslistener.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/focuslistener.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetnavigationfix.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetnavigationfix.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgetutils.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/abstractkeynavdevitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/abstractkeynavdevitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevcontrol.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevcontrol.h
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsubsection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsubsection.h
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/dev/keynav/keynavdevsection.h
     )
 
 set(MODULE_UI
@@ -138,5 +141,10 @@ set(MODULE_UI
 set(MODULE_LINK
     accessibility
     )
+
+if (OS_IS_MAC)
+    find_library(AppKit NAMES AppKit)
+    set(MODULE_LINK ${MODULE_LINK} ${AppKit})
+endif()
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

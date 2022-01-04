@@ -25,6 +25,7 @@
 #include "dataformatter.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -39,19 +40,19 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 void BeamSettingsModel::createProperties()
 {
     m_featheringHeightLeft = buildPropertyItem(Ms::Pid::GROW_LEFT);
-    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
     });
 
-    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isBeamHidden) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isBeamHidden.toBool());
+    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isBeamHidden) {
+        onPropertyValueChanged(pid, !isBeamHidden.toBool());
     });
 
-    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
+    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const Ms::Pid, const QVariant& newValue) {
         updateBeamHeight(newValue.toDouble(), m_beamVectorY->value().toDouble());
     });
 
-    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
+    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const Ms::Pid, const QVariant& newValue) {
         updateBeamHeight(m_beamVectorX->value().toDouble(), newValue.toDouble());
     });
 }
@@ -64,11 +65,11 @@ void BeamSettingsModel::requestElements()
 void BeamSettingsModel::loadProperties()
 {
     loadPropertyItem(m_featheringHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_featheringHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
@@ -76,11 +77,11 @@ void BeamSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
@@ -96,7 +97,7 @@ void BeamSettingsModel::resetProperties()
     m_beamVectorX->resetToDefault();
     m_beamVectorY->resetToDefault();
 
-    m_cachedBeamVector = QPointF();
+    m_cachedBeamVector = PointF();
 
     setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     setIsBeamHeightLocked(false);
@@ -115,8 +116,9 @@ void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
         synchronizeLockedBeamHeight(x, y);
     }
 
-    onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true); // TODO проверить, можно ли это перенести в DOM модель
-    onPropertyValueChanged(Ms::Pid::BEAM_POS, QPointF(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble()));
+    onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true);
+    onPropertyValueChanged(Ms::Pid::BEAM_POS,
+                           QVariant::fromValue(QPair<qreal, qreal>(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble())));
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
     m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());
@@ -169,6 +171,11 @@ PropertyItem* BeamSettingsModel::featheringHeightRight() const
 BeamTypes::FeatheringMode BeamSettingsModel::featheringMode() const
 {
     return m_featheringMode;
+}
+
+bool BeamSettingsModel::isFeatheringHeightChangingAllowed() const
+{
+    return m_featheringMode != BeamTypes::FeatheringMode::FEATHERING_NONE;
 }
 
 PropertyItem* BeamSettingsModel::isBeamHidden() const
@@ -226,7 +233,8 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 {
     m_beamModesModel = beamModesModel;
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const QVariant& newValue) {
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const Ms::Pid,
+                                                                                                     const QVariant& newValue) {
         if (!newValue.toBool()) {
             setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
         }

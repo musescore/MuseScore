@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -184,15 +184,15 @@
         <height>7</height>
         <bottomGap>1.33333</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Title</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Composer</text>
           </Text>
         <Text>
@@ -200,7 +200,7 @@
           <text>Lyricist</text>
           </Text>
         <Text>
-          <style>Instrument Name (Part)</style>
+          <style>instrument_excerpt</style>
           <text>Partname</text>
           </Text>
         </VBox>

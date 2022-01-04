@@ -25,7 +25,7 @@
 
 #include "igetscore.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
 #include "libmscore/segment.h"
 #include "libmscore/slur.h"
@@ -33,6 +33,8 @@
 #include "libmscore/part.h"
 #include "libmscore/sig.h"
 #include "libmscore/measure.h"
+
+#include "accessibility/accessibleroot.h"
 
 using namespace mu::notation;
 using namespace mu::async;
@@ -62,6 +64,12 @@ mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
     return m_accessibilityInfo;
 }
 
+void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
+{
+    score()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
+    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setMapToScreenFunc(func);
+}
+
 void NotationAccessibility::updateAccessibilityInfo()
 {
     QString newAccessibilityInfo;
@@ -73,6 +81,9 @@ void NotationAccessibility::updateAccessibilityInfo()
     } else if (selection()->isList()) {
         newAccessibilityInfo = qtrc("notation", "List selection");
     }
+
+    // Simplify whitespace and remove newlines
+    newAccessibilityInfo = newAccessibilityInfo.simplified();
 
     setAccessibilityInfo(newAccessibilityInfo);
 }
@@ -98,14 +109,14 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
         endSegment = endSegment->prev1MM();
     }
 
-    return qtrc("notation", "Range Selection %1 %2")
+    return qtrc("notation", "Range selection %1 %2")
            .arg(formatStartBarsAndBeats(selection()->startSegment()))
            .arg(formatEndBarsAndBeats(endSegment));
 }
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
 {
-    const Element* element = selection()->element();
+    const EngravingItem* element = selection()->element();
     if (!element) {
         return QString();
     }
@@ -135,7 +146,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     return accessibilityInfo;
 }
 
-QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatSingleElementBarsAndBeats(const EngravingItem* element) const
 {
     const Ms::Spanner* spanner = nullptr;
     if (element->isSpannerSegment()) {
@@ -172,33 +183,33 @@ QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* el
     return result;
 }
 
-QString NotationAccessibility::formatStartBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatStartBarsAndBeats(const EngravingItem* element) const
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
-    return qtrc("notation", "Start Measure: %1; Start Beat: %2")
+    return qtrc("notation", "Start measure: %1; Start beat: %2")
            .arg(QString::number(barbeat.first))
            .arg(QString::number(barbeat.second));
 }
 
-QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatEndBarsAndBeats(const EngravingItem* element) const
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
-    return qtrc("notation", "End Measure: %1; End Beat: %2")
+    return qtrc("notation", "End measure: %1; End beat: %2")
            .arg(QString::number(barbeat.first))
            .arg(QString::number(barbeat.second));
 }
 
-std::pair<int, float> NotationAccessibility::barbeat(const Element* element) const
+std::pair<int, float> NotationAccessibility::barbeat(const EngravingItem* element) const
 {
     if (!element) {
         return std::pair<int, float>(0, 0.0F);
     }
 
-    const Element* parent = element;
+    const EngravingItem* parent = element;
     while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
-        parent = parent->parent();
+        parent = parent->parentItem();
     }
 
     if (!parent) {

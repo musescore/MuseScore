@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void exec();
     Q_INVOKABLE void show();
     Q_INVOKABLE void hide();
+    Q_INVOKABLE void raise();
     Q_INVOKABLE void accept();
     Q_INVOKABLE void reject(int code = -1);
 

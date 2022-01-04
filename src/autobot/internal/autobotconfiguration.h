@@ -24,20 +24,25 @@
 
 #include "../iautobotconfiguration.h"
 
+#include "modularity/ioc.h"
+#include "iglobalconfiguration.h"
+
 namespace mu::autobot {
 class AutobotConfiguration : public IAutobotConfiguration
 {
+    INJECT(autobot, framework::IGlobalConfiguration, globalConfiguration)
+
 public:
     AutobotConfiguration() = default;
 
+    io::paths scriptsDirPaths() const override;
+    io::path testingFilesDirPath() const override;
+
     io::path dataPath() const override;
-
-    io::path filesPath() const override;
-
+    io::path savingFilesPath() const override;
+    io::path reportsPath() const override;
     io::path drawDataPath() const override;
     io::path fileDrawDataPath(const io::path& filePath) const override;
-
-    io::path reportsPath() const override;
 };
 }
 

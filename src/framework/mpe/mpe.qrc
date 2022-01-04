@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Mpe/qmldir</file>
+        <file>qml/MuseScore/Mpe/ArticulationPatternPlot.qml</file>
+        <file>qml/MuseScore/Mpe/ArrangementPatternControl.qml</file>
+        <file>qml/MuseScore/Mpe/ArticulationPatternControlsTab.qml</file>
+        <file>qml/MuseScore/Mpe/PitchPatternControl.qml</file>
+        <file>qml/MuseScore/Mpe/ExpressionPatternControl.qml</file>
+        <file>qml/MuseScore/Mpe/ArticulationPatternsTab.qml</file>
+        <file>qml/MuseScore/Mpe/ArticulationPatternsList.qml</file>
+        <file>qml/MuseScore/Mpe/ArticulationPatternSegmentsList.qml</file>
+        <file alias="mpe/general_keyboard_articulations_profile.json">resources/general_keyboard_articulations_profile.json</file>
+        <file alias="mpe/general_strings_articulations_profile.json">resources/general_strings_articulations_profile.json</file>
+        <file alias="mpe/general_winds_articulations_profile.json">resources/general_winds_articulations_profile.json</file>
+        <file alias="mpe/general_percussion_articulations_profile.json">resources/general_percussion_articulations_profile.json</file>
+    </qresource>
+</RCC>

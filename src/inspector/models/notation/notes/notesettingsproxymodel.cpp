@@ -30,15 +30,47 @@
 
 using namespace mu::inspector;
 
+static const QMap<Ms::ElementType, InspectorModelType> NOTE_PART_TYPES {
+    { Ms::ElementType::NOTEHEAD, InspectorModelType::TYPE_NOTEHEAD },
+    { Ms::ElementType::STEM, InspectorModelType::TYPE_STEM },
+    { Ms::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
+    { Ms::ElementType::HOOK, InspectorModelType::TYPE_HOOK },
+};
+
 NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent)
+    : AbstractInspectorProxyModel(parent, repository)
 {
-    setSectionType(InspectorSectionType::SECTION_NOTATION);
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(qtrc("inspector", "Note"));
+    setIcon(ui::IconCode::Code::MUSIC_NOTES);
 
-    addModel(new StemSettingsModel(this, repository));
-    addModel(new NoteheadSettingsModel(this, repository));
-    addModel(new BeamSettingsModel(this, repository));
-    addModel(new HookSettingsModel(this, repository));
+    QList<AbstractInspectorModel*> models;
+    for (InspectorModelType modelType : NOTE_PART_TYPES) {
+        models << inspectorModelCreator()->newInspectorModel(modelType, this, repository);
+    }
+
+    setModels(models);
+
+    connect(m_repository->getQObject(), SIGNAL(elementsUpdated(const QList<Ms::EngravingItem*>&)), this,
+            SLOT(onElementsUpdated(const QList<Ms::EngravingItem*>&)));
+}
+
+void NoteSettingsProxyModel::onElementsUpdated(const QList<Ms::EngravingItem*>& newElements)
+{
+    InspectorModelType defaultType = resolveDefaultSubModelType(newElements);
+
+    setDefaultSubModelType(defaultType);
+}
+
+InspectorModelType NoteSettingsProxyModel::resolveDefaultSubModelType(const QList<Ms::EngravingItem*>& newElements) const
+{
+    InspectorModelType defaultModelType = InspectorModelType::TYPE_NOTEHEAD;
+
+    for (const Ms::EngravingItem* element : newElements) {
+        if (NOTE_PART_TYPES.contains(element->type())) {
+            defaultModelType = NOTE_PART_TYPES[element->type()];
+        }
+    }
+
+    return defaultModelType;
 }

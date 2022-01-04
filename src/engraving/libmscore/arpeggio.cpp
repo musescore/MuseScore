@@ -23,19 +23,22 @@
 #include "arpeggio.h"
 
 #include <cmath>
+#include <QVector>
 
 #include "translation.h"
+#include "rw/xml.h"
 
 #include "scorefont.h"
+#include "accidental.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"
 #include "staff.h"
+#include "stafflines.h"
 #include "part.h"
 #include "page.h"
 #include "segment.h"
 #include "property.h"
-#include "xml.h"
 
 using namespace mu;
 
@@ -53,8 +56,8 @@ const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
 //   Arpeggio
 //---------------------------------------------------------
 
-Arpeggio::Arpeggio(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+Arpeggio::Arpeggio(Chord* parent)
+    : EngravingItem(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
 {
     _arpeggioType = ArpeggioType::NORMAL;
     setHeight(spatium() * 4);        // for use in palettes
@@ -88,8 +91,8 @@ void Arpeggio::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
-    Element::writeProperties(xml);
+    xml.startObject(this);
+    EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::ARPEGGIO_TYPE);
     if (_userLen1 != 0.0) {
         xml.tag("userLen1", _userLen1 / spatium());
@@ -102,7 +105,7 @@ void Arpeggio::write(XmlWriter& xml) const
     }
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::TIME_STRETCH);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -125,7 +128,7 @@ void Arpeggio::read(XmlReader& e)
             _playArpeggio = e.readBool();
         } else if (tag == "timeStretch") {
             _stretch = e.readDouble();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -133,14 +136,14 @@ void Arpeggio::read(XmlReader& e)
 
 //---------------------------------------------------------
 //   symbolLine
-//    construct a string of symbols aproximating width w
+//    construct a string of symbols approximating width w
 //---------------------------------------------------------
 
 void Arpeggio::symbolLine(SymId end, SymId fill)
 {
-    qreal y1 = -_userLen1;
-    qreal y2 = _height + _userLen2;
-    qreal w   = y2 - y1;
+    qreal top = calcTop();
+    qreal bottom = calcBottom();
+    qreal w   = bottom - top;
     qreal mag = magS();
     ScoreFont* f = score()->scoreFont();
 
@@ -155,13 +158,79 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
 }
 
 //---------------------------------------------------------
+//   calcTop
+//---------------------------------------------------------
+
+qreal Arpeggio::calcTop() const
+{
+    qreal top = -_userLen1;
+    if (!explicitParent()) {
+        return top;
+    }
+    switch (arpeggioType()) {
+    case ArpeggioType::BRACKET: {
+        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+        return top - lineWidth / 2.0;
+    }
+    case ArpeggioType::NORMAL:
+    case ArpeggioType::UP:
+    case ArpeggioType::DOWN: {
+        // if the top is in the staff on a space, move it up
+        // if the bottom note is on a line, the distance is 0.25 spaces
+        // if the bottom note is on a space, the distance is 0.5 spaces
+        int topNoteLine = chord()->upNote()->line();
+        int lines = staff()->lines(tick());
+        int bottomLine = (lines - 1) * 2;
+        if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine) {
+            return top;
+        }
+        int downNoteLine = chord()->downNote()->line();
+        if (downNoteLine % 2 == 1 && downNoteLine < bottomLine) {
+            return top - 0.4 * spatium();
+        }
+        return top - 0.25 * spatium();
+    }
+    default: {
+        return top - spatium() / 4;
+    }
+    }
+}
+
+//---------------------------------------------------------
+//   calcBottom
+//---------------------------------------------------------
+
+qreal Arpeggio::calcBottom() const
+{
+    qreal top = -_userLen1;
+    qreal bottom = _height + _userLen2;
+    if (!explicitParent()) {
+        return bottom;
+    }
+    switch (arpeggioType()) {
+    case ArpeggioType::BRACKET: {
+        qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
+        return bottom - top + lineWidth;
+    }
+    case ArpeggioType::NORMAL:
+    case ArpeggioType::UP:
+    case ArpeggioType::DOWN: {
+        return bottom;
+    }
+    default: {
+        return bottom + spatium() / 2;
+    }
+    }
+}
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Arpeggio::layout()
 {
-    qreal y1 = -_userLen1;
-    qreal y2 = _height + _userLen2;
+    qreal top = calcTop();
+    qreal bottom = calcBottom();
     _hidden = false;
     if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (staff() && staff()->isPitchedStaff(tick())) {
@@ -182,7 +251,7 @@ void Arpeggio::layout()
         symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, -r.x() + y1, r.height(), r.width()));
+        setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
     }
     break;
 
@@ -190,7 +259,7 @@ void Arpeggio::layout()
         symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, -r.x() + y1, r.height(), r.width()));
+        setbbox(RectF(0.0, -r.x() + top, r.height(), r.width()));
     }
     break;
 
@@ -198,7 +267,7 @@ void Arpeggio::layout()
         symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
         RectF r(symBbox(symbols));
-        setbbox(RectF(0.0, r.x() + y1, r.height(), r.width()));
+        setbbox(RectF(0.0, r.x() + top, r.height(), r.width()));
     }
     break;
 
@@ -206,8 +275,7 @@ void Arpeggio::layout()
         qreal _spatium = spatium();
         qreal x1 = _spatium * .5;
         qreal w  = symBbox(SymId::arrowheadBlackUp).width();
-        qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium;
-        setbbox(RectF(x1 - w * .5, y1, w, y2 - y1 + lw * .5));
+        setbbox(RectF(x1 - w * .5, top, w, bottom));
     }
     break;
 
@@ -215,16 +283,14 @@ void Arpeggio::layout()
         qreal _spatium = spatium();
         qreal x1 = _spatium * .5;
         qreal w  = symBbox(SymId::arrowheadBlackDown).width();
-        qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium;
-        setbbox(RectF(x1 - w * .5, y1 - lw * .5, w, y2 - y1 + lw * .5));
+        setbbox(RectF(x1 - w * .5, top, w, bottom));
     }
     break;
 
     case ArpeggioType::BRACKET: {
         qreal _spatium = spatium();
-        qreal lw = score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium * .5;
         qreal w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-        setbbox(RectF(0.0, y1, w, y2 - y1).adjusted(-lw, -lw, lw, lw));
+        setbbox(RectF(0.0, top, w, bottom));
         break;
     }
     }
@@ -244,31 +310,29 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
 
     qreal _spatium = spatium();
 
-    qreal y1 = -_userLen1;
-    qreal y2 = _height + _userLen2;
+    qreal y1 = _bbox.top();
+    qreal y2 = _bbox.bottom();
 
-    painter->setPen(Pen(curColor(),
-                        score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
-                        PenStyle::SolidLine, PenCapStyle::RoundCap));
+    qreal lineWidth = score()->styleMM(Sid::ArpeggioLineWidth);
 
+    painter->setPen(Pen(curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
+
     switch (arpeggioType()) {
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
         RectF r(symBbox(symbols));
-        qreal scale = painter->worldTransform().m11();
         painter->rotate(-90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
     }
     break;
 
     case ArpeggioType::DOWN:
     {
         RectF r(symBbox(symbols));
-        qreal scale = painter->worldTransform().m11();
         painter->rotate(90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
     }
     break;
 
@@ -296,9 +360,9 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::BRACKET:
     {
         qreal w = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-        painter->drawLine(LineF(0.0, y1, 0.0, y2));
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
+        painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
     }
     break;
     }
@@ -370,7 +434,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
         int btrack  = track() + (_span - 1) * VOICES;
-        Element* e = _chord->segment()->element(btrack);
+        EngravingItem* e = _chord->segment()->element(btrack);
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }
@@ -385,7 +449,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 
 void Arpeggio::startEdit(EditData& ed)
 {
-    Element::startEdit(ed);
+    EngravingItem::startEdit(ed);
     ElementEditData* eed = ed.getData(this);
     eed->pushProperty(Pid::ARP_USER_LEN1);
     eed->pushProperty(Pid::ARP_USER_LEN2);
@@ -448,18 +512,18 @@ bool Arpeggio::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Arpeggio::drop(EditData& data)
+EngravingItem* Arpeggio::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARPEGGIO:
     {
         Arpeggio* a = toArpeggio(e);
-        if (parent()) {
+        if (explicitParent()) {
             score()->undoRemoveElement(this);
         }
         a->setTrack(track());
-        a->setParent(parent());
+        a->setParent(explicitParent());
         score()->undoAddElement(a);
     }
         return e;
@@ -478,14 +542,164 @@ void Arpeggio::reset()
 {
     undoChangeProperty(Pid::ARP_USER_LEN1, 0.0);
     undoChangeProperty(Pid::ARP_USER_LEN2, 0.0);
-    Element::reset();
+    EngravingItem::reset();
+}
+
+//
+// INSET:
+// Arpeggios have inset white space. For instance, the bracket
+// "[" shape has whitespace inside of the "C". Symbols like
+// accidentals can fit inside this whitespace. These inset
+// functions are used to get the size of the inner dimensions
+// for this area on all arpeggios.
+//
+
+//---------------------------------------------------------
+//   insetTop
+//---------------------------------------------------------
+
+qreal Arpeggio::insetTop() const
+{
+    qreal top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
+
+    // use wiggle width, not height, since it's rotated 90 degrees
+    if (arpeggioType() == ArpeggioType::UP) {
+        top += symBbox(SymId::wiggleArpeggiatoUpArrow).width();
+    } else if (arpeggioType() == ArpeggioType::UP_STRAIGHT) {
+        top += symBbox(SymId::arrowheadBlackUp).width();
+    }
+
+    return top;
+}
+
+//---------------------------------------------------------
+//   insetBottom
+//---------------------------------------------------------
+
+qreal Arpeggio::insetBottom() const
+{
+    qreal bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
+
+    // use wiggle width, not height, since it's rotated 90 degrees
+    if (arpeggioType() == ArpeggioType::DOWN) {
+        bottom -= symBbox(SymId::wiggleArpeggiatoUpArrow).width();
+    } else if (arpeggioType() == ArpeggioType::DOWN_STRAIGHT) {
+        bottom -= symBbox(SymId::arrowheadBlackDown).width();
+    }
+
+    return bottom;
+}
+
+//---------------------------------------------------------
+//   insetWidth
+//---------------------------------------------------------
+
+qreal Arpeggio::insetWidth() const
+{
+    switch (arpeggioType()) {
+    case ArpeggioType::NORMAL:
+    {
+        return 0.0;
+    }
+
+    case ArpeggioType::UP:
+    case ArpeggioType::DOWN:
+    {
+        // use wiggle height, not width, since it's rotated 90 degrees
+        return (width() - symBbox(SymId::wiggleArpeggiatoUp).height()) / 2;
+    }
+
+    case ArpeggioType::UP_STRAIGHT:
+    case ArpeggioType::DOWN_STRAIGHT:
+    {
+        return (width() - score()->styleMM(Sid::ArpeggioLineWidth)) / 2;
+    }
+
+    case ArpeggioType::BRACKET:
+    {
+        return width() - score()->styleMM(Sid::ArpeggioLineWidth) / 2;
+    }
+    }
+    return 0.0;
+}
+
+//---------------------------------------------------------
+//   insetDistance
+//---------------------------------------------------------
+
+qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const
+{
+    if (accidentals.size() == 0) {
+        return 0.0;
+    }
+
+    qreal arpeggioTop = insetTop() * mag_;
+    qreal arpeggioBottom = insetBottom() * mag_;
+    ArpeggioType type = arpeggioType();
+    bool hasTopArrow = type == ArpeggioType::UP
+                       || type == ArpeggioType::UP_STRAIGHT
+                       || type == ArpeggioType::BRACKET;
+    bool hasBottomArrow = type == ArpeggioType::DOWN
+                          || type == ArpeggioType::DOWN_STRAIGHT
+                          || type == ArpeggioType::BRACKET;
+
+    Accidental* furthestAccidental = nullptr;
+    for (auto accidental : accidentals) {
+        if (furthestAccidental) {
+            bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
+            bool currentIsSameX = accidental->x() == furthestAccidental->x();
+            auto accidentalBbox = symBbox(accidental->symbol());
+            qreal currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
+            qreal currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
+            bool collidesWithTop = currentTop <= arpeggioTop && hasTopArrow;
+            bool collidesWithBottom = currentBottom >= arpeggioBottom && hasBottomArrow;
+
+            if (currentIsFurtherX || (currentIsSameX && (collidesWithTop || collidesWithBottom))) {
+                furthestAccidental = accidental;
+            }
+        } else {
+            furthestAccidental = accidental;
+        }
+    }
+
+    // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
+    // if an accidental does not have a cutout (e.g., ♭), this value is 0
+    qreal accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x() * mag_;
+    qreal accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
+    qreal accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
+
+    qreal maximumInset = (score()->styleMM(Sid::ArpeggioAccidentalDistance)
+                          - score()->styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+
+    if (accidentalCutOutX > maximumInset) {
+        accidentalCutOutX = maximumInset;
+    }
+
+    RectF bbox = symBbox(furthestAccidental->symbol());
+    qreal center = furthestAccidental->note()->pos().y() * mag_;
+    qreal top = center + bbox.top() * mag_;
+    qreal bottom = center + bbox.bottom() * mag_;
+    bool collidesWithTop = hasTopArrow && top <= arpeggioTop;
+    bool collidesWithBottom = hasBottomArrow && bottom >= arpeggioBottom;
+    bool cutoutCollidesWithTop = collidesWithTop && top - accidentalCutOutYTop >= arpeggioTop;
+    bool cutoutCollidesWithBottom = collidesWithBottom && bottom - accidentalCutOutYBottom <= arpeggioBottom;
+
+    if (collidesWithTop || collidesWithBottom) {
+        // optical adjustment for one edge case
+        if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom) {
+            return accidentalCutOutX + maximumInset;
+        }
+        return accidentalCutOutX;
+    }
+
+    return insetWidth() + accidentalCutOutX;
 }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Arpeggio::getProperty(Pid propertyId) const
+engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ARPEGGIO_TYPE:
@@ -501,14 +715,14 @@ QVariant Arpeggio::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
+bool Arpeggio::setProperty(Pid propertyId, const engraving::PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::ARPEGGIO_TYPE:
@@ -527,7 +741,7 @@ bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
         setPlayArpeggio(val.toBool());
         break;
     default:
-        if (!Element::setProperty(propertyId, val)) {
+        if (!EngravingItem::setProperty(propertyId, val)) {
             return false;
         }
         break;
@@ -540,7 +754,7 @@ bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Arpeggio::propertyDefault(Pid propertyId) const
+engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ARP_USER_LEN1:
@@ -554,7 +768,7 @@ QVariant Arpeggio::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -566,6 +780,6 @@ Pid Arpeggio::propertyId(const QStringRef& name) const
     if (name == "subtype") {
         return Pid::ARPEGGIO_TYPE;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 }

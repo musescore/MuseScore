@@ -21,27 +21,24 @@
  */
 #include "scorefont.h"
 
+#include <QFile>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
 
-#include "log.h"
-
 #include "draw/painter.h"
+#include "types/symnames.h"
+
 #include "mscore.h"
-#include "sym.h"
+
+#include "log.h"
 
 using namespace Ms;
 using namespace mu;
 using namespace mu::draw;
 
-//---------------------------------------------------------
-//   scoreFonts
-//    this is the list of available score fonts
-//---------------------------------------------------------
-
-static const int FALLBACK_FONT_INDEX = 1; // Bravura
+static constexpr int FALLBACK_FONT_INDEX = 1; // Bravura
 
 std::vector<ScoreFont> ScoreFont::s_scoreFonts {
     ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"),
@@ -52,16 +49,19 @@ std::vector<ScoreFont> ScoreFont::s_scoreFonts {
     ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf"),
 };
 
-std::array<uint, size_t(SymId::lastSym) + 1> ScoreFont::s_mainSymCodeTable { { 0 } };
+std::array<uint, size_t(SymId::lastSym) + 1> ScoreFont::s_symIdCodes { { 0 } };
 
 // =============================================
 // ScoreFont
 // =============================================
 
 ScoreFont::ScoreFont(const char* name, const char* family, const char* path, const char* filename)
-    : m_name(name), m_family(family), m_fontPath(path), m_filename(filename)
+    : m_symbols(static_cast<size_t>(SymId::lastSym) + 1),
+    m_name(name),
+    m_family(family),
+    m_fontPath(path),
+    m_filename(filename)
 {
-    m_symbols = std::vector<Sym>(size_t(SymId::lastSym) + 1);
 }
 
 ScoreFont::ScoreFont(const ScoreFont& other)
@@ -88,7 +88,7 @@ const QString& ScoreFont::family() const
     return m_family;
 }
 
-QString ScoreFont::fontPath() const
+const QString& ScoreFont::fontPath() const
 {
     return m_fontPath;
 }
@@ -110,56 +110,51 @@ double ScoreFont::textEnclosureThickness()
 void ScoreFont::initScoreFonts()
 {
     QJsonObject glyphNamesJson(ScoreFont::initGlyphNamesJson());
-    if (glyphNamesJson.empty()) {
-        qFatal("initGlyphNamesJson failed");
+    IF_ASSERT_FAILED(!glyphNamesJson.empty()) {
+        LOGE() << "Could not read glyph names JSON";
+        return;
     }
 
-    for (size_t i = 0; i < Sym::symNames.size(); ++i) {
-        const char* name = Sym::symNames[i];
-        Sym::nameToSymIdHash.insert(name, SymId(i));
+    for (size_t i = 0; i < s_symIdCodes.size(); ++i) {
+        QString name(SymNames::nameForSymId(static_cast<SymId>(i)));
 
         bool ok;
         uint code = glyphNamesJson.value(name).toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
         if (ok) {
-            ScoreFont::s_mainSymCodeTable[i] = code;
+            s_symIdCodes[i] = code;
         } else if (MScore::debugMode) {
-            qDebug("codepoint not recognized for glyph %s", qPrintable(name));
+            LOGD() << "could not read codepoint for glyph " << name;
         }
     }
 
-    for (const Sym::OldName& i : qAsConst(Sym::oldNames)) {
-        Sym::oldNameToSymIdHash.insert(i.name, SymId(i.symId));
-    }
-
-    auto fprovider = mu::modularity::ioc()->resolve<mu::draw::IFontProvider>("score");
-    fprovider->insertSubstitution("Leland Text",    "Bravura Text");
-    fprovider->insertSubstitution("Bravura Text",   "Leland Text");
-    fprovider->insertSubstitution("MScore Text",    "Leland Text");
-    fprovider->insertSubstitution("Gootville Text", "Leland Text");
-    fprovider->insertSubstitution("MuseJazz Text",  "Leland Text");
-    fprovider->insertSubstitution("Petaluma Text",  "MuseJazz Text");
-    fprovider->insertSubstitution("ScoreFont",      "Leland Text"); // alias for current Musical Text Font
+    fontProvider()->insertSubstitution("Leland Text",    "Bravura Text");
+    fontProvider()->insertSubstitution("Bravura Text",   "Leland Text");
+    fontProvider()->insertSubstitution("MScore Text",    "Leland Text");
+    fontProvider()->insertSubstitution("Gootville Text", "Leland Text");
+    fontProvider()->insertSubstitution("MuseJazz Text",  "Leland Text");
+    fontProvider()->insertSubstitution("Petaluma Text",  "MuseJazz Text");
+    fontProvider()->insertSubstitution("ScoreFont",      "Leland Text"); // alias for current Musical Text Font
 
     fallbackFont(); // load fallback font
 }
 
 QJsonObject ScoreFont::initGlyphNamesJson()
 {
-    QFile fi(":fonts/smufl/glyphnames.json");
-    if (!fi.open(QIODevice::ReadOnly)) {
-        qDebug("ScoreFont: open glyph names file <%s> failed", qPrintable(fi.fileName()));
+    QFile file(":fonts/smufl/glyphnames.json");
+    if (!file.open(QIODevice::ReadOnly)) {
+        LOGE() << "could not open glyph names JSON file.";
         return QJsonObject();
     }
 
     QJsonParseError error;
-    QJsonObject glyphNamesJson = QJsonDocument::fromJson(fi.readAll(), &error).object();
+    QJsonObject glyphNamesJson = QJsonDocument::fromJson(file.readAll(), &error).object();
+    file.close();
+
     if (error.error != QJsonParseError::NoError) {
-        qDebug("Json parse error in <%s>(offset: %d): %s", qPrintable(fi.fileName()),
-               error.offset, qPrintable(error.errorString()));
+        LOGE() << "JSON parse error in glyph names file: " << error.errorString()
+               << " (offset: " << error.offset << ")";
         return QJsonObject();
     }
-
-    fi.close();
 
     return glyphNamesJson;
 }
@@ -238,13 +233,12 @@ void ScoreFont::load()
     m_font.setNoFontMerging(true);
     m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
 
-    for (size_t id = 0; id < s_mainSymCodeTable.size(); ++id) {
-        uint code = s_mainSymCodeTable[id];
+    for (size_t id = 0; id < s_symIdCodes.size(); ++id) {
+        uint code = s_symIdCodes[id];
         if (code == 0) {
             continue;
         }
-        SymId symId = SymId(id);
-        Sym* sym    = &m_symbols[int(symId)];
+        Sym& sym = m_symbols[id];
         computeMetrics(sym, code);
     }
 
@@ -268,70 +262,45 @@ void ScoreFont::load()
     loadEngravingDefaults(metadataJson.value("engravingDefaults").toObject());
 
     m_loaded = true;
-
-#if 0
-    // check for missing symbols
-    ScoreFont* fallback = ScoreFont::fallbackFont();
-    if (fallback && fallback != this) {
-        for (int i = 1; i < int(SymId::lastSym); ++i) {
-            const Sym& sym = m_symbols[i];
-            if (!sym.isValid()) {
-                LOGD() << "symbol missing: " << Sym::id2name(SymId(i));
-            }
-        }
-    }
-#endif
 }
 
 void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
 {
     for (const QString& symName : glyphsWithAnchors.keys()) {
-        constexpr qreal scale = SPATIUM20;
-        QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
-
-        SymId symId = Sym::nameToSymIdHash.value(symName, SymId::noSym);
+        SymId symId = SymNames::symIdByName(symName);
         if (symId == SymId::noSym) {
             //! NOTE currently, Bravura contains a bunch of entries in glyphsWithAnchors
             //! for glyph names that will not be found - flag32ndUpStraight, etc.
             continue;
         }
 
-        Sym* sym = &m_symbols[int(symId)];
+        Sym& sym = this->sym(symId);
+        QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
 
-        for (const QString& anchorKey : anchors.keys()) {
-            if (anchorKey == "stemDownNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownNW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemUpSE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpSE, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemDownSW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownSW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemUpNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpNW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "cutOutNE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNE, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNW, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutSE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSE, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutSW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSW, PointF(x, -y) * scale);
+        static const std::unordered_map<QString, SmuflAnchorId> smuflAnchorIdNames {
+            { "stemDownNW", SmuflAnchorId::stemDownNW },
+            { "stemUpSE", SmuflAnchorId::stemUpSE },
+            { "stemDownSW", SmuflAnchorId::stemDownSW },
+            { "stemUpNW", SmuflAnchorId::stemUpNW },
+            { "cutOutNE", SmuflAnchorId::cutOutNE },
+            { "cutOutNW", SmuflAnchorId::cutOutNW },
+            { "cutOutSE", SmuflAnchorId::cutOutSE },
+            { "cutOutSW", SmuflAnchorId::cutOutSW },
+            { "opticalCenter", SmuflAnchorId::opticalCenter },
+        };
+
+        for (const QString& anchorId : anchors.keys()) {
+            auto search = smuflAnchorIdNames.find(anchorId);
+            if (search == smuflAnchorIdNames.cend()) {
+                //LOGD() << "Unhandled SMuFL anchorId: " << anchorId;
+                continue;
             }
+
+            QJsonArray arr = anchors.value(anchorId).toArray();
+            double x = arr.at(0).toDouble();
+            double y = arr.at(1).toDouble();
+
+            sym.smuflAnchors[search->second] = PointF(x, -y) * SPATIUM20;
         }
     }
 }
@@ -340,7 +309,7 @@ void ScoreFont::loadComposedGlyphs()
 {
     static const struct ComposedGlyph {
         const SymId id;
-        const std::vector<SymId> subSymbolIds;
+        const SymIdList subSymbolIds;
     } composedGlyphs[] = {
         { SymId::ornamentPrallMordent, {
               SymId::ornamentZigZagLineNoRightEnd,
@@ -367,25 +336,13 @@ void ScoreFont::loadComposedGlyphs()
               SymId::ornamentZigZagLineNoRightEnd,
               SymId::ornamentBottomRightConcaveStroke,
           } },
-#if 0
-        {
-            SymId::ornamentDownPrall, {
-                SymId::ornamentTopLeftConvexStroke,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentZigZagLineWithRightEnd
-            }
-        },
-#endif
-        {
-            SymId::ornamentDownMordent, {
-                SymId::ornamentLeftVerticalStroke,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentMiddleVerticalStroke,
-                SymId::ornamentZigZagLineWithRightEnd
-            }
-        },
+        { SymId::ornamentDownMordent, {
+              SymId::ornamentLeftVerticalStroke,
+              SymId::ornamentZigZagLineNoRightEnd,
+              SymId::ornamentZigZagLineNoRightEnd,
+              SymId::ornamentMiddleVerticalStroke,
+              SymId::ornamentZigZagLineWithRightEnd
+          } },
         { SymId::ornamentPrallUp, {
               SymId::ornamentZigZagLineNoRightEnd,
               SymId::ornamentZigZagLineNoRightEnd,
@@ -401,11 +358,10 @@ void ScoreFont::loadComposedGlyphs()
     };
 
     for (const ComposedGlyph& c : composedGlyphs) {
-        if (!m_symbols[int(c.id)].isValid()) {
-            Sym* sym = &m_symbols[int(c.id)];
-            std::vector<SymId> subSymbolIds { c.subSymbolIds };
-            sym->setSubSymbols(subSymbolIds);
-            sym->setBbox(bbox(subSymbolIds, 1.0));
+        Sym& sym = this->sym(c.id);
+        if (!sym.isValid()) {
+            sym.subSymbolIds = c.subSymbolIds;
+            sym.bbox = bbox(c.subSymbolIds, 1.0);
         }
     }
 }
@@ -476,6 +432,70 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
         { QString("brace"),
           QString("braceLarger"),
           SymId::braceLarger
+        },
+        { QString("flag1024thDown"),
+          QString("flag1024thDownStraight"),
+          SymId::flag1024thDownStraight
+        },
+        { QString("flag1024thUp"),
+          QString("flag1024thUpStraight"),
+          SymId::flag1024thUpStraight
+        },
+        { QString("flag128thDown"),
+          QString("flag128thDownStraight"),
+          SymId::flag128thDownStraight
+        },
+        { QString("flag128thUp"),
+          QString("flag128thUpStraight"),
+          SymId::flag128thUpStraight
+        },
+        { QString("flag16thDown"),
+          QString("flag16thDownStraight"),
+          SymId::flag16thDownStraight
+        },
+        { QString("flag16thUp"),
+          QString("flag16thUpStraight"),
+          SymId::flag16thUpStraight
+        },
+        { QString("flag256thDown"),
+          QString("flag256thDownStraight"),
+          SymId::flag256thDownStraight
+        },
+        { QString("flag256thUp"),
+          QString("flag256thUpStraight"),
+          SymId::flag256thUpStraight
+        },
+        { QString("flag32ndDown"),
+          QString("flag32ndDownStraight"),
+          SymId::flag32ndDownStraight
+        },
+        { QString("flag32ndUp"),
+          QString("flag32ndUpStraight"),
+          SymId::flag32ndUpStraight
+        },
+        { QString("flag512thDown"),
+          QString("flag512thDownStraight"),
+          SymId::flag512thDownStraight
+        },
+        { QString("flag512thUp"),
+          QString("flag512thUpStraight"),
+          SymId::flag512thUpStraight
+        },
+        { QString("flag64thDown"),
+          QString("flag64thDownStraight"),
+          SymId::flag64thDownStraight
+        },
+        { QString("flag64thUp"),
+          QString("flag64thUpStraight"),
+          SymId::flag64thUpStraight
+        },
+        { QString("flag8thDown"),
+          QString("flag8thDownStraight"),
+          SymId::flag8thDownStraight
+        },
+        { QString("flag8thUp"),
+          QString("flag8thUpStraight"),
+          SymId::flag8thUpStraight
         }
     };
 
@@ -493,10 +513,10 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
             });
 
             if (alternateIt != alternatesArray.cend()) {
-                Sym* sym = &m_symbols[int(glyph.alternateSymId)];
-                int codepoint = alternateIt->toObject().value("codepoint").toString().midRef(2).toInt(&ok, 16);
+                Sym& sym = this->sym(glyph.alternateSymId);
+                uint code = alternateIt->toObject().value("codepoint").toString().midRef(2).toUInt(&ok, 16);
                 if (ok) {
-                    computeMetrics(sym, codepoint);
+                    computeMetrics(sym, code);
                 }
             }
         }
@@ -509,7 +529,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
         { "staffLineThickness",            Sid::staffLineWidth },
         { "stemThickness",                 Sid::stemWidth },
         { "beamThickness",                 Sid::beamWidth },
-        { "beamSpacing",                   Sid::beamDistance },
+        { "beamSpacing",                   Sid::useWideBeams },
         { "legerLineThickness",            Sid::ledgerLineWidth },
         { "legerLineExtension",            Sid::ledgerLineLength },
         { "slurEndpointThickness",         Sid::SlurEndWidth },
@@ -541,7 +561,7 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
                 qreal value = engravingDefaultsObject.value(key).toDouble();
 
                 if (key == "beamSpacing") {
-                    value /= engravingDefaultsObject.value("beamThickness").toDouble();
+                    value = value > 0.75;
                 }
 
                 m_engravingDefaults.push_back({ mapping.second, value });
@@ -552,40 +572,42 @@ void ScoreFont::loadEngravingDefaults(const QJsonObject& engravingDefaultsObject
     m_engravingDefaults.push_back({ Sid::MusicalTextFont, QString("%1 Text").arg(m_family) });
 }
 
-void ScoreFont::computeMetrics(Sym* sym, int code)
+void ScoreFont::computeMetrics(ScoreFont::Sym& sym, uint code)
 {
-    RectF bbox = fontProvider()->symBBox(m_font, code, DPI_F);
-    qreal advance = fontProvider()->symAdvance(m_font, code, DPI_F);
-
-    sym->setCode(code);
-    sym->setBbox(bbox);
-    sym->setAdvance(advance);
+    sym.code = code;
+    sym.bbox = fontProvider()->symBBox(m_font, code, DPI_F);
+    sym.advance = fontProvider()->symAdvance(m_font, code, DPI_F);
 }
 
 // =============================================
 // Symbol properties
 // =============================================
 
-Sym ScoreFont::sym(SymId id) const
+ScoreFont::Sym& ScoreFont::sym(SymId id)
 {
-    size_t index = static_cast<size_t>(id);
-    if (index < m_symbols.size()) {
-        return m_symbols[index];
-    }
-    return Sym();
+    return m_symbols[static_cast<size_t>(id)];
+}
+
+const ScoreFont::Sym& ScoreFont::sym(SymId id) const
+{
+    return m_symbols.at(static_cast<size_t>(id));
 }
 
 uint ScoreFont::symCode(SymId id) const
 {
     const Sym& s = sym(id);
-    uint code;
     if (s.isValid()) {
-        code = s.code();
-    } else {
-        // fallback: search in the common SMuFL table
-        code = s_mainSymCodeTable[size_t(id)];
+        return s.code;
     }
-    return code;
+
+    // fallback: search in the common SMuFL table
+    return s_symIdCodes.at(static_cast<size_t>(id));
+}
+
+SymId ScoreFont::fromCode(uint code) const
+{
+    auto it = std::find_if(m_symbols.begin(), m_symbols.end(), [code](const Sym& s) { return s.code == code; });
+    return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
 }
 
 static QString codeToString(uint code)
@@ -623,17 +645,17 @@ const RectF ScoreFont::bbox(SymId id, const SizeF& mag) const
         return fallbackFont()->bbox(id, mag);
     }
 
-    RectF r = sym(id).bbox();
+    RectF r = sym(id).bbox;
     return RectF(r.x() * mag.width(), r.y() * mag.height(),
                  r.width() * mag.width(), r.height() * mag.height());
 }
 
-const RectF ScoreFont::bbox(const std::vector<SymId>& s, qreal mag) const
+const RectF ScoreFont::bbox(const SymIdList& s, qreal mag) const
 {
     return bbox(s, SizeF(mag, mag));
 }
 
-const RectF ScoreFont::bbox(const std::vector<SymId>& s, const SizeF& mag) const
+const RectF ScoreFont::bbox(const SymIdList& s, const SizeF& mag) const
 {
     RectF r;
     PointF pos;
@@ -655,7 +677,7 @@ qreal ScoreFont::width(SymId id, qreal mag) const
 
 qreal ScoreFont::height(SymId id, qreal mag) const
 {
-    return bbox(id, mag).width();
+    return bbox(id, mag).height();
 }
 
 qreal ScoreFont::advance(SymId id, qreal mag) const
@@ -664,10 +686,10 @@ qreal ScoreFont::advance(SymId id, qreal mag) const
         return fallbackFont()->advance(id, mag);
     }
 
-    return sym(id).advance() * mag;
+    return sym(id).advance * mag;
 }
 
-qreal ScoreFont::width(const std::vector<SymId>& s, qreal mag) const
+qreal ScoreFont::width(const SymIdList& s, qreal mag) const
 {
     return bbox(s, mag).width();
 }
@@ -678,94 +700,65 @@ PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) co
         return fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
 
-    return sym(symId).smuflAnchor(anchorId) * mag;
+    return const_cast<Sym&>(sym(symId)).smuflAnchors[anchorId] * mag;
 }
 
 // =============================================
 // Draw
 // =============================================
 
-void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos, qreal worldScale) const
+void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
 {
-    if (!sym(id).subSymbols().empty()) { // is this a compound symbol?
-        draw(sym(id).subSymbols(), painter, mag, pos);
+    const Sym& sym = this->sym(id);
+    if (sym.isCompound()) { // is this a compound symbol?
+        draw(sym.subSymbolIds, painter, mag, pos);
         return;
     }
 
-    if (!isValid(id)) {
+    if (!sym.isValid()) {
         if (MScore::useFallbackFont && this != ScoreFont::fallbackFont()) {
-            fallbackFont()->draw(id, painter, mag, pos, worldScale);
+            fallbackFont()->draw(id, painter, mag, pos);
         } else {
-            qDebug("ScoreFont::draw: invalid sym %d", int(id));
+            LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
 
         return;
     }
 
+    painter->save();
     qreal size = 20.0 * MScore::pixelRatio;
     m_font.setPointSizeF(size);
-    SizeF imag = SizeF(1.0 / mag.width(), 1.0 / mag.height());
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
-    painter->drawSymbol(PointF(pos.x() * imag.width(), pos.y() * imag.height()), symCode(id));
-    painter->scale(imag.width(), imag.height());
+    painter->drawSymbol(PointF(pos.x() / mag.width(), pos.y() / mag.height()), symCode(id));
+    painter->restore();
 }
 
 void ScoreFont::draw(SymId id, Painter* painter, qreal mag, const PointF& pos) const
 {
-    qreal worldScale = painter->worldTransform().m11();
-    draw(id, painter, mag, pos, worldScale);
-}
-
-void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
-{
-    qreal worldScale = painter->worldTransform().m11();
-    draw(id, painter, mag, pos, worldScale);
-}
-
-void ScoreFont::draw(SymId id, Painter* painter, qreal mag, const PointF& pos, qreal worldScale) const
-{
-    draw(id, painter, SizeF(mag, mag), pos, worldScale);
+    draw(id, painter, SizeF(mag, mag), pos);
 }
 
 void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const PointF& pos, int n) const
 {
-    std::vector<SymId> d;
-    d.reserve(n);
-    for (int i = 0; i < n; ++i) {
-        d.push_back(id);
-    }
-
-    draw(d, painter, mag, pos);
+    SymIdList list(n, id);
+    draw(list, painter, mag, pos);
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, Painter* p, qreal mag, const PointF& _pos, qreal scale) const
+void ScoreFont::draw(const SymIdList& ids, Painter* painter, qreal mag, const PointF& startPos) const
 {
-    PointF pos(_pos);
+    PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, p, mag, pos, scale);
+        draw(id, painter, mag, pos);
         pos.setX(pos.x() + advance(id, mag));
     }
 }
 
-void ScoreFont::draw(const std::vector<SymId>& ids, Painter* p, const SizeF& mag, const PointF& _pos) const
+void ScoreFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
 {
-    qreal scale = p->worldTransform().m11();
-    draw(ids, p, mag, _pos, scale);
-}
-
-void ScoreFont::draw(const std::vector<SymId>& ids, Painter* p, const SizeF& mag, const PointF& _pos,
-                     qreal scale) const
-{
-    PointF pos(_pos);
+    PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, p, mag, pos, scale);
+        draw(id, painter, mag, pos);
         pos.setX(pos.x() + advance(id, mag.width()));
     }
-}
-
-void ScoreFont::draw(const std::vector<SymId>& ids, Painter* p, qreal mag, const PointF& _pos) const
-{
-    qreal scale = p->worldTransform().m11();
-    draw(ids, p, mag, _pos, scale);
 }

@@ -113,7 +113,7 @@
         <lid>0</lid>
         <Text>
           <lid>1</lid>
-          <style>Title</style>
+          <style>title</style>
           <text>crescendo-2</text>
           </Text>
         </VBox>
@@ -649,11 +649,11 @@
           <lid>0</lid>
           <Text>
             <lid>1</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>crescendo-2</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>

@@ -39,8 +39,6 @@ public:
     virtual bool isActive() const = 0;
     virtual void setIsActive(bool arg) = 0;
 
-    virtual void seek(const msecs_t newPositionMsecs) { UNUSED(newPositionMsecs) }
-
     //! set current sample rate. Called by destination.
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
@@ -50,7 +48,7 @@ public:
     virtual async::Channel<unsigned int> audioChannelsCountChanged() const = 0;
 
     //! move buffer forward for sampleCount samples
-    virtual void process(float* buffer, unsigned int sampleCount) = 0;
+    virtual samples_t process(float* buffer, samples_t samplesPerChannel) = 0;
 };
 
 using IAudioSourcePtr = std::shared_ptr<IAudioSource>;

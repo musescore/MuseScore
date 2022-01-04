@@ -33,6 +33,7 @@
 #include "compat/backendapi.h"
 
 using namespace mu::converter;
+using namespace mu::project;
 using namespace mu::notation;
 
 static const std::string PDF_SUFFIX = "pdf";
@@ -65,27 +66,27 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
     TRACEFUNC;
 
     LOGI() << "in: " << in << ", out: " << out;
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
 
-    std::string suffix = io::syffix(out);
+    std::string suffix = io::suffix(out);
     auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in, stylePath, forceMode);
+    Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
     }
 
     if (isConvertPageByPage(suffix)) {
-        ret = convertPageByPage(writer, masterNotation->notation(), out);
+        ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
     } else {
-        ret = convertFullNotation(writer, masterNotation->notation(), out);
+        ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
     }
 
     return make_ret(Ret::Code::Ok);
@@ -96,27 +97,27 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
 {
     TRACEFUNC;
 
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
 
-    std::string suffix = io::syffix(out);
+    std::string suffix = io::suffix(out);
     auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
     }
 
-    Ret ret = masterNotation->load(in, stylePath, forceMode);
+    Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
     }
 
     if (suffix == PDF_SUFFIX) {
-        ret = convertScorePartsToPdf(writer, masterNotation, out);
+        ret = convertScorePartsToPdf(writer, notationProject->masterNotation(), out);
     } else if (suffix == PNG_SUFFIX) {
-        ret = convertScorePartsToPngs(writer, masterNotation, out);
+        ret = convertScorePartsToPngs(writer, notationProject->masterNotation(), out);
     } else {
         ret = make_ret(Ret::Code::NotSupported);
     }
@@ -170,12 +171,12 @@ bool ConverterController::isConvertPageByPage(const std::string& suffix) const
     return types.contains(suffix);
 }
 
-mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
 {
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
-        const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::syffix(out)).toQString().arg(i + 1);
+        const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
 
         QFile file(filePath);
         if (!file.open(QFile::WriteOnly)) {
@@ -185,6 +186,8 @@ mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writ
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
         };
+
+        file.setProperty("path", out.toQString());
 
         Ret ret = writer->write(notation, file, options);
         if (!ret) {
@@ -198,13 +201,14 @@ mu::Ret ConverterController::convertPageByPage(notation::INotationWriterPtr writ
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
+mu::Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const mu::io::path& out) const
 {
     QFile file(out.toQString());
     if (!file.open(QFile::WriteOnly)) {
         return make_ret(Err::OutFileFailedOpen);
     }
 
+    file.setProperty("path", out.toQString());
     Ret ret = writer->write(notation, file);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
@@ -216,8 +220,7 @@ mu::Ret ConverterController::convertFullNotation(notation::INotationWriterPtr wr
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr writer, IMasterNotationPtr masterNotation,
-                                                    const io::path& out) const
+mu::Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const io::path& out) const
 {
     TRACEFUNC;
 
@@ -248,7 +251,7 @@ mu::Ret ConverterController::convertScorePartsToPdf(notation::INotationWriterPtr
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::convertScorePartsToPngs(notation::INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
+mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::notation::IMasterNotationPtr masterNotation,
                                                      const io::path& out) const
 {
     TRACEFUNC;

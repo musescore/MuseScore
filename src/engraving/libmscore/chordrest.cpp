@@ -24,9 +24,13 @@
 
 #include <QDebug>
 
+#include "style/style.h"
+#include "rw/xml.h"
+#include "rw/xmlvalue.h"
+#include "types/typesconv.h"
+
+#include "factory.h"
 #include "chord.h"
-#include "xml.h"
-#include "style.h"
 #include "system.h"
 #include "measure.h"
 #include "staff.h"
@@ -53,31 +57,34 @@
 #include "harmony.h"
 #include "hairpin.h"
 #include "figuredbass.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "utils.h"
 #include "keysig.h"
 #include "page.h"
 #include "hook.h"
 #include "rehearsalmark.h"
 #include "instrchange.h"
+#include "navigate.h"
 
 using namespace mu;
+using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
 //---------------------------------------------------------
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(Score* s)
-    : DurationElement(s)
+ChordRest::ChordRest(const ElementType& type, Segment* parent)
+    : DurationElement(type, parent)
 {
-    _staffMove   = 0;
-    _beam        = 0;
-    _tabDur      = 0;
-    _up          = true;
-    _beamMode    = Beam::Mode::AUTO;
-    _small       = false;
-    _melismaEnd  = false;
+    _staffMove    = 0;
+    _beam         = 0;
+    _tabDur       = 0;
+    _up           = true;
+    _beamMode     = BeamMode::AUTO;
+    m_isSmall     = false;
+    _melismaEnd   = false;
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
@@ -92,12 +99,12 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
 
     _beamMode     = cr._beamMode;
     _up           = cr._up;
-    _small        = cr._small;
+    m_isSmall     = cr.m_isSmall;
     _melismaEnd   = cr._melismaEnd;
     _crossMeasure = cr._crossMeasure;
 
     for (Lyrics* l : cr._lyrics) {          // make deep copy
-        Lyrics* nl = new Lyrics(*l);
+        Lyrics* nl = Factory::copyLyrics(*l);
         if (link) {
             nl->linkTo(l);
         }
@@ -142,31 +149,12 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     DurationElement::writeProperties(xml);
 
     //
-    // Beam::Mode default:
-    //    REST  - Beam::Mode::NONE
-    //    CHORD - Beam::Mode::AUTO
+    // BeamMode default:
+    //    REST  - BeamMode::NONE
+    //    CHORD - BeamMode::AUTO
     //
-    if ((isRest() && _beamMode != Beam::Mode::NONE) || (isChord() && _beamMode != Beam::Mode::AUTO)) {
-        QString s;
-        switch (_beamMode) {
-        case Beam::Mode::AUTO:    s = "auto";
-            break;
-        case Beam::Mode::BEGIN:   s = "begin";
-            break;
-        case Beam::Mode::MID:     s = "mid";
-            break;
-        case Beam::Mode::END:     s = "end";
-            break;
-        case Beam::Mode::NONE:    s = "no";
-            break;
-        case Beam::Mode::BEGIN32: s = "begin32";
-            break;
-        case Beam::Mode::BEGIN64: s = "begin64";
-            break;
-        case Beam::Mode::INVALID: s = "?";
-            break;
-        }
-        xml.tag("BeamMode", s);
+    if ((isRest() && _beamMode != BeamMode::NONE) || (isChord() && _beamMode != BeamMode::AUTO)) {
+        xml.tag("BeamMode", XmlValue::toXml(_beamMode));
     }
     writeProperty(xml, Pid::SMALL);
     if (actualDurationType().dots()) {
@@ -175,7 +163,7 @@ void ChordRest::writeProperties(XmlWriter& xml) const
     writeProperty(xml, Pid::STAFF_MOVE);
 
     if (actualDurationType().isValid()) {
-        xml.tag("durationType", actualDurationType().name());
+        xml.tag("durationType", TConv::toXml(actualDurationType().type()));
     }
 
     if (!ticks().isZero() && (!actualDurationType().fraction().isValid()
@@ -221,8 +209,8 @@ bool ChordRest::readProperties(XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "durationType") {
-        setDurationType(e.readElementText());
-        if (actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
+        setDurationType(TConv::fromXml(e.readElementText(), DurationType::V_QUARTER));
+        if (actualDurationType().type() != DurationType::V_MEASURE) {
             if (score()->mscVersion() < 112 && (type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
@@ -233,9 +221,9 @@ bool ChordRest::readProperties(XmlReader& e)
                 &&            // rest durations are initialized to full measure duration when
                               // created upon reading the <Rest> tag (see Measure::read() )
                               // so a V_WHOLE rest in a measure of 4/4 or less => V_MEASURE
-                (actualDurationType() == TDuration::DurationType::V_WHOLE && ticks() <= Fraction(4, 4))) {
+                (actualDurationType() == DurationType::V_WHOLE && ticks() <= Fraction(4, 4))) {
                 // old pre 2.0 scores: convert
-                setDurationType(TDuration::DurationType::V_MEASURE);
+                setDurationType(DurationType::V_MEASURE);
             } else {    // not from old score: set duration fraction from duration type
                 setTicks(actualDurationType().fraction());
             }
@@ -246,28 +234,9 @@ bool ChordRest::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "BeamMode") {
-        QString val(e.readElementText());
-        Beam::Mode bm = Beam::Mode::AUTO;
-        if (val == "auto") {
-            bm = Beam::Mode::AUTO;
-        } else if (val == "begin") {
-            bm = Beam::Mode::BEGIN;
-        } else if (val == "mid") {
-            bm = Beam::Mode::MID;
-        } else if (val == "end") {
-            bm = Beam::Mode::END;
-        } else if (val == "no") {
-            bm = Beam::Mode::NONE;
-        } else if (val == "begin32") {
-            bm = Beam::Mode::BEGIN32;
-        } else if (val == "begin64") {
-            bm = Beam::Mode::BEGIN64;
-        } else {
-            bm = Beam::Mode(val.toInt());
-        }
-        _beamMode = Beam::Mode(bm);
+        _beamMode = XmlValue::fromXml(e.readElementText(), BeamMode::AUTO);
     } else if (tag == "Articulation") {
-        Articulation* atr = new Articulation(score());
+        Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());
         atr->read(e);
         add(atr);
@@ -275,7 +244,7 @@ bool ChordRest::readProperties(XmlReader& e)
         qDebug("ChordRest: %s obsolete", tag.toLocal8Bit().data());
         e.skipCurrentElement();
     } else if (tag == "small") {
-        _small = e.readInt();
+        m_isSmall = e.readInt();
     } else if (tag == "duration") {
         setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
@@ -285,7 +254,7 @@ bool ChordRest::readProperties(XmlReader& e)
             i = mticks;
         }
         if ((type() == ElementType::REST) && (mticks == i)) {
-            setDurationType(TDuration::DurationType::V_MEASURE);
+            setDurationType(DurationType::V_MEASURE);
             setTicks(Fraction::fromTicks(i));
         } else {
             Fraction f = Fraction::fromTicks(i);
@@ -302,7 +271,7 @@ bool ChordRest::readProperties(XmlReader& e)
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
-        Element* element = new Lyrics(score());
+        EngravingItem* element = Factory::createLyrics(this);
         element->setTrack(e.track());
         element->read(e);
         add(element);
@@ -337,13 +306,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setStartElement(this);
             if (pasteMode) {
                 score()->undoAddElement(spanner);
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = toSpanner(ee);
                     ls->setTick(spanner->tick());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack(cr->track());
@@ -362,13 +331,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setTick2(tick());
             spanner->setEndElement(this);
             if (pasteMode) {
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = static_cast<Spanner*>(ee);
                     ls->setTick2(spanner->tick2());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());
@@ -391,15 +360,6 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 }
 
 //---------------------------------------------------------
-//   setSmall
-//---------------------------------------------------------
-
-void ChordRest::setSmall(bool val)
-{
-    _small = val;
-}
-
-//---------------------------------------------------------
 //   undoSetSmall
 //---------------------------------------------------------
 
@@ -412,9 +372,9 @@ void ChordRest::undoSetSmall(bool val)
 //   drop
 //---------------------------------------------------------
 
-Element* ChordRest::drop(EditData& data)
+EngravingItem* ChordRest::drop(EditData& data)
 {
-    Element* e       = data.dropElement;
+    EngravingItem* e       = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == -1);
     switch (e->type()) {
@@ -424,7 +384,7 @@ Element* ChordRest::drop(EditData& data)
         b->setPos(PointF());
         // allow breath marks in voice > 1
         b->setTrack(this->track());
-        b->setPlacement(b->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+        b->setPlacement(b->track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
         Fraction bt = tick() + actualTicks();
         bt = tick() + actualTicks();
 
@@ -461,7 +421,6 @@ Element* ChordRest::drop(EditData& data)
                     l = toBarLine(obl->linkedClone());
                 }
                 l->setTrack(st->idx() * VOICES);
-                l->setScore(score);
                 l->setParent(seg);
                 score->undoAddElement(l);
                 l->layout();
@@ -490,8 +449,8 @@ Element* ChordRest::drop(EditData& data)
         }
 
     case ElementType::FERMATA:
-        e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
-        for (Element* el: segment()->annotations()) {
+        e->setPlacement(track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE);
+        for (EngravingItem* el: segment()->annotations()) {
             if (el->isFermata() && (el->track() == track())) {
                 if (el->subtype() == e->subtype()) {
                     delete e;
@@ -518,16 +477,17 @@ Element* ChordRest::drop(EditData& data)
 
     case ElementType::NOTE: {
         Note* note = toNote(e);
-        NoteVal nval;
-        nval.pitch = note->pitch();
-        nval.tpc1 = note->tpc1();
-        nval.headGroup = note->headGroup();
-        nval.fret = note->fret();
-        nval.string = note->string();
-        score()->setNoteRest(segment(), track(), nval, ticks(), Direction::AUTO);
-        delete e;
+        Segment* seg = segment();
+        score()->undoRemoveElement(this);
+        Chord* chord = Factory::createChord(score()->dummy()->segment());
+        chord->setTrack(track());
+        chord->setDurationType(durationType());
+        chord->setTicks(ticks());
+        chord->setTuplet(tuplet());
+        chord->add(note);
+        score()->undoAddCR(chord, seg->measure(), seg->tick());
+        return note;
     }
-    break;
 
     case ElementType::HARMONY:
     {
@@ -600,26 +560,26 @@ Element* ChordRest::drop(EditData& data)
         score()->undoAddElement(e);
         return e;
 
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     {
-        switch (toIcon(e)->iconType()) {
-        case IconType::SBEAM:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN));
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::BEAM_START:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN);
             break;
-        case IconType::MBEAM:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::MID));
+        case ActionIconType::BEAM_MID:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
             break;
-        case IconType::NBEAM:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
+        case ActionIconType::BEAM_NONE:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
             break;
-        case IconType::BEAM32:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN32));
+        case ActionIconType::BEAM_BEGIN_32:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN32);
             break;
-        case IconType::BEAM64:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN64));
+        case ActionIconType::BEAM_BEGIN_64:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::BEGIN64);
             break;
-        case IconType::AUTOBEAM:
-            undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
+        case ActionIconType::BEAM_AUTO:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::AUTO);
             break;
         default:
             break;
@@ -639,17 +599,15 @@ Element* ChordRest::drop(EditData& data)
     }
     break;
 
-    case ElementType::HAIRPIN:
-    {
-        Hairpin* hairpin = toHairpin(e);
-        hairpin->setTick(tick());
-        hairpin->setTrack(track());
-        hairpin->setTrack2(track());
-        score()->undoAddElement(hairpin);
-    }
-        return e;
-
     default:
+        if (e->isSpanner()) {
+            Spanner* spanner = toSpanner(e);
+            spanner->setTick(tick());
+            spanner->setTrack(track());
+            spanner->setTrack2(track());
+            score()->undoAddElement(spanner);
+            return e;
+        }
         qDebug("cannot drop %s", e->name());
         delete e;
         return 0;
@@ -670,15 +628,9 @@ void ChordRest::setBeam(Beam* b)
 //   setDurationType
 //---------------------------------------------------------
 
-void ChordRest::setDurationType(TDuration::DurationType t)
+void ChordRest::setDurationType(DurationType t)
 {
     _durationType.setType(t);
-    _crossMeasure = CrossMeasure::UNKNOWN;
-}
-
-void ChordRest::setDurationType(const QString& s)
-{
-    _durationType.setType(s);
     _crossMeasure = CrossMeasure::UNKNOWN;
 }
 
@@ -738,19 +690,19 @@ QString ChordRest::durationUserName() const
 
     switch (dots()) {
     case 1:
-        dotString += QObject::tr("Dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 2:
-        dotString += QObject::tr("Double dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Double dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 3:
-        dotString += QObject::tr("Triple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Triple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     case 4:
-        dotString += QObject::tr("Quadruple dotted %1").arg(durationType().durationTypeUserName()).trimmed();
+        dotString += QObject::tr("Quadruple dotted %1").arg(TConv::toUserName(durationType().type())).trimmed();
         break;
     default:
-        dotString += durationType().durationTypeUserName();
+        dotString += TConv::toUserName(durationType().type());
     }
     return QString("%1%2").arg(tupletType, dotString);
 }
@@ -759,7 +711,7 @@ QString ChordRest::durationUserName() const
 //   add
 //---------------------------------------------------------
 
-void ChordRest::add(Element* e)
+void ChordRest::add(EngravingItem* e)
 {
     e->setParent(this);
     e->setTrack(track());
@@ -783,7 +735,7 @@ void ChordRest::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void ChordRest::remove(Element* e)
+void ChordRest::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::LYRICS: {
@@ -839,37 +791,34 @@ void ChordRest::replaceBeam(Beam* newBeam)
 
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
+    if (secondChordRest == nullptr) {
+        secondChordRest = Ms::nextChordRest(const_cast<ChordRest*>(this));
+    }
     int currentTick = tick().ticks();
+    Ms::Slur* result = nullptr;
     for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
         Ms::Spanner* spanner = it.value;
         if (!spanner->isSlur()) {
             continue;
         }
-
         Ms::Slur* slur = Ms::toSlur(spanner);
-        if (!secondChordRest) {
-            if (slur->endElement()->tick() > tick()) {
+        if (slur->startElement() == this && slur->endElement() == secondChordRest) {
+            if (slur->slurDirection() == DirectionV::AUTO) {
                 return slur;
             }
-
-            continue;
-        }
-
-        if (slur->endElement() == secondChordRest) {
-            return slur;
+            result = slur;
         }
     }
-
-    return nullptr;
+    return result;
 }
 
 //---------------------------------------------------------
 //   undoSetBeamMode
 //---------------------------------------------------------
 
-void ChordRest::undoSetBeamMode(Beam::Mode mode)
+void ChordRest::undoSetBeamMode(BeamMode mode)
 {
-    undoChangeProperty(Pid::BEAM_MODE, int(mode));
+    undoChangeProperty(Pid::BEAM_MODE, mode);
 }
 
 //---------------------------------------------------------
@@ -879,10 +828,10 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     DurationElement::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : lyrics()) {
+    for (EngravingItem* e : lyrics()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
 }
@@ -891,14 +840,14 @@ void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant ChordRest::getProperty(Pid propertyId) const
+PropertyValue ChordRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SMALL:      return QVariant(small());
+    case Pid::SMALL:      return PropertyValue::fromValue(isSmall());
     case Pid::BEAM_MODE:  return int(beamMode());
     case Pid::STAFF_MOVE: return staffMove();
-    case Pid::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
-    default:               return DurationElement::getProperty(propertyId);
+    case Pid::DURATION_TYPE_WITH_DOTS: return actualDurationType().typeWithDots();
+    default:              return DurationElement::getProperty(propertyId);
     }
 }
 
@@ -906,14 +855,14 @@ QVariant ChordRest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
+bool ChordRest::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SMALL:
         setSmall(v.toBool());
         break;
     case Pid::BEAM_MODE:
-        setBeamMode(Beam::Mode(v.toInt()));
+        setBeamMode(v.value<BeamMode>());
         break;
     case Pid::STAFF_MOVE:
         setStaffMove(v.toInt());
@@ -922,8 +871,8 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
         setVisible(v.toBool());
         measure()->checkMultiVoices(staffIdx());
         break;
-    case Pid::DURATION_TYPE:
-        setDurationType(v.value<TDuration>());
+    case Pid::DURATION_TYPE_WITH_DOTS:
+        setDurationType(v.value<DurationTypeWithDots>());
         break;
     default:
         return DurationElement::setProperty(propertyId, v);
@@ -936,13 +885,13 @@ bool ChordRest::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ChordRest::propertyDefault(Pid propertyId) const
+PropertyValue ChordRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SMALL:
         return false;
     case Pid::BEAM_MODE:
-        return int(Beam::Mode::AUTO);
+        return BeamMode::AUTO;
     case Pid::STAFF_MOVE:
         return 0;
     default:
@@ -1018,10 +967,10 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
         // chordrest ends at afrac+actualFraction
         // we return the segment at or after the end of the chordrest
         // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
-        Element* e = s;
+        EngravingItem* e = s;
         if (s->isChordRestType()) {
             // Find the first non-NULL element in the segment
-            for (Element* ee : s->elist()) {
+            for (EngravingItem* ee : s->elist()) {
                 if (ee) {
                     e = ee;
                     break;
@@ -1041,8 +990,8 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 
 void ChordRest::setTrack(int val)
 {
-    Element::setTrack(val);
-    processSiblings([val](Element* e) { e->setTrack(val); });
+    EngravingItem::setTrack(val);
+    processSiblings([val](EngravingItem* e) { e->setTrack(val); });
 }
 
 //---------------------------------------------------------
@@ -1051,15 +1000,15 @@ void ChordRest::setTrack(int val)
 
 void ChordRest::setScore(Score* s)
 {
-    Element::setScore(s);
-    processSiblings([s](Element* e) { e->setScore(s); });
+    EngravingItem::setScore(s);
+    processSiblings([s](EngravingItem* e) { e->setScore(s); });
 }
 
 //---------------------------------------------------------
 //   processSiblings
 //---------------------------------------------------------
 
-void ChordRest::processSiblings(std::function<void(Element*)> func)
+void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 {
     if (_beam) {
         func(_beam);
@@ -1079,7 +1028,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //   nextArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::nextArticulationOrLyric(Element* e)
+EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
     if (isChord() && e->isArticulation()) {
         Chord* c = toChord(this);
@@ -1110,7 +1059,7 @@ Element* ChordRest::nextArticulationOrLyric(Element* e)
 //   prevArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::prevArticulationOrLyric(Element* e)
+EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 {
     auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
     if (i != _lyrics.end()) {
@@ -1139,16 +1088,16 @@ Element* ChordRest::prevArticulationOrLyric(Element* e)
 //   nextElement
 //---------------------------------------------------------
 
-Element* ChordRest::nextElement()
+EngravingItem* ChordRest::nextElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::LYRICS: {
-        Element* next = nextArticulationOrLyric(e);
+        EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
             return next;
         } else {
@@ -1173,16 +1122,16 @@ Element* ChordRest::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* ChordRest::prevElement()
+EngravingItem* ChordRest::prevElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::LYRICS: {
-        Element* prev = prevArticulationOrLyric(e);
+        EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {
             return prev;
         } else {
@@ -1204,24 +1153,20 @@ Element* ChordRest::prevElement()
 //   lastElementBeforeSegment
 //---------------------------------------------------------
 
-Element* ChordRest::lastElementBeforeSegment()
+EngravingItem* ChordRest::lastElementBeforeSegment()
 {
     if (!_lyrics.empty()) {
         return _lyrics.back();
     }
-//      else if (!_articulations.empty()) {           // TODO:fermata
-//            return _articulations.back();
-//            }
-    else {
-        return 0;
-    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* ChordRest::nextSegmentElement()
+EngravingItem* ChordRest::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -1230,7 +1175,7 @@ Element* ChordRest::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* ChordRest::prevSegmentElement()
+EngravingItem* ChordRest::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -1238,7 +1183,7 @@ Element* ChordRest::prevSegmentElement()
 QString ChordRest::accessibleExtraInfo() const
 {
     QString rez = "";
-    for (Element* l : lyrics()) {
+    for (EngravingItem* l : lyrics()) {
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
@@ -1246,7 +1191,7 @@ QString ChordRest::accessibleExtraInfo() const
     }
 
     if (segment()) {
-        for (Element* e : segment()->annotations()) {
+        for (EngravingItem* e : segment()->annotations()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
@@ -1351,7 +1296,7 @@ Shape ChordRest::shape() const
         qreal x1 = 1000000.0;
         qreal x2 = -1000000.0;
         bool adjustWidth = false;
-        for (Element* e : segment()->annotations()) {
+        for (EngravingItem* e : segment()->annotations()) {
             if (!e || !e->addToSkyline()) {
                 continue;
             }
@@ -1382,7 +1327,7 @@ Shape ChordRest::shape() const
 //   lyrics
 //---------------------------------------------------------
 
-Lyrics* ChordRest::lyrics(int no, Placement p) const
+Lyrics* ChordRest::lyrics(int no, PlacementV p) const
 {
     for (Lyrics* l : _lyrics) {
         if (l->placement() == p && l->no() == no) {
@@ -1398,7 +1343,7 @@ Lyrics* ChordRest::lyrics(int no, Placement p) const
 //    return -1 if there are no lyrics;
 //---------------------------------------------------------
 
-int ChordRest::lastVerse(Placement p) const
+int ChordRest::lastVerse(PlacementV p) const
 {
     int lastVerse = -1;
 
@@ -1434,7 +1379,7 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 bool ChordRest::isBefore(const ChordRest* o) const
 {
     if (!o || this == o) {
-        return true;
+        return false;
     }
     int otick = o->tick().ticks();
     int t     = tick().ticks();
@@ -1447,10 +1392,10 @@ bool ChordRest::isBefore(const ChordRest* o) const
         int oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
         int graceIndex   = grace ? toChord(this)->graceIndex() + 1 : 0;
         if (oGrace) {
-            oGraceIndex = toChord(o->parent())->graceNotes().size() - oGraceIndex;
+            oGraceIndex = toChord(o->explicitParent())->graceNotes().size() - oGraceIndex;
         }
         if (grace) {
-            graceIndex = toChord(parent())->graceNotes().size() - graceIndex;
+            graceIndex = toChord(explicitParent())->graceNotes().size() - graceIndex;
         }
         otick = otick + (oGraceAfter ? 1 : -1) * oGraceIndex;
         t     = t + (graceAfter ? 1 : -1) * graceIndex;
@@ -1462,7 +1407,7 @@ bool ChordRest::isBefore(const ChordRest* o) const
 //   undoAddAnnotation
 //---------------------------------------------------------
 
-void ChordRest::undoAddAnnotation(Element* a)
+void ChordRest::undoAddAnnotation(EngravingItem* a)
 {
     Segment* seg = segment();
     Measure* m = measure();

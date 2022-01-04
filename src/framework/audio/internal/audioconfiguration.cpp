@@ -36,7 +36,7 @@ using namespace mu::framework;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-static const int AUDIO_CHANNELS = 2;
+static const audioch_t AUDIO_CHANNELS = 2;
 
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
@@ -46,8 +46,9 @@ static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySou
 
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
-//! FIXME Temporary for tests
-static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
+    = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/ };
 
 void AudioConfiguration::init()
 {
@@ -85,7 +86,7 @@ void AudioConfiguration::setCurrentAudioApi(const std::string& name)
     settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
-int AudioConfiguration::audioChannelsCount() const
+audioch_t AudioConfiguration::audioChannelsCount() const
 {
     return AUDIO_CHANNELS;
 }
@@ -95,10 +96,10 @@ unsigned int AudioConfiguration::driverBufferSize() const
     return settings()->value(AUDIO_BUFFER_SIZE).toInt();
 }
 
-std::vector<io::path> AudioConfiguration::soundFontPaths() const
+SoundFontPaths AudioConfiguration::soundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
+    SoundFontPaths paths = io::path::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->appDataPath());
 
     //! TODO Implement me
@@ -106,6 +107,11 @@ std::vector<io::path> AudioConfiguration::soundFontPaths() const
     //QStringList extensionsDir = Ms::Extension::getDirectoriesByType(Ms::Extension::soundfontsDir);
 
     return paths;
+}
+
+async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const
+{
+    return m_soundFontDirsChanged;
 }
 
 bool AudioConfiguration::isShowControlsInMixer() const
@@ -118,13 +124,21 @@ void AudioConfiguration::setIsShowControlsInMixer(bool show)
     settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
+AudioInputParams AudioConfiguration::defaultAudioInputParams() const
+{
+    AudioInputParams result;
+    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
+
+    return result;
+}
+
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
 {
     static SynthesizerState state;
     if (state.isNull()) {
         SynthesizerState::Group gf;
         gf.name = "Fluid";
-        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
+        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_SOUND_FONT_NAME));
         state.groups.insert({ gf.name, std::move(gf) });
     }
 

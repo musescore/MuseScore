@@ -23,11 +23,13 @@
 #define MU_NOTATION_IMASTERNOTATION_H
 
 #include "modularity/imoduleexport.h"
-#include "inotation.h"
-#include "iexcerptnotation.h"
 #include "retval.h"
 #include "io/path.h"
 #include "io/device.h"
+
+#include "inotation.h"
+#include "iexcerptnotation.h"
+#include "imasternotationmididata.h"
 
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
@@ -37,25 +39,18 @@ class IMasterNotation
 public:
     virtual INotationPtr notation() = 0;
 
-    virtual Meta metaInfo() const = 0;
-    virtual void setMetaInfo(const Meta& meta) = 0;
-
-    virtual Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) = 0;
-    virtual io::path path() const = 0;
-
-    virtual Ret createNew(const ScoreCreateOptions& scoreInfo) = 0;
     virtual RetVal<bool> created() const = 0;
-
-    virtual Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) = 0;
     virtual ValNt<bool> needSave() const = 0;
 
+    virtual IExcerptNotationPtr newExcerptBlankNotation() const = 0;
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
-    virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual ExcerptNotationList potentialExcerpts() const = 0;
+
+    virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
-    virtual INotationPtr clone() const = 0;
-
-    virtual Ret writeToDevice(io::Device& destinationDevice) = 0;
+    virtual IMasterNotationMidiDataPtr midiData() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

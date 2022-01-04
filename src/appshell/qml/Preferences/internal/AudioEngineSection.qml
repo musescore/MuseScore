@@ -20,24 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
     signal restartAudioAndMidiDevicesRequested()
 
-    spacing: 18
-
-    StyledTextLabel {
-        text: qsTrc("appshell", "Audio Engine")
-        font: ui.theme.bodyBoldFont
-    }
+    title: qsTrc("appshell", "Audio engine")
 
     FlatButton {
-        text: qsTrc("appshell", "Restart audio and MIDI Devices")
+        text: qsTrc("appshell", "Restart audio and MIDI devices")
+
+        navigation.name: "RestartAudioAndMidiDevicesBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
         onClicked: {
             root.restartAudioAndMidiDevicesRequested()

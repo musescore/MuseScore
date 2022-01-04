@@ -28,52 +28,34 @@
 #include "async/asyncable.h"
 #include "retval.h"
 
-#include "isoundfontsprovider.h"
 #include "iaudiodriver.h"
-#include "isynthesizersregister.h"
-#include "imixer.h"
-
-#include "internal/synthesizers/synthesizercontroller.h"
+#include "internal/worker/mixer.h"
 #include "internal/iaudiobuffer.h"
 
 namespace mu::audio {
 class AudioEngine : public async::Asyncable
 {
-    INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
-    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
 public:
     ~AudioEngine();
 
     static AudioEngine* instance();
 
-    Ret init();
+    Ret init(IAudioBufferPtr bufferPtr);
     void deinit();
-    void onDriverOpened(unsigned int sampleRate, uint16_t readBufferSize);
 
     void setSampleRate(unsigned int sampleRate);
     void setReadBufferSize(uint16_t readBufferSize);
+    void setAudioChannelsCount(const audioch_t count);
 
-    bool isInited() const;
-    async::Channel<bool> initChanged() const;
-    unsigned int sampleRate() const;
-    IMixerPtr mixer() const;
-    void setMixer(IMixerPtr mixerPtr);
-    IAudioBufferPtr buffer() const;
-    void setAudioBuffer(IAudioBufferPtr buffer);
+    MixerPtr mixer() const;
 
 private:
-
     AudioEngine();
 
     bool m_inited = false;
-    mu::async::Channel<bool> m_initChanged;
-    unsigned int m_sampleRate = 0;
 
-    IMixerPtr m_mixer = nullptr;
+    MixerPtr m_mixer = nullptr;
     IAudioBufferPtr m_buffer = nullptr;
-
-    // synthesizers
-    std::shared_ptr<synth::SynthesizerController> m_synthesizerController = nullptr;
 };
 }
 

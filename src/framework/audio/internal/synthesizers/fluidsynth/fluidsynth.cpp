@@ -31,12 +31,19 @@
 
 #include "log.h"
 #include "audioerrors.h"
-
-static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
+#include "audiotypes.h"
 
 using namespace mu;
 using namespace mu::midi;
+using namespace mu::audio;
 using namespace mu::audio::synth;
+
+static const double FLUID_GLOBAL_VOLUME_GAIN { 1.8 };
+
+/// @note
+///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
+/// @see https://www.fluidsynth.org/api/settings_synth.html
+static const audioch_t FLUID_AUDIO_CHANNELS_PAIR = 1;
 
 struct mu::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
@@ -49,8 +56,9 @@ struct mu::audio::synth::Fluid {
     }
 };
 
-FluidSynth::FluidSynth()
+FluidSynth::FluidSynth(const AudioSourceParams& params)
 {
+    m_params = params;
     m_fluid = std::make_shared<Fluid>();
 }
 
@@ -62,6 +70,21 @@ bool FluidSynth::isValid() const
 std::string FluidSynth::name() const
 {
     return "Fluid";
+}
+
+AudioSourceType FluidSynth::type() const
+{
+    return AudioSourceType::Fluid;
+}
+
+const AudioInputParams& FluidSynth::params() const
+{
+    return m_params;
+}
+
+async::Channel<AudioInputParams> FluidSynth::paramsChanged() const
+{
+    return m_paramsChanges;
 }
 
 SoundFontFormats FluidSynth::soundFontFormats() const
@@ -102,10 +125,11 @@ Ret FluidSynth::init()
 
     m_fluid->settings = new_fluid_settings();
     fluid_settings_setnum(m_fluid->settings, "synth.gain", FLUID_GLOBAL_VOLUME_GAIN);
-    fluid_settings_setint(m_fluid->settings, "synth.audio-channels", 1);
+    fluid_settings_setint(m_fluid->settings, "synth.audio-channels", FLUID_AUDIO_CHANNELS_PAIR); // 1 pair of audio channels
     fluid_settings_setint(m_fluid->settings, "synth.lock-memory", 0);
     fluid_settings_setint(m_fluid->settings, "synth.threadsafe-api", 0);
-    fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 80);
+    fluid_settings_setint(m_fluid->settings, "synth.midi-channels", 16);
+    fluid_settings_setint(m_fluid->settings, "synth.dynamic-sample-loading", 1);
 
     if (m_sampleRate > 0) {
         fluid_settings_setnum(m_fluid->settings, "synth.sample-rate", static_cast<double>(m_sampleRate));
@@ -114,7 +138,7 @@ Ret FluidSynth::init()
     //fluid_settings_setint(_fluid->settings, "synth.min-note-length", 50);
     //fluid_settings_setint(_fluid->settings, "synth.polyphony", conf.polyphony);
 
-//    fluid_settings_setstr(m_fluid->settings, "synth.chorus.active", 0);
+    fluid_settings_setint(m_fluid->settings, "synth.chorus.active", 0);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.depth", 8);
 //    fluid_settings_setnum(m_fluid->settings, "synth.chorus.level", 10);
 //    fluid_settings_setint(m_fluid->settings, "synth.chorus.nr", 4);
@@ -210,7 +234,7 @@ Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
 
     if (m_soundFonts.empty()) {
         LOGE() << "sound fonts not loaded";
-        return make_ret(Err::SoundFontNotLoaded);
+        return make_ret(Err::NoLoadedSoundFonts);
     }
 
     fluid_synth_program_reset(m_fluid->synth);
@@ -235,6 +259,10 @@ Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
 
 bool FluidSynth::handleEvent(const Event& e)
 {
+    //! NOTE special midi events are mapped to internal controller
+    //! see /engraving/compat/midi/event.h
+    static uint8_t CTRL_PROGRAM = 0x81;
+
     if (e.isChannelVoice20()) {
         auto events = e.toMIDI10();
         bool ret = true;
@@ -257,7 +285,7 @@ bool FluidSynth::handleEvent(const Event& e)
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
     } break;
     case Event::Opcode::ControlChange: {
-        if (e.index() == CntrType::CTRL_PROGRAM) {
+        if (e.index() == CTRL_PROGRAM) {
             ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
         } else {
             ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());
@@ -270,7 +298,7 @@ bool FluidSynth::handleEvent(const Event& e)
         ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
     } break;
     default: {
-        LOGW() << "not supported event type: " << e.opcodeString();
+        LOGD() << "not supported event type: " << e.opcodeString();
         ret = FLUID_FAILED;
     }
     }
@@ -367,25 +395,26 @@ void FluidSynth::setIsActive(bool arg)
     m_isActive = arg;
 }
 
-void FluidSynth::writeBuf(float* stream, unsigned int samples)
-{
-    IF_ASSERT_FAILED(samples > 0) {
-        return;
-    }
-
-    fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples),
-                            stream, 0, config()->audioChannelsCount(),
-                            stream, 1, config()->audioChannelsCount());
-}
-
 unsigned int FluidSynth::audioChannelsCount() const
 {
-    return config()->audioChannelsCount();
+    return FLUID_AUDIO_CHANNELS_PAIR * 2;
 }
 
-void FluidSynth::process(float* buffer, unsigned int sampleCount)
+samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 {
-    writeBuf(buffer, sampleCount);
+    IF_ASSERT_FAILED(samplesPerChannel > 0) {
+        return 0;
+    }
+
+    int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
+                                         buffer, 0, audioChannelsCount(),
+                                         buffer, 1, audioChannelsCount());
+
+    if (result != FLUID_OK) {
+        return 0;
+    }
+
+    return samplesPerChannel;
 }
 
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const

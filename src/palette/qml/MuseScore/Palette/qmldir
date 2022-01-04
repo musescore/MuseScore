@@ -1,4 +1,5 @@
 module MuseScore.Palette
-PalettesWidget 1.0 PalettesWidget.qml
+PalettesPanel 1.0 PalettesPanel.qml
 PalettePropertiesDialog 1.0 PalettePropertiesDialog.qml
 PaletteCellPropertiesDialog 1.0 PaletteCellPropertiesDialog.qml
+DrumsetPanel 1.0 DrumsetPanel.qml

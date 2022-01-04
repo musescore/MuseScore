@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -49,7 +49,7 @@ TEvent::TEvent(const TEvent& e)
     time  = e.time;
 }
 
-TEvent::TEvent(qreal t, qreal p, TempoType tp)
+TEvent::TEvent(BeatsPerSecond t, qreal p, TempoType tp)
 {
     type  = tp;
     tempo = t;
@@ -84,7 +84,7 @@ void TempoMap::setPause(int tick, qreal pause)
         e->second.pause = pause;
         e->second.type |= TempoType::PAUSE;
     } else {
-        qreal t = tempo(tick);
+        BeatsPerSecond t = tempo(tick);
         insert(std::pair<const int, TEvent>(tick, TEvent(t, pause, TempoType::PAUSE)));
     }
     normalize();
@@ -94,7 +94,7 @@ void TempoMap::setPause(int tick, qreal pause)
 //   setTempo
 //---------------------------------------------------------
 
-void TempoMap::setTempo(int tick, qreal tempo)
+void TempoMap::setTempo(int tick, BeatsPerSecond tempo)
 {
     auto e = find(tick);
     if (e != end()) {
@@ -114,7 +114,7 @@ void TempoMap::normalize()
 {
     qreal time  = 0;
     int tick    = 0;
-    qreal tempo = 2.0;
+    BeatsPerSecond tempo = 2.0;
     for (auto e = begin(); e != end(); ++e) {
         // entries that represent a pause *only* (not tempo change also)
         // need to be corrected to continue previous tempo
@@ -122,11 +122,11 @@ void TempoMap::normalize()
             e->second.tempo = tempo;
         }
         int delta = e->first - tick;
-        time += qreal(delta) / (MScore::division * tempo * _relTempo);
+        time += qreal(delta) / (Constant::division * tempo.val * _relTempo.val);
         time += e->second.pause;
         e->second.time = time;
         tick  = e->first;
-        tempo = e->second.tempo;
+        tempo = e->second.tempo.val;
     }
     ++_tempoSN;
 }
@@ -140,7 +140,7 @@ void TempoMap::dump() const
     qDebug("\nTempoMap:");
     for (auto i = begin(); i != end(); ++i) {
         qDebug("%6d type: %2d tempo: %f pause: %f time: %f",
-               i->first, static_cast<int>(i->second.type), i->second.tempo, i->second.pause, i->second.time);
+               i->first, static_cast<int>(i->second.type), i->second.tempo.val, i->second.pause, i->second.time);
     }
 }
 
@@ -175,7 +175,7 @@ void TempoMap::clearRange(int tick1, int tick2)
 //   tempo
 //---------------------------------------------------------
 
-qreal TempoMap::tempo(int tick) const
+BeatsPerSecond TempoMap::tempo(int tick) const
 {
     if (empty()) {
         return 2.0;
@@ -220,7 +220,7 @@ void TempoMap::del(int tick)
 //   setRelTempo
 //---------------------------------------------------------
 
-void TempoMap::setRelTempo(qreal val)
+void TempoMap::setRelTempo(BeatsPerSecond val)
 {
     _relTempo = val;
     normalize();
@@ -263,7 +263,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
 {
     qreal time  = 0.0;
     qreal delta = qreal(tick);
-    qreal tempo = 2.0;
+    BeatsPerSecond tempo = 2.0;
 
     if (!empty()) {
         int ptick  = 0;
@@ -292,7 +292,7 @@ qreal TempoMap::tick2time(int tick, int* sn) const
     if (sn) {
         *sn = _tempoSN;
     }
-    time += delta / (MScore::division * tempo * _relTempo);
+    time += delta / (Constant::division * tempo.val * _relTempo.val);
     return time;
 }
 
@@ -304,7 +304,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
 {
     int tick     = 0;
     qreal delta = time;
-    qreal tempo = _tempo;
+    BeatsPerSecond tempo = _tempo;
 
     delta = 0.0;
     tempo = 2.0;
@@ -322,7 +322,7 @@ int TempoMap::time2tick(qreal time, int* sn) const
         tempo = e->second.tempo;
     }
     delta = time - delta;
-    tick += lrint(delta * _relTempo * MScore::division * tempo);
+    tick += lrint(delta * _relTempo.val * Constant::division * tempo.val);
     if (sn) {
         *sn = _tempoSN;
     }

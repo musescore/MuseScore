@@ -41,13 +41,12 @@ class InstrumentChange final : public TextBase
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
 
 public:
-    InstrumentChange(Score*);
-    InstrumentChange(const Instrument&, Score*);
+    InstrumentChange(EngravingItem* parent);
+    InstrumentChange(const Instrument&, EngravingItem* parent);
     InstrumentChange(const InstrumentChange&);
     ~InstrumentChange();
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-    ElementType type() const override { return ElementType::INSTRUMENT_CHANGE; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
@@ -66,9 +65,9 @@ public:
     bool init() const { return _init; }
     void setInit(bool init) { _init = init; }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
 
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     bool placeMultiple() const override { return false; }
 };

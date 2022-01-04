@@ -1,0 +1,180 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <gtest/gtest.h>
+
+#include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
+#include "libmscore/keysig.h"
+#include "libmscore/undo.h"
+#include "libmscore/part.h"
+
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
+static const QString KEYSIG_DATA_DIR("keysig_data/");
+
+using namespace mu::engraving;
+using namespace Ms;
+
+class KeySigTests : public ::testing::Test
+{
+};
+
+TEST_F(KeySigTests, keysig)
+{
+    QString writeFile1("keysig01-test.mscx");
+    QString reference1(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
+    QString writeFile2("keysig02-test.mscx");
+    QString reference2(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
+    QString writeFile3("keysig03-test.mscx");
+    QString reference3(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
+    QString writeFile4("keysig04-test.mscx");
+    QString reference4(KEYSIG_DATA_DIR + "keysig02-ref.mscx");     // with Eb maj
+    QString writeFile5("keysig05-test.mscx");
+    QString reference5(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
+    QString writeFile6("keysig06-test.mscx");
+    QString reference6(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
+
+    // read file
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig.mscx");
+    EXPECT_TRUE(score);
+    Measure* m2 = score->firstMeasure()->nextMeasure();
+    EXPECT_TRUE(m2);
+
+    // add a key signature (D major) in measure 2
+    KeySigEvent ke2;
+    ke2.setKey(Key::D);
+    score->startCmd();
+    score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
+
+    // change key signature in measure 2 to E flat major
+    KeySigEvent ke_3;
+    ke_3.setKey(Key(-3));
+    score->startCmd();
+    score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
+
+    // remove key signature in measure 2
+    Segment* s = m2->first();
+    while (!(s->isKeySigType())) {
+        s = s->next();
+    }
+    EngravingItem* e = s->element(0);
+    score->startCmd();
+    score->undoRemoveElement(e);
+    score->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile3, reference3));
+
+    // undo remove
+    EditData ed;
+    score->undoStack()->undo(&ed);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile4, reference4));
+
+    // undo change
+    score->undoStack()->undo(&ed);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile5, reference5));
+
+    // undo add
+    score->undoStack()->undo(&ed);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile6, reference6));
+
+    delete score;
+}
+
+//---------------------------------------------------------
+//   keysig_78216
+//    input score has section breaks on non-measure MeasureBase objects.
+//    should not display courtesy keysig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
+//---------------------------------------------------------
+TEST_F(KeySigTests, keysig_78216)
+{
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+    Measure* m2 = m1->nextMeasure();
+    EXPECT_TRUE(m2);
+    Measure* m3 = m2->nextMeasure();
+    EXPECT_TRUE(m3);
+
+    // verify no keysig exists in segment of final tick of m1, m2, m3
+    EXPECT_EQ(m1->findSegment(SegmentType::KeySig, m1->endTick()), nullptr) << "Should be no keysig at end of measure 1.";
+    EXPECT_EQ(m2->findSegment(SegmentType::KeySig, m2->endTick()), nullptr) << "Should be no keysig at end of measure 2.";
+    EXPECT_EQ(m3->findSegment(SegmentType::KeySig, m3->endTick()), nullptr) << "Should be no keysig at end of measure 3.";
+
+    delete score;
+}
+
+TEST_F(KeySigTests, concertPitch)
+{
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
+    EXPECT_TRUE(score);
+
+    score->cmdConcertPitchChanged(true);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-01-ref.mscx"));
+    score->cmdConcertPitchChanged(false);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-02-ref.mscx"));
+
+    delete score;
+}
+
+TEST_F(KeySigTests, preferSharpFlat)
+{
+    MasterScore* score1 = ScoreRW::readScore(KEYSIG_DATA_DIR + "preferSharpFlat-1.mscx");
+    EXPECT_TRUE(score1);
+    auto parts = score1->parts();
+    Part* part1 = parts[0];
+    part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
+    score1->transpositionChanged(part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
+    score1->update();
+    score1->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, "preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-1-ref.mscx"));
+    delete score1;
+
+    MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + "preferSharpFlat-2.mscx");
+    EXPECT_TRUE(score2);
+    score2->cmdSelectAll();
+    score2->startCmd();
+    // transpose augmented unison up
+    score2->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
+    score2->endCmd();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, "preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-2-ref.mscx"));
+    delete score2;
+}
+
+TEST_F(KeySigTests, keysigMode)
+{
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysigMode.mscx");
+    EXPECT_TRUE(score);
+    Measure* m1 = score->firstMeasure();
+    KeySig* ke = toKeySig(m1->findSegment(SegmentType::KeySig, m1->tick())->element(0));
+    ke->setProperty(Pid::KEYSIG_MODE, int(KeyMode::DORIAN));
+    score->update();
+    score->doLayout();
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "keysig03.mscx", KEYSIG_DATA_DIR + "keysig03-ref.mscx"));
+    delete score;
+}

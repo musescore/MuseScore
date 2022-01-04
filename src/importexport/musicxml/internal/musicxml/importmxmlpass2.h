@@ -25,7 +25,7 @@
 
 #include <array>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/tuplet.h"
 #include "importxmlfirstpass.h"
 #include "importmxmlpass1.h"
@@ -72,7 +72,7 @@ enum class MusicXmlSlash : char {
 struct MusicXmlTupletDesc {
     MusicXmlTupletDesc();
     MxmlStartStop type;
-    Placement placement;
+    PlacementV placement;
     TupletBracketType bracket;
     TupletNumberType shownumber;
 };
@@ -204,11 +204,13 @@ public:
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
                     MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
+    QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
     bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
+    void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
     void harmonic();
@@ -226,6 +228,7 @@ private:
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                              // the error logger
+    QString _errors;                    // errors to present to the user
     MusicXmlTupletDesc _tupletDesc;
     QString _dynamicsPlacement;
     QStringList _dynamicsList;
@@ -249,6 +252,7 @@ class MusicXMLParserPass2
 public:
     MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
     Score::FileError parse(QIODevice* device);
+    QString errors() const { return _errors; }
 
     // part specific data interface functions
     void addSpanner(const MusicXmlSpannerDesc& desc);
@@ -256,6 +260,7 @@ public:
     void clearSpanner(const MusicXmlSpannerDesc& desc);
 
 private:
+    void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void initPartState(const QString& partId);
     SpannerSet findIncompleteSpannersAtPartEnd();
     Score::FileError parse();
@@ -279,17 +284,17 @@ private:
                Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beam*& beam,
                FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
-    FiguredBassItem* figure(const int idx, const bool paren);
+    FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
     void harmony(const QString& partId, Measure* measure, const Fraction sTime);
     Accidental* accidental();
-    void beam(Beam::Mode& beamMode);
+    void beam(BeamMode& beamMode);
     void duration(Fraction& dura);
     void forward(Fraction& dura);
     void backup(Fraction& dura);
     void timeModification(Fraction& timeMod, TDuration& normalType);
-    void stem(Direction& sd, bool& nost);
+    void stem(DirectionV& sd, bool& nost);
     void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text);
     void staffDetails(const QString& partId);
     void staffTuning(StringData* t);
@@ -306,6 +311,7 @@ private:
     Score* const _score;                  // the score
     MusicXMLParserPass1& _pass1;          // the pass1 results
     MxmlLogger* _logger;                  ///< Error logger
+    QString _errors;                      ///< Errors to present to the user
 
     // part specific data (TODO: move to part-specific class)
 
@@ -335,6 +341,7 @@ private:
     Chord* _tremStart;                            ///< Starting chord for current tremolo
     FiguredBass* _figBass;                        ///< Current figured bass element (to attach to next note)
     int _multiMeasureRestCount;
+    int _measureNumber;                           ///< Current measure number as written in the score
     MusicXmlLyricsExtend _extendedLyrics;         ///< Lyrics with "extend" requiring fixup
 
     MusicXmlSlash _measureStyleSlash;             ///< Are we inside a measure to be displayed as slashes?
@@ -381,7 +388,7 @@ private:
     bool _segno;
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
-    QList<Element*> _elems;
+    QList<EngravingItem*> _elems;
     Fraction _offset;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);

@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/fraction.h"
-
 #include <QXmlStreamReader>
+
+#include "engraving/types/fraction.h"
+#include "engraving/types/typesconv.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -123,7 +126,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
     if (_dura.isValid() && calcDura.isValid()) {
         if (_dura != calcDura) {
             errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                       .arg(calcDura.print(), _dura.print());
+                       .arg(calcDura.toString(), _dura.toString());
             //qDebug("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
 
             if (rest && type == "whole" && _dura.isValid()) {
@@ -180,7 +183,6 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
 
 void mxmlNoteDuration::duration(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "duration");
     _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
     _dura.set(0, 0);          // invalid unless set correctly
@@ -213,7 +215,7 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
     //qDebug("tag %s", qPrintable(tag.toString()));
     if (tag == "dot") {
         _dots++;
-        e.readNext();
+        e.skipCurrentElement();  // skip but don't log
         return true;
     } else if (tag == "duration") {
         duration(e);
@@ -235,7 +237,6 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
 
 void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "time-modification");
     _logger->logDebugTrace("MusicXMLParserPass1::timeModification", &e);
 
     int intActual = 0;
@@ -254,7 +255,7 @@ void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
             // but would be accepted by setType()
             QString strNormalType = e.readElementText();
             if (strNormalType != "measure") {
-                _normalType.setType(strNormalType);
+                _normalType.setType(TConv::fromXml(strNormalType, DurationType::V_INVALID));
             }
         } else {
             _logger->logDebugInfo(QString("skipping '%1'").arg(e.name().toString()), &e);

@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
-#include "xml.h"
 #include "bagpembell.h"
-#include "scorefont.h"
+
 #include "draw/pen.h"
+#include "rw/xml.h"
+
+#include "score.h"
+#include "scorefont.h"
 
 using namespace mu;
 
@@ -367,9 +369,9 @@ noteList BagpipeEmbellishment::getNoteList() const
 
 void BagpipeEmbellishment::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", _embelType);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -413,7 +415,7 @@ struct BEDrawingDataX {
         lw(0.1 * s),
         xcorr(0.1 * s)
     {
-        qreal w = gscore->scoreFont()->width(hs, mags);
+        qreal w = Score::paletteScore()->scoreFont()->width(hs, mags);
         headw = 1.2 * w;     // using 1.0 the stem xpos is off
         headp = 1.6 * w;
         xl    = (1 - 1.6 * (nn - 1)) * w / 2;

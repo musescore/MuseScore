@@ -23,18 +23,31 @@
 
 #include "modularity/ioc.h"
 
-#ifndef NO_ENGRAVING_QFONTENGINE
-#include "engraving/draw/qfontprovider.h"
+#ifndef NO_ENGRAVING_INTERNAL
+#include "engraving/infrastructure/internal/engravingconfiguration.h"
+#include "engraving/infrastructure/internal/qfontprovider.h"
+#include "engraving/infrastructure/internal/qimageprovider.h"
 #endif
 
+#include "engraving/style/defaultstyle.h"
+
 #include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/scorefont.h"
 
-#include "notation/inotationconfiguration.h"
+#include "engraving/accessibility/accessibleitem.h"
+
+#include "compat/scoreaccess.h"
 
 using namespace mu::engraving;
 using namespace mu::modularity;
+
+static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
+
+static void engraving_init_qrc()
+{
+    Q_INIT_RESOURCE(engraving);
+}
 
 std::string EngravingModule::moduleName() const
 {
@@ -43,8 +56,10 @@ std::string EngravingModule::moduleName() const
 
 void EngravingModule::registerExports()
 {
-#ifndef NO_ENGRAVING_QFONTENGINE
+#ifndef NO_ENGRAVING_INTERNAL
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
+    ioc()->registerExport<draw::IImageProvider>(moduleName(), new draw::QImageProvider());
+    ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
 #endif
 }
 
@@ -54,6 +69,7 @@ void EngravingModule::resolveImports()
 
 void EngravingModule::registerResources()
 {
+    engraving_init_qrc();
 }
 
 void EngravingModule::registerUiTypes()
@@ -63,21 +79,36 @@ void EngravingModule::registerUiTypes()
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
+    s_configuration->init();
+
     Ms::MScore::init(); // initialize libmscore
+
+    DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
+                                   s_configuration->partStyleFilePath());
 
     Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    Ms::gscore = new Ms::MasterScore();
-    Ms::gscore->setPaletteMode(true);
-    Ms::gscore->setMovements(new Ms::Movements());
-    Ms::gscore->setStyle(Ms::MScore::baseStyle());
+    AccessibleItem::enabled = false;
+    Ms::gpaletteScore = compat::ScoreAccess::createMasterScore();
+    AccessibleItem::enabled = true;
+    if (Ms::EngravingObject::elementsProvider()) {
+        Ms::EngravingObject::elementsProvider()->unreg(Ms::gpaletteScore);
+    }
 
-    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
+    Ms::gpaletteScore->setStyle(DefaultStyle::baseStyle());
+
+    Ms::gpaletteScore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
     Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName("Leland");
-    Ms::gscore->setScoreFont(scoreFont);
-    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
+    Ms::gpaletteScore->setScoreFont(scoreFont);
+    Ms::gpaletteScore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gpaletteScore->spatium()) / Ms::SPATIUM20);
 
     //! NOTE And some initialization in the `Notation::init()`
+}
+
+void EngravingModule::onDestroy()
+{
+    delete Ms::gpaletteScore;
+    Ms::gpaletteScore = nullptr;
 }

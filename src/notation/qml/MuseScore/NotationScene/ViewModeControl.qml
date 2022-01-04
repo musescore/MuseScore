@@ -32,7 +32,9 @@ FlatButton {
 
     signal changeCurrentViewModeRequested(var newViewMode)
 
-    normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+    transparent: !menu.isMenuOpened
+    accentButton: menu.isMenuOpened
+    margins: 6
 
     visible: Boolean(root.currentViewMode)
 
@@ -63,7 +65,7 @@ FlatButton {
     }
 
     onClicked: {
-        menu.toggleOpened(root.availableViewModeList, root.navigation)
+        menu.toggleOpened(root.availableViewModeList)
     }
 
     StyledMenuLoader {
@@ -71,8 +73,10 @@ FlatButton {
 
         menuAnchorItem: ui.rootItem
 
-        onHandleAction: {
-            Qt.callLater(root.changeCurrentViewModeRequested, actionCode)
+        navigationParentControl: root.navigation
+
+        onHandleMenuItem: {
+            Qt.callLater(root.changeCurrentViewModeRequested, itemId)
         }
     }
 }

@@ -21,9 +21,9 @@
  */
 
 #include "notedot.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "staff.h"
-#include "xml.h"
 #include "chord.h"
 #include "rest.h"
 
@@ -34,8 +34,14 @@ namespace Ms {
 //   NoteDot
 //---------------------------------------------------------
 
-NoteDot::NoteDot(Score* s)
-    : Element(s)
+NoteDot::NoteDot(Note* parent)
+    : EngravingItem(ElementType::NOTEDOT, parent)
+{
+    setFlag(ElementFlag::MOVABLE, false);
+}
+
+NoteDot::NoteDot(Rest* parent)
+    : EngravingItem(ElementType::NOTEDOT, parent)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }
@@ -75,9 +81,9 @@ void NoteDot::layout()
 //   elementBase
 //---------------------------------------------------------
 
-Element* NoteDot::elementBase() const
+EngravingItem* NoteDot::elementBase() const
 {
-    return parent();
+    return parentItem();
 }
 
 //---------------------------------------------------------
@@ -91,7 +97,7 @@ void NoteDot::read(XmlReader& e)
             e.readElementText();
         } else if (e.name() == "subtype") {     // obsolete
             e.readElementText();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -103,6 +109,6 @@ void NoteDot::read(XmlReader& e)
 
 qreal NoteDot::mag() const
 {
-    return parent()->mag() * score()->styleD(Sid::dotMag);
+    return parentItem()->mag() * score()->styleD(Sid::dotMag);
 }
 }

@@ -35,3 +35,4 @@ inline QDebug operator<<(QDebug debug, const std::string& s)
     if (!(cond)) \
 
 #define UNUSED(x) (void)x;
+#define UNREACHABLE

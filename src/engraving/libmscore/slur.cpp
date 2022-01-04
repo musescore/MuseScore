@@ -19,29 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "slur.h"
 
 #include <cmath>
-
-#include "measure.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
-#include "chord.h"
-#include "stem.h"
-#include "slur.h"
-#include "tie.h"
-#include "part.h"
-#include "navigate.h"
-#include "articulation.h"
 
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
+#include "rw/xml.h"
+
+#include "articulation.h"
+#include "chord.h"
+#include "measure.h"
+#include "mscoreview.h"
+#include "navigate.h"
+#include "part.h"
+#include "score.h"
+#include "stem.h"
+#include "system.h"
+#include "tie.h"
+#include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
+SlurSegment::SlurSegment(System* parent)
+    : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
+{
+}
+
+SlurSegment::SlurSegment(const SlurSegment& ss)
+    : SlurTieSegment(ss)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -63,23 +76,23 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurEndWidth) * mag);
         break;
     case 1:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case 2:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     case 3:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+        pen.setWidthF(score()->styleMM(Sid::SlurDottedWidth) * mag);
         break;
     }
     painter->setPen(pen);
@@ -120,13 +133,13 @@ bool SlurSegment::edit(EditData& ed)
 {
     Slur* sl = slur();
 
-    if (ed.key == Qt::Key_X) {
-        sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
+    if (ed.key == Qt::Key_X && !ed.modifiers) {
+        sl->undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(sl->up() ? DirectionV::DOWN : DirectionV::UP));
         sl->layout();
         return true;
     }
-    if (ed.key == Qt::Key_Home) {
-        ups(ed.curGrip).off = PointF();              //TODO
+    if (ed.key == Qt::Key_Home && !ed.modifiers) {
+        ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
     }
@@ -172,7 +185,7 @@ bool SlurSegment::edit(EditData& ed)
 //   changeAnchor
 //---------------------------------------------------------
 
-void SlurSegment::changeAnchor(EditData& ed, Element* element)
+void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
     ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
     ChordRest* scr = spanner()->startCR();
@@ -182,7 +195,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // save current start/end elements
-    for (ScoreElement* e : spanner()->linkList()) {
+    for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
         score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
@@ -209,17 +222,17 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // update start/end elements (which could be grace notes)
-    for (ScoreElement* lsp : spanner()->linkList()) {
+    for (EngravingObject* lsp : spanner()->linkList()) {
         Spanner* sp = static_cast<Spanner*>(lsp);
         if (sp == spanner()) {
             score()->undo(new ChangeSpannerElements(sp, scr, ecr));
         } else {
-            Element* se = 0;
-            Element* ee = 0;
+            EngravingItem* se = 0;
+            EngravingItem* ee = 0;
             if (scr) {
-                QList<ScoreElement*> sel = scr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
-                    Element* le = toElement(lcr);
+                QList<EngravingObject*> sel = scr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
+                    EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
                         se = le;
                         break;
@@ -227,9 +240,9 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
                 }
             }
             if (ecr) {
-                QList<ScoreElement*> sel = ecr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
-                    Element* le = toElement(lcr);
+                QList<EngravingObject*> sel = ecr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
+                    EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {
                         ee = le;
                         break;
@@ -319,7 +332,7 @@ void SlurSegment::computeBezier(mu::PointF p6o)
     PointF p3(c1, -shoulderH);
     PointF p4(c2, -shoulderH);
 
-    qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+    qreal w = score()->styleMM(Sid::SlurMidWidth) - score()->styleMM(Sid::SlurEndWidth);
     if (staff()) {
         w *= staff()->staffMag(slur()->tick());
     }
@@ -496,6 +509,12 @@ bool SlurSegment::isEdited() const
     return false;
 }
 
+Slur::Slur(const Slur& s)
+    : SlurTie(s)
+{
+    _sourceStemArrangement = s._sourceStemArrangement;
+}
+
 //---------------------------------------------------------
 //   fixArticulations
 //---------------------------------------------------------
@@ -507,7 +526,6 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
     // yo = current offset of slur from chord position
     // return unchanged position, or position of outmost "close" articulation
     //
-#if 1
     for (Articulation* a : c->articulations()) {
         if (!a->layoutCloseToNote() || !a->addToSkyline()) {
             continue;
@@ -523,25 +541,6 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
         }
     }
     return yo;
-#else
-    const QVector<Articulation*>& al = c->articulations();
-    if (al.size() >= 2) {
-        Articulation* a = al.at(1);
-        if (a->up() == c->up() && !stemSide) {
-            return yo;
-        } else if (a->layoutCloseToNote()) {
-            return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
-        }
-    } else if (al.size() >= 1) {
-        Articulation* a = al.at(0);
-        if (a->up() == c->up() && !stemSide) {
-            return yo;
-        } else if (a->layoutCloseToNote()) {
-            return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
-        }
-    }
-    return yo;
-#endif
 }
 
 //---------------------------------------------------------
@@ -972,10 +971,20 @@ void Slur::slurPos(SlurPos* sp)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(Score* s)
-    : SlurTie(s)
+Slur::Slur(EngravingItem* parent)
+    : SlurTie(ElementType::SLUR, parent)
 {
     setAnchor(Anchor::CHORD);
+}
+
+//---------------------------------------------------------
+//   calcStemArrangement
+//---------------------------------------------------------
+
+int calcStemArrangement(EngravingItem* start, EngravingItem* end)
+{
+    return (start && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
+           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
 }
 
 //---------------------------------------------------------
@@ -991,9 +1000,26 @@ void Slur::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
+    if (xml.clipboardmode()) {
+        xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
+    }
     SlurTie::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
+}
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Slur::readProperties(XmlReader& e)
+{
+    const QStringRef& tag(e.name());
+    if (tag == "stemArr") {
+        _sourceStemArrangement = e.readInt();
+        return true;
+    }
+    return SlurTie::readProperties(e);
 }
 
 //---------------------------------------------------------
@@ -1024,7 +1050,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 {
     bool up = c1->up();
     for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
-        Element* e = seg->element(c1->track());
+        EngravingItem* e = seg->element(c1->track());
         if (!e || !e->isChord()) {
             continue;
         }
@@ -1049,8 +1075,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this]() {
-        return new SlurSegment(score());
+    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [](System* parent) {
+        return new SlurSegment(parent);
     }));
 
     SpannerSegmentType sst;
@@ -1072,13 +1098,13 @@ SpannerSegment* Slur::layoutSystem(System* system)
             setTick2(tick());
         }
         switch (_slurDirection) {
-        case Direction::UP:
+        case DirectionV::UP:
             _up = true;
             break;
-        case Direction::DOWN:
+        case DirectionV::DOWN:
             _up = false;
             break;
-        case Direction::AUTO:
+        case DirectionV::AUTO:
         {
             //
             // assumption:
@@ -1090,6 +1116,15 @@ SpannerSegment* Slur::layoutSystem(System* system)
             }
             Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
             Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
+
+            if (_sourceStemArrangement != -1) {
+                if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
+                    // copy & paste from incompatible stem arrangement, so reset bezier points
+                    for (int g = 0; g < (int)Ms::Grip::GRIPS; ++g) {
+                        slurSegment->ups((Ms::Grip)g) = UP();
+                    }
+                }
+            }
 
             if (c1 && c1->beam() && c1->beam()->cross()) {
                 // TODO: stem direction is not finalized, so we cannot use it here
@@ -1136,11 +1171,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
         slurSegment->layoutSegment(sPos.p1, sPos.p2);
         break;
     case SpannerSegmentType::BEGIN:
-        slurSegment->layoutSegment(sPos.p1, PointF(system->bbox().width(), sPos.p1.y()));
+        slurSegment->layoutSegment(sPos.p1, PointF(system->lastNoteRestSegmentX(true), sPos.p1.y()));
         break;
     case SpannerSegmentType::MIDDLE: {
         qreal x1 = system->firstNoteRestSegmentX(true);
-        qreal x2 = system->bbox().width();
+        qreal x2 = system->lastNoteRestSegmentX(true);
         qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
         slurSegment->layoutSegment(PointF(x1, y), PointF(x2, y));
     }
@@ -1165,7 +1200,7 @@ void Slur::layout()
 
     qreal _spatium = spatium();
 
-    if (score() == gscore || tick() == Fraction(-1, 1)) {
+    if (score()->isPaletteScore() || tick() == Fraction(-1, 1)) {
         //
         // when used in a palette, slur has no parent and
         // tick and tick2 has no meaning so no layout is
@@ -1173,7 +1208,7 @@ void Slur::layout()
         //
         SlurSegment* s;
         if (spannerSegments().empty()) {
-            s = new SlurSegment(score());
+            s = new SlurSegment(score()->dummy()->system());
             s->setTrack(track());
             add(s);
         } else {
@@ -1196,13 +1231,13 @@ void Slur::layout()
         setTick2(tick());
     }
     switch (_slurDirection) {
-    case Direction::UP:
+    case DirectionV::UP:
         _up = true;
         break;
-    case Direction::DOWN:
+    case DirectionV::DOWN:
         _up = false;
         break;
-    case Direction::AUTO:
+    case DirectionV::AUTO:
     {
         //
         // assumption:
@@ -1322,7 +1357,7 @@ void Slur::layout()
 
 void Slur::setTrack(int n)
 {
-    Element::setTrack(n);
+    EngravingItem::setTrack(n);
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setTrack(n);
     }

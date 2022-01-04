@@ -28,12 +28,11 @@ namespace mu::context {
 class GlobalContext : public IGlobalContext
 {
 public:
-    void addMasterNotation(const notation::IMasterNotationPtr& notation) override;
-    void removeMasterNotation(const notation::IMasterNotationPtr& notation) override;
-    const std::vector<notation::IMasterNotationPtr>& masterNotations() const override;
-    bool containsMasterNotation(const io::path& path) const override;
 
-    void setCurrentMasterNotation(const notation::IMasterNotationPtr& notation) override;
+    void setCurrentProject(const project::INotationProjectPtr& project) override;
+    project::INotationProjectPtr currentProject() const override;
+    async::Notification currentProjectChanged() const override;
+
     notation::IMasterNotationPtr currentMasterNotation() const override;
     async::Notification currentMasterNotationChanged() const override;
 
@@ -44,10 +43,8 @@ public:
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
-    std::vector<notation::IMasterNotationPtr> m_masterNotations;
-
-    notation::IMasterNotationPtr m_currentMasterNotation;
-    async::Notification m_currentMasterNotationChanged;
+    project::INotationProjectPtr m_currentProject;
+    async::Notification m_currentProjectChanged;
 
     notation::INotationPtr m_currentNotation;
     async::Notification m_currentNotationChanged;

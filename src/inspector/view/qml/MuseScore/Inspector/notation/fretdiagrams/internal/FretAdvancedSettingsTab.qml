@@ -19,16 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
 FocusableItem {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -44,7 +50,8 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: scaleSection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -52,28 +59,19 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Scale")
                 propertyItem: root.model ? root.model.scale : null
 
-                IncrementalPropertyControl {
-                    id: scaleControl
+                measureUnitsSymbol: "%"
+                step: 1
+                decimals: 0
+                maxValue: 300
+                minValue: 1
 
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.scale.isUndefined : false
-                    currentValue: root.model ? root.model.scale.value : 0
-                    measureUnitsSymbol: "%"
-                    step: 1
-                    decimals: 0
-                    maxValue: 300
-                    minValue: 1
-                    validator: IntInputValidator {
-                        top: scaleControl.maxValue
-                        bottom: scaleControl.minValue
-                    }
-
-                    onValueEdited: { root.model.scale.value = newValue }
-                }
+                navigationName: "Scale"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: root.navigationRowStart
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: stringsSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -81,24 +79,14 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Strings")
                 propertyItem: root.model ? root.model.stringsCount : null
 
-                IncrementalPropertyControl {
-                    id: stringsCountControl
+                step: 1
+                decimals: 0
+                maxValue: 12
+                minValue: 4
 
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.stringsCount.isUndefined : false
-                    currentValue: root.model ? root.model.stringsCount.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 12
-                    minValue: 4
-                    validator: IntInputValidator {
-                        top: stringsCountControl.maxValue
-                        bottom: stringsCountControl.minValue
-                    }
-
-                    onValueEdited: { root.model.stringsCount.value = newValue }
-                }
+                navigationName: "Strings"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: scaleSection.navigationRowEnd + 1
             }
         }
 
@@ -106,7 +94,8 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: visibleFrets
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -114,27 +103,18 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Visible frets")
                 propertyItem: root.model ? root.model.fretsCount : null
 
-                IncrementalPropertyControl {
-                    id: visibleFretsCountControl
+                step: 1
+                decimals: 0
+                maxValue: 6
+                minValue: 3
 
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.fretsCount.isUndefined : false
-                    currentValue: root.model ? root.model.fretsCount.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 6
-                    minValue: 3
-                    validator: IntInputValidator {
-                        top: visibleFretsCountControl.maxValue
-                        bottom: visibleFretsCountControl.minValue
-                    }
-
-                    onValueEdited: { root.model.fretsCount.value = newValue }
-                }
+                navigationName: "VisibleFrets"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: stringsSection.navigationRowEnd + 1
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
+                id: startingFretNumber
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -142,74 +122,37 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Starting fret number")
                 propertyItem: root.model ? root.model : null
 
-                IncrementalPropertyControl {
-                    id: startingFretNumberControl
+                step: 1
+                decimals: 0
+                maxValue: 12
+                minValue: 1
 
-                    iconMode: iconModeEnum.hidden
-
-                    isIndeterminate: root.model ? root.model.startingFretNumber.isUndefined : false
-                    currentValue: root.model ? root.model.startingFretNumber.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 12
-                    minValue: 1
-                    validator: IntInputValidator {
-                        top: startingFretNumberControl.maxValue
-                        bottom: startingFretNumberControl.minValue
-                    }
-
-                    onValueEdited: { root.model.startingFretNumber.value = newValue }
-                }
+                navigationName: "StartingFretNumber"
+                navigationPanel: root.navigationPanel
+                navigationRowStart: visibleFrets.navigationRowEnd + 1
             }
         }
 
-        InspectorPropertyView {
+        PlacementSection {
+            id: placementSection
             titleText: qsTrc("inspector", "Placement on staff")
             propertyItem: root.model ? root.model.placement : null
 
-            RadioButtonGroup {
-                id: positionButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { textRole: qsTrc("inspector", "Above"), valueRole: Hairpin.PLACEMENT_TYPE_ABOVE },
-                    { textRole: qsTrc("inspector", "Below"), valueRole: Hairpin.PLACEMENT_TYPE_BELOW }
-                ]
-
-                delegate: FlatRadioButton {
-
-                    ButtonGroup.group: positionButtonList.radioButtonGroup
-
-                    checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.placement.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                    }
-                }
-            }
+            navigationPanel: root.navigationPanel
+            navigationRowStart: startingFretNumber.navigationRowEnd + 1
         }
 
-        CheckBox {
+        CheckBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            isIndeterminate: root.model ? root.model.isNutVisible.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.isNutVisible.value : false
             text: qsTrc("inspector", "Show nut")
+            propertyItem: root.model ? root.model.isNutVisible : false
 
-            onClicked: { root.model.isNutVisible.value = !checked }
+            navigation.name: "MultipleDotsCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: placementSection.navigationRowEnd + 2
         }
     }
 }
-

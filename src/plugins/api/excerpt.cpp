@@ -22,7 +22,7 @@
 
 #include "excerpt.h"
 #include "score.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace Ms {
 namespace PluginAPI {

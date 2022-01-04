@@ -23,7 +23,7 @@
 #ifndef __TESTUTILS_H__
 #define __TESTUTILS_H__
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 namespace Ms {
 class MScore;

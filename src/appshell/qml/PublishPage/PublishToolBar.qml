@@ -28,14 +28,17 @@ import MuseScore.AppShell 1.0
 Rectangle {
     id: root
 
-    property alias navigation: keynavSub
+    property alias navigation: navPanel
+
+    width: view.width
+    height: view.height
 
     color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
-        id: keynavSub
-
+        id: navPanel
         name: "PublishToolBar"
+        enabled: root.enabled && root.visible
     }
 
     PublishToolBarModel {
@@ -47,9 +50,7 @@ Rectangle {
     }
 
     ListView {
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 4
+        id: view
 
         height: contentItem.childrenRect.height
         width: contentItem.childrenRect.width
@@ -70,10 +71,16 @@ Rectangle {
             toolTipShortcut: model.shortcut
 
             orientation: Qt.Horizontal
-            normalStateColor: "transparent"
+            transparent: true
+
+            navigation.panel: navPanel
+            navigation.order: model.index
+
+            iconFont: ui.theme.toolbarIconsFont
+            height: 36
 
             onClicked: {
-                toolBarModel.handleAction(model.code)
+                toolBarModel.handleMenuItem(model.id)
             }
         }
     }

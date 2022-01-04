@@ -41,12 +41,10 @@ DialogView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
-    property alias navigation: navSec
     property bool isDoActiveParentOnClose: true
-
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
-        name: root.objectName != "" ? root.objectName : "StyledDialogView"
+        name: root.objectName !== "" ? root.objectName : "StyledDialogView"
         type: NavigationSection.Exclusive
         enabled: root.isOpened
         order: 1
@@ -62,6 +60,10 @@ DialogView {
                 root.close()
             }
         }
+    }
+
+    onOpened: {
+        navSec.requestActive()
     }
 
     onClosed: {

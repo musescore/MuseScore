@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
 ExpandableBlank {
@@ -28,41 +30,29 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
 
     width: parent.width
 
-    contentItemComponent: InspectorPropertyView {
+    contentItemComponent: SpinBoxPropertyView {
+        id: pauseTimeSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Pause time Menu"
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigationName: "Pause time"
+        navigationPanel: root.navigation.panel
+        navigationRowStart: root.navigation.row + 1
 
         titleText: qsTrc("inspector", "Pause time")
-        propertyItem: model ? model.pauseTime : null
+        propertyItem: root.model ? root.model.pauseTime : null
 
-        IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
-            navigation.name: "Pause time Value"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
-
-            measureUnitsSymbol: "s"
-            isIndeterminate: model ? model.pauseTime.isUndefined : false
-            currentValue: model ? model.pauseTime.value : 0
-
-            minValue: 0.0
-            maxValue: 60.0
-
-            onValueEdited: { model.pauseTime.value = newValue }
-        }
+        minValue: 0.0
+        maxValue: 60.0
+        measureUnitsSymbol: "s"
     }
 }

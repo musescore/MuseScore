@@ -63,7 +63,7 @@ Frame *DropArea::frameContainingPos(QPoint globalPos) const
 {
     const Layouting::Item::List &items = this->items();
     for (Layouting::Item *item : items) {
-        auto frame = static_cast<Frame*>(item->guestAsQObject());
+        auto frame = static_cast<Frame *>(item->guestAsQObject());
         if (!frame || !frame->QWidgetAdapter::isVisible()) {
             continue;
         }
@@ -84,7 +84,7 @@ void DropArea::updateFloatingActions()
 Layouting::Item *DropArea::centralFrame() const
 {
     for (Layouting::Item *item : this->items()) {
-        if (auto f = static_cast<Frame*>(item->guestAsQObject())) {
+        if (auto f = static_cast<Frame *>(item->guestAsQObject())) {
             if (f->isCentralFrame())
                 return item;
         }
@@ -260,7 +260,7 @@ bool DropArea::drop(WindowBeingDragged *draggedWindow, Frame *acceptingFrame,
     const DockWidgetBase::List droppedDockWidgets = needToFocusNewlyDroppedWidgets
         ? droppedWindow->layoutWidget()->dockWidgets()
         : DockWidgetBase::List(); // just so save some memory allocations for the case where this
-                                  // variable isn't used
+        // variable isn't used
 
     switch (droploc) {
     case DropIndicatorOverlayInterface::DropLocation_Left:

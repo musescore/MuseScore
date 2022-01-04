@@ -33,13 +33,14 @@
 #include "global/xmlwriter.h"
 
 using namespace mu::converter;
+using namespace mu::engraving;
 
 static QString boolToString(bool b)
 {
     return b ? "true" : "false";
 }
 
-mu::RetVal<std::string> NotationMeta::metaJson(INotationPtr notation)
+mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -87,7 +88,7 @@ mu::RetVal<std::string> NotationMeta::metaJson(INotationPtr notation)
 QString NotationMeta::title(const Ms::Score* score)
 {
     QString title;
-    const Ms::Text* text = score->getText(Ms::Tid::TITLE);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::TITLE);
     if (text) {
         title = text->plainText();
     }
@@ -106,7 +107,7 @@ QString NotationMeta::title(const Ms::Score* score)
 QString NotationMeta::subtitle(const Ms::Score* score)
 {
     QString subtitle;
-    const Ms::Text* text = score->getText(Ms::Tid::SUBTITLE);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::SUBTITLE);
     if (text) {
         subtitle = text->plainText();
     }
@@ -117,7 +118,7 @@ QString NotationMeta::subtitle(const Ms::Score* score)
 QString NotationMeta::composer(const Ms::Score* score)
 {
     QString composer;
-    const Ms::Text* text = score->getText(Ms::Tid::COMPOSER);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::COMPOSER);
     if (text) {
         composer = text->plainText();
     }
@@ -132,7 +133,7 @@ QString NotationMeta::composer(const Ms::Score* score)
 QString NotationMeta::poet(const Ms::Score* score)
 {
     QString poet;
-    const Ms::Text* text = score->getText(Ms::Tid::POET);
+    const Ms::Text* text = score->getText(Ms::TextStyleType::POET);
     if (text) {
         poet = text->plainText();
     }
@@ -147,14 +148,14 @@ QString NotationMeta::poet(const Ms::Score* score)
 QString NotationMeta::timesig(const Ms::Score* score)
 {
     int staves = score->nstaves();
-    int tracks = staves * VOICES;
+    int tracks = staves * Ms::VOICES;
     const Ms::Segment* timeSigSegment = score->firstSegmentMM(Ms::SegmentType::TimeSig);
     if (!timeSigSegment) {
         return QString();
     }
 
     QString timeSig;
-    const Element* element = nullptr;
+    const Ms::EngravingItem* element = nullptr;
     for (int track = 0; track < tracks; ++track) {
         element = timeSigSegment->element(track);
         if (element) {
@@ -176,10 +177,10 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
     QString tempoText;
     for (const Ms::Segment* segment = score->firstSegmentMM(Ms::SegmentType::All); segment; segment = segment->next1MM()) {
         auto annotations = segment->annotations();
-        for (const Element* anotation : annotations) {
+        for (const Ms::EngravingItem* anotation : annotations) {
             if (anotation && anotation->isTempoText()) {
                 const Ms::TempoText* tt = toTempoText(anotation);
-                tempo = round(tt->tempo() * 60);
+                tempo = round(tt->tempo().toBPM().val);
                 tempoText = tt->xmlText();
             }
         }
@@ -191,7 +192,7 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
 QString NotationMeta::parts(const Ms::Score* score)
 {
     QJsonArray jsonPartsArray;
-    for (const Part* part : score->parts()) {
+    for (const Ms::Part* part : score->parts()) {
         QJsonObject jsonPart;
         jsonPart.insert("name", part->longName().replace("\n", ""));
         int midiProgram = part->midiProgram();
@@ -219,15 +220,15 @@ QString NotationMeta::pageFormat(const Ms::Score* score)
     return QJsonDocument(format).toJson(QJsonDocument::Compact);
 }
 
-static void findTextByType(void* data, Element* element)
+static void findTextByType(void* data, Ms::EngravingItem* element)
 {
     if (!element->isTextBase()) {
         return;
     }
 
     const Ms::TextBase* text = toTextBase(element);
-    auto* typeStringsData = static_cast<std::pair<Ms::Tid, QStringList*>*>(data);
-    if (text->tid() == typeStringsData->first) {
+    auto* typeStringsData = static_cast<std::pair<TextStyleType, QStringList*>*>(data);
+    if (text->textStyleType() == typeStringsData->first) {
         QStringList* titleStrings = typeStringsData->second;
         Q_ASSERT(titleStrings);
         titleStrings->append(text->plainText());
@@ -237,17 +238,17 @@ static void findTextByType(void* data, Element* element)
 QString NotationMeta::typeData(Ms::Score* score)
 {
     QJsonObject typesData;
-    static std::vector<std::pair<QString, Ms::Tid> > namesTypesList {
-        { "titles", Ms::Tid::TITLE },
-        { "subtitles", Ms::Tid::SUBTITLE },
-        { "composers", Ms::Tid::COMPOSER },
-        { "poets", Ms::Tid::POET }
+    static std::vector<std::pair<QString, TextStyleType> > namesTypesList {
+        { "titles", TextStyleType::TITLE },
+        { "subtitles", TextStyleType::SUBTITLE },
+        { "composers", TextStyleType::COMPOSER },
+        { "poets", TextStyleType::POET }
     };
 
     for (auto nameType : namesTypesList) {
         QJsonArray typeData;
         QStringList typeTextStrings;
-        std::pair<Ms::Tid, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
+        std::pair<TextStyleType, QStringList*> extendedTitleData = std::make_pair(nameType.second, &typeTextStrings);
         score->scanElements(&extendedTitleData, findTextByType);
         for (auto typeStr : typeTextStrings) {
             typeData.append(typeStr);

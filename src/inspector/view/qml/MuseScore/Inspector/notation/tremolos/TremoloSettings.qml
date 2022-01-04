@@ -19,24 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: tremoloPopup.model
+    property QtObject model: null
 
-    icon: IconCode.TREMOLO_TWO_NOTES
-    text: qsTrc("inspector", "Tremolos")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "TremoloSettings"
 
-    TremoloPopup {
-        id: tremoloPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        styleSection.focusOnFirst()
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: styleSection
+        titleText: qsTrc("inspector", "Style (between notes)")
+        propertyItem: root.model ? root.model.style : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+
+        model: [
+            { iconCode: IconCode.TREMOLO_STYLE_DEFAULT, value: TremoloTypes.STYLE_DEFAULT, title: qsTrc("inspector", "Default") },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL, value: TremoloTypes.STYLE_TRADITIONAL, title: qsTrc("inspector", "Traditional") },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, value: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE, title: qsTrc("inspector", "Traditional alternative") }
+        ]
     }
 }

@@ -1,21 +1,24 @@
-//=============================================================================
-//  MusE
-//  Linux Music Editor
-//
-//  Copyright (C) 2002-2010 by Werner Schweer and others
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #ifndef MUSESCORE_CONFIG_H
 #define MUSESCORE_CONFIG_H
@@ -28,24 +31,24 @@
 #cmakedefine SCRIPT_INTERFACE
 #cmakedefine HAS_AUDIOFILE
 
-#define CRASH_REPORT_URL        "${CRASH_REPORT_URL}"
-#define MUSESCORE_NAME_VERSION  "${MUSESCORE_NAME_VERSION}"
-#define MUSESCORE_REVISION      "${MUSESCORE_REVISION}"
-#define INSTALL_NAME            "${Mscore_INSTALL_NAME}"
-#define INSTPREFIX              "${CMAKE_INSTALL_PREFIX}"
-#define VERSION                 "${MUSESCORE_VERSION_FULL}"
-#define VERSION_LABEL           "${MUSESCORE_VERSION_LABEL}"
-#define BUILD_NUMBER            "${CMAKE_BUILD_NUMBER}"
-#define WIN_SPARKLE_APPCAST_URL "${WIN_SPARKLE_APPCAST_URL}"
+#define CRASH_REPORT_URL       "${CRASH_REPORT_URL}"
+#define MUSESCORE_NAME_VERSION "${MUSESCORE_NAME_VERSION}"
+#define MUSESCORE_REVISION     "${MUSESCORE_REVISION}"
+#define INSTALL_NAME           "${Mscore_INSTALL_NAME}"
+#define INSTPREFIX             "${CMAKE_INSTALL_PREFIX}"
+#define VERSION                "${MUSESCORE_VERSION_FULL}"
+#define VERSION_LABEL          "${MUSESCORE_VERSION_LABEL}"
+#define BUILD_NUMBER           "${CMAKE_BUILD_NUMBER}"
+#define SPARKLE_APPCAST_URL    "${SPARKLE_APPCAST_URL}"
 
-#cmakedefine BUILD_TELEMETRY_MODULE
-#define TELEMETRY_TRACK_ID "${TELEMETRY_TRACK_ID}"
+#define YOUTUBE_API_KEY "${YOUTUBE_API_KEY}"
+
+#cmakedefine LOGGER_DEBUGLEVEL_ENABLED
 
 #cmakedefine BUILD_SHORTCUTS_MODULE
 #cmakedefine BUILD_SYSTEM_MODULE
 #cmakedefine BUILD_NETWORK_MODULE
 #cmakedefine BUILD_AUDIO_MODULE
-#cmakedefine BUILD_USERSCORES_MODULE
 #cmakedefine BUILD_LEARN_MODULE
 #cmakedefine BUILD_WORKSPACE_MODULE
 #cmakedefine BUILD_CLOUD_MODULE
@@ -54,16 +57,22 @@
 #cmakedefine BUILD_PLUGINS_MODULE
 #cmakedefine BUILD_PLAYBACK_MODULE
 #cmakedefine BUILD_PALETTE_MODULE
-#cmakedefine BUILD_INSTRUMENTS_MODULE
+#cmakedefine BUILD_INSTRUMENTSSCENE_MODULE
 #cmakedefine BUILD_INSPECTOR_MODULE
 #cmakedefine BUILD_AUTOBOT_MODULE
 #cmakedefine BUILD_MULTIINSTANCES_MODULE
 #cmakedefine BUILD_VST
+#cmakedefine BUILD_DIAGNOSTICS
 
-#cmakedefine USE_SCORE_ACCESSIBLE_TREE
+#cmakedefine ENGRAVING_PAINT_DEBUGGER_ENABLED
+#cmakedefine ENGRAVING_COMPAT_WRITESTYLE_302
+#cmakedefine ENGRAVING_COMPAT_WRITEEXCERPTS_302
 
-#cmakedefine WIN_SPARKLE_ENABLED
-#cmakedefine MAC_SPARKLE_ENABLED
+#cmakedefine UI_DISABLE_MODALITY
+
+#cmakedefine ACCESSIBILITY_LOGGING_ENABLED
+
+#cmakedefine SPARKLE_ENABLED
 #cmakedefine OPENGL
 #cmakedefine SOUNDFONT3
 #cmakedefine WIN_PORTABLE

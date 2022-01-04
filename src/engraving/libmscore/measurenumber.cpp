@@ -40,12 +40,12 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Score* s, Tid tid)
-    : MeasureNumberBase(s, tid)
+MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
+    : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);
 
-    setHPlacement(score()->styleV(Sid::measureNumberHPlacement).value<HPlacement>());
+    setHPlacement(score()->styleV(Sid::measureNumberHPlacement).value<PlacementH>());
 }
 
 //---------------------------------------------------------
@@ -63,11 +63,11 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureNumber::propertyDefault(Pid id) const
+engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::MEASURE_NUMBER);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::MEASURE_NUMBER;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:

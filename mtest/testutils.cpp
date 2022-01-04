@@ -23,7 +23,7 @@
 #include <QtTest/QtTest>
 #include <QTextStream>
 #include "config.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/instrtemplate.h"
@@ -61,7 +61,7 @@ namespace Ms {
 //    writes and element and reads it back
 //---------------------------------------------------------
 
-Element* MTest::writeReadElement(Element* element)
+EngravingItem* MTest::writeReadElement(EngravingItem* element)
 {
     //
     // write element
@@ -80,7 +80,7 @@ Element* MTest::writeReadElement(Element* element)
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
     QString tag(e.name().toString());
-    element = Element::name2Element(e.name(), score);
+    element = EngravingItem::name2Element(e.name(), score);
     element->read(e);
     return element;
 }

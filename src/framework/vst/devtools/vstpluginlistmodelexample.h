@@ -23,54 +23,93 @@
 #ifndef MU_VST_VSTPLUGINLISTMODELEXAMPLE_H
 #define MU_VST_VSTPLUGINLISTMODELEXAMPLE_H
 
-#include <QAbstractListModel>
+#include <QObject>
+#include <QVector>
+#include <QList>
+#include <QStringList>
+#include <QString>
 
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "audio/itracks.h"
+#include "audio/iaudiooutput.h"
+#include "audio/iplayback.h"
 
 #include "internal/vstplugin.h"
-#include "ivstpluginrepository.h"
+#include "ivstmodulesrepository.h"
 
 namespace mu::vst {
-class VstPluginListModelExample : public QAbstractListModel, public async::Asyncable
+class VstPluginListModelExample : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(int selectedItemIndex READ selectedItemIndex WRITE setSelectedItemIndex NOTIFY selectedItemIndexChanged)
+    Q_PROPERTY(int currentSequenceId READ currentSequenceId WRITE setCurrentSequenceId NOTIFY currentSequenceIdChanged)
+    Q_PROPERTY(int currentTrackId READ currentTrackId WRITE setCurrentTrackId NOTIFY currentTrackIdChanged)
+    Q_PROPERTY(QString currentSynthResource READ currentSynthResource WRITE setCurrentSynthResource NOTIFY currentSynthResourceChanged)
+    Q_PROPERTY(QString currentFxResource READ currentFxResource WRITE setCurrentFxResource NOTIFY currentFxResourceChanged)
 
+    Q_PROPERTY(QVariantList sequenceIdList READ sequenceIdList WRITE setSequenceIdList NOTIFY sequenceIdListChanged)
+    Q_PROPERTY(QVariantList trackIdList READ trackIdList WRITE setTrackIdList NOTIFY trackIdListChanged)
+    Q_PROPERTY(QVariantList availableFxResources READ availableFxResources NOTIFY availableFxResourcesChanged)
+    Q_PROPERTY(QVariantList availableSynthResources READ availableSynthResources NOTIFY availableSynthResourcesChanged)
+
+    INJECT(vst, audio::IPlayback, playback)
     INJECT(vst, framework::IInteractive, interactive)
-    INJECT(vst, IVstPluginRepository, repository)
 public:
     explicit VstPluginListModelExample(QObject* parent = nullptr);
-    ~VstPluginListModelExample();
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void showPluginEditor();
+    Q_INVOKABLE void showSynthPluginEditor();
+    Q_INVOKABLE void showFxPluginEditor();
 
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    QHash<int, QByteArray> roleNames() const override;
+    const QVariantList& sequenceIdList() const;
+    void setSequenceIdList(const QVariantList& newSequenceIdList);
 
-    int selectedItemIndex() const;
+    const QVariantList& trackIdList() const;
+    void setTrackIdList(const QVariantList& newTrackIdList);
 
-public slots:
-    void setSelectedItemIndex(int selectedItemIndex);
+    const QVariantList& availableFxResources() const;
+    void setAvailableFxResources(const QVariantList& newAvailableFxResources);
+
+    const QVariantList& availableSynthResources() const;
+    void setAvailableSynthResources(const QVariantList& newAvailableSynthResources);
+
+    int currentSequenceId() const;
+    void setCurrentSequenceId(int newCurrentSequenceId);
+
+    int currentTrackId() const;
+    void setCurrentTrackId(int newCurrentTrackId);
+
+    const QString& currentSynthResource() const;
+    void setCurrentSynthResource(const QString& newCurrentSynthResource);
+
+    const QString& currentFxResource() const;
+    void setCurrentFxResource(const QString& newCurrentFxResource);
 
 signals:
-    void selectedItemIndexChanged(int selectedItemIndex);
+    void sequenceIdListChanged();
+    void trackIdListChanged();
+    void availableFxResourcesChanged();
+    void availableSynthResourcesChanged();
+
+    void currentSequenceIdChanged();
+    void currentTrackIdChanged();
+    void currentSynthResourceChanged();
+    void currentFxResourceChanged();
 
 private:
-    enum Roles {
-        NameRole = Qt::UserRole + 1,
-        IdRole,
-        PathRole
-    };
+    void applyNewInputParams();
+    void applyNewOutputParams();
 
-    void updatePluginMetaList(const VstPluginMetaList& newMetaList);
-
-    VstPluginMetaList m_pluginMetaList;
-    int m_selectedItemIndex = -1;
+    QVariantList m_sequenceIdList;
+    QVariantList m_trackIdList;
+    QVariantList m_availableFxResources;
+    QVariantList m_availableSynthResources;
+    int m_currentSequenceId = -1;
+    int m_currentTrackId = -1;
+    QString m_currentSynthResource;
+    QString m_currentFxResource;
 };
 }
 

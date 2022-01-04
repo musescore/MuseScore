@@ -30,31 +30,28 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "global/iinteractive.h"
+#include "iselectinstrumentscenario.h"
 
-namespace mu {
-namespace notation {
-class EditStaff;
+namespace mu::notation {
 class EditStaffType;
-
-//---------------------------------------------------------
-//   EditStaff
-//    edit staff and part properties
-//---------------------------------------------------------
 
 class EditStaff : public QDialog, private Ui::EditStaffBase
 {
     Q_OBJECT
 
-    INJECT(notation, mu::context::IGlobalContext, globalContext)
+    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentsScenario)
 
-    Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
-
+public:
     EditStaff(QWidget* parent = nullptr);
     EditStaff(const EditStaff&);
 
     static int metaTypeId();
 
-    virtual void hideEvent(QHideEvent*);
+private:
+    void hideEvent(QHideEvent*) override;
     void apply();
     void setStaff(Ms::Staff*, const Ms::Fraction& tick);
     void updateInterval(const Ms::Interval&);
@@ -62,13 +59,10 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
     void updateInstrument();
     void updateNextPreviousButtons();
 
-protected:
-    QString midiCodeToStr(int midiCode);
-
 private slots:
     void bboxClicked(QAbstractButton* button);
     void editStringDataClicked();
-    void showInstrumentDialog();
+    void showReplaceInstrumentDialog();
     void showStaffTypeDialog();
     void minPitchAClicked();
     void maxPitchAClicked();
@@ -83,40 +77,34 @@ private slots:
     void gotoPreviousStaff();
     void invisibleChanged();
     void transpositionChanged();
-    void setStaffIdx(int staffIdx);
 
 signals:
     void instrumentChanged();
-    void staffIdxChanged(int staffIdx);
 
 private:
+    INotationPtr notation() const;
     INotationPartsPtr notationParts() const;
 
-    int staffIdx() const;
-    void updateCurrentStaff();
+    void initStaff();
 
     Staff* staff(int staffIndex) const;
-    instruments::Instrument instrument() const;
+    Instrument instrument() const;
 
     void applyStaffProperties();
     void applyPartProperties();
 
-    bool isInstrumentChanged();
+    QString midiCodeToStr(int midiCode);
 
-private:
-    int m_staffIdx = -1;
     Ms::Staff* m_staff = nullptr;
     Ms::Staff* m_orgStaff = nullptr;
-    ID m_partId;
-    ID m_instrumentId;
-    instruments::Instrument m_instrument;
-    instruments::Instrument m_orgInstrument;
+    Instrument m_instrument;
+    Instrument m_orgInstrument;
+    InstrumentKey m_instrumentKey;
     int m_minPitchA, m_maxPitchA, m_minPitchP, m_maxPitchP;
     Ms::Fraction m_tickStart, m_tickEnd;
 
     EditStaffType* editStaffTypeDialog = nullptr;
 };
-}
 }
 
 Q_DECLARE_METATYPE(mu::notation::EditStaff)

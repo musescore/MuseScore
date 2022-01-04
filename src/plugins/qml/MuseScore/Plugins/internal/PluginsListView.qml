@@ -19,29 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Plugins 1.0
 
-Item {
+Column {
     id: root
 
     property alias model: filterModel.sourceModel
-    property alias count: view.count
+    readonly property alias count: view.count
 
-    property string title: ""
+    property alias title: titleLabel.text
 
     property string search: ""
     property string selectedCategory: ""
     property bool installed: false
 
-    signal pluginClicked(var plugin)
+    property var flickableItem: null
+    property int headerHeight: titleLabel.height + spacing
 
-    height: view.height
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PluginsListView"
+        direction: NavigationPanel.Both
+        accessible.name: root.title
+    }
+
+    signal pluginClicked(var plugin, var navigationControl)
+    signal navigationActivated(var itemRect)
 
     function resetSelectedPlugin() {
         view.currentIndex = -1
+    }
+
+    function focusOnFirst() {
+        view.itemAtIndex(0).requestActive()
     }
 
     SortFilterProxyModel {
@@ -66,45 +79,41 @@ Item {
         ]
     }
 
+    StyledTextLabel {
+        id: titleLabel
+        width: parent.width
+        font: ui.theme.tabBoldFont
+        horizontalAlignment: Text.AlignLeft
+    }
+
+    spacing: 24
+
     GridView {
         id: view
 
+        readonly property int columns: Math.max(0, Math.floor(width / cellWidth))
+
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.leftMargin: -spacingBetweenColumns / 2
+        anchors.rightMargin: -spacingBetweenColumns / 2
 
-        readonly property int sideMargin: 28
-
-        anchors.leftMargin: -sideMargin
-        anchors.rightMargin: -sideMargin
-
-        height: contentHeight
-
-        header: Item {
-            height: titleLabel.height
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            StyledTextLabel {
-                id: titleLabel
-
-                anchors.top: parent.top
-                anchors.topMargin: 8
-                anchors.left: parent.left
-                anchors.leftMargin: view.sideMargin
-
-                text: root.title
-                font: ui.theme.tabBoldFont
-            }
-        }
+        height: contentHeight - spacingBetweenRows
 
         model: filterModel
 
-        clip: true
+        // We don't want this GridView to be scrollable; it would conflict with the containing Flickable.
+        interactive: false
+        highlightFollowsCurrentItem: false // prevent automatic scrolling
 
-        cellHeight: 254
-        cellWidth: sideMargin + 296 + sideMargin
+        readonly property real spacingBetweenColumns: 50
+        readonly property real spacingBetweenRows: 24
 
-        boundsBehavior: Flickable.StopAtBounds
+        readonly property real actualCellWidth: 256
+        readonly property real actualCellHeight: 176
+
+        cellWidth: actualCellWidth + spacingBetweenColumns
+        cellHeight: actualCellHeight + spacingBetweenRows
 
         delegate: Item {
             id: item
@@ -112,22 +121,36 @@ Item {
             height: view.cellHeight
             width: view.cellWidth
 
+            function requestActive() {
+                _item.navigation.requestActive()
+            }
+
             PluginItem {
-                anchors.centerIn: parent
+                id: _item
+
+                width: view.actualCellWidth
+                height: view.actualCellHeight
+
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 name: model.name
                 thumbnailUrl: model.thumbnailUrl
-                selected: view.currentIndex == index
+                selected: view.currentIndex === index
 
-                height: 206
-                width: 296
+                navigation.panel: root.navigationPanel
+                navigation.row: view.columns === 0 ? 0 : Math.floor(model.index / view.columns)
+                navigation.column: model.index - (navigation.row * view.columns)
+                navigation.onActiveChanged: {
+                    var pos = _item.mapToItem(root.flickableItem, 0, 0)
+                    var rect = Qt.rect(pos.x, pos.y, _item.width, _item.height)
+                    root.navigationActivated(rect)
+                }
 
                 onClicked: {
                     forceActiveFocus()
-
-                    view.positionViewAtIndex(index, GridView.Visible)
                     view.currentIndex = index
-                    root.pluginClicked(model)
+                    root.pluginClicked(model, navigation)
                 }
             }
         }

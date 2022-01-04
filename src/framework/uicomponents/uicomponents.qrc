@@ -10,7 +10,6 @@
         <file>qml/MuseScore/UiComponents/FlatButton.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledComboBox.qml</file>
         <file>qml/MuseScore/UiComponents/TabPanel.qml</file>
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
@@ -20,17 +19,16 @@
         <file>qml/MuseScore/UiComponents/SeparatorLine.qml</file>
         <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
-        <file>qml/MuseScore/UiComponents/ContextMenu.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledContextMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/SearchField.qml</file>
+        <file>qml/MuseScore/UiComponents/StyledTabBar.qml</file>
         <file>qml/MuseScore/UiComponents/StyledTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/PopupPanel.qml</file>
         <file>qml/MuseScore/UiComponents/ProgressButton.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/InstallationPanel.qml</file>
         <file>qml/MuseScore/UiComponents/StyledScrollBar.qml</file>
-        <file>qml/MuseScore/UiComponents/GradientTabButton.qml</file>
+        <file>qml/MuseScore/UiComponents/PageTabButton.qml</file>
         <file>qml/MuseScore/UiComponents/GridViewSectional.qml</file>
         <file>qml/MuseScore/UiComponents/ListItemBlank.qml</file>
         <file>qml/MuseScore/UiComponents/StyledSlider.qml</file>
@@ -41,6 +39,7 @@
         <file>qml/MuseScore/UiComponents/StyledPopupView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledDialogView.qml</file>
         <file>qml/MuseScore/UiComponents/Border.qml</file>
+        <file>qml/MuseScore/UiComponents/NavigationFocusBorder.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenu.qml</file>
         <file>qml/MuseScore/UiComponents/StyledMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/MenuButton.qml</file>
@@ -53,5 +52,11 @@
         <file>qml/MuseScore/UiComponents/TabItem.qml</file>
         <file>qml/MuseScore/UiComponents/StyledDropShadow.qml</file>
         <file>qml/MuseScore/UiComponents/StyledToolTip.qml</file>
+        <file>qml/MuseScore/UiComponents/Utils.js</file>
+        <file>qml/MuseScore/UiComponents/Dropdown.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
+        <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
+        <file>qml/MuseScore/UiComponents/MenuMetrics.qml</file>
+        <file>qml/MuseScore/UiComponents/PageIndicator.qml</file>
     </qresource>
 </RCC>

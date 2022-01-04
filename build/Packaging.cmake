@@ -5,7 +5,7 @@
 include (InstallRequiredSystemLibraries)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "MuseScore is a full featured WYSIWYG score editor")
-SET(CPACK_PACKAGE_VENDOR "Werner Schweer and Others")
+SET(CPACK_PACKAGE_VENDOR "MuseScore BVBA and Others")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
 SET(CPACK_RESOURCE_FILE_LICENSE    "${PROJECT_SOURCE_DIR}/LICENSE.GPL")
 
@@ -22,6 +22,7 @@ if (MSCORE_UNSTABLE)
       if (GIT_EXECUTABLE)
             execute_process(
                   COMMAND "${GIT_EXECUTABLE}" log -1 --date=short --format=%cd
+                  WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
                   OUTPUT_VARIABLE git_date
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
       endif (GIT_EXECUTABLE)

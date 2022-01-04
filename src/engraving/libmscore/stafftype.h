@@ -23,8 +23,8 @@
 #ifndef __STAFFTYPE_H__
 #define __STAFFTYPE_H__
 
-#include "element.h"
-#include "spatium.h"
+#include "infrastructure/draw/color.h"
+#include "engravingitem.h"
 #include "mscore.h"
 #include "durationtype.h"
 #include "note.h"
@@ -152,7 +152,7 @@ struct TablatureDurationFont {
     qreal gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     qreal gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
     // the note value with no beaming in 'grid'-style beaming
-    TDuration::DurationType zeroBeamLevel = TDuration::DurationType::V_QUARTER;
+    DurationType zeroBeamLevel = DurationType::V_QUARTER;
     QChar displayDot;                 // the char to use to draw a dot
     QChar displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
 
@@ -185,6 +185,8 @@ static const int STAFF_GROUP_NAME_MAX_LENGTH   = 32;
 
 class StaffType
 {
+    INJECT_STATIC(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     friend class TabDurationSymbol;
 
     StaffGroup _group = StaffGroup::STANDARD;
@@ -197,7 +199,7 @@ class StaffType
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
     bool _invisible          { false };
-    QColor _color            { QColor(Qt::black) };
+    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
 
     int _lines            = 5;
     int _stepOffset       = 0;
@@ -212,7 +214,7 @@ class StaffType
     bool _genKeysig       = true;         // create key signature at beginning of system
 
     // Standard: configurable properties
-    NoteHead::Scheme _noteHeadScheme = NoteHead::Scheme::HEAD_NORMAL;
+    NoteHeadScheme _noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
 
     // TAB: configurable properties
     qreal _durationFontSize = 15.0;       // the size (in points) for the duration symbol font
@@ -277,10 +279,10 @@ public:
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
               bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,
-              const QColor& color);
+              const mu::draw::Color& color);
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
-              bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color, const QString& durFontName,
+              bool showBarLines, bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color, const QString& durFontName,
               qreal durFontSize, qreal durFontUserY, qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
@@ -300,6 +302,8 @@ public:
 
     void setLines(int val) { _lines = val; }
     int lines() const { return _lines; }
+    int middleLine() const;
+    int bottomLine() const;
     void setStepOffset(int v) { _stepOffset = v; }
     int stepOffset() const { return _stepOffset; }
     void setLineDistance(const Spatium& val) { _lineDistance = val; }
@@ -309,13 +313,13 @@ public:
     void setShowBarlines(bool val) { _showBarlines = val; }
     bool showBarlines() const { return _showBarlines; }
     qreal userMag() const { return _userMag; }
-    bool small() const { return _small; }
+    bool isSmall() const { return _small; }
     bool invisible() const { return _invisible; }
-    const QColor& color() const { return _color; }
+    const mu::draw::Color& color() const { return _color; }
     void setUserMag(qreal val) { _userMag = val; }
     void setSmall(bool val) { _small = val; }
     void setInvisible(bool val) { _invisible = val; }
-    void setColor(const QColor& val) { _color = val; }
+    void setColor(const mu::draw::Color& val) { _color = val; }
     Spatium yoffset() const { return _yoffset; }
     void setYoffset(Spatium val) { _yoffset = val; }
     qreal spatium(Score*) const;
@@ -339,11 +343,11 @@ public:
     bool genKeysig() const { return _genKeysig; }
     void setShowLedgerLines(bool val) { _showLedgerLines = val; }
     bool showLedgerLines() const { return _showLedgerLines; }
-    void setNoteHeadScheme(NoteHead::Scheme s) { _noteHeadScheme = s; }
-    NoteHead::Scheme noteHeadScheme() const { return _noteHeadScheme; }
+    void setNoteHeadScheme(NoteHeadScheme s) { _noteHeadScheme = s; }
+    NoteHeadScheme noteHeadScheme() const { return _noteHeadScheme; }
 
     QString fretString(int fret, int string, bool ghost) const;     // returns a string with the text for fret
-    QString durationString(TDuration::DurationType type, int dots) const;
+    QString durationString(DurationType type, int dots) const;
 
     // functions to cope with historic TAB's peculiarities, like upside-down, bass string notations
     int     physStringToVisual(int strg) const;                   // return the string in visual order from physical string
@@ -426,7 +430,7 @@ public:
 
 //---------------------------------------------------------
 //   TabDurationSymbol
-//    Element used to draw duration symbols above tablatures
+//    EngravingItem used to draw duration symbols above tablatures
 //---------------------------------------------------------
 
 enum class TabBeamGrid : char {
@@ -436,7 +440,7 @@ enum class TabBeamGrid : char {
     NUM_OF
 };
 
-class TabDurationSymbol final : public Element
+class TabDurationSymbol final : public EngravingItem
 {
     qreal _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
     int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams
@@ -446,18 +450,17 @@ class TabDurationSymbol final : public Element
     bool _repeat     { false };
 
 public:
-    TabDurationSymbol(Score* s);
-    TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots);
+    TabDurationSymbol(ChordRest* parent);
+    TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
     void layout() override;
-    ElementType type() const override { return ElementType::TAB_DURATION_SYMBOL; }
 
     TabBeamGrid beamGrid() { return _beamGrid; }
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
-    void setDuration(TDuration::DurationType type, int dots, const StaffType* tab)
+    void setDuration(DurationType type, int dots, const StaffType* tab)
     {
         _tab = tab;
         _text = tab->durationString(type, dots);

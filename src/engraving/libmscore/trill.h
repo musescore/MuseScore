@@ -35,35 +35,32 @@ class Accidental;
 
 class TrillSegment final : public LineSegment
 {
-    std::vector<SymId> _symbols;
+    SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
     Sid getPropertyStyle(Pid) const override;
 
-protected:
 public:
-    TrillSegment(Spanner* sp, Score* s)
-        : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
-    TrillSegment(Score* s)
-        : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    TrillSegment(Trill* sp, System* parent);
+    TrillSegment(System* parent);
 
     Trill* trill() const { return (Trill*)spanner(); }
-    ElementType type() const override { return ElementType::TRILL_SEGMENT; }
+
     TrillSegment* clone() const override { return new TrillSegment(*this); }
     void draw(mu::draw::Painter*) const override;
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     Shape shape() const override;
 
-    std::vector<SymId> symbols() const { return _symbols; }
-    void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
+    SymIdList symbols() const { return _symbols; }
+    void setSymbols(const SymIdList& s) { _symbols = s; }
 };
 
 //---------------------------------------------------------
@@ -83,34 +80,33 @@ public:
 private:
     Type _trillType;
     Accidental* _accidental;
-    MScore::OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
+    OrnamentStyle _ornamentStyle;   // for use in ornaments such as trill
     bool _playArticulation;
 
 public:
-    Trill(Score* s);
+    Trill(EngravingItem* parent);
     Trill(const Trill& t);
     ~Trill();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     Trill* clone() const override { return new Trill(*this); }
-    ElementType type() const override { return ElementType::TRILL; }
 
     void layout() override;
-    LineSegment* createLineSegment() override;
-    void add(Element*) override;
-    void remove(Element*) override;
+    LineSegment* createLineSegment(System* parent) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
     void setTrillType(const QString& s);
     void setTrillType(Type tt) { _trillType = tt; }
     Type trillType() const { return _trillType; }
-    void setOrnamentStyle(MScore::OrnamentStyle val) { _ornamentStyle = val; }
-    MScore::OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
+    void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
+    OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
     void setPlayArticulation(bool val) { _playArticulation = val; }
     bool playArticulation() const { return _playArticulation; }
     static QString type2name(Trill::Type t);
@@ -119,11 +115,11 @@ public:
     Accidental* accidental() const { return _accidental; }
     void setAccidental(Accidental* a) { _accidental = a; }
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     QString accessibleInfo() const override;

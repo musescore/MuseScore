@@ -23,7 +23,7 @@
 #ifndef __IMPORTMXML_H__
 #define __IMPORTMXML_H__
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords definition
 #include "musicxmlsupport.h"

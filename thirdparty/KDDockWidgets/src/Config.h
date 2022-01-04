@@ -21,28 +21,29 @@
 
 #include "docks_export.h"
 
+#include <qglobal.h>
+
 QT_BEGIN_NAMESPACE
 class QQmlEngine;
 class QSize;
 QT_END_NAMESPACE
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 
 class DockWidgetBase;
 class MainWindowBase;
 class FrameworkWidgetFactory;
 
-typedef KDDockWidgets::DockWidgetBase* (*DockWidgetFactoryFunc)(const QString &name);
-typedef KDDockWidgets::MainWindowBase* (*MainWindowFactoryFunc)(const QString &name);
+typedef KDDockWidgets::DockWidgetBase *(*DockWidgetFactoryFunc)(const QString &name);
+typedef KDDockWidgets::MainWindowBase *(*MainWindowFactoryFunc)(const QString &name);
 
 /// @brief Function to allow the user more granularity to disallow dock widgets to tab together
 /// @param source The dock widgets being dragged
 /// @param target The dock widgets within an existing docked tab group
 /// @return true if the docking is allowed.
 /// @sa setTabbingAllowedFunc
-typedef bool (*TabbingAllowedFunc)(const QVector<DockWidgetBase*> &source,
-                                   const QVector<DockWidgetBase*> &target);
+typedef bool (*TabbingAllowedFunc)(const QVector<DockWidgetBase *> &source,
+                                   const QVector<DockWidgetBase *> &target);
 
 /**
  * @brief Singleton to allow to choose certain behaviours of the framework.
@@ -53,7 +54,6 @@ typedef bool (*TabbingAllowedFunc)(const QVector<DockWidgetBase*> &source,
 class DOCKS_EXPORT Config
 {
 public:
-
     ///@brief returns the singleton Config instance
     static Config &self();
 
@@ -61,7 +61,8 @@ public:
     ~Config();
 
     ///@brief Flag enum to tune certain behaviours, the defaults are Flag_Default
-    enum Flag {
+    enum Flag
+    {
         Flag_None = 0, ///< No option set
         Flag_NativeTitleBar = 1, ///< Enables the Native OS title bar on OSes that support it (Windows 10, macOS), ignored otherwise.
         Flag_AeroSnapWithClientDecos = 2, ///< Deprecated. This is now default and cannot be turned off. Moving a window on Windows 10 uses native moving, as that works well across screens with different HDPI settings. There's no reason to use manual client/Qt window moving.
@@ -78,15 +79,18 @@ public:
         Flag_TitleBarHasMinimizeButton = 0x2000 | Flag_DontUseUtilityFloatingWindows, ///< The title bar will have a minimize button when floating. This implies Flag_DontUseUtilityFloatingWindows too, otherwise they wouldn't appear in the task bar.
         Flag_TitleBarNoFloatButton = 0x4000, ///< The TitleBar won't show the float button
         Flag_AutoHideSupport = 0x8000 | Flag_TitleBarNoFloatButton, ///< Supports minimizing dock widgets to the side-bar.
-                                                                    ///< By default it also turns off the float button, but you can remove Flag_TitleBarNoFloatButton to have both.
+            ///< By default it also turns off the float button, but you can remove Flag_TitleBarNoFloatButton to have both.
         Flag_KeepAboveIfNotUtilityWindow = 0x10000, ///< Only meaningful if Flag_DontUseUtilityFloatingWindows is set. If floating windows are normal windows, you might still want them to keep above and not minimize when you focus the main window.
         Flag_CloseOnlyCurrentTab = 0x20000, ///< The TitleBar's close button will only close the current tab, instead of all of them
+        Flag_ShowButtonsOnTabBarIfTitleBarHidden = 0x40000, ///< When using Flag_HideTitleBarWhenTabsVisible the close/float buttons disappear with the title bar. With Flag_ShowButtonsOnTabBarIfHidden they'll be shown in the tab bar.
+        Flag_AllowSwitchingTabsViaMenu = 0x80000, ///< Allow switching tabs via a context menu when right clicking on the tab area
         Flag_Default = Flag_AeroSnapWithClientDecos ///< The defaults
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
     ///@brief List of customizable widgets
-    enum CustomizableWidget {
+    enum CustomizableWidget
+    {
         CustomizableWidget_None = 0, ///< None
         CustomizableWidget_TitleBar, ///< The title bar
         CustomizableWidget_DockWidget, ///< The dock widget
@@ -96,18 +100,22 @@ public:
         CustomizableWidget_FloatingWindow, ///< A top-level window. The container for 1 or more Frame nested side by side
         CustomizableWidget_Separator ///< The draggable separator between dock widgets in a layout
     };
-     Q_DECLARE_FLAGS(CustomizableWidgets, CustomizableWidget)
+    Q_DECLARE_FLAGS(CustomizableWidgets, CustomizableWidget)
 
     ///@internal
-    ///Internal flags for addtional tunning.
+    ///Internal flags for additional tuning.
     ///@warning Not for public consumption, support will be limited.
-    enum InternalFlag {
+    enum InternalFlag
+    {
         InternalFlag_None = 0, ///< The default
         InternalFlag_NoAeroSnap = 1, ///< Only for development. Disables Aero-snap.
-        InternalFlag_DontUseParentForFloatingWindows = 2,  ///< FloatingWindows won't have a parent top-level.
+        InternalFlag_DontUseParentForFloatingWindows = 2, ///< FloatingWindows won't have a parent top-level.
         InternalFlag_DontUseQtToolWindowsForFloatingWindows = 4, ///< FloatingWindows will use Qt::Window instead of Qt::Tool.
         InternalFlag_DontShowWhenUnfloatingHiddenWindow = 8, ///< DockWidget::setFloating(false) won't do anything if the window is hidden.
-        InternalFlag_UseTransparentFloatingWindow = 16 ///< For QtQuick only. Allows to have round-corners. It's flaky when used with native Windows drop-shadow.
+        InternalFlag_UseTransparentFloatingWindow = 16, ///< For QtQuick only. Allows to have round-corners. It's flaky when used with native Windows drop-shadow.
+        InternalFlag_DisableTranslucency = 32, ///< KDDW tries to detect if your Window Manager doesn't support transparent windows, but the detection might fail
+        /// with more exotic setups. This flag can be used to override.
+        InternalFlag_TopLevelIndicatorRubberBand = 64 ///< Makes the rubber band of classic drop indicators to be top-level windows. Helps with working around MFC bugs
     };
     Q_DECLARE_FLAGS(InternalFlags, InternalFlag)
 
@@ -256,7 +264,7 @@ public:
 #ifdef KDDOCKWIDGETS_QTQUICK
     ///@brief Sets the QQmlEngine to use. Applicable only when using QtQuick.
     void setQmlEngine(QQmlEngine *);
-    QQmlEngine* qmlEngine() const;
+    QQmlEngine *qmlEngine() const;
 #endif
 
 private:

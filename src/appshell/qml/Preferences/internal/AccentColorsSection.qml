@@ -22,70 +22,56 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+
+import "../../shared"
 
 Row {
     id: root
 
-    property alias colors: view.model
-    property alias currentColorIndex: view.currentIndex
+    property alias colors: colorsList.colors
+    property alias currentColorIndex: colorsList.currentColorIndex
 
-    property int firstColumnWidth: 0
+    property NavigationPanel navigation: NavigationPanel {
+        name: titleLabel.text
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Horizontal
+        accessible.name: titleLabel.text
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
+    property int columnWidth: 0
 
     signal accentColorChangeRequested(var newColorIndex)
 
-    height: 36
-    spacing: 0
+    height: colorsList.height
+    spacing: 12
 
     StyledTextLabel {
-        width: root.firstColumnWidth
+        id: titleLabel
+        width: root.columnWidth
 
         anchors.verticalCenter: parent.verticalCenter
         horizontalAlignment: Qt.AlignLeft
 
-        text: qsTrc("appshell", "Accent colour:")
+        text: qsTrc("appshell", "Accent color:")
     }
 
-    RadioButtonGroup {
-        id: view
+    AccentColorsList {
+        id: colorsList
 
-        spacing: 10
+        navigationPanel: root.navigation
 
-        delegate: RoundedRadioButton {
-            width: 36
-            height: width
+        sampleSize: 30
 
-            checked: view.currentIndex === model.index
-
-            onClicked: {
-                root.accentColorChangeRequested(model.index)
-            }
-
-            indicator: Rectangle {
-                anchors.fill: parent
-
-                radius: width / 2
-
-                border.color: ui.theme.fontPrimaryColor
-                border.width: parent.checked ? 1 : 0
-
-                color: "transparent"
-
-                Rectangle {
-                    anchors.centerIn: parent
-
-                    width: 30
-                    height: width
-                    radius: width / 2
-
-                    border.color: ui.theme.strokeColor
-                    border.width: 1
-
-                    color: modelData
-                }
-            }
-
-            background: Item {}
+        onAccentColorChangeRequested: function(newColorIndex) {
+            root.accentColorChangeRequested(newColorIndex)
         }
     }
 }

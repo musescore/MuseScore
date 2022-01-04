@@ -36,11 +36,14 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, engraving::IEngravingConfiguration, engravingConfiguration)
 
-    Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
+    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
+    Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
+    Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
-    Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
+    Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
     Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
@@ -56,13 +59,28 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
+    Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
+
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
 
-    QVariantList themes() const;
+    Q_INVOKABLE void init();
+
+    enum ColorType {
+        AccentColor,
+        TextAndIconsColor,
+        DisabledColor,
+        BorderColor
+    };
+    Q_ENUM(ColorType)
+
+    bool highContrastEnabled() const;
+    QVariantList generalThemes() const;
+    QVariantList highContrastThemes() const;
+
     QStringList accentColors() const;
 
-    int currentThemeIndex() const;
+    QString currentThemeCode() const;
     int currentAccentColorIndex() const;
 
     int currentFontIndex() const;
@@ -76,12 +94,17 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
+    bool scoreInversionEnabled() const;
+
+    Q_INVOKABLE void resetThemeToDefault();
+    Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
-    void setCurrentThemeIndex(int index);
+    void setHighContrastEnabled(bool enabled);
+    void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
     void setCurrentFontIndex(int index);
     void setBodyTextSize(int size);
@@ -91,17 +114,20 @@ public slots:
     void setForegroundUseColor(bool value);
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
+    void setScoreInversionEnabled(bool value);
 
 signals:
+    void highContrastEnabledChanged();
     void themesChanged();
-    void currentFontIndexChanged(int index);
-    void bodyTextSizeChanged(int size);
-    void backgroundUseColorChanged(bool value);
-    void backgroundColorChanged(const QColor& color);
-    void backgroundWallpaperPathChanged(const QString& path);
-    void foregroundUseColorChanged(bool value);
-    void foregroundColorChanged(const QColor& color);
-    void foregroundWallpaperPathChanged(const QString& path);
+    void currentFontIndexChanged();
+    void bodyTextSizeChanged();
+    void backgroundUseColorChanged();
+    void backgroundColorChanged();
+    void backgroundWallpaperPathChanged();
+    void foregroundUseColorChanged();
+    void foregroundColorChanged();
+    void foregroundWallpaperPathChanged();
+    void invertScoreColorChanged();
 
 private:
     ui::ThemeInfo currentTheme() const;

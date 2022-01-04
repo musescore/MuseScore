@@ -25,11 +25,11 @@
 #include "config.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/capellareader.h"
 
 using namespace mu::iex::capella;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string CapellaModule::moduleName() const
 {

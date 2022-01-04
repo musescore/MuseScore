@@ -30,7 +30,7 @@
 #include "libmscore/property.h"
 
 namespace Ms {
-class ScoreElement;
+class EngravingObject;
 
 namespace PluginAPI {
 //---------------------------------------------------------
@@ -55,7 +55,7 @@ class ScoreElement : public QObject
 {
     Q_OBJECT
     /**
-     * Type of this element. See PluginAPI::PluginAPI::Element
+     * Type of this element. See PluginAPI::PluginAPI::EngravingItem
      * for the list of possible values.
      */
     Q_PROPERTY(int type READ type)
@@ -72,12 +72,12 @@ class ScoreElement : public QObject
 
 protected:
     /// \cond MS_INTERNAL
-    Ms::ScoreElement* const e;
+    Ms::EngravingObject* const e;
     /// \endcond
 
 public:
     /// \cond MS_INTERNAL
-    ScoreElement(Ms::ScoreElement* _e = nullptr, Ownership own = Ownership::PLUGIN)
+    ScoreElement(Ms::EngravingObject* _e = nullptr, Ownership own = Ownership::PLUGIN)
         : QObject(), _ownership(own), e(_e) {}
     ScoreElement(const ScoreElement&) = delete;
     ScoreElement& operator=(const ScoreElement&) = delete;
@@ -86,8 +86,8 @@ public:
     Ownership ownership() const { return _ownership; }
     void setOwnership(Ownership o) { _ownership = o; }
 
-    Ms::ScoreElement* element() { return e; }
-    const Ms::ScoreElement* element() const { return e; }
+    Ms::EngravingObject* element() { return e; }
+    const Ms::EngravingObject* element() const { return e; }
 
     QString name() const;
     int type() const;
@@ -117,7 +117,7 @@ Wrapper* wrap(T* t, Ownership own = Ownership::SCORE)
     return w;
 }
 
-extern ScoreElement* wrap(Ms::ScoreElement* se, Ownership own = Ownership::SCORE);
+extern ScoreElement* wrap(Ms::EngravingObject* se, Ownership own = Ownership::SCORE);
 
 //---------------------------------------------------------
 //   customWrap

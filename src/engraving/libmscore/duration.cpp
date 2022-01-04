@@ -21,23 +21,24 @@
  */
 
 #include "duration.h"
+#include "rw/xml.h"
 #include "measure.h"
 #include "tuplet.h"
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
-#include "xml.h"
 #include "property.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(Score* s, ElementFlags f)
-    : Element(s, f)
+DurationElement::DurationElement(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     _tuplet = 0;
 }
@@ -47,7 +48,7 @@ DurationElement::DurationElement(Score* s, ElementFlags f)
 //---------------------------------------------------------
 
 DurationElement::DurationElement(const DurationElement& e)
-    : Element(e)
+    : EngravingItem(e)
 {
     _tuplet   = 0;      // e._tuplet;
     _duration = e._duration;
@@ -143,13 +144,13 @@ void DurationElement::writeTupletEnd(XmlWriter& xml) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant DurationElement::getProperty(Pid propertyId) const
+PropertyValue DurationElement::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DURATION:
-        return QVariant::fromValue(_duration);
+        return PropertyValue::fromValue(_duration);
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -157,7 +158,7 @@ QVariant DurationElement::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
+bool DurationElement::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DURATION: {
@@ -167,7 +168,7 @@ bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
     }
     break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     return true;
 }

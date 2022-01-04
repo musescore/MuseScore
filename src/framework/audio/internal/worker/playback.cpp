@@ -38,8 +38,10 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::async;
 
-Playback::Playback()
+void Playback::init()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     m_playerHandlersPtr = std::make_shared<PlayerHandler>(this);
     m_trackHandlersPtr = std::make_shared<TracksHandler>(this);
     m_audioOutputPtr = std::make_shared<AudioOutputHandler>(this);
@@ -50,9 +52,10 @@ Promise<TrackSequenceId> Playback::addSequence()
     return Promise<TrackSequenceId>([this](Promise<TrackSequenceId>::Resolve resolve, Promise<TrackSequenceId>::Reject /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        TrackSequenceId newId = m_sequences.size();
+        TrackSequenceId newId = static_cast<TrackSequenceId>(m_sequences.size());
 
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
+        m_sequenceAdded.send(newId);
 
         resolve(std::move(newId));
     }, AudioThread::ID);
@@ -84,7 +87,23 @@ void Playback::removeSequence(const TrackSequenceId id)
         if (search != m_sequences.end()) {
             m_sequences.erase(search);
         }
+
+        m_sequenceRemoved.send(id);
     }, AudioThread::ID);
+}
+
+Channel<TrackSequenceId> Playback::sequenceAdded() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_sequenceAdded;
+}
+
+Channel<TrackSequenceId> Playback::sequenceRemoved() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_sequenceRemoved;
 }
 
 IPlayerPtr Playback::player() const

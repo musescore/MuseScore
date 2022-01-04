@@ -53,8 +53,8 @@ private:
     QString _label;                 ///< referenced from Jump() element
 
 public:
-    Marker(Score*);
-    Marker(Score*, Tid);
+    Marker(EngravingItem* parent);
+    Marker(EngravingItem* parent, TextStyleType);
 
     void setMarkerType(Type t);
     Type markerType() const { return _markerType; }
@@ -62,10 +62,10 @@ public:
     Type markerType(const QString&) const;
 
     Marker* clone() const override { return new Marker(*this); }
-    ElementType type() const override { return ElementType::MARKER; }
+
     int subtype() const override { return int(_markerType); }
 
-    Measure* measure() const { return (Measure*)parent(); }
+    Measure* measure() const { return (Measure*)explicitParent(); }
 
     void layout() override;
     void read(XmlReader&) override;
@@ -78,12 +78,12 @@ public:
 
     void styleChanged() override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 

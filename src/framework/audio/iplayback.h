@@ -47,6 +47,9 @@ public:
     virtual async::Promise<TrackSequenceIdList> sequenceIdList() const = 0;
     virtual void removeSequence(const TrackSequenceId id) = 0;
 
+    virtual async::Channel<TrackSequenceId> sequenceAdded() const = 0;
+    virtual async::Channel<TrackSequenceId> sequenceRemoved() const = 0;
+
     // 2. Setup tracks for Sequence
     virtual std::shared_ptr<ITracks> tracks() const = 0;
 

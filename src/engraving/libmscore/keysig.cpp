@@ -23,8 +23,10 @@
 #include "keysig.h"
 
 #include "translation.h"
+#include "rw/xml.h"
+#include "types/symnames.h"
+#include "types/typesconv.h"
 
-#include "sym.h"
 #include "staff.h"
 #include "clef.h"
 #include "measure.h"
@@ -32,9 +34,10 @@
 #include "score.h"
 #include "system.h"
 #include "undo.h"
-#include "xml.h"
+#include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 const char* keyNames[] = {
@@ -60,15 +63,15 @@ const char* keyNames[] = {
 //   KeySig
 //---------------------------------------------------------
 
-KeySig::KeySig(Score* s)
-    : Element(s, ElementFlag::ON_STAFF)
+KeySig::KeySig(Segment* s)
+    : EngravingItem(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
     _showCourtesy = true;
     _hideNaturals = false;
 }
 
 KeySig::KeySig(const KeySig& k)
-    : Element(k)
+    : EngravingItem(k)
 {
     _showCourtesy = k._showCourtesy;
     _sig          = k._sig;
@@ -88,12 +91,35 @@ qreal KeySig::mag() const
 //   add
 //---------------------------------------------------------
 
-void KeySig::addLayout(SymId sym, qreal x, int line)
+void KeySig::addLayout(SymId sym, int line)
 {
     qreal stepDistance = staff() ? staff()->lineDistance(tick()) * 0.5 : 0.5;
     KeySym ks;
-    ks.sym    = sym;
-    ks.spos   = PointF(x, qreal(line) * stepDistance);
+    ks.sym = sym;
+    qreal x = 0.0;
+    qreal y = qreal(line) * stepDistance;
+    if (_sig.keySymbols().size() > 0) {
+        KeySym& previous = _sig.keySymbols().back();
+        qreal accidentalGap = score()->styleS(Sid::keysigAccidentalDistance).val();
+        if (previous.sym != sym) {
+            accidentalGap *= 2;
+        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
+            accidentalGap = score()->styleS(Sid::keysigNaturalDistance).val();
+        }
+        // width is divided by mag() to get the staff-scaling-independent width of the symbols
+        qreal previousWidth = symWidth(previous.sym) / score()->spatium() / mag();
+        x = previous.spos.x() + previousWidth + accidentalGap;
+        bool isAscending = y < previous.spos.y();
+        SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
+        SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
+        PointF cutout = symSmuflAnchor(sym, currentCutout);
+        qreal currentCutoutY = y * spatium() + cutout.y();
+        qreal previousCoutoutY = previous.spos.y() * spatium() + symSmuflAnchor(previous.sym, previousCutout).y();
+        if ((isAscending && currentCutoutY < previousCoutoutY) || (!isAscending && currentCutoutY > previousCoutoutY)) {
+            x -= cutout.x() / spatium();
+        }
+    }
+    ks.spos = PointF(x, y);
     _sig.keySymbols().append(ks);
 }
 
@@ -241,69 +267,28 @@ void KeySig::layout()
 
     const signed char* lines = ClefInfo::lines(clef);
 
-    // add prefixed naturals, if any
-
-    qreal xo = 0.0;
     if (prefixNaturals) {
         for (int i = 0; i < 7; ++i) {
             if (naturals & (1 << i)) {
-                addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
-                xo += 1.0;
+                addLayout(SymId::accidentalNatural, lines[i + coffset]);
             }
         }
     }
-    // add accidentals
-    static const qreal sspread = 1.0;
-    static const qreal fspread = 1.0;
-
-    switch (t1) {
-    case 7:  addLayout(SymId::accidentalSharp, xo + 6.0 * sspread, lines[6]);
-    // fall through
-    case 6:  addLayout(SymId::accidentalSharp, xo + 5.0 * sspread, lines[5]);
-    // fall through
-    case 5:  addLayout(SymId::accidentalSharp, xo + 4.0 * sspread, lines[4]);
-    // fall through
-    case 4:  addLayout(SymId::accidentalSharp, xo + 3.0 * sspread, lines[3]);
-    // fall through
-    case 3:  addLayout(SymId::accidentalSharp, xo + 2.0 * sspread, lines[2]);
-    // fall through
-    case 2:  addLayout(SymId::accidentalSharp, xo + 1.0 * sspread, lines[1]);
-    // fall through
-    case 1:  addLayout(SymId::accidentalSharp, xo,                 lines[0]);
-        break;
-    case -7: addLayout(SymId::accidentalFlat, xo + 6.0 * fspread, lines[13]);
-    // fall through
-    case -6: addLayout(SymId::accidentalFlat, xo + 5.0 * fspread, lines[12]);
-    // fall through
-    case -5: addLayout(SymId::accidentalFlat, xo + 4.0 * fspread, lines[11]);
-    // fall through
-    case -4: addLayout(SymId::accidentalFlat, xo + 3.0 * fspread, lines[10]);
-    // fall through
-    case -3: addLayout(SymId::accidentalFlat, xo + 2.0 * fspread, lines[9]);
-    // fall through
-    case -2: addLayout(SymId::accidentalFlat, xo + 1.0 * fspread, lines[8]);
-    // fall through
-    case -1: addLayout(SymId::accidentalFlat, xo,                 lines[7]);
-    case 0:
-        break;
-    default:
+    if (abs(t1) <= 7) {
+        SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
+        int lineIndexOffset = t1 > 0 ? 0 : 7;
+        for (int i = 0; i < abs(t1); ++i) {
+            addLayout(symbol, lines[lineIndexOffset + i]);
+        }
+    } else {
         qDebug("illegal t1 key %d", t1);
-        break;
     }
+
     // add suffixed naturals, if any
     if (suffixNaturals) {
-        xo += qAbs(t1);                   // skip accidentals
-        if (t1 > 0) {                     // after sharps, add a little more space
-            xo += 0.15;
-            // if last sharp (t1) is above next natural (t1+1)...
-            if (lines[t1] < lines[t1 + 1]) {
-                xo += 0.2;                // ... add more space
-            }
-        }
         for (int i = 0; i < 7; ++i) {
             if (naturals & (1 << i)) {
-                addLayout(SymId::accidentalNatural, xo, lines[i + coffset]);
-                xo += 1.0;
+                addLayout(SymId::accidentalNatural, lines[i + coffset]);
             }
         }
     }
@@ -331,9 +316,9 @@ void KeySig::draw(mu::draw::Painter* painter) const
     for (const KeySym& ks: _sig.keySymbols()) {
         drawSymbol(ks.sym, painter, PointF(ks.pos.x(), ks.pos.y()));
     }
-    if (!parent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
+    if (!explicitParent() && (isAtonal() || isCustom()) && _sig.keySymbols().empty()) {
         // empty custom or atonal key signature - draw something for palette
-        painter->setPen(Qt::gray);
+        painter->setPen(engravingConfiguration()->formattingMarksColor());
         drawSymbol(SymId::timeSigX, painter, PointF(symWidth(SymId::timeSigX) * -0.5, 2.0 * spatium()));
     }
 }
@@ -351,7 +336,7 @@ bool KeySig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* KeySig::drop(EditData& data)
+EngravingItem* KeySig::drop(EditData& data)
 {
     KeySig* ks = toKeySig(data.dropElement);
     if (ks->type() != ElementType::KEYSIG) {
@@ -391,53 +376,33 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
 {
-    xml.stag(this);
-    Element::writeProperties(xml);
+    xml.startObject(this);
+    EngravingItem::writeProperties(xml);
     if (_sig.isAtonal()) {
         xml.tag("custom", 1);
     } else if (_sig.custom()) {
         xml.tag("custom", 1);
         for (const KeySym& ks : _sig.keySymbols()) {
-            xml.stag("KeySym");
-            xml.tag("sym", Sym::id2name(ks.sym));
+            xml.startObject("KeySym");
+            xml.tag("sym", SymNames::nameForSymId(ks.sym));
             xml.tag("pos", ks.spos);
-            xml.etag();
+            xml.endObject();
         }
     } else {
         xml.tag("accidental", int(_sig.key()));
     }
-    switch (_sig.mode()) {
-    case KeyMode::NONE:       xml.tag("mode", "none");
-        break;
-    case KeyMode::MAJOR:      xml.tag("mode", "major");
-        break;
-    case KeyMode::MINOR:      xml.tag("mode", "minor");
-        break;
-    case KeyMode::DORIAN:     xml.tag("mode", "dorian");
-        break;
-    case KeyMode::PHRYGIAN:   xml.tag("mode", "phrygian");
-        break;
-    case KeyMode::LYDIAN:     xml.tag("mode", "lydian");
-        break;
-    case KeyMode::MIXOLYDIAN: xml.tag("mode", "mixolydian");
-        break;
-    case KeyMode::AEOLIAN:    xml.tag("mode", "aeolian");
-        break;
-    case KeyMode::IONIAN:     xml.tag("mode", "ionian");
-        break;
-    case KeyMode::LOCRIAN:    xml.tag("mode", "locrian");
-        break;
-    case KeyMode::UNKNOWN:
-    default:
-        ;
+
+    if (_sig.mode() != KeyMode::UNKNOWN) {
+        xml.tag("mode", TConv::toXml(_sig.mode()));
     }
+
     if (!_showCourtesy) {
         xml.tag("showCourtesySig", _showCourtesy);
     }
     if (forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -460,13 +425,14 @@ void KeySig::read(XmlReader& e)
                     bool valid;
                     SymId id = SymId(val.toInt(&valid));
                     if (!valid) {
-                        id = Sym::name2id(val);
+                        id = SymNames::symIdByName(val);
                     }
                     if (score()->mscVersion() <= 114) {
                         if (valid) {
                             id = KeySig::convertFromOldId(val.toInt(&valid));
-                        } else {
-                            id = Sym::oldName2id(val);
+                        }
+                        if (!valid) {
+                            id = SymNames::symIdByOldName(val);
                         }
                     }
                     ks.sym = id;
@@ -517,7 +483,7 @@ void KeySig::read(XmlReader& e)
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
             setForInstrumentChange(e.readBool());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -654,7 +620,7 @@ void KeySig::undoSetMode(KeyMode v)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant KeySig::getProperty(Pid propertyId) const
+PropertyValue KeySig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::KEY:
@@ -664,7 +630,7 @@ QVariant KeySig::getProperty(Pid propertyId) const
     case Pid::KEYSIG_MODE:
         return int(mode());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -672,7 +638,7 @@ QVariant KeySig::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool KeySig::setProperty(Pid propertyId, const QVariant& v)
+bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::KEY:
@@ -692,9 +658,10 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
             return false;
         }
         setMode(KeyMode(v.toInt()));
+        staff()->setKey(tick(), keySigEvent());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -708,7 +675,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant KeySig::propertyDefault(Pid id) const
+PropertyValue KeySig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::KEY:
@@ -718,7 +685,7 @@ QVariant KeySig::propertyDefault(Pid id) const
     case Pid::KEYSIG_MODE:
         return int(KeyMode::UNKNOWN);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -726,7 +693,7 @@ QVariant KeySig::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::nextSegmentElement()
+EngravingItem* KeySig::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -735,7 +702,7 @@ Element* KeySig::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::prevSegmentElement()
+EngravingItem* KeySig::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -748,13 +715,13 @@ QString KeySig::accessibleInfo() const
 {
     QString keySigType;
     if (isAtonal()) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
+        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
     } else if (isCustom()) {
-        return QObject::tr("%1: Custom").arg(Element::accessibleInfo());
+        return QObject::tr("%1: Custom").arg(EngravingItem::accessibleInfo());
     }
 
     if (key() == Key::C) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
+        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
     }
     int keyInt = static_cast<int>(key());
     if (keyInt < 0) {
@@ -762,6 +729,6 @@ QString KeySig::accessibleInfo() const
     } else {
         keySigType = qtrc("MuseScore", keyNames[(keyInt - 1) * 2]);
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), keySigType);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

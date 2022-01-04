@@ -21,10 +21,18 @@
  */
 
 #include "editstringdata.h"
+
+#include <QKeyEvent>
+
+#include "translation.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetnavigationfix.h"
 #include "editpitch.h"
-#include "widgetstatestore.h"
+
+static const int OPEN_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   EditStringData
@@ -56,6 +64,10 @@ EditStringData::EditStringData(QWidget* parent, QList<Ms::instrString>* strings,
             QTableWidgetItem* newCheck = new QTableWidgetItem();
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
+
+            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Open"));
+            newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
+
             stringList->setItem(i, 0, newCheck);
             QTableWidgetItem* newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
             stringList->setItem(i, 1, newPitch);
@@ -68,17 +80,30 @@ EditStringData::EditStringData(QWidget* parent, QList<Ms::instrString>* strings,
         deleteString->setEnabled(false);
     }
 
+    connect(stringList, &QTableWidget::itemChanged, this, [this](QTableWidgetItem* item){
+        if (item->column() == 0) {
+            item->setData(Qt::AccessibleTextRole, openColumnAccessibleText(item));
+        }
+    });
+
     _frets = frets;
     numOfFrets->setValue(*_frets);
 
-    connect(deleteString, SIGNAL(clicked()), SLOT(deleteStringClicked()));
-    connect(editString,   SIGNAL(clicked()), SLOT(editStringClicked()));
-    connect(newString,    SIGNAL(clicked()), SLOT(newStringClicked()));
-    connect(stringList,   SIGNAL(doubleClicked(QModelIndex)),     SLOT(editStringClicked()));
-    connect(stringList,   SIGNAL(itemClicked(QTableWidgetItem*)), SLOT(listItemClicked(QTableWidgetItem*)));
+    connect(deleteString, &QPushButton::clicked, this, &EditStringData::deleteStringClicked);
+    connect(editString,   &QPushButton::clicked, this, &EditStringData::editStringClicked);
+    connect(newString,    &QPushButton::clicked, this, &EditStringData::newStringClicked);
+
+    connect(stringList,   &QTableWidget::itemClicked,       this, &EditStringData::listItemClicked);
+    connect(stringList,   &QTableWidget::itemDoubleClicked, this, &EditStringData::editStringClicked);
+
     _modified = false;
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+
+    qApp->installEventFilter(this);
 }
 
 EditStringData::~EditStringData()
@@ -93,6 +118,28 @@ void EditStringData::hideEvent(QHideEvent* ev)
 {
     WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(ev);
+}
+
+bool EditStringData::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent
+            && WidgetNavigationFix::fixNavigationForTableWidget(
+                new WidgetNavigationFix::NavigationChain { stringList, newString, buttonBox },
+                keyEvent->key())) {
+            return true;
+        }
+    }
+
+    return QDialog::eventFilter(obj, event);
+}
+
+QString EditStringData::openColumnAccessibleText(const QTableWidgetItem* item) const
+{
+    QString accessibleText = item->data(OPEN_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+                             + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
+    return accessibleText;
 }
 
 //---------------------------------------------------------
@@ -167,16 +214,21 @@ void EditStringData::newStringClicked()
         if (i <= 0) {
             i = stringList->rowCount();
         }
+
         // insert in local string list and in dlg list control
         Ms::instrString strg = { newCode, 0 };
         _stringsLoc.insert(i, strg);
         stringList->insertRow(i);
+
         QTableWidgetItem* newCheck = new QTableWidgetItem();
         newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
         newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
+        newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
         stringList->setItem(i, 0, newCheck);
+
         QTableWidgetItem* newPitch = new QTableWidgetItem(midiCodeToStr(strg.pitch));
         stringList->setItem(i, 1, newPitch);
+
         // select last added item and ensure buttons are active
         stringList->setCurrentCell(i, 1);
         editString->setEnabled(true);

@@ -23,6 +23,7 @@
 #define MU_INSPECTOR_ABSTRACTINSPECTORPROXYMODEL_H
 
 #include "models/abstractinspectormodel.h"
+#include "models/iinspectormodelcreator.h"
 
 #include <QHash>
 
@@ -31,24 +32,50 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-public:
-    explicit AbstractInspectorProxyModel(QObject* parent);
+    Q_PROPERTY(bool isMultiModel READ isMultiModel NOTIFY modelsChanged)
+    Q_PROPERTY(QVariantList models READ models NOTIFY modelsChanged)
+    Q_PROPERTY(QObject * firstModel READ firstModel NOTIFY modelsChanged)
 
-    Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
+    Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
+
+    INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
+
+public:
+    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
+
+    bool isMultiModel() const;
+    QVariantList models() const;
+    QObject* firstModel() const;
+
+    InspectorModelType defaultSubModelType() const;
+
+    Q_INVOKABLE QObject* modelByType(InspectorModelType type) const;
+
+    QList<AbstractInspectorModel*> modelList() const;
 
     void createProperties() override {}
-    void requestElements() override {}
     void loadProperties() override {}
     void resetProperties() override {}
 
+    void requestElements() override;
     void requestResetToDefaults() override;
-    bool hasAcceptableElements() const override;
+    bool isEmpty() const override;
+
+    void updateModels(const ElementKeySet& newElementKeySet);
+
+public slots:
+    void setDefaultSubModelType(InspectorModelType modelType);
+
+signals:
+    void modelsChanged();
+    void defaultSubModelTypeChanged();
 
 protected:
-    void addModel(AbstractInspectorModel* model);
+    void setModels(const QList<AbstractInspectorModel*>& models);
 
 private:
-    QHash<int, AbstractInspectorModel*> m_modelsHash;
+    QHash<InspectorModelType, AbstractInspectorModel*> m_modelsHash;
+    InspectorModelType m_defaultSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
 }
 

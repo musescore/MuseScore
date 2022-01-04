@@ -21,10 +21,12 @@
  */
 
 #include "fingering.h"
+
+#include "rw/xml.h"
+
 #include "score.h"
 #include "staff.h"
 #include "undo.h"
-#include "xml.h"
 #include "chord.h"
 #include "part.h"
 #include "measure.h"
@@ -46,18 +48,18 @@ static const ElementStyle fingeringStyle {
 
 //---------------------------------------------------------
 //   Fingering
-//      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+//      EngravingItem(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
-    : TextBase(s, tid, ef)
+Fingering::Fingering(Note* parent, TextStyleType tid, ElementFlags ef)
+    : TextBase(ElementType::FINGERING, parent, tid, ef)
 {
-    setPlacement(Placement::ABOVE);
+    setPlacement(PlacementV::ABOVE);
     initElementStyle(&fingeringStyle);
 }
 
-Fingering::Fingering(Score* s, ElementFlags ef)
-    : Fingering(s, Tid::FINGERING, ef)
+Fingering::Fingering(Note* parent, ElementFlags ef)
+    : Fingering(parent, TextStyleType::FINGERING, ef)
 {
 }
 
@@ -67,10 +69,10 @@ Fingering::Fingering(Score* s, ElementFlags ef)
 
 ElementType Fingering::layoutType()
 {
-    switch (tid()) {
-    case Tid::FINGERING:
-    case Tid::RH_GUITAR_FINGERING:
-    case Tid::STRING_NUMBER:
+    switch (textStyleType()) {
+    case TextStyleType::FINGERING:
+    case TextStyleType::RH_GUITAR_FINGERING:
+    case TextStyleType::STRING_NUMBER:
         return ElementType::CHORD;
     default:
         return ElementType::NOTE;
@@ -81,11 +83,11 @@ ElementType Fingering::layoutType()
 //   calculatePlacement
 //---------------------------------------------------------
 
-Placement Fingering::calculatePlacement() const
+PlacementV Fingering::calculatePlacement() const
 {
     Note* n = note();
     if (!n) {
-        return Placement::ABOVE;
+        return PlacementV::ABOVE;
     }
     Chord* chord = n->chord();
     Staff* staff = chord->staff();
@@ -93,7 +95,7 @@ Placement Fingering::calculatePlacement() const
     int nstaves  = part->nstaves();
     bool voices  = chord->measure()->hasVoices(staff->idx(), chord->tick(), chord->actualTicks());
     bool below   = voices ? !chord->up() : (nstaves > 1) && (staff->rstaff() == nstaves - 1);
-    return below ? Placement::BELOW : Placement::ABOVE;
+    return below ? PlacementV::BELOW : PlacementV::ABOVE;
 }
 
 //---------------------------------------------------------
@@ -102,8 +104,8 @@ Placement Fingering::calculatePlacement() const
 
 void Fingering::layout()
 {
-    if (parent()) {
-        Fraction tick = parent()->tick();
+    if (explicitParent()) {
+        Fraction tick = parentItem()->tick();
         const Staff* st = staff();
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
             setbbox(RectF());
@@ -118,7 +120,7 @@ void Fingering::layout()
         Note* n      = note();
         Chord* chord = n->chord();
         bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
-        bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && tid() != Tid::STRING_NUMBER;
+        bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && textStyleType() != TextStyleType::STRING_NUMBER;
 
         qreal headWidth = n->bboxRightPos();
 
@@ -218,7 +220,7 @@ void Fingering::layout()
                     rypos() += yd;
                 }
             }
-        } else if (tid() == Tid::LH_GUITAR_FINGERING) {
+        } else if (textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             qreal left = n->shape().left();
             if (left - n->x() > 0.0) {
@@ -248,14 +250,23 @@ void Fingering::draw(mu::draw::Painter* painter) const
     TextBase::draw(painter);
 }
 
+bool Fingering::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    return TextBase::edit(ed);
+}
+
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
 QString Fingering::accessibleInfo() const
 {
-    QString rez = Element::accessibleInfo();
-    if (tid() == Tid::STRING_NUMBER) {
+    QString rez = EngravingItem::accessibleInfo();
+    if (textStyleType() == TextStyleType::STRING_NUMBER) {
         rez += " " + QObject::tr("String number");
     }
     return QString("%1: %2").arg(rez, plainText());
@@ -265,13 +276,13 @@ QString Fingering::accessibleInfo() const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Fingering::propertyDefault(Pid id) const
+engraving::PropertyValue Fingering::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return int(calculatePlacement());
-    case Pid::SUB_STYLE:
-        return int(Tid::FINGERING);
+        return calculatePlacement();
+    case Pid::TEXT_STYLE:
+        return TextStyleType::FINGERING;
     default:
         return TextBase::propertyDefault(id);
     }

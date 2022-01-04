@@ -31,6 +31,11 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using namespace mu::framework;
 
+static QString defaultPartTitle()
+{
+    return mu::qtrc("notation", "Part");
+}
+
 PartListModel::PartListModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))
 {
@@ -47,9 +52,12 @@ void PartListModel::load()
         return;
     }
 
-    m_notations << masterNotation->notation();
     for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
-        m_notations << excerpt->notation();
+        m_excerpts << excerpt;
+    }
+
+    for (IExcerptNotationPtr excerpt : masterNotation->potentialExcerpts()) {
+        m_excerpts << excerpt;
     }
 
     endResetModel();
@@ -61,69 +69,23 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    INotationPtr notation = m_notations[index.row()];
+    IExcerptNotationPtr excerpt = m_excerpts[index.row()];
 
     switch (role) {
     case RoleTitle:
-        return notation->metaInfo().title;
+        return excerpt->title();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
-    case RoleIsMain:
-        return isMainNotation(notation);
-    case RoleVoicesVisibility:
-        return voicesVisibility(notation);
-    case RoleVoicesTitle:
-        return formatVoicesTitle(notation);
+    case RoleIsCreated:
+        return excerpt->isCreated();
     }
 
     return QVariant();
 }
 
-bool PartListModel::isMainNotation(INotationPtr notation) const
-{
-    return notation == masterNotation()->notation();
-}
-
-QString PartListModel::formatVoicesTitle(INotationPtr notation) const
-{
-    QVariantList voicesVisibility = this->voicesVisibility(notation);
-    QStringList voices;
-
-    for (int voiceIndex = 0; voiceIndex < voicesVisibility.size(); ++voiceIndex) {
-        bool visible = voicesVisibility[voiceIndex].toBool();
-
-        if (visible) {
-            voices << QString::number(voiceIndex + 1);
-        }
-    }
-
-    if (voices.isEmpty()) {
-        return qtrc("notation", "None");
-    } else if (voices.size() == voicesVisibility.size()) {
-        return qtrc("notation", "All");
-    }
-
-    return voices.join(", ");
-}
-
-QVariantList PartListModel::voicesVisibility(INotationPtr notation) const
-{
-    QVariantList visibility;
-
-    if (!notation) {
-        return visibility;
-    }
-
-    for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
-        visibility << notation->parts()->voiceVisible(voiceIndex);
-    }
-
-    return visibility;
-}
-
 int PartListModel::rowCount(const QModelIndex&) const
 {
-    return m_notations.size();
+    return m_excerpts.size();
 }
 
 QHash<int, QByteArray> PartListModel::roleNames() const
@@ -131,9 +93,7 @@ QHash<int, QByteArray> PartListModel::roleNames() const
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
         { RoleIsSelected, "isSelected" },
-        { RoleIsMain, "isMain" },
-        { RoleVoicesVisibility, "voicesVisibility" },
-        { RoleVoicesTitle, "voicesTitle" }
+        { RoleIsCreated, "isCreated" }
     };
 
     return roles;
@@ -150,8 +110,8 @@ bool PartListModel::isRemovingAvailable() const
         return false;
     }
 
-    for (int index : selectedRows()) {
-        if (isMainNotation(m_notations[index])) {
+    for (int index : m_selectionModel->selectedRows()) {
+        if (!m_excerpts[index]->isCreated()) {
             return false;
         }
     }
@@ -161,40 +121,27 @@ bool PartListModel::isRemovingAvailable() const
 
 void PartListModel::createNewPart()
 {
-    Meta meta;
-    meta.title = qtrc("notation", "Part");
+    IExcerptNotationPtr excerpt = masterNotation()->newExcerptBlankNotation();
 
-    INotationPtr notation = notationCreator()->newExcerptNotation()->notation();
-
-    notation->setMetaInfo(meta);
-
-    int index = m_notations.size();
-    insertNotation(index, notation);
+    int index = m_excerpts.size();
+    insertExcerpt(index, excerpt);
 }
 
 void PartListModel::selectPart(int partIndex)
 {
-    if (!isNotationIndexValid(partIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
-    QModelIndexList previousSelectedIndexes = m_selectionModel->selectedIndexes();
     QModelIndex modelIndex = index(partIndex);
     m_selectionModel->select(modelIndex);
-    QModelIndexList newSelectedIndexes = m_selectionModel->selectedIndexes();
 
-    QSet<QModelIndex> indexesToUpdate(previousSelectedIndexes.begin(), previousSelectedIndexes.end());
-    indexesToUpdate = indexesToUpdate.unite(QSet<QModelIndex>(newSelectedIndexes.begin(), newSelectedIndexes.end()));
-    indexesToUpdate << modelIndex;
-
-    for (const QModelIndex& indexToUpdate : indexesToUpdate) {
-        emit dataChanged(indexToUpdate, indexToUpdate);
-    }
+    emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
 }
 
 void PartListModel::removePart(int partIndex)
 {
-    if (!isNotationIndexValid(partIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
@@ -207,48 +154,53 @@ void PartListModel::removePart(int partIndex)
 
 void PartListModel::doRemovePart(int partIndex)
 {
-    if (!isNotationIndexValid(partIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
+    bool isCurrentContation = context()->currentNotation() == m_excerpts[partIndex]->notation();
+
     beginRemoveRows(QModelIndex(), partIndex, partIndex);
-    m_notations[partIndex]->setOpened(false);
-    m_notations.removeAt(partIndex);
+
+    masterNotation()->removeExcerpts({ m_excerpts[partIndex] });
+    m_excerpts.removeAt(partIndex);
+
     endRemoveRows();
+
+    if (isCurrentContation) {
+        context()->setCurrentNotation(context()->currentMasterNotation()->notation());
+    }
 }
 
 void PartListModel::setPartTitle(int partIndex, const QString& title)
 {
-    if (!isNotationIndexValid(partIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
-    INotationPtr notation = m_notations[partIndex];
-    Meta meta = notation->metaInfo();
-
-    if (meta.title == title) {
+    IExcerptNotationPtr excerpt = m_excerpts[partIndex];
+    if (excerpt->title() == title) {
         return;
     }
 
-    meta.title = title;
-    notation->setMetaInfo(meta);
+    excerpt->setTitle(title);
 
     notifyAboutNotationChanged(partIndex);
 }
 
-void PartListModel::setVoiceVisible(int partIndex, int voiceIndex, bool visible)
+void PartListModel::validatePartTitle(int partIndex)
 {
-    if (!isNotationIndexValid(partIndex) || !isVoiceIndexValid(voiceIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
-    INotationPtr notation = m_notations[partIndex];
-
-    if (notation->parts()->voiceVisible(voiceIndex) == visible) {
+    IExcerptNotationPtr excerpt = m_excerpts[partIndex];
+    if (!excerpt->title().isEmpty()) {
         return;
     }
 
-    notation->parts()->setVoiceVisible(voiceIndex, visible);
+    excerpt->setTitle(defaultPartTitle());
+
     notifyAboutNotationChanged(partIndex);
 }
 
@@ -260,23 +212,23 @@ void PartListModel::notifyAboutNotationChanged(int index)
 
 void PartListModel::copyPart(int partIndex)
 {
-    if (!isNotationIndexValid(partIndex)) {
+    if (!isExcerptIndexValid(partIndex)) {
         return;
     }
 
-    INotationPtr copy = m_notations[partIndex]->clone();
-    Meta meta = copy->metaInfo();
-    meta.title += qtrc("notation", " (copy)");
+    IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
+    QString title = copy->title();
+    title += qtrc("notation", " (copy)");
 
-    copy->setMetaInfo(meta);
+    copy->setTitle(title);
 
-    insertNotation(partIndex + 1, copy);
+    insertExcerpt(partIndex + 1, copy);
 }
 
-void PartListModel::insertNotation(int destinationIndex, INotationPtr notation)
+void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt)
 {
     beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
-    m_notations.insert(destinationIndex, notation);
+    m_excerpts.insert(destinationIndex, excerpt);
     endInsertRows();
 
     emit partAdded(destinationIndex);
@@ -285,7 +237,7 @@ void PartListModel::insertNotation(int destinationIndex, INotationPtr notation)
 
 void PartListModel::removeSelectedParts()
 {
-    QList<int> rows = selectedRows();
+    QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
     }
@@ -294,14 +246,14 @@ void PartListModel::removeSelectedParts()
         return;
     }
 
-    QList<INotationPtr> notationsToRemove;
+    QList<IExcerptNotationPtr> excerptsToRemove;
 
     for (int row : rows) {
-        notationsToRemove.push_back(m_notations[row]);
+        excerptsToRemove.push_back(m_excerpts[row]);
     }
 
-    for (INotationPtr notation : notationsToRemove) {
-        int row = m_notations.indexOf(notation);
+    for (IExcerptNotationPtr excerpt : excerptsToRemove) {
+        int row = m_excerpts.indexOf(excerpt);
         doRemovePart(row);
     }
 
@@ -317,56 +269,34 @@ bool PartListModel::userAgreesToRemoveParts(int partCount) const
         IInteractive::Button::Yes, IInteractive::Button::No
     });
 
-    return result.standartButton() == IInteractive::Button::Yes;
+    return result.standardButton() == IInteractive::Button::Yes;
 }
 
 void PartListModel::openSelectedParts()
 {
-    QList<int> rows = selectedRows();
+    QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
     }
 
-    for (int row : rows) {
-        m_notations[row]->setOpened(true);
-    }
+    std::sort(rows.begin(), rows.end());
 
-    m_currentNotation = m_notations[rows.last()];
-}
-
-QList<int> PartListModel::selectedRows() const
-{
-    QList<int> result;
-
-    for (const QModelIndex& index: m_selectionModel->selectedIndexes()) {
-        result << index.row();
-    }
-
-    return result;
-}
-
-void PartListModel::apply()
-{
     ExcerptNotationList newExcerpts;
-
-    for (INotationPtr notation : m_notations) {
-        IExcerptNotationPtr excerpt = std::dynamic_pointer_cast<IExcerptNotation>(notation);
-
-        if (excerpt) {
-            newExcerpts.push_back(excerpt);
-        }
+    for (int index : rows) {
+        newExcerpts.push_back(m_excerpts[index]);
     }
 
-    masterNotation()->setExcerpts(newExcerpts);
+    masterNotation()->addExcerpts(newExcerpts);
 
-    if (m_currentNotation) {
-        context()->setCurrentNotation(m_currentNotation);
+    for (int index : rows) {
+        m_excerpts[index]->notation()->setOpened(true);
     }
+    context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
 }
 
-bool PartListModel::isNotationIndexValid(int index) const
+bool PartListModel::isExcerptIndexValid(int index) const
 {
-    return index >= 0 && index < m_notations.size();
+    return index >= 0 && index < m_excerpts.size();
 }
 
 IMasterNotationPtr PartListModel::masterNotation() const

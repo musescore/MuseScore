@@ -31,7 +31,7 @@ Rectangle {
 
     property NavigationSection navigationSection: null
 
-    height: 30
+    height: 26
     visible: notationsView.count > 0
     color: ui.theme.backgroundSecondaryColor
 
@@ -52,15 +52,24 @@ Rectangle {
         notationSwitchModel.load()
     }
 
+    NavigationPanel {
+        id: navPanel
+        name: "NotationViewTabs"
+        enabled: root.enabled && root.visible
+        section: root.navigationSection
+        direction: NavigationPanel.Horizontal
+        order: 1
+    }
+
     RadioButtonGroup {
         id: notationsView
 
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.margins: 1
 
         width: Math.min(contentWidth, parent.width)
+        clip: true
 
         model: notationSwitchModel
         currentIndex: 0
@@ -71,29 +80,19 @@ Rectangle {
         delegate: NotationSwitchButton {
             id: button
 
-            property NavigationPanel navigationPanel: NavigationPanel {
-                name: "NotationView" + model.index
-                section: root.navigationSection
-                order: 1 + model.index
-
-                onNavigationEvent: {
-                    event.accepted = true;
-                }
-            }
-
-            navigation.name: "NotationTab" + model.index
-            navigation.panel: button.navigationPanel
+            navigation.name: "NotationTab" + index
+            navigation.panel: navPanel
             navigation.row: 1
-            navigation.column: 1
+            navigation.column: index + 1
 
-            title: model.title
+            text: model.title
             needSave: model.needSave
 
             ButtonGroup.group: notationsView.radioButtonGroup
-            checked: model.index === notationsView.currentIndex
+            checked: index === notationsView.currentIndex
 
             function resolveNextNotationIndex() {
-                var nextIndex = model.index - 1
+                var nextIndex = index - 1
                 if (nextIndex < 0) {
                     return 0
                 }
@@ -102,18 +101,18 @@ Rectangle {
             }
 
             onToggled: {
-                notationSwitchModel.setCurrentNotation(model.index)
+                notationSwitchModel.setCurrentNotation(index)
             }
 
             onCloseRequested: {
-                if (model.index !== notationsView.currentIndex) {
-                    notationSwitchModel.closeNotation(model.index)
+                if (index !== notationsView.currentIndex) {
+                    notationSwitchModel.closeNotation(index)
                     return
                 }
 
-                var index = button.resolveNextNotationIndex()
-                notationSwitchModel.closeNotation(model.index)
-                notationSwitchModel.setCurrentNotation(index)
+                var nextIndex = button.resolveNextNotationIndex()
+                notationSwitchModel.setCurrentNotation(nextIndex)
+                notationSwitchModel.closeNotation(index)
             }
         }
     }

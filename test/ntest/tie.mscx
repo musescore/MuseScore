@@ -96,12 +96,12 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <subtype>Title</subtype>
           <text>tie</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <subtype>Subtitle</subtype>
           <text>test tie layout</text>
           </Text>

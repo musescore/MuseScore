@@ -26,7 +26,7 @@
 #include "fraction.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class InputState;
 class Score;
 class Chord;
@@ -40,7 +40,7 @@ class Measure;
 enum class SegmentType;
 
 namespace PluginAPI {
-class Element;
+class EngravingItem;
 class Measure;
 class Segment;
 class Score;
@@ -88,14 +88,14 @@ class Cursor : public QObject
     /** Key signature of current staff at tick pos. (read only) */
     Q_PROPERTY(int keySignature READ qmlKeySignature)
     /** Associated score */
-    Q_PROPERTY(Ms::PluginAPI::Score* score READ score WRITE setScore)
+    Q_PROPERTY(Ms::PluginAPI::Score * score READ score WRITE setScore)
 
     /** Current element at track, read only */
-    Q_PROPERTY(Ms::PluginAPI::Element* element READ element)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * element READ element)
     /** Current segment, read only */
-    Q_PROPERTY(Ms::PluginAPI::Segment* segment READ qmlSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * segment READ qmlSegment)
     /** Current measure, read only */
-    Q_PROPERTY(Ms::PluginAPI::Measure* measure READ measure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * measure READ measure)
     /**
      * A physical string number where this cursor currently at. This is useful
      * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
@@ -138,7 +138,7 @@ private:
     void prevInTrack();
     void nextInTrack();
     void setScore(Ms::Score* s);
-    Ms::Element* currentElement() const;
+    Ms::EngravingItem* currentElement() const;
 
     InputState& inputState();
     const InputState& inputState() const { return const_cast<Cursor*>(this)->inputState(); }
@@ -172,7 +172,7 @@ public:
     InputStateMode inputStateMode() const { return _inputStateMode; }
     void setInputStateMode(InputStateMode val);
 
-    Element* element() const;
+    EngravingItem* element() const;
     Segment* qmlSegment() const;
     Measure* measure() const;
 
@@ -189,7 +189,7 @@ public:
     Q_INVOKABLE bool next();
     Q_INVOKABLE bool nextMeasure();
     Q_INVOKABLE bool prev();
-    Q_INVOKABLE void add(Ms::PluginAPI::Element*);
+    Q_INVOKABLE void add(Ms::PluginAPI::EngravingItem*);
 
     Q_INVOKABLE void addNote(int pitch, bool addToChord = false);
     Q_INVOKABLE void addRest();

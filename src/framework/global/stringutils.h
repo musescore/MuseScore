@@ -26,10 +26,10 @@
 #include <vector>
 #include <sstream>
 
-namespace mu {
-namespace strings {
+namespace mu::strings {
 bool replace(std::string& source, const std::string& what, const std::string& to);
 void split(const std::string& str, std::vector<std::string>& out, const std::string& delim);
+std::string join(const std::vector<std::string>& strs, const std::string& sep = ",");
 
 void ltrim(std::string& s);
 void rtrim(std::string& s);
@@ -37,6 +37,7 @@ void trim(std::string& s);
 
 std::string toLower(const std::string& source);
 bool endsWith(const std::string& str, const std::string& end);
+std::string leftJustified(const std::string& val, size_t width);
 
 // Locale-independent version of std::to_string
 template<typename T>
@@ -46,7 +47,6 @@ std::string toString(const T& t)
     oss.imbue(std::locale::classic());
     oss << t;
     return oss.str();
-}
 }
 }
 

@@ -27,14 +27,14 @@
 #include "ipopupwindow.h"
 
 #include "modularity/ioc.h"
-#include "ui/imainwindow.h"
+#include "ui/iinteractiveprovider.h"
 
 namespace mu::uicomponents {
-class PopupWindow_QQuickView : public QObject, public IPopupWindow
+class PopupWindow_QQuickView : public IPopupWindow
 {
     Q_OBJECT
 
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
+    INJECT(uicomponents, ui::IInteractiveProvider, interactiveProvider)
 
 public:
     explicit PopupWindow_QQuickView(QObject* parent = nullptr);
@@ -45,11 +45,18 @@ public:
     void setContent(QQuickItem* item) override;
 
     void show(QPoint p) override;
-    void hide() override;
+    void close() override;
+    void raise() override;
+    void setPosition(QPoint p) override;
 
     QWindow* qWindow() const override;
     bool isVisible() const override;
     QRect geometry() const override;
+
+    QWindow* parentWindow() const override;
+    void setParentWindow(QWindow* window) override;
+
+    void setPosition(const QPoint& position) const override;
 
     void forceActiveFocus() override;
 
@@ -61,6 +68,8 @@ private:
 
     QQuickView* m_view = nullptr;
     std::function<void()> m_onHidden;
+
+    QWindow* m_parentWindow = nullptr;
 };
 }
 #endif // POPUPWINDOW_QQUICKVIEW_H

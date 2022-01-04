@@ -32,6 +32,7 @@ StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
     setTitle(qtrc("inspector", "Staff type changes"));
+    setIcon(ui::IconCode::Code::STAFF_TYPE_CHANGE);
     createProperties();
 }
 
@@ -39,8 +40,8 @@ void StaffTypeSettingsModel::createProperties()
 {
     m_isSmall = buildPropertyItem(Ms::Pid::SMALL);
     m_verticalOffset = buildPropertyItem(Ms::Pid::STAFF_YOFFSET);
-    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 
     m_lineCount = buildPropertyItem(Ms::Pid::STAFF_LINES); // int
@@ -66,13 +67,13 @@ void StaffTypeSettingsModel::requestElements()
 void StaffTypeSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_isSmall);
     loadPropertyItem(m_verticalOffset, formatDoubleFunc);
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_lineCount);

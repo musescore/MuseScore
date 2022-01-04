@@ -25,7 +25,6 @@
 #include "staff.h"
 #include "chordlist.h"
 #include "harmony.h"
-#include "fraction.h"
 #include "segment.h"
 #include "chordrest.h"
 
@@ -426,6 +425,9 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
         if (!(omit & (1 << 5))) {
             ret.insert(step2pitchInterval(5, -1) + RANK_MULT * RANK_3RD, tpcInterval(rootTpc, 5, -1));         //dim5
         }
+        if (!(omit & (1 << 7)) && quality == "half-diminished") {
+            ret.insert(step2pitchInterval(7, -1) + RANK_MULT * RANK_7TH, tpcInterval(rootTpc, 7, -1));           //min7
+        }
         alt5 = true;
     } else { //major or dominant
         if (!(omit & (1 << 3))) {
@@ -466,6 +468,8 @@ RealizedHarmony::PitchMap RealizedHarmony::getIntervals(int rootTpc, bool litera
                 ret.insert(11 + RANK_MULT * RANK_7TH, tpcInterval(rootTpc, 7, 0));
             } else if (quality == "diminished") {
                 ret.insert(9 + RANK_MULT * RANK_7TH, tpcInterval(rootTpc, 7, -2));
+            } else if (quality == "half-diminished") {
+                // 7th note already added when handling chord quality
             } else {         //dominant or augmented or minor
                 ret.insert(10 + RANK_MULT * RANK_7TH, tpcInterval(rootTpc, 7, -1));
             }

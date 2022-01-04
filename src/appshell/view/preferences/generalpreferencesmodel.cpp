@@ -41,14 +41,18 @@ void GeneralPreferencesModel::load()
         emit languagesChanged(languages());
     });
 
-    telemetryConfiguration()->isTelemetryAllowed().ch.onReceive(this, [this](bool) {
-        emit isTelemetryAllowedChanged(isTelemetryAllowed());
+    projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
+        emit autoSaveEnabledChanged(enabled);
+    });
+
+    projectConfiguration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
+        emit autoSaveIntervalChanged(minutes);
     });
 }
 
 void GeneralPreferencesModel::openUpdateTranslationsPage()
 {
-    interactive()->open("musescore://home?item=add-ons&subItem=languages");
+    interactive()->open("musescore://home?section=add-ons&subSection=languages");
 }
 
 QVariantList GeneralPreferencesModel::languages() const
@@ -82,19 +86,25 @@ QString GeneralPreferencesModel::currentLanguageCode() const
     return languagesConfiguration()->currentLanguageCode().val;
 }
 
-bool GeneralPreferencesModel::isTelemetryAllowed() const
+QStringList GeneralPreferencesModel::keyboardLayouts() const
 {
-    return telemetryConfiguration()->isTelemetryAllowed().val;
+    NOT_IMPLEMENTED;
+    return { "US-QWERTY", "UK-QWERTY", "QWERTZ", "AZERTY" };
 }
 
-bool GeneralPreferencesModel::isAutoSave() const
+QString GeneralPreferencesModel::currentKeyboardLayout() const
 {
-    return false;
+    return shortcutsConfiguration()->currentKeyboardLayout();
 }
 
-int GeneralPreferencesModel::autoSavePeriod() const
+bool GeneralPreferencesModel::isAutoSaveEnabled() const
 {
-    return 0;
+    return projectConfiguration()->isAutoSaveEnabled();
+}
+
+int GeneralPreferencesModel::autoSaveInterval() const
+{
+    return projectConfiguration()->autoSaveIntervalMinutes();
 }
 
 bool GeneralPreferencesModel::isOSCRemoteControl() const
@@ -107,7 +117,7 @@ int GeneralPreferencesModel::oscPort() const
     return 0;
 }
 
-void GeneralPreferencesModel::setCurrentLanguageCode(QString currentLanguageCode)
+void GeneralPreferencesModel::setCurrentLanguageCode(const QString& currentLanguageCode)
 {
     if (currentLanguageCode == this->currentLanguageCode()) {
         return;
@@ -117,26 +127,34 @@ void GeneralPreferencesModel::setCurrentLanguageCode(QString currentLanguageCode
     emit currentLanguageCodeChanged(currentLanguageCode);
 }
 
-void GeneralPreferencesModel::setIsTelemetryAllowed(bool isTelemetryAllowed)
+void GeneralPreferencesModel::setCurrentKeyboardLayout(const QString& keyboardLayout)
 {
-    if (isTelemetryAllowed == this->isTelemetryAllowed()) {
+    if (keyboardLayout == this->currentKeyboardLayout()) {
         return;
     }
 
-    telemetryConfiguration()->setIsTelemetryAllowed(isTelemetryAllowed);
-    emit isTelemetryAllowedChanged(isTelemetryAllowed);
+    shortcutsConfiguration()->setCurrentKeyboardLayout(keyboardLayout);
+    emit currentKeyboardLayoutChanged();
 }
 
-void GeneralPreferencesModel::setIsAutoSave(bool isAutoSave)
+void GeneralPreferencesModel::setAutoSaveEnabled(bool enabled)
 {
-    NOT_IMPLEMENTED;
-    emit isAutoSaveChanged(isAutoSave);
+    if (enabled == isAutoSaveEnabled()) {
+        return;
+    }
+
+    projectConfiguration()->setAutoSaveEnabled(enabled);
+    emit autoSaveEnabledChanged(enabled);
 }
 
-void GeneralPreferencesModel::setAutoSavePeriod(int autoSavePeriod)
+void GeneralPreferencesModel::setAutoSaveInterval(int minutes)
 {
-    NOT_IMPLEMENTED;
-    emit autoSavePeriodChanged(autoSavePeriod);
+    if (minutes == autoSaveInterval()) {
+        return;
+    }
+
+    projectConfiguration()->setAutoSaveInterval(minutes);
+    emit autoSaveIntervalChanged(minutes);
 }
 
 void GeneralPreferencesModel::setIsOSCRemoteControl(bool isOSCRemoteControl)

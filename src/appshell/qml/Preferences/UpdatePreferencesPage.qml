@@ -25,6 +25,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 PreferencesPage {
     id: root
 
@@ -33,35 +35,23 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        width: parent.width
+        spacing: root.sectionsSpacing
 
-        spacing: 18
+        AutomaticUpdateSection {
+            isAppUpdatable: updateModel.isAppUpdatable()
+            needCheckForNewAppVersion: updateModel.needCheckForNewAppVersion
+            needCheckForNewExtensionsVersion: updateModel.needCheckForNewExtensionsVersion
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "Automatic Update Check")
-            font: ui.theme.bodyBoldFont
-        }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-        CheckBox {
-            text: qsTrc("appshell", "Check for new version of MuseScore")
-
-            visible: updateModel.isAppUpdatable()
-            checked: updateModel.needCheckForNewAppVersion
-
-            onClicked: {
-                updateModel.needCheckForNewAppVersion = !checked
+            onNeedCheckForNewAppVersionChangeRequested: function(check) {
+                updateModel.needCheckForNewAppVersion = check
             }
-        }
 
-        CheckBox {
-            width: 200
-
-            text: qsTrc("appshell", "Check for new version of MuseScore extensions")
-
-            checked: updateModel.needCheckForNewExtensionsVersion
-
-            onClicked: {
-                updateModel.needCheckForNewExtensionsVersion = !checked
+            onNeedCheckForNewExtensionsVersionChangeRequested: function(check) {
+                updateModel.needCheckForNewExtensionsVersion = check
             }
         }
     }

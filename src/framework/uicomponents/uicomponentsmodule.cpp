@@ -31,6 +31,7 @@
 #include "view/dialogview.h"
 #include "view/filepickermodel.h"
 #include "view/itemmultiselectionmodel.h"
+#include "view/textinputfieldmodel.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -78,6 +79,8 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<DialogView>("MuseScore.UiComponents", 1, 0, "DialogView");
     qmlRegisterType<FilePickerModel>("MuseScore.UiComponents", 1, 0, "FilePickerModel");
     qmlRegisterType<ItemMultiSelectionModel>("MuseScore.UiComponents", 1, 0, "ItemMultiSelectionModel");
+
+    qmlRegisterType<TextInputFieldModel>("MuseScore.UiComponents", 1, 0, "TextInputFieldModel");
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

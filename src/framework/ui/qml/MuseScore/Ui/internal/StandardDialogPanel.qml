@@ -42,8 +42,8 @@ Rectangle {
     property var buttons: []
     property int defaultButtonId: 0
 
-    property var contentWidth: Math.max(textContent.contentWidth, buttons.width)
-    property var contentHeight: content.contentHeight
+    property real contentWidth: Math.max(textContent.contentWidth, buttons.width)
+    property real contentHeight: content.contentHeight
 
     property alias navigation: navPanel
 
@@ -95,6 +95,7 @@ Rectangle {
         id: navPanel
         name: "StandardDialog"
         order: 1
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Horizontal
         accessible.role: MUAccessible.Dialog
         accessible.name: root.standardName(root.type)
@@ -108,7 +109,7 @@ Rectangle {
         accessibleParent: navPanel.accessible
         visualItem: root
         role: MUAccessible.Information
-        name: root.title + " " + root.text + "" + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
+        name: root.title + " " + root.text + " " + root.firstFocusBtn().text + " " + qsTrc("global", "Button")
     }
 
     ColumnLayout {

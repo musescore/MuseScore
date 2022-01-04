@@ -35,7 +35,7 @@ static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "
 void ImagesExportConfiguration::init()
 {
     settings()->setDefaultValue(EXPORT_PNG_DPI_RESOLUTION_KEY, Val(Ms::DPI));
-    settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(true));
+    settings()->setDefaultValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(false));
     settings()->setDefaultValue(EXPORT_PDF_DPI_RESOLUTION_KEY, Val(Ms::DPI));
 }
 
@@ -75,7 +75,7 @@ void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool trans
 
 int ImagesExportConfiguration::trimMarginPixelSize() const
 {
-    return m_trimMarginPixelSize ? m_trimMarginPixelSize.value() : 0;
+    return m_trimMarginPixelSize ? m_trimMarginPixelSize.value() : -1;
 }
 
 void ImagesExportConfiguration::setTrimMarginPixelSize(std::optional<int> pixelSize)

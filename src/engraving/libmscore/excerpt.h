@@ -25,7 +25,8 @@
 
 #include <QMultiMap>
 
-#include "fraction.h"
+#include "types/fraction.h"
+#include "mscore.h"
 
 namespace Ms {
 class MasterScore;
@@ -35,6 +36,7 @@ class Measure;
 class XmlWriter;
 class Staff;
 class XmlReader;
+class EngravingItem;
 
 //---------------------------------------------------------
 //   @@ Excerpt
@@ -59,7 +61,7 @@ public:
     const QList<Part*>& parts() const { return _parts; }
     bool containsPart(const Part* part) const;
 
-    void removePart(const QString& id);
+    void removePart(const ID& id);
 
     void setParts(const QList<Part*>& p) { _parts = p; }
 
@@ -67,7 +69,7 @@ public:
     bool isEmpty() const;
 
     QMultiMap<int, int>& tracks() { return _tracks; }
-    void setTracks(const QMultiMap<int, int>& t) { _tracks = t; }
+    void setTracks(const QMultiMap<int, int>& tracks);
 
     MasterScore* oscore() const { return _oscore; }
     Score* partScore() const { return _partScore; }
@@ -81,17 +83,21 @@ public:
     QString title() const { return _title; }
     void setTitle(const QString& s) { _title = s; }
 
+    void updateTracks();
+
+    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
+
     static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 
     static void createExcerpt(Excerpt*);
-    static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, QMultiMap<int, int>& allTracks);
+    static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, const QMultiMap<int, int>& allTracks);
+    static void cloneMeasures(Score* oscore, Score* score);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
     static void cloneStaff2(Staff* ostaff, Staff* nstaff, const Fraction& startTick, const Fraction& endTick);
 
 private:
     static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
-    static void processLinkedClone(Element* ne, Score* score, int strack);
 };
 }     // namespace Ms
 #endif

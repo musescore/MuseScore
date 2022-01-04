@@ -32,7 +32,7 @@
 #include "interval.h"
 #include "clef.h"
 
-#include "framework/midi_old/event.h"
+#include "compat/midi/event.h"
 
 namespace Ms {
 class InstrumentTemplate;
@@ -213,7 +213,7 @@ public:
     void write(XmlWriter&, const Part* part) const;
     void read(XmlReader&, Part* part);
     void updateInitList() const;
-    bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
+    bool operator==(const Channel& c) const { return (_name == c._name) && (_channel == c._channel); }
 
     void addListener(ChannelListener* l);
     void removeListener(ChannelListener* l);
@@ -277,6 +277,30 @@ public:
 };
 
 //---------------------------------------------------------
+//   Trait
+//---------------------------------------------------------
+
+enum class TraitType
+{
+    Unknown,
+    Tuning,
+    Transposition,
+    Course
+};
+
+struct Trait
+{
+    QString name;
+
+    TraitType type = TraitType::Unknown;
+
+    bool isDefault = false;
+    bool isHiddenOnScore = false;
+
+    bool isValid() const { return !name.isEmpty(); }
+};
+
+//---------------------------------------------------------
 //   Instrument
 //---------------------------------------------------------
 
@@ -287,12 +311,15 @@ class Instrument
     QString _trackName;
     QString _id;
 
-    char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+    char _minPitchA = 0;
+    char _maxPitchA = 0;
+    char _minPitchP = 0;
+    char _maxPitchP = 0;
     Interval _transpose;
     QString _instrumentId;
 
-    bool _useDrumset;
-    Drumset* _drumset;
+    bool _useDrumset = false;
+    Drumset* _drumset = nullptr;
     StringData _stringData;
 
     QList<NamedEventList> _midiActions;
@@ -300,12 +327,13 @@ class Instrument
     QList<Channel*> _channel;        // at least one entry
     QList<ClefTypeList> _clefType;
 
-    bool _singleNoteDynamics;
+    bool _singleNoteDynamics = false;
+
+    Trait _trait;
 
 public:
-    Instrument(QString id="");
+    Instrument(QString id = "");
     Instrument(const Instrument&);
-    void operator=(const Instrument&);
     ~Instrument();
 
     void read(XmlReader&, Part* part);
@@ -320,10 +348,13 @@ public:
     QString recognizeInstrumentId() const;
     int recognizeMidiProgram() const;
 
+    void operator=(const Instrument&);
     bool operator==(const Instrument&) const;
+    bool operator!=(const Instrument&) const;
+
     bool isDifferentInstrument(const Instrument& i) const;
 
-    QString getId() const { return _id; }
+    QString id() const { return _id; }
     void setId(const QString& id) { _id = id; }
     void setMinPitchP(int v) { _minPitchP = v; }
     void setMaxPitchP(int v) { _maxPitchP = v; }
@@ -384,6 +415,9 @@ public:
     QString name() const;
     QString abbreviature() const;
     static Instrument fromTemplate(const InstrumentTemplate* t);
+
+    Trait trait() const;
+    void setTrait(const Trait& trait);
 
     void updateInstrumentId();
 

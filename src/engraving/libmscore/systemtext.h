@@ -33,14 +33,13 @@ namespace Ms {
 class SystemText final : public StaffTextBase
 {
     void layout() override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    SystemText(Score* = 0, Tid = Tid::SYSTEM);
+    SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM);
 
     SystemText* clone() const override { return new SystemText(*this); }
-    ElementType type() const override { return ElementType::SYSTEM_TEXT; }
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 };
 }     // namespace Ms
 #endif

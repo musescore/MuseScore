@@ -52,8 +52,6 @@ private:
         OrderRole
     };
 
-    void onActionsStateChanges(const actions::ActionCodeList& codes) override;
-
     INotationPtr notation() const;
 
     void onNotationChanged();
@@ -69,13 +67,14 @@ private:
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
+    void updateTupletState();
+    void updateAddState();
 
     bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
-    bool isTupletChooseAction(const actions::ActionCode& actionCode) const;
 
     ui::UiAction currentNoteInputModeAction() const;
 
-    ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section);
+    ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section, const ui::MenuItemList& subitems = {});
     ui::MenuItem makeAddItem(const QString& section);
 
     QVariantList subitems(const actions::ActionCode& actionCode) const;
@@ -91,9 +90,6 @@ private:
 
     bool isMenuSecondary(const actions::ActionCode& actionCode) const;
 
-    void notifyAboutTupletItemChanged();
-    void notifyAboutAddItemChanged();
-
     int findNoteInputModeItemIndex() const;
 
     INotationNoteInputPtr noteInput() const;
@@ -105,12 +101,12 @@ private:
     std::set<SymbolId> resolveCurrentArticulations() const;
     bool resolveRestSelected() const;
     DurationType resolveCurrentDurationType() const;
-    bool resolveSlurSelected() const;
+    bool resolveTupletEnabled() const;
 
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;
 
-    const ChordRest* elementToChordRest(const Element* element) const;
+    const ChordRest* elementToChordRest(const EngravingItem* element) const;
 };
 }
 

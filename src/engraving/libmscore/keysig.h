@@ -24,10 +24,13 @@
 #define __KEYSIG_H__
 
 #include "key.h"
-#include "element.h"
+#include "engravingitem.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
-class Sym;
 class Segment;
 
 //---------------------------------------------------------------------------------------
@@ -37,30 +40,33 @@ class Segment;
 //   @P showCourtesy  bool  show courtesy key signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
-class KeySig final : public Element
+class KeySig final : public EngravingItem
 {
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;
-    void addLayout(SymId sym, qreal x, int y);
+
+    friend class mu::engraving::Factory;
+    KeySig(Segment* = 0);
+    KeySig(const KeySig&);
+
+    void addLayout(SymId sym, int y);
 
 public:
-    KeySig(Score* = 0);
-    KeySig(const KeySig&);
 
     KeySig* clone() const override { return new KeySig(*this); }
     void draw(mu::draw::Painter*) const override;
-    ElementType type() const override { return ElementType::KEYSIG; }
+
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     qreal mag() const override;
 
     //@ sets the key of the key signature
     Q_INVOKABLE void setKey(Key);
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return parent() ? (Measure*)parent()->parent() : nullptr; }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return explicitParent() ? (Measure*)explicitParent()->explicitParent() : nullptr; }
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
     //@ returns the key of the key signature (from -7 (flats) to +7 (sharps) )
@@ -86,12 +92,12 @@ public:
     void setForInstrumentChange(bool forInstrumentChange) { _sig.setForInstrumentChange(forInstrumentChange); }
     bool forInstrumentChange() const { return _sig.forInstrumentChange(); }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 
     SymId convertFromOldId(int val) const;

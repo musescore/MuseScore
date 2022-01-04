@@ -21,28 +21,28 @@
  */
 
 #include "stafftypechange.h"
+#include "rw/xml.h"
 #include "score.h"
-#include "mscore.h"
-#include "xml.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   StaffTypeChange
 //---------------------------------------------------------
 
-StaffTypeChange::StaffTypeChange(Score* score)
-    : Element(score, ElementFlag::HAS_TAG)
+StaffTypeChange::StaffTypeChange(MeasureBase* parent)
+    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
 {
     lw = spatium() * 0.3;
 }
 
 StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
-    : Element(lb)
+    : EngravingItem(lb)
 {
     lw = lb.lw;
 }
@@ -53,12 +53,12 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
 
 void StaffTypeChange::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     if (_staffType) {
         _staffType->write(xml);
     }
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -74,7 +74,7 @@ void StaffTypeChange::read(XmlReader& e)
             st->read(e);
             // Measure::add() will replace this with a pointer to a copy in the staff
             _staffType = st;
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -121,7 +121,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     qreal w  = _spatium * 2.5;
     qreal lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
-    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
@@ -140,7 +140,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     qreal startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;
@@ -152,7 +152,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::getProperty(Pid propertyId) const
+PropertyValue StaffTypeChange::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::STEP_OFFSET:
@@ -178,15 +178,15 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
     case Pid::MAG:
         return _staffType->userMag();
     case Pid::SMALL:
-        return _staffType->small();
+        return _staffType->isSmall();
     case Pid::STAFF_INVISIBLE:
         return _staffType->invisible();
     case Pid::STAFF_COLOR:
-        return _staffType->color();
+        return PropertyValue::fromValue(_staffType->color());
     case Pid::STAFF_YOFFSET:
         return _staffType->yoffset();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -194,7 +194,7 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
+bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::STEP_OFFSET:
@@ -216,7 +216,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
         _staffType->setStemless(v.toBool());
         break;
     case Pid::HEAD_SCHEME:
-        _staffType->setNoteHeadScheme(NoteHead::Scheme(v.toInt()));
+        _staffType->setNoteHeadScheme(v.value<NoteHeadScheme>());
         break;
     case Pid::STAFF_GEN_CLEF:
         _staffType->setGenClef(v.toBool());
@@ -249,18 +249,18 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
         _staffType->setInvisible(v.toBool());
         break;
     case Pid::STAFF_COLOR:
-        _staffType->setColor(v.value<QColor>());
+        _staffType->setColor(v.value<mu::draw::Color>());
         break;
     case Pid::STAFF_YOFFSET:
         _staffType->setYoffset(v.value<Spatium>());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
     }
-    if (parent()) {
+    if (explicitParent()) {
         staff()->staffTypeListChanged(measure()->tick());
     }
     return true;
@@ -270,7 +270,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffTypeChange::propertyDefault(Pid id) const
+PropertyValue StaffTypeChange::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::STEP_OFFSET:
@@ -286,7 +286,7 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_STEMLESS:
         return false;
     case Pid::HEAD_SCHEME:
-        return int(NoteHead::Scheme::HEAD_NORMAL);
+        return NoteHeadScheme::HEAD_NORMAL;
     case Pid::STAFF_GEN_CLEF:
         return true;
     case Pid::STAFF_GEN_TIMESIG:
@@ -300,11 +300,11 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return false;
     case Pid::STAFF_COLOR:
-        return QColor(Qt::black);
+        return PropertyValue::fromValue(engravingConfiguration()->defaultColor());
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

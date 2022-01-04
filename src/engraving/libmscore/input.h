@@ -30,7 +30,7 @@
 #include "beam.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Slur;
 class ChordRest;
 class Drumset;
@@ -52,21 +52,27 @@ enum class NoteEntryMethod : char {
 
 class InputState
 {
-    TDuration _duration    { TDuration::DurationType::V_INVALID };      // currently duration
-    int _drumNote    { -1 };
-    int _track       { 0 };
-    int _prevTrack   { 0 };                                 // used for navigation
-    Segment* _lastSegment { 0 };
-    Segment* _segment     { 0 };                            // current segment
-    int _string      { VISUAL_STRING_NONE };                // visual string selected for input (TAB staves only)
-    bool _rest               { false };                // rest mode
-    NoteType _noteType       { NoteType::NORMAL };
-    Beam::Mode _beamMode       { Beam::Mode::AUTO };
-    bool _noteEntryMode      { false };
+    int _track     { 0 };
+    int _prevTrack { 0 }; // used for navigation
+
+    int _drumNote { -1 };
+    int _string   { VISUAL_INVALID_STRING_INDEX }; // visual string selected for input (TAB staves only)
+
+    Segment* _lastSegment = nullptr;
+    Segment* _segment = nullptr; // current segment
+
+    bool _noteEntryMode { false };
     NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
+
+    TDuration _duration { DurationType::V_INVALID }; // currently duration
+    bool _rest { false }; // rest mode
+
+    NoteType _noteType { NoteType::NORMAL };
+    BeamMode _beamMode { BeamMode::AUTO };
+
     AccidentalType _accidentalType { AccidentalType::NONE };
-    Slur* _slur              { 0 };
-    bool _insertMode         { false };
+    Slur* _slur = nullptr;
+    bool _insertMode { false };
 
     std::set<SymId> _articulationIds;
 
@@ -110,8 +116,8 @@ public:
     NoteType noteType() const { return _noteType; }
     void setNoteType(NoteType t) { _noteType = t; }
 
-    Beam::Mode beamMode() const { return _beamMode; }
-    void setBeamMode(Beam::Mode m) { _beamMode = m; }
+    BeamMode beamMode() const { return _beamMode; }
+    void setBeamMode(BeamMode m) { _beamMode = m; }
 
     bool noteEntryMode() const { return _noteEntryMode; }
     void setNoteEntryMode(bool v) { _noteEntryMode = v; }
@@ -133,13 +139,13 @@ public:
     void setInsertMode(bool val) { _insertMode = val; }
 
     void update(Selection& selection);
-    void moveInputPos(Element* e);
+    void moveInputPos(EngravingItem* e);
     void moveToNextInputPos();
     bool endOfScore() const;
 
     // TODO: unify with Selection::cr()?
-    static Note* note(Element*);
-    static ChordRest* chordRest(Element*);
+    static Note* note(EngravingItem*);
+    static ChordRest* chordRest(EngravingItem*);
 };
 }     // namespace Ms
 #endif

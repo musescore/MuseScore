@@ -41,13 +41,13 @@ public:
 
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
+    virtual void resetCurrentBackgroundColorToDefault() = 0;
 
     virtual io::path backgroundWallpaperPath() const = 0;
     virtual void setBackgroundWallpaperPath(const io::path& path) = 0;
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
-
     virtual async::Notification backgroundChanged() const = 0;
 
     virtual QColor foregroundColor() const = 0;
@@ -58,7 +58,6 @@ public:
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
-
     virtual async::Notification foregroundChanged() const = 0;
 
     virtual io::path wallpapersDefaultDirPath() const = 0;
@@ -73,10 +72,6 @@ public:
     virtual int cursorOpacity() const = 0;
 
     virtual QColor selectionColor(int voiceIndex = 0) const = 0;
-    virtual void setSelectionColor(int voiceIndex, const QColor& color) = 0;
-    virtual async::Channel<int> selectionColorChanged() = 0;
-
-    virtual QColor layoutBreakColor() const = 0;
 
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proxymity) = 0;
@@ -123,8 +118,8 @@ public:
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
 
-    virtual float guiScaling() const = 0;
-    virtual float notationScaling() const = 0;
+    virtual double guiScaling() const = 0;
+    virtual double notationScaling() const = 0;
 
     virtual std::string notationRevision() const = 0;
     virtual int notationDivision() const = 0;
@@ -134,6 +129,7 @@ public:
 
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
+    virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
     virtual bool colorNotesOusideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOusideOfUsablePitchRange(bool value) = 0;
@@ -146,6 +142,24 @@ public:
 
     virtual void setTemplateModeEnalbed(bool enabled) = 0;
     virtual void setTestModeEnabled(bool enabled) = 0;
+
+    virtual io::paths instrumentListPaths() const = 0;
+    virtual async::Notification instrumentListPathsChanged() const = 0;
+
+    virtual io::paths userInstrumentListPaths() const = 0;
+    virtual void setUserInstrumentListPaths(const io::paths& paths) = 0;
+
+    virtual io::paths scoreOrderListPaths() const = 0;
+    virtual async::Notification scoreOrderListPathsChanged() const = 0;
+
+    virtual io::paths userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
+
+    virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
+    virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;
+
+    virtual int gridSizeSpatium(framework::Orientation gridOrientation) const = 0;
+    virtual void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) = 0;
 };
 }
 

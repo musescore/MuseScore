@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
-#include "draw/geometry.h"
+#include "engraving/infrastructure/draw/geometry.h"
 
 class QColor;
 

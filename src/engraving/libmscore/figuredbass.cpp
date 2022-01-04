@@ -21,6 +21,8 @@
  */
 
 #include "figuredbass.h"
+#include "draw/fontmetrics.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "note.h"
 #include "measure.h"
@@ -30,14 +32,9 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
-#include "xml.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
-
-// trying to do without it
-//#include <QQmlEngine>
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -76,8 +73,8 @@ static QList<FiguredBassFont> g_FBFonts;
 const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
-FiguredBassItem::FiguredBassItem(Score* s, int l)
-    : Element(s), ord(l)
+FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
+    : EngravingItem(ElementType::INVALID, parent), ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
@@ -87,7 +84,7 @@ FiguredBassItem::FiguredBassItem(Score* s, int l)
 }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
-    : Element(item)
+    : EngravingItem(item)
 {
     ord         = item.ord;
     _prefix     = item._prefix;
@@ -441,7 +438,7 @@ QString FiguredBassItem::normalizedText() const
 
 void FiguredBassItem::write(XmlWriter& xml) const
 {
-    xml.stag("FiguredBassItem", this);
+    xml.startObject("FiguredBassItem", this);
     xml.tagE(QString("brackets b0=\"%1\" b1=\"%2\" b2=\"%3\" b3=\"%4\" b4=\"%5\"")
              .arg(int(parenth[0])).arg(int(parenth[1])).arg(int(parenth[2])).arg(int(parenth[3])).arg(int(parenth[4])));
     if (_prefix != Modifier::NONE) {
@@ -456,7 +453,7 @@ void FiguredBassItem::write(XmlWriter& xml) const
     if (_contLine != ContLine::NONE) {
         xml.tag("continuationLine", int(_contLine));
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -483,7 +480,7 @@ void FiguredBassItem::read(XmlReader& e)
             _suffix = (Modifier)(e.readInt());
         } else if (tag == "continuationLine") {
             _contLine = (ContLine)(e.readInt());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -684,7 +681,7 @@ void FiguredBassItem::draw(mu::draw::Painter* painter) const
 //   PROPERTY METHODS
 //---------------------------------------------------------
 
-QVariant FiguredBassItem::getProperty(Pid propertyId) const
+PropertyValue FiguredBassItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::FBPREFIX:
@@ -706,11 +703,11 @@ QVariant FiguredBassItem::getProperty(Pid propertyId) const
     case Pid::FBPARENTHESIS5:
         return int(parenth[4]);
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
-bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
+bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     int val = v.toInt();
@@ -767,13 +764,13 @@ bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
         parenth[4] = (Parenthesis)val;
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayoutAll();
     return true;
 }
 
-QVariant FiguredBassItem::propertyDefault(Pid id) const
+PropertyValue FiguredBassItem::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::FBPREFIX:
@@ -784,7 +781,7 @@ QVariant FiguredBassItem::propertyDefault(Pid id) const
     case Pid::FBCONTINUATIONLINE:
         return false;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -915,58 +912,6 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 }
 
 //---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FiguredBassItem state based on the MusicXML <figure> node de.
-// In MusicXML, parentheses is set to "yes" or "no" for the figured-bass
-// node instead of for each individual <figure> node.
-//---------------------------------------------------------
-
-#if 0
-void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
-{
-    // read the <figure> node de
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "figure-number") {
-            // MusicXML spec states figure-number is a number
-            // MuseScore can only handle single digit
-            int iVal = e.readInt();
-            if (1 <= iVal && iVal <= 9) {
-                _digit = iVal;
-            }
-        } else if (tag == "prefix") {
-            _prefix = MusicXML2Modifier(e.readElementText());
-        } else if (tag == "suffix") {
-            _suffix = MusicXML2Modifier(e.readElementText());
-        } else {
-            e.unknown();
-        }
-    }
-    // set parentheses
-    if (paren) {
-        // parenthesis open
-        if (_prefix != Modifier::NONE) {
-            parenth[0] = Parenthesis::ROUNDOPEN;       // before prefix
-        } else if (_digit != FBIDigitNone) {
-            parenth[1] = Parenthesis::ROUNDOPEN;       // before digit
-        } else if (_suffix != Modifier::NONE) {
-            parenth[2] = Parenthesis::ROUNDOPEN;       // before suffix
-        }
-        // parenthesis close
-        if (_suffix != Modifier::NONE) {
-            parenth[3] = Parenthesis::ROUNDCLOSED;       // after suffix
-        } else if (_digit != FBIDigitNone) {
-            parenth[2] = Parenthesis::ROUNDCLOSED;       // after digit
-        } else if (_prefix != Modifier::NONE) {
-            parenth[1] = Parenthesis::ROUNDCLOSED;       // after prefix
-        }
-    }
-}
-
-#endif
-
-//---------------------------------------------------------
 //   Write MusicXML
 //
 // Writes the portion within the <figure> tag.
@@ -982,7 +927,7 @@ void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
 
 void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick) const
 {
-    xml.stag("figure");
+    xml.startObject("figure");
 
     // The first figure of each group is the "original" figure. Practically, it is one inserted manually
     // by the user, rather than automatically by the "duration" extend method.
@@ -1025,7 +970,7 @@ void FiguredBassItem::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int c
             xml.tagE("extend type=\"stop\" ");
         }
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1050,15 +995,15 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-FiguredBass::FiguredBass(Score* s)
-    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+FiguredBass::FiguredBass(Segment* parent)
+    : TextBase(ElementType::FIGURED_BASS, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);
     // figured bass inherits from TextBase for layout purposes
     // but there is no specific text style to use as a basis for styled properties
     // (this is true for historical reasons due to the special layout of figured bass)
     // override the styled property definitions
-    for (const StyledProperty& p : *textStyle(tid())) {
+    for (const StyledProperty& p : *textStyle(textStyleType())) {
         setPropertyFlags(p.pid, PropertyFlags::NOSTYLE);
     }
     for (const StyledProperty& p : figuredBassTextStyle) {
@@ -1066,19 +1011,6 @@ FiguredBass::FiguredBass(Score* s)
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
     setOnNote(true);
-#if 0  // TODO
-    TextStyle st(
-        g_FBFonts[0].family,
-        score()->styleD(Sid::figuredBassFontSize),
-        false,
-        false,
-        false,
-        Align::LEFT | Align::TOP,
-        PointF(0, score()->styleD(Sid::figuredBassYOffset)),
-        OffsetType::SPATIUM);
-    st.setSizeIsSpatiumDependent(true);
-    setElementStyle(st);
-#endif
     setTicks(Fraction(0, 1));
     qDeleteAll(items);
     items.clear();
@@ -1117,7 +1049,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
             return p.sid;
         }
     }
-    return Element::getPropertyStyle(id);
+    return EngravingItem::getPropertyStyle(id);
 }
 
 //---------------------------------------------------------
@@ -1129,7 +1061,7 @@ void FiguredBass::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     if (!onNote()) {
         xml.tag("onNote", onNote());
     }
@@ -1149,9 +1081,9 @@ void FiguredBass::write(XmlWriter& xml) const
         for (const StyledProperty& spp : *_elementStyle) {
             writeProperty(xml, spp.pid);
         }
-        Element::writeProperties(xml);
+        EngravingItem::writeProperties(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1169,7 +1101,7 @@ void FiguredBass::read(XmlReader& e)
         } else if (tag == "onNote") {
             setOnNote(e.readInt() != 0l);
         } else if (tag == "FiguredBassItem") {
-            FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
+            FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
             pItem->setTrack(track());
             pItem->setParent(this);
             pItem->read(e);
@@ -1198,17 +1130,6 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
 {
-    // if 'our' style, force 'our' style data from FiguredBass parameters
-#if 0
-    if (textStyleType() == StyledPropertyListIdx::FIGURED_BASS) {
-        TextStyle st(g_FBFonts[0].family, score()->styleD(Sid::figuredBassFontSize),
-                     false, false, false, Align::LEFT | Align::TOP, PointF(0, yOff),
-                     OffsetType::SPATIUM);
-        st.setSizeIsSpatiumDependent(true);
-        setTextStyle(st);
-    }
-#endif
-
     // VERTICAL POSITION:
     const qreal y = score()->styleD(Sid::figuredBassYOffset) * spatium();
     setPos(PointF(0.0, y));
@@ -1217,7 +1138,7 @@ void FiguredBass::layout()
     TextBase::layout1();   // prepare structs and data expected by Text methods
     // if element could be parsed into items, layout each element
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
-    // TODO: consider disabling specific layout in case text style is changed (tid() != Tid::FIGURED_BASS).
+    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (items.size() > 0) {
         layoutLines();
         bbox().setRect(0, 0, _lineLengths.at(0), 0);
@@ -1268,7 +1189,7 @@ void FiguredBass::layoutLines()
             int endTrack = startTrack + VOICES;
             for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
                 for (int t = startTrack; t < endTrack; ++t) {
-                    Element* el = seg->element(t);
+                    EngravingItem* el = seg->element(t);
                     if (el && el->isChordRest()) {
                         lastCR = toChordRest(el);
                         break;
@@ -1351,14 +1272,14 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     if (!score()->printing() && score()->showUnprintable()) {
         for (qreal len : _lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(Qt::lightGray, 3));
+                painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }
     }
     // if in edit mode or with custom style, use standard text drawing
 //      if (editMode() || subStyle() != ElementStyle::FIGURED_BASS)
-//      if (tid() != Tid::FIGURED_BASS)
+//      if (tid() != TextStyleName::FIGURED_BASS)
 //            TextBase::draw(painter);
 //      else
     {                                                        // not edit mode:
@@ -1372,11 +1293,6 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
             }
         }
     }
-/* DEBUG
-      QString str = QString();
-      str.setNum(_ticks);
-      painter->drawText(0, (_onNote ? 40 : 30), str);
-*/
 }
 
 //---------------------------------------------------------
@@ -1391,10 +1307,21 @@ void FiguredBass::startEdit(EditData& ed)
     TextBase::startEdit(ed);
 }
 
+bool FiguredBass::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    if (ed.key == Qt::Key_Semicolon || ed.key == Qt::Key_Colon) {
+        return true;
+    }
+
+    return TextBase::edit(ed);
+}
+
 void FiguredBass::endEdit(EditData& ed)
 {
-    int idx;
-
     TextBase::endEdit(ed);
     // as the standard text editor keeps inserting spurious HTML formatting and styles
     // retrieve and work only on the plain text
@@ -1408,9 +1335,9 @@ void FiguredBass::endEdit(EditData& ed)
     qDeleteAll(items);
     items.clear();
     QString normalizedText = QString();
-    idx = 0;
+    int idx = 0;
     for (QString str : qAsConst(list)) {
-        FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
+        FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
             qDeleteAll(items);
             items.clear();                      // clear item list
@@ -1448,7 +1375,7 @@ void FiguredBass::endEdit(EditData& ed)
 
 void FiguredBass::setSelected(bool flag)
 {
-    Element::setSelected(flag);
+    EngravingItem::setSelected(flag);
     for (FiguredBassItem* item : items) {
         item->setSelected(flag);
     }
@@ -1456,7 +1383,7 @@ void FiguredBass::setSelected(bool flag)
 
 void FiguredBass::setVisible(bool flag)
 {
-    Element::setVisible(flag);
+    EngravingItem::setVisible(flag);
     for (FiguredBassItem* item : items) {
         item->setVisible(flag);
     }
@@ -1485,7 +1412,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
     }
 
     // scan segment annotations for an existing FB element in the this' staff
-    for (Element* e : nextSegm->annotations()) {
+    for (EngravingItem* e : nextSegm->annotations()) {
         if (e->type() == ElementType::FIGURED_BASS && e->track() == track()) {
             return toFiguredBass(e);
         }
@@ -1529,36 +1456,22 @@ qreal FiguredBass::additionalContLineX(qreal pagePosY) const
 //   PROPERTY METHODS
 //---------------------------------------------------------
 
-QVariant FiguredBass::getProperty(Pid propertyId) const
+PropertyValue FiguredBass::getProperty(Pid propertyId) const
 {
     return TextBase::getProperty(propertyId);
 }
 
-bool FiguredBass::setProperty(Pid propertyId, const QVariant& v)
+bool FiguredBass::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
     return TextBase::setProperty(propertyId, v);
 }
 
-QVariant FiguredBass::propertyDefault(Pid id) const
+PropertyValue FiguredBass::propertyDefault(Pid id) const
 {
     return TextBase::propertyDefault(id);
 }
 
-//---------------------------------------------------------
-//   TEMPORARY HACK!!!
-//---------------------------------------------------------
-/*
-FiguredBassItem * FiguredBass::addItem()
-      {
-      int line = items.size();
-      FiguredBassItem* fib = new FiguredBassItem(score(), line);
-      // tell QML not to garbage collect this item
-      QQmlEngine::setObjectOwnership(fib, QQmlEngine::CppOwnership);
-      items.push_back(fib);
-      return fib;
-      }
-*/
 //---------------------------------------------------------
 //   STATIC FUNCTION
 //    adding a new FiguredBass to a Segment;
@@ -1580,7 +1493,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
 
     // scan segment annotations for an existing FB element in the same staff
     FiguredBass* fb = 0;
-    for (Element* e : seg->annotations()) {
+    for (EngravingItem* e : seg->annotations()) {
         if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
             // an FB already exists in segment: re-use it
             fb = toFiguredBass(e);
@@ -1590,7 +1503,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         }
     }
     if (fb == 0) {                            // no FB at segment: create new
-        fb = new FiguredBass(seg->score());
+        fb = new FiguredBass(seg);
         fb->setTrack(track);
         fb->setParent(seg);
 
@@ -1626,7 +1539,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         Segment* prevSegm;
         FiguredBass* prevFB = 0;
         for (prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm; prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
-            for (Element* e : prevSegm->annotations()) {
+            for (EngravingItem* e : prevSegm->annotations()) {
                 if (e->type() == ElementType::FIGURED_BASS && (e->track()) == track) {
                     prevFB = toFiguredBass(e);             // previous FB found
                     break;
@@ -1861,14 +1774,14 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
     if (hasParentheses()) {
         stag += " parentheses=\"yes\"";
     }
-    xml.stag(stag);
+    xml.startObject(stag);
     for (FiguredBassItem* item : items) {
         item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);
     }
     if (writeDuration) {
         xml.tag("duration", ticks().ticks() / divisions);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1887,7 +1800,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
 
 FiguredBass* Score::addFiguredBass()
 {
-    Element* el = selection().element();
+    EngravingItem* el = selection().element();
     if (!el || (!(el->isNote()) && !(el->isRest()) && !(el->isFiguredBass()))) {
         MScore::setError(MsError::NO_NOTE_FIGUREDBASS_SELECTED);
         return 0;

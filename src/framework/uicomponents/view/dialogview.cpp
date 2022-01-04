@@ -44,10 +44,6 @@ bool DialogView::isDialog() const
 
 void DialogView::beforeShow()
 {
-    if (!m_localPos.isNull()) {
-        return;
-    }
-
     QWindow* qMainWindow = mainWindow()->qWindow();
     IF_ASSERT_FAILED(qMainWindow) {
         return;
@@ -58,6 +54,9 @@ void DialogView::beforeShow()
 
     m_globalPos.setX(appRect.x() + (appRect.width() / 2 - dlgRect.width() / 2));
     m_globalPos.setY(appRect.y() + (appRect.height() / 2 - dlgRect.height() / 2) - DIALOG_WINDOW_FRAME_HEIGHT);
+
+    m_globalPos.setX(m_globalPos.x() + m_localPos.x());
+    m_globalPos.setY(m_globalPos.y() + m_localPos.y());
 
     //! NOTE ok will be if they call accept
     setErrCode(Ret::Code::Cancel);
@@ -86,6 +85,13 @@ void DialogView::show()
 void DialogView::hide()
 {
     close();
+}
+
+void DialogView::raise()
+{
+    if (isOpened()) {
+        m_window->raise();
+    }
 }
 
 void DialogView::accept()

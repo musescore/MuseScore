@@ -45,18 +45,18 @@ namespace Ms {
 
 static void tupletAssert()
 {
-    if (!(int(TDuration::DurationType::V_BREVE) == int(TDuration::DurationType::V_LONG) + 1
-          && int(TDuration::DurationType::V_WHOLE) == int(TDuration::DurationType::V_BREVE) + 1
-          && int(TDuration::DurationType::V_HALF) == int(TDuration::DurationType::V_WHOLE) + 1
-          && int(TDuration::DurationType::V_QUARTER) == int(TDuration::DurationType::V_HALF) + 1
-          && int(TDuration::DurationType::V_EIGHTH) == int(TDuration::DurationType::V_QUARTER) + 1
-          && int(TDuration::DurationType::V_16TH) == int(TDuration::DurationType::V_EIGHTH) + 1
-          && int(TDuration::DurationType::V_32ND) == int(TDuration::DurationType::V_16TH) + 1
-          && int(TDuration::DurationType::V_64TH) == int(TDuration::DurationType::V_32ND) + 1
-          && int(TDuration::DurationType::V_128TH) == int(TDuration::DurationType::V_64TH) + 1
-          && int(TDuration::DurationType::V_256TH) == int(TDuration::DurationType::V_128TH) + 1
-          && int(TDuration::DurationType::V_512TH) == int(TDuration::DurationType::V_256TH) + 1
-          && int(TDuration::DurationType::V_1024TH) == int(TDuration::DurationType::V_512TH) + 1
+    if (!(int(DurationType::V_BREVE) == int(DurationType::V_LONG) + 1
+          && int(DurationType::V_WHOLE) == int(DurationType::V_BREVE) + 1
+          && int(DurationType::V_HALF) == int(DurationType::V_WHOLE) + 1
+          && int(DurationType::V_QUARTER) == int(DurationType::V_HALF) + 1
+          && int(DurationType::V_EIGHTH) == int(DurationType::V_QUARTER) + 1
+          && int(DurationType::V_16TH) == int(DurationType::V_EIGHTH) + 1
+          && int(DurationType::V_32ND) == int(DurationType::V_16TH) + 1
+          && int(DurationType::V_64TH) == int(DurationType::V_32ND) + 1
+          && int(DurationType::V_128TH) == int(DurationType::V_64TH) + 1
+          && int(DurationType::V_256TH) == int(DurationType::V_128TH) + 1
+          && int(DurationType::V_512TH) == int(DurationType::V_256TH) + 1
+          && int(DurationType::V_1024TH) == int(DurationType::V_512TH) + 1
           )) {
         qFatal("tupletAssert() failed");
     }
@@ -230,7 +230,7 @@ static Score::FileError doValidate(const QString& name, QIODevice* dev)
 
 static Score::FileError doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
 {
-    // verify tuplet TDuration::DurationType dependencies
+    // verify tuplet DurationType dependencies
     tupletAssert();
 
     // validate the file
@@ -242,7 +242,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
 
     // actually do the import
     res = importMusicXMLfromBuffer(score, name, dev);
-    //qDebug("importMusicXml() return %d", int(res));
+    //qDebug("res %d", static_cast<int>(res));
     return res;
 }
 

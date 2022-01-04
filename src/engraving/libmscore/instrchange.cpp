@@ -21,13 +21,15 @@
  */
 
 #include "instrchange.h"
+
+#include "rw/xml.h"
+
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "part.h"
 #include "undo.h"
 #include "mscore.h"
-#include "xml.h"
 #include "measure.h"
 #include "system.h"
 #include "chord.h"
@@ -49,15 +51,15 @@ static const ElementStyle instrumentChangeStyle {
 //   InstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange::InstrumentChange(Score* s)
-    : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+InstrumentChange::InstrumentChange(EngravingItem* parent)
+    : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     _instrument = new Instrument();
 }
 
-InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-    : TextBase(s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+InstrumentChange::InstrumentChange(const Instrument& i, EngravingItem* parent)
+    : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     _instrument = new Instrument(i);
@@ -95,7 +97,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                 ClefType clefType
                     = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
+                EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
                 score()->undoChangeClef(part->staff(i), element, clefType, true);
             }
         }
@@ -117,7 +119,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // change instrument in all linked scores
-        for (ScoreElement* se : linkList()) {
+        for (EngravingObject* se : linkList()) {
             InstrumentChange* lic = static_cast<InstrumentChange*>(se);
             Instrument* newInstrument = new Instrument(*instrument);
             lic->score()->undo(new ChangeInstrument(lic, newInstrument));
@@ -191,13 +193,13 @@ std::vector<Clef*> InstrumentChange::clefs() const
 
 void InstrumentChange::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     _instrument->write(xml, part());
     if (_init) {
         xml.tag("init", _init);
     }
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -236,11 +238,11 @@ void InstrumentChange::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentChange::propertyDefault(Pid propertyId) const
+engraving::PropertyValue InstrumentChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SUB_STYLE:
-        return int(Tid::INSTRUMENT_CHANGE);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::INSTRUMENT_CHANGE;
     default:
         return TextBase::propertyDefault(propertyId);
     }

@@ -19,55 +19,58 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject gapAbove: undefined
-    property QtObject gapBelow: undefined
+    property PropertyItem gapAbove: null
+    property PropertyItem gapBelow: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: gapBelow.navigationRowEnd
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    function focusOnFirst() {
+        gapAbove.focusOnFirst()
+    }
+
+    SpinBoxPropertyView {
+        id: gapAbove
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Gap above")
-        propertyItem: gapAbove
+        propertyItem: root.gapAbove
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_ABOVE
+        icon: IconCode.GAP_ABOVE
 
-            enabled: gapAbove ? gapAbove.isEnabled : false
-            isIndeterminate: gapAbove && enabled ? gapAbove.isUndefined : false
-            currentValue: gapAbove ? gapAbove.value : 0
-
-            onValueEdited: { gapAbove.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: gapBelow
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Gap below")
-        propertyItem: gapBelow
+        propertyItem: root.gapBelow
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_BELOW
+        icon: IconCode.GAP_BELOW
 
-            enabled: gapBelow ? gapBelow.isEnabled : false
-            isIndeterminate: gapBelow && enabled ? gapBelow.isUndefined : false
-            currentValue: gapBelow ? gapBelow.value : 0
-
-            onValueEdited: { gapBelow.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: gapAbove.navigationRowEnd + 1
     }
 }

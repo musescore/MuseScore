@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
@@ -29,42 +30,76 @@ import "internal"
 PreferencesPage {
     id: root
 
-    contentHeight: content.height
-
     AppearancePreferencesModel {
         id: appearanceModel
     }
 
+    Component.onCompleted: {
+        appearanceModel.init()
+    }
+
     Column {
-        id: content
-
         width: parent.width
-        height: childrenRect.height
-
-        spacing: 24
-
-        readonly property int firstColumnWidth: 212
+        spacing: root.sectionsSpacing
 
         ThemesSection {
             width: parent.width
 
-            themes: appearanceModel.themes
-            currentThemeIndex: appearanceModel.currentThemeIndex
+            themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
+            currentThemeCode: appearanceModel.currentThemeCode
+            highContrastEnabled: appearanceModel.highContrastEnabled
+            accentColors: appearanceModel.accentColors
+            currentAccentColorIndex: appearanceModel.currentAccentColorIndex
 
-            onThemeChangeRequested: {
-                appearanceModel.currentThemeIndex = newThemeIndex
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onThemeChangeRequested: function(newThemeCode) {
+                appearanceModel.currentThemeCode = newThemeCode
+            }
+
+            onHighContrastChangeRequested: function(enabled) {
+                appearanceModel.highContrastEnabled = enabled
+            }
+
+            onAccentColorChangeRequested: function(newColorIndex) {
+                appearanceModel.currentAccentColorIndex = newColorIndex
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+
+            onEnsureContentVisibleRequested: function(contentRect) {
+                root.ensureContentVisibleRequested(contentRect)
             }
         }
 
-        AccentColorsSection {
+        SeparatorLine {
+            visible: uiColorsSection.visible
+        }
+
+        UiColorsSection {
+            id: uiColorsSection
+
             width: parent.width
 
-            colors: appearanceModel.accentColors
-            currentColorIndex: appearanceModel.currentAccentColorIndex
-            firstColumnWidth: parent.firstColumnWidth
+            visible: appearanceModel.highContrastEnabled
 
-            onAccentColorChangeRequested: {
-                appearanceModel.currentAccentColorIndex = newColorIndex
+            navigation.section: root.navigationSection
+            //! NOTE: 3 because ThemesSection have two panels
+            navigation.order: root.navigationOrderStart + 3
+
+            onColorChangeRequested: function(newColor, propertyType) {
+                appearanceModel.setNewColor(newColor, propertyType)
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -74,48 +109,71 @@ PreferencesPage {
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
-            firstColumnWidth: parent.firstColumnWidth
 
-            onFontChangeRequested: {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onFontChangeRequested: function(newFontIndex) {
                 appearanceModel.currentFontIndex = newFontIndex
             }
 
-            onBodyTextSizeChangeRequested: {
+            onBodyTextSizeChangeRequested: function(newBodyTextSize) {
                 appearanceModel.bodyTextSize = newBodyTextSize
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
         SeparatorLine {}
 
         ColorAndWallpaperSection {
+            id: backgroundSettings
+
             width: parent.width
 
             title: qsTrc("appshell", "Background")
-            wallpaperDialogTitle: qsTrc("appshell", "Choose Background Wallpaper")
+            wallpaperDialogTitle: qsTrc("appshell", "Choose background wallpaper")
             useColor: appearanceModel.backgroundUseColor
             color: appearanceModel.backgroundColor
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: parent.firstColumnWidth
 
-            onUseColorChangeRequested: {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onUseColorChangeRequested: function(newValue) {
                 appearanceModel.backgroundUseColor = newValue
             }
 
-            onColorChangeRequested: {
+            onColorChangeRequested: function(newColor) {
                 appearanceModel.backgroundColor = newColor
             }
 
-            onWallpaperPathChangeRequested: {
+            onWallpaperPathChangeRequested: function(newWallpaperPath) {
                 appearanceModel.backgroundWallpaperPath = newWallpaperPath
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
         SeparatorLine {}
 
         ColorAndWallpaperSection {
+            id: paperSettings
+
             width: parent.width
+
+            enabled: !appearanceModel.scoreInversionEnabled
+            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
             wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")
@@ -124,18 +182,49 @@ PreferencesPage {
             wallpaperPath: appearanceModel.foregroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: parent.firstColumnWidth
 
-            onUseColorChangeRequested: {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 6
+
+            onUseColorChangeRequested: function(newValue) {
                 appearanceModel.foregroundUseColor = newValue
             }
 
-            onColorChangeRequested: {
+            onColorChangeRequested: function(newColor) {
                 appearanceModel.foregroundColor = newColor
             }
 
-            onWallpaperPathChangeRequested: {
+            onWallpaperPathChangeRequested: function(newWallpaperPath) {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+        }
+
+        SeparatorLine {}
+
+        ThemeAdditionalOptionsSection {
+            scoreInversionEnabled: appearanceModel.scoreInversionEnabled
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 7
+
+            onResetThemeToDefaultRequested: {
+                appearanceModel.resetThemeToDefault()
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+
+            onScoreInversionEnableChangeRequested: function(enable) {
+                appearanceModel.scoreInversionEnabled = enable
             }
         }
     }

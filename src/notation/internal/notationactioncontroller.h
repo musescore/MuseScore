@@ -28,6 +28,7 @@
 #include "actions/actiontypes.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
+#include "context/iuicontextresolver.h"
 #include "inotation.h"
 #include "iinteractive.h"
 #include "playback/iplaybackcontroller.h"
@@ -39,13 +40,11 @@ class NotationActionController : public actions::Actionable, public async::Async
 {
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(notation, context::IUiContextResolver, uiContextResolver)
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
-
-private:
-    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
 
 public:
     void init();
@@ -71,59 +70,37 @@ private:
     void toggleNoteInput();
     void toggleNoteInputMethod(NoteInputMethod method);
     void addNote(NoteName note, NoteAddingMode addingMode);
-    void addText(TextType type);
-    void addFiguredBass();
     void padNote(const Pad& pad);
     void putNote(const actions::ActionData& data);
-
-    void toggleVisible();
+    void doubleNoteInputDuration();
+    void halveNoteInputDuration();
 
     void toggleAccidental(AccidentalType type);
-    void putRestToSelection();
-    void putRest(DurationType duration);
     void addArticulation(SymbolId articulationSymbolId);
 
+    void putTuplet(const actions::ActionData& data);
+    void putTuplet(const TupletOptions& options);
     void putTuplet(int tupletCount);
-    void addBeamToSelectedChordRests(BeamMode mode);
-    void addBracketsToSelection(BracketsType type);
 
-    void moveAction(const actions::ActionCode& actionCode);
-    void moveChord(MoveDirection direction);
-    void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
+    void move(MoveDirection direction, bool quickly = false);
+    void moveWithinChord(MoveDirection direction);
+    void selectTopOrBottomOfChord(MoveDirection direction);
 
-    void increaseDecreaseDuration(int steps, bool stepByDots);
-
-    void swapVoices(int voiceIndex1, int voiceIndex2);
     void changeVoice(int voiceIndex);
 
     void cutSelection();
-    void copySelection();
-    void deleteSelection();
-    void swapSelection();
-    void flipSelection();
     void addTie();
     void chordTie();
     void addSlur();
-    void addInterval(int interval);
-    void addFret(int fretIndex);
 
-    void undo();
-    void redo();
-
-    void addChordToSelection(MoveDirection direction);
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
     void openSelectionMoreOptions();
-    void selectAll();
-    void selectSection();
-    void firstElement();
-    void lastElement();
 
-    void toggleLayoutBreak(LayoutBreakType breakType);
+    void startEditSelectedElement();
+    void startEditSelectedText();
 
-    void splitMeasure();
-    void joinSelectedMeasures();
     void selectMeasuresCountAndInsert();
     void selectMeasuresCountAndAppend();
 
@@ -133,31 +110,13 @@ private:
     void appendBoxes(BoxType boxType, int count);
     int firstSelectedBoxIndex() const;
 
-    void addOttava(OttavaType type);
-    void addHairpin(HairpinType type);
-    void addAnchoredNoteLine();
-
     void addStretch(qreal value);
 
-    void explodeSelectedStaff();
-    void implodeSelectedStaff();
-    void realizeSelectedChordSymbols();
-    void removeSelectedRange();
-    void removeEmptyTrailingMeasures();
-    void fillSelectionWithSlashes();
-    void replaceSelectedNotesWithSlashes();
-    void spellPitches();
-    void regroupNotesAndRests();
-    void resequenceRehearsalMarks();
     void unrollRepeats();
-    void copyLyrics();
-    void addGraceNotesToSelectedNotes(GraceNoteType type);
 
     void resetState();
     void resetStretch();
-    void resetTextStyleOverrides();
     void resetBeamMode();
-    void resetShapesAndPosition();
 
     void openEditStyleDialog();
     void openPageSettingsDialog();
@@ -167,37 +126,94 @@ private:
     void openTransposeDialog();
     void openPartsDialog();
     void openTupletOtherDialog();
+    void openStaffTextPropertiesDialog();
+    void openMeasurePropertiesDialog();
+    void openEditGridSizeDialog();
+    void openRealizeChordSymbolsDialog();
+    mu::io::path selectStyleFile(bool forLoad);
+    void loadStyle();
+    void saveStyle();
 
     void toggleScoreConfig(ScoreConfigType configType);
-    void toggleNavigator();
-    void toggleMixer();
     void toggleConcertPitch();
 
     void playSelectedElement(bool playChord = true);
 
-    bool isTextEditing() const;
-    bool isNotTextEditing() const;
+    bool isEditingText() const;
+    bool isEditingLyrics() const;
+    bool isNoteInputMode() const;
+    bool isEditingElement() const;
+    bool isNotEditingElement() const;
+    bool isNotNoteInputMode() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
-    FilterElementsOptions elementsFilterOptions(const Element* element) const;
+    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
+
+    bool measureNavigationAvailable() const;
+
+    enum class TextNavigationType {
+        NearNoteOrRest,
+        NearBeat,
+        Fraction
+    };
+
+    bool textNavigationAvailable() const;
+    bool textNavigationByBeatsAvailable() const;
+    bool textNavigationByFractionAvailable() const;
+    bool resolveTextNavigationAvailable(TextNavigationType type = TextNavigationType::NearNoteOrRest) const;
+
+    void nextTextElement();
+    void prevTextElement();
+    void nextBeatTextElement();
+    void prevBeatTextElement();
+    void navigateToTextElement(MoveDirection direction, bool nearNoteOrRest = false);
+    void navigateToTextElementByFraction(const Fraction& fraction);
+    void navigateToTextElementInNearMeasure(MoveDirection direction);
 
     void startNoteInputIfNeed();
 
     bool hasSelection() const;
+    Ms::EngravingItem* selectedElement() const;
+
     bool canUndo() const;
     bool canRedo() const;
     bool isNotationPage() const;
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
-    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerAction(const mu::actions::ActionCode&, std::function<void()>, bool (NotationActionController::*)() const);
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(const actions::ActionData& data),
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(),
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const mu::actions::ActionCode&, std::function<void()>,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
     void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
+
     void registerPadNoteAction(const mu::actions::ActionCode&, Pad padding);
+    void registerTabPadNoteAction(const mu::actions::ActionCode&, Pad padding);
+
+    enum PlayMode {
+        NoPlay, PlayNote, PlayChord
+    };
+
+    void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), bool (NotationActionController::*)() const);
+    void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(), PlayMode = PlayMode::NoPlay,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    template<typename P1>
+    void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, PlayMode = PlayMode::NoPlay,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    template<typename P1>
+    void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1), P1, bool (NotationActionController::*)() const);
+    template<typename P1, typename P2>
+    void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), P1, P2, PlayMode = PlayMode::NoPlay,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
 
     async::Notification m_currentNotationNoteInputChanged;
+    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
 };
 }
 

@@ -14,7 +14,7 @@
    <enum>Qt::NoFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Score Properties</string>
+   <string>Score properties</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -29,6 +29,9 @@
        </property>
        <property name="textInteractionFlags">
         <set>Qt::NoTextInteraction</set>
+       </property>
+       <property name="buddy">
+        <cstring>level</cstring>
        </property>
       </widget>
      </item>
@@ -46,24 +49,24 @@
        <property name="textInteractionFlags">
         <set>Qt::NoTextInteraction</set>
        </property>
+       <property name="buddy">
+        <cstring>version</cstring>
+       </property>
       </widget>
      </item>
      <item row="3" column="3">
-      <widget class="QLabel" name="revision">
+      <widget class="QLineEdit" name="revision">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
        <property name="text">
         <string>No revision</string>
        </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -81,10 +84,13 @@
        <property name="textInteractionFlags">
         <set>Qt::NoTextInteraction</set>
        </property>
+       <property name="buddy">
+        <cstring>filePath</cstring>
+       </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLabel" name="version">
+      <widget class="QLineEdit" name="version">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -97,14 +103,11 @@
        <property name="accessibleDescription">
         <string>The MuseScore version with which this score was last saved.</string>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
        <property name="text">
         <string>No version</string>
        </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -116,10 +119,13 @@
        <property name="textInteractionFlags">
         <set>Qt::NoTextInteraction</set>
        </property>
+       <property name="buddy">
+        <cstring>revision</cstring>
+       </property>
       </widget>
      </item>
      <item row="3" column="5">
-      <widget class="QLabel" name="level">
+      <widget class="QLineEdit" name="level">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -135,19 +141,19 @@
        <property name="toolTip">
         <string>API-Level</string>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
        <property name="text">
         <string>No level</string>
        </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="1" colspan="5">
-      <widget class="QLabel" name="filePath">
+      <widget class="QLineEdit" name="filePath">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -160,24 +166,28 @@
        <property name="accessibleDescription">
         <string>Where this score is saved on your computer.</string>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::Panel</enum>
-       </property>
        <property name="text">
         <string>The score has not been saved yet.</string>
        </property>
-       <property name="textInteractionFlags">
-        <set>Qt::TextSelectableByMouse</set>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="6">
-      <widget class="QToolButton" name="revealButton"/>
+      <widget class="QToolButton" name="revealButton">
+       <property name="accessibleName">
+        <string>Open file path</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
+     <property name="focusPolicy">
+      <enum>Qt::TabFocus</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -267,10 +277,16 @@
   </layout>
  </widget>
  <tabstops>
+  <tabstop>filePath</tabstop>
+  <tabstop>revealButton</tabstop>
+  <tabstop>version</tabstop>
+  <tabstop>revision</tabstop>
+  <tabstop>level</tabstop>
+  <tabstop>scrollArea</tabstop>
   <tabstop>newButton</tabstop>
-  <tabstop>saveButton</tabstop>
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
+  <tabstop>saveButton</tabstop>
  </tabstops>
  <resources/>
  <connections>

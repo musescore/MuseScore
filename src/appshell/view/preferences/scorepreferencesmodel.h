@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "instruments/iinstrumentsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "audio/iaudioconfiguration.h"
 
@@ -36,7 +35,6 @@ class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, instruments::IInstrumentsConfiguration, instrumentsConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 
@@ -51,7 +49,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
 
     bool isShowMIDIControls() const;
 
@@ -66,7 +63,8 @@ private:
         TitleRole = Qt::UserRole + 1,
         PathRole,
         PathFilterRole,
-        ChooseTitleRole
+        ChooseTitleRole,
+        DirectoryRole
     };
 
     enum class DefaultFileType {
@@ -115,6 +113,8 @@ private:
 
     void setPath(DefaultFileType fileType, const QString& path);
     QModelIndex fileIndex(DefaultFileType fileType);
+
+    QString fileDirectory(const QString& filePath) const;
 
     QList<DefaultFileInfo> m_defaultFiles;
 };

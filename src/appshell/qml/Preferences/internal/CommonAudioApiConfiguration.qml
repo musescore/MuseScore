@@ -20,15 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
 Item {
     id: root
 
-    property int firstColumnWidth: 0
+    property int columnWidth: 0
+
+    property NavigationPanel navigation: null
+    property int navigationOrderStart: 0
 
     width: parent.width
     height: content.height
@@ -44,25 +47,35 @@ Item {
 
         ComboBoxWithTitle {
             title: qsTrc("appshell", "Audio device:")
-            titleWidth: root.firstColumnWidth
+            columnWidth: root.columnWidth
 
             currentIndex: apiModel.currentDeviceIndex
             model: apiModel.deviceList()
 
-            onValueEdited: {
+            navigation.name: "AudioDeviceBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart
+
+            onValueEdited: function(newValue) {
                 apiModel.currentDeviceIndex = currentIndex
             }
         }
 
         ComboBoxWithTitle {
+            id: sampleRate
+
             title: qsTrc("appshell", "Sample rate:")
-            titleWidth: root.firstColumnWidth
+            columnWidth: root.columnWidth
 
             currentIndex: apiModel.currentSampleRateIndex
             model: apiModel.sampleRateHzList()
             control.displayText: currentValue
 
-            onValueEdited: {
+            navigation.name: "SampleRateBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart + 1
+
+            onValueEdited: function(newValue) {
                 apiModel.currentSampleRateIndex = currentIndex
             }
         }

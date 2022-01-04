@@ -20,22 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "systemdivider.h"
-#include "xml.h"
+#include "rw/xml.h"
+#include "types/symnames.h"
+
+#include "score.h"
 #include "measure.h"
-#include "sym.h"
 #include "system.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(Score* s)
-    : Symbol(s, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
+SystemDivider::SystemDivider(System* parent)
+    : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
 {
     // default value, but not valid until setDividerType()
     _dividerType = SystemDivider::Type::LEFT;
@@ -62,9 +64,9 @@ void SystemDivider::layout()
     ScoreFont* sf = score()->scoreFont();
 
     if (_dividerType == SystemDivider::Type::LEFT) {
-        sid = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
+        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
     } else {
-        sid = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
+        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
     }
     setSym(sid, sf);
     Symbol::layout();
@@ -101,12 +103,12 @@ mu::RectF SystemDivider::drag(EditData& ed)
 void SystemDivider::write(XmlWriter& xml) const
 {
     if (dividerType() == SystemDivider::Type::LEFT) {
-        xml.stag(this, "type=\"left\"");
+        xml.startObject(this, "type=\"left\"");
     } else {
-        xml.stag(this, "type=\"right\"");
+        xml.startObject(this, "type=\"right\"");
     }
     writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -118,12 +120,12 @@ void SystemDivider::read(XmlReader& e)
     ScoreFont* sf = score()->scoreFont();
     if (e.attribute("type") == "left") {
         _dividerType = SystemDivider::Type::LEFT;
-        SymId sym = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
+        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
         setSym(sym, sf);
         setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
         _dividerType = SystemDivider::Type::RIGHT;
-        SymId sym = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
+        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
         setSym(sym, sf);
         setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
     }

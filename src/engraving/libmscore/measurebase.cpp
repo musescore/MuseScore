@@ -21,6 +21,10 @@
  */
 
 #include "measurebase.h"
+
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "measure.h"
 #include "staff.h"
 #include "score.h"
@@ -30,25 +34,25 @@
 #include "image.h"
 #include "segment.h"
 #include "tempo.h"
-#include "xml.h"
 #include "system.h"
 #include "stafftypechange.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(Score* score)
-    : Element(score)
+MeasureBase::MeasureBase(const ElementType& type, System* system)
+    : EngravingItem(type, system)
 {
     setIrregular(true);
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
-    : Element(m)
+    : EngravingItem(m)
 {
     _next     = m._next;
     _prev     = m._prev;
@@ -56,7 +60,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
     _no       = m._no;
     _noOffset = m._noOffset;
 
-    for (Element* e : m._el) {
+    for (EngravingItem* e : m._el) {
         add(e->clone());
     }
 }
@@ -88,8 +92,8 @@ ElementList MeasureBase::takeElements()
 
 void MeasureBase::setScore(Score* score)
 {
-    Element::setScore(score);
-    for (Element* e : _el) {
+    EngravingItem::setScore(score);
+    for (EngravingItem* e : _el) {
         e->setScore(score);
     }
 }
@@ -105,34 +109,37 @@ MeasureBase::~MeasureBase()
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to MeasureBase
+///   Add new EngravingItem \a el to MeasureBase
 //---------------------------------------------------------
 
-void MeasureBase::add(Element* e)
+void MeasureBase::add(EngravingItem* e)
 {
-    e->setParent(this);
+    if (e->explicitParent() != this) {
+        e->setParent(this);
+    }
+
     if (e->isLayoutBreak()) {
         LayoutBreak* b = toLayoutBreak(e);
         switch (b->layoutBreakType()) {
-        case LayoutBreak::Type::PAGE:
+        case LayoutBreakType::PAGE:
             setPageBreak(true);
             setLineBreak(false);
             setNoBreak(false);
             break;
-        case LayoutBreak::Type::LINE:
+        case LayoutBreakType::LINE:
             setPageBreak(false);
             setLineBreak(true);
             setSectionBreak(false);
             setNoBreak(false);
             break;
-        case LayoutBreak::Type::SECTION:
+        case LayoutBreakType::SECTION:
             setLineBreak(false);
             setSectionBreak(true);
             setNoBreak(false);
             //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
             triggerLayoutAll();
             break;
-        case LayoutBreak::Type:: NOBREAK:
+        case LayoutBreakType:: NOBREAK:
             setPageBreak(false);
             setLineBreak(false);
             setSectionBreak(false);
@@ -150,26 +157,26 @@ void MeasureBase::add(Element* e)
 
 //---------------------------------------------------------
 //   remove
-///   Remove Element \a el from MeasureBase.
+///   Remove EngravingItem \a el from MeasureBase.
 //---------------------------------------------------------
 
-void MeasureBase::remove(Element* el)
+void MeasureBase::remove(EngravingItem* el)
 {
     if (el->isLayoutBreak()) {
         LayoutBreak* lb = toLayoutBreak(el);
         switch (lb->layoutBreakType()) {
-        case LayoutBreak::Type::PAGE:
+        case LayoutBreakType::PAGE:
             setPageBreak(false);
             break;
-        case LayoutBreak::Type::LINE:
+        case LayoutBreakType::LINE:
             setLineBreak(false);
             break;
-        case LayoutBreak::Type::SECTION:
+        case LayoutBreakType::SECTION:
             setSectionBreak(false);
             score()->setPause(endTick(), 0);
             triggerLayoutAll();
             break;
-        case LayoutBreak::Type::NOBREAK:
+        case LayoutBreakType::NOBREAK:
             setNoBreak(false);
             break;
         }
@@ -284,7 +291,7 @@ void MeasureBase::layout()
 {
     int breakCount = 0;
 
-    for (Element* element : _el) {
+    for (EngravingItem* element : _el) {
         if (!score()->tagIsValid(element->tag())) {
             continue;
         }
@@ -293,9 +300,9 @@ void MeasureBase::layout()
             qreal x;
             qreal y;
             if (toLayoutBreak(element)->isNoBreak()) {
-                x = width() + score()->styleP(Sid::barWidth) - element->width() * .5;
+                x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
             } else {
-                x = width() + score()->styleP(Sid::barWidth) - element->width()
+                x = width() + score()->styleMM(Sid::barWidth) - element->width()
                     - breakCount * (element->width() + _spatium * .5);
                 breakCount++;
             }
@@ -315,9 +322,9 @@ void MeasureBase::layout()
 MeasureBase* MeasureBase::top() const
 {
     const MeasureBase* mb = this;
-    while (mb->parent()) {
-        if (mb->parent()->isMeasureBase()) {
-            mb = toMeasureBase(mb->parent());
+    while (mb->explicitParent()) {
+        if (mb->explicitParent()->isMeasureBase()) {
+            mb = toMeasureBase(mb->explicitParent());
         } else {
             break;
         }
@@ -371,7 +378,7 @@ MeasureBase* Score::last()  const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureBase::getProperty(Pid id) const
+PropertyValue MeasureBase::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::REPEAT_END:
@@ -385,7 +392,7 @@ QVariant MeasureBase::getProperty(Pid id) const
     case Pid::IRREGULAR:
         return irregular();
     default:
-        return Element::getProperty(id);
+        return EngravingItem::getProperty(id);
     }
 }
 
@@ -393,7 +400,7 @@ QVariant MeasureBase::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureBase::setProperty(Pid id, const QVariant& value)
+bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
 {
     switch (id) {
     case Pid::REPEAT_END:
@@ -412,7 +419,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
         setIrregular(value.toBool());
         break;
     default:
-        if (!Element::setProperty(id, value)) {
+        if (!EngravingItem::setProperty(id, value)) {
             return false;
         }
         break;
@@ -426,7 +433,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureBase::propertyDefault(Pid propertyId) const
+PropertyValue MeasureBase::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::REPEAT_END:
@@ -436,23 +443,23 @@ QVariant MeasureBase::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
 //   undoSetBreak
 //---------------------------------------------------------
 
-void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
+void MeasureBase::undoSetBreak(bool v, LayoutBreakType type)
 {
     switch (type) {
-    case LayoutBreak::Type::LINE:
+    case LayoutBreakType::LINE:
         if (lineBreak() == v) {
             return;
         }
         setLineBreak(v);
         break;
-    case LayoutBreak::Type::PAGE:
+    case LayoutBreakType::PAGE:
         if (pageBreak() == v) {
             return;
         }
@@ -461,7 +468,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
         }
         setPageBreak(v);
         break;
-    case LayoutBreak::Type::SECTION:
+    case LayoutBreakType::SECTION:
         if (sectionBreak() == v) {
             return;
         }
@@ -470,7 +477,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
         }
         setSectionBreak(v);
         break;
-    case LayoutBreak::Type::NOBREAK:
+    case LayoutBreakType::NOBREAK:
         if (noBreak() == v) {
             return;
         }
@@ -484,10 +491,10 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
     }
 
     if (v) {
-        LayoutBreak* lb = new LayoutBreak(score());
+        MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
+        LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(-1);           // this are system elements
-        MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }
@@ -501,26 +508,26 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 void MeasureBase::cleanupLayoutBreaks(bool undo)
 {
     // remove unneeded layout breaks
-    std::vector<Element*> toDelete;
-    for (Element* e : el()) {
+    std::vector<EngravingItem*> toDelete;
+    for (EngravingItem* e : el()) {
         if (e->isLayoutBreak()) {
             switch (toLayoutBreak(e)->layoutBreakType()) {
-            case LayoutBreak::Type::LINE:
+            case LayoutBreakType::LINE:
                 if (!lineBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::Type::PAGE:
+            case LayoutBreakType::PAGE:
                 if (!pageBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::Type::SECTION:
+            case LayoutBreakType::SECTION:
                 if (!sectionBreak()) {
                     toDelete.push_back(e);
                 }
                 break;
-            case LayoutBreak::Type::NOBREAK:
+            case LayoutBreakType::NOBREAK:
                 if (!noBreak()) {
                     toDelete.push_back(e);
                 }
@@ -528,7 +535,7 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
             }
         }
     }
-    for (Element* e : toDelete) {
+    for (EngravingItem* e : toDelete) {
         if (undo) {
             score()->undoRemoveElement(e);
         } else {
@@ -572,8 +579,8 @@ MeasureBase* MeasureBase::prevMM() const
 
 void MeasureBase::writeProperties(XmlWriter& xml) const
 {
-    Element::writeProperties(xml);
-    for (const Element* e : el()) {
+    EngravingItem::writeProperties(xml);
+    for (const EngravingItem* e : el()) {
         e->write(xml);
     }
 }
@@ -586,26 +593,26 @@ bool MeasureBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "LayoutBreak") {
-        LayoutBreak* lb = new LayoutBreak(score());
+        LayoutBreak* lb = Factory::createLayoutBreak(this);
         lb->read(e);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
-        case LayoutBreak::Type::LINE:
+        case LayoutBreakType::LINE:
             if (lineBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::Type::PAGE:
+        case LayoutBreakType::PAGE:
             if (pageBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::Type::SECTION:
+        case LayoutBreakType::SECTION:
             if (sectionBreak()) {
                 doAdd = false;
             }
             break;
-        case LayoutBreak::Type::NOBREAK:
+        case LayoutBreakType::NOBREAK:
             if (noBreak()) {
                 doAdd = false;
             }
@@ -618,12 +625,12 @@ bool MeasureBase::readProperties(XmlReader& e)
             delete lb;
         }
     } else if (tag == "StaffTypeChange") {
-        StaffTypeChange* stc = new StaffTypeChange(score());
+        StaffTypeChange* stc = Factory::createStaffTypeChange(this);
         stc->setTrack(e.track());
         stc->setParent(this);
         stc->read(e);
         add(stc);
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -677,7 +684,7 @@ int MeasureBase::measureIndex() const
 LayoutBreak* MeasureBase::sectionBreakElement() const
 {
     if (sectionBreak()) {
-        for (Element* e : el()) {
+        for (EngravingItem* e : el()) {
             if (e->isLayoutBreak() && toLayoutBreak(e)->isSectionBreak()) {
                 return toLayoutBreak(e);
             }

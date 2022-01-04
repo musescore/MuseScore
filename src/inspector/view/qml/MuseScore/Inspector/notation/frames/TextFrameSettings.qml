@@ -19,23 +19,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+import QtQuick 2.15
 
-PopupViewButton {
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+
+import "internal"
+
+Column {
     id: root
 
-    property alias model: textFramePopup.model
+    property QtObject model: null
 
-    icon: IconCode.TEXT_FRAME
-    text: qsTrc("inspector", "Text frames")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "TextFrameSettings"
 
-    TextFramePopup {
-        id: textFramePopup
+    spacing: 12
+
+    function focusOnFirst() {
+        verticalGapsSection.focusOnFirst()
+    }
+
+    VerticalGapsSection {
+        id: verticalGapsSection
+        gapAbove: root.model ? root.model.gapAbove : null
+        gapBelow: root.model ? root.model.gapBelow : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+    }
+
+    SeparatorLine { anchors.margins: -12 }
+
+    HorizontalMarginsSection {
+        id: horizontalMarginsSection
+        frameLeftMargin: root.model ? root.model.frameLeftMargin : null
+        frameRightMargin: root.model ? root.model.frameRightMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: verticalGapsSection.navigationRowEnd + 1
+    }
+
+    VerticalMarginsSection {
+        frameTopMargin: root.model ? root.model.frameTopMargin : null
+        frameBottomMargin: root.model ? root.model.frameBottomMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: horizontalMarginsSection.navigationRowEnd + 1
     }
 }

@@ -33,10 +33,10 @@ public:
 
     unsigned int audioChannelsCount() const override;
 
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
 private:
-    float m_frequency = 1'000.f;
+    float m_frequency = 1000.f;
     float m_phase = 0;
 };
 }

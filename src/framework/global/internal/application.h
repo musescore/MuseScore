@@ -35,6 +35,8 @@ public:
     RunMode runMode() const override;
     bool noGui() const override;
 
+    bool notify(QObject* object, QEvent* event) override;
+
 private:
 
     RunMode m_runMode = RunMode::Editor;

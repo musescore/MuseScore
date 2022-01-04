@@ -19,38 +19,97 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-import QtQuick 2.8
-import QtQuick.Controls 2.1
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
+
 import MuseScore.Ui 1.0
 
 Popup {
     id: root
 
-    property color borderColor: ui.theme.strokeColor
-    property color fillColor: ui.theme.backgroundPrimaryColor
-    property bool isOpened: false
+    readonly property alias isOpened: prv.isOpened
     property bool opensUpward: false
 
-    property var arrowX: Boolean(anchorItem) ? anchorItem.x - x + anchorItem.width / 2 : width / 2
-    property alias arrowHeight: arrow.height
-
-    readonly property int borderWidth: 1
-
     property Item anchorItem: null
+    property real arrowX: Boolean(anchorItem) ? anchorItem.x - x + anchorItem.width / 2 : width / 2
+
+    property alias navigation: navPanel
+    property bool isDoActiveParentOnClose: true
+
+    QtObject {
+        id: prv
+
+        property bool isOpened: false
+
+        readonly property int padding: 12
+        readonly property alias arrowHeight: arrow.height
+
+        readonly property color backgroundColor: ui.theme.backgroundPrimaryColor
+        readonly property color borderColor: ui.theme.strokeColor
+        readonly property int borderWidth: 1
+
+        onBackgroundColorChanged: { arrow.requestPaint() }
+        onBorderColorChanged: { arrow.requestPaint() }
+    }
+
+    NavigationPopupPanel {
+        id: navPanel
+        enabled: root.visible && root.enabled
+        order: {
+            if (parentControl && parentControl.panel) {
+                return parentControl.panel.order + 1
+            }
+            return -1
+        }
+
+        section: {
+            if (parentControl && parentControl.panel) {
+                return parentControl.panel.section
+            }
+            return null
+        }
+
+        parentControl: {
+            if (root.anchorItem && root.anchorItem.navigation
+                    && root.anchorItem.navigation instanceof NavigationControl) {
+                return root.anchorItem.navigation
+            }
+            return null
+        }
+
+        onActiveChanged: {
+            if (navPanel.active) {
+                root.forceActiveFocus()
+            } else {
+                root.close()
+            }
+        }
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.Escape) {
+                root.close()
+            }
+        }
+    }
 
     x: Boolean(anchorItem) ? Math.max(anchorItem.x + (anchorItem.width - width) / 2, 0) : 0
     y: Boolean(anchorItem) ? (opensUpward ? anchorItem.y - height : anchorItem.y + anchorItem.height) : 0
 
-    property var popupPadding: 12
-    topPadding: opensUpward ? popupPadding : popupPadding + arrowHeight
-    bottomPadding: opensUpward ? popupPadding + arrowHeight : popupPadding
-    leftPadding: popupPadding
-    rightPadding: popupPadding
+    topPadding: opensUpward ? prv.padding : prv.padding + prv.arrowHeight
+    bottomPadding: opensUpward ? prv.padding + prv.arrowHeight : prv.padding
+    leftPadding: prv.padding
+    rightPadding: prv.padding
 
-    onOpened: { isOpened = true }
-    onClosed: { isOpened = false }
+    onOpened: {
+        prv.isOpened = true
+    }
+    onClosed: {
+        prv.isOpened = false
+        if (root.isDoActiveParentOnClose && navigation.parentControl) {
+            navigation.parentControl.requestActive()
+        }
+    }
 
     closePolicy: Popup.CloseOnPressOutsideParent | Popup.CloseOnPressOutside | Popup.CloseOnEscape
 
@@ -73,8 +132,8 @@ Popup {
 
             Canvas {
                 id: arrow
-                anchors.top: opensUpward ? undefined : parent.top
-                anchors.bottom: opensUpward ? parent.bottom : undefined
+                anchors.top: root.opensUpward ? undefined : parent.top
+                anchors.bottom: root.opensUpward ? parent.bottom : undefined
                 z: 1
                 height: 12
                 width: 22
@@ -82,12 +141,12 @@ Popup {
 
                 onPaint: {
                     var ctx = getContext("2d");
-                    ctx.lineWidth = 2;
-                    ctx.fillStyle = fillColor;
-                    ctx.strokeStyle = borderColor;
+                    ctx.fillStyle = prv.backgroundColor;
+                    ctx.strokeStyle = prv.borderColor;
+                    ctx.lineWidth = prv.borderWidth;
                     ctx.beginPath();
 
-                    if (opensUpward) {
+                    if (root.opensUpward) {
                         ctx.moveTo(0, 0);
                         ctx.lineTo(width / 2, height - 1);
                         ctx.lineTo(width, 0);
@@ -103,18 +162,17 @@ Popup {
             }
 
             Rectangle {
-                color: fillColor
-                border { width: root.borderWidth; color: root.borderColor }
+                color: prv.backgroundColor
+                border.color: prv.borderColor
+                border.width: prv.borderWidth
                 radius: 3
 
-                anchors {
-                    top: opensUpward ? parent.top : arrow.bottom
-                    topMargin: opensUpward ? 0 : -1
-                    bottom: opensUpward ? arrow.top : parent.bottom
-                    bottomMargin: opensUpward ? -1 : 0
-                    left: parent.left
-                    right: parent.right
-                }
+                anchors.top: root.opensUpward ? parent.top : arrow.bottom
+                anchors.topMargin: root.opensUpward ? 0 : -1
+                anchors.bottom: root.opensUpward ? arrow.top : parent.bottom
+                anchors.bottomMargin: root.opensUpward ? -1 : 0
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
         }
 

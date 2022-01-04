@@ -45,19 +45,25 @@ public:
     virtual qreal width() const = 0;
     virtual qreal height() const = 0;
 
-    virtual void moveCanvas(int dx, int dy) = 0;
-    virtual void moveCanvasHorizontal(int dx) = 0;
-    virtual void moveCanvasVertical(int dy) = 0;
+    virtual PointF canvasPos() const = 0;
 
+    //! Returns true if the canvas has been moved
+    virtual bool moveCanvas(qreal dx, qreal dy) = 0;
+    virtual void moveCanvasHorizontal(qreal dx) = 0;
+    virtual void moveCanvasVertical(qreal dy) = 0;
+
+    virtual RectF notationContentRect() const = 0;
     virtual qreal currentScaling() const = 0;
-    virtual void scale(qreal scaling, const QPoint& pos) = 0;
+    virtual void setScaling(qreal scaling, const PointF& pos) = 0;
 
-    virtual PointF toLogical(const QPoint& p) const = 0;
+    virtual PointF toLogical(const PointF& p) const = 0;
+    virtual PointF toLogical(const QPointF& p) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
+    virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -79,6 +85,12 @@ public:
     void initZoom();
     void zoomIn();
     void zoomOut();
+    void nextScreen();
+    void previousScreen();
+    void nextPage();
+    void previousPage();
+    void startOfScore();
+    void endOfScore();
 
     void setReadonly(bool readonly);
 
@@ -95,38 +107,35 @@ public:
     void dragMoveEvent(QDragMoveEvent* event);
     void dropEvent(QDropEvent* event);
 
+    ElementType selectionType() const;
+    PointF hitElementPos() const;
+
 private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
+    INotationInteractionPtr viewInteraction() const;
+    EngravingItem* hitElement() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();
     void zoomToTwoPages();
+    void moveScreen(int direction);
+    void movePage(int direction);
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    qreal notationScaling() const;
-    void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
+    PointF findZoomFocusPoint() const;
+    void setZoom(int zoomPercentage, const PointF& pos = PointF());
 
     void setViewMode(const ViewMode& viewMode);
 
-    struct InteractData {
-        PointF beginPoint;
-        Element* hitElement = nullptr;
-        int hitStaffIndex = 0;
-    };
-
-    bool isDragAllowed() const;
     void startDragElements(ElementType elementsType, const PointF& elementsOffset);
 
     float hitWidth() const;
 
-    ElementType selectionType() const;
-
-    double guiScalling() const;
+    bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
 
     IControlledView* m_view = nullptr;
-    InteractData m_interactData;
 
     QList<int> m_possibleZoomsPercentage;
 
@@ -134,6 +143,7 @@ private:
     bool m_isCanvasDragged = false;
 
     bool m_isZoomInited = false;
+    PointF m_beginPoint;
 };
 }
 

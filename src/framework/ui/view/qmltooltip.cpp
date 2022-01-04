@@ -45,9 +45,7 @@ void QmlToolTip::show(QQuickItem* item, const QString& title, const QString& des
         return;
     }
 
-    if (m_item) {
-        disconnect(m_item, &QObject::destroyed, this, &QmlToolTip::doHide);
-    }
+    doHide();
 
     m_item = item;
     m_title = title;

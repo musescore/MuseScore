@@ -25,12 +25,16 @@
 #include <QObject>
 #include <QQmlParserStatus>
 
+#include "async/asyncable.h"
 #include "../inavigation.h"
 #include "qmlaccessible.h"
 #include "navigationevent.h"
 
+#include "modularity/ioc.h"
+#include "../inavigationcontroller.h"
+
 namespace mu::ui {
-class AbstractNavigation : public QObject, public QQmlParserStatus
+class AbstractNavigation : public QObject, public QQmlParserStatus, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,10 +47,13 @@ class AbstractNavigation : public QObject, public QQmlParserStatus
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
+    Q_PROPERTY(bool highlight READ highlight NOTIFY highlightChanged)
 
     Q_PROPERTY(AccessibleItem * accessible READ accessible WRITE setAccessible NOTIFY accessibleChanged)
 
     Q_INTERFACES(QQmlParserStatus)
+
+    INJECT(ui, INavigationController, navigationController)
 
 public:
     explicit AbstractNavigation(QObject* parent = nullptr);
@@ -65,6 +72,8 @@ public:
 
     bool active() const;
     async::Channel<bool> activeChanged() const;
+
+    bool highlight() const;
 
     AccessibleItem* accessible() const;
     void setAccessibleParent(AccessibleItem* p);
@@ -91,6 +100,7 @@ signals:
     void rowChanged(int row);
     void enabledChanged(bool enabled);
     void activeChanged(bool active);
+    void highlightChanged();
     void accessibleChanged();
 
     void navigationEvent(QVariant event);

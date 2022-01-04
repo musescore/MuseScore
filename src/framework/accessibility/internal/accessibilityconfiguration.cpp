@@ -23,6 +23,8 @@
 
 #include <QAccessible>
 
+#include "config.h"
+
 using namespace mu::accessibility;
 
 bool AccessibilityConfiguration::enabled() const
@@ -31,10 +33,15 @@ bool AccessibilityConfiguration::enabled() const
         return false;
     }
 
+#ifdef BUILD_DIAGNOSTICS
+    return true;
+#else
+
     if (!QAccessible::isActive()) {
         return false;
     }
 
     //! NOTE Accessibility available if navigation is used
     return navigationController()->activeSection() != nullptr;
+#endif
 }

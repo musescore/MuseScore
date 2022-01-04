@@ -35,7 +35,9 @@ class BeamSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * featheringHeightLeft READ featheringHeightLeft CONSTANT)
     Q_PROPERTY(PropertyItem * featheringHeightRight READ featheringHeightRight CONSTANT)
-    Q_PROPERTY(BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
+    Q_PROPERTY(
+        mu::inspector::BeamTypes::FeatheringMode featheringMode READ featheringMode WRITE setFeatheringMode NOTIFY featheringModeChanged)
+    Q_PROPERTY(bool isFeatheringHeightChangingAllowed READ isFeatheringHeightChangingAllowed NOTIFY featheringModeChanged)
 
     Q_PROPERTY(PropertyItem * beamVectorX READ beamVectorX CONSTANT)
     Q_PROPERTY(PropertyItem * beamVectorY READ beamVectorY CONSTANT)
@@ -53,6 +55,7 @@ public:
     PropertyItem* featheringHeightLeft() const;
     PropertyItem* featheringHeightRight() const;
     BeamTypes::FeatheringMode featheringMode() const;
+    bool isFeatheringHeightChangingAllowed() const;
 
     PropertyItem* isBeamHidden() const;
 
@@ -89,7 +92,7 @@ private:
 
     PropertyItem* m_beamVectorX = nullptr;
     PropertyItem* m_beamVectorY = nullptr;
-    QPointF m_cachedBeamVector; //!Note used in delta calculation
+    PointF m_cachedBeamVector; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;

@@ -19,9 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Extensions 1.0
 
@@ -35,6 +36,10 @@ Item {
 
     property int sideMargin: 46
 
+    property NavigationSection navigationSection: null
+
+    clip: true
+
     Component.onCompleted: {
         extensionListModel.load()
     }
@@ -43,6 +48,7 @@ Item {
         id: prv
 
         property var selectedExtension: undefined
+        property var lastNavigatedExtension: undefined
 
         function resetSelectedExtension() {
             selectedExtension = undefined
@@ -53,23 +59,27 @@ Item {
         id: extensionListModel
 
         onProgress: {
-            if (prv.selectedExtension.code !== extensionCode) {
+            if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== extensionCode) {
                 return
             }
 
             extensionPanel.setProgress(status, indeterminate, current, total)
         }
         onFinish: {
-            if (prv.selectedExtension.code !== item.code) {
+            if (!Boolean(prv.selectedExtension) || prv.selectedExtension.code !== item.code) {
                 return
             }
 
+            prv.lastNavigatedExtension = null
             prv.selectedExtension = item
             extensionPanel.resetProgress()
+            extensionPanel.close()
         }
     }
 
     Rectangle {
+        id: topGradient
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: flickable.top
@@ -93,18 +103,20 @@ Item {
         id: flickable
 
         anchors.top: parent.top
-        anchors.topMargin: 5
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
         anchors.rightMargin: root.sideMargin
         anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
 
-        clip: true
-
         contentWidth: width
-        contentHeight: extensionsColumn.height
-        interactive: height < contentHeight
+        contentHeight: extensionsColumn.implicitHeight
+
+        topMargin: topGradient.height
+        bottomMargin: 24
+
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
 
         ScrollBar.vertical: StyledScrollBar {
             parent: flickable.parent
@@ -112,7 +124,6 @@ Item {
             anchors.top: parent.top
             anchors.bottom: extensionPanel.visible ? extensionPanel.top : parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 16
 
             visible: flickable.contentHeight > flickable.height
             z: 1
@@ -120,23 +131,20 @@ Item {
 
         Column {
             id: extensionsColumn
+            anchors.fill: parent
 
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            spacing: 20
+            spacing: 24
 
             ExtensionsListView {
-                id: installedView
+                id: installedExtensionsView
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-
+                width: parent.width
                 title: qsTrc("extensions", "Installed")
+                visible: count > 0
 
                 model: extensionListModel
-                visible: count > 0
+
+                flickableItem: extensionsColumn
 
                 selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
@@ -153,23 +161,32 @@ Item {
                     }
                 ]
 
-                onClicked: {
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "InstalledExtensions"
+                navigationPanel.order: 6
+
+                onClicked: function(index, extension, navigationControl) {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
+                    prv.lastNavigatedExtension = navigationControl
+                }
+
+                onNavigationActivated: function(itemRect) {
+                    Utils.ensureContentVisible(flickable, itemRect, installedExtensionsView.headerHeight + 16)
                 }
             }
 
             ExtensionsListView {
-                id: notInstalledView
+                id: notInstalledExtensionsView
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-
-                title: qsTrc("extensions", "Not Installed")
+                width: parent.width
+                title: qsTrc("extensions", "Not installed")
+                visible: count > 0
 
                 model: extensionListModel
-                visible: count > 0
+
+                flickableItem: extensionsColumn
 
                 selectedExtensionCode: Boolean(prv.selectedExtension) ? prv.selectedExtension.code : ""
 
@@ -186,32 +203,20 @@ Item {
                     }
                 ]
 
-                onClicked: {
+                navigationPanel.section: root.navigationSection
+                navigationPanel.name: "InstalledExtensions"
+                navigationPanel.order: 7
+
+                onClicked: function(index, extension, navigationControl) {
                     prv.selectedExtension = extensionListModel.extension(extension.code)
 
                     extensionPanel.open()
+                    prv.lastNavigatedExtension = navigationControl
                 }
-            }
-        }
-    }
 
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: flickable.bottom
-
-        visible: !extensionPanel.visible
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
+                onNavigationActivated: function(itemRect) {
+                    Utils.ensureContentVisible(flickable, itemRect, notInstalledExtensionsView.headerHeight + 16)
+                }
             }
         }
     }
@@ -260,6 +265,20 @@ Item {
 
         onClosed: {
             prv.resetSelectedExtension()
+            Qt.callLater(resetNavigationFocus)
+        }
+
+        function resetNavigationFocus() {
+            if (prv.lastNavigatedExtension) {
+                prv.lastNavigatedExtension.requestActive()
+                return
+            }
+
+            if (installedExtensionsView.count > 0) {
+                installedExtensionsView.focusOnFirst()
+            } else {
+                notInstalledExtensionsView.focusOnFirst()
+            }
         }
     }
 }

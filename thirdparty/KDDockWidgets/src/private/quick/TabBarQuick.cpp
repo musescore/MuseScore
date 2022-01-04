@@ -43,7 +43,7 @@ int TabBarQuick::tabAt(QPoint p) const
     if (QQuickItem *internalListView = listView()) {
         int index = -1;
         QMetaObject::invokeMethod(internalListView, "indexAt", Q_RETURN_ARG(int, index),
-                Q_ARG(double, p.x()), Q_ARG(double, p.y()));
+                                  Q_ARG(double, p.x()), Q_ARG(double, p.y()));
 
         return index;
     } else {
@@ -74,7 +74,7 @@ QString TabBarQuick::text(int index) const
 QRect TabBarQuick::rectForTab(int index) const
 {
     if (QQuickItem *item = tabAt(index))
-       return item->boundingRect().toRect();
+        return item->boundingRect().toRect();
 
     return {};
 }
@@ -85,7 +85,7 @@ bool TabBarQuick::event(QEvent *ev)
     case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress: {
         if (m_tabBarQmlItem) {
-            auto me = static_cast<QMouseEvent*>(ev);
+            auto me = static_cast<QMouseEvent *>(ev);
             m_tabBarQmlItem->setProperty("currentIndex", tabAt(me->pos()));
             if (ev->type() == QEvent::MouseButtonPress)
                 TabBar::onMousePress(me->pos());
@@ -110,19 +110,19 @@ QQuickItem *TabBarQuick::tabAt(int index) const
 
     QQuickItem *item = nullptr;
     QMetaObject::invokeMethod(view, "itemAtIndex", Q_RETURN_ARG(QQuickItem*, item),
-            Q_ARG(int, index));
+                              Q_ARG(int, index));
 
     return item;
 }
 
-QQuickItem* TabBarQuick::listView() const
+QQuickItem *TabBarQuick::listView() const
 {
     // Returns the internal ListView of the TabBar
 
     if (!m_tabBarQmlItem)
         return nullptr;
 
-    const QList<QQuickItem*> children = m_tabBarQmlItem->childItems();
+    const QList<QQuickItem *> children = m_tabBarQmlItem->childItems();
     for (QQuickItem *child : children) {
         if (qstrcmp(child->metaObject()->className(), "QQuickListView") == 0)
             return child;

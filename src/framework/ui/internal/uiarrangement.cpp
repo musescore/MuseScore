@@ -58,9 +58,9 @@ void UiArrangement::updateData(DataKey key, QJsonObject& obj, Notifications& not
 
     Notifications::Iterator it = notifications.begin();
     for (; it != notifications.end(); ++it) {
-        const QString& key = it.key();
+        const QString& k = it.key();
 
-        if (oldObj.value(key) != obj.value(key)) {
+        if (oldObj.value(k) != obj.value(k)) {
             it.value().notify();
         }
     }
@@ -126,7 +126,7 @@ ToolConfig UiArrangement::toolConfig(const QString& toolName) const
     ToolConfig config;
 
     config.items.reserve(itemsArr.size());
-    for (const QJsonValue& v : itemsArr) {
+    for (const QJsonValue v : itemsArr) {
         QJsonObject itemObj = v.toObject();
 
         ToolConfig::Item item;

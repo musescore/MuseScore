@@ -174,12 +174,20 @@ void Profiler::clear()
 
 Profiler::Data Profiler::threadsData(Data::Mode mode) const
 {
+    std::vector<std::thread::id> funcsThreads;
+    std::vector<FuncTimers> funcsTimers;
+    {
+        std::lock_guard<std::mutex> lock(m_funcs.mutex);
+        funcsThreads = m_funcs.threads;
+        funcsTimers = m_funcs.timers;
+    }
+
     Data data;
-    data.mainThread = m_funcs.threads[MAIN_THREAD_INDEX];
+    data.mainThread = funcsThreads[MAIN_THREAD_INDEX];
 
     std::thread::id empty;
-    for (size_t i = 0; i < m_funcs.threads.size(); ++i) {
-        std::thread::id th = m_funcs.threads[i];
+    for (size_t i = 0; i < funcsThreads.size(); ++i) {
+        std::thread::id th = funcsThreads[i];
         if (th == empty) {
             break;
         }
@@ -197,7 +205,7 @@ Profiler::Data Profiler::threadsData(Data::Mode mode) const
         Data::Thread thdata;
         thdata.thread = th;
 
-        const FuncTimers& timers = m_funcs.timers[i];
+        const FuncTimers& timers = funcsTimers[i];
         for (auto it : timers) {
             const FuncTimer* ft = it.second;
             Data::Func f(
@@ -541,15 +549,15 @@ void Profiler::Printer::funcsToStream(std::stringstream& stream,
                                       int count) const
 {
     auto leftJustified = [](const std::string& val, size_t width) -> std::string
-                         {
-                             std::string str;
-                             str.resize(width, ' ');
-                             size_t lenght = width < val.size() ? width : val.size();
-                             for (size_t i = 0; i < lenght; ++i) {
-                                 str[i] = val[i];
-                             }
-                             return str;
-                         };
+    {
+        std::string str;
+        str.resize(width, ' ');
+        size_t lenght = width < val.size() ? width : val.size();
+        for (size_t i = 0; i < lenght; ++i) {
+            str[i] = val[i];
+        }
+        return str;
+    };
 
     #define FORMAT(str, width) leftJustified(str, width)
     #define TITLE(str) FORMAT(std::string(str), 18)

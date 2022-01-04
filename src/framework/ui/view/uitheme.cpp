@@ -30,20 +30,23 @@
 #include <QStyleFactory>
 #include <QStyleOption>
 #include <QToolBar>
+#include <QTextEdit>
+#include <QLineEdit>
 #include <QVariant>
+
+#include <math.h>
 
 #include "log.h"
 
 using namespace mu::ui;
 
-static const QString SEMIBOLD_STYLE_NAME("SemiBold");
-
 static const QPen NO_BORDER(Qt::transparent, 0);
 static const QBrush NO_FILL(Qt::transparent);
+static const int DEFAULT_RADIUS = 3;
 
 static const int GROUP_BOX_LABEL_SPACING = 2;
 
-//! NOTE In QML, a border is drawn _inside_ a rectangle.
+//!      NOTE In QML, a border is drawn _inside_ a rectangle.
 //!      In C++, a border would normally be drawn half inside the rectangle, half outside.
 //!      In this function, we exactly replicate the behaviour from QML.
 static void drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius, const QBrush& brush = NO_FILL,
@@ -98,6 +101,8 @@ void UiTheme::init()
         update();
     });
 
+    initThemeValues();
+
     initUiFonts();
     initIconsFont();
     initMusicalFont();
@@ -105,66 +110,93 @@ void UiTheme::init()
     setupWidgetTheme();
 }
 
+void UiTheme::initThemeValues()
+{
+    QMap<ThemeStyleKey, QVariant> themeValues = configuration()->currentTheme().values;
+
+    m_backgroundPrimaryColor = themeValues[BACKGROUND_PRIMARY_COLOR].toString();
+    m_backgroundSecondaryColor = themeValues[BACKGROUND_SECONDARY_COLOR].toString();
+    m_popupBackgroundColor = themeValues[POPUP_BACKGROUND_COLOR].toString();
+    m_textFieldColor = themeValues[TEXT_FIELD_COLOR].toString();
+    m_accentColor = themeValues[ACCENT_COLOR].toString();
+    m_strokeColor = themeValues[STROKE_COLOR].toString();
+    m_buttonColor = themeValues[BUTTON_COLOR].toString();
+    m_fontPrimaryColor = themeValues[FONT_PRIMARY_COLOR].toString();
+    m_fontSecondaryColor = themeValues[FONT_SECONDARY_COLOR].toString();
+    m_linkColor = themeValues[LINK_COLOR].toString();
+    m_focusColor = themeValues[FOCUS_COLOR].toString();
+
+    m_borderWidth = themeValues[BORDER_WIDTH].toReal();
+    m_navCtrlBorderWidth = themeValues[NAVIGATION_CONTROL_BORDER_WIDTH].toReal();
+    m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
+    m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
+    m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();
+    m_buttonOpacityNormal = themeValues[BUTTON_OPACITY_NORMAL].toReal();
+    m_buttonOpacityHover = themeValues[BUTTON_OPACITY_HOVER].toReal();
+    m_buttonOpacityHit = themeValues[BUTTON_OPACITY_HIT].toReal();
+    m_itemOpacityDisabled = themeValues[ITEM_OPACITY_DISABLED].toReal();
+}
+
 void UiTheme::update()
 {
+    initThemeValues();
     setupWidgetTheme();
-
     notifyAboutThemeChanged();
 }
 
 QColor UiTheme::backgroundPrimaryColor() const
 {
-    return colorByKey(BACKGROUND_PRIMARY_COLOR);
+    return m_backgroundPrimaryColor;
 }
 
 QColor UiTheme::backgroundSecondaryColor() const
 {
-    return colorByKey(BACKGROUND_SECONDARY_COLOR);
+    return m_backgroundSecondaryColor;
 }
 
 QColor UiTheme::popupBackgroundColor() const
 {
-    return colorByKey(POPUP_BACKGROUND_COLOR);
+    return m_popupBackgroundColor;
 }
 
 QColor UiTheme::textFieldColor() const
 {
-    return colorByKey(TEXT_FIELD_COLOR);
+    return m_textFieldColor;
 }
 
 QColor UiTheme::accentColor() const
 {
-    return colorByKey(ACCENT_COLOR);
+    return m_accentColor;
 }
 
 QColor UiTheme::strokeColor() const
 {
-    return colorByKey(STROKE_COLOR);
+    return m_strokeColor;
 }
 
 QColor UiTheme::buttonColor() const
 {
-    return colorByKey(BUTTON_COLOR);
+    return m_buttonColor;
 }
 
 QColor UiTheme::fontPrimaryColor() const
 {
-    return colorByKey(FONT_PRIMARY_COLOR);
+    return m_fontPrimaryColor;
 }
 
 QColor UiTheme::fontSecondaryColor() const
 {
-    return colorByKey(FONT_SECONDARY_COLOR);
+    return m_fontSecondaryColor;
 }
 
 QColor UiTheme::linkColor() const
 {
-    return colorByKey(LINK_COLOR);
+    return m_linkColor;
 }
 
 QColor UiTheme::focusColor() const
 {
-    return colorByKey(FOCUS_COLOR);
+    return m_focusColor;
 }
 
 QFont UiTheme::bodyFont() const
@@ -227,54 +259,49 @@ QFont UiTheme::musicalFont() const
     return m_musicalFont;
 }
 
+qreal UiTheme::borderWidth() const
+{
+    return m_borderWidth;
+}
+
+qreal UiTheme::navCtrlBorderWidth() const
+{
+    return m_navCtrlBorderWidth;
+}
+
 qreal UiTheme::accentOpacityNormal() const
 {
-    return realByKey(ACCENT_OPACITY_NORMAL);
+    return m_accentOpacityNormal;
 }
 
 qreal UiTheme::accentOpacityHover() const
 {
-    return realByKey(ACCENT_OPACITY_HOVER);
+    return m_accentOpacityHover;
 }
 
 qreal UiTheme::accentOpacityHit() const
 {
-    return realByKey(ACCENT_OPACITY_HIT);
+    return m_accentOpacityHit;
 }
 
 qreal UiTheme::buttonOpacityNormal() const
 {
-    return realByKey(BUTTON_OPACITY_NORMAL);
+    return m_buttonOpacityNormal;
 }
 
 qreal UiTheme::buttonOpacityHover() const
 {
-    return realByKey(BUTTON_OPACITY_HOVER);
+    return m_buttonOpacityHover;
 }
 
 qreal UiTheme::buttonOpacityHit() const
 {
-    return realByKey(BUTTON_OPACITY_HIT);
+    return m_buttonOpacityHit;
 }
 
 qreal UiTheme::itemOpacityDisabled() const
 {
-    return realByKey(ITEM_OPACITY_DISABLED);
-}
-
-QColor UiTheme::colorByKey(ThemeStyleKey key) const
-{
-    return currentTheme().values[key].toString();
-}
-
-qreal UiTheme::realByKey(ThemeStyleKey key) const
-{
-    return currentTheme().values[key].toDouble();
-}
-
-const ThemeInfo& UiTheme::currentTheme() const
-{
-    return configuration()->currentTheme();
+    return m_itemOpacityDisabled;
 }
 
 void UiTheme::initUiFonts()
@@ -328,10 +355,7 @@ void UiTheme::setupUiFonts()
 
         font->setPixelSize(size);
         font->setFamily(QString::fromStdString(family));
-
-        if (weight == QFont::DemiBold) {
-            font->setStyleName(SEMIBOLD_STYLE_NAME);
-        }
+        font->setWeight(weight);
     }
 }
 
@@ -419,7 +443,8 @@ void UiTheme::polish(QWidget* widget)
     QProxyStyle::polish(widget);
 
     if (qobject_cast<QAbstractItemView*>(widget)
-        || qobject_cast<QGroupBox*>(widget)) {
+        || qobject_cast<QGroupBox*>(widget)
+        || qobject_cast<QLineEdit*>(widget)) {
         // Make hovering work
         widget->setMouseTracking(true);
         widget->setAttribute(Qt::WA_Hover, true);
@@ -431,17 +456,21 @@ void UiTheme::unpolish(QWidget* widget)
     QProxyStyle::unpolish(widget);
 
     if (qobject_cast<QAbstractItemView*>(widget)
-        || qobject_cast<QGroupBox*>(widget)) {
+        || qobject_cast<QGroupBox*>(widget)
+        || qobject_cast<QLineEdit*>(widget)) {
         widget->setMouseTracking(false);
         widget->setAttribute(Qt::WA_Hover, false);
     }
 }
 
-void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter,
+                            const QWidget* widget) const
 {
-    const bool enabled = option->state & State_Enabled;
-    const bool hovered = option->state & State_MouseOver;
-    const bool pressed = option->state & State_Sunken;
+    StyleState styleState;
+    styleState.enabled = option->state & State_Enabled;
+    styleState.hovered = option->state & State_MouseOver;
+    styleState.pressed = option->state & State_Sunken;
+    styleState.focused = (option->state & State_KeyboardFocusChange) && (option->state & State_HasFocus);
 
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -454,7 +483,10 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         const bool accentButton = buttonOption && buttonOption->features & QStyleOptionButton::DefaultButton;
         const bool flat = buttonOption && buttonOption->features & QStyleOptionButton::Flat;
 
-        drawButtonBackground(painter, option->rect, enabled, hovered, pressed, accentButton, flat);
+        QColor paletteColor = widget ? widget->palette().color(QPalette::Button) : QColor();
+        const QColor background = paletteColor.isValid() ? paletteColor : buttonColor();
+
+        drawButtonBackground(painter, option->rect, styleState, accentButton, flat, background);
     } break;
 
     // Checkboxes
@@ -463,14 +495,29 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         const bool checked = option->state & State_On;
         const bool inMenu = qobject_cast<const QMenu*>(widget);
 
-        drawCheckboxIndicator(painter, option->rect, enabled, hovered, pressed, checked, indeterminate, inMenu);
+        drawCheckboxIndicator(painter, option->rect, styleState, checked, indeterminate, inMenu);
     } break;
 
     // Radio buttons
     case QStyle::PE_IndicatorRadioButton: {
         const bool selected = option->state & State_On;
 
-        drawRadioButtonIndicator(painter, option->rect, enabled, hovered, pressed, selected);
+        drawRadioButtonIndicator(painter, option->rect, styleState, selected);
+    } break;
+
+    case QStyle::PE_FrameLineEdit: {
+        const bool editing = option->state & State_HasFocus;
+
+        drawLineEditBackground(painter, option->rect, styleState, editing);
+    } break;
+
+    case QStyle::PE_FrameFocusRect: {
+        bool isTreeWidget = option->styleObject && option->styleObject->inherits("QTreeWidget");
+        if (isTreeWidget) {
+            drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        }
+
+        //! NOTE: need for removing frame focus recangle
     } break;
 
     // Indicator icons
@@ -478,14 +525,14 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     case QStyle::PE_IndicatorSpinDown:
     case QStyle::PE_IndicatorSpinPlus:
     case QStyle::PE_IndicatorSpinMinus: {
-        drawIndicatorIcon(painter, option->rect, enabled, element);
+        drawIndicatorIcon(painter, option->rect, styleState, element);
     } break;
 
-    // ListView
+    // ViewItem
     case QStyle::PE_PanelItemViewItem: {
         bool selected = option->state & State_Selected;
 
-        drawListViewItemBackground(painter, option->rect, enabled, hovered, pressed, selected);
+        drawViewItemBackground(painter, option->rect, styleState, selected);
     } break;
 
     // Toolbar
@@ -498,15 +545,27 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), 1));
+        drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, QBrush("#03000000"), QPen(strokeColor(), fmax(borderWidth(), 1.0)));
     } break;
 
     // Menu
     case QStyle::PE_PanelMenu: {
-        drawRoundedRect(painter, option->rect, 3, backgroundPrimaryColor());
+        drawRoundedRect(painter, option->rect, 1, backgroundPrimaryColor(), QPen(strokeColor(), borderWidth()));
     } break;
     case QStyle::PE_FrameMenu: {
-        drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), 1));
+        drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+    } break;
+
+    case QStyle::PE_Frame: {
+        if (qobject_cast<const QTextEdit*>(widget) != nullptr) {
+            if (styleState.enabled) {
+                drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, NO_FILL, QPen(strokeColor(), borderWidth()));
+            } else {
+                QColor penBorderColor = strokeColor();
+                penBorderColor.setAlphaF(itemOpacityDisabled());
+                drawRoundedRect(painter, option->rect, DEFAULT_RADIUS, NO_FILL, QPen(penBorderColor, borderWidth()));
+            }
+        }
     } break;
 
     default:
@@ -515,6 +574,44 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     }
 
     painter->restore();
+}
+
+void UiTheme::drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget) const
+{
+    StyleState styleState;
+    styleState.enabled = option->state & State_Enabled;
+    styleState.hovered = option->state & State_MouseOver;
+    styleState.pressed = option->state & State_Sunken;
+    styleState.focused = (option->state & State_KeyboardFocusChange) && (option->state & State_HasFocus);
+
+    switch (control) {
+    case CC_ScrollBar: {
+        QProxyStyle::drawComplexControl(control, option, painter, widget);
+
+        if (configuration()->isHighContrast()) {
+            QRect scrollBarHandle = QProxyStyle::subControlRect(CC_ScrollBar, option, SC_ScrollBarSlider, widget);
+
+            QColor handleColor = fontPrimaryColor();
+            handleColor.setAlphaF(
+                !styleState.enabled ? buttonOpacityNormal()
+                * itemOpacityDisabled() : styleState.pressed ? buttonOpacityHit() : styleState.hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+            drawRoundedRect(painter, scrollBarHandle, 1, handleColor, NO_BORDER);
+        }
+    } break;
+
+    case CC_SpinBox: {
+        QProxyStyle::drawComplexControl(control, option, painter, widget);
+
+        QRect spinBoxFrame = QProxyStyle::subControlRect(CC_SpinBox, option, SC_SpinBoxFrame, widget);
+        if (styleState.focused) {
+            drawRoundedRect(painter, spinBoxFrame, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+        }
+    } break;
+
+    default: QProxyStyle::drawComplexControl(control, option, painter, widget);
+    }
 }
 
 QRect UiTheme::subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
@@ -596,13 +693,11 @@ int UiTheme::pixelMetric(QStyle::PixelMetric metric, const QStyleOption* option,
     switch (metric) {
     case PM_IndicatorWidth: // Checkbox
     case PM_IndicatorHeight:
-        return 20;
-    case PM_CheckBoxLabelSpacing:
-        return 8;
     case PM_ExclusiveIndicatorWidth: // Radio button
     case PM_ExclusiveIndicatorHeight:
         return 20;
-    case PM_RadioButtonLabelSpacing:
+    case PM_CheckBoxLabelSpacing: // Checkbox
+    case PM_RadioButtonLabelSpacing: // Radio button
         return 6;
     case PM_ToolBarHandleExtent: // Toolbars
         return 32;
@@ -680,44 +775,70 @@ int UiTheme::styleHint(QStyle::StyleHint hint, const QStyleOption* option, const
 // QStyle elements drawing
 // ====================================================
 
-void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
-                                   bool flat) const
+void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
+                                   const QColor& defaultBackground) const
 {
     QColor backgroundColor(accentButton ? accentColor()
                            : flat ? Qt::transparent
-                           : buttonColor());
+                           : defaultBackground);
 
-    backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                              : pressed ? buttonOpacityHit()
-                              : hovered ? buttonOpacityHover()
+    backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
+                              : styleState.pressed ? buttonOpacityHit()
+                              : styleState.hovered ? buttonOpacityHover()
                               : !flat ? buttonOpacityNormal()
                               : 0);
 
-    drawRoundedRect(painter, rect, 3, backgroundColor);
+    if (styleState.enabled) {
+        if (configuration()->isHighContrast()) {
+            QColor penBorderColor(strokeColor());
+            penBorderColor.setAlphaF(
+                styleState.pressed ? buttonOpacityHit() : styleState.hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, QPen(penBorderColor, borderWidth()));
+        } else {
+            drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
+        }
+    } else {
+        drawRoundedRect(painter, rect, DEFAULT_RADIUS, backgroundColor, NO_BORDER);
+    }
+
+    if (styleState.focused) {
+        drawRoundedRect(painter, rect, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+    }
 }
 
-void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
-                                    bool indeterminate, bool inMenu) const
+void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool checked, bool indeterminate,
+                                    bool inMenu) const
 {
+    QColor backgroundColor = buttonColor();
+    const qreal borderRadius = 2;
+
     if (!inMenu) {
-        QColor backgroundColor = buttonColor();
-        backgroundColor.setAlphaF(!enabled ? buttonOpacityNormal() * itemOpacityDisabled()
-                                  : pressed ? buttonOpacityHit()
-                                  : hovered ? buttonOpacityHover()
+        backgroundColor.setAlphaF(!styleState.enabled ? buttonOpacityNormal() * itemOpacityDisabled()
+                                  : styleState.pressed ? buttonOpacityHit()
+                                  : styleState.hovered ? buttonOpacityHover()
                                   : buttonOpacityNormal());
 
-        QColor borderColor = enabled && (hovered || pressed) ? strokeColor() : Qt::transparent;
-        borderColor.setAlphaF(enabled && pressed ? buttonOpacityHit()
-                              : enabled && hovered ? buttonOpacityHover()
-                              : 0);
+        QColor penBorderColor(Qt::transparent);
+        int penBorderWidth = 0;
+        if (configuration()->isHighContrast()) {
+            penBorderColor = strokeColor();
+            penBorderWidth = styleState.enabled ? borderWidth() : 0;
+        } else {
+            penBorderWidth = styleState.enabled && (styleState.hovered || styleState.pressed) ? borderWidth() : 0;
+        }
 
-        const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
-        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(borderColor, borderWidth));
+        penBorderColor.setAlphaF(styleState.pressed ? buttonOpacityHit() : styleState.hovered ? buttonOpacityHover() : buttonOpacityNormal());
+        drawRoundedRect(painter, rect, borderRadius, backgroundColor, QPen(penBorderColor, penBorderWidth));
+    }
+
+    if (styleState.focused) {
+        drawRoundedRect(painter, rect, borderRadius, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
     }
 
     if (checked || indeterminate) {
         QColor tickColor = fontPrimaryColor();
-        if (!enabled) {
+        if (!styleState.enabled) {
             tickColor.setAlphaF(itemOpacityDisabled());
         }
         painter->setPen(tickColor);
@@ -727,34 +848,37 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
     }
 }
 
-void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool /*enabled*/, bool hovered, bool pressed,
-                                       bool selected) const
+void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const
 {
-    QColor borderColor(fontPrimaryColor());
-    QColor backgroundColor(textFieldColor());
-    QColor centerColor(accentColor());
+    QColor borderColor = fontPrimaryColor();
+    QColor backgroundColor = textFieldColor();
 
-    if (pressed) {
-        backgroundColor.setAlphaF(accentOpacityHit());
-    } else if (selected && !hovered) {
-        backgroundColor.setAlphaF(accentOpacityNormal());
-    } else if (hovered && !selected && !pressed) {
-        backgroundColor.setAlphaF(buttonOpacityHover());
-    } else if (hovered && selected) {
-        backgroundColor.setAlphaF(accentOpacityHover());
+    if (styleState.pressed) {
+        borderColor.setAlphaF(buttonOpacityHit());
+    } else if (styleState.hovered) {
+        borderColor.setAlphaF(buttonOpacityHover());
     } else {
-        backgroundColor.setAlphaF(buttonOpacityNormal());
+        borderColor.setAlphaF(buttonOpacityNormal());
     }
 
-    borderColor.setAlphaF(backgroundColor.alphaF());
-
     const int borderWidth = 1;
-    const qreal outerCircleRadius = 10; // diameter = 20
+    qreal outerCircleRadius = 10; // diameter = 20
+
+    if (styleState.focused) {
+        const qreal focusCircleRadius = outerCircleRadius;
+        const QRect focusCircleRect(rect.center() + QPoint(1, 1) - QPoint(focusCircleRadius, focusCircleRadius),
+                                    QSize(focusCircleRadius, focusCircleRadius) * 2);
+        drawRoundedRect(painter, focusCircleRect, focusCircleRadius, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+
+        outerCircleRadius -= navCtrlBorderWidth();
+    }
+
     const QRect outerCircleRect(rect.center() + QPoint(1, 1) - QPoint(outerCircleRadius, outerCircleRadius),
                                 QSize(outerCircleRadius, outerCircleRadius) * 2);
     drawRoundedRect(painter, outerCircleRect, outerCircleRadius, backgroundColor, QPen(borderColor, borderWidth));
 
-    if (selected || pressed) {
+    if (selected || styleState.pressed) {
+        QColor centerColor = accentColor();
         const int innerCircleRadius = 5; // diameter = 10
         const QRect innerCircleRect(rect.center() + QPoint(1, 1) - QPoint(innerCircleRadius, innerCircleRadius),
                                     QSize(innerCircleRadius, innerCircleRadius) * 2);
@@ -762,10 +886,31 @@ void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, boo
     }
 }
 
-void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabled, QStyle::PrimitiveElement element) const
+void UiTheme::drawLineEditBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool editing) const
+{
+    QColor backgroundColor = textFieldColor();
+    backgroundColor.setAlphaF(!styleState.enabled ? itemOpacityDisabled() : (editing ? 1 : (styleState.hovered ? 0.6 : 1)));
+
+    if (styleState.focused) {
+        drawRoundedRect(painter, rect, DEFAULT_RADIUS, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+    }
+
+    QRect editRect = rect.adjusted(navCtrlBorderWidth(), navCtrlBorderWidth(), -navCtrlBorderWidth(), -navCtrlBorderWidth());
+    QColor penBorderColor = editing ? accentColor() : strokeColor();
+    penBorderColor.setAlphaF(editing ? 1 : (styleState.hovered ? 0.6 : 1));
+    int borderWidth = configuration()->isHighContrast() ? this->borderWidth() : 1;
+
+    if (styleState.enabled) {
+        drawRoundedRect(painter, editRect, DEFAULT_RADIUS, backgroundColor, QPen(penBorderColor, borderWidth));
+    } else {
+        drawRoundedRect(painter, editRect, DEFAULT_RADIUS, backgroundColor, QPen(penBorderColor, 1));
+    }
+}
+
+void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, const StyleState& styleState, QStyle::PrimitiveElement element) const
 {
     QColor color = fontPrimaryColor();
-    if (!enabled) {
+    if (!styleState.enabled) {
         color.setAlphaF(itemOpacityDisabled());
     }
     painter->setPen(color);
@@ -790,26 +935,32 @@ void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabl
     }
 
     painter->drawText(rect, Qt::AlignCenter, iconCodeToChar(code));
+    drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth())); //does nothing apparently
 }
 
-void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed,
-                                         bool selected) const
+void UiTheme::drawViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const
 {
     QColor backgroundColor(Qt::transparent);
     if (selected) {
         backgroundColor = accentColor();
-        backgroundColor.setAlphaF(enabled ? accentOpacityHit() : accentOpacityHit() * itemOpacityDisabled());
-    } else if (enabled && pressed) {
+        backgroundColor.setAlphaF(styleState.enabled ? accentOpacityHit() : accentOpacityHit() * itemOpacityDisabled());
+    } else if (styleState.enabled && styleState.pressed) {
         backgroundColor = buttonColor();
         backgroundColor.setAlphaF(buttonOpacityHit());
-    } else if (enabled && hovered) {
+    } else if (styleState.enabled && styleState.hovered) {
         backgroundColor = buttonColor();
         backgroundColor.setAlphaF(buttonOpacityHover());
-    } else {
-        return; // filling a rect with transparent does not make sense
     }
 
     painter->fillRect(rect, backgroundColor);
+
+    if (configuration()->isHighContrast()) {
+        drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+    }
+
+    if (styleState.focused) {
+        drawRoundedRect(painter, rect, 1, NO_FILL, QPen(fontPrimaryColor(), navCtrlBorderWidth()));
+    }
 }
 
 void UiTheme::drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const

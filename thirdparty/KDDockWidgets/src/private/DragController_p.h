@@ -32,6 +32,8 @@ class Draggable;
 class FallbackMouseGrabber;
 class MinimalStateMachine;
 
+using ResolveDropAreaFunc = std::function<DropArea*(const QPoint&)>;
+
 class State : public QObject
 {
     Q_OBJECT
@@ -39,12 +41,13 @@ public:
     explicit State(MinimalStateMachine *parent);
     ~State() override;
 
-    template <typename Obj, typename Signal>
+    template<typename Obj, typename Signal>
     void addTransition(Obj *, Signal, State *dest);
     bool isCurrentState() const;
 
     virtual void onEntry() = 0;
     virtual void onExit() {};
+
 private:
     MinimalStateMachine *const m_machine;
 };
@@ -67,7 +70,8 @@ class DOCKS_EXPORT DragController : public MinimalStateMachine
     Q_OBJECT
     Q_PROPERTY(bool isDragging READ isDragging NOTIFY isDraggingChanged)
 public:
-    enum State {
+    enum State
+    {
         State_None = 0,
         State_PreDrag,
         State_Dragging
@@ -90,10 +94,21 @@ public:
     FloatingWindow *floatingWindowBeingDragged() const;
 
     ///@brief Returns the window being dragged
-    WindowBeingDragged* windowBeingDragged() const;
+    WindowBeingDragged *windowBeingDragged() const;
 
     /// Experimental, internal, not for general use.
     void enableFallbackMouseGrabber();
+
+    /**
+     * @brief Allows the user to override the default algorithm for resolving DropArea
+     * when a window is being dragged
+     */
+    void setResolveDropAreaFunc(ResolveDropAreaFunc func);
+
+    ///@brief Used internally by the framework. Returns the function which was passed to setResolveDropAreaFunc()
+    ///By default it's nullptr.
+    ///@sa setResolveDropAreaFunc().
+    ResolveDropAreaFunc resolveDropAreaFunc() const;
 
 Q_SIGNALS:
     void mousePressed();
@@ -132,6 +147,7 @@ private:
     bool m_nonClientDrag = false;
     FallbackMouseGrabber *m_fallbackMouseGrabber = nullptr;
     StateInternalMDIDragging *m_stateDraggingMDI = nullptr;
+    ResolveDropAreaFunc m_resolveDropAreaFunc = nullptr;
 };
 
 class StateBase : public State
@@ -142,16 +158,40 @@ public:
     ~StateBase();
 
     // Not using QEvent here, to abstract platform differences regarding production of such events
-    virtual bool handleMouseButtonPress(Draggable * /*receiver*/, QPoint /*globalPos*/, QPoint /*pos*/) { return false; }
-    virtual bool handleMouseMove(QPoint /*globalPos*/) { return false; }
-    virtual bool handleMouseButtonRelease(QPoint /*globalPos*/) { return false; }
-    virtual bool handleMouseDoubleClick() { return false; }
+    virtual bool handleMouseButtonPress(Draggable * /*receiver*/, QPoint /*globalPos*/, QPoint /*pos*/)
+    {
+        return false;
+    }
+    virtual bool handleMouseMove(QPoint /*globalPos*/)
+    {
+        return false;
+    }
+    virtual bool handleMouseButtonRelease(QPoint /*globalPos*/)
+    {
+        return false;
+    }
+    virtual bool handleMouseDoubleClick()
+    {
+        return false;
+    }
 
     // Only interesting for Wayland
-    virtual bool handleDragEnter(QDragEnterEvent *, DropArea *) { return false; }
-    virtual bool handleDragLeave(DropArea *) { return false; }
-    virtual bool handleDragMove(QDragMoveEvent *, DropArea *) { return false; }
-    virtual bool handleDrop(QDropEvent *, DropArea *) { return false; }
+    virtual bool handleDragEnter(QDragEnterEvent *, DropArea *)
+    {
+        return false;
+    }
+    virtual bool handleDragLeave(DropArea *)
+    {
+        return false;
+    }
+    virtual bool handleDragMove(QDragMoveEvent *, DropArea *)
+    {
+        return false;
+    }
+    virtual bool handleDrop(QDropEvent *, DropArea *)
+    {
+        return false;
+    }
 
     // Returns whether this is the current state
     bool isActiveState() const;
@@ -193,6 +233,7 @@ public:
     bool handleMouseButtonRelease(QPoint globalPos) override;
     bool handleMouseMove(QPoint globalPos) override;
     bool handleMouseDoubleClick() override;
+
 private:
     QTimer m_maybeCancelDrag;
 };

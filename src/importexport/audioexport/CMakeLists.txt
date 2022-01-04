@@ -26,6 +26,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioexportconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioexportconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractaudiowriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mp3writer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/wavewriter.cpp
@@ -39,7 +41,6 @@ set(MODULE_SRC
 set(MODULE_LINK
     engraving
     qzip
-    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

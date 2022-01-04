@@ -32,21 +32,22 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 {
     setModelType(InspectorModelType::TYPE_BEND);
     setTitle(qtrc("inspector", "Bend"));
+    setIcon(ui::IconCode::Code::GUITAR_BEND);
     createProperties();
 }
 
 void BendSettingsModel::createProperties()
 {
-    m_bendType = buildPropertyItem(Ms::Pid::BEND_TYPE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_bendType = buildPropertyItem(Ms::Pid::BEND_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         if (newValue.toInt() != static_cast<int>(BendTypes::BendType::TYPE_CUSTOM)) {
             emit requestReloadPropertyItems();
         }
     });
 
-    m_bendCurve = buildPropertyItem(Ms::Pid::BEND_CURVE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_bendCurve = buildPropertyItem(Ms::Pid::BEND_CURVE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -66,7 +67,7 @@ void BendSettingsModel::loadProperties()
     loadPropertyItem(m_bendType);
     loadPropertyItem(m_bendCurve);
     loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

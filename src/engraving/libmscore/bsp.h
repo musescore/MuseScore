@@ -26,7 +26,7 @@
 #include <QVector>
 #include <QList>
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class BspTreeVisitor;
@@ -34,7 +34,7 @@ class InsertItemBspTreeVisitor;
 class RemoveItemBspTreeVisitor;
 class FindItemBspTreeVisitor;
 
-class Element;
+class EngravingItem;
 
 //---------------------------------------------------------
 //   BspTree
@@ -60,12 +60,12 @@ private:
     void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
 
-    void findItems(QList<Element*>* foundItems, const mu::RectF& rect, int index);
-    void findItems(QList<Element*>* foundItems, const mu::PointF& pos, int index);
+    void findItems(QList<EngravingItem*>* foundItems, const mu::RectF& rect, int index);
+    void findItems(QList<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
     mu::RectF rectForIndex(int index) const;
 
     QVector<Node> nodes;
-    QVector<QList<Element*> > leaves;
+    QVector<QList<EngravingItem*> > leaves;
     int leafCnt;
     mu::RectF rect;
 
@@ -75,11 +75,11 @@ public:
     void initialize(const mu::RectF& rect, int depth);
     void clear();
 
-    void insert(Element* item);
-    void remove(Element* item);
+    void insert(EngravingItem* item);
+    void remove(EngravingItem* item);
 
-    QList<Element*> items(const mu::RectF& rect);
-    QList<Element*> items(const mu::PointF& pos);
+    QList<EngravingItem*> items(const mu::RectF& rect);
+    QList<EngravingItem*> items(const mu::PointF& pos);
 
     int leafCount() const { return leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }
@@ -102,7 +102,7 @@ class BspTreeVisitor
 {
 public:
     virtual ~BspTreeVisitor() {}
-    virtual void visit(QList<Element*>* items) = 0;
+    virtual void visit(QList<EngravingItem*>* items) = 0;
 };
 }     // namespace Ms
 #endif

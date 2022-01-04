@@ -23,7 +23,7 @@
 #ifndef __TESTUTILS_H__
 #define __TESTUTILS_H__
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 namespace Ms {
 class MScore;
@@ -55,7 +55,7 @@ protected:
     bool saveCompareMusicXmlScore(Ms::MasterScore*, const QString& saveName, const QString& compareWith);
     bool saveCompareBrailleScore(MasterScore* score, const QString& saveName, const QString& compareWith);
     bool saveCompareMimeData(QByteArray, const QString& saveName, const QString& compareWith);
-    Ms::Element* writeReadElement(Ms::Element* element);
+    Ms::EngravingItem* writeReadElement(Ms::EngravingItem* element);
     void initMTest();
 
 public:

@@ -42,16 +42,14 @@ if (BUILD_AUDIO_MODULE)
 endif (BUILD_AUDIO_MODULE)
 
 add_subdirectory(midi)
-add_subdirectory(midi_old)
-
-if (BUILD_TELEMETRY_MODULE)
-      add_subdirectory(telemetry)
-endif (BUILD_TELEMETRY_MODULE)
+add_subdirectory(mpe)
 
 if (BUILD_UNIT_TESTS)
     add_subdirectory(global/tests)
+    add_subdirectory(mpe/tests)
     add_subdirectory(system/tests)
     add_subdirectory(ui/tests)
+    add_subdirectory(accessibility/tests)
 endif(BUILD_UNIT_TESTS)
 
 if (BUILD_VST)

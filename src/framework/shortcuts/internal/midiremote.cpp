@@ -194,8 +194,9 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
     if (release) {
         bool advanceToNextNoteOnKeyRelease = configuration()->advanceToNextNoteOnKeyRelease();
         RemoteEvent remoteEvent = remoteEventFromMidiEvent(event);
-        bool isRealtimeAdvance = this->remoteEvent(REALTIME_ADVANCE_ACTION_NAME) == remoteEvent;
-        if (!advanceToNextNoteOnKeyRelease || !isRealtimeAdvance) {
+        RemoteEvent realtimeEvent = this->remoteEvent(REALTIME_ADVANCE_ACTION_NAME);
+        if (!advanceToNextNoteOnKeyRelease
+            || (realtimeEvent.isValid() && remoteEvent != realtimeEvent)) {
             return true;
         }
     }

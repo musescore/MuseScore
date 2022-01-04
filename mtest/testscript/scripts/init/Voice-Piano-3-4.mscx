@@ -144,7 +144,7 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Voice-Piano-3-4</text>
           </Text>
         </VBox>

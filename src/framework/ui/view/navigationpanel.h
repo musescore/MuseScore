@@ -27,14 +27,13 @@
 
 #include "abstractnavigation.h"
 #include "navigationcontrol.h"
-#include "async/asyncable.h"
 
 namespace mu::ui {
 class NavigationSection;
-class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
+class NavigationPanel : public AbstractNavigation, public INavigationPanel
 {
     Q_OBJECT
-    Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
+    Q_PROPERTY(mu::ui::NavigationSection * section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
     Q_PROPERTY(QString directionInfo READ directionInfo NOTIFY directionChanged)
 
@@ -71,13 +70,14 @@ public:
     const std::set<INavigationControl*>& controls() const override;
     async::Notification controlsListChanged() const override;
 
-    async::Channel<PanelControl> activeRequested() const override;
-
     INavigationSection* section() const override;
     NavigationSection* section_property() const;
 
     void addControl(NavigationControl* control);
     void removeControl(NavigationControl* control);
+
+    //! NOTE Can be called from QML without args
+    Q_INVOKABLE void requestActive(INavigationControl* control = nullptr) override;
 
 public slots:
     void setSection_property(NavigationSection* section);
@@ -95,7 +95,6 @@ private:
     NavigationSection* m_section = nullptr;
     std::set<INavigationControl*> m_controls;
     async::Notification m_controlsListChanged;
-    async::Channel<PanelControl> m_forceActiveRequested;
     QmlDirection m_direction = QmlDirection::Horizontal;
 };
 }

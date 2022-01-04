@@ -20,9 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "editpitch.h"
-#include "widgetstatestore.h"
+
+#include <QKeyEvent>
+
+#include "translation.h"
+#include "ui/view/iconcodes.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetnavigationfix.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   EditPitch
@@ -33,20 +40,20 @@ EditPitch::EditPitch(QWidget* parent)
     : QDialog(parent)
 {
     setObjectName("EditPitchNew");
-    setupUi(this);
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    setup();
+
     tableWidget->setCurrentCell(tableWidget->rowCount() - 1 - 5, 0);                  // select centre C by default
-    WidgetStateStore::restoreGeometry(this);
 }
 
 EditPitch::EditPitch(QWidget* parent, int midiCode)
     : QDialog(parent)
 {
     setObjectName("EditPitchEdit");
-    setupUi(this);
-    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    setup();
+
     tableWidget->setCurrentCell(tableWidget->rowCount() - 1 - (midiCode / 12), midiCode % 12);
-    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -57,6 +64,44 @@ void EditPitch::hideEvent(QHideEvent* ev)
 {
     WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(ev);
+}
+
+bool EditPitch::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent
+            && WidgetNavigationFix::fixNavigationForTableWidget(
+                new WidgetNavigationFix::NavigationChain { tableWidget, buttonBox, buttonBox },
+                keyEvent->key())) {
+            return true;
+        }
+    }
+
+    return QDialog::eventFilter(obj, event);
+}
+
+void EditPitch::setup()
+{
+    setupUi(this);
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    auto clefTrebleItem = tableWidget->item(5, 7);
+    if (clefTrebleItem) {
+        clefTrebleItem->setText(iconCodeToChar(IconCode::Code::CLEF_TREBLE) + QString(" ") + qtrc("notation", "G 4"));
+    }
+
+    auto clefBassItem = tableWidget->item(6, 5);
+    if (clefBassItem) {
+        clefBassItem->setText(iconCodeToChar(IconCode::Code::CLEF_BASS) + QString(" ") + qtrc("notation", "F 3"));
+    }
+
+    WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+
+    qApp->installEventFilter(this);
 }
 
 void EditPitch::accept()

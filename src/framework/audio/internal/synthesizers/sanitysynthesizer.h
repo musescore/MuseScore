@@ -33,6 +33,7 @@ public:
     bool isValid() const override;
 
     std::string name() const override;
+    AudioSourceType type() const override;
     SoundFontFormats soundFontFormats() const override;
 
     Ret init() override;
@@ -44,7 +45,6 @@ public:
 
     Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
-    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override;  // all channels
     void flushSound() override;
@@ -57,7 +57,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t sampleCount) override;
 
 private:
 

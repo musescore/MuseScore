@@ -27,7 +27,7 @@
 #include <functional>
 
 #include "elementgroup.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class Dynamic;
@@ -53,8 +53,8 @@ public:
     mu::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
-    static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const Element*)> isDragged);
-    static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged);
+    static std::unique_ptr<ElementGroup> detectFor(HairpinSegment* hs, std::function<bool(const EngravingItem*)> isDragged);
+    static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
 };
 
 //-------------------------------------------------------------------
@@ -75,7 +75,7 @@ public:
     mu::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
-    static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged);
+    static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
 };
 } // namespace Ms
 

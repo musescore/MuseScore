@@ -27,6 +27,10 @@
 
 #include "key.h"
 
+namespace mu::engraving {
+class ReadContext;
+}
+
 namespace Ms {
 class XmlReader;
 
@@ -45,7 +49,7 @@ public:
     void setKey(int tick, KeySigEvent);
     int nextKeyTick(int tick) const;
     int currentKeyTick(int tick) const;
-    void read(XmlReader&, Score*);
+    void read(XmlReader&, const mu::engraving::ReadContext& ctx);
 };
 }
 

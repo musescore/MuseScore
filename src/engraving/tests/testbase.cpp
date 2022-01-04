@@ -26,18 +26,25 @@
 #include <QTextStream>
 
 #include "config.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/page.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/factory.h"
 #include "thirdparty/qzip/qzipreader_p.h"
+
+#include "engraving/compat/mscxcompat.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/writescorehook.h"
+#include "engraving/rw/xml.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"
+
+using namespace mu::engraving;
 
 static void initMyResources()
 {
@@ -50,7 +57,7 @@ namespace Ms {
 //    writes and element and reads it back
 //---------------------------------------------------------
 
-Element* MTest::writeReadElement(Element* element)
+EngravingItem* MTest::writeReadElement(EngravingItem* element)
 {
     //
     // write element
@@ -58,7 +65,7 @@ Element* MTest::writeReadElement(Element* element)
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(element->score(), &buffer);
-    xml.header();
+    xml.writeHeader();
     element->write(xml);
     buffer.close();
 
@@ -68,7 +75,7 @@ Element* MTest::writeReadElement(Element* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    element = Element::name2Element(e.name(), score);
+    element = Factory::createItemByName(e.name(), score->dummy());
     element->read(e);
     return element;
 }
@@ -99,40 +106,48 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score_ = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     QFileInfo fi(name);
-    score->setName(fi.completeBaseName());
+    score_->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(name, false);
+        rv = compat::loadMsczOrMscx(score_, name, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
         QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
-        delete score;
-        score = 0;
+        delete score_;
+        score_ = 0;
     } else {
         for (Score* s : score->scoreList()) {
             s->doLayout();
         }
     }
-    return score;
+    return score_;
 }
 
 //---------------------------------------------------------
 //   saveScore
 //---------------------------------------------------------
 
-bool MTest::saveScore(Score* score, const QString& name) const
+bool MTest::saveScore(Score* score_, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+
+    compat::WriteScoreHook hook;
+    return score_->writeScore(&file, false, false, hook);
 }
 
 //---------------------------------------------------------
@@ -174,9 +189,9 @@ bool MTest::compareFiles(const QString& saveName, const QString& compareWith) co
 //---------------------------------------------------------
 
 // bool MTest::saveCompareScore(MasterScore* score, const QString& saveName, const QString& compareWith) const
-bool MTest::saveCompareScore(Score* score, const QString& saveName, const QString& compareWith) const
+bool MTest::saveCompareScore(Score* score_, const QString& saveName, const QString& compareWith) const
 {
-    if (!saveScore(score, saveName)) {
+    if (!saveScore(score_, saveName)) {
         return false;
     }
     return compareFiles(saveName, compareWith);
@@ -231,5 +246,6 @@ void MTest::initMTest()
     root = rootPath();
     loadInstrumentTemplates(":/data/instruments.xml");
     score = readScore("test.mscx");
+    MScore::_error = Ms::MsError::MS_NO_ERROR;
 }
 }

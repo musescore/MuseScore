@@ -32,6 +32,7 @@ SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_SPACER);
     setTitle(qtrc("inspector", "Spacer"));
+    setIcon(ui::IconCode::Code::SPACER);
     createProperties();
 }
 
@@ -48,7 +49,7 @@ void SpacerSettingsModel::requestElements()
 void SpacerSettingsModel::loadProperties()
 {
     loadPropertyItem(m_spacerHeight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

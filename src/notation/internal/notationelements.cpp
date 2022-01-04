@@ -21,7 +21,7 @@
  */
 #include "notationelements.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/measure.h"
@@ -45,7 +45,7 @@ Ms::Score* NotationElements::msScore() const
     return m_getScore->score();
 }
 
-Element* NotationElements::search(const std::string& searchText) const
+EngravingItem* NotationElements::search(const std::string& searchText) const
 {
     SearchCommandsParser commandsParser;
 
@@ -73,13 +73,13 @@ Element* NotationElements::search(const std::string& searchText) const
     return nullptr;
 }
 
-std::vector<Element*> NotationElements::elements(const FilterElementsOptions& elementsOptions) const
+std::vector<EngravingItem*> NotationElements::elements(const FilterElementsOptions& elementsOptions) const
 {
-    std::vector<Element*> result;
+    std::vector<EngravingItem*> result;
 
     const FilterElementsOptions* elementsFilterOptions = dynamic_cast<const FilterElementsOptions*>(&elementsOptions);
 
-    if (!elementsFilterOptions || !elementsFilterOptions->isValid()) {
+    if (!elementsFilterOptions) {
         return allScoreElements();
     }
 
@@ -101,7 +101,7 @@ Ms::RehearsalMark* NotationElements::rehearsalMark(const std::string& name) cons
 
     for (Ms::Segment* segment = score()->firstSegment(Ms::SegmentType::ChordRest); segment;
          segment = segment->next1(Ms::SegmentType::ChordRest)) {
-        for (Element* element: segment->annotations()) {
+        for (EngravingItem* element: segment->annotations()) {
             if (element->type() != ElementType::REHEARSAL_MARK) {
                 continue;
             }
@@ -141,11 +141,11 @@ Ms::Page* NotationElements::page(const int pageIndex) const
     return score()->pages().at(pageIndex);
 }
 
-std::vector<Element*> NotationElements::allScoreElements() const
+std::vector<EngravingItem*> NotationElements::allScoreElements() const
 {
-    std::vector<Element*> result;
+    std::vector<EngravingItem*> result;
     for (Ms::Page* page : score()->pages()) {
-        for (Element* element: page->elements()) {
+        for (EngravingItem* element: page->elements()) {
             result.push_back(element);
         }
     }
@@ -153,28 +153,28 @@ std::vector<Element*> NotationElements::allScoreElements() const
     return result;
 }
 
-std::vector<Element*> NotationElements::filterElements(const FilterElementsOptions* elementsOptions) const
+std::vector<EngravingItem*> NotationElements::filterElements(const FilterElementsOptions* elementsOptions) const
 {
     ElementPattern* pattern = constructElementPattern(elementsOptions);
 
     score()->scanElements(pattern, Ms::Score::collectMatch);
 
-    std::vector<Element*> result;
-    for (Element* element: pattern->el) {
+    std::vector<EngravingItem*> result;
+    for (EngravingItem* element: pattern->el) {
         result.push_back(element);
     }
 
     return result;
 }
 
-std::vector<Element*> NotationElements::filterNotes(const FilterNotesOptions* notesOptions) const
+std::vector<EngravingItem*> NotationElements::filterNotes(const FilterNotesOptions* notesOptions) const
 {
     Ms::NotePattern* pattern = constructNotePattern(notesOptions);
 
     score()->scanElements(pattern, Ms::Score::collectNoteMatch);
 
-    std::vector<Element*> result;
-    for (Element* element: pattern->el) {
+    std::vector<EngravingItem*> result;
+    for (EngravingItem* element: pattern->el) {
         result.push_back(element);
     }
 

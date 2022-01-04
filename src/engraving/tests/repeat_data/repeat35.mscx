@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -80,11 +80,11 @@
         <height>10</height>
         <bottomGap>1</bottomGap>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>repeat35 test multi-movement w/ section_breaks</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>Movement A</text>
           </Text>
         </VBox>
@@ -152,7 +152,7 @@
         <topMargin>1</topMargin>
         <bottomMargin>1</bottomMargin>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <offset x="0" y="0"/>
           <text>Movement B</text>
           </Text>
@@ -237,7 +237,7 @@
         <topMargin>1</topMargin>
         <bottomMargin>1</bottomMargin>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <offset x="0" y="0"/>
           <text>Movement C</text>
           </Text>
@@ -306,7 +306,7 @@
         <topMargin>1</topMargin>
         <bottomMargin>1</bottomMargin>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <offset x="0" y="0"/>
           <text>Movement D</text>
           </Text>

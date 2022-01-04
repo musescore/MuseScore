@@ -31,14 +31,15 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Fermatas"));
+    setModelType(InspectorModelType::TYPE_FERMATA);
 
     createProperties();
 }
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 }
 
@@ -50,7 +51,7 @@ void FermataPlaybackModel::requestElements()
 void FermataPlaybackModel::loadProperties()
 {
     loadPropertyItem(m_timeStretch, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 }
 

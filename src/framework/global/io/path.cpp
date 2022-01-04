@@ -21,8 +21,9 @@
  */
 #include "path.h"
 
-#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
+#include <QRegularExpression>
 
 #include "stringutils.h"
 
@@ -81,10 +82,10 @@ paths path::pathsFromString(const std::string& str, const std::string& delim)
     return ps;
 }
 
-std::string mu::io::syffix(const mu::io::path& path)
+std::string mu::io::suffix(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
-    return fi.suffix().toStdString();
+    return fi.suffix().toLower().toStdString();
 }
 
 mu::io::path mu::io::filename(const mu::io::path& path)
@@ -115,6 +116,58 @@ mu::io::path mu::io::dirpath(const mu::io::path& path)
     return QFileInfo(path.toQString()).dir().path();
 }
 
+bool mu::io::isAllowedFileName(const path& fn_)
+{
+    QString fn = basename(fn_).toQString();
+
+    // Windows filenames are not case sensitive.
+    fn = fn.toUpper();
+
+    static const QString illegal="<>:\"|?*";
+
+    for (const QChar& c : fn) {
+        // Check for control characters
+        if (c.toLatin1() > 0 && c.toLatin1() < 32) {
+            return false;
+        }
+
+        // Check for illegal characters
+        if (illegal.contains(c)) {
+            return false;
+        }
+    }
+
+    // Check for device names in filenames
+    static const QStringList devices = {
+        "CON", "PRN",  "AUX",  "NUL",
+        "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+        "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+    };
+
+    foreach (const QString& s, devices) {
+        if (fn == s) {
+            return false;
+        }
+    }
+
+    // Check for trailing periods or spaces
+    if (fn.right(1) == "." || fn.right(1) == " ") {
+        return false;
+    }
+
+    // Check for pathnames that are too long
+    if (fn.length() > 96) {
+        return false;
+    }
+
+    // Since we are checking for a filename, it mustn't be a directory
+    if (fn.right(1) == "\\") {
+        return false;
+    }
+
+    return true;
+}
+
 mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
 {
     //
@@ -125,16 +178,16 @@ mu::io::path mu::io::escapeFileName(const mu::io::path& fn_)
     fn = fn.simplified();
     fn = fn.replace(QChar(' '),  "_");
     fn = fn.replace(QChar('\n'), "_");
-    fn = fn.replace(QChar(0xe4), "ae");   // &auml;
-    fn = fn.replace(QChar(0xf6), "oe");   // &ouml;
-    fn = fn.replace(QChar(0xfc), "ue");   // &uuml;
-    fn = fn.replace(QChar(0xdf), "ss");   // &szlig;
-    fn = fn.replace(QChar(0xc4), "Ae");   // &Auml;
-    fn = fn.replace(QChar(0xd6), "Oe");   // &Ouml;
-    fn = fn.replace(QChar(0xdc), "Ue");   // &Uuml;
-    fn = fn.replace(QChar(0x266d), "b");   // musical flat sign, happen in instrument names, so can happen in part (file) names
-    fn = fn.replace(QChar(0x266f), "#");   // musical sharp sign, can happen in titles, so can happen in score (file) names
-    fn = fn.replace(QRegExp("[" + QRegExp::escape("\\/:*?\"<>|") + "]"), "_");         //FAT/NTFS special chars
+    fn = fn.replace(QChar(0xe4), "ae"); // &auml;
+    fn = fn.replace(QChar(0xf6), "oe"); // &ouml;
+    fn = fn.replace(QChar(0xfc), "ue"); // &uuml;
+    fn = fn.replace(QChar(0xdf), "ss"); // &szlig;
+    fn = fn.replace(QChar(0xc4), "Ae"); // &Auml;
+    fn = fn.replace(QChar(0xd6), "Oe"); // &Ouml;
+    fn = fn.replace(QChar(0xdc), "Ue"); // &Uuml;
+    fn = fn.replace(QChar(0x266d), "b"); // musical flat sign, happen in instrument names, so can happen in part (file) names
+    fn = fn.replace(QChar(0x266f), "#"); // musical sharp sign, can happen in titles, so can happen in score (file) names
+    fn = fn.replace(QRegularExpression("[" + QRegularExpression::escape("\\/:*?\"<>|") + "]"), "_"); //FAT/NTFS special chars
     return fn;
 }
 

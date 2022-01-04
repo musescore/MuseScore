@@ -52,7 +52,7 @@ StyledDialogView {
 
         anchors.fill: parent
 
-        navigation.section: root.navigation
+        navigation.section: root.navigationSection
 
         buttons: root.buttons
 

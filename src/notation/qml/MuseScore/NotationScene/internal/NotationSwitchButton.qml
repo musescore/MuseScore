@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.7
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -28,41 +28,46 @@ import MuseScore.Ui 1.0
 FlatRadioButton {
     id: root
 
-    property string title: ""
     property bool needSave: false
 
     signal closeRequested()
 
-    normalStateColor: ui.theme.backgroundSecondaryColor
-    hoverStateColor: selectedStateColor
-    pressedStateColor: selectedStateColor
-    selectedStateColor: ui.theme.backgroundPrimaryColor
-
-    width: 200
+    width: Math.min(200, implicitContentWidth)
     radius: 0
 
+    checkedColor: ui.theme.backgroundPrimaryColor
+
     RowLayout {
+        id: contentRow
         anchors.fill: parent
-        anchors.leftMargin: 12
+        spacing: 4
 
         StyledTextLabel {
             Layout.alignment: Qt.AlignLeft
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            Layout.fillWidth: root.implicitContentWidth > 200
+            Layout.preferredWidth: implicitWidth
+            Layout.leftMargin: 12
 
             horizontalAlignment: Text.AlignLeft
 
-            text: root.title + (root.needSave ? "*" : "")
+            text: root.text + (root.needSave ? "*" : "")
         }
 
         FlatButton {
-            Layout.preferredHeight: 14
+            Layout.preferredHeight: 20
             Layout.preferredWidth: height
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
 
-            normalStateColor: "transparent"
+            transparent: true
             icon: IconCode.CLOSE_X_ROUNDED
-            onClicked: root.closeRequested()
+            iconFont {
+                family: ui.theme.iconsFont.family
+                pixelSize: 12
+            }
+
+            onClicked: {
+                root.closeRequested()
+            }
         }
 
         SeparatorLine { orientation: Qt.Vertical }

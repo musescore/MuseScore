@@ -21,15 +21,18 @@
  */
 
 #include "breath.h"
-#include "sym.h"
+
+#include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "system.h"
 #include "segment.h"
 #include "measure.h"
 #include "score.h"
-#include "xml.h"
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 const std::vector<BreathType> Breath::breathList {
@@ -48,8 +51,8 @@ const std::vector<BreathType> Breath::breathList {
 //   Breath
 //---------------------------------------------------------
 
-Breath::Breath(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+Breath::Breath(Segment* parent)
+    : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE)
 {
     _symId = SymId::breathMarkComma;
     _pause = 0.0;
@@ -98,11 +101,11 @@ void Breath::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::SYMBOL);
     writeProperty(xml, Pid::PAUSE);
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -127,10 +130,10 @@ void Breath::read(XmlReader& e)
                 break;
             }
         } else if (tag == "symbol") {
-            _symId = Sym::name2id(e.readElementText());
+            _symId = SymNames::symIdByName(e.readElementText());
         } else if (tag == "pause") {
             _pause = e.readDouble();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -162,7 +165,7 @@ void Breath::draw(mu::draw::Painter* painter) const
 
 mu::PointF Breath::pagePos() const
 {
-    if (parent() == 0) {
+    if (explicitParent() == 0) {
         return pos();
     }
     System* system = segment()->measure()->system();
@@ -177,15 +180,15 @@ mu::PointF Breath::pagePos() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Breath::getProperty(Pid propertyId) const
+PropertyValue Breath::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return QVariant::fromValue(_symId);
+        return PropertyValue::fromValue(_symId);
     case Pid::PAUSE:
         return _pause;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -193,7 +196,7 @@ QVariant Breath::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Breath::setProperty(Pid propertyId, const QVariant& v)
+bool Breath::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:
@@ -203,7 +206,7 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
         setPause(v.toDouble());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -217,15 +220,15 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Breath::propertyDefault(Pid id) const
+PropertyValue Breath::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::PAUSE:
         return 0.0;
     case Pid::PLACEMENT:
-        return track() & 1 ? int(Placement::BELOW) : int(Placement::ABOVE);
+        return track() & 1 ? PlacementV::BELOW : PlacementV::ABOVE;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -233,7 +236,7 @@ QVariant Breath::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::nextSegmentElement()
+EngravingItem* Breath::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -242,7 +245,7 @@ Element* Breath::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::prevSegmentElement()
+EngravingItem* Breath::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -253,6 +256,6 @@ Element* Breath::prevSegmentElement()
 
 QString Breath::accessibleInfo() const
 {
-    return Sym::id2userName(_symId);
+    return SymNames::translatedUserNameForSymId(_symId);
 }
 }

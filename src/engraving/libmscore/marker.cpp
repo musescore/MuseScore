@@ -23,12 +23,13 @@
 #include "marker.h"
 
 #include "translation.h"
+#include "rw/xml.h"
 
 #include "score.h"
-#include "xml.h"
 #include "measure.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -48,8 +49,8 @@ const MarkerTypeItem markerTypeTable[] = {
     { Marker::Type::VARCODA, QT_TRANSLATE_NOOP("markerType", "Varied coda") },
     { Marker::Type::CODETTA, QT_TRANSLATE_NOOP("markerType", "Codetta") },
     { Marker::Type::FINE, QT_TRANSLATE_NOOP("markerType", "Fine") },
-    { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To Coda") },
-    { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To Coda (Symbol)") },
+    { Marker::Type::TOCODA, QT_TRANSLATE_NOOP("markerType", "To coda") },
+    { Marker::Type::TOCODASYM, QT_TRANSLATE_NOOP("markerType", "To coda (symbol)") },
     { Marker::Type::USER, QT_TRANSLATE_NOOP("markerType", "Custom") }
 };
 
@@ -62,13 +63,13 @@ int markerTypeTableSize()
 //   Marker
 //---------------------------------------------------------
 
-Marker::Marker(Score* s)
-    : Marker(s, Tid::REPEAT_LEFT)
+Marker::Marker(EngravingItem* parent)
+    : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
 }
 
-Marker::Marker(Score* s, Tid tid)
-    : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+Marker::Marker(EngravingItem* parent, TextStyleType tid)
+    : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
     _markerType = Type::FINE;
@@ -111,19 +112,19 @@ void Marker::setMarkerType(Type t)
 
     case Type::FINE:
         txt = "Fine";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("fine");
         break;
 
     case Type::TOCODA:
         txt = "To Coda";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 
     case Type::TOCODASYM:
         txt = "To <font size=\"20\"/><sym>coda</sym>";
-        initTid(Tid::REPEAT_RIGHT, true);
+        initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel("coda");
         break;
 
@@ -194,7 +195,7 @@ void Marker::layout()
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
 
-    if (layoutToParentWidth() && !(align() & (Align::RIGHT | Align::HCENTER))) {
+    if (layoutToParentWidth() && align() == AlignH::LEFT) {
         rxpos() -= width() * 0.5;
     }
 
@@ -228,10 +229,10 @@ void Marker::read(XmlReader& e)
 
 void Marker::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     TextBase::writeProperties(xml);
     xml.tag("label", _label);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -256,7 +257,7 @@ void Marker::undoSetMarkerType(Type t)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Marker::getProperty(Pid propertyId) const
+PropertyValue Marker::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LABEL:
@@ -273,7 +274,7 @@ QVariant Marker::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Marker::setProperty(Pid propertyId, const QVariant& v)
+bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LABEL:
@@ -296,7 +297,7 @@ bool Marker::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Marker::propertyDefault(Pid propertyId) const
+PropertyValue Marker::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LABEL:
@@ -304,7 +305,7 @@ QVariant Marker::propertyDefault(Pid propertyId) const
     case Pid::MARKER_TYPE:
         return int(Type::FINE);
     case Pid::PLACEMENT:
-        return int(Placement::ABOVE);
+        return PlacementV::ABOVE;
     default:
         break;
     }
@@ -315,7 +316,7 @@ QVariant Marker::propertyDefault(Pid propertyId) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Marker::nextSegmentElement()
+EngravingItem* Marker::nextSegmentElement()
 {
     Segment* seg;
     if (markerType() == Marker::Type::FINE) {
@@ -327,14 +328,14 @@ Element* Marker::nextSegmentElement()
         seg = prevMeasure->last();
         return seg->firstElement(staffIdx());
     }
-    return Element::nextSegmentElement();
+    return EngravingItem::nextSegmentElement();
 }
 
 //---------------------------------------------------------
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Marker::prevSegmentElement()
+EngravingItem* Marker::prevSegmentElement()
 {
     //it's the same barline
     return nextSegmentElement();
@@ -346,6 +347,6 @@ Element* Marker::prevSegmentElement()
 
 QString Marker::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), markerTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
 }
 }

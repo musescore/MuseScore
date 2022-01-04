@@ -25,7 +25,7 @@
 
 #include <QQmlEngine>
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -35,7 +35,7 @@ namespace PluginAPI {
 ///   Use PluginAPI::PluginAPI::fraction to create a
 ///   fraction for usage within your plugin:
 ///   \code
-///   var ts = newElement(Element.TIMESIG);
+///   var ts = newElement(EngravingItem.TIMESIG);
 ///   ts.timesig = fraction(3, 4);
 ///   \endcode
 //---------------------------------------------------------

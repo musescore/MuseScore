@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 FocusScope {
     id: root
@@ -38,14 +39,27 @@ FocusScope {
     property alias hintIcon: hintIcon.iconCode
     property bool clearTextButtonVisible: false
 
+    property alias textHorizontalAlignment: valueInput.horizontalAlignment
+    property alias textVerticalAlignment: valueInput.verticalAlignment
     property bool hasText: valueInput.text.length > 0
     property alias readOnly: valueInput.readOnly
 
-    property alias navigation: navCtrl
-    property alias accessible: navCtrl.accessible
+    property real textSidePadding: 12
+    property real accessoriesPadding: 4
+
+    readonly property alias background: background
+
+    readonly property alias mouseArea: clickableArea
+    property bool containsMouse: clickableArea.containsMouse
+
+    readonly property alias navigation: navCtrl
+    readonly property alias accessible: navCtrl.accessible
+
+    readonly property alias clearTextButton: clearTextButtonItem
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
+    signal textEditingFinished()
 
     function selectAll() {
         valueInput.selectAll()
@@ -74,6 +88,9 @@ FocusScope {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
+    FocusListener {
+        item: root
+    }
 
     NavigationControl {
         id: navCtrl
@@ -81,7 +98,7 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.EditableText
-        accessible.name: valueInput.text
+        accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
         accessible.visualItem: root
 
         onActiveChanged: {
@@ -94,16 +111,19 @@ FocusScope {
     Rectangle {
         id: background
         anchors.fill: parent
+
+        NavigationFocusBorder { navigationCtrl: navCtrl }
+
         color: ui.theme.textFieldColor
-        radius: 4
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
-        border.width: navCtrl.active ? 2 : 1
+        border.color: ui.theme.strokeColor
+        border.width: Math.max(ui.theme.borderWidth, 1)
+        radius: 3
     }
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: hintIcon.visible ? 0 : 12
-        anchors.rightMargin: 4
+        anchors.leftMargin: hintIcon.visible ? 0 : root.textSidePadding
+        anchors.rightMargin: clearTextButtonItem.visible ? 0 : root.textSidePadding
 
         spacing: 0
 
@@ -111,9 +131,10 @@ FocusScope {
             id: hintIcon
 
             Layout.fillHeight: true
-            Layout.preferredWidth: 30
+            Layout.preferredWidth: height
+            Layout.margins: root.accessoriesPadding
 
-            visible: Boolean(!hintIcon.isEmpty)
+            visible: !isEmpty
         }
 
         TextField {
@@ -123,6 +144,7 @@ FocusScope {
 
             Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: !measureUnitsLabel.visible
+            padding: 0
 
             //! NOTE Disabled default Qt Accessible
             Accessible.role: Accessible.NoRole
@@ -135,23 +157,46 @@ FocusScope {
             focus: false
             activeFocusOnPress: false
             selectByMouse: true
-            selectionColor: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, ui.theme.accentOpacityNormal)
+            selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
             text: root.currentText === undefined ? "" : root.currentText
 
+            TextInputFieldModel {
+                id: textInputFieldModel
+            }
+
+            Component.onCompleted: {
+                textInputFieldModel.init()
+            }
+
+            Keys.onShortcutOverride: {
+                if (textInputFieldModel.isShortcutAllowedOverride(event.key, event.modifiers)) {
+                    event.accepted = true
+                } else {
+                    event.accepted = false
+
+                    root.focus = false
+                    root.textEditingFinished()
+                }
+            }
+
             Keys.onPressed: {
-                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                    valueInput.focus = false
+                if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
+                        || event.key === Qt.Key_Escape) {
+                    root.focus = false
+                    root.textEditingFinished()
                 }
             }
 
             onActiveFocusChanged: {
                 if (activeFocus) {
+                    navCtrl.requestActive()
                     selectAll()
                 } else {
                     deselect()
+                    root.textEditingFinished()
                 }
             }
 
@@ -170,29 +215,28 @@ FocusScope {
             Layout.alignment: Qt.AlignVCenter
 
             color: ui.theme.fontPrimaryColor
-            visible: !root.isIndeterminate && Boolean(text)
+            visible: !root.isIndeterminate && !isEmpty
         }
 
         FlatButton {
-            id: clearTextButton
+            id: clearTextButtonItem
 
             Layout.fillHeight: true
             Layout.preferredWidth: height
-
-            readonly property int margin: 4
-
-            Layout.topMargin: margin
-            Layout.bottomMargin: margin
+            Layout.margins: root.accessoriesPadding
 
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
 
-            normalStateColor: background.color
-            hoveredStateColor: ui.theme.accentColor
-            pressedStateColor: ui.theme.accentColor
+            transparent: true
+            accentButton: true
+
+            navigation.panel: navCtrl.panel
+            navigation.order: navCtrl.order + 1
 
             onClicked: {
                 root.clear()
+                navCtrl.requestActive()
             }
         }
 
@@ -216,14 +260,14 @@ FocusScope {
     states: [
         State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !valueInput.activeFocus
-            PropertyChanges { target: background; opacity: 0.6 }
+            when: root.containsMouse && !valueInput.activeFocus
+            PropertyChanges { target: background; border.color: Utils.colorWithAlpha(ui.theme.accentColor, 0.6) }
         },
 
         State {
             name: "FOCUSED"
             when: valueInput.activeFocus
-            PropertyChanges { target: background; border.color: ui.theme.accentColor; border.width: 1; opacity: 1 }
+            PropertyChanges { target: background; border.color: ui.theme.accentColor }
         }
     ]
 
@@ -234,7 +278,7 @@ FocusScope {
         anchors.left: parent.left
 
         height: parent.height
-        width: clearTextButton.visible ? parent.width - clearTextButton.width : parent.width
+        width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
         propagateComposedEvents: true
         hoverEnabled: true

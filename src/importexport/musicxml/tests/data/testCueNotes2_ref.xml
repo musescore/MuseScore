@@ -120,7 +120,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <beam number="1">begin</beam>
         <notations>
           <tied type="start"/>
@@ -139,7 +139,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <beam number="1">end</beam>
         <notations>
           <tied type="stop"/>
@@ -155,11 +155,11 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
-        </note>
         <lyric number="1">
           <syllabic>single</syllabic>
           <text>cue</text>
           </lyric>
+        </note>
       <note>
         <cue/>
         <pitch>
@@ -189,7 +189,7 @@
           <step>F</step>
           <octave>5</octave>
           </pitch>
-        <duration>1</duration>
+        <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>

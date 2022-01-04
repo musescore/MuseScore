@@ -20,14 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Window 2.15
+
 import MuseScore.Ui 1.0
 
 Item {
-
     id: root
 
     property var topParent: null
     property var provider: ui._interactiveProvider
+    property var objects: ({})
 
     signal requestedDockPage(var uri, var params)
 
@@ -39,21 +41,26 @@ Item {
         color: "#440000"
     }
 
+    function onPageOpened() {
+        root.provider.onOpen(ContainerType.PrimaryPage, {})
+    }
+
     Connections {
         target: root.provider
 
         function onFireOpen(data) {
 
             var page = data.data()
-            console.log("try open uri: " + data.value("uri") + ", page: " + JSON.stringify(page))
+            var uri = data.value("uri")
+
+            console.log("try open uri: " + uri + ", page: " + JSON.stringify(page))
             if (!(page && (page.type === ContainerType.PrimaryPage || page.type === ContainerType.QmlDialog))) {
                 data.setValue("ret", {errcode: 101 }) // ResolveFailed
                 return;
             }
 
             if (page.type === ContainerType.PrimaryPage) {
-                root.requestedDockPage(data.value("uri"), page.params)
-                root.provider.onOpen(page.type, {})
+                root.requestedDockPage(uri, page.params)
                 data.setValue("ret", {errcode: 0 })
                 return;
             }
@@ -63,7 +70,7 @@ Item {
 
                 var dialogObj = createDialog(dialogPath, page.params)
                 data.setValue("ret", dialogObj.ret)
-                data.setValue("objectID", dialogObj.object.objectID)
+                data.setValue("objectId", dialogObj.object.objectId)
 
                 if (dialogObj.ret.errcode > 0) {
                     return
@@ -81,7 +88,7 @@ Item {
             var dialog = data.data()
             var dialogObj = createDialog("internal/StandardDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
-            data.setValue("objectID", dialogObj.object.objectID)
+            data.setValue("objectId", dialogObj.object.objectId)
 
             if (dialogObj.ret.errcode > 0) {
                 return
@@ -90,11 +97,18 @@ Item {
             dialogObj.object.exec()
         }
 
-        function onFireClose(objectID) {
-            for(var i = 0; i < root.topParent.children.length; ++i) {
-                if (root.topParent.children[i].objectID === objectID) {
-                    root.topParent.children[i].hide()
-                }
+        function onFireClose(objectId) {
+            var obj = root.findObject(objectId)
+            if (obj) {
+                obj.hide()
+            }
+            root.objects[objectId] = undefined
+        }
+
+        function onFireRaise(objectId) {
+            var obj = root.findObject(objectId)
+            if (obj) {
+                obj.raise()
             }
         }
     }
@@ -107,7 +121,8 @@ Item {
         }
 
         var obj = comp.createObject(root.topParent, params)
-        obj.objectID = root.provider.objectID(obj)
+        obj.objectId = root.provider.objectId(obj)
+        root.objects[obj.objectId] = obj
 
         var ret = (obj.ret && obj.ret.errcode) ? obj.ret : {errcode: 0}
 
@@ -115,13 +130,19 @@ Item {
             return { "ret": ret, "object" : obj }
         }
 
+        obj.opened.connect(function() {
+            root.provider.onOpen(ContainerType.QmlDialog, obj.objectId, obj.contentItem.Window.window)
+        })
+
         obj.closed.connect(function() {
-            root.provider.onPopupClose(obj.objectID, obj.ret ? obj.ret : {errcode: 0})
+            root.provider.onClose(obj.objectId, obj.ret ? obj.ret : {errcode: 0})
             obj.destroy()
         })
 
-        root.provider.onOpen(ContainerType.QmlDialog, obj.objectID)
-
         return { "ret": ret, "object" : obj }
+    }
+
+    function findObject(objectId) {
+        return root.objects[objectId]
     }
 }

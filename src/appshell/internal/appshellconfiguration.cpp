@@ -30,6 +30,8 @@ using namespace mu::framework;
 
 static const std::string module_name("appshell");
 
+static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "application/hasCompletedFirstLaunchSetup");
+
 static const Settings::Key STARTUP_SESSION_TYPE(module_name, "application/startup/sessionStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
@@ -47,14 +49,25 @@ static const std::string UTM_MEDIUM_MENU("menu");
 
 static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
-static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startup/showTours");
 
 void AppShellConfiguration::init()
 {
+    settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
+
     settings()->setDefaultValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(StartupSessionType::StartEmpty)));
-    settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(userScoresConfiguration()->myFirstScorePath().toStdString()));
+    settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
+}
+
+bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
+{
+    return settings()->value(HAS_COMPLETED_FIRST_LAUNCH_SETUP).toBool();
+}
+
+void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
+{
+    settings()->setSharedValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(has));
 }
 
 StartupSessionType AppShellConfiguration::startupSessionType() const
@@ -161,11 +174,6 @@ std::string AppShellConfiguration::museScoreRevision() const
     return MUSESCORE_REVISION;
 }
 
-mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
-{
-    return userScoresConfiguration()->recentScorePaths();
-}
-
 bool AppShellConfiguration::isNotationNavigatorVisible() const
 {
     return uiConfiguration()->isVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, false);
@@ -189,16 +197,6 @@ bool AppShellConfiguration::needShowSplashScreen() const
 void AppShellConfiguration::setNeedShowSplashScreen(bool show)
 {
     settings()->setSharedValue(SPLASH_SCREEN_VISIBLE_KEY, Val(show));
-}
-
-bool AppShellConfiguration::needShowTours() const
-{
-    return settings()->value(TOURS_VISIBLE_KEY).toBool();
-}
-
-void AppShellConfiguration::setNeedShowTours(bool show)
-{
-    settings()->setSharedValue(TOURS_VISIBLE_KEY, Val(show));
 }
 
 void AppShellConfiguration::startEditSettings()

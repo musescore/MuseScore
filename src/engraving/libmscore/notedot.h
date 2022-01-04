@@ -23,7 +23,11 @@
 #ifndef __NOTEDOT_H__
 #define __NOTEDOT_H__
 
-#include "element.h"
+#include "engravingitem.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Note;
@@ -33,22 +37,25 @@ class Rest;
 //   @@ NoteDot
 //---------------------------------------------------------
 
-class NoteDot final : public Element
+class NoteDot final : public EngravingItem
 {
 public:
-    NoteDot(Score* = 0);
 
     NoteDot* clone() const override { return new NoteDot(*this); }
-    ElementType type() const override { return ElementType::NOTEDOT; }
     qreal mag() const override;
 
     void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;
     void layout() override;
 
-    Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
-    Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }
-    Element* elementBase() const override;
+    Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
+    Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }
+    EngravingItem* elementBase() const override;
+
+private:
+    friend class mu::engraving::Factory;
+    NoteDot(Note* parent);
+    NoteDot(Rest* parent);
 };
 }     // namespace Ms
 #endif

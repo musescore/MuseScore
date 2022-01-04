@@ -61,26 +61,27 @@ private:
     Syllabic _syllabic;
     LyricsLine* _separator;
 
+    friend class mu::engraving::Factory;
+    Lyrics(ChordRest* parent);
+    Lyrics(const Lyrics&);
+
     bool isMelisma() const;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
 protected:
     int _no;                  ///< row index
     bool _even;
 
 public:
-    Lyrics(Score* = 0);
-    Lyrics(const Lyrics&);
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }
-    ElementType type() const override { return ElementType::LYRICS; }
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
-    Segment* segment() const { return toSegment(parent()->parent()); }
-    Measure* measure() const { return toMeasure(parent()->parent()->parent()); }
-    ChordRest* chordRest() const { return toChordRest(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()->explicitParent()); }
+    Measure* measure() const { return toMeasure(explicitParent()->explicitParent()->explicitParent()); }
+    ChordRest* chordRest() const { return toChordRest(explicitParent()); }
 
     void layout() override;
     void layout2(int);
@@ -95,8 +96,9 @@ public:
     bool isEven() const { return _no % 1; }
     void setSyllabic(Syllabic s) { _syllabic = s; }
     Syllabic syllabic() const { return _syllabic; }
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    bool edit(EditData&) override;
     void endEdit(EditData&) override;
 
     Fraction ticks() const { return _ticks; }
@@ -104,12 +106,12 @@ public:
     Fraction endTick() const;
     void removeFromScore();
 
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const QString& txt) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 
 //---------------------------------------------------------
@@ -123,21 +125,20 @@ protected:
     Lyrics* _nextLyrics;
 
 public:
-    LyricsLine(Score*);
+    LyricsLine(EngravingItem* parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
-    ElementType type() const override { return ElementType::LYRICSLINE; }
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
     void styleChanged() override;
 
-    Lyrics* lyrics() const { return toLyrics(parent()); }
+    Lyrics* lyrics() const { return toLyrics(explicitParent()); }
     Lyrics* nextLyrics() const { return _nextLyrics; }
     bool isEndMelisma() const { return lyrics()->ticks().isNotZero(); }
     bool isDash() const { return !isEndMelisma(); }
-    bool setProperty(Pid propertyId, const QVariant& v) override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
     SpannerSegment* layoutSystem(System*) override;
 };
 
@@ -153,10 +154,9 @@ protected:
     qreal _dashLength = 0;
 
 public:
-    LyricsLineSegment(Spanner*, Score*);
+    LyricsLineSegment(LyricsLine*, System* parent);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
-    ElementType type() const override { return ElementType::LYRICSLINE_SEGMENT; }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     // helper functions

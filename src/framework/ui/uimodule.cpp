@@ -34,10 +34,13 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
+#include "view/platform/macos/macosmainwindowprovider.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
+#include "view/mainwindowprovider.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
+#include "view/mainwindowprovider.h"
 #endif
 
 #include "view/qmltooltip.h"
@@ -49,14 +52,10 @@
 #include "view/navigationcontrol.h"
 #include "view/navigationevent.h"
 #include "view/qmlaccessible.h"
+#include "view/focuslistener.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
-#include "dev/keynav/keynavdevmodel.h"
-#include "dev/keynav/abstractkeynavdevitem.h"
-#include "dev/keynav/keynavdevsection.h"
-#include "dev/keynav/keynavdevsubsection.h"
-#include "dev/keynav/keynavdevcontrol.h"
 
 using namespace mu::ui;
 using namespace mu::modularity;
@@ -106,7 +105,6 @@ void UiModule::resolveImports()
     if (ir) {
         ir->registerWidgetUri(Uri("musescore://devtools/interactive/testdialog"), TestDialog::static_metaTypeId());
         ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
-        ir->registerQmlUri(Uri("musescore://devtools/keynav/controls"), "MuseScore/Ui/KeyNavDevDialog.qml");
     }
 }
 
@@ -126,7 +124,6 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<InteractiveProvider>("MuseScore.Ui", 1, 0, "QmlInteractiveProvider", "Cannot create");
     qmlRegisterUncreatableType<ContainerType>("MuseScore.Ui", 1, 0, "ContainerType", "Cannot create a ContainerType");
 
-    qmlRegisterUncreatableType<AbstractNavigation>("MuseScore.Ui", 1, 0, "AbstractNavigation", "Cannot create a AbstractType");
     qmlRegisterUncreatableType<NavigationEvent>("MuseScore.Ui", 1, 0, "NavigationEvent", "Cannot create a KeyNavigationEvent");
     qmlRegisterType<NavigationSection>("MuseScore.Ui", 1, 0, "NavigationSection");
     qmlRegisterType<NavigationPanel>("MuseScore.Ui", 1, 0, "NavigationPanel");
@@ -135,14 +132,16 @@ void UiModule::registerUiTypes()
     qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
     qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
 
+    qmlRegisterType<FocusListener>("MuseScore.Ui", 1, 0, "FocusListener");
+
+#ifdef Q_OS_MAC
+    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+#else
+    qmlRegisterType<MainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+#endif
+
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");
-
-    qmlRegisterType<KeyNavDevModel>("MuseScore.Ui", 1, 0, "KeyNavDevModel");
-    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("MuseScore.Ui", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
-    qmlRegisterUncreatableType<KeyNavDevSubSection>("MuseScore.Ui", 1, 0, "KeyNavDevSubSection", "Cannot create a KeyNavDevSubSection");
-    qmlRegisterUncreatableType<KeyNavDevSection>("MuseScore.Ui", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
-    qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Ui", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }

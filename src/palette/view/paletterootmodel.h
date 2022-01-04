@@ -24,39 +24,41 @@
 
 #include <QObject>
 
+#include "actions/actionable.h"
 #include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "../ipaletteadapter.h"
-#include "../internal/palette/paletteworkspace.h"
+#include "internal/paletteprovider.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PaletteRootModel : public QObject, async::Asyncable
+class PaletteRootModel : public QObject, public actions::Actionable, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteAdapter, adapter)
+    INJECT(palette, IPaletteProvider, paletteProvider)
+    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+
+    Q_PROPERTY(Ms::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 
     Q_PROPERTY(bool paletteEnabled READ paletteEnabled NOTIFY paletteEnabledChanged)
-    Q_PROPERTY(Ms::PaletteWorkspace* paletteWorkspace READ paletteWorkspace CONSTANT)
-
-    Q_PROPERTY(bool shadowOverlay READ shadowOverlay NOTIFY shadowOverlayChanged)
+    Q_PROPERTY(bool needShowShadowOverlay READ needShowShadowOverlay NOTIFY needShowShadowOverlayChanged)
 
 public:
-    PaletteRootModel(QObject* parent = nullptr);
+    explicit PaletteRootModel(QObject* parent = nullptr);
+
+    Ms::PaletteProvider* paletteProvider_property() const;
 
     bool paletteEnabled() const;
-    Ms::PaletteWorkspace* paletteWorkspace() const;
-    bool shadowOverlay() const;
+    bool needShowShadowOverlay() const;
 
 signals:
-    void paletteEnabledChanged(bool paletteEnabled);
     void paletteSearchRequested();
-    void shadowOverlayChanged(bool shadowOverlay);
-    void elementDraggedToScoreView();
+    void paletteEnabledChanged();
+    void needShowShadowOverlayChanged();
 
 private:
-    bool m_paletteEnabled = true;
-    bool m_shadowOverlay = false;
+    bool m_needShowShadowOverlay = false;
 };
 }
 

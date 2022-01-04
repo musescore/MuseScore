@@ -21,7 +21,7 @@
  */
 
 #include "audio.h"
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -55,8 +55,8 @@ void Audio::read(XmlReader& e)
 
 void Audio::write(XmlWriter& xml) const
 {
-    xml.stag("Audio");
+    xml.startObject("Audio");
     xml.tag("path", _path);
-    xml.etag();
+    xml.endObject();
 }
 }

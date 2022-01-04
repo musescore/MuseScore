@@ -57,14 +57,10 @@
 #include "stubs/framework/audio/audiostubmodule.h"
 #endif
 #include "framework/midi/midimodule.h"
+#include "framework/mpe/mpemodule.h"
 
 #include "appshell/appshellmodule.h"
 #include "context/contextmodule.h"
-#ifdef BUILD_USERSCORES_MODULE
-#include "userscores/userscoresmodule.h"
-#else
-#include "stubs/userscores/userscoresstubmodule.h"
-#endif
 
 #ifdef BUILD_LEARN_MODULE
 #include "learn/learnmodule.h"
@@ -74,6 +70,8 @@
 
 #include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
+#include "project/projectmodule.h"
+#include "print/printmodule.h"
 
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
@@ -97,18 +95,15 @@
 #else
 #include "stubs/playback/playbackstubmodule.h"
 #endif
-#ifdef BUILD_INSTRUMENTS_MODULE
-#include "instruments/instrumentsmodule.h"
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+#include "instrumentsscene/instrumentsscenemodule.h"
 #else
-#include "stubs/instruments/instrumentsstubmodule.h"
+#include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 #include "converter/convertermodule.h"
 
 #ifdef BUILD_VST
 #include "framework/vst/vstmodule.h"
-#endif
-#ifdef BUILD_TELEMETRY_MODULE
-#include "framework/telemetry/telemetrymodule.h"
 #endif
 
 #ifndef Q_OS_WASM
@@ -174,11 +169,9 @@ int main(int argc, char** argv)
 
     mu::appshell::AppShell app;
 
-    //! NOTE `telemetry` must be first, because it install crash handler.
-    //! others modules order not important (must be)
-#ifdef BUILD_TELEMETRY_MODULE
-    app.addModule(new mu::telemetry::TelemetryModule());
-#endif
+    //! NOTE `diagnostics` must be first, because it installs the crash handler.
+    //! For other modules, the order is (an should be) unimportant.
+    app.addModule(new mu::diagnostics::DiagnosticsModule());
     app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
@@ -211,17 +204,14 @@ int main(int argc, char** argv)
     app.addModule(new mu::audio::AudioStubModule());
 #endif
     app.addModule(new mu::midi::MidiModule());
-
-#ifdef BUILD_USERSCORES_MODULE
-    app.addModule(new mu::userscores::UserScoresModule());
-#else
-    app.addModule(new mu::userscores::UserScoresStubModule());
-#endif
+    app.addModule(new mu::mpe::MpeModule());
 
     app.addModule(new mu::learn::LearnModule());
 
     app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
+    app.addModule(new mu::project::ProjectModule());
+    app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
 #ifdef BUILD_PLAYBACK_MODULE
     app.addModule(new mu::playback::PlaybackModule());
@@ -229,10 +219,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::playback::PlaybackStubModule());
 #endif
 
-#ifdef BUILD_INSTRUMENTS_MODULE
-    app.addModule(new mu::instruments::InstrumentsModule());
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneModule());
 #else
-    app.addModule(new mu::instruments::InstrumentsStubModule());
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneStubModule());
 #endif
 
 #ifdef BUILD_VST
@@ -285,7 +275,6 @@ int main(int argc, char** argv)
 #endif
 
     app.addModule(new mu::mi::MultiInstancesModule());
-    app.addModule(new mu::diagnostics::DiagnosticsModule());
 
 #ifdef BUILD_AUTOBOT_MODULE
     app.addModule(new mu::autobot::AutobotModule());

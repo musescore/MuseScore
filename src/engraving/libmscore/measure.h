@@ -29,8 +29,11 @@
 */
 
 #include "measurebase.h"
-#include "fraction.h"
 #include "segmentlist.h"
+
+namespace mu::engraving::rw {
+class MeasureRW;
+}
 
 namespace Ms {
 class XmlWriter;
@@ -135,36 +138,35 @@ private:
 class Measure final : public MeasureBase
 {
 public:
-    Measure(Score* = 0);
-    Measure(const Measure&);
+
     ~Measure();
 
+    void setParent(System* s);
+
     Measure* clone() const override { return new Measure(*this); }
-    ElementType type() const override { return ElementType::MEASURE; }
     void setScore(Score* s) override;
     Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
-    void read(XmlReader&, int idx);
-    void read(XmlReader& d) override { read(d, 0); }
+    void read(XmlReader& d) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
-    void write(XmlWriter& xml) const override { Element::write(xml); }
+    void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
     void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const override;
     void writeBox(XmlWriter&) const;
     void readBox(XmlReader&);
     bool isEditable() const override { return false; }
     void checkMeasure(int idx, bool useGapRests = true);
 
-    void add(Element*) override;
-    void remove(Element*) override;
-    void change(Element* o, Element* n) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    void change(EngravingItem* o, EngravingItem* n) override;
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
     bool hasVoices(int staffIdx, Fraction stick, Fraction len) const;
     bool hasVoices(int staffIdx) const;
     void setHasVoices(int staffIdx, bool v);
@@ -242,7 +244,7 @@ public:
     void sortStaves(QList<int>& dst);
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     int repeatCount() const { return m_repeatCount; }
     void setRepeatCount(int val) { m_repeatCount = val; }
@@ -261,9 +263,9 @@ public:
 
     qreal createEndBarLines(bool);
     void barLinesSetSpan(Segment*);
-    void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());
+    void setEndBarLineType(BarLineType val, int track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void createVoice(int track);
     void adjustToLen(Fraction, bool appendRestsIfNecessary = true);
 
@@ -292,9 +294,9 @@ public:
     void setPlaybackCount(int val) { m_playbackCount = val; }
     mu::RectF staffabbox(int staffIdx) const;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
@@ -318,8 +320,8 @@ public:
     bool nextIsOneMeasureRepeat(int staffidx) const;
     bool prevIsOneMeasureRepeat(int staffIdx) const;
 
-    Element* nextElementStaff(int staff);
-    Element* prevElementStaff(int staff);
+    EngravingItem* nextElementStaff(int staff);
+    EngravingItem* prevElementStaff(int staff);
     QString accessibleInfo() const override;
 
     void addSystemHeader(bool firstSystem);
@@ -340,14 +342,32 @@ public:
     void setStretchedWidth(qreal);
     void layoutStaffLines();
 
+    //! puts segments on the positions according to their length
+    void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
+
+    qreal computeFirstSegmentXPosition(Segment* segment);
+
+    void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
+
+    void calculateQuantumCell(const std::vector<int>& visibleParts);
+
+    Fraction quantumOfSegmentCell() const;
+
+    void stretchMeasureInPracticeMode(qreal stretch);
+
 private:
+
+    friend class mu::engraving::Factory;
+    friend class mu::engraving::rw::MeasureRW;
+
+    Measure(System* parent = 0);
+    Measure(const Measure&);
+
     void push_back(Segment* e);
     void push_front(Segment* e);
 
     void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
     void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
-
-    void readVoice(XmlReader& e, int staffIdx, bool irregular);
 
     MStaff* mstaff(int staffIndex) const;
 
@@ -363,13 +383,15 @@ private:
                                // 0 if this is the start of am mmrest (m_mmRest != 0)
                                // < 0 if this measure is covered by an mmrest
 
-    int m_playbackCount { 0 };  // temp. value used in RepeatList
+    int m_playbackCount = 0;    // temp. value used in RepeatList
                                 // counts how many times this measure was already played
 
     int m_repeatCount;          ///< end repeat marker and repeat count
 
     MeasureNumberMode m_noMode;
     bool m_breakMultiMeasureRest;
+
+    Fraction m_quantumOfSegmentCell = { 1, 16 };
 };
 }     // namespace Ms
 #endif

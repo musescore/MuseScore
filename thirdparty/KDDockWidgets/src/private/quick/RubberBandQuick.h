@@ -14,8 +14,7 @@
 
 #include "QWidgetAdapter.h"
 
-namespace KDDockWidgets
-{
+namespace KDDockWidgets {
 
 class RubberBandQuick : public QWidgetAdapter
 {

@@ -3,14 +3,14 @@ name: CI_codestyle
 on:
   pull_request:
     branches:
-    - master 
+    - master
 
 jobs:
   codestyle:    
-    runs-on: macos-10.15
+    runs-on: ubuntu-18.04
     steps:
     - name: Clone repository
       uses: actions/checkout@v2    
     - name: Test coding style
       run: |
-        bash ./build/ci/macos/checkcodestyle.sh
+        bash ./build/ci/linux/checkcodestyle.sh

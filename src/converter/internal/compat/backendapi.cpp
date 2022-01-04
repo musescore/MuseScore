@@ -31,15 +31,20 @@
 #include <QJsonValue>
 #include <QRandomGenerator>
 
-#include "libmscore/excerpt.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/infrastructure/io/mscwriter.h"
+#include "engraving/libmscore/excerpt.h"
 
-#include "log.h"
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::converter;
+using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
@@ -187,29 +192,42 @@ Ret BackendApi::openOutputFile(QFile& file, const io::path& out)
     return ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
 }
 
-RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
+RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& path,
+                                                             const io::path& stylePath,
+                                                             bool forceMode)
 {
     TRACEFUNC
 
-    auto masterNotation = notationCreator()->newMasterNotation();
-    IF_ASSERT_FAILED(masterNotation) {
+    auto notationProject = notationCreator()->newProject();
+    IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    Ret ret = masterNotation->load(path, stylePath, forceMode);
+    Ret ret = notationProject->load(path, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load: " << path << ", ret: " << ret.toString();
         return make_ret(Ret::Code::InternalError);
     }
 
-    INotationPtr notation = masterNotation->notation();
+    INotationPtr notation = notationProject->masterNotation()->notation();
     if (!notation) {
         return make_ret(Ret::Code::InternalError);
     }
 
     notation->setViewMode(ViewMode::PAGE);
 
-    return RetVal<notation::IMasterNotationPtr>::make_ok(masterNotation);
+    return RetVal<INotationProjectPtr>::make_ok(notationProject);
+}
+
+RetVal<notation::IMasterNotationPtr> BackendApi::openScore(const io::path& path, const io::path& stylePath, bool forceMode)
+{
+    TRACEFUNC
+    RetVal<INotationProjectPtr> prj = openProject(path, stylePath, forceMode);
+    if (!prj.ret) {
+        return prj.ret;
+    }
+
+    return RetVal<IMasterNotationPtr>::make_ok(prj.val->masterNotation());
 }
 
 PageList BackendApi::pages(const INotationPtr notation)
@@ -491,7 +509,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
 
 Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
 {
-    Ms::Score* score = notation->elements()->msScore();
+    Ms::MasterScore* score = notation->elements()->msScore()->masterScore();
 
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
@@ -541,7 +559,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
     for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
-        QJsonValue partNameVal(e->metaInfo().title);
+        QJsonValue partNameVal(e->title());
         partsNamesArray.append(partNameVal);
 
         QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
@@ -591,17 +609,22 @@ Ret BackendApi::doExportScoreTranspose(const INotationPtr notation, BackendJsonW
 
 RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string& fileName)
 {
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
+    QByteArray scoreData;
+    QBuffer buf(&scoreData);
 
-    bool ok = score->saveCompressedFile(&buffer, QString::fromStdString(fileName), false);
+    MscWriter::Params params;
+    params.device = &buf;
+    params.filePath = QString::fromStdString(fileName);
+    params.mode = MscIoMode::Zip;
+
+    MscWriter mscWriter(params);
+    mscWriter.open();
+
+    bool ok = compat::ScoreAccess::exportPart(mscWriter, score);
     if (!ok) {
-        LOGW() << "Error save compressed file";
+        LOGW() << "Error save mscz file";
     }
-
-    buffer.open(QIODevice::ReadOnly);
-    QByteArray scoreData = buffer.readAll();
-    buffer.close();
+    mscWriter.close();
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
@@ -700,15 +723,15 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
 
 Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
 {
-    RetVal<IMasterNotationPtr> notation = openScore(in, NO_STYLE, forceMode);
-    if (!notation.ret) {
-        return notation.ret;
+    RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
+    if (!project.ret) {
+        return project.ret;
     }
 
-    Meta meta = notation.val->metaInfo();
+    ProjectMeta meta = project.val->metaInfo();
     meta.source = QString::fromStdString(newSource);
 
-    notation.val->setMetaInfo(meta);
+    project.val->setMetaInfo(meta);
 
-    return notation.val->save();
+    return project.val->save();
 }

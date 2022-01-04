@@ -23,10 +23,10 @@
 #ifndef MU_IMPORTEXPORT_MXLWRITER_H
 #define MU_IMPORTEXPORT_MXLWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "musicxmlwriter.h"
 
 namespace mu::iex::musicxml {
-class MxlWriter : public notation::AbstractNotationWriter
+class MxlWriter : public MusicXmlWriter
 {
 public:
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;

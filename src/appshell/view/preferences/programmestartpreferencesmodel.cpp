@@ -96,7 +96,6 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
     PanelList panels {
         Panel { SplashScreen, qtrc("appshell", "Show splash screen"), configuration()->needShowSplashScreen() },
         Panel { Navigator, qtrc("appshell", "Show navigator"), configuration()->isNotationNavigatorVisible() },
-        Panel { Tours, qtrc("appshell", "Show tours"), configuration()->needShowTours() }
     };
 
     return panels;
@@ -104,7 +103,7 @@ ProgrammeStartPreferencesModel::PanelList ProgrammeStartPreferencesModel::allPan
 
 QString ProgrammeStartPreferencesModel::scorePathFilter() const
 {
-    return qtrc("appshell", "MuseScore Files") + " (*.mscz *.mscx);;"
+    return qtrc("appshell", "MuseScore File") + " (*.mscz);;"
            + qtrc("appshell", "All") + " (*)";
 }
 
@@ -152,9 +151,6 @@ void ProgrammeStartPreferencesModel::setPanelVisible(int panelIndex, bool visibl
         break;
     case Navigator:
         configuration()->setIsNotationNavigatorVisible(visible);
-        break;
-    case Tours:
-        configuration()->setNeedShowTours(visible);
         break;
     case Unknown:
         return;

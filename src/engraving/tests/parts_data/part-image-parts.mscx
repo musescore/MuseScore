@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -98,7 +98,7 @@
         <lid>1</lid>
         <Text>
           <lid>2</lid>
-          <style>Title</style>
+          <style>title</style>
           <text>testpart1</text>
           </Text>
         <Image>
@@ -701,7 +701,7 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>testpart1</text>
             </Text>
           <Image>
@@ -710,7 +710,7 @@
             <size w="38.52" h="38.64"/>
             </Image>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Alto</text>
             </Text>
           </VBox>
@@ -1052,7 +1052,7 @@
           <lid>1</lid>
           <Text>
             <lid>2</lid>
-            <style>Title</style>
+            <style>title</style>
             <text>testpart1</text>
             </Text>
           <Image>
@@ -1061,7 +1061,7 @@
             <size w="38.52" h="38.64"/>
             </Image>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Tenor</text>
             </Text>
           </VBox>

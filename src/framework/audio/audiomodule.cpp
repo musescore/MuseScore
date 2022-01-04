@@ -27,25 +27,20 @@
 #include "modularity/ioc.h"
 #include "log.h"
 
-#include "internal/rpc/queuedrpcchannel.h"
-#include "internal/rpc/rpccontrollers.h"
-#include "internal/rpc/rpcaudioenginecontroller.h"
-#include "internal/rpc/rpcdevtoolscontroller.h"
-
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
 #include "internal/audiobuffer.h"
+#include "internal/audiothreadsecurer.h"
 
 #include "internal/worker/audioengine.h"
 #include "internal/worker/playback.h"
-#include "internal/worker/mixer.h"
 
 // synthesizers
-#include "internal/synthesizers/fluidsynth/fluidsynth.h"
-#include "internal/synthesizers/soundfontsprovider.h"
-#include "internal/synthesizers/synthesizercontroller.h"
-#include "internal/synthesizers/synthesizersregister.h"
+#include "internal/synthesizers/fluidsynth/fluidresolver.h"
+#include "internal/synthesizers/synthresolver.h"
+
+#include "internal/fx/fxresolver.h"
 
 #include "view/synthssettingsmodel.h"
 #include "devtools/waveformmodel.h"
@@ -56,14 +51,17 @@
 
 using namespace mu::modularity;
 using namespace mu::audio;
+using namespace mu::audio::synth;
+using namespace mu::audio::fx;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
 
-static std::shared_ptr<rpc::RpcControllers> s_rpcControllers = std::make_shared<rpc::RpcControllers>();
-static std::shared_ptr<IPlayback> s_playbackFacade = std::make_shared<Playback>();
-static std::shared_ptr<IMixer> s_mixer = std::make_shared<Mixer>();
+static std::shared_ptr<FxResolver> s_fxResolver = std::make_shared<FxResolver>();
+static std::shared_ptr<SynthResolver> s_synthResolver = std::make_shared<SynthResolver>();
+
+static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
 
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
@@ -105,20 +103,12 @@ std::string AudioModule::moduleName() const
 void AudioModule::registerExports()
 {
     ioc()->registerExport<IAudioConfiguration>(moduleName(), s_audioConfiguration);
+    ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<IAudioDriver>(moduleName(), s_audioDriver);
     ioc()->registerExport<IPlayback>(moduleName(), s_playbackFacade);
-    ioc()->registerExport<IMixer>(moduleName(), s_mixer);
 
-    // synthesizers
-    std::shared_ptr<synth::ISynthesizersRegister> sreg = std::make_shared<synth::SynthesizersRegister>();
-    sreg->registerSynthesizer("Fluid", std::make_shared<synth::FluidSynth>());
-    sreg->setDefaultSynthesizer("Fluid");
-
-    ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), sreg);
-    ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProvider());
-
-    //! TODO maybe need remove
-    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), s_audioWorker->channel());
+    ioc()->registerExport<ISynthResolver>(moduleName(), s_synthResolver);
+    ioc()->registerExport<IFxResolver>(moduleName(), s_fxResolver);
 }
 
 void AudioModule::registerResources()
@@ -162,7 +152,7 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         in order to avoid problems associated with access data thread safety.
 
         Objects from different layers (threads) must interact only through:
-            * Rpc (remote call procedure) channel - controls and pass midi data
+            * Asyncronous API (@see thirdparty/deto) - controls and pass midi data
             * AudioBuffer - pass audio data from worker to driver for play
 
         AudioEngine is in the worker and operates only with the buffer,
@@ -173,29 +163,13 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
     // Init configuration
     s_audioConfiguration->init();
 
-    s_audioBuffer->init();
-
-    // Setup rpc system and worker
-    s_audioWorker->channel()->setupMainThread();
-    s_audioWorker->setAudioBuffer(s_audioBuffer);
-    s_audioWorker->run([]() {
-        AudioSanitizer::setupWorkerThread();
-        ONLY_AUDIO_WORKER_THREAD;
-
-        AudioEngine::instance()->setMixer(s_mixer);
-        AudioEngine::instance()->setAudioBuffer(s_audioBuffer);
-        AudioEngine::instance()->init();
-
-        s_rpcControllers->reg(std::make_shared<rpc::RpcAudioEngineController>());
-        s_rpcControllers->reg(std::make_shared<rpc::RpcDevToolsController>());
-        s_rpcControllers->init(s_audioWorker->channel());
-    });
+    s_audioBuffer->init(s_audioConfiguration->audioChannelsCount());
 
     // Setup audio driver
     IAudioDriver::Spec requiredSpec;
     requiredSpec.sampleRate = 48000;
     requiredSpec.format = IAudioDriver::Format::AudioF32;
-    requiredSpec.channels = 2; // stereo
+    requiredSpec.channels = s_audioConfiguration->audioChannelsCount();
     requiredSpec.samples = s_audioConfiguration->driverBufferSize();
     requiredSpec.callback = [](void* /*userdata*/, uint8_t* stream, int byteCount) {
         auto samplesPerChannel = byteCount / (2 * sizeof(float));
@@ -209,19 +183,37 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    // Setup audio engine
-    //! NOTE Send msg for audio engine to worker
-    s_audioWorker->channel()->send(
-        rpc::Msg(
-            rpc::TargetName::AudioEngine,
-            "onDriverOpened",
-            rpc::Args::make_arg2<int, uint16_t>(activeSpec.sampleRate, activeSpec.samples)
-            ));
+    // Setup worker
+    auto workerSetup = [activeSpec]() {
+        AudioSanitizer::setupWorkerThread();
+        ONLY_AUDIO_WORKER_THREAD;
+
+        // Setup audio engine
+        AudioEngine::instance()->init(s_audioBuffer);
+        AudioEngine::instance()->setAudioChannelsCount(s_audioConfiguration->audioChannelsCount());
+        AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
+        AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
+
+        auto fluidResolver = std::make_shared<FluidResolver>(s_audioConfiguration->soundFontDirectories(),
+                                                             s_audioConfiguration->soundFontDirectoriesChanged());
+        s_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
+        s_synthResolver->init(s_audioConfiguration->defaultAudioInputParams());
+
+        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
+        s_playbackFacade->init();
+    };
+
+    auto workerLoopBody = []() {
+        ONLY_AUDIO_WORKER_THREAD;
+        s_audioBuffer->forward();
+    };
+
+    s_audioWorker->run(workerSetup, workerLoopBody);
 
     //! --- Diagnostics ---
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        std::vector<io::path> paths = s_audioConfiguration->soundFontPaths();
+        std::vector<io::path> paths = s_audioConfiguration->soundFontDirectories();
         for (const io::path& p : paths) {
             pr->reg("soundfonts", p);
         }
@@ -237,7 +229,6 @@ void AudioModule::onDeinit()
     if (s_audioWorker->isRunning()) {
         s_audioWorker->stop([]() {
             ONLY_AUDIO_WORKER_THREAD;
-            s_rpcControllers->deinit();
             AudioEngine::instance()->deinit();
         });
     }

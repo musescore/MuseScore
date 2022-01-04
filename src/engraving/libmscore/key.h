@@ -25,15 +25,14 @@
 
 #include <QList>
 
-#include "symid.h"
-#include "draw/geometry.h"
+#include "types/types.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class XmlWriter;
 class Score;
 class XmlReader;
 enum class AccidentalVal : signed char;
-enum class ClefType : signed char;
 
 //---------------------------------------------------------
 //   Key
@@ -60,24 +59,6 @@ enum class Key {
     INVALID = Key::MIN - 1,
     NUM_OF  = Key::MAX - Key::MIN + 1,
     DELTA_ENHARMONIC = 12
-};
-
-//---------------------------------------------------------
-//   KeyMode
-//---------------------------------------------------------
-
-enum class KeyMode {
-    UNKNOWN = -1,
-    NONE,
-    MAJOR,
-    MINOR,
-    DORIAN,
-    PHRYGIAN,
-    LYDIAN,
-    MIXOLYDIAN,
-    AEOLIAN,
-    IONIAN,
-    LOCRIAN
 };
 
 static inline bool operator<(Key a, Key b) { return static_cast<int>(a) < static_cast<int>(b); }

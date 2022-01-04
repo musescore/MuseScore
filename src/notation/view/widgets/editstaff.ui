@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>751</width>
     <height>641</height>
    </rect>
   </property>
@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Staff/Part Properties</string>
+   <string>Staff/part properties</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="2">
@@ -41,47 +41,160 @@
       </size>
      </property>
      <property name="title">
-      <string>Staff Properties</string>
+      <string>Staff properties</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QGridLayout" name="grid_StaffProps">
-        <item row="4" column="1">
-         <widget class="QCheckBox" name="hideSystemBarLine">
-          <property name="text">
-           <string>Hide system barline</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="showClef">
-          <property name="text">
-           <string>Show clef</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
+        <item row="3" column="2">
          <widget class="QCheckBox" name="showBarlines">
           <property name="text">
            <string>Show barlines</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="showClef">
+          <property name="text">
+           <string>Show clef</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
          <widget class="QCheckBox" name="showTimesig">
           <property name="text">
            <string>Show time signature</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QPushButton" name="changeStaffType">
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="showIfEmpty">
           <property name="text">
-           <string>Advanced Style Properties…</string>
+           <string>Do not hide if system is empty</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" rowspan="5">
+        <item row="0" column="2">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Hide when empty:</string>
+            </property>
+            <property name="buddy">
+             <cstring>hideMode</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="hideMode">
+            <item>
+             <property name="text">
+              <string>Auto</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Instrument</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="4">
+         <layout class="QHBoxLayout" name="hLayout_LineColor">
+          <item>
+           <widget class="QLabel" name="labelColor">
+            <property name="text">
+             <string>Staff line color:</string>
+            </property>
+            <property name="buddy">
+             <cstring>color</cstring>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Awl::ColorLabel" name="color">
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="4">
+         <widget class="QCheckBox" name="invisible">
+          <property name="text">
+           <string>Invisible staff lines</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="4" column="2">
+         <widget class="QCheckBox" name="hideSystemBarLine">
+          <property name="text">
+           <string>Hide system barline</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QCheckBox" name="cutaway">
+          <property name="text">
+           <string>Cutaway</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="5" column="2">
+         <widget class="QCheckBox" name="mergeMatchingRests">
+          <property name="text">
+           <string>Merge matching rests</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QCheckBox" name="isSmallCheckbox">
+          <property name="text">
+           <string>Small staff</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="6">
          <layout class="QFormLayout" name="formLayout">
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
@@ -178,6 +291,9 @@
             <property name="text">
              <string>Scale:</string>
             </property>
+            <property name="buddy">
+             <cstring>mag</cstring>
+            </property>
            </widget>
           </item>
           <item row="5" column="1">
@@ -211,82 +327,25 @@
           </item>
          </layout>
         </item>
-        <item row="0" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Hide when empty:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="hideMode">
-            <item>
-             <property name="text">
-              <string>Auto</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Always</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Never</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Instrument</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="5" column="1">
-         <widget class="QCheckBox" name="mergeMatchingRests">
+        <item row="5" column="4">
+         <widget class="QPushButton" name="changeStaffType">
           <property name="text">
-           <string>Merge matching rests</string>
+           <string>Advanced style properties…</string>
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <layout class="QHBoxLayout" name="hLayout_LineColor">
-          <item>
-           <widget class="QLabel" name="labelColor">
-            <property name="text">
-             <string>Staff line color:</string>
-            </property>
-            <property name="buddy">
-             <cstring>color</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Awl::ColorLabel" name="color">
-            <property name="focusPolicy">
-             <enum>Qt::TabFocus</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="2" column="2">
-         <widget class="QCheckBox" name="invisible">
-          <property name="text">
-           <string>Invisible staff lines</string>
+        <item row="0" column="5">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QCheckBox" name="showIfEmpty">
-          <property name="text">
-           <string>Do not hide if system is empty</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
           </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -302,7 +361,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Part Properties</string>
+      <string>Part properties</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0,0,0,0">
       <item>
@@ -310,28 +369,45 @@
         <property name="leftMargin">
          <number>0</number>
         </property>
-        <item row="2" column="0" colspan="2">
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_PartName">
+          <property name="text">
+           <string>Part name:</string>
+          </property>
+          <property name="buddy">
+           <cstring>partName</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="partName"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="labelInstrName">
+          <property name="text">
+           <string>Instrument:</string>
+          </property>
+          <property name="buddy">
+           <cstring>instrumentName</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="spacing">
            <number>6</number>
           </property>
           <item>
-           <widget class="QLabel" name="labelInstrName">
-            <property name="text">
-             <string>Instrument:</string>
-            </property>
+           <widget class="QLabel" name="instrumentName">
             <property name="buddy">
-             <cstring>instrumentName</cstring>
+             <cstring>changeInstrument</cstring>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="instrumentName"/>
-          </item>
-          <item>
            <widget class="QPushButton" name="changeInstrument">
             <property name="text">
-             <string>Change Instrument…</string>
+             <string>Replace Instrument…</string>
             </property>
            </widget>
           </item>
@@ -349,19 +425,6 @@
            </spacer>
           </item>
          </layout>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_PartName">
-          <property name="text">
-           <string>Part name:</string>
-          </property>
-          <property name="buddy">
-           <cstring>partName</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="partName"/>
         </item>
        </layout>
       </item>
@@ -448,6 +511,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="minPitchA">
+          <property name="maxLength">
+           <number>4</number>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -455,6 +521,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="minPitchASelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -465,10 +534,16 @@
           <property name="text">
            <string notr="true">-</string>
           </property>
+          <property name="buddy">
+           <cstring>maxPitchA</cstring>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="maxPitchA">
+          <property name="maxLength">
+           <number>4</number>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -476,6 +551,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="maxPitchASelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -488,8 +566,8 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>100</width>
-            <height>20</height>
+            <width>0</width>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -506,6 +584,9 @@
         </item>
         <item>
          <widget class="QLineEdit" name="minPitchP">
+          <property name="maxLength">
+           <number>4</number>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -513,6 +594,9 @@
         </item>
         <item>
          <widget class="QToolButton" name="minPitchPSelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
@@ -523,10 +607,16 @@
           <property name="text">
            <string notr="true">-</string>
           </property>
+          <property name="buddy">
+           <cstring>maxPitchP</cstring>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="maxPitchP">
+          <property name="maxLength">
+           <number>4</number>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -534,10 +624,26 @@
         </item>
         <item>
          <widget class="QToolButton" name="maxPitchPSelect">
+          <property name="accessibleName">
+           <string>Edit</string>
+          </property>
           <property name="text">
            <string notr="true"/>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>
@@ -780,6 +886,9 @@
              <property name="text">
               <string>Prefer sharps or flats for transposed key signatures:</string>
              </property>
+             <property name="buddy">
+              <cstring>preferSharpFlat</cstring>
+             </property>
             </widget>
            </item>
            <item>
@@ -848,7 +957,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="numOfStrings"/>
+          <widget class="QLabel" name="numOfStrings">
+           <property name="buddy">
+            <cstring>editStringData</cstring>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editStringData">
@@ -899,6 +1012,9 @@
        <property name="toolTip">
         <string>Go to previous staff</string>
        </property>
+       <property name="accessibleName">
+        <string>Go to previous staff</string>
+       </property>
        <property name="text">
         <string notr="true"/>
        </property>
@@ -913,6 +1029,9 @@
         </size>
        </property>
        <property name="toolTip">
+        <string>Go to next staff</string>
+       </property>
+       <property name="accessibleName">
         <string>Go to next staff</string>
        </property>
        <property name="text">
@@ -965,7 +1084,12 @@
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
+  <tabstop>mergeMatchingRests</tabstop>
+  <tabstop>showIfEmpty</tabstop>
+  <tabstop>isSmallCheckbox</tabstop>
+  <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
+  <tabstop>cutaway</tabstop>
   <tabstop>changeStaffType</tabstop>
   <tabstop>changeInstrument</tabstop>
   <tabstop>partName</tabstop>
@@ -984,7 +1108,6 @@
   <tabstop>up</tabstop>
   <tabstop>down</tabstop>
   <tabstop>preferSharpFlat</tabstop>
-  <tabstop>numOfStrings</tabstop>
   <tabstop>editStringData</tabstop>
   <tabstop>singleNoteDynamics</tabstop>
   <tabstop>previousButton</tabstop>

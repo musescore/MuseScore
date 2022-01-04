@@ -24,8 +24,13 @@
 #define __PAGE_H__
 
 #include "config.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "bsp.h"
+
+namespace mu::engraving {
+class RootItem;
+class Factory;
+}
 
 namespace Ms {
 class System;
@@ -40,7 +45,7 @@ class MeasureBase;
 //   @P pagenumber int (read only)
 //---------------------------------------------------------
 
-class Page final : public Element
+class Page final : public EngravingItem
 {
     QList<System*> _systems;
     int _no;                        // page number
@@ -50,20 +55,23 @@ class Page final : public Element
 #endif
     bool bspTreeValid;
 
+    friend class mu::engraving::Factory;
+    Page(mu::engraving::RootItem* parent);
+
     QString replaceTextMacros(const QString&) const;
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
+    Text* layoutHeaderFooter(int area, const QString& ss) const;
 
 public:
-    Page(Score*);
+
     ~Page();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     Page* clone() const override { return new Page(*this); }
-    ElementType type() const override { return ElementType::PAGE; }
     const QList<System*>& systems() const { return _systems; }
     QList<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }
@@ -80,15 +88,17 @@ public:
     qreal bm() const;
     qreal lm() const;
     qreal rm() const;
+    qreal headerExtension() const;
+    qreal footerExtension() const;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    QList<Element*> items(const mu::RectF& r);
-    QList<Element*> items(const mu::PointF& p);
-    void rebuildBspTree() { bspTreeValid = false; }
+    QList<EngravingItem*> items(const mu::RectF& r);
+    QList<EngravingItem*> items(const mu::PointF& p);
+    void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
-    QList<Element*> elements() const;           ///< list of visible elements
+    QList<EngravingItem*> elements() const;           ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
 };

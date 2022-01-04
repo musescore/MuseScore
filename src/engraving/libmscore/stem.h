@@ -23,72 +23,75 @@
 #ifndef __STEM_H__
 #define __STEM_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Chord;
 
-//---------------------------------------------------------
-//   @@ Stem
-///    Graphic representation of a note stem.
-//---------------------------------------------------------
-
-class Stem final : public Element
+class Stem final : public EngravingItem
 {
-    mu::LineF line;   // p1 is attached to notehead
-    qreal _lineWidth;
-    qreal _userLen;
-    qreal _len       { 0.0 };       // always positive
-
 public:
-    Stem(Score* = 0);
+
     Stem& operator=(const Stem&) = delete;
 
     Stem* clone() const override { return new Stem(*this); }
-    ElementType type() const override { return ElementType::STEM; }
-    void draw(mu::draw::Painter*) const override;
-    bool isEditable() const override { return true; }
-    void layout() override;
-    void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-    Element* elementBase() const override;
 
+    void layout() override;
+    void draw(mu::draw::Painter*) const override;
+    void spatiumChanged(double oldValue, double newValue) override;
+    EngravingItem* elementBase() const override;
+
+    bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
     void editDrag(EditData&) override;
+
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+
     void write(XmlWriter& xml) const override;
     void read(XmlReader& e) override;
     bool readProperties(XmlReader&) override;
-    void reset() override;
-    bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    void reset() override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     int vStaffIdx() const override;
 
-    Chord* chord() const { return toChord(parent()); }
+    Chord* chord() const { return toChord(explicitParent()); }
     bool up() const;
 
-    qreal userLen() const { return _userLen; }
-    void setUserLen(qreal l) { _userLen = l; }
+    Millimetre baseLength() const { return m_baseLength; }
+    void setBaseLength(Millimetre baseLength);
 
-    qreal lineWidth() const { return _lineWidth; }
-    qreal lineWidthMag() const { return _lineWidth * mag(); }
-    void setLineWidth(qreal w) { _lineWidth = w; }
+    Millimetre userLength() const { return m_userLength; }
+    void setUserLength(Millimetre userLength) { m_userLength = userLength; }
 
-    void setLen(qreal l);
-    qreal len() const { return _len; }
+    Millimetre lineWidth() const { return m_lineWidth; }
+    double lineWidthMag() const { return m_lineWidth * mag(); }
+    void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
 
-    mu::PointF hookPos() const;
-    qreal stemLen() const;
-    mu::PointF p2() const { return line.p2(); }
+    mu::PointF p2() const { return m_line.p2(); }
+    mu::PointF flagPosition() const;
+    double length() const { return m_baseLength + m_userLength; }
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+private:
+    friend class mu::engraving::Factory;
+    Stem(Chord* parent = 0);
+
+    mu::LineF m_line;
+
+    Millimetre m_baseLength = Millimetre(0.0);
+    Millimetre m_userLength = Millimetre(0.0);
+
+    Millimetre m_lineWidth = Millimetre(0.0);
 };
-}     // namespace Ms
+}
 #endif

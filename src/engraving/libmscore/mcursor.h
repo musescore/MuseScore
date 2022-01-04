@@ -23,13 +23,12 @@
 #ifndef __MCURSOR_H__
 #define __MCURSOR_H__
 
-#include "fraction.h"
+#include "types/fraction.h"
 
 namespace Ms {
 class MasterScore;
 class Score;
 class TDuration;
-class Fraction;
 class TimeSig;
 class Chord;
 enum class Key;
@@ -50,7 +49,6 @@ class MCursor
 public:
     MCursor(MasterScore* s = 0);
     void createScore(const QString& s);
-    void saveScore();
 
     void addPart(const QString& instrument);
     Chord* addChord(int pitch, const TDuration& duration);

@@ -19,11 +19,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 install(FILES
-      Leland.mss
       MuseJazz.mss
-      legacy-style-defaults-v3.mss
-      legacy-style-defaults-v2.mss
-      legacy-style-defaults-v1.mss
       chords_std.xml
       chords_jazz.xml
       chords.xml

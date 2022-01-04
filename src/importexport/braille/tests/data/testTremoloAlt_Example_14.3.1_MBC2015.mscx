@@ -95,11 +95,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Example 14.3.1</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Music Braille Code 2015
 </text>
           </Text>

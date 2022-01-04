@@ -28,6 +28,7 @@ FocusScope {
 
     property int icon: IconCode.NONE
     property string text: ""
+    property int textFormat: Text.AutoText
 
     property string toolTipTitle: ""
     property string toolTipDescription: ""
@@ -36,14 +37,22 @@ FocusScope {
     property font iconFont: ui.theme.iconsFont
     property font textFont: ui.theme.bodyFont
 
-    property color normalStateColor: prv.defaultColor
-    property color hoveredStateColor: prv.defaultColor
-    property color pressedStateColor: prv.defaultColor
+    property bool transparent: false
     property bool accentButton: false
 
+    property color normalColor:
+        transparent ? "transparent" : accentButton ? accentColor : ui.theme.buttonColor
+    property color hoverHitColor: accentButton ? accentColor : ui.theme.buttonColor
+    property color accentColor: ui.theme.accentColor
+
     property bool narrowMargins: false
+    property real margins: narrowMargins ? 12 : 16
+    property real minWidth: narrowMargins ? 24 : 132
+
+    property bool drawFocusBorderInsideRect: false
 
     property int orientation: Qt.Vertical
+    readonly property bool isVertical: root.orientation === Qt.Vertical
 
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
@@ -52,7 +61,8 @@ FocusScope {
 
     property bool isClickOnKeyNavTriggered: true
 
-    property Component contentItem: defaultComponent
+    property Component contentItem: defaultContentComponent
+    property Component backgroundItem: defaultBackgroundComponent
 
     signal clicked(var mouse)
     signal pressAndHold(var mouse)
@@ -60,22 +70,10 @@ FocusScope {
     objectName: root.text
 
     height: contentLoader.item.height + 14
-    width: {
-        if (narrowMargins) {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 12, prv.isVertical ? 24 : 0) : contentLoader.item.width + 16)
-        } else {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 16)
-        }
-    }
+    width: Boolean(text) ? Math.max(contentLoader.item.width + 2 * margins, root.isVertical ? minWidth : 0)
+                         : contentLoader.item.width + 16
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
-    QtObject {
-        id: prv
-
-        property color defaultColor: root.accentButton ? ui.theme.accentColor : ui.theme.buttonColor
-        property bool isVertical: root.orientation === Qt.Vertical
-    }
 
     NavigationControl {
         id: navCtrl
@@ -83,24 +81,65 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.text
+        accessible.name: Boolean(root.text) ? root.text : root.toolTipTitle
+        accessible.description: root.toolTipDescription
         accessible.visualItem: root
 
         onTriggered: {
-            if (root.isClickOnKeyNavTriggered) {
+            if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {
                 root.clicked(null)
             }
         }
     }
 
-    Rectangle {
-        id: background
+    Loader {
         anchors.fill: parent
-        color: root.normalStateColor
-        opacity: ui.theme.buttonOpacityNormal
-        radius: 3
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+
+        sourceComponent: root.backgroundItem
+    }
+
+    Component {
+        id: defaultBackgroundComponent
+
+        Rectangle {
+            id: background
+
+            color: root.normalColor
+            opacity: ui.theme.buttonOpacityNormal
+
+            radius: 3
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
+
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+                drawOutsideParent: !root.drawFocusBorderInsideRect
+            }
+
+            states: [
+                State {
+                    name: "PRESSED"
+                    when: mouseArea.pressed
+
+                    PropertyChanges {
+                        target: background
+                        color: root.hoverHitColor
+                        opacity: ui.theme.buttonOpacityHit
+                    }
+                },
+
+                State {
+                    name: "HOVERED"
+                    when: mouseArea.containsMouse && !mouseArea.pressed
+
+                    PropertyChanges {
+                        target: background
+                        color: root.hoverHitColor
+                        opacity: ui.theme.buttonOpacityHover
+                    }
+                }
+            ]
+        }
     }
 
     Loader {
@@ -113,15 +152,15 @@ FocusScope {
     }
 
     Component {
-        id: defaultComponent
+        id: defaultContentComponent
 
         Item {
             id: contentWrapper
 
             property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
 
-            height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
-            width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
+            height: !root.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+            width: root.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
             StyledIconLabel {
                 id: buttonIcon
@@ -135,6 +174,7 @@ FocusScope {
 
                 text: root.text
                 font: root.textFont
+                textFormat: root.textFormat
 
                 height: text === "" ? 0 : implicitHeight
                 horizontalAlignment: Text.AlignHCenter
@@ -142,7 +182,7 @@ FocusScope {
 
             states: [
                 State {
-                    when: !prv.isVertical
+                    when: !root.isVertical
                     AnchorChanges {
                         target: buttonIcon
                         anchors.left: parent.left
@@ -159,7 +199,7 @@ FocusScope {
                     }
                 },
                 State {
-                    when: prv.isVertical
+                    when: root.isVertical
                     AnchorChanges {
                         target: buttonIcon
                         anchors.top: parent.top
@@ -179,44 +219,22 @@ FocusScope {
         }
     }
 
-    states: [
-        State {
-            name: "PRESSED"
-            when: mouseArea.pressed
-
-            PropertyChanges {
-                target: background
-                color: root.pressedStateColor
-                opacity: ui.theme.buttonOpacityHit
-            }
-        },
-
-        State {
-            name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed
-
-            PropertyChanges {
-                target: background
-                color: root.hoveredStateColor
-                opacity: ui.theme.buttonOpacityHover
-            }
-        }
-    ]
-
     MouseArea {
         id: mouseArea
         anchors.fill: parent
 
         hoverEnabled: true
 
-        onClicked: function (mouse) { 
-            ui.tooltip.hide(this)
-            root.clicked(mouse) 
+        onClicked: function (mouse) {
+            root.clicked(mouse)
         }
-        
-        onPressAndHold: function (mouse) { 
+
+        onPressed: {
             ui.tooltip.hide(this)
-            root.pressAndHold(mouse) 
+        }
+
+        onPressAndHold: function (mouse) {
+            root.pressAndHold(mouse)
         }
 
         onContainsMouseChanged: {

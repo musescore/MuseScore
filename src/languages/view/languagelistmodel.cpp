@@ -131,15 +131,6 @@ void LanguageListModel::setupConnections()
         QModelIndex _index = createIndex(index, 0);
         emit dataChanged(_index, _index);
     });
-
-    ValCh<LanguagesHash> languages = languagesService()->languages();
-    languages.ch.onReceive(this, [this](const LanguagesHash&) {
-        load();
-    });
-
-    languagesService()->currentLanguage().ch.onReceive(this, [this](const Language&) {
-        load();
-    });
 }
 
 void LanguageListModel::install(QString code)
@@ -150,7 +141,7 @@ void LanguageListModel::install(QString code)
         return;
     }
 
-    RetCh<LanguageProgress> installRet = languagesService()->install(m_list.at(index).code);
+    RetCh<LanguageProgress> installRet = languagesService()->install(code);
     if (!installRet.ret) {
         LOGE() << "Error" << installRet.ret.code() << installRet.ret.text();
         return;
@@ -173,7 +164,7 @@ void LanguageListModel::update(QString code)
         return;
     }
 
-    RetCh<LanguageProgress> updateRet = languagesService()->update(m_list.at(index).code);
+    RetCh<LanguageProgress> updateRet = languagesService()->update(code);
     if (!updateRet.ret) {
         LOGE() << "Error" << updateRet.ret.code() << updateRet.ret.text();
         return;
@@ -196,7 +187,7 @@ void LanguageListModel::uninstall(QString code)
         return;
     }
 
-    Ret ret = languagesService()->uninstall(m_list.at(index).code);
+    Ret ret = languagesService()->uninstall(code);
     if (!ret) {
         LOGE() << "Error" << ret.code() << ret.text();
         return;

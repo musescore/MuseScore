@@ -22,47 +22,50 @@
 
 #include "importgtp.h"
 
-#include <libmscore/score.h>
-#include <libmscore/measurebase.h>
-#include <libmscore/text.h>
-#include <libmscore/box.h>
-#include <libmscore/staff.h>
-#include <libmscore/part.h>
-#include <libmscore/measure.h>
-#include <libmscore/timesig.h>
-#include <libmscore/tremolo.h>
-#include <libmscore/chordline.h>
-#include <libmscore/glissando.h>
-#include <libmscore/rest.h>
-#include <libmscore/chord.h>
-#include <libmscore/note.h>
-#include <libmscore/stringdata.h>
-#include <libmscore/clef.h>
-#include <libmscore/lyrics.h>
-#include <libmscore/tempotext.h>
-#include <libmscore/slur.h>
-#include <libmscore/tie.h>
-#include <libmscore/tuplet.h>
-#include <libmscore/barline.h>
-#include <libmscore/excerpt.h>
-#include <libmscore/stafftype.h>
-#include <libmscore/bracket.h>
-#include <libmscore/articulation.h>
-#include <libmscore/keysig.h>
-#include <libmscore/harmony.h>
-#include <libmscore/bend.h>
-#include <libmscore/tremolobar.h>
-#include <libmscore/segment.h>
-#include <libmscore/rehearsalmark.h>
-#include <libmscore/dynamic.h>
-#include <libmscore/arpeggio.h>
-#include <libmscore/volta.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/fingering.h>
-#include <libmscore/notedot.h>
-#include <libmscore/stafftext.h>
-#include <libmscore/sym.h>
-#include <libmscore/instrtemplate.h>
+#include "libmscore/factory.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/articulation.h"
+#include "libmscore/barline.h"
+#include "libmscore/bend.h"
+#include "libmscore/box.h"
+#include "libmscore/bracket.h"
+#include "libmscore/chord.h"
+#include "libmscore/chordline.h"
+#include "libmscore/clef.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/fingering.h"
+#include "libmscore/glissando.h"
+#include "libmscore/harmony.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/keysig.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/note.h"
+#include "libmscore/notedot.h"
+#include "libmscore/part.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/rest.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/segment.h"
+#include "libmscore/slur.h"
+#include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/stringdata.h"
+#include "types/symid.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/text.h"
+#include "libmscore/tie.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
+#include "libmscore/tremolobar.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/volta.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -140,7 +143,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         int strokeup = readUChar();                // up stroke length
         int strokedown = readUChar();                // down stroke length
 
-        Arpeggio* a = new Arpeggio(score);
+        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
         } else if (strokedown > 0) {
@@ -151,7 +154,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         }
 
         if (a) {
-            ChordRest* cr = new Chord(score);
+            ChordRest* cr = Factory::createChord(segment);
             cr->setTrack(track);
             cr->add(a);
             segment->add(cr);
@@ -188,7 +191,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     //    1 - Time-independent duration
 
     if (noteBits & BEAT_TREMOLO) {
-        //note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        //note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
 
@@ -203,7 +206,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             slides[staffIdx * VOICES] = -2;
             tieNote = true;
         } else if (variant == 3) {                   // dead notes = ghost note
-            note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+            note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
             note->setGhost(true);
         } else {
             qDebug("unknown note variant: %d", variant);
@@ -239,9 +242,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
     // check if a note is supposed to be accented, and give it the sforzato type
     if (noteBits & NOTE_SFORZATO) {             // 0x40
-        Articulation* art = new Articulation(note->score());
+        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
-        if (!note->score()->addArticulation(note, art)) {
+        if (!note->score()->toggleArticulation(note, art)) {
             delete art;
         }
     }
@@ -249,7 +252,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     if (noteBits & NOTE_FINGERING) {            // 0x80
         int leftFinger  = readUChar();
         int rightFinger = readUChar();
-        Fingering* fi   = new Fingering(score);
+        Fingering* fi   = new Fingering(note);
         QString finger;
         // if there is a valid left hand fingering
         if (leftFinger < 5) {
@@ -305,18 +308,18 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             int transition = readUChar();             // grace transition
             int duration = readUChar();               // grace duration
 
-            int grace_len = MScore::division / 8;
+            int grace_len = Constant::division / 8;
             if (duration == 1) {
-                grace_len = MScore::division / 8;       //32th
+                grace_len = Constant::division / 8;       //32nd
             } else if (duration == 2) {
-                grace_len = MScore::division / 6;       //24th
+                grace_len = Constant::division / 6;       //24th
             } else if (duration == 3) {
-                grace_len = MScore::division / 4;       //16th
+                grace_len = Constant::division / 4;       //16th
             }
-            Note* gn = new Note(score);
+            Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
-                gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+                gn->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
                 gn->setGhost(true);
             }
             if (fret == 255) {
@@ -324,18 +327,18 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
             gn->setFret(fret);
             gn->setString(string);
-            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr, Fraction(0, 1));
+            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
-            Chord* gc = new Chord(score);
+            Chord* gc = Factory::createChord(score->dummy()->segment());
             gc->setTrack(note->chord()->track());
             gc->add(gn);
             gc->setParent(note->chord());
 
             TDuration d;
             d.setVal(grace_len);
-            if (grace_len == MScore::division / 6) {
+            if (grace_len == Constant::division / 6) {
                 d.setDots(1);
             }
             gc->setDurationType(d);
@@ -351,16 +354,6 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 //TODO: Add a 'slide' guitar effect when implemented
                 //TODO-ws				note->setSlideNote(gn);
             } else if (transition == 2 && fretNumber >= 0 && fretNumber <= 255 && fretNumber != gn->fret()) {
-#if 0
-                QList<PitchValue> points;
-                points.append(PitchValue(0, 0, false));
-                points.append(PitchValue(60, (fretNumber - gn->fret()) * 100, false));
-
-                Bend* b = new Bend(note->score());
-                b->setPoints(points);
-                b->setTrack(gn->track());
-                gn->add(b);
-#endif
             } else if (transition == 3) {
                 // TODO:
                 //     major: replace with a 'hammer-on' guitar effect when implemented
@@ -369,7 +362,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 ChordRest* cr1 = toChord(gc);
                 ChordRest* cr2 = toChord(note->chord());
 
-                Slur* slur1 = new Slur(score);
+                Slur* slur1 = Factory::createSlur(score->dummy());
                 slur1->setAnchor(Spanner::Anchor::CHORD);
                 slur1->setStartElement(cr1);
                 slur1->setEndElement(cr2);
@@ -383,7 +376,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         }
         if (modMask2 & EFFECT_STACATTO) {       // staccato
             Chord* chord = note->chord();
-            Articulation* a = new Articulation(chord->score());
+            Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::articStaccatoAbove);
             chord->add(a);
         }
@@ -395,7 +388,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         if (modMask2 & EFFECT_TREMOLO) {        // tremolo picking length
             int tremoloDivision = readUChar();
             Chord* chord = note->chord();
-            Tremolo* t = new Tremolo(chord->score());
+            Tremolo* t = Factory::createTremolo(chord);
             if (tremoloDivision == 1) {
                 t->setTremoloType(TremoloType::R8);
                 chord->add(t);
@@ -430,9 +423,9 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             /*int period =*/ readUChar();            // trill length
 
             // add the trill articulation to the note
-            Articulation* art = new Articulation(note->score());
+            Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
             art->setSymId(SymId::ornamentTrill);
-            if (!note->score()->addArticulation(note, art)) {
+            if (!note->score()->toggleArticulation(note, art)) {
                 delete art;
             }
         }
@@ -443,14 +436,14 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     Staff* staff = note->staff();
     if (fretNumber == 255) {
         fretNumber = 0;
-        note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
+        note->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         note->setGhost(true);
     }
     // dead note represented as high numbers - fix to zero
     if (fretNumber > 99 || fretNumber == -1) {
         fretNumber = 0;
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0, 1));
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(std::min(pitch, 127));
@@ -469,13 +462,11 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             addTextToNote("A.H.", Align::CENTER, note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
-            Note* harmonicNote = new Note(score);
+            Note* harmonicNote = Factory::createNote(note->chord());
             note->chord()->add(harmonicNote);
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
-            //TODO-ws			harmonicNote->setHarmonic(true);
-            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr,
-                                                                                               Fraction(0, 1)));
+            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr));
             harmonicNote->setTpcFromPitch();
         }
     }
@@ -494,14 +485,14 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         std::vector<ChordRest*> chords;
         Note* true_note = 0;
         while (segment) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e) {
                 if (e->isChord()) {
                     Chord* chord2 = toChord(e);
                     foreach (Note* note2, chord2->notes()) {
                         if (note2->string() == string) {
                             if (chords.empty()) {
-                                Tie* tie = new Tie(score);
+                                Tie* tie = new Tie(note2);
                                 tie->setEndNote(note);
                                 note2->add(tie);
                             }
@@ -541,7 +532,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         tuplet->remove(rest);
                     }
                     delete rest;
-                    chord1 = new Chord(score);
+                    chord1 = Factory::createChord(seg);
                     chord1->setTrack(note->track());
                     chord1->setTicks(dur);
                     chord1->setDurationType(dut);
@@ -551,20 +542,20 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                     }
                 }
 
-                Note* note2 = new Note(score);
+                Note* note2 = Factory::createNote(chord1);
                 note2->setString(true_note->string());
                 note2->setFret(true_note->fret());
                 note2->setPitch(true_note->pitch());
                 note2->setTpcFromPitch();
                 chord1->setNoteType(true_note->noteType());
                 chord1->add(note2);
-                Tie* tie = new Tie(score);
+                Tie* tie = new Tie(note2);
                 tie->setEndNote(end_note);
                 //TODO-ws			end_note->setHarmonic(true_note->harmonic());
                 end_note = note2;
                 note2->add(tie);
             }
-            Tie* tie = new Tie(score);
+            Tie* tie = new Tie(true_note);
             tie->setEndNote(end_note);
             //TODO-ws		end_note->setHarmonic(true_note->harmonic());
             true_note->add(tie);
@@ -708,10 +699,9 @@ bool GuitarPro4::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = new Staff(score);
-        s->setPart(part);
-        part->insertStaff(s, 0);
-        score->staves().push_back(s);
+        Staff* s = Factory::createStaff(part);
+
+        score->appendStaff(s);
         score->appendPart(part);
     }
 
@@ -775,15 +765,15 @@ bool GuitarPro4::read(QFile* fp)
             clefId = defaultClef(patch);
         }
         Measure* measure = score->firstMeasure();
-        Clef* clef = new Clef(score);
+        Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+        Clef* clef = Factory::createClef(segment);
         clef->setClefType(clefId);
         clef->setTrack(i * VOICES);
-        Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
         segment->add(clef);
 
         if (capo > 0) {
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            StaffText* st = new StaffText(score);
+            StaffText* st = new StaffText(s);
             st->setPlainText(QString("Capo. fret ") + QString::number(capo));
             st->setTrack(i * VOICES);
             s->add(st);
@@ -823,10 +813,10 @@ bool GuitarPro4::read(QFile* fp)
         }
         const GpBar& gpbar = bars[bar];
         if (!gpbar.marker.isEmpty()) {
-            RehearsalMark* s = new RehearsalMark(score);
+            Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+            RehearsalMark* s = new RehearsalMark(segment);
             s->setPlainText(gpbar.marker.trimmed());
             s->setTrack(0);
-            Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
             segment->add(s);
         }
 
@@ -860,17 +850,6 @@ bool GuitarPro4::read(QFile* fp)
                 int tuple = 0;
                 if (beatBits & BEAT_TUPLET) {
                     tuple = readInt();
-#if 0 // TODO: ws
-                    if (tupleKind[staffIdx]) {
-                        --tupleKind[staffIdx];
-                    } else {
-                        tupleKind[staffIdx] = tuple - 1;
-                        curTuple = tuple;
-                    }
-#endif
-                } else if (tupleKind[staffIdx]) {
-                    //TODO: ws                              tuple = curTuple;
-                    //					--tupleKind[staffIdx];
                 }
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                 if (beatBits & BEAT_CHORD) {
@@ -891,7 +870,7 @@ bool GuitarPro4::read(QFile* fp)
 
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
-                    lyrics = new Lyrics(score);
+                    lyrics = Factory::createLyrics(score->dummy()->chord());
                     auto str = readDelphiString();
                     //TODO-ws					str.erase(std::remove_if(str.begin(), str.end(), [](char c){return c == '_'; }), str.end());
                     lyrics->setPlainText(str);
@@ -900,7 +879,7 @@ bool GuitarPro4::read(QFile* fp)
                 if (gpLyrics.beatCounter >= gpLyrics.fromBeat && gpLyrics.lyricTrack == staffIdx + 1) {
                     int index = gpLyrics.beatCounter - gpLyrics.fromBeat;
                     if (index < gpLyrics.lyrics.size()) {
-                        lyrics = new Lyrics(score);
+                        lyrics = Factory::createLyrics(score->dummy()->chord());
                         lyrics->setPlainText(gpLyrics.lyrics[index]);
                     }
                 }
@@ -913,13 +892,6 @@ bool GuitarPro4::read(QFile* fp)
                     readMixChange(measure);
                     mixChange = true;
                 }
-#if 0
-                else {
-                    if (bar == 0) {
-                        setTempo(tempo, measure);
-                    }
-                }
-#endif
                 int strings = readUChar();           // used strings mask
                 Fraction l  = len2fraction(len);
 
@@ -932,10 +904,10 @@ bool GuitarPro4::read(QFile* fp)
                         delete cr;
                         cr = 0;
                     }
-                    cr = new Rest(score);
+                    cr = Factory::createRest(score->dummy()->segment());
                 } else {
                     if (!segment->cr(track)) {
-                        cr = new Chord(score);
+                        cr = Factory::createChord(score->dummy()->segment());
                     }
                 }
                 cr->setParent(segment);
@@ -953,7 +925,7 @@ bool GuitarPro4::read(QFile* fp)
                 if (tuple) {
                     Tuplet* tuplet = tuplets[staffIdx];
                     if ((tuplet == 0) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
-                        tuplet = new Tuplet(score);
+                        tuplet = new Tuplet(measure);
                         tuplet->setTick(tick);
                         tuplet->setTrack(cr->track());
                         tuplets[staffIdx] = tuplet;
@@ -970,7 +942,7 @@ bool GuitarPro4::read(QFile* fp)
                 }
                 cr->setTicks(l);
                 if (cr->isRest() && (pause == 0 || l >= measure->ticks())) {
-                    cr->setDurationType(TDuration::DurationType::V_MEASURE);
+                    cr->setDurationType(DurationType::V_MEASURE);
                     cr->setTicks(measure->ticks());
                 } else {
                     cr->setDurationType(d);
@@ -985,11 +957,11 @@ bool GuitarPro4::read(QFile* fp)
                 if (cr && cr->isChord()) {            // TODO::ws  crashes without if
                     for (int i = 6; i >= 0; --i) {
                         if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                            Note* note = new Note(score);
+                            Note* note = Factory::createNote(toChord(cr));
                             // apply dotted notes to the note
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
-                                NoteDot* dot = new NoteDot(score);
+                                NoteDot* dot = Factory::createNoteDot(note);
                                 dot->setParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);
@@ -1019,7 +991,7 @@ bool GuitarPro4::read(QFile* fp)
                 bool slurSwap = true;
                 if (slide != 2) {
                     if (hasSlur && (slurs[staffIdx] == 0)) {
-                        Slur* slur = new Slur(score);
+                        Slur* slur = Factory::createSlur(score->dummy());
                         slur->setParent(0);
                         slur->setTrack(track);
                         slur->setTrack2(track);
@@ -1061,7 +1033,7 @@ bool GuitarPro4::read(QFile* fp)
                                 if (cr1) {
                                     for (auto n : cr1->notes()) {
                                         if (n->string() == last->string()) {
-                                            Glissando* s = new Glissando(score);
+                                            Glissando* s = new Glissando(n);
                                             s->setAnchor(Spanner::Anchor::NOTE);
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());
@@ -1139,8 +1111,7 @@ bool GuitarPro4::read(QFile* fp)
                         if (br) {
                             break;
                         }
-#if 1  // TODO-ws: crash
-                        Glissando* s = new Glissando(score);
+                        Glissando* s = new Glissando(n);
                         s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());
@@ -1151,7 +1122,6 @@ bool GuitarPro4::read(QFile* fp)
                         s->setTick2(nt->chord()->segment()->tick());
                         s->setTrack2(n->track());
                         score->addElement(s);
-#endif
                         br = true;
                         break;
                     }

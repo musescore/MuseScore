@@ -23,8 +23,7 @@
 #ifndef __TREMOLOBAR_H__
 #define __TREMOLOBAR_H__
 
-#include "element.h"
-#include "pitchvalue.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -45,13 +44,11 @@ enum class TremoloBarType {
     CUSTOM
 };
 
-class TremoloBar final : public Element
+class TremoloBar final : public EngravingItem
 {
 public:
-    TremoloBar(Score* s);
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
-    ElementType type() const override { return ElementType::TREMOLOBAR; }
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;
@@ -59,13 +56,13 @@ public:
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
 
-    QList<PitchValue>& points() { return m_points; }
-    const QList<PitchValue>& points() const { return m_points; }
-    void setPoints(const QList<PitchValue>& p) { m_points = p; }
+    PitchValues& points() { return m_points; }
+    const PitchValues& points() const { return m_points; }
+    void setPoints(const PitchValues& p) { m_points = p; }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return m_userMag; }
     void setUserMag(qreal m) { m_userMag = m; }
@@ -77,14 +74,18 @@ public:
     void setPlay(bool val) { m_play = val; }
 
 private:
-    TremoloBarType parseTremoloBarTypeFromCurve(const QList<PitchValue>& curve) const;
+
+    friend class mu::engraving::Factory;
+    TremoloBar(EngravingItem* parent);
+
+    TremoloBarType parseTremoloBarTypeFromCurve(const PitchValues& curve) const;
     void updatePointsByTremoloBarType(const TremoloBarType type);
 
     Spatium m_lw;
     qreal m_userMag = 1.0;           // allowed 0.1 - 10.0
     bool m_play = true;
 
-    QList<PitchValue> m_points;
+    PitchValues m_points;
 
     mu::PolygonF m_polygon;                    // computed by layout
 };

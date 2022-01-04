@@ -137,6 +137,10 @@ set(DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES
     private/widgets/TabWidgetWidget_p.h
 )
 
+set(DOCKS_INSTALLABLE_PRIVATE_QUICK_INCLUDES
+    private/quick/QWidgetAdapter_quick_p.h
+)
+
 if(${PROJECT_NAME}_QTQUICK)
   set(DOCKSLIBS_SRCS ${DOCKSLIBS_SRCS}
       DockWidgetQuick.cpp
@@ -217,11 +221,22 @@ else()
   )
 endif()
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-  set(IS_CLANG_BUILD TRUE)
-else()
-  set(IS_CLANG_BUILD FALSE)
-endif()
+#Generate C/C++ CamelCase forwarding headers (only public includes)
+#include(ECMGenerateHeaders)
+#ecm_generate_headers(camelcase_HEADERS
+#  ORIGINAL
+#    CAMELCASE
+#  HEADER_NAMES
+#    Config
+#    DockWidget
+#    DockWidgetBase
+#    FocusScope
+#    FrameworkWidgetFactory,DefaultWidgetFactory
+#    LayoutSaver
+#    MainWindow
+#    MainWindowBase
+#    MainWindowMDI
+#)
 
 set(RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/kddockwidgets_resources.qrc)
 
@@ -230,15 +245,20 @@ add_library(KDAB::kddockwidgets ALIAS kddockwidgets)
 set_target_properties(kddockwidgets PROPERTIES OUTPUT_NAME "kddockwidgets${KDDockWidgets_LIBRARY_QTID}")
 set_compiler_flags(kddockwidgets)
 
+if(${PROJECT_NAME}_QT6)
+  set(DOCKS_INCLUDES_INSTALL_PATH "include/kddockwidgets-qt6")
+else()
+  set(DOCKS_INCLUDES_INSTALL_PATH "include/")
+endif()
+
+
 target_include_directories(kddockwidgets
   PUBLIC
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:${DOCKS_INCLUDES_INSTALL_PATH}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/fwd_headers>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
   PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/private
-    ${CMAKE_CURRENT_SOURCE_DIR}/private/multisplitter/
 )
 
 target_compile_definitions(kddockwidgets
@@ -254,15 +274,18 @@ else()
   target_compile_definitions(kddockwidgets PRIVATE BUILDING_DOCKS_LIBRARY)
 endif()
 
-if (KDDockWidgets_QTQUICK)
+if(KDDockWidgets_QTQUICK)
   target_compile_definitions(kddockwidgets PUBLIC KDDOCKWIDGETS_QTQUICK)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR IS_CLANG_BUILD)
-  target_compile_options(kddockwidgets PRIVATE -Wshadow -fvisibility=hidden)
+  target_compile_options(kddockwidgets PRIVATE -Wshadow)
+  if(NOT MSVC)
+    target_compile_options(kddockwidgets PRIVATE -fvisibility=hidden)
+  endif()
 
   # Disable -Wconversion for Qt6. The qsizetype to int conversions are harmless
-  if (NOT ${PROJECT_NAME}_QT6)
+  if(NOT ${PROJECT_NAME}_QT6)
     target_compile_options(kddockwidgets PRIVATE -Wconversion)
   endif()
 
@@ -272,16 +295,16 @@ if(CMAKE_COMPILER_IS_GNUCXX OR IS_CLANG_BUILD)
 endif()
 
 if(${PROJECT_NAME}_QTQUICK)
-  target_link_libraries(kddockwidgets PUBLIC Qt${QT_MAJOR_VERSION}::Widgets Qt${QT_MAJOR_VERSION}::Quick Qt${QT_MAJOR_VERSION}::QuickControls2)
+  target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::Widgets Qt${Qt_VERSION_MAJOR}::Quick Qt${Qt_VERSION_MAJOR}::QuickControls2)
 else()
-  target_link_libraries(kddockwidgets PUBLIC Qt${QT_MAJOR_VERSION}::Widgets)
+  target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::Widgets PRIVATE Qt${Qt_VERSION_MAJOR}::WidgetsPrivate)
 endif()
 
-if (WIN32)
-    target_link_libraries(kddockwidgets PRIVATE Qt${QT_MAJOR_VERSION}::GuiPrivate dwmapi)
-elseif(NOT APPLE AND NOT EMSCRIPTEN AND NOT ${PROJECT_NAME}_QT6)
-    find_package(Qt${QT_MAJOR_VERSION}X11Extras)
-    target_link_libraries(kddockwidgets PUBLIC Qt${QT_MAJOR_VERSION}::X11Extras)
+if(WIN32)
+  target_link_libraries(kddockwidgets PRIVATE Qt${Qt_VERSION_MAJOR}::GuiPrivate dwmapi)
+elseif(NOT APPLE AND NOT EMSCRIPTEN AND NOT ${PROJECT_NAME}_QT6 AND ${PROJECT_NAME}_X11EXTRAS)
+  find_package(Qt${Qt_VERSION_MAJOR}X11Extras)
+  target_link_libraries(kddockwidgets PUBLIC Qt${Qt_VERSION_MAJOR}::X11Extras)
 endif()
 
 set_target_properties(kddockwidgets PROPERTIES
@@ -291,7 +314,7 @@ set_target_properties(kddockwidgets PROPERTIES
 
 #version libraries on Windows
 if(WIN32)
-  if (CMAKE_BUILD_TYPE)
+  if(CMAKE_BUILD_TYPE)
     set(postfix ${${PROJECT_NAME}_VERSION_MAJOR})
     string(TOUPPER ${CMAKE_BUILD_TYPE} UPPER_BUILD_TYPE)
     if(${UPPER_BUILD_TYPE} MATCHES "^DEBUG")
@@ -316,21 +339,23 @@ if(MSVC AND NOT ${PROJECT_NAME}_STATIC)
   install(FILES "$<TARGET_PDB_FILE_DIR:kddockwidgets>/$<TARGET_PDB_FILE_NAME:kddockwidgets>" DESTINATION ${INSTALL_LIBRARY_DIR} CONFIGURATIONS Debug RelWithDebInfo)
 endif()
 
-install(FILES ${DOCKS_INSTALLABLE_INCLUDES} DESTINATION include/kddockwidgets)
-install(FILES ${DOCKS_INSTALLABLE_PRIVATE_INCLUDES} DESTINATION include/kddockwidgets/private)
-install(FILES private/multisplitter/Item_p.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES private/multisplitter/Widget.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES private/multisplitter/Separator_p.h DESTINATION include/kddockwidgets/private/multisplitter)
-install(FILES private/indicators/ClassicIndicators_p.h DESTINATION include/kddockwidgets/private/indicators)
-install(FILES private/indicators/SegmentedIndicators_p.h DESTINATION include/kddockwidgets/private/indicators)
+install(FILES ${camelcase_HEADERS} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets)
+install(FILES ${DOCKS_INSTALLABLE_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets)
+install(FILES ${DOCKS_INSTALLABLE_PRIVATE_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private)
+install(FILES private/multisplitter/Item_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
+install(FILES private/multisplitter/Widget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
+install(FILES private/multisplitter/Separator_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
+install(FILES private/indicators/ClassicIndicators_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/indicators)
+install(FILES private/indicators/SegmentedIndicators_p.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/indicators)
 
-if (KDDockWidgets_QTQUICK)
-  install(FILES private/multisplitter/Separator_quick.h DESTINATION include/kddockwidgets/private/multisplitter)
-  install(FILES private/multisplitter/Widget_quick.h DESTINATION include/kddockwidgets/private/multisplitter)
+if(KDDockWidgets_QTQUICK)
+  install(FILES ${DOCKS_INSTALLABLE_PRIVATE_QUICK_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/quick)
+  install(FILES private/multisplitter/Separator_quick.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
+  install(FILES private/multisplitter/Widget_quick.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 else()
-  install(FILES ${DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES} DESTINATION include/kddockwidgets/private/widgets)
-  install(FILES private/multisplitter/Separator_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
-  install(FILES private/multisplitter/Widget_qwidget.h DESTINATION include/kddockwidgets/private/multisplitter)
+  install(FILES ${DOCKS_INSTALLABLE_PRIVATE_WIDGET_INCLUDES} DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/widgets)
+  install(FILES private/multisplitter/Separator_qwidget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
+  install(FILES private/multisplitter/Widget_qwidget.h DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets/private/multisplitter)
 endif()
 
 # Generate library version files
@@ -339,20 +364,21 @@ ecm_setup_version(
   ${${PROJECT_NAME}_VERSION}
   VARIABLE_PREFIX KDDOCKWIDGETS
   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kddockwidgets_version.h"
-  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgetsConfigVersion.cmake"
+  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets${KDDockWidgets_LIBRARY_QTID}ConfigVersion.cmake"
   SOVERSION ${${PROJECT_NAME}_SOVERSION}
-  COMPATIBILITY AnyNewerVersion)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kddockwidgets_version.h" DESTINATION include/kddockwidgets)
+  COMPATIBILITY AnyNewerVersion
+)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kddockwidgets_version.h" DESTINATION ${DOCKS_INCLUDES_INSTALL_PATH}/kddockwidgets)
 
 install(EXPORT kddockwidgetsTargets
-        FILE KDDockWidgetsTargets.cmake
+        FILE KDDockWidgets${KDDockWidgets_LIBRARY_QTID}Targets.cmake
         NAMESPACE KDAB::
-        DESTINATION ${INSTALL_LIBRARY_DIR}/cmake/KDDockWidgets
+        DESTINATION ${INSTALL_LIBRARY_DIR}/cmake/KDDockWidgets${KDDockWidgets_LIBRARY_QTID}
 )
-configure_file(KDDockWidgetsConfig.cmake.in KDDockWidgetsConfig.cmake @ONLY)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgetsConfig.cmake"
-              "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgetsConfigVersion.cmake"
-        DESTINATION ${INSTALL_LIBRARY_DIR}/cmake/KDDockWidgets
+configure_file(KDDockWidgetsConfig.cmake.in KDDockWidgets${KDDockWidgets_LIBRARY_QTID}Config.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets${KDDockWidgets_LIBRARY_QTID}Config.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/KDDockWidgets${KDDockWidgets_LIBRARY_QTID}ConfigVersion.cmake"
+        DESTINATION ${INSTALL_LIBRARY_DIR}/cmake/KDDockWidgets${KDDockWidgets_LIBRARY_QTID}
 )
 
 if(${PROJECT_NAME}_DEVELOPER_MODE)
@@ -361,9 +387,9 @@ if(${PROJECT_NAME}_DEVELOPER_MODE)
 
   option(KDDockWidgets_LINTER "Build the layout linter" ON)
 
-  if (NOT ${PROJECT_NAME}_QTQUICK AND KDDockWidgets_LINTER) # TODO: We can support it
+  if(NOT ${PROJECT_NAME}_QTQUICK AND KDDockWidgets_LINTER) # TODO: We can support it
     add_executable(kddockwidgets_linter layoutlinter_main.cpp)
-    target_link_libraries(kddockwidgets_linter kddockwidgets Qt${QT_MAJOR_VERSION}::Widgets)
+    target_link_libraries(kddockwidgets_linter kddockwidgets Qt${Qt_VERSION_MAJOR}::Widgets)
   endif()
 
 endif()

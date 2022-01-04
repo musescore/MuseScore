@@ -37,6 +37,9 @@ class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAppShellConfiguration() = default;
 
+    virtual bool hasCompletedFirstLaunchSetup() const = 0;
+    virtual void setHasCompletedFirstLaunchSetup(bool has) = 0;
+
     virtual StartupSessionType startupSessionType() const = 0;
     virtual void setStartupSessionType(StartupSessionType type) = 0;
 
@@ -61,17 +64,12 @@ public:
     virtual std::string museScoreVersion() const = 0;
     virtual std::string museScoreRevision() const = 0;
 
-    virtual ValCh<io::paths> recentScorePaths() const = 0;
-
     virtual bool isNotationNavigatorVisible() const = 0;
     virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
     virtual async::Notification isNotationNavigatorVisibleChanged() const = 0;
 
     virtual bool needShowSplashScreen() const = 0;
     virtual void setNeedShowSplashScreen(bool show) = 0;
-
-    virtual bool needShowTours() const = 0;
-    virtual void setNeedShowTours(bool show) = 0;
 
     virtual void startEditSettings() = 0;
     virtual void applySettings() = 0;

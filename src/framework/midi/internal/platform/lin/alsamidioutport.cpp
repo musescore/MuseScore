@@ -46,7 +46,7 @@ AlsaMidiOutPort::~AlsaMidiOutPort()
 
 void AlsaMidiOutPort::init()
 {
-    m_alsa = std::unique_ptr<Alsa>(new Alsa());
+    m_alsa = std::make_shared<Alsa>();
 
     m_devicesListener.startWithCallback([this]() {
         return devices();
@@ -213,20 +213,20 @@ mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
     snd_seq_ev_set_source(&seqev, 0);
     snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
 
-    switch (e.type()) {
-    case EventType::ME_NOTEON:
+    switch (e.opcode()) {
+    case Event::Opcode::NoteOn:
         snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
         break;
-    case EventType::ME_NOTEOFF:
+    case Event::Opcode::NoteOff:
         snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
         break;
-    case EventType::ME_PROGRAM:
+    case Event::Opcode::ProgramChange:
         snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
         break;
-    case EventType::ME_CONTROLLER:
+    case Event::Opcode::ControlChange:
         snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
         break;
-    case EventType::ME_PITCHBEND:
+    case Event::Opcode::PitchBend:
         snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data() - 8192);
         break;
     default:

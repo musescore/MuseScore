@@ -38,9 +38,12 @@ class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMultiInstancesProvider() = default;
 
-    // Score opening
-    virtual bool isScoreAlreadyOpened(const io::path& scorePath) const = 0;
-    virtual void activateWindowWithScore(const io::path& scorePath) = 0;
+    // Project opening
+    virtual bool isProjectAlreadyOpened(const io::path& projectPath) const = 0;
+    virtual void activateWindowWithProject(const io::path& projectPath) = 0;
+    virtual bool isHasAppInstanceWithoutProject() const = 0;
+    virtual void activateWindowWithoutProject() = 0;
+    virtual bool openNewAppInstance(const QStringList& args) = 0;
 
     // Settings
     virtual bool isPreferencesAlreadyOpened() const = 0;
@@ -58,6 +61,9 @@ public:
     virtual const std::string& selfID() const = 0;
     virtual std::vector<InstanceMeta> instances() const = 0;
     virtual async::Notification instancesChanged() const = 0;
+
+    // Quit for all
+    virtual void quitForAll() = 0;
 };
 }
 

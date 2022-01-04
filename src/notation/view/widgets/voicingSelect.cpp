@@ -30,9 +30,12 @@ VoicingSelect::VoicingSelect(QWidget* parent)
     setupUi(this);
 
     //setup changed signals
-    connect(interpretBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
-    connect(voicingBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
-    connect(durationBox, SIGNAL(currentIndexChanged(int)), SLOT(_voicingChanged()));
+    connect(interpretBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &VoicingSelect::_voicingChanged);
+    connect(voicingBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &VoicingSelect::_voicingChanged);
+    connect(durationBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &VoicingSelect::_voicingChanged);
 }
 
 void VoicingSelect::_voicingChanged()

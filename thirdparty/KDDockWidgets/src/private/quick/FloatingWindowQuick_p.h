@@ -12,7 +12,7 @@
 #ifndef KD_FLOATING_WINDOWQUICK_P_H
 #define KD_FLOATING_WINDOWQUICK_P_H
 
-#include "FloatingWindow_p.h"
+#include "../FloatingWindow_p.h"
 
 class QQuickView;
 
@@ -23,7 +23,7 @@ class DOCKS_EXPORT FloatingWindowQuick : public FloatingWindow
     Q_OBJECT
 public:
     explicit FloatingWindowQuick(MainWindowBase *parent = nullptr);
-    explicit FloatingWindowQuick(Frame *frame, MainWindowBase *parent = nullptr);
+    explicit FloatingWindowQuick(Frame *frame, QRect suggestedGeometry, MainWindowBase *parent = nullptr);
     ~FloatingWindowQuick();
 
     QSize minimumSize() const override;

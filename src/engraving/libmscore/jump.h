@@ -55,17 +55,17 @@ public:
         USER
     };
 
-    Jump(Score*);
+    Jump(Measure* parent);
 
     void setJumpType(Type t);
     Type jumpType() const;
     QString jumpTypeUserName() const;
 
     Jump* clone() const override { return new Jump(*this); }
-    ElementType type() const override { return ElementType::JUMP; }
+
     int subtype() const override { return int(jumpType()); }
 
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
@@ -84,12 +84,12 @@ public:
     bool playRepeats() const { return _playRepeats; }
     void setPlayRepeats(bool val) { _playRepeats = val; }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 

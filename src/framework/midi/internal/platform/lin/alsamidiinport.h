@@ -46,19 +46,19 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    Ret run() override;
-    void stop() override;
-    bool isRunning() const override;
     async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
+    Ret run();
+    void stop();
+
     static void process(AlsaMidiInPort* self);
     void doProcess();
 
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Alsa;
-    std::unique_ptr<Alsa> m_alsa;
+    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };

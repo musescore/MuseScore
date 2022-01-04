@@ -24,23 +24,34 @@ import QtQuick.Window 2.15
 
 import MuseScore.AppShell 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.NotationScene 1.0
 
-Rectangle {
+Item {
     id: root
 
     NotationStatusBarModel {
         id: model
     }
 
-    Component.onCompleted: {
-        model.load()
+    NavigationSection {
+        id: navSec
+        name: "NotationStatusBar"
+        enabled: root.enabled && root.visible
+        order: 8
     }
 
-    MouseArea {
-        anchors.fill: parent
+    NavigationPanel {
+        id: navPanel
+        name: "NotationStatusBar"
+        enabled: root.enabled && root.visible
+        order: 0
+        direction: NavigationPanel.Horizontal
+        section: navSec
+    }
 
-        onClicked: root.forceActiveFocus()
+    Component.onCompleted: {
+        model.load()
     }
 
     StyledTextLabel {
@@ -67,23 +78,25 @@ Rectangle {
         property int remainingSpace: 999999
 
         anchors.right: parent.right
-        anchors.rightMargin: hiddenControlsMenuButton.visible ? 4 : 12
+        anchors.rightMargin: 4
 
         height: parent.height
 
-        spacing: 10
+        spacing: 4
 
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
             id: workspaceControl
-
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             text: model.currentWorkspaceAction.title
-            normalStateColor: "transparent"
-
+            transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
+
+            navigation.panel: navPanel
+            navigation.order: 1
 
             onClicked: {
                 Qt.callLater(model.selectWorkspace)
@@ -94,15 +107,17 @@ Rectangle {
 
         ConcertPitchControl {
             id: concertPitchControl
-
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             text: model.concertPitchAction.title
             icon: model.concertPitchAction.icon
             checked: model.concertPitchAction.checked
             enabled: model.concertPitchAction.enabled
-
             visible: statusBarRow.remainingSpace > width
+
+            navigation.panel: navPanel
+            navigation.order: 2
 
             onToggleConcertPitchRequested: {
                 model.toggleConcertPitch()
@@ -113,11 +128,14 @@ Rectangle {
 
         ViewModeControl {
             id: viewModeControl
-
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
+
+            navigation.panel: navPanel
+            navigation.order: 3
 
             onChangeCurrentViewModeRequested: {
                 model.setCurrentViewMode(newViewMode)
@@ -126,8 +144,8 @@ Rectangle {
 
         ZoomControl {
             id: zoomControl
-
             anchors.verticalCenter: parent.verticalCenter
+            height: 28
 
             enabled: model.zoomEnabled
             currentZoomPercentage: model.currentZoomPercentage
@@ -135,12 +153,15 @@ Rectangle {
             maxZoomPercentage: model.maxZoomPercentage()
             availableZoomList: model.availableZoomList
 
+            navigationPanel: navPanel
+            navigationOrderMin: 4
+
             onChangeZoomPercentageRequested: {
                 model.currentZoomPercentage = newZoomPercentage
             }
 
             onChangeZoomRequested: {
-                model.setCurrentZoomIndex(newZoomIndex)
+                model.setCurrentZoom(zoomId)
             }
 
             onZoomInRequested: {
@@ -162,6 +183,9 @@ Rectangle {
             visible: !concertPitchControl.visible ||
                      !workspaceControl.visible
 
+            navigation.panel: navPanel
+            navigation.order: zoomControl.navigationOrderMax + 1
+
             menuModel: {
                 var result = []
 
@@ -176,8 +200,15 @@ Rectangle {
                 return result
             }
 
-            onHandleAction: {
-                model.handleAction(actionCode)
+            onHandleMenuItem: {
+                switch (itemId) {
+                case model.concertPitchAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                case model.currentWorkspaceAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                }
             }
         }
     }

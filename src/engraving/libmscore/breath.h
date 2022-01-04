@@ -23,8 +23,11 @@
 #ifndef __BREATH_H__
 #define __BREATH_H__
 
-#include "element.h"
-#include "symid.h"
+#include "engravingitem.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 //---------------------------------------------------------
@@ -42,15 +45,16 @@ struct BreathType {
 //!    breathType() is index in symList
 //---------------------------------------------------------
 
-class Breath final : public Element
+class Breath final : public EngravingItem
 {
     qreal _pause;
     SymId _symId;
 
-public:
-    Breath(Score* s);
+    friend class mu::engraving::Factory;
+    Breath(Segment* parent);
 
-    ElementType type() const override { return ElementType::BREATH; }
+public:
+
     Breath* clone() const override { return new Breath(*this); }
 
     qreal mag() const override;
@@ -60,7 +64,7 @@ public:
     qreal pause() const { return _pause; }
     void setPause(qreal v) { _pause = v; }
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;
@@ -68,12 +72,12 @@ public:
     void read(XmlReader&) override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 
     bool isCaesura() const;

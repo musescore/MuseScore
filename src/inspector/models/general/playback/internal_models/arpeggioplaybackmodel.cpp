@@ -31,6 +31,7 @@ ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Arpeggio"));
+    setModelType(InspectorModelType::TYPE_ARPEGGIO);
 
     createProperties();
 }
@@ -48,7 +49,7 @@ void ArpeggioPlaybackModel::requestElements()
 void ArpeggioPlaybackModel::loadProperties()
 {
     loadPropertyItem(m_stretch, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

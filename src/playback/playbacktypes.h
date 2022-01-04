@@ -33,6 +33,34 @@ enum class PlaybackCursorType {
     STEPPED
 };
 
+enum class MixerSectionType {
+    Unknown,
+    Labels,
+    Sound,
+    AudioFX,
+    Balance,
+    Volume,
+    Fader,
+    MuteAndSolo,
+    Title
+};
+
+inline QList<MixerSectionType> allMixerSectionTypes()
+{
+    static const QList<MixerSectionType> sections {
+        MixerSectionType::Labels,
+        MixerSectionType::Sound,
+        MixerSectionType::AudioFX,
+        MixerSectionType::Balance,
+        MixerSectionType::Volume,
+        MixerSectionType::Fader,
+        MixerSectionType::MuteAndSolo,
+        MixerSectionType::Title
+    };
+
+    return sections;
+}
+
 static const QTime ZERO_TIME(0, 0, 0, 0);
 
 inline audio::msecs_t secondsToMilliseconds(float seconds)

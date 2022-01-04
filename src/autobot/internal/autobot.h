@@ -22,60 +22,77 @@
 #ifndef MU_AUTOBOT_AUTOBOT_H
 #define MU_AUTOBOT_AUTOBOT_H
 
+#include <QEventLoop>
+
 #include "../iautobot.h"
 #include "io/path.h"
 #include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../iautobotconfiguration.h"
 #include "system/ifilesystem.h"
+#include "ui/inavigationcontroller.h"
+#include "shortcuts/ishortcutsregister.h"
+#include "iinteractive.h"
 
-#include "abrunner.h"
-#include "abreport.h"
+#include "scriptengine.h"
+#include "testcasecontext.h"
+#include "testcaserunner.h"
+#include "testcasereport.h"
+#include "autobotinteractive.h"
 
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(autobot, IAutobotConfiguration, configuration)
     INJECT(autobot, system::IFileSystem, fileSystem)
+    INJECT(autobot, ui::INavigationController, navigation)
+    INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(autobot, framework::IInteractive, interactive)
 
 public:
-    Autobot();
+    Autobot() = default;
 
     void init();
 
-    std::vector<ITestCasePtr> testCases() const override;
-    ITestCasePtr testCase(const std::string& name) const override;
+    Status status() const override;
+    async::Channel<io::path, Status> statusChanged() const override;
+    async::Channel<QString, StepStatus, Ret> stepStatusChanged() const override;
 
-    void setCurrentTestCase(const std::string& name) override;
-    const ValCh<ITestCasePtr>& currentTestCase() const override;
+    SpeedMode speedMode() const override;
+    void setSpeedMode(SpeedMode mode) override;
+    async::Channel<SpeedMode> speedModeChanged() const override;
+    void setDefaultIntervalMsec(int msec) override;
+    int defaultIntervalMsec() const override;
+    int intervalMsec() const override;
 
-    void runAllFiles() override;
-    void runFile(int fileIndex) override;
-    void stop() override;
-    const ValCh<Status>& status() const override;
+    void execScript(const io::path& path) override;
+    void runTestCase(const TestCase& testCase) override;
+    void sleep(int msec) override;
+    void pause() override;
+    void unpause() override;
+    void abort() override;
+    void fatal(const QString& msg) override;
 
-    const ValNt<Files>& files() const override;
-    async::Channel<File> fileFinished() const override;
-    const ValCh<int>& currentFileIndex() const override;
+    ITestCaseContextPtr context() const override;
+    AutobotInteractivePtr autobotInteractive() const override;
 
 private:
 
-    mu::RetVal<mu::io::paths> filesList() const;
-    void nextFile();
-    void onFileFinished(const IAbContextPtr& ctx);
-    void doStop();
+    void affectOnServices();
+    void restoreAffectOnServices();
 
-    std::vector<ITestCasePtr> m_testCases;
-    ValCh<ITestCasePtr> m_currentTestCase;
+    void setStatus(Status st);
 
-    ValNt<Files> m_files;
-    ValCh<int> m_fileIndex;
+    Status m_status = Status::Undefined;
+    async::Channel<io::path, Status> m_statusChanged;
+    async::Channel<QString, StepStatus, Ret> m_stepStatusChanged;
+    ScriptEngine* m_engine = nullptr;
+    ITestCaseContextPtr m_context = nullptr;
+    TestCaseRunner m_runner;
+    TestCaseReport m_report;
+    AutobotInteractivePtr m_autobotInteractive = nullptr;
 
-    async::Channel<File> m_fileFinished;
-
-    ValCh<Status> m_status;
-    AbRunner m_runner;
-    AbReport m_report;
+    QEventLoop m_sleepLoop;
 };
 }
 

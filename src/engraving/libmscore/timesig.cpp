@@ -23,18 +23,20 @@
 #include "timesig.h"
 
 #include "translation.h"
+#include "style/style.h"
+#include "rw/xml.h"
 
-#include "xml.h"
 #include "score.h"
 #include "scorefont.h"
-#include "style.h"
 #include "symbol.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "segment.h"
 #include "utils.h"
+#include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle timesigStyle {
@@ -49,8 +51,8 @@ static const ElementStyle timesigStyle {
 //    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
-TimeSig::TimeSig(Score* s)
-    : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+TimeSig::TimeSig(Segment* parent)
+    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     initElementStyle(&timesigStyle);
 
@@ -59,6 +61,11 @@ TimeSig::TimeSig(Score* s)
     _sig.set(0, 1);                 // initialize to invalid
     _timeSigType      = TimeSigType::NORMAL;
     _largeParentheses = false;
+}
+
+void TimeSig::setParent(Segment* parent)
+{
+    EngravingItem::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -97,9 +104,9 @@ bool TimeSig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TimeSig::drop(EditData& data)
+EngravingItem* TimeSig::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isTimeSig()) {
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
@@ -141,9 +148,9 @@ void TimeSig::setDenominatorString(const QString& a)
 
 void TimeSig::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::TIMESIG_TYPE);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     xml.tag("sigN",  _sig.numerator());
     xml.tag("sigD",  _sig.denominator());
@@ -159,7 +166,7 @@ void TimeSig::write(XmlWriter& xml) const
     writeProperty(xml, Pid::SHOW_COURTESY);
     writeProperty(xml, Pid::SCALE);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -219,7 +226,7 @@ void TimeSig::read(XmlReader& e)
         } else if (tag == "Groups") {
             _groups.read(e);
         } else if (readStyledProperty(e, tag)) {
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -230,7 +237,7 @@ void TimeSig::read(XmlReader& e)
 
     // HACK: handle time signatures from scores before 3.5 differently on some special occasions.
     // See https://musescore.org/node/308139.
-    QString version = masterScore()->mscoreVersion();
+    QString version = mscoreVersion();
     if (!version.isEmpty() && (version >= "3.0") && (version < "3.5")) {
         if ((_timeSigType == TimeSigType::NORMAL) && !_numeratorString.isEmpty() && _denominatorString.isEmpty()) {
             if (_numeratorString == QString::number(_sig.numerator())) {
@@ -258,9 +265,9 @@ Pid TimeSig::propertyId(const QStringRef& name) const
         return Pid::TIMESIG_STRETCH;
     }
     if (name == "Groups") {
-        return Pid::GROUPS;
+        return Pid::GROUP_NODES;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -338,11 +345,11 @@ void TimeSig::layout()
         ds.clear();
     } else {
         if (_numeratorString.isEmpty()) {
-            ns = toTimeSigString(_numeratorString.isEmpty() ? QString::number(_sig.numerator()) : _numeratorString);
-            ds = toTimeSigString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
+            ns = timeSigSymIdsFromString(_numeratorString.isEmpty() ? QString::number(_sig.numerator()) : _numeratorString);
+            ds = timeSigSymIdsFromString(_denominatorString.isEmpty() ? QString::number(_sig.denominator()) : _denominatorString);
         } else {
-            ns = toTimeSigString(_numeratorString);
-            ds = toTimeSigString(_denominatorString);
+            ns = timeSigSymIdsFromString(_numeratorString);
+            ds = timeSigSymIdsFromString(_denominatorString);
         }
 
         ScoreFont* font = score()->scoreFont();
@@ -450,7 +457,7 @@ void TimeSig::setSSig(const QString& s)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TimeSig::getProperty(Pid propertyId) const
+PropertyValue TimeSig::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
@@ -459,20 +466,20 @@ QVariant TimeSig::getProperty(Pid propertyId) const
         return numeratorString();
     case Pid::DENOMINATOR_STRING:
         return denominatorString();
-    case Pid::GROUPS:
-        return QVariant::fromValue(groups());
+    case Pid::GROUP_NODES:
+        return groups().nodes();
     case Pid::TIMESIG:
-        return QVariant::fromValue(_sig);
+        return PropertyValue::fromValue(_sig);
     case Pid::TIMESIG_GLOBAL:
-        return QVariant::fromValue(globalSig());
+        return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
-        return QVariant::fromValue(stretch());
+        return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
         return int(_timeSigType);
     case Pid::SCALE:
         return _scale;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -480,7 +487,7 @@ QVariant TimeSig::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
+bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SHOW_COURTESY:
@@ -495,8 +502,8 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
     case Pid::DENOMINATOR_STRING:
         setDenominatorString(v.toString());
         break;
-    case Pid::GROUPS:
-        setGroups(v.value<Groups>());
+    case Pid::GROUP_NODES:
+        setGroups(v.value<GroupNodes>());
         break;
     case Pid::TIMESIG:
         setSig(v.value<Fraction>());
@@ -511,10 +518,10 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
         _timeSigType = (TimeSigType)(v.toInt());
         break;
     case Pid::SCALE:
-        _scale = SizeF::fromVariant(v);
+        _scale = v.value<ScaleF>();
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -528,25 +535,25 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TimeSig::propertyDefault(Pid id) const
+PropertyValue TimeSig::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::SHOW_COURTESY:
-        return true;
+        return 1;
     case Pid::NUMERATOR_STRING:
         return QString();
     case Pid::DENOMINATOR_STRING:
         return QString();
     case Pid::TIMESIG:
-        return QVariant::fromValue(Fraction(4, 4));
+        return PropertyValue::fromValue(Fraction(4, 4));
     case Pid::TIMESIG_GLOBAL:
-        return QVariant::fromValue(Fraction(1, 1));
+        return PropertyValue::fromValue(Fraction(1, 1));
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::SCALE:
         return score()->styleV(Sid::timesigScale);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -554,7 +561,7 @@ QVariant TimeSig::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::nextSegmentElement()
+EngravingItem* TimeSig::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -563,7 +570,7 @@ Element* TimeSig::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::prevSegmentElement()
+EngravingItem* TimeSig::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -591,7 +598,7 @@ QString TimeSig::accessibleInfo() const
     default:
         timeSigString = qtrc("engraving", "%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), timeSigString);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }
 
 //---------------------------------------------------------

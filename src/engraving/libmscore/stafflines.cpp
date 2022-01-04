@@ -48,8 +48,8 @@ namespace Ms {
 //   StaffLines
 //---------------------------------------------------------
 
-StaffLines::StaffLines(Score* s)
-    : Element(s)
+StaffLines::StaffLines(Measure* parent)
+    : EngravingItem(ElementType::STAFF_LINES, parent)
 {
     setSelectable(false);
 }
@@ -71,13 +71,13 @@ PointF StaffLines::pagePos() const
 PointF StaffLines::canvasPos() const
 {
     PointF p(pagePos());
-    Element* e = parent();
+    EngravingItem* e = parentItem();
     while (e) {
         if (e->type() == ElementType::PAGE) {
             p += e->pos();
             break;
         }
-        e = e->parent();
+        e = e->parentItem();
     }
     return p;
 }
@@ -104,7 +104,7 @@ void StaffLines::layoutForWidth(qreal w)
     int _lines;
     if (s) {
         setMag(s->staffMag(measure()->tick()));
-        setVisible(!s->invisible(measure()->tick()));
+        setVisible(!s->isLinesInvisible(measure()->tick()));
         setColor(s->color(measure()->tick()));
         const StaffType* st = s->staffType(measure()->tick());
         dist         *= st->lineDistance().val();
@@ -114,7 +114,7 @@ void StaffLines::layoutForWidth(qreal w)
 //                  rypos() = 2 * _spatium;
     } else {
         _lines = 5;
-        setColor(MScore::defaultColor);
+        setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
     qreal x1 = pos().x();
@@ -159,7 +159,7 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
         rypos()       = st->yoffset().val() * _spatium;
     } else {
         _lines = 5;
-        setColor(MScore::defaultColor);
+        setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
     qreal x1 = pos().x();
@@ -212,7 +212,7 @@ qreal StaffLines::y1() const
 //   scanElements
 //---------------------------------------------------------
 
-void StaffLines::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void StaffLines::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
         func(data, this);

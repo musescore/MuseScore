@@ -21,14 +21,13 @@
  */
 
 #include "staffstate.h"
+#include "draw/pen.h"
+#include "rw/xml.h"
 #include "score.h"
 #include "instrtemplate.h"
 #include "segment.h"
 #include "staff.h"
 #include "part.h"
-#include "mscore.h"
-#include "xml.h"
-#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -38,15 +37,15 @@ namespace Ms {
 //   StaffState
 //---------------------------------------------------------
 
-StaffState::StaffState(Score* score)
-    : Element(score)
+StaffState::StaffState(EngravingItem* parent)
+    : EngravingItem(ElementType::STAFF_STATE, parent)
 {
     _staffStateType = StaffStateType::INSTRUMENT;
     _instrument = new Instrument;
 }
 
 StaffState::StaffState(const StaffState& ss)
-    : Element(ss)
+    : EngravingItem(ss)
 {
     _instrument = new Instrument(*ss._instrument);
 }
@@ -62,13 +61,13 @@ StaffState::~StaffState()
 
 void StaffState::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", int(_staffStateType));
     if (staffStateType() == StaffStateType::INSTRUMENT) {
         _instrument->write(xml, nullptr);
     }
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -83,7 +82,7 @@ void StaffState::read(XmlReader& e)
             _staffStateType = StaffStateType(e.readInt());
         } else if (tag == "Instrument") {
             _instrument->read(e, nullptr);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -99,7 +98,7 @@ void StaffState::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
             lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
@@ -212,9 +211,9 @@ bool StaffState::acceptDrop(EditData&) const
 //   drop
 //---------------------------------------------------------
 
-Element* StaffState::drop(EditData& data)
+EngravingItem* StaffState::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);
     return e;
 }

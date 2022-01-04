@@ -23,7 +23,7 @@
 #ifndef __PLUGIN_API_STYLE_H__
 #define __PLUGIN_API_STYLE_H__
 
-#include "libmscore/style.h"
+#include "engraving/style/style.h"
 
 namespace Ms {
 class Score;

@@ -106,18 +106,18 @@ containing recognized text, unrecognized plaintext and unrecognized text requiri
       <VBox>
         <height>18.0977</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Harmony 6</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
+          <style>subtitle</style>
           <text>MuseScore testfile
 Chords using normal, Roman and Nashville notation
 containing recognized text, unrecognized plaintext and unrecognized text requiring HTML escape
 </text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Leon Vinken</text>
           </Text>
         </VBox>

@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
 Item {
     id: root
 
-    property alias iconModeEnum: _iconModeEnum
-    property int iconMode: !iconImage.isEmpty ? iconModeEnum.left : iconModeEnum.hidden
+    property int iconMode: !iconImage.isEmpty ? IncrementalPropertyControl.Left : IncrementalPropertyControl.Hidden
     property int iconBackgroundSize: 20
     property alias icon: iconImage.iconCode
 
@@ -53,20 +53,22 @@ Item {
 
     function increment() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value + step
+        var newValue = Math.min(value + step, root.maxValue)
 
-        if (newValue > root.maxValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
 
     function decrement() {
         var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = value - step
+        var newValue = Math.max(value - step, root.minValue)
 
-        if (newValue < root.minValue)
+        if (newValue === value) {
             return
+        }
 
         root.valueEdited(+newValue.toFixed(decimals))
     }
@@ -82,12 +84,10 @@ Item {
         }
     }
 
-    QtObject {
-        id: _iconModeEnum
-
-        readonly property int left: 1
-        readonly property int right: 2
-        readonly property int hidden: 3
+    enum IconMode {
+        Hidden,
+        Left,
+        Right
     }
 
     Rectangle {
@@ -105,7 +105,6 @@ Item {
 
         StyledIconLabel {
             id: iconImage
-
             anchors.fill: parent
         }
     }
@@ -118,30 +117,36 @@ Item {
 
         DoubleInputValidator {
             id: doubleInputValidator
-            top: maxValue
-            bottom: minValue
-            decimal: decimals
+            top: root.maxValue
+            bottom: root.minValue
+            decimal: root.decimals
         }
 
         IntInputValidator {
             id: intInputValidator
-            top: maxValue
-            bottom: minValue
+            top: root.maxValue
+            bottom: root.minValue
         }
 
-        validator: decimals > 0 ? doubleInputValidator : intInputValidator
+        validator: root.decimals > 0 ? doubleInputValidator : intInputValidator
+
+        containsMouse: mouseArea.containsMouse || valueAdjustControl.containsMouse
 
         ValueAdjustControl {
             id: valueAdjustControl
 
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: textInputField.background.border.width
+            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
-            icon: IconCode.SMALL_ARROW_DOWN
+            radius: textInputField.background.radius - anchors.margins
 
-            onIncreaseButtonClicked: increment()
+            canIncrease: root.currentValue < root.maxValue
+            canDecrease: root.currentValue > root.minValue
 
-            onDecreaseButtonClicked: decrement()
+            onIncreaseButtonClicked: { root.increment() }
+            onDecreaseButtonClicked: { root.decrement() }
         }
 
         onCurrentTextEdited: {
@@ -151,48 +156,77 @@ Item {
                 newVal = 0
             }
 
-            root.valueEdited(+newVal.toFixed(decimals))
+            root.valueEdited(+newVal.toFixed(root.decimals))
         }
     }
 
     states: [
         State {
+            name: "ICON_MODE_HIDDEN"
+            when: root.iconMode === IncrementalPropertyControl.Hidden
+
+            AnchorChanges {
+                target: textInputField
+                anchors.left: root.left
+                anchors.right: root.right
+            }
+
+            PropertyChanges {
+                target: iconBackground
+                visible: false
+            }
+        },
+
+        State {
             name: "ICON_ALIGN_LEFT"
-            when: root.iconMode === iconModeEnum.left
+            when: root.iconMode === IncrementalPropertyControl.Left
 
-            AnchorChanges { target: iconBackground; anchors.left: root.left }
+            PropertyChanges {
+                target: textInputField
+                anchors.leftMargin: root.spacing
+            }
 
-            PropertyChanges { target: iconBackground; visible: true }
+            AnchorChanges {
+                target: textInputField
+                anchors.left: iconBackground.right
+                anchors.right: root.right
+            }
 
-            AnchorChanges { target: textInputField; anchors.left: iconBackground.right }
+            PropertyChanges {
+                target: iconBackground
+                visible: true
+            }
 
-            PropertyChanges { target: textInputField; anchors.leftMargin: spacing
-                width: root.width - iconBackground.width - root.spacing }
+            AnchorChanges {
+                target: iconBackground
+                anchors.left: root.left
+            }
         },
 
         State {
             name: "ICON_ALIGN_RIGHT"
-            when: root.iconMode === iconModeEnum.right
+            when: root.iconMode === IncrementalPropertyControl.Right
 
-            AnchorChanges { target: textInputField; anchors.left: root.left }
+            PropertyChanges {
+                target: textInputField
+                anchors.rightMargin: root.spacing
+            }
 
-            PropertyChanges { target: textInputField; width: root.width - iconBackground.width - root.spacing }
+            AnchorChanges {
+                target: textInputField
+                anchors.left: root.left
+                anchors.right: iconBackground.left
+            }
 
-            AnchorChanges { target: iconBackground; anchors.left: textInputField.right }
+            PropertyChanges {
+                target: iconBackground
+                visible: true
+            }
 
-            PropertyChanges { target: iconBackground; anchors.leftMargin: spacing
-                visible: true }
-        },
-
-        State {
-            name: "ICON_MODE_HIDDEN"
-            when: root.iconMode === iconModeEnum.hidden
-
-            AnchorChanges { target: textInputField; anchors.left: root.left }
-
-            PropertyChanges { target: textInputField; width: root.width }
-
-            PropertyChanges { target: iconBackground; visible: false }
+            AnchorChanges {
+                target: iconBackground
+                anchors.right: root.right
+            }
         }
     ]
 }

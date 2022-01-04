@@ -35,18 +35,15 @@ class Accidental;
 
 class VibratoSegment final : public LineSegment
 {
-    std::vector<SymId> _symbols;
+    SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
     virtual Sid getPropertyStyle(Pid) const override;
 
-protected:
 public:
-    VibratoSegment(Spanner* sp, Score* s)
-        : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    VibratoSegment(Vibrato* sp, System* parent);
 
-    ElementType type() const override { return ElementType::VIBRATO_SEGMENT; }
     VibratoSegment* clone() const override { return new VibratoSegment(*this); }
 
     Vibrato* vibrato() const { return toVibrato(spanner()); }
@@ -54,11 +51,11 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;
-    std::vector<SymId> symbols() const { return _symbols; }
-    void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
+    SymIdList symbols() const { return _symbols; }
+    void setSymbols(const SymIdList& s) { _symbols = s; }
 };
 
 //---------------------------------------------------------
@@ -78,14 +75,13 @@ private:
     bool _playArticulation;
 
 public:
-    Vibrato(Score* s);
+    Vibrato(EngravingItem* parent);
     ~Vibrato();
 
     Vibrato* clone() const override { return new Vibrato(*this); }
-    ElementType type() const override { return ElementType::VIBRATO; }
 
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -100,11 +96,11 @@ public:
     QString vibratoTypeName() const;
     QString vibratoTypeUserName() const;
 
-    Segment* segment() const { return (Segment*)parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
     QString accessibleInfo() const override;
 };

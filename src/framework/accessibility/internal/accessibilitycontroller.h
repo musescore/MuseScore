@@ -27,43 +27,48 @@
 #include <QList>
 #include <QHash>
 
-#include "../iaccessibilitycontroller.h"
-#include "accessibleobject.h"
 #include "async/asyncable.h"
+#include "global/iapplication.h"
 
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
-#include "actions/iactionsdispatcher.h"
-#include "actions/actionable.h"
-#include "global/iinteractive.h"
-#include "accessibility/iaccessibilityconfiguration.h"
+#include "ui/iinteractiveprovider.h"
+#include "../iaccessibilityconfiguration.h"
+#include "../iqaccessibleinterfaceregister.h"
+#include "../iaccessibilitycontroller.h"
+#include "accessibleobject.h"
 
 class QAccessibleInterface;
 class QAccessibleEvent;
 
+namespace mu::diagnostics {
+class DiagnosticAccessibleModel;
+}
+
 namespace mu::accessibility {
-class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable, public actions::Actionable,
+class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
-    INJECT(accessibility, IAccessibilityConfiguration, configuration)
+    INJECT(accessibility, framework::IApplication, application)
     INJECT(accessibility, ui::IMainWindow, mainWindow)
-    INJECT(accessibility, actions::IActionsDispatcher, dispatcher)
-    INJECT(accessibility, framework::IInteractive, interactive)
+    INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(accessibility, IAccessibilityConfiguration, configuration)
 
 public:
     AccessibilityController() = default;
     ~AccessibilityController();
 
-    void init();
+    static QAccessibleInterface* accessibleInterface(QObject* object);
 
     // IAccessibilityController
-    const IAccessible* accessibleRoot() const override;
-
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
+
+    const IAccessible* accessibleRoot() const override;
+    const IAccessible* lastFocused() const override;
     // -----
 
-    // IAccessibility
+    // IAccessibility (root)
     IAccessible* accessibleParent() const override;
 
     size_t accessibleChildCount() const override;
@@ -71,6 +76,11 @@ public:
 
     Role accessibleRole() const override;
     QString accessibleName() const override;
+    QString accessibleDescription() const override;
+    QVariant accesibleValue() const override;
+    QVariant accesibleMaximumValue() const override;
+    QVariant accesibleMinimumValue() const override;
+    QVariant accesibleValueStepSize() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
@@ -82,8 +92,13 @@ public:
     int childCount(const IAccessible* item) const;
     QAccessibleInterface* child(const IAccessible* item, int i) const;
     int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
+    QAccessibleInterface* focusedChild(const IAccessible* item) const;
+
+    async::Channel<QAccessibleEvent*> eventSent() const;
 
 private:
+
+    friend class mu::diagnostics::DiagnosticAccessibleModel;
 
     struct Item
     {
@@ -94,6 +109,8 @@ private:
         bool isValid() const { return item != nullptr; }
     };
 
+    void init();
+
     const Item& findItem(const IAccessible* aitem) const;
 
     void propertyChanged(IAccessible* item, IAccessible::Property p);
@@ -101,9 +118,15 @@ private:
 
     void sendEvent(QAccessibleEvent* ev);
 
+    void cancelPreviousReading();
+
     QHash<const IAccessible*, Item> m_allItems;
 
     QList<IAccessible*> m_children;
+    async::Channel<QAccessibleEvent*> m_eventSent;
+    IAccessible* m_lastFocused = nullptr;
+
+    bool m_inited = false;
 };
 }
 

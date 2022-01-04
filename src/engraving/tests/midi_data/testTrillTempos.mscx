@@ -76,11 +76,11 @@
       <VBox>
         <height>10</height>
         <Text>
-          <style>Title</style>
+          <style>title</style>
           <text>Trill Tempos</text>
           </Text>
         <Text>
-          <style>Composer</style>
+          <style>composer</style>
           <text>Composer</text>
           </Text>
         </VBox>
@@ -499,7 +499,7 @@
           </LayoutBreak>
         <voice>
           <Tempo>
-            <tempo>1.6666666666666667</tempo>
+            <tempo>1.66667</tempo>
             <followText>1</followText>
             <text><sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>

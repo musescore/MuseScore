@@ -29,31 +29,31 @@
 namespace Ms {
 namespace PluginAPI {
 //---------------------------------------------------------
-//   Element::setOffsetX
+//   EngravingItem::setOffsetX
 //---------------------------------------------------------
 
-void Element::setOffsetX(qreal offX)
+void EngravingItem::setOffsetX(qreal offX)
 {
     const qreal offY = element()->offset().y() / element()->spatium();
     set(Ms::Pid::OFFSET, QPointF(offX, offY));
 }
 
 //---------------------------------------------------------
-//   Element::setOffsetY
+//   EngravingItem::setOffsetY
 //---------------------------------------------------------
 
-void Element::setOffsetY(qreal offY)
+void EngravingItem::setOffsetY(qreal offY)
 {
     const qreal offX = element()->offset().x() / element()->spatium();
     set(Ms::Pid::OFFSET, QPointF(offX, offY));
 }
 
 //---------------------------------------------------------
-//   Element::bbox
+//   EngravingItem::bbox
 //   return the element bbox in spatium units, rather than in raster units as stored internally
 //---------------------------------------------------------
 
-QRectF Element::bbox() const
+QRectF EngravingItem::bbox() const
 {
     mu::RectF bbox = element()->bbox();
     qreal spatium = element()->spatium();
@@ -64,9 +64,9 @@ QRectF Element::bbox() const
 //   Segment::elementAt
 //---------------------------------------------------------
 
-Element* Segment::elementAt(int track)
+EngravingItem* Segment::elementAt(int track)
 {
-    Ms::Element* el = segment()->elementAt(track);
+    Ms::EngravingItem* el = segment()->elementAt(track);
     if (!el) {
         return nullptr;
     }
@@ -122,9 +122,9 @@ bool Note::isChildAllowed(Ms::ElementType elementType)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::add(Ms::PluginAPI::Element* wrapped)
+void Note::add(Ms::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::Element* s = wrapped ? wrapped->element() : nullptr;
+    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
@@ -143,7 +143,7 @@ void Note::add(Ms::PluginAPI::Element* wrapped)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::addInternal(Ms::Note* note, Ms::Element* s)
+void Note::addInternal(Ms::Note* note, Ms::EngravingItem* s)
 {
     // Provide parentage for element.
     s->setScore(note->score());
@@ -163,12 +163,12 @@ void Note::addInternal(Ms::Note* note, Ms::Element* s)
 ///   \since MuseScore 3.3.3
 //---------------------------------------------------------
 
-void Note::remove(Ms::PluginAPI::Element* wrapped)
+void Note::remove(Ms::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::Element* s = wrapped->element();
+    Ms::EngravingItem* s = wrapped->element();
     if (!s) {
         qWarning("PluginAPI::Note::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->parent() != note()) {
+    } else if (s->explicitParent() != note()) {
         qWarning("PluginAPI::Note::remove: The element is not a child of this note. Use removeElement() instead.");
     } else if (isChildAllowed(s->type())) {
         note()->score()->deleteItem(s);     // Create undo op and remove the element.
@@ -221,9 +221,9 @@ void Chord::setPlayEventType(Ms::PlayEventType v)
 //   Chord::add
 //---------------------------------------------------------
 
-void Chord::add(Ms::PluginAPI::Element* wrapped)
+void Chord::add(Ms::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::Element* s = wrapped ? wrapped->element() : nullptr;
+    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (s) {
         // Ensure that the object has the expected ownership
         if (wrapped->ownership() == Ownership::SCORE) {
@@ -241,7 +241,7 @@ void Chord::add(Ms::PluginAPI::Element* wrapped)
 //   Chord::addInternal
 //---------------------------------------------------------
 
-void Chord::addInternal(Ms::Chord* chord, Ms::Element* s)
+void Chord::addInternal(Ms::Chord* chord, Ms::EngravingItem* s)
 {
     // Provide parentage for element.
     s->setScore(chord->score());
@@ -268,12 +268,12 @@ int Page::pagenumber() const
 //   Chord::remove
 //---------------------------------------------------------
 
-void Chord::remove(Ms::PluginAPI::Element* wrapped)
+void Chord::remove(Ms::PluginAPI::EngravingItem* wrapped)
 {
-    Ms::Element* s = wrapped->element();
+    Ms::EngravingItem* s = wrapped->element();
     if (!s) {
         qWarning("PluginAPI::Chord::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
-    } else if (s->parent() != chord()) {
+    } else if (s->explicitParent() != chord()) {
         qWarning("PluginAPI::Chord::remove: The element is not a child of this chord. Use removeElement() instead.");
     } else if (chord()->notes().size() <= 1 && s->type() == ElementType::NOTE) {
         qWarning("PluginAPI::Chord::remove: Removal of final note is not allowed.");
@@ -294,11 +294,11 @@ Part* Staff::part()
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
-///   Wraps Ms::Element choosing the correct wrapper type
+///   Wraps Ms::EngravingItem choosing the correct wrapper type
 ///   at runtime based on the actual element type.
 //---------------------------------------------------------
 
-Element* wrap(Ms::Element* e, Ownership own)
+EngravingItem* wrap(Ms::EngravingItem* e, Ownership own)
 {
     if (!e) {
         return nullptr;
@@ -327,7 +327,7 @@ Element* wrap(Ms::Element* e, Ownership own)
         }
         break;
     }
-    return wrap<Element>(e, own);
+    return wrap<EngravingItem>(e, own);
 }
 }
 }

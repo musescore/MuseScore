@@ -21,11 +21,14 @@
  */
 #include "notationpagemodel.h"
 
+#include "internal/applicationuiactions.h"
+#include "dockwindow/idockwindow.h"
+
 #include "log.h"
 
-#include "dockwindow/dockwindow.h"
-
 using namespace mu::appshell;
+using namespace mu::notation;
+using namespace mu::actions;
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent)
@@ -34,116 +37,136 @@ NotationPageModel::NotationPageModel(QObject* parent)
 
 bool NotationPageModel::isNavigatorVisible() const
 {
-    return pageState()->isPanelVisible(PanelType::NotationNavigator);
+    return configuration()->isNotationNavigatorVisible();
 }
 
-void NotationPageModel::setNoteInputBarDockName(const QString& dockName)
+void NotationPageModel::init()
 {
-    setPanelDockName(PanelType::NoteInputBar, dockName);
+    TRACEFUNC;
+
+    for (const ActionCode& actionCode : ApplicationUiActions::toggleDockActions().keys()) {
+        DockName dockName = ApplicationUiActions::toggleDockActions()[actionCode];
+        dispatcher()->reg(this, actionCode, [=]() { toggleDock(dockName); });
+    }
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
+    onNotationChanged();
+    updateDrumsetPanelVisibility();
 }
 
-void NotationPageModel::setNotationToolBarDockName(const QString& dockName)
+QString NotationPageModel::notationToolBarName() const
 {
-    setPanelDockName(PanelType::NotationToolBar, dockName);
+    return NOTATION_TOOLBAR_NAME;
 }
 
-void NotationPageModel::setPlaybackToolBarDockName(const QString& dockName)
+QString NotationPageModel::playbackToolBarName() const
 {
-    setPanelDockName(PanelType::PlaybackToolBar, dockName);
+    return PLAYBACK_TOOLBAR_NAME;
 }
 
-void NotationPageModel::setUndoRedoToolBarDockName(const QString& dockName)
+QString NotationPageModel::undoRedoToolBarName() const
 {
-    setPanelDockName(PanelType::UndoRedoToolBar, dockName);
+    return UNDO_REDO_TOOLBAR_NAME;
 }
 
-void NotationPageModel::setPalettePanelDockName(const QString& dockName)
+QString NotationPageModel::noteInputBarName() const
 {
-    setPanelDockName(PanelType::Palette, dockName);
+    return NOTE_INPUT_BAR_NAME;
 }
 
-void NotationPageModel::setInstrumentsPanelDockName(const QString& dockName)
+QString NotationPageModel::palettesPanelName() const
 {
-    setPanelDockName(PanelType::Instruments, dockName);
+    return PALETTES_PANEL_NAME;
 }
 
-void NotationPageModel::setInspectorPanelDockName(const QString& dockName)
+QString NotationPageModel::instrumentsPanelName() const
 {
-    setPanelDockName(PanelType::Inspector, dockName);
+    return INSTRUMENTS_PANEL_NAME;
 }
 
-void NotationPageModel::setPianoRollDockName(const QString& dockName)
+QString NotationPageModel::inspectorPanelName() const
 {
-    setPanelDockName(PanelType::Piano, dockName);
+    return INSPECTOR_PANEL_NAME;
 }
 
-void NotationPageModel::setMixerDockName(const QString& dockName)
+QString NotationPageModel::selectionFiltersPanelName() const
 {
-    setPanelDockName(PanelType::Mixer, dockName);
+    return SELECTION_FILTERS_PANEL_NAME;
 }
 
-void NotationPageModel::setStatusBarDockName(const QString& dockName)
+QString NotationPageModel::pianoPanelName() const
 {
-    setPanelDockName(PanelType::NotationStatusBar, dockName);
+    return PIANO_PANEL_NAME;
 }
 
-void NotationPageModel::setPanelDockName(PanelType type, const QString& dockName)
+QString NotationPageModel::mixerPanelName() const
 {
-    m_panelTypeToDockName[type] = dockName;
+    return MIXER_PANEL_NAME;
 }
 
-void NotationPageModel::init(QQuickItem* dockWindow)
+QString NotationPageModel::timelinePanelName() const
 {
-    m_window = dynamic_cast<dock::DockWindow*>(dockWindow);
-    IF_ASSERT_FAILED(m_window) {
+    return TIMELINE_PANEL_NAME;
+}
+
+QString NotationPageModel::drumsetPanelName() const
+{
+    return DRUMSET_PANEL_NAME;
+}
+
+QString NotationPageModel::statusBarName() const
+{
+    return NOTATION_STATUSBAR_NAME;
+}
+
+void NotationPageModel::onNotationChanged()
+{
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
         return;
     }
 
-    IF_ASSERT_FAILED(!m_panelTypeToDockName.isEmpty()) {
-        return;
-    }
-
-    std::map<PanelType, bool> initialState;
-    for (PanelType type : m_panelTypeToDockName.keys()) {
-        initialState[type] = m_window->isDockShown(m_panelTypeToDockName[type]);
-    }
-
-    pageState()->setIsPanelsVisible(initialState);
-
-    static const QMap<std::string, PanelType> actionToPanelType {
-        { "toggle-navigator", PanelType::NotationNavigator },
-        { "toggle-mixer", PanelType::Mixer },
-        { "toggle-palette", PanelType::Palette },
-        { "toggle-instruments", PanelType::Instruments },
-        { "inspector", PanelType::Inspector },
-        { "toggle-statusbar", PanelType::NotationStatusBar },
-        { "toggle-noteinput", PanelType::NoteInputBar },
-        { "toggle-notationtoolbar", PanelType::NotationToolBar },
-        { "toggle-undoredo", PanelType::UndoRedoToolBar },
-        { "toggle-transport", PanelType::PlaybackToolBar }
-    };
-
-    for (const std::string& actionCode : actionToPanelType.keys()) {
-        dispatcher()->reg(this, actionCode, [=]() { togglePanel(actionToPanelType[actionCode]); });
-    }
-
-    pageState()->panelsVisibleChanged().onReceive(this, [this](PanelTypeList types) {
-        for (PanelType type : types) {
-            if (type == PanelType::NotationNavigator) {
-                emit isNavigatorVisibleChanged();
-            }
-        }
+    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    noteInput->stateChanged().onNotify(this, [this]() {
+        updateDrumsetPanelVisibility();
     });
 }
 
-void NotationPageModel::togglePanel(PanelType type)
+void NotationPageModel::toggleDock(const QString& name)
 {
-    IF_ASSERT_FAILED(m_window) {
+    if (name == NOTATION_NAVIGATOR_PANEL_NAME) {
+        configuration()->setIsNotationNavigatorVisible(!isNavigatorVisible());
+        emit isNavigatorVisibleChanged();
         return;
     }
 
-    bool visible = pageState()->isPanelVisible(type);
-    pageState()->setIsPanelsVisible({ { type, !visible } });
+    dispatcher()->dispatch("dock-toggle", ActionData::make_arg1<QString>(name));
+}
 
-    m_window->toggleDockVisibility(m_panelTypeToDockName[type]);
+void NotationPageModel::updateDrumsetPanelVisibility()
+{
+    TRACEFUNC;
+    const dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window) {
+        return;
+    }
+
+    const INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    const INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+
+    bool isNeedOpen = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
+    bool isOpened = window->isDockOpen(DRUMSET_PANEL_NAME);
+
+    if (isNeedOpen == isOpened) {
+        return;
+    }
+
+    dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(DRUMSET_PANEL_NAME, isNeedOpen));
 }

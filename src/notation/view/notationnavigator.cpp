@@ -23,6 +23,8 @@
 
 #include "libmscore/system.h"
 
+#include "log.h"
+
 using namespace mu::notation;
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
@@ -33,6 +35,8 @@ NotationNavigator::NotationNavigator(QQuickItem* parent)
 
 void NotationNavigator::load()
 {
+    TRACEFUNC;
+
     initOrientation();
     initVisible();
 
@@ -46,16 +50,6 @@ void NotationNavigator::load()
 bool NotationNavigator::isVerticalOrientation() const
 {
     return configuration()->canvasOrientation().val == framework::Orientation::Vertical;
-}
-
-QRectF NotationNavigator::notationContentRect() const
-{
-    RectF result;
-    for (const Page* page: pages()) {
-        result = result.united(page->bbox().translated(page->pos()));
-    }
-
-    return result.toQRectF();
 }
 
 PageList NotationNavigator::pages() const
@@ -75,6 +69,8 @@ PageList NotationNavigator::pages() const
 
 void NotationNavigator::rescale()
 {
+    TRACEFUNC;
+
     PageList pages = this->pages();
     if (pages.empty()) {
         return;
@@ -82,17 +78,21 @@ void NotationNavigator::rescale()
 
     const Page* lastPage = pages.back();
 
-    qreal _scale = 0;
+    qreal scaling = 1.0;
 
     if (isVerticalOrientation()) {
         qreal scoreWidth = lastPage->width();
-        _scale = width() * guiScaling() / scoreWidth;
+        scaling = width() / scoreWidth;
     } else {
         qreal scoreHeight = lastPage->height();
-        _scale = height() * guiScaling() / scoreHeight;
+        scaling = height() / scoreHeight;
     }
 
-    scale(_scale, QPoint());
+    if (qFuzzyIsNull(scaling)) {
+        return;
+    }
+
+    setScaling(scaling, PointF());
 }
 
 void NotationNavigator::wheelEvent(QWheelEvent*)
@@ -101,44 +101,47 @@ void NotationNavigator::wheelEvent(QWheelEvent*)
 
 void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
+    TRACEFUNC;
+
     PointF logicPos = toLogical(event->pos());
     m_startMove = logicPos;
-    if (m_cursorRect.contains(logicPos.toQPoint())) {
+    if (m_cursorRect.contains(logicPos)) {
         return;
     }
 
-    QRectF viewRect = m_cursorRect;
-    double dx = logicPos.x() - (viewRect.x() + (viewRect.width() / 2));
-    double dy = logicPos.y() - (viewRect.y() + (viewRect.height() / 2));
+    double dx = logicPos.x() - (m_cursorRect.x() + (m_cursorRect.width() / 2));
+    double dy = logicPos.y() - (m_cursorRect.y() + (m_cursorRect.height() / 2));
 
     moveNotationRequested(-dx, -dy);
 }
 
 void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
 {
+    TRACEFUNC;
+
     PointF logicPos = toLogical(event->pos());
     PointF delta = logicPos - m_startMove;
-    int dx = delta.x();
-    int dy = delta.y();
-    moveNotationRequested(-dx, -dy);
+    moveNotationRequested(-delta.x(), -delta.y());
 
     m_startMove = logicPos;
 }
 
-void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
+void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
 {
-    QRectF newViewRect = viewRect;
-    QRect viewport = this->viewport();
-    QRectF notationContentRect = this->notationContentRect();
+    TRACEFUNC;
 
-    int dx = 0;
-    int dy = 0;
+    RectF newViewRect = viewRect;
+    RectF viewport = this->viewport();
+    RectF notationContentRect = this->notationContentRect();
+
+    qreal dx = 0;
+    qreal dy = 0;
 
     if (isVerticalOrientation()) {
-        newViewRect.setHeight(std::min(viewport.height(), newViewRect.toRect().height()));
+        newViewRect.setHeight(std::min(viewport.height(), newViewRect.height()));
 
-        QPoint top = newViewRect.topLeft().toPoint();
-        QPoint bottom = newViewRect.bottomRight().toPoint();
+        PointF top = newViewRect.topLeft();
+        PointF bottom = newViewRect.bottomRight();
 
         if (!notationContentRect.contains(top) && !notationContentRect.contains(bottom)) {
             return;
@@ -150,10 +153,10 @@ void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
             dy = bottom.y() - viewport.bottom();
         }
     } else {
-        newViewRect.setWidth(std::min(viewport.width(), newViewRect.toRect().width()));
+        newViewRect.setWidth(std::min(viewport.width(), newViewRect.width()));
 
-        QPoint left = newViewRect.topLeft().toPoint();
-        QPoint right = newViewRect.bottomRight().toPoint();
+        PointF left = newViewRect.topLeft();
+        PointF right = newViewRect.bottomRight();
 
         if (!notationContentRect.contains(left) && !notationContentRect.contains(right)) {
             return;
@@ -169,14 +172,15 @@ void NotationNavigator::moveCanvasToRect(const QRect& viewRect)
     moveCanvas(-dx, -dy);
 }
 
-void NotationNavigator::setCursorRect(const QRect& rect)
+void NotationNavigator::setCursorRect(const QRectF& rect)
 {
-    QRect newCursorRect = rect;
-    if (!newCursorRect.isValid()) {
+    if (!rect.isValid()) {
         return;
     }
 
-    newCursorRect = notationContentRect().intersected(QRectF(newCursorRect)).toRect();
+    TRACEFUNC;
+
+    RectF newCursorRect = notationContentRect().intersected(RectF::fromQRectF(rect));
 
     moveCanvasToRect(newCursorRect);
 
@@ -199,7 +203,7 @@ void NotationNavigator::initOrientation()
 {
     ValCh<framework::Orientation> orientation = configuration()->canvasOrientation();
     orientation.ch.onReceive(this, [this](framework::Orientation) {
-        moveCanvasToPosition(QPoint(0, 0));
+        moveCanvasToPosition(PointF(0, 0));
         emit orientationChanged();
     });
 
@@ -229,20 +233,28 @@ void NotationNavigator::paint(QPainter* painter)
         return;
     }
 
+    TRACEFUNC;
+
     NotationPaintView::paint(painter);
-    paintCursor(painter);
 
     paintPageNumbers(painter);
+    paintCursor(painter);
+}
+
+void NotationNavigator::onViewSizeChanged()
+{
 }
 
 void NotationNavigator::paintCursor(QPainter* painter)
 {
+    TRACEFUNC;
+
     QColor color(configuration()->selectionColor());
     QPen pen(color, configuration()->borderWidth());
     painter->setPen(pen);
     painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
 
-    painter->drawRect(m_cursorRect);
+    painter->drawRect(m_cursorRect.toQRectF());
 }
 
 void NotationNavigator::paintPageNumbers(QPainter* painter)
@@ -251,6 +263,8 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
         return;
     }
 
+    TRACEFUNC;
+
     constexpr int PAGE_NUMBER_FONT_SIZE = 2000;
     QFont font(QString::fromStdString(configuration()->fontFamily()), PAGE_NUMBER_FONT_SIZE);
 
@@ -258,7 +272,7 @@ void NotationNavigator::paintPageNumbers(QPainter* painter)
         painter->translate(page->pos().toQPointF());
 
         painter->setFont(font);
-        painter->setPen(configuration()->layoutBreakColor());
+        painter->setPen(engravingConfiguration()->formattingMarksColor().toQColor());
         painter->drawText(page->bbox().toQRectF(), Qt::AlignCenter, QString("%1").arg(page->no() + 1));
 
         painter->translate(-page->pos().toQPointF());

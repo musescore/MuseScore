@@ -21,16 +21,17 @@
  */
 
 #include "measurerepeat.h"
+#include "draw/pen.h"
+#include "rw/xml.h"
 #include "barline.h"
 #include "measure.h"
 #include "mscore.h"
 #include "score.h"
 #include "staff.h"
-#include "symid.h"
 #include "system.h"
-#include "draw/pen.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle measureRepeatStyle {
@@ -41,12 +42,12 @@ static const ElementStyle measureRepeatStyle {
 //   MeasureRepeat
 //---------------------------------------------------------
 
-MeasureRepeat::MeasureRepeat(Score* score)
-    : Rest(score), m_numMeasures(0), m_symId(SymId::noSym)
+MeasureRepeat::MeasureRepeat(Segment* parent)
+    : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0), m_symId(SymId::noSym)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure
-    setDurationType(TDuration::DurationType::V_MEASURE);
-    if (score) {
+    setDurationType(DurationType::V_MEASURE);
+    if (parent) {
         initElementStyle(&measureRepeatStyle);
     }
 }
@@ -63,13 +64,13 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
     drawSymbol(symId(), painter);
 
     if (track() != -1) { // in score rather than palette
-        qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
-        qreal y = numberPos() * spatium() - staff()->height() * .5;
-        drawSymbols(numberSym(), painter, PointF(x, y));
+        PointF numberPosition = numberRect().topLeft();
+        drawSymbols(numberSym(), painter, numberPosition);
+
         if (score()->styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
             // TODO: add style settings specific to measure repeats
             // for now, using thickness and margin same as mmrests
-            qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
+            qreal hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
             if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
                 Pen pen(painter->pen());
                 pen.setCapStyle(PenCapStyle::FlatCap);
@@ -77,7 +78,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
                 painter->setPen(pen);
 
                 qreal twoMeasuresWidth = 2 * measure()->width();
-                qreal margin = score()->styleP(Sid::multiMeasureRestMargin);
+                qreal margin = score()->styleMM(Sid::multiMeasureRestMargin);
                 qreal xOffset = symBbox(symId()).width() * .5;
                 qreal gapDistance = (symBbox(symId()).width() + spatium()) * .5;
                 painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
@@ -93,7 +94,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 
 void MeasureRepeat::layout()
 {
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
     }
 
@@ -103,7 +104,7 @@ void MeasureRepeat::layout()
         setSymId(SymId::repeat1Bar);
         if (score()->styleB(Sid::mrNumberSeries) && track() != -1) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
-            int staffIdx = staff()->idx();
+            int staffIdx = this->staffIdx();
             Measure* m = measure();
             while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
                 placeInSeries++;
@@ -111,7 +112,7 @@ void MeasureRepeat::layout()
             }
             if (placeInSeries % score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    m_numberSym = toTimeSigString(QString("(%1)").arg(placeInSeries));
+                    m_numberSym = timeSigSymIdsFromString(QString("(%1)").arg(placeInSeries));
                 } else {
                     setNumberSym(placeInSeries);
                 }
@@ -139,10 +140,19 @@ void MeasureRepeat::layout()
         break;
     }
 
-    if (track() != -1) {    // in score rather than palette
-        setPos(0, 2.0 * spatium() + 0.5 * styleP(Sid::staffLineWidth)); // xpos handled by Measure::stretchMeasure()
+    RectF bbox = symBbox(symId());
+
+    if (track() != -1) { // if this is in score rather than a palette cell
+        // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
+        // We compensate for it, to make sure the symbol is visually centered around the staff line
+        qreal offset = (-bbox.top() - bbox.bottom()) / 2.0;
+
+        const StaffType* staffType = this->staffType();
+
+        // Only need to set y position here; x position is handled in Measure::stretchMeasure()
+        setPos(0, std::floor(staffType->middleLine() / 4.0) * 2.0 * staffType->lineDistance().val() * spatium() + offset);
     }
-    setbbox(symBbox(symId()));
+    setbbox(bbox);
     addbbox(numberRect());
 }
 
@@ -153,12 +163,13 @@ void MeasureRepeat::layout()
 
 RectF MeasureRepeat::numberRect() const
 {
-    if (track() == -1 || numberSym().empty()) { // don't display in palette
+    if (track() == -1 || m_numberSym.empty()) { // don't display in palette
         return RectF();
     }
-    RectF r = symBbox(numberSym());
-    qreal x = (symBbox(symId()).width() - symBbox(numberSym()).width()) * .5;
-    qreal y = numberPos() * spatium() - staff()->height() * .5;
+
+    RectF r = symBbox(m_numberSym);
+    qreal x = (symBbox(symId()).width() - symBbox(m_numberSym).width()) * .5;
+    qreal y = -pos().y() + numberPos() * spatium(); // -pos().y(): relative to topmost staff line
     r.translate(PointF(x, y));
     return r;
 }
@@ -181,11 +192,11 @@ Shape MeasureRepeat::shape() const
 
 void MeasureRepeat::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::SUBTYPE);
     Rest::writeProperties(xml);
     el().write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -208,7 +219,7 @@ void MeasureRepeat::read(XmlReader& e)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MeasureRepeat::propertyDefault(Pid propertyId) const
+PropertyValue MeasureRepeat::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MEASURE_REPEAT_NUMBER_POS:
@@ -222,7 +233,7 @@ QVariant MeasureRepeat::propertyDefault(Pid propertyId) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MeasureRepeat::getProperty(Pid propertyId) const
+PropertyValue MeasureRepeat::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SUBTYPE:
@@ -238,7 +249,7 @@ QVariant MeasureRepeat::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MeasureRepeat::setProperty(Pid propertyId, const QVariant& v)
+bool MeasureRepeat::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SUBTYPE:
@@ -272,7 +283,7 @@ Fraction MeasureRepeat::ticks() const
 
 QString MeasureRepeat::accessibleInfo() const
 {
-    return QObject::tr("%1; Duration: %2 measure(s)").arg(Element::accessibleInfo()).arg(numMeasures());
+    return QObject::tr("%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
 }
 
 //---------------------------------------------------------

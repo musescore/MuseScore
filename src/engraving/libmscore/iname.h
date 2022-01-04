@@ -44,10 +44,9 @@ class InstrumentName final : public TextBase
     SysStaff* _sysStaff { nullptr };
 
 public:
-    InstrumentName(Score*);
+    InstrumentName(System*);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
-    ElementType type() const override { return ElementType::INSTRUMENT_NAME; }
 
     int layoutPos() const { return _layoutPos; }
     void setLayoutPos(int val) { _layoutPos = val; }
@@ -57,18 +56,18 @@ public:
     void setInstrumentNameType(InstrumentNameType v);
     void setInstrumentNameType(const QString& s);
 
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     SysStaff* sysStaff() const { return _sysStaff; }
     void setSysStaff(SysStaff* s) { _sysStaff = s; }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Fraction playTick() const override;
     bool isEditable() const override { return false; }
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 };
 }     // namespace Ms
 #endif

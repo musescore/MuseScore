@@ -30,6 +30,7 @@
 
 using namespace mu::inspector;
 using namespace mu::ui;
+using namespace mu::engraving;
 
 GridCanvas::GridCanvas(QQuickItem* parent)
     : QQuickPaintedItem(parent)
@@ -39,7 +40,18 @@ GridCanvas::GridCanvas(QQuickItem* parent)
 
 QVariant GridCanvas::pointList() const
 {
-    return QVariant::fromValue(m_points);
+    QVariantList result;
+
+    for (const PitchValue& v : m_points) {
+        QVariantMap obj;
+        obj["time"] = v.time;
+        obj["pitch"] = v.pitch;
+        obj["vibrato"] = v.vibrato;
+
+        result << obj;
+    }
+
+    return result;
 }
 
 int GridCanvas::rowCount() const
@@ -117,9 +129,18 @@ void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
     emit shouldShowNegativeRowsChanged(m_showNegativeRows);
 }
 
-void GridCanvas::setPointList(QVariant pointList)
+void GridCanvas::setPointList(QVariant points)
 {
-    QList<Ms::PitchValue> newPointList = pointList.value<QList<Ms::PitchValue> >();
+    PitchValues newPointList;
+    QVariantList pointList = points.toList();
+    for (const QVariant& v : pointList) {
+        QVariantMap obj = v.toMap();
+        PitchValue pv;
+        pv.time = obj.value("time").toInt();
+        pv.time = obj.value("time").toInt();
+        pv.time = obj.value("time").toInt();
+        newPointList << pv;
+    }
 
     if (m_points == newPointList) {
         return;

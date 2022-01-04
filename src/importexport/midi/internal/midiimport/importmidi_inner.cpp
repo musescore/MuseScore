@@ -26,7 +26,7 @@
 #include "importmidi_operations.h"
 #include "importmidi_chord.h"
 #include "libmscore/durationtype.h"
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/midifile.h"
 
 namespace Ms {
 MTrack::MTrack()

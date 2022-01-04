@@ -24,7 +24,7 @@
 #define __DURATION_H__
 
 #include "config.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 
 namespace Ms {
@@ -40,17 +40,12 @@ class Spanner;
 //   @P globalDuration Fraction  played duration
 //---------------------------------------------------------
 
-class DurationElement : public Element
+class DurationElement : public EngravingItem
 {
-    Fraction _duration;
-    Tuplet* _tuplet;
-
 public:
-    DurationElement(Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
-    DurationElement(const DurationElement& e);
     ~DurationElement();
 
-    virtual Measure* measure() const { return (Measure*)(parent()); }
+    virtual Measure* measure() const { return (Measure*)(explicitParent()); }
 
     void readAddTuplet(Tuplet* t);
     void writeTupletStart(XmlWriter& xml) const;
@@ -68,8 +63,16 @@ public:
     Fraction globalTicks() const;
     void setTicks(const Fraction& f) { _duration = f; }
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+
+protected:
+    DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const DurationElement& e);
+
+private:
+    Fraction _duration;
+    Tuplet* _tuplet;
 };
 }     // namespace Ms
 #endif

@@ -23,8 +23,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "internal"
 
@@ -46,10 +46,13 @@ Item {
     property alias hasSelection: selectionModel.hasSelection
     readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)
 
-    signal doubleClicked(var index, var item)
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
+
+    signal handleItem(var index, var item)
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         property real valueItemWidth: 126
         property real spacing: 4
@@ -110,36 +113,57 @@ Item {
         anchors.right: parent.right
         height: 38
 
-        ValueListHeaderItem {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.leftMargin: privateProperties.sideMargin
+        property NavigationPanel headerNavigation: NavigationPanel {
+            name: "ValueListHeaderPanel"
+            section: root.navigationSection
+            enabled: header.enabled && header.visible
+            direction: NavigationPanel.Horizontal
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("uicomponents", "Value list header panel")
 
-            headerTitle: keyTitle
-            spacing: privateProperties.spacing
-            isSorterEnabled: keySorter.enabled
-            sortOrder: keySorter.sortOrder
-
-            onClicked: {
-                privateProperties.toggleSorter(keySorter)
-                privateProperties.setSorterEnabled(valueSorter, false)
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
             }
         }
 
         ValueListHeaderItem {
-            Layout.preferredWidth: privateProperties.valueItemWidth
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            leftMargin: prv.sideMargin
+
+            headerTitle: keyTitle
+            spacing: prv.spacing
+            isSorterEnabled: keySorter.enabled
+            sortOrder: keySorter.sortOrder
+
+            navigation.panel: header.headerNavigation
+            navigation.column: 0
+
+            onClicked: {
+                prv.toggleSorter(keySorter)
+                prv.setSorterEnabled(valueSorter, false)
+            }
+        }
+
+        ValueListHeaderItem {
+            Layout.preferredWidth: prv.valueItemWidth + prv.sideMargin
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignRight
-            Layout.rightMargin: privateProperties.sideMargin
+            rightMargin: prv.sideMargin
 
             headerTitle: valueTitle
-            spacing: privateProperties.spacing
+            spacing: prv.spacing
             isSorterEnabled: valueSorter.enabled
             sortOrder: valueSorter.sortOrder
 
+            navigation.panel: header.headerNavigation
+            navigation.column: 1
+
             onClicked: {
-                privateProperties.toggleSorter(valueSorter)
-                privateProperties.setSorterEnabled(keySorter, false)
+                prv.toggleSorter(valueSorter)
+                prv.setSorterEnabled(keySorter, false)
             }
         }
     }
@@ -160,15 +184,29 @@ Item {
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
-        ScrollBar.vertical: StyledScrollBar {
-            anchors.right: parent.right
-            anchors.rightMargin: 8
+        property NavigationPanel navigation: NavigationPanel {
+            name: "ValueListPanel"
+            section: root.navigationSection
+            enabled: root.enabled && root.visible
+            direction: NavigationPanel.Both
+            order: root.navigationOrderStart + 1
+            accessible.name: qsTrc("uicomponents", "Value list panel")
+
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
+            }
         }
 
+        ScrollBar.vertical: StyledScrollBar {}
+
         delegate: ValueListItem {
+            id: listItem
+
             item: model
 
-            property var modelIndex: sortFilterProxyModel.index(item.index, 0)
+            property var modelIndex: sortFilterProxyModel.index(model.index, 0)
 
             keyRoleName: root.keyRoleName
             valueRoleName: root.valueRoleName
@@ -179,16 +217,46 @@ Item {
             isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
             readOnly: root.readOnly
 
-            spacing: privateProperties.spacing
-            sideMargin: privateProperties.sideMargin
-            valueItemWidth: privateProperties.valueItemWidth
+            spacing: prv.spacing
+            sideMargin: prv.sideMargin
+            valueItemWidth: prv.valueItemWidth
+
+            navigation.panel: view.navigation
+            navigation.enabled: enabled
+            navigation.row: model.index
+            navigation.column: 0
+
+            navigation.onNavigationEvent: {
+                switch (event.type) {
+                case NavigationEvent.Up:
+                    if (model.index === 0) {
+                        event.accepted = true
+                    }
+                    break
+                case NavigationEvent.Down:
+                    if (model.index === view.model.rowCount() - 1) {
+                        event.accepted = true
+                    }
+                    break
+                }
+            }
 
             onClicked: {
                 selectionModel.select(modelIndex)
             }
 
             onDoubleClicked: {
-                root.doubleClicked(sortFilterProxyModel.mapToSource(modelIndex), item)
+                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+            }
+
+            onNavigationTriggered: {
+                root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    view.positionViewAtIndex(index, ListView.Contain)
+                }
             }
         }
     }

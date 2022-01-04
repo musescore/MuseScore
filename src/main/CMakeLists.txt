@@ -75,7 +75,7 @@ elseif(OS_IS_MAC)
     set(MACOSX_BUNDLE_LONG_VERSION_STRING ${MUSESCORE_VERSION_FULL})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2021 MuseScore BVBA and others. Published under the GNU General Public License.")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright © 1999-2022 MuseScore BVBA and others. Published under the GNU General Public License version 3.")
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
     set(MACOSX_BUNDLE_BUNDLE_VERSION ${MUSESCORE_VERSION_FULL}.${CMAKE_BUILD_NUMBER})
 
@@ -134,13 +134,8 @@ set(LINK_LIB
     fonts
     system
     network
-    )
 
-if (BUILD_TELEMETRY_MODULE)
-    set(LINK_LIB ${LINK_LIB} telemetry)
-endif(BUILD_TELEMETRY_MODULE)
-
-set(LINK_LIB ${LINK_LIB}
+    diagnostics
     engraving
     actions
     accessibility
@@ -149,16 +144,17 @@ set(LINK_LIB ${LINK_LIB}
     shortcuts
     workspace
     audio
+    mpe
     midi
-    midi_old
-    userscores
     learn
     notation
+    project
+    print
     commonscene
     palette
     inspector
     playback
-    instruments
+    instrumentsscene
     converter
     )
 
@@ -181,8 +177,6 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB multiinstances)
 endif()
-
-list(APPEND LINK_LIB diagnostics)
 
 if (BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
@@ -233,7 +227,11 @@ if (OS_IS_MAC)
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
-    set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows" )
+    if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+        set_target_properties(mscore PROPERTIES LINK_FLAGS "-mwindows -mconsole")
+    else (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+        set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
+    endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
 endif(CC_IS_MINGW)
 
 if (CC_IS_MSVC)
@@ -264,11 +262,9 @@ else()
     qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
 endif()
 
-if (OS_IS_MAC)
-  target_link_libraries(mscore ${OsxFrameworks})
-else (OS_IS_MAC)
-#    target_link_libraries(mscore rt) # TODO What is it?
-endif (OS_IS_MAC)
+if (OS_IS_MAC AND SPARKLE_ENABLED)
+    target_link_libraries(mscore ${SPARKLE_LIBRARY})
+endif()
 
 
 ###########################################
@@ -428,7 +424,7 @@ elseif(OS_IS_LIN)
        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
     install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
-    # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
+    # Note: Must now run "gtk-update-icon-cache" to set the new icons.
 
 ###########################################
 # MacOS

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <list>
 #include <iostream>
 #include <map>
 #include <mutex>
@@ -89,13 +90,60 @@ protected:
         bool containsReceiver(Asyncable* receiver) const;
     };
 
+    struct QInvoker
+    {
+        std::mutex mutex;
+        AbstractInvoker* invoker = nullptr;
+        int type = -1;
+        CallBack call;
+        NotifyData data;
+
+        QInvoker(AbstractInvoker* i, int t, CallBack c, NotifyData d)
+            : invoker(i), type(t), call(c), data(d)
+        {
+            invoker->addQInvoker(this);
+        }
+
+        ~QInvoker()
+        {
+            if (invoker) {
+                invoker->removeQInvoker(this);
+            }
+        }
+
+        void invoke()
+        {
+            AbstractInvoker* inv = nullptr;
+            {
+                std::lock_guard<std::mutex> lock(mutex);
+                inv = invoker;
+            }
+
+            if (inv) {
+                inv->invokeCallback(type, call, data);
+            }
+        }
+
+        void invalidate()
+        {
+            std::lock_guard<std::mutex> lock(mutex);
+            invoker = nullptr;
+        }
+    };
+
     void invokeCallback(int type, const CallBack& c, const NotifyData& data);
 
     void addCallBack(int type, Asyncable* receiver, void* call, Asyncable::AsyncMode mode = Asyncable::AsyncMode::AsyncSetRepeat);
     void removeCallBack(int type, Asyncable* receiver);
     void removeAllCallBacks();
 
+    void addQInvoker(QInvoker* qi);
+    void removeQInvoker(QInvoker* qi);
+
     std::map<int /*type*/, CallBacks > m_callbacks;
+
+    std::mutex m_qInvokersMutex;
+    std::list<QInvoker*> m_qInvokers;
 };
 
 inline void processEvents()

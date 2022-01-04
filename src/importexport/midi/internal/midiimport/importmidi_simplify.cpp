@@ -27,45 +27,29 @@
 #include "importmidi_quant.h"
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
-#include "libmscore/sig.h"
-#include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/libmscore/sig.h"
+#include "engraving/libmscore/durationtype.h"
+#include "engraving/compat/midi/midifile.h"
 
 namespace Ms {
 namespace Simplify {
 bool hasComplexBeamedDurations(const QList<std::pair<ReducedFraction, TDuration> >& list)
 {
     for (const auto& d: list) {
-        if (d.second == TDuration::DurationType::V_16TH
-            || d.second == TDuration::DurationType::V_32ND
-            || d.second == TDuration::DurationType::V_64TH
-            || d.second == TDuration::DurationType::V_128TH
-            || d.second == TDuration::DurationType::V_256TH
-            || d.second == TDuration::DurationType::V_512TH
-            || d.second == TDuration::DurationType::V_1024TH) {
+        if (d.second == DurationType::V_16TH
+            || d.second == DurationType::V_32ND
+            || d.second == DurationType::V_64TH
+            || d.second == DurationType::V_128TH
+            || d.second == DurationType::V_256TH
+            || d.second == DurationType::V_512TH
+            || d.second == DurationType::V_1024TH) {
             return true;
         }
     }
     return false;
 }
-
-#ifdef QT_DEBUG
-
-bool areDurationsEqual(
-    const QList<std::pair<ReducedFraction, TDuration> >& durations,
-    const ReducedFraction& desiredLen)
-{
-    ReducedFraction sum(0, 1);
-    for (const auto& d: durations) {
-        sum += ReducedFraction(d.second.fraction()) / d.first;
-    }
-
-    return desiredLen == desiredLen;
-}
-
-#endif
 
 void lengthenNote(
     MidiNote& note,
@@ -99,12 +83,6 @@ void lengthenNote(
     const auto origRestDurations = Meter::toDurationList(
         note.offTime - barStart, endTime - barStart, barFraction,
         tupletsForDuration, Meter::DurationType::REST, useDots, false);
-#ifdef QT_DEBUG
-    Q_ASSERT_X(areDurationsEqual(origNoteDurations, note.offTime - durationStart),
-               "Simplify::lengthenNote", "Too short note durations remaining");
-    Q_ASSERT_X(areDurationsEqual(origRestDurations, endTime - note.offTime),
-               "Simplify::lengthenNote", "Too short rest durations remaining");
-#endif
 
     // double - because can be + 0.5 for dots
     double minNoteDurationCount = MidiDuration::durationCount(origNoteDurations);
@@ -120,10 +98,6 @@ void lengthenNote(
         const auto noteDurations = Meter::toDurationList(
             durationStart - barStart, offTime - barStart, barFraction,
             tupletsForDuration, Meter::DurationType::NOTE, useDots, false);
-#ifdef QT_DEBUG
-        Q_ASSERT_X(areDurationsEqual(noteDurations, offTime - durationStart),
-                   "Simplify::lengthenNote", "Too short note durations remaining");
-#endif
 
         noteDurationCount += MidiDuration::durationCount(noteDurations);
 
@@ -131,10 +105,6 @@ void lengthenNote(
             const auto restDurations = Meter::toDurationList(
                 offTime - barStart, endTime - barStart, barFraction,
                 tupletsForDuration, Meter::DurationType::REST, useDots, false);
-#ifdef QT_DEBUG
-            Q_ASSERT_X(areDurationsEqual(restDurations, endTime - offTime),
-                       "Simplify::lengthenNote", "Too short rest durations remaining");
-#endif
 
             restDurationCount += MidiDuration::durationCount(restDurations);
         }
@@ -219,7 +189,7 @@ void shortenDrumNote(
         }
         if (next != chords.end()) {
             const auto len = ReducedFraction::fromTicks(
-                MScore::division) / 8;                             // 1/32
+                Constant::division) / 8;                             // 1/32
             auto newOffTime = it->first + len;
             if (next->second.isInTuplet) {
                 const auto& tuplet = next->second.tuplet->second;

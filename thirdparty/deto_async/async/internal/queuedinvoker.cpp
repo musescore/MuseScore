@@ -22,8 +22,14 @@ void QueuedInvoker::invoke(const std::thread::id& th, const Functor& f, bool isA
 
 void QueuedInvoker::processEvents()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
-    Queue& q = m_queues[std::this_thread::get_id()];
+    Queue q;
+    {
+        std::lock_guard<std::recursive_mutex> lock(m_mutex);
+        auto n = m_queues.extract(std::this_thread::get_id());
+        if (!n.empty()) {
+            q = n.mapped();
+        }
+    }
     while (!q.empty()) {
         const auto& f = q.front();
         if (f) {

@@ -32,9 +32,8 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_AMBITUS);
     setTitle(qtrc("inspector", "Ambitus"));
+    setIcon(ui::IconCode::Code::AMBITUS);
     createProperties();
-
-    setNoteheadGroupsModel(new NoteheadTypesModel(this));
 }
 
 void AmbitusSettingsModel::createProperties()
@@ -47,14 +46,14 @@ void AmbitusSettingsModel::createProperties()
     m_topOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS3);
     m_bottomOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS4);
 
-    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -82,7 +81,7 @@ void AmbitusSettingsModel::loadProperties()
 
     loadPropertyItem(m_direction);
     loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 
@@ -102,15 +101,14 @@ void AmbitusSettingsModel::resetProperties()
 
 void AmbitusSettingsModel::matchRangesToStaff()
 {
+    // TODO: The "default values" are not always actual and correct
+    // That is because the default value gets set to a fixed value
+    // only when loadProperties() is called, but for an Ambitus, it
+    // is crucial that the default value is recalculated every time.
     m_topTpc->resetToDefault();
     m_bottomTpc->resetToDefault();
     m_topPitch->resetToDefault();
     m_bottomPitch->resetToDefault();
-}
-
-NoteheadTypesModel* AmbitusSettingsModel::noteheadGroupsModel() const
-{
-    return m_noteheadGroupsModel;
 }
 
 PropertyItem* AmbitusSettingsModel::noteheadGroup() const
@@ -161,27 +159,4 @@ PropertyItem* AmbitusSettingsModel::topPitch() const
 PropertyItem* AmbitusSettingsModel::bottomPitch() const
 {
     return m_bottomPitch;
-}
-
-void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGroupsModel)
-{
-    if (m_noteheadGroupsModel == noteheadGroupsModel) {
-        return;
-    }
-
-    m_noteheadGroupsModel = noteheadGroupsModel;
-
-    connect(m_noteheadGroupsModel, &NoteheadTypesModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
-        m_noteheadGroup->setValue(noteHeadGroup);
-    });
-
-    connect(m_noteheadGroup, &PropertyItem::valueChanged, [this](const QVariant& noteHeadGroup) {
-        if (m_noteheadGroup->isUndefined()) {
-            m_noteheadGroupsModel->init(Ms::NoteHead::Group::HEAD_INVALID);
-        } else {
-            m_noteheadGroupsModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
-        }
-    });
-
-    emit noteheadGroupsModelChanged(m_noteheadGroupsModel);
 }

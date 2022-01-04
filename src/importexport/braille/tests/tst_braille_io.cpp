@@ -24,7 +24,7 @@
 
 #include "testbase.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 // start includes required for fixupScore()
 #include "libmscore/measure.h"

@@ -38,18 +38,17 @@ class NoteLine final : public TextLineBase
     Note* _endNote;
 
 public:
-    NoteLine(Score* s);
+    NoteLine(EngravingItem* parent);
     NoteLine(const NoteLine&);
     ~NoteLine() {}
 
     NoteLine* clone() const override { return new NoteLine(*this); }
-    ElementType type() const override { return ElementType::NOTELINE; }
 
     void setStartNote(Note* n) { _startNote = n; }
     Note* startNote() const { return _startNote; }
     void setEndNote(Note* n) { _endNote = n; }
     Note* endNote() const { return _endNote; }
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 };
 }     // namespace Ms
 #endif

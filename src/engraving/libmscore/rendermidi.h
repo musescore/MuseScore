@@ -23,7 +23,6 @@
 #ifndef __RENDERMIDI_H__
 #define __RENDERMIDI_H__
 
-#include "fraction.h"
 #include "measure.h"
 #include "synthesizerstate.h"
 
@@ -141,11 +140,8 @@ public:
     void setScoreChanged() { needUpdate = true; }
     void setMinChunkSize(int sizeMeasures) { minChunkSize = sizeMeasures; needUpdate = true; }
 
-    Chunk getChunkAt(int utick);
-
     static const int ARTICULATION_CONV_FACTOR { 100000 };
 
-    Chunk chunkAt(int utick);
     std::vector<Chunk> chunksFromRange(const int fromTick, const int toTick);
 };
 

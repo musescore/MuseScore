@@ -31,6 +31,8 @@ ListItemBlank {
 
     property var modelData
 
+    property var parentWindow: null
+
     enum IconAndCheckMarkMode {
         None,
         ShowOne,
@@ -38,60 +40,95 @@ ListItemBlank {
     }
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
-    property bool reserveSpaceForShortcutOrSubmenuIndicator: prv.hasShortcut || prv.hasSubMenu
+    property bool reserveSpaceForShortcutOrSubmenuIndicator: itemPrv.hasShortcut || itemPrv.hasSubMenu
 
     property int padding: 0
 
-    signal handleAction(string actionCode, int actionIndex)
+    signal handleMenuItem(string itemId)
 
-    signal subMenuShowed()
+    signal openSubMenuRequested(var menu)
+    signal subMenuShowed(var menu)
     signal subMenuClosed()
 
     signal requestParentItemActive()
 
     implicitHeight: 32
 
-    hoveredStateColor: ui.theme.accentColor
-    pressedStateColor: ui.theme.accentColor
+    hoverHitColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
-    isSelected: Boolean(prv.showedSubMenu) || (prv.isSelectable && prv.isSelected)
+    isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.highlight
 
-    navigation.onActiveChanged: {
-        if (prv.hasSubMenu) {
-            if (navigation.active) {
-                prv.showSubMenu()
-            } else {
-                Qt.callLater(function() {
-                    if (prv.showedSubMenu && !prv.showedSubMenu.navigation.active) {
-                        prv.closeSubMenu()
-                    }
-                })
-            }
+    navigation.name: titleLabel.text
+    navigation.accessible.role: MUAccessible.MenuItem
+    navigation.accessible.name: {
+        var text = itemPrv.title
+        if (itemPrv.isCheckable) {
+            text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "unchecked"))
+        } else if (itemPrv.isSelectable) {
+            text += " " + (itemPrv.isSelected ? qsTrc("appshell", "selected") : qsTrc("appshell", "not selected"))
         }
+
+        if (itemPrv.hasShortcut) {
+            text += " " + itemPrv.shortcut
+        }
+
+        if (itemPrv.hasSubMenu) {
+            text += " " + qsTrc("appshell", "menu")
+        }
+
+        return Utils.removeAmpersands(text)
     }
 
     navigation.onNavigationEvent: {
         switch (event.type) {
         case NavigationEvent.Right:
-            //! NOTE Go to submenu if shown
-            if (prv.showedSubMenu) {
-                event.accepted = true
-                prv.showedSubMenu.focusOnFirstItem()
+            if (!itemPrv.hasSubMenu) {
+                return
             }
-            break;
+
+            //! NOTE Go to submenu if shown
+            if (!itemPrv.showedSubMenu) {
+                itemPrv.showSubMenu()
+            }
+
+            var focused = itemPrv.showedSubMenu.requestFocus()
+
+            event.accepted = true
+            if (!focused) {
+                root.forceActiveFocus()
+            }
+
+            break
         case NavigationEvent.Left:
+            if (itemPrv.showedSubMenu) {
+                itemPrv.closeSubMenu()
+                event.accepted = true
+                return
+            }
+
             //! NOTE Go to parent item
-            root.requestParentItemActive()
+            requestParentItemActive()
+            break
+        case NavigationEvent.Up:
+        case NavigationEvent.Down:
+            if (itemPrv.showedSubMenu) {
+                itemPrv.closeSubMenu()
+            }
+
+            break
         }
     }
 
-    navigation.onTriggered: root.clicked()
+    navigation.onTriggered: root.clicked(null)
 
     QtObject {
-        id: prv
+        id: itemPrv
+
+        property string title: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
 
         property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
+        property string shortcut: hasShortcut ? modelData.shortcut : ""
 
         property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
         property var showedSubMenu: null
@@ -102,10 +139,10 @@ ListItemBlank {
         property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
         property bool isSelected: isSelectable && Boolean(modelData.selected)
 
-        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon)
+        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
 
         function showSubMenu() {
-            if (prv.showedSubMenu) {
+            if (itemPrv.showedSubMenu) {
                 return
             }
 
@@ -115,31 +152,34 @@ ListItemBlank {
             menu.y = 0
 
             menu.navigationParentControl = root.navigation
-            menu.navigation.name = root.navigation.name+"SubMenu"
 
             menu.model = modelData.subitems
 
-            menu.handleAction.connect(function(actionCode, actionIndex) {
-                Qt.callLater(root.handleAction, actionCode, actionIndex)
+            menu.setParentWindow(root.parentWindow)
+
+            menu.handleMenuItem.connect(function(itemId) {
+                Qt.callLater(root.handleMenuItem, itemId)
                 menu.close()
             })
 
             menu.closed.connect(function() {
-                prv.showedSubMenu = null
+                itemPrv.showedSubMenu = null
                 menu.destroy()
                 subMenuClosed()
             })
 
-            subMenuShowed()
+            menu.opened.connect(function() {
+                itemPrv.showedSubMenu = menu
+                subMenuShowed(menu)
+            })
 
-            prv.showedSubMenu = menu
-            menu.toggleOpened()
+            root.openSubMenuRequested(menu)
         }
 
         function closeSubMenu() {
-            if (prv.showedSubMenu) {
-                prv.showedSubMenu.isDoActiveParentOnClose = false
-                prv.showedSubMenu.close()
+            if (itemPrv.showedSubMenu) {
+                itemPrv.showedSubMenu.isDoActiveParentOnClose = false
+                itemPrv.showedSubMenu.close()
             }
         }
     }
@@ -198,12 +238,12 @@ ListItemBlank {
             Layout.alignment: Qt.AlignLeft
             width: 16
             iconCode: {
-                if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && prv.hasIcon) {
-                    return prv.hasIcon ? modelData.icon : IconCode.NONE
-                } else if (prv.isCheckable) {
-                    return prv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
-                } else  if (prv.isSelectable) {
-                    return prv.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
+                    return itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+                } else if (itemPrv.isCheckable) {
+                    return itemPrv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                } else  if (itemPrv.isSelectable) {
+                    return itemPrv.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 }
 
                 return IconCode.NONE
@@ -215,52 +255,60 @@ ListItemBlank {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
             width: 16
-            iconCode: prv.hasIcon ? modelData.icon : IconCode.NONE
+            iconCode: itemPrv.hasIcon ? modelData.icon : IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 
         StyledTextLabel {
             id: titleLabel
             Layout.fillWidth: true
-            text: Boolean(modelData) && Boolean(modelData.title) ? modelData.title : ""
             horizontalAlignment: Text.AlignLeft
+
+            text: Utils.makeMnemonicText(itemPrv.title)
+
+            textFormat: Text.RichText
+            //! If the rich text format is set, then the component intercepts the hover state
+            //  The hover state is required to open a submenu(see onHovered)
+            //  So, let's turn off the mouse hovering over the component
+            enabled: false
+            opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
         }
 
         StyledTextLabel {
             id: shortcutLabel
             Layout.alignment: Qt.AlignRight
-            text: prv.hasShortcut ? modelData.shortcut : ""
+            text: itemPrv.shortcut
             horizontalAlignment: Text.AlignRight
-            visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator)
+            visible: !itemPrv.hasShortcut || (root.reserveSpaceForShortcutOrSubmenuIndicator)
         }
 
         StyledIconLabel {
             id: submenuIndicator
             Layout.alignment: Qt.AlignRight
             width: 16
-            iconCode: prv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
+            iconCode: itemPrv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
             visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator && !shortcutLabel.visible)
         }
     }
 
     onHovered: {
-        if (isHovered) {
-            root.navigation.requestActive()
-        }
-
-        if (!prv.hasSubMenu) {
+        if (!itemPrv.hasSubMenu) {
             return
         }
 
         if (isHovered) {
-            prv.showSubMenu()
+            itemPrv.showSubMenu()
         } else {
+            if (!Boolean(itemPrv.showedSubMenu)) {
+                return
+            }
+
             var mouseGlogalPos = mapToGlobal(Qt.point(mouseX, mouseY))
-            var showedSubMenuGlobalPos = prv.showedSubMenu.contentItem.mapToGlobal(0, 0)
+            var showedSubMenuGlobalPos = itemPrv.showedSubMenu.contentItem.mapToGlobal(0, 0)
 
             var eps = 8
-            var subMenuWidth = prv.showedSubMenu.width
-            var subMenuHeight = prv.showedSubMenu.height
+            var subMenuWidth = itemPrv.showedSubMenu.width
+            var subMenuHeight = itemPrv.showedSubMenu.height
 
             var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlogalPos.x + eps && mouseGlogalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
                     && (showedSubMenuGlobalPos.y < mouseGlogalPos.y + eps && mouseGlogalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
@@ -269,16 +317,19 @@ ListItemBlank {
                 return
             }
 
-            prv.closeSubMenu()
+            itemPrv.closeSubMenu()
         }
     }
 
     onClicked: {
-        if (prv.hasSubMenu) {
-            prv.showSubMenu()
+        if (itemPrv.hasSubMenu) {
+            itemPrv.showSubMenu()
+
+            itemPrv.showedSubMenu.requestFocus()
+
             return
         }
 
-        root.handleAction(modelData.code, prv.isSelectable ? index : -1)
+        root.handleMenuItem(modelData.id)
     }
 }

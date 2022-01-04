@@ -21,7 +21,7 @@
  */
 
 #include "pedal.h"
-#include "xml.h"
+#include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
@@ -54,6 +54,14 @@ static const ElementStyle pedalStyle {
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
 };
+
+const QString Pedal::PEDAL_SYMBOL = "<sym>keyboardPedalPed</sym>";
+const QString Pedal::STAR_SYMBOL = "<sym>keyboardPedalUp</sym>";
+
+PedalSegment::PedalSegment(Pedal* sp, System* parent)
+    : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
 
 //---------------------------------------------------------
 //   layout
@@ -92,8 +100,8 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(Score* s)
-    : TextLineBase(s)
+Pedal::Pedal(EngravingItem* parent)
+    : TextLineBase(ElementType::PEDAL, parent)
 {
     initElementStyle(&pedalStyle);
     setLineVisible(true);
@@ -138,7 +146,7 @@ void Pedal::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
 
     for (auto i : {
             Pid::END_HOOK_TYPE,
@@ -155,7 +163,7 @@ void Pedal::write(XmlWriter& xml) const
     }
 
     SLine::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -167,9 +175,9 @@ static const ElementStyle pedalSegmentStyle {
     { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Pedal::createLineSegment()
+LineSegment* Pedal::createLineSegment(System* parent)
 {
-    PedalSegment* p = new PedalSegment(this, score());
+    PedalSegment* p = new PedalSegment(this, parent);
     p->setTrack(track());
     p->initElementStyle(&pedalSegmentStyle);
     return p;
@@ -179,11 +187,11 @@ LineSegment* Pedal::createLineSegment()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Pedal::propertyDefault(Pid propertyId) const
+engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return score()->styleP(Sid::pedalLineWidth);              // return point, not spatium
+        return score()->styleMM(Sid::pedalLineWidth);              // return point, not spatium
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::pedalLineStyle);
@@ -196,11 +204,11 @@ QVariant Pedal::propertyDefault(Pid propertyId) const
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
 
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
 
     case Pid::LINE_VISIBLE:
         return true;
@@ -228,7 +236,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->type() == ElementType::REST && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
             if (beginHookType() == HookType::HOOK_45) {
@@ -236,7 +244,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
             }
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // pedal marking on single note or ends with non-angled hook:
@@ -283,7 +291,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
         } else if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->type() == ElementType::REST && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
         }

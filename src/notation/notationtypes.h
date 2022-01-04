@@ -27,18 +27,19 @@
 
 #include "io/path.h"
 #include "translation.h"
+#include "id.h"
+#include "midi/midievent.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/timesig.h"
 #include "libmscore/key.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
-#include "libmscore/score.h"
 #include "libmscore/chord.h"
 #include "libmscore/articulation.h"
 #include "libmscore/slur.h"
@@ -52,34 +53,36 @@
 #include "libmscore/realizedharmony.h"
 #include "libmscore/instrument.h"
 
-#include "instruments/instrumentstypes.h"
+#include "engraving/layout/layoutoptions.h"
 
 namespace mu::notation {
 using Page = Ms::Page;
-using Element = Ms::Element;
+using EngravingItem = Ms::EngravingItem;
 using ElementType = Ms::ElementType;
+using PropertyValue = engraving::PropertyValue;
 using Note = Ms::Note;
 using Measure = Ms::Measure;
-using DurationType = Ms::TDuration::DurationType;
+using DurationType = Ms::DurationType;
 using Duration = Ms::TDuration;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
-using ViewMode = Ms::LayoutMode;  // Accomodate inconsistent convention from v3
+using ViewMode = engraving::LayoutMode;
 using PitchMode = Ms::UpDownMode;
 using StyleId = Ms::Sid;
 using SymbolId = Ms::SymId;
 using Key = Ms::Key;
 using KeyMode = Ms::KeyMode;
 using TimeSigType = Ms::TimeSigType;
+using TimeSignature = Ms::TimeSig;
 using Part = Ms::Part;
 using Staff = Ms::Staff;
-using StaffType = Ms::StaffTypes;
 using NoteHead = Ms::NoteHead;
 using SharpFlat = Ms::PreferSharpFlat;
 using TransposeMode = Ms::TransposeMode;
 using TransposeDirection = Ms::TransposeDirection;
 using Fraction = Ms::Fraction;
 using ElementPattern = Ms::ElementPattern;
+using SelectionFilterType = Ms::SelectionFilterType;
 using Chord = Ms::Chord;
 using ChordRest = Ms::ChordRest;
 using Harmony = Ms::Harmony;
@@ -94,17 +97,52 @@ using NoteInputMethod = Ms::NoteEntryMethod;
 using AccidentalType = Ms::AccidentalType;
 using OttavaType = Ms::OttavaType;
 using HairpinType = Ms::HairpinType;
-using TextType = Ms::Tid;
+using TextBase = Ms::TextBase;
 using TupletNumberType = Ms::TupletNumberType;
 using TupletBracketType = Ms::TupletBracketType;
 using GraceNoteType = Ms::NoteType;
-using BeamMode = Ms::Beam::Mode;
-using LayoutBreakType = Ms::LayoutBreak::Type;
+using BeamMode = Ms::BeamMode;
+using LayoutBreakType = Ms::LayoutBreakType;
+using Interval = Ms::Interval;
+using Drumset = Ms::Drumset;
+using StringData = Ms::StringData;
+using Clef = Ms::Clef;
+using ClefType = Ms::ClefType;
+using ClefTypeList = Ms::ClefTypeList;
+using BracketType = Ms::BracketType;
+using StaffGroup = Ms::StaffGroup;
+using StaffType = Ms::StaffTypes;
+using StaffTypePreset = Ms::StaffType;
+using StaffName = Ms::StaffName;
+using StaffNameList = Ms::StaffNameList;
+using MidiArticulation = Ms::MidiArticulation;
+using TextStyleType = mu::engraving::TextStyleType;
+using Trait = Ms::Trait;
+using TraitType = Ms::TraitType;
+using HarmonyDurationType = Ms::HDuration;
+using Voicing = Ms::Voicing;
 using InstrumentChannel = Ms::Channel;
-
+using Instrument = Ms::Instrument;
+using InstrumentTemplate = Ms::InstrumentTemplate;
+using InstrumentTrait = Ms::Trait;
+using ScoreOrder = Ms::ScoreOrder;
+using ScoreOrderGroup = Ms::ScoreGroup;
+using InstrumentOverwrite = Ms::InstrumentOverwrite;
+using InstrumentGenre = Ms::InstrumentGenre;
+using InstrumentGroup = Ms::InstrumentGroup;
+using MidiArticulation = Ms::MidiArticulation;
 using PageList = std::vector<const Page*>;
-using StaffList = QList<const Staff*>;
-using PartList = QList<const Part*>;
+using PartList = std::vector<const Part*>;
+using InstrumentList = QList<Instrument>;
+using InstrumentTemplateList = QList<const InstrumentTemplate*>;
+using InstrumentGenreList = QList<const InstrumentGenre*>;
+using ScoreOrderList = QList<ScoreOrder>;
+using InstrumentGroupList = QList<const InstrumentGroup*>;
+using MidiArticulationList = QList<MidiArticulation>;
+
+using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
+
+static const QString COMMON_GENRE_ID("common");
 
 enum class DragMode
 {
@@ -126,10 +164,21 @@ enum class MoveDirection
 enum class MoveSelectionType
 {
     Undefined = 0,
-    Element,
+    EngravingItem,
     Chord,
     Measure,
-    Track
+    Track,
+    Frame,
+    System,
+    String // TAB Staff
+};
+
+enum class ExpandSelectionMode
+{
+    BeginSystem,
+    EndSystem,
+    BeginScore,
+    EndScore,
 };
 
 enum class BreaksSpawnIntervalType
@@ -166,22 +215,6 @@ enum class NoteAddingMode
     InsertChord
 };
 
-enum class SaveMode
-{
-    Save,
-    SaveAs,
-    SaveCopy,
-    SaveSelection
-};
-
-enum class ResettableValueType
-{
-    Stretch,
-    BeamMode,
-    ShapesAndPosition,
-    TextStyleOverriders
-};
-
 enum class IntervalType
 {
     Above,
@@ -216,6 +249,9 @@ struct NoteInputState
     bool isRest = false;
     bool withSlur = false;
     int currentVoiceIndex = 0;
+    int currentTrack = 0;
+    const Drumset* drumset = nullptr;
+    StaffGroup staffGroup = StaffGroup::STANDARD;
 };
 
 enum class NoteFilter
@@ -244,32 +280,6 @@ inline QString zoomTypeTitle(ZoomType type)
     return QString();
 }
 
-struct Meta
-{
-    io::path fileName;
-    io::path filePath;
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-    QString translator;
-    QString arranger;
-    size_t partsCount = 0;
-    QPixmap thumbnail;
-    QDate creationDate;
-
-    QString source;
-    QString platform;
-    QString musescoreVersion;
-    int musescoreRevision = 0;
-    int mscVersion = 0;
-
-    QVariantMap additionalTags;
-};
-
-using MetaList = QList<Meta>;
-
 struct Tempo
 {
     int valueBpm = 0;
@@ -282,33 +292,81 @@ struct Tempo
     }
 };
 
-struct ScoreCreateOptions
+static constexpr int MAX_STAVES  = 4;
+
+struct ClefPair
 {
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
+    ClefType concertClef = ClefType::G;
+    ClefType transposingClef = ClefType::G;
+};
 
-    bool withTempo = false;
-    Tempo tempo;
+struct PitchRange
+{
+    int min = 0;
+    int max = 0;
 
-    int timesigNumerator = 0;
-    int timesigDenominator = 1;
-    TimeSigType timesigType = TimeSigType::NORMAL;
+    PitchRange() = default;
+    PitchRange(int min, int max)
+        : min(min), max(max) {}
 
-    Key key = Key::C;
-    KeyMode keyMode = KeyMode::UNKNOWN;
+    bool operator ==(const PitchRange& other) const
+    {
+        return min == other.min && max == other.max;
+    }
 
-    bool withPickupMeasure = false;
-    int measures = 0;
-    int measureTimesigNumerator = 0;
-    int measureTimesigDenominator = 0;
+    bool operator !=(const PitchRange& other) const
+    {
+        return !operator ==(other);
+    }
+};
 
-    io::path templatePath;
+struct InstrumentKey
+{
+    QString instrumentId;
+    ID partId;
+    Fraction tick = Ms::Fraction(0, 1);
+};
 
-    instruments::PartInstrumentList parts;
-    instruments::ScoreOrder order;
+inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait, int instrumentNumber = 0)
+{
+    QString result = instrumentName;
+
+    switch (trait.type) {
+    case TraitType::Tuning:
+        result = mu::qtrc("notation", "%1 %2").arg(trait.name).arg(instrumentName);
+        break;
+    case TraitType::Course:
+        result = mu::qtrc("notation", "%1 (%2)").arg(instrumentName).arg(trait.name);
+        break;
+    case TraitType::Transposition:
+        result = mu::qtrc("notation", "%1 in %2").arg(instrumentName).arg(trait.name);
+        break;
+    case TraitType::Unknown:
+        break;
+    }
+
+    if (!result.isEmpty() && instrumentNumber > 0) {
+        result += " " + QString::number(instrumentNumber);
+    }
+
+    return result;
+}
+
+struct PartInstrument
+{
+    ID partId;
+    InstrumentTemplate instrumentTemplate;
+
+    bool isExistingPart = false;
+    bool isSoloist = false;
+};
+
+using PartInstrumentList = QList<PartInstrument>;
+
+struct PartInstrumentListScoreOrder
+{
+    PartInstrumentList instruments;
+    ScoreOrder scoreOrder;
 };
 
 struct SearchCommand
@@ -329,7 +387,7 @@ struct FilterElementsOptions
     int staffEnd = -1;
     int voice = -1;
     const Ms::System* system = nullptr;
-    Fraction durationTicks;
+    Fraction durationTicks{ -1, 1 };
 
     bool bySubtype = false;
     int subtype = -1;
@@ -345,14 +403,15 @@ struct FilterElementsOptions
 struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
-    int string = Ms::STRING_NONE;
+    int string = Ms::INVALID_STRING_INDEX;
     int tpc = Ms::Tpc::TPC_INVALID;
-    NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
+    engraving::NoteHeadGroup notehead = engraving::NoteHeadGroup::HEAD_INVALID;
     Ms::TDuration durationType = Ms::TDuration();
     Ms::NoteType noteType = Ms::NoteType::INVALID;
 };
 
-struct SelectionRange {
+struct SelectionRange
+{
     int startStaffIndex = 0;
     int endStaffIndex = 0;
     Fraction startTick;
@@ -364,10 +423,12 @@ struct StaffConfig
     bool visible = false;
     int linesCount = 0;
     double lineDistance = 0.0;
-    QColor linesColor;
+    mu::draw::Color linesColor;
     bool visibleLines = false;
     qreal userDistance = 0.0;
     double scale = 0.0;
+    bool isSmall = false;
+    bool cutaway = false;
     bool showIfEmpty = false;
     bool showClef = false;
     bool showTimeSignature = false;
@@ -378,8 +439,8 @@ struct StaffConfig
     bool hideSystemBarline = false;
     bool mergeMatchingRests = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
-    NoteHead::Scheme noteheadScheme = NoteHead::Scheme::HEAD_AUTO;
-    Ms::ClefTypeList clefType;
+    engraving::NoteHeadScheme noteheadScheme = engraving::NoteHeadScheme::HEAD_AUTO;
+    ClefTypeList clefTypeList;
 };
 
 struct TransposeOptions
@@ -412,8 +473,8 @@ struct LoopBoundaries
     int loopInTick = 0;
     int loopOutTick = 0;
 
-    QRect loopInRect = {};
-    QRect loopOutRect = {};
+    RectF loopInRect = {};
+    RectF loopOutRect = {};
 
     bool visible = false;
 
@@ -461,15 +522,16 @@ struct ScoreConfig
 
 inline QString staffTypeToString(StaffType type)
 {
-    return Ms::StaffType::preset(type)->name();
+    const Ms::StaffType* preset = Ms::StaffType::preset(type);
+    return preset ? preset->name() : QString();
 }
 
 inline QList<StaffType> allStaffTypes()
 {
     QList<StaffType> result;
 
-    for (const Ms::StaffType& staffType: Ms::StaffType::presets()) {
-        result << staffType.type();
+    for (const Ms::StaffType& preset: Ms::StaffType::presets()) {
+        result << preset.type();
     }
 
     return result;
@@ -490,26 +552,59 @@ enum class BracketsType
     Parentheses
 };
 
+struct ScoreCreateOptions
+{
+    bool withTempo = false;
+    Tempo tempo;
+
+    int timesigNumerator = 0;
+    int timesigDenominator = 1;
+    TimeSigType timesigType = TimeSigType::NORMAL;
+
+    Key key = Key::C;
+    KeyMode keyMode = KeyMode::UNKNOWN;
+
+    bool withPickupMeasure = false;
+    int measures = 0;
+    int measureTimesigNumerator = 0;
+    int measureTimesigDenominator = 0;
+
+    PartInstrumentList parts;
+    ScoreOrder order;
+};
+
+inline const ScoreOrder& customOrder()
+{
+    static ScoreOrder order;
+    order.id = "custom";
+    order.name = qtrc("OrderXML", "Custom");
+
+    return order;
+}
+
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;
 
 static constexpr int MAX_FRET = 14;
 
-inline bool isNotesIntervalValid(int interval)
+constexpr bool isNotesIntervalValid(int interval)
 {
     return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
            && interval != 0 && interval != -1;
 }
 
-inline bool isVoiceIndexValid(int voiceIndex)
+constexpr bool isVoiceIndexValid(int voiceIndex)
 {
-    return 0 <= voiceIndex && voiceIndex < VOICES;
+    return 0 <= voiceIndex && voiceIndex < Ms::VOICES;
 }
 
-inline bool isFretIndexValid(int fretIndex)
+constexpr bool isFretIndexValid(int fretIndex)
 {
     return 0 <= fretIndex && fretIndex < MAX_FRET;
 }
 }
+
+Q_DECLARE_METATYPE(mu::notation::InstrumentTemplate)
+Q_DECLARE_METATYPE(mu::notation::ScoreOrder)
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

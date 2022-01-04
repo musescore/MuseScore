@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "stafftext.h"
+#include "rw/xml.h"
+#include "score.h"
 #include "system.h"
 #include "staff.h"
-#include "xml.h"
 #include "measure.h"
 
 using namespace mu;
@@ -43,8 +43,8 @@ static const ElementStyle staffStyle {
 //   StaffText
 //---------------------------------------------------------
 
-StaffText::StaffText(Score* s, Tid tid)
-    : StaffTextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+StaffText::StaffText(Segment* parent, TextStyleType tid)
+    : StaffTextBase(ElementType::STAFF_TEXT, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&staffStyle);
 }
@@ -63,11 +63,11 @@ void StaffText::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant StaffText::propertyDefault(Pid id) const
+engraving::PropertyValue StaffText::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::STAFF);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::STAFF;
     default:
         return StaffTextBase::propertyDefault(id);
     }

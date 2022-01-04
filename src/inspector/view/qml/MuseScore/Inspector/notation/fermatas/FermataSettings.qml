@@ -19,24 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: fermataPopup.model
+    property QtObject model: null
 
-    icon: IconCode.FERMATA
-    text: qsTrc("inspector", "Fermatas")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "FermataSettings"
 
-    FermataPopup {
-        id: fermataPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        placementOnStaffSection.focusOnFirst()
+    }
+
+    PlacementSection {
+        id: placementOnStaffSection
+        titleText: qsTrc("inspector", "Placement on staff")
+        propertyItem: root.model ? root.model.placementType : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 }

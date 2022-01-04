@@ -22,20 +22,20 @@
 
 #include "svgwriter.h"
 
-#include "log.h"
-
 #include "svggenerator.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
+#include "engraving/paint/paint.h"
 
-#include "engraving/draw/qpainterprovider.h"
+#include "log.h"
 
 using namespace mu::iex::imagesexport;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 
@@ -75,12 +75,11 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
     printer.setOutputDevice(&destinationDevice);
 
-    const int TRIM_MARGINS_SIZE = configuration()->trimMarginPixelSize();
+    const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
     RectF pageRect = page->abbox();
-    if (TRIM_MARGINS_SIZE >= 0) {
-        QMarginsF margins(TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE, TRIM_MARGINS_SIZE);
-        pageRect = RectF::fromQRectF(page->tbbox().toQRectF() + margins);
+    if (TRIM_MARGIN_SIZE >= 0) {
+        pageRect = page->tbbox().adjusted(-TRIM_MARGIN_SIZE, -TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE, TRIM_MARGIN_SIZE);
     }
 
     qreal width = pageRect.width();
@@ -90,14 +89,14 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     mu::draw::Painter painter(&printer, "svgwriter");
     painter.setAntialiasing(true);
-    if (TRIM_MARGINS_SIZE >= 0) {
+    if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
     }
 
     Ms::MScore::pixelRatio = Ms::DPI / printer.logicalDpiX();
 
     if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
-        painter.fillRect(pageRect, Qt::white);
+        painter.fillRect(pageRect, mu::draw::Color::white);
     }
 
     // 1st pass: StaffLines
@@ -105,7 +104,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
         int stavesCount = system->staves()->size();
 
         for (int staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
-            if (score->staff(staffIndex)->invisible(Ms::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
+            if (score->staff(staffIndex)->isLinesInvisible(Ms::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 
@@ -143,7 +142,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                     if (measure->isMeasure() && Ms::toMeasure(measure)->visible(staffIndex)) {
                         Ms::StaffLines* sl = Ms::toMeasure(measure)->staffLines(staffIndex);
                         printer.setElement(sl);
-                        Ms::paintElement(painter, sl);
+                        engraving::Paint::paintElement(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
@@ -159,18 +158,18 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                 }
 
                 printer.setElement(firstSL);
-                Ms::paintElement(painter, firstSL);
+                engraving::Paint::paintElement(painter, firstSL);
             }
         }
     }
 
     // 2nd pass: the rest of the elements
-    QList<Ms::Element*> elements = page->elements();
+    QList<Ms::EngravingItem*> elements = page->elements();
     std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     int lastNoteIndex = -1;
     for (int i = 0; i < PAGE_NUMBER; ++i) {
-        for (const Ms::Element* element: pages[i]->elements()) {
+        for (const Ms::EngravingItem* element: pages[i]->elements()) {
             if (element->type() == Ms::ElementType::NOTE) {
                 lastNoteIndex++;
             }
@@ -179,7 +178,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     NotesColors notesColors = parseNotesColors(options.value(OptionKey::NOTES_COLORS, Val()).toQVariant());
 
-    for (const Ms::Element* element : elements) {
+    for (const Ms::EngravingItem* element : elements) {
         // Always exclude invisible elements
         if (!element->visible()) {
             continue;
@@ -194,24 +193,24 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
             break;
         }
 
-        // Set the Element pointer inside SvgGenerator/SvgPaintEngine
+        // Set the EngravingItem pointer inside SvgGenerator/SvgPaintEngine
         printer.setElement(element);
 
         // Paint it
         if (element->type() == Ms::ElementType::NOTE && !notesColors.isEmpty()) {
-            QColor color = element->color();
+            QColor color = element->color().toQColor();
             int currentNoteIndex = (++lastNoteIndex);
 
             if (notesColors.contains(currentNoteIndex)) {
                 color = notesColors[currentNoteIndex];
             }
 
-            Ms::Element* note = dynamic_cast<const Ms::Note*>(element)->clone();
+            Ms::EngravingItem* note = dynamic_cast<const Ms::Note*>(element)->clone();
             note->setColor(color);
-            Ms::paintElement(painter, note);
+            engraving::Paint::paintElement(painter, note);
             delete note;
         } else {
-            Ms::paintElement(painter, element);
+            engraving::Paint::paintElement(painter, element);
         }
     }
 

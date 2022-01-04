@@ -18,10 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# This is module for convert mscz files to various formats (image, pdf, audio and etc).
-# Main goal - determine what need to do and call necceasers functions.
-# Usually use from command line.
-
 set(MODULE multiinstances)
 
 set(MODULE_QRC multiinstances.qrc)

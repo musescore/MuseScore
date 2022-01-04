@@ -24,13 +24,14 @@
 namespace Layouting {
 
 class DOCKS_EXPORT SeparatorWidget
-        : public QWidget
-        , public Layouting::Separator
-        , public Layouting::Widget_qwidget
+    : public QWidget,
+      public Layouting::Separator,
+      public Layouting::Widget_qwidget
 {
     Q_OBJECT
 public:
     explicit SeparatorWidget(Layouting::Widget *parent = nullptr);
+
 protected:
     void paintEvent(QPaintEvent *) override;
     void enterEvent(KDDockWidgets::Qt5Qt6Compat::QEnterEvent *) override;
@@ -39,14 +40,13 @@ protected:
     void mouseMoveEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseDoubleClickEvent(QMouseEvent *) override;
-    Widget* createRubberBand(Widget *parent) override;
+    Widget *createRubberBand(Widget *parent) override;
     Widget *asWidget() override;
 };
 
-class RubberBand : public QRubberBand
-                 , public Layouting::Widget_qwidget
+class RubberBand : public QRubberBand, public Layouting::Widget_qwidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit RubberBand(Layouting::Widget *parent);
 };

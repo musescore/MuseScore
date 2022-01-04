@@ -22,6 +22,8 @@
 
 #include "importxmlfirstpass.h"
 
+#include "log.h"
+
 namespace Ms {
 // TODO: move somewhere else
 
@@ -67,7 +69,7 @@ QString MusicXmlPart::toString() const
             res += "\n";
         }
         res += QString("measure %1 duration %2 (%3)")
-               .arg(measureNumbers.at(i), measureDurations.at(i).print()).arg(measureDurations.at(i).ticks());
+               .arg(measureNumbers.at(i), measureDurations.at(i).toString()).arg(measureDurations.at(i).ticks());
     }
 
     return res;
@@ -151,7 +153,7 @@ void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
         qDebug("instr '%s', tick %s (%d): element already exists",
-               qPrintable(instr), qPrintable(f.print()), f.ticks());
+               qPrintable(instr), qPrintable(f.toString()), f.ticks());
     }
     //(*this)[f] = instr;
 }
@@ -171,7 +173,9 @@ int MusicXmlOctaveShiftList::octaveShift(const Fraction f) const
 
 void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
 {
-    Q_ASSERT(Fraction(0, 1) <= f);
+    IF_ASSERT_FAILED(Fraction(0, 1) <= f) {
+        return;
+    }
 
     //qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
     auto i = find(f);

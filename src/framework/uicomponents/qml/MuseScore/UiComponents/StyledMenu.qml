@@ -30,14 +30,27 @@ StyledPopupView {
     id: root
 
     property alias model: view.model
-    property int minimumMenuWidth: 178
 
-    signal handleAction(string actionCode, int actionIndex)
+    property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
-    x: 0
+    signal handleMenuItem(string itemId)
+
+    x: {
+        switch(preferredAlign) {
+        case Qt.AlignLeft:
+            return -contentWidth + padding
+        case Qt.AlignHCenter:
+            return -contentWidth / 2 + padding
+        case Qt.AlignRight:
+            return 0
+        }
+
+        return 0
+    }
+
     y: parent.height
 
-    contentWidth: prv.itemWidth
+    contentWidth: menuMetrics.itemWidth
 
     padding: 8
     margins: 0
@@ -45,71 +58,38 @@ StyledPopupView {
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
-    navigation.name: "StyledMenu"
-    navigation.direction: NavigationPanel.Vertical
+    isCloseByEscape: false
 
-    function focusOnFirstItem() {
-        var loader = view.itemAtIndex(0)
-        if (loader && loader.item) {
-            loader.item.navigation.requestActive()
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "StyledMenu"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        order: 1
+    }
+
+    navigationSection.onNavigationEvent: {
+        if (event.type === NavigationEvent.Escape) {
+            if (prv.showedSubMenu) {
+                prv.showedSubMenu.close()
+            } else {
+                root.close()
+            }
         }
     }
 
-    function focusOnSelected() {
-        for (var i = 0; i < view.count; ++i) {
-            var loader = view.itemAtIndex(i)
-            if (loader && loader.item && loader.item.isSelected) {
-                loader.item.navigation.requestActive()
-                return true
-            }
+    signal loaded()
+
+    function requestFocus() {
+        var focused = prv.focusOnSelected()
+        if (!focused) {
+            focused = prv.focusOnFirstEnabled()
         }
-        return false
+
+        return focused
     }
 
     onModelChanged: {
-        prv.hasItemsWithIconAndCheckable = false
-        prv.hasItemsWithIconOrCheckable = false
-        prv.hasItemsWithSubmenu = false
-        prv.hasItemsWithShortcut = false
-
-        //! NOTE Policy:
-        //! - if the menu contains checkable items, space for the checkmarks is reserved
-        //! - if the menu contains items with an icon, space for icons is reserved
-        //! - selectable items that don't have an icon are treated as checkable
-        //! - selectable items that do have an icon are treated as non-checkable
-        //! - all selectable items that are selected get an accent color background
-
-        for (let i = 0; i < model.length; i++) {
-            let item = model[i]
-            let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
-
-            if (item.checkable && hasIcon) {
-                prv.hasItemsWithIconAndCheckable = true
-                prv.hasItemsWithIconOrCheckable = true
-            } else if (item.checkable || hasIcon || item.selectable) {
-                prv.hasItemsWithIconOrCheckable = true
-            }
-
-            if (Boolean(item.subitems) && item.subitems.length > 0) {
-                prv.hasItemsWithSubmenu = true
-            }
-
-            if (Boolean(item.shortcut)) {
-                prv.hasItemsWithShortcut = true
-            }
-        }
-
-        let leftWidth = 0
-        let rightWidth = 0
-
-        for (let j = 0; j < model.length; j++) {
-            prv.testItem.modelData = model[j]
-            leftWidth = Math.max(leftWidth, prv.testItem.calculatedLeftPartWidth())
-            rightWidth = Math.max(rightWidth, prv.testItem.calculatedRightPartWidth())
-        }
-
-        prv.itemLeftPartWidth = leftWidth
-        prv.itemRightPartWidth = rightWidth
+        menuMetrics.calculate(model)
 
         //! NOTE: Due to the fact that the view has a dynamic delegate,
         //  the height calculation occurs with an error
@@ -117,46 +97,57 @@ StyledPopupView {
         //  Let's manually adjust the height of the content
         var sepCount = 0
         for (let k = 0; k < model.length; k++) {
-            if (!Boolean(model[k].title)) {
+            if (!Boolean(Utils.getItem(model, k).title)) {
                 sepCount++
             }
         }
 
-        var itemHeight = (view.contentHeight - view.spacing * (model.length - 1)) / model.length
-        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight) +
+        var itemHeight = 0
+        for(var child in view.contentItem.children) {
+            itemHeight = Math.max(itemHeight, view.contentItem.children[child].height)
+        }
+
+        var itemsCount = model.length - sepCount
+
+        root.contentHeight = itemHeight * itemsCount + sepCount * prv.separatorHeight +
                 prv.viewVerticalMargin * 2
+
+        root.loaded()
+    }
+
+    MenuMetrics {
+        id: menuMetrics
     }
 
     QtObject {
         id: prv
 
-        property bool hasItemsWithIconAndCheckable: false
-        property bool hasItemsWithIconOrCheckable: false
-        property bool hasItemsWithSubmenu: false
-        property bool hasItemsWithShortcut: false
-
-        property int itemLeftPartWidth: 100
-        property int itemRightPartWidth: 100
-        readonly property int itemWidth:
-            Math.max(itemLeftPartWidth + itemRightPartWidth, root.minimumMenuWidth)
+        property var showedSubMenu: null
 
         readonly property int separatorHeight: 1
         readonly property int viewVerticalMargin: 4
 
-        readonly property int iconAndCheckMarkMode: {
-            if (prv.hasItemsWithIconAndCheckable) {
-                return StyledMenuItem.ShowBoth
-            } else if (prv.hasItemsWithIconOrCheckable) {
-                return StyledMenuItem.ShowOne
+        function focusOnFirstEnabled() {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+                if (loader && !loader.isSeparator && loader.item && loader.item.enabled) {
+                    loader.item.navigation.requestActive()
+                    return true
+                }
             }
-            return StyledMenuItem.None
+
+            return false
         }
 
-        property StyledMenuItem testItem: StyledMenuItem {
-            iconAndCheckMarkMode: prv.iconAndCheckMarkMode
-
-            reserveSpaceForShortcutOrSubmenuIndicator:
-                prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
+        function focusOnSelected() {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+                if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
+                    loader.item.navigation.requestActive()
+                    return true
+                }
+            }
+            return false
         }
     }
 
@@ -170,16 +161,43 @@ StyledPopupView {
         spacing: 0
         interactive: false
 
+        function itemByKey(key) {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+
+                if (!Boolean(loader) || loader.isSeparator) {
+                    continue
+                }
+
+                var title = loader.item.title
+                if (Boolean(title)) {
+                    title = title.toLowerCase()
+                    var index = title.indexOf('&')
+                    if (index === -1) {
+                        continue
+                    }
+
+                    var activateKey = title[index + 1]
+                    if (activateKey === key) {
+                        return loader.item
+                    }
+                }
+            }
+
+            return null
+        }
+
         delegate: Loader {
             id: loader
 
-            property bool isSeparator: Boolean(modelData.title)
+            property var itemData: Boolean(root.model.get) ? model : modelData
+            property bool isSeparator: !Boolean(itemData.title) || itemData.title === ""
 
-            sourceComponent: isSeparator ? menuItemComp : separatorComp
+            sourceComponent: isSeparator ? separatorComp : menuItemComp
 
             onLoaded: {
-                loader.item.modelData = Qt.binding(() => (modelData))
-                loader.item.width = Qt.binding(() => (prv.itemWidth))
+                loader.item.modelData = Qt.binding(() => (itemData))
+                loader.item.width = Qt.binding(() => (menuMetrics.itemWidth))
             }
 
             Component {
@@ -188,34 +206,76 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
-                    navigation.panel: root.navigation
-                    navigation.column: 0
+                    property string title: modelData.title
+
+                    parentWindow: root.window()
+
+                    navigation.panel: root.navigationPanel
                     navigation.row: model.index
 
-                    iconAndCheckMarkMode: prv.iconAndCheckMarkMode
+                    iconAndCheckMarkMode: menuMetrics.iconAndCheckMarkMode
 
                     reserveSpaceForShortcutOrSubmenuIndicator:
-                        prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
+                        menuMetrics.hasItemsWithShortcut || menuMetrics.hasItemsWithSubmenu
 
                     padding: root.padding
 
+                    Keys.onShortcutOverride: {
+                        var activatedItem = view.itemByKey(event.text)
+                        event.accepted = Boolean(activatedItem)
+                    }
+
+                    Keys.onPressed: {
+                        var activatedItem = view.itemByKey(event.text)
+                        if (Boolean(activatedItem)) {
+                            activatedItem.navigation.requestActive()
+                            activatedItem.navigation.triggered()
+                        }
+                    }
+
+                    onOpenSubMenuRequested: {
+                        if (prv.showedSubMenu){
+                            if (prv.showedSubMenu === menu) {
+                                return
+                            } else {
+                                prv.showedSubMenu.close()
+                            }
+                        }
+
+                        menu.toggleOpened()
+                    }
+
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
+                        prv.showedSubMenu = menu
                     }
 
                     onSubMenuClosed: {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
+                        prv.showedSubMenu = null
+
+                        if (!root.activeFocus) {
+                            root.forceActiveFocus()
+                        }
+
+                        if (!item.activeFocus) {
+                            item.forceActiveFocus()
+                        }
                     }
 
-                    onHandleAction: {
+                    onHandleMenuItem: {
                         // NOTE: reset view state
                         view.update()
 
-                        root.handleAction(actionCode, actionIndex)
+                        root.handleMenuItem(itemId)
                     }
 
                     onRequestParentItemActive: {
-                        root.navigationParentControl.requestActive()
+                        if (root.navigationParentControl) {
+                            root.navigationParentControl.requestActive()
+                        }
+
+                        root.close()
                     }
                 }
             }

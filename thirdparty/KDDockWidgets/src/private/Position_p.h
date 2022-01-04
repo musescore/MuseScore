@@ -47,6 +47,7 @@ struct ItemRef
     Layouting::Item *const item;
     const QPointer<Layouting::Item> guard;
     const QMetaObject::Connection connection;
+
 private:
     Q_DISABLE_COPY(ItemRef)
 };
@@ -77,7 +78,10 @@ public:
      * @brief Returns whether the Position is valid. If invalid then the DockWidget was never
      * in a MainWindow.
      */
-    bool isValid() const { return layoutItem() != nullptr; }
+    bool isValid() const
+    {
+        return layoutItem() != nullptr;
+    }
 
     /**
      * @brief returns if the dock widget was in a tab
@@ -97,12 +101,15 @@ public:
     ///@brief Adds the last layout item where the dock widget was (or is)
     void addPlaceholderItem(Layouting::Item *placeholder);
 
-    Layouting::Item* layoutItem() const;
+    Layouting::Item *layoutItem() const;
 
-    bool containsPlaceholder(Layouting::Item*) const;
+    bool containsPlaceholder(Layouting::Item *) const;
     void removePlaceholders();
 
-    const std::vector<std::unique_ptr<ItemRef>>& placeholders() const { return m_placeholders; }
+    const std::vector<std::unique_ptr<ItemRef>> &placeholders() const
+    {
+        return m_placeholders;
+    }
 
     ///@brief Removes the placeholders that belong to this multisplitter
     void removePlaceholders(const LayoutWidget *);
@@ -125,23 +132,28 @@ struct LastPositions
 {
     // TODO: Support multiple old positions, one per main window
 
-    bool isValid() const {
+    bool isValid() const
+    {
         return lastPosition->isValid();
     }
 
-    void addPosition(Layouting::Item *item) {
+    void addPosition(Layouting::Item *item)
+    {
         lastPosition->addPlaceholderItem(item);
     }
 
-    void setLastFloatingGeometry(QRect geo) {
+    void setLastFloatingGeometry(QRect geo)
+    {
         m_lastFloatingGeometry = geo;
     }
 
-    bool wasFloating() const {
+    bool wasFloating() const
+    {
         return lastPosition->m_wasFloating;
     }
 
-    QRect lastFloatingGeometry() const {
+    QRect lastFloatingGeometry() const
+    {
         return m_lastFloatingGeometry;
     }
 
@@ -158,21 +170,25 @@ struct LastPositions
     LayoutSaver::Position serialize();
     void deserialize(const LayoutSaver::Position &p);
 
-    Layouting::Item* lastItem() const {
+    Layouting::Item *lastItem() const
+    {
         return lastPosition->layoutItem();
     }
 
-    Layouting::Item::List layoutItems() const {
+    Layouting::Item::List layoutItems() const
+    {
         Layouting::Item::List items;
         return items;
     }
 
-    void saveTabIndex(int tabIndex, bool isFloating) {
+    void saveTabIndex(int tabIndex, bool isFloating)
+    {
         lastPosition->m_tabIndex = tabIndex;
         lastPosition->m_wasFloating = isFloating;
     }
 
-    void removePlaceholders() const {
+    void removePlaceholders() const
+    {
         lastPosition->removePlaceholders();
     }
 
@@ -181,7 +197,8 @@ struct LastPositions
         lastPosition->removePlaceholders(hostWidget);
     }
 
-    int lastTabIndex() const {
+    int lastTabIndex() const
+    {
         return lastPosition->m_tabIndex;
     }
 

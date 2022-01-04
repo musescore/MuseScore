@@ -49,6 +49,8 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("template-mode", "Save template mode, no page size")); // and no platform and creationDate tags
     m_parser.addOption(QCommandLineOption({ "t", "test-mode" }, "Set test mode flag for all files")); // this includes --template-mode
 
+    m_parser.addOption(QCommandLineOption("session-type", "Startup with given session type", "type")); // see StartupScenario::sessionTypeTromString
+
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
@@ -74,6 +76,9 @@ void CommandLineController::parse(const QStringList& args)
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
+    //! NOTE Currently only implemented `full` mode
+    m_parser.addOption(QCommandLineOption("migration", "Whether to do migration with given mode, `full` - full migration", "mode"));
+
     m_parser.process(args);
 }
 
@@ -82,6 +87,15 @@ void CommandLineController::apply()
     auto floatValue = [this](const QString& name) -> std::optional<float> {
         bool ok = true;
         float val = m_parser.value(name).toFloat(&ok);
+        if (ok) {
+            return val;
+        }
+        return std::nullopt;
+    };
+
+    auto doubleValue = [this](const QString& name) -> std::optional<double> {
+        bool ok = true;
+        double val = m_parser.value(name).toDouble(&ok);
         if (ok) {
             return val;
         }
@@ -109,7 +123,7 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("D")) {
-        std::optional<float> val = floatValue("D");
+        std::optional<double> val = doubleValue("D");
         if (val) {
             uiConfiguration()->setPhysicalDotsPerInch(val);
         } else {
@@ -141,6 +155,11 @@ void CommandLineController::apply()
 
     notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
     notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
+
+    QString sessionType;
+    if (m_parser.isSet("session-type")) {
+        sessionType = m_parser.value("session-type");
+    }
 
     // Converter mode
     if (m_parser.isSet("r")) {
@@ -240,8 +259,31 @@ void CommandLineController::apply()
         m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
     }
 
-    if (application()->runMode() == IApplication::RunMode::Editor && !scorefiles.isEmpty()) {
-        startupScenario()->setStartupScorePath(scorefiles[0]);
+    if (application()->runMode() == IApplication::RunMode::Converter) {
+        project::MigrationOptions migration;
+        migration.appVersion = Ms::MSCVERSION;
+
+        //! NOTE Don't ask about migration in convert mode
+        migration.isAskAgain = false;
+
+        if (m_parser.isSet("migration")) {
+            QString val = m_parser.value("migration");
+            bool isMigration = (val == "full") ? true : false;
+            migration.isApplyMigration = isMigration;
+            migration.isApplyEdwin = isMigration;
+            migration.isApplyLeland = isMigration;
+        }
+
+        //! NOTE Don't write to settings, just on current session
+        projectConfiguration()->setMigrationOptions(migration, false);
+    }
+
+    if (application()->runMode() == IApplication::RunMode::Editor) {
+        startupScenario()->setSessionType(sessionType);
+
+        if (!scorefiles.isEmpty()) {
+            startupScenario()->setStartupScorePath(scorefiles[0]);
+        }
     }
 }
 

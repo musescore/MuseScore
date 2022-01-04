@@ -52,6 +52,11 @@ void DiagnosticsPathsModel::load()
     LOGI() << dump;
 }
 
+void DiagnosticsPathsModel::openPath(const QString& path)
+{
+    interactive()->openUrl(QUrl(path));
+}
+
 QVariant DiagnosticsPathsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {

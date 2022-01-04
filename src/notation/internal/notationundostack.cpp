@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
 using namespace mu::notation;
@@ -97,12 +97,20 @@ void NotationUndoStack::prepareChanges()
         return;
     }
 
+    if (m_isLocked) {
+        return;
+    }
+
     score()->startCmd();
 }
 
 void NotationUndoStack::rollbackChanges()
 {
     IF_ASSERT_FAILED(score()) {
+        return;
+    }
+
+    if (m_isLocked) {
         return;
     }
 
@@ -118,10 +126,29 @@ void NotationUndoStack::commitChanges()
         return;
     }
 
+    if (m_isLocked) {
+        return;
+    }
+
     score()->endCmd();
     masterScore()->setSaved(isStackClean());
 
     notifyAboutStateChanged();
+}
+
+void NotationUndoStack::lock()
+{
+    m_isLocked = true;
+}
+
+void NotationUndoStack::unlock()
+{
+    m_isLocked = false;
+}
+
+bool NotationUndoStack::isLocked() const
+{
+    return m_isLocked;
 }
 
 mu::async::Notification NotationUndoStack::stackChanged() const

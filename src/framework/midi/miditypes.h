@@ -42,12 +42,6 @@ using bank_t = int32_t;
 using tick_t = uint32_t;
 using tempo_t = uint32_t;
 using TempoMap = std::map<tick_t, tempo_t>;
-
-using SynthName = std::string;
-using SynthMap = std::map<midi::channel_t, SynthName>;
-
-using EventType = Ms::EventType;
-using CntrType = Ms::CntrType;
 using Events = std::map<tick_t, std::vector<Event> >;
 
 struct Program {
@@ -67,19 +61,17 @@ using Programs = std::vector<midi::Program>;
 struct MidiMapping {
     int division = 480;
     TempoMap tempo;
-    SynthName synthName;
     Programs programms;
 
     bool isValid() const
     {
-        return !synthName.empty() && !programms.empty() && !tempo.empty();
+        return !programms.empty() && !tempo.empty();
     }
 
     bool operator==(const MidiMapping& other) const
     {
         return division == other.division
                && tempo == other.tempo
-               && synthName == other.synthName
                && programms == other.programms;
     }
 };

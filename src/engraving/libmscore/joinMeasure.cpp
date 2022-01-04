@@ -26,6 +26,8 @@
 #include "range.h"
 #include "spanner.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -89,7 +91,11 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
             break;
         }
     }
-    insertMeasure(ElementType::MEASURE, next, /* createEmptyMeasures*/ true);
+
+    InsertMeasureOptions options;
+    options.createEmptyMeasures = true;
+
+    insertMeasure(ElementType::MEASURE, next, options);
     // The loop since measures are not currently linked in MuseScore
     for (Score* s : masterScore()->scoreList()) {
         Measure* ins = s->tick2measure(tick1);

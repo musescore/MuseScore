@@ -23,11 +23,13 @@
 
 #include <algorithm>
 
+#include "accessibility/iaccessible.h"
 #include "navigationsection.h"
 #include "translation.h"
 #include "log.h"
 
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 NavigationPanel::NavigationPanel(QObject* parent)
     : AbstractNavigation(parent)
@@ -141,11 +143,6 @@ mu::async::Notification NavigationPanel::controlsListChanged() const
     return m_controlsListChanged;
 }
 
-mu::async::Channel<PanelControl> NavigationPanel::activeRequested() const
-{
-    return m_forceActiveRequested;
-}
-
 INavigationSection* NavigationPanel::section() const
 {
     return m_section;
@@ -197,10 +194,6 @@ void NavigationPanel::addControl(NavigationControl* control)
 
     m_controls.insert(control);
 
-    control->activeRequested().onReceive(this, [this](INavigationControl* c) {
-        m_forceActiveRequested.send(std::make_tuple(this, c));
-    });
-
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
     }
@@ -214,9 +207,15 @@ void NavigationPanel::removeControl(NavigationControl* control)
     }
 
     m_controls.erase(control);
-    control->activeRequested().resetOnReceive(this);
 
     if (m_controlsListChanged.isConnected()) {
         m_controlsListChanged.notify();
+    }
+}
+
+void NavigationPanel::requestActive(INavigationControl* control)
+{
+    if (m_section) {
+        m_section->requestActive(this, control);
     }
 }

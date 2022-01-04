@@ -23,8 +23,8 @@
 #ifndef __LINE_H__
 #define __LINE_H__
 
+#include "infrastructure/draw/color.h"
 #include "spanner.h"
-#include "mscore.h"
 
 namespace Ms {
 class SLine;
@@ -49,11 +49,11 @@ protected:
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
+    LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    LineSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::NOTHING);
+
 public:
-    LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(sp, s, f) {}
-    LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(s, f) {}
+
     LineSegment(const LineSegment&);
     SLine* line() const { return (SLine*)spanner(); }
     virtual void spatiumChanged(qreal, qreal) override;
@@ -63,9 +63,9 @@ public:
     virtual void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
 
-    virtual Element* propertyDelegate(Pid) override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
@@ -92,8 +92,8 @@ private:
 
 class SLine : public Spanner
 {
-    qreal _lineWidth;
-    QColor _lineColor       { MScore::defaultColor };
+    Millimetre _lineWidth;
+    mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
     qreal _dashLineLen      { 5.0 };
     qreal _dashGapLen       { 5.0 };
@@ -103,7 +103,7 @@ protected:
     virtual mu::PointF linePos(Grip, System** system) const;
 
 public:
-    SLine(Score* s, ElementFlags = ElementFlag::NOTHING);
+    SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
     virtual void layout() override;
@@ -111,9 +111,9 @@ public:
 
     bool readProperties(XmlReader& node) override;
     void writeProperties(XmlWriter& xml) const override;
-    virtual LineSegment* createLineSegment() = 0;
+    virtual LineSegment* createLineSegment(System* parent) = 0;
     void setLen(qreal l);
-    using Element::bbox;
+    using EngravingItem::bbox;
     const mu::RectF& bbox() const override;
 
     virtual void write(XmlWriter&) const override;
@@ -122,11 +122,11 @@ public:
     bool diagonal() const { return _diagonal; }
     void setDiagonal(bool v) { _diagonal = v; }
 
-    qreal lineWidth() const { return _lineWidth; }
-    QColor lineColor() const { return _lineColor; }
+    Millimetre lineWidth() const { return _lineWidth; }
+    mu::draw::Color lineColor() const { return _lineColor; }
     mu::draw::PenStyle lineStyle() const { return _lineStyle; }
-    void setLineWidth(const qreal& v) { _lineWidth = v; }
-    void setLineColor(const QColor& v) { _lineColor = v; }
+    void setLineWidth(const Millimetre& v) { _lineWidth = v; }
+    void setLineColor(const mu::draw::Color& v) { _lineColor = v; }
     void setLineStyle(mu::draw::PenStyle v) { _lineStyle = v; }
 
     qreal dashLineLen() const { return _dashLineLen; }
@@ -141,9 +141,9 @@ public:
     LineSegment* segmentAt(int n) { return toLineSegment(Spanner::segmentAt(n)); }
     const LineSegment* segmentAt(int n) const { return toLineSegment(Spanner::segmentAt(n)); }
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     friend class LineSegment;
 };

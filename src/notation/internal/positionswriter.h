@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
-#include "abstractnotationwriter.h"
+#include "project/inotationwriter.h"
 
 namespace mu::framework {
 class XmlWriter;
@@ -36,7 +36,7 @@ class Score;
 }
 
 namespace mu::notation {
-class PositionsWriter : public notation::AbstractNotationWriter
+class PositionsWriter : public project::INotationWriter
 {
     INJECT(notation, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
 
@@ -49,7 +49,14 @@ public:
     explicit PositionsWriter() = default;
     explicit PositionsWriter(ElementType elementType);
 
-    Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
+    Ret write(notation::INotationPtr notation, io::Device& device, const Options& options = Options()) override;
+    Ret writeList(const INotationPtrList& notations, io::Device& device, const Options& options = Options()) override;
+
+    void abort() override;
+    framework::ProgressChannel progress() const override;
 
 private:
     qreal pngDpiResolution() const;

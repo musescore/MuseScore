@@ -23,7 +23,7 @@
 #ifndef __STAFFTYPECHANGE_H__
 #define __STAFFTYPECHANGE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class StaffType;
@@ -32,21 +32,22 @@ class StaffType;
 //   @@ StaffTypeChange
 //---------------------------------------------------------
 
-class StaffTypeChange final : public Element
+class StaffTypeChange final : public EngravingItem
 {
     StaffType* _staffType { 0 };
     qreal lw;
+
+    friend class mu::engraving::Factory;
+    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(const StaffTypeChange&);
 
     void layout() override;
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void draw(mu::draw::Painter*) const override;
 
 public:
-    StaffTypeChange(Score* = 0);
-    StaffTypeChange(const StaffTypeChange&);
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
-    ElementType type() const override { return ElementType::STAFFTYPE_CHANGE; }
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -54,11 +55,11 @@ public:
     const StaffType* staffType() const { return _staffType; }
     void setStaffType(StaffType* st) { _staffType = st; }
 
-    Measure* measure() const { return toMeasure(parent()); }
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 };
 }     // namespace Ms
 

@@ -26,26 +26,29 @@
 #include "notationtypes.h"
 #include "async/notification.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class INotationStyle
 {
 public:
     virtual ~INotationStyle() = default;
 
-    virtual QVariant styleValue(const StyleId& styleId) const = 0;
-    virtual QVariant defaultStyleValue(const StyleId& styleId) const = 0;
-    virtual void setStyleValue(const StyleId& styleId, const QVariant& newValue) = 0;
+    virtual PropertyValue styleValue(const StyleId& styleId) const = 0;
+    virtual PropertyValue defaultStyleValue(const StyleId& styleId) const = 0;
+    virtual void setStyleValue(const StyleId& styleId, const PropertyValue& newValue) = 0;
     virtual void resetStyleValue(const StyleId& styleId) = 0;
 
     virtual bool canApplyToAllParts() const = 0;
     virtual void applyToAllParts() = 0;
 
+    virtual void resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes = {}) = 0;
+
     virtual async::Notification styleChanged() const = 0;
+
+    virtual bool loadStyle(const mu::io::path&, bool allowAnyVersion) = 0;
+    virtual bool saveStyle(const mu::io::path&) = 0;
 };
 
 using INotationStylePtr = std::shared_ptr<INotationStyle>;
-}
 }
 
 #endif // MU_NOTATION_INOTATIONSTYLE_H

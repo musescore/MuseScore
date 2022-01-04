@@ -21,6 +21,8 @@
  */
 #include "application.h"
 
+#include <QApplication>
+
 using namespace mu::framework;
 
 void Application::setRunMode(const RunMode& mode)
@@ -40,4 +42,9 @@ bool Application::noGui() const
     case RunMode::Converter: return true;
     }
     return false;
+}
+
+bool Application::notify(QObject* object, QEvent* event)
+{
+    return qApp->notify(object, event);
 }

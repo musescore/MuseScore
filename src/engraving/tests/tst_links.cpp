@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/measure.h"
@@ -97,7 +97,7 @@ void TestLinks::test3LinkedSameScore_99796()
     score->doLayout();
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
-    Element* e = s->element(0);
+    EngravingItem* e = s->element(0);
     QVERIFY(e->isChord());
 
     score->select(e);
@@ -202,7 +202,7 @@ void TestLinks::test3LinkedParts_99796()
     // delete chord
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
-    Element* e = s->element(0);
+    EngravingItem* e = s->element(0);
     QVERIFY(e->type() == ElementType::CHORD);
     score->select(e);
     score->cmdDeleteSelection();
@@ -283,7 +283,7 @@ void TestLinks::test4LinkedParts_94911()
     // delete chord
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
-    Element* e = s->element(0);
+    EngravingItem* e = s->element(0);
     QVERIFY(e->type() == ElementType::CHORD);
     score->select(e);
     score->cmdDeleteSelection();
@@ -406,7 +406,7 @@ void TestLinks::test5LinkedParts_94911()
     // delete chord
     Measure* m = score->firstMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
-    Element* e = s->element(0);
+    EngravingItem* e = s->element(0);
     QVERIFY(e->type() == ElementType::CHORD);
     score->select(e);
     score->cmdDeleteSelection();

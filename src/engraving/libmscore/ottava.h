@@ -78,18 +78,16 @@ class Ottava;
 
 class OttavaSegment final : public TextLineBaseSegment
 {
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    OttavaSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    OttavaSegment(Ottava* sp, System* parent);
 
-    ElementType type() const override { return ElementType::OTTAVA_SEGMENT; }
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
     void layout() override;
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -104,17 +102,16 @@ class Ottava final : public TextLineBase
 
     void updateStyledProperties();
     Sid getPropertyStyle(Pid) const override;
-    void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
 protected:
     friend class OttavaSegment;
 
 public:
-    Ottava(Score* s);
+    Ottava(EngravingItem* parent);
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }
-    ElementType type() const override { return ElementType::OTTAVA; }
 
     void setOttavaType(OttavaType val);
     OttavaType ottavaType() const { return _ottavaType; }
@@ -122,18 +119,18 @@ public:
     bool numbersOnly() const { return _numbersOnly; }
     void setNumbersOnly(bool val);
 
-    void setPlacement(Placement);
+    void setPlacement(PlacementV);
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     int pitchShift() const;
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader& de) override;
     bool readProperties(XmlReader& e) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     QString accessibleInfo() const override;

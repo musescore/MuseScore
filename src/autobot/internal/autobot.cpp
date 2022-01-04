@@ -23,259 +23,258 @@
 
 #include <QTimer>
 
+#include "modularity/ioc.h"
+
 #include "log.h"
-
-#include "abcontext.h"
-#include "typicaltc.h"
-
-#include "steps/abscoreloadstep.h"
-#include "steps/abscorezoom.h"
-#include "steps/abscoreclosestep.h"
-#include "steps/abdrawcurrentstep.h"
-#include "steps/abdrawrefstep.h"
-#include "steps/abdrawcompstep.h"
-#include "steps/abdiffdrawstep.h"
 
 using namespace mu::autobot;
 
-Autobot::Autobot()
-{
-    auto makeTypicalTC = [](const std::string& name, std::vector<ITestStep*> steps) {
-        return std::make_shared<TypicalTC>(name, steps);
-    };
-
-    m_testCases = {
-        makeTypicalTC("Zoom", {
-            new AbScoreLoadStep(),
-            new AbScoreZoom(100),
-            new AbScoreZoom(50, ITestStep::Delay::Long),
-            new AbScoreZoom(100, ITestStep::Delay::Long),
-            new AbScoreCloseStep(ITestStep::Delay::Long)
-        }),
-        makeTypicalTC("Create Draw Ref", {
-            new AbScoreLoadStep(),
-            new AbScoreZoom(100),
-            new AbDrawCurrentStep(true),
-            new AbScoreCloseStep()
-        }),
-        makeTypicalTC("Comp Draw Data", {
-            new AbScoreLoadStep(),
-            new AbScoreZoom(100),
-            new AbDrawCurrentStep(false),
-            new AbDrawRefStep(),
-            new AbDrawCompStep(),
-            new AbDiffDrawStep(),
-            new AbScoreCloseStep()
-        }),
-    };
-}
-
-std::vector<ITestCasePtr> Autobot::testCases() const
-{
-    return m_testCases;
-}
-
-ITestCasePtr Autobot::testCase(const std::string& name) const
-{
-    auto it = std::find_if(m_testCases.cbegin(), m_testCases.cend(), [name](const ITestCasePtr& t) {
-        return t->name() == name;
-    });
-
-    if (it != m_testCases.cend()) {
-        return *it;
-    }
-    return nullptr;
-}
-
-void Autobot::setCurrentTestCase(const std::string& name)
-{
-    m_currentTestCase.set(testCase(name));
-
-    for (File& f : m_files.val) {
-        f.completeRet = Ret();
-    }
-    m_files.notification.notify();
-}
-
-const mu::ValCh<ITestCasePtr>& Autobot::currentTestCase() const
-{
-    return m_currentTestCase;
-}
-
-mu::RetVal<mu::io::paths> Autobot::filesList() const
-{
-    using namespace mu::system;
-
-    io::path filesPath = configuration()->filesPath();
-    LOGI() << "filesPath: " << filesPath;
-    RetVal<io::paths> paths = fileSystem()->scanFiles(filesPath, QStringList(), IFileSystem::ScanMode::OnlyCurrentDir);
-    return paths;
-}
-
 void Autobot::init()
 {
-    m_status.val = Status::Stoped;
+    m_autobotInteractive = std::make_shared<AutobotInteractive>();
 
-    m_runner.allFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
-        onFileFinished(ctx);
+    m_runner.stepStatusChanged().onReceive(this, [this](const QString& name, StepStatus stepStatus, const Ret& ret) {
+        if (stepStatus == StepStatus::Started) {
+            m_context->addStep(name);
+        }
+
+        m_report.onStepStatusChanged(name, stepStatus, m_context);
+        m_stepStatusChanged.send(name, stepStatus, ret);
+
+        if (stepStatus == StepStatus::Aborted) {
+            setStatus(Status::Aborted);
+        } else if (stepStatus == StepStatus::Error) {
+            setStatus(Status::Error);
+        }
     });
 
-    m_runner.stepStarted().onReceive(this, [this](const IAbContextPtr& ctx) {
-        m_report.beginStep(ctx);
+    m_runner.allFinished().onReceive(this, [this](bool aborted) {
+        m_report.endReport(aborted);
     });
 
-    m_runner.stepFinished().onReceive(this, [this](const IAbContextPtr& ctx) {
-        m_report.endStep(ctx);
-    });
-
-    m_currentTestCase.set(m_testCases.front());
-
-    RetVal<io::paths> files = filesList();
-    if (!files.ret) {
-        LOGE() << "failed get score list, err: " << files.ret.toString();
-        return;
-    }
-
-    m_files.val.clear();
-    for (const io::path& p : files.val) {
-        File f;
-        f.path = p;
-        m_files.val.push_back(std::move(f));
-    }
-
-    m_files.notification.notify();
+    setStatus(Status::Undefined);
+    setSpeedMode(SpeedMode::Default);
 }
 
-void Autobot::runAllFiles()
+void Autobot::affectOnServices()
 {
-    if (m_status.val != Status::Stoped) {
-        LOGW() << "already running";
-        return;
-    }
+    //! NOTE Disable reset on mouse press for testing purpose
+    navigation()->setIsResetOnMousePress(false);
 
-    IF_ASSERT_FAILED(m_currentTestCase.val) {
-        return;
-    }
+    //! NOTE Only defaults shortcuts
+    shortcutsRegister()->reload(true);
 
-    m_fileIndex.val = -1;
-    m_status.set(Status::RunningAll);
-
-    m_report.beginReport(m_currentTestCase.val);
-
-    nextFile();
+    //! NOTE Change Interactive implementation
+    using namespace mu::framework;
+    auto realInteractive = modularity::ioc()->resolve<IInteractive>("autobot");
+    m_autobotInteractive->setRealInteractive(realInteractive);
+    modularity::ioc()->unregisterExport<IInteractive>("autobot");
+    modularity::ioc()->registerExport<IInteractive>("autobot", m_autobotInteractive);
 }
 
-void Autobot::runFile(int fileIndex)
+void Autobot::restoreAffectOnServices()
 {
-    if (m_status.val != Status::Stoped) {
-        LOGW() << "already running";
+    navigation()->setIsResetOnMousePress(true);
+    shortcutsRegister()->reload(false);
+
+    using namespace mu::framework;
+    auto realInteractive = m_autobotInteractive->realInteractive();
+    modularity::ioc()->unregisterExport<IInteractive>("autobot");
+    modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
+}
+
+void Autobot::execScript(const io::path& path)
+{
+    LOGD() << path;
+
+    if (status() == Status::Running || status() == Status::Paused) {
+        abort();
+    }
+
+    //! NOTE If an error occurred during the execution of TestCase and a dialog was opened at that time,
+    //! the TestCase loop does not exit because of the open dialog,
+    //! so we need to close all dialogs in order to complete the execution of the previous script.
+    if (m_engine) {
+        std::vector<Uri> stack = interactive()->stack();
+        if (stack.size() > 1) {
+            const Uri& uri = stack.back();
+            interactive()->close(uri);
+            QTimer::singleShot(1000, [this, path]() {
+                execScript(path);
+            });
+            return;
+        }
+    }
+
+    if (m_engine) {
+        LOGE() << "unknown internal error with prev execScript";
+        delete m_engine;
+        m_engine = nullptr;
+    }
+
+    IF_ASSERT_FAILED(!m_engine) {
+        delete m_engine;
+        m_engine = nullptr;
+    }
+
+    affectOnServices();
+
+    m_context = std::make_shared<TestCaseContext>();
+    m_context->setGlobalVal("script_path", path.toQString());
+
+    m_engine = new ScriptEngine();
+    m_engine->setScriptPath(path);
+
+    setStatus(Status::Running);
+    Ret ret = m_engine->call("main");
+
+    //! NOTE Also maybe abort or error
+    if (status() == Status::Running) {
+        setStatus(Status::Finished);
+    }
+
+    delete m_engine;
+    m_engine = nullptr;
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    restoreAffectOnServices();
+}
+
+SpeedMode Autobot::speedMode() const
+{
+    return m_runner.speedMode();
+}
+
+void Autobot::setSpeedMode(SpeedMode mode)
+{
+    m_runner.setSpeedMode(mode);
+}
+
+mu::async::Channel<SpeedMode> Autobot::speedModeChanged() const
+{
+    return m_runner.speedModeChanged();
+}
+
+void Autobot::setDefaultIntervalMsec(int msec)
+{
+    m_runner.setDefaultInterval(msec);
+}
+
+int Autobot::defaultIntervalMsec() const
+{
+    return m_runner.defaultInterval();
+}
+
+int Autobot::intervalMsec() const
+{
+    return m_runner.intervalMsec();
+}
+
+void Autobot::runTestCase(const TestCase& testCase)
+{
+    m_report.beginReport(testCase);
+    m_runner.run(testCase);
+}
+
+void Autobot::abort()
+{
+    fatal("abort");
+}
+
+void Autobot::fatal(const QString& msg)
+{
+    if (status() == Status::Paused) {
+        unpause();
+    }
+
+    if (status() != Status::Running) {
         return;
     }
 
-    IF_ASSERT_FAILED(m_currentTestCase.val) {
+    if (m_engine) {
+        m_engine->throwError(msg);
+    }
+    m_runner.abort();
+}
+
+void Autobot::sleep(int msec)
+{
+    //! NOTE If pause state, then we sleep until to unpause
+    //! It's allowing to do pause during step execution
+    if (status() == IAutobot::Status::Paused) {
+        m_sleepLoop.exec();
         return;
     }
 
-    m_fileIndex.val = fileIndex - 1;
-    m_status.set(Status::RunningFile);
-
-    m_report.beginReport(m_currentTestCase.val);
-
-    nextFile();
+    QTimer timer;
+    QObject::connect(&timer, &QTimer::timeout, &m_sleepLoop, &QEventLoop::quit);
+    timer.start(msec);
+    m_sleepLoop.exec();
 }
 
-void Autobot::stop()
+void Autobot::pause()
 {
-    m_status.set(Status::Stoped);
+    setStatus(Status::Paused);
+    m_runner.pause();
 }
 
-void Autobot::doStop()
+void Autobot::unpause()
 {
-    m_report.endReport();
+    bool isNextStep = true;
 
-    if (m_status.val != Status::Stoped) {
-        m_status.set(Status::Stoped);
+    //! NOTE If pause did on sleep (during step execution),
+    //! then unpause current step (without perform next step)
+    if (m_sleepLoop.isRunning()) {
+        m_sleepLoop.quit();
+        isNextStep = false;
     }
+
+    m_runner.unpause(isNextStep);
+    setStatus(Status::Running);
 }
 
-const mu::ValCh<IAutobot::Status>& Autobot::status() const
+ITestCaseContextPtr Autobot::context() const
+{
+    return m_context;
+}
+
+AutobotInteractivePtr Autobot::autobotInteractive() const
+{
+    return m_autobotInteractive;
+}
+
+void Autobot::setStatus(Status st)
+{
+    if (m_status == st) {
+        return;
+    }
+
+    if (m_sleepLoop.isRunning()) {
+        m_sleepLoop.quit();
+    }
+
+    m_status = st;
+
+    io::path path;
+    if (m_engine) {
+        path = m_engine->scriptPath();
+    }
+    m_statusChanged.send(path, st);
+}
+
+IAutobot::Status Autobot::status() const
 {
     return m_status;
 }
 
-const mu::ValNt<Files>& Autobot::files() const
+mu::async::Channel<mu::io::path, IAutobot::Status> Autobot::statusChanged() const
 {
-    return m_files;
+    return m_statusChanged;
 }
 
-mu::async::Channel<File> Autobot::fileFinished() const
+mu::async::Channel<QString, StepStatus, mu::Ret> Autobot::stepStatusChanged() const
 {
-    return m_fileFinished;
-}
-
-const mu::ValCh<int>& Autobot::currentFileIndex() const
-{
-    return m_fileIndex;
-}
-
-void Autobot::nextFile()
-{
-    IF_ASSERT_FAILED(m_currentTestCase.val) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(!m_files.val.empty()) {
-        return;
-    }
-
-    if (m_status.val == Status::Stoped) {
-        doStop();
-        return;
-    }
-
-    m_fileIndex.val += 1;
-    m_fileIndex.ch.send(m_fileIndex.val);
-
-    if (size_t(m_fileIndex.val) > (m_files.val.size() - 1)) {
-        return;
-    }
-
-    const File& file = m_files.val.at(size_t(m_fileIndex.val));
-
-    IAbContextPtr ctx = std::make_shared<AbContext>();
-    ctx->setGlobalVal(AbContext::Key::FilePath, file.path);
-    ctx->setGlobalVal(AbContext::Key::FileIndex, size_t(m_fileIndex.val));
-
-    m_report.beginFile(file);
-    m_runner.run(m_currentTestCase.val, ctx);
-}
-
-void Autobot::onFileFinished(const IAbContextPtr& ctx)
-{
-    Ret completeRet = ctx->completeRet();
-    if (completeRet) {
-        LOGI() << "success finished, score: " << ctx->globalVal<io::path>(IAbContext::Key::FilePath);
-    } else {
-        LOGE() << "failed finished, score: " << ctx->globalVal<io::path>(IAbContext::Key::FilePath);
-    }
-
-    m_report.endFile(ctx);
-
-    size_t fileIndex = ctx->globalVal<size_t>(IAbContext::Key::FileIndex);
-    IF_ASSERT_FAILED(fileIndex < m_files.val.size()) {
-        return;
-    }
-
-    File& file = m_files.val.at(fileIndex);
-    file.completeRet = completeRet;
-
-    m_fileFinished.send(file);
-
-    if (m_status.val == Status::RunningAll) {
-        QTimer::singleShot(10, [this]() {
-            nextFile();
-        });
-    } else {
-        doStop();
-    }
+    return m_stepStatusChanged;
 }

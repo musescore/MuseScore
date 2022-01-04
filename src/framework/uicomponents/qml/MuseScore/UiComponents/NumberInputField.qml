@@ -24,7 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 
-Item {
+FocusScope {
     id: root
 
     property int minValue: 0
@@ -36,6 +36,9 @@ Item {
 
     property alias font: textField.font
 
+    property alias navigation: navCtrl
+    property alias accessible: navCtrl.accessible
+
     signal valueEdited(var newValue)
 
     implicitWidth: textField.contentWidth
@@ -43,13 +46,25 @@ Item {
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+    }
+
+    onActiveFocusChanged: {
+        if (activeFocus) {
+            textField.forceActiveFocus()
+        }
+    }
+
     QtObject {
         id: privateProperties
 
         function pad(value) {
             var str = value.toString()
 
-            if (!addLeadingZeros) {
+            if (!root.addLeadingZeros) {
                 return str;
             }
 
@@ -61,8 +76,28 @@ Item {
         }
     }
 
+    FocusListener {
+        item: root
+    }
+
     onValueChanged: {
         textField.text = privateProperties.pad(value)
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "NumberInputField"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.EditableText
+        accessible.name: textField.text
+        accessible.visualItem: root
+
+        onActiveChanged: {
+            if (navCtrl.active) {
+                root.ensureActiveFocus()
+            }
+        }
     }
 
     TextField {
@@ -101,10 +136,21 @@ Item {
         selectByMouse: false
 
         color: ui.theme.fontPrimaryColor
-        font: ui.theme.tabFont
+        font: ui.theme.largeBodyFont
 
         validator: IntValidator {
             bottom: root.minValue
+        }
+
+        Keys.onShortcutOverride: {
+            event.accepted = true
+        }
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
+                    || event.key === Qt.Key_Escape) {
+                textField.focus = false
+            }
         }
     }
 
@@ -117,8 +163,8 @@ Item {
 
         enabled: !textField.readOnly
 
-        onClicked: {
-            textField.forceActiveFocus()
+        onPressed: {
+            root.ensureActiveFocus()
             textField.cursorPosition = textField.text.length
         }
     }

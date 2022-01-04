@@ -22,12 +22,14 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
-    property alias title: titleLabel.text
+    navigation.direction: NavigationPanel.Both
+
     property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
     property bool useColor: true
@@ -37,34 +39,34 @@ Column {
     property alias wallpapersDir: wallpaperPicker.dir
     property alias wallpaperFilter: wallpaperPicker.filter
 
-    property int firstColumnWidth: 0
+    property alias opacityOverride: gridSection.opacity
 
     signal useColorChangeRequested(var newValue)
     signal colorChangeRequested(var newColor)
     signal wallpaperPathChangeRequested(var newWallpaperPath)
 
-    spacing: 18
-
-    StyledTextLabel {
-        id: titleLabel
-
-        font: ui.theme.bodyBoldFont
-    }
-
     GridLayout {
+        id: gridSection
+
         rows: 2
         columns: 2
 
-        rowSpacing: 8
-        columnSpacing: 0
+        rowSpacing: root.rowSpacing
+        columnSpacing: root.columnSpacing
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            id: colorButton
+            implicitWidth: root.columnWidth
 
             checked: root.useColor
-            text: qsTrc("appshell", "Colour:")
+            text: qsTrc("appshell", "Color:")
 
-            onClicked: {
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 0
+
+            onToggled: {
                 root.useColorChangeRequested(true)
             }
         }
@@ -76,30 +78,43 @@ Column {
 
             enabled: root.useColor
 
-            onNewColorSelected: {
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 1
+
+            onNewColorSelected: function(newColor) {
                 root.colorChangeRequested(newColor)
             }
         }
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            implicitWidth: root.columnWidth
 
             checked: !root.useColor
             text: qsTrc("appshell", "Wallpaper:")
 
-            onClicked: {
+            navigation.name: "WallpaperBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
+
+            onToggled: {
                 root.useColorChangeRequested(false)
             }
         }
 
         FilePicker {
             id: wallpaperPicker
-
-            width: 208
+            pathFieldWidth: root.columnWidth
 
             enabled: !root.useColor
 
-            onPathEdited: {
+            navigation: root.navigation
+            navigationRowOrderStart: 1
+            navigationColumnOrderStart: 1
+
+            onPathEdited: function(newPath) {
                 root.wallpaperPathChangeRequested(newPath)
             }
         }

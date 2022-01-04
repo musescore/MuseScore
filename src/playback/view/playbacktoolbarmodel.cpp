@@ -83,18 +83,6 @@ void PlaybackToolBarModel::updateActions()
 {
     MenuItemList result;
     MenuItemList settingsItems;
-    MenuItemList additionalItems;
-
-    //! NOTE At the moment no customization ability
-    ToolConfig config = PlaybackUiActions::defaultPlaybackToolConfig();
-    for (const ToolConfig::Item& item : config.items) {
-        if (isAdditionalAction(item.action)) {
-            //! NOTE: In this case, we want to see the actions' description instead of the title
-            additionalItems << makeActionWithDescriptionAsTitle(item.action);
-        } else {
-            result << makeMenuItem(item.action);
-        }
-    }
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
         settingsItems << makeActionWithDescriptionAsTitle(action.code);
@@ -102,16 +90,22 @@ void PlaybackToolBarModel::updateActions()
 
     if (!m_isToolbarFloating) {
         settingsItems << makeSeparator();
-        settingsItems << additionalItems;
+    }
+
+    //! NOTE At the moment no customization ability
+    ToolConfig config = PlaybackUiActions::defaultPlaybackToolConfig();
+    for (const ToolConfig::Item& item : config.items) {
+        if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
+            //! NOTE In this case, we want to see the actions' description instead of the title
+            settingsItems << makeActionWithDescriptionAsTitle(item.action);
+        } else {
+            result << makeMenuItem(item.action);
+        }
     }
 
     MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
     settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
     result << settingsItem;
-
-    if (m_isToolbarFloating) {
-        result << additionalItems;
-    }
 
     setItems(result);
 }
@@ -297,7 +291,7 @@ QVariant PlaybackToolBarModel::tempo() const
     MusicalSymbolCodes::Code noteIcon = tempoDurationToNoteIcon(tempo.duration);
 
     QVariantMap obj;
-    obj["noteSymbol"] = noteIconToString(noteIcon, tempo.withDot);
+    obj["noteSymbol"] = musicalSymbolToString(noteIcon, tempo.withDot);
     obj["value"] = tempo.valueBpm;
 
     return obj;

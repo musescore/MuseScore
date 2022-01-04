@@ -32,8 +32,8 @@
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
-#include "internal/notationpagestate.h"
 #include "internal/startupscenario.h"
+#include "internal/applicationactioncontroller.h"
 
 #include "view/devtools/settingslistmodel.h"
 #include "view/appmenumodel.h"
@@ -41,6 +41,8 @@
 #include "view/notationpagemodel.h"
 #include "view/notationstatusbarmodel.h"
 #include "view/aboutmodel.h"
+#include "view/firstlaunchsetup/firstlaunchsetupmodel.h"
+#include "view/firstlaunchsetup/themespagemodel.h"
 #include "view/preferences/preferencesmodel.h"
 #include "view/preferences/generalpreferencesmodel.h"
 #include "view/preferences/updatepreferencesmodel.h"
@@ -56,6 +58,7 @@
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
 #include "view/publish/publishtoolbarmodel.h"
+#include "view/windowdroparea.h"
 
 #include "view/dockwindow/docksetup.h"
 
@@ -68,7 +71,6 @@ using namespace mu::dock;
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
-static std::shared_ptr<NotationPageState> s_notationPageState = std::make_shared<NotationPageState>();
 
 static void appshell_init_qrc()
 {
@@ -89,7 +91,7 @@ void AppShellModule::registerExports()
     DockSetup::registerExports();
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
-    ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
+    ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
 }
 
@@ -109,6 +111,8 @@ void AppShellModule::resolveImports()
         ir->registerUri(Uri("musescore://devtools"), ContainerMeta(ContainerType::PrimaryPage));
         ir->registerUri(Uri("musescore://about/musescore"), ContainerMeta(ContainerType::QmlDialog, "AboutDialog.qml"));
         ir->registerUri(Uri("musescore://about/musicxml"), ContainerMeta(ContainerType::QmlDialog, "AboutMusicXMLDialog.qml"));
+        ir->registerUri(Uri("musescore://firstLaunchSetup"),
+                        ContainerMeta(ContainerType::QmlDialog, "FirstLaunchSetup/FirstLaunchSetupDialog.qml"));
         ir->registerUri(Uri("musescore://preferences"), ContainerMeta(ContainerType::QmlDialog, "Preferences/PreferencesDialog.qml"));
     }
 }
@@ -136,19 +140,25 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
+
     qmlRegisterType<AppMenuModel>("MuseScore.AppShell", 1, 0, "AppMenuModel");
     qmlRegisterType<MainWindowTitleProvider>("MuseScore.AppShell", 1, 0, "MainWindowTitleProvider");
     qmlRegisterType<NotationPageModel>("MuseScore.AppShell", 1, 0, "NotationPageModel");
     qmlRegisterType<NotationStatusBarModel>("MuseScore.AppShell", 1, 0, "NotationStatusBarModel");
     qmlRegisterType<AboutModel>("MuseScore.AppShell", 1, 0, "AboutModel");
+    qmlRegisterType<FirstLaunchSetupModel>("MuseScore.AppShell", 1, 0, "FirstLaunchSetupModel");
+    qmlRegisterType<ThemesPageModel>("MuseScore.AppShell", 1, 0, "ThemesPageModel");
     qmlRegisterType<FramelessWindowModel>("MuseScore.AppShell", 1, 0, "FramelessWindowModel");
     qmlRegisterType<PublishToolBarModel>("MuseScore.AppShell", 1, 0, "PublishToolBarModel");
+
+    qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
+    DockSetup::onInit();
+
     s_appShellConfiguration->init();
     s_applicationActionController->init();
-    s_notationPageState->init();
     s_applicationUiActions->init();
 }

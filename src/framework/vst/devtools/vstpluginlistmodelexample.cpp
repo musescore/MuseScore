@@ -24,94 +24,233 @@
 #include "log.h"
 
 using namespace mu::vst;
+using namespace mu::audio;
 
 VstPluginListModelExample::VstPluginListModelExample(QObject* parent)
-    : QAbstractListModel(parent)
-{
-}
-
-VstPluginListModelExample::~VstPluginListModelExample()
+    : QObject(parent)
 {
 }
 
 void VstPluginListModelExample::load()
 {
-    repository()->loadAvailablePlugins();
+    playback()->sequenceIdList()
+    .onResolve(this, [this](TrackSequenceIdList idList) {
+        QVariantList list;
 
-    RetValCh<VstPluginMetaList> pluginMetaList = repository()->pluginsMetaList();
+        for (const TrackSequenceId id : idList) {
+            QVariantMap item = { { "value", id } };
+            list << item;
+        }
+        setSequenceIdList(list);
+    })
+    .onReject(this, [](int errCode, const std::string& text) {
+        LOGE() << "unable to resolve track sequences, "
+               << "error code: " << errCode
+               << "error text: " << text;
+    });
 
-    if (!pluginMetaList.ret) {
-        return;
-    }
+    playback()->tracks()->availableInputResources()
+    .onResolve(this, [this](AudioResourceMetaList resourceList) {
+        QVariantList list;
 
-    updatePluginMetaList(pluginMetaList.val);
+        for (const auto& meta : resourceList) {
+            if (meta.type != AudioResourceType::VstPlugin) {
+                continue;
+            }
 
-    pluginMetaList.ch.onReceive(this, [this](const VstPluginMetaList& newMetaList) {
-        updatePluginMetaList(newMetaList);
+            QVariantMap item = { { "value", QString::fromStdString(meta.id) } };
+            list << item;
+        }
+        setAvailableSynthResources(list);
+    })
+    .onReject(this, [](int errCode, const std::string& text) {
+        LOGE() << "unable to resolve vsti audio resources, "
+               << "error code: " << errCode
+               << "error text: " << text;
+    });
+
+    playback()->audioOutput()->availableOutputResources()
+    .onResolve(this, [this](AudioResourceMetaList resources) {
+        QVariantList list;
+
+        for (const auto& meta : resources) {
+            QVariantMap item = { { "value", QString::fromStdString(meta.id) } };
+            list << item;
+        }
+        setAvailableFxResources(list);
+    })
+    .onReject(this, [](int errCode, const std::string& text) {
+        LOGE() << "unable to resolve vstfx audio resources, "
+               << "error code: " << errCode
+               << "error text: " << text;
     });
 }
 
-void VstPluginListModelExample::showPluginEditor()
+void VstPluginListModelExample::showSynthPluginEditor()
 {
-    if (m_selectedItemIndex < 0 || m_selectedItemIndex > m_pluginMetaList.size() - 1) {
+    QString uri = QString("musescore://vsti/editor?sync=false&floating=true&trackId=%1&resourceId=%2")
+                  .arg(m_currentTrackId)
+                  .arg(m_currentSynthResource);
+
+    interactive()->open(uri.toStdString());
+}
+
+void VstPluginListModelExample::showFxPluginEditor()
+{
+    QString uri = QString("musescore://vstfx/editor?sync=false&floating=true&trackId=%1&resourceId=%2")
+                  .arg(m_currentTrackId)
+                  .arg(m_currentFxResource);
+
+    interactive()->open(uri.toStdString());
+}
+
+const QVariantList& VstPluginListModelExample::sequenceIdList() const
+{
+    return m_sequenceIdList;
+}
+
+void VstPluginListModelExample::setSequenceIdList(const QVariantList& newSequenceIdList)
+{
+    if (m_sequenceIdList == newSequenceIdList) {
         return;
     }
-
-    VstPluginMeta meta = m_pluginMetaList.at(m_selectedItemIndex);
-
-    interactive()->open("musescore://vst/editor?sync=false&pluginId=" + meta.id);
+    m_sequenceIdList = newSequenceIdList;
+    emit sequenceIdListChanged();
 }
 
-int VstPluginListModelExample::rowCount(const QModelIndex&) const
+const QVariantList& VstPluginListModelExample::trackIdList() const
 {
-    return m_pluginMetaList.size();
+    return m_trackIdList;
 }
 
-QVariant VstPluginListModelExample::data(const QModelIndex& index, int role) const
+void VstPluginListModelExample::setTrackIdList(const QVariantList& newTrackIdList)
 {
-    if (!index.isValid() || index.row() >= rowCount()) {
-        return QVariant();
-    }
-
-    VstPluginMeta meta = m_pluginMetaList.at(index.row());
-    switch (role) {
-    case NameRole: return QString::fromStdString(meta.name);
-    case IdRole: return QString::fromStdString(meta.id);
-    case PathRole: return QString::fromStdString(meta.path);
-    default: return QVariant();
-    }
-}
-
-QHash<int, QByteArray> VstPluginListModelExample::roleNames() const
-{
-    static const QHash<int, QByteArray> roles = {
-        { NameRole, "nameRole" },
-        { IdRole, "idRole" },
-        { PathRole, "pathRole" }
-    };
-    return roles;
-}
-
-int VstPluginListModelExample::selectedItemIndex() const
-{
-    return m_selectedItemIndex;
-}
-
-void VstPluginListModelExample::setSelectedItemIndex(int selectedItemIndex)
-{
-    if (m_selectedItemIndex == selectedItemIndex) {
+    if (m_trackIdList == newTrackIdList) {
         return;
     }
-
-    m_selectedItemIndex = selectedItemIndex;
-    emit selectedItemIndexChanged(m_selectedItemIndex);
+    m_trackIdList = newTrackIdList;
+    emit trackIdListChanged();
 }
 
-void VstPluginListModelExample::updatePluginMetaList(const VstPluginMetaList& newMetaList)
+const QVariantList& VstPluginListModelExample::availableFxResources() const
 {
-    beginResetModel();
+    return m_availableFxResources;
+}
 
-    m_pluginMetaList = newMetaList;
+void VstPluginListModelExample::setAvailableFxResources(const QVariantList& newAvailableFxResources)
+{
+    if (m_availableFxResources == newAvailableFxResources) {
+        return;
+    }
+    m_availableFxResources = newAvailableFxResources;
+    emit availableFxResourcesChanged();
+}
 
-    endResetModel();
+const QVariantList& VstPluginListModelExample::availableSynthResources() const
+{
+    return m_availableSynthResources;
+}
+
+void VstPluginListModelExample::setAvailableSynthResources(const QVariantList& newAvailableSynthResources)
+{
+    if (m_availableSynthResources == newAvailableSynthResources) {
+        return;
+    }
+    m_availableSynthResources = newAvailableSynthResources;
+    emit availableSynthResourcesChanged();
+}
+
+int VstPluginListModelExample::currentSequenceId() const
+{
+    return m_currentSequenceId;
+}
+
+void VstPluginListModelExample::setCurrentSequenceId(int newCurrentSequenceId)
+{
+    if (m_currentSequenceId == newCurrentSequenceId) {
+        return;
+    }
+    m_currentSequenceId = newCurrentSequenceId;
+
+    playback()->tracks()->trackIdList(m_currentSequenceId)
+    .onResolve(this, [this](const TrackIdList idList) {
+        QVariantList list;
+
+        for (const TrackId id : idList) {
+            QVariantMap item = { { "value", id } };
+            list << item;
+        }
+        setTrackIdList(list);
+    })
+    .onReject(this, [](int errCode, const std::string& text) {
+        LOGE() << "unable to resolve tracks, "
+               << "error code: " << errCode
+               << "error text: " << text;
+    });
+
+    emit currentSequenceIdChanged();
+}
+
+int VstPluginListModelExample::currentTrackId() const
+{
+    return m_currentTrackId;
+}
+
+void VstPluginListModelExample::setCurrentTrackId(int newCurrentTrackId)
+{
+    if (m_currentTrackId == newCurrentTrackId) {
+        return;
+    }
+    m_currentTrackId = newCurrentTrackId;
+    emit currentTrackIdChanged();
+}
+
+const QString& VstPluginListModelExample::currentSynthResource() const
+{
+    return m_currentSynthResource;
+}
+
+void VstPluginListModelExample::applyNewInputParams()
+{
+    AudioInputParams inputParams;
+    inputParams.resourceMeta.id = m_currentSynthResource.toStdString();
+
+    playback()->tracks()->setInputParams(m_currentSequenceId, m_currentTrackId, inputParams);
+}
+
+void VstPluginListModelExample::applyNewOutputParams()
+{
+    AudioFxParams fxParams;
+    fxParams.resourceMeta.id = m_currentFxResource.toStdString();
+
+    AudioOutputParams outputParams;
+    outputParams.fxChain.emplace(0, fxParams);
+
+    playback()->audioOutput()->setOutputParams(m_currentSequenceId, m_currentTrackId, outputParams);
+}
+
+void VstPluginListModelExample::setCurrentSynthResource(const QString& newCurrentSynthResource)
+{
+    if (m_currentSynthResource == newCurrentSynthResource) {
+        return;
+    }
+    m_currentSynthResource = newCurrentSynthResource;
+
+    applyNewInputParams();
+    emit currentSynthResourceChanged();
+}
+
+const QString& VstPluginListModelExample::currentFxResource() const
+{
+    return m_currentFxResource;
+}
+
+void VstPluginListModelExample::setCurrentFxResource(const QString& newCurrentFxResource)
+{
+    if (m_currentFxResource == newCurrentFxResource) {
+        return;
+    }
+    m_currentFxResource = newCurrentFxResource;
+    applyNewOutputParams();
+    emit currentFxResourceChanged();
 }

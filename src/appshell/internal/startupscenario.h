@@ -28,24 +28,34 @@
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
 #include "actions/iactionsdispatcher.h"
+#include "async/asyncable.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario
+class StartupScenario : public IStartupScenario, public async::Asyncable
 {
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
 public:
+
+    void setSessionType(const QString& sessionType) override;
     void setStartupScorePath(const io::path& path) override;
+
     void run() override;
+    bool startupCompleted() const override;
 
 private:
-    std::string startupPageUri() const;
+    void onStartupPageOpened(StartupSessionType sessionType);
+
+    StartupSessionType resolveStartupSessionType() const;
+    Uri startupPageUri(StartupSessionType sessionType) const;
 
     void openScore(const io::path& path);
 
+    QString m_sessionType;
     io::path m_startupScorePath;
+    bool m_startupCompleted = false;
 };
 }
 

@@ -19,17 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 FocusableItem {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -40,7 +45,7 @@ FocusableItem {
         height: childrenRect.height
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
         visible: root.model ? root.model.areSettingsAvailable : false
 
@@ -59,6 +64,10 @@ FocusableItem {
                 checked: root.model && enabled ? root.model.isBarreModeOn : false
                 text: qsTrc("inspector", "Barre")
 
+                navigation.name: "BarreModeCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 1
+
                 onClicked: { root.model.isBarreModeOn = !checked }
             }
 
@@ -73,6 +82,10 @@ FocusableItem {
                 checked: root.model && enabled ? root.model.isMultipleDotsModeOn : false
                 text: qsTrc("inspector", "Multiple dots")
 
+                navigation.name: "MultipleDotsCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 2
+
                 onClicked: { root.model.isMultipleDotsModeOn = !checked }
             }
         }
@@ -83,7 +96,10 @@ FocusableItem {
             spacing: 8
 
             StyledTextLabel {
+                id: markerTypeLabel
+                width: parent.width
                 text: qsTrc("inspector", "Marker type")
+                horizontalAlignment: Text.AlignLeft
             }
 
             RadioButtonGroup {
@@ -95,24 +111,23 @@ FocusableItem {
                 enabled: root.model ? !root.model.isBarreModeOn : false
 
                 model: [
-                    { iconRole: IconCode.FRETBOARD_MARKER_CIRCLE_FILLED, typeRole: FretDiagramTypes.DOT_NORMAL },
-                    { iconRole: IconCode.CLOSE_X_ROUNDED, typeRole: FretDiagramTypes.DOT_CROSS },
-                    { iconRole: IconCode.STOP, typeRole: FretDiagramTypes.DOT_SQUARE },
-                    { iconRole: IconCode.FRETBOARD_MARKER_TRIANGLE, typeRole: FretDiagramTypes.DOT_TRIANGLE }
+                    { iconRole: IconCode.FRETBOARD_MARKER_CIRCLE_FILLED, typeRole: FretDiagramTypes.DOT_NORMAL, titleRole: qsTrc("inspector", "Normal") },
+                    { iconRole: IconCode.CLOSE_X_ROUNDED, typeRole: FretDiagramTypes.DOT_CROSS, titleRole: qsTrc("inspector", "Cross") },
+                    { iconRole: IconCode.STOP, typeRole: FretDiagramTypes.DOT_SQUARE, titleRole: qsTrc("inspector", "Square") },
+                    { iconRole: IconCode.FRETBOARD_MARKER_TRIANGLE, typeRole: FretDiagramTypes.DOT_TRIANGLE, titleRole: qsTrc("inspector", "Triangle") }
                 ]
 
                 delegate: FlatRadioButton {
-
-                    ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
+                    iconCode: modelData["iconRole"]
                     checked: root.model ? root.model.currentFretDotType === modelData["typeRole"] : false
+
+                    navigation.name: "LineStyleGroup"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: root.navigationRowStart + 3 + index
+                    navigation.accessible.name: markerTypeLabel.text + " " + modelData["titleRole"]
 
                     onToggled: {
                         root.model.currentFretDotType = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }

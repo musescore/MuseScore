@@ -23,38 +23,44 @@
 #include "editstafftype.h"
 #include "libmscore/part.h"
 #include "libmscore/mscore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/stringdata.h"
 
-#include "widgetstatestore.h"
-#include "internal/mscznotationreader.h"
+#include "engraving/types/typesconv.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/mscxcompat.h"
 
-#include "log.h"
+#include "ui/view/widgetstatestore.h"
+
 #include "notationerrors.h"
 
+#include "log.h"
+
 using namespace mu::notation;
+using namespace mu::engraving;
+using namespace mu::ui;
 
 const char* g_groupNames[Ms::STAFF_GROUP_MAX] = {
-    QT_TRANSLATE_NOOP("staff group header name", "STANDARD STAFF"),
-    QT_TRANSLATE_NOOP("staff group header name", "PERCUSSION STAFF"),
-    QT_TRANSLATE_NOOP("staff group header name", "TABLATURE STAFF")
+    QT_TRANSLATE_NOOP("notation", "STANDARD STAFF"),
+    QT_TRANSLATE_NOOP("notation", "PERCUSSION STAFF"),
+    QT_TRANSLATE_NOOP("notation", "TABLATURE STAFF")
 };
 
 //---------------------------------------------------------
 //   noteHeadSchemes
 //---------------------------------------------------------
 
-Ms::NoteHead::Scheme noteHeadSchemes[] = {
-    Ms::NoteHead::Scheme::HEAD_NORMAL,
-    Ms::NoteHead::Scheme::HEAD_PITCHNAME,
-    Ms::NoteHead::Scheme::HEAD_PITCHNAME_GERMAN,
-    Ms::NoteHead::Scheme::HEAD_SOLFEGE,
-    Ms::NoteHead::Scheme::HEAD_SOLFEGE_FIXED,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_4,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_AIKIN,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_FUNK,
-    Ms::NoteHead::Scheme::HEAD_SHAPE_NOTE_7_WALKER
+Ms::NoteHeadScheme noteHeadSchemes[] = {
+    Ms::NoteHeadScheme::HEAD_NORMAL,
+    Ms::NoteHeadScheme::HEAD_PITCHNAME,
+    Ms::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,
+    Ms::NoteHeadScheme::HEAD_SOLFEGE,
+    Ms::NoteHeadScheme::HEAD_SOLFEGE_FIXED,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_4,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,
+    Ms::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER
 };
 
 //---------------------------------------------------------
@@ -81,11 +87,11 @@ EditStaffType::EditStaffType(QWidget* parent)
     durFontName->setCurrentIndex(0);
 
     for (auto i : noteHeadSchemes) {
-        noteHeadScheme->addItem(Ms::NoteHead::scheme2userName(i), Ms::NoteHead::scheme2name(i));
+        noteHeadScheme->addItem(TConv::toUserName(i), static_cast<int>(i));
     }
 
     // load a sample standard score in preview
-    Ms::MasterScore* sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
+    Ms::MasterScore* sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/std_sample.mscx")) {
         standardPreview->setScore(sc);
     } else {
@@ -93,7 +99,7 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
 
     // load a sample tabulature score in preview
-    sc = new Ms::MasterScore(Ms::MScore::defaultStyle());
+    sc = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     if (loadScore(sc, ":/view/resources/data/tab_sample.mscx")) {
         tabPreview->setScore(sc);
     } else {
@@ -101,54 +107,63 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
     tabPreview->adjustSize();
 
-    connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
-    connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updatePreview()));
-    connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(noteHeadScheme, SIGNAL(currentIndexChanged(int)),   SLOT(updatePreview()));
+    connect(name, &QLineEdit::textEdited, this, &EditStaffType::nameEdited);
 
-    connect(genKeysigPitched,           SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(showLedgerLinesPitched,     SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(stemlessPitched,            SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(genKeysigPercussion,        SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(showLedgerLinesPercussion,  SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(stemlessPercussion,         SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+    connect(lines,        QOverload<int>::of(&QSpinBox::valueChanged),          this, &EditStaffType::updatePreview);
+    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
 
-    connect(noteValuesSymb,       SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-    connect(noteValuesStems,      SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-    connect(valuesRepeatNever,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatSystem,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatMeasure,  SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatAlways,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemBesideRadio,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemThroughRadio,     SIGNAL(toggled(bool)),              SLOT(tabStemThroughToggled(bool)));
-    connect(stemAboveRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemBelowRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(minimShortRadio,      SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
-    connect(minimSlashedRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showRests,            SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(durFontName,          SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
-    connect(durFontSize,          SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(durY,                 SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(fretFontName,         SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
-    connect(fretFontSize,         SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(fretY,                SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+    connect(showBarlines, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genClef,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genTimesig,   &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
-    connect(linesThroughRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(onLinesRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showTabFingering,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(upsideDown,           SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(numbersRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showBackTied,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+    connect(noteHeadScheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::updatePreview);
 
-    connect(templateReset,        SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
-    connect(addToTemplates,       SIGNAL(clicked()),                  SLOT(addToTemplatesClicked()));
-//      connect(groupCombo,           SIGNAL(currentIndexChanged(int)),   SLOT(staffGroupChanged(int)));
+    connect(genKeysigPitched,          &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showLedgerLinesPitched,    &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(stemlessPitched,           &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genKeysigPercussion,       &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showLedgerLinesPercussion, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(stemlessPercussion,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+
+    connect(noteValuesSymb,      &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
+    connect(noteValuesStems,     &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
+    connect(valuesRepeatNever,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatSystem,  &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatMeasure, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatAlways,  &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemBesideRadio,     &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemThroughRadio,    &QRadioButton::toggled, this, &EditStaffType::tabStemThroughToggled);
+    connect(stemAboveRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemBelowRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(minimShortRadio,     &QRadioButton::toggled, this, &EditStaffType::tabMinimShortToggled);
+    connect(minimSlashedRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(showRests,           &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+
+    connect(durFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::durFontNameChanged);
+    connect(durFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(durY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(fretFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::fretFontNameChanged);
+    connect(fretFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(fretY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+
+    connect(linesThroughRadio, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(onLinesRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(showTabFingering,  &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showBackTied,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+
+    connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
+    connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
+
+    //connect(groupCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::staffGroupChanged);
+
     addToTemplates->setVisible(false);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
@@ -158,20 +173,20 @@ void EditStaffType::setStaffType(const Ms::StaffType* stafftype)
     setValues();
 }
 
-void EditStaffType::setInstrument(const instruments::Instrument instrument)
+void EditStaffType::setInstrument(const Instrument& instrument)
 {
     // template combo
 
     templateCombo->clear();
     // standard group also as fall-back (but excluded by percussion)
-    bool bStandard    = !(instrument.drumset != nullptr);
-    bool bPerc        = (instrument.drumset != nullptr);
-    bool bTab = (instrument.stringData.frettedStrings() > 0);
+    bool bStandard    = !(instrument.drumset() != nullptr);
+    bool bPerc        = (instrument.drumset() != nullptr);
+    bool bTab = (instrument.stringData()->frettedStrings() > 0);
     int idx           = 0;
     for (const Ms::StaffType& t : Ms::StaffType::presets()) {
         if ((t.group() == Ms::StaffGroup::STANDARD && bStandard)
             || (t.group() == Ms::StaffGroup::PERCUSSION && bPerc)
-            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData.frettedStrings())) {
+            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.name(), idx);
         }
         idx++;
@@ -188,16 +203,13 @@ mu::Ret EditStaffType::loadScore(Ms::MasterScore* score, const mu::io::path& pat
 
 mu::Ret EditStaffType::doLoadScore(Ms::MasterScore* score, const mu::io::path& path) const
 {
-    MsczNotationReader reader;
-
     QFileInfo fi(path.toQString());
     score->setName(fi.completeBaseName());
     score->setImportedFilePath(fi.filePath());
     score->setMetaTag("originalFormat", fi.suffix().toLower());
 
-    Ret ret = reader.read(score, path);
-    if (!ret) {
-        return ret;
+    if (compat::loadMsczOrMscx(score, path.toQString()) != Ms::Score::FileError::FILE_NO_ERROR) {
+        return make_ret(Ret::Code::UnknownError);
     }
 
     score->connectTies();
@@ -446,7 +458,7 @@ void EditStaffType::setFromDlg()
         staffType.setGenKeysig(genKeysigPitched->isChecked());
         staffType.setShowLedgerLines(showLedgerLinesPitched->isChecked());
         staffType.setStemless(stemlessPitched->isChecked());
-        staffType.setNoteHeadScheme(Ms::NoteHead::name2scheme(noteHeadScheme->currentData().toString()));
+        staffType.setNoteHeadScheme(static_cast<NoteHeadScheme>(noteHeadScheme->currentData().toInt()));
     }
     if (staffType.group() == Ms::StaffGroup::PERCUSSION) {
         staffType.setGenKeysig(genKeysigPercussion->isChecked());

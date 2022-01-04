@@ -23,12 +23,12 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
-#include "fraction.h"
-
 #include <climits>
 
+#include "property/propertyvalue.h"
+
 namespace Ms {
-class Element;
+class EngravingItem;
 class XmlReader;
 class XmlWriter;
 
@@ -48,10 +48,10 @@ class Location
     int _note;
     bool _rel;
 
-    static int track(const Element* e);
-    static int measure(const Element* e);
-    static int graceIndex(const Element* e);
-    static int note(const Element* e);
+    static int track(const EngravingItem* e);
+    static int measure(const EngravingItem* e);
+    static int graceIndex(const EngravingItem* e);
+    static int note(const EngravingItem* e);
 
 public:
     constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
@@ -90,11 +90,11 @@ public:
     int note() const { return _note; }
     void setNote(int note) { _note = note; }
 
-    void fillForElement(const Element* e, bool absfrac = true);
-    void fillPositionForElement(const Element* e, bool absfrac = true);
-    static Location forElement(const Element* e, bool absfrac = true);
-    static Location positionForElement(const Element* e, bool absfrac = true);
-    static QVariant getLocationProperty(Pid pid, const Element* start, const Element* end);
+    void fillForElement(const EngravingItem* e, bool absfrac = true);
+    void fillPositionForElement(const EngravingItem* e, bool absfrac = true);
+    static Location forElement(const EngravingItem* e, bool absfrac = true);
+    static Location positionForElement(const EngravingItem* e, bool absfrac = true);
+    static mu::engraving::PropertyValue getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end);
 
     bool operator==(const Location& other) const;
     bool operator!=(const Location& other) const { return !(*this == other); }

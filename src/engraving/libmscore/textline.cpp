@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "textline.h"
+
+#include "rw/xml.h"
 
 #include "score.h"
-#include "textline.h"
 #include "staff.h"
 #include "system.h"
 #include "undo.h"
@@ -96,8 +98,8 @@ static const ElementStyle systemTextLineStyle {
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Spanner* sp, Score* s, bool system)
-    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
+    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
     if (systemFlag()) {
@@ -111,7 +113,7 @@ TextLineSegment::TextLineSegment(Spanner* sp, Score* s, bool system)
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TextLineSegment::propertyDelegate(Pid pid)
+EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::SYSTEM_FLAG) {
         return static_cast<TextLine*>(spanner());
@@ -136,8 +138,8 @@ void TextLineSegment::layout()
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(Score* s, bool system)
-    : TextLineBase(s)
+TextLine::TextLine(EngravingItem* parent, bool system)
+    : TextLineBase(ElementType::TEXTLINE, parent)
 {
     setSystemFlag(system);
 
@@ -191,15 +193,15 @@ void TextLine::write(XmlWriter& xml) const
         return;
     }
     if (systemFlag()) {
-        xml.stag(QString("TextLine"), this, QString("system=\"1\""));
+        xml.startObject(QString("TextLine"), this, QString("system=\"1\""));
     } else {
-        xml.stag(this);
+        xml.startObject(this);
     }
     // other styled properties are included in TextLineBase pids list
     writeProperty(xml, Pid::PLACEMENT);
     writeProperty(xml, Pid::OFFSET);
     TextLineBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -218,9 +220,9 @@ void TextLine::read(XmlReader& e)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* TextLine::createLineSegment()
+LineSegment* TextLine::createLineSegment(System* parent)
 {
-    TextLineSegment* seg = new TextLineSegment(this, score(), systemFlag());
+    TextLineSegment* seg = new TextLineSegment(this, parent, systemFlag());
     seg->setTrack(track());
     // note-anchored line segments are relative to system not to staff
     if (anchor() == Spanner::Anchor::NOTE) {
@@ -290,7 +292,7 @@ Sid TextLine::getPropertyStyle(Pid pid) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TextLine::propertyDefault(Pid propertyId) const
+engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
@@ -311,11 +313,11 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
         return PointF(0, 0);
     case Pid::BEGIN_HOOK_TYPE:
     case Pid::END_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::LEFT);
+        return TextPlace::LEFT;
     case Pid::BEGIN_HOOK_HEIGHT:
     case Pid::END_HOOK_HEIGHT:
         return Spatium(1.5);
@@ -328,11 +330,11 @@ QVariant TextLine::propertyDefault(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TextLine::setProperty(Pid id, const QVariant& v)
+bool TextLine::setProperty(Pid id, const engraving::PropertyValue& v)
 {
     switch (id) {
     case Pid::PLACEMENT:
-        setPlacement(Placement(v.toInt()));
+        setPlacement(v.value<PlacementV>());
         break;
     default:
         return TextLineBase::setProperty(id, v);
@@ -345,7 +347,7 @@ bool TextLine::setProperty(Pid id, const QVariant& v)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void TextLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void TextLine::undoChangeProperty(Pid id, const engraving::PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::SYSTEM_FLAG) {
         score()->undo(new ChangeTextLineProperty(this, v));

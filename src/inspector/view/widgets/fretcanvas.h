@@ -27,17 +27,21 @@
 #include <QPainter>
 #include <QVariant>
 
+#include "context/iglobalcontext.h"
 #include "fret.h"
 
 namespace mu::inspector {
 class FretCanvas : public QQuickPaintedItem
 {
+    INJECT(instruments, context::IGlobalContext, globalContext)
+
     Q_OBJECT
 
     Q_PROPERTY(QVariant diagram READ diagram WRITE setFretDiagram NOTIFY diagramChanged)
     Q_PROPERTY(bool isBarreModeOn READ isBarreModeOn WRITE setIsBarreModeOn NOTIFY isBarreModeOnChanged)
     Q_PROPERTY(bool isMultipleDotsModeOn READ isMultipleDotsModeOn WRITE setIsMultipleDotsModeOn NOTIFY isMultipleDotsModeOnChanged)
     Q_PROPERTY(int currentFretDotType READ currentFretDotType WRITE setCurrentFretDotType NOTIFY currentFretDotTypeChanged)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
     explicit FretCanvas(QQuickItem* parent = nullptr);
@@ -54,10 +58,13 @@ public:
     bool isBarreModeOn() const;
     bool isMultipleDotsModeOn() const;
 
+    QColor color() const;
+
 public slots:
     void setCurrentFretDotType(int currentFretDotType);
     void setIsBarreModeOn(bool isBarreModeOn);
     void setIsMultipleDotsModeOn(bool isMultipleDotsModeOn);
+    void setColor(QColor color);
 
 signals:
     void diagramChanged(QVariant diagram);
@@ -66,10 +73,12 @@ signals:
     void isBarreModeOnChanged(bool isBarreModeOn);
     void isMultipleDotsModeOnChanged(bool isMultipleDotsModeOn);
 
+    void colorChanged(QColor color);
+
 private:
     void draw(QPainter* painter);
     void mousePressEvent(QMouseEvent*) override;
-    void mouseMoveEvent(QMouseEvent*) override;
+    void hoverMoveEvent(QHoverEvent*) override;
 
     void paintDotSymbol(QPainter* p, QPen& pen, qreal y, qreal x, qreal dotd, Ms::FretDotType dtype);
     void getPosition(const QPointF& pos, int* string, int* fret);
@@ -83,6 +92,8 @@ private:
     Ms::FretDotType m_currentDtype = Ms::FretDotType::NORMAL;
     bool m_barreMode = false;
     bool m_multidotMode = false;
+
+    QColor m_color;
 };
 }
 

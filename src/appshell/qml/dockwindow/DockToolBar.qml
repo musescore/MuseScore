@@ -24,90 +24,143 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Dock 1.0 as Dock
+import MuseScore.Dock 1.0
 
-Dock.DockToolBar {
+DockToolBarView {
     id: root
 
-    property Component contentComponent
+    default property alias contentComponent: contentLoader.sourceComponent
 
-    Rectangle {
+    property alias floatable: gripButton.visible
+
+    property int gripButtonPadding: 2
+    property int contentTopPadding: 0
+    property int contentBottomPadding: 0
+
+    readonly property bool isVertical: orientation === Qt.Vertical
+
+    minimumWidth: Math.min(contentWidth, maximumWidth)
+    minimumHeight: Math.min(contentHeight, maximumHeight)
+
+    QtObject {
+        id: prv
+
+        readonly property int minimumLength: 36
+        readonly property int maximumLength: 9999999
+        readonly property int gripButtonWidth: gripButton.visible ? gripButton.width + 2 * gripButtonPadding : 0
+        readonly property int gripButtonHeight: gripButton.visible ? gripButton.height + 2 * gripButtonPadding : 0
+    }
+
+    Item {
+        id: content
         anchors.fill: parent
+        anchors.topMargin: root.contentTopPadding
+        anchors.bottomMargin: root.contentBottomPadding
 
-        color: ui.theme.backgroundPrimaryColor
+        FlatButton {
+            id: gripButton
+            width: root.isVertical ? 30 : 24
+            height: root.isVertical ? 24 : 30
+
+            mouseArea.objectName: root.objectName + "_gripButton"
+
+            transparent: true
+            contentItem: StyledIconLabel {
+                iconCode: IconCode.TOOLBAR_GRIP
+                rotation: root.isVertical ? 90 : 0
+            }
+
+            Component.onCompleted: {
+                root.setDraggableMouseArea(mouseArea)
+            }
+        }
 
         Loader {
-            id: loader
-
-            anchors.fill: parent
-            anchors.margins: 2
-
-            sourceComponent: orientation === Qt.Horizontal ? horizontalView : verticalView
-
-            onLoaded: {
-                root.setDraggableMouseArea(loader.item.gripMouseArea)
-            }
+            id: contentLoader
         }
     }
 
-    Component {
-        id: horizontalView
+    states: [
+        State {
+            name: "HORIZONTAL"
+            when: !root.isVertical
 
-        RowLayout {
-            spacing: 2
+            PropertyChanges {
+                target: root
 
-            property var gripMouseArea: gripButton.mouseArea
+                contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
+                contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + contentBottomPadding + contentTopPadding)
 
-            FlatButton {
-                id: gripButton
-
-                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
-
-                mouseArea.objectName: root.objectName + "_toolBarMouseAreaHorizontal"
-
-                normalStateColor: "transparent"
-                icon: IconCode.TOOLBAR_GRIP
-
-                visible: root.movable
+                maximumWidth: prv.maximumLength
+                maximumHeight: floating ? contentHeight : prv.minimumLength
             }
 
-            Loader {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            PropertyChanges {
+                target: gripButton
 
-                sourceComponent: root.contentComponent
+                anchors.leftMargin: root.gripButtonPadding
+            }
+
+            AnchorChanges {
+                target: gripButton
+
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            PropertyChanges {
+                target: contentLoader
+
+                anchors.leftMargin: gripButton.visible ? root.gripButtonPadding : 0
+            }
+
+            AnchorChanges {
+                target: contentLoader
+
+                anchors.left: gripButton.visible ? gripButton.right : parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        },
+
+        State {
+            name: "VERTICAL"
+            when: root.isVertical
+
+            PropertyChanges {
+                target: root
+
+                contentWidth: Math.max(prv.gripButtonWidth, contentLoader.implicitWidth + contentBottomPadding + contentTopPadding)
+                contentHeight: prv.gripButtonHeight + contentLoader.implicitHeight
+
+                maximumWidth: contentWidth
+                maximumHeight: prv.maximumLength
+            }
+
+            PropertyChanges {
+                target: gripButton
+
+                anchors.topMargin: root.gripButtonPadding
+            }
+
+            AnchorChanges {
+                target: gripButton
+
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            PropertyChanges {
+                target: contentLoader
+
+                anchors.topMargin: gripButton.visible ? root.gripButtonPadding : 0
+            }
+
+            AnchorChanges {
+                target: contentLoader
+
+                anchors.top: gripButton.visible ? gripButton.bottom : parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
-    }
-
-    Component {
-        id: verticalView
-
-        ColumnLayout {
-            spacing: 2
-
-            property var gripMouseArea: gripButton.mouseArea
-
-            FlatButton {
-                id: gripButton
-
-                Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
-
-                mouseArea.objectName: root.objectName + "_toolBarMouseAreaVertical"
-
-                normalStateColor: "transparent"
-                icon: IconCode.TOOLBAR_GRIP
-                rotation: 90
-
-                visible: root.movable
-            }
-
-            Loader {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                sourceComponent: root.contentComponent
-            }
-        }
-    }
+    ]
 }

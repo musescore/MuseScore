@@ -27,10 +27,9 @@
 #include <QAbstractMessageHandler>
 #include <QSourceLocation>
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
-#include "libmscore/symid.h"
 
 class Chord;
 
@@ -172,18 +171,18 @@ struct MusicXMLInstrument {
     int midiProgram;                   // midi-program read from MusicXML
     int midiVolume;                    // volume read from MusicXML
     int midiPan;                       // pan value read from MusicXML
-    NoteHead::Group notehead;          ///< notehead symbol set
+    NoteHeadGroup notehead;          ///< notehead symbol set
     int line;                          ///< place notehead onto this line
-    Direction stemDirection;
+    DirectionV stemDirection;
 
     QString toString() const;
 
     MusicXMLInstrument()        // required by QMap
         : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-        notehead(NoteHead::Group::HEAD_INVALID), line(0), stemDirection(Direction::AUTO) {}
+        notehead(NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(DirectionV::AUTO) {}
     MusicXMLInstrument(QString s)
         : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
-        notehead(NoteHead::Group::HEAD_NORMAL), line(0), stemDirection(Direction::AUTO) {}
+        notehead(NoteHeadGroup::HEAD_NORMAL), line(0), stemDirection(DirectionV::AUTO) {}
     /*
     MusicXMLInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
           : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
@@ -242,6 +241,8 @@ extern AccidentalType mxmlString2accidentalType(const QString mxmlName);
 extern SymId mxmlString2accSymId(const QString mxmlName);
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
-extern bool hasLaissezVibrer(const Chord* const chord);
+extern const Articulation* findLaissezVibrer(const Chord* const chord);
+extern QString xmlReaderLocation(const QXmlStreamReader& e);
+extern QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName);
 } // namespace Ms
 #endif

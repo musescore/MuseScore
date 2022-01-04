@@ -53,6 +53,8 @@ GridView {
 
     property bool enableAnimations: true
 
+    property bool isInVisibleArea: true
+
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
     property int navigationCol: 1
@@ -173,11 +175,12 @@ GridView {
 
             anchors.fill: parent
 
+            visible: paletteView.isInVisibleArea
+
             navigation.panel: paletteView.navigationPanel
             //! NOTE Just Up/Down navigation now
             navigation.row: paletteView.ncells + paletteView.navigationRow
             navigation.column: 1
-            navigation.enabled: paletteView.visible
 
             onActiveFocusChanged: {
                 if (activeFocus) {
@@ -191,9 +194,8 @@ GridView {
 
             text: qsTrc("palette", "More")
 
-            normalStateColor: "transparent"
-            hoveredStateColor: ui.theme.accentColor
-            pressedStateColor: ui.theme.accentColor
+            transparent: true
+            accentButton: true
 
             onClicked: paletteView.moreButtonClicked(moreButton)
         }
@@ -387,10 +389,9 @@ GridView {
 
     function focusFirstItem() {
         if (count == 0 && moreButton.visible) {
-            moreButton.forceActiveFocus();
+            moreButton.forceActiveFocus()
         } else {
-            currentIndex = 0;
-            currentItem.forceActiveFocus();
+            currentIndex = 0
         }
     }
 
@@ -399,7 +400,6 @@ GridView {
             moreButton.forceActiveFocus();
         } else {
             currentIndex = count - 1;
-            currentItem.forceActiveFocus();
         }
     }
 
@@ -408,7 +408,6 @@ GridView {
         const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
-            currentItem.forceActiveFocus();
             return true;
         }
         return false;
@@ -515,14 +514,13 @@ GridView {
             navigation.row: model.index + paletteView.navigationRow
             navigation.column: 1
 
-            navigation.enabled: paletteView.visible
             navigation.onActiveChanged: {
                 if (navigation.active) {
                     paletteView.currentIndex = paletteCell.rowIndex;
                     paletteView.updateSelection(true);
                 }
             }
-            navigation.onTriggered: paletteCell.clicked()
+            navigation.onTriggered: paletteCell.clicked(null)
 
             IconView {
                 anchors.fill: parent
@@ -606,6 +604,8 @@ GridView {
 
                 draggedIcon.grabToImage(function(result) {
                     Drag.imageSource = result.url
+                    Drag.hotSpot.x = paletteCell.mouseArea.mouseX
+                    Drag.hotSpot.y = paletteCell.mouseArea.mouseY
                     dragDropReorderTimer.restart();
                 })
             }
@@ -613,7 +613,7 @@ GridView {
             function showCellMenu() {
                 contextMenu.modelIndex = modelIndex
                 contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
-                contextMenu.toggleOpened(contextMenu.items, null, mouseArea.mouseX, mouseArea.mouseY)
+                contextMenu.toggleOpened(contextMenu.items, mouseArea.mouseX, mouseArea.mouseY)
             }
 
             StyledMenuLoader {
@@ -622,13 +622,15 @@ GridView {
                 property var modelIndex: null
                 property bool canEdit: true
 
+                navigationParentControl: paletteCell.navigation
+
                 property var items: [
-                    { code: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
-                    { code: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
+                    { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
+                    { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
                 ]
 
-                onHandleAction: {
-                    switch(actionCode) {
+                onHandleMenuItem: {
+                    switch(itemId) {
                     case "delete":
                         paletteView.paletteController.remove(contextMenu.modelIndex)
                         break
@@ -639,6 +641,7 @@ GridView {
                 }
             }
 
+            /* TODO?
             Connections {
                 // force not hiding palette cell if it is being dragged to a score
                 enabled: paletteCell.paletteDrag
@@ -648,6 +651,7 @@ GridView {
                     paletteCell.paletteDrag = false;
                 }
             }
+            */
         } // end ListItemBlank
     } // end DelegateModel
 }

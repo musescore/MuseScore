@@ -20,11 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
     property alias currentInputDeviceIndex: inputDevicesBox.currentIndex
@@ -33,42 +32,38 @@ Column {
     property alias inputDevices: inputDevicesBox.model
     property alias outputDevices: outputDevicesBox.model
 
-    property int firstColumnWidth: 0
-
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOuputDeviceIndexChangeRequested(int newIndex)
 
-    spacing: 18
+    title: qsTrc("appshell", "MIDI")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "MIDI")
-        font: ui.theme.bodyBoldFont
+    ComboBoxWithTitle {
+        id: inputDevicesBox
+
+        title: qsTrc("appshell", "MIDI input:")
+        columnWidth: root.columnWidth
+
+        navigation.name: "MidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onValueEdited: function(newValue) {
+            root.currentInputDeviceIndexChangeRequested(currentIndex)
+        }
     }
 
-    Column {
-        width: parent.width
-        spacing: 12
+    ComboBoxWithTitle {
+        id: outputDevicesBox
 
-        ComboBoxWithTitle {
-            id: inputDevicesBox
+        title: qsTrc("appshell", "MIDI output:")
+        columnWidth: root.columnWidth
 
-            title: qsTrc("appshell", "MIDI input:")
-            titleWidth: root.firstColumnWidth
+        navigation.name: "MidiOutputBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
-            onValueEdited: {
-                root.currentInputDeviceIndexChangeRequested(currentIndex)
-            }
-        }
-
-        ComboBoxWithTitle {
-            id: outputDevicesBox
-
-            title: qsTrc("appshell", "MIDI ouput:")
-            titleWidth: root.firstColumnWidth
-
-            onValueEdited: {
-                root.currentOuputDeviceIndexChangeRequested(currentIndex)
-            }
+        onValueEdited: function(newValue) {
+            root.currentOuputDeviceIndexChangeRequested(currentIndex)
         }
     }
 }

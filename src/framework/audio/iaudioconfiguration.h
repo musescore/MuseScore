@@ -25,7 +25,10 @@
 #include "modularity/imoduleexport.h"
 #include "io/path.h"
 #include "ret.h"
+#include "async/channel.h"
 #include "async/notification.h"
+
+#include "audiotypes.h"
 #include "synthtypes.h"
 
 namespace mu::audio {
@@ -40,14 +43,17 @@ public:
     virtual std::string currentAudioApi() const = 0;
     virtual void setCurrentAudioApi(const std::string& name) = 0;
 
-    virtual int audioChannelsCount() const = 0;
+    virtual audioch_t audioChannelsCount() const = 0;
     virtual unsigned int driverBufferSize() const = 0; // samples
 
     virtual bool isShowControlsInMixer() const = 0;
     virtual void setIsShowControlsInMixer(bool show) = 0;
 
     // synthesizers
-    virtual std::vector<io::path> soundFontPaths() const = 0;
+    virtual AudioInputParams defaultAudioInputParams() const = 0;
+    virtual io::paths soundFontDirectories() const = 0;
+    virtual async::Channel<io::paths> soundFontDirectoriesChanged() const = 0;
+
     virtual const synth::SynthesizerState& synthesizerState() const = 0;
     virtual Ret saveSynthesizerState(const synth::SynthesizerState& state) = 0;
     virtual async::Notification synthesizerStateChanged() const = 0;

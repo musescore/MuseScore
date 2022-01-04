@@ -25,6 +25,7 @@
 
 #include "spanner.h"
 #include "mscore.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -96,33 +97,35 @@ protected:
     mu::PainterPath shapePath;
     Shape _shape;
 
-    virtual void changeAnchor(EditData&, Element*) = 0;
+    SlurTieSegment(const ElementType& type, System*);
+    SlurTieSegment(const SlurTieSegment&);
+
+    virtual void changeAnchor(EditData&, EngravingItem*) = 0;
     QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
-    SlurTieSegment(Score*);
-    SlurTieSegment(const SlurTieSegment&);
+
     virtual void spatiumChanged(qreal, qreal) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 
-    virtual void startEditDrag(EditData& ed) override;
-    virtual void endEditDrag(EditData& ed) override;
-    virtual void editDrag(EditData&) override;
+    void startEditDrag(EditData& ed) override;
+    void endEditDrag(EditData& ed) override;
+    void editDrag(EditData&) override;
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
-    virtual void reset() override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    void reset() override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
     void move(const mu::PointF& s) override;
-    virtual bool isEditable() const override { return true; }
+    bool isEditable() const override { return true; }
 
     void setSlurOffset(Grip i, const mu::PointF& val) { _ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return _ups[int(i)]; }
     UP& ups(Grip i) { return _ups[int(i)]; }
-    virtual Shape shape() const override { return _shape; }
+    Shape shape() const override { return _shape; }
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
@@ -130,7 +133,7 @@ public:
 
     void writeSlur(XmlWriter& xml, int no) const;
     void read(XmlReader&) override;
-    virtual void drawEditMode(mu::draw::Painter*, EditData&) override;
+    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, qreal currentViewScaling) override;
     virtual void computeBezier(mu::PointF so = mu::PointF()) = 0;
 };
 
@@ -147,11 +150,11 @@ class SlurTie : public Spanner
 protected:
     bool _up;                 // actual direction
 
-    Direction _slurDirection;
+    DirectionV _slurDirection;
     void fixupSegments(unsigned nsegs);
 
 public:
-    SlurTie(Score*);
+    SlurTie(const ElementType& type, EngravingItem* parent);
     SlurTie(const SlurTie&);
     ~SlurTie();
 
@@ -159,14 +162,14 @@ public:
 
     virtual void reset() override;
 
-    Direction slurDirection() const { return _slurDirection; }
-    void setSlurDirection(Direction d) { _slurDirection = d; }
-    void undoSetSlurDirection(Direction d);
+    DirectionV slurDirection() const { return _slurDirection; }
+    void setSlurDirection(DirectionV d) { _slurDirection = d; }
+    void undoSetSlurDirection(DirectionV d);
 
     virtual void layout2(const mu::PointF, int, struct UP&) {}
     virtual bool contains(const mu::PointF&) const { return false; }    // not selectable
 
-    virtual void read(XmlReader&) override;
+    void read(XmlReader&) override;
 
     void writeProperties(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
@@ -176,11 +179,11 @@ public:
     void undoSetLineType(int);
 
     virtual void slurPos(SlurPos*) = 0;
-    virtual SlurTieSegment* newSlurTieSegment() = 0;
+    virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }
 

@@ -53,6 +53,30 @@ public:
         TIMESIG_COMMON = 0xE08A,
         TIMESIG_CUT = 0xE08B,
 
+        NOTEHEAD_NORMAL = 0xE0A4,
+        NOTEHEAD_CROSS = 0xE0A9,
+        NOTEHEAD_PLUS = 0xE0AF,
+        NOTEHEAD_XCIRCLE = 0xE0B3,
+        NOTEHEAD_WITHX = 0xE0B7,
+        NOTEHEAD_TRIANGLE_UP = 0xE0BE,
+        NOTEHEAD_TRIANGLE_DOWN = 0xE0C7,
+        NOTEHEAD_SLASHED1 = 0xE0CF,
+        NOTEHEAD_SLASHED2 = 0xE0D0,
+        NOTEHEAD_DIAMOND = 0xE0DB,
+        NOTEHEAD_DIAMOND_OLD = 0xE0E2,
+        NOTEHEAD_CIRCLED = 0xE0E4,
+        NOTEHEAD_CIRCLED_LARGE = 0xE0E8,
+        NOTEHEAD_LARGE_ARROW = 0xE0F0,
+
+        NOTEHEAD_SLASH = 0xE101,
+        NOTEHEAD_SOL = 0xE1B1,
+        NOTEHEAD_LA = 0xE1B3,
+        NOTEHEAD_FA = 0xE1B5,
+        NOTEHEAD_MI = 0xE1B9,
+        NOTEHEAD_DO = 0xE1BB,
+        NOTEHEAD_RE = 0xE1BD,
+        NOTEHEAD_TI = 0xE1BF,
+
         SEMIBREVE = 0xE1D2,
         MINIM = 0xE1D3,
         CROTCHET = 0xE1D5,
@@ -61,15 +85,27 @@ public:
         DEMISEMIQUAVER = 0xE1DB,
         DOT = 0xE1E7,
 
+        MENSURAL_PROLATION_1 = 0xE910,
+        MENSURAL_PROLATION_2 = 0xE911,
+        MENSURAL_PROLATION_3 = 0xE912,
+        MENSURAL_PROLATION_4 = 0xE913,
+        MENSURAL_PROLATION_5 = 0xE914,
+        MENSURAL_PROLATION_7 = 0xE916,
+        MENSURAL_PROLATION_8 = 0xE917,
+        MENSURAL_PROLATION_10 = 0xE919,
+        MENSURAL_PROLATION_11 = 0xE91A,
+
+        NOTEHEAD_BREVIS_ALT = 0xF43F,
+
         NONE
     };
 
     Q_ENUM(Code)
 };
 
-inline QString noteIconToString(MusicalSymbolCodes::Code noteIcon, bool withDot)
+inline QString musicalSymbolToString(MusicalSymbolCodes::Code symbolCode, bool withDot = false)
 {
-    QString noteSymbol = QString(QChar(static_cast<char16_t>(noteIcon)));
+    QString noteSymbol = QString(QChar(static_cast<char16_t>(symbolCode)));
 
     if (withDot) {
         noteSymbol += QChar(static_cast<char16_t>(MusicalSymbolCodes::Code::DOT));

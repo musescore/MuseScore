@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
     - master
+    
   schedule: 
     - cron: '0 4 */1 */1 *' # At 04:00 on every day-of-month
   workflow_dispatch:
@@ -26,7 +27,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.5.0
+      uses: styfle/cancel-workflow-action@0.9.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
@@ -41,6 +42,8 @@ jobs:
       run: |
         sudo bash ./build/ci/tools/setup_ccache.sh     
     - name: "Configure workflow"
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -79,6 +82,9 @@ jobs:
           DO_PUBLISH='false'
         fi
 
+        if [ "${{ github.event_name }}" == "pull_request" ]; then PR_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${{ github.run_id }}_Lin${PR_INFO}")"
+
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -92,6 +98,8 @@ jobs:
         echo "SENTRY_PROJECT: $SENTRY_PROJECT"
         echo "SENTRY_URL=$SENTRY_URL" >> $GITHUB_ENV
         echo "SENTRY_URL: $SENTRY_URL"
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
@@ -100,9 +108,9 @@ jobs:
     - name: Build
       if: env.DO_BUILD == 'true'
       run: |
-        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --crash_log_url $C_URL
+        sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL
         echo "============== ccache ==============="
         ccache -s
     - name: Generate dump symbols
@@ -129,5 +137,5 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: MuseScore_MU4_${{ github.run_id }}
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/      

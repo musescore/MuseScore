@@ -32,6 +32,7 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElement
 {
     setModelType(InspectorModelType::TYPE_VERTICAL_FRAME);
     setTitle(qtrc("inspector", "Vertical frame"));
+    setIcon(ui::IconCode::Code::VERTICAL_FRAME);
     createProperties();
 }
 
@@ -54,7 +55,7 @@ void VerticalFrameSettingsModel::requestElements()
 void VerticalFrameSettingsModel::loadProperties()
 {
     loadPropertyItem(m_frameHeight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_gapAbove);

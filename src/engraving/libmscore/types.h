@@ -150,10 +150,13 @@ enum class ElementType {
     VBOX,
     TBOX,
     FBOX,
-    ICON,
+    ACTION_ICON,
     OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
+
+    ROOT_ITEM,
+    DUMMY,
 
     MAXTYPE
     ///\}
@@ -378,32 +381,12 @@ constexpr bool operator&(NoteType t1, NoteType t2)
 }
 
 //---------------------------------------------------------
-//   Direction
-//---------------------------------------------------------
-
-enum class Direction {
-    ///.\{
-    AUTO, UP, DOWN
-    ///\}
-};
-
-//---------------------------------------------------------
 //   GlissandoType
 //---------------------------------------------------------
 
 enum class GlissandoType {
     ///.\{
     STRAIGHT, WAVY
-    ///\}
-};
-
-//---------------------------------------------------------
-//   GlissandoStyle
-//---------------------------------------------------------
-
-enum class GlissandoStyle {
-    ///.\{
-    CHROMATIC, WHITE_KEYS, BLACK_KEYS, DIATONIC, PORTAMENTO
     ///\}
 };
 
@@ -416,26 +399,6 @@ enum class HarmonyType {
     STANDARD,
     ROMAN,
     NASHVILLE
-    ///\}
-};
-
-//---------------------------------------------------------
-//   Placement
-//---------------------------------------------------------
-
-enum class Placement {
-    ///.\{
-    ABOVE, BELOW
-    ///\}
-};
-
-//---------------------------------------------------------
-//   HPlacement
-//---------------------------------------------------------
-
-enum class HPlacement {
-    ///.\{
-    LEFT, CENTER, RIGHT
     ///\}
 };
 
@@ -498,125 +461,17 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
-//-------------------------------------------------------------------
-//   Tid
-///   Enumerates the list of built-in text substyles
-///   \internal
-///   Must be in sync with textStyles array (in style.cpp)
-//-------------------------------------------------------------------
-
-enum class Tid {
-    ///.\{
-    DEFAULT,
-    TITLE,
-    SUBTITLE,
-    COMPOSER,
-    POET,
-    TRANSLATOR,
-    FRAME,
-    INSTRUMENT_EXCERPT,
-    INSTRUMENT_LONG,
-    INSTRUMENT_SHORT,
-    INSTRUMENT_CHANGE,
-    HEADER,
-    FOOTER,
-    MEASURE_NUMBER,
-    MMREST_RANGE,
-    TEMPO,
-    METRONOME,
-    REPEAT_LEFT,       // align to start of measure
-    REPEAT_RIGHT,      // align to end of measure
-    REHEARSAL_MARK,
-    SYSTEM,
-    STAFF,
-    EXPRESSION,
-    DYNAMICS,
-    HAIRPIN,
-    LYRICS_ODD,
-    LYRICS_EVEN,
-    HARMONY_A,
-    HARMONY_B,
-    HARMONY_ROMAN,
-    HARMONY_NASHVILLE,
-    TUPLET,
-    STICKING,
-    FINGERING,
-    LH_GUITAR_FINGERING,
-    RH_GUITAR_FINGERING,
-    STRING_NUMBER,
-    TEXTLINE,
-    VOLTA,
-    OTTAVA,
-    GLISSANDO,
-    PEDAL,
-    BEND,
-    LET_RING,
-    PALM_MUTE,
-    USER1,
-    USER2,
-    USER3,
-    USER4,
-    USER5,
-    USER6,
-    USER7,
-    USER8,
-    USER9,
-    USER10,
-    USER11,
-    USER12,
-    // special, no-contents, styles used while importing older scores
-    TEXT_STYLES,           // used for user-defined styles
-    IGNORED_STYLES         // used for styles no longer relevant (mainly Figured bass text style)
-    ///.\}
-};
-
-//---------------------------------------------------------
-///   Align
-///   Because the Align enum has Top = 0 and Left = 0,
-///   align() & Align::Top will always return false.
-///   @warning Do not use if (align() & Align::Top) { doSomething(); }
-///   because doSomething() will never be executed!
-///   use this instead:
-///   `if ((static_cast<char>(align()) & static_cast<char>(Align::VMASK)) == Align::Top) { doSomething(); }`
-///   Same applies to Align::Left.
-//---------------------------------------------------------
-
-enum class Align : char {
-    ///.\{
-    LEFT     = 0,
-    RIGHT    = 1,
-    HCENTER  = 2,
-    TOP      = 0,
-    BOTTOM   = 4,
-    VCENTER  = 8,
-    BASELINE = 16,
-    CENTER = Align::HCENTER | Align::VCENTER,
-    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
-    VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
-             ///.\}
-};
-
-constexpr Align operator|(Align a1, Align a2)
-{
-    return static_cast<Align>(static_cast<char>(a1) | static_cast<char>(a2));
-}
-
-constexpr bool operator&(Align a1, Align a2)
-{
-    return static_cast<char>(a1) & static_cast<char>(a2);
-}
-
-constexpr Align operator~(Align a)
-{
-    return static_cast<Align>(~static_cast<char>(a));
-}
-
 //---------------------------------------------------------
 //   FontStyle
 //---------------------------------------------------------
 
 enum class FontStyle : char {
-    Undefined = -1, Normal = 0, Bold = 1, Italic = 2, Underline = 4
+    Undefined = -1,
+    Normal = 0,
+    Bold = 1 << 0,
+    Italic = 1 << 1,
+    Underline = 1 << 2,
+    Strike = 1 << 3
 };
 
 constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
@@ -661,14 +516,8 @@ enum class TupletBracketType : char {
 
 #ifdef SCRIPT_INTERFACE
 Q_ENUM_NS(ElementType);
-Q_ENUM_NS(Direction);
 Q_ENUM_NS(GlissandoType);
-Q_ENUM_NS(GlissandoStyle);
-Q_ENUM_NS(Placement);
-Q_ENUM_NS(HPlacement);
 Q_ENUM_NS(SegmentType);
-Q_ENUM_NS(Tid);
-Q_ENUM_NS(Align);
 Q_ENUM_NS(NoteType);
 Q_ENUM_NS(PlayEventType);
 Q_ENUM_NS(AccidentalType);
@@ -681,22 +530,12 @@ class Mops : public QObject
 {
     Q_GADGET
 };
-
-extern Direction toDirection(const QString&);
-extern const char* toString(Direction);
-extern QString toUserString(Direction);
 } // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Align);
-
-Q_DECLARE_METATYPE(Ms::Direction);
 
 Q_DECLARE_METATYPE(Ms::NoteType);
 
 Q_DECLARE_METATYPE(Ms::PlayEventType);
 
 Q_DECLARE_METATYPE(Ms::AccidentalType);
-
-Q_DECLARE_METATYPE(Ms::HPlacement);
 
 #endif

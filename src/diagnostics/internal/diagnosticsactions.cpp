@@ -28,8 +28,29 @@ using namespace mu::actions;
 using namespace mu::diagnostics;
 
 const UiActionList DiagnosticsActions::m_actions = {
-    UiAction("diagnostics-show",
-             mu::context::UiCtxAny
+    UiAction("diagnostic-show-paths",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show paths…")
+             ),
+    UiAction("diagnostic-show-profiler",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show profiler…")
+             ),
+    UiAction("diagnostic-show-navigation-tree",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show navigation tree…")
+             ),
+    UiAction("diagnostic-show-accessible-tree",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Show accessible tree…")
+             ),
+    UiAction("diagnostic-accessible-tree-dump",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Accessible dump")
+             ),
+    UiAction("diagnostic-show-engraving-elements",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Engraving elements")
              )
 };
 

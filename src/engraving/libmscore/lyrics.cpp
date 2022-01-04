@@ -22,20 +22,23 @@
 
 #include "lyrics.h"
 
-#include <QGuiApplication>
 #include <QRegularExpression>
 
+#include "rw/xml.h"
+
 #include "chord.h"
-#include "score.h"
-#include "system.h"
-#include "xml.h"
-#include "staff.h"
-#include "segment.h"
-#include "undo.h"
-#include "textedit.h"
+#include "masterscore.h"
 #include "measure.h"
+#include "mscoreview.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
+#include "textedit.h"
+#include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -50,8 +53,8 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(Score* s)
-    : TextBase(s, Tid::LYRICS_ODD)
+Lyrics::Lyrics(ChordRest* parent)
+    : TextBase(ElementType::LYRICS, parent, TextStyleType::LYRICS_ODD)
 {
     _even       = false;
     initElementStyle(&lyricsElementStyle);
@@ -87,7 +90,7 @@ void Lyrics::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::VERSE);
     if (_syllabic != Syllabic::SINGLE) {
         static const char* sl[] = {
@@ -99,7 +102,7 @@ void Lyrics::write(XmlWriter& xml) const
     writeProperty(xml, Pid::LYRIC_TICKS);
 
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -116,7 +119,7 @@ void Lyrics::read(XmlReader& e)
     if (!isStyled(Pid::OFFSET) && !e.pasteMode()) {
         // fix offset for pre-3.1 scores
         // 3.0: y offset was meaningless if autoplace is set
-        QString version = masterScore()->mscoreVersion();
+        QString version = mscoreVersion();
         if (autoplace() && !version.isEmpty() && version < "3.1") {
             PointF off = propertyDefault(Pid::OFFSET).value<PointF>();
             ryoffset() = off.y();
@@ -162,7 +165,7 @@ bool Lyrics::readProperties(XmlReader& e)
 //   add
 //---------------------------------------------------------
 
-void Lyrics::add(Element* el)
+void Lyrics::add(EngravingItem* el)
 {
 //      el->setParent(this);
 //      if (el->type() == ElementType::LINE)
@@ -176,32 +179,17 @@ void Lyrics::add(Element* el)
 //   remove
 //---------------------------------------------------------
 
-void Lyrics::remove(Element* el)
+void Lyrics::remove(EngravingItem* el)
 {
     if (el->isLyricsLine()) {
         // only if separator still exists and is the right one
         if (_separator && el == _separator) {
-#if 0
-            // clear melismaEnd flag from end cr
-            // find end cr from melisma itself, as ticks for lyrics may not be accurate at this point
-            // note this clearing this might be premature, as there may be other lyrics that still end there
-            // also, at this point we can't be sure if this is a melisma or a dash
-            // but the flag will be regenerated on next layout
-            Element* e = _separator->endElement();
-            if (!e) {
-                e = score()->findCRinStaff(_separator->tick2(), track());
-            }
-            if (e && e->isChordRest()) {
-                toChordRest(e)->setMelismaEnd(false);
-            }
-#endif
             // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
             // be sure each finds a clean context
             LyricsLine* separ = _separator;
             _separator = 0;
-            separ->setParent(0);
+            separ->resetExplicitParent();
             separ->removeUnmanaged();
-//done in undo/redo?                  delete separ;
         }
     } else {
         qDebug("Lyrics::remove: unknown element %s", el->name());
@@ -244,7 +232,7 @@ bool Lyrics::isMelisma() const
 
 void Lyrics::layout()
 {
-    if (!parent()) {   // palette & clone trick
+    if (!explicitParent()) {   // palette & clone trick
         setPos(PointF());
         TextBase::layout1();
         return;
@@ -281,12 +269,12 @@ void Lyrics::layout()
 
     bool styleDidChange = false;
     if (isEven() && !_even) {
-        initTid(Tid::LYRICS_EVEN, /* preserveDifferent */ true);
+        initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
         _even             = true;
         styleDidChange    = true;
     }
     if (!isEven() && _even) {
-        initTid(Tid::LYRICS_ODD, /* preserveDifferent */ true);
+        initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
         _even             = false;
         styleDidChange    = true;
     }
@@ -334,7 +322,7 @@ void Lyrics::layout()
 
     ChordRest* cr = chordRest();
 
-    if (align() & Align::HCENTER) {
+    if (align() == AlignH::HCENTER) {
         //
         // center under notehead, not origin
         // however, lyrics that are melismas or have verse numbers will be forced to left alignment
@@ -342,7 +330,7 @@ void Lyrics::layout()
         // center under note head
         qreal nominalWidth = symWidth(SymId::noteheadBlack);
         x += nominalWidth * .5 - cr->x() - centerAdjust * 0.5;
-    } else if (!(align() & Align::RIGHT)) {
+    } else if (!(align() == AlignH::RIGHT)) {
         // even for left aligned syllables, ignore leading verse numbers and/or punctuation
         x -= leftAdjust;
     }
@@ -351,7 +339,7 @@ void Lyrics::layout()
 
     if (_ticks > Fraction(0, 1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
         if (!_separator) {
-            _separator = new LyricsLine(score());
+            _separator = new LyricsLine(score()->dummy());
             _separator->setTick(cr->tick());
             score()->addUnmanagedSpanner(_separator);
         }
@@ -409,7 +397,7 @@ void Lyrics::paste(EditData& ed, const QString& txt)
 {
     MuseScoreView* scoreview = ed.view();
     QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
-    QStringList sl = txt.split(QRegExp(regex), Qt::SkipEmptyParts);
+    QStringList sl = txt.split(QRegularExpression(regex), Qt::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
@@ -486,7 +474,7 @@ bool Lyrics::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Lyrics::drop(EditData& data)
+EngravingItem* Lyrics::drop(EditData& data)
 {
     ElementType type = data.dropElement->type();
     if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
@@ -502,6 +490,32 @@ Element* Lyrics::drop(EditData& data)
     e->setParent(this);
     score()->undoAddElement(e);
     return e;
+}
+
+//---------------------------------------------------------
+//   edit
+//---------------------------------------------------------
+
+bool Lyrics::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
+    }
+
+    if (ed.modifiers == Qt::NoModifier || ed.modifiers == Qt::ShiftModifier) {
+        static const QList<int> lyricsNavigationKeys {
+            Qt::Key_Underscore,
+            Qt::Key_Minus,
+            Qt::Key_Enter,
+            Qt::Key_Return
+        };
+
+        if (lyricsNavigationKeys.contains(ed.key)) {
+            return false;
+        }
+    }
+
+    return TextBase::edit(ed);
 }
 
 //---------------------------------------------------------
@@ -539,7 +553,7 @@ void Lyrics::removeFromScore()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Lyrics::getProperty(Pid propertyId) const
+PropertyValue Lyrics::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYLLABIC:
@@ -557,11 +571,11 @@ QVariant Lyrics::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
+bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::PLACEMENT:
-        setPlacement(Placement(v.toInt()));
+        setPlacement(v.value<PlacementV>());
         break;
     case Pid::SYLLABIC:
         _syllabic = Syllabic(v.toInt());
@@ -600,11 +614,11 @@ bool Lyrics::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Lyrics::propertyDefault(Pid id) const
+PropertyValue Lyrics::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(isEven() ? Tid::LYRICS_EVEN : Tid::LYRICS_ODD);
+    case Pid::TEXT_STYLE:
+        return isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD;
     case Pid::PLACEMENT:
         return score()->styleV(Sid::lyricsPlacement);
     case Pid::SYLLABIC:
@@ -630,7 +644,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
 void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 {
     for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (e) {
                 for (Lyrics* l : toChordRest(e)->lyrics()) {
                     f(l);
@@ -644,14 +658,14 @@ void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::VERSE && no() != v.toInt()) {
         for (Lyrics* l : chordRest()->lyrics()) {
             if (l->no() == v.toInt()) {
                 // verse already exists, swap
                 l->TextBase::undoChangeProperty(id, no(), ps);
-                Placement p = l->placement();
+                PlacementV p = l->placement();
                 l->TextBase::undoChangeProperty(Pid::PLACEMENT, int(placement()), ps);
                 TextBase::undoChangeProperty(Pid::PLACEMENT, int(p), ps);
                 break;
@@ -675,27 +689,6 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         TextBase::undoChangeProperty(id, v, ps);
         return;
     }
-#if 0
-    // TODO: create new command to do this
-    if (id == Pid::PLACEMENT) {
-        if (Placement(v.toInt()) == Placement::ABOVE) {
-            // change placment of all verse for the same voice upto this one to ABOVE
-            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
-                if (l->no() <= no() && l->voice() == voice()) {
-                    l->TextBase::undoChangeProperty(id, v, ps);
-                }
-            });
-        } else {
-            // change placment of all verse for the same voce starting from this one to BELOW
-            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
-                if (l->no() >= no() && l->voice() == voice()) {
-                    l->TextBase::undoChangeProperty(id, v, ps);
-                }
-            });
-        }
-        return;
-    }
-#endif
 
     TextBase::undoChangeProperty(id, v, ps);
 }

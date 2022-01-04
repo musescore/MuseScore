@@ -26,19 +26,21 @@
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
+#include "style/style.h"
+#include "rw/xml.h"
+
+#include "layout/layouttremolo.h"
 
 #include "score.h"
 #include "staff.h"
-#include "style.h"
 #include "chord.h"
 #include "note.h"
 #include "measure.h"
 #include "segment.h"
 #include "stem.h"
-#include "symid.h"
-#include "xml.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -65,19 +67,24 @@ static const char* tremoloName[] = {
     QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
 };
 
-Tremolo::Tremolo(Score* score)
-    : Element(score, ElementFlag::MOVABLE)
+Tremolo::Tremolo(Chord* parent)
+    : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&tremoloStyle);
 }
 
 Tremolo::Tremolo(const Tremolo& t)
-    : Element(t)
+    : EngravingItem(t)
 {
     setTremoloType(t.tremoloType());
     _chord1       = t.chord1();
     _chord2       = t.chord2();
     _durationType = t._durationType;
+}
+
+void Tremolo::setParent(Chord* ch)
+{
+    EngravingItem::setParent(ch);
 }
 
 //---------------------------------------------------------
@@ -86,7 +93,7 @@ Tremolo::Tremolo(const Tremolo& t)
 
 qreal Tremolo::chordMag() const
 {
-    return parent() ? toChord(parent())->chordMag() : 1.0;
+    return explicitParent() ? toChord(explicitParent())->chordMag() : 1.0;
 }
 
 //---------------------------------------------------------
@@ -95,7 +102,7 @@ qreal Tremolo::chordMag() const
 
 qreal Tremolo::mag() const
 {
-    return parent() ? parent()->mag() : 1.0;
+    return parentItem() ? parentItem()->mag() : 1.0;
 }
 
 //---------------------------------------------------------
@@ -126,7 +133,7 @@ void Tremolo::draw(mu::draw::Painter* painter) const
         painter->drawPath(path);
     }
     // for palette
-    if (!parent() && !twoNotes()) {
+    if (!explicitParent() && !twoNotes()) {
         qreal x = 0.0;     // bbox().width() * .25;
         Pen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
         painter->setPen(pen);
@@ -172,7 +179,7 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     computeShape();
 }
 
@@ -183,7 +190,7 @@ void Tremolo::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Tremolo::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::localSpatiumChanged(oldValue, newValue);
+    EngravingItem::localSpatiumChanged(oldValue, newValue);
     computeShape();
 }
 
@@ -194,7 +201,7 @@ void Tremolo::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 void Tremolo::styleChanged()
 {
-    Element::styleChanged();
+    EngravingItem::styleChanged();
     computeShape();
 }
 
@@ -219,7 +226,7 @@ PainterPath Tremolo::basePath() const
     PainterPath ppath;
 
     // first line
-    if (parent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
+    if (explicitParent() && twoNotes() && (_style == TremoloStyle::DEFAULT)) {
         ppath.addRect(-nw2, 0.0, 2.0 * nw2, lw);
     } else {
         ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
@@ -229,7 +236,7 @@ PainterPath Tremolo::basePath() const
 
     // other lines
     for (int i = 1; i < _lines; i++) {
-        if (parent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL)) {
+        if (explicitParent() && twoNotes() && (_style != TremoloStyle::TRADITIONAL)) {
             ppath.addRect(-nw2, ty, 2.0 * nw2, lw);
         } else {
             ppath.addRect(-w2, ty, 2.0 * w2, lw);
@@ -237,7 +244,7 @@ PainterPath Tremolo::basePath() const
         ty += td;
     }
 
-    if (!parent() || !twoNotes()) {
+    if (!explicitParent() || !twoNotes()) {
         // for the palette or for one-note tremolos
         Transform shearTransform;
         shearTransform.shear(0.0, -(lw / 2.0) / w2);
@@ -253,7 +260,7 @@ PainterPath Tremolo::basePath() const
 
 void Tremolo::computeShape()
 {
-    if (parent() && twoNotes()) {
+    if (explicitParent() && twoNotes()) {
         return;     // cannot compute shape here, should be done at layout stage
     }
     if (isBuzzRoll()) {
@@ -268,48 +275,37 @@ void Tremolo::computeShape()
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal spatium)
+void Tremolo::layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium)
 {
     Q_ASSERT(!twoNotes());
 
     bool up = chord()->up();
-    int line = up ? chord()->upLine() : chord()->downLine();
+    int upValue = up ? -1 : 1;
 
-    qreal t = 0.0;
-    // nearest distance between note and tremolo stroke should be no less than 3.0
-    if (chord()->hook() || chord()->beam()) {
-        t = up ? -3.0 * chordMag() - 2.0 * minHeight() : 3.0 * chordMag();
-    } else {
-        const qreal offset = 2.0 * score()->styleS(Sid::tremoloStrokeWidth).val();
+    qreal yOffset = h - score()->styleMM(Sid::tremoloOutSidePadding).val();
 
-        if (!up && !(line & 1)) {   // stem is down; even line
-            t = qMax((4.0 + offset) * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (!up && (line & 1)) { // stem is down; odd line
-            t = qMax(5.0 * chordMag() - 2.0 * minHeight(), 3.0 * chordMag());
-        } else if (up && !(line & 1)) { // stem is up; even line
-            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), (-4.0 - offset) * chordMag());
-        } else { /*if ( up &&  (line & 1))*/ // stem is up; odd line
-            t = qMin(-3.0 * chordMag() - 2.0 * minHeight(), -5.0 * chordMag());
-        }
+    int beams = chord()->beams();
+    if (chord()->hook()) {
+        yOffset -= up ? 1.5 * spatium : 1 * spatium;
+        yOffset -= beams >= 2 ? 0.5 * spatium : 0.0;
+    } else if (beams) {
+        yOffset -= beams * (score()->styleB(Sid::useWideBeams) ? 1.0 : 0.75) * spatium;
+        yOffset += beams == 0 ? 0.0 : 0.25 * spatium;
     }
+    yOffset -= isBuzzRoll() && up ? 0.5 * spatium : 0.0;
+    yOffset *= upValue;
+    yOffset -= up ? 0.0 : minHeight() * spatium;
 
-    qreal yLine = line + t;
-    // prevent stroke from going out of staff at the top while stem direction is down
-    if (!chord()->up()) {
-        yLine = qMax(yLine, 0.0);
-    }
-    // prevent stroke from going out of staff at the bottom while stem direction is up
-    else {
+    y += yOffset;
+
+    if (up) {
         qreal height = isBuzzRoll() ? 0 : minHeight();
-        yLine = qMin(yLine, (staff()->lines(tick()) - 1) * 2 - 2.0 * height);
+        y = qMin(y, ((staff()->lines(tick()) - 1) - height) * spatium);
+    } else {
+        y = qMax(y, 0.0);
     }
-
-    y = yLine * .5 * spatium;
-
     setPos(x, y);
 }
-
-extern std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Tremolo*, qreal, qreal);
 
 //---------------------------------------------------------
 //   layoutTwoNotesTremolo
@@ -325,23 +321,6 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     //---------------------------------------------------
 
     y += (h - bbox().height()) * .5;
-
-#if 0 // Needs to be done earlier, see connectTremolo in layout.cpp
-    Segment* s = _chord1->segment()->next();
-    while (s) {
-        if (s->element(track()) && (s->element(track())->isChord())) {
-            break;
-        }
-        s = s->next();
-    }
-    if (s == 0) {
-        qDebug("no second note of tremolo found");
-        return;
-    }
-
-    _chord2 = toChord(s->element(track()));
-    _chord2->setTremolo(this);
-#endif
 
     Stem* stem1 = _chord1->stem();
     Stem* stem2 = _chord2->stem();
@@ -359,7 +338,8 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     } else {
         firstChordStaffY = _chord1->pagePos().y() - _chord1->y();      // y coordinate of the staff of the first chord
         const std::pair<qreal, qreal> extendedLen
-            = extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
+            = mu::engraving::LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
+                                                                              _chord2->defaultStemLength());
         y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
         y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
     }
@@ -511,7 +491,7 @@ void Tremolo::layout()
 {
     path = basePath();
 
-    _chord1 = toChord(parent());
+    _chord1 = toChord(explicitParent());
     if (!_chord1) {
         // palette
         if (!isBuzzRoll()) {
@@ -521,27 +501,36 @@ void Tremolo::layout()
         return;
     }
 
-    Note* anchor1 = _chord1->upNote();
+    Note* anchor1 = _chord1->up() ? _chord1->upNote() : _chord1->downNote();
     Stem* stem    = _chord1->stem();
     qreal x, y, h;
     if (stem) {
-        x  = stem->pos().x();
-        y  = stem->pos().y();
-        h  = stem->stemLen();
+        x = stem->pos().x() + stem->width() / 2 * (_chord1->up() ? -1.0 : 1.0);
+        y = stem->pos().y();
+        h = stem->length();
     } else {
         // center tremolo above note
-        x = anchor1->x() + anchor1->headWidth() * .5;
-        y = anchor1->y();
-        h = 2.0 * spatium() + bbox().height();
-        if (anchor1->line() > 4) {
-            h *= -1;
+        x = anchor1->x() + anchor1->headWidth() * 0.5;
+        if (!twoNotes()) {
+            bool hasMirroredNote = false;
+            for (Note* n : _chord1->notes()) {
+                if (n->mirror()) {
+                    hasMirroredNote = true;
+                    break;
+                }
+            }
+            if (hasMirroredNote) {
+                x = _chord1->stemPosX();
+            }
         }
+        y = anchor1->y();
+        h = score()->styleMM(Sid::tremoloNoteSidePadding).val() + bbox().height();
     }
 
     if (twoNotes()) {
         layoutTwoNotesTremolo(x, y, h, spatium());
     } else {
-        layoutOneNoteTremolo(x, y, spatium());
+        layoutOneNoteTremolo(x, y, h, spatium());
     }
 }
 
@@ -569,11 +558,11 @@ void Tremolo::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::TREMOLO_TYPE);
     writeProperty(xml, Pid::TREMOLO_STYLE);
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -594,7 +583,7 @@ void Tremolo::read(XmlReader& e)
             setStyle(TremoloStyle(e.readInt()));
             setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
         } else if (readStyledProperty(e, tag)) {
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -704,7 +693,7 @@ QString Tremolo::subtypeName() const
 
 QString Tremolo::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), subtypeName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
 }
 
 //---------------------------------------------------------
@@ -714,7 +703,7 @@ QString Tremolo::accessibleInfo() const
 bool Tremolo::customStyleApplicable() const
 {
     return twoNotes()
-           && (durationType().type() == TDuration::DurationType::V_HALF)
+           && (durationType().type() == DurationType::V_HALF)
            && (staffType()->group() != StaffGroup::TAB);
 }
 
@@ -722,7 +711,7 @@ bool Tremolo::customStyleApplicable() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Tremolo::getProperty(Pid propertyId) const
+PropertyValue Tremolo::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
@@ -732,14 +721,14 @@ QVariant Tremolo::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
 
-bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
+bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
@@ -751,7 +740,7 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
         }
         break;
     default:
-        return Element::setProperty(propertyId, val);
+        return EngravingItem::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
@@ -761,13 +750,13 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Tremolo::propertyDefault(Pid propertyId) const
+PropertyValue Tremolo::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_STYLE:
         return score()->styleI(Sid::tremoloStyle);
     default:
-        return Element::propertyDefault(propertyId);
+        return EngravingItem::propertyDefault(propertyId);
     }
 }
 
@@ -780,33 +769,18 @@ Pid Tremolo::propertyId(const QStringRef& name) const
     if (name == "subtype") {
         return Pid::TREMOLO_TYPE;
     }
-    return Element::propertyId(name);
-}
-
-//---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Tremolo::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::TREMOLO_TYPE:
-        return subtypeName();
-    default:
-        break;
-    }
-    return Element::propertyUserValue(pid);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
-void Tremolo::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         return;
     }
-    Element::scanElements(data, func, all);
+    EngravingItem::scanElements(data, func, all);
 }
 }

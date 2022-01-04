@@ -41,15 +41,14 @@ extern LineSegment* voltaDebug;
 class VoltaSegment final : public TextLineBaseSegment
 {
 public:
-    VoltaSegment(Spanner*, Score*);
+    VoltaSegment(Volta*, System* parent);
 
-    ElementType type() const override { return ElementType::VOLTA_SEGMENT; }
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
     Volta* volta() const { return (Volta*)spanner(); }
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -67,12 +66,11 @@ public:
         OPEN, CLOSED
     };
 
-    Volta(Score* s);
+    Volta(EngravingItem* parent);
 
     Volta* clone() const override { return new Volta(*this); }
-    ElementType type() const override { return ElementType::VOLTA; }
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;
@@ -96,9 +94,9 @@ public:
     void setVoltaType(Volta::Type);       // deprecated
     Type voltaType() const;               // deprecated
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     QString accessibleInfo() const override;
 };

@@ -26,7 +26,7 @@
 #include "log.h"
 
 #include "libmscore/rendermidi.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/tempo.h"
 #include "libmscore/part.h"
 #include "libmscore/instrument.h"
@@ -43,8 +43,6 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/tempo.h"
 
-#include "framework/midi_old/event.h" //! TODO Remove me
-
 #include "notationerrors.h"
 
 using namespace mu;
@@ -53,18 +51,12 @@ using namespace mu::midi;
 using namespace mu::async;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
-                                   async::Notification notationChanged,
-                                   INotationMidiEventsPtr midiDataProvider)
-    : m_getScore(getScore), m_midiEventsProvider(std::move(midiDataProvider))
+                                   async::Notification notationChanged)
+    : m_getScore(getScore)
 {
     notationChanged.onNotify(this, [this]() {
         updateLoopBoundaries();
     });
-}
-
-NotationPlayback::~NotationPlayback()
-{
-    m_notationParts = nullptr;
 }
 
 Ms::Score* NotationPlayback::score() const
@@ -72,20 +64,11 @@ Ms::Score* NotationPlayback::score() const
     return m_getScore->score();
 }
 
-Ms::MasterScore* NotationPlayback::masterScore() const
-{
-    return score() ? score()->masterScore() : nullptr;
-}
-
-void NotationPlayback::init(INotationPartsPtr parts)
+void NotationPlayback::init()
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
-
-    m_notationParts = parts;
-
-    m_midiEventsProvider->init();
 
     QObject::connect(score(), &Ms::Score::posChanged, [this](Ms::POS pos, int tick) {
         if (Ms::POS::CURRENT == pos) {
@@ -94,138 +77,6 @@ void NotationPlayback::init(INotationPartsPtr parts)
             updateLoopBoundaries();
         }
     });
-
-    load();
-}
-
-MidiData mu::notation::NotationPlayback::buildMidiData(const Ms::Part* part) const
-{
-    return { buildMidiMapping(part), buildMidiStream(part) };
-}
-
-MidiMapping NotationPlayback::buildMidiMapping(const Ms::Part* part) const
-{
-    midi::MidiMapping mapping;
-
-    mapping.division = Ms::MScore::division;
-    mapping.tempo = makeTempoMap();
-
-    for (auto it = part->instruments()->cbegin(); it != part->instruments()->cend(); ++it) {
-        const Ms::Instrument* instrument = it->second;
-
-        for (const Ms::Channel* channel : instrument->channel()) {
-            mapping.synthName = channel->synti().toStdString();
-            mapping.programms.push_back({ static_cast<midi::channel_t>(channel->channel()),
-                                          channel->program(),
-                                          channel->bank() });
-        }
-    }
-
-    return mapping;
-}
-
-MidiStream NotationPlayback::buildMidiStream(const Ms::Part* part) const
-{
-    midi::MidiStream stream;
-
-    IF_ASSERT_FAILED(masterScore()->lastMeasure()) {
-        return stream;
-    }
-
-    stream.lastTick = masterScore()->lastMeasure()->endTick().ticks() - 1;
-
-    for (auto it = part->instruments()->cbegin(); it != part->instruments()->cend(); ++it) {
-        const Ms::Instrument* instrument = it->second;
-
-        std::vector<channel_t> midiChannels(instrument->channel().size());
-
-        for (const Ms::Channel* channel : instrument->channel()) {
-            channel_t midiChannel = channel->channel();
-            midiChannels.push_back(midiChannel);
-        }
-
-        std::list<InstrumentChannel*> channelList(instrument->channel().begin(), instrument->channel().end());
-
-        std::vector<Event> setupEvents = m_midiEventsProvider->retrieveSetupEvents(channelList);
-        stream.controlEventsStream.set(std::move(setupEvents));
-
-        stream.eventsRequest.onReceive(this, [this, stream, midiChannels](const tick_t fromTick, const tick_t toTick) mutable {
-            if (fromTick >= stream.lastTick || toTick > stream.lastTick) {
-                stream.mainStream.send({}, 0);
-                return;
-            }
-
-            for (const channel_t& midiChannel : midiChannels) {
-                Events events = m_midiEventsProvider->retrieveEvents(static_cast<channel_t>(midiChannel), fromTick, toTick);
-
-                stream.mainStream.send(std::move(events), toTick);
-            }
-        });
-    }
-
-    return stream;
-}
-
-void NotationPlayback::load()
-{
-    IF_ASSERT_FAILED(m_notationParts) {
-        return;
-    }
-
-    if (!score()) {
-        return;
-    }
-
-    m_instrumentsMidiData.clear();
-
-    for (const Part* part : m_notationParts->partList()) {
-        m_instrumentsMidiData.insert({ part->id().toStdString(), buildMidiData(part) });
-    }
-
-    m_notationParts->partList().onItemAdded(this, [this](const Part* part) {
-        InstrumentTrackId id = part->id().toStdString();
-        m_instrumentsMidiData.insert({ id, buildMidiData(part) });
-        m_instrumentTrackAdded.send(std::move(id));
-    });
-
-    m_notationParts->partList().onItemRemoved(this, [this](const Part* part) {
-        InstrumentTrackId id = part->id().toStdString();
-        m_instrumentsMidiData.erase(id);
-        m_instrumentTrackRemoved.send(std::move(id));
-    });
-}
-
-MidiData NotationPlayback::instrumentMidiData(const INotationPlayback::InstrumentTrackId& id) const
-{
-    auto search = m_instrumentsMidiData.find(id);
-
-    if (search != m_instrumentsMidiData.end()) {
-        return search->second;
-    }
-
-    return MidiData();
-}
-
-std::vector<INotationPlayback::InstrumentTrackId> NotationPlayback::instrumentTrackIdList() const
-{
-    std::vector<INotationPlayback::InstrumentTrackId> result;
-    result.reserve(m_instrumentsMidiData.size());
-
-    for (auto&& pair : m_instrumentsMidiData) {
-        result.push_back(pair.first);
-    }
-
-    return result;
-}
-
-Channel<INotationPlayback::InstrumentTrackId> NotationPlayback::instrumentTrackRemoved() const
-{
-    return m_instrumentTrackRemoved;
-}
-
-Channel<INotationPlayback::InstrumentTrackId> NotationPlayback::instrumentTrackAdded() const
-{
-    return m_instrumentTrackAdded;
 }
 
 void NotationPlayback::updateLoopBoundaries()
@@ -247,53 +98,17 @@ void NotationPlayback::updateLoopBoundaries()
     }
 }
 
-int NotationPlayback::instrumentBank(const Ms::Instrument* instrument) const
+audio::msecs_t NotationPlayback::totalPlayTime() const
 {
-    //! NOTE Temporary solution
-    if (instrument->useDrumset()) {
-        return 128;
-    }
-    return 0;
-}
-
-TempoMap NotationPlayback::makeTempoMap() const
-{
-    midi::TempoMap tempos;
-
-    Ms::TempoMap* tempomap = score()->tempomap();
-    qreal relTempo = tempomap->relTempo();
-    for (const Ms::RepeatSegment* rs : score()->repeatList()) {
-        int startTick = rs->tick, endTick = startTick + rs->len();
-        int tickOffset = rs->utick - rs->tick;
-
-        auto se = tempomap->lower_bound(startTick);
-        auto ee = tempomap->lower_bound(endTick);
-        for (auto it = se; it != ee; ++it) {
-            //
-            // compute midi tempo: microseconds / quarter note
-            //
-            tempo_t tempo = static_cast<tempo_t>(lrint((1.0 / (it->second.tempo * relTempo)) * 1000000.0));
-
-            tempos.insert({ it->first + tickOffset, tempo });
-        }
-    }
-
-    return tempos;
-}
-
-QTime NotationPlayback::totalPlayTime() const
-{
-    QTime time(0, 0, 0, 0);
-
     Ms::Score* score = m_getScore->score();
     if (!score) {
-        return time;
+        return 0;
     }
 
     int lastTick = score->repeatList().ticks();
-    int secs = score->utick2utime(lastTick);
+    qreal secs = score->utick2utime(lastTick);
 
-    return time.addSecs(secs);
+    return secs * 1000.f;
 }
 
 float NotationPlayback::tickToSec(tick_t tick) const
@@ -307,22 +122,22 @@ tick_t NotationPlayback::secToTick(float sec) const
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
-QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
+RectF NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
 {
     if (!score()) {
-        return QRect();
+        return {};
     }
 
     Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score()->tick2measureMM(tick);
     if (!measure) {
-        return QRect();
+        return {};
     }
 
     Ms::System* system = measure->system();
     if (!system) {
-        return QRect();
+        return {};
     }
 
     qreal x = 0.0;
@@ -359,7 +174,7 @@ QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     }
 
     if (!s) {
-        return QRect();
+        return {};
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -384,10 +199,10 @@ QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     x -= _spatium;
     y -= 3 * _spatium;
 
-    return QRect(x, y, w, h);
+    return RectF(x, y, w, h);
 }
 
-RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Element* element) const
+RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const EngravingItem* element) const
 {
     RetVal<tick_t> result;
     result.ret = make_ret(Err::Undefined);
@@ -407,7 +222,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Element* 
     }
 
     if (element->isNote()) {
-        element = element->parent();
+        element = element->parentItem();
     }
 
     const Ms::ChordRest* cr = Ms::toChordRest(element);
@@ -415,100 +230,6 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Element* 
     int ticks = score()->repeatList().tick2utick(cr->tick().ticks());
 
     return result.make_ok(std::move(ticks));
-}
-
-Ret NotationPlayback::playElementMidiData(const Element* element)
-{
-    if (element->isNote()) {
-        const Ms::Note* note = Ms::toNote(element);
-        IF_ASSERT_FAILED(note) {
-            return make_ret(Err::UnableToPlaybackElement);
-        }
-        return playNoteMidiData(note);
-    } else if (element->isChord()) {
-        const Ms::Chord* chord = Ms::toChord(element);
-        IF_ASSERT_FAILED(chord) {
-            return make_ret(Err::UnableToPlaybackElement);
-        }
-        return playChordMidiData(chord);
-    } else if (element->isHarmony()) {
-        const Ms::Harmony* h = Ms::toHarmony(element);
-        IF_ASSERT_FAILED(h) {
-            return make_ret(Err::UnableToPlaybackElement);
-        }
-        return playHarmonyMidiData(h);
-    }
-
-    NOT_SUPPORTED << element->name();
-    return make_ret(Err::UnableToPlaybackElement);
-}
-
-//! NOTE Copied from MuseScore::play(Element* e, int pitch)
-Ret NotationPlayback::playNoteMidiData(const Ms::Note* note) const
-{
-    const Ms::Note* masterNote = note;
-    if (note->linkList().size() > 1) {
-        for (Ms::ScoreElement* se : note->linkList()) {
-            if (se->score() == note->masterScore() && se->isNote()) {
-                masterNote = Ms::toNote(se);
-                break;
-            }
-        }
-    }
-
-    Ms::Fraction tick = masterNote->chord()->tick();
-    if (tick < Ms::Fraction(0, 1)) {
-        tick = Ms::Fraction(0, 1);
-    }
-    const Ms::Instrument* instr = masterNote->part()->instrument(tick);
-    channel_t midiChannel = instr->channel(masterNote->subchannel())->channel();
-
-    MidiData midiData = instrumentMidiData(masterNote->part()->id().toStdString());
-
-    Events events = m_midiEventsProvider->retrieveEventsForElement(masterNote, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
-
-    return make_ret(Ret::Code::Ok);
-}
-
-Ret NotationPlayback::playChordMidiData(const Ms::Chord* chord) const
-{
-    Ms::Part* part = chord->part();
-    Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0, 1);
-    Ms::Instrument* instr = part->instrument(tick);
-    channel_t midiChannel = instr->channel(chord->notes()[0]->subchannel())->channel();
-
-    MidiData midiData = instrumentMidiData(part->id().toStdString());
-
-    Events events = m_midiEventsProvider->retrieveEventsForElement(chord, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
-
-    return make_ret(Ret::Code::Ok);
-}
-
-Ret NotationPlayback::playHarmonyMidiData(const Ms::Harmony* harmony) const
-{
-    if (!harmony->isRealizable()) {
-        return make_ret(Err::UnableToPlaybackElement);
-    }
-
-    const Ms::Channel* hChannel = harmony->part()->harmonyChannel();
-    if (!hChannel) {
-        return make_ret(Err::UnableToPlaybackElement);
-    }
-
-    const Ms::Instrument* instr = harmony->part() ? harmony->part()->instrument() : nullptr;
-    if (!instr) {
-        return make_ret(Err::UnableToPlaybackElement);
-    }
-
-    channel_t midiChannel = hChannel->channel();
-    MidiData midiData = instrumentMidiData(harmony->part()->id().toStdString());
-
-    Events events = m_midiEventsProvider->retrieveEventsForElement(harmony, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
-
-    return make_ret(Ret::Code::Ok);
 }
 
 void NotationPlayback::addLoopBoundary(LoopBoundaryType boundaryType, tick_t tick)
@@ -575,7 +296,7 @@ void NotationPlayback::setLoopBoundariesVisible(bool visible)
     m_loopBoundaries.set(m_loopBoundaries.val);
 }
 
-QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
+RectF NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, int _tick) const
 {
     Fraction tick = Fraction::fromTicks(_tick);
 
@@ -586,7 +307,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
 
     Measure* measure = score()->tick2measureMM(tick);
     if (measure == nullptr) {
-        return QRect();
+        return RectF();
     }
 
     qreal x = 0.0;
@@ -618,12 +339,12 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     }
 
     if (s == nullptr) {
-        return QRect();
+        return RectF();
     }
 
     Ms::System* system = measure->system();
-    if (system == nullptr || system->page() == nullptr) {
-        return QRect();
+    if (system == nullptr || system->page() == nullptr || system->staves()->empty()) {
+        return RectF();
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
@@ -652,7 +373,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
         x = x - _spatium * .5;
     }
 
-    return QRect(x, y, width, height);
+    return RectF(x, y, width, height);
 }
 
 mu::ValCh<LoopBoundaries> NotationPlayback::loopBoundaries() const
@@ -673,7 +394,7 @@ Tempo NotationPlayback::tempo(tick_t tick) const
 
     if (!tempoText || !duration.isValid()) {
         tempo.duration = DurationType::V_QUARTER;
-        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)) * 60.);
+        tempo.valueBpm = std::round(score()->tempo(Fraction::fromTicks(tick)).toBPM().val);
         return tempo;
     }
 
@@ -691,7 +412,7 @@ const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
 
     Ms::SegmentType segmentType = Ms::SegmentType::All;
     for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (Ms::Element* element: segment->annotations()) {
+        for (Ms::EngravingItem* element: segment->annotations()) {
             if (element && element->isTempoText() && element->tick() <= tick) {
                 result = Ms::toTempoText(element);
             }

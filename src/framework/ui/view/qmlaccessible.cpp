@@ -85,6 +85,31 @@ QString AccessibleItem::accessibleName() const
     return m_name;
 }
 
+QString AccessibleItem::accessibleDescription() const
+{
+    return m_description;
+}
+
+QVariant AccessibleItem::accesibleValue() const
+{
+    return m_value;
+}
+
+QVariant AccessibleItem::accesibleMaximumValue() const
+{
+    return m_maximumValue;
+}
+
+QVariant AccessibleItem::accesibleMinimumValue() const
+{
+    return m_minimumValue;
+}
+
+QVariant AccessibleItem::accesibleValueStepSize() const
+{
+    return m_stepSize;
+}
+
 bool AccessibleItem::accessibleState(State st) const
 {
     return m_state.value(st, false);
@@ -217,9 +242,86 @@ void AccessibleItem::setName(QString name)
     m_accessiblePropertyChanged.send(IAccessible::Property::Name);
 }
 
+void AccessibleItem::setDescription(QString description)
+{
+    if (m_description == description) {
+        return;
+    }
+
+    m_description = description;
+    emit descriptionChanged(m_description);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Description);
+}
+
+void AccessibleItem::setValue(QVariant value)
+{
+    if (m_value == value) {
+        return;
+    }
+
+    m_value = value;
+    emit valueChanged(m_value);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Value);
+}
+
+void AccessibleItem::setMaximumValue(QVariant maximumValue)
+{
+    if (m_maximumValue == maximumValue) {
+        return;
+    }
+
+    m_maximumValue = maximumValue;
+    emit maximumValueChanged(m_maximumValue);
+}
+
+void AccessibleItem::setMinimumValue(QVariant minimumValue)
+{
+    if (m_minimumValue == minimumValue) {
+        return;
+    }
+
+    m_minimumValue = minimumValue;
+    emit minimumValueChanged(m_minimumValue);
+}
+
+void AccessibleItem::setStepSize(QVariant stepSize)
+{
+    if (m_stepSize == stepSize) {
+        return;
+    }
+
+    m_stepSize = stepSize;
+    emit stepSizeChanged(m_stepSize);
+}
+
 QString AccessibleItem::name() const
 {
     return m_name;
+}
+
+QString AccessibleItem::description() const
+{
+    return m_description;
+}
+
+QVariant AccessibleItem::value() const
+{
+    return m_value;
+}
+
+QVariant AccessibleItem::maximumValue() const
+{
+    return m_maximumValue;
+}
+
+QVariant AccessibleItem::minimumValue() const
+{
+    return m_minimumValue;
+}
+
+QVariant AccessibleItem::stepSize() const
+{
+    return m_stepSize;
 }
 
 void AccessibleItem::setIgnored(bool ignored)

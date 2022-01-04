@@ -30,18 +30,18 @@ static const volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
 WaveFormModel::WaveFormModel(QObject* parent)
     : QObject(parent)
 {
-    playback()->audioOutput()->masterSignalAmplitudeChanged().onReceive(this, [this](const audioch_t, const float amplitude) {
-        setCurrentSignalAmplitude(amplitude);
-    });
+    playback()->audioOutput()->masterSignalChanges().onResolve(this, [this](AudioSignalChanges signalChanges) {
+        signalChanges.onReceive(this, [this](const audioch_t, const AudioSignalVal& newValue) {
+            setCurrentSignalAmplitude(newValue.amplitude);
 
-    playback()->audioOutput()->masterVolumePressureChanged().onReceive(this, [this](const audioch_t, const volume_dbfs_t pressure) {
-        if (pressure < MIN_DISPLAYED_DBFS) {
-            setCurrentVolumePressure(MIN_DISPLAYED_DBFS);
-        } else if (pressure > MAX_DISPLAYED_DBFS) {
-            setCurrentVolumePressure(MAX_DISPLAYED_DBFS);
-        } else {
-            setCurrentVolumePressure(pressure);
-        }
+            if (newValue.pressure < MIN_DISPLAYED_DBFS) {
+                setCurrentVolumePressure(MIN_DISPLAYED_DBFS);
+            } else if (newValue.pressure > MAX_DISPLAYED_DBFS) {
+                setCurrentVolumePressure(MAX_DISPLAYED_DBFS);
+            } else {
+                setCurrentVolumePressure(newValue.pressure);
+            }
+        });
     });
 }
 

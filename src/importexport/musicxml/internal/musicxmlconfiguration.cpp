@@ -32,6 +32,7 @@ static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/music
 static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
 static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
 static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
+static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
 static const Settings::Key MIGRATION_NOT_ASK_AGAING_KEY(module_name, "import/compatibility/do_not_ask_me_again");
 static const Settings::Key STYLE_FILE_IMPORT_PATH_KEY(module_name, "import/style/styleFile");
@@ -42,6 +43,7 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(MusicxmlExportBreaksType::All)));
+    settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAING_KEY, Val(false));
 }
 
@@ -83,6 +85,16 @@ MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlE
 void MusicXmlConfiguration::setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(static_cast<int>(breaksType)));
+}
+
+bool MusicXmlConfiguration::musicxmlExportInvisibleElements() const
+{
+    return settings()->value(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY).toBool();
+}
+
+void MusicXmlConfiguration::setMusicxmlExportInvisibleElements(bool value)
+{
+    settings()->setSharedValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(value));
 }
 
 bool MusicXmlConfiguration::needUseDefaultFont() const

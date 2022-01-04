@@ -85,6 +85,11 @@ UriQuery::UriQuery(const std::string& str)
     parceParams(str, m_params);
 }
 
+UriQuery::UriQuery(const Uri& uri)
+    : m_uri(uri)
+{
+}
+
 void UriQuery::parceParams(const std::string& uri, Params& out) const
 {
     auto paramsPos = uri.find('?');
@@ -202,4 +207,26 @@ mu::Val UriQuery::param(const std::string& key, const Val& def) const
 void UriQuery::addParam(const std::string& key, const Val& val)
 {
     m_params[key] = val;
+}
+
+UriQuery UriQuery::addingParam(const std::string& key, const Val& val) const
+{
+    UriQuery copy(*this);
+    copy.addParam(key, val);
+    return copy;
+}
+
+bool UriQuery::contains(const std::string& key) const
+{
+    return m_params.count(key) > 0;
+}
+
+bool UriQuery::operator==(const UriQuery& query) const
+{
+    return m_uri == query.m_uri && m_params == query.m_params;
+}
+
+bool UriQuery::operator!=(const UriQuery& query) const
+{
+    return !(*this == query);
 }

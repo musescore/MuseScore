@@ -22,7 +22,6 @@ add_subdirectory(bb)
 add_subdirectory(braille)
 add_subdirectory(bww)
 add_subdirectory(capella)
-add_subdirectory(guitarpro)
 add_subdirectory(midi)
 add_subdirectory(musedata)
 add_subdirectory(musicxml)
@@ -30,3 +29,9 @@ add_subdirectory(ove)
 add_subdirectory(audioexport)
 add_subdirectory(imagesexport)
 
+# We have two implementations for importing `gp` files
+# Old and new
+# The new one is more structured, imports more correctly, more amenable to improvements, but not stable, so it is now disabled.
+
+#add_subdirectory(guitarpro)
+add_subdirectory(guitarpro_old)

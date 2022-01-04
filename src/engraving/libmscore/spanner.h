@@ -25,7 +25,8 @@
 
 #include <deque>
 
-#include "element.h"
+#include "infrastructure/draw/color.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Spanner;
@@ -43,7 +44,7 @@ enum class SpannerSegmentType {
 //!    parent: System
 //---------------------------------------------------------
 
-class SpannerSegment : public Element
+class SpannerSegment : public EngravingItem
 {
     Spanner* _spanner;
     SpannerSegmentType _spannerSegmentType;
@@ -52,15 +53,16 @@ protected:
     mu::PointF _p2;
     mu::PointF _offset2;
 
-public:
-    SpannerSegment(Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
+public:
+
     // Score Tree functions
-    virtual ScoreElement* treeParent() const override;
-    virtual ScoreElement* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
+    virtual EngravingObject* scanParent() const override;
+    virtual EngravingObject* scanChild(int idx) const override;
+    virtual int scanChildCount() const override;
 
     virtual qreal mag() const override;
     virtual Fraction tick() const override;
@@ -78,7 +80,7 @@ public:
     bool isEndType() const { return spannerSegmentType() == SpannerSegmentType::END; }
 
     void setSystem(System* s);
-    System* system() const { return toSystem(parent()); }
+    System* system() const { return toSystem(explicitParent()); }
 
     const mu::PointF& userOff2() const { return _offset2; }
     void setUserOff2(const mu::PointF& o) { _offset2 = o; }
@@ -95,35 +97,35 @@ public:
     qreal& rxpos2() { return _p2.rx(); }
     qreal& rypos2() { return _p2.ry(); }
 
-    virtual bool isEditable() const override { return true; }
+    bool isEditable() const override { return true; }
 
     QByteArray mimeData(const mu::PointF& dragOffset) const override;
 
-    virtual void spatiumChanged(qreal ov, qreal nv) override;
+    void spatiumChanged(qreal ov, qreal nv) override;
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid id, const QVariant& v) override;
-    virtual QVariant propertyDefault(Pid id) const override;
-    virtual Element* propertyDelegate(Pid) override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& v) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    using EngravingObject::undoChangeProperty;
 
-    virtual Sid getPropertyStyle(Pid id) const override;
-    virtual PropertyFlags propertyFlags(Pid id) const override;
-    virtual void resetProperty(Pid id) override;
-    virtual void styleChanged() override;
+    Sid getPropertyStyle(Pid id) const override;
+    PropertyFlags propertyFlags(Pid id) const override;
+    void resetProperty(Pid id) override;
+    void styleChanged() override;
     void reset() override;
 
-    virtual void setSelected(bool f) override;
-    virtual void setVisible(bool f) override;
-    virtual void setColor(const QColor& col) override;
+    void setSelected(bool f) override;
+    void setVisible(bool f) override;
+    void setColor(const mu::draw::Color& col) override;
 
-    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    virtual Element* nextSegmentElement() override;
-    virtual Element* prevSegmentElement() override;
-    virtual QString accessibleInfo() const override;
-    virtual void triggerLayout() const override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
+    QString accessibleInfo() const override;
+    void triggerLayout() const override;
     void autoplaceSpannerSegment();
 };
 
@@ -132,13 +134,13 @@ public:
 ///   Virtual base class for slurs, ties, lines etc.
 //
 //    @P anchor         enum (Spanner.CHORD, Spanner.MEASURE, Spanner.NOTE, Spanner.SEGMENT)
-//    @P endElement     Element           the element the spanner end is anchored to (read-only)
-//    @P startElement   Element           the element the spanner start is anchored to (read-only)
+//    @P endElement     EngravingItem           the element the spanner end is anchored to (read-only)
+//    @P startElement   EngravingItem           the element the spanner start is anchored to (read-only)
 //    @P tick           int               tick start position
 //    @P tick2          int               tick end position
 //----------------------------------------------------------------------------------
 
-class Spanner : public Element
+class Spanner : public EngravingItem
 {
     Q_GADGET
 public:
@@ -148,8 +150,8 @@ public:
     Q_ENUM(Anchor);
 private:
 
-    Element* _startElement { 0 };
-    Element* _endElement   { 0 };
+    EngravingItem* _startElement { 0 };
+    EngravingItem* _endElement   { 0 };
 
     Anchor _anchor         { Anchor::SEGMENT };
     Fraction _tick         { Fraction(-1, 1) };
@@ -161,27 +163,29 @@ private:
     std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
                                                   // We cannot just delete them as they can be referenced
                                                   // in undo stack or other places already.
-
 protected:
+
+    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const Spanner&);
+
     void pushUnusedSegment(SpannerSegment* seg);
     SpannerSegment* popUnusedSegment();
     void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
                                                   // is added back to the spanner.
     int reuseSegments(int number);
-    SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* ()> createSegment);
-    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment);
+    SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System*)> createSegment);
+    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
 
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
 public:
-    Spanner(Score* s, ElementFlags = ElementFlag::NOTHING);
-    Spanner(const Spanner&);
+
     ~Spanner();
 
     // Score Tree functions
-    virtual ScoreElement* treeParent() const override;
-    virtual ScoreElement* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
+    virtual EngravingObject* scanParent() const override;
+    virtual EngravingObject* scanChild(int idx) const override;
+    virtual int scanChildCount() const override;
 
     virtual qreal mag() const override;
 
@@ -190,9 +194,9 @@ public:
     bool readProperties(XmlReader&) override;
     void writeProperties(XmlWriter&) const override;
 
-    void writeSpannerStart(XmlWriter& xml, const Element* current, int track, Fraction frac = { -1, 1 }) const;
-    void writeSpannerEnd(XmlWriter& xml,   const Element* current, int track, Fraction frac = { -1, 1 }) const;
-    static void readSpanner(XmlReader& e, Element* current, int track);
+    void writeSpannerStart(XmlWriter& xml, const EngravingItem* current, int track, Fraction frac = { -1, 1 }) const;
+    void writeSpannerEnd(XmlWriter& xml,   const EngravingItem* current, int track, Fraction frac = { -1, 1 }) const;
+    static void readSpanner(XmlReader& e, EngravingItem* current, int track);
     static void readSpanner(XmlReader& e, Score* current, int track);
 
     virtual Fraction tick() const override { return _tick; }
@@ -230,32 +234,32 @@ public:
 
     virtual void triggerLayout() const override;
     virtual void triggerLayoutAll() const override;
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
-    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
+    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     bool removeSpannerBack();
     virtual void removeUnmanaged();
     virtual void insertTimeUnmanaged(const Fraction& tick, const Fraction& len);
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant propertyDefault(Pid propertyId) const override;
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
+    virtual void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
 
     void computeStartElement();
     void computeEndElement();
-    static Note* endElementFromSpanner(Spanner* sp, Element* newStart);
-    static Note* startElementFromSpanner(Spanner* sp, Element* newEnd);
+    static Note* endElementFromSpanner(Spanner* sp, EngravingItem* newStart);
+    static Note* startElementFromSpanner(Spanner* sp, EngravingItem* newEnd);
     void setNoteSpan(Note* startNote, Note* endNote);
 
-    Element* startElement() const { return _startElement; }
-    Element* endElement() const { return _endElement; }
+    EngravingItem* startElement() const { return _startElement; }
+    EngravingItem* endElement() const { return _endElement; }
 
     Measure* startMeasure() const;
     Measure* endMeasure() const;
 
-    void setStartElement(Element* e);
-    void setEndElement(Element* e);
+    void setStartElement(EngravingItem* e);
+    void setEndElement(EngravingItem* e);
 
     ChordRest* startCR();
     ChordRest* endCR();
@@ -275,14 +279,14 @@ public:
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
-    virtual void setColor(const QColor& col) override;
-    Spanner* nextSpanner(Element* e, int activeStaff);
-    Spanner* prevSpanner(Element* e, int activeStaff);
-    virtual Element* nextSegmentElement() override;
-    virtual Element* prevSegmentElement() override;
+    virtual void setColor(const mu::draw::Color& col) override;
+    Spanner* nextSpanner(EngravingItem* e, int activeStaff);
+    Spanner* prevSpanner(EngravingItem* e, int activeStaff);
+    virtual EngravingItem* nextSegmentElement() override;
+    virtual EngravingItem* prevSegmentElement() override;
 
     friend class SpannerSegment;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 };
 }     // namespace Ms
 #endif

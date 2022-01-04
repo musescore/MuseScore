@@ -42,12 +42,17 @@ FocusScope {
     signal clicked()
 
     function setProgress(status, indeterminate, current, total) {
+        if (!progressBarNavCtrl.active) {
+            progressBarNavCtrl.requestActive()
+        }
+
         root.progressTitle = status
         root.indeterminate = indeterminate
-        root.value = 0.0
         if (!indeterminate) {
             root.value = current
             root.to = total
+        } else {
+            root.value = 0.0
         }
     }
 
@@ -81,7 +86,40 @@ FocusScope {
                 root.ensureActiveFocus()
             }
         }
-        onTriggered: root.clicked()
+        onTriggered: {
+            root.clicked()
+        }
+    }
+
+    NavigationControl {
+        id: progressBarNavCtrl
+        name: root.objectName != "" ? root.objectName : "ProgressBar"
+        enabled: root.enabled && root.visible
+        panel: navCtrl.panel
+        order: 1000
+
+        accessible.role: MUAccessible.Range
+        accessible.name: root.progressTitle
+        accessible.ignored: true
+        accessible.visualItem: root
+
+        accessible.value: {
+            var current = Math.trunc((root.value * 100) / root.to) // to percent
+            if (current % 10 !== 0) {
+                return accessible.value
+            }
+
+            return current
+        }
+        accessible.minimumValue: 0
+        accessible.maximumValue: 100
+        accessible.stepSize: 1
+
+        onActiveChanged: {
+            if (active) {
+                accessible.ignored = false
+            }
+        }
     }
 
     QtObject {
@@ -98,8 +136,10 @@ FocusScope {
         color: prv.inProgress ? ui.theme.backgroundPrimaryColor : ui.theme.accentColor
         opacity: ui.theme.buttonOpacityNormal
 
-        border.color: ui.theme.focusColor
-        border.width: navCtrl.active ? 2 : 0
+        NavigationFocusBorder { navigationCtrl: navCtrl.active ? navCtrl : progressBarNavCtrl }
+
+        border.color: ui.theme.strokeColor
+        border.width: ui.theme.borderWidth
 
         radius: 3
     }

@@ -52,6 +52,7 @@ protected:
     void renameTab(int index, const QString &) override;
     void changeTabIcon(int index, const QIcon &) override;
     int nonContentsHeight() const override;
+
 private:
     friend class ::TestDocks;
 };

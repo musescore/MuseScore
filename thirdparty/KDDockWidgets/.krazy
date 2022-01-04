@@ -19,5 +19,5 @@ SKIP /KDDockWidgetsConfig.cmake.in
 #skip more files
 SKIP CMakePresets.json
 #skip the borrowed code in the cmake subdir
-SKIP /cmake/Qt5Portability.cmake|/cmake/ECM/|/cmake/InstallLocation.cmake
+SKIP /cmake/InstallLocation.cmake|/cmake/ECM/|/cmake/KDAB/
 

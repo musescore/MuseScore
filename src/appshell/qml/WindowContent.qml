@@ -38,12 +38,16 @@ DockWindow {
 
     objectName: "WindowContent"
 
-    property var provider: InteractiveProvider {
+    property var interactiveProvider: InteractiveProvider {
         topParent: root
 
-        onRequestedDockPage: {
-            root.loadPage(uri)
+        onRequestedDockPage: function(uri, params) {
+            root.loadPage(uri, params)
         }
+    }
+
+    onPageLoaded: {
+        root.interactiveProvider.onPageOpened()
     }
 
     property NavigationSection topToolKeyNavSec: NavigationSection {
@@ -57,14 +61,11 @@ DockWindow {
             id: mainToolBar
 
             objectName: "mainToolBar"
-            title: qsTrc("appshell", "Main Toolbar")
+            title: qsTrc("appshell", "Main toolbar")
 
-            width: root.width / 2
-            minimumWidth: 304
+            floatable: false
 
-            movable: false
-
-            contentComponent: MainToolBar {
+            MainToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 1
 
@@ -83,19 +84,10 @@ DockWindow {
         }
     ]
 
-    mainToolBarDockingHolder: DockToolBarHolder {
-        objectName: root.objectName + "_mainToolBarDockingHolderTop"
-        location: DockBase.Top
-
-        Rectangle { color: ui.theme.backgroundPrimaryColor }
-    }
-
     pages: [
         HomePage {},
 
         NotationPage {
-            dockWindow: root
-
             topToolKeyNavSec: root.topToolKeyNavSec
         },
 

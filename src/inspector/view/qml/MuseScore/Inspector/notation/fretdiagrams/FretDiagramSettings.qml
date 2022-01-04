@@ -19,24 +19,88 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+import QtQuick 2.15
 
-PopupViewButton {
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
+import "internal"
+
+Item {
     id: root
 
-    property alias model: fretDiagramPopup.model
+    property alias model: fretDiagramTabPanel.model
 
-    icon: IconCode.FRETBOARD_DIAGRAM
-    text: qsTrc("inspector", "Fretboard diagrams")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "FretDiagramSettings"
 
-    FretDiagramPopup {
-        id: fretDiagramPopup
+    height: content.implicitHeight
+
+    function focusOnFirst() {
+        fretDiagramTabPanel.focusOnFirst()
+    }
+
+    Column {
+        id: content
+
+        width: parent.width
+
+        spacing: 12
+
+        FretDiagramTabPanel {
+            id: fretDiagramTabPanel
+
+            width: parent.width
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+        }
+
+        Column {
+            height: childrenRect.height
+            width: parent.width
+
+            spacing: 12
+
+            FlatButton {
+                width: parent.width
+
+                visible: root.model ? root.model.areSettingsAvailable : false
+
+                text: qsTrc("inspector", "Clear")
+
+                navigation.name: "Clear"
+                navigation.panel: root.navigationPanel
+                navigation.row: 10000
+
+                onClicked: {
+                    fretCanvas.clear()
+                }
+            }
+
+            FretCanvas {
+                id: fretCanvas
+
+                diagram: root.model ? root.model.fretDiagram : null
+                isBarreModeOn: root.model ? root.model.isBarreModeOn : false
+                isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
+                currentFretDotType: root.model ? root.model.currentFretDotType : false
+                visible: root.model ? root.model.areSettingsAvailable : false
+                color: ui.theme.fontPrimaryColor
+
+                width: parent.width
+            }
+        }
+    }
+
+    StyledTextLabel {
+        anchors.fill: parent
+
+        wrapMode: Text.Wrap
+        text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings")
+        visible: root.model ? !root.model.areSettingsAvailable : false
     }
 }

@@ -21,15 +21,18 @@
  */
 
 #include "tremolobar.h"
+#include "draw/pen.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
-#include "draw/pen.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -40,32 +43,32 @@ static const ElementStyle tremoloBarStyle {
     { Sid::tremoloBarLineWidth,  Pid::LINE_WIDTH },
 };
 
-static const QList<PitchValue> DIP_CURVE = { PitchValue(0, 0),
-                                             PitchValue(30, -100),
-                                             PitchValue(60, 0) };
+static const PitchValues DIP_CURVE = { PitchValue(0, 0),
+                                       PitchValue(30, -100),
+                                       PitchValue(60, 0) };
 
-static const QList<PitchValue> DIVE_CURVE = { PitchValue(0, 0),
-                                              PitchValue(60, -150) };
+static const PitchValues DIVE_CURVE = { PitchValue(0, 0),
+                                        PitchValue(60, -150) };
 
-static const QList<PitchValue> RELEASE_UP_CURVE = { PitchValue(0, -150),
-                                                    PitchValue(60, 0) };
+static const PitchValues RELEASE_UP_CURVE = { PitchValue(0, -150),
+                                              PitchValue(60, 0) };
 
-static const QList<PitchValue> INVERTED_DIP_CURVE = { PitchValue(0, 0),
-                                                      PitchValue(30, 100),
-                                                      PitchValue(60, 0) };
+static const PitchValues INVERTED_DIP_CURVE = { PitchValue(0, 0),
+                                                PitchValue(30, 100),
+                                                PitchValue(60, 0) };
 
-static const QList<PitchValue> RETURN_CURVE = { PitchValue(0, 0),
-                                                PitchValue(60, 150) };
+static const PitchValues RETURN_CURVE = { PitchValue(0, 0),
+                                          PitchValue(60, 150) };
 
-static const QList<PitchValue> RELEASE_DOWN_CURVE = { PitchValue(0, 150),
-                                                      PitchValue(60, 0) };
+static const PitchValues RELEASE_DOWN_CURVE = { PitchValue(0, 150),
+                                                PitchValue(60, 0) };
 
 //---------------------------------------------------------
 //   TremoloBar
 //---------------------------------------------------------
 
-TremoloBar::TremoloBar(Score* s)
-    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TremoloBar::TremoloBar(EngravingItem* parent)
+    : EngravingItem(ElementType::TREMOLOBAR, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tremoloBarStyle);
 }
@@ -77,7 +80,7 @@ TremoloBar::TremoloBar(Score* s)
 void TremoloBar::layout()
 {
     qreal _spatium = spatium();
-    if (parent()) {
+    if (explicitParent()) {
         setPos(0.0, -_spatium * 3.0);
     } else {
         setPos(PointF());
@@ -122,15 +125,14 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 
 void TremoloBar::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::MAG);
     writeProperty(xml, Pid::LINE_WIDTH);
     writeProperty(xml, Pid::PLAY);
     for (const PitchValue& v : m_points) {
-        xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
-                 .arg(v.time).arg(v.pitch).arg(v.vibrato));
+        xml.tagE(TConv::toXml(v));
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -164,11 +166,11 @@ void TremoloBar::read(XmlReader& e)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant TremoloBar::getProperty(Pid propertyId) const
+PropertyValue TremoloBar::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        return lineWidth();
+        return lineWidth().val();
     case Pid::MAG:
         return userMag();
     case Pid::PLAY:
@@ -176,9 +178,9 @@ QVariant TremoloBar::getProperty(Pid propertyId) const
     case Pid::TREMOLOBAR_TYPE:
         return static_cast<int>(parseTremoloBarTypeFromCurve(m_points));
     case Pid::TREMOLOBAR_CURVE:
-        return QVariant::fromValue(m_points);
+        return m_points;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -186,11 +188,11 @@ QVariant TremoloBar::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
+bool TremoloBar::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
-        setLineWidth(v.value<Spatium>());
+        setLineWidth(Spatium(v.value<qreal>()));
         break;
     case Pid::MAG:
         setUserMag(v.toDouble());
@@ -203,10 +205,10 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));
         break;
     case Pid::TREMOLOBAR_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue> >());
+        setPoints(v.value<PitchValues>());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -216,7 +218,7 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant TremoloBar::propertyDefault(Pid pid) const
+PropertyValue TremoloBar::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::MAG:
@@ -226,21 +228,21 @@ QVariant TremoloBar::propertyDefault(Pid pid) const
     case Pid::TREMOLOBAR_TYPE:
         return static_cast<int>(TremoloBarType::DIP);
     case Pid::TREMOLOBAR_CURVE:
-        return QVariant::fromValue(DIP_CURVE);
+        return DIP_CURVE;
     default:
         for (const StyledProperty& p : *styledProperties()) {
             if (p.pid == pid) {
-                if (propertyType(pid) == P_TYPE::SP_REAL) {
-                    return score()->styleP(p.sid);
+                if (propertyType(pid) == P_TYPE::MILLIMETRE) {
+                    return score()->styleMM(p.sid);
                 }
                 return score()->styleV(p.sid);
             }
         }
-        return Element::propertyDefault(pid);
+        return EngravingItem::propertyDefault(pid);
     }
 }
 
-TremoloBarType TremoloBar::parseTremoloBarTypeFromCurve(const QList<PitchValue>& curve) const
+TremoloBarType TremoloBar::parseTremoloBarTypeFromCurve(const PitchValues& curve) const
 {
     if (curve == DIP_CURVE) {
         return TremoloBarType::DIP;

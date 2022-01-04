@@ -26,17 +26,22 @@
 #include "inotation.h"
 
 namespace mu::notation {
+class IExcerptNotation;
+using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
+
 class IExcerptNotation
 {
 public:
+    virtual ~IExcerptNotation() = default;
+
+    virtual bool isCreated() const = 0;
+
+    virtual QString title() const = 0;
+    virtual void setTitle(const QString& title) = 0;
+
     virtual INotationPtr notation() = 0;
-
-    virtual Meta metaInfo() const = 0;
-    virtual void setMetaInfo(const Meta& meta) = 0;
-
-    virtual INotationPtr clone() const = 0;
+    virtual IExcerptNotationPtr clone() const = 0;
 };
-using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
 }
 
 #endif // MU_NOTATION_IEXCERPTNOTATION_H

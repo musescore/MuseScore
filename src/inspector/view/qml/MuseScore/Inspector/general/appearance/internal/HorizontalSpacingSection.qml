@@ -20,83 +20,60 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject leadingSpace: undefined
-    property QtObject barWidth: undefined
+    property PropertyItem leadingSpace: null
+    property PropertyItem barWidth: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
-
-    function navigationRow(r) {
-        return root.navigationRowOffset + r
-    }
+    property int navigationRowStart: 0
+    property int navigationRowEnd: barWidth.navigationRowEnd
 
     function focusOnFirst() {
-        leadingValue.navigation.requestActive()
+        leadingValue.focusOnFirst()
     }
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: leadingValue
+
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
-        navigation.name: "LeadingMenu"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow(1)
+        navigationName: "Leading"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
 
         titleText: qsTrc("inspector", "Leading")
-        propertyItem: leadingSpace
+        propertyItem: root.leadingSpace
 
-        IncrementalPropertyControl {
-            id: leadingValue
-            icon: IconCode.HORIZONTAL
-
-            navigation.name: "LeadingValue"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRow(2)
-
-            enabled: leadingSpace ? leadingSpace.isEnabled : false
-            isIndeterminate: leadingSpace && enabled ? leadingSpace.isUndefined : false
-            currentValue: leadingSpace ? leadingSpace.value : 0
-
-            onValueEdited: { leadingSpace.value = newValue }
-        }
+        icon: IconCode.HORIZONTAL
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: barWidth
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
-        navigation.name: "Bar width Menu"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRow(3)
+        navigationName: "Bar width"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: leadingValue.navigationRowEnd + 1
 
         titleText: qsTrc("inspector", "Bar width")
-        propertyItem: barWidth
+        propertyItem: root.barWidth
 
-        IncrementalPropertyControl {
-            icon: IconCode.HORIZONTAL
-
-            navigation.name: "Bar width Value"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRow(4)
-
-            enabled: barWidth ? barWidth.isEnabled : false
-            isIndeterminate: barWidth && enabled ? barWidth.isUndefined : false
-            currentValue: barWidth ? barWidth.value : 0
-
-            onValueEdited: { barWidth.value = newValue }
-        }
+        icon: IconCode.HORIZONTAL
     }
 }

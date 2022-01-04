@@ -23,14 +23,12 @@
 #include <QDir>
 #include <QCoreApplication>
 
-#include "config.h"
 #include "translation.h"
+#include "style/style.h"
 
 #include "musescoreCore.h"
-#include "style.h"
 #include "mscore.h"
-#include "sequencer.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "dynamic.h"
 #include "accidental.h"
 #include "figuredbass.h"
@@ -61,17 +59,16 @@
 #include "keysig.h"
 #include "harmony.h"
 #include "stafftext.h"
-#include "mscoreview.h"
 #include "chord.h"
 #include "hook.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "fraction.h"
 #include "excerpt.h"
-#include "spatium.h"
 #include "barline.h"
 #include "skyline.h"
 #include "scorefont.h"
+
+#include "config.h"
 
 using namespace mu;
 
@@ -94,8 +91,6 @@ bool MScore::useFallbackFont       = true;
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
 
-MStyle* MScore::_defaultStyleForParts;
-
 QString MScore::_globalShare;
 int MScore::_vRaster;
 int MScore::_hRaster;
@@ -104,19 +99,12 @@ qreal MScore::verticalPageGap = 5.0;
 qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
 
-QColor MScore::selectColor[VOICES];
-QColor MScore::defaultColor;
-QColor MScore::layoutBreakColor;
-QColor MScore::frameMarginColor;
-QColor MScore::bgColor;
-QColor MScore::dropColor;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
 bool MScore::harmonyPlayDisableCompatibility;
 bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
-bool MScore::panPlayback;
 int MScore::playbackSpeedIncrement;
 qreal MScore::nudgeStep;
 qreal MScore::nudgeStep10;
@@ -124,7 +112,6 @@ qreal MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
 
 QString MScore::lastError;
-int MScore::division    = 480;     // 3840;   // pulses per quarter note (PPQ) // ticks per beat
 int MScore::sampleRate  = 44100;
 int MScore::mtcType;
 
@@ -134,10 +121,6 @@ bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;
 
 double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
-
-MPaintDevice* MScore::_paintDevice;
-
-Sequencer* MScore::seq = 0;
 
 extern void initDrumset();
 extern QString mscoreGlobalShare;
@@ -164,8 +147,11 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "First beat of measure") },
     { MsError::CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Cannot split tuplet") },
     { MsError::INSUFFICIENT_MEASURES,           "m3", QT_TRANSLATE_NOOP("error",
-                                                                        "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
+                                                                        "Measure repeat cannot be added here:\n"
+                                                                        "Insufficient or unequal measures") },
     { MsError::CANNOT_SPLIT_MEASURE_REPEAT,     "m4", QT_TRANSLATE_NOOP("error", "Cannot split measure repeat") },
+    { MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT,  "m5",
+      QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Measure would be too short") },
 
     { MsError::CANNOT_REMOVE_TIME_TUPLET,       "d1", QT_TRANSLATE_NOOP("error",
                                                                         "Cannot remove time from tuplet:\nPlease select the complete tuplet and retry") },
@@ -186,72 +172,6 @@ std::vector<MScoreError> MScore::errorList {
 };
 
 MsError MScore::_error { MsError::MS_NO_ERROR };
-
-//---------------------------------------------------------
-//   Direction
-//---------------------------------------------------------
-
-Direction toDirection(const QString& s)
-{
-    Direction val;
-    if (s == "up") {
-        val = Direction::UP;
-    } else if (s == "down") {
-        val = Direction::DOWN;
-    } else if (s == "auto") {
-        val = Direction::AUTO;
-    } else {
-        val = Direction(s.toInt());
-    }
-    return val;
-}
-
-//---------------------------------------------------------
-//   Direction::toString
-//---------------------------------------------------------
-
-const char* toString(Direction val)
-{
-    switch (val) {
-    case Direction::AUTO: return "auto";
-    case Direction::UP:   return "up";
-    case Direction::DOWN: return "down";
-    }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    __builtin_unreachable();
-#else
-    // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-    __assume(0);
-#endif
-}
-
-//---------------------------------------------------------
-//   Direction::toUserString
-//---------------------------------------------------------
-
-QString toUserString(Direction val)
-{
-    switch (val) {
-    case Direction::AUTO: return qtrc("Direction", "Auto");
-    case Direction::UP:   return qtrc("Direction", "Up");
-    case Direction::DOWN: return qtrc("Direction", "Down");
-    }
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    __builtin_unreachable();
-#else
-    // The MSVC __assume() optimizer hint is similar, though not identical, to __builtin_unreachable()
-    __assume(0);
-#endif
-}
-
-//---------------------------------------------------------
-//   doubleToSpatium
-//---------------------------------------------------------
-
-static Spatium doubleToSpatium(double d)
-{
-    return Spatium(d);
-}
 
 //---------------------------------------------------------
 //   init
@@ -286,25 +206,17 @@ void MScore::init()
     }
 #endif
 
-    defaultColor        = Qt::black;
-    dropColor           = QColor("#1778db");
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
     playRepeats         = true;
-    panPlayback         = true;
     playbackSpeedIncrement = 5;
 
     lastError           = "";
 
-    layoutBreakColor    = QColor("#A0A0A4");
-    frameMarginColor    = QColor("#A0A0A4");
-    bgColor.setNamedColor("#dddddd");
-
     //
     //  initialize styles
     //
-    _baseStyle.precomputeValues();
 
     ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
@@ -320,22 +232,8 @@ void MScore::init()
 
 void MScore::registerUiTypes()
 {
-    if (!QMetaType::registerConverter<Spatium, double>(&Spatium::toDouble)) {
-        qFatal("registerConverter Spatium::toDouble failed");
-    }
-    if (!QMetaType::registerConverter<double, Spatium>(&doubleToSpatium)) {
-        qFatal("registerConverter doubleToSpatium failed");
-    }
-//      if (!QMetaType::registerComparators<Spatium>())
-//            qFatal("registerComparators for Spatium failed");
-
 #ifdef SCRIPT_INTERFACE
-    qRegisterMetaType<Note::ValueType>("ValueType");
-
-    qRegisterMetaType<MScore::DirectionH>("DirectionH");
     qRegisterMetaType<Spanner::Anchor>("Anchor");
-    qRegisterMetaType<NoteHead::Group>("NoteHeadGroup");
-    qRegisterMetaType<NoteHead::Type>("NoteHeadType");
     qRegisterMetaType<SegmentType>("SegmentType");
     qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
     qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");
@@ -343,72 +241,12 @@ void MScore::registerUiTypes()
     qRegisterMetaType<Volta::Type>("VoltaType");
     qRegisterMetaType<OttavaType>("OttavaType");
     qRegisterMetaType<Trill::Type>("TrillType");
-    qRegisterMetaType<Dynamic::Range>("DynamicRange");
     qRegisterMetaType<Jump::Type>("JumpType");
     qRegisterMetaType<Marker::Type>("MarkerType");
-    qRegisterMetaType<Beam::Mode>("BeamMode");
     qRegisterMetaType<HairpinType>("HairpinType");
     qRegisterMetaType<Lyrics::Syllabic>("Syllabic");
-    qRegisterMetaType<LayoutBreak::Type>("LayoutBreakType");
 
-    //classed enumerations
-//      qRegisterMetaType<MSQE_StyledPropertyListIdx::E>("StyledPropertyListIdx");
-//      qRegisterMetaType<MSQE_BarLineType::E>("BarLineType");
 #endif
-    qRegisterMetaType<Fraction>("Fraction");
-
-    if (!QMetaType::registerConverter<Fraction, QString>(&Fraction::toString)) {
-        qFatal("registerConverter Fraction::toString failed");
-    }
-}
-
-//---------------------------------------------------------
-//   readDefaultStyle
-//---------------------------------------------------------
-
-bool MScore::readDefaultStyle(QString file)
-{
-    if (file.isEmpty()) {
-        return false;
-    }
-    MStyle style = defaultStyle();
-    QFile f(file);
-    if (!f.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    bool rv = style.load(&f, true);
-    if (rv) {
-        setDefaultStyle(style);
-    }
-    f.close();
-    return rv;
-}
-
-bool MScore::readPartStyle(QString filePath)
-{
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-
-    _defaultStyleForParts = new MStyle(_defaultStyle);
-    bool rv = _defaultStyleForParts->load(&file, true);
-    if (rv) {
-        _defaultStyleForParts->precomputeValues();
-    }
-    file.close();
-    return rv;
-}
-
-//---------------------------------------------------------
-//   defaultStyleForPartsHasChanged
-//---------------------------------------------------------
-
-void MScore::defaultStyleForPartsHasChanged()
-{
-// TODO what is needed here?
-//      delete _defaultStyleForParts;
-//      _defaultStyleForParts = 0;
 }
 
 //---------------------------------------------------------
@@ -437,42 +275,5 @@ const char* MScore::errorGroup()
         }
     }
     return "";
-}
-
-//---------------------------------------------------------
-//   paintDevice
-//---------------------------------------------------------
-
-MPaintDevice* MScore::paintDevice()
-{
-    if (!_paintDevice) {
-        _paintDevice = new MPaintDevice();
-    }
-    return _paintDevice;
-}
-
-//---------------------------------------------------------
-//   metric
-//---------------------------------------------------------
-
-int MPaintDevice::metric(PaintDeviceMetric m) const
-{
-    switch (m) {
-    case QPaintDevice::PdmDpiY:
-        return int(DPI);
-    default:
-//printf("debug: metric %d\n", int(m));
-        return 1;
-    }
-}
-
-//---------------------------------------------------------
-//   paintEngine
-//---------------------------------------------------------
-
-QPaintEngine* MPaintDevice::paintEngine() const
-{
-//printf("paint engine\n");
-    return 0;
 }
 }

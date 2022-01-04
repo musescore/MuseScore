@@ -24,6 +24,11 @@
 #define __CHORDLIST_H__
 
 #include <QMap>
+#include "style/style.h"
+
+namespace mu::engraving::compat {
+class ReadChordListHook;
+}
 
 namespace Ms {
 class XmlWriter;
@@ -259,6 +264,8 @@ class ChordList : public QMap<int, ChordDescription>
     qreal _emag = 1.0, _eadjust = 0.0;
     qreal _mmag = 1.0, _madjust = 0.0;
 
+    bool _customChordList = false; // if true, chordlist will be saved as part of score
+
 public:
     QList<ChordFont> fonts;
     QList<RenderAction> renderListRoot;
@@ -273,13 +280,27 @@ public:
     void configureAutoAdjust(qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0, qreal madjust = 0.0);
     qreal position(const QStringList& names, ChordTokenClass ctc) const;
 
-    void write(XmlWriter& xml) const;
-    void read(XmlReader&);
     bool read(const QString&);
+    bool read(QIODevice* device);
     bool write(const QString&) const;
+    bool write(QIODevice* device) const;
     bool loaded() const;
     void unload();
+
+    const ChordDescription* description(int id) const;
     ChordSymbol symbol(const QString& s) const { return symbols.value(s); }
+
+    void setCustomChordList(bool t) { _customChordList = t; }
+    bool customChordList() const { return _customChordList; }
+
+    void checkChordList(const MStyle& style);
+
+private:
+
+    friend class mu::engraving::compat::ReadChordListHook;
+
+    void read(XmlReader&);
+    void write(XmlWriter& xml) const;
 };
 }     // namespace Ms
 #endif

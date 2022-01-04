@@ -58,10 +58,10 @@ QVariantList ImportPreferencesModel::shortestNotes() const
         QVariantMap { { "title", qtrc("appshell", "Quarter") }, { "value", division() } },
         QVariantMap { { "title", qtrc("appshell", "Eighth") }, { "value", division() / 2 } },
         QVariantMap { { "title", qtrc("appshell", "16th") }, { "value", division() / 4 } },
-        QVariantMap { { "title", qtrc("appshell", "32th") }, { "value", division() / 8 } },
+        QVariantMap { { "title", qtrc("appshell", "32nd") }, { "value", division() / 8 } },
         QVariantMap { { "title", qtrc("appshell", "64th") }, { "value", division() / 16 } },
         QVariantMap { { "title", qtrc("appshell", "128th") }, { "value", division() / 32 } },
-        QVariantMap { { "title", qtrc("appshell", "256h") }, { "value", division() / 64 } },
+        QVariantMap { { "title", qtrc("appshell", "256th") }, { "value", division() / 64 } },
         QVariantMap { { "title", qtrc("appshell", "512th") }, { "value", division() / 128 } },
         QVariantMap { { "title", qtrc("appshell", "1024th") }, { "value", division() / 256 } }
     };
@@ -76,7 +76,7 @@ QString ImportPreferencesModel::stylePathFilter() const
 
 QString ImportPreferencesModel::styleChooseTitle() const
 {
-    return qtrc("appshell", "Choose Default Style for Imports");
+    return qtrc("appshell", "Choose default style for imports");
 }
 
 QString ImportPreferencesModel::fileDirectory(const QString& filePath) const

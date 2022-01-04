@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include <QGuiApplication>
-
 #include "dynamic.h"
+#include "style/style.h"
+#include "rw/xml.h"
+#include "types/typesconv.h"
+
 #include "dynamichairpingroup.h"
-#include "xml.h"
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "segment.h"
 #include "utils.h"
-#include "style.h"
 #include "mscore.h"
 #include "chord.h"
 #include "undo.h"
 #include "musescoreCore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //-----------------------------------------------------------------------------
@@ -45,56 +45,62 @@ namespace Ms {
 //-----------------------------------------------------------------------------
 
 struct Dyn {
+    DynamicType type;
     int velocity;        ///< associated midi velocity (0-127, -1 = none)
-    bool accent;         ///< if true add velocity to current chord velocity
-    const char* tag;     // name of dynamics, eg. "fff"
-    const char* text;    // utf8 text of dynamic
     int changeInVelocity;
+    bool accent;         ///< if true add velocity to current chord velocity
+    const char* text;    // utf8 text of dynamic
 };
 
 // variant with ligatures, works for both emmentaler and bravura:
-
 static Dyn dynList[] = {
     // dynamic:
-    { -1,  true,  "other-dynamics", "", 0 },
-    { 1,  false, "pppppp",
-      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>",
-      0 },
-    { 5,  false, "ppppp",
-      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 10,  false, "pppp",   "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 16,  false, "ppp",    "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 33,  false, "pp",     "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>", 0 },
-    { 49,  false, "p",      "<sym>dynamicPiano</sym>", 0 },
-    { 64,  false, "mp",     "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>", 0 },
-    { 80,  false, "mf",     "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>", 0 },
-    { 96,  false, "f",      "<sym>dynamicForte</sym>", 0 },
-    { 112,  false, "ff",     "<sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 126,  false, "fff",    "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "ffff",   "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "fffff",
-      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", 0 },
-    { 127,  false, "ffffff",
-      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>",
-      0 },
+    { DynamicType::OTHER,  -1, 0,   true, "" },
+    { DynamicType::PPPPPP,  1, 0,   false,
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PPPPP,   5, 0,   false,
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PPPP,    10, 0,  false,
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PPP,     16, 0,  false,
+      "<sym>dynamicPiano</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PP,      33, 0,  false,  "<sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::P,       49, 0,  false,  "<sym>dynamicPiano</sym>" },
 
-    // accents:
-    { 96,  true,  "fp",     "<sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-    { 49,  true,  "pf",     "<sym>dynamicPiano</sym><sym>dynamicForte</sym>", 47 },
-    { 112, true,  "sf",     "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>", -18 },
-    { 112, true,  "sfz",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 126, true,  "sff",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>", -18 },
-    { 126, true,  "sffz",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 112, true,  "sfp",    "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>", -47 },
-    { 112, true,  "sfpp",   "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>", -79 },
-    { 112, true,  "rfz",    "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 112, true,  "rf",     "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>", -18 },
-    { 112, true,  "fz",     "<sym>dynamicForte</sym><sym>dynamicZ</sym>", -18 },
-    { 96,  true,  "m",      "<sym>dynamicMezzo</sym>", -16 },
-    { 112, true,  "r",      "<sym>dynamicRinforzando</sym>", -18 },
-    { 112, true,  "s",      "<sym>dynamicSforzando</sym>", -18 },
-    { 80,  true,  "z",      "<sym>dynamicZ</sym>", 0 },
-    { 49,  true,  "n",      "<sym>dynamicNiente</sym>", -48 }
+    { DynamicType::MP,      64, 0,   false, "<sym>dynamicMezzo</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::MF,      80, 0,   false, "<sym>dynamicMezzo</sym><sym>dynamicForte</sym>" },
+
+    { DynamicType::F,       96, 0,   false, "<sym>dynamicForte</sym>" },
+    { DynamicType::FF,      112, 0,  false, "<sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFF,     126, 0,  false, "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFFF,    127, 0,  false,
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFFFF,   127, 0,  false,
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FFFFFF,  127, 0,  false,
+      "<sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+
+    { DynamicType::FP,      96, -47,  true, "<sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::PF,      49, 47,   true, "<sym>dynamicPiano</sym><sym>dynamicForte</sym>" },
+
+    { DynamicType::SF,      112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFZ,     112, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::SFF,     126, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFFZ,    126, -18, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::SFP,     112, -47, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
+    { DynamicType::SFPP,    112, -79, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
+
+    { DynamicType::RFZ,     112, -18, true, "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::RF,      112, -18, true, "<sym>dynamicRinforzando</sym><sym>dynamicForte</sym>" },
+    { DynamicType::FZ,      112, -18, true, "<sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+
+    { DynamicType::M,       96, -16,  true, "<sym>dynamicMezzo</sym>" },
+    { DynamicType::R,       112, -18, true, "<sym>dynamicRinforzando</sym>" },
+    { DynamicType::S,       112, -18, true, "<sym>dynamicSforzando</sym>" },
+    { DynamicType::Z,       80, 0,    true, "<sym>dynamicZ</sym>" },
+    { DynamicType::N,       49, -48,  true, "<sym>dynamicNiente</sym>" }
 };
 
 //---------------------------------------------------------
@@ -107,66 +113,17 @@ static const ElementStyle dynamicsStyle {
 };
 
 //---------------------------------------------------------
-//   changeSpeedTable
-//---------------------------------------------------------
-
-const std::vector<Dynamic::ChangeSpeedItem> Dynamic::changeSpeedTable {
-    { Dynamic::Speed::NORMAL,           "normal" },
-    { Dynamic::Speed::SLOW,             "slow" },
-    { Dynamic::Speed::FAST,             "fast" },
-};
-
-//---------------------------------------------------------
-//   findInString
-//---------------------------------------------------------
-
-// find the longest first match of dynList's dynamic text in s
-// used by the MusicXML export to correctly export dynamics embedded
-// in spanner begin- or endtexts
-// return match's position and length and the dynamic type
-
-int Dynamic::findInString(const QString& s, int& length, QString& type)
-{
-    length = 0;
-    type = "";
-    int matchIndex { -1 };
-    const int n = sizeof(dynList) / sizeof(*dynList);
-
-    // for all dynamics, find their text in s
-    for (int i = 0; i < n; ++i) {
-        const QString dynamicText = dynList[i].text;
-        const int dynamicLength = dynamicText.length();
-        // note: skip entries with empty text
-        if (dynamicLength > 0) {
-            const auto index = s.indexOf(dynamicText);
-            if (index >= 0) {
-                // found a match, accept it if
-                // - it is the first one
-                // - or it starts a the same index but is longer ("pp" versus "p")
-                if (matchIndex == -1 || (index == matchIndex && dynamicLength > length)) {
-                    matchIndex = index;
-                    length = dynamicLength;
-                    type = dynList[i].tag;
-                }
-            }
-        }
-    }
-
-    return matchIndex;
-}
-
-//---------------------------------------------------------
 //   Dynamic
 //---------------------------------------------------------
 
-Dynamic::Dynamic(Score* s)
-    : TextBase(s, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Dynamic::Dynamic(Segment* parent)
+    : TextBase(ElementType::DYNAMIC, parent, TextStyleType::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _velocity    = -1;
-    _dynRange    = Range::PART;
-    _dynamicType = Type::OTHER;
+    _dynRange    = DynamicRange::PART;
+    _dynamicType = DynamicType::OTHER;
     _changeInVelocity = 128;
-    _velChangeSpeed = Speed::NORMAL;
+    _velChangeSpeed = DynamicSpeed::NORMAL;
     initElementStyle(&dynamicsStyle);
 }
 
@@ -222,22 +179,22 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = double(score()->tempomap()->tempo(segment()->tick().ticks())) / double(Score::defaultTempo());
+    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::defaultTempo.val;
     double speedMult;
     switch (velChangeSpeed()) {
-    case Dynamic::Speed::SLOW:
+    case DynamicSpeed::SLOW:
         speedMult = 1.3;
         break;
-    case Dynamic::Speed::FAST:
+    case DynamicSpeed::FAST:
         speedMult = 0.5;
         break;
-    case Dynamic::Speed::NORMAL:
+    case DynamicSpeed::NORMAL:
     default:
         speedMult = 0.8;
         break;
     }
 
-    return Fraction::fromTicks(int(ratio * (speedMult * double(MScore::division))));
+    return Fraction::fromTicks(int(ratio * (speedMult * double(Constant::division))));
 }
 
 //---------------------------------------------------------
@@ -247,19 +204,19 @@ Fraction Dynamic::velocityChangeLength() const
 bool Dynamic::isVelocityChangeAvailable() const
 {
     switch (dynamicType()) {
-    case Type::FP:
-    case Type::SF:
-    case Type::SFZ:
-    case Type::SFF:
-    case Type::SFFZ:
-    case Type::SFP:
-    case Type::SFPP:
-    case Type::RFZ:
-    case Type::RF:
-    case Type::FZ:
-    case Type::M:
-    case Type::R:
-    case Type::S:
+    case DynamicType::FP:
+    case DynamicType::SF:
+    case DynamicType::SFZ:
+    case DynamicType::SFF:
+    case DynamicType::SFFZ:
+    case DynamicType::SFP:
+    case DynamicType::SFPP:
+    case DynamicType::RFZ:
+    case DynamicType::RF:
+    case DynamicType::FZ:
+    case DynamicType::M:
+    case DynamicType::R:
+    case DynamicType::S:
         return true;
     default:
         return false;
@@ -275,14 +232,14 @@ void Dynamic::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::DYNAMIC_TYPE);
     writeProperty(xml, Pid::VELOCITY);
     writeProperty(xml, Pid::DYNAMIC_RANGE);
     writeProperty(xml, Pid::VELO_CHANGE);
     writeProperty(xml, Pid::VELO_CHANGE_SPEED);
-    TextBase::writeProperties(xml, dynamicType() == Type::OTHER);
-    xml.etag();
+    TextBase::writeProperties(xml, dynamicType() == DynamicType::OTHER);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -298,16 +255,15 @@ void Dynamic::read(XmlReader& e)
         } else if (tag == "velocity") {
             _velocity = e.readInt();
         } else if (tag == "dynType") {
-            _dynRange = Range(e.readInt());
+            _dynRange = TConv::fromXml(e.readElementText(), DynamicRange::STAFF);
         } else if (tag == "veloChange") {
             _changeInVelocity = e.readInt();
         } else if (tag == "veloChangeSpeed") {
-            _velChangeSpeed = nameToSpeed(e.readElementText());
+            _velChangeSpeed = TConv::fromXml(e.readElementText(), DynamicSpeed::NORMAL);
         } else if (!TextBase::readProperties(e)) {
             e.unknown();
         }
     }
-    styleChanged();
 }
 
 //---------------------------------------------------------
@@ -322,17 +278,33 @@ void Dynamic::layout()
     if (s) {
         int t = track() & ~0x3;
         for (int voice = 0; voice < VOICES; ++voice) {
-            Element* e = s->element(t + voice);
+            EngravingItem* e = s->element(t + voice);
             if (!e) {
                 continue;
             }
-            if (e->isChord() && (align() & Align::HCENTER)) {
-                Chord* c = toChord(e);
-                qreal noteHeadWidth = score()->noteHeadWidth() * c->mag();
-                if (c->stem() && !c->up()) {        // stem down
-                    rxpos() += noteHeadWidth * .25;            // center on stem + optical correction
-                } else {
-                    rxpos() += noteHeadWidth * .5;             // center on notehead
+            if (e->isChord() && (align() == AlignH::HCENTER)) {
+                SymId symId = TConv::symId(dynamicType());
+
+                // this value is different than chord()->mag() or mag()
+                // as it reflects the actual scaling of the text
+                // using chord()->mag(), mag() or fontSize will yield
+                // undesirable results with small staves or cue notes
+                qreal dynamicMag = spatium() / SPATIUM20;
+
+                qreal noteHeadWidth = score()->noteHeadWidth() * dynamicMag;
+                rxpos() += noteHeadWidth * .5;
+
+                qreal opticalCenter = symSmuflAnchor(symId, SmuflAnchorId::opticalCenter).x() * dynamicMag;
+                if (symId != SymId::noSym && opticalCenter) {
+                    static const qreal DEFAULT_DYNAMIC_FONT_SIZE = 10.0;
+                    qreal fontScaling = size() / DEFAULT_DYNAMIC_FONT_SIZE;
+                    qreal left = symBbox(symId).bottomLeft().x() * dynamicMag; // this is negative per SMuFL spec
+
+                    opticalCenter *= fontScaling;
+                    left *= fontScaling;
+
+                    qreal offset = opticalCenter - left - bbox().width() * 0.5;
+                    rxpos() -= offset;
                 }
             } else {
                 rxpos() += e->width() * .5;
@@ -340,7 +312,7 @@ void Dynamic::layout()
             break;
         }
     } else {
-        setPos(PointF());          // for palette
+        setPos(PointF());
     }
 }
 
@@ -387,24 +359,25 @@ void Dynamic::setDynamicType(const QString& tag)
 {
     int n = sizeof(dynList) / sizeof(*dynList);
     for (int i = 0; i < n; ++i) {
-        if (dynList[i].tag == tag || dynList[i].text == tag) {
-            setDynamicType(Type(i));
+        if (TConv::toXml(DynamicType(i)) == tag || dynList[i].text == tag) {
+            setDynamicType(DynamicType(i));
             setXmlText(QString::fromUtf8(dynList[i].text));
             return;
         }
     }
     qDebug("setDynamicType: other <%s>", qPrintable(tag));
-    setDynamicType(Type::OTHER);
+    setDynamicType(DynamicType::OTHER);
     setXmlText(tag);
 }
 
-//---------------------------------------------------------
-//   dynamicTypeName
-//---------------------------------------------------------
-
-QString Dynamic::dynamicTypeName(Dynamic::Type type)
+QString Dynamic::dynamicText(DynamicType t)
 {
-    return dynList[int(type)].tag;
+    return dynList[int(t)].text;
+}
+
+QString Dynamic::subtypeName() const
+{
+    return TConv::toXml(dynamicType());
 }
 
 //---------------------------------------------------------
@@ -424,7 +397,7 @@ void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
     if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text)) {
-        _dynamicType = Type::OTHER;
+        _dynamicType = DynamicType::OTHER;
     }
 }
 
@@ -441,7 +414,7 @@ void Dynamic::reset()
 //   getDragGroup
 //---------------------------------------------------------
 
-std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const EngravingItem*)> isDragged)
 {
     if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged)) {
         return g;
@@ -458,12 +431,12 @@ std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Ele
 
 mu::RectF Dynamic::drag(EditData& ed)
 {
-    RectF f = Element::drag(ed);
+    RectF f = EngravingItem::drag(ed);
 
     //
     // move anchor
     //
-    Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+    Qt::KeyboardModifiers km = ed.modifiers;
     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
         int si       = staffIdx();
         Segment* seg = segment();
@@ -488,51 +461,22 @@ mu::RectF Dynamic::drag(EditData& ed)
 //   undoSetDynRange
 //---------------------------------------------------------
 
-void Dynamic::undoSetDynRange(Range v)
+void Dynamic::undoSetDynRange(DynamicRange v)
 {
-    undoChangeProperty(Pid::DYNAMIC_RANGE, int(v));
-}
-
-//---------------------------------------------------------
-//   speedToName
-//---------------------------------------------------------
-
-QString Dynamic::speedToName(Speed speed)
-{
-    for (auto i : Dynamic::changeSpeedTable) {
-        if (i.speed == speed) {
-            return i.name;
-        }
-    }
-    qFatal("Unrecognised change speed!");
-    return "none";   // silence a compiler warning
-}
-
-//---------------------------------------------------------
-//   nameToSpeed
-//---------------------------------------------------------
-
-Dynamic::Speed Dynamic::nameToSpeed(QString name)
-{
-    for (auto i : Dynamic::changeSpeedTable) {
-        if (i.name == name) {
-            return i.speed;
-        }
-    }
-    return Speed::NORMAL;     // default
+    undoChangeProperty(Pid::DYNAMIC_RANGE, v);
 }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Dynamic::getProperty(Pid propertyId) const
+PropertyValue Dynamic::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        return QVariant::fromValue(_dynamicType);
+        return _dynamicType;
     case Pid::DYNAMIC_RANGE:
-        return int(_dynRange);
+        return _dynRange;
     case Pid::VELOCITY:
         return velocity();
     case Pid::SUBTYPE:
@@ -541,7 +485,7 @@ QVariant Dynamic::getProperty(Pid propertyId) const
         if (isVelocityChangeAvailable()) {
             return changeInVelocity();
         } else {
-            return QVariant();
+            return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
         return int(_velChangeSpeed);
@@ -554,20 +498,20 @@ QVariant Dynamic::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
+bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        _dynamicType = v.value<Dynamic::Type>();
+        _dynamicType = v.value<DynamicType>();
         break;
     case Pid::DYNAMIC_RANGE:
-        _dynRange = Range(v.toInt());
+        _dynRange = v.value<DynamicRange>();
         break;
     case Pid::VELOCITY:
         _velocity = v.toInt();
         break;
     case Pid::SUBTYPE:
-        _dynamicType = Type(v.toInt());
+        _dynamicType = v.value<DynamicType>();
         break;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
@@ -575,7 +519,7 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
         }
         break;
     case Pid::VELO_CHANGE_SPEED:
-        _velChangeSpeed = Speed(v.toInt());
+        _velChangeSpeed = v.value<DynamicSpeed>();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -591,23 +535,23 @@ bool Dynamic::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Dynamic::propertyDefault(Pid id) const
+PropertyValue Dynamic::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::DYNAMICS);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::DYNAMICS;
     case Pid::DYNAMIC_RANGE:
-        return int(Range::PART);
+        return DynamicRange::PART;
     case Pid::VELOCITY:
         return -1;
     case Pid::VELO_CHANGE:
         if (isVelocityChangeAvailable()) {
             return dynList[int(dynamicType())].changeInVelocity;
         } else {
-            return QVariant();
+            return PropertyValue();
         }
     case Pid::VELO_CHANGE_SPEED:
-        return int(Speed::NORMAL);
+        return DynamicSpeed::NORMAL;
     default:
         return TextBase::propertyDefault(id);
     }
@@ -626,21 +570,6 @@ Pid Dynamic::propertyId(const QStringRef& name) const
 }
 
 //---------------------------------------------------------
-//   propertyUserValue
-//---------------------------------------------------------
-
-QString Dynamic::propertyUserValue(Pid pid) const
-{
-    switch (pid) {
-    case Pid::DYNAMIC_TYPE:
-        return dynamicTypeName();
-    default:
-        break;
-    }
-    return TextBase::propertyUserValue(pid);
-}
-
-//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 
@@ -648,16 +577,16 @@ QString Dynamic::accessibleInfo() const
 {
     QString s;
 
-    if (dynamicType() == Dynamic::Type::OTHER) {
+    if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
         if (s.length() > 20) {
             s.truncate(20);
             s += "…";
         }
     } else {
-        s = dynamicTypeName();
+        s = TConv::toUserName(dynamicType());
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), s);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 
 //---------------------------------------------------------
@@ -668,11 +597,11 @@ QString Dynamic::screenReaderInfo() const
 {
     QString s;
 
-    if (dynamicType() == Dynamic::Type::OTHER) {
+    if (dynamicType() == DynamicType::OTHER) {
         s = plainText().simplified();
     } else {
-        s = dynamicTypeName();
+        s = TConv::toUserName(dynamicType());
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), s);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 }

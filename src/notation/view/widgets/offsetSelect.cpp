@@ -31,40 +31,14 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 {
     setupUi(this);
 
-    showRaster(false);
-
-    //! TODO Need to port for MU4
-//    QAction* a = Ms::getAction("hraster");
-//    if (a) {
-//        a->setCheckable(true);
-//        hRaster->setDefaultAction(a);
-//        hRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-//        hRaster->addAction(Ms::getAction("config-raster"));
-//    }
-
-//    a = Ms::getAction("vraster");
-//    if (a) {
-//        a->setCheckable(true);
-//        vRaster->setDefaultAction(a);
-//        vRaster->setContextMenuPolicy(Qt::ActionsContextMenu);
-//        vRaster->addAction(Ms::getAction("config-raster"));
-//    }
-    //!---
-
-    connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
-    connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
+    connect(xVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
+    connect(yVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
 }
 
 void OffsetSelect::setSuffix(const QString& s)
 {
     xVal->setSuffix(s);
     yVal->setSuffix(s);
-}
-
-void OffsetSelect::showRaster(bool v)
-{
-    hRaster->setVisible(v);
-    vRaster->setVisible(v);
 }
 
 void OffsetSelect::_offsetChanged()

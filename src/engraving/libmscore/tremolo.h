@@ -25,6 +25,7 @@
 
 #include "durationtype.h"
 #include "symbol.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 class Chord;
@@ -45,7 +46,7 @@ enum class TremoloStyle : signed char {
 //   @@ Tremolo
 //---------------------------------------------------------
 
-class Tremolo final : public Element
+class Tremolo final : public EngravingItem
 {
     TremoloType _tremoloType { TremoloType::R8 };
     Chord* _chord1 { nullptr };
@@ -56,28 +57,32 @@ class Tremolo final : public Element
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
+    friend class mu::engraving::Factory;
+    Tremolo(Chord* parent);
+    Tremolo(const Tremolo&);
+
     mu::PainterPath basePath() const;
     void computeShape();
-    void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
+    void layoutOneNoteTremolo(qreal x, qreal y, qreal h, qreal spatium);
     void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
 
 public:
-    Tremolo(Score*);
-    Tremolo(const Tremolo&);
+
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }
-    ElementType type() const override { return ElementType::TREMOLO; }
+
+    Chord* chord() const { return toChord(explicitParent()); }
+    void setParent(Chord* ch);
+
     int subtype() const override { return static_cast<int>(_tremoloType); }
     QString subtypeName() const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     QString tremoloTypeName() const;
     void setTremoloType(const QString& s);
     static TremoloType name2Type(const QString& s);
     static QString type2name(TremoloType t);
-
-    Chord* chord() const { return toChord(parent()); }
 
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }
@@ -124,11 +129,10 @@ public:
 
     bool customStyleApplicable() const;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    QString propertyUserValue(Pid) const override;
 };
 }     // namespace Ms
 #endif

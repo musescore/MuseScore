@@ -33,12 +33,8 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_ARTICULATION);
     setTitle(qtrc("inspector", "Articulation"));
+    setIcon(ui::IconCode::Code::ARTICULATION);
     createProperties();
-}
-
-void ArticulationSettingsModel::openChannelAndMidiProperties()
-{
-    NOT_IMPLEMENTED;
 }
 
 void ArticulationSettingsModel::createProperties()
@@ -49,7 +45,7 @@ void ArticulationSettingsModel::createProperties()
 
 void ArticulationSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::EngravingItem* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }

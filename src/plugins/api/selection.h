@@ -39,7 +39,7 @@ class Selection : public QObject
     Q_OBJECT
     /// Current GUI selections for the score.
     /// \since MuseScore 3.3
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> elements READ elements)
 
     /**
      * Whether this selection covers a range of a score, as opposed to
@@ -53,14 +53,14 @@ class Selection : public QObject
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment* startSegment READ startSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * startSegment READ startSegment)
     /**
      * End segment of selection, excluded. This property is valid
      * only for range selection.
      * \since MuseScore 3.5
      * \see \ref isRange
      */
-    Q_PROPERTY(Ms::PluginAPI::Segment* endSegment READ endSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * endSegment READ endSegment)
     /**
      * First staff of selection, included. This property is valid
      * only for range selection.
@@ -88,8 +88,8 @@ public:
         : QObject(), _select(select) {}
     virtual ~Selection() { }
 
-    QQmlListProperty<Element> elements()
-    { return wrapContainerProperty<Element>(this, _select->elements()); }
+    QQmlListProperty<EngravingItem> elements()
+    { return wrapContainerProperty<EngravingItem>(this, _select->elements()); }
 
     bool isRange() const { return _select->isRange(); }
 
@@ -99,9 +99,9 @@ public:
     int endStaff() const { return _select->staffEnd(); }
     /// \endcond
 
-    Q_INVOKABLE bool select(Ms::PluginAPI::Element* e, bool add = false);
+    Q_INVOKABLE bool select(Ms::PluginAPI::EngravingItem* e, bool add = false);
     Q_INVOKABLE bool selectRange(int startTick, int endTick, int startStaff, int endStaff);
-    Q_INVOKABLE bool deselect(Ms::PluginAPI::Element* e);
+    Q_INVOKABLE bool deselect(Ms::PluginAPI::EngravingItem* e);
     Q_INVOKABLE bool clear();
 };
 

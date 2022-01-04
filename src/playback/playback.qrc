@@ -3,5 +3,16 @@
         <file>qml/MuseScore/Playback/qmldir</file>
         <file>qml/MuseScore/Playback/PlaybackToolBar.qml</file>
         <file>qml/MuseScore/Playback/internal/MeasureAndBeatFields.qml</file>
+        <file>qml/MuseScore/Playback/MixerPanel.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerPanelSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerBalanceSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerVolumeSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerTitleSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerSoundSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerFxSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerFaderSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml</file>
+        <file>qml/MuseScore/Playback/internal/AudioResourceControl.qml</file>
+        <file>qml/MuseScore/Playback/internal/PlaybackToolBarActions.qml</file>
     </qresource>
 </RCC>

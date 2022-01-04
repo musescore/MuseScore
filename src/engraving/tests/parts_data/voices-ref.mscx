@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -149,7 +149,7 @@
         <linkedMain/>
         <Text>
           <linkedMain/>
-          <style>Title</style>
+          <style>title</style>
           <text>voices</text>
           </Text>
         </VBox>
@@ -1065,6 +1065,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1143,11 +1144,11 @@
           <Text>
             <linked>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Piano</text>
             </Text>
           </VBox>
@@ -1922,6 +1923,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1997,11 +1999,11 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone</text>
             </Text>
           </VBox>
@@ -2463,6 +2465,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -2538,11 +2541,11 @@
                 <staves>-2</staves>
                 </location>
               </linked>
-            <style>Title</style>
+            <style>title</style>
             <text>voices</text>
             </Text>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Trombone</text>
             </Text>
           </VBox>

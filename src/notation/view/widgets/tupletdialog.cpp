@@ -21,11 +21,13 @@
  */
 #include "tupletdialog.h"
 
-#include "libmscore/tuplet.h"
+#include "engraving/libmscore/tuplet.h"
 
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
+using namespace mu::actions;
 
 //---------------------------------------------------------
 //   TupletDialog
@@ -39,9 +41,15 @@ TupletDialog::TupletDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     WidgetStateStore::restoreGeometry(this);
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &TupletDialog::bboxClicked);
 
     defaultToStyleSettings();
+
+    numberGroupBox->setAccessibleName(formatGroupBox->title() + " " + numberGroupBox->title());
+    bracketGroupBox->setAccessibleName(formatGroupBox->title() + " " + bracketGroupBox->title());
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 TupletDialog::TupletDialog(const TupletDialog& other)
@@ -114,26 +122,13 @@ INotationPtr TupletDialog::notation() const
 
 void TupletDialog::apply()
 {
-    auto interaction = notation()->interaction();
-    if (!interaction) {
-        return;
-    }
-
-    auto noteInput = interaction->noteInput();
-    if (!noteInput) {
-        return;
-    }
-
     TupletOptions options;
     options.ratio = Fraction(actualNotes->value(), normalNotes->value());
     options.numberType = numberType();
     options.bracketType = bracketType();
 
-    if (noteInput->isNoteInputMode()) {
-        noteInput->addTuplet(options);
-    } else {
-        interaction->addTupletToSelectedChordRests(options);
-    }
+    ActionData data_ = ActionData::make_arg1<TupletOptions>(options);
+    dispatcher()->dispatch("custom-tuplet", data_);
 }
 
 void TupletDialog::bboxClicked(QAbstractButton* button)

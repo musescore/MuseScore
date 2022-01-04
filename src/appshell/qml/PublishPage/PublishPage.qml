@@ -35,11 +35,10 @@ import "../NotationPage"
 DockPage {
     id: root
 
-    property var color: ui.theme.backgroundPrimaryColor
-    property var topToolKeyNavSec
-
     objectName: "Publish"
     uri: "musescore://publish"
+
+    property var topToolKeyNavSec
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
@@ -54,11 +53,16 @@ DockPage {
             id: notationToolBar
 
             objectName: root.objectName + "_notationToolBar"
-            title: qsTrc("appshell", "Notation Toolbar")
+            title: qsTrc("appshell", "Notation toolbar")
 
-            minimumWidth: 198
+            floatable: false
+            resizable: false
+            separatorsVisible: false
+            alignment: DockToolBarAlignment.Center
+            contentBottomPadding: 2
 
-            contentComponent: NotationToolBar {
+            NotationToolBar {
+                navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
 
                 onActiveFocusRequested: {
@@ -73,13 +77,13 @@ DockPage {
             id: playbackToolBar
 
             objectName: root.objectName + "_playbackToolBar"
-            title: qsTrc("appshell", "Playback Controls")
+            title: qsTrc("appshell", "Playback controls")
 
-            width: root.width / 3
-            minimumWidth: floating ? 526 : 476
-            minimumHeight: floating ? 56 : 48
+            separatorsVisible: false
+            alignment: DockToolBarAlignment.Right
+            contentBottomPadding: 2
 
-            contentComponent: PlaybackToolBar {
+            PlaybackToolBar {
                 navigation.section: root.topToolKeyNavSec
                 navigation.order: 3
 
@@ -91,14 +95,18 @@ DockPage {
             id: undoRedoToolBar
 
             objectName: root.objectName + "_undoRedoToolBar"
-            title: qsTrc("appshell", "Undo/Redo Toolbar")
+            title: qsTrc("appshell", "Undo/redo toolbar")
 
-            minimumWidth: 74
-            maximumWidth: 74
+            floatable: false
+            resizable: false
+            separatorsVisible: false
+            alignment: DockToolBarAlignment.Right
+            contentBottomPadding: 2
 
-            movable: false
-
-            contentComponent: UndoRedoToolBar {}
+            UndoRedoToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 4
+            }
         }
     ]
 
@@ -106,20 +114,23 @@ DockPage {
         DockToolBar {
             objectName: "publishToolBar"
 
-            contentComponent: PublishToolBar {
+            floatable: false
+
+            PublishToolBar {
                 navigation.section: root.publishToolBarKeyNavSec
                 navigation.order: 1
             }
         }
     ]
 
-    central: NotationView {}
+    central: NotationView {
+        name: "PublishNotationView"
+        publishMode: true
+    }
 
     statusBar: DockStatusBar {
         objectName: "publishStatusBar"
 
-        NotationStatusBar {
-            color: root.color
-        }
+        NotationStatusBar {}
     }
 }

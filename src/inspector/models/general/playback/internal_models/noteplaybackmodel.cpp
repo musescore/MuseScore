@@ -30,6 +30,7 @@ NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Notes"));
+    setModelType(InspectorModelType::TYPE_NOTE);
 
     createProperties();
 }
@@ -49,7 +50,7 @@ void NotePlaybackModel::requestElements()
 void NotePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tuning, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_velocity);

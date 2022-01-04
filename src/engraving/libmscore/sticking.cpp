@@ -21,7 +21,10 @@
  */
 
 #include "sticking.h"
-#include "xml.h"
+
+#include "rw/xml.h"
+
+#include "segment.h"
 
 using namespace mu;
 
@@ -39,8 +42,8 @@ static const ElementStyle stickingStyle {
 //   Sticking
 //---------------------------------------------------------
 
-Sticking::Sticking(Score* s)
-    : TextBase(s, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Sticking::Sticking(Segment* parent)
+    : TextBase(ElementType::STICKING, parent, TextStyleType::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);
 }
@@ -54,9 +57,9 @@ void Sticking::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -65,12 +68,16 @@ void Sticking::write(XmlWriter& xml) const
 
 void Sticking::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
+    TextBase::read(e);
+}
+
+bool Sticking::edit(EditData& ed)
+{
+    if (isTextNavigationKey(ed.key, ed.modifiers)) {
+        return false;
     }
-    styleChanged();
+
+    return TextBase::edit(ed);
 }
 
 //---------------------------------------------------------
@@ -87,11 +94,11 @@ void Sticking::layout()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Sticking::propertyDefault(Pid id) const
+engraving::PropertyValue Sticking::propertyDefault(Pid id) const
 {
     switch (id) {
-    case Pid::SUB_STYLE:
-        return int(Tid::STICKING);
+    case Pid::TEXT_STYLE:
+        return TextStyleType::STICKING;
     default:
         return TextBase::propertyDefault(id);
     }

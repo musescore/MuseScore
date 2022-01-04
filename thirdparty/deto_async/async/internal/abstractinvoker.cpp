@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include "queuedinvoker.h"
+#include <qlogging.h>
 
 using namespace deto::async;
 
@@ -12,6 +13,10 @@ AbstractInvoker::AbstractInvoker()
 
 AbstractInvoker::~AbstractInvoker()
 {
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    for (QInvoker* qi : m_qInvokers) {
+        qi->invalidate();
+    }
 }
 
 void AbstractInvoker::invoke(int type)
@@ -32,11 +37,18 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
     CallBacks callbacks = it->second;
 
     for (const CallBack& c : callbacks) {
+        if (!it->second.containsReceiver(c.receiver)) {
+            qDebug("Skipping removed receiver");
+            continue;
+        }
         if (c.threadID == threadID) {
             invokeCallback(type, c, data);
         } else {
-            auto functor = [this, type, c, data]() { invokeCallback(type, c, data); };
-            QueuedInvoker::instance()->invoke(c.threadID, functor);
+            QInvoker* qi = new QInvoker(this, type, c, data);
+            QueuedInvoker::instance()->invoke(c.threadID, [qi]() {
+                qi->invoke();
+                delete qi;
+            });
         }
     }
 }
@@ -44,6 +56,9 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
 void AbstractInvoker::invokeCallback(int type, const CallBack& c, const NotifyData& data)
 {
     assert(c.threadID == std::this_thread::get_id());
+    if (c.receiver && !c.receiver->isConnectedAsync()) {
+        return;
+    }
     doInvoke(type, c.call, data);
 }
 
@@ -102,6 +117,16 @@ void AbstractInvoker::removeCallBack(int type, Asyncable* receiver)
     }
     callbacks.erase(callbacks.begin() + index);
 
+    {
+        std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+        for (QInvoker* qi : m_qInvokers) {
+            if (qi->call.call == c.call) {
+                qi->invalidate();
+                break;
+            }
+        }
+    }
+
     deleteCall(type, c.call);
 }
 
@@ -155,4 +180,16 @@ void AbstractInvoker::disconnectAsync(Asyncable* receiver)
     for (int type : types) {
         removeCallBack(type, receiver);
     }
+}
+
+void AbstractInvoker::addQInvoker(QInvoker* qi)
+{
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    m_qInvokers.push_back(qi);
+}
+
+void AbstractInvoker::removeQInvoker(QInvoker* qi)
+{
+    std::lock_guard<std::mutex> lock(m_qInvokersMutex);
+    m_qInvokers.remove(qi);
 }

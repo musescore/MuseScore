@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
@@ -34,7 +34,7 @@ RowLayout {
     property alias beatNumber: beatNumberField.value
     property alias maxBeatNumber: beatNumberField.maxValue
 
-    property var font: ui.theme.tabFont
+    property var font: ui.theme.largeBodyFont
 
     signal measureNumberEdited(var newValue)
     signal beatNumberEdited(var newValue)
@@ -42,7 +42,10 @@ RowLayout {
     spacing: 4
 
     Item {
-        Layout.preferredWidth: 20
+        //! NOTE: explicit width prevents the content from jumping around
+        // when a score is being played
+        // See: https://github.com/musescore/MuseScore/issues/9633
+        Layout.preferredWidth: 26
 
         NumberInputField {
             id: measureNumberField
@@ -55,7 +58,7 @@ RowLayout {
 
             font: root.font
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.measureNumberEdited(newValue)
             }
         }
@@ -67,7 +70,10 @@ RowLayout {
     }
 
     Item {
-        Layout.preferredWidth: 10
+        //! NOTE: explicit width prevents the content from jumping around
+        // when a score is being played
+        // See: https://github.com/musescore/MuseScore/issues/9633
+        Layout.preferredWidth: 26
 
         NumberInputField {
             id: beatNumberField
@@ -80,7 +86,7 @@ RowLayout {
 
             font: root.font
 
-            onValueEdited: {
+            onValueEdited: function(newValue) {
                 root.beatNumberEdited(newValue)
             }
         }

@@ -23,7 +23,7 @@
 #ifndef __HARMONY_H__
 #define __HARMONY_H__
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
 
 #include "text.h"
 #include "pitchspelling.h"
@@ -80,28 +80,28 @@ class HDegree;
 
 class Harmony final : public TextBase
 {
-    int _rootTpc;                         // root note for chord
-    int _baseTpc;                         // bass note or chord base; used for "slash" chords
-                                          // or notation of base note in chord
-    int _id;                              // >0 = id of matched chord from chord list, if applicable
-                                          // -1 = invalid chord
-                                          // <-10000 = private id of generated chord or matched chord with no id
-    QString _function;                    // numeric representation of root for RNA or Nashville
-    QString _userName;                    // name as typed by user if applicable
-    QString _textName;                    // name recognized from chord list, read from score file, or constructed from imported source
-    ParsedChord* _parsedForm;             // parsed form of chord
-    bool showSpell = false;               // show spell check warning
-    HarmonyType _harmonyType;             // used to control rendering, transposition, export, etc.
-    qreal _harmonyHeight;                 // used for calculating the the height is frame while editing.
+    int _rootTpc;               // root note for chord
+    int _baseTpc;               // bass note or chord base; used for "slash" chords
+                                // or notation of base note in chord
+    int _id;                    // >0 = id of matched chord from chord list, if applicable
+                                // -1 = invalid chord
+                                // <-10000 = private id of generated chord or matched chord with no id
+    QString _function;          // numeric representation of root for RNA or Nashville
+    QString _userName;          // name as typed by user if applicable
+    QString _textName;          // name recognized from chord list, read from score file, or constructed from imported source
+    ParsedChord* _parsedForm;   // parsed form of chord
+    bool _isMisspelled = false; // show spell check warning
+    HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
+    qreal _harmonyHeight;       // used for calculating the the height is frame while editing.
 
-    mutable RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
+    mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
     QList<HDegree> _degreeList;
-    QList<mu::draw::Font> fontList;                // temp values used in render()
-    QList<TextSegment*> textList;         // rendered chord
+    QList<mu::draw::Font> fontList; // temp values used in render()
+    QList<TextSegment*> textList;   // rendered chord
 
-    bool _leftParen, _rightParen;         // include opening and/or closing parenthesis
-    bool _play;                           // whether or not to play back the harmony
+    bool _leftParen, _rightParen;   // include opening and/or closing parenthesis
+    bool _play;                     // whether or not to play back the harmony
 
     mutable mu::RectF _tbbox;
 
@@ -111,7 +111,7 @@ class Harmony final : public TextBase
 
     void determineRootBaseSpelling();
     void draw(mu::draw::Painter*) const override;
-    void drawEditMode(mu::draw::Painter* p, EditData& ed) override;
+    void drawEditMode(mu::draw::Painter* p, EditData& ed, qreal currentViewScaling) override;
     void render(const QString&, qreal&, qreal&);
     void render(const QList<RenderAction>& renderList, qreal&, qreal&, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
                 NoteCaseType noteCase = NoteCaseType::AUTO);
@@ -120,12 +120,11 @@ class Harmony final : public TextBase
     Harmony* findInSeg(Segment* seg) const;
 
 public:
-    Harmony(Score* = 0);
+    Harmony(Segment* parent = 0);
     Harmony(const Harmony&);
     ~Harmony();
 
     Harmony* clone() const override { return new Harmony(*this); }
-    ElementType type() const override { return ElementType::HARMONY; }
 
     void setId(int d) { _id = d; }
     int id() const { return _id; }
@@ -141,7 +140,7 @@ public:
     void setLeftParen(bool leftParen) { _leftParen = leftParen; }
     void setRightParen(bool rightParen) { _rightParen = rightParen; }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Harmony* findNext() const;
     Harmony* findPrev() const;
@@ -225,11 +224,11 @@ public:
     QString screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }     // namespace Ms
 #endif

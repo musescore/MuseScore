@@ -23,26 +23,30 @@
 #ifndef __LASSO_H__
 #define __LASSO_H__
 
-#include "element.h"
+#include "engravingitem.h"
+
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
 
 namespace Ms {
 //---------------------------------------------------------
 //   Lasso
 //---------------------------------------------------------
 
-class Lasso : public Element
+class Lasso : public EngravingItem
 {
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
 public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
-    ElementType type() const final { return ElementType::LASSO; }
-    virtual void draw(mu::draw::Painter*) const override;
-    virtual bool isEditable() const override { return true; }
-    virtual void editDrag(EditData&) override;
-    virtual void endDrag(EditData&) override {}
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
+    bool isEmpty() const { return bbox().isEmpty(); }
+
+    void draw(mu::draw::Painter*) const override;
+    bool isEditable() const override { return true; }
+    void editDrag(EditData&) override;
+    void endDrag(EditData&) override {}
 
     int gripsCount() const override { return 8; }
     Grip initialEditModeGrip() const override { return Grip(7); }

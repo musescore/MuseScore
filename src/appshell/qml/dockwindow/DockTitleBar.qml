@@ -33,7 +33,11 @@ Item {
 
     required property QtObject titleBarCpp
 
+    property alias contextMenuModel: contextMenuButton.menuModel
     property alias heightWhenVisible: titleBar.heightWhenVisible
+    property bool isHorizontalPanel: false
+
+    signal handleContextMenuItemRequested(string itemId)
 
     width: parent.width
     height: visible ? heightWhenVisible : 0
@@ -45,36 +49,50 @@ Item {
 
         anchors.fill: parent
 
-        heightWhenVisible: 34
+        heightWhenVisible: titleBarContent.implicitHeight
         color: ui.theme.backgroundPrimaryColor
 
         visible: parent.visible
 
-        RowLayout {
+        Column {
+            id: titleBarContent
+
             anchors.fill: parent
+            anchors.leftMargin: 12
+            anchors.rightMargin: 12
 
-            StyledTextLabel {
-                id: titleLabel
+            spacing: 0
 
-                Layout.fillWidth: true
-                Layout.leftMargin: 12
+            RowLayout {
+                width: parent.width
+                height: 34
 
-                horizontalAlignment: Qt.AlignLeft
+                StyledTextLabel {
+                    id: titleLabel
+                    Layout.fillWidth: true
 
-                font: ui.theme.bodyBoldFont
-                text: titleBar.title
+                    text: titleBar.title
+                    font: ui.theme.bodyBoldFont
+                    horizontalAlignment: Qt.AlignLeft
+                }
+
+                MenuButton {
+                    id: contextMenuButton
+
+                    width: 20
+                    height: width
+
+                    onHandleMenuItem: function(itemId) {
+                        root.handleContextMenuItemRequested(itemId)
+                    }
+                }
             }
 
-            MenuButton {
-                Layout.margins: 2
-
-                //! TODO: only for testing
-                // We should get data for this model from c++
-                menuModel: [
-                    { "code": "close", "title": "Close tab" },
-                    { "code": "undock", "title": "Undock" },
-                    { "code": "move", "title": "Move panel to right side" },
-                ]
+            SeparatorLine {
+                id: bottomSeparator
+                orientation: Qt.Horizontal
+                anchors.margins: -12
+                visible: root.isHorizontalPanel
             }
         }
     }

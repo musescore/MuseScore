@@ -33,12 +33,8 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_ORNAMENT);
     setTitle(qtrc("inspector", "Ornament"));
+    setIcon(ui::IconCode::Code::ORNAMENT);
     createProperties();
-}
-
-void OrnamentSettingsModel::openChannelAndMidiProperties()
-{
-    NOT_IMPLEMENTED;
 }
 
 void OrnamentSettingsModel::createProperties()
@@ -49,7 +45,7 @@ void OrnamentSettingsModel::createProperties()
 
 void OrnamentSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::ARTICULATION, [](const Ms::EngravingItem* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }

@@ -22,7 +22,6 @@
 #include "midimodule.h"
 
 #include <QQmlEngine>
-#include "log.h"
 
 #include "modularity/ioc.h"
 
@@ -32,6 +31,8 @@
 
 #include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
+
+#include "log.h"
 
 using namespace mu::midi;
 

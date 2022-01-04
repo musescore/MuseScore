@@ -35,13 +35,12 @@ namespace Ms {
 
 class StaffText final : public StaffTextBase
 {
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
 public:
-    StaffText(Score* s = 0, Tid = Tid::STAFF);
+    StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
-    ElementType type() const override { return ElementType::STAFF_TEXT; }
     void layout() override;
 };
 }     // namespace Ms

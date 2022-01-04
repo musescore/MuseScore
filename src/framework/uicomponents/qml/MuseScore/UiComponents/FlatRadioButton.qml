@@ -20,24 +20,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
 
 RadioDelegate {
     id: root
 
-    default property Component contentComponent
+    default property Component contentComponent: null
+
+    //! NOTE Don't use the `icon` property.
+    //!      It's a property of the ancestor of RadioDelegate
+    //!      and has the wrong type (QQuickIcon).
+    //!      It can't be overridden either, as it is marked `FINAL`.
+    property int iconCode: IconCode.NONE
+    property int iconFontSize: ui.theme.iconsFont.pixelSize
 
     property alias radius: backgroundRect.radius
 
-    property color normalStateColor: ui.theme.buttonColor
-    property color hoverStateColor: ui.theme.buttonColor
-    property color pressedStateColor: ui.theme.buttonColor
-    property color selectedStateColor: ui.theme.accentColor
+    property bool transparent: false
+    property color normalColor: transparent ? "transparent" : ui.theme.buttonColor
+    property color hoverHitColor: ui.theme.buttonColor
+    property color checkedColor: ui.theme.accentColor
 
     property alias navigation: navCtrl
 
-    implicitHeight: 30
+    ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
+
+    implicitHeight: ListView.view ? ListView.view.height : 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
     hoverEnabled: true
@@ -53,33 +63,60 @@ RadioDelegate {
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "FlatRadioButton"
-        onTriggered: root.checked = !root.checked
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.RadioButton
+        accessible.name: root.text
+        accessible.checked: root.checked
+
+        onTriggered: root.toggled()
     }
 
     background: Rectangle {
         id: backgroundRect
-
         anchors.fill: parent
-        anchors.margins: navCtrl.active ? 1 : 0
 
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
-        color: normalStateColor
+        color: root.checked ? root.checkedColor : root.normalColor
         opacity: ui.theme.buttonOpacityNormal
 
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
         radius: 2
     }
 
-    contentItem: Item {
+    contentItem: Loader {
+        id: contentLoader
         anchors.fill: parent
 
-        Loader {
-            id: contentLoader
+        sourceComponent: {
+            if (root.contentComponent) {
+                return root.contentComponent
+            }
 
-            anchors.fill: parent
+            if (root.iconCode && root.iconCode !== IconCode.NONE) {
+                return iconComponent
+            }
 
-            sourceComponent: contentComponent
+            return textComponent
+        }
+
+        Component {
+            id: iconComponent
+
+            StyledIconLabel {
+                iconCode: root.iconCode
+                font.pixelSize: root.iconFontSize
+            }
+        }
+
+        Component {
+            id: textComponent
+
+            StyledTextLabel {
+                text: root.text
+            }
         }
     }
 
@@ -88,34 +125,23 @@ RadioDelegate {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered && !root.checked && !root.pressed
+            when: root.hovered && !root.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: hoverStateColor
+                color: root.checked ? root.checkedColor : root.hoverHitColor
                 opacity: ui.theme.buttonOpacityHover
             }
         },
 
         State {
             name: "PRESSED"
-            when: root.pressed && !root.checked
+            when: root.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: pressedStateColor
+                color: root.checked ? root.checkedColor : root.hoverHitColor
                 opacity: ui.theme.buttonOpacityHit
-            }
-        },
-
-        State {
-            name: "SELECTED"
-            when: root.checked
-
-            PropertyChanges {
-                target: backgroundRect
-                color: selectedStateColor
-                opacity: ui.theme.buttonOpacityNormal
             }
         }
     ]

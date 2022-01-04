@@ -47,7 +47,6 @@ void Score::cmdSplitMeasure(ChordRest* cr)
 
 //---------------------------------------------------------
 //   splitMeasure
-//    return true on success
 //---------------------------------------------------------
 
 void Score::splitMeasure(Segment* segment)
@@ -77,8 +76,8 @@ void Score::splitMeasure(Segment* segment)
     std::list<std::tuple<Spanner*, Fraction, Fraction> > sl;
     for (auto i : spanner()) {
         Spanner* s = i.second;
-        Element* start = s->startElement();
-        Element* end = s->endElement();
+        EngravingItem* start = s->startElement();
+        EngravingItem* end = s->endElement();
         if (s->tick() >= stick && s->tick() < etick) {
             start = nullptr;
         }
@@ -114,9 +113,13 @@ void Score::splitMeasure(Segment* segment)
     undoInsertTime(measure->tick(), -measure->ticks());
 
     // create empty measures:
-    insertMeasure(ElementType::MEASURE, nm, true, false);
+    InsertMeasureOptions options;
+    options.createEmptyMeasures = true;
+    options.moveSignaturesClef = false;
+
+    insertMeasure(ElementType::MEASURE, nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
-    insertMeasure(ElementType::MEASURE, m2, true, false);
+    insertMeasure(ElementType::MEASURE, m2, options);
     Measure* m1 = toMeasure(m2->prev());
 
     Fraction tick = segment->tick();
@@ -133,7 +136,7 @@ void Score::splitMeasure(Segment* segment)
     if (ticks1.denominator() < measure->ticks().denominator()) {
         if (measure->ticks().denominator() % m1->timesig().denominator() == 0) {
             int mult = measure->ticks().denominator() / ticks1.denominator();
-            // *= operator audomatically reduces via GCD, so rather do literal multiplication:
+            // *= operator automatically reduces via GCD, so rather do literal multiplication:
             ticks1.setDenominator(ticks1.denominator() * mult);
             ticks1.setNumerator(ticks1.numerator() * mult);
         }
@@ -144,6 +147,10 @@ void Score::splitMeasure(Segment* segment)
             ticks2.setDenominator(ticks2.denominator() * mult);
             ticks2.setNumerator(ticks2.numerator() * mult);
         }
+    }
+    if (ticks1.denominator() > 128 || ticks2.denominator() > 128) {
+        MScore::setError(MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT);
+        return;
     }
     m1->adjustToLen(ticks1, false);
     m2->adjustToLen(ticks2, false);

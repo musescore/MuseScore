@@ -22,7 +22,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "mscore/preferences.h"
 
 #define DIR QString("testoves/bdat/")

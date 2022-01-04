@@ -23,7 +23,7 @@
 #include "cursor.h"
 #include "elements.h"
 #include "score.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/rest.h"
@@ -248,9 +248,9 @@ bool Cursor::nextMeasure()
 ///   position.
 //---------------------------------------------------------
 
-void Cursor::add(Element* wrapped)
+void Cursor::add(EngravingItem* wrapped)
 {
-    Ms::Element* s = wrapped ? wrapped->element() : nullptr;
+    Ms::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (!segment() || !s) {
         return;
     }
@@ -304,7 +304,7 @@ void Cursor::add(Element* wrapped)
         case ElementType::TREMOLO:
         case ElementType::CHORDLINE:
         case ElementType::ARTICULATION: {
-            Ms::Element* curElement = currentElement();
+            Ms::EngravingItem* curElement = currentElement();
             if (curElement->isChord()) {
                 // call Chord::addInternal() (i.e. do the same as a call to Chord.add())
                 Chord::addInternal(toChord(curElement), s);
@@ -315,7 +315,7 @@ void Cursor::add(Element* wrapped)
 
         // To be added at chord/rest level
         case ElementType::LYRICS: {
-            Ms::Element* curElement = currentElement();
+            Ms::EngravingItem* curElement = currentElement();
             if (curElement->isChordRest()) {
                 s->setParent(curElement);
                 _score->undoAddElement(s);
@@ -325,7 +325,7 @@ void Cursor::add(Element* wrapped)
 
         // To be added to a note (and in case of SYMBOL also to a rest)
         case ElementType::SYMBOL: {
-            Ms::Element* curElement = currentElement();
+            Ms::EngravingItem* curElement = currentElement();
             if (curElement->isRest()) {
                 s->setParent(curElement);
                 _score->undoAddElement(s);
@@ -334,7 +334,7 @@ void Cursor::add(Element* wrapped)
         case ElementType::FINGERING:
         case ElementType::BEND:
         case ElementType::NOTEHEAD: {
-            Ms::Element* curElement = currentElement();
+            Ms::EngravingItem* curElement = currentElement();
             if (curElement->isChord()) {
                 Ms::Chord* chord = toChord(curElement);
                 Ms::Note* note = nullptr;
@@ -352,7 +352,7 @@ void Cursor::add(Element* wrapped)
         // To be added to a segment (clef subtype)
         case ElementType::CLEF:
         case ElementType::AMBITUS: {
-            Ms::Element* parent = nullptr;
+            Ms::EngravingItem* parent = nullptr;
             // Find backwards first measure containing a clef
             for (Ms::Measure* m = _segment->measure(); m != 0; m = m->prevMeasure()) {
                 Ms::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
@@ -508,7 +508,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 
     _score->changeCRlen(cr, fDuration);
 
-    Ms::Tuplet* tuplet = new Ms::Tuplet(_score);
+    Ms::Tuplet* tuplet = new Ms::Tuplet(tupletMeasure);
     tuplet->setParent(tupletMeasure);
     tuplet->setTrack(track());
     tuplet->setTick(tupletTick);
@@ -535,7 +535,7 @@ void Cursor::setDuration(int z, int n)
 {
     TDuration d(Fraction(z, n));
     if (!d.isValid()) {
-        d = TDuration(TDuration::DurationType::V_QUARTER);
+        d = TDuration(DurationType::V_QUARTER);
     }
     inputState().setDuration(d);
 }
@@ -565,14 +565,14 @@ double Cursor::time()
 
 qreal Cursor::tempo()
 {
-    return _score->tempo(Fraction::fromTicks(tick()));
+    return _score->tempo(Fraction::fromTicks(tick())).val;
 }
 
 //---------------------------------------------------------
 //   currentElement
 //---------------------------------------------------------
 
-Ms::Element* Cursor::currentElement() const
+Ms::EngravingItem* Cursor::currentElement() const
 {
     const int t = track();
     Ms::Segment* seg = segment();
@@ -593,9 +593,9 @@ Segment* Cursor::qmlSegment() const
 //   element
 //---------------------------------------------------------
 
-Element* Cursor::element() const
+EngravingItem* Cursor::element() const
 {
-    Ms::Element* e = currentElement();
+    Ms::EngravingItem* e = currentElement();
     if (!e) {
         return nullptr;
     }

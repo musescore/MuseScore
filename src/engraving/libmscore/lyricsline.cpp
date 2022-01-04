@@ -22,16 +22,17 @@
 
 #include "lyrics.h"
 
+#include "draw/pen.h"
+#include "rw/xml.h"
+
 #include "chord.h"
 #include "score.h"
 #include "system.h"
-#include "xml.h"
 #include "staff.h"
 #include "segment.h"
 #include "undo.h"
 #include "textedit.h"
 #include "measure.h"
-#include "draw/pen.h"
 
 using namespace mu;
 
@@ -40,7 +41,7 @@ namespace Ms {
 //   searchNextLyrics
 //---------------------------------------------------------
 
-static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p)
+static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, PlacementV p)
 {
     Lyrics* l = 0;
     while ((s = s->next1(SegmentType::ChordRest))) {
@@ -68,12 +69,12 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 //   LyricsLine
 //---------------------------------------------------------
 
-LyricsLine::LyricsLine(Score* s)
-    : SLine(s, ElementFlag::NOT_SELECTABLE)
+LyricsLine::LyricsLine(EngravingItem* parent)
+    : SLine(ElementType::LYRICSLINE, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
-    setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
+    setLineWidth(score()->styleMM(Sid::lyricsDashLineThickness));
     setAnchor(Spanner::Anchor::SEGMENT);
     _nextLyrics = 0;
 }
@@ -90,7 +91,7 @@ LyricsLine::LyricsLine(const LyricsLine& g)
 
 void LyricsLine::styleChanged()
 {
-    setLineWidth(score()->styleP(Sid::lyricsDashLineThickness));
+    setLineWidth(score()->styleMM(Sid::lyricsDashLineThickness));
 }
 
 //---------------------------------------------------------
@@ -101,7 +102,7 @@ void LyricsLine::layout()
 {
     bool tempMelismaTicks = (lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
     if (isEndMelisma()) {           // melisma
-        setLineWidth(score()->styleP(Sid::lyricsLineThickness));
+        setLineWidth(score()->styleMM(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
             lyrics()->setTicks(Fraction(0, 1));
@@ -126,7 +127,7 @@ void LyricsLine::layout()
             s = score()->lastSegment();
             lyricsEndTick = Fraction(-1, 1);
         }
-        Element* se = s->element(lyricsTrack);
+        EngravingItem* se = s->element(lyricsTrack);
         // everything is OK if we have reached a chord at right tick on right track
         if (s->tick() == lyricsEndTick && se && se->type() == ElementType::CHORD) {
             // advance to next CR, or last segment if no next CR
@@ -143,7 +144,7 @@ void LyricsLine::layout()
             Segment* ns = s;
             Segment* ps = s->prev1(SegmentType::ChordRest);
             while (ps && ps != lyricsSegment) {
-                Element* pe = ps->element(lyricsTrack);
+                EngravingItem* pe = ps->element(lyricsTrack);
                 // we're looking for an actual chord on this track
                 if (pe && pe->type() == ElementType::CHORD) {
                     break;
@@ -155,7 +156,7 @@ void LyricsLine::layout()
                 // no valid previous CR, so try to lengthen melisma instead
                 ps = ns;
                 s = ps->nextCR(lyricsTrack, true);
-                Element* e = s ? s->element(lyricsTrack) : nullptr;
+                EngravingItem* e = s ? s->element(lyricsTrack) : nullptr;
                 // check to make sure we have a chord
                 if (!e || e->type() != ElementType::CHORD) {
                     // nothing to do but set ticks to 0
@@ -193,8 +194,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this]() {
-        return createLineSegment();
+    LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this](System* parent) {
+        return createLineSegment(parent);
     }));
 
     SpannerSegmentType sst;
@@ -236,14 +237,14 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        qreal x2 = system->bbox().right();
+        qreal x2 = system->lastNoteRestSegmentX(true);
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
         qreal x1 = system->firstNoteRestSegmentX(leading);
-        qreal x2 = system->bbox().right();
+        qreal x2 = system->lastNoteRestSegmentX(true);
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));
@@ -280,9 +281,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LyricsLine::createLineSegment()
+LineSegment* LyricsLine::createLineSegment(System* parent)
 {
-    LyricsLineSegment* seg = new LyricsLineSegment(this, score());
+    LyricsLineSegment* seg = new LyricsLineSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -305,16 +306,16 @@ void LyricsLine::removeUnmanaged()
 //   setProperty
 //---------------------------------------------------------
 
-bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
+bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SPANNER_TICKS:
     {
         // if parent lyrics has a melisma, change its length too
-        if (parent() && parent()->type() == ElementType::LYRICS
+        if (explicitParent() && explicitParent()->type() == ElementType::LYRICS
             && isEndMelisma()) {
-            Fraction newTicks   = toLyrics(parent())->ticks() + v.value<Fraction>() - ticks();
-            parent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
+            Fraction newTicks   = toLyrics(explicitParent())->ticks() + v.value<Fraction>() - ticks();
+            explicitParent()->undoChangeProperty(Pid::LYRIC_TICKS, newTicks);
         }
         setTicks(v.value<Fraction>());
     }
@@ -333,8 +334,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //   LyricsLineSegment
 //=========================================================
 
-LyricsLineSegment::LyricsLineSegment(Spanner* sp, Score* s)
-    : LineSegment(sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
+LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
+    : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
 }
@@ -375,7 +376,7 @@ void LyricsLineSegment::layout()
             qreal lyrXp       = lyr->pagePos().x();
             qreal sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
-            qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleP(Sid::lyricsDashPad);
+            qreal offsetX     = toX - pos().x() - pos2().x() - score()->styleMM(Sid::lyricsDashPad);
             //                    delta from current end pos.| ending padding
             rxpos2()          += offsetX;
         }
@@ -391,7 +392,7 @@ void LyricsLineSegment::layout()
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
         qreal offsetX     = fromX - pos().x();
-        offsetX           += score()->styleP(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
+        offsetX           += score()->styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
         rxpos()           += offsetX;
@@ -418,14 +419,16 @@ void LyricsLineSegment::layout()
     if (isEndMelisma) {                   // melisma
         _numOfDashes = 1;
         rypos()      -= lyricsLine()->lineWidth() * .5;     // let the line 'sit on' the base line
-        // if not final segment, shorten it
+        // if not final segment, shorten it (why? -AS)
+        /*
         if (isBeginType() || isMiddleType()) {
             rxpos2() -= score()->styleP(Sid::minNoteDistance) * mag();
         }
+        */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        rypos() -= MScore::pixelRatio * lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
-        _dashLength = score()->styleP(Sid::lyricsDashMaxLength) * mag();      // and dash length
+        rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
+        _dashLength = score()->styleMM(Sid::lyricsDashMaxLength) * mag();      // and dash length
         qreal len         = pos2().x();
         qreal minDashLen  = score()->styleS(Sid::lyricsDashMinLength).val() * sp;
         qreal maxDashDist = score()->styleS(Sid::lyricsDashMaxDistance).val() * sp;

@@ -44,7 +44,7 @@ class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 public:
     ShortcutsRegister() = default;
 
-    void load();
+    void reload(bool onlyDef = false) override;
 
     const ShortcutList& shortcuts() const override;
     Ret setShortcuts(const ShortcutList& shortcuts) override;
@@ -52,10 +52,16 @@ public:
 
     const Shortcut& shortcut(const std::string& actionCode) const override;
     const Shortcut& defaultShortcut(const std::string& actionCode) const override;
+
+    bool isRegistered(const std::string& sequence) const override;
     ShortcutList shortcutsForSequence(const std::string& sequence) const override;
 
     Ret importFromFile(const io::path& filePath) override;
     Ret exportToFile(const io::path& filePath) const override;
+
+    bool active() override;
+    void setActive(bool active) override;
+    async::Notification activeChanged() const override;
 
 private:
 
@@ -65,12 +71,16 @@ private:
     bool writeToFile(const ShortcutList& shortcuts, const io::path& path) const;
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
-    void mergeSortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
+    void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
+    void makeUnique(ShortcutList& shortcuts);
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
     ShortcutList m_shortcuts;
     ShortcutList m_defaultShortcuts;
     async::Notification m_shortcutsChanged;
+
+    bool m_isActive = true;
+    async::Notification m_activeChanged;
 };
 }
 

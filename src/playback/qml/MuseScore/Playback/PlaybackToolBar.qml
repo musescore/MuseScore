@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.12
+import QtQuick.Layouts 1.15
 
 import MuseScore.Playback 1.0
 import MuseScore.UiComponents 1.0
@@ -30,17 +29,20 @@ import MuseScore.CommonScene 1.0
 
 import "internal"
 
-Rectangle {
+Item {
     id: root
 
-    property alias navigation: keynavSub
+    property alias navigation: navPanel
     property bool floating: false
 
-    color: ui.theme.backgroundPrimaryColor
+    width: content.width
+    height: content.height
 
     NavigationPanel {
-        id: keynavSub
+        id: navPanel
         name: "PlaybackToolBar"
+        enabled: root.enabled && root.visible
+        accessible.name: qsTrc("playback", "Playback toolbar")
     }
 
     PlaybackToolBarModel {
@@ -53,153 +55,25 @@ Rectangle {
     }
 
     Column {
-        spacing: 14
+        id: content
 
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width
+        spacing: 8
+
+        width: childrenRect.width
 
         enabled: playbackModel.isPlayAllowed
 
-        RowLayout {
+        PlaybackToolBarActions {
             id: playbackActions
 
-            spacing: 0
+            playbackModel: playbackModel
+            floating: root.floating
 
-            ListView {
-                Layout.preferredWidth: childrenRect.width
-                Layout.preferredHeight: childrenRect.height
-
-                contentHeight: 32
-                contentWidth: contentHeight
-
-                spacing: 4
-
-                model: playbackModel
-
-                orientation: Qt.Horizontal
-                interactive: false
-
-                delegate: Loader {
-                    id: itemLoader
-
-                    sourceComponent: Boolean(model.code) || model.subitems.length !== 0 ? menuItemComp : separatorComp
-
-                    onLoaded: {
-                        itemLoader.item.modelData = model
-                    }
-
-                    Component {
-                        id: menuItemComp
-
-                        FlatButton {
-                            id: btn
-                            property var modelData
-                            property var hasSubitems: modelData.subitems.length !== 0
-
-                            icon: modelData.icon
-
-                            toolTipTitle: modelData.title
-                            toolTipDescription: modelData.description
-                            toolTipShortcut: modelData.shortcut
-
-                            iconFont: ui.theme.toolbarIconsFont
-
-                            normalStateColor: modelData.checked || menuLoader.isMenuOpened
-                                              ? ui.theme.accentColor : "transparent"
-                            accentButton: modelData.checked || menuLoader.isMenuOpened
-
-                            navigation.panel: keynavSub
-                            navigation.name: modelData.title
-                            navigation.order: modelData.index
-                            navigation.enabled: playbackModel.isPlayAllowed
-
-                            onClicked: {
-                                if (menuLoader.isMenuOpened || hasSubitems) {
-                                    menuLoader.toggleOpened(modelData.subitems, btn.navigation)
-                                    return
-                                }
-
-                                Qt.callLater(playbackModel.handleAction, modelData.code)
-                            }
-
-                            StyledMenuLoader {
-                                id: menuLoader
-                                onHandleAction: playbackModel.handleAction(actionCode)
-                            }
-                        }
-                    }
-
-                    Component {
-                        id: separatorComp
-
-                        SeparatorLine {
-                            property var modelData
-                            orientation: Qt.Vertical
-                        }
-                    }
-                }
-            }
-
-            SeparatorLine {
-                Layout.leftMargin: 12
-                orientation: Qt.Vertical
-                visible: !root.floating
-            }
-
-            TimeInputField {
-                id: timeField
-
-                Layout.leftMargin: 24
-                Layout.preferredWidth: 60
-
-                maxTime: playbackModel.maxPlayTime
-                maxMillisecondsNumber: 9
-                time: playbackModel.playTime
-
-                onTimeEdited: {
-                    playbackModel.playTime = newTime
-                }
-            }
-
-            MeasureAndBeatFields {
-                Layout.leftMargin: 24
-
-                measureNumber: playbackModel.measureNumber
-                maxMeasureNumber: playbackModel.maxMeasureNumber
-                beatNumber: playbackModel.beatNumber
-                maxBeatNumber: playbackModel.maxBeatNumber
-
-                font: timeField.font
-
-                onMeasureNumberEdited: {
-                    playbackModel.measureNumber = newValue
-                }
-
-                onBeatNumberEdited: {
-                    playbackModel.beatNumber = newValue
-                }
-            }
-
-            TempoView {
-                Layout.leftMargin: 24
-                Layout.preferredWidth: 60
-
-                noteSymbol: playbackModel.tempo.noteSymbol
-                tempoValue: playbackModel.tempo.value
-
-                noteSymbolFont.pixelSize: ui.theme.iconsFont.pixelSize
-                tempoValueFont: timeField.font
-            }
-
-            SeparatorLine {
-                Layout.leftMargin: 24
-                orientation: Qt.Vertical
-                visible: !root.floating
-            }
+            navPanel: root.navigation
         }
 
         StyledSlider {
-            width: playbackActions.width
+            width: playbackActions.width - 12
             visible: root.floating
             value: playbackModel.playPosition
 

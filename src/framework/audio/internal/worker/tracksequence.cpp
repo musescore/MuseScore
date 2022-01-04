@@ -30,6 +30,7 @@
 #include "midiaudiosource.h"
 #include "sequenceplayer.h"
 #include "sequenceio.h"
+#include "audioengine.h"
 #include "audioerrors.h"
 
 using namespace mu;
@@ -51,13 +52,11 @@ TrackSequence::TrackSequence(const TrackSequenceId id)
 
 TrackSequence::~TrackSequence()
 {
+    ONLY_AUDIO_WORKER_THREAD;
+
     mixer()->removeClock(m_clock);
 
-    for (const auto& pair : m_tracks) {
-        if (pair.second && pair.second->mixerChannel) {
-            mixer()->removeChannel(pair.second->mixerChannel->id());
-        }
-    }
+    removeAllTracks();
 }
 
 TrackSequenceId TrackSequence::id() const
@@ -67,70 +66,98 @@ TrackSequenceId TrackSequence::id() const
     return m_id;
 }
 
-RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioOutputParams& outputParams)
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, const midi::MidiData& midiData,
+                                                      const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    RetVal<TrackId> result;
+    RetVal2<TrackId, AudioParams> result;
+    result.val1 = -1;
 
-    if (!midiData.mapping.isValid()) {
-        result.ret = make_ret(Err::InvalidMidiMapping);
-        result.val = -1;
+    IF_ASSERT_FAILED(mixer()) {
+        result.ret = make_ret(Err::Undefined);
         return result;
     }
 
-    TrackId newId = m_tracks.size();
+    if (!midiData.mapping.isValid()) {
+        result.ret = make_ret(Err::InvalidMidiMapping);
+        return result;
+    }
 
-    MidiTrack track;
-    track.id = newId;
-    track.name = trackName;
-    track.setInputParams(midiData);
-    track.setOutputParams(outputParams);
-    track.audioSource = std::make_shared<MidiAudioSource>(midiData, track.inputParamsChanged);
-    track.mixerChannel = mixer()->addChannel(track.audioSource, outputParams, track.outputParamsChanged).val;
+    TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    m_tracks.emplace(newId, std::make_shared<MidiTrack>(std::move(track)));
+    MidiTrackPtr trackPtr = std::make_shared<MidiTrack>();
+    trackPtr->id = newId;
+    trackPtr->name = trackName;
+    trackPtr->setPlaybackData(midiData);
+    trackPtr->inputHandler = std::make_shared<MidiAudioSource>(newId, midiData);
+    trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
+    trackPtr->setInputParams(requiredParams.in);
+    trackPtr->setOutputParams(requiredParams.out);
 
+    m_trackAboutToBeAdded.send(trackPtr);
+    m_tracks.emplace(newId, trackPtr);
     m_trackAdded.send(newId);
 
-    return result.make_ok(newId);
+    result.ret = make_ret(Err::NoError);
+    result.val1 = newId;
+    result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
+
+    return result;
 }
 
-RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const io::path& filePath, const AudioOutputParams& outputParams)
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     NOT_IMPLEMENTED;
 
-    RetVal<TrackId> result;
+    RetVal2<TrackId, AudioParams> result;
 
-    if (filePath.empty()) {
+    if (!device) {
         result.ret = make_ret(Err::InvalidAudioFilePath);
-        result.val = -1;
+        result.val1 = -1;
         return result;
     }
 
-    TrackId newId = m_tracks.size();
+    TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    AudioTrack track;
-    track.id = newId;
-    track.name = trackName;
-    track.setInputParams(filePath);
-    track.setOutputParams(outputParams);
+    AudioTrackPtr trackPtr = std::make_shared<AudioTrack>();
+    trackPtr->id = newId;
+    trackPtr->name = trackName;
+    trackPtr->setPlaybackData(device);
+    trackPtr->setInputParams(requiredParams.in);
+    trackPtr->setOutputParams(requiredParams.out);
     //TODO create AudioSource and MixerChannel
 
-    m_tracks.emplace(newId, std::make_shared<AudioTrack>(std::move(track)));
-
+    m_trackAboutToBeAdded.send(trackPtr);
+    m_tracks.emplace(newId, trackPtr);
     m_trackAdded.send(newId);
 
-    return result.make_ok(newId);
+    result.ret = make_ret(Err::NoError);
+    result.val1 = newId;
+    result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
+
+    return result;
+}
+
+TrackName TrackSequence::trackName(const TrackId id) const
+{
+    TrackPtr trackPtr = track(id);
+
+    if (trackPtr) {
+        return trackPtr->name;
+    }
+
+    static TrackName emptyName;
+    return emptyName;
 }
 
 TrackIdList TrackSequence::trackIdList() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    TrackIdList result(m_tracks.size());
+    TrackIdList result;
 
     for (const auto& pair : m_tracks) {
         result.push_back(pair.first);
@@ -143,16 +170,30 @@ Ret TrackSequence::removeTrack(const TrackId id)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(mixer()) {
+        return make_ret(Err::Undefined);
+    }
+
     auto search = m_tracks.find(id);
 
     if (search != m_tracks.end() && search->second) {
-        mixer()->removeChannel(search->second->mixerChannel->id());
+        m_trackAboutToBeRemoved.send(search->second);
+        mixer()->removeChannel(id);
         m_tracks.erase(id);
         m_trackRemoved.send(id);
         return true;
     }
 
     return make_ret(Err::InvalidTrackId);
+}
+
+void TrackSequence::removeAllTracks()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    for (const TrackId& id : trackIdList()) {
+        removeTrack(id);
+    }
 }
 
 Channel<TrackId> TrackSequence::trackAdded() const
@@ -197,4 +238,23 @@ TracksMap TrackSequence::allTracks() const
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_tracks;
+}
+
+Channel<TrackPtr> TrackSequence::trackAboutToBeAdded() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_trackAboutToBeAdded;
+}
+
+Channel<TrackPtr> TrackSequence::trackAboutToBeRemoved() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_trackAboutToBeRemoved;
+}
+
+std::shared_ptr<Mixer> TrackSequence::mixer() const
+{
+    return AudioEngine::instance()->mixer();
 }

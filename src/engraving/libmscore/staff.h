@@ -28,14 +28,18 @@
  Definition of class Staff.
 */
 
-#include "mscore.h"
+#include "engravingitem.h"
+#include "infrastructure/draw/color.h"
 #include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"
 #include "keylist.h"
 #include "stafftypelist.h"
 #include "groups.h"
-#include "scoreElement.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class InstrumentTemplate;
@@ -69,7 +73,7 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff final : public Element
+class Staff final : public EngravingItem
 {
 public:
     enum class HideMode {
@@ -77,8 +81,8 @@ public:
     };
 
 private:
-    QString _id;
-    Part* _part       { 0 };
+    ID _id = INVALID_ID;
+    Part* _part = nullptr;
 
     ClefList clefs;
     ClefTypeList _defaultClefType;
@@ -87,19 +91,18 @@ private:
     std::map<int, TimeSig*> timesigs;
 
     QList <BracketItem*> _brackets;
-    int _barLineSpan        { false };       ///< true - span barline to next staff
+    int _barLineSpan         { false };       ///< true - span barline to next staff
     int _barLineFrom         { 0 };          ///< line of start staff to draw the barline from (0 = staff top line, ...)
     int _barLineTo           { 0 };          ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
 
-    bool _invisible          { false };
     bool _cutaway            { false };
     bool _showIfEmpty        { false };         ///< show this staff if system is empty and hideEmptyStaves is true
     bool _hideSystemBarLine  { false };         // no system barline if not preceded by staff with barline
     bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
-    QColor _color            { MScore::defaultColor };
-    qreal _userDist          { 0.0 };           ///< user edited extra distance
+    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
+    Millimetre _userDist     { Millimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
 
@@ -113,28 +116,32 @@ private:
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
 
+    friend class mu::engraving::Factory;
+    Staff(Part* parent);
+    Staff(const Staff& staff);
+
     void fillBrackets(int);
     void cleanBrackets();
 
     qreal staffMag(const StaffType*) const;
 
 public:
-    Staff(Score* score = 0);
+
     Staff* clone() const override;
+    ~Staff();
+
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
 
-    ElementType type() const override { return ElementType::STAFF; }
+    ID id() const;
+    void setId(const ID& id);
 
     void setScore(Score* score) override;
 
     bool isTop() const;
     QString partName() const;
     int rstaff() const;
-    QString id() const;
-    void setId(const QString& id);
-    static QString makeId();
     int idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
@@ -232,7 +239,7 @@ public:
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
-    const StaffType* staffTypeForElement(const Element*) const;
+    const StaffType* staffTypeForElement(const EngravingItem*) const;
     StaffType* staffType(const Fraction&);
     StaffType* setStaffType(const Fraction&, const StaffType&);
     void removeStaffType(const Fraction&);
@@ -246,17 +253,17 @@ public:
     void setLines(const Fraction&, int lines);
     qreal lineDistance(const Fraction&) const;
 
-    bool invisible(const Fraction&) const;
-    void setInvisible(const Fraction&, bool val);
+    bool isLinesInvisible(const Fraction&) const;
+    void setIsLinesInvisible(const Fraction&, bool val);
 
     void setSlashStyle(const Fraction&, bool val);
     int middleLine(const Fraction&) const;
     int bottomLine(const Fraction&) const;
 
     qreal staffMag(const Fraction&) const;
-    qreal staffMag(const Element* element) const;
+    qreal staffMag(const EngravingItem* element) const;
     qreal spatium(const Fraction&) const;
-    qreal spatium(const Element*) const;
+    qreal spatium(const EngravingItem*) const;
     //===========
 
     ChangeMap& velocities() { return _velocities; }
@@ -267,26 +274,27 @@ public:
     void updateOttava();
 
     QList<Staff*> staffList() const;
-    bool primaryStaff() const;
+    Staff* primaryStaff() const;
+    bool isPrimaryStaff() const;
 
-    qreal userDist() const { return _userDist; }
-    void setUserDist(qreal val) { _userDist = val; }
+    Millimetre userDist() const { return _userDist; }
+    void setUserDist(Millimetre val) { _userDist = val; }
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
-    using Element::color;
-    using Element::setColor;
-    QColor color(const Fraction&) const;
-    void setColor(const Fraction&, const QColor& val);
-    void undoSetColor(const QColor& val);
+    using EngravingItem::color;
+    using EngravingItem::setColor;
+    mu::draw::Color color(const Fraction&) const;
+    void setColor(const Fraction&, const mu::draw::Color& val);
+    void undoSetColor(const mu::draw::Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
-    QVariant getProperty(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     BracketType innerBracket() const;
 
@@ -296,6 +304,8 @@ public:
     std::array<bool, VOICES> visibilityVoices() const;
     bool isVoiceVisible(int voice) const;
     void setVoiceVisible(int voice, bool visible);
+    bool canDisableVoice() const;
+    void updateVisibilityVoices(Staff* masterStaff);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;

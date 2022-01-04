@@ -23,8 +23,9 @@
 #ifndef __STAFFSTATE_H__
 #define __STAFFSTATE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "instrument.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 enum class StaffStateType : char {
@@ -38,7 +39,7 @@ enum class StaffStateType : char {
 //   @@ StaffState
 //---------------------------------------------------------
 
-class StaffState final : public Element
+class StaffState final : public EngravingItem
 {
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     qreal lw { 0.0 };
@@ -46,16 +47,18 @@ class StaffState final : public Element
 
     Instrument* _instrument { nullptr };
 
+    friend class mu::engraving::Factory;
+    StaffState(EngravingItem* parent);
+    StaffState(const StaffState&);
+
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
 public:
-    StaffState(Score*);
-    StaffState(const StaffState&);
+
     ~StaffState();
 
     StaffState* clone() const override { return new StaffState(*this); }
-    ElementType type() const override { return ElementType::STAFF_STATE; }
 
     void setStaffStateType(const QString&);
     void setStaffStateType(StaffStateType st) { _staffStateType = st; }
@@ -63,7 +66,7 @@ public:
     QString staffStateTypeName() const;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
@@ -71,7 +74,7 @@ public:
     Instrument* instrument() const { return _instrument; }
     void setInstrument(const Instrument* i) { *_instrument = *i; }
     void setInstrument(const Instrument&& i) { *_instrument = i; }
-    Segment* segment() { return (Segment*)parent(); }
+    Segment* segment() { return (Segment*)explicitParent(); }
 };
 }     // namespace Ms
 #endif

@@ -23,7 +23,7 @@
 #ifndef __IMPORTXMLFIRSTPASS_H__
 #define __IMPORTXMLFIRSTPASS_H__
 
-#include "libmscore/fraction.h"
+#include "engraving/types/fraction.h"
 #include "libmscore/interval.h"
 #include "musicxmlsupport.h"
 

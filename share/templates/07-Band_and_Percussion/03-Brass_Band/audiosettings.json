@@ -1,0 +1,392 @@
+{
+    "master": {
+        "balance": 0,
+        "fxChain": {
+        },
+        "muted": false,
+        "solo": false,
+        "volumeDb": 0
+    },
+    "tracks": {
+        "1": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "10": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "11": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "12": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "13": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "14": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "15": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "16": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "17": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "18": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "19": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "2": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "3": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "4": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "5": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "6": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "7": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "8": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        },
+        "9": {
+            "in": {
+                "resourceMeta": {
+                    "hasNativeEditorSupport": false,
+                    "id": "MuseScore_General",
+                    "type": "fluid_soundfont",
+                    "vendor": "Fluid"
+                },
+                "unitConfiguration": {
+                }
+            },
+            "out": {
+                "balance": 0,
+                "fxChain": {
+                },
+                "muted": false,
+                "solo": false,
+                "volumeDb": 0
+            }
+        }
+    }
+}

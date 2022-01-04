@@ -20,9 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 import "internal"
 
@@ -32,20 +34,10 @@ Item {
     property QtObject proxyModel: null
 
     property NavigationPanel navigationPanel: null
-    property int navigationColumn: 1
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
-
-    function navigationCol() {
-        return root.navigationColumn
-    }
-
-    function navigationRow(r) {
-        //! NOTE 100 - to make unique, let's assume that there can be no more than 100 controls in one expandable block.
-        return root.navigationRowOffset + r * 100
-    }
 
     Column {
         id: contentColumn
@@ -56,43 +48,42 @@ Item {
         spacing: 4
 
         NoteExpandableBlank {
-            id: noteExpandableBlank
+            id: noteSection
             navigation.panel: root.navigationPanel
-            navigation.column: root.navigationCol()
-            navigation.row: root.navigationRow(1)
-            model: proxyModel ? proxyModel.notePlaybackModel : null
+            navigation.row: root.navigationRowStart
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTE) : null
         }
 
         ArpeggioExpandableBlank {
-            id: arpeggioExpandableBlank
+            id:arpeggioSection
             navigation.panel: root.navigationPanel
-            navigation.column: root.navigationCol()
-            navigation.row: root.navigationRow(2)
-            model: proxyModel ? proxyModel.arpeggioPlaybackModel : null
+            navigation.row: noteSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_ARPEGGIO) : null
         }
 
         FermataExpandableBlank {
-            id: fermataExpandableBlank
+            id: fermataSection
             navigation.panel: root.navigationPanel
-            navigation.column: root.navigationCol()
-            navigation.row: root.navigationRow(3)
-            model: proxyModel ? proxyModel.fermataPlaybackModel : null
+            navigation.row: arpeggioSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_FERMATA) : null
         }
 
         PausesExpandableBlank {
-            id: pauseExpandableBlank
+            id: pausesSection
             navigation.panel: root.navigationPanel
-            navigation.column: root.navigationCol()
-            navigation.row: root.navigationRow(4)
-            model: proxyModel ? proxyModel.breathPlaybackModel : null
+            navigation.row: fermataSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BREATH) : null
         }
 
         GlissandoExpandableBlank {
-            id: glissandoExpandableBlank
             navigation.panel: root.navigationPanel
-            navigation.column: root.navigationCol()
-            navigation.row: root.navigationRow(5)
-            model: proxyModel ? proxyModel.glissandoPlaybackModel : null
+            navigation.row: pausesSection.navigationRowEnd + 1
+
+            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
         }
     }
 }

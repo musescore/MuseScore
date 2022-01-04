@@ -22,11 +22,41 @@
 
 #include "startupscenario.h"
 
+#include "async/async.h"
+#include "log.h"
+
 using namespace mu::appshell;
 using namespace mu::actions;
 
-static const std::string HOME_URI("musescore://home");
-static const std::string NOTATION_URI("musescore://notation");
+static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
+static const mu::Uri HOME_URI("musescore://home");
+static const mu::Uri NOTATION_URI("musescore://notation");
+
+static StartupSessionType sessionTypeTromString(const QString& str)
+{
+    if ("start-empty" == str) {
+        return StartupSessionType::StartEmpty;
+    }
+
+    if ("continue-last" == str) {
+        return StartupSessionType::ContinueLastSession;
+    }
+
+    if ("start-with-new" == str) {
+        return StartupSessionType::StartWithNewScore;
+    }
+
+    if ("start-with-file" == str) {
+        return StartupSessionType::StartWithScore;
+    }
+
+    return StartupSessionType::StartEmpty;
+}
+
+void StartupScenario::setSessionType(const QString& sessionType)
+{
+    m_sessionType = sessionType;
+}
 
 void StartupScenario::setStartupScorePath(const io::path& path)
 {
@@ -35,14 +65,58 @@ void StartupScenario::setStartupScorePath(const io::path& path)
 
 void StartupScenario::run()
 {
-    if (!m_startupScorePath.empty()) {
-        openScore(m_startupScorePath);
+    TRACEFUNC;
+
+    if (m_startupCompleted) {
         return;
     }
 
-    interactive()->open(startupPageUri());
+    StartupSessionType sessionType = resolveStartupSessionType();
+    Uri startupUri = startupPageUri(sessionType);
 
-    switch (configuration()->startupSessionType()) {
+    async::Channel<Uri> opened = interactive()->opened();
+    opened.onReceive(this, [this, opened, sessionType](const Uri&) {
+        static bool once = false;
+        if (once) {
+            return;
+        }
+        once = true;
+
+        onStartupPageOpened(sessionType);
+
+        async::Async::call(this, [this, opened]() {
+            async::Channel<Uri> mut = opened;
+            mut.resetOnReceive(this);
+            m_startupCompleted = true;
+        });
+    });
+
+    interactive()->open(startupUri);
+}
+
+bool StartupScenario::startupCompleted() const
+{
+    return m_startupCompleted;
+}
+
+StartupSessionType StartupScenario::resolveStartupSessionType() const
+{
+    if (!m_startupScorePath.empty()) {
+        return StartupSessionType::StartWithScore;
+    }
+
+    if (!m_sessionType.isEmpty()) {
+        return sessionTypeTromString(m_sessionType);
+    }
+
+    return configuration()->startupSessionType();
+}
+
+void StartupScenario::onStartupPageOpened(StartupSessionType sessionType)
+{
+    TRACEFUNC;
+
+    switch (sessionType) {
     case StartupSessionType::StartEmpty:
         break;
     case StartupSessionType::StartWithNewScore:
@@ -52,14 +126,20 @@ void StartupScenario::run()
         dispatcher()->dispatch("continue-last-session");
         break;
     case StartupSessionType::StartWithScore: {
-        openScore(configuration()->startupScorePath());
+        io::path path = m_startupScorePath.empty() ? configuration()->startupScorePath()
+                        : m_startupScorePath;
+        openScore(path);
     } break;
+    }
+
+    if (!configuration()->hasCompletedFirstLaunchSetup()) {
+        interactive()->open(FIRST_LAUNCH_SETUP_URI);
     }
 }
 
-std::string StartupScenario::startupPageUri() const
+mu::Uri StartupScenario::startupPageUri(StartupSessionType sessionType) const
 {
-    switch (configuration()->startupSessionType()) {
+    switch (sessionType) {
     case StartupSessionType::StartEmpty:
     case StartupSessionType::StartWithNewScore:
         return HOME_URI;

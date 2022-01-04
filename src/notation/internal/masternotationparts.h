@@ -34,38 +34,18 @@ public:
 
     void setExcerpts(ExcerptNotationList excerpts);
 
-    void setParts(const instruments::PartInstrumentList& instruments) override;
-    void setScoreOrder(const instruments::ScoreOrder& order) override;
-    void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
-    void setPartName(const ID& partId, const QString& name) override;
-    void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
-    void setPartTransposition(const ID& partId, const instruments::Interval& transpose) override;
-    void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) override;
-    void setStaffType(const ID& staffId, StaffType type) override;
-    void setCutawayEnabled(const ID& staffId, bool enabled) override;
-    void setSmallStaff(const ID& staffId, bool smallStaff) override;
-
-    void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
-
     void removeParts(const IDList& partsIds) override;
-    void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) override;
     void removeStaves(const IDList& stavesIds) override;
 
-    void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
-    void moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                         const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) override;
-    void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
-
-    void appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId) override;
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
+    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
-    void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
-
-    void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
 private:
-    void startEdit();
-    void apply();
+    void startGlobalEdit();
+    void endGlobalEdit();
 
     std::vector<INotationPartsPtr> excerptsParts() const;
 

@@ -23,7 +23,12 @@
 #ifndef __CHORDLINE_H__
 #define __CHORDLINE_H__
 
-#include "element.h"
+#include "engravingitem.h"
+#include "infrastructure/draw/painterpath.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Chord;
@@ -40,7 +45,7 @@ enum class ChordLineType : char {
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine final : public Element
+class ChordLine final : public EngravingItem
 {
     ChordLineType _chordLineType;
     bool _straight;
@@ -50,16 +55,17 @@ class ChordLine final : public Element
     qreal _lengthY;
     const int _initialLength = 2;
 
-public:
-    ChordLine(Score*);
+    friend class mu::engraving::Factory;
+    ChordLine(Chord* parent);
     ChordLine(const ChordLine&);
 
+public:
+
     ChordLine* clone() const override { return new ChordLine(*this); }
-    ElementType type() const override { return ElementType::CHORDLINE; }
 
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return _chordLineType; }
-    Chord* chord() const { return (Chord*)(parent()); }
+    Chord* chord() const { return (Chord*)(explicitParent()); }
     bool isStraight() const { return _straight; }
     void setStraight(bool straight) { _straight =  straight; }
     void setLengthX(qreal length) { _lengthX = length; }
@@ -75,13 +81,13 @@ public:
 
     QString accessibleInfo() const override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
-    int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
+    int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;

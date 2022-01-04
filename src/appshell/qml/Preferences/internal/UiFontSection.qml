@@ -23,53 +23,51 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
+
+    title: qsTrc("appshell", "Appearance")
 
     property alias allFonts: selectFontControl.model
 
     property alias currentFontIndex: selectFontControl.currentIndex
     property alias bodyTextSize: bodyTextSizeControl.currentValue
 
-    property int firstColumnWidth: 0
-
     signal fontChangeRequested(var newFontIndex)
     signal bodyTextSizeChangeRequested(var newBodyTextSize)
 
-    spacing: 18
+    ComboBoxWithTitle {
+        id: selectFontControl
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "Appearance")
-        font: ui.theme.bodyBoldFont
+        title: qsTrc("appshell", "Font face:")
+        columnWidth: root.columnWidth
+
+        navigation.name: "FontFaceBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onValueEdited: function(newValue) {
+            root.fontChangeRequested(currentIndex)
+        }
     }
 
-    Column {
-        spacing: 8
+    IncrementalPropertyControlWithTitle {
+        id: bodyTextSizeControl
 
-        ComboBoxWithTitle {
-            id: selectFontControl
+        title: qsTrc("appshell", "Body text size:")
+        columnWidth: root.columnWidth
+        control.width: 112
 
-            title: qsTrc("appshell", "Font face:")
-            titleWidth: root.firstColumnWidth
+        minValue: 8
+        maxValue: 24
+        measureUnitsSymbol: qsTrc("appshell", "pt")
 
-            onValueEdited: {
-                root.fontChangeRequested(currentIndex)
-            }
-        }
+        navigation.name: "BodyTextControl"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
-        IncrementalPropertyControlWithTitle {
-            id: bodyTextSizeControl
-
-            title: qsTrc("appshell", "Body text size:")
-            titleWidth: root.firstColumnWidth
-
-            minValue: 8
-            maxValue: 24
-            measureUnitsSymbol: qsTrc("appshell", "pt")
-
-            onValueEdited: {
-                root.bodyTextSizeChangeRequested(newValue)
-            }
+        onValueEdited: function(newValue) {
+            root.bodyTextSizeChangeRequested(newValue)
         }
     }
 }

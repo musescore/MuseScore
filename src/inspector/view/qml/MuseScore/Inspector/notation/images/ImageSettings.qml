@@ -19,24 +19,109 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: imagePopup.model
+    property QtObject model: null
 
-    icon: IconCode.IMAGE_MOUNTAINS
-    text: qsTrc("inspector", "Images")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "ImageSettings"
 
-    ImagePopup {
-        id: imagePopup
+    spacing: 12
+
+    function focusOnFirst() {
+        heightControl.focusOnFirst()
+    }
+
+    Item {
+        height: childrenRect.height
+        width: parent.width
+
+        SpinBoxPropertyView {
+            id: heightControl
+
+            anchors.left: parent.left
+            anchors.right: lockButton.left
+            anchors.rightMargin: 6
+
+            titleText: qsTrc("inspector", "Image height")
+            propertyItem: root.model ? root.model.height : null
+
+            icon: IconCode.VERTICAL
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
+        }
+
+        FlatToggleButton {
+            id: lockButton
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: heightControl.verticalCenter
+
+            height: 20
+            width: 20
+
+            icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+
+            navigation.name: "Lock"
+            navigation.panel: root.navigationPanel
+            navigation.row: heightControl.navigationRowEnd + 1
+            navigation.accessible.name: qsTrc("inspector", "Lock")
+
+            checked: root.model ? root.model.isAspectRatioLocked.value : false
+            onToggled: {
+                root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
+            }
+        }
+
+        SpinBoxPropertyView {
+            id: imageWidthSection
+            anchors.left: lockButton.right
+            anchors.leftMargin: 6
+            anchors.right: parent.right
+
+            titleText: qsTrc("inspector", "Image width")
+            propertyItem: root.model ? root.model.width : null
+
+            icon: IconCode.HORIZONTAL
+            iconMode: IncrementalPropertyControl.Right
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: lockButton.navigation.row + 1
+        }
+    }
+
+    SeparatorLine { anchors.margins: -12 }
+
+    CheckBoxPropertyView {
+        text: qsTrc("inspector", "Scale to frame size")
+        propertyItem: root.model ? root.model.shouldScaleToFrameSize : null
+
+        navigation.name: "ScaleToFrameSizeCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: imageWidthSection.navigationRowEnd + 1
+    }
+
+    CheckBoxPropertyView {
+        id: staffSpaceUnitsCheckbox
+        text: qsTrc("inspector", "Use staff space units")
+        propertyItem: root.model ? root.model.isSizeInSpatiums : null
+
+        navigation.name: "UseStaffSpaceUnitsCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: imageWidthSection.navigationRowEnd + 2
     }
 }

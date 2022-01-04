@@ -55,7 +55,8 @@ static std::pair<Hairpin*, Hairpin*> findAdjacentHairpins(Dynamic* d)
     return { leftHairpin, rightHairpin };
 }
 
-std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSegment* hs, std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSegment* hs,
+                                                                      std::function<bool(const EngravingItem*)> isDragged)
 {
     if (!hs->isSingleType()) {
         return nullptr;
@@ -84,7 +85,7 @@ std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(HairpinSeg
     return nullptr;
 }
 
-std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinWithDynamicsDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;
@@ -108,7 +109,7 @@ void HairpinWithDynamicsDragGroup::startDrag(EditData& ed)
     if (startDynamic) {
         startDynamic->startDrag(ed);
     }
-    static_cast<Element*>(hairpinSegment)->startDrag(ed);
+    static_cast<EngravingItem*>(hairpinSegment)->startDrag(ed);
     if (endDynamic) {
         endDynamic->startDrag(ed);
     }
@@ -119,11 +120,11 @@ mu::RectF HairpinWithDynamicsDragGroup::drag(EditData& ed)
     RectF r;
 
     if (startDynamic) {
-        r.unite(static_cast<Element*>(startDynamic)->drag(ed));
+        r.unite(static_cast<EngravingItem*>(startDynamic)->drag(ed));
     }
     r.unite(hairpinSegment->drag(ed));
     if (endDynamic) {
-        r.unite(static_cast<Element*>(endDynamic)->drag(ed));
+        r.unite(static_cast<EngravingItem*>(endDynamic)->drag(ed));
     }
 
     Hairpin* h = hairpinSegment->hairpin();
@@ -159,7 +160,7 @@ void HairpinWithDynamicsDragGroup::endDrag(EditData& ed)
     }
 }
 
-std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d, std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> DynamicNearHairpinsDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
 {
     Hairpin* leftHairpin = nullptr;
     Hairpin* rightHairpin = nullptr;
@@ -187,7 +188,7 @@ void DynamicNearHairpinsDragGroup::startDrag(EditData& ed)
 
 RectF DynamicNearHairpinsDragGroup::drag(EditData& ed)
 {
-    RectF r(static_cast<Element*>(dynamic)->drag(ed));
+    RectF r(static_cast<EngravingItem*>(dynamic)->drag(ed));
 
     const Fraction tick = dynamic->segment()->tick();
 

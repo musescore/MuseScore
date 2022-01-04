@@ -31,8 +31,9 @@ public:
     MultiInstancesStubProvider() = default;
 
     // Score opening
-    bool isScoreAlreadyOpened(const io::path& scorePath) const override;
-    void activateWindowWithScore(const io::path& scorePath) override;
+    bool isProjectAlreadyOpened(const io::path& scorePath) const override;
+    void activateWindowWithProject(const io::path& scorePath) override;
+    bool openNewAppInstance(const QStringList& args) override;
 
     // Settings
     bool isPreferencesAlreadyOpened() const override;
@@ -50,6 +51,9 @@ public:
     const std::string& selfID() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
+
+    // Quit for all
+    void quitForAll() override;
 };
 }
 

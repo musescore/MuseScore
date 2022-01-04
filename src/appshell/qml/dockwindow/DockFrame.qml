@@ -35,9 +35,9 @@ Rectangle {
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
     readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
+    //! ---
 
     anchors.fill: parent
-
     color: ui.theme.backgroundPrimaryColor
 
     onFrameCppChanged: {
@@ -65,6 +65,7 @@ Rectangle {
     NavigationPanel {
         id: navPanel
         name: root.objectName+"PanelTabs"
+        enabled: root.enabled && root.visible
         section: frameModel.navigationSection
         order: 1
 
@@ -82,7 +83,13 @@ Rectangle {
 
         titleBarCpp: root.titleBarCpp
 
+        contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
+        isHorizontalPanel: frameModel.isHorizontalPanel
+
+        onHandleContextMenuItemRequested: function(itemId) {
+            frameModel.handleMenuItem(itemId)
+        }
     }
 
     MouseArea {
@@ -104,10 +111,11 @@ Rectangle {
 
         anchors.top: titleBar.visible ? titleBar.bottom : parent.top
 
-        height: 36
+        height: 35
         width: parent.width
 
         visible: tabs.count > 1
+        clip: true
 
         color: ui.theme.backgroundSecondaryColor
 
@@ -138,20 +146,31 @@ Rectangle {
 
             orientation: Qt.Horizontal
             interactive: false
-            clip: true
             spacing: 0
 
             currentIndex: tabsPanel.currentIndex
-            model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
+            model: frameModel.tabs
 
             delegate: DockPanelTab {
-                navigation.name: title
-                navigation.panel: navPanel
-                navigation.order: model.index
-                onNavigationTriggered: tabsPanel.currentIndex = model.index
-
-                text: title
+                text: modelData.title
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
+                contextMenuModel: modelData.contextMenuModel
+
+                navigation.name: text
+                navigation.panel: navPanel
+                navigation.order: model.index * 2 // NOTE '...' button will have +1 order
+
+                onNavigationTriggered: {
+                    tabsPanel.currentIndex = model.index
+                }
+
+                onClicked: {
+                    tabsPanel.currentIndex = model.index
+                }
+
+                onHandleContextMenuItemRequested: {
+                    frameModel.handleMenuItem(itemId)
+                }
             }
         }
 
@@ -185,6 +204,27 @@ Rectangle {
             }
 
             return 0
+        }
+    }
+
+    Rectangle {
+        visible: frameModel.highlightingVisible
+
+        x: frameModel.highlightingRect.x
+        y: frameModel.highlightingRect.y
+        width: frameModel.highlightingRect.width
+        height: frameModel.highlightingRect.height
+
+        color: "transparent"
+
+        border.width: 1
+        border.color: ui.theme.accentColor
+
+        Rectangle {
+            anchors.fill: parent
+
+            color: ui.theme.accentColor
+            opacity: 0.3
         }
     }
 }

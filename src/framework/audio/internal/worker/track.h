@@ -27,10 +27,10 @@
 #include <memory>
 #include <vector>
 
+#include "async/asyncable.h"
 #include "async/channel.h"
 
 #include "iaudiosource.h"
-#include "imixerchannel.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
@@ -40,11 +40,38 @@ enum TrackType {
     Audio
 };
 
-struct Track
+class ITrackAudioInput : public IAudioSource
+{
+public:
+    virtual ~ITrackAudioInput() = default;
+
+    virtual void seek(const msecs_t newPositionMsecs) = 0;
+    virtual const AudioInputParams& inputParams() const = 0;
+    virtual void applyInputParams(const AudioInputParams& requiredParams) = 0;
+    virtual async::Channel<AudioInputParams> inputParamsChanged() const = 0;
+};
+
+class ITrackAudioOutput : public IAudioSource
+{
+public:
+    virtual ~ITrackAudioOutput() = default;
+
+    virtual const AudioOutputParams& outputParams() const = 0;
+    virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
+    virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
+
+    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const = 0;
+};
+
+using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
+using ITrackAudioOutputPtr = std::shared_ptr<ITrackAudioOutput>;
+
+struct Track : public async::Asyncable
 {
 public:
     Track(const TrackType trackType = Undefined)
         : type(trackType) {}
+    virtual ~Track() = default;
 
     TrackId id = -1;
     TrackType type = Undefined;
@@ -54,38 +81,75 @@ public:
     {
         return id != -1
                && type != Undefined
-               && audioSource
-               && mixerChannel;
+               && inputHandler
+               && outputHandler;
     }
 
-    virtual AudioInputParams inputParams() const = 0;
-    virtual bool setInputParams(const AudioInputParams& params) = 0;
+    virtual PlaybackData playbackData() const = 0;
+    virtual bool setPlaybackData(const PlaybackData& data) = 0;
 
-    AudioOutputParams outputParams() const
+    AudioInputParams inputParams() const
     {
-        return m_outParams;
+        if (!inputHandler) {
+            return {};
+        }
+
+        return inputHandler->inputParams();
     }
 
-    bool setOutputParams(const AudioOutputParams& params)
+    bool setInputParams(const AudioInputParams& requiredParams)
     {
-        if (m_outParams == params) {
+        if (!inputHandler) {
             return false;
         }
 
-        m_outParams = params;
-        outputParamsChanged.send(params);
+        inputHandler->applyInputParams(requiredParams);
 
         return true;
     }
 
-    async::Channel<AudioInputParams> inputParamsChanged;
-    async::Channel<AudioOutputParams> outputParamsChanged;
+    AudioOutputParams outputParams() const
+    {
+        if (!outputHandler) {
+            return {};
+        }
 
-    IAudioSourcePtr audioSource = nullptr;
-    IMixerChannelPtr mixerChannel = nullptr;
+        return outputHandler->outputParams();
+    }
 
-private:
-    AudioOutputParams m_outParams;
+    bool setOutputParams(const AudioOutputParams& requiredParams)
+    {
+        if (!outputHandler) {
+            return false;
+        }
+
+        outputHandler->applyOutputParams(requiredParams);
+
+        return true;
+    }
+
+    ITrackAudioInputPtr inputHandler = nullptr;
+    ITrackAudioOutputPtr outputHandler = nullptr;
+
+    async::Channel<AudioInputParams> inputParamsChanged()
+    {
+        if (!inputHandler) {
+            return {};
+        }
+
+        return inputHandler->inputParamsChanged();
+    }
+
+    async::Channel<AudioOutputParams> outputParamsChanged()
+    {
+        if (!outputHandler) {
+            return {};
+        }
+
+        return outputHandler->outputParamsChanged();
+    }
+
+    async::Channel<PlaybackData> playbackDataChanged;
 };
 
 struct MidiTrack : public Track
@@ -94,21 +158,21 @@ public:
     MidiTrack()
         : Track(Midi) {}
 
-    AudioInputParams inputParams() const
+    PlaybackData playbackData() const override
     {
         return m_midiData;
     }
 
-    bool setInputParams(const AudioInputParams& params)
+    bool setPlaybackData(const PlaybackData& data) override
     {
-        midi::MidiData newMidiData = std::get<midi::MidiData>(params);
+        midi::MidiData newMidiData = std::get<midi::MidiData>(data);
 
         if (m_midiData == newMidiData) {
             return false;
         }
 
         m_midiData = newMidiData;
-        inputParamsChanged.send(std::move(newMidiData));
+        playbackDataChanged.send(std::move(newMidiData));
 
         return true;
     }
@@ -122,27 +186,28 @@ struct AudioTrack : public Track
     AudioTrack()
         : Track(Audio) {}
 
-    AudioInputParams inputParams() const override
+    PlaybackData playbackData() const override
     {
-        return m_filePath;
+        return m_ioDevice;
     }
 
-    bool setInputParams(const AudioInputParams& params) override
+    bool setPlaybackData(const PlaybackData& data) override
     {
-        io::path newPath = std::get<io::path>(params);
+        io::Device* newDevice = std::get<io::Device*>(data);
 
-        if (m_filePath == newPath) {
+        if (m_ioDevice == newDevice) {
             return false;
         }
 
-        m_filePath = newPath;
-        inputParamsChanged.send(std::move(newPath));
+        m_ioDevice->close();
+        m_ioDevice = newDevice;
+        playbackDataChanged.send(std::move(newDevice));
 
         return true;
     }
 
 private:
-    io::path m_filePath;
+    io::Device* m_ioDevice = nullptr;
 };
 
 using TrackPtr = std::shared_ptr<Track>;

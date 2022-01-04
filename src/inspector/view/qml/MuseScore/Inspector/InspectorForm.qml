@@ -20,18 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQml.Models 2.3
 import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-import "common"
-import "general"
-import "notation"
-import "text"
-import "score"
+import "."
 
 Rectangle {
     id: root
@@ -42,7 +37,6 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
@@ -50,47 +44,13 @@ Rectangle {
         }
     }
 
-    NavigationPanel {
-        id: navPanel
-        name: "Inspector"
-        section: root.navigationSection
-        direction: NavigationPanel.Vertical
-        enabled: root.visible
-        order: 2
-    }
-
-    InspectorListModel {
-        id: inspectorListModel
-
-        onModelChanged: {
-            if (navPanel.active) {
-                root.focusFirstItem()
-            }
-        }
-    }
-
-    StyledScrollBar {
-        id: scrollBar
-
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-
-        visible: flickableArea.contentHeight > flickableArea.height
-        z: 1
-    }
-
     Flickable {
         id: flickableArea
-
         anchors.fill: parent
-        anchors.margins: 12
 
-        function ensureContentVisible(delegateY, delegateContentHeight) {
-            var contentBottomY = delegateY + delegateContentHeight
-
-            if (contentBottomY > flickableArea.height) {
-                flickableArea.contentY = contentBottomY - flickableArea.height
+        function ensureContentVisible(invisibleContentHeight) {
+            if (flickableArea.contentY + invisibleContentHeight > 0) {
+                flickableArea.contentY += invisibleContentHeight
             } else {
                 flickableArea.contentY = 0
             }
@@ -101,101 +61,53 @@ Rectangle {
         boundsBehavior: Flickable.StopAtBounds
         maximumFlickVelocity: 1000
 
-        contentHeight: contentItem.childrenRect.height
+        contentHeight: contentColumn.childrenRect.height + 2 * contentColumn.anchors.margins
 
         Behavior on contentY {
             NumberAnimation { duration: 250 }
         }
 
-        ScrollBar.vertical: scrollBar
+        ScrollBar.vertical: StyledScrollBar {}
 
         Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            id: contentColumn
 
-            spacing: 6
+            anchors.fill: parent
+            anchors.margins: 12
+
+            height: childrenRect.height
+            spacing: 12
 
             Repeater {
                 id: inspectorRepeater
 
-                model: inspectorListModel
+                model: InspectorListModel {
+                    id: inspectorListModel
+                }
 
-                delegate: ExpandableBlank {
-                    id: expandableDelegate
+                delegate: Column {
+                    width: parent.width
 
-                    property var contentHeight: implicitHeight
+                    spacing: contentColumn.spacing
 
-                    navigation.panel: navPanel
-                    navigation.row: (model.index + 1) * 1000 // make unique
+                    SeparatorLine {
+                        anchors.margins: -12
 
-                    function viewBySectionType() {
-                        flickableArea.contentY = 0
+                        visible: model.index !== 0
+                    }
 
-                        switch (inspectorData.sectionType) {
-                        case Inspector.SECTION_GENERAL: return generalInspector
-                        case Inspector.SECTION_TEXT: return textInspector
-                        case Inspector.SECTION_NOTATION: return notationInspector
-                        case Inspector.SECTION_SCORE_DISPLAY: return scoreInspector
-                        case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceInspector
+                    InspectorSectionDelegate {
+                        sectionModel: model.inspectorSectionModel
+                        index: model.index
+                        anchorItem: root
+                        navigationSection: root.navigationSection
+
+                        onReturnToBoundsRequested: {
+                            flickableArea.returnToBounds()
                         }
-                    }
 
-                    contentItemComponent: viewBySectionType()
-
-                    Component.onCompleted: {
-                        title = inspectorData.title
-                    }
-
-                    function updateContentHeight(newContentHeight) {
-                        expandableDelegate.contentHeight = newContentHeight
-                        flickableArea.ensureContentVisible(y, newContentHeight)
-                    }
-
-                    Component {
-                        id: generalInspector
-                        GeneralInspectorView {
-                            model: inspectorData
-                            navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
-                        }
-                    }
-                    Component {
-                        id: textInspector
-                        TextInspectorView {
-                            model: inspectorData
-                            navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
-                        }
-                    }
-                    Component {
-                        id: notationInspector
-                        NotationInspectorView {
-                            model: inspectorData
-                            navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
-                        }
-                    }
-                    Component {
-                        id: scoreInspector
-
-                        ScoreDisplayInspectorView {
-                            model: inspectorData
-                            navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
-                        }
-                    }
-                    Component {
-                        id: scoreAppearanceInspector
-
-                        ScoreAppearanceInspectorView {
-                            model: inspectorData
-                            navigationPanel: navPanel
-                            navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                        onEnsureContentVisibleRequested: {
+                            flickableArea.ensureContentVisible(invisibleContentHeight)
                         }
                     }
                 }

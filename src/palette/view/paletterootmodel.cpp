@@ -26,31 +26,23 @@ using namespace mu::palette;
 PaletteRootModel::PaletteRootModel(QObject* parent)
     : QObject(parent)
 {
-    ValCh<bool> enabled = adapter()->paletteEnabled();
-    enabled.ch.onReceive(this, [this](bool arg) {
-        emit paletteEnabledChanged(arg);
-    });
-
-    adapter()->paletteSearchRequested().onNotify(this, [this]() {
+    dispatcher()->reg(this, "palette-search", [this]() {
         emit paletteSearchRequested();
-    });
-
-    adapter()->elementDraggedToScoreView().onNotify(this, [this]() {
-        emit elementDraggedToScoreView();
     });
 }
 
 bool PaletteRootModel::paletteEnabled() const
 {
-    return adapter()->paletteEnabled().val;
+    // TODO?
+    return true;
 }
 
-Ms::PaletteWorkspace* PaletteRootModel::paletteWorkspace() const
+Ms::PaletteProvider* PaletteRootModel::paletteProvider_property() const
 {
-    return adapter()->paletteWorkspace();
+    return dynamic_cast<Ms::PaletteProvider*>(paletteProvider().get());
 }
 
-bool PaletteRootModel::shadowOverlay() const
+bool PaletteRootModel::needShowShadowOverlay() const
 {
-    return m_shadowOverlay;
+    return m_needShowShadowOverlay;
 }

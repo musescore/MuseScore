@@ -22,6 +22,12 @@
 
 #include "masternotationparts.h"
 
+#include "libmscore/masterscore.h"
+#include "libmscore/scoreorder.h"
+#include "libmscore/undo.h"
+
+#include "log.h"
+
 using namespace mu::notation;
 
 MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
@@ -34,173 +40,38 @@ void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
     m_excerpts = excerpts;
 }
 
-void MasterNotationParts::startEdit()
+void MasterNotationParts::startGlobalEdit()
 {
-    undoStack()->prepareChanges();
+    NotationParts::startEdit();
+    undoStack()->lock();
 }
 
-void MasterNotationParts::apply()
+void MasterNotationParts::endGlobalEdit()
 {
-    undoStack()->commitChanges();
-    partsChanged().notify();
-}
-
-void MasterNotationParts::setParts(const instruments::PartInstrumentList& instruments)
-{
-    startEdit();
-    NotationParts::setParts(instruments);
-    apply();
-}
-
-void MasterNotationParts::setScoreOrder(const instruments::ScoreOrder& order)
-{
-    startEdit();
-    NotationParts::setScoreOrder(order);
-    apply();
-}
-
-void MasterNotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
-{
-    startEdit();
-
-    NotationParts::setInstrumentName(instrumentId, fromPartId, name);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setInstrumentName(instrumentId, fromPartId, name);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setPartName(const ID& partId, const QString& name)
-{
-    startEdit();
-
-    NotationParts::setPartName(partId, name);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setPartName(partId, name);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat)
-{
-    startEdit();
-
-    NotationParts::setPartSharpFlat(partId, sharpFlat);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setPartSharpFlat(partId, sharpFlat);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setPartTransposition(const ID& partId, const instruments::Interval& transpose)
-{
-    startEdit();
-
-    NotationParts::setPartTransposition(partId, transpose);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setPartTransposition(partId, transpose);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature)
-{
-    startEdit();
-
-    NotationParts::setInstrumentAbbreviature(instrumentId, fromPartId, abbreviature);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setInstrumentAbbreviature(instrumentId, fromPartId, abbreviature);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setStaffType(const ID& staffId, StaffType type)
-{
-    startEdit();
-
-    NotationParts::setStaffType(staffId, type);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setStaffType(staffId, type);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
-{
-    startEdit();
-
-    NotationParts::setCutawayEnabled(staffId, enabled);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setCutawayEnabled(staffId, enabled);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
-{
-    startEdit();
-
-    NotationParts::setSmallStaff(staffId, smallStaff);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setSmallStaff(staffId, smallStaff);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
-{
-    startEdit();
-
-    NotationParts::setStaffConfig(staffId, config);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->setStaffConfig(staffId, config);
-    }
-
-    apply();
+    undoStack()->unlock();
+    NotationParts::apply();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)
 {
-    startEdit();
+    TRACEFUNC;
+
+    startGlobalEdit();
 
     NotationParts::removeParts(partsIds);
 
-    apply();
-}
-
-void MasterNotationParts::removeInstruments(const IDList& instrumentsIds, const ID& fromPartId)
-{
-    startEdit();
-
-    NotationParts::removeInstruments(instrumentsIds, fromPartId);
-
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->removeInstruments(instrumentsIds, fromPartId);
+        parts->removeParts(partsIds);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
-    startEdit();
+    TRACEFUNC;
+
+    startGlobalEdit();
 
     NotationParts::removeStaves(stavesIds);
 
@@ -208,95 +79,74 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
         parts->removeStaves(stavesIds);
     }
 
-    apply();
-}
-
-void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveParts(sourcePartsIds, destinationPartId, mode);
-
-    apply();
-}
-
-void MasterNotationParts::moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                                          const ID& destinationInstrumentId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveStaves(sourceStavesIds, destinationStaffId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveStaves(sourceStavesIds, destinationStaffId, mode);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::appendDoublingInstrument(const instruments::Instrument& instrument, const ID& destinationPartId)
-{
-    startEdit();
-
-    NotationParts::appendDoublingInstrument(instrument, destinationPartId);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendDoublingInstrument(instrument, destinationPartId);
-    }
-
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
-    startEdit();
+    TRACEFUNC;
+
+    startGlobalEdit();
+
+    //! NOTE: will be generated later after adding to the score
+    staff->setId(Ms::INVALID_ID);
 
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendStaff(staff->clone(), destinationPartId);
+        Staff* excerptStaff = Ms::toStaff(staff->linkedClone());
+        parts->appendStaff(excerptStaff, destinationPartId);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
-void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
+void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
 {
-    startEdit();
+    TRACEFUNC;
 
-    NotationParts::cloneStaff(sourceStaffId, destinationStaffId);
+    startGlobalEdit();
+
+    //! NOTE: will be generated later after adding to the score
+    staff->setId(Ms::INVALID_ID);
+
+    NotationParts::appendLinkedStaff(staff, sourceStaffId, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->cloneStaff(sourceStaffId, destinationStaffId);
+        parts->appendLinkedStaff(staff->clone(), sourceStaffId, destinationPartId);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
-void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const instruments::Instrument& newInstrument)
+void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
 {
-    startEdit();
+    TRACEFUNC;
 
-    NotationParts::replaceInstrument(instrumentId, fromPartId, newInstrument);
+    startGlobalEdit();
+
+    NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->replaceInstrument(instrumentId, fromPartId, newInstrument);
+        parts->replaceInstrument(instrumentKey, newInstrument);
     }
 
-    apply();
+    endGlobalEdit();
+}
+
+void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
+{
+    TRACEFUNC;
+
+    startGlobalEdit();
+
+    NotationParts::replaceDrumset(instrumentKey, newDrumset);
+
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->replaceDrumset(instrumentKey, newDrumset);
+    }
+
+    endGlobalEdit();
 }
 
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const

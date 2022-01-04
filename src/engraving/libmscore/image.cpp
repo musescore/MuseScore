@@ -21,17 +21,21 @@
  */
 
 #include "image.h"
-#include "xml.h"
+
+#include "draw/pixmap.h"
+#include "draw/transform.h"
+#include "draw/svgrenderer.h"
+#include "rw/xml.h"
+
 #include "score.h"
 #include "undo.h"
 #include "mscore.h"
 #include "imageStore.h"
-
-#include "draw/transform.h"
-#include "draw/svgrenderer.h"
+#include "masterscore.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -46,11 +50,10 @@ static bool defaultSizeIsSpatium    = true;
 //   Image
 //---------------------------------------------------------
 
-Image::Image(Score* s)
-    : BSymbol(s, ElementFlag::MOVABLE)
+Image::Image(EngravingItem* parent)
+    : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
-    rasterDoc        = 0;
     _size            = SizeF(0.0, 0.0);
     _storeItem       = 0;
     _dirty           = false;
@@ -77,7 +80,7 @@ Image::Image(const Image& img)
     _linkPath        = img._linkPath;
     _linkIsValid     = img._linkIsValid;
     if (imageType == ImageType::RASTER) {
-        rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
+        rasterDoc = img.rasterDoc ? std::make_shared<Pixmap>(*img.rasterDoc) : nullptr;
     } else if (imageType == ImageType::SVG) {
         svgDoc = img.svgDoc ? new SvgRenderer(_storeItem->buffer()) : 0;
     }
@@ -95,8 +98,6 @@ Image::~Image()
     }
     if (imageType == ImageType::SVG) {
         delete svgDoc;
-    } else if (imageType == ImageType::RASTER) {
-        delete rasterDoc;
     }
 }
 
@@ -110,7 +111,7 @@ void Image::setImageType(ImageType t)
     if (imageType == ImageType::SVG) {
         svgDoc = 0;
     } else if (imageType == ImageType::RASTER) {
-        rasterDoc = 0;
+        rasterDoc.reset();
     } else {
         qDebug("illegal image type");
     }
@@ -127,7 +128,8 @@ SizeF Image::imageSize() const
     }
 
     if (imageType == ImageType::RASTER) {
-        return SizeF::fromQSizeF(rasterDoc->size());
+        Size rasterSize = rasterDoc->size();
+        return SizeF(rasterSize.width(), rasterSize.height());
     }
 
     return svgDoc->defaultSize();
@@ -161,14 +163,14 @@ void Image::draw(mu::draw::Painter* painter) const
             if (score() && score()->printing() && !MScore::svgPrinting) {
                 // use original image size for printing, but not for svg for reasonable file size.
                 painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
-                painter->drawPixmap(PointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                painter->drawPixmap(PointF(0, 0), *rasterDoc);
             } else {
                 Transform t = painter->worldTransform();
-                QSizeF ss = QSizeF(s.width() * t.m11(), s.height() * t.m22());
+                Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
-                    buffer = QPixmap::fromImage(rasterDoc->scaled(ss.toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    buffer = imageProvider()->scaled(*rasterDoc, ss);
                     _dirty = false;
                 }
                 if (buffer.isNull()) {
@@ -182,14 +184,14 @@ void Image::draw(mu::draw::Painter* painter) const
     }
     if (emptyImage) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
-        painter->setPen(Qt::black);
+        painter->setPen(engravingConfiguration()->defaultColor());
         painter->drawRect(bbox());
         painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
         painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
     }
     if (selected() && !(score() && score()->printing())) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
-        painter->setPen(MScore::selectColor[0]);
+        painter->setPen(engravingConfiguration()->selectionColor());
         painter->drawRect(bbox());
     }
 }
@@ -200,11 +202,11 @@ void Image::draw(mu::draw::Painter* painter) const
 
 bool Image::isImageFramed() const
 {
-    if (!parent()) {
+    if (!explicitParent()) {
         return false;
     }
 
-    return parent()->isBox();
+    return explicitParent()->isBox();
 }
 
 //---------------------------------------------------------
@@ -315,7 +317,7 @@ void Image::write(XmlWriter& xml) const
         relativeFilePath = _linkPath;
     }
 
-    xml.stag(this);
+    xml.startObject(this);
     BSymbol::writeProperties(xml);
     // keep old "path" tag, for backward compatibility and because it is used elsewhere
     // (for instance by Box:read(), Measure:read(), Note:read(), ...)
@@ -327,7 +329,7 @@ void Image::write(XmlWriter& xml) const
     writeProperty(xml, Pid::LOCK_ASPECT_RATIO);
     writeProperty(xml, Pid::SIZE_IS_SPATIUM);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -393,7 +395,7 @@ void Image::read(XmlReader& e)
         path = _linkPath;
     }
 
-    if (path.endsWith(".svg")) {
+    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -430,7 +432,7 @@ bool Image::load(const QString& ss)
     _linkPath = fi.canonicalFilePath();
     _storeItem = imageStore.add(_linkPath, ba);
     _storeItem->reference(this);
-    if (path.endsWith(".svg")) {
+    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -452,7 +454,7 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
     _linkPath = "";
     _storeItem = imageStore.add(ss, ba);
     _storeItem->reference(this);
-    if (ss.endsWith(".svg")) {
+    if (ss.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -547,8 +549,7 @@ void Image::layout()
         }
     } else if (imageType == ImageType::RASTER && !rasterDoc) {
         if (_storeItem) {
-            rasterDoc = new QImage;
-            rasterDoc->loadFromData(_storeItem->buffer());
+            rasterDoc = imageProvider()->createPixmap(_storeItem->buffer());
             if (!rasterDoc->isNull()) {
                 _dirty = true;
             }
@@ -559,13 +560,13 @@ void Image::layout()
     }
 
     // if autoscale && inside a box, scale to box relevant size
-    if (autoScale() && parent() && ((parent()->isHBox() || parent()->isVBox()))) {
+    if (autoScale() && explicitParent() && ((explicitParent()->isHBox() || explicitParent()->isVBox()))) {
         if (_lockAspectRatio) {
             qreal f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());
             qreal ratio = size.width() / size.height();
-            qreal w = parent()->width();
-            qreal h = parent()->height();
+            qreal w = parentItem()->width();
+            qreal h = parentItem()->height();
             if ((w / h) < ratio) {
                 _size.setWidth(w / f);
                 _size.setHeight((w / ratio) / f);
@@ -574,7 +575,7 @@ void Image::layout()
                 _size.setWidth(h * ratio / f);
             }
         } else {
-            _size = pixel2size(parent()->bbox().size());
+            _size = pixel2size(parentItem()->bbox().size());
         }
     }
 
@@ -586,13 +587,13 @@ void Image::layout()
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Image::getProperty(Pid propertyId) const
+PropertyValue Image::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::AUTOSCALE:
         return autoScale();
     case Pid::SIZE:
-        return QVariant::fromValue(size());
+        return PropertyValue::fromValue(size());
     case Pid::IMAGE_HEIGHT:
         return imageHeight();
     case Pid::IMAGE_WIDTH:
@@ -604,7 +605,7 @@ QVariant Image::getProperty(Pid propertyId) const
     case Pid::SIZE_IS_SPATIUM:
         return sizeIsSpatium();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -612,7 +613,7 @@ QVariant Image::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Image::setProperty(Pid propertyId, const QVariant& v)
+bool Image::setProperty(Pid propertyId, const PropertyValue& v)
 {
     bool rv = true;
     score()->addRefresh(canvasBoundingRect());
@@ -621,7 +622,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
         setAutoScale(v.toBool());
         break;
     case Pid::SIZE:
-        setSize(SizeF::fromVariant(v));
+        setSize(v.value<SizeF>());
         break;
     case Pid::IMAGE_HEIGHT:
         updateImageHeight(v.toDouble());
@@ -641,7 +642,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
     }
     break;
     default:
-        rv = Element::setProperty(propertyId, v);
+        rv = EngravingItem::setProperty(propertyId, v);
         break;
     }
     setGenerated(false);
@@ -654,13 +655,13 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Image::propertyDefault(Pid id) const
+PropertyValue Image::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::AUTOSCALE:
         return defaultAutoScale;
     case Pid::SIZE:
-        return QVariant::fromValue(pixel2size(imageSize()));
+        return PropertyValue::fromValue(pixel2size(imageSize()));
     case Pid::IMAGE_HEIGHT:
         return pixel2size(imageSize()).height();
     case Pid::IMAGE_WIDTH:
@@ -672,7 +673,7 @@ QVariant Image::propertyDefault(Pid id) const
     case Pid::SIZE_IS_SPATIUM:
         return defaultSizeIsSpatium;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

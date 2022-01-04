@@ -15,11 +15,10 @@
 #include "Separator_p.h"
 
 #ifdef KDMULTISPLITTER_QTQUICK
-# include <QQmlEngine>
+#include <QQmlEngine>
 #endif
 
-namespace Layouting
-{
+namespace Layouting {
 
 Config::Config()
 {

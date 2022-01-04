@@ -28,11 +28,11 @@ FocusScope {
     default property alias content: contentItemContaner.data
     property alias contentItem: contentItemContaner
     property alias background: focusRectItem
+    property alias focusBorder: focusBorderItem
 
     property alias mouseArea: mouseAreaItem
-    property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
 
-    property alias navigation: keynavItem
+    property alias navigation: navCtrl
 
     signal navigationActived()
     signal navigationTriggered()
@@ -43,13 +43,21 @@ FocusScope {
         }
     }
 
+    //! NOTE ListView can destroy delegates, but not delete objects,
+    // they remain in memory (this is done for optimization, for reusing delegate objects).
+    // In this case, navigation controls also remain in memory and in the navigation tree.
+    // But they should at least be turned off.
+    property bool completed: false
+    Component.onCompleted: root.completed = true
+    Component.onDestruction: root.completed = false
+
     NavigationControl {
-        id: keynavItem
+        id: navCtrl
         name: root.objectName
-        enabled: root.enabled && root.visible
+        enabled: root.enabled && root.visible && root.completed
 
         onActiveChanged: {
-            if (keynavItem.active) {
+            if (navCtrl.active) {
                 root.ensureActiveFocus()
                 root.navigationActived()
             }
@@ -63,8 +71,14 @@ FocusScope {
     Rectangle {
         id: focusRectItem
         anchors.fill: parent
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+
+        NavigationFocusBorder {
+            id: focusBorderItem
+            navigationCtrl: navCtrl
+        }
+
+        border.color: ui.theme.strokeColor
+        border.width: ui.theme.borderWidth
     }
 
     MouseArea {
@@ -80,6 +94,5 @@ FocusScope {
         id: contentItemContaner
         objectName: "FocusableControlContent"
         anchors.fill: focusRectItem
-        anchors.margins: 2 //! NOTE margin needed to show focus border
     }
 }

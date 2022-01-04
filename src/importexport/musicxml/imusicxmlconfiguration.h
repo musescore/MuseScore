@@ -49,6 +49,9 @@ public:
     virtual MusicxmlExportBreaksType musicxmlExportBreaksType() const = 0;
     virtual void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) = 0;
 
+    virtual bool musicxmlExportInvisibleElements() const = 0;
+    virtual void setMusicxmlExportInvisibleElements(bool value) = 0;
+
     virtual bool needUseDefaultFont() const = 0;
     virtual void setNeedUseDefaultFont(bool value) = 0;
 

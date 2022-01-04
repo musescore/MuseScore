@@ -25,10 +25,15 @@
  render score into event list
 */
 
+#include "rendermidi.h"
+
 #include <set>
 #include <cmath>
 
-#include "rendermidi.h"
+#include "style/style.h"
+#include "compat/midi/event.h"
+#include "types/constants.h"
+
 #include "score.h"
 #include "volta.h"
 #include "note.h"
@@ -38,7 +43,6 @@
 #include "chord.h"
 #include "trill.h"
 #include "vibrato.h"
-#include "style.h"
 #include "slur.h"
 #include "tie.h"
 #include "stafftext.h"
@@ -61,15 +65,15 @@
 #include "segment.h"
 #include "undo.h"
 #include "utils.h"
-#include "symid.h"
 #include "synthesizerstate.h"
 #include "easeInOut.h"
 
-#include "framework/midi_old/event.h"
+#include "masterscore.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //int printNoteEventLists(NoteEventList el, int prefix, int j){
@@ -117,7 +121,7 @@ void Score::updateSwing()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (const Element* e : s->annotations()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (!e->isStaffTextBase()) {
                 continue;
             }
@@ -157,7 +161,7 @@ void Score::updateCapo()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 toHarmony(e)->realizedHarmony().setDirty(true);
             }
@@ -193,7 +197,7 @@ void Score::updateChannel()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (const Element* e : s->annotations()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
                 for (Staff* staff : *e->part()->staves()) {
                     for (int voice = 0; voice < VOICES; ++voice) {
@@ -237,7 +241,7 @@ void Score::updateChannel()
                 if (!s->element(track)) {
                     continue;
                 }
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e->type() != ElementType::CHORD) {
                     continue;
                 }
@@ -264,7 +268,7 @@ void Score::updateChannel()
 //---------------------------------------------------------
 int toMilliseconds(float tempo, float midiTime)
 {
-    float ticksPerSecond = (float)MScore::division * tempo;
+    float ticksPerSecond = (float)Constant::division * tempo;
     int time = (int)((midiTime / ticksPerSecond) * 1000.0f);
     if (time > 0x7fff) { //maximum possible value
         time = 0x7fff;
@@ -360,7 +364,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     int tieLen = 0;
     if (chord->isGrace()) {
         Q_ASSERT(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
-        chord = toChord(chord->parent());
+        chord = toChord(chord->explicitParent());
     }
 
     ticks = chord->actualTicks().ticks();   // ticks of the actual note
@@ -503,7 +507,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     }
 
     // Bends
-    for (Element* e : note->el()) {
+    for (EngravingItem* e : note->el()) {
         if (e == 0 || e->type() != ElementType::BEND) {
             continue;
         }
@@ -511,7 +515,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
         if (!bend->playBend()) {
             break;
         }
-        const QList<PitchValue>& points = bend->points();
+        const PitchValues& points = bend->points();
         int pitchSize = points.size();
 
         double noteLen = note->playTicks();
@@ -603,7 +607,7 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
     // collect program changes and controller
     //
     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx) {
                 continue;
             }
@@ -685,11 +689,12 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     }
     Staff* staff = m->score()->staff(h->track() / VOICES);
     const Channel* channel = staff->part()->harmonyChannel();
-    IF_ASSERT_FAILED(channel)
-    return;
+    IF_ASSERT_FAILED(channel) {
+        return;
+    }
 
     events->registerChannel(channel->channel());
-    if (!staff->primaryStaff()) {
+    if (!staff->isPrimaryStaff()) {
         return;
     }
 
@@ -738,7 +743,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
         //render harmony
         if (sctx.renderHarmony) {
-            for (Element* e : seg->annotations()) {
+            for (EngravingItem* e : seg->annotations()) {
                 if (!e || (e->track() < strack) || (e->track() >= etrack)) {
                     continue;
                 }
@@ -757,11 +762,11 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
         for (int track = strack; track < etrack; ++track) {
             // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+            if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
                 track += VOICES - 1;
                 continue;
             }
-            Element* cr = seg->element(track);
+            EngravingItem* cr = seg->element(track);
             if (cr == 0 || cr->type() != ElementType::CHORD) {
                 continue;
             }
@@ -834,7 +839,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
 
         //render harmony
         if (sctx.renderHarmony) {
-            for (Element* e : seg->annotations()) {
+            for (EngravingItem* e : seg->annotations()) {
                 if (!e || (e->track() < strack) || (e->track() >= etrack)) {
                     continue;
                 }
@@ -854,12 +859,12 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
         for (int track = strack; track < etrack; ++track) {
             // Skip linked staves, except primary
             Staff* st1 = m->score()->staff(track / VOICES);
-            if (!st1->primaryStaff()) {
+            if (!st1->isPrimaryStaff()) {
                 track += VOICES - 1;
                 continue;
             }
 
-            Element* cr = seg->element(track);
+            EngravingItem* cr = seg->element(track);
             if (!cr) {
                 continue;
             }
@@ -964,15 +969,15 @@ void Score::updateHairpin(Hairpin* h)
     }
 
     switch (h->dynRange()) {
-    case Dynamic::Range::STAFF:
+    case DynamicRange::STAFF:
         st->velocities().addRamp(tick, tick2, veloChange, method, direction);
         break;
-    case Dynamic::Range::PART:
+    case DynamicRange::PART:
         for (Staff* s : *st->part()->staves()) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
         break;
-    case Dynamic::Range::SYSTEM:
+    case DynamicRange::SYSTEM:
         for (Staff* s : qAsConst(_staves)) {
             s->velocities().addRamp(tick, tick2, veloChange, method, direction);
         }
@@ -1008,7 +1013,7 @@ void Score::updateVelo()
 
         for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
             Fraction tick = s->tick();
-            for (const Element* e : s->annotations()) {
+            for (const EngravingItem* e : s->annotations()) {
                 if (e->staffIdx() != staffIdx) {
                     continue;
                 }
@@ -1034,7 +1039,7 @@ void Score::updateVelo()
 
                 int dStaffIdx = d->staffIdx();
                 switch (d->dynRange()) {
-                case Dynamic::Range::STAFF:
+                case DynamicRange::STAFF:
                     if (dStaffIdx == staffIdx) {
                         velo.addFixed(tick, v);
                         if (change != 0) {
@@ -1044,7 +1049,7 @@ void Score::updateVelo()
                         }
                     }
                     break;
-                case Dynamic::Range::PART:
+                case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
                         for (int i = partStaff; i < partStaff + partStaves; ++i) {
                             ChangeMap& stVelo = staff(i)->velocities();
@@ -1057,7 +1062,7 @@ void Score::updateVelo()
                         }
                     }
                     break;
-                case Dynamic::Range::SYSTEM:
+                case DynamicRange::SYSTEM:
                     for (int i = 0; i < nstaves(); ++i) {
                         ChangeMap& stVelo = staff(i)->velocities();
                         stVelo.addFixed(tick, v);
@@ -1073,7 +1078,7 @@ void Score::updateVelo()
 
             if (s->isChordRestType()) {
                 for (int i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
-                    Element* el = s->element(i);
+                    EngravingItem* el = s->element(i);
                     if (!el || !el->isChord()) {
                         continue;
                     }
@@ -1241,7 +1246,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
             }
 
             int j = 0;
-            int delta = MScore::division / 8;       // 1/8 note
+            int delta = Constant::division / 8;       // 1/8 note
             int lastPointTick = stick;
             while (lastPointTick < etick) {
                 int pitch = (j % 4 < 2) ? spitch : epitch;
@@ -1376,7 +1381,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
 
     // render tremolo with multiple events
     if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
-        int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constant::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -1391,7 +1396,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             return;
         }
 
-        Element* s2El = seg2->element(track);
+        EngravingItem* s2El = seg2->element(track);
         if (s2El) {
             if (!s2El->isChord()) {
                 return;
@@ -1452,7 +1457,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             events->clear();
         }
     } else if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
-        int t = MScore::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
+        int t = Constant::division / (1 << (tremolo->lines() + chord->durationType().hooks()));
         if (t == 0) {   // avoid crash on very short tremolo
             t = 1;
         }
@@ -1495,7 +1500,7 @@ void renderArpeggio(Chord* chord, QList<NoteEventList>& ell)
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()) / Score::defaultTempo();
+        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::defaultTempo.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
 
@@ -1592,7 +1597,7 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
     int endTrack   = startTrack + VOICES;
     bool done = false;
     for (int track = startTrack; track < endTrack; ++track) {
-        Element* e = segment->element(track);
+        EngravingItem* e = segment->element(track);
         if (!e || e->type() != ElementType::CHORD) {
             continue;
         }
@@ -1650,7 +1655,7 @@ int totalTiedNoteTicks(Note* note)
 //   renderNoteArticulation
 // prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
 // body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
-// tickspernote, number of ticks, either _16h or _32nd, i.e., MScore::division/4 or MScore::division/8
+// tickspernote, number of ticks, either _16h or _32nd, i.e., Constant::division/4 or Constant::division/8
 // repeatp, true means repeat the body as many times as possible to fill the time slice.
 // sustainp, true means the last note of the body is sustained to fill remaining time slice
 //---------------------------------------------------------
@@ -1682,8 +1687,8 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
     }
 
     Fraction tick = chord->tick();
-    qreal tempo = chord->score()->tempo(tick);
-    int ticksPerSecond = tempo * MScore::division;
+    BeatsPerSecond tempo = chord->score()->tempo(tick);
+    int ticksPerSecond = tempo.val * Constant::division;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);
     int maxTicksPerNote = (0 == slowestFreq) ? 0 : int(ticksPerSecond / slowestFreq);
@@ -1842,7 +1847,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 // This struct specifies how to render an articulation.
 //   atype - the articulation type to implement, such as SymId::ornamentTurn
 //   ostyles - the actual ornament has a property called ornamentStyle whose value is
-//             a value of type MScore::OrnamentStyle.  This ostyles field indicates the
+//             a value of type OrnamentStyle.  This ostyles field indicates the
 //             the set of ornamentStyles which apply to this rendition.
 //   duration - the default duration for each note in the rendition, the final duration
 //            rendered might be less than this if an articulation is attached to a note of
@@ -1868,7 +1873,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, i
 
 struct OrnamentExcursion {
     SymId atype;
-    std::set<MScore::OrnamentStyle> ostyles;
+    std::set<OrnamentStyle> ostyles;
     int duration;
     std::vector<int> prefix;
     std::vector<int> body;
@@ -1877,10 +1882,10 @@ struct OrnamentExcursion {
     std::vector<int> suffix;
 };
 
-std::set<MScore::OrnamentStyle> baroque  = { MScore::OrnamentStyle::BAROQUE };
-std::set<MScore::OrnamentStyle> defstyle = { MScore::OrnamentStyle::DEFAULT };
-std::set<MScore::OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = MScore::division / 4;
+std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
+std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
+std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
+int _16th = Constant::division / 4;
 int _32nd = _16th / 2;
 
 std::vector<OrnamentExcursion> excursions = {
@@ -1896,6 +1901,7 @@ std::vector<OrnamentExcursion> excursions = {
     { SymId::ornamentShortTrill,     defstyle, _32nd, {},    { 0, 1, 0 },      false, true, {} },// inverted mordent
     { SymId::ornamentShortTrill,      baroque, _32nd, { 1, 0, 1 }, { 0 },         false, true, {} },// short trill
     { SymId::ornamentTremblement,         any, _32nd, { 1, 0 }, { 1, 0 },        false, true, {} },
+    { SymId::brassMuteClosed,        defstyle, _32nd, {},    { 0 },             false, true, {} },// regular hand-stopped brass
     { SymId::ornamentPrallMordent,        any, _32nd, {},    { 1, 0, -1, 0 },   false, true, {} },
     { SymId::ornamentLinePrall,           any, _32nd, { 2, 2, 2 }, { 1, 0 },       true,  true, {} },
     { SymId::ornamentUpPrall,             any, _16th, { -1, 0 }, { 1, 0 },        true,  true, { 1, 0 } },// p 144 Ex 152 [1]
@@ -1918,7 +1924,7 @@ std::vector<OrnamentExcursion> excursions = {
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, SymId articulationType, OrnamentStyle ornamentStyle)
 {
     if (!note->staff()->isPitchedStaff(note->tick())) { // not enough info in tab staff
         return false;
@@ -1939,7 +1945,7 @@ bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, S
 //   renderNoteArticulation
 //---------------------------------------------------------
 
-bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, MScore::OrnamentStyle ornamentStyle)
+bool renderNoteArticulation(NoteEventList* events, Note* note, bool chromatic, Trill::Type trillType, OrnamentStyle ornamentStyle)
 {
     std::map<Trill::Type, SymId> articulationMap = {
         { Trill::Type::TRILL_LINE,      SymId::ornamentTrill },
@@ -2041,7 +2047,7 @@ void renderGlissando(NoteEventList* events, Note* notestart)
         if (spanner->type() == ElementType::GLISSANDO
             && toGlissando(spanner)->playGlissando()
             && glissandoPitchOffsets(spanner, body)) {
-            renderNoteArticulation(events, notestart, true, MScore::division, empty, body, false, true, empty, 16, 0);
+            renderNoteArticulation(events, notestart, true, Constant::division, empty, body, false, true, empty, 16, 0);
         }
     }
 }
@@ -2233,7 +2239,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 
     int graceDuration = 0;
     bool drumset = (getDrumset(chord) != nullptr);
-    const qreal ticksPerSecond = tempo(tick) * MScore::division;
+    const qreal ticksPerSecond = tempo(tick).val * Constant::division;
     const qreal chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;     //ms
@@ -2377,7 +2383,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 // The range has ended, but we should collect events
                 // for tied notes. So we'll check if this is the case.
                 const Segment* seg = m->first(st);
-                const Element* e = seg->element(track);
+                const EngravingItem* e = seg->element(track);
                 bool tie = false;
                 if (e && e->isChord()) {
                     for (const Note* n : toChord(e)->notes()) {
@@ -2393,11 +2399,11 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
             }
 
             // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+            if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
                 continue;
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                Element* e = seg->element(track);
+                EngravingItem* e = seg->element(track);
                 if (e == 0 || !e->isChord()) {
                     continue;
                 }
@@ -2431,10 +2437,10 @@ void MidiRenderer::renderMetronome(const Chunk& chunk, EventMap* events)
 void MidiRenderer::renderMetronome(EventMap* events, Measure const* m, const Fraction& tickOffset)
 {
     int msrTick         = m->tick().ticks();
-    qreal tempo         = score->tempomap()->tempo(msrTick);
+    BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
     TimeSigFrac timeSig = score->sigmap()->timesig(msrTick).nominal();
 
-    int clickTicks      = timeSig.isBeatedCompound(tempo) ? timeSig.beatTicks() : timeSig.dUnitTicks();
+    int clickTicks      = timeSig.isBeatedCompound(tempo.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
     int endTick         = m->endTick().ticks();
 
     int rtick;
@@ -2464,12 +2470,14 @@ void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
 
 void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
 {
+    bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
     MidiRenderer::Context ctx;
     ctx.synthState = synthState;
     ctx.metronome = metronome;
     ctx.renderHarmony = true;
     MidiRenderer(this).renderScore(events, ctx);
+    masterScore()->setExpandRepeats(expandRepeatsBackup);
 }
 
 void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
@@ -2672,58 +2680,16 @@ void MidiRenderer::updateChunksPartition()
     }
 }
 
-//---------------------------------------------------------
-//   MidiRenderer::getChunkAt
-//---------------------------------------------------------
-
-MidiRenderer::Chunk MidiRenderer::getChunkAt(int utick)
-{
-    updateState();
-
-    auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-        return utick < ch.utick1();
-    });
-    if (it == chunks.begin()) {
-        return Chunk();
-    }
-    --it;
-    const Chunk& ch = *it;
-    if (ch.utick2() <= utick) {
-        return Chunk();
-    }
-    return ch;
-}
-
-MidiRenderer::Chunk MidiRenderer::chunkAt(int utick)
-{
-    updateState();
-    auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-        return utick <= ch.utick1();
-    });
-
-    if (it == chunks.end()) {
-        return Chunk();
-    }
-
-    const Chunk& ch = *it;
-    return ch;
-}
-
 std::vector<MidiRenderer::Chunk> MidiRenderer::chunksFromRange(const int fromTick, const int toTick)
 {
     std::vector<Chunk> result;
 
-    Chunk currentChunk = chunkAt(fromTick);
+    updateState();
 
-    if (fromTick == toTick) {
-        result.push_back(std::move(currentChunk));
-        return result;
-    }
-
-    while (currentChunk.utick2() <= toTick) {
-        result.push_back(currentChunk);
-
-        currentChunk = chunkAt(currentChunk.utick2());
+    for (const Chunk& chunk : chunks) {
+        if (chunk.utick2() >= fromTick && chunk.utick1() <= toTick) {
+            result.push_back(chunk);
+        }
     }
 
     return result;

@@ -23,19 +23,18 @@
 #ifndef __FRET_H__
 #define __FRET_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "harmony.h"
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class StringData;
 class Chord;
-
-enum class Orientation : signed char {
-    VERTICAL,
-    HORIZONTAL
-};
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -136,7 +135,7 @@ public:
 //   Note that, while strings are zero-indexed, frets are one-indexed
 //---------------------------------------------------------
 
-class FretDiagram final : public Element
+class FretDiagram final : public EngravingItem
 {
     int _strings       { 6 };
     int _frets         { 4 };
@@ -165,6 +164,10 @@ class FretDiagram final : public Element
     qreal markerSize;
     int _numPos;
 
+    friend class mu::engraving::Factory;
+    FretDiagram(Segment* parent = nullptr);
+    FretDiagram(const FretDiagram&);
+
     void removeDot(int s, int f = 0);
     void removeBarre(int f);
     void removeBarres(int string, int fret = 0);
@@ -172,24 +175,22 @@ class FretDiagram final : public Element
     void removeDotsMarkers(int ss, int es, int fret);
 
 public:
-    FretDiagram(Score* s = nullptr);
-    FretDiagram(const FretDiagram&);
+
     ~FretDiagram();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     void draw(mu::draw::Painter*) const override;
-    Element* linkedClone() override;
+    EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
 
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const QString& s);
 
-    ElementType type() const override { return ElementType::FRET_DIAGRAM; }
     void layout() override;
     void write(XmlWriter& xml) const override;
     void writeNew(XmlWriter& xml) const;
@@ -232,9 +233,6 @@ public:
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
     FretItem::Barre barre(int fret) const;
-#if 0 // NOTE:JT possible future feature
-    int fingering(int s) const { return _fingering ? _fingering[s] : 0; }
-#endif
 
     BarreMap barres() const { return _barres; }
     DotMap dots() const { return _dots; }
@@ -243,18 +241,18 @@ public:
     Harmony* harmony() const { return _harmony; }
 
     void init(Ms::StringData*, Chord*);
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     void endEditDrag(EditData& editData) override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
 
     qreal userMag() const { return _userMag; }
     void setUserMag(qreal m) { _userMag = m; }

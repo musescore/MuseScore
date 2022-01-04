@@ -23,8 +23,10 @@
 
 #include <QBuffer>
 
-#include "palette/paletteworkspace.h"
-#include "palette/palettecreator.h"
+#include "paletteprovider.h"
+#include "palettecreator.h"
+
+#include "engraving/rw/xml.h"
 
 #include "log.h"
 
@@ -33,7 +35,7 @@ using namespace mu::workspace;
 
 static const QString PALETTE_XML_TAG("PaletteBox");
 
-static Ms::PaletteTreePtr readPalette(const QByteArray& data)
+static PaletteTreePtr readPalette(const QByteArray& data)
 {
     QBuffer buf;
     buf.setData(data);
@@ -44,7 +46,7 @@ static Ms::PaletteTreePtr readPalette(const QByteArray& data)
         reader.readNextStartElement();
 
         if (reader.name() == PALETTE_XML_TAG) {
-            Ms::PaletteTreePtr tree = std::make_shared<Ms::PaletteTree>();
+            PaletteTreePtr tree = std::make_shared<PaletteTree>();
             tree->read(reader);
             return tree;
         }
@@ -53,7 +55,7 @@ static Ms::PaletteTreePtr readPalette(const QByteArray& data)
     return nullptr;
 }
 
-static void writePalette(const Ms::PaletteTreePtr& tree, QByteArray& data)
+static void writePalette(const PaletteTreePtr& tree, QByteArray& data)
 {
     QBuffer buf(&data);
     buf.open(QIODevice::WriteOnly);
@@ -67,10 +69,8 @@ void PaletteWorkspaceSetup::setup()
         return;
     }
 
-    Ms::PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
-    QObject::connect(paletteWorkspace, &Ms::PaletteWorkspace::userPaletteChanged, [this, paletteWorkspace]() {
-        Ms::PaletteTreeModel* treeModel = paletteWorkspace->userPaletteModel();
-        Ms::PaletteTreePtr tree = treeModel->paletteTreePtr();
+    paletteProvider()->userPaletteTreeChanged().onNotify(this, [this]() {
+        PaletteTreePtr tree = paletteProvider()->userPaletteTree();
 
         QByteArray newData;
         writePalette(tree, newData);
@@ -78,19 +78,19 @@ void PaletteWorkspaceSetup::setup()
         workspacesDataProvider()->setRawData(DataKey::Palettes, newData);
     });
 
-    auto loadData = [this, paletteWorkspace]() {
+    auto loadData = [this]() {
         RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
-        Ms::PaletteTreePtr tree;
+        PaletteTreePtr tree;
         if (data.ret) {
             LOGD() << "there is palette data in the workspace, we will use it";
             tree = readPalette(data.val);
         } else {
             LOGD() << "no palette data in workspace, will use default";
-            tree = std::shared_ptr<Ms::PaletteTree>(Ms::PaletteCreator::newDefaultPaletteTree());
+            tree = PaletteCreator::newDefaultPaletteTree();
         }
 
-        paletteWorkspace->setDefaultPaletteTree(tree);
-        paletteWorkspace->setUserPaletteTree(tree);
+        paletteProvider()->setDefaultPaletteTree(tree);
+        paletteProvider()->setUserPaletteTree(tree);
     };
 
     workspacesDataProvider()->workspaceChanged().onNotify(this, loadData);

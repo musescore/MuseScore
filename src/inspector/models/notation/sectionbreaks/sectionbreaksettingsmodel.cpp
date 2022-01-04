@@ -30,7 +30,8 @@ SectionBreakSettingsModel::SectionBreakSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SECTIONBREAK);
-    setTitle(qtrc("inspector", "Section Break"));
+    setTitle(qtrc("inspector", "Section break"));
+    setIcon(ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }
 
@@ -51,7 +52,7 @@ void SectionBreakSettingsModel::loadProperties()
     loadPropertyItem(m_shouldStartWithLongInstrNames);
     loadPropertyItem(m_shouldResetBarNums);
     loadPropertyItem(m_pauseDuration, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

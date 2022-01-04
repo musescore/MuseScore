@@ -34,6 +34,8 @@
 #include "ui/view/navigationcontrol.h"
 #include "popupwindow/ipopupwindow.h"
 
+class QQuickCloseEvent;
+
 namespace mu::uicomponents {
 class PopupView : public QObject, public QQmlParserStatus
 {
@@ -69,7 +71,7 @@ class PopupView : public QObject, public QQmlParserStatus
 
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-    Q_PROPERTY(QString objectID READ objectID WRITE setObjectID NOTIFY objectIDChanged)
+    Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
@@ -104,12 +106,15 @@ public:
     Q_INVOKABLE void close();
     Q_INVOKABLE void toggleOpened();
 
+    Q_INVOKABLE void setParentWindow(QWindow* window);
+    Q_INVOKABLE QWindow* window();
+
     ClosePolicy closePolicy() const;
     QObject* navigationParentControl() const;
 
     bool isOpened() const;
 
-    QString objectID() const;
+    QString objectId() const;
     QString title() const;
     bool modal() const;
     bool resizable() const;
@@ -129,7 +134,7 @@ public slots:
     void setLocalY(qreal y);
     void setClosePolicy(ClosePolicy closePolicy);
     void setNavigationParentControl(QObject* parentNavigationControl);
-    void setObjectID(QString objectID);
+    void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
     void setResizable(bool resizable);
@@ -149,7 +154,7 @@ signals:
     void yChanged(qreal y);
     void closePolicyChanged(ClosePolicy closePolicy);
     void navigationParentControlChanged(QObject* navigationParentControl);
-    void objectIDChanged(QString objectID);
+    void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
     void resizableChanged(bool resizable);
@@ -157,6 +162,7 @@ signals:
 
     void isOpenedChanged();
     void opened();
+    void aboutToClose(QQuickCloseEvent* closeEvent);
     void closed();
 
     void opensUpwardChanged(bool opensUpward);
@@ -183,15 +189,18 @@ protected:
     virtual void beforeShow();
     virtual void onHidden();
 
+    void repositionWindowIfNeed();
+
     void setErrCode(Ret::Code code);
 
     QRect currentScreenGeometry() const;
     void updatePosition();
+    void updateContentPosition();
 
     QQuickItem* parentPopupContentItem() const;
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
 
-    QRect anchorGeometry() const;
+    QRectF anchorGeometry() const;
 
     IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
@@ -202,7 +211,7 @@ protected:
     QPointF m_globalPos;
     ClosePolicy m_closePolicy = ClosePolicy::CloseOnPressOutsideParent;
     QObject* m_navigationParentControl = nullptr;
-    QString m_objectID;
+    QString m_objectId;
     QString m_title;
     bool m_modal = true;
     bool m_resizable = false;

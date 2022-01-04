@@ -28,7 +28,8 @@ Column {
     id: root
 
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property int navigationRowStart: 0
+    property int navigationRowEnd: forwardsButton.navigation.row
 
     signal pushBackRequested()
     signal pushFrontRequested()
@@ -36,7 +37,7 @@ Column {
     height: implicitHeight
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
     Column {
         width: parent.width
@@ -44,7 +45,9 @@ Column {
         spacing: 8
 
         StyledTextLabel {
+            width: parent.width
             text: qsTrc("inspector", "Arrange")
+            horizontalAlignment: Text.AlignLeft
         }
 
         Item {
@@ -58,7 +61,7 @@ Column {
 
                 navigation.name: "Backwards"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 1
+                navigation.row: root.navigationRowStart + 1
 
                 text: qsTrc("inspector", "Backwards")
 
@@ -68,13 +71,14 @@ Column {
             }
 
             FlatButton {
+                id: forwardsButton
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 4
                 anchors.right: parent.right
 
                 navigation.name: "Forwards"
                 navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRowOffset + 2
+                navigation.row: root.navigationRowStart + 2
 
                 text: qsTrc("inspector", "Forwards")
 

@@ -29,32 +29,32 @@ using namespace mu::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Play"),
              QT_TRANSLATE_NOOP("action", "Start or stop playback"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Stop"),
              QT_TRANSLATE_NOOP("action", "Stop playback"),
              IconCode::Code::STOP
              ),
     UiAction("rewind",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Rewind"),
              QT_TRANSLATE_NOOP("action", "Rewind to start position"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
-             mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Loop Playback"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Loop Playback'"),
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Loop playback"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Loop playback'"),
              IconCode::Code::LOOP,
              Checkable::Yes
              ),
     UiAction("metronome",
-             mu::context::UiCtxNotationFocused,
+             mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Metronome"),
              QT_TRANSLATE_NOOP("action", "Play metronome during playback"),
              IconCode::Code::METRONOME,
@@ -65,28 +65,28 @@ const UiActionList PlaybackUiActions::m_mainActions = {
 const UiActionList PlaybackUiActions::m_settingsActions = {
     UiAction("midi-on",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "MIDI Input"),
-             QT_TRANSLATE_NOOP("action", "Enable 'MIDI Input'"),
+             QT_TRANSLATE_NOOP("action", "MIDI input"),
+             QT_TRANSLATE_NOOP("action", "Enable 'MIDI input'"),
              IconCode::Code::MIDI_INPUT,
              Checkable::Yes
              ),
     UiAction("repeat",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Play Repeats"),
+             QT_TRANSLATE_NOOP("action", "Play repeats"),
              QT_TRANSLATE_NOOP("action", "Play repeats"),
              IconCode::Code::PLAY_REPEATS,
              Checkable::Yes
              ),
     UiAction("pan",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Pan Score"),
+             QT_TRANSLATE_NOOP("action", "Pan score"),
              QT_TRANSLATE_NOOP("action", "Pan score automatically"),
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
              ),
     UiAction("countin",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Count-In"),
+             QT_TRANSLATE_NOOP("action", "Count-in"),
              QT_TRANSLATE_NOOP("action", "Enable count-in when playing"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
@@ -96,13 +96,13 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
 const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
     UiAction("loop-in",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Loop In"),
+             QT_TRANSLATE_NOOP("action", "Loop in"),
              QT_TRANSLATE_NOOP("action", "Set loop marker left"),
              IconCode::Code::LOOP_IN
              ),
     UiAction("loop-out",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Loop Out"),
+             QT_TRANSLATE_NOOP("action", "Loop out"),
              QT_TRANSLATE_NOOP("action", "Set loop marker right"),
              IconCode::Code::LOOP_OUT
              ),
@@ -179,6 +179,7 @@ const mu::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
             { "loop", true },
             { "loop-in", true },
             { "loop-out", true },
+            { "metronome", true },
         };
     }
     return config;

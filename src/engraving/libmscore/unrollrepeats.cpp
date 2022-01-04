@@ -24,8 +24,10 @@
  File handling: loading and saving.
  */
 
-#include "xml.h"
-#include "element.h"
+#include "style/style.h"
+#include "rw/xml.h"
+
+#include "engravingitem.h"
 #include "note.h"
 #include "chord.h"
 #include "rest.h"
@@ -35,7 +37,6 @@
 #include "score.h"
 #include "page.h"
 #include "dynamic.h"
-#include "style.h"
 #include "tempo.h"
 #include "select.h"
 #include "staff.h"
@@ -71,6 +72,8 @@
 #include "chordlist.h"
 #include "mscore.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -93,7 +96,7 @@ static void removeRepeatMarkings(Score* score)
     }
 
     // remove coda/fine labels and jumps
-    QList<Element*> elems;
+    QList<EngravingItem*> elems;
     score->scanElements(&elems, collectElements, false);
     for (auto e : elems) {
         if (e->isMarker() || e->isJump()) {
@@ -127,7 +130,7 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
     for (Excerpt* e: excerpts) {
-        Score* nscore = new Score(e->oscore());
+        Score* nscore = e->oscore()->createScore();
         e->setPartScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
         cs->startCmd();

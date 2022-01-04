@@ -77,7 +77,6 @@ if (NOT MINGW AND NOT APPLE AND NOT MSVC)
 endif (NOT MINGW AND NOT APPLE AND NOT MSVC)
 
 if (APPLE)
-target_link_libraries(${TARGET} ${OsxFrameworks})
 target_link_libraries(${TARGET}
       dl
       pthread

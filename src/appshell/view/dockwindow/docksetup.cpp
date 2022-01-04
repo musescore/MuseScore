@@ -22,23 +22,21 @@
 
 #include "docksetup.h"
 
-#include "internal/dropindicators.h"
+#include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
+#include "internal/docktabbar.h"
+#include "internal/dockwindowactionscontroller.h"
+#include "internal/dockwindowprovider.h"
 
 #include "dockwindow.h"
-#include "dockpanel.h"
-#include "dockpanelholder.h"
-#include "dockstatusbar.h"
-#include "docktoolbarholder.h"
-#include "dockcentral.h"
-#include "dockpage.h"
-
-#ifdef Q_OS_MAC
-#include "internal/platform/macos/macosmainwindowprovider.h"
-#else
-#include "mainwindowprovider.h"
-#endif
+#include "dockpanelview.h"
+#include "docktoolbarview.h"
+#include "dockstatusbarview.h"
+#include "dockingholderview.h"
+#include "dockcentralview.h"
+#include "dockpageview.h"
+#include "docktitlebar.h"
 
 #include "docktypes.h"
 
@@ -55,7 +53,7 @@ class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
 public:
     KDDockWidgets::DropIndicatorOverlayInterface* createDropIndicatorOverlay(KDDockWidgets::DropArea* dropArea) const override
     {
-        return new DropIndicators(dropArea);
+        return new DropController(dropArea);
     }
 
     Layouting::Separator* createSeparator(Layouting::Widget* parent = nullptr) const override
@@ -63,9 +61,29 @@ public:
         return new DockSeparator(parent);
     }
 
+    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::Frame* frame) const override
+    {
+        return new DockTitleBar(frame);
+    }
+
+    KDDockWidgets::TitleBar* createTitleBar(KDDockWidgets::FloatingWindow* floatingWindow) const override
+    {
+        return new DockTitleBar(floatingWindow);
+    }
+
+    KDDockWidgets::TabBar* createTabBar(KDDockWidgets::TabWidget* parent) const override
+    {
+        return new DockTabBar(parent);
+    }
+
     QUrl titleBarFilename() const override
     {
         return QUrl("qrc:/qml/dockwindow/DockTitleBar.qml");
+    }
+
+    QUrl dockwidgetFilename() const override
+    {
+        return QUrl("qrc:/qml/dockwindow/DockWidget.qml");
     }
 
     QUrl frameFilename() const override
@@ -81,31 +99,28 @@ public:
 }
 
 using namespace mu::dock;
+using namespace mu::modularity;
+
+static std::shared_ptr<DockWindowActionsController> s_actionsController = std::make_shared<DockWindowActionsController>();
 
 void DockSetup::registerQmlTypes()
 {
     qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
-    qmlRegisterType<DockPanel>("MuseScore.Dock", 1, 0, "DockPanel");
-    qmlRegisterType<DockPanelHolder>("MuseScore.Dock", 1, 0, "DockPanelHolder");
-    qmlRegisterType<DockStatusBar>("MuseScore.Dock", 1, 0, "DockStatusBar");
-    qmlRegisterType<DockToolBar>("MuseScore.Dock", 1, 0, "DockToolBar");
-    qmlRegisterType<DockToolBarHolder>("MuseScore.Dock", 1, 0, "DockToolBarHolder");
-    qmlRegisterType<DockCentral>("MuseScore.Dock", 1, 0, "DockCentral");
-    qmlRegisterType<DockPage>("MuseScore.Dock", 1, 0, "DockPage");
+    qmlRegisterType<DockPanelView>("MuseScore.Dock", 1, 0, "DockPanelView");
+    qmlRegisterType<DockStatusBarView>("MuseScore.Dock", 1, 0, "DockStatusBar");
+    qmlRegisterType<DockToolBarView>("MuseScore.Dock", 1, 0, "DockToolBarView");
+    qmlRegisterType<DockingHolderView>("MuseScore.Dock", 1, 0, "DockingHolderView");
+    qmlRegisterType<DockCentralView>("MuseScore.Dock", 1, 0, "DockCentralView");
+    qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
-    qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
-#ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
-#else
-    qmlRegisterType<MainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
-#endif
-
-    qRegisterMetaType<DropIndicators*>();
+    qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
+    qmlRegisterUncreatableType<DockLocation>("MuseScore.Dock", 1, 0, "Location", "Not creatable from QML");
 }
 
 void DockSetup::registerExports()
 {
+    ioc()->registerExport<IDockWindowProvider>("dock", new DockWindowProvider());
 }
 
 void DockSetup::setup(QQmlEngine* engine)
@@ -114,7 +129,8 @@ void DockSetup::setup(QQmlEngine* engine)
     KDDockWidgets::Config::self().setQmlEngine(engine);
 
     auto flags = KDDockWidgets::Config::self().flags()
-                 | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
+                 | KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible
+                 | KDDockWidgets::Config::Flag_TitleBarNoFloatButton;
 
     KDDockWidgets::Config::self().setFlags(flags);
 
@@ -127,9 +143,11 @@ void DockSetup::setup(QQmlEngine* engine)
 
     KDDockWidgets::Config::self().setInternalFlags(internalFlags);
 
-    QSize minDockSize = KDDockWidgets::Config::self().absoluteWidgetMinSize();
-    minDockSize.setHeight(30);
-    KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(minDockSize);
-
+    KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(10, 10));
     KDDockWidgets::Config::self().setSeparatorThickness(1);
+}
+
+void DockSetup::onInit()
+{
+    s_actionsController->init();
 }

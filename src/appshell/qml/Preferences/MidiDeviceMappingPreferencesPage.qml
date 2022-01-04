@@ -20,13 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Preferences 1.0
 import MuseScore.Shortcuts 1.0
 
 PreferencesPage {
     id: root
+
+    contentFillsAvailableHeight: true
 
     function apply() {
         return page.apply()
@@ -36,5 +37,8 @@ PreferencesPage {
         id: page
 
         anchors.fill: parent
+
+        navigationSection: root.navigationSection
+        navigationOrderStart: root.navigationOrderStart
     }
 }

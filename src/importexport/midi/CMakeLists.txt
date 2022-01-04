@@ -38,11 +38,9 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    midi_old    # for midi
     beatroot    # for midi
     engraving
     qzip
-    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

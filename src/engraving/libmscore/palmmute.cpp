@@ -21,14 +21,14 @@
  */
 
 #include "palmmute.h"
-#include "xml.h"
+#include "rw/xml.h"
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
-
 #include "score.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle palmMuteStyle {
@@ -54,6 +54,11 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMutePlacement,                     Pid::PLACEMENT },
     { Sid::palmMutePosBelow,                      Pid::OFFSET },
 };
+
+PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
+    : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
 
 //---------------------------------------------------------
 //   layout
@@ -89,8 +94,8 @@ Sid PalmMute::getPropertyStyle(Pid pid) const
 //   PalmMute
 //---------------------------------------------------------
 
-PalmMute::PalmMute(Score* s)
-    : TextLineBase(s)
+PalmMute::PalmMute(EngravingItem* parent)
+    : TextLineBase(ElementType::PALM_MUTE, parent)
 {
     initElementStyle(&palmMuteStyle);
     resetProperty(Pid::LINE_VISIBLE);
@@ -157,9 +162,9 @@ static const ElementStyle palmMuteSegmentStyle {
     { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE },
 };
 
-LineSegment* PalmMute::createLineSegment()
+LineSegment* PalmMute::createLineSegment(System* parent)
 {
-    PalmMuteSegment* pms = new PalmMuteSegment(this, score());
+    PalmMuteSegment* pms = new PalmMuteSegment(this, parent);
     pms->setTrack(track());
     pms->initElementStyle(&palmMuteSegmentStyle);
     return pms;
@@ -169,14 +174,14 @@ LineSegment* PalmMute::createLineSegment()
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant PalmMute::propertyDefault(Pid propertyId) const
+PropertyValue PalmMute::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_WIDTH:
         return score()->styleV(Sid::palmMuteLineWidth);
 
     case Pid::ALIGN:
-        return QVariant::fromValue(Align::LEFT | Align::BASELINE);
+        return Align(AlignH::LEFT, AlignV::BASELINE);
 
     case Pid::LINE_STYLE:
         return score()->styleV(Sid::palmMuteLineStyle);
@@ -186,7 +191,7 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
 
     case Pid::CONTINUE_TEXT_OFFSET:
     case Pid::END_TEXT_OFFSET:
-        return QVariant::fromValue(PointF(0, 0));
+        return PropertyValue::fromValue(PointF(0, 0));
 
 //TODOws            case Pid::BEGIN_FONT_ITALIC:
 //                  return score()->styleV(Sid::palmMuteFontItalic);
@@ -198,12 +203,12 @@ QVariant PalmMute::propertyDefault(Pid propertyId) const
         return "";
 
     case Pid::BEGIN_HOOK_TYPE:
-        return int(HookType::NONE);
+        return HookType::NONE;
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
-        return int(PlaceText::AUTO);
+        return TextPlace::AUTO;
 
     default:
         return TextLineBase::propertyDefault(propertyId);
@@ -227,11 +232,11 @@ mu::PointF PalmMute::linePos(Grip grip, System** sys) const
         }
         s = c->segment()->system();
         x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-        if (c->isRest() && c->durationType() == TDuration::DurationType::V_MEASURE) {
+        if (c->isRest() && c->durationType() == DurationType::V_MEASURE) {
             x -= c->x();
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // palmMute marking on single note or ends with non-angled hook:
@@ -270,7 +275,7 @@ mu::PointF PalmMute::linePos(Grip grip, System** sys) const
         } else if (c) {
             s = c->segment()->system();
             x = c->pos().x() + c->segment()->pos().x() + c->segment()->measure()->pos().x();
-            if (c->type() == ElementType::REST && c->durationType() == TDuration::DurationType::V_MEASURE) {
+            if (c->type() == ElementType::REST && c->durationType() == DurationType::V_MEASURE) {
                 x -= c->x();
             }
         }

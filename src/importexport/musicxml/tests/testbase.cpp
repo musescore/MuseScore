@@ -26,11 +26,17 @@
 #include <QTextStream>
 
 #include "config.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
+#include "engraving/compat/mscxcompat.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/writescorehook.h"
+
 #include "importexport/musicxml/internal/musicxml/exportxml.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 extern Score::FileError importMusicXml(MasterScore*, const QString&);
@@ -51,16 +57,15 @@ MasterScore* MTest::readScore(const QString& name)
 
 MasterScore* MTest::readCreatedScore(const QString& name)
 {
-    QString path = root + "/" + name;
-    MasterScore* score = new MasterScore(mscore->baseStyle());
-    QFileInfo fi(path);
+    MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
+    QFileInfo fi(name);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
 
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(path, false);
+        rv = compat::loadMsczOrMscx(score, name, false);
     } else if (csl == "xml" || csl == "musicxml") {
         rv = importMusicXml(score, name);
     } else if (csl == "mxl") {
@@ -70,7 +75,7 @@ MasterScore* MTest::readCreatedScore(const QString& name)
     }
 
     if (rv != Score::FileError::FILE_NO_ERROR) {
-        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(path).arg(csl)));
+        QWARN(qPrintable(QString("readScore: cannot load <%1> type <%2>\n").arg(name).arg(csl)));
         delete score;
         score = 0;
     } else {
@@ -83,9 +88,16 @@ MasterScore* MTest::readCreatedScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    compat::WriteScoreHook hook;
+    return score->writeScore(&file, false, false, hook);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

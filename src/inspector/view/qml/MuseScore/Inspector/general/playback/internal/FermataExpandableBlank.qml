@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
 ExpandableBlank {
@@ -29,49 +31,30 @@ ExpandableBlank {
 
     property QtObject model: null
 
+    property int navigationRowEnd: contentItem.navigationRowEnd
+
     enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
 
     width: parent.width
 
-    contentItemComponent: InspectorPropertyView {
+    contentItemComponent: SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Time stretch Menu"
-        navigation.panel: root.navigation.panel
-        navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigationName: "Time stretch"
+        navigationPanel: root.navigation.panel
+        navigationRowStart: root.navigation.row + 1
 
         titleText: qsTrc("inspector", "Time stretch")
-        propertyItem: model ? model.timeStretch : null
+        propertyItem: root.model ? root.model.timeStretch : null
 
-        IncrementalPropertyControl {
-            id: timeStretchControl
-
-            iconMode: iconModeEnum.hidden
-
-            navigation.name: "Time stretch Value"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
-
-            measureUnitsSymbol: "%"
-            isIndeterminate: model ? model.timeStretch.isUndefined : false
-            currentValue: model ? model.timeStretch.value : 0
-
-            step: 1
-            decimals: 0
-            maxValue: 400
-            minValue: 0
-            validator: IntInputValidator {
-                top: timeStretchControl.maxValue
-                bottom: timeStretchControl.minValue
-            }
-
-            onValueEdited: { model.timeStretch.value = newValue }
-        }
+        step: 1
+        decimals: 0
+        maxValue: 400
+        minValue: 0
+        measureUnitsSymbol: "%"
     }
 }

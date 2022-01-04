@@ -806,7 +806,7 @@
           <linked>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 1</text>
             </Text>
           </VBox>
@@ -948,7 +948,7 @@
             <indexDiff>-9</indexDiff>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 2</text>
             </Text>
           </VBox>
@@ -1087,7 +1087,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 3</text>
             </Text>
           </VBox>
@@ -1226,7 +1226,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 4</text>
             </Text>
           </VBox>
@@ -1771,7 +1771,7 @@
               </location>
             </linked>
           <Text>
-            <style>Instrument Name (Part)</style>
+            <style>instrument_excerpt</style>
             <text>Track 5</text>
             </Text>
           </VBox>

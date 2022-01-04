@@ -23,22 +23,30 @@
 #define MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
 
 #include "../ishortcutscontroller.h"
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
-#include "ishortcutsregister.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/iuiactionsregister.h"
+#include "ui/iinteractiveprovider.h"
+#include "ishortcutsregister.h"
+#include "context/iuicontextresolver.h"
 
 namespace mu::shortcuts {
-class ShortcutsController : public IShortcutsController
+class ShortcutsController : public IShortcutsController, public async::Asyncable
 {
     INJECT(shortcuts, IShortcutsRegister, shortcutsRegister)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts, ui::IUiActionsRegister, aregister)
+    INJECT(shortcuts, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(shortcuts, context::IUiContextResolver, uiContextResolver)
 
 public:
     ShortcutsController() = default;
 
+    void init();
+
     void activate(const std::string& sequence) override;
+    bool isRegistered(const std::string& sequence) const override;
 };
 }
 

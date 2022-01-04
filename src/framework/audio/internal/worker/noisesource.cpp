@@ -37,14 +37,14 @@ unsigned int NoiseSource::audioChannelsCount() const
     return 1;
 }
 
-void NoiseSource::process(float* buffer, unsigned int sampleCount)
+samples_t NoiseSource::process(float* buffer, samples_t samplesPerChannel)
 {
     auto streams = audioChannelsCount();
     std::uniform_real_distribution<float> distribution{ -1.f, 1.f };
     std::random_device randomDevice{};
     std::mt19937 gen{ randomDevice() };
 
-    for (unsigned int i = 0; i < sampleCount; ++i) {
+    for (unsigned int i = 0; i < samplesPerChannel; ++i) {
         float sample = distribution(gen);
         switch (m_type) {
         case PINK: sample = pinkFilter(sample);
@@ -55,6 +55,8 @@ void NoiseSource::process(float* buffer, unsigned int sampleCount)
             buffer[streams * i + s] = sample;
         }
     }
+
+    return samplesPerChannel;
 }
 
 float NoiseSource::pinkFilter(float white)

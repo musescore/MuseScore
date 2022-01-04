@@ -25,6 +25,7 @@ if (NOT VST3_SDK_PATH)
 endif()
 
 include(GetPlatformInfo)
+include(GetCompilerInfo)
 include(GetBuildType)
 
 if (BUILD_IS_DEBUG)
@@ -118,6 +119,8 @@ set(VST_SDK_COMMON_SRC
     ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker.h
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.h
+    ${VST3_SDK_PATH}/public.sdk/source/common/memorystream.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/memorystream.h
     ${VST3_SDK_PATH}/public.sdk/source/main/pluginfactory.cpp
     ${VST3_SDK_PATH}/public.sdk/source/main/pluginfactory.h
     )
@@ -162,3 +165,7 @@ set(MODULE_INCLUDE
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 target_no_warning(${MODULE} -w)
+
+if (CC_IS_CLANG)
+    set_property(TARGET ${MODULE} APPEND_STRING PROPERTY COMPILE_FLAGS "-fobjc-arc")
+endif()

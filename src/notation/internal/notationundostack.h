@@ -51,6 +51,10 @@ public:
     void rollbackChanges() override;
     void commitChanges() override;
 
+    void lock() override;
+    void unlock() override;
+    bool isLocked() const override;
+
     async::Notification stackChanged() const override;
 
 private:
@@ -71,6 +75,8 @@ private:
     async::Notification m_stackStateChanged;
     async::Notification m_undoNotification;
     async::Notification m_redoNotification;
+
+    bool m_isLocked = false;
 };
 }
 

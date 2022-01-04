@@ -28,6 +28,8 @@
 
 #include "iinteractive.h"
 
+class QWindow;
+
 namespace mu::ui {
 class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 {
@@ -55,10 +57,18 @@ public:
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
+    virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
+    virtual async::Channel<Uri> opened() const = 0;
+
+    virtual void raise(const UriQuery& uri) = 0;
 
     virtual void close(const Uri& uri) = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
+    virtual std::vector<Uri> stack() const = 0;
+
+    virtual QWindow* topWindow() const = 0;
+    virtual bool topWindowIsWidget() const = 0;
 };
 }
 

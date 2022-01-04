@@ -57,22 +57,6 @@ MidiDeviceID DummyMidiInPort::deviceID() const
     return m_deviceID;
 }
 
-Ret DummyMidiInPort::run()
-{
-    m_running = true;
-    return true;
-}
-
-void DummyMidiInPort::stop()
-{
-    m_running = false;
-}
-
-bool DummyMidiInPort::isRunning() const
-{
-    return m_running;
-}
-
 async::Channel<tick_t, Event> DummyMidiInPort::eventReceived() const
 {
     return m_eventReceived;

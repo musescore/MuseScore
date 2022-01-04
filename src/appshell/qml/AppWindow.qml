@@ -25,10 +25,15 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.Shortcuts 1.0
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0
 
 ApplicationWindow {
     id: root
+
+    default property alias windowContent: windowContentItem.data
+
+    objectName: "ApplicationWindow"
+
+    title: titleProvider.title
 
     width: 1150
     height: 800
@@ -36,7 +41,14 @@ ApplicationWindow {
     minimumWidth: 1150
     minimumHeight: 600
 
-    visible: true
+    visible: false
+
+    color: ui.theme.backgroundPrimaryColor
+
+    Component.onCompleted: {
+        ui.rootItem = root.contentItem
+        titleProvider.load()
+    }
 
     MainWindowTitleProvider {
         id: titleProvider
@@ -51,15 +63,17 @@ ApplicationWindow {
         fileModified: titleProvider.fileModified
     }
 
-    title: titleProvider.title
-
     ToolTipProvider { }
 
     //! NOTE Need only create
     Shortcuts { }
 
-    Component.onCompleted: {
-        ui.rootItem = root.contentItem
-        titleProvider.load()
+    Item {
+        id: windowContentItem
+        anchors.fill: parent
+    }
+
+    WindowDropArea {
+        anchors.fill: parent
     }
 }

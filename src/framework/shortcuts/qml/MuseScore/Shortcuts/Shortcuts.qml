@@ -27,7 +27,7 @@ QtObject {
     id: root
 
     Component.onCompleted: {
-        shortcutsModel.load()
+        shortcutsModel.init()
     }
 
     property var objects: []
@@ -36,7 +36,12 @@ QtObject {
         id: shortcutsModel
 
         onShortcutsChanged: {
+            for (var s = 0; s < root.objects.length; ++s) {
+                root.objects[s].enabled = false
+                root.objects[s].destroy()
+            }
             root.objects = []
+
             for (var i = 0; i < shortcutsModel.shortcuts.length; ++i) {
                 var sh = shortcutsModel.shortcuts[i]
                 var obj = shortcutComponent.createObject(root, {sequence: sh})
@@ -49,6 +54,7 @@ QtObject {
         id: shortcutComponent
         Shortcut {
             context: Qt.ApplicationShortcut
+            enabled: shortcutsModel.active
             onActivated: shortcutsModel.activate(sequence)
         }
     }

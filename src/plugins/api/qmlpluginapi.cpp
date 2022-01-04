@@ -31,9 +31,15 @@
 #include "selection.h"
 #include "tie.h"
 
+#include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
+#include "libmscore/factory.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/dummyelement.h"
 
 #include <QQmlEngine>
+
+using namespace mu::engraving;
 
 namespace Ms {
 namespace PluginAPI {
@@ -147,11 +153,11 @@ void PluginAPI::closeScore(Ms::PluginAPI::Score* score)
 //   newElement
 ///   Creates a new element with the given type. The
 ///   element can be then added to a score via Cursor::add.
-///   \param elementType Element type, should be the value
-///   from PluginAPI::PluginAPI::Element enumeration.
+///   \param elementType EngravingItem type, should be the value
+///   from PluginAPI::PluginAPI::EngravingItem enumeration.
 //---------------------------------------------------------
 
-Element* PluginAPI::newElement(int elementType)
+EngravingItem* PluginAPI::newElement(int elementType)
 {
     Ms::Score* score = msc()->currentScore();
     if (!score) {
@@ -162,18 +168,18 @@ Element* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
-    Ms::Element* e = Ms::Element::create(type, score);
+    Ms::EngravingItem* e = Factory::createItem(type, score->dummy());
     return wrap(e, Ownership::PLUGIN);
 }
 
 //---------------------------------------------------------
 //   removeElement
-///   Disposes of an Element and its children.
-///   \param Element type.
+///   Disposes of an EngravingItem and its children.
+///   \param EngravingItem type.
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
 
-void PluginAPI::removeElement(Ms::PluginAPI::Element* wrapped)
+void PluginAPI::removeElement(Ms::PluginAPI::EngravingItem* wrapped)
 {
     Ms::Score* score = wrapped->element()->score();
     score->deleteItem(wrapped->element());
@@ -188,7 +194,7 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
     if (msc()->currentScore()) {
         msc()->currentScore()->endCmd();
     }
-    MasterScore* score = new MasterScore(MScore::defaultStyle());
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     score->setName(name);
     score->appendPart(Score::instrTemplateFromName(part));
     score->appendMeasures(measures);
@@ -207,7 +213,21 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
 
 void PluginAPI::cmd(const QString& s)
 {
-    shortcuts()->activate(s.toStdString());
+    static const QMap<QString, QString> COMPAT_CMD_MAP = {
+        { "escape", "notation-escape" },
+        { "cut", "notation-cut" },
+        { "copy", "notation-copy" },
+        { "paste", "notation-paste" },
+        { "paste-half", "notation-paste-half" },
+        { "paste-double", "notation-paste-double" },
+        { "select-all", "notation-select-all" },
+        { "delete", "notation-delete" },
+        { "next-chord", "notation-move-right" },
+        { "prev-chord", "notation-move-left" },
+        { "prev-measure", "notation-move-left-quickly" }
+    };
+
+    actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
 }
 
 //---------------------------------------------------------
@@ -307,7 +327,6 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
     //-----------mscore bindings
     qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
-//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", QObject::tr(enumErr));
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
         qWarning("qmlRegisterType failed: MuseScore");
@@ -315,13 +334,12 @@ void PluginAPI::registerQmlTypes()
 
     qmlRegisterUncreatableType<Enum>("MuseScore", 3, 0, "MuseScoreEnum", "Cannot create an enumeration");
 
-//             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
     qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
     qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Score>("MuseScore", 3);
-    qmlRegisterAnonymousType<Element>("MuseScore", 3);
+    qmlRegisterAnonymousType<EngravingItem>("MuseScore", 3);
     qmlRegisterAnonymousType<Chord>("MuseScore", 3);
     qmlRegisterAnonymousType<Note>("MuseScore", 3);
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);
@@ -334,41 +352,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Hook>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Stem>("MuseScore", 3);
-    //qmlRegisterAnonymousType<StemSlash>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Beam>("MuseScore", 3);
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
-#if 0
-    qmlRegisterType<NoteHead>("MuseScore", 1, 0, "NoteHead");
-    qmlRegisterType<Accidental>("MuseScore", 1, 0, "Accidental");
-    qmlRegisterType<Rest>("MuseScore", 1, 0, "Rest");
-    qmlRegisterType<StaffText>("MuseScore", 1, 0, "StaffText");
-    qmlRegisterType<Staff>("MuseScore", 1, 0, "Staff");
-    qmlRegisterType<Harmony>("MuseScore", 1, 0, "Harmony");
-    qmlRegisterType<TimeSig>("MuseScore", 1, 0, "TimeSig");
-    qmlRegisterType<KeySig>("MuseScore", 1, 0, "KeySig");
-    qmlRegisterType<Slur>("MuseScore", 1, 0, "Slur");
-    qmlRegisterType<Tie>("MuseScore", 1, 0, "Tie");
-    qmlRegisterType<NoteDot>("MuseScore", 1, 0, "NoteDot");
-    qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-    qmlRegisterType<Text>("MuseScore", 1, 0, "MText");
-    qmlRegisterType<Lyrics>("MuseScore", 1, 0, "Lyrics");
-    qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
-    qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-    qmlRegisterType<BarLine>("MuseScore", 1, 0, "BarLine");
-
-    //classed enumerations
-    qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx",
-                                                           QObject::tr("You can't create an enum"));
-    qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", enumErr);
-
-    //-----------virtual classes
-    qmlRegisterType<ChordRest>();
-    qmlRegisterType<SlurTie>();
-    qmlRegisterType<Spanner>();
-#endif
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 

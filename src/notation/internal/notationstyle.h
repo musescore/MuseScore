@@ -24,31 +24,36 @@
 #define MU_NOTATION_NOTATIONSTYLE_H
 
 #include "inotationstyle.h"
+#include "inotationundostack.h"
 
 #include "igetscore.h"
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class NotationStyle : public INotationStyle
 {
 public:
-    NotationStyle(IGetScore* getScore);
+    NotationStyle(IGetScore* getScore, INotationUndoStackPtr);
 
-    QVariant styleValue(const StyleId& styleId) const override;
-    QVariant defaultStyleValue(const StyleId& styleId) const override;
-    void setStyleValue(const StyleId& styleId, const QVariant& newValue) override;
+    PropertyValue styleValue(const StyleId& styleId) const override;
+    PropertyValue defaultStyleValue(const StyleId& styleId) const override;
+    void setStyleValue(const StyleId& styleId, const PropertyValue& newValue) override;
     void resetStyleValue(const StyleId& styleId) override;
 
     bool canApplyToAllParts() const override;
     void applyToAllParts() override;
 
+    void resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes = {}) override;
+
     async::Notification styleChanged() const override;
+
+    bool loadStyle(const mu::io::path&, bool allowAnyVersion) override;
+    bool saveStyle(const mu::io::path&) override;
 
 private:
     IGetScore* m_getScore = nullptr;
     async::Notification m_styleChanged;
+    INotationUndoStackPtr m_undoStack;
 };
-}
 }
 
 #endif // MU_NOTATION_NOTATIONSTYLE_H

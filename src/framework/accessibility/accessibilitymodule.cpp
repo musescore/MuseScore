@@ -27,22 +27,11 @@
 #include "log.h"
 
 #include "internal/accessibilitycontroller.h"
-#include "internal/accessibilityuiactions.h"
 #include "internal/accessibilityconfiguration.h"
-#include "dev/accessibledevmodel.h"
-
-#include "ui/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
+#include "internal/qaccessibleinterfaceregister.h"
 
 using namespace mu::accessibility;
 using namespace mu::modularity;
-
-static std::shared_ptr<AccessibilityController> s_accessibilityController = std::make_shared<AccessibilityController>();
-
-static void accessibility_init_qrc()
-{
-    Q_INIT_RESOURCE(accessibility);
-}
 
 std::string AccessibilityModule::moduleName() const
 {
@@ -52,37 +41,17 @@ std::string AccessibilityModule::moduleName() const
 void AccessibilityModule::registerExports()
 {
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfiguration());
-    ioc()->registerExport<IAccessibilityController>(moduleName(), s_accessibilityController);
+    ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());
+    ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
 }
 
 void AccessibilityModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("musescore://devtools/accessible/tree"), "MuseScore/Accessibility/AccessibleDevDialog.qml");
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    if (accr) {
+#ifdef Q_OS_MAC
+        accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
+#endif
+        accr->registerInterfaceGetter("mu::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
     }
-
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<AccessibilityUiActions>());
-    }
-}
-
-void AccessibilityModule::registerResources()
-{
-    accessibility_init_qrc();
-}
-
-void AccessibilityModule::registerUiTypes()
-{
-    qmlRegisterType<AccessibleDevModel>("MuseScore.Accessibility", 1, 0, "AccessibleDevModel");
-}
-
-void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
-{
-    if (mode != framework::IApplication::RunMode::Editor) {
-        return;
-    }
-
-    s_accessibilityController->init();
 }

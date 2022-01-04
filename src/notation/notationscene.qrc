@@ -13,14 +13,25 @@
         <file>qml/MuseScore/NotationScene/internal/PartsView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/VoicesPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartDelegate.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleDialogPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/ItemWithTitle.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml</file>
         <file>view/resources/data/std_sample.mscx</file>
         <file>view/resources/data/tab_sample.mscx</file>
-        <file>view/resources/icons/go-next.svg</file>
-        <file>view/resources/icons/go-previous.svg</file>
         <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
-        <file>qml/MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/Timeline.qml</file>
+        <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/NotationScrollAndZoomArea.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NotationScrollBar.qml</file>
     </qresource>
 </RCC>

@@ -23,27 +23,83 @@
 #include "dockseparator.h"
 
 #include "log.h"
+#include "../docktypes.h"
 
 #include "thirdparty/KDDockWidgets/src/private/multisplitter/Rubberband_quick.h"
+#include "thirdparty/KDDockWidgets/src/DockWidgetBase.h"
+#include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 
 #include <QTimer>
 
 using namespace mu::dock;
 
+namespace mu::dock {
+static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator* separator)
+{
+    const Layouting::ItemBoxContainer* container = separator->parentContainer();
+    if (!container) {
+        return nullptr;
+    }
+
+    int separatorPos = separator->Layouting::Separator::position();
+    Qt::Orientation orientation = separator->orientation();
+    Layouting::Item::List children = container->visibleChildren();
+
+    const Layouting::Item* nearestItem = nullptr;
+    int minPosDiff = std::numeric_limits<int>::max();
+
+    for (const Layouting::Item* child : children) {
+        int childPos = child->pos(orientation);
+        int diff = std::abs(childPos - separatorPos);
+
+        if (diff < minPosDiff) {
+            nearestItem = child;
+            minPosDiff = diff;
+        }
+    }
+
+    if (!nearestItem) {
+        return nullptr;
+    }
+
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(nearestItem->guestAsQObject());
+    return frame && !frame->isEmpty() ? frame->currentDockWidget() : nullptr;
+}
+}
+
 DockSeparator::DockSeparator(Layouting::Widget* parent)
     : QQuickItem(qobject_cast<QQuickItem*>(parent->asQObject())),
     Layouting::Separator(parent),
-    Layouting::Widget_quick(this)
+    Layouting::Widget_quick(this), m_isSeparatorVisible(true)
 {
     createQQuickItem("qrc:/qml/dockwindow/DockSeparator.qml", this);
 
     // Only set on Separator::init(), so single-shot
     QTimer::singleShot(0, this, &DockSeparator::isVerticalChanged);
+    QTimer::singleShot(0, this, [this]() {
+        initAvailability();
+    });
+}
+
+void DockSeparator::initAvailability()
+{
+    const QObject* dock = findNearestDock(this);
+    DockProperties properties = readPropertiesFromObject(dock);
+
+    if (properties.isValid()) {
+        m_isSeparatorVisible = properties.separatorsVisible;
+        emit isSeparatorVisibleChanged();
+    }
 }
 
 bool DockSeparator::isVertical() const
 {
     return Layouting::Separator::isVertical();
+}
+
+bool DockSeparator::isSeparatorVisible() const
+{
+    return m_isSeparatorVisible;
 }
 
 Layouting::Widget* DockSeparator::createRubberBand(Layouting::Widget* parent)

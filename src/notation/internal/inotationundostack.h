@@ -47,6 +47,10 @@ public:
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
 
+    virtual void lock() = 0;
+    virtual void unlock() = 0;
+    virtual bool isLocked() const = 0;
+
     virtual async::Notification stackChanged() const = 0;
 };
 

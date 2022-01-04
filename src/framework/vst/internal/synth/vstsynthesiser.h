@@ -23,22 +23,28 @@
 #ifndef MU_VST_VSTSYNTHESISER_H
 #define MU_VST_VSTSYNTHESISER_H
 
+#include <memory>
+
+#include "async/asyncable.h"
 #include "audio/isynthesizer.h"
 #include "audio/iaudioconfiguration.h"
+#include "audio/audiotypes.h"
 #include "modularity/ioc.h"
 
+#include "internal/vstaudioclient.h"
+#include "ivstpluginsregister.h"
+#include "ivstmodulesrepository.h"
 #include "vsttypes.h"
-#include "ivstpluginrepository.h"
-#include "vstaudioclient.h"
 
 namespace mu::vst {
-class VstSynthesiser : public audio::synth::ISynthesizer
+class VstSynthesiser : public audio::synth::ISynthesizer, public async::Asyncable
 {
-    INJECT(vst, IVstPluginRepository, repository)
+    INJECT(vst, IVstPluginsRegister, pluginsRegister)
+    INJECT(vst, IVstModulesRepository, modulesRepo)
     INJECT(vst, audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(const VstPluginMeta& meta);
+    explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);
 
     Ret init() override;
 
@@ -46,14 +52,17 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    audio::AudioSourceType type() const override;
     std::string name() const override;
+
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
     audio::synth::SoundFontFormats soundFontFormats() const override;
     Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
     Ret removeSoundFonts() override;
 
     bool handleEvent(const midi::Event& e) override;
-    void writeBuf(float* stream, unsigned int samples) override;
     void allSoundsOff() override;
     void flushSound() override;
 
@@ -67,19 +76,22 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    audio::samples_t process(float* buffer, audio::samples_t samplelPerChannel) override;
 
 private:
-
-    VstPluginMeta m_pluginMeta;
     VstPluginPtr m_pluginPtr = nullptr;
 
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     bool m_isActive = false;
 
+    audio::AudioInputParams m_params;
+
+    async::Channel<audio::AudioInputParams> m_paramsChanges;
     async::Channel<unsigned int> m_streamsCountChanged;
 };
+
+using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
 
 #endif // MU_VST_VSTSYNTHESISER_H

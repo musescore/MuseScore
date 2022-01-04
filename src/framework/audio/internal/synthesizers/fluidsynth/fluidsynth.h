@@ -29,7 +29,6 @@
 #include <functional>
 
 #include "modularity/ioc.h"
-#include "iaudioconfiguration.h"
 
 #include "isynthesizer.h"
 
@@ -37,14 +36,15 @@ namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public ISynthesizer
 {
-    INJECT(audio, IAudioConfiguration, config)
-
 public:
-    FluidSynth();
+    FluidSynth(const audio::AudioSourceParams& params);
 
     bool isValid() const override;
 
     std::string name() const override;
+    AudioSourceType type() const override;
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
     SoundFontFormats soundFontFormats() const override;
 
     Ret init() override;
@@ -57,7 +57,6 @@ public:
 
     Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
-    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override; // all channels
     void flushSound() override;
@@ -68,7 +67,7 @@ public:
     bool midiChannelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int audioChannelsCount() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 private:
@@ -95,8 +94,12 @@ private:
     bool m_isActive = false;
 
     unsigned int m_sampleRate = 0;
+    audio::AudioInputParams m_params;
+    async::Channel<audio::AudioInputParams> m_paramsChanges;
     async::Channel<unsigned int> m_streamsCountChanged;
 };
+
+using FluidSynthPtr = std::shared_ptr<FluidSynth>;
 }
 
 #endif //MU_AUDIO_FLUIDSYNTH_H

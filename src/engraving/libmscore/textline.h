@@ -38,12 +38,11 @@ class TextLineSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLineSegment(Spanner* sp, Score* s, bool system=false);
+    TextLineSegment(Spanner* sp, System* parent, bool system=false);
 
-    ElementType type() const override { return ElementType::TEXTLINE_SEGMENT; }
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
-    virtual Element* propertyDelegate(Pid) override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
     void layout() override;
@@ -59,24 +58,23 @@ class TextLine final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLine(Score* s, bool system=false);
+    TextLine(EngravingItem* parent, bool system=false);
     TextLine(const TextLine&);
     ~TextLine() {}
 
-    virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    virtual SpannerSegment* layoutSystem(System*) override;
+    void undoChangeProperty(Pid id, const mu::engraving::PropertyValue&, PropertyFlags ps) override;
+    SpannerSegment* layoutSystem(System*) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
-    ElementType type() const override { return ElementType::TEXTLINE; }
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
     void initStyle();
 
-    LineSegment* createLineSegment() override;
-    QVariant propertyDefault(Pid) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
+    LineSegment* createLineSegment(System* parent) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
 };
 }     // namespace Ms
 #endif

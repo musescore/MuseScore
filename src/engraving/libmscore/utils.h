@@ -23,11 +23,12 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+#include "types/types.h"
+
 #include "mscore.h"
 #include "interval.h"
-#include "symid.h"
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 enum class Key;
@@ -46,13 +47,10 @@ enum class Key;
 class Measure;
 class Segment;
 class System;
-class Element;
+class EngravingItem;
 class Note;
 class Tuplet;
 class BarLine;
-class Fraction;
-
-enum class ClefType : signed char;
 
 extern mu::RectF handleRect(const mu::PointF& pos);
 
@@ -75,8 +73,7 @@ int diatonicUpDown(Key, int pitch, int steps);
 extern int version();
 extern int majorVersion();
 extern int minorVersion();
-extern int updateVersion();
-extern bool compareVersion(QString v1, QString v2);
+extern int patchVersion();
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
@@ -96,7 +93,7 @@ extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
-extern std::vector<SymId> toTimeSigString(const QString&);
+extern SymIdList timeSigSymIdsFromString(const QString&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 }     // namespace Ms
 #endif

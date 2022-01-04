@@ -19,7 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "textframe.h"
 
+#include "draw/fontmetrics.h"
+#include "rw/xml.h"
+
+#include "factory.h"
 #include "box.h"
 #include "text.h"
 #include "score.h"
@@ -31,23 +36,20 @@
 #include "layoutbreak.h"
 #include "fret.h"
 #include "mscore.h"
-#include "textframe.h"
-#include "xml.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
 
-TBox::TBox(Score* score)
-    : VBox(score)
+TBox::TBox(System* parent)
+    : VBox(ElementType::TBOX, parent)
 {
     setBoxHeight(Spatium(1));
-    _text  = new Text(score, Tid::FRAME);
+    _text  = Factory::createText(this, TextStyleType::FRAME);
     _text->setLayoutToParentWidth(true);
     _text->setParent(this);
 }
@@ -55,7 +57,7 @@ TBox::TBox(Score* score)
 TBox::TBox(const TBox& tbox)
     : VBox(tbox)
 {
-    _text = new Text(*(tbox._text));
+    _text = Factory::copyText(*(tbox._text));
 }
 
 TBox::~TBox()
@@ -82,15 +84,6 @@ void TBox::layout()
         h = _text->height();
     }
     qreal y = topMargin() * DPMM;
-#if 0
-    if (_text->align() & Align::BOTTOM) {
-        y += h;
-    } else if (_text->align() & Align::VCENTER) {
-        y +=  h * .5;
-    } else {
-        // y = 0;
-    }
-#endif
     _text->setPos(leftMargin() * DPMM, y);
     h += topMargin() * DPMM + bottomMargin() * DPMM;
     bbox().setRect(0.0, 0.0, system()->width(), h);
@@ -104,10 +97,10 @@ void TBox::layout()
 
 void TBox::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     Box::writeProperties(xml);
     _text->write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -131,9 +124,9 @@ void TBox::read(XmlReader& e)
 //   drop
 //---------------------------------------------------------
 
-Element* TBox::drop(EditData& data)
+EngravingItem* TBox::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::TEXT:
         _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
@@ -146,10 +139,10 @@ Element* TBox::drop(EditData& data)
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to TBox
+///   Add new EngravingItem \a el to TBox
 //---------------------------------------------------------
 
-void TBox::add(Element* e)
+void TBox::add(EngravingItem* e)
 {
     if (e->isText()) {
         // does not normally happen, since drop() handles this directly
@@ -163,7 +156,7 @@ void TBox::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void TBox::remove(Element* el)
+void TBox::remove(EngravingItem* el)
 {
     if (el == _text) {
         // does not normally happen, since Score::deleteItem() handles this directly
@@ -171,7 +164,7 @@ void TBox::remove(Element* el)
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
         qDebug("TBox::remove() - replacing _text");
-        _text = new Text(score(), Tid::FRAME);
+        _text = Factory::createText(this, TextStyleType::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);
     } else {

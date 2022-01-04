@@ -42,17 +42,22 @@ public:
     bool canCopy() const override;
     QMimeData* mimeData() const override;
 
-    Element* element() const override;
-    std::vector<Element*> elements() const override;
+    EngravingItem* element() const override;
+    std::vector<EngravingItem*> elements() const override;
 
     std::vector<Note*> notes(NoteFilter filter) const override;
 
-    QRectF canvasBoundingRect() const override;
+    RectF canvasBoundingRect() const override;
 
     INotationSelectionRangePtr range() const override;
 
+    EngravingItem* lastElementHit() const override;
+
+    void onElementHit(EngravingItem*);
+
 private:
     Ms::Score* score() const;
+    EngravingItem* m_lastElementHit;
 
     IGetScore* m_getScore = nullptr;
     INotationSelectionRangePtr m_range;

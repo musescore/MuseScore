@@ -38,12 +38,12 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
 
 void HookSettingsModel::createProperties()
 {
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
@@ -55,11 +55,11 @@ void HookSettingsModel::requestElements()
 void HookSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 }
 

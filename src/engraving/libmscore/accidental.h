@@ -33,21 +33,15 @@
 #include <QVariant>
 
 #include "config.h"
-#include "element.h"
-#include "symid.h"
+#include "engravingitem.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class Note;
 enum class AccidentalVal : signed char;
-
-//---------------------------------------------------------
-//   AccidentalRole
-//---------------------------------------------------------
-
-enum class AccidentalRole : char {
-    AUTO,                 // layout created accidental
-    USER                  // user created accidental
-};
 
 //---------------------------------------------------------
 //   AccidentalBracket
@@ -57,7 +51,7 @@ enum class AccidentalBracket : char {
     NONE,
     PARENTHESIS,
     BRACKET,
-    BRACE,
+    BRACE, //! Deprecated; removed from the UI and kept here only for compatibility purposes
 };
 
 //---------------------------------------------------------
@@ -75,27 +69,29 @@ struct SymElement {
 //---------------------------------------------------------
 //   @@ Accidental
 //   @P role        enum  (Accidental.AUTO, .USER) (read only)
-//   @P small       bool
+//   @P isSmall     bool
 //---------------------------------------------------------
 
-class Accidental final : public Element
+class Accidental final : public EngravingItem
 {
     QList<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
-    bool _small                    { false };
+    bool m_isSmall                    { false };
     AccidentalBracket _bracket     { AccidentalBracket::NONE };
     AccidentalRole _role           { AccidentalRole::AUTO };
 
+    friend class mu::engraving::Factory;
+
+    Accidental(EngravingItem* parent);
+
 public:
-    Accidental(Score* s = 0);
 
     Accidental* clone() const override { return new Accidental(*this); }
-    ElementType type() const override { return ElementType::ACCIDENTAL; }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     QString subtypeUserName() const;
     void setSubtype(const QString& s);
@@ -108,7 +104,7 @@ public:
     QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     void layoutMultiGlyphAccidental();
     void layoutSingleGlyphAccidental();
@@ -117,26 +113,25 @@ public:
     void startEdit(EditData&) override { setGenerated(false); }
 
     SymId symbol() const;
-    Note* note() const { return (parent() && parent()->isNote()) ? toNote(parent()) : 0; }
+    Note* note() const { return (explicitParent() && explicitParent()->isNote()) ? toNote(explicitParent()) : 0; }
 
     AccidentalBracket bracket() const { return _bracket; }
     void setBracket(AccidentalBracket val) { _bracket = val; }
 
     void setRole(AccidentalRole r) { _role = r; }
 
-    bool small() const { return _small; }
-    void setSmall(bool val) { _small = val; }
+    bool isSmall() const { return m_isSmall; }
+    void setSmall(bool val) { m_isSmall = val; }
 
     void undoSetSmall(bool val);
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid propertyId) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
-    QString propertyUserValue(Pid) const override;
 
     static AccidentalVal subtype2value(AccidentalType);               // return effective pitch offset
     static SymId subtype2symbol(AccidentalType);

@@ -20,12 +20,13 @@ namespace Layouting {
 class Separator;
 class Widget;
 
-typedef Separator* (*SeparatorFactoryFunc)(Layouting::Widget *parent);
+typedef Separator *(*SeparatorFactoryFunc)(Layouting::Widget *parent);
 
-class DOCKS_EXPORT_FOR_UNIT_TESTS Config {
+class DOCKS_EXPORT_FOR_UNIT_TESTS Config
+{
 public:
-
-    enum class Flag {
+    enum class Flag
+    {
         None = 0,
         LazyResize = 1
     };
@@ -65,7 +66,7 @@ private:
     friend class ItemBoxContainer;
 
     Config();
-    Separator* createSeparator(Layouting::Widget *) const;
+    Separator *createSeparator(Layouting::Widget *) const;
 
     void registerQmlTypes();
 

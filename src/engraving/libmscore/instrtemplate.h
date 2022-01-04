@@ -34,6 +34,7 @@ class Part;
 class Staff;
 class StringData;
 class StaffType;
+struct ScoreOrder;
 
 //---------------------------------------------------------
 //   InstrumentGenre
@@ -73,9 +74,12 @@ public:
 
 class InstrumentTemplate
 {
-    int staves;               // 1 <= MAX_STAVES
-
 public:
+    InstrumentTemplate();
+    InstrumentTemplate(const InstrumentTemplate&);
+    ~InstrumentTemplate();
+    InstrumentTemplate& operator=(const InstrumentTemplate&);
+
     QString id;
     QString trackName;
     StaffNameList longNames;     ///< shown on first system
@@ -83,17 +87,22 @@ public:
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
 
-    char minPitchA;           // pitch range playable by an amateur
-    char maxPitchA;
-    char minPitchP;           // pitch range playable by professional
-    char maxPitchP;
+    int staffCount = 0;
+    int sequenceOrder = 0;
+
+    Trait trait;
+
+    char minPitchA = 0;           // pitch range playable by an amateur
+    char maxPitchA = 0;
+    char minPitchP = 0;           // pitch range playable by professional
+    char maxPitchP = 0;
 
     Interval transpose;       // for transposing instruments
 
     StaffGroup staffGroup;
-    const StaffType* staffTypePreset;
-    bool useDrumset;
-    Drumset* drumset;
+    const StaffType* staffTypePreset = nullptr;
+    bool useDrumset = false;
+    Drumset* drumset = nullptr;
 
     StringData stringData;
 
@@ -101,7 +110,7 @@ public:
     QList<MidiArticulation> articulation;
     QList<Channel> channel;
     QList<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
-    InstrumentFamily* family;             //; family the instrument belongs to
+    InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
     int staffLines[MAX_STAVES];
@@ -110,26 +119,22 @@ public:
     int barlineSpan[MAX_STAVES];
     bool smallStaff[MAX_STAVES];
 
-    bool extended;            // belongs to extended instrument set if true
+    bool extended = false;            // belongs to extended instrument set if true
+    bool singleNoteDynamics = false;
 
-    bool singleNoteDynamics;
+    QString groupId;
 
-    InstrumentTemplate();
-    InstrumentTemplate(const InstrumentTemplate&);
-    ~InstrumentTemplate();
-    void init(const InstrumentTemplate&);
-    void linkGenre(const QString&);
-    void addGenre(QList<InstrumentGenre*>);
-    bool genreMember(const QString&);
-    bool familyMember(const QString&);
-
-    void setPitchRange(const QString& s, char* a, char* b) const;
     void write(XmlWriter& xml) const;
     void write1(XmlWriter& xml) const;
     void read(XmlReader&);
-    int nstaves() const { return staves; }
-    void setStaves(int val) { staves = val; }
     ClefTypeList clefType(int staffIdx) const;
+    QString familyId() const;
+    bool containsGenre(const QString& genreId) const;
+
+private:
+    void init(const InstrumentTemplate&);
+    void setPitchRange(const QString& s, char* a, char* b) const;
+    void linkGenre(const QString&);
 };
 
 //---------------------------------------------------------
@@ -164,6 +169,7 @@ extern QList<InstrumentGenre*> instrumentGenres;
 extern QList<InstrumentFamily*> instrumentFamilies;
 extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
+extern QList<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);

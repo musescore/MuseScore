@@ -53,7 +53,7 @@ enum class InternalRestoreOption
 Q_DECLARE_FLAGS(InternalRestoreOptions, InternalRestoreOption)
 
 
-template <typename T>
+template<typename T>
 typename T::List fromVariantList(const QVariantList &listV)
 {
     typename T::List result;
@@ -68,7 +68,7 @@ typename T::List fromVariantList(const QVariantList &listV)
     return result;
 }
 
-template <typename T>
+template<typename T>
 QVariantList toVariantList(const typename T::List &list)
 {
     QVariantList result;
@@ -97,9 +97,10 @@ struct LayoutSaver::Placeholder
 struct LayoutSaver::ScalingInfo
 {
     ScalingInfo() = default;
-    explicit ScalingInfo(const QString &mainWindowId, QRect savedMainWindowGeo);
+    explicit ScalingInfo(const QString &mainWindowId, QRect savedMainWindowGeo, int screenIndex);
 
-    bool isValid() const {
+    bool isValid() const
+    {
         return heightFactor > 0 && widthFactor > 0 && !((qFuzzyCompare(widthFactor, 1) && qFuzzyCompare(heightFactor, 1)));
     }
 
@@ -113,6 +114,7 @@ struct LayoutSaver::ScalingInfo
     QRect realMainWindowGeometry;
     double heightFactor = -1;
     double widthFactor = -1;
+    bool mainWindowChangedScreen = false;
 };
 
 struct LayoutSaver::Position
@@ -165,7 +167,9 @@ struct DOCKS_EXPORT LayoutSaver::DockWidget
     LayoutSaver::Position lastPosition;
 
 private:
-    DockWidget() {}
+    DockWidget()
+    {
+    }
 };
 
 
@@ -205,9 +209,13 @@ struct LayoutSaver::Frame
     bool isNull = true;
     QString objectName;
     QRect geometry;
-    unsigned int options;
+    QFlags<FrameOption>::Int options;
     int currentTabIndex;
     QString id; // for coorelation purposes
+
+    /// Might be empty if not in a main window. Used so we don't create a frame when restoring
+    /// the persistent central frame, that's never deleted when restoring
+    QString mainWindowUniqueName;
 
     LayoutSaver::DockWidget::List dockWidgets;
 };
@@ -247,12 +255,14 @@ struct LayoutSaver::FloatingWindow
     QStringList affinities;
     int parentIndex = -1;
     QRect geometry;
+    QRect normalGeometry;
     int screenIndex;
-    QSize screenSize;  // for relative-size restoring
+    QSize screenSize; // for relative-size restoring
     bool isVisible = true;
 
     // The instance that was created during a restore:
     KDDockWidgets::FloatingWindow *floatingWindowInstance = nullptr;
+    Qt::WindowState windowState = Qt::WindowNoState;
 };
 
 struct LayoutSaver::MainWindow
@@ -275,7 +285,7 @@ public:
     QStringList affinities;
     QRect geometry;
     int screenIndex;
-    QSize screenSize;  // for relative-size restoring
+    QSize screenSize; // for relative-size restoring
     bool isVisible;
     Qt::WindowState windowState = Qt::WindowNoState;
 
@@ -300,11 +310,11 @@ struct LayoutSaver::ScreenInfo
 struct LayoutSaver::Layout
 {
 public:
-
-    Layout() {
+    Layout()
+    {
         s_currentLayoutBeingRestored = this;
 
-        const QList<QScreen*> screens = qApp->screens();
+        const QList<QScreen *> screens = qApp->screens();
         const int numScreens = screens.size();
         screenInfo.reserve(numScreens);
         for (int i = 0; i < numScreens; ++i) {
@@ -317,7 +327,8 @@ public:
         }
     }
 
-    ~Layout() {
+    ~Layout()
+    {
         s_currentLayoutBeingRestored = nullptr;
     }
 
@@ -331,7 +342,7 @@ public:
     /// Iterates through the layout and patches all absolute sizes. See RestoreOption_RelativeToMainWindow.
     void scaleSizes(KDDockWidgets::InternalRestoreOptions);
 
-    static LayoutSaver::Layout* s_currentLayoutBeingRestored;
+    static LayoutSaver::Layout *s_currentLayoutBeingRestored;
 
     LayoutSaver::MainWindow mainWindowForIndex(int index) const;
     LayoutSaver::FloatingWindow floatingWindowForIndex(int index) const;
@@ -339,6 +350,7 @@ public:
     QStringList mainWindowNames() const;
     QStringList dockWidgetNames() const;
     QStringList dockWidgetsToClose() const;
+    bool containsDockWidget(const QString &uniqueName) const;
 
     int serializationVersion = KDDOCKWIDGETS_SERIALIZATION_VERSION;
     LayoutSaver::MainWindow::List mainWindows;
@@ -346,6 +358,7 @@ public:
     LayoutSaver::DockWidget::List closedDockWidgets;
     LayoutSaver::DockWidget::List allDockWidgets;
     ScreenInfo::List screenInfo;
+
 private:
     Q_DISABLE_COPY(Layout)
 };
@@ -364,6 +377,7 @@ public:
 
     bool matchesAffinity(const QStringList &affinities) const;
     void floatWidgetsWhichSkipRestore(const QStringList &mainWindowNames);
+    void floatUnknownWidgets(const LayoutSaver::Layout &layout);
 
     template<typename T>
     void deserializeWindowGeometry(const T &saved, QWidgetOrQuick *topLevel);

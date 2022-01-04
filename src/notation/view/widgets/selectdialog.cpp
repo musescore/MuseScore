@@ -26,13 +26,14 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "libmscore/system.h"
+#include "engraving/libmscore/system.h"
 
 #include "notationtypes.h"
 
-#include "widgetstatestore.h"
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   SelectDialog
@@ -60,8 +61,8 @@ SelectDialog::SelectDialog(QWidget* parent)
         subtype->setText(qApp->translate("TextStyle", m_element->subtypeName().toUtf8()));
         break;
     case ElementType::ARTICULATION: { // comes translated, but from a different method
-        const Articulation* articulation = dynamic_cast<const Articulation*>(m_element);
-        subtype->setText(articulation->userName());
+        const Articulation* artic = dynamic_cast<const Articulation*>(m_element);
+        subtype->setText(artic->userName());
         break;
     }
     // other come translated or don't need any or are too difficult to implement
@@ -74,9 +75,12 @@ SelectDialog::SelectDialog(QWidget* parent)
     inSelection->setEnabled(m_element->score()->selection().isRange());
     sameDuration->setEnabled(m_element->isRest());
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 SelectDialog::SelectDialog(const SelectDialog& other)
@@ -131,14 +135,14 @@ FilterElementsOptions SelectDialog::elementOptions() const
     return options;
 }
 
-Ms::System* SelectDialog::elementSystem(const Element* element) const
+Ms::System* SelectDialog::elementSystem(const EngravingItem* element) const
 {
-    Element* _element = const_cast<Element*>(element);
+    EngravingItem* _element = const_cast<EngravingItem*>(element);
     do {
         if (_element->type() == ElementType::SYSTEM) {
             return dynamic_cast<Ms::System*>(_element);
         }
-        _element = _element->parent();
+        _element = _element->parentItem();
     } while (element);
 
     return nullptr;
@@ -227,14 +231,14 @@ void SelectDialog::apply() const
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
 
     FilterElementsOptions options = elementOptions();
 
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -243,18 +247,18 @@ void SelectDialog::apply() const
         interaction->clearSelection();
         interaction->select(elements, SelectType::ADD);
     } else if (doSubtract()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
+        for (EngravingItem* element: elements) {
             selesctionElements.erase(std::remove(selesctionElements.begin(), selesctionElements.end(), element), selesctionElements.end());
         }
 
         interaction->clearSelection();
         interaction->select(selesctionElements, SelectType::ADD);
     } else if (doAdd()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
 
-        std::vector<Element*> elementsToSelect;
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> elementsToSelect;
+        for (EngravingItem* element: elements) {
             if (std::find(selesctionElements.begin(), selesctionElements.end(), element) == selesctionElements.end()) {
                 elementsToSelect.push_back(element);
             }

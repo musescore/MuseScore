@@ -29,15 +29,48 @@ Item {
 
     property string headerTitle: ""
     property alias spacing: row.spacing
+    property real leftMargin: 0
+    property real rightMargin: 0
     property bool isSorterEnabled: false
     property int sortOrder: Qt.AscendingOrder
 
+    property alias navigation: navCtrl
+
     signal clicked()
+
+    implicitWidth: leftMargin + row.implicitWidth + rightMargin
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "ValueListHeaderItem"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.Button
+        accessible.name: {
+            var text = root.headerTitle
+            if (root.isSorterEnabled) {
+                var sortOrderName = root.sortOrder === Qt.AscendingOrder ? qsTrc("uicomponents", "ascending") : qsTrc("uicomponents", "descending")
+                text += " " + qsTrc("uicomponents", "sort ") + sortOrderName
+            } else {
+                text += qsTrc("uicomponents", "sort default")
+            }
+
+            return text
+        }
+        accessible.visualItem: root
+
+        onTriggered: {
+            root.clicked()
+        }
+    }
 
     Row {
         id: row
 
         anchors.fill: parent
+        anchors.leftMargin: root.leftMargin
+        anchors.rightMargin: root.rightMargin
+
         spacing: root.spacing
 
         StyledTextLabel {
@@ -62,11 +95,14 @@ Item {
         }
     }
 
+    NavigationFocusBorder {
+        navigationCtrl: navCtrl
+        drawOutsideParent: false
+    }
+
     MouseArea {
         id: mouseArea
-
         anchors.fill: parent
-
         hoverEnabled: true
 
         onClicked: {

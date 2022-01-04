@@ -23,9 +23,12 @@
 #ifndef __FERMATA_H__
 #define __FERMATA_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
-#include "symid.h"
+
+namespace mu::engraving {
+class Factory;
+}
 
 namespace Ms {
 class ChordRest;
@@ -38,22 +41,23 @@ class Page;
 //    Fermata
 //---------------------------------------------------------
 
-class Fermata final : public Element
+class Fermata final : public EngravingItem
 {
     SymId _symId;
     qreal _timeStretch;
     bool _play;
 
+    friend class mu::engraving::Factory;
+    Fermata(EngravingItem* parent);
+
     void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    Fermata(Score*);
-    Fermata(SymId, Score*);
+
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }
-    ElementType type() const override { return ElementType::FERMATA; }
 
     qreal mag() const override;
 
@@ -70,15 +74,15 @@ public:
 
     QVector<mu::LineF> dragAnchorLines() const override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
 
     Pid propertyId(const QStringRef& xmlName) const override;
 
     ChordRest* chordRest() const;
-    Segment* segment() const { return toSegment(parent()); }
+    Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const;
     System* system() const;
     Page* page() const;

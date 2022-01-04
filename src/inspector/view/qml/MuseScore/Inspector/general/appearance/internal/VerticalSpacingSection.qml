@@ -20,40 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../../common"
 
-InspectorPropertyView {
+SpinBoxPropertyView {
     id: root
 
-    property QtObject minimumDistance: undefined
-
-    property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 0
+    property PropertyItem minimumDistance: null
 
     anchors.left: parent.left
-    anchors.right: parent.horizontalCenter
-    anchors.rightMargin: 2
+    anchors.right: parent.right
 
-    navigation.name: "Minimum distance Menu"
-    navigation.panel: root.navigationPanel
-    navigation.row: root.navigationRowOffset + 1
+    navigationName: "Minimum distance"
 
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
 
-    IncrementalPropertyControl {
-        icon: IconCode.VERTICAL
-
-        navigation.name: "Minimum distance Value"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 2
-
-        isIndeterminate: minimumDistance ? minimumDistance.isUndefined : false
-        currentValue: minimumDistance ? minimumDistance.value : 0
-
-        onValueEdited: { minimumDistance.value = newValue }
-    }
+    icon: IconCode.VERTICAL
 }

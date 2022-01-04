@@ -37,19 +37,18 @@ class MMRestRange : public MeasureNumberBase
     M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
 
 public:
-    MMRestRange(Score* s = nullptr);
+    MMRestRange(Measure* parent = nullptr);
     MMRestRange(const MMRestRange& other);
 
-    virtual ElementType type()   const override { return ElementType::MMREST_RANGE; }
-    virtual MMRestRange* clone() const override { return new MMRestRange(*this); }
+    MMRestRange* clone() const override { return new MMRestRange(*this); }
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid id, const QVariant& val) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& val) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    virtual bool readProperties(XmlReader&) override;
+    bool readProperties(XmlReader&) override;
 
-    virtual void setXmlText(const QString&) override;
+    void setXmlText(const QString&) override;
 };
 } // namespace Ms
 

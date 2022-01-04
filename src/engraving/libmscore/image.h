@@ -23,9 +23,13 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
+#include "modularity/ioc.h"
+
+#include "infrastructure/draw/iimageprovider.h"
 #include "bsymbol.h"
 
 namespace mu::draw {
+class Pixmap;
 class SvgRenderer;
 }
 
@@ -42,39 +46,15 @@ enum class ImageType : char {
 
 class Image final : public BSymbol
 {
-    union {
-        QImage* rasterDoc;
-        mu::draw::SvgRenderer* svgDoc;
-    };
-    ImageType imageType;
-
-    mu::SizeF pixel2size(const mu::SizeF& s) const;
-    mu::SizeF size2pixel(const mu::SizeF& s) const;
-
-protected:
-    ImageStoreItem* _storeItem;
-    QString _storePath;             // the path of the img in the ImageStore
-    QString _linkPath;              // the path of an external linked img
-    bool _linkIsValid;              // whether _linkPath file exists or not
-    mutable QPixmap buffer;         ///< cached rendering
-    mu::SizeF _size;                   // in mm or spatium units
-    bool _lockAspectRatio;
-    bool _autoScale;                ///< fill parent frame
-    bool _sizeIsSpatium;
-    mutable bool _dirty;
-
-    bool isEditable() const override { return true; }
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData& ed) override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
+    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 
 public:
-    Image(Score* = 0);
+    Image(EngravingItem* parent = 0);
     Image(const Image&);
     ~Image();
 
     Image* clone() const override { return new Image(*this); }
-    ElementType type() const override { return ElementType::IMAGE; }
+
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool load(const QString& s);
@@ -98,9 +78,9 @@ public:
     bool sizeIsSpatium() const { return _sizeIsSpatium; }
     void setSizeIsSpatium(bool val) { _sizeIsSpatium = val; }
 
-    QVariant getProperty(Pid) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     mu::SizeF imageSize() const;
 
@@ -108,11 +88,37 @@ public:
     ImageType getImageType() const { return imageType; }
     bool isValid() const { return rasterDoc || svgDoc; }
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+protected:
+    ImageStoreItem* _storeItem;
+    QString _storePath;             // the path of the img in the ImageStore
+    QString _linkPath;              // the path of an external linked img
+    bool _linkIsValid;              // whether _linkPath file exists or not
+    mutable mu::draw::Pixmap buffer;         ///< cached rendering
+    mu::SizeF _size;                   // in mm or spatium units
+    bool _lockAspectRatio;
+    bool _autoScale;                ///< fill parent frame
+    bool _sizeIsSpatium;
+    mutable bool _dirty;
+
+    bool isEditable() const override { return true; }
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData& ed) override;
+    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
+
+private:
+    mu::SizeF pixel2size(const mu::SizeF& s) const;
+    mu::SizeF size2pixel(const mu::SizeF& s) const;
+
+    std::shared_ptr<mu::draw::Pixmap> rasterDoc;
+    mu::draw::SvgRenderer* svgDoc = nullptr;
+
+    ImageType imageType = ImageType::NONE;
 };
 }     // namespace Ms
 #endif

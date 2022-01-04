@@ -21,15 +21,24 @@
  */
 
 #include "measureproperties.h"
-#include "libmscore/measure.h"
-#include "libmscore/sig.h"
-#include "libmscore/score.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/undo.h"
-#include "libmscore/range.h"
+
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/measure.h"
+#include "engraving/libmscore/measurerepeat.h"
+#include "engraving/libmscore/range.h"
+#include "engraving/libmscore/sig.h"
+#include "engraving/libmscore/undo.h"
+
 #include "notation/inotationelements.h"
 
+#include "ui/view/widgetnavigationfix.h"
+#include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
+
 using namespace mu::notation;
+using namespace mu::ui;
+
+static const int ITEM_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     : QDialog(parent)
@@ -39,17 +48,31 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_notation = context()->currentNotation();
+    initMeasure();
 
     staves->verticalHeader()->hide();
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
-    connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
-    connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+    nextButton->setText(iconCodeToChar(IconCode::Code::ARROW_RIGHT));
+    previousButton->setText(iconCodeToChar(IconCode::Code::ARROW_LEFT));
+
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &MeasurePropertiesDialog::bboxClicked);
+    connect(nextButton, &QToolButton::clicked, this, &MeasurePropertiesDialog::gotoNextMeasure);
+    connect(previousButton, &QToolButton::clicked, this, &MeasurePropertiesDialog::gotoPreviousMeasure);
 
     if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
         horizontalLayout_2->removeWidget(nextButton);
         horizontalLayout_2->insertWidget(0, nextButton);
     }
+
+    WidgetUtils::setWidgetIcon(previousButton, IconCode::Code::ARROW_LEFT);
+    WidgetUtils::setWidgetIcon(nextButton, IconCode::Code::ARROW_RIGHT);
+
+    WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
+
+    qApp->installEventFilter(this);
 }
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
@@ -57,27 +80,20 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& 
 {
 }
 
-int MeasurePropertiesDialog::index() const
+void MeasurePropertiesDialog::initMeasure()
 {
-    return m_measureIndex;
-}
-
-void MeasurePropertiesDialog::setIndex(int measureIndex)
-{
-    if (m_measureIndex == measureIndex) {
+    if (!m_notation) {
         return;
     }
 
-    Ms::Measure* measure = m_notation->elements()->measure(measureIndex);
+    INotationInteraction::HitElementContext context = m_notation->interaction()->hitElementContext();
+    Ms::Measure* measure = Ms::toMeasure(context.element);
 
     if (!measure) {
         return;
     }
 
     setMeasure(measure);
-
-    m_measureIndex = measureIndex;
-    emit indexChanged(m_measureIndex);
 }
 
 //---------------------------------------------------------
@@ -136,6 +152,21 @@ void MeasurePropertiesDialog::gotoPreviousMeasure()
     m_notation->notationChanged().notify();
 }
 
+bool MeasurePropertiesDialog::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (keyEvent
+            && WidgetNavigationFix::fixNavigationForTableWidget(
+                new WidgetNavigationFix::NavigationChain { staves, actualZ, buttonBox },
+                keyEvent->key())) {
+            return true;
+        }
+    }
+
+    return QDialog::eventFilter(obj, event);
+}
+
 //---------------------------------------------------------
 //   setMeasure
 //---------------------------------------------------------
@@ -176,23 +207,37 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
     staves->setRowCount(rows);
     staves->setColumnCount(3);
 
+    auto itemAccessibleText = [](const QTableWidgetItem* item){
+        QString accessibleText = item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
+                                 + (item->checkState() == Qt::Checked ? tr("checked") : tr("unchecked"));
+        return accessibleText;
+    };
+
     for (int staffIdx = 0; staffIdx < rows; ++staffIdx) {
         QTableWidgetItem* item = new QTableWidgetItem(QString("%1").arg(staffIdx + 1));
         staves->setItem(staffIdx, 0, item);
 
-        item = new QTableWidgetItem(tr("visible"));
+        item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->visible(staffIdx) ? Qt::Checked : Qt::Unchecked);
         if (rows == 1) {                  // cannot be invisible if only one row
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Visible"));
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(staffIdx, 1, item);
 
-        item = new QTableWidgetItem(tr("stemless"));
+        item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, qtrc("notation", "Stemless"));
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(staffIdx, 2, item);
     }
+
+    connect(staves, &QTableWidget::itemChanged, this, [&itemAccessibleText](QTableWidgetItem* item){
+        item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
+    });
 }
 
 //---------------------------------------------------------
@@ -201,22 +246,12 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
 
 void MeasurePropertiesDialog::bboxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::ButtonRole br = buttonBox->buttonRole(button);
-    switch (br) {
+    switch (buttonBox->buttonRole(button)) {
     case QDialogButtonBox::ApplyRole:
-        apply();
-        break;
-
     case QDialogButtonBox::AcceptRole:
         apply();
-    // fall through
-
-    case QDialogButtonBox::RejectRole:
-        close();
         break;
-
     default:
-        qDebug("EditStaff: unknown button %d", int(br));
         break;
     }
 }
@@ -274,8 +309,13 @@ int MeasurePropertiesDialog::repeatCount() const
 
 void MeasurePropertiesDialog::apply()
 {
+    if (!m_notation || !m_measure) {
+        return;
+    }
+
     Ms::Score* score = m_measure->score();
 
+    m_notation->undoStack()->prepareChanges();
     bool propertiesChanged = false;
     for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         bool v = visible(staffIdx);
@@ -302,7 +342,14 @@ void MeasurePropertiesDialog::apply()
     if (propertiesChanged) {
         m_measure->triggerLayout();
     }
+    m_notation->undoStack()->commitChanges();
 
     m_notation->interaction()->select({ m_measure }, Ms::SelectType::SINGLE, 0);
     m_notation->notationChanged().notify();
+}
+
+void MeasurePropertiesDialog::hideEvent(QHideEvent* event)
+{
+    WidgetStateStore::saveGeometry(this);
+    QDialog::hideEvent(event);
 }

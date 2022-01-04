@@ -19,24 +19,119 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: timeSignaturePopup.model
+    property QtObject model: null
 
-    icon: IconCode.TIME_SIGNATURE
-    text: qsTrc("inspector", "Time signatures")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "TimeSignatureSettings"
 
-    TimeSignaturePopup {
-        id: timeSignaturePopup
+    spacing: 12
+
+    function focusOnFirst() {
+        horizontalScaleControl.focusOnFirst()
+    }
+
+    InspectorPropertyView {
+        id: scaleSection
+        height: childrenRect.height
+
+        titleText: qsTrc("inspector", "Scale")
+        propertyItem: root.model ? root.model.horizontalScale : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+        navigationRowEnd: verticalScaleControl.navigation.row
+
+        Item {
+            height: childrenRect.height
+            width: parent.width
+
+            IncrementalPropertyControl {
+                id: horizontalScaleControl
+
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
+
+                icon: IconCode.HORIZONTAL
+                isIndeterminate: root.model ? root.model.horizontalScale.isUndefined : false
+                currentValue: root.model ? root.model.horizontalScale.value : 0
+
+                measureUnitsSymbol: "%"
+                step: 1
+                decimals: 0
+                maxValue: 300
+                minValue: 1
+
+                navigation.name: "HorizontalScale"
+                navigation.panel: root.navigationPanel
+                navigation.row: scaleSection.navigationRowStart + 2
+                navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Horizontal") + currentValue
+
+                onValueEdited: { root.model.horizontalScale.value = newValue }
+            }
+
+            IncrementalPropertyControl {
+                id: verticalScaleControl
+
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 2
+                anchors.right: parent.right
+
+                icon: IconCode.VERTICAL
+                isIndeterminate: root.model ? root.model.verticalScale.isUndefined : false
+                currentValue: root.model ? root.model.verticalScale.value : 0
+
+                measureUnitsSymbol: "%"
+                step: 1
+                decimals: 0
+                maxValue: 300
+                minValue: 1
+
+                navigation.name: "VeriticalScale"
+                navigation.panel: root.navigationPanel
+                navigation.row: scaleSection.navigationRowStart + 3
+                navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue
+
+                onValueEdited: { root.model.verticalScale.value = newValue }
+            }
+        }
+    }
+
+    CheckBoxPropertyView {
+        text: qsTrc("inspector", "Show courtesy time signature on previous system")
+        propertyItem: root.model ? root.model.shouldShowCourtesy : null
+
+        navigation.name: "ShowCourtesyCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: scaleSection.navigationRowEnd + 1
+    }
+
+    FlatButton {
+        width: parent.width
+
+        text: qsTrc("inspector", "Change time signature")
+
+        navigation.name: "ChangeButton"
+        navigation.panel: root.navigationPanel
+        navigation.row: scaleSection.navigationRowEnd + 2
+
+        onClicked: {
+            if (root.model) {
+                root.model.showTimeSignatureProperties()
+            }
+        }
     }
 }

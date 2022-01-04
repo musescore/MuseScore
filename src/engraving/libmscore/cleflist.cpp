@@ -21,9 +21,9 @@
  */
 
 #include "cleflist.h"
+#include "rw/xml.h"
 #include "clef.h"
 #include "score.h"
-#include "xml.h"
 
 using namespace mu;
 

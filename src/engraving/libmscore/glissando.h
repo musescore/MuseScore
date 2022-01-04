@@ -23,7 +23,7 @@
 #ifndef __GLISSANDO_H__
 #define __GLISSANDO_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "line.h"
 #include "property.h"
 
@@ -42,16 +42,15 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
 public:
-    GlissandoSegment(Spanner* sp, Score* s)
-        : LineSegment(sp, s) {}
+    GlissandoSegment(Glissando* sp, System* parent);
+
     Glissando* glissando() const { return toGlissando(spanner()); }
 
-    ElementType type() const override { return ElementType::GLISSANDO_SEGMENT; }
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -74,7 +73,7 @@ class Glissando final : public SLine
     static const std::array<const char*, 2> glissandoTypeNames;
 
 public:
-    Glissando(Score* s);
+    Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);
@@ -84,17 +83,17 @@ public:
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
-    ElementType type() const override { return ElementType::GLISSANDO; }
-    LineSegment* createLineSegment() override;
+
+    LineSegment* createLineSegment(System* parent) override;
 
     void layout() override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
     // property/style methods
-    QVariant getProperty(Pid propertyId) const override;
-    bool     setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 };
 }     // namespace Ms

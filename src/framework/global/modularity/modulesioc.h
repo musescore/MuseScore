@@ -78,9 +78,17 @@ public:
     }
 
     template<class I>
-    void unregisterExport()
+    void unregisterExport(const std::string& /*module*/)
     {
         unregisterService(I::interfaceId());
+    }
+
+    template<class I>
+    void unregisterExportIfRegistered(const std::string& module, std::shared_ptr<I> p)
+    {
+        if (resolve<I>(module) == p) {
+            unregisterExport<I>(module);
+        }
     }
 
     template<class I>

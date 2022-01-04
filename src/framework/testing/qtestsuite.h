@@ -66,16 +66,36 @@ public:
         list.append(object);
     }
 
+    inline static bool shouldExecute(QObject* qObj, int argc, char* argv[])
+    {
+        if (argc <= 1 || argv[1][0] == '-') {
+            return true;
+        }
+        const QMetaObject* moTest = qObj->metaObject();
+        for (int methodIdx = moTest->methodOffset(); methodIdx < moTest->methodCount(); ++methodIdx) {
+            QMetaMethod mmTest = moTest->method(methodIdx);
+            if (mmTest.methodType() == QMetaMethod::Slot) {
+                if (QString(mmTest.methodSignature()).contains(argv[1])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     inline static int run(int argc, char* argv[])
     {
-        //! TODO Add filter by the test function
         qDebug() << "========================== argc: " << argc;
         for (int i = 0; i < argc; ++i) {
             qDebug() << "========================== argv " << i << ": " << argv[i];
         }
         int ret = 0;
         for (QObject* test : testList()) {
-            ret += QTest::qExec(test, argc, argv);
+            if (argc > 0 && std::find(argv + 1, argv + argc, test->objectName()) != argv + argc) {
+                ret += QTest::qExec(test, 1, argv);
+            } else if (shouldExecute(test, argc, argv)) {
+                ret += QTest::qExec(test, argc, argv);
+            }
         }
         return ret;
     }
@@ -99,7 +119,7 @@ public:
 #undef QTEST_MAIN
 #endif
 
-#define DECLARE_TEST(className) static mu::testing::QTestHolder<className> _t(#className);
+#define DECLARE_TEST(className) static mu::testing::QTestHolder<className> t_(#className);
 #define QTEST_MAIN(className) DECLARE_TEST(className)
 }
 

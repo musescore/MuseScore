@@ -27,10 +27,19 @@ import MuseScore.Ui 1.0
 Slider {
     id: root
 
-    implicitWidth: vertical ? 4 : 220
-    implicitHeight: vertical ? 220 : 4
+    implicitWidth: vertical ? prv.handleSize : prv.defaultLength
+    implicitHeight: vertical ? prv.defaultLength : prv.handleSize
 
     hoverEnabled: true
+    wheelEnabled: true
+
+    QtObject {
+        id: prv
+
+        readonly property int lineSize: 4
+        readonly property int handleSize: 14
+        readonly property int defaultLength: 220
+    }
 
     background: Item {
         id: mainBackground
@@ -40,19 +49,24 @@ Slider {
         Rectangle {
             id: filledBackground
 
+            anchors.verticalCenter: parent.verticalCenter
+
             width: handleBackground.x + handleBackground.width / 2
-            height: mainBackground.height
+            height: prv.lineSize
 
             opacity: 1
             color: ui.theme.accentColor
-            radius: 4
+            radius: height
         }
 
         Rectangle {
             id: blankBackground
 
-            height: mainBackground.height
+            anchors.verticalCenter: parent.verticalCenter
+
             width: mainBackground.width - filledBackground.width
+            height: prv.lineSize
+
             x: filledBackground.width
 
             opacity: 0.5
@@ -67,7 +81,7 @@ Slider {
         x: root.leftPadding + root.visualPosition * (root.availableWidth - width)
         y: root.topPadding + root.availableHeight / 2 - height / 2
 
-        width: 14
+        width: prv.handleSize
         height: width
         radius: width / 2
 
@@ -114,22 +128,26 @@ Slider {
             when: root.vertical
 
             PropertyChanges {
-                target: filledBackground
+                target: blankBackground
 
-                y: handleBackground.y + handleBackground.height / 2
+                anchors.top: parent.top
+                anchors.verticalCenter: undefined
+                anchors.horizontalCenter: parent.horizontalCenter
 
-                width: mainBackground.width
-                height: root.height - y
+                width: prv.lineSize
+                height: handleBackground.y + handleBackground.height / 2
             }
 
             PropertyChanges {
-                target: blankBackground
+                target: filledBackground
 
-                x: mainBackground.x
-                y: mainBackground.y
+                anchors.verticalCenter: undefined
+                anchors.horizontalCenter: parent.horizontalCenter
 
-                width: mainBackground.width
-                height: root.height - filledBackground.height
+                y: blankBackground.height
+
+                width: prv.lineSize
+                height: root.height - blankBackground.height
             }
 
             PropertyChanges {

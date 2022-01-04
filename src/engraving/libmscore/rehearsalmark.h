@@ -33,13 +33,13 @@ namespace Ms {
 class RehearsalMark final : public TextBase
 {
 public:
-    RehearsalMark(Score* score);
+    RehearsalMark(Segment* parent);
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
-    ElementType type() const override { return ElementType::REHEARSAL_MARK; }
-    Segment* segment() const { return (Segment*)parent(); }
+
+    Segment* segment() const { return (Segment*)explicitParent(); }
     void layout() override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 };
 }     // namespace Ms
 #endif

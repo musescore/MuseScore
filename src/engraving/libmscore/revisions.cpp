@@ -21,7 +21,7 @@
  */
 
 #include "revisions.h"
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -42,11 +42,11 @@ Revision::Revision()
 
 void Revision::write(XmlWriter& xml) const
 {
-    xml.stag("Revision");
+    xml.startObject("Revision");
     xml.tag("id",   _id);
     xml.tag("date", _dateTime.toString());
     xml.tag("diff", _diff);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

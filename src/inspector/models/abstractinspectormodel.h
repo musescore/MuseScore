@@ -24,9 +24,11 @@
 
 #include <QList>
 #include <functional>
-#include "libmscore/element.h"
-#include "libmscore/score.h"
-#include "libmscore/style.h"
+
+#include "engraving/style/style.h"
+
+#include "libmscore/engravingitem.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/property.h"
 
 #include "internal/interfaces/ielementrepositoryservice.h"
@@ -35,6 +37,8 @@
 #include "actions/iactionsdispatcher.h"
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
+#include "ui/view/iconcodes.h"
+#include "types/commontypes.h"
 
 namespace mu::inspector {
 class AbstractInspectorModel : public QObject
@@ -44,7 +48,8 @@ class AbstractInspectorModel : public QObject
     INJECT(inspector, context::IGlobalContext, context)
     INJECT(inspector, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+    Q_PROPERTY(int icon READ icon CONSTANT)
     Q_PROPERTY(InspectorSectionType sectionType READ sectionType CONSTANT)
     Q_PROPERTY(InspectorModelType modelType READ modelType CONSTANT)
     Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged)
@@ -53,8 +58,8 @@ public:
     enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
         SECTION_GENERAL,
-        SECTION_TEXT,
         SECTION_NOTATION,
+        SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
         SECTION_SCORE_APPEARANCE
     };
@@ -71,18 +76,26 @@ public:
         TYPE_TEMPO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
+        TYPE_BREATH,
         TYPE_STAFF,
         TYPE_MARKER,
         TYPE_SECTIONBREAK,
         TYPE_JUMP,
         TYPE_KEYSIGNATURE,
         TYPE_ACCIDENTAL,
+        TYPE_ARPEGGIO,
         TYPE_FRET_DIAGRAM,
         TYPE_PEDAL,
         TYPE_SPACER,
         TYPE_CLEF,
         TYPE_HAIRPIN,
+        TYPE_OTTAVA,
+        TYPE_PALM_MUTE,
+        TYPE_LET_RING,
+        TYPE_VOLTA,
+        TYPE_VIBRATO,
         TYPE_CRESCENDO,
+        TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
@@ -93,59 +106,64 @@ public:
         TYPE_IMAGE,
         TYPE_CHORD_SYMBOL,
         TYPE_BRACKET,
-        TYPE_BRACE,
         TYPE_TIME_SIGNATURE,
         TYPE_MMREST,
         TYPE_BEND,
         TYPE_TREMOLOBAR,
         TYPE_TREMOLO,
-        TYPE_MEASURE_REPEAT
+        TYPE_MEASURE_REPEAT,
+        TYPE_DYNAMIC,
+        TYPE_TUPLET
     };
     Q_ENUM(InspectorModelType)
 
-    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
+    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
+                                    Ms::ElementType elementType = Ms::ElementType::INVALID);
 
     Q_INVOKABLE virtual void requestResetToDefaults();
 
     QString title() const;
+    int icon() const;
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
-    bool isEmpty() const;
+    static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
+    static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet);
 
-    static QList<Ms::ElementType> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
-    static InspectorSectionType sectionTypeFromElementType(const Ms::ElementType elementType);
-
-    virtual bool hasAcceptableElements() const;
+    virtual bool isEmpty() const;
 
     virtual void createProperties() = 0;
-    virtual void requestElements() = 0;
     virtual void loadProperties() = 0;
     virtual void resetProperties() = 0;
 
+    virtual void requestElements();
+
 public slots:
     void setTitle(QString title);
+    void setIcon(ui::IconCode::Code icon);
     void setSectionType(InspectorSectionType sectionType);
     void setModelType(InspectorModelType modelType);
-    void setIsEmpty(bool isEmpty);
 
 signals:
+    void titleChanged();
+
     void elementsModified();
     void modelReseted();
-    void isEmptyChanged(bool isEmpty);
+    void isEmptyChanged();
 
     void requestReloadPropertyItems();
 
 protected:
-    PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const int propertyId,
+    PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const Ms::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
     void loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);
 
     bool isNotationExisting() const;
 
-    QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
-    QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
+    engraving::PropertyValue valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
+    QVariant valueFromElementUnits(const Ms::Pid& pid, const engraving::PropertyValue& value, const Ms::EngravingItem* element) const;
 
     notation::INotationStylePtr style() const;
     void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
@@ -158,12 +176,11 @@ protected:
     void updateNotation();
     async::Notification currentNotationChanged() const;
 
-    IElementRepositoryService* m_repository;
+    IElementRepositoryService* m_repository = nullptr;
 
-    QList<Ms::Element*> m_elementList;
+    QList<Ms::EngravingItem*> m_elementList;
 
 protected slots:
-    void onResetToDefaults(const QList<Ms::Pid>& pidList);
     void onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue);
     void updateProperties();
 
@@ -171,10 +188,26 @@ private:
     Ms::Sid styleIdByPropertyId(const Ms::Pid pid) const;
 
     QString m_title;
+    ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
-    bool m_isEmpty = false;
+    Ms::ElementType m_elementType = Ms::ElementType::INVALID;
 };
+
+using InspectorModelType = AbstractInspectorModel::InspectorModelType;
+using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
+using InspectorModelTypeSet = QSet<InspectorModelType>;
+using InspectorSectionTypeSet = QSet<InspectorSectionType>;
+
+inline uint qHash(InspectorSectionType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+inline uint qHash(InspectorModelType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
 }
 
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H

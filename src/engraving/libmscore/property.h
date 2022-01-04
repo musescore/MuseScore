@@ -26,6 +26,8 @@
 #include <QVariant>
 #include <QString>
 
+#include "property/propertyvalue.h"
+
 namespace Ms {
 class XmlReader;
 
@@ -34,14 +36,14 @@ class XmlReader;
 //       helper macro to define a styled ScoreElement property
 //
 //    usage example:
-//    class Text : public Element {
-//          M_PROPERTY(QColor, color, setColor)
+//    class Text : public EngravingItem {
+//          M_PROPERTY(Color, color, setColor)
 //          ...
 //          };
 //    this defines:
-//          QColor _color;
-//          const QColor& color() const { return _color; }
-//          void setColor(const QColor& val) { _color = val; }
+//          Color _color;
+//          const Color& color() const { return _color; }
+//          void setColor(const Color& val) { _color = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a, b, c)                                      \
@@ -67,7 +69,7 @@ enum class PropertyFlags : char {
 };
 
 //------------------------------------------------------------------------
-//   Element Properties
+//   EngravingItem Properties
 //------------------------------------------------------------------------
 
 enum class Pid {
@@ -210,12 +212,10 @@ enum class Pid {
     GLISS_EASEIN,
     GLISS_EASEOUT,
     DIAGONAL,
-    GROUPS,
+    GROUP_NODES,
     LINE_STYLE,
     LINE_WIDTH,
     LINE_WIDTH_SPATIUM,
-    LASSO_POS,
-    LASSO_SIZE,
     TIME_STRETCH,
     ORNAMENT_STYLE,
 
@@ -251,8 +251,8 @@ enum class Pid {
     MAG,
     USE_DRUMSET,
     DURATION,
-    DURATION_TYPE,
-    ROLE,
+    DURATION_TYPE_WITH_DOTS,
+    ACCIDENTAL_ROLE,
     TRACK,
 
     FRET_STRINGS,
@@ -303,7 +303,7 @@ enum class Pid {
     BRACKET_COLUMN,
     INAME_LAYOUT_POSITION,
 //200
-    SUB_STYLE,
+    TEXT_STYLE,
 
     FONT_FACE,
     FONT_SIZE,
@@ -365,7 +365,7 @@ enum class Pid {
     CLEF_TYPE_CONCERT,
     CLEF_TYPE_TRANSPOSING,
     KEY,
-    ACTION,   // for Icon
+    ACTION,   // for ActionIcon
     MIN_DISTANCE,
 
     ARPEGGIO_TYPE,
@@ -392,59 +392,10 @@ enum class Pid {
     END
 };
 
-enum class P_TYPE : char {
-    BOOL,
-    INT,
-    REAL,
-    SPATIUM,
-    SP_REAL,            // real (point) value saved in (score) spatium units
-    FRACTION,
-    POINT,
-    POINT_SP,           // point units, value saved in (score) spatium units
-    POINT_MM,
-    POINT_SP_MM,        // point units, value saved as mm or spatium depending on Element->sizeIsSpatiumDependent()
-    SIZE,
-    SIZE_MM,
-    STRING,
-    SCALE,
-    COLOR,
-    DIRECTION,        // enum class Direction
-    DIRECTION_H,      // enum class MScore::DirectionH
-    ORNAMENT_STYLE,   // enum class MScore::OrnamentStyle
-    TDURATION,
-    LAYOUT_BREAK,
-    VALUE_TYPE,
-    BEAM_MODE,
-    PLACEMENT,        // ABOVE or BELOW
-    HPLACEMENT,       // LEFT, CENTER or RIGHT
-    TEXT_PLACE,
-    TEMPO,
-    GROUPS,
-    SYMID,
-    INT_LIST,
-    GLISS_STYLE,
-    BARLINE_TYPE,
-    HEAD_TYPE,          // enum class Notehead::Type
-    HEAD_GROUP,         // enum class Notehead::Group
-    ZERO_INT,           // displayed with offset +1
-    FONT,
-    SUB_STYLE,
-    ALIGN,
-    CHANGE_METHOD,      // enum class VeloChangeMethod (for single note dynamics)
-    CHANGE_SPEED,       // enum class Dynamic::Speed
-    CLEF_TYPE,          // enum class ClefType
-    DYNAMIC_TYPE,       // enum class Dynamic::Type
-    KEYMODE,            // enum class KeyMode
-    ORIENTATION,        // enum class Orientation
-
-    PATH,               // mu::PainterPath
-    HEAD_SCHEME,        // enum class NoteHead::Scheme
-};
-
-extern QVariant readProperty(Pid type, XmlReader& e);
-extern QVariant propertyFromString(Pid type, QString value);
-extern QString propertyToString(Pid, QVariant value, bool mscx);
-extern P_TYPE propertyType(Pid);
+extern mu::engraving::PropertyValue readProperty(Pid type, XmlReader& e);
+extern mu::engraving::PropertyValue propertyFromString(mu::engraving::P_TYPE type, QString value);
+extern QString propertyToString(Pid, const mu::engraving::PropertyValue& value, bool mscx);
+extern mu::engraving::P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
 extern Pid propertyId(const QString& name);

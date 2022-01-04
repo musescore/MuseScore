@@ -31,6 +31,7 @@ static const QString TITLE_KEY("title");
 
 static const std::vector<std::pair<ThemeStyleKey, QString > > s_keys = {
     { UNKNOWN, QString() },
+
     { BACKGROUND_PRIMARY_COLOR, "backgroundPrimaryColor" },
     { BACKGROUND_SECONDARY_COLOR, "backgroundSecondaryColor" },
     { POPUP_BACKGROUND_COLOR, "popupBackgroundColor" },
@@ -38,16 +39,22 @@ static const std::vector<std::pair<ThemeStyleKey, QString > > s_keys = {
     { ACCENT_COLOR, "accentColor" },
     { STROKE_COLOR, "strokeColor" },
     { BUTTON_COLOR, "buttonColor" },
+    { BORDER_WIDTH, "borderWidth" },
     { FONT_PRIMARY_COLOR, "fontPrimaryColor" },
     { FONT_SECONDARY_COLOR, "fontSecondaryColor" },
     { LINK_COLOR, "linkColor" },
     { FOCUS_COLOR, "focusColor" },
+
+    { BORDER_WIDTH, "borderWidth" },
+    { NAVIGATION_CONTROL_BORDER_WIDTH, "navigationControlBorderWidth" },
+
     { ACCENT_OPACITY_NORMAL, "accentOpacityNormal" },
     { ACCENT_OPACITY_HOVER, "accentOpacityHover" },
     { ACCENT_OPACITY_HIT, "accentOpacityHit" },
     { BUTTON_OPACITY_NORMAL, "buttonOpacityNormal" },
     { BUTTON_OPACITY_HOVER, "buttonOpacityHover" },
     { BUTTON_OPACITY_HIT, "buttonOpacityHit" },
+
     { ITEM_OPACITY_DISABLED, "itemOpacityDisabled" },
 };
 

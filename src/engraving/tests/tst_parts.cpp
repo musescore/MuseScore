@@ -23,7 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
@@ -35,7 +35,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/fingering.h"
 #include "libmscore/image.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/sym.h"
@@ -645,8 +645,8 @@ MasterScore* TestParts::doRemoveFingering()
     Segment* s   = m->first()->next(SegmentType::ChordRest);
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
-    Element* fingering = 0;
-    for (Element* e : note->el()) {
+    EngravingItem* fingering = 0;
+    for (EngravingItem* e : note->el()) {
         if (e->type() == ElementType::FINGERING) {
             fingering = e;
             break;
@@ -768,8 +768,8 @@ MasterScore* TestParts::doRemoveSymbol()
     Segment* s   = m->first()->next(SegmentType::ChordRest);
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
-    Element* se = 0;
-    for (Element* e : note->el()) {
+    EngravingItem* se = 0;
+    for (EngravingItem* e : note->el()) {
         if (e->type() == ElementType::SYMBOL) {
             se = e;
             break;
@@ -891,8 +891,8 @@ MasterScore* TestParts::doRemoveChordline()
     Segment* s   = m->first()->next(SegmentType::ChordRest);
     Ms::Chord* chord = toChord(s->element(0));
 
-    Element* se = 0;
-    for (Element* e : chord->el()) {
+    EngravingItem* se = 0;
+    for (EngravingItem* e : chord->el()) {
         if (e->type() == ElementType::CHORDLINE) {
             se = e;
             break;
@@ -1128,8 +1128,8 @@ MasterScore* TestParts::doRemoveImage()
     Segment* s   = m->first()->next(SegChordRest);
     Ms::Chord* chord = toChord(s->element(0));
     Note* note   = chord->upNote();
-    Element* fingering = 0;
-    for (Element* e : note->el()) {
+    EngravingItem* fingering = 0;
+    for (EngravingItem* e : note->el()) {
         if (e->type() == IMAGE) {
             fingering = e;
             break;

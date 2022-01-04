@@ -23,9 +23,11 @@
 #ifndef __SHADOWNOTE_H__
 #define __SHADOWNOTE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 #include "staff.h"
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -37,8 +39,10 @@ namespace Ms {
  which shows the note insert position in note entry mode.
 */
 
-class ShadowNote final : public Element
+class ShadowNote final : public EngravingItem
 {
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     Fraction m_tick;
     int m_lineIndex;
     SymId m_noteheadSymbol;
@@ -52,7 +56,6 @@ public:
     ShadowNote(Score*);
 
     ShadowNote* clone() const override { return new ShadowNote(*this); }
-    ElementType type() const override { return ElementType::SHADOW_NOTE; }
 
     bool isValid() const;
 
@@ -73,7 +76,9 @@ public:
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }
-    SymId getNoteFlag() const;
+    bool hasStem() const;
+    bool hasFlag() const;
+    SymId flagSym() const;
 };
 } // namespace Ms
 #endif

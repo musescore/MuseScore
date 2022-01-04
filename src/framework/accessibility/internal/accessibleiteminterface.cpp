@@ -60,7 +60,7 @@ QWindow* AccessibleItemInterface::window() const
 //    if (w) {
 //        return w;
 //    }
-    return mainWindow()->qWindow();
+    return interactiveProvider()->topWindow();
 }
 
 QRect AccessibleItemInterface::rect() const
@@ -104,8 +104,9 @@ QAccessibleInterface* AccessibleItemInterface::childAt(int, int) const
 
 QAccessibleInterface* AccessibleItemInterface::focusChild() const
 {
-    NOT_IMPLEMENTED;
-    return nullptr;
+    QAccessibleInterface* child = m_object->controller()->focusedChild(m_object->item());
+    MYLOG() << "item: " << m_object->item()->accessibleName() << ", focused child: " << (child ? child->text(QAccessible::Name) : "null");
+    return child;
 }
 
 QAccessible::State AccessibleItemInterface::state() const
@@ -141,7 +142,7 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focused = item->accessibleState(IAccessible::State::Focused);
 
         state.checkable = true;
-        state.checked = item->accessibleState(IAccessible::State::Selected);
+        state.checked = item->accessibleState(IAccessible::State::Checked);
     } break;
     case IAccessible::Role::EditableText: {
         state.focusable = true;
@@ -166,6 +167,25 @@ QAccessible::State AccessibleItemInterface::state() const
 //        state.checkable = true;
 //        state.checked = item->accessibleState(IAccessible::State::Selected);
     } break;
+    case IAccessible::Role::CheckBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+
+        state.checkable = true;
+        state.checked = item->accessibleState(IAccessible::State::Checked);
+    } break;
+    case IAccessible::Role::ComboBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::MenuItem: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
+    case IAccessible::Role::Range: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
@@ -189,6 +209,8 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
     case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
+    case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
+    case IAccessible::Role::Range: return QAccessible::Slider;
     case IAccessible::Role::Information: {
 #ifdef Q_OS_WIN
         return QAccessible::StaticText;
@@ -213,6 +235,7 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
     switch (textType) {
     case QAccessible::Name: return m_object->item()->accessibleName();
+    case QAccessible::Description: return m_object->item()->accessibleDescription();
     default: break;
     }
 
@@ -224,8 +247,38 @@ void AccessibleItemInterface::setText(QAccessible::Text, const QString&)
     NOT_IMPLEMENTED;
 }
 
-void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType)
+QVariant AccessibleItemInterface::currentValue() const
 {
+    return m_object->item()->accesibleValue();
+}
+
+void AccessibleItemInterface::setCurrentValue(const QVariant&)
+{
+    NOT_IMPLEMENTED;
+}
+
+QVariant AccessibleItemInterface::maximumValue() const
+{
+    return m_object->item()->accesibleMaximumValue();
+}
+
+QVariant AccessibleItemInterface::minimumValue() const
+{
+    return m_object->item()->accesibleMinimumValue();
+}
+
+QVariant AccessibleItemInterface::minimumStepSize() const
+{
+    return m_object->item()->accesibleValueStepSize();
+}
+
+void* AccessibleItemInterface::interface_cast(QAccessible::InterfaceType type)
+{
+    QAccessible::Role itemRole = role();
+    if (type == QAccessible::InterfaceType::ValueInterface && itemRole == QAccessible::Slider) {
+        return static_cast<QAccessibleValueInterface*>(this);
+    }
+
     //! NOTE Not implemented
     return nullptr;
 }

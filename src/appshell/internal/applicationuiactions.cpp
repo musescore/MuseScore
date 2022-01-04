@@ -24,10 +24,16 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 
+#include "view/dockwindow/idockwindow.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::ui;
+using namespace mu::actions;
+using namespace mu::dock;
+
+const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -36,33 +42,33 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Full Screen"),
+             QT_TRANSLATE_NOOP("action", "Full screen"),
              QT_TRANSLATE_NOOP("action", "Full screen"),
              Checkable::Yes
              ),
     UiAction("about",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About...")
+             QT_TRANSLATE_NOOP("action", "About…")
              ),
     UiAction("about-qt",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About Qt...")
+             QT_TRANSLATE_NOOP("action", "About Qt…")
              ),
     UiAction("about-musicxml",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "About MusicXML...")
+             QT_TRANSLATE_NOOP("action", "About MusicXML…")
              ),
     UiAction("online-handbook",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Online Handbook")
+             QT_TRANSLATE_NOOP("action", "Online handbook")
              ),
     UiAction("ask-help",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Ask for Help")
+             QT_TRANSLATE_NOOP("action", "Ask for help")
              ),
     UiAction("report-bug",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Report a Bug"),
+             QT_TRANSLATE_NOOP("action", "Report a bug"),
              QT_TRANSLATE_NOOP("action", "Report a bug")
              ),
     UiAction("leave-feedback",
@@ -72,8 +78,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("revert-factory",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Revert to Factory Settings"),
+             QT_TRANSLATE_NOOP("action", "Revert to factory settings"),
              QT_TRANSLATE_NOOP("action", "Revert to factory settings")
+             ),
+    UiAction("dock-restore-default-layout",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Restore the default layout"),
+             QT_TRANSLATE_NOOP("action", "Restore the default layout")
              ),
     UiAction("toggle-mixer",
              mu::context::UiCtxNotationOpened,
@@ -88,7 +99,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
              Checkable::Yes
              ),
-    UiAction("toggle-palette",
+    UiAction("toggle-palettes",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Palettes"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'"),
@@ -102,14 +113,20 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("inspector",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Inspector"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Inspector'"),
+             QT_TRANSLATE_NOOP("action", "Properties"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Properties'"),
+             Checkable::Yes
+             ),
+    UiAction("toggle-selection-filter",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Selection filter"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Selection filter'"),
              Checkable::Yes
              ),
     UiAction("toggle-statusbar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Status Bar"),
-             QT_TRANSLATE_NOOP("action", "Toggle 'Status Bar'"),
+             QT_TRANSLATE_NOOP("action", "Status bar"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Status bar'"),
              Checkable::Yes
              ),
     UiAction("toggle-noteinput",
@@ -120,13 +137,13 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-notationtoolbar",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Notation Toolbar"),
+             QT_TRANSLATE_NOOP("action", "Notation toolbar"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Notation' toolbar"),
              Checkable::Yes
              ),
     UiAction("toggle-undoredo",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Undo/Redo Toolbar"),
+             QT_TRANSLATE_NOOP("action", "Undo/redo toolbar"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Undo/Redo' toolbar"),
              Checkable::Yes
              ),
@@ -156,7 +173,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("toggle-scorecmp-tool",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Score Comparison Tool"),
+             QT_TRANSLATE_NOOP("action", "Score comparison tool"),
              QT_TRANSLATE_NOOP("action", "Toggle score comparison tool"),
              Checkable::Yes
              ),
@@ -167,26 +184,9 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("check-update",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Check for Updates"),
+             QT_TRANSLATE_NOOP("action", "Check for updates"),
              QT_TRANSLATE_NOOP("action", "Check for updates")
              )
-};
-
-const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiActions::m_panels = {
-    { "toggle-palette", PanelType::Palette },
-    { "toggle-instruments", PanelType::Instruments },
-    { "inspector", PanelType::Inspector },
-    { "toggle-notationtoolbar", PanelType::NotationToolBar },
-    { "toggle-noteinput", PanelType::NoteInputBar },
-    { "toggle-undoredo", PanelType::UndoRedoToolBar },
-    { "toggle-navigator", PanelType::NotationNavigator },
-    { "toggle-statusbar", PanelType::NotationStatusBar },
-    { "toggle-transport", PanelType::PlaybackToolBar },
-    { "toggle-mixer", PanelType::Mixer },
-    { "toggle-timeline", PanelType::TimeLine },
-    { "synth-control", PanelType::Synthesizer },
-    { "toggle-piano", PanelType::Piano },
-    { "toggle-scorecmp-tool", PanelType::ComparisonTool }
 };
 
 ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller)
@@ -196,16 +196,34 @@ ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionCont
 
 void ApplicationUiActions::init()
 {
-    notationPageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& types) {
-        actions::ActionCodeList alist;
-        for (PanelType t : types) {
-            actions::ActionCode code = panelTypeToAction(t);
-            if (!code.empty()) {
-                alist.push_back(std::move(code));
+    configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
+    });
+
+    dockWindowProvider()->windowChanged().onNotify(this, [this]() {
+        listenOpenedDocksChanged(dockWindowProvider()->window());
+    });
+}
+
+void ApplicationUiActions::listenOpenedDocksChanged(IDockWindow* window)
+{
+    if (!window) {
+        return;
+    }
+
+    window->docksOpenStatusChanged().onReceive(this, [this](const QStringList& dockNames) {
+        ActionCodeList actions;
+
+        for (const ActionCode& toggleDockAction : toggleDockActions().keys()) {
+            const DockName& dockName = toggleDockActions()[toggleDockAction];
+
+            if (dockNames.contains(dockName)) {
+                actions.push_back(toggleDockAction);
             }
         }
-        if (!alist.empty()) {
-            m_actionCheckedChanged.send(alist);
+
+        if (!actions.empty()) {
+            m_actionCheckedChanged.send(actions);
         }
     });
 }
@@ -224,34 +242,21 @@ bool ApplicationUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-PanelType ApplicationUiActions::panelType(const actions::ActionCode& code) const
-{
-    for (const auto& p : m_panels) {
-        if (p.first == code) {
-            return p.second;
-        }
-    }
-    return PanelType::Undefined;
-}
-
-mu::actions::ActionCode ApplicationUiActions::panelTypeToAction(const PanelType& type) const
-{
-    for (const auto& p : m_panels) {
-        if (p.second == type) {
-            return p.first;
-        }
-    }
-    return actions::ActionCode();
-}
-
 bool ApplicationUiActions::actionChecked(const UiAction& act) const
 {
-    PanelType panel = panelType(act.code);
-    if (panel != PanelType::Undefined) {
-        return notationPageState()->isPanelVisible(panel);
+    QMap<ActionCode, DockName> toggleDockActions = ApplicationUiActions::toggleDockActions();
+    DockName dockName = toggleDockActions.value(act.code, DockName());
+
+    if (dockName.isEmpty()) {
+        return false;
     }
 
-    return false;
+    if (dockName == NOTATION_NAVIGATOR_PANEL_NAME) {
+        return configuration()->isNotationNavigatorVisible();
+    }
+
+    const IDockWindow* window = dockWindowProvider()->window();
+    return window ? window->isDockOpen(dockName) : false;
 }
 
 mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
@@ -262,4 +267,24 @@ mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionEnab
 mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
+}
+
+const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
+{
+    static const QMap<mu::actions::ActionCode, DockName> actionsMap {
+        { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
+        { "toggle-mixer", MIXER_PANEL_NAME },
+        { "toggle-timeline", TIMELINE_PANEL_NAME },
+        { "toggle-palettes", PALETTES_PANEL_NAME },
+        { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
+        { "inspector", INSPECTOR_PANEL_NAME },
+        { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+        { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
+        { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
+        { "toggle-notationtoolbar", NOTATION_TOOLBAR_NAME },
+        { "toggle-undoredo", UNDO_REDO_TOOLBAR_NAME },
+        { "toggle-transport", PLAYBACK_TOOLBAR_NAME }
+    };
+
+    return actionsMap;
 }

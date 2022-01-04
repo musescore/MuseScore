@@ -34,22 +34,26 @@ namespace Ms {
 
 class MeasureNumberBase : public TextBase
 {
-    M_PROPERTY(HPlacement, hPlacement, setHPlacement)    // Horizontal Placement
-
 public:
-    MeasureNumberBase(Score* = nullptr, Tid = Tid::DEFAULT);
+    MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
-    virtual QVariant getProperty(Pid id) const override;
-    virtual bool setProperty(Pid id, const QVariant& val) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const mu::engraving::PropertyValue& val) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
-    virtual bool readProperties(XmlReader&) override;
+    bool readProperties(XmlReader&) override;
 
-    virtual void layout() override;
-    Measure* measure() const { return toMeasure(parent()); }
+    void layout() override;
+    Measure* measure() const { return toMeasure(explicitParent()); }
 
-    virtual bool isEditable() const override { return false; }   // The measure numbers' text should not be editable
+    bool isEditable() const override { return false; }    // The measure numbers' text should not be editable
+
+    PlacementH hPlacement() const { return m_placementH; }
+    void setHPlacement(PlacementH p) { m_placementH = p; }
+
+private:
+    PlacementH m_placementH = PlacementH::LEFT;
 };
 }     // namespace Ms
 

@@ -24,14 +24,14 @@
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacesdataprovider.h"
-#include "../ipaletteadapter.h"
+#include "ipaletteprovider.h"
 #include "async/asyncable.h"
 
 namespace mu::palette {
 class PaletteWorkspaceSetup : public async::Asyncable
 {
     INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
-    INJECT(palette, IPaletteAdapter, adapter)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
 public:
     void setup();

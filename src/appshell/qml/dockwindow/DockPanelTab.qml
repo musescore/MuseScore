@@ -29,22 +29,24 @@ import MuseScore.UiComponents 1.0
 StyledTabButton {
     id: root
 
-    //! TODO: only for testing
-    // We should get data for this model from c++
-    property var menuModel: [
-        { "code": "close", "title": "Close tab" },
-        { "code": "undock", "title": "Undock" },
-        { "code": "move", "title": "Move panel to right side" },
-    ]
+    property alias contextMenuModel: contextMenuButton.menuModel
 
-    height: 36
+    signal handleContextMenuItemRequested(string itemId)
+
+    readonly property real actualHeight: 34
+    height: actualHeight + 1 // For separator
     width: implicitWidth
 
-    leftPadding: 10
-    rightPadding: 10
+    readonly property real textPadding: 10
+    readonly property real buttonPadding: 6
+
+    leftPadding: textPadding
+    rightPadding: (contextMenuButton.visible ? buttonPadding : textPadding) + 1 // For separator
+    topPadding: 0
+    bottomPadding: 1 // For separator
 
     contentItem: Row {
-        spacing: 4
+        spacing: root.buttonPadding
 
         StyledTextLabel {
             anchors.verticalCenter: parent.verticalCenter
@@ -56,59 +58,93 @@ StyledTabButton {
         }
 
         MenuButton {
-            anchors.verticalCenter: parent.verticalCenter
+            id: contextMenuButton
 
+            height: 20
+            width: height
+
+            anchors.verticalCenter: parent.verticalCenter
             visible: root.isCurrent
 
-            menuModel: root.menuModel
+            Connections {
+                target: root
+
+                function onIsCurrentChanged() {
+                    timer.running = true
+                }
+            }
+
+            Timer {
+                id: timer
+
+                interval: 150
+                repeat: false
+
+                onTriggered: {
+                    contextMenuButton.enabled = root.isCurrent
+                }
+            }
+
+            navigation.panel: root.navigation.panel
+            navigation.order: root.navigation.order + 1
+
+            onHandleMenuItem: function(itemId) {
+                root.handleContextMenuItemRequested(itemId)
+            }
         }
     }
 
-    background: Rectangle {
-        id: backgroundRect
+    background: Item {
+        Rectangle {
+            id: backgroundRect
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.right: rightSeparator.left
+            anchors.bottom: root.isCurrent ? parent.bottom : bottomSeparator.top
 
-        border.width: root.navigation.active ? 2 : 0
-        border.color: ui.theme.focusColor
+            NavigationFocusBorder{
+                navigationCtrl: root.navigation
+                drawOutsideParent: false
+            }
 
-        color: ui.theme.backgroundSecondaryColor
-        opacity: 1
+            color: ui.theme.backgroundSecondaryColor
+            opacity: 1
+
+            states: [
+                State {
+                    name: "HOVERED"
+                    when: root.hovered && !root.isCurrent
+
+                    PropertyChanges {
+                        target: backgroundRect
+                        color: ui.theme.backgroundPrimaryColor
+                        opacity: ui.theme.buttonOpacityHover
+                    }
+                },
+
+                State {
+                    name: "SELECTED"
+                    when: root.isCurrent
+
+                    PropertyChanges {
+                        target: backgroundRect
+                        color: ui.theme.backgroundPrimaryColor
+                    }
+                }
+            ]
+        }
 
         SeparatorLine {
+            id: rightSeparator
             anchors.right: parent.right
-
             orientation: Qt.Vertical
         }
 
         SeparatorLine {
+            id: bottomSeparator
             anchors.bottom: parent.bottom
-
             visible: !root.isCurrent
         }
-
-        states: [
-            State {
-                name: "HOVERED"
-                when: root.hovered && !root.isCurrent
-
-                PropertyChanges {
-                    target: backgroundRect
-
-                    opacity: ui.theme.buttonOpacityHover
-                    color: ui.theme.backgroundPrimaryColor
-                }
-            },
-
-            State {
-                name: "SELECTED"
-                when: root.isCurrent
-
-                PropertyChanges {
-                    target: backgroundRect
-
-                    color: ui.theme.backgroundPrimaryColor
-                }
-            }
-        ]
     }
 
     states: []

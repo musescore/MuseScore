@@ -12,10 +12,19 @@
         <file>qml/HomePage/AddonsContent.qml</file>
         <file>qml/DevTools/VST/VSTTests.qml</file>
         <file>qml/DevTools/Gallery/GeneralComponentsGallery.qml</file>
-        <file>qml/DevTools/Telemetry/TelemetryInfo.qml</file>
+        <file>qml/DevTools/CrashHandler/CrashHandlerDevTools.qml</file>
         <file>qml/AboutDialog.qml</file>
         <file>qml/AboutMusicXMLDialog.qml</file>
         <file>qml/resources/mu_logo.svg</file>
+        <file>qml/shared/AccentColorsList.qml</file>
+        <file>qml/shared/ThemeSamplesList.qml</file>
+        <file>qml/shared/internal/ThemeSample.qml</file>
+        <file>qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml</file>
+        <file>qml/FirstLaunchSetup/Page.qml</file>
+        <file>qml/FirstLaunchSetup/ThemesPage.qml</file>
+        <file>qml/FirstLaunchSetup/PlaybackPage.qml</file>
+        <file>qml/FirstLaunchSetup/TutorialsPage.qml</file>
+        <file>qml/FirstLaunchSetup/resources/tutorials_placeholder.png</file>
         <file>qml/Preferences/PreferencesPage.qml</file>
         <file>qml/Preferences/GeneralPreferencesPage.qml</file>
         <file>qml/Preferences/UpdatePreferencesPage.qml</file>
@@ -34,10 +43,10 @@
         <file>qml/Preferences/PreferencesDialog.qml</file>
         <file>qml/Preferences/internal/PreferencesButtonsPanel.qml</file>
         <file>qml/Preferences/internal/PreferencesMenu.qml</file>
-        <file>qml/Preferences/internal/ThemeSample.qml</file>
         <file>qml/Preferences/internal/ThemesSection.qml</file>
         <file>qml/Preferences/internal/AccentColorsSection.qml</file>
         <file>qml/Preferences/internal/UiFontSection.qml</file>
+        <file>qml/Preferences/internal/UiColorsSection.qml</file>
         <file>qml/Preferences/internal/ColorAndWallpaperSection.qml</file>
         <file>qml/Preferences/internal/ImportStyleSection.qml</file>
         <file>qml/Preferences/internal/CharsetsSection.qml</file>
@@ -49,6 +58,7 @@
         <file>qml/Preferences/internal/CommonAudioApiConfiguration.qml</file>
         <file>qml/Preferences/internal/ComboBoxWithTitle.qml</file>
         <file>qml/Preferences/internal/IncrementalPropertyControlWithTitle.qml</file>
+        <file>qml/Preferences/internal/KeyboardLayoutsSection.qml</file>
         <file>qml/DevTools/Autobot/AutobotControl.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavExample.qml</file>
         <file>qml/DevTools/KeyNav/KeyNavSection.qml</file>
@@ -58,6 +68,7 @@
         <file>qml/PublishPage/PublishPage.qml</file>
         <file>qml/PublishPage/PublishToolBar.qml</file>
         <file>qml/DevTools/DevToolsPage.qml</file>
+        <file>qml/dockwindow/DockWidget.qml</file>
         <file>qml/dockwindow/DockTitleBar.qml</file>
         <file>qml/dockwindow/DockToolBar.qml</file>
         <file>qml/dockwindow/DockFrame.qml</file>
@@ -65,15 +76,34 @@
         <file>qml/dockwindow/DockSeparator.qml</file>
         <file>qml/dockwindow/DockFloatingWindow.qml</file>
         <file>qml/dockwindow/DockPage.qml</file>
-        <file>qml/dockwindow/DropIndicators.qml</file>
-        <file>qml/dockwindow/DropIndicator.qml</file>
-        <file>qml/AppTitleBar.qml</file>
+        <file>qml/dockwindow/DockPanel.qml</file>
+        <file>qml/dockwindow/DockingHolder.qml</file>
         <file>qml/AppWindow.qml</file>
         <file>qml/WindowContent.qml</file>
-        <file>qml/AppMenuBar.qml</file>
-        <file>qml/platform/linux/AppTitleBarLinux.qml</file>
         <file>qml/platform/linux/Main.qml</file>
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
+        <file>resources/win_opengl_buglist.json</file>
+        <file>qml/Preferences/internal/BaseSection.qml</file>
+        <file>qml/Preferences/internal/LanguagesSection.qml</file>
+        <file>qml/Preferences/internal/AutoSaveSection.qml</file>
+        <file>qml/Preferences/internal/RemoteControlSection.qml</file>
+        <file>qml/Preferences/internal/ProgrammeStartSection.qml</file>
+        <file>qml/Preferences/internal/FoldersSection.qml</file>
+        <file>qml/Preferences/internal/ThemeAdditionalOptionsSection.qml</file>
+        <file>qml/Preferences/internal/AdvancedTopSection.qml</file>
+        <file>qml/Preferences/internal/ZoomSection.qml</file>
+        <file>qml/Preferences/internal/ScrollPagesSection.qml</file>
+        <file>qml/Preferences/internal/NoteInputSection.qml</file>
+        <file>qml/Preferences/internal/NoteInputPlaySection.qml</file>
+        <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
+        <file>qml/Preferences/internal/ScoreViewSection.qml</file>
+        <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
+        <file>qml/platform/win/AppTitleBar.qml</file>
+        <file>qml/DevTools/MPE/ArticulationsProfileEditorView.qml</file>
+        <file>qml/Preferences/internal/MiscellaneousSection.qml</file>
+        <file>qml/platform/win/AppSystemButtons.qml</file>
+        <file>qml/platform/AppMenuBar.qml</file>
+        <file>qml/platform/AppButtonBackground.qml</file>
     </qresource>
 </RCC>

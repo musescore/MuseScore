@@ -30,7 +30,7 @@ namespace mu::appshell {
 class FramelessWindowController : public QAbstractNativeEventFilter
 {
 public:
-    virtual void init(QWindow* window);
+    virtual void init();
 
     virtual bool nativeEventFilter(const QByteArray& eventType, void* message, long* result) override;
 

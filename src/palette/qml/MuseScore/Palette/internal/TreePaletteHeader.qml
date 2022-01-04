@@ -37,7 +37,9 @@ Item {
     property bool custom: false
     property bool unresolved: false
 
-    property PaletteWorkspace paletteWorkspace
+    property bool isInVisibleArea: true
+
+    property PaletteProvider paletteProvider
     property var modelIndex: null
 
     property NavigationPanel navigationPanel: null
@@ -60,12 +62,13 @@ Item {
         visible: !root.unresolved // TODO: make a separate palette placeholder component
         activeFocusOnTab: false // same focus object as parent palette
         icon: root.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
-        normalStateColor: "transparent"
+        transparent: true
 
         enabled: paletteExpandArrow.visible
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
         navigation.column: 1
+        accessible.name: qsTrc("palette", "Expand")
 
         onClicked: root.toggleExpandRequested()
     }
@@ -98,7 +101,7 @@ Item {
         toolTipTitle: deleteButton.text
         visible: root.hidePaletteElementVisible && root.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
-        normalStateColor: "transparent"
+        transparent: true
 
         enabled: deleteButton.visible
         navigation.panel: root.navigationPanel
@@ -128,33 +131,38 @@ Item {
 
         z: 1000
 
-        visible: root.expanded || root.hovered || isMenuOpened || navigation.active
+        height: 20
+        width: height
+
+        anchors.verticalCenter: parent.verticalCenter
+
+        visible: (root.expanded || root.hovered || isMenuOpened || navigation.active) && root.isInVisibleArea
 
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow
         navigation.column: 3
 
         menuModel: [
-            {code: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
-            {code: "new", title: qsTrc("palette", "Insert New Palette") },
-            {code: "", title: "" }, // separator
-            {code: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
-            {code: "", title: "" }, // separator
-            {code: "reset", title: qsTrc("palette", "Reset Palette") },
-            {code: "save", title: qsTrc("palette", "Save Palette…") },
-            {code: "load", title: qsTrc("palette", "Load Palette…") },
-            {code: "", title: "" }, // separator
-            {code: "properties", title: qsTrc("palette", "Palette Properties…") },
+            {id: "hide", title: root.custom ? qsTrc("palette", "Hide/delete palette") : qsTrc("palette", "Hide palette") },
+            {id: "new", title: qsTrc("palette", "Insert new palette") },
+            {id: "", title: "" }, // separator
+            {id: "edit", title: qsTrc("palette", "Enable editing"), checkable: true, checked: root.editingEnabled },
+            {id: "", title: "" }, // separator
+            {id: "reset", title: qsTrc("palette", "Reset palette") },
+            {id: "save", title: qsTrc("palette", "Save palette…") },
+            {id: "load", title: qsTrc("palette", "Load palette…") },
+            {id: "", title: "" }, // separator
+            {id: "properties", title: qsTrc("palette", "Palette properties…") },
         ]
 
-        onHandleAction: {
-            switch(actionCode) {
+        onHandleMenuItem: {
+            switch(itemId) {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break
             case "edit": root.enableEditingToggled(!root.editingEnabled); break
-            case "reset": root.paletteWorkspace.resetPalette(root.modelIndex); break
-            case "save": root.paletteWorkspace.savePalette(root.modelIndex); break
-            case "load": root.paletteWorkspace.loadPalette(root.modelIndex); break
+            case "reset": root.paletteProvider.resetPalette(root.modelIndex); break
+            case "save": root.paletteProvider.savePalette(root.modelIndex); break
+            case "load": root.paletteProvider.loadPalette(root.modelIndex); break
             case "properties": Qt.callLater(root.editPalettePropertiesRequested); break
             }
         }

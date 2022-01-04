@@ -20,10 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <set>
 #include <QDebug>
 
 #include "importmidi_clef.h"
-#include "libmscore/score.h"
+#include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -32,7 +34,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/slur.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/sig.h"
 #include "importmidi_tie.h"
 #include "importmidi_meter.h"
@@ -40,7 +42,7 @@
 #include "importmidi_operations.h"
 #include "libmscore/instrtemplate.h"
 
-#include <set>
+using namespace mu::engraving;
 
 namespace Ms {
 namespace MidiClef {
@@ -117,15 +119,15 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
     if (tick == 0) {
         staff->setDefaultClefType(ClefTypeList(clefType, clefType));
     } else {
-        Clef* clef = new Clef(staff->score());
+        Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
+        Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
+        Clef* clef = Factory::createClef(seg);
         clef->setClefType(clefType);
         const int track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
         clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
-        Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
-        Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
         seg->add(clef);
     }
 }
@@ -434,7 +436,7 @@ bool hasGFclefs(const InstrumentTemplate* templ)
     if (!templ) {
         return false;
     }
-    const int staveCount = templ->nstaves();
+    const int staveCount = templ->staffCount;
     bool hasG = false;
     bool hasF = false;
     for (int i = 0; i != staveCount; ++i) {

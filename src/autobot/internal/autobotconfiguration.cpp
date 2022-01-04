@@ -22,17 +22,54 @@
 #include "autobotconfiguration.h"
 
 #include <cstdlib>
+#include <QDir>
 
 using namespace mu::autobot;
 
-mu::io::path AutobotConfiguration::dataPath() const
+mu::io::paths AutobotConfiguration::scriptsDirPaths() const
 {
-    return io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    io::path p = io::path(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    if (!p.empty()) {
+        return { p };
+    }
+
+    io::paths paths;
+    paths.push_back(globalConfiguration()->appDataPath() + "/autobotscripts");
+    paths.push_back(globalConfiguration()->userDataPath() + "/AutobotScripts");
+
+    return paths;
 }
 
-mu::io::path AutobotConfiguration::filesPath() const
+mu::io::path AutobotConfiguration::testingFilesDirPath() const
 {
-    return io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    io::path p = io::path(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    if (!p.empty()) {
+        return p;
+    }
+
+    p = globalConfiguration()->userDataPath() + "/AutobotTestingFiles";
+    return p;
+}
+
+mu::io::path AutobotConfiguration::dataPath() const
+{
+    io::path p = io::path(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    if (!p.empty()) {
+        return p;
+    }
+
+    p = globalConfiguration()->userDataPath() + "/AutobotData";
+    return p;
+}
+
+mu::io::path AutobotConfiguration::savingFilesPath() const
+{
+    return dataPath() + "/saving_files";
+}
+
+mu::io::path AutobotConfiguration::reportsPath() const
+{
+    return dataPath() + "/reports";
 }
 
 mu::io::path AutobotConfiguration::drawDataPath() const
@@ -43,9 +80,4 @@ mu::io::path AutobotConfiguration::drawDataPath() const
 mu::io::path AutobotConfiguration::fileDrawDataPath(const io::path& filePath) const
 {
     return drawDataPath() + "/" + io::basename(filePath) + ".json";
-}
-
-mu::io::path AutobotConfiguration::reportsPath() const
-{
-    return dataPath() + "/reports";
 }

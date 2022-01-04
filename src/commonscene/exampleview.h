@@ -36,11 +36,11 @@
 #include "notation/inotationconfiguration.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Score;
 class Note;
 class Chord;
-class Icon;
+class ActionIcon;
 enum class Grip : int;
 
 //---------------------------------------------------------
@@ -57,8 +57,8 @@ class ExampleView : public QFrame, public MuseScoreView
     QTransform _matrix, imatrix;
     QColor _fgColor;
     QPixmap* _fgPixmap;
-    Element* dragElement = 0;
-    const Element* dropTarget = 0;        ///< current drop target during dragMove
+    EngravingItem* dragElement = 0;
+    const EngravingItem* dropTarget = 0;        ///< current drop target during dragMove
     QRectF dropRectangle;                 ///< current drop rectangle during dragMove
     QLineF dropAnchor;                    ///< line to current anchor point during dragMove
 
@@ -67,8 +67,8 @@ class ExampleView : public QFrame, public MuseScoreView
 
     double m_defaultScaling = 0;
 
-    void drawElements(mu::draw::Painter& painter, const QList<Element*>& el);
-    void setDropTarget(const Element* el) override;
+    void drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el);
+    void setDropTarget(const EngravingItem* el) override;
 
     virtual void paintEvent(QPaintEvent*) override;
     virtual void dragEnterEvent(QDragEnterEvent*) override;
@@ -82,7 +82,7 @@ class ExampleView : public QFrame, public MuseScoreView
 
 signals:
     void noteClicked(Note*);
-    void beamPropertyDropped(Chord*, Icon*);
+    void beamPropertyDropped(Chord*, ActionIcon*);
 
 public:
     ExampleView(QWidget* parent = 0);
@@ -91,16 +91,13 @@ public:
     virtual void layoutChanged() override;
     virtual void dataChanged(const mu::RectF&) override;
     virtual void updateAll() override;
-    virtual void adjustCanvasPosition(const Element* el, bool playBack, int staff = -1) override;
+    virtual void adjustCanvasPosition(const EngravingItem* el, bool playBack, int staff = -1) override;
     virtual void setScore(Score*) override;
     virtual void removeScore() override;
 
-    virtual void changeEditElement(Element*) override;
-    virtual QCursor cursor() const override;
-    virtual void setCursor(const QCursor&) override;
+    virtual void changeEditElement(EngravingItem*) override;
     virtual void setDropRectangle(const mu::RectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-    virtual Element* elementNear(mu::PointF) override;
     virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
     const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }

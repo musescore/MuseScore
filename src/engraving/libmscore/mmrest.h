@@ -34,16 +34,14 @@ namespace Ms {
 class MMRest final : public Rest
 {
 public:
-    MMRest(Score* s = 0);
+    MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);
     ~MMRest()
     {
     }
 
-    ElementType type() const override { return ElementType::MMREST; }
-
     MMRest* clone() const override { return new MMRest(*this, false); }
-    Element* linkedClone() override { return new MMRest(*this, true); }
+    EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;
@@ -53,20 +51,20 @@ public:
 
     void write(XmlWriter&) const override;
 
-    QVariant propertyDefault(Pid) const override;
-    bool setProperty(Pid, const QVariant&) override;
-    QVariant getProperty(Pid) const override;
+    mu::engraving::PropertyValue propertyDefault(Pid) const override;
+    bool setProperty(Pid, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue getProperty(Pid) const override;
 
     Shape shape() const override;
 
 private:
     Sid getPropertyStyle(Pid) const override;
-    qreal m_width;                  // width of multimeasure rest
-    int m_number;                   // number of measures represented
-    qreal m_numberPos;              // vertical position of number relative to staff
-    bool m_numberVisible;           // show or hide number
-    std::vector<SymId> m_restSyms;  // stores symbols when using old-style rests
-    qreal m_symsWidth;              // width of symbols with spacing when using old-style
+    qreal m_width;        // width of multimeasure rest
+    int m_number;         // number of measures represented
+    qreal m_numberPos;    // vertical position of number relative to staff
+    bool m_numberVisible; // show or hide number
+    SymIdList m_restSyms; // stores symbols when using old-style rests
+    qreal m_symsWidth;    // width of symbols with spacing when using old-style
 };
 }     // namespace Ms
 #endif

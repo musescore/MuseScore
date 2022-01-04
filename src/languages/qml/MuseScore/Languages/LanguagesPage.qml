@@ -36,13 +36,18 @@ Item {
 
     property int sideMargin: 46
 
-    property alias navigation: navPanel
+    property NavigationSection navigationSection: null
+
+    clip: true
 
     NavigationPanel {
         id: navPanel
         name: "AddonsLanguages"
+        section: root.navigationSection
+        enabled: root.enabled && root.visible
         direction: NavigationPanel.Vertical
         accessible.name: qsTrc("languages", "Languages") + navPanel.directionInfo
+        order: 8
     }
 
     QtObject {
@@ -103,7 +108,7 @@ Item {
         property real itemWidth: parent.width / 2
 
         anchors.top: parent.top
-        anchors.topMargin: 16
+        anchors.topMargin: 8
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
         anchors.right: parent.right
@@ -130,26 +135,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: view.top
-
-        height: 56
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.backgroundColor
-            }
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
-    }
-
     ListView {
         id: view
 
@@ -157,14 +142,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: panel.visible ? panel.top : parent.bottom
-
-        header: Rectangle {
-            height: 24
-        }
-
-        footer: Rectangle {
-            height: 32
-        }
 
         model: filterModel
 
@@ -178,7 +155,6 @@ Item {
             anchors.top: parent.top
             anchors.bottom: panel.visible ? panel.top : parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 16
 
             visible: view.contentHeight > view.height
             z: 1
@@ -191,12 +167,12 @@ Item {
 
             navigation.panel: navPanel
             navigation.row: 1 + model.index
-            onNavigationActive: view.positionViewAtIndex(model.index, ListView.Contain)
+            navigation.onActiveChanged: view.positionViewAtIndex(model.index, ListView.Contain)
 
             title: model.name
             statusTitle: model.statusTitle
 
-            color: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
+            normalColor: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
 
             headerWidth: header.itemWidth
             sideMargin: root.sideMargin
@@ -204,26 +180,6 @@ Item {
             onClicked: {
                 prv.selectedLanguage = languageListModel.language(model.code)
                 panel.open(item.navigation)
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: view.bottom
-
-        height: 56
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
             }
         }
     }
@@ -240,6 +196,7 @@ Item {
         title: Boolean(selectedLanguage) ? selectedLanguage.name : ""
         installed: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.Installed) : false
         hasUpdate: Boolean(selectedLanguage) ? (selectedLanguage.status === LanguageStatus.NeedUpdate) : false
+        needRestart: false
         neutralButtonTitle: qsTrc("languages", "Open language preferences")
         background: view
 
@@ -257,10 +214,6 @@ Item {
 
         onUpdateRequested: {
             Qt.callLater(languageListModel.update, selectedLanguage.code)
-        }
-
-        onRestartRequested: {
-            Qt.callLater(languageListModel.restart, selectedLanguage.code)
         }
 
         onNeutralButtonClicked: {

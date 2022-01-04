@@ -48,7 +48,7 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     INJECT(shortcuts, framework::IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
-    Q_PROPERTY(QString currentSequence READ currentSequence NOTIFY selectionChanged)
+    Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)
 
 public:
     explicit ShortcutsModel(QObject* parent = nullptr);
@@ -58,7 +58,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     QItemSelection selection() const;
-    QString currentSequence() const;
+    QVariant currentShortcut() const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE bool apply();

@@ -27,12 +27,24 @@ import MuseScore.Ui 1.0
 TabView {
     id: root
 
-    readonly property int tabBarHeight: 32
-
     width: parent.width
 
-    function focusOnFirstTab() {
-        var tabItem = root.getTab(0);
+    readonly property int tabBarHeight: 32
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "TabViewPanel"
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Horizontal
+
+        onActiveChanged: {
+            if (navigation.active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
+    function focusOnTab(index) {
+        var tabItem = root.getTab(index)
         if (tabItem && tabItem.navigation) {
             tabItem.navigation.requestActive()
         }
@@ -77,13 +89,15 @@ TabView {
             implicitHeight: tabBarHeight
 
             Rectangle {
-
                 anchors.fill: parent
-                color:  ui.theme.backgroundPrimaryColor
+                color: ui.theme.backgroundPrimaryColor
                 radius: 4
                 anchors.margins: 1
-                border.width: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? 2 : 0
-                border.color: ui.theme.focusColor
+
+                NavigationFocusBorder { navigationCtrl: tab.tabItem.navigation ?? null }
+
+                border.width: ui.theme.borderWidth
+                border.color: ui.theme.strokeColor
                 opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
 
                 StyledTextLabel {

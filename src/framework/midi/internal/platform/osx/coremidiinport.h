@@ -30,7 +30,7 @@ namespace mu::midi {
 class CoreMidiInPort : public IMidiInPort
 {
 public:
-    CoreMidiInPort() = default;
+    CoreMidiInPort();
     ~CoreMidiInPort() override;
 
     void init();
@@ -43,15 +43,12 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    Ret run() override;
-    void stop() override;
-    bool isRunning() const override;
     async::Channel<tick_t, Event> eventReceived() const override;
 
-    //internal
-    void doProcess(uint32_t message, tick_t timing);
-
 private:
+    Ret run();
+    void stop();
+
     void initCore();
 
     struct Core;

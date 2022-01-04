@@ -20,19 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Learn 1.0
+
+import "internal"
 
 FocusScope {
     id: root
 
-    property var color: ui.theme.backgroundSecondaryColor
-    property string item: ""
-
-    signal requestActiveFocus()
+    property alias color: background.color
+    property string section: ""
 
     QtObject {
         id: prv
@@ -47,26 +48,36 @@ FocusScope {
         order: 3
         onActiveChanged: {
             if (active) {
-                root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }
 
-    onItemChanged: {
-        if (!Boolean(root.item)) {
+    onSectionChanged: {
+        if (!Boolean(root.section)) {
             return
         }
 
-        bar.selectPage(root.item)
+        tabBar.selectPage(root.section)
+    }
+
+    LearnPageModel {
+        id: pageModel
+    }
+
+    Component.onCompleted: {
+        pageModel.load()
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
-        color: root.color
+        color: ui.theme.backgroundSecondaryColor
     }
 
     RowLayout {
         id: topLayout
+
         anchors.top: parent.top
         anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
@@ -79,6 +90,7 @@ FocusScope {
         NavigationPanel {
             id: navSearchPanel
             name: "LearnSearch"
+            enabled: topLayout.enabled && topLayout.visible
             section: navSec
             order: 1
             accessible.name: qsTrc("learn", "Learn")
@@ -86,15 +98,11 @@ FocusScope {
 
         StyledTextLabel {
             id: learnLabel
+            Layout.fillWidth: true
 
             text: qsTrc("learn", "Learn")
             font: ui.theme.titleBoldFont
             horizontalAlignment: Text.AlignLeft
-        }
-
-        Item {
-            Layout.preferredWidth: topLayout.width - learnLabel.width - searchField.width - topLayout.spacing * 2
-            Layout.fillHeight: true
         }
 
         SearchField {
@@ -106,21 +114,22 @@ FocusScope {
             navigation.panel: navSearchPanel
             navigation.order: 1
             accessible.name: qsTrc("learn", "Learn search")
+
+            onSearchTextChanged: {
+                pageModel.setSearchText(searchText)
+            }
         }
     }
 
-    TabBar {
-        id: bar
+    StyledTabBar {
+        id: tabBar
 
         anchors.top: topLayout.bottom
-        anchors.topMargin: 36
+        anchors.topMargin: prv.sideMargin
         anchors.left: parent.left
-        anchors.leftMargin: prv.sideMargin - itemSideMargin
-
-        contentHeight: 32
-        spacing: 0
-
-        readonly property int itemSideMargin: 22
+        anchors.leftMargin: prv.sideMargin
+        anchors.right: parent.right
+        anchors.rightMargin: prv.sideMargin
 
         function pageIndex(pageName) {
             switch (pageName) {
@@ -140,89 +149,113 @@ FocusScope {
             id: navTabPanel
             name: "LearnTabs"
             section: navSec
+            direction: NavigationPanel.Horizontal
             order: 2
             accessible.name: qsTrc("learn", "Learn tabs")
+            enabled: tabBar.enabled && tabBar.visible
 
             onNavigationEvent: {
                 if (event.type === NavigationEvent.AboutActive) {
-                    event.setData("controlName", bar.currentItem.navigation.name)
+                    event.setData("controlName", tabBar.currentItem.navigation.name)
                 }
             }
         }
 
         StyledTabButton {
-            text: qsTrc("learn", "Get Started")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 0
-            backgroundColor: root.color
+            text: qsTrc("learn", "Get started")
 
-            navigation.name: "Get Started"
+            navigation.name: "Get started"
             navigation.panel: navTabPanel
-            navigation.order: 1
-            onNavigationTriggered: bar.currentIndex = 0
+            navigation.column: 1
+            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
             text: qsTrc("learn", "Advanced")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 1
-            backgroundColor: root.color
 
             navigation.name: "Advanced"
             navigation.panel: navTabPanel
-            navigation.order: 2
-            onNavigationTriggered: bar.currentIndex = 1
+            navigation.column: 2
+            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
             text: qsTrc("learn", "Classes")
-            sideMargin: bar.itemSideMargin
-            isCurrent: bar.currentIndex === 2
-            backgroundColor: root.color
 
             navigation.name: "Classes"
             navigation.panel: navTabPanel
-            navigation.order: 3
-            onNavigationTriggered: bar.currentIndex = 2
+            navigation.column: 3
+            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 
     StackLayout {
-        anchors.top: bar.bottom
-        anchors.topMargin: 24
+        anchors.top: tabBar.bottom
+        anchors.topMargin: 28
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        currentIndex: bar.currentIndex
+        currentIndex: tabBar.currentIndex
 
-        Rectangle {
+        Playlist {
             id: getStartedComp
 
-            color: root.color
+            playlist: pageModel.startedPlaylist
 
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            navigation.section: navSec
+            navigation.order: 3
+            navigation.name: "LearnGetStarted"
+            navigation.accessible.name: qsTrc("learn", "Get started") + navigation.directionInfo
+
+            backgroundColor: root.color
+            sideMargin: prv.sideMargin
+
+            onRequestOpenVideo: {
+                pageModel.openVideo(videoId)
+            }
         }
 
-        Rectangle {
+        Playlist {
             id: advancedComp
 
-            color: root.color
+            playlist: pageModel.advancedPlaylist
 
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            navigation.section: navSec
+            navigation.order: 4
+            navigation.name: "LearnAdvanced"
+            navigation.accessible.name: qsTrc("learn", "Advanced") + navigation.directionInfo
+
+            backgroundColor: root.color
+            sideMargin: prv.sideMargin
+
+            onRequestOpenVideo: {
+                pageModel.openVideo(videoId)
+            }
         }
 
-        Rectangle {
+        ClassesPage {
             id: classesComp
 
-            color: root.color
+            property var author: pageModel.classesAuthor()
 
-            //            navigation.section: navSec
-            //            navigation.order: 3
-            //            search: searchField.searchText
-            //            backgroundColor: root.color
+            authorName: author.name
+            authorPosition: author.position
+            authorRole: author.role
+            authorDescription: author.description
+            authorAvatarUrl: author.avatarUrl
+            authorOrganizationName: author.organizationName
+
+            navigation.section: navSec
+            navigation.order: 5
+            navigation.name: "LearnClasses"
+            navigation.accessible.name: qsTrc("learn", "Classes") + navigation.directionInfo
+
+            sideMargin: prv.sideMargin
+
+            onRequestOpenOrganizationUrl: {
+                pageModel.openUrl(author.organizationUrl)
+            }
         }
     }
 }

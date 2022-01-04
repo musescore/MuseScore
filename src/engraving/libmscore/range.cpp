@@ -21,6 +21,8 @@
  */
 
 #include "range.h"
+
+#include "factory.h"
 #include "measure.h"
 #include "segment.h"
 #include "rest.h"
@@ -36,8 +38,10 @@
 #include "excerpt.h"
 #include "measurerepeat.h"
 #include "tremolo.h"
+#include "linkedobjects.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -65,7 +69,7 @@ TrackList::~TrackList()
 {
     int n = size();
     for (int i = 0; i < n; ++i) {
-        Element* e = at(i);
+        EngravingItem* e = at(i);
         if (e->isTuplet()) {
             Tuplet* t = toTuplet(e);
             cleanupTuplet(t);
@@ -142,7 +146,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
 //   append
 //---------------------------------------------------------
 
-void TrackList::append(Element* e)
+void TrackList::append(EngravingItem* e)
 {
     if (e->isDurationElement()) {
         _duration += toDurationElement(e)->ticks();
@@ -157,7 +161,7 @@ void TrackList::append(Element* e)
             du += toRest(e)->ticks();
             rest->setTicks(du);
         } else {
-            Element* element = 0;
+            EngravingItem* element = 0;
             if (e->isTuplet()) {
                 Tuplet* src = toTuplet(e);
                 if (src->generated() && !empty() && back()->isTuplet()) {
@@ -172,7 +176,7 @@ void TrackList::append(Element* e)
                 element = e->clone();
                 ChordRest* src = toChordRest(e);
                 Segment* s1 = src->segment();
-                for (Element* ee : s1->annotations()) {
+                for (EngravingItem* ee : s1->annotations()) {
                     if (ee->track() == e->track()) {
                         _range->annotations.push_back({ s1->tick(), ee->clone() });
                     }
@@ -204,13 +208,13 @@ void TrackList::append(Element* e)
             }
             if (element) {
                 element->setSelected(false);
-                QList<Element*>::append(element);
+                QList<EngravingItem*>::append(element);
             }
         }
     } else {
-        Element* c = e->clone();
-        c->setParent(0);
-        QList<Element*>::append(c);
+        EngravingItem* c = e->clone();
+        c->resetExplicitParent();
+        QList<EngravingItem*>::append(c);
     }
 }
 
@@ -218,12 +222,12 @@ void TrackList::append(Element* e)
 //   appendGap
 //---------------------------------------------------------
 
-void TrackList::appendGap(const Fraction& du)
+void TrackList::appendGap(const Fraction& du, Score* score)
 {
     if (du.isZero()) {
         return;
     }
-    Element* e = empty() ? 0 : back();
+    EngravingItem* e = empty() ? 0 : back();
     if (e && e->isRest()) {
         Rest* rest  = toRest(back());
         Fraction dd = rest->ticks();
@@ -231,9 +235,9 @@ void TrackList::appendGap(const Fraction& du)
         _duration   += du;
         rest->setTicks(dd);
     } else {
-        Rest* rest = new Rest(0);
+        Rest* rest = Factory::createRest(score->dummy()->segment());
         rest->setTicks(du);
-        QList<Element*>::append(rest);
+        QList<EngravingItem*>::append(rest);
         _duration   += du;
     }
 }
@@ -248,7 +252,7 @@ bool TrackList::truncate(const Fraction& f)
     if (empty()) {
         return true;
     }
-    Element* e = back();
+    EngravingItem* e = back();
     if (!e->isRest()) {
         return false;
     }
@@ -279,9 +283,9 @@ void TrackList::read(const Segment* fs, const Segment* es)
         if (!s->enabled()) {
             continue;
         }
-        Element* e = s->element(_track);
+        EngravingItem* e = s->element(_track);
         if (!e || e->generated()) {
-            for (Element* ee : s->annotations()) {
+            for (EngravingItem* ee : s->annotations()) {
                 if (ee->track() == _track) {
                     _range->annotations.push_back({ s->tick(), ee->clone() });
                 }
@@ -291,10 +295,14 @@ void TrackList::read(const Segment* fs, const Segment* es)
         if (e->isMeasureRepeat()) {
             // TODO: copy previous measure contents?
             MeasureRepeat* rm = toMeasureRepeat(e);
-            Rest r(*rm);
-            r.reset();
-            append(&r);
-            tick += r.ticks();
+            Rest* r = Factory::copyRest(*rm);
+            //! TODO Perhaps there is a bug.
+            //! Previously, the element changed its type (because there was a virtual method that returned the type).
+            //! This code has been added for compatibility reasons to maintain the same behavior.
+            r->hack_toRestType();
+            r->reset();
+            append(r);
+            tick += r->ticks();
         } else if (e->isChordRest()) {
             DurationElement* de = toDurationElement(e);
             Fraction gap = s->tick() - tick;
@@ -305,7 +313,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             }
 
             if (gap.isNotZero()) {
-                appendGap(gap);
+                appendGap(gap, e->score());
                 tick += gap;
             }
             append(de);
@@ -321,7 +329,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
     }
     Fraction gap = es->tick() - tick;
     if (gap.isNotZero()) {
-        appendGap(gap);
+        appendGap(gap, es->score());
     }
 
     //
@@ -329,7 +337,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
     //
     int n = size();
     for (int i = 0; i < n; ++i) {
-        Element* e = at(i);
+        EngravingItem* e = at(i);
         if (!e->isChord()) {
             continue;
         }
@@ -340,7 +348,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                 continue;
             }
             for (int k = i + 1; k < n; ++k) {
-                Element* ee = at(k);
+                EngravingItem* ee = at(k);
                 if (!ee->isChord()) {
                     continue;
                 }
@@ -458,7 +466,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                     if (cr->isChord()) {
                         for (Note* note : toChord(cr)->notes()) {
                             if (!duration.isZero() && !note->tieFor()) {
-                                Tie* tie = new Tie(score);
+                                Tie* tie = new Tie(note);
                                 tie->setGenerated(true);
                                 note->add(tie);
                             }
@@ -495,7 +503,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     Fraction remains = m->endTick() - tick;
     Segment* segment = 0;
 
-    for (Element* e : *this) {
+    for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction duration = toDurationElement(e)->ticks();
             if (!checkRest(remains, m, duration)) {     // go to next measure, if necessary
@@ -518,7 +526,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     Segment* seg = m->getSegmentR(SegmentType::ChordRest, m->ticks() - remains);
                     if ((_track % VOICES) == 0) {
                         // write only for voice 1
-                        Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
+                        Rest* r = Factory::createRest(seg, DurationType::V_MEASURE);
                         // ideally we should be using stretchedLen
                         // but this is not valid during rewrite when adding time signatures
                         // since the time signature has not been added yet
@@ -566,7 +574,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
-                                    Tie* tie = new Tie(score);
+                                    Tie* tie = new Tie(note);
                                     tie->setGenerated(true);
                                     note->add(tie);
                                 }
@@ -586,12 +594,6 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                 }
             }
         } else if (e->isBarLine()) {
-//                  if (pos.numerator() == 0 && m) {
-//                        BarLineType t = toBarLine(e)->barLineType();
-//                        Measure* pm = m->prevMeasure();
-//TODO                        if (pm)
-//                              pm->setEndBarLineType(t,0);
-//                        }
         } else if (e->isClef()) {
             Segment* seg;
             if (remains == m->ticks() && m->tick() > Fraction(0, 1)) {
@@ -602,7 +604,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             } else {
                 seg = m->getSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             }
-            Element* ne = e->clone();
+            EngravingItem* ne = e->clone();
             ne->setScore(score);
             ne->setTrack(_track);
             seg->add(ne);
@@ -614,7 +616,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             // but KeySig has to be at start of (current) measure
 
             Segment* seg = m->getSegmentR(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : m->ticks() - remains);
-            Element* ne = e->clone();
+            EngravingItem* ne = e->clone();
             ne->setScore(score);
             ne->setTrack(_track);
             seg->add(ne);
@@ -625,7 +627,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     //
 
     for (Segment* s = measure->first(); s; s = s->next1()) {
-        Element* e = s->element(_track);
+        EngravingItem* e = s->element(_track);
         if (!e || !e->isChord()) {
             continue;
         }
@@ -680,7 +682,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             Spanner* s = i.second;
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
-                ns->setParent(0);
+                ns->resetExplicitParent();
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
@@ -715,7 +717,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             // clone staff if appropriate after all voices have been copied
             int staffIdx = track / VOICES;
             Staff* ostaff = score->staff(staffIdx);
-            const LinkedElements* linkedStaves = ostaff->links();
+            const LinkedObjects* linkedStaves = ostaff->links();
             if (linkedStaves) {
                 for (auto le : *linkedStaves) {
                     Staff* nstaff = toStaff(le);
@@ -753,7 +755,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
     }
     for (const Annotation& a : annotations) {
         Measure* tm = score->tick2measure(a.tick);
-        Segment* op = toSegment(a.e->parent());
+        Segment* op = toSegment(a.e->explicitParent());
         Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
         if (s) {
             a.e->setParent(s);
@@ -772,7 +774,7 @@ void ScoreRange::fill(const Fraction& f)
     const Fraction oldDuration = ticks();
     Fraction oldEndTick = _first->tick() + oldDuration;
     for (auto t : qAsConst(tracks)) {
-        t->appendGap(f);
+        t->appendGap(f, _first->score());
     }
 
     Fraction diff = ticks() - oldDuration;
@@ -794,7 +796,7 @@ bool ScoreRange::truncate(const Fraction& f)
         if (dl->empty()) {
             continue;
         }
-        Element* e = dl->back();
+        EngravingItem* e = dl->back();
         if (!e->isRest()) {
             return false;
         }
@@ -825,7 +827,7 @@ Fraction ScoreRange::ticks() const
 void TrackList::dump() const
 {
     qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
-    for (Element* e : *this) {
+    for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
             qDebug("   %s  %d/%d", e->name(), du.numerator(), du.denominator());

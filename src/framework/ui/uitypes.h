@@ -38,14 +38,16 @@ using ThemeCode = std::string;
 
 static const ThemeCode DARK_THEME_CODE("dark");
 static const ThemeCode LIGHT_THEME_CODE("light");
-static const ThemeCode HIGH_CONTRAST_THEME_CODE("high_contrast");
+static const ThemeCode HIGH_CONTRAST_BLACK_THEME_CODE("high_contrast_black");
+static const ThemeCode HIGH_CONTRAST_WHITE_THEME_CODE("high_contrast_white");
 
 inline std::vector<ThemeCode> allStandardThemeCodes()
 {
     return {
         LIGHT_THEME_CODE,
         DARK_THEME_CODE,
-        HIGH_CONTRAST_THEME_CODE
+        HIGH_CONTRAST_BLACK_THEME_CODE,
+        HIGH_CONTRAST_WHITE_THEME_CODE
     };
 }
 
@@ -64,6 +66,9 @@ enum ThemeStyleKey
     FONT_SECONDARY_COLOR,
     LINK_COLOR,
     FOCUS_COLOR,
+
+    BORDER_WIDTH,
+    NAVIGATION_CONTROL_BORDER_WIDTH,
 
     ACCENT_OPACITY_NORMAL,
     ACCENT_OPACITY_HOVER,
@@ -141,7 +146,12 @@ struct UiContext
         return std::strcmp(const_data, ctx.const_data) == 0;
     }
 
-    std::string toString() const { return std::string(const_data); }
+    inline bool operator !=(const UiContext& ctx) const
+    {
+        return !this->operator ==(ctx);
+    }
+
+    std::string toString() const { return const_data ? std::string(const_data) : std::string(); }
 
 private:
     const char* const_data = nullptr;
@@ -165,20 +175,20 @@ struct UiAction
     QString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
-    std::string shortcut;
+    std::vector<std::string> shortcuts;
 
     UiAction() = default;
     UiAction(const actions::ActionCode& code, UiContext ctx, Checkable ch = Checkable::No)
         : code(code), context(ctx), checkable(ch) {}
     UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), checkable(ch) {}
+        : code(code), context(ctx), title(title), description(title), checkable(ch) {}
     UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(desc), checkable(ch) {}
     UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, const char* desc, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), context(ctx), title(title), description(desc), iconCode(icon), checkable(ch) {}
     UiAction(const actions::ActionCode& code, UiContext ctx, const char* title, IconCode::Code icon, Checkable ch = Checkable::No)
-        : code(code), context(ctx), title(title), iconCode(icon), checkable(ch) {}
+        : code(code), context(ctx), title(title), description(title), iconCode(icon), checkable(ch) {}
 
     bool isValid() const
     {
@@ -232,27 +242,52 @@ struct UiActionState
 
     static UiActionState make_disabled(bool checked = false)
     {
-        return UiActionState{ false, checked };
+        return UiActionState { false, checked };
     }
 
     static UiActionState make_enabled(bool checked = false)
     {
-        return UiActionState{ true, checked };
+        return UiActionState { true, checked };
     }
+};
+
+// This must be in sync with QAction::MenuRole
+enum class MenuItemRole {
+    NoRole = 0,
+    TextHeuristicRole,
+    ApplicationSpecificRole,
+    AboutQtRole,
+    AboutRole,
+    PreferencesRole,
+    QuitRole
 };
 
 struct MenuItem : public UiAction
 {
+    QString id;
     QString section;
     UiActionState state;
     bool selectable = false;
     bool selected = false;
+    MenuItemRole role = MenuItemRole::NoRole;
     actions::ActionData args;
     QList<MenuItem> subitems;
 
     MenuItem() = default;
     MenuItem(const UiAction& a)
-        : UiAction(a) {}
+        : UiAction(a)
+    {
+        id = QString::fromStdString(a.code);
+    }
+
+    QString shortcutsAsString() const
+    {
+        QStringList list;
+        for (const std::string& sc : shortcuts) {
+            list << QString::fromStdString(sc);
+        }
+        return list.join("; ");
+    }
 
     QVariantMap toMap() const
     {
@@ -262,8 +297,9 @@ struct MenuItem : public UiAction
         }
 
         return {
+            { "id", id },
             { "code", QString::fromStdString(code) },
-            { "shortcut", QString::fromStdString(shortcut) },
+            { "shortcut", shortcutsAsString() },
             { "title", title },
             { "description", description },
             { "section", section },
@@ -273,8 +309,14 @@ struct MenuItem : public UiAction
             { "checked", state.checked },
             { "selectable", selectable },
             { "selected", selected },
+            { "role", static_cast<int>(role) },
             { "subitems", subitemsVariantList }
         };
+    }
+
+    bool isValid() const
+    {
+        return !id.isEmpty();
     }
 };
 using MenuItemList = QList<MenuItem>;
@@ -297,4 +339,4 @@ struct ToolConfig
 };
 }
 
-#endif // MU_UI_UIERRORS_H
+#endif // MU_UI_UITYPES_H

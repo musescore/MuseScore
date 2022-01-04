@@ -28,6 +28,8 @@ import MuseScore.Shortcuts 1.0
 PreferencesPage {
     id: root
 
+    contentFillsAvailableHeight: true
+
     function apply() {
         return page.apply()
     }
@@ -36,5 +38,8 @@ PreferencesPage {
         id: page
 
         anchors.fill: parent
+
+        navigationSection: root.navigationSection
+        navigationOrderStart: root.navigationOrderStart
     }
 }

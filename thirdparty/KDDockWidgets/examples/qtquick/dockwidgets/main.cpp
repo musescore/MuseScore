@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     KDDockWidgets::Config::self().setQmlEngine(&appEngine);
     appEngine.load((QUrl("qrc:/main.qml")));
 
-    // Bellow we illustrate usage of our C++ API. Alternative you can use declarative API.
+    // Below we illustrate usage of our C++ API. Alternative you can use declarative API.
     // See main.qml for examples of dockwidgets created directly in QML
 
     auto dw1 = new KDDockWidgets::DockWidgetQuick("Dock #1");

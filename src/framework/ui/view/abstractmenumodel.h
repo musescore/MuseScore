@@ -38,7 +38,8 @@ class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
     INJECT(ui, IUiActionsRegister, uiactionsRegister)
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
+    Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
+    Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
 
 public:
     explicit AbstractMenuModel(QObject* parent = nullptr);
@@ -49,17 +50,20 @@ public:
 
     virtual void load();
 
-    Q_INVOKABLE void handleAction(const QString& actionCode, int actionIndex = -1);
+    QVariantList itemsProperty() const;
+    const MenuItemList& items() const;
+
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
     Q_INVOKABLE QVariantMap get(int index);
 
 signals:
-    void countChanged(int count);
+    void itemsChanged();
+    void itemChanged(const MenuItem& item);
 
 protected:
-    virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
-
     enum Roles {
         CodeRole = Qt::UserRole + 1,
+        IdRole,
         TitleRole,
         DescriptionRole,
         ShortcutRole,
@@ -72,19 +76,21 @@ protected:
         UserRole,
     };
 
-    const MenuItemList& items() const;
-    MenuItemList& items();
+    virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
+
     void setItems(const MenuItemList& items);
+    void clear();
 
     static const int INVALID_ITEM_INDEX;
-    int itemIndex(const actions::ActionCode& actionCode) const;
+    int itemIndex(const QString& itemId) const;
 
+    MenuItem& item(int index);
+
+    MenuItem& findItem(const QString& itemId);
     MenuItem& findItem(const actions::ActionCode& actionCode);
-    MenuItem& findItemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
-    MenuItem& findMenu(const actions::ActionCode& subitemsActionCode);
+    MenuItem& findMenu(const QString& menuId);
 
-    MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true,
-                      const actions::ActionCode& menuActionCode = "") const;
+    MenuItem makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
 
     MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
     MenuItem makeSeparator() const;
@@ -93,8 +99,9 @@ protected:
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
+    MenuItem& item(MenuItemList& items, const QString& itemId);
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
-    MenuItem& menu(MenuItemList& items, const actions::ActionCode& subitemsActionCode);
+    MenuItem& menu(MenuItemList& items, const QString& menuId);
 
     MenuItemList m_items;
 };

@@ -21,7 +21,7 @@
  */
 
 #include "noteevent.h"
-#include "xml.h"
+#include "rw/xml.h"
 
 using namespace mu;
 
@@ -52,11 +52,11 @@ void NoteEvent::read(XmlReader& e)
 
 void NoteEvent::write(XmlWriter& xml) const
 {
-    xml.stag("Event");
+    xml.startObject("Event");
     xml.tag("pitch", _pitch, 0);
     xml.tag("ontime", _ontime, 0);
     xml.tag("len", _len, NOTE_LENGTH);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -37,8 +37,11 @@ public:
     virtual Ret exists(const io::path& path) const = 0;
     virtual Ret remove(const io::path& path) const = 0;
     virtual Ret copy(const io::path& src, const io::path& dst, bool replace = false) const = 0;
+    virtual Ret move(const io::path& src, const io::path& dst, bool replace = false) const = 0;
 
     virtual Ret makePath(const io::path& path) const = 0;
+
+    virtual RetVal<uint64_t> fileSize(const io::path& path) const = 0;
 
     enum class ScanMode {
         OnlyCurrentDir,
@@ -50,6 +53,12 @@ public:
 
     virtual RetVal<QByteArray> readFile(const io::path& filePath) const = 0;
     virtual Ret writeToFile(const io::path& filePath, const QByteArray& data) const = 0;
+
+    enum class Attribute {
+        Hidden
+    };
+
+    virtual void setAttribute(const io::path& path, Attribute attribute) const = 0;
 };
 }
 

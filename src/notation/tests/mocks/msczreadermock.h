@@ -24,13 +24,13 @@
 
 #include <gmock/gmock.h>
 
-#include "notation/imsczmetareader.h"
+#include "project/imscmetareader.h"
 
 namespace mu::notation {
-class MsczReaderMock : public IMsczMetaReader
+class MsczReaderMock : public project::IMscMetaReader
 {
 public:
-    MOCK_METHOD(MetaList, readMetaList, (const io::paths&), (const, override));
+    MOCK_METHOD(RetVal<project::ProjectMeta>, readMeta, (const io::path& filePath), (const, override));
 };
 }
 

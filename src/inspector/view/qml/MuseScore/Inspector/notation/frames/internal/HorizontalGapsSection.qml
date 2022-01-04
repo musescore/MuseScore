@@ -19,56 +19,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject leftGap: undefined
-    property QtObject rightGap: undefined
+    property PropertyItem leftGap: null
+    property PropertyItem rightGap: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: rightGap.navigationRowEnd
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: leftGap
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Left gap")
-        propertyItem: leftGap
+        propertyItem: root.leftGap
 
-        IncrementalPropertyControl {
-            icon: IconCode.LEFT_GAP
+        icon: IconCode.LEFT_GAP
 
-            enabled: leftGap ? leftGap.isEnabled : false
-            isIndeterminate: leftGap && enabled ? leftGap.isUndefined : false
-            currentValue: leftGap ? leftGap.value : 0
-
-            onValueEdited: { leftGap.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
+        id: rightGap
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Right gap")
-        propertyItem: rightGap
+        propertyItem: root.rightGap
 
-        IncrementalPropertyControl {
-            icon: IconCode.RIGHT_GAP
+        icon: IconCode.RIGHT_GAP
 
-            enabled: rightGap ? rightGap.isEnabled : false
-            isIndeterminate: rightGap && enabled ? rightGap.isUndefined : false
-            currentValue: rightGap ? rightGap.value : 0
-
-            onValueEdited: { rightGap.value = newValue }
-        }
+        navigationPanel: root.navigationPanel
+        navigationRowStart: leftGap.navigationRowEnd + 1
     }
 }

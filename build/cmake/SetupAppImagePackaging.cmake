@@ -96,5 +96,5 @@ if (NOT MINGW AND NOT MSVC AND NOT APPLE)
     # Add .MSCZ and .MSCX to MIME database (informs system that filetypes .MSCZ & .MSCX are MuseScore files)
     configure_file(build/Linux+BSD/musescore.xml.in musescore${MSCORE_INSTALL_SUFFIX}.xml)
     install( FILES ${PROJECT_BINARY_DIR}/musescore${MSCORE_INSTALL_SUFFIX}.xml DESTINATION share/mime/packages COMPONENT doc)
-    # Note: Must now run "update-mime-database" to apply changes. This is done in the Makefile.
+    # Note: Must now run "update-mime-database" to apply changes.
 endif (NOT MINGW AND NOT MSVC AND NOT APPLE)

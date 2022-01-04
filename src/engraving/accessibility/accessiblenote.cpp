@@ -23,11 +23,11 @@
 
 #include "log.h"
 
-using namespace mu::score;
+using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleNote::AccessibleNote(Ms::Element* n)
-    : AccessibleElement(n)
+AccessibleNote::AccessibleNote(Ms::EngravingItem* n)
+    : AccessibleItem(n)
 {
 }
 
@@ -35,7 +35,7 @@ AccessibleNote::~AccessibleNote()
 {
 }
 
-AccessibleElement* AccessibleNote::clone(Ms::Element* e) const
+AccessibleItem* AccessibleNote::clone(Ms::EngravingItem* e) const
 {
     return new AccessibleNote(e);
 }

@@ -41,6 +41,7 @@ public:
     void pause(const TrackSequenceId sequenceId) override;
     void resume(const TrackSequenceId sequenceId) override;
 
+    void setDuration(const TrackSequenceId sequenceId, const msecs_t durationMsec) override;
     async::Promise<bool> setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetLoop(const TrackSequenceId sequenceId) override;
 

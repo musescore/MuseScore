@@ -19,24 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: clefPopup.model
+    property QtObject model: null
 
-    icon: IconCode.CLEF_BASS
-    text: qsTrc("inspector", "Clefs")
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
-    visible: root.model ? !root.model.isEmpty : false
+    objectName: "ClefSettings"
 
-    ClefPopup {
-        id: clefPopup
+    spacing: 12
+
+    function focusOnFirst() {
+        showCourtesyClef.navigation.requestActive()
+    }
+
+    CheckBoxPropertyView {
+        id: showCourtesyClef
+
+        navigation.name: "ShowCourtesyClefCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+
+        text: qsTrc("inspector", "Show courtesy clef on previous system")
+        propertyItem: root.model ? root.model.shouldShowCourtesy : null
     }
 }

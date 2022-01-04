@@ -10,19 +10,20 @@
 */
 
 #include "ClassicIndicators_p.h"
-#include "DropArea_p.h"
-#include "DragController_p.h"
-#include "Frame_p.h"
-#include "Logging_p.h"
 #include "Config.h"
-#include "DockRegistry_p.h"
 #include "FrameworkWidgetFactory.h"
 #include "ClassicIndicatorsWindow_p.h"
-#include "Utils_p.h"
+
+#include "private/DropArea_p.h"
+#include "private/DragController_p.h"
+#include "private/Frame_p.h"
+#include "private/Logging_p.h"
+#include "private/DockRegistry_p.h"
+#include "private/Utils_p.h"
 
 using namespace KDDockWidgets;
 
-static IndicatorWindow* createIndicatorWindow(ClassicIndicators *classicIndicators)
+static IndicatorWindow *createIndicatorWindow(ClassicIndicators *classicIndicators)
 {
     auto window = new IndicatorWindow(classicIndicators);
     window->setObjectName(QStringLiteral("_docks_IndicatorWindow_Overlay"));
@@ -32,9 +33,11 @@ static IndicatorWindow* createIndicatorWindow(ClassicIndicators *classicIndicato
 
 ClassicIndicators::ClassicIndicators(DropArea *dropArea)
     : DropIndicatorOverlayInterface(dropArea) // Is parented on the drop-area, not a toplevel.
-    , m_rubberBand(Config::self().frameworkWidgetFactory()->createRubberBand(dropArea))
+    , m_rubberBand(Config::self().frameworkWidgetFactory()->createRubberBand(rubberBandIsTopLevel() ? nullptr : dropArea))
     , m_indicatorWindow(createIndicatorWindow(this))
 {
+    if (rubberBandIsTopLevel())
+        m_rubberBand->setWindowOpacity(0.5);
 }
 
 ClassicIndicators::~ClassicIndicators()
@@ -69,8 +72,8 @@ bool ClassicIndicators::tabIndicatorVisible() const
 
 bool ClassicIndicators::onResize(QSize)
 {
-     m_indicatorWindow->resize(window()->size());
-     return false;
+    m_indicatorWindow->resize(window()->size());
+    return false;
 }
 
 void ClassicIndicators::updateVisibility()
@@ -96,16 +99,14 @@ void ClassicIndicators::updateIndicatorsVisibility(bool visible)
 
     WindowBeingDragged *windowBeingDragged = DragController::instance()->windowBeingDragged();
 
-    // If there's only 1 frame in the layout, the outter indicators are redundant, as they do the same thing as the internal ones.
-    // But there might be another window obscuring our target, so it's useful to show the outter indicators in this case
-    m_outterIndicatorsVisible = visible && (!isTheOnlyFrame ||
-                                            DockRegistry::self()->isProbablyObscured(m_hoveredFrame->window()->windowHandle(), windowBeingDragged));
+    // If there's only 1 frame in the layout, the outer indicators are redundant, as they do the same thing as the internal ones.
+    // But there might be another window obscuring our target, so it's useful to show the outer indicators in this case
+    m_outterIndicatorsVisible = visible && (!isTheOnlyFrame || DockRegistry::self()->isProbablyObscured(m_hoveredFrame->window()->windowHandle(), windowBeingDragged));
 
 
     // Only allow to dock to center if the affinities match
     auto tabbingAllowedFunc = Config::self().tabbingAllowedFunc();
-    m_tabIndicatorVisible = m_innerIndicatorsVisible && windowBeingDragged &&
-                            DockRegistry::self()->affinitiesMatch(m_hoveredFrame->affinities(), windowBeingDragged->affinities());
+    m_tabIndicatorVisible = m_innerIndicatorsVisible && windowBeingDragged && DockRegistry::self()->affinitiesMatch(m_hoveredFrame->affinities(), windowBeingDragged->affinities()) && m_hoveredFrame->isDockable();
     if (m_tabIndicatorVisible && tabbingAllowedFunc) {
         const DockWidgetBase::List source = windowBeingDragged->dockWidgets();
         const DockWidgetBase::List target = m_hoveredFrame->dockWidgets();
@@ -156,8 +157,13 @@ void ClassicIndicators::setDropLocation(ClassicIndicators::DropLocation location
     }
 
     if (location == DropLocation_Center) {
-        m_rubberBand->setGeometry(m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect());
+        m_rubberBand->setGeometry(geometryForRubberband(m_hoveredFrame ? m_hoveredFrame->QWidgetAdapter::geometry() : rect()));
         m_rubberBand->setVisible(true);
+        if (rubberBandIsTopLevel()) {
+            m_rubberBand->raise();
+            raiseIndicators();
+        }
+
         return;
     }
 
@@ -192,8 +198,12 @@ void ClassicIndicators::setDropLocation(ClassicIndicators::DropLocation location
     QRect rect = m_dropArea->rectForDrop(windowBeingDragged, multisplitterLocation,
                                          m_dropArea->itemForFrame(relativeToFrame));
 
-    m_rubberBand->setGeometry(rect);
+    m_rubberBand->setGeometry(geometryForRubberband(rect));
     m_rubberBand->setVisible(true);
+    if (rubberBandIsTopLevel()) {
+        m_rubberBand->raise();
+        raiseIndicators();
+    }
 }
 
 void ClassicIndicators::updateWindowPosition()
@@ -205,4 +215,22 @@ void ClassicIndicators::updateWindowPosition()
         rect.moveTo(pos);
     }
     m_indicatorWindow->setGeometry(rect);
+}
+
+bool ClassicIndicators::rubberBandIsTopLevel() const
+{
+    return Config::self().internalFlags() & Config::InternalFlag_TopLevelIndicatorRubberBand;
+}
+
+QRect ClassicIndicators::geometryForRubberband(QRect localRect) const
+{
+    if (!rubberBandIsTopLevel())
+        return localRect;
+
+    QPoint topLeftLocal = localRect.topLeft();
+    QPoint topLeftGlobal = m_dropArea->QWidgetAdapter::mapToGlobal(topLeftLocal);
+
+    localRect.moveTopLeft(topLeftGlobal);
+
+    return localRect;
 }

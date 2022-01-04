@@ -52,28 +52,37 @@ class ScorePropertiesDialog : public QDialog, public Ui::ScorePropertiesDialog
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, system::IFileSystem, fileSystem)
 
-    bool m_dirty = false;     /// whether the editor has unsaved changes or not
+public:
+    ScorePropertiesDialog(QWidget* parent = nullptr);
+    ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
 
+private:
     virtual void closeEvent(QCloseEvent*) override;
+    void accept() override;
+
+    struct TagItem {
+        QWidget* titleWidget = nullptr;
+        QLineEdit* valueLineEdit = nullptr;
+        QToolButton* deleteButton = nullptr;
+    };
 
     bool isStandardTag(const QString& tag) const;
-    QPair<QLineEdit*, QLineEdit*> addTag(const QString& key, const QString& value);
+    TagItem addTag(const QString& key, const QString& value);
 
     bool save();
     void newClicked();
     void setDirty(const bool dirty = true);
     void openFileLocation();
 
-    INotationPtr notation() const;
+    project::INotationProjectPtr project() const;
 
     void initTags();
     void saveMetaTags(const QVariantMap& tagsMap);
 
-    void accept() override;
+    void updateTabOrders(const TagItem& lastTagItem);
 
-public:
-    ScorePropertiesDialog(QWidget* parent = nullptr);
-    ScorePropertiesDialog(const ScorePropertiesDialog& dialog);
+private:
+    bool m_dirty = false;     /// whether the editor has unsaved changes or not
 };
 }
 

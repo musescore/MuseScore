@@ -37,7 +37,8 @@ enum class Err {
     FSReadError,
     FSWriteError,
     FSMakingError,
-    FSCopyError
+    FSCopyError,
+    FSMoveErrors
 };
 
 inline Ret make_ret(Err e)
@@ -55,6 +56,7 @@ inline Ret make_ret(Err e)
     case Err::FSWriteError: return Ret(retCode, trc("system", "An error occurred when writing to the file"));
     case Err::FSMakingError: return Ret(retCode, trc("system", "An error occurred when making a path"));
     case Err::FSCopyError: return Ret(retCode, trc("system", "An error occurred when coping the file"));
+    case Err::FSMoveErrors: return Ret(retCode, trc("system", "An error occurred when moving the file"));
     }
 
     return Ret(static_cast<int>(e));

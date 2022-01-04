@@ -21,6 +21,11 @@
  */
 
 #include "articulation.h"
+
+#include "rw/compat/read206.h"
+#include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "score.h"
 #include "chordrest.h"
 #include "system.h"
@@ -30,10 +35,10 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
-#include "sym.h"
-#include "xml.h"
+#include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -50,22 +55,16 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+Articulation::Articulation(ChordRest* parent)
+    : EngravingItem(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;
-    _direction     = Direction::AUTO;
+    _direction     = DirectionV::AUTO;
     _up            = true;
-    _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+    _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&articulationStyle);
-}
-
-Articulation::Articulation(SymId id, Score* s)
-    : Articulation(s)
-{
-    setSymId(id);
 }
 
 //---------------------------------------------------------
@@ -84,11 +83,11 @@ void Articulation::setSymId(SymId id)
 
 int Articulation::subtype() const
 {
-    QString s = Sym::id2name(_symId);
+    QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith("Below")) {
-        return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+        return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else if (s.endsWith("Turned")) {
-        return int(Sym::name2id(s.left(s.size() - 6)));
+        return int(SymNames::symIdByName(s.left(s.size() - 6)));
     } else {
         return int(_symId);
     }
@@ -101,17 +100,17 @@ int Articulation::subtype() const
 void Articulation::setUp(bool val)
 {
     _up = val;
-    bool dup = _direction == Direction::AUTO ? val : _direction == Direction::UP;
-    QString s = Sym::id2name(_symId);
+    bool dup = _direction == DirectionV::AUTO ? val : _direction == DirectionV::UP;
+    QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith(!dup ? "Above" : "Below")) {
         QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
-        _symId = Sym::name2id(s2);
+        _symId = SymNames::symIdByName(s2);
     } else if (s.endsWith("Turned")) {
         QString s2 = dup ? s.left(s.size() - 6) : s;
-        _symId = Sym::name2id(s2);
+        _symId = SymNames::symIdByName(s2);
     } else if (!dup) {
         QString s2 = s + "Turned";
-        SymId sym = Sym::name2id(s2);
+        SymId sym = SymNames::symIdByName(s2);
         if (sym != SymId::noSym) {
             _symId = sym;
         }
@@ -131,8 +130,6 @@ void Articulation::read(XmlReader& e)
     }
 }
 
-extern SymId oldArticulationNames2SymId(const QString&);
-
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
@@ -143,9 +140,9 @@ bool Articulation::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         QString s = e.readElementText();
-        SymId id = Sym::name2id(s);
+        SymId id = SymNames::symIdByName(s);
         if (id == SymId::noSym) {
-            id = oldArticulationNames2SymId(s);             // compatibility hack for "old" 3.0 scores
+            id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
         }
         if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
             id = SymId::ornamentMordent;
@@ -170,11 +167,11 @@ bool Articulation::readProperties(XmlReader& e)
         setPlayArticulation(e.readBool());
     } else if (tag == "offset") {
         if (score()->mscVersion() > 114) {
-            Element::readProperties(e);
+            EngravingItem::readProperties(e);
         } else {
             e.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -190,19 +187,19 @@ void Articulation::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     if (!_channelName.isEmpty()) {
         xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
     }
     writeProperty(xml, Pid::DIRECTION);
-    xml.tag("subtype", Sym::id2name(_symId));
+    xml.tag("subtype", SymNames::nameForSymId(_symId));
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
     }
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -211,7 +208,7 @@ void Articulation::write(XmlWriter& xml) const
 
 QString Articulation::userName() const
 {
-    return Sym::id2userName(symId());
+    return SymNames::translatedUserNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -221,21 +218,6 @@ QString Articulation::userName() const
 void Articulation::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-#if 0 //TODO
-    SymId sym = symId();
-    ArticulationShowIn flags = articulationList[int(articulationType())].flags;
-    if (staff()) {
-        if (staff()->staffGroup() == StaffGroup::TAB) {
-            if (!(flags & ArticulationShowIn::TABLATURE)) {
-                return;
-            }
-        } else {
-            if (!(flags & ArticulationShowIn::PITCHED_STAFF)) {
-                return;
-            }
-        }
-    }
-#endif
 
     painter->setPen(curColor());
     drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
@@ -247,8 +229,8 @@ void Articulation::draw(mu::draw::Painter* painter) const
 
 ChordRest* Articulation::chordRest() const
 {
-    if (parent() && parent()->isChordRest()) {
-        return toChordRest(parent());
+    if (explicitParent() && explicitParent()->isChordRest()) {
+        return toChordRest(explicitParent());
     }
     return 0;
 }
@@ -262,11 +244,11 @@ Segment* Articulation::segment() const
 
     Segment* s = 0;
     if (cr->isGrace()) {
-        if (cr->parent()) {
-            s = toSegment(cr->parent()->parent());
+        if (cr->explicitParent()) {
+            s = toSegment(cr->explicitParent()->explicitParent());
         }
     } else {
-        s = toSegment(cr->parent());
+        s = toSegment(cr->explicitParent());
     }
 
     return s;
@@ -275,19 +257,19 @@ Segment* Articulation::segment() const
 Measure* Articulation::measure() const
 {
     Segment* s = segment();
-    return toMeasure(s ? s->parent() : 0);
+    return toMeasure(s ? s->explicitParent() : 0);
 }
 
 System* Articulation::system() const
 {
     Measure* m = measure();
-    return toSystem(m ? m->parent() : 0);
+    return toSystem(m ? m->explicitParent() : 0);
 }
 
 Page* Articulation::page() const
 {
     System* s = system();
-    return toPage(s ? s->parent() : 0);
+    return toPage(s ? s->explicitParent() : 0);
 }
 
 //---------------------------------------------------------
@@ -319,7 +301,7 @@ bool Articulation::layoutCloseToNote() const
 QVector<mu::LineF> Articulation::dragAnchorLines() const
 {
     QVector<LineF> result;
-    result << LineF(canvasPos(), parent()->canvasPos());
+    result << LineF(canvasPos(), parentItem()->canvasPos());
     return result;
 }
 
@@ -327,16 +309,16 @@ QVector<mu::LineF> Articulation::dragAnchorLines() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Articulation::getProperty(Pid propertyId) const
+PropertyValue Articulation::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::SYMBOL:              return QVariant::fromValue(_symId);
-    case Pid::DIRECTION:           return QVariant::fromValue<Direction>(direction());
+    case Pid::SYMBOL:              return PropertyValue::fromValue(_symId);
+    case Pid::DIRECTION:           return PropertyValue::fromValue<DirectionV>(direction());
     case Pid::ARTICULATION_ANCHOR: return int(anchor());
-    case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
+    case Pid::ORNAMENT_STYLE:      return ornamentStyle();
     case Pid::PLAY:                return bool(playArticulation());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -344,14 +326,14 @@ QVariant Articulation::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Articulation::setProperty(Pid propertyId, const QVariant& v)
+bool Articulation::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:
         setSymId(v.value<SymId>());
         break;
     case Pid::DIRECTION:
-        setDirection(v.value<Direction>());
+        setDirection(v.value<DirectionV>());
         break;
     case Pid::ARTICULATION_ANCHOR:
         setAnchor(ArticulationAnchor(v.toInt()));
@@ -360,10 +342,10 @@ bool Articulation::setProperty(Pid propertyId, const QVariant& v)
         setPlayArticulation(v.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
-        setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
+        setOrnamentStyle(v.value<OrnamentStyle>());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -373,15 +355,14 @@ bool Articulation::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Articulation::propertyDefault(Pid propertyId) const
+PropertyValue Articulation::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DIRECTION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return DirectionV::AUTO;
 
     case Pid::ORNAMENT_STYLE:
-        //return int(score()->style()->ornamentStyle(_ornamentStyle));
-        return int(MScore::OrnamentStyle::DEFAULT);
+        return OrnamentStyle::DEFAULT;
 
     case Pid::PLAY:
         return true;
@@ -389,7 +370,7 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -538,7 +519,7 @@ Pid Articulation::propertyId(const QStringRef& xmlName) const
     if (xmlName == "subtype") {
         return Pid::SYMBOL;
     }
-    return Element::propertyId(xmlName);
+    return EngravingItem::propertyId(xmlName);
 }
 
 //---------------------------------------------------------
@@ -558,7 +539,7 @@ Sid Articulation::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::MIN_DISTANCE:
-        return Element::getPropertyStyle(id);
+        return EngravingItem::getPropertyStyle(id);
 
     case Pid::ARTICULATION_ANCHOR: {
         switch (anchorGroup(_symId)) {
@@ -595,7 +576,7 @@ void Articulation::resetProperty(Pid id)
     default:
         break;
     }
-    Element::resetProperty(id);
+    EngravingItem::resetProperty(id);
 }
 
 //---------------------------------------------------------
@@ -604,7 +585,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
 {
-    return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
+    return explicitParent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
 bool Articulation::isTenuto() const
@@ -683,7 +664,7 @@ bool Articulation::isOrnament() const
 
 QString Articulation::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
 }
 
 //---------------------------------------------------------
@@ -699,7 +680,7 @@ void Articulation::doAutoplace()
         rebase = rebaseOffset();
     }
 
-    if (autoplace() && parent()) {
+    if (autoplace() && explicitParent()) {
         Segment* s = segment();
         Measure* m = measure();
         int si     = staffIdx();
@@ -796,8 +777,8 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
 {
     std::set<SymId> result;
     for (const SymId& articulationSymbolId: articulationSymbolIds) {
-        auto articulation = articulationAboveSplitGroups.find(articulationSymbolId);
-        if (articulation != articulationAboveSplitGroups.end()) {
+        auto artic = articulationAboveSplitGroups.find(articulationSymbolId);
+        if (artic != articulationAboveSplitGroups.end()) {
             ArticulationGroup group = articulationAboveSplitGroups[articulationSymbolId];
             result.insert(group.first);
             result.insert(group.second);
@@ -811,9 +792,9 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
 
 std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds)
 {
-    std::vector<SymId> result;
+    SymIdList result;
 
-    std::vector<SymId> vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
+    SymIdList vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
 
     std::sort(vsymbolIds.begin(), vsymbolIds.end(), [](SymId l, SymId r) {
         return l > r;
@@ -918,11 +899,11 @@ std::set<SymId> updateArticulations(const std::set<SymId>& articulationSymbolIds
     return joinArticulations(splittedArticulations);
 }
 
-std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, Placement placement)
+std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, PlacementV placement)
 {
     std::set<SymId> result;
     switch (placement) {
-    case Placement::ABOVE:
+    case PlacementV::ABOVE:
         for (const SymId& articulationSymbolId: articulationSymbolIds) {
             bool found = false;
             for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {
@@ -938,7 +919,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
             }
         }
         break;
-    case Placement::BELOW:
+    case PlacementV::BELOW:
         for (const SymId& articulationSymbolId: articulationSymbolIds) {
             bool found = false;
             for (auto it = articulationPlacements.begin(); it != articulationPlacements.end(); ++it) {

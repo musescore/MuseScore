@@ -21,14 +21,18 @@
  */
 
 #include "mmrest.h"
+
+#include "draw/pen.h"
+#include "rw/xml.h"
+#include "types/symnames.h"
+
 #include "measure.h"
 #include "score.h"
-#include "symid.h"
 #include "undo.h"
 #include "utils.h"
-#include "draw/pen.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle mmRestStyle {
@@ -39,8 +43,8 @@ static const ElementStyle mmRestStyle {
 //    MMRest
 //--------------------------------------------------------
 
-MMRest::MMRest(Score* s)
-    : Rest(s)
+MMRest::MMRest(Segment* s)
+    : Rest(ElementType::MMREST, s)
 {
     m_width = 0;
     m_symsWidth = 0;
@@ -77,7 +81,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
 
     // draw number
     painter->setPen(curColor());
-    std::vector<SymId>&& numberSym = toTimeSigString(QString("%1").arg(m_number));
+    SymIdList&& numberSym = timeSigSymIdsFromString(QString("%1").arg(m_number));
     RectF numberBox = symBbox(numberSym);
     qreal x = (m_width - numberBox.width()) * .5;
     qreal y = m_numberPos * spatium() - staff()->height() * .5;
@@ -89,7 +93,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         && m_number <= score()->styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
         x = (m_width - m_symsWidth) * 0.5;
-        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        qreal spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : m_restSyms) {
             y = (sym == SymId::restWhole ? -spatium() : 0);
             drawSymbol(sym, painter, PointF(x, y));
@@ -100,7 +104,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
         pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
-        qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
+        qreal hBarThickness = score()->styleMM(Sid::mmRestHBarThickness);
         if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(hBarThickness);
             painter->setPen(pen);
@@ -118,11 +122,11 @@ void MMRest::draw(mu::draw::Painter* painter) const
         }
 
         // draw vertical lines
-        qreal vStrokeThickness = score()->styleP(Sid::mmRestHBarVStrokeThickness);
+        qreal vStrokeThickness = score()->styleMM(Sid::mmRestHBarVStrokeThickness);
         if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
             pen.setWidthF(vStrokeThickness);
             painter->setPen(pen);
-            qreal halfVStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight) * .5;
+            qreal halfVStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight) * .5;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
             painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
         }
@@ -137,7 +141,7 @@ void MMRest::layout()
 {
     m_number = measure()->mmRestCount();
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
     }
 
@@ -146,7 +150,7 @@ void MMRest::layout()
         m_symsWidth = 0;
 
         int remaining = m_number;
-        qreal spacing = score()->styleP(Sid::mmRestOldStyleSpacing);
+        qreal spacing = score()->styleMM(Sid::mmRestOldStyleSpacing);
         SymId sym;
 
         while (remaining > 0) {
@@ -169,7 +173,7 @@ void MMRest::layout()
         qreal symHeight = symBbox(m_restSyms[0]).height();
         setbbox(RectF((m_width - m_symsWidth) * .5, -spatium(), m_symsWidth, symHeight));
     } else { // H-bar
-        qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
+        qreal vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
         setbbox(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     }
     if (m_numberVisible) {
@@ -185,7 +189,7 @@ void MMRest::layout()
 
 RectF MMRest::numberRect() const
 {
-    std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(m_number));
+    SymIdList&& s = timeSigSymIdsFromString(QString("%1").arg(m_number));
 
     RectF r = symBbox(s);
     qreal x = (m_width - r.width()) * .5;
@@ -201,17 +205,17 @@ RectF MMRest::numberRect() const
 
 void MMRest::write(XmlWriter& xml) const
 {
-    xml.stag("Rest"); // for compatibility, see also Measure::readVoice()
+    xml.startObject("Rest"); // for compatibility, see also Measure::readVoice()
     ChordRest::writeProperties(xml);
     el().write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant MMRest::propertyDefault(Pid propertyId) const
+PropertyValue MMRest::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:
@@ -227,7 +231,7 @@ QVariant MMRest::propertyDefault(Pid propertyId) const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant MMRest::getProperty(Pid propertyId) const
+PropertyValue MMRest::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:
@@ -243,7 +247,7 @@ QVariant MMRest::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool MMRest::setProperty(Pid propertyId, const QVariant& v)
+bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::MMREST_NUMBER_POS:
@@ -267,7 +271,7 @@ bool MMRest::setProperty(Pid propertyId, const QVariant& v)
 Shape MMRest::shape() const
 {
     Shape shape;
-    qreal vStrokeHeight = score()->styleP(Sid::mmRestHBarVStrokeHeight);
+    qreal vStrokeHeight = score()->styleMM(Sid::mmRestHBarVStrokeHeight);
     shape.add(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
     if (m_numberVisible) {
         shape.add(numberRect());

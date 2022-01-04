@@ -24,73 +24,68 @@
 
 #include <memory>
 
-#include "../imasternotation.h"
-#include "../inotationreadersregister.h"
-#include "../inotationwritersregister.h"
-
 #include "modularity/ioc.h"
-#include "notation.h"
 #include "retval.h"
+#include "project/projecttypes.h"
+
+#include "notation.h"
+#include "../imasternotation.h"
 
 namespace Ms {
 class MasterScore;
 }
 
+namespace mu::project {
+class NotationProject;
+}
+
 namespace mu::notation {
 class MasterNotation : public IMasterNotation, public Notation, public std::enable_shared_from_this<MasterNotation>
 {
-    INJECT(notation, INotationReadersRegister, readers)
-    INJECT(notation, INotationWritersRegister, writers)
-
 public:
-    explicit MasterNotation();
     ~MasterNotation();
+
+    void setMasterScore(Ms::MasterScore* masterScore);
+    Ret setupNewScore(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions);
+    void applyOptions(Ms::MasterScore* score, const ScoreCreateOptions& scoreOptions, bool createdFromTemplate = false);
+    void onSaveCopy();
 
     INotationPtr notation() override;
 
-    Meta metaInfo() const override;
-    void setMetaInfo(const Meta& meta) override;
-
-    Ret load(const io::path& path, const io::path& stylePath = io::path(), bool forceMode = false) override;
-    io::path path() const override;
-
-    Ret createNew(const ScoreCreateOptions& scoreOptions) override;
     RetVal<bool> created() const override;
 
-    Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
     mu::ValNt<bool> needSave() const override;
 
+    IExcerptNotationPtr newExcerptBlankNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
-    void setExcerpts(const ExcerptNotationList& excerpts) override;
+    ExcerptNotationList potentialExcerpts() const override;
+
+    void addExcerpts(const ExcerptNotationList& excerpts) override;
+    void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
-    INotationPtr clone() const override;
-
-    Ret writeToDevice(io::Device& destinationDevice) override;
+    IMasterNotationMidiDataPtr midiData() const override;
 
 private:
-    Ret exportScore(const io::path& path, const std::string& suffix);
+
+    friend class project::NotationProject;
+    explicit MasterNotation();
 
     Ms::MasterScore* masterScore() const;
 
-    Ret load(const io::path& path, const io::path& stylePath, const INotationReaderPtr& reader, bool forceMode = false);
-    Ret doLoadScore(Ms::MasterScore* score, const io::path& path, const INotationReaderPtr& reader, bool forceMode = false) const;
-    mu::RetVal<Ms::MasterScore*> newScore(const ScoreCreateOptions& scoreInfo);
-
+    void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
     void doSetExcerpts(ExcerptNotationList excerpts);
 
-    void initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts = QList<Ms::Excerpt*>());
-
-    void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
-
-    void updateExcerpts();
-    IExcerptNotationPtr createExcerpt(Ms::Part* part);
-
-    Ret saveScore(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
-    Ret saveSelectionOnScore(const io::path& path = io::path());
+    void notifyAboutNeedSaveChanged();
 
     ValCh<ExcerptNotationList> m_excerpts;
+    IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+
+    async::Notification m_needSaveNotification;
 };
+
+using MasterNotationPtr = std::shared_ptr<MasterNotation>;
 }
 
 #endif // MU_NOTATION_MASTERNOTATION_H

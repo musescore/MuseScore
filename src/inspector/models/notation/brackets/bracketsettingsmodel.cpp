@@ -29,10 +29,11 @@
 using namespace mu::inspector;
 
 BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+    : AbstractInspectorModel(parent, repository, Ms::ElementType::BRACKET)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
     setTitle(qtrc("inspector", "Bracket"));
+    setIcon(ui::IconCode::Code::BRACKET);
     createProperties();
 }
 
@@ -40,22 +41,6 @@ void BracketSettingsModel::createProperties()
 {
     m_bracketColumnPosition = buildPropertyItem(Ms::Pid::BRACKET_COLUMN);
     m_bracketSpanStaves = buildPropertyItem(Ms::Pid::BRACKET_SPAN);
-}
-
-void BracketSettingsModel::requestElements()
-{
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [](const Ms::Element* element) -> bool {
-        IF_ASSERT_FAILED(element) {
-            return false;
-        }
-
-        const Ms::Bracket* bracket = Ms::toBracket(element);
-        IF_ASSERT_FAILED(bracket) {
-            return false;
-        }
-
-        return bracket->bracketType() != Ms::BracketType::BRACE;
-    });
 }
 
 void BracketSettingsModel::loadProperties()

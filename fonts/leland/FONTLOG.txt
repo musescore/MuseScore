@@ -11,7 +11,7 @@ Basic font information
 
 Leland is a Unicode typeface designed by MuseScore BVBA for its music notation and scoring applications.
 
-It is compliant with version 1.2 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
+It is compliant with version 1.4 of the Standard Music Font Layout (SMuFL), a community-driven standard for how music symbols should be laid out in the Unicode Private Use Area (PUA) in the Basic Multilingual Plane (BMP) for compatibility between different scoring applications.
 
 The latest version of the SMuFL specification can be found at:
 
@@ -32,6 +32,108 @@ https://musescore.com/contact
 
 Change log
 ----------
+
+25 November 2021 (Martin Keary & Simon Smith) Leland Version 0.74
+- Leland
+  - Added:
+    - Bar repeat components (E503-E505)
+    - Baroque ornaments:
+      - Right- and left-facing half circle (E571, E572)
+      - Curve below (E578)
+      - Shake (Muffat) (E584)
+    - Combining strokes for trills and mordents:
+      - Ornament low left concave stroke (E598)
+      - Ornament zig-zag line without right-hand/left-hand end (E59D, E59E)
+    - Precomposed trills and mordents:
+      - Cadence (E5BE)
+      - Double cadence with lower/upper prefix (E5C0, E5C3)
+
+17 November 2021 (Martin Keary & Simon Smith) Leland Version 0.73
+- Corrected small bump in contour of whole note symbols
+- Fixed missing extrema in pedal symbols E650 and E651
+
+16 November 2021 (Martin Keary & Simon Smith) Leland Version 0.72
+- Leland
+  - Added:
+    - Unpitched percussion clef 2 (E06A)
+    - Diamond whole notehead (E0D8)
+    - Staccatissimo (E4A6, E4A7)
+    - Breath mark (comma) (E4CE)
+    - Short caesura (E4D3)
+    - Repeat 1/2/4 bars (E500-E502)
+    - Crescendo and diminuendo hairpins (E53E, E53F)
+    - Messa di voce (E540)
+    - Brass mute symbols (E5E6-E5EB)
+    - Brass valve trill (E5EF)
+    - Short trill ornament (E56C)
+    - Haydn ornament (E56F)
+    - Ornament low left concave stroke (E598)
+    - Ornament zig-zag line with/without right-hand end (E59D, E59E)
+    - Pre-beat port de voix followed by multiple mordent (E5BC)
+    - Baroque ornaments:
+      - Port de voix (E570)
+      - Right- and left-facing hook (E573, E574)
+      - Hook before and after note (E575, E576)
+      - Oblique straight lines (E579-E57E)
+      - various components (E573-E576, E579-E57E)
+      - Shake (E582)
+      - Schleifer (E587)
+      - Pincé (E588)
+  - Modified:
+    - Double whole notehead (E0A0) - previous version now a stylistic alternate
+    - Individual notes (E1D2-E1E6)
+    - Staccatissimo wedges (E4A8, E4A9)
+    - Z-style quarter rest (E4F6)
+    - Trill with lower suffix (E5C8)
+    - pf dynamic (E52E)
+    - Straight flags (some were incorrectly positioned)
+- Leland Text
+  - Modified:
+    - Metronome mark notes (ECA3, ECA5, ECA7, ECA9) and dot (ECB7)
+- Fixed remaining issues with self-intersection and missing extrema
+- Adjusted opticalCenter anchor points for dynamics
+
+08 July 2021 (Martin Keary & Simon Smith) Leland Version 0.61
+- Added missing points at extrema throughout
+
+05 July 2021 (Martin Keary & Simon Smith) Leland Version 0.6
+- Leland
+  - Added:
+    - Notehead parentheses (E0F5, E0F6)
+    - Noteheads:
+      - square white/black (E0B8, E0B9)
+      - triangle up white/black (E0BD, E0BE)
+      - triangle left white/black (E0BF, E0C0)
+      - moon white/black (E0CA, E0CB)
+      - triangle-round down white/black (E0CC, E0CD)
+      - slashed (E0CF-E0D6)
+      - diamond double whole and whole (E0D7, E0D8)
+      - round double-slashed black/white (E11C, E11D)
+    - Straight flags (stylistic alternates for E240-E24D)
+    - Metronome mark double whole note, whole note, 32nd note (ECA0, ECA2, ECAB)
+    - Z-style quarter rest (E4F6)
+  - Modified:
+    - Treble clefs (E050-E057, E07A)
+    - Whole note and double whole note (E0A0, E0A2)
+    - Diamond half and whole noteheads (E0D9, E0DB)
+    - Flags (E240-E251)
+    - Some quartertones with arrows (E274-E278)
+    - Laissez vibrer ties (E4BA, E4BB)
+    - Maxima, longa and double whole rests (E4E0-E4E2)
+    - Metronome mark notes (ECA3, ECA5, ECA7, ECA9) and dot (ECB7)
+- Leland Text
+  - Added:
+    - Chord symbols (E870-E87C)
+    - Metronome mark double whole note, whole note, 32nd note (ECA0, ECA2, ECAB)
+    - Standard accidentals for chord symbols (ED60-ED66)
+  - Modified:
+    - Metronome mark notes (ECA3, ECA5, ECA7, ECA9) and dot (ECB7)
+- Added metadata for glyphsWithAlternates and ligatures
+- Added metadata for preferred text fonts, in engravingDefaults
+
+04 February 2021 (Martin Keary & Simon Smith) Leland Version 0.52
+- Packaged with MuseScore 3.6.2
+- Added kerning for fz pairs in dynamics
 
 25 January 2021 (Martin Keary & Simon Smith) Leland Version 0.51
 - Packaged with MuseScore 3.6.1

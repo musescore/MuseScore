@@ -24,12 +24,11 @@
 #define __MSCOREVIEW_H__
 
 #include <QList>
-#include <QCursor>
 
-#include "draw/painter.h"
+#include "infrastructure/draw/painter.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Score;
 class Slur;
 class Note;
@@ -50,10 +49,12 @@ protected:
 
 public:
     virtual ~MuseScoreView() = default;
-    Page* point2page(const mu::PointF&);
-    Element* elementAt(const mu::PointF& p);
-    const QList<Element*> elementsAt(const mu::PointF&);
-    virtual Element* elementNear(mu::PointF) { return 0; }
+    Page* point2page(const mu::PointF&) const;
+    EngravingItem* elementAt(const mu::PointF& p) const;
+    const QList<EngravingItem*> elementsAt(const mu::PointF&) const;
+    EngravingItem* elementNear(const mu::PointF& pos) const;
+    const QList<EngravingItem*> elementsNear(const mu::PointF& pos) const;
+    virtual qreal selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
     virtual void dataChanged(const mu::RectF&) = 0;
@@ -62,20 +63,18 @@ public:
     virtual void moveCursor() {}
     virtual void showLoopCursors(bool) {}
 
-    virtual void adjustCanvasPosition(const Element*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
+    virtual void adjustCanvasPosition(const EngravingItem*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
     virtual void setScore(Score* s) { _score = s; }
     Score* score() const { return _score; }
     virtual void removeScore() {}
 
-    virtual void changeEditElement(Element*) {}
-    virtual QCursor cursor() const { return QCursor(); }
-    virtual void setCursor(const QCursor&) {}
+    virtual void changeEditElement(EngravingItem*) {}
     virtual void setDropRectangle(const mu::RectF&) {}
     virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
-    virtual void startEdit(Element*, Grip /*startGrip*/) {}
+    virtual void startEdit(EngravingItem*, Grip /*startGrip*/) {}
     virtual void startNoteEntryMode() {}
     virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const = 0;
-    virtual void setDropTarget(const Element*) {}
+    virtual void setDropTarget(const EngravingItem*) {}
 
     virtual void textTab(bool /*back*/) {}
     virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
@@ -85,7 +84,7 @@ public:
     virtual void lyricsMinus() {}
     virtual void lyricsUnderscore() {}
 
-    virtual void onElementDestruction(Element*) {}
+    virtual void onElementDestruction(EngravingItem*) {}
 
     virtual const mu::Rect geometry() const = 0;
 };

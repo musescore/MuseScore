@@ -31,7 +31,7 @@
 #include <QtCore/qscopedpointer.h>
 
 namespace Ms {
-class Element;
+class EngravingItem;
 }
 
 class SvgGeneratorPrivate;
@@ -85,7 +85,7 @@ public:
     void setResolution(int dpi);
     int resolution() const;
 
-    void setElement(const Ms::Element* e);
+    void setElement(const Ms::EngravingItem* e);
 
 protected:
     QPaintEngine* paintEngine() const;

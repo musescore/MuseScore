@@ -21,6 +21,7 @@
  */
 
 #include "utils.h"
+#include "factory.h"
 #include "score.h"
 #include "pitchspelling.h"
 #include "key.h"
@@ -35,8 +36,10 @@
 #include "measure.h"
 #include "fret.h"
 #include "part.h"
+#include "linkedobjects.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -336,7 +339,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     }
 
     if (_selection.isList()) {
-        foreach (Element* e, _selection.uniqueElements()) {
+        foreach (EngravingItem* e, _selection.uniqueElements()) {
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
@@ -354,10 +357,10 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 int rootTpc, baseTpc;
                 if (mode == TransposeMode::DIATONICALLY) {
                     Fraction tick = Fraction(0, 1);
-                    if (h->parent()->isSegment()) {
-                        tick = toSegment(h->parent())->tick();
-                    } else if (h->parent()->isFretDiagram() && h->parent()->parent()->isSegment()) {
-                        tick = toSegment(h->parent()->parent())->tick();
+                    if (h->explicitParent()->isSegment()) {
+                        tick = toSegment(h->explicitParent())->tick();
+                    } else if (h->explicitParent()->isFretDiagram() && h->explicitParent()->explicitParent()->isSegment()) {
+                        tick = toSegment(h->explicitParent()->explicitParent())->tick();
                     }
                     Key key = !h->staff() ? Key::C : h->staff()->key(tick);
                     rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
@@ -437,7 +440,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             if (staff(track / VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (!e) {
                 continue;
             }
@@ -493,7 +496,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
         if (transposeChordNames) {
-            foreach (Element* e, segment->annotations()) {
+            foreach (EngravingItem* e, segment->annotations()) {
                 if ((e->type() != ElementType::HARMONY) || (!tracks.contains(e->track()))) {
                     continue;
                 }
@@ -502,7 +505,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 // undoTransposeHarmony does not do links
                 // because it is also used to handle transposing instruments
                 // and score / parts could be in different concert pitch states
-                for (ScoreElement* se : hh->linkList()) {
+                for (EngravingObject* se : hh->linkList()) {
                     Harmony* h = toHarmony(se);
                     if (mode == TransposeMode::DIATONICALLY) {
                         Fraction tick = segment->tick();
@@ -531,7 +534,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
             KeySig* ks = toKeySig(seg->element(track));
             if (!ks) {
-                ks = new KeySig(this);
+                ks = Factory::createKeySig(seg);
                 ks->setTrack(track);
                 Key nKey = transposeKey(Key::C, interval, ks->part()->preferSharpFlat());
                 ks->setKey(nKey);
@@ -619,14 +622,14 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
             }
         }
         if (createKey && firstMeasure()) {
-            KeySig* ks = new KeySig(this);
+            Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
+            seg->setHeader(true);
+            KeySig* ks = Factory::createKeySig(seg);
             ks->setTrack(staffIdx * VOICES);
             Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
             KeySigEvent ke;
             ke.setKey(nKey);
             ks->setKeySigEvent(ke);
-            Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
-            seg->setHeader(true);
             ks->setParent(seg);
             undoAddElement(ks);
         }
@@ -817,7 +820,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
             int t1 = st->idx() * VOICES;
             int t2 = t1 + VOICES;
             for (int track = t1; track < t2; ++track) {
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->isChord()) {
                     Chord* c = toChord(e);
                     for (Chord* gc : c->graceNotes()) {
@@ -832,15 +835,15 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                     }
                 }
                 // find chord symbols
-                for (Element* element : s->annotations()) {
+                for (EngravingItem* element : s->annotations()) {
                     if (element->track() != track || element->type() != ElementType::HARMONY) {
                         continue;
                     }
                     Harmony* h  = toHarmony(element);
                     int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                     int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
-                    for (ScoreElement* scoreElement : h->linkList()) {
-                        if (!scoreElement->score()->styleB(Sid::concertPitch)) {
+                    for (EngravingObject* scoreElement : h->linkList()) {
+                        if (!scoreElement->style()->styleB(Sid::concertPitch)) {
                             undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                         }
                     }

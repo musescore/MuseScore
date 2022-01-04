@@ -19,18 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "scoreorder.h"
+
 #include <iostream>
 
-#include "scoreorder.h"
 #include "translation.h"
+#include "rw/xml.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/undo.h"
-#include "libmscore/xml.h"
 
 using namespace mu;
 
@@ -42,18 +43,28 @@ static const QString UNSORTED_ID("<unsorted>");
 //   readBoolAttribute
 //---------------------------------------------------------
 
-bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* name, bool defvalue)
+bool ScoreOrder::operator==(const ScoreOrder& order) const
 {
-    if (!reader.hasAttribute(name)) {
+    return id == order.id;
+}
+
+bool ScoreOrder::operator!=(const ScoreOrder& order) const
+{
+    return !(*this == order);
+}
+
+bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, bool defvalue)
+{
+    if (!reader.hasAttribute(attrName)) {
         return defvalue;
     }
-    QString attr { reader.attribute(name) };
+    QString attr { reader.attribute(attrName) };
     if (attr.toLower() == "false") {
         return false;
     } else if (attr.toLower() == "true") {
         return true;
     }
-    qDebug("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(name), defvalue);
+    qDebug("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(attrName), defvalue);
     return defvalue;
 }
 
@@ -129,7 +140,7 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
             sg.family = QString(UNSORTED_ID);
             sg.section = sectionId;
             sg.unsorted = group;
-            sg.bracket = false;
+            sg.bracket = true;
             sg.showSystemMarkings = readBoolAttribute(reader, "showSystemMarkings", false);
             sg.barLineSpan = readBoolAttribute(reader, "barLineSpan", true);
             sg.thinBracket = readBoolAttribute(reader, "thinBrackets", true);
@@ -145,10 +156,10 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
 //   hasGroup
 //---------------------------------------------------------
 
-bool ScoreOrder::hasGroup(const QString& id, const QString& group) const
+bool ScoreOrder::hasGroup(const QString& familyId, const QString& group) const
 {
     for (const ScoreGroup& sg: groups) {
-        if ((sg.family == id) && (group == sg.unsorted)) {
+        if ((sg.family == familyId) && (group == sg.unsorted)) {
             return true;
         }
     }
@@ -237,7 +248,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     int thnBracketSpan { 0 };
 
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate) {
             continue;
         }
@@ -276,13 +287,13 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 }
             }
 
-            if (ii.instrTemplate->nstaves() > 1) {
+            if (ii.instrTemplate->staffCount > 1) {
                 blockThinBracket = true;
                 if (ii.instrTemplate->bracket[staffIdx] != BracketType::NO_BRACKET) {
                     score->undoAddBracket(staff, 2, ii.instrTemplate->bracket[staffIdx], ii.instrTemplate->bracketSpan[staffIdx]);
                 }
                 staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, ii.instrTemplate->barlineSpan[staffIdx]);
-                if (staffIdx < ii.instrTemplate->nstaves()) {
+                if (staffIdx < ii.instrTemplate->staffCount) {
                     ++staffIdx;
                 }
                 prvStaff = nullptr;
@@ -351,7 +362,7 @@ void ScoreOrder::read(Ms::XmlReader& reader)
             sg.family = QString(UNSORTED_ID);
             sg.section = sectionId;
             sg.unsorted = group;
-            sg.bracket = true;
+            sg.bracket = false;
             sg.showSystemMarkings = false;
             sg.barLineSpan = false;
             sg.thinBracket = false;
@@ -373,30 +384,31 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
         return;
     }
 
-    xml.stag(QString("Order id=\"%1\"").arg(id));
+    xml.startObject(QString("Order id=\"%1\"").arg(id));
     xml.tag("name", name);
 
     QMapIterator<QString, InstrumentOverwrite> i(instrumentMap);
     while (i.hasNext()) {
         i.next();
-        xml.stag(QString("instrument id=\"%1\"").arg(i.key()));
+        xml.startObject(QString("instrument id=\"%1\"").arg(i.key()));
         xml.tag(QString("family id=\"%1\"").arg(i.value().id), i.value().name);
-        xml.etag();
+        xml.endObject();
     }
 
     QString section { "" };
     for (const ScoreGroup& sg : groups) {
         if (sg.section != section) {
             if (!section.isEmpty()) {
-                xml.etag();
+                xml.endObject();
             }
             if (!sg.section.isEmpty()) {
-                xml.stag(QString("section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
-                         .arg(sg.section,
-                              sg.bracket ? "true" : "false",
-                              sg.showSystemMarkings ? "true" : "false",
-                              sg.barLineSpan ? "true" : "false",
-                              sg.thinBracket ? "true" : "false"));
+                xml.startObject(QString(
+                                    "section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
+                                .arg(sg.section,
+                                     sg.bracket ? "true" : "false",
+                                     sg.showSystemMarkings ? "true" : "false",
+                                     sg.barLineSpan ? "true" : "false",
+                                     sg.thinBracket ? "true" : "false"));
             }
             section = sg.section;
         }
@@ -411,9 +423,9 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
         }
     }
     if (!section.isEmpty()) {
-        xml.etag();
+        xml.endObject();
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -423,7 +435,7 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
 void ScoreOrder::updateInstruments(const Score* score)
 {
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate || !ii.instrTemplate->family) {
             continue;
         }

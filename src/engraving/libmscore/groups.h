@@ -23,10 +23,9 @@
 #ifndef __GROUPS__
 #define __GROUPS__
 
-#include "fraction.h"
-#include "mscore.h"
 #include "durationtype.h"
 #include "beam.h"
+#include "types/groupnode.h"
 
 namespace Ms {
 class ChordRest;
@@ -34,45 +33,33 @@ class XmlWriter;
 class XmlReader;
 
 //---------------------------------------------------------
-//   GroupNode
-//---------------------------------------------------------
-
-struct GroupNode {
-    int pos;            // tick position, division 32nd
-    int action;         // bits: cccc bbbb aaaa
-                        // cc - 1/64  bb - 1/32  aa - 1/16
-                        // bit pattern xxxx:
-                        // 1 - start new beam
-                        // 2 - start new 1/32 subbeam
-                        // 3 - start new 1/64 subbeam
-
-    bool operator==(const GroupNode& g) const { return g.pos == pos && g.action == action; }
-};
-
-//---------------------------------------------------------
 //   @@ Groups
 ///    GroupNodes must be sorted by tick
 //---------------------------------------------------------
 
-class Groups : public std::vector<GroupNode>
+class Groups
 {
 public:
     Groups() {}
-    Groups(const std::vector<GroupNode>& l)
-        : std::vector<GroupNode>(l) {}
+    Groups(const GroupNodes& nodes)
+        : m_nodes(nodes) {}
+
+    const GroupNodes& nodes() const { return m_nodes; }
+    bool empty() const { return m_nodes.empty(); }
+    void addNode(const GroupNode& n) { m_nodes.push_back(n); }
 
     void write(XmlWriter&) const;
     void read(XmlReader&);
 
-    Beam::Mode beamMode(int tick, TDuration::DurationType d) const;
-    void addStop(int pos, TDuration::DurationType d, Beam::Mode bm);
+    BeamMode beamMode(int tick, DurationType d) const;
+    void addStop(int pos, DurationType d, BeamMode bm);
     bool operator==(const Groups& g) const
     {
-        if (g.size() != size()) {
+        if (g.m_nodes.size() != m_nodes.size()) {
             return false;
         }
-        for (unsigned i = 0; i < size(); ++i) {
-            if (!(g[i] == (*this)[i])) {
+        for (size_t i = 0; i < m_nodes.size(); ++i) {
+            if (!(g.m_nodes.at(i) == m_nodes.at(i))) {
                 return false;
             }
         }
@@ -82,7 +69,10 @@ public:
     void dump(const char*) const;
 
     static const Groups& endings(const Fraction& f);
-    static Beam::Mode endBeam(ChordRest* cr, ChordRest* prev = 0);
+    static BeamMode endBeam(ChordRest* cr, ChordRest* prev = 0);
+
+private:
+    GroupNodes m_nodes;
 };
 
 //---------------------------------------------------------
@@ -94,7 +84,5 @@ struct NoteGroup {
     Groups endings;
 };
 }     // namespace Ms
-
-Q_DECLARE_METATYPE(Ms::Groups);
 
 #endif

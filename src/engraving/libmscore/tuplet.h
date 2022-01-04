@@ -45,16 +45,17 @@ enum class TupletBracketType : char;
 class Tuplet final : public DurationElement
 {
     std::vector<DurationElement*> _elements;
-    Direction _direction;
+    DirectionV _direction;
     TupletNumberType _numberType;
     TupletBracketType _bracketType;
-    Spatium _bracketWidth;
+    Millimetre _bracketWidth;
 
     bool _hasBracket;
     Fraction _ratio;
     TDuration _baseLen;        // 1/8 for a triplet of 1/8
 
     bool _isUp;
+    bool _isSmall;
 
     Fraction _tick;
 
@@ -69,21 +70,22 @@ class Tuplet final : public DurationElement
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
 
 public:
-    Tuplet(Score*);
+    Tuplet(Measure* parent);
     Tuplet(const Tuplet&);
     ~Tuplet();
 
+    void setParent(Measure* parent);
+
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     Tuplet* clone() const override { return new Tuplet(*this); }
-    ElementType type() const override { return ElementType::TUPLET; }
     void setTrack(int val) override;
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     Text* number() const { return _number; }
     void setNumber(Text* t) { _number = t; }
@@ -95,7 +97,7 @@ public:
 
     void setSelected(bool f) override;
 
-    Measure* measure() const override { return toMeasure(parent()); }
+    Measure* measure() const override { return toMeasure(explicitParent()); }
 
     TupletNumberType numberType() const { return _numberType; }
     TupletBracketType bracketType() const { return _bracketType; }
@@ -103,8 +105,8 @@ public:
     void setBracketType(TupletBracketType val) { _bracketType = val; }
     bool hasBracket() const { return _hasBracket; }
     void setHasBracket(bool b) { _hasBracket = b; }
-    Spatium bracketWidth() const { return _bracketWidth; }
-    void setBracketWidth(Spatium s) { _bracketWidth = s; }
+    Millimetre bracketWidth() const { return _bracketWidth; }
+    void setBracketWidth(Millimetre s) { _bracketWidth = s; }
 
     Fraction ratio() const { return _ratio; }
     void setRatio(const Fraction& r) { _ratio = r; }
@@ -117,7 +119,7 @@ public:
     }
 
     void layout() override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void read(XmlReader&) override;
     void write(XmlWriter&) const override;
@@ -134,9 +136,10 @@ public:
 
     void dump() const override;
 
-    void setDirection(Direction d) { _direction = d; }
-    Direction direction() const { return _direction; }
+    void setDirection(DirectionV d) { _direction = d; }
+    DirectionV direction() const { return _direction; }
     bool isUp() const { return _isUp; }
+    bool isSmall() const { return _isSmall; }
     Fraction tick() const override { return _tick; }
     Fraction rtick() const override;
     void setTick(const Fraction& v) { _tick = v; }
@@ -146,13 +149,13 @@ public:
 
     void setVisible(bool f) override;
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant& v) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue& v) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
 
     Shape shape() const override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }

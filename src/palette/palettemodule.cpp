@@ -30,24 +30,33 @@
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
+#include "accessibility/iqaccessibleinterfaceregister.h"
 
-#include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
-#include "internal/palette/masterpalette.h"
-#include "internal/paletteactionscontroller.h"
 #include "internal/paletteuiactions.h"
+#include "internal/paletteactionscontroller.h"
+#include "internal/paletteworkspacesetup.h"
+#include "internal/paletteprovider.h"
+#include "internal/palettecell.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
 #include "view/palettecellpropertiesmodel.h"
+#include "view/drumsetpanelview.h"
 
-#include "internal/paletteworkspacesetup.h"
+#include "view/widgets/masterpalette.h"
+#include "view/widgets/specialcharactersdialog.h"
+#include "view/widgets/editdrumsetdialog.h"
+#include "view/widgets/timesignaturepropertiesdialog.h"
+#include "view/widgets/keyedit.h"
+#include "view/widgets/timedialog.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
 using namespace mu::ui;
+using namespace mu::accessibility;
 
-static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
+static std::shared_ptr<Ms::PaletteProvider> s_paletteProvider = std::make_shared<Ms::PaletteProvider>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
 static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
 static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
@@ -65,7 +74,7 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
+    ioc()->registerExport<IPaletteProvider>(moduleName(), s_paletteProvider);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), s_configuration);
 }
 
@@ -81,11 +90,32 @@ void PaletteModule::resolveImports()
         ir->registerUri(Uri("musescore://palette/masterpalette"),
                         ContainerMeta(ContainerType::QWidgetDialog, Ms::MasterPalette::static_metaTypeId()));
 
+        ir->registerUri(Uri("musescore://palette/specialcharacters"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::SpecialCharactersDialog::static_metaTypeId()));
+
+        ir->registerUri(Uri("musescore://palette/timesignatureproperties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::TimeSignaturePropertiesDialog::static_metaTypeId()));
+
+        ir->registerUri(Uri("musescore://palette/editdrumset"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::EditDrumsetDialog::static_metaTypeId()));
+
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
 
         ir->registerUri(Uri("musescore://palette/cellproperties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PaletteCellPropertiesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://notation/keysignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::KeyEditor>("KeySignaturesDialog")));
+
+        ir->registerUri(Uri("musescore://notation/timesignatures"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<Ms::TimeDialog>("TimeSignaturesDialog")));
+    }
+
+    auto accr = ioc()->resolve<IQAccessibleInterfaceRegister>(moduleName());
+    if (accr) {
+        accr->registerInterfaceGetter("mu::palette::PaletteWidget", PaletteWidget::accessibleInterface);
+        accr->registerInterfaceGetter("mu::palette::PaletteCell", PaletteCell::accessibleInterface);
     }
 }
 
@@ -98,7 +128,7 @@ void PaletteModule::registerUiTypes()
 {
     using namespace Ms;
 
-    qmlRegisterUncreatableType<PaletteWorkspace>("MuseScore.Palette", 1, 0, "PaletteWorkspace", "Cannot create");
+    qmlRegisterUncreatableType<PaletteProvider>("MuseScore.Palette", 1, 0, "PaletteProvider", "Cannot create");
     qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 1, 0, "PaletteController", "Cannot ...");
     qmlRegisterUncreatableType<PaletteElementEditor>("MuseScore.Palette", 1, 0, "PaletteElementEditor", "Cannot ...");
     qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 1, 0, "PaletteTreeModel",  "Cannot create");
@@ -107,6 +137,11 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
     qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
+    qmlRegisterType<DrumsetPanelView>("MuseScore.Palette", 1, 0, "DrumsetPanelView");
+
+    qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
+    qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
+    qRegisterMetaType<Ms::EditDrumsetDialog>("EditDrumsetDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
@@ -120,6 +155,7 @@ void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
     s_configuration->init();
     s_actionsController->init();
     s_paletteUiActions->init();
+    s_paletteProvider->init();
 }
 
 void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
@@ -131,4 +167,14 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     //! NOTE We need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
+}
+
+void PaletteModule::onDeinit()
+{
+    s_paletteWorkspaceSetup.reset();
+    s_configuration.reset();
+    s_paletteUiActions.reset();
+
+    ioc()->unregisterExportIfRegistered<IPaletteProvider>(moduleName(), s_paletteProvider);
+    s_paletteProvider.reset();
 }

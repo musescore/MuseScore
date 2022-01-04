@@ -23,8 +23,7 @@
 #define MU_ASYNC_PROCESSEVENTS_H
 
 #include "thirdparty/deto_async/async/channel.h"
-namespace mu {
-namespace async {
+namespace mu::async {
 inline void processEvents()
 {
     deto::async::processEvents();
@@ -33,7 +32,6 @@ inline void processEvents()
 inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
     deto::async::onMainThreadInvoke(f);
-}
 }
 }
 

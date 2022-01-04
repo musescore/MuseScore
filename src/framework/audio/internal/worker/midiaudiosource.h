@@ -31,21 +31,21 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "isynthesizersregister.h"
-#include "isoundfontsprovider.h"
 #include "midi/imidioutport.h"
+
+#include "isynthresolver.h"
+#include "track.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
-class MidiAudioSource : public IAudioSource, public async::Asyncable
+class MidiAudioSource : public ITrackAudioInput, public async::Asyncable
 {
-    INJECT(audio, synth::ISynthesizersRegister, synthesizersRegister)
-    INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
+    INJECT(audio, synth::ISynthResolver, synthResolver)
     INJECT(audio, midi::IMidiOutPort, midiOutPort)
 
 public:
-    explicit MidiAudioSource(const midi::MidiData& midiData, async::Channel<AudioInputParams> inputParamsChanged);
-    ~MidiAudioSource() = default;
+    explicit MidiAudioSource(const TrackId trackId, const midi::MidiData& midiData);
+    ~MidiAudioSource() override;
 
     bool isActive() const override;
     void setIsActive(const bool active) override;
@@ -53,9 +53,13 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
+
+    const AudioInputParams& inputParams() const override;
+    void applyInputParams(const AudioInputParams& requiredParams) override;
+    async::Channel<AudioInputParams> inputParamsChanged() const override;
 
 private:
     struct EventsBuffer {
@@ -84,6 +88,21 @@ private:
             }
         }
 
+        bool hasEventsForNextTicks(const midi::tick_t nextTicksCount) const
+        {
+            if (isEmpty()) {
+                return false;
+            }
+
+            for (midi::tick_t tick = currentTick; tick <= currentTick + nextTicksCount; ++tick) {
+                if (hasEventsForTick(tick)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         bool isEmpty() const
         {
             return m_eventsMap.empty();
@@ -104,14 +123,15 @@ private:
 
     midi::tick_t tickFromMsec(const msecs_t msec) const;
 
+    bool hasAnythingToPlayback(const msecs_t nextMsecsNumber) const;
     void handleBackgroundStream(const msecs_t nextMsecsNumber);
     void handleMainStream(const msecs_t nextMsecsNumber);
 
     void findAndSendNextEvents(EventsBuffer& eventsBuffer, const midi::tick_t nextTicks);
     bool sendEvents(const std::vector<midi::Event>& events);
     void requestNextEvents(const midi::tick_t nextTicksNumber);
+    void sendRequestFromTick(const midi::tick_t from);
 
-    void resolveSynth(const synth::SynthName& synthName);
     void buildTempoMap();
     void setupChannels();
 
@@ -119,13 +139,16 @@ private:
 
     bool m_hasActiveRequest = false;
 
+    TrackId m_trackId = -1;
     synth::ISynthesizerPtr m_synth = nullptr;
+    AudioInputParams m_params;
+    async::Channel<AudioInputParams> m_paramsChanges;
 
     midi::MidiStream m_stream;
     midi::MidiMapping m_mapping;
 
-    EventsBuffer m_mainStreamEvents;
-    EventsBuffer m_backgroundStreamEvents;
+    EventsBuffer m_mainStreamEventsBuffer;
+    EventsBuffer m_backgroundStreamEventsBuffer;
 
     unsigned int m_sampleRate = 0;
 

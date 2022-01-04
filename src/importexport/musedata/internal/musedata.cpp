@@ -21,7 +21,9 @@
  */
 
 #include "musedata.h"
-#include "libmscore/score.h"
+
+#include "libmscore/factory.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/barline.h"
@@ -41,7 +43,8 @@
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
-#include "libmscore/symid.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -71,11 +74,11 @@ void MuseData::musicalAttribute(QString s, Part* part)
             int n = tl[1].toInt();
             if ((z > 0) && (n > 0)) {
 //TODO                        score->sigmap()->add(curTick, Fraction(z, n));
-                TimeSig* ts = new TimeSig(score);
-                Staff* staff = part->staff(0);
-                ts->setTrack(staff->idx() * VOICES);
                 Measure* mes = score->tick2measure(curTick);
                 Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
+                TimeSig* ts = Factory::createTimeSig(seg);
+                Staff* staff = part->staff(0);
+                ts->setTrack(staff->idx() * VOICES);
                 seg->add(ts);
             }
         } else if (item.startsWith("X:")) {
@@ -145,7 +148,7 @@ void MuseData::readChord(Part*, const QString& s)
     }
 
     Chord* chord = (Chord*)chordRest;
-    Note* note = new Note(score);
+    Note* note = Factory::createNote(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(staffIdx * VOICES + voice);
@@ -163,7 +166,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
         qDebug("%06d: slur %d already open", tick.ticks(), idx + 1);
         return;
     }
-    slur[idx] = new Slur(score);
+    slur[idx] = Factory::createSlur(score->dummy());
     slur[idx]->setTick(tick);
     slur[idx]->setTrack(staffIdx * VOICES + voc);
     score->addElement(slur[idx]);
@@ -207,12 +210,12 @@ void MuseData::readNote(Part* part, const QString& s)
             break;
         }
     }
-    Direction dir = Direction::AUTO;
+    DirectionV dir = DirectionV::AUTO;
     if (s.size() >= 23) {
         if (s[22] == 'u') {
-            dir = Direction::UP;
+            dir = DirectionV::UP;
         } else if (s[22] == 'd') {
-            dir = Direction::DOWN;
+            dir = DirectionV::DOWN;
         }
     }
 
@@ -232,7 +235,7 @@ void MuseData::readNote(Part* part, const QString& s)
     if (pitch > 127) {
         pitch = 127;
     }
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constant::division + _division / 2) / _division);
     Fraction tick  = curTick;
     curTick  += ticks;
 
@@ -252,7 +255,7 @@ void MuseData::readNote(Part* part, const QString& s)
             if (chordRest && chordRest->tuplet() && ntuplet) {
                 tuplet = chordRest->tuplet();
             } else {
-                tuplet = new Tuplet(score);
+                tuplet = new Tuplet(measure);
                 tuplet->setTrack(gstaff * VOICES);
                 tuplet->setTick(tick);
                 ntuplet = a;
@@ -265,7 +268,7 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
 
-    Chord* chord = new Chord(score);
+    Chord* chord = Factory::createChord(score->dummy()->segment());
     chordRest = chord;
     chord->setTrack(gstaff * VOICES);
     chord->setStemDirection(dir);
@@ -282,7 +285,7 @@ void MuseData::readNote(Part* part, const QString& s)
 
     voice = 0;
     for (; voice < VOICES; ++voice) {
-        Element* e = segment->element(gstaff * VOICES + voice);
+        EngravingItem* e = segment->element(gstaff * VOICES + voice);
         if (e == 0) {
             chord->setTrack(gstaff * VOICES + voice);
             segment->add(chord);
@@ -294,7 +297,7 @@ void MuseData::readNote(Part* part, const QString& s)
         delete chord;
         return;
     }
-    Note* note = new Note(score);
+    Note* note = Factory::createNote(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(gstaff * VOICES + voice);
@@ -320,32 +323,32 @@ void MuseData::readNote(Part* part, const QString& s)
         } else if (an[i] == 'x') {
             closeSlur(3, tick, staff, voice);
         } else if (an[i] == '.') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
             chord->add(atr);
         } else if (an[i] == '_') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articTenutoAbove);
             chord->add(atr);
         } else if (an[i] == 'v') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsUpBow);
             chord->add(atr);
         } else if (an[i] == 'n') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsDownBow);
             chord->add(atr);
         } else if (an[i] == 't') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::ornamentTrill);
             chord->add(atr);
         } else if (an[i] == 'F') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(true);
             atr->setSymId(SymId::fermataAbove);
             chord->add(atr);
         } else if (an[i] == 'E') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(false);
             atr->setSymId(SymId::fermataBelow);
             chord->add(atr);
@@ -376,10 +379,10 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
     if (!dynamics.isEmpty()) {
-        Dynamic* dyn = new Dynamic(score);
+        Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+        Dynamic* dyn = Factory::createDynamic(seg);
         dyn->setDynamicType(dynamics);
         dyn->setTrack(gstaff * VOICES);
-        Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
         seg->add(dyn);
     }
 
@@ -387,14 +390,13 @@ void MuseData::readNote(Part* part, const QString& s)
     if (!txt.isEmpty()) {
         QStringList sl = txt.split("|");
         int no = 0;
-        foreach (QString w, sl) {
+        for (QString w : sl) {
             w = diacritical(w);
-            Lyrics* l = new Lyrics(score);
+            Lyrics* l = Factory::createLyrics(chord);
             l->setPlainText(w);
             l->setNo(no++);
             l->setTrack(gstaff * VOICES);
-            Segment* seg = measure->tick2segment(tick);
-            seg->add(l);
+            chord->add(l);
         }
     }
 }
@@ -433,7 +435,7 @@ QString MuseData::diacritical(QString s)
 
 void MuseData::readRest(Part* part, const QString& s)
 {
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constant::division + _division / 2) / _division);
 
     Fraction tick  = curTick;
     curTick  += ticks;
@@ -449,7 +451,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
     TDuration d;
     d.setVal(ticks.ticks());
-    Rest* rest = new Rest(score, d);
+    Rest* rest = Factory::createRest(score->dummy()->segment(), d);
     rest->setTicks(d.fraction());
     chordRest  = rest;
     rest->setTrack(gstaff * VOICES);
@@ -457,7 +459,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
     voice = 0;
     for (; voice < VOICES; ++voice) {
-        Element* e = segment->element(gstaff * VOICES + voice);
+        EngravingItem* e = segment->element(gstaff * VOICES + voice);
         if (e == 0) {
             rest->setTrack(gstaff * VOICES + voice);
             segment->add(rest);
@@ -477,7 +479,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
 void MuseData::readBackup(const QString& s)
 {
-    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * MScore::division + _division / 2) / _division);
+    Fraction ticks = Fraction::fromTicks((s.midRef(5, 3).toInt() * Constant::division + _division / 2) / _division);
     if (s[0] == 'b') {
         curTick  -= ticks;
     } else {
@@ -503,11 +505,6 @@ Measure* MuseData::createMeasure()
         }
         if (curTick > st && curTick < (st + l)) {
             // irregular measure
-#if 0 // TODO
-            Fraction f = score->sigmap()->timesig(st).fraction();
-            score->sigmap()->add(st, curTick - st, f);
-            score->sigmap()->add(curTick, f);
-#endif
             break;
         }
         if (curTick < st + l) {
@@ -515,18 +512,9 @@ Measure* MuseData::createMeasure()
             return 0;
         }
     }
-    Measure* mes  = new Measure(score);
+    Measure* mes  = Factory::createMeasure(score->dummy()->system());
     mes->setTick(curTick);
 
-#if 0
-    foreach (Staff* s, score->staves()) {
-        if (s->isTop()) {
-            BarLine* barLine = new BarLine(score);
-            barLine->setStaff(s);
-            mes->setEndBarLine(barLine);
-        }
-    }
-#endif
     score->measures()->add(mes);
     return mes;
 }
@@ -681,10 +669,9 @@ bool MuseData::read(const QString& name)
             Part* mpart = new Part(score);
             int staves  = countStaves(part);
             for (int i = 0; i < staves; ++i) {
-                Staff* staff = new Staff(score);
-                staff->setPart(mpart);
-                mpart->insertStaff(staff, i);
-                score->staves().push_back(staff);
+                Staff* staff = Factory::createStaff(mpart);
+                score->appendStaff(staff);
+
                 if ((staves == 2) && (i == 0)) {
                     staff->setBracketType(0, BracketType::BRACE);
                     staff->setBracketSpan(0, 2);
@@ -717,22 +704,6 @@ void MuseData::convert()
         Part* part = (score->parts())[pn];
         readPart(parts[pn], part);
     }
-#if 0
-    // crash if system does not fit on page (too many instruments)
-
-    Measure* measure = score->tick2measure(0);
-    if (measure) {
-        Text* text = new Text(score);
-        text->setSubtype(TEXT_TITLE);
-        text->setText(parts[0][6]);
-        text->setText("mops");
-        measure->add(text);
-        text = new Text(score);
-        text->setSubtype(TEXT_SUBTITLE);
-        text->setText(parts[0][6]);
-        measure->add(text);
-    }
-#endif
 }
 
 //---------------------------------------------------------

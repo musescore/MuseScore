@@ -23,10 +23,13 @@
 #ifndef MU_AUDIO_ISYNTHESIZER_H
 #define MU_AUDIO_ISYNTHESIZER_H
 
+#include "async/channel.h"
 #include "io/path.h"
 #include "ret.h"
-#include "synthtypes.h"
 #include "midi/miditypes.h"
+
+#include "synthtypes.h"
+#include "audiotypes.h"
 #include "iaudiosource.h"
 
 namespace mu::audio::synth {
@@ -38,6 +41,9 @@ public:
     virtual bool isValid() const = 0;
 
     virtual std::string name() const = 0;
+    virtual AudioSourceType type() const = 0;
+    virtual const audio::AudioInputParams& params() const = 0;
+    virtual async::Channel<audio::AudioInputParams> paramsChanged() const = 0;
     virtual SoundFontFormats soundFontFormats() const = 0;
 
     virtual Ret init() = 0;
@@ -46,7 +52,6 @@ public:
 
     virtual Ret setupMidiChannels(const std::vector<midi::Event>& events) = 0;
     virtual bool handleEvent(const midi::Event& e) = 0;
-    virtual void writeBuf(float* stream, unsigned int samples) = 0;
 
     virtual void allSoundsOff() = 0; // all channels
     virtual void flushSound() = 0;

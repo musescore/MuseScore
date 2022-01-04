@@ -33,9 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/beamtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/bendtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/chordsymboltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/crescendotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/dynamictypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/fermatatypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/fretdiagramtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/glissandotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/hairpintypes.h
@@ -43,12 +41,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/markertypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/noteheadtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ornamenttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/pedaltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/scoreappearancetypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/linetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/commontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectormodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/abstractinspectorproxymodel.cpp
@@ -99,18 +100,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/articulations/articulationsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracesettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinlinesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinlinesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/horizontalframesettingsmodel.cpp
@@ -121,10 +122,22 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/hairpins/hairpinsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/hairpins/hairpinsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/vibratosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/vibratosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/letringsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/letringsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/palmmutesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/palmmutesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/jumps/jumpsettingsmodel.cpp
@@ -135,8 +148,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/markers/markersettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp
@@ -157,22 +170,24 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/notesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodelistmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodelistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadtypesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadtypesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadgroupsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadgroupsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/stems/stemsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/stems/stemsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/measurerepeats/measurerepeatsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h

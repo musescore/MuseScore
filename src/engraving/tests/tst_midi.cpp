@@ -30,7 +30,7 @@
 #include "testutils.h"
 
 #include "libmscore/mscore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -180,7 +180,7 @@ bool saveMidi(Score* score, const QString& name)
 //   compareElements
 //---------------------------------------------------------
 
-bool compareElements(Element* e1, Element* e2)
+bool compareElements(EngravingItem* e1, EngravingItem* e2)
 {
     if (e1->type() != e2->type()) {
         return false;
@@ -246,8 +246,8 @@ bool compareScores(Score* score1, Score* score2)
     int tracks = staves * VOICES;
     for (;;) {
         for (int track = 0; track < tracks; ++track) {
-            Element* e1 = s1->element(track);
-            Element* e2 = s2->element(track);
+            EngravingItem* e1 = s1->element(track);
+            EngravingItem* e2 = s2->element(track);
             if ((e1 && !e2) || (e2 && !e1)) {
                 printf("   elements different\n");
                 return false;
@@ -462,7 +462,7 @@ void TestMidi::testTimeStretchFermataTempoEdit(MasterScore* score, const QString
     const QString writeFile = QString("%1-%2-test-%3.mid").arg(file).arg(testName);
     const QString reference(MIDI_DATA_DIR + file + "-%1-ref.mid");
 
-    Element* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, -1, 3);
+    EngravingItem* tempo = score->firstSegment(SegmentType::ChordRest)->findAnnotation(ElementType::TEMPO_TEXT, -1, 3);
     Q_ASSERT(tempo && tempo->isTempoText());
 
     const int scoreTempo = 200;

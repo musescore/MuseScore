@@ -23,12 +23,15 @@
 #define MU_AUTOBOT_IAUTOBOT_H
 
 #include <vector>
+#include <QJSValue>
 
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
-#include "abtypes.h"
-#include "itestcase.h"
+#include "async/channel.h"
+#include "autobottypes.h"
+#include "itestcasecontext.h"
+#include "internal/autobotinteractive.h"
 
 namespace mu::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
@@ -38,25 +41,48 @@ public:
     virtual ~IAutobot() = default;
 
     enum class Status {
-        Stoped = 0,
-        RunningAll,
-        RunningFile
+        Undefined = 0,
+        Running,
+        Paused,
+        Aborted,
+        Error,
+        Finished
     };
 
-    virtual std::vector<ITestCasePtr> testCases() const = 0;
-    virtual ITestCasePtr testCase(const std::string& name) const = 0;
+    static QString statusToString(Status st)
+    {
+        switch (st) {
+        case IAutobot::Status::Undefined: return "";
+        case IAutobot::Status::Running: return "Running";
+        case IAutobot::Status::Paused: return "Paused";
+        case IAutobot::Status::Aborted: return "Aborted";
+        case IAutobot::Status::Error: return "Error";
+        case IAutobot::Status::Finished: return "Finished";
+        }
+        return QString();
+    }
 
-    virtual void setCurrentTestCase(const std::string& name) = 0;
-    virtual const ValCh<ITestCasePtr>& currentTestCase() const = 0;
+    virtual Status status() const = 0;
+    virtual async::Channel<io::path, Status> statusChanged() const = 0;
+    virtual async::Channel<QString /*name*/, StepStatus, Ret> stepStatusChanged() const = 0;
 
-    virtual void runAllFiles() = 0;
-    virtual void runFile(int fileIndex) = 0;
-    virtual void stop() = 0;
-    virtual const ValCh<Status>& status() const = 0;
+    virtual SpeedMode speedMode() const = 0;
+    virtual void setSpeedMode(SpeedMode mode) = 0;
+    virtual async::Channel<SpeedMode> speedModeChanged() const = 0;
+    virtual void setDefaultIntervalMsec(int msec) = 0;
+    virtual int defaultIntervalMsec() const = 0;
+    virtual int intervalMsec() const = 0;
 
-    virtual const ValNt<Files>& files() const = 0;
-    virtual async::Channel<File> fileFinished() const = 0;
-    virtual const ValCh<int>& currentFileIndex() const = 0;
+    virtual void execScript(const io::path& path) = 0;
+    virtual void runTestCase(const TestCase& testCase) = 0;
+    virtual void sleep(int msec) = 0;
+    virtual void pause() = 0;
+    virtual void unpause() = 0;
+    virtual void abort() = 0;
+    virtual void fatal(const QString& msg) = 0;
+
+    virtual ITestCaseContextPtr context() const = 0;
+    virtual AutobotInteractivePtr autobotInteractive() const = 0;
 };
 }
 

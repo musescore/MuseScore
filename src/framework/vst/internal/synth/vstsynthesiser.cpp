@@ -28,22 +28,31 @@
 using namespace mu;
 using namespace mu::vst;
 
-VstSynthesiser::VstSynthesiser(const VstPluginMeta& meta)
-    : m_pluginMeta(meta), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
+    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>()), m_params(params)
 {
 }
 
 Ret VstSynthesiser::init()
 {
-    RetVal plugin = repository()->findPluginById(m_pluginMeta.id);
+    m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
 
-    if (!plugin.ret) {
-        return plugin.ret;
+    if (m_pluginPtr->isLoaded()) {
+        m_pluginPtr->updatePluginConfig(m_params.configuration);
+    } else {
+        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
+            m_pluginPtr->updatePluginConfig(m_params.configuration);
+        });
     }
 
-    m_pluginPtr = plugin.val;
+    m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
+        if (m_params.configuration == newConfig) {
+            return;
+        }
 
-    m_vstAudioClient->init(m_pluginPtr->component());
+        m_params.configuration = newConfig;
+        m_paramsChanges.send(m_params);
+    });
 
     return make_ret(Ret::Code::Ok);
 }
@@ -67,9 +76,28 @@ void VstSynthesiser::setIsActive(bool arg)
     m_isActive = arg;
 }
 
+audio::AudioSourceType VstSynthesiser::type() const
+{
+    return m_params.type();
+}
+
 std::string VstSynthesiser::name() const
 {
-    return m_pluginMeta.name;
+    if (!m_pluginPtr) {
+        return std::string();
+    }
+
+    return m_pluginPtr->name();
+}
+
+const audio::AudioInputParams& VstSynthesiser::params() const
+{
+    return m_params;
+}
+
+async::Channel<audio::AudioInputParams> VstSynthesiser::paramsChanged() const
+{
+    return m_paramsChanges;
 }
 
 audio::synth::SoundFontFormats VstSynthesiser::soundFontFormats() const
@@ -99,11 +127,6 @@ bool VstSynthesiser::handleEvent(const midi::Event& e)
     return m_vstAudioClient->handleEvent(e);
 }
 
-void VstSynthesiser::writeBuf(float* stream, unsigned int samples)
-{
-    m_vstAudioClient->process(stream, samples);
-}
-
 void VstSynthesiser::allSoundsOff()
 {
     NOT_IMPLEMENTED;
@@ -111,7 +134,7 @@ void VstSynthesiser::allSoundsOff()
 
 void VstSynthesiser::flushSound()
 {
-    NOT_IMPLEMENTED;
+    m_vstAudioClient->flush();
 }
 
 Ret VstSynthesiser::setupMidiChannels(const std::vector<midi::Event>& /*events*/)
@@ -158,13 +181,13 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-void VstSynthesiser::process(float* buffer, unsigned int sampleCount)
+audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplelPerChannel)
 {
     if (!buffer) {
-        return;
+        return 0;
     }
 
-    m_vstAudioClient->setBlockSize(sampleCount);
+    m_vstAudioClient->setBlockSize(samplelPerChannel);
 
-    writeBuf(buffer, sampleCount);
+    return m_vstAudioClient->process(buffer, samplelPerChannel);
 }

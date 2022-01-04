@@ -33,9 +33,9 @@ import "utils.js" as Utils
 ListView {
     id: paletteTree
 
-    property PaletteWorkspace paletteWorkspace
-    property var paletteModel: Boolean(paletteWorkspace) ? paletteWorkspace.mainPaletteModel : null
-    property PaletteController paletteController: paletteWorkspace ? paletteWorkspace.mainPaletteController : null
+    property PaletteProvider paletteProvider
+    property var paletteModel: Boolean(paletteProvider) ? paletteProvider.mainPaletteModel : null
+    property PaletteController paletteController: paletteProvider ? paletteProvider.mainPaletteController : null
 
     property alias navigation: keynavTree
 
@@ -50,18 +50,16 @@ ListView {
     property bool enableAnimations: true
     property int expandDuration: enableAnimations ? 150 : 0 // duration of expand / collapse animations
 
-    property string backgroundColor: "#ffffff"
-
     preferredHighlightBegin: Math.min(48, Math.floor(0.1 * height))
     preferredHighlightEnd: Math.ceil(height - preferredHighlightBegin)
     highlightRangeMode: itemDragged ? ListView.ApplyRange : ListView.NoHighlightRange
 
     Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)", "", count)
 
-
     NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
+        enabled: paletteTree.enabled && paletteTree.visible
         direction: NavigationPanel.Both
         onActiveChanged: {
             if (active) {
@@ -71,8 +69,8 @@ ListView {
     }
 
     onSearchOpenedChanged: {
-        if (paletteWorkspace) {
-            paletteWorkspace.setSearching(searchOpened)
+        if (paletteProvider) {
+            paletteProvider.setSearching(searchOpened)
         }
     }
 
@@ -301,14 +299,14 @@ ListView {
             }
 
             background: ListItemBlank {
-                background.color: paletteTree.backgroundColor
                 visible: !control.Drag.active
                 isSelected: control.selected
 
-                navigation.name: "PaletteTreeItem"
+                navigation.name: model.display
                 navigation.panel: keynavTree
                 navigation.row: control.navigationRow
                 navigation.column: 0
+                navigation.accessible.name: control.text
                 enabled: control.visible
                 navigation.onActiveChanged: {
                     if (navigation.active && !control.selected) {
@@ -321,6 +319,9 @@ ListView {
             highlighted: (activeFocus && !selected) || DelegateModel.isUnresolved
 
             property bool popupExpanded: palettePopup.isOpened
+            onPopupExpandedChanged: {
+                paletteTree.interactive = !popupExpanded
+            }
 
             function togglePopup(btn) {
                 const expand = !popupExpanded;
@@ -364,10 +365,10 @@ ListView {
                 placeholder.makePlaceholder(control.rowIndex, paletteTree.placeholderData());
             }
 
-            Drag.onDragFinished: {
+            Drag.onDragFinished: function (dropAction) {
                 paletteTree.itemDragged = false;
 
-                if (dropAction != Qt.IgnoreAction) {
+                if (dropAction !== Qt.IgnoreAction) {
                     paletteTree.currentIndex = -1;
                 }
 
@@ -378,7 +379,7 @@ ListView {
                 DelegateModel.inItems = true;
                 DelegateModel.inPersistedItems = false;
 
-                if (dropAction == Qt.MoveAction) {
+                if (dropAction === Qt.MoveAction) {
                     controller.move(
                                 root, rowIndex,
                                 root, destIndex);
@@ -450,6 +451,8 @@ ListView {
                     hovered: control.hovered
                     text: model.display
 
+                    isInVisibleArea: control.y >= paletteTree.contentY && control.y < (paletteTree.contentY + paletteTree.height)
+
                     navigationPanel: keynavTree
                     navigationRow: control.navigationRow
 
@@ -476,7 +479,7 @@ ListView {
                     onInsertNewPaletteRequested: paletteTree.insertCustomPalette(control.rowIndex);
                     onHidePaletteRequested: control.hidePalette();
 
-                    paletteWorkspace: paletteTree.paletteWorkspace
+                    paletteProvider: paletteTree.paletteProvider
                     modelIndex: control.modelIndex
 
                     onEditPalettePropertiesRequested: {
@@ -523,6 +526,11 @@ ListView {
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
 
+                        isInVisibleArea: {
+                            var mainPaletteBottom = control.y + mainPalette.height
+                            return mainPaletteBottom >= paletteTree.contentY && mainPaletteBottom < (paletteTree.contentY + paletteTree.height)
+                        }
+
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup(btn);
 
@@ -553,13 +561,13 @@ ListView {
                     onIsOpenedChanged: {
                         // build pool model on first popup appearance
                         if (visible && !poolPalette) {
-                            poolPalette = paletteTree.paletteWorkspace.poolPaletteModel(control.modelIndex);
-                            poolPaletteRootIndex = paletteTree.paletteWorkspace.poolPaletteIndex(control.modelIndex, poolPalette);
-                            poolPaletteController = paletteTree.paletteWorkspace.poolPaletteController(poolPalette, control.modelIndex);
+                            poolPalette = paletteTree.paletteProvider.poolPaletteModel(control.modelIndex);
+                            poolPaletteRootIndex = paletteTree.paletteProvider.poolPaletteIndex(control.modelIndex, poolPalette);
+                            poolPaletteController = paletteTree.paletteProvider.poolPaletteController(poolPalette, control.modelIndex);
 
-                            customPalette = paletteTree.paletteWorkspace.customElementsPaletteModel
-                            customPaletteRootIndex = paletteTree.paletteWorkspace.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
-                            customPaletteController = paletteTree.paletteWorkspace.customElementsPaletteController
+                            customPalette = paletteTree.paletteProvider.customElementsPaletteModel
+                            customPaletteRootIndex = paletteTree.paletteProvider.customElementsPaletteIndex(control.modelIndex) // TODO: make a property binding? (but that works incorrectly)
+                            customPaletteController = paletteTree.paletteProvider.customElementsPaletteController
                         }
                     }
 

@@ -29,8 +29,8 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
-#include "notation/inotationcreator.h"
-#include "notation/inotationwritersregister.h"
+#include "project/iprojectcreator.h"
+#include "project/inotationwritersregister.h"
 
 namespace Ms {
 class Score;
@@ -41,8 +41,8 @@ class BackendJsonWriter;
 class BackendApi
 {
     INJECT_STATIC(converter, system::IFileSystem, fileSystem)
-    INJECT_STATIC(converter, notation::INotationCreator, notationCreator)
-    INJECT_STATIC(converter, notation::INotationWritersRegister, writers)
+    INJECT_STATIC(converter, project::IProjectCreator, notationCreator)
+    INJECT_STATIC(converter, project::INotationWritersRegister, writers)
 
 public:
     static Ret exportScoreMedia(const io::path& in, const io::path& out, const io::path& highlightConfigPath,
@@ -57,6 +57,9 @@ public:
 
 private:
     static Ret openOutputFile(QFile& file, const io::path& out);
+
+    static RetVal<project::INotationProjectPtr> openProject(const io::path& path,
+                                                            const io::path& stylePath = io::path(), bool forceMode = false);
 
     static RetVal<notation::IMasterNotationPtr> openScore(const io::path& path,
                                                           const io::path& stylePath = io::path(), bool forceMode = false);
@@ -78,7 +81,7 @@ private:
 
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtr notation);
     static mu::RetVal<QByteArray> processWriter(const std::string& writerName, const notation::INotationPtrList notations,
-                                                const notation::INotationWriter::Options& options);
+                                                const project::INotationWriter::Options& options);
 
     static Ret doExportScoreParts(const notation::INotationPtr notation, mu::io::Device& destinationDevice);
     static Ret doExportScorePartsPdfs(const notation::IMasterNotationPtr notation, mu::io::Device& destinationDevice,

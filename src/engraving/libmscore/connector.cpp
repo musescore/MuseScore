@@ -21,20 +21,21 @@
  */
 
 #include "connector.h"
-
-#include "element.h"
+#include "rw/xml.h"
+#include "engravingitem.h"
 #include "score.h"
-#include "scoreElement.h"
-#include "xml.h"
+#include "engravingobject.h"
+#include "factory.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   ConnectorInfo
 //---------------------------------------------------------
 
-ConnectorInfo::ConnectorInfo(const Element* current, int track, Fraction frac)
+ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction frac)
     : _current(current), _score(current->score()), _currentLoc(Location::absolute())
 {
     if (!current) {
@@ -64,7 +65,7 @@ ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation
 //   ConnectorInfo::updateLocation
 //---------------------------------------------------------
 
-void ConnectorInfo::updateLocation(const Element* e, Location& l, bool clipboardmode)
+void ConnectorInfo::updateLocation(const EngravingItem* e, Location& l, bool clipboardmode)
 {
     l.fillForElement(e, clipboardmode);
 }
@@ -301,7 +302,7 @@ ConnectorInfo* ConnectorInfo::end()
 //   ConnectorInfoReader
 //---------------------------------------------------------
 
-ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Element* current, int track)
+ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, EngravingItem* current, int track)
     : ConnectorInfo(current, track), _reader(&e), _connector(nullptr), _connectorReceiver(current)
 {}
 
@@ -330,7 +331,8 @@ ConnectorInfoReader::ConnectorInfoReader(XmlReader& e, Score* current, int track
 //   ConnectorInfoWriter
 //---------------------------------------------------------
 
-ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track, Fraction frac)
+ConnectorInfoWriter::ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track,
+                                         Fraction frac)
     : ConnectorInfo(current, track, frac), _xml(&xml), _connector(connector)
 {
     if (!connector) {
@@ -351,23 +353,23 @@ void ConnectorInfoWriter::write()
     if (!xml.canWrite(_connector)) {
         return;
     }
-    xml.stag(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
+    xml.startObject(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
     if (isStart()) {
         _connector->write(xml);
     }
     if (hasPrevious()) {
-        xml.stag("prev");
+        xml.startObject("prev");
         _prevLoc.toRelative(_currentLoc);
         _prevLoc.write(xml);
-        xml.etag();
+        xml.endObject();
     }
     if (hasNext()) {
-        xml.stag("next");
+        xml.startObject("next");
         _nextLoc.toRelative(_currentLoc);
         _nextLoc.write(xml);
-        xml.etag();
+        xml.endObject();
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -378,7 +380,7 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
     const QString name(e.attribute("type"));
-    _type = ScoreElement::name2type(&name);
+    _type = Factory::name2type(&name);
 
     e.fillLocation(_currentLoc);
 
@@ -391,7 +393,7 @@ bool ConnectorInfoReader::read()
             readEndpointLocation(_nextLoc);
         } else {
             if (tag == name) {
-                _connector = Element::name2Element(tag, _connectorReceiver->score());
+                _connector = Factory::createItemByName(tag, _connectorReceiver->score()->dummy());
             } else {
                 qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
                          tag.toLatin1().constData(), name.toLatin1().constData());
@@ -477,7 +479,7 @@ void ConnectorInfoReader::readConnector(std::unique_ptr<ConnectorInfoReader> inf
 //   ConnectorInfoReader::connector
 //---------------------------------------------------------
 
-Element* ConnectorInfoReader::connector()
+EngravingItem* ConnectorInfoReader::connector()
 {
     // connector should be contained in the first node normally.
     ConnectorInfo* i = findFirst();
@@ -491,7 +493,7 @@ Element* ConnectorInfoReader::connector()
 //   ConnectorInfoReader::connector
 //---------------------------------------------------------
 
-const Element* ConnectorInfoReader::connector() const
+const EngravingItem* ConnectorInfoReader::connector() const
 {
     return const_cast<ConnectorInfoReader*>(this)->connector();
 }
@@ -500,13 +502,13 @@ const Element* ConnectorInfoReader::connector() const
 //   ConnectorInfoReader::releaseConnector
 //---------------------------------------------------------
 
-Element* ConnectorInfoReader::releaseConnector()
+EngravingItem* ConnectorInfoReader::releaseConnector()
 {
     ConnectorInfoReader* i = static_cast<ConnectorInfoReader*>(findFirst());
     if (!i) {
         // circular connector?
         ConnectorInfoReader* ii = this;
-        Element* c = nullptr;
+        EngravingItem* c = nullptr;
         while (ii->prev()) {
             if (ii->_connector) {
                 c = ii->_connector;
@@ -519,7 +521,7 @@ Element* ConnectorInfoReader::releaseConnector()
         }
         return c;
     }
-    Element* c = i->_connector;
+    EngravingItem* c = i->_connector;
     i->_connector = nullptr;
     return c;
 }

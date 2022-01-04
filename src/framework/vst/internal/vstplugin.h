@@ -23,36 +23,62 @@
 #ifndef MU_VST_VSTPLUGIN_H
 #define MU_VST_VSTPLUGIN_H
 
+#include <mutex>
+#include <atomic>
+
+#include "modularity/ioc.h"
 #include "io/path.h"
+#include "async/asyncable.h"
+#include "async/notification.h"
+#include "async/channel.h"
+#include "audio/iaudiothreadsecurer.h"
+#include "audio/audiotypes.h"
 
 #include "vsttypes.h"
+#include "vstcomponenthandler.h"
 #include "vsterrors.h"
 
 namespace mu::vst {
-class VstPlugin
+class VstPlugin : public async::Asyncable
 {
+    INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
+
 public:
+    VstPlugin(PluginModulePtr module);
 
-    VstPlugin();
-    Ret load(const io::path& pluginPath);
+    const std::string& name() const;
 
-    PluginId id() const;
-    VstPluginMeta meta() const;
     PluginViewPtr view() const;
-    PluginComponentPtr component() const;
+    PluginProviderPtr provider() const;
+
+    void updatePluginConfig(const audio::AudioUnitConfig& config);
+
+    void load();
 
     bool isValid() const;
+    bool isLoaded() const;
+
+    async::Notification loadingCompleted() const;
+    async::Channel<audio::AudioUnitConfig> pluginSettingsChanged() const;
 
 private:
+    void rescanParams();
+    void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const;
 
     PluginModulePtr m_module = nullptr;
-    PluginFactory m_factory;
     PluginProviderPtr m_pluginProvider = nullptr;
-    PluginControllerPtr m_pluginController = nullptr;
-    mutable PluginComponentPtr m_pluginComponent = nullptr;
     mutable PluginViewPtr m_pluginView = nullptr;
 
-    PluginContext m_pluginContext;
+    VstComponentHandler m_componentHandler;
+
+    VstMemoryStream m_componentStateBuffer;
+    VstMemoryStream m_controllerStateBuffer;
+    mutable async::Channel<audio::AudioUnitConfig> m_pluginSettingsChanges;
+
+    std::atomic_bool m_isLoaded = false;
+    async::Notification m_loadingCompleted;
+
+    mutable std::mutex m_mutex;
 };
 }
 

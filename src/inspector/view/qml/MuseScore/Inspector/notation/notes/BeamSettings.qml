@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+
 import "../../common"
 import "internal"
 
@@ -31,7 +33,10 @@ FocusableItem {
     id: root
 
     property QtObject model: null
-    property QtObject beamModesModel: model ? model.beamModesModel : null
+    readonly property QtObject beamModesModel: model ? model.beamModesModel : null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -40,39 +45,35 @@ FocusableItem {
         id: contentColumn
 
         width: parent.width
-
         spacing: 12
 
-        InspectorPropertyView {
-
+        BeamTypeSelector {
+            id: beamTypeSection
             titleText: qsTrc("inspector", "Beam types")
-            propertyItem: beamModesModel ? beamModesModel.mode : null
+            propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
+            enabled: root.beamModesModel && !root.beamModesModel.isEmpty
 
-            BeamTypesGrid {
-                id: beamTypesGridView
-
-                beamTypesModel: beamModesModel ? beamModesModel.modeListModel : null
-                enabled: beamModesModel ? !beamModesModel.isEmpty : false
-            }
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
         }
 
         Column {
-            spacing: 16
+            spacing: 12
 
             height: implicitHeight
             width: parent.width
 
-            enabled: model ? !model.isEmpty : false
+            enabled: root.model ? !root.model.isEmpty : false
 
             SeparatorLine {
-                anchors.margins: -10
+                anchors.margins: -12
                 visible: featheringControlsColumn.visible
             }
 
             Column {
                 id: featheringControlsColumn
 
-                spacing: 12
+                spacing: 8
 
                 height: implicitHeight
                 width: parent.width
@@ -81,36 +82,41 @@ FocusableItem {
                                              : false
 
                 StyledTextLabel {
+                    id: featheredBeamsLabel
+                    width: parent.width
                     text: qsTrc("inspector", "Feathered beams")
+                    horizontalAlignment: Text.AlignLeft
                 }
 
                 RadioButtonGroup {
-                    id: radioButtonList
+                    id: featheredBeamsButtonList
+
+                    property int navigationRowStart: beamTypeSection.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowStart + model.length
 
                     height: 30
                     width: parent.width
 
                     model: [
-                        { iconRole: IconCode.NONE, typeRole: Beam.FEATHERING_NONE },
-                        { iconRole: IconCode.FEATHERED_LEFT_HEIGHT, typeRole: Beam.FEATHERING_LEFT },
-                        { iconRole: IconCode.FEATHERED_RIGHT_HEIGHT, typeRole: Beam.FEATHERING_RIGHT }
+                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE, title: qsTrc("inspector", "None") },
+                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT, title: qsTrc("inspector", "Left") },
+                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT, title: qsTrc("inspector", "Right") }
                     ]
 
                     delegate: FlatRadioButton {
+                        iconCode: modelData["iconCode"] ?? IconCode.NONE
+                        text: modelData["text"] ?? ""
 
-                        ButtonGroup.group: radioButtonList.radioButtonGroup
+                        navigation.name: text
+                        navigation.panel: root.navigationPanel
+                        navigation.row: featheredBeamsButtonList.navigationRowStart + index
+                        navigation.accessible.name: featheredBeamsLabel.text + " " + text
 
-                        checked: root.beamModesModel &&
-                                 !(root.model.featheringHeightLeft.isUndefined
-                                   ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
-                                                                                   : false
-
+                        checked: root.beamModesModel && !(root.model.featheringHeightLeft.isUndefined || root.model.featheringHeightRight.isUndefined)
+                                 ? root.model.featheringMode === modelData["value"]
+                                 : false
                         onToggled: {
-                            root.model.featheringMode = modelData["typeRole"]
-                        }
-
-                        StyledIconLabel {
-                            iconCode: modelData["iconRole"]
+                            root.model.featheringMode = modelData["value"]
                         }
                     }
                 }
@@ -119,134 +125,165 @@ FocusableItem {
                     height: childrenRect.height
                     width: parent.width
 
-                    InspectorPropertyView {
+                    visible: root.model && root.model.isFeatheringHeightChangingAllowed
+
+                    SpinBoxPropertyView {
+                        id: featheringLeftSection
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
                         titleText: qsTrc("inspector", "Feathering left")
-                        propertyItem: model ? model.featheringHeightLeft : null
+                        propertyItem: root.model ? root.model.featheringHeightLeft : null
+                        enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        IncrementalPropertyControl {
-                            icon: IconCode.FEATHERED_LEFT_HEIGHT
-                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
-                            currentValue: model ? model.featheringHeightLeft.value : 0
-                            maxValue: 4
-                            minValue: 0
-                            step: 0.1
+                        icon: IconCode.FEATHERED_LEFT_HEIGHT
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
 
-                            onValueEdited: { model.featheringHeightLeft.value = newValue }
-                        }
+                        navigationName: "FeatheringLeft"
+                        navigationPanel: root.navigationPanel
+                        navigationRowStart: featheredBeamsButtonList.navigationRowEnd + 1
                     }
 
-                    InspectorPropertyView {
+                    SpinBoxPropertyView {
+                        id: featheringRightSection
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
                         titleText: qsTrc("inspector", "Feathering right")
-                        propertyItem: model ? model.featheringHeightRight : null
+                        propertyItem: root.model ? root.model.featheringHeightRight : null
+                        enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        IncrementalPropertyControl {
-                            icon: IconCode.FEATHERED_RIGHT_HEIGHT
-                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
-                            iconMode: iconModeEnum.right
-                            currentValue: model ? model.featheringHeightRight.value : 0
-                            maxValue: 4
-                            minValue: 0
-                            step: 0.1
+                        icon: IconCode.FEATHERED_RIGHT_HEIGHT
+                        iconMode: IncrementalPropertyControl.Right
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
 
-                            onValueEdited: { model.featheringHeightRight.value = newValue }
-                        }
+                        navigationName: "FeatheringRight"
+                        navigationPanel: root.navigationPanel
+                        navigationRowStart: featheringLeftSection.navigationRowEnd + 1
                     }
                 }
             }
 
             SeparatorLine {
-                anchors.margins: -10
+                anchors.margins: -12
                 visible: featheringControlsColumn.visible
             }
 
             FlatButton {
+                id: forceHorizontalButton
                 width: parent.width
 
                 text: qsTrc("inspector", "Force horizontal")
 
-                onClicked: {
-                    if (!model)
-                        return
+                navigation.name: "ForceHorizontal"
+                navigation.panel: root.navigationPanel
+                navigation.row: featheringRightSection.navigationRowEnd + 1
 
-                    model.forceHorizontal()
+                onClicked: {
+                    if (!root.model) {
+                        return
+                    }
+
+                    root.model.forceHorizontal()
                 }
             }
 
             ExpandableBlank {
+                id: showItem
                 isExpanded: false
 
                 title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
                 width: parent.width
 
+                navigation.panel: root.navigationPanel
+                navigation.row: forceHorizontalButton.navigation.row + 1
+
                 contentItemComponent: Column {
                     height: implicitHeight
                     width: root.width
 
-                    spacing: 16
+                    spacing: 12
 
                     InspectorPropertyView {
-
+                        id: beamHeight
                         titleText: qsTrc("inspector", "Beam height")
-                        propertyItem: model ? model.beamVectorX : null
+                        propertyItem: root.model ? root.model.beamVectorX : null
+
+                        navigationName: "Beam height"
+                        navigationPanel: root.navigationPanel
+                        navigationRowStart: showItem.navigation.row + 1
+                        navigationRowEnd: beamHeightLeftControl.navigation.row
 
                         Item {
                             height: childrenRect.height
                             width: parent.width
 
                             IncrementalPropertyControl {
-                                id: beamHightLeftControl
+                                id: beamHeightRightControl
 
                                 anchors.left: parent.left
                                 anchors.right: lockButton.left
                                 anchors.rightMargin: 6
 
                                 icon: IconCode.BEAM_RIGHT_Y_POSITION
-                                isIndeterminate: model ? model.beamVectorX.isUndefined : false
-                                currentValue: model ? model.beamVectorX.value : 0
+                                isIndeterminate: root.model ? root.model.beamVectorX.isUndefined : false
+                                currentValue: root.model ? root.model.beamVectorX.value : 0
 
-                                onValueEdited: { model.beamVectorX.value = newValue }
+                                navigation.name: "BeamHeightRightControl"
+                                navigation.panel: root.navigationPanel
+                                navigation.row: beamHeight.navigationRowStart + 1
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
+
+                                onValueEdited: { root.model.beamVectorX.value = newValue }
                             }
 
                             FlatToggleButton {
                                 id: lockButton
 
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: beamHightLeftControl.verticalCenter
+                                anchors.verticalCenter: beamHeightRightControl.verticalCenter
 
                                 height: 20
                                 width: 20
 
                                 icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
-                                checked: model ? model.isBeamHeightLocked : false
+                                checked: root.model ? root.model.isBeamHeightLocked : false
+
+                                navigation.name: "Lock beam height"
+                                navigation.panel: root.navigationPanel
+                                navigation.row: beamHeightRightControl.navigation.row + 1
+                                navigation.accessible.name: qsTrc("inspector", "Lock")
 
                                 onToggled: {
-                                    model.isBeamHeightLocked = !model.isBeamHeightLocked
+                                    root.model.isBeamHeightLocked = !root.model.isBeamHeightLocked
                                 }
                             }
 
                             IncrementalPropertyControl {
+                                id: beamHeightLeftControl
                                 anchors.left: lockButton.right
                                 anchors.leftMargin: 6
                                 anchors.right: parent.right
 
                                 icon: IconCode.BEAM_LEFT_Y_POSITION
-                                iconMode: iconModeEnum.right
-                                isIndeterminate: model ? model.beamVectorY.isUndefined : false
-                                currentValue: model ? model.beamVectorY.value : 0
+                                iconMode: IncrementalPropertyControl.Right
+                                isIndeterminate: root.model ? root.model.beamVectorY.isUndefined : false
+                                currentValue: root.model ? root.model.beamVectorY.value : 0
 
-                                onValueEdited: { model.beamVectorY.value = newValue }
+                                navigation.name: "BeamHightLeftControl"
+                                navigation.panel: root.navigationPanel
+                                navigation.row: lockButton.navigation.row + 1
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
+
+                                onValueEdited: { root.model.beamVectorY.value = newValue }
                             }
                         }
                     }

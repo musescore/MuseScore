@@ -23,7 +23,7 @@
 #ifndef __STEMSLASH_H__
 #define __STEMSLASH_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "stem.h"
 
 namespace Ms {
@@ -32,22 +32,22 @@ namespace Ms {
 ///    used for grace notes of type acciaccatura
 //---------------------------------------------------------
 
-class StemSlash final : public Element
+class StemSlash final : public EngravingItem
 {
     mu::LineF line;
 
-public:
-    StemSlash(Score* s = 0)
-        : Element(s) {}
+    friend class mu::engraving::Factory;
+    StemSlash(Chord* parent = 0);
 
-    qreal mag() const override { return parent()->mag(); }
+public:
+
+    qreal mag() const override { return parentItem()->mag(); }
     void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }
-    ElementType type() const override { return ElementType::STEM_SLASH; }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
-    Chord* chord() const { return (Chord*)parent(); }
+    Chord* chord() const { return (Chord*)explicitParent(); }
 };
 }     // namespace Ms
 #endif

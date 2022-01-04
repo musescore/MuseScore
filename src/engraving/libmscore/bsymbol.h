@@ -23,7 +23,7 @@
 #ifndef __BSYMBOL_H__
 #define __BSYMBOL_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -31,27 +31,24 @@ namespace Ms {
 ///    base class for Symbol and Image
 //---------------------------------------------------------
 
-class BSymbol : public Element
+class BSymbol : public EngravingItem
 {
-    QList<Element*> _leafs;
-    Align _align;
-
 public:
-    BSymbol(Score* s, ElementFlags f = ElementFlag::NOTHING);
-    BSymbol(const BSymbol&);
+
+    Segment* segment() const { return (Segment*)explicitParent(); }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     BSymbol& operator=(const BSymbol&) = delete;
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
-    virtual bool acceptDrop(EditData&) const override;
-    virtual Element* drop(EditData&) override;
-    virtual void layout() override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+    void layout() override;
     mu::RectF drag(EditData&) override;
 
     void writeProperties(XmlWriter& xml) const override;
@@ -60,12 +57,20 @@ public:
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }
 
-    const QList<Element*>& leafs() const { return _leafs; }
-    QList<Element*>& leafs() { return _leafs; }
+    const QList<EngravingItem*>& leafs() const { return _leafs; }
+    QList<EngravingItem*>& leafs() { return _leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     QVector<mu::LineF> dragAnchorLines() const override;
-    Segment* segment() const { return (Segment*)parent(); }
+
+protected:
+    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const BSymbol&);
+
+private:
+
+    QList<EngravingItem*> _leafs;
+    Align _align;
 };
 }     // namespace Ms
 #endif

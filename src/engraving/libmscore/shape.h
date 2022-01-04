@@ -23,7 +23,7 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 #ifndef NDEBUG

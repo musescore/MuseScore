@@ -24,16 +24,23 @@
 #include <vector>
 #include <map>
 
+#include <QWindow>
+
 #include "ui/internal/navigationcontroller.h"
 #include "actions/internal/actionsdispatcher.h"
 
 #include "mocks/navigationmocks.h"
+#include "mocks/mainwindowprovidermock.h"
+#include "global/tests/mocks/applicationmock.h"
 
 #include "log.h"
 
 using ::testing::Return;
 using ::testing::ReturnRef;
 using ::testing::NiceMock;
+using ::testing::_;
+using ::testing::SaveArgPointee;
+using ::testing::DoAll;
 
 using namespace mu;
 using namespace mu::ui;
@@ -109,7 +116,6 @@ public:
         c->control = new NiceMock<NavigationControlMock>();
         ON_CALL(*c->control, enabled()).WillByDefault(Return(true));
         ON_CALL(*c->control, active()).WillByDefault(Return(false));
-        ON_CALL(*c->control, activeRequested()).WillByDefault(Return(async::Channel<INavigationControl*>()));
         ON_CALL(*c->control, index()).WillByDefault(ReturnRef(idx));
 
         return c;
@@ -121,7 +127,7 @@ public:
 
         for (size_t ci = 0; ci < controlsCount; ++ci) {
             INavigation::Index& idx = make_idx(env);
-            idx.column = ci;
+            idx.column = static_cast<int>(ci);
 
             Control* c = make_control(idx);
 
@@ -132,7 +138,6 @@ public:
         p->panel = new NiceMock<NavigationPanelMock>();
         ON_CALL(*p->panel, enabled()).WillByDefault(Return(true));
         ON_CALL(*p->panel, active()).WillByDefault(Return(false));
-        ON_CALL(*p->panel, activeRequested()).WillByDefault(Return(async::Channel<PanelControl>()));
         ON_CALL(*p->panel, controls()).WillByDefault(ReturnRef(p->icontrols));
 
         INavigation::Index& idx = make_idx(env);
@@ -147,7 +152,7 @@ public:
         Section* s = new Section();
 
         for (size_t pi = 0; pi < panelsCount; ++pi) {
-            Panel* p = make_panel(env, pi, controlsCount);
+            Panel* p = make_panel(env, static_cast<int>(pi), controlsCount);
             s->panels.push_back(p);
             s->ipanels.insert(p->panel);
         }
@@ -156,7 +161,6 @@ public:
         ON_CALL(*s->section, type()).WillByDefault(Return(INavigationSection::Type::Regular));
         ON_CALL(*s->section, enabled()).WillByDefault(Return(true));
         ON_CALL(*s->section, active()).WillByDefault(Return(false));
-        ON_CALL(*s->section, activeRequested()).WillByDefault(Return(async::Channel<SectionPanelControl>()));
         ON_CALL(*s->section, panels()).WillByDefault(ReturnRef(s->ipanels));
 
         INavigation::Index& idx = make_idx(env);

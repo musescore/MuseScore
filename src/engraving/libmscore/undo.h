@@ -28,17 +28,17 @@
  Definition of undo-releated classes and structs.
 */
 
-#include "spatium.h"
+#include "style/style.h"
+#include "compat/midi/midipatch.h"
+
 #include "mscore.h"
 #include "sig.h"
 #include "tempo.h"
 #include "input.h"
-#include "style.h"
 #include "key.h"
 #include "select.h"
 #include "instrument.h"
 #include "scoreorder.h"
-#include "pitchvalue.h"
 #include "timesig.h"
 #include "noteevent.h"
 #include "synthesizerstate.h"
@@ -52,11 +52,9 @@
 #include "rest.h"
 #include "fret.h"
 
-#include "framework/midi_old/midipatch.h"
-
 namespace Ms {
 class ElementList;
-class Element;
+class EngravingItem;
 class Instrument;
 class System;
 class Measure;
@@ -89,14 +87,11 @@ class InstrumentChange;
 class Box;
 class Spanner;
 class BarLine;
-enum class ClefType : signed char;
 enum class PlayEventType : char;
 class Excerpt;
 class EditData;
 
 #define UNDO_NAME(a)  virtual const char* name() const override { return a; }
-
-enum class LayoutMode : char;
 
 //---------------------------------------------------------
 //   UndoCommand
@@ -134,10 +129,10 @@ public:
     virtual const char* name() const { return "UndoCommand"; }
 // #endif
 
-    virtual bool isFiltered(Filter, const Element* /* target */) const { return false; }
-    bool hasFilteredChildren(Filter, const Element* target) const;
-    bool hasUnfilteredChildren(const std::vector<Filter>& filters, const Element* target) const;
-    void filterChildren(UndoCommand::Filter f, Element* target);
+    virtual bool isFiltered(Filter, const EngravingItem* /* target */) const { return false; }
+    bool hasFilteredChildren(Filter, const EngravingItem* target) const;
+    bool hasUnfilteredChildren(const std::vector<Filter>& filters, const EngravingItem* target) const;
+    void filterChildren(UndoCommand::Filter f, EngravingItem* target);
 };
 
 //---------------------------------------------------------
@@ -149,7 +144,7 @@ public:
 class UndoMacro : public UndoCommand
 {
     struct SelectionInfo {
-        std::vector<Element*> elements;
+        std::vector<EngravingItem*> elements;
         Fraction tickStart;
         Fraction tickEnd;
         int staffStart = -1;
@@ -175,7 +170,7 @@ public:
     bool empty() const { return childCount() == 0; }
     void append(UndoMacro&& other);
 
-    static bool canRecordSelectedElement(const Element* e);
+    static bool canRecordSelectedElement(const EngravingItem* e);
 
     UNDO_NAME("UndoMacro");
 };
@@ -481,12 +476,12 @@ public:
 
 class ChangeElement : public UndoCommand
 {
-    Element* oldElement;
-    Element* newElement;
+    EngravingItem* oldElement;
+    EngravingItem* newElement;
     void flip(EditData*) override;
 
 public:
-    ChangeElement(Element* oldElement, Element* newElement);
+    ChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
     UNDO_NAME("ChangeElement")
 };
 
@@ -597,19 +592,19 @@ public:
 
 class AddElement : public UndoCommand
 {
-    Element* element;
+    EngravingItem* element;
 
     void endUndoRedo(bool) const;
     void undo(EditData*) override;
     void redo(EditData*) override;
 
 public:
-    AddElement(Element*);
-    Element* getElement() const { return element; }
+    AddElement(EngravingItem*);
+    EngravingItem* getElement() const { return element; }
     virtual void cleanup(bool) override;
     virtual const char* name() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 };
 
 //---------------------------------------------------------
@@ -618,16 +613,16 @@ public:
 
 class RemoveElement : public UndoCommand
 {
-    Element* element;
+    EngravingItem* element;
 
 public:
-    RemoveElement(Element*);
+    RemoveElement(EngravingItem*);
     virtual void undo(EditData*) override;
     virtual void redo(EditData*) override;
     virtual void cleanup(bool) override;
     virtual const char* name() const override;
 
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 };
 
 //---------------------------------------------------------
@@ -691,23 +686,24 @@ public:
 
 class ChangeStaff : public UndoCommand
 {
-    Staff* staff;
-    bool invisible;
+    Staff* staff = nullptr;
+
+    bool visible = false;
     ClefTypeList clefType;
-    qreal userDist;
-    Staff::HideMode hideMode;
-    bool showIfEmpty;
-    bool cutaway;
-    bool hideSystemBarLine;
-    bool mergeMatchingRests;
+    qreal userDist = 0.0;
+    Staff::HideMode hideMode = Staff::HideMode::AUTO;
+    bool showIfEmpty = false;
+    bool cutaway = false;
+    bool hideSystemBarLine = false;
+    bool mergeMatchingRests = false;
 
     void flip(EditData*) override;
 
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool hide, bool mergeRests);
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+                bool _hideSystemBarLine, bool _mergeRests);
     UNDO_NAME("ChangeStaff")
 };
 
@@ -770,12 +766,12 @@ class ChangeStyleVal : public UndoCommand
 {
     Score* score;
     Sid idx;
-    QVariant value;
+    mu::engraving::PropertyValue value;
 
     void flip(EditData*) override;
 
 public:
-    ChangeStyleVal(Score* s, Sid i, const QVariant& v)
+    ChangeStyleVal(Score* s, Sid i, const mu::engraving::PropertyValue& v)
         : score(s), idx(i), value(v) {}
     UNDO_NAME("ChangeStyleVal")
 };
@@ -819,12 +815,12 @@ public:
 class ChangeVelocity : public UndoCommand
 {
     Note* note;
-    Note::ValueType veloType;
+    VeloType veloType;
     int veloOffset;
     void flip(EditData*) override;
 
 public:
-    ChangeVelocity(Note*, Note::ValueType, int);
+    ChangeVelocity(Note*, VeloType, int);
     UNDO_NAME("ChangeVelocity")
 };
 
@@ -969,12 +965,12 @@ public:
 class ChangeBend : public UndoCommand
 {
     Bend* bend;
-    QList<PitchValue> points;
+    PitchValues points;
 
     void flip(EditData*) override;
 
 public:
-    ChangeBend(Bend* b, QList<PitchValue> p)
+    ChangeBend(Bend* b, PitchValues p)
         : bend(b), points(p) {}
     UNDO_NAME("ChangeBend")
 };
@@ -986,12 +982,12 @@ public:
 class ChangeTremoloBar : public UndoCommand
 {
     TremoloBar* bend;
-    QList<PitchValue> points;
+    PitchValues points;
 
     void flip(EditData*) override;
 
 public:
-    ChangeTremoloBar(TremoloBar* b, QList<PitchValue> p)
+    ChangeTremoloBar(TremoloBar* b, PitchValues p)
         : bend(b), points(p) {}
     UNDO_NAME("ChangeTremoloBar")
 };
@@ -1107,47 +1103,28 @@ public:
 };
 
 //---------------------------------------------------------
-//   MoveStaff
-//---------------------------------------------------------
-#if 0 // commented out in mscore/instrwidget.cpp, not used anywhere else
-class MoveStaff : public UndoCommand
-{
-    Staff* staff;
-    Part* part;
-    int rstaff;
-
-    void flip(EditData*) override;
-
-public:
-    MoveStaff(Staff* s, Part* p, int idx)
-        : staff(s), part(p), rstaff(idx) {}
-    UNDO_NAME("MoveStaff")
-};
-#endif
-
-//---------------------------------------------------------
 //   ChangeProperty
 //---------------------------------------------------------
 
 class ChangeProperty : public UndoCommand
 {
 protected:
-    ScoreElement* element;
+    EngravingObject* element;
     Pid id;
-    QVariant property;
+    mu::engraving::PropertyValue property;
     PropertyFlags flags;
 
     void flip(EditData*) override;
 
 public:
-    ChangeProperty(ScoreElement* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeProperty(EngravingObject* e, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : element(e), id(i), property(v), flags(ps) {}
     Pid getId() const { return id; }
-    ScoreElement* getElement() const { return element; }
-    QVariant data() const { return property; }
+    EngravingObject* getElement() const { return element; }
+    mu::engraving::PropertyValue data() const { return property; }
     UNDO_NAME("ChangeProperty")
 
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
         return f == UndoCommand::Filter::ChangePropertyLinked && target->linkList().contains(element);
     }
@@ -1165,7 +1142,7 @@ class ChangeBracketProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeBracketProperty(Staff* s, int l, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeBracketProperty(Staff* s, int l, Pid i, const mu::engraving::PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : ChangeProperty(nullptr, i, v, ps), staff(s), level(l) {}
     UNDO_NAME("ChangeBracketProperty")
 };
@@ -1179,7 +1156,7 @@ class ChangeTextLineProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeTextLineProperty(ScoreElement* e, QVariant v)
+    ChangeTextLineProperty(EngravingObject* e, mu::engraving::PropertyValue v)
         : ChangeProperty(e, Pid::SYSTEM_FLAG, v, PropertyFlags::NOSTYLE) {}
     UNDO_NAME("ChangeTextLineProperty")
 };
@@ -1266,13 +1243,13 @@ public:
 class ChangeSpannerElements : public UndoCommand
 {
     Spanner* spanner;
-    Element* startElement;
-    Element* endElement;
+    EngravingItem* startElement;
+    EngravingItem* endElement;
 
     void flip(EditData*) override;
 
 public:
-    ChangeSpannerElements(Spanner* s, Element* se, Element* ee)
+    ChangeSpannerElements(Spanner* s, EngravingItem* se, EngravingItem* ee)
         : spanner(s), startElement(se), endElement(ee) {}
     UNDO_NAME("ChangeSpannerElements")
 };
@@ -1283,14 +1260,14 @@ public:
 
 class ChangeParent : public UndoCommand
 {
-    Element* element;
-    Element* parent;
+    EngravingItem* element;
+    EngravingItem* parent;
     int staffIdx;
 
     void flip(EditData*) override;
 
 public:
-    ChangeParent(Element* e, Element* p, int si)
+    ChangeParent(EngravingItem* e, EngravingItem* p, int si)
         : element(e), parent(p), staffIdx(si) {}
     UNDO_NAME("ChangeParent")
 };
@@ -1395,8 +1372,8 @@ class LinkUnlink : public UndoCommand
     bool mustDelete  { false };
 
 protected:
-    LinkedElements* le = nullptr;
-    ScoreElement* e = nullptr;
+    LinkedObjects* le = nullptr;
+    EngravingObject* e = nullptr;
 
     void link();
     void unlink();
@@ -1413,7 +1390,7 @@ public:
 class Unlink : public LinkUnlink
 {
 public:
-    Unlink(ScoreElement*);
+    Unlink(EngravingObject*);
     virtual void undo(EditData*) override { link(); }
     virtual void redo(EditData*) override { unlink(); }
     UNDO_NAME("Unlink")
@@ -1426,12 +1403,12 @@ public:
 class Link : public LinkUnlink
 {
 public:
-    Link(ScoreElement*, ScoreElement*);
+    Link(EngravingObject*, EngravingObject*);
     virtual void undo(EditData*) override { unlink(); }
     virtual void redo(EditData*) override { link(); }
     UNDO_NAME("Link")
 
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override;
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override;
 };
 
 //---------------------------------------------------------
@@ -1441,13 +1418,13 @@ public:
 class ChangeStartEndSpanner : public UndoCommand
 {
     Spanner* spanner;
-    Element* start;
-    Element* end;
+    EngravingItem* start;
+    EngravingItem* end;
 
     void flip(EditData*) override;
 
 public:
-    ChangeStartEndSpanner(Spanner* sp, Element* s, Element* e)
+    ChangeStartEndSpanner(Spanner* sp, EngravingItem* s, EngravingItem* e)
         : spanner(sp), start(s), end(e) {}
     UNDO_NAME("ChangeStartEndSpanner")
 };

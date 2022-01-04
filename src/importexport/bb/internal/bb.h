@@ -23,7 +23,8 @@
 #ifndef __BB_H__
 #define __BB_H__
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/event.h"
+#include "engraving/libmscore/sig.h"
 
 namespace Ms {
 const int MAX_BARS = 255;
@@ -137,9 +138,6 @@ class BBFile
     int _startChorus;
     int _endChorus;
     int _repeats;
-#if 0 // yet(?) unused
-    int _flags;
-#endif
     char* _styleName;
     QList<BBTrack*> _tracks;
     int _measures;

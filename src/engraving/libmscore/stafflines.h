@@ -20,9 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef MU_LIBMSCORE_STAFFLINES_H
+#define MU_LIBMSCORE_STAFFLINES_H
+
 #include <vector>
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //-------------------------------------------------------------------
@@ -31,27 +34,31 @@ namespace Ms {
 ///    it draws the horizontal staff lines.
 //-------------------------------------------------------------------
 
-class StaffLines final : public Element
+class StaffLines final : public EngravingItem
 {
     qreal lw { 0.0 };
     std::vector<mu::LineF> lines;
 
+    friend class mu::engraving::Factory;
+    StaffLines(Measure* parent);
+
 public:
-    StaffLines(Score*);
 
     StaffLines* clone() const override { return new StaffLines(*this); }
-    ElementType type() const override { return ElementType::STAFF_LINES; }
+
     void layout() override;
     void draw(mu::draw::Painter*) const override;
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     std::vector<mu::LineF>& getLines() { return lines; }
-    Measure* measure() const { return (Measure*)parent(); }
+    Measure* measure() const { return (Measure*)explicitParent(); }
     qreal y1() const;
     void layoutForWidth(qreal width);
     void layoutPartialWidth(qreal w, qreal wPartial, bool alignLeft);
 };
-}     // namespace Ms
+}
+
+#endif // MU_LIBMSCORE_STAFFLINES_H

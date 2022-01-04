@@ -25,18 +25,22 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "libmscore/select.h"
 #include "selectnotedialog.h"
-#include "libmscore/element.h"
-#include "libmscore/system.h"
-#include "libmscore/score.h"
-#include "libmscore/chord.h"
-#include "libmscore/segment.h"
-#include "libmscore/note.h"
 
-#include "widgetstatestore.h"
+#include "engraving/types/typesconv.h"
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/engravingitem.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/note.h"
+#include "engraving/libmscore/segment.h"
+#include "engraving/libmscore/select.h"
+#include "engraving/libmscore/system.h"
+
+#include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
+using namespace mu::ui;
 
 //---------------------------------------------------------
 //   SelectDialog
@@ -51,18 +55,35 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
 
     m_note = dynamic_cast<Ms::Note*>(globalContext()->currentNotation()->interaction()->selection()->element());
 
-    notehead->setText(Ms::NoteHead::group2userName(m_note->headGroup()));
+    notehead->setText(TConv::toUserName(m_note->headGroup()));
+    sameNotehead->setAccessibleName(sameNotehead->text() + notehead->text());
+
     pitch->setText(m_note->tpcUserName());
+    samePitch->setAccessibleName(samePitch->text() + pitch->text());
+
     string->setText(QString::number(m_note->string() + 1));
+    sameString->setAccessibleName(sameString->text() + string->text());
+
     type->setText(m_note->noteTypeUserName());
-    durationType->setText(tr("%1 Note").arg(m_note->chord()->durationType().durationTypeUserName()));
+    sameType->setAccessibleName(sameType->text() + type->text());
+
+    durationType->setText(tr("%1 Note").arg(TConv::toUserName(m_note->chord()->durationType().type())));
+    sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
+
     durationTicks->setText(m_note->chord()->durationUserName());
+    sameDurationTicks->setAccessibleName(sameDurationTicks->text() + durationTicks->text());
+
     name->setText(tpc2name(m_note->tpc(), Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO, false));
+    sameName->setAccessibleName(sameName->text() + name->text());
+
     inSelection->setEnabled(m_note->score()->selection().isRange());
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectNoteDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
+
+    //! NOTE: It is necessary for the correct start of navigation in the dialog
+    setFocus();
 }
 
 SelectNoteDialog::SelectNoteDialog(const SelectNoteDialog& other)
@@ -213,14 +234,14 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
 
     FilterElementsOptions options = noteOptions();
 
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -229,18 +250,18 @@ void SelectNoteDialog::apply() const
         interaction->clearSelection();
         interaction->select(elements, SelectType::ADD);
     } else if (doSubtract()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
+        for (EngravingItem* element: elements) {
             selesctionElements.erase(std::remove(selesctionElements.begin(), selesctionElements.end(), element), selesctionElements.end());
         }
 
         interaction->clearSelection();
         interaction->select(selesctionElements, SelectType::ADD);
     } else if (doAdd()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
 
-        std::vector<Element*> elementsToSelect;
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> elementsToSelect;
+        for (EngravingItem* element: elements) {
             if (std::find(selesctionElements.begin(), selesctionElements.end(), element) == selesctionElements.end()) {
                 elementsToSelect.push_back(element);
             }

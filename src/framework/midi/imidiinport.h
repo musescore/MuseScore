@@ -45,9 +45,6 @@ public:
     virtual bool isConnected() const = 0;
     virtual MidiDeviceID deviceID() const = 0;
 
-    virtual Ret run() = 0;
-    virtual void stop() = 0;
-    virtual bool isRunning() const = 0;
     virtual async::Channel<tick_t, Event> eventReceived() const = 0;
 };
 }

@@ -33,17 +33,21 @@ class EditPitch : public QDialog, private Ui::EditPitchBase
 {
     Q_OBJECT
 
-    virtual void hideEvent(QHideEvent*);
-
-private slots:
-    void on_tableWidget_cellDoubleClicked(int row, int column);
-    void accept();
-    void reject() { done(-1); }                               // return an invalid pitch MIDI code
-
 public:
     EditPitch(QWidget* parent);
     EditPitch(QWidget* parent, int midiCode);
     ~EditPitch() {}
+
+private slots:
+    void on_tableWidget_cellDoubleClicked(int row, int column);
+    void accept() override;
+    void reject() override { done(-1); }                               // return an invalid pitch MIDI code
+
+private:
+    virtual void hideEvent(QHideEvent*) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
+    void setup();
 };
 }
 

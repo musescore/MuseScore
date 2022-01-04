@@ -46,6 +46,7 @@ QVariant AbstractMenuModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case TitleRole: return item["title"];
     case CodeRole: return item["code"];
+    case IdRole: return item["id"];
     case DescriptionRole: return item["description"];
     case ShortcutRole: return item["shortcut"];
     case IconRole: return item["icon"];
@@ -73,6 +74,7 @@ QHash<int, QByteArray> AbstractMenuModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { TitleRole, "title" },
+        { IdRole, "id" },
         { CodeRole, "code" },
         { DescriptionRole, "description" },
         { ShortcutRole, "shortcut" },
@@ -86,12 +88,11 @@ QHash<int, QByteArray> AbstractMenuModel::roleNames() const
     return roles;
 }
 
-void AbstractMenuModel::handleAction(const QString& actionCodeStr, int actionIndex)
+void AbstractMenuModel::handleMenuItem(const QString& itemId)
 {
-    ActionCode actionCode = codeFromQString(actionCodeStr);
-    MenuItem menuItem = actionIndex == -1 ? findItem(actionCode) : findItemByIndex(actionCode, actionIndex);
+    MenuItem menuItem = findItem(itemId);
 
-    dispatch(actionCode, menuItem.args);
+    dispatch(menuItem.code, menuItem.args);
 }
 
 void AbstractMenuModel::dispatch(const ActionCode& actionCode, const ActionData& args)
@@ -122,12 +123,18 @@ void AbstractMenuModel::load()
     });
 }
 
-const MenuItemList& AbstractMenuModel::items() const
+QVariantList AbstractMenuModel::itemsProperty() const
 {
-    return m_items;
+    QVariantList items;
+
+    for (const MenuItem& item: m_items) {
+        items << item.toMap();
+    }
+
+    return items;
 }
 
-MenuItemList& AbstractMenuModel::items()
+const MenuItemList& AbstractMenuModel::items() const
 {
     return m_items;
 }
@@ -140,13 +147,18 @@ void AbstractMenuModel::setItems(const MenuItemList& items)
     m_items = items;
     endResetModel();
 
-    emit countChanged(items.size());
+    emit itemsChanged();
 }
 
-int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
+void AbstractMenuModel::clear()
+{
+    setItems(MenuItemList());
+}
+
+int AbstractMenuModel::itemIndex(const QString& itemId) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
-        if (m_items[i].code == actionCode) {
+        if (m_items[i].id == itemId) {
             return i;
         }
     }
@@ -154,35 +166,31 @@ int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
     return INVALID_ITEM_INDEX;
 }
 
+MenuItem& AbstractMenuModel::item(int index)
+{
+    return m_items[index];
+}
+
+MenuItem& AbstractMenuModel::findItem(const QString& itemId)
+{
+    return item(m_items, itemId);
+}
+
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
 {
     return item(m_items, actionCode);
 }
 
-MenuItem& AbstractMenuModel::findItemByIndex(const ActionCode& menuActionCode, int actionIndex)
+MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
 {
-    MenuItem& menuItem = menu(m_items, menuActionCode);
-    MenuItemList& subitems = menuItem.subitems;
-    for (int i = 0; i < subitems.size(); ++i) {
-        if (i == actionIndex) {
-            return subitems[i];
-        }
-    }
-
-    static MenuItem null;
-    return null;
+    return menu(m_items, menuId);
 }
 
-MenuItem& AbstractMenuModel::findMenu(const ActionCode& subitemsActionCode)
-{
-    return menu(m_items, subitemsActionCode);
-}
-
-MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items, bool enabled,
-                                     const ActionCode& menuActionCode) const
+MenuItem AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items,
+                                     const QString& menuId, bool enabled) const
 {
     MenuItem item;
-    item.code = menuActionCode;
+    item.id = menuId;
     item.title = title;
     item.subitems = items;
     item.state.enabled = enabled;
@@ -193,6 +201,7 @@ MenuItem AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
 {
     const UiAction& action = uiactionsRegister()->action(actionCode);
     if (!action.isValid()) {
+        LOGW() << "not found action: " << actionCode;
         return MenuItem();
     }
 
@@ -223,6 +232,25 @@ void AbstractMenuModel::onActionsStateChanges(const actions::ActionCodeList& cod
     }
 }
 
+MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
+{
+    for (MenuItem& menuItem : items) {
+        if (menuItem.id == itemId) {
+            return menuItem;
+        }
+
+        if (!menuItem.subitems.empty()) {
+            MenuItem& subitem = item(menuItem.subitems, itemId);
+            if (subitem.id == itemId) {
+                return subitem;
+            }
+        }
+    }
+
+    static MenuItem null;
+    return null;
+}
+
 MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
 {
     for (MenuItem& menuItem : items) {
@@ -242,18 +270,14 @@ MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionC
     return null;
 }
 
-MenuItem& AbstractMenuModel::menu(MenuItemList& items, const ActionCode& subitemsActionCode)
+MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)
 {
     for (MenuItem& item : items) {
-        if (item.subitems.isEmpty()) {
-            continue;
-        }
-
-        if (item.code == subitemsActionCode) {
+        if (item.id == menuId) {
             return item;
         }
 
-        MenuItem& menuItem = menu(item.subitems, subitemsActionCode);
+        MenuItem& menuItem = menu(item.subitems, menuId);
         if (menuItem.isValid()) {
             return menuItem;
         }

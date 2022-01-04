@@ -44,8 +44,10 @@ public:
     virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
     virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
 
-    virtual async::Channel<audioch_t, float> masterSignalAmplitudeChanged() const = 0;
-    virtual async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureChanged() const = 0;
+    virtual async::Promise<AudioResourceMetaList> availableOutputResources() const = 0;
+
+    virtual async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual async::Promise<AudioSignalChanges> masterSignalChanges() const = 0;
 };
 
 using IAudioOutputPtr = std::shared_ptr<IAudioOutput>;

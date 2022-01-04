@@ -42,6 +42,12 @@ std::string SanitySynthesizer::name() const
     return m_synth->name();
 }
 
+audio::AudioSourceType SanitySynthesizer::type() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    return m_synth->type();
+}
+
 SoundFontFormats SanitySynthesizer::soundFontFormats() const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -88,12 +94,6 @@ bool SanitySynthesizer::handleEvent(const midi::Event& e)
 {
     ONLY_AUDIO_WORKER_THREAD;
     return m_synth->handleEvent(e);
-}
-
-void SanitySynthesizer::writeBuf(float* stream, unsigned int samples)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    m_synth->writeBuf(stream, samples);
 }
 
 void SanitySynthesizer::allSoundsOff()
@@ -151,8 +151,8 @@ async::Channel<unsigned int> SanitySynthesizer::audioChannelsCountChanged() cons
     return m_synth->audioChannelsCountChanged();
 }
 
-void SanitySynthesizer::process(float* buffer, unsigned int sampleCount)
+audio::samples_t SanitySynthesizer::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_synth->process(buffer, sampleCount);
+    return m_synth->process(buffer, samplesPerChannel);
 }

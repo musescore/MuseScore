@@ -50,11 +50,11 @@ RepeatSegment::RepeatSegment(int playbackCount)
 void RepeatSegment::addMeasure(Measure const* const m)
 {
     if (m != nullptr) {
-        if (measureList.empty()) {
+        if (m_measureList.empty()) {
             tick = m->tick().ticks();
         }
-        if ((measureList.empty()) || (measureList.back() != m)) {
-            measureList.push_back(m);
+        if ((m_measureList.empty()) || (m_measureList.back() != m)) {
+            m_measureList.push_back(m);
         }
     }
 }
@@ -62,18 +62,18 @@ void RepeatSegment::addMeasure(Measure const* const m)
 /// \brief Expands or clips my measureList up to m (including m)
 void RepeatSegment::addMeasures(Measure const* const m)
 {
-    if (!measureList.empty()) {
+    if (!m_measureList.empty()) {
         // Add up to the current measure, final measure is added outside of this condition
-        Measure const* lastMeasure = measureList.back()->nextMeasure();
+        Measure const* lastMeasure = m_measureList.back()->nextMeasure();
         if (lastMeasure && (lastMeasure->tick() < m->tick())) {     // Ensure provided reference is later than current last
             while (lastMeasure != m) {
-                measureList.push_back(lastMeasure);
+                m_measureList.push_back(lastMeasure);
                 lastMeasure = lastMeasure->nextMeasure();
             }
         }
         //else { // Possibly clip compared to current last measure }
-        while (!measureList.empty() && (measureList.back()->tick() >= m->tick())) {
-            measureList.pop_back();
+        while (!m_measureList.empty() && (m_measureList.back()->tick() >= m->tick())) {
+            m_measureList.pop_back();
         }
     }
     addMeasure(m);
@@ -81,7 +81,7 @@ void RepeatSegment::addMeasures(Measure const* const m)
 
 bool RepeatSegment::containsMeasure(Measure const* const m) const
 {
-    for (Measure const* const measure : measureList) {
+    for (Measure const* const measure : m_measureList) {
         if (measure == m) {
             return true;
         }
@@ -91,19 +91,24 @@ bool RepeatSegment::containsMeasure(Measure const* const m) const
 
 bool RepeatSegment::isEmpty() const
 {
-    return measureList.empty();
+    return m_measureList.empty();
 }
 
 int RepeatSegment::len() const
 {
-    return (measureList.empty()) ? 0 : (measureList.last()->endTick().ticks() - tick);
+    return (m_measureList.empty()) ? 0 : (m_measureList.last()->endTick().ticks() - tick);
 }
 
 void RepeatSegment::popMeasure()
 {
-    if (!measureList.empty()) {
-        measureList.pop_back();
+    if (!m_measureList.empty()) {
+        m_measureList.pop_back();
     }
+}
+
+const QList<const Measure*> RepeatSegment::measureList() const
+{
+    return m_measureList;
 }
 
 //---------------------------------------------------------
@@ -319,13 +324,13 @@ class RepeatListElement
 {
 public:
     RepeatListElementType const repeatListElementType;
-    Element const* const element;
+    EngravingItem const* const element;
     Measure const* const measure;    // convenience, should be measure containing element
 private:
     int repeatCount;
 
 public:
-    RepeatListElement(RepeatListElementType type, Element const* const el, Measure const* const m)
+    RepeatListElement(RepeatListElementType type, EngravingItem const* const el, Measure const* const m)
         : repeatListElementType(type), element(el), measure(m)
     {
         repeatCount = (type == RepeatListElementType::REPEAT_START) ? 1 : 0;
@@ -476,7 +481,7 @@ void RepeatList::collectRepeatListElements()
                 sectionRLElements->push_back(startFromRepeatMeasure);
             }
             // Jumps and Markers
-            for (Element* e : mb->el()) {
+            for (EngravingItem* e : mb->el()) {
                 if (e->isJump()) {
                     sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                     if (volta != nullptr) {
@@ -498,21 +503,18 @@ void RepeatList::collectRepeatListElements()
                     // them from left to right. The only way available to guess their order is to look at their
                     // text alignment and order them left to right
                     // At the same time, we should ensure Markers are evaluated before Jumps
-                    Align markerRLEalignmentH
-                        = static_cast<Align>(static_cast<char>(toMarker(e)->align()) & static_cast<char>(Align::HMASK));
+                    Align markerRLEalignmentH = toMarker(e)->align();
                     auto insertionIt = sectionRLElements->end() - 1;
                     while ((*insertionIt)->measure == markerRLE->measure) {
                         bool markerShouldGoBefore = false;
                         if (((*insertionIt)->repeatListElementType == RepeatListElementType::MARKER)
-                            && (markerRLEalignmentH != Align::RIGHT) // We can be the end when right aligned
+                            && (markerRLEalignmentH != AlignH::RIGHT) // We can be the end when right aligned
                             ) {
-                            Align storedMarkerAlignmentH
-                                = static_cast<Align>(static_cast<char>(toMarker((*insertionIt)->element)->align())
-                                                     & static_cast<char>(Align::HMASK));
-                            if (markerRLEalignmentH == Align::HCENTER) {
-                                markerShouldGoBefore = (storedMarkerAlignmentH == Align::RIGHT);
+                            Align storedMarkerAlignmentH = toMarker((*insertionIt)->element)->align();
+                            if (markerRLEalignmentH == AlignH::HCENTER) {
+                                markerShouldGoBefore = (storedMarkerAlignmentH == AlignH::RIGHT);
                             } else { //(markerRLEalignmentH == Align::LEFT)
-                                markerShouldGoBefore = (storedMarkerAlignmentH != Align::LEFT);
+                                markerShouldGoBefore = (storedMarkerAlignmentH != AlignH::LEFT);
                             }
                         }
                         if (markerShouldGoBefore
@@ -563,7 +565,8 @@ void RepeatList::collectRepeatListElements()
                 if (volta != nullptr) {
                     //if (volta->endMeasure()->tick() < mb->tick()) {
                     // The previous volta was supposed to end before us (open volta case) -> insert the end
-                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta, toMeasure(mb)));
+                    sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::VOLTA_END, volta,
+                                                                       toMeasure(sectionEndMeasureBase)));
                     volta = nullptr;
                     //} else {
                     //    // Volta is spanning over this section break, consider splitting the volta

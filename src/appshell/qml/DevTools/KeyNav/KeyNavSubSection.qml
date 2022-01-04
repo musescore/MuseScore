@@ -34,8 +34,7 @@ Rectangle {
     height: 40
     width: btns.childrenRect.width
 
-    border.color: "#75507b"
-    border.width: keynavsec.active ? 4 : 0
+    NavigationFocusBorder { navigationCtrl: keynavsec }
 
     signal clicked(string info)
 

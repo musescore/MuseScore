@@ -25,9 +25,9 @@
 #include "config.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/musicxmlreader.h"
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "internal/musicxmlwriter.h"
 #include "internal/musicxmlwriter.h"
 #include "internal/mxlwriter.h"
@@ -35,7 +35,7 @@
 #include "internal/musicxmlconfiguration.h"
 
 using namespace mu::iex::musicxml;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<MusicXmlConfiguration> s_configuration = std::make_shared<MusicXmlConfiguration>();
 

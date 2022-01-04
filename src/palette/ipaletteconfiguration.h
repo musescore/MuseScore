@@ -38,6 +38,8 @@ class IPaletteConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPaletteConfiguration() = default;
 
+    virtual double paletteSpatium() const = 0;
+
     virtual double paletteScaling() const = 0;
     virtual void setPaletteScaling(double scale) = 0;
 

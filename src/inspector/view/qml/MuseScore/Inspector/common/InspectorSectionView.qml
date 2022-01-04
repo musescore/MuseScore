@@ -27,25 +27,17 @@ import MuseScore.UiComponents 1.0
 FocusScope {
     id: root
 
-    property QtObject model: undefined
+    property QtObject model: null
     property NavigationPanel navigationPanel: null
-    property int navigationRowOffset: 1
+    property int navigationRowStart: 1
 
-    property var contentHeight: implicitHeight
-    signal contentExtended()
+    property var anchorItem: null
+    signal ensureContentVisibleRequested(int invisibleContentHeight)
 
     anchors.left: parent.left
     anchors.right: parent.right
 
     function navigationRow(row) {
-        return root.navigationRowOffset + row
-    }
-
-    onContentHeightChanged: {
-        if (contentHeight > implicitHeight) {
-            root.contentExtended()
-        } else if (contentHeight < implicitHeight) {
-            root.contentIntended()
-        }
+        return root.navigationRowStart + row
     }
 }

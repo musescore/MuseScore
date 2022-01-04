@@ -34,6 +34,42 @@ using namespace mu::async;
 SequenceIO::SequenceIO(IGetTracks* getTracks)
     : m_getTracks(getTracks)
 {
+    m_getTracks->trackAboutToBeAdded().onReceive(this, [this](TrackPtr trackPtr) {
+        if (!trackPtr) {
+            return;
+        }
+
+        TrackId id = trackPtr->id;
+
+        trackPtr->inputParamsChanged().onReceive(this, [this, id](const AudioInputParams& params) {
+            m_inputParamsChanged.send(id, params);
+        });
+
+        trackPtr->outputParamsChanged().onReceive(this, [this, id](const AudioOutputParams& params) {
+            m_outputParamsChanged.send(id, params);
+        });
+    });
+
+    m_getTracks->trackAboutToBeRemoved().onReceive(this, [this](TrackPtr trackPtr) {
+        if (!trackPtr) {
+            return;
+        }
+
+        trackPtr->inputParamsChanged().resetOnReceive(this);
+        trackPtr->outputParamsChanged().resetOnReceive(this);
+    });
+}
+
+bool SequenceIO::isHasTrack(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return false;
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    return track != nullptr;
 }
 
 RetVal<AudioInputParams> SequenceIO::inputParams(const TrackId id) const
@@ -83,10 +119,7 @@ void SequenceIO::setInputParams(const TrackId id, const AudioInputParams& params
     }
 
     TrackPtr track = m_getTracks->track(id);
-
-    if (track && track->setInputParams(params)) {
-        m_inputParamsChanged.send(id, params);
-    }
+    track->setInputParams(params);
 }
 
 void SequenceIO::setOutputParams(const TrackId id, const AudioOutputParams& params)
@@ -98,10 +131,7 @@ void SequenceIO::setOutputParams(const TrackId id, const AudioOutputParams& para
     }
 
     TrackPtr track = m_getTracks->track(id);
-
-    if (track && track->setOutputParams(params)) {
-        m_outputParamsChanged.send(id, params);
-    }
+    track->setOutputParams(params);
 }
 
 Channel<TrackId, AudioInputParams> SequenceIO::inputParamsChanged() const
@@ -112,4 +142,20 @@ Channel<TrackId, AudioInputParams> SequenceIO::inputParamsChanged() const
 Channel<TrackId, AudioOutputParams> SequenceIO::outputParamsChanged() const
 {
     return m_outputParamsChanged;
+}
+
+Channel<audioch_t, AudioSignalVal> SequenceIO::audioSignalChanges(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return {};
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return Channel<audioch_t, AudioSignalVal>();
+    }
+
+    return track->outputHandler->audioSignalChanges();
 }

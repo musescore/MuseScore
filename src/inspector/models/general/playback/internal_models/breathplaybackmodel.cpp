@@ -31,6 +31,7 @@ BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Breaths & pauses"));
+    setModelType(InspectorModelType::TYPE_BREATH);
 
     createProperties();
 }
@@ -48,7 +49,7 @@ void BreathPlaybackModel::requestElements()
 void BreathPlaybackModel::loadProperties()
 {
     loadPropertyItem(m_pauseTime, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

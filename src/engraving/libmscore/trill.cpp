@@ -25,11 +25,12 @@
 #include <cmath>
 
 #include "translation.h"
+#include "style/style.h"
+#include "rw/xml.h"
 
-#include "style.h"
+#include "factory.h"
 #include "system.h"
 #include "measure.h"
-#include "xml.h"
 #include "utils.h"
 #include "score.h"
 #include "scorefont.h"
@@ -38,6 +39,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -66,6 +68,16 @@ static const ElementStyle trillStyle {
     { Sid::trillPosAbove,  Pid::OFFSET },
 };
 
+TrillSegment::TrillSegment(Trill* sp, System* parent)
+    : LineSegment(ElementType::TRILL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
+TrillSegment::TrillSegment(System* parent)
+    : LineSegment(ElementType::TRILL_SEGMENT, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -81,7 +93,7 @@ void TrillSegment::draw(mu::draw::Painter* painter) const
 //   add
 //---------------------------------------------------------
 
-void TrillSegment::add(Element* e)
+void TrillSegment::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->type() == ElementType::ACCIDENTAL) {
@@ -94,7 +106,7 @@ void TrillSegment::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void TrillSegment::remove(Element* e)
+void TrillSegment::remove(EngravingItem* e)
 {
     if (trill()->accidental() == e) {
         // accidental is part of trill
@@ -221,9 +233,9 @@ bool TrillSegment::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TrillSegment::drop(EditData& data)
+EngravingItem* TrillSegment::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ACCIDENTAL:
         e->setParent(trill());
@@ -242,7 +254,7 @@ Element* TrillSegment::drop(EditData& data)
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TrillSegment::propertyDelegate(Pid pid)
+EngravingItem* TrillSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY) {
         return spanner();
@@ -274,18 +286,18 @@ Sid Trill::getPropertyStyle(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(Score* s)
-    : SLine(s)
+Trill::Trill(EngravingItem* parent)
+    : SLine(ElementType::TRILL, parent)
 {
     _trillType     = Type::TRILL_LINE;
     _accidental    = 0;
-    _ornamentStyle = MScore::OrnamentStyle::DEFAULT;
+    _ornamentStyle = OrnamentStyle::DEFAULT;
     setPlayArticulation(true);
     initElementStyle(&trillStyle);
 }
 
 Trill::Trill(const Trill& t)
-    : SLine(t.score())
+    : SLine(t)
 {
     _trillType = t._trillType;
     _accidental = t._accidental ? t._accidental->clone() : nullptr;
@@ -303,7 +315,7 @@ Trill::~Trill()
 //   add
 //---------------------------------------------------------
 
-void Trill::add(Element* e)
+void Trill::add(EngravingItem* e)
 {
     if (e->type() == ElementType::ACCIDENTAL) {
         e->setParent(this);
@@ -317,7 +329,7 @@ void Trill::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Trill::remove(Element* e)
+void Trill::remove(EngravingItem* e)
 {
     if (e == _accidental) {
         _accidental = 0;
@@ -331,7 +343,7 @@ void Trill::remove(Element* e)
 void Trill::layout()
 {
     SLine::layout();
-    if (score() == gscore) {
+    if (score()->isPaletteScore()) {
         return;
     }
     if (spannerSegments().empty()) {
@@ -355,9 +367,9 @@ static const ElementStyle trillSegmentStyle {
     { Sid::trillMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Trill::createLineSegment()
+LineSegment* Trill::createLineSegment(System* parent)
 {
-    TrillSegment* seg = new TrillSegment(this, score());
+    TrillSegment* seg = new TrillSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     seg->initElementStyle(&trillSegmentStyle);
@@ -373,7 +385,7 @@ void Trill::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", trillTypeName());
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
@@ -382,7 +394,7 @@ void Trill::write(XmlWriter& xml) const
     if (_accidental) {
         _accidental->write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -398,7 +410,7 @@ void Trill::read(XmlReader& e)
         if (tag == "subtype") {
             setTrillType(e.readElementText());
         } else if (tag == "Accidental") {
-            _accidental = new Accidental(score());
+            _accidental = Factory::createAccidental(this);
             _accidental->read(e);
             _accidental->setParent(this);
         } else if (tag == "ornamentStyle") {
@@ -471,13 +483,13 @@ QString Trill::trillTypeUserName() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Trill::getProperty(Pid propertyId) const
+PropertyValue Trill::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:
         return int(trillType());
     case Pid::ORNAMENT_STYLE:
-        return int(ornamentStyle());
+        return ornamentStyle();
     case Pid::PLAY:
         return bool(playArticulation());
     default:
@@ -490,7 +502,7 @@ QVariant Trill::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Trill::setProperty(Pid propertyId, const QVariant& val)
+bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:
@@ -500,10 +512,10 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
         setPlayArticulation(val.toBool());
         break;
     case Pid::ORNAMENT_STYLE:
-        setOrnamentStyle(MScore::OrnamentStyle(val.toInt()));
+        setOrnamentStyle(val.value<OrnamentStyle>());
         break;
     case Pid::COLOR:
-        setColor(val.value<QColor>());
+        setColor(val.value<Color>());
         [[fallthrough]];
     default:
         if (!SLine::setProperty(propertyId, val)) {
@@ -519,14 +531,13 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Trill::propertyDefault(Pid propertyId) const
+PropertyValue Trill::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TRILL_TYPE:
         return 0;
     case Pid::ORNAMENT_STYLE:
-        //return int(score()->style()->ornamentStyle(_ornamentStyle));
-        return int(MScore::OrnamentStyle::DEFAULT);
+        return OrnamentStyle::DEFAULT;
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:
@@ -555,6 +566,6 @@ Pid Trill::propertyId(const QStringRef& name) const
 
 QString Trill::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), trillTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 }

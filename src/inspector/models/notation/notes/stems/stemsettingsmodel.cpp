@@ -39,20 +39,24 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isStemHidden) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isStemHidden.toBool());
+    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isStemHidden) {
+        onPropertyValueChanged(pid, !isStemHidden.toBool());
     });
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_length = buildPropertyItem(Ms::Pid::USER_LEN);
     m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    });
+
+    context()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
+        emit useStraightNoteFlagsChanged();
     });
 }
 
@@ -68,21 +72,21 @@ void StemSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_thickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_length, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_stemDirection);
 
     loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
     });
 
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 }
 
@@ -124,4 +128,20 @@ PropertyItem* StemSettingsModel::verticalOffset() const
 PropertyItem* StemSettingsModel::stemDirection() const
 {
     return m_stemDirection;
+}
+
+bool StemSettingsModel::useStraightNoteFlags() const
+{
+    return context()->currentNotation()->style()->styleValue(Ms::Sid::useStraightNoteFlags).toBool();
+}
+
+void StemSettingsModel::setUseStraightNoteFlags(bool use)
+{
+    if (use == useStraightNoteFlags()) {
+        return;
+    }
+
+    context()->currentNotation()->undoStack()->prepareChanges();
+    context()->currentNotation()->style()->setStyleValue(Ms::Sid::useStraightNoteFlags, use);
+    context()->currentNotation()->undoStack()->commitChanges();
 }

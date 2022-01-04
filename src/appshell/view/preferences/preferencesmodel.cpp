@@ -146,7 +146,7 @@ void PreferencesModel::load(const QString& currentPageId)
     m_rootItem = new PreferencePageItem();
 
     QList<PreferencePageItem*> generalItems {
-        makeItem("general-start", qtrc("appshell", "Programme Start"), IconCode::Code::NONE,
+        makeItem("general-start", qtrc("appshell", "Program start"), IconCode::Code::NONE,
                  "Preferences/ProgrammeStartPreferencesPage.qml"),
 
         makeItem("general-folders", qtrc("appshell", "Folders"), IconCode::Code::NONE,
@@ -163,10 +163,10 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("canvas", qtrc("appshell", "Canvas"), IconCode::Code::NEW_FILE,
                  "Preferences/CanvasPreferencesPage.qml"),
 
-        makeItem("note-input", qtrc("appshell", "Note Input"), IconCode::Code::EDIT,
+        makeItem("note-input", qtrc("appshell", "Note input"), IconCode::Code::EDIT,
                  "Preferences/NoteInputPreferencesPage.qml"),
 
-        makeItem("midi-device-mapping", qtrc("appshell", "MIDI Device Mapping"), IconCode::Code::MIDI_INPUT,
+        makeItem("midi-device-mapping", qtrc("appshell", "MIDI device mapping"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
         makeItem("score", qtrc("appshell", "Score"), IconCode::Code::SCORE,

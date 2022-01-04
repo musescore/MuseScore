@@ -60,7 +60,12 @@ StyledDialogView {
             var pagePath = Boolean(pageInfo.path) ? pageInfo.path : "Preferences/StubPreferencesPage.qml"
             var pageComponent = Qt.createComponent("../" + pagePath)
 
-            var obj = pageComponent.createObject(stack)
+            var properties = {
+                navigationSection: root.navigationSection,
+                navigationOrderStart: (i + 1) * 100
+            }
+
+            var obj = pageComponent.createObject(stack, properties)
 
             if (!Boolean(obj)) {
                 continue
@@ -95,27 +100,19 @@ StyledDialogView {
                 Layout.fillHeight: true
                 Layout.preferredWidth: 220
 
+                navigation.section: root.navigationSection
+                navigation.order: 1
+
                 model: preferencesModel
             }
 
             SeparatorLine { orientation: Qt.Vertical }
 
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                color: ui.theme.backgroundSecondaryColor
-
-                StackLayout {
-                    id: stack
-
-                    anchors.fill: parent
-                    anchors.margins: 30
-
-                    currentIndex: {
-                        var keys = Object.keys(root.privatesProperties.pagesObjects)
-                        return keys.indexOf(preferencesModel.currentPageId)
-                    }
+            StackLayout {
+                id: stack
+                currentIndex: {
+                    var keys = Object.keys(root.privatesProperties.pagesObjects)
+                    return keys.indexOf(preferencesModel.currentPageId)
                 }
             }
         }
@@ -127,6 +124,9 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 70
+
+            navigation.section: root.navigationSection
+            navigation.order: 100000
 
             onRevertFactorySettingsRequested: {
                 preferencesModel.resetFactorySettings()

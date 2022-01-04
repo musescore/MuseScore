@@ -23,7 +23,7 @@
 #ifndef __TIMESIG_H__
 #define __TIMESIG_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "sig.h"
 #include "mscore.h"
 #include "groups.h"
@@ -49,13 +49,13 @@ enum class TimeSigType : char {
 ///    This class represents a time signature.
 //---------------------------------------------------------------------------------------
 
-class TimeSig final : public Element
+class TimeSig final : public EngravingItem
 {
     QString _numeratorString;       // calculated from actualSig() if !customText
     QString _denominatorString;
 
-    std::vector<SymId> ns;
-    std::vector<SymId> ds;
+    SymIdList ns;
+    SymIdList ds;
 
     mu::PointF pz;
     mu::PointF pn;
@@ -65,19 +65,22 @@ class TimeSig final : public Element
     Fraction _stretch;        // localSig / globalSig
     Groups _groups;
 
-    mu::SizeF _scale;
+    mu::ScaleF _scale;
     TimeSigType _timeSigType;
     bool _showCourtesySig;
     bool _largeParentheses;
 
+    friend class mu::engraving::Factory;
+    TimeSig(Segment* parent = 0);
+
 public:
-    TimeSig(Score* = 0);
+
+    void setParent(Segment* parent);
 
     QString ssig() const;
     void setSSig(const QString&);
 
     TimeSig* clone() const override { return new TimeSig(*this); }
-    ElementType type() const override { return ElementType::TIMESIG; }
 
     TimeSigType timeSigType() const { return _timeSigType; }
 
@@ -101,10 +104,10 @@ public:
     int denominatorStretch() const { return _stretch.denominator(); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
-    Segment* segment() const { return (Segment*)parent(); }
-    Measure* measure() const { return (Measure*)parent()->parent(); }
+    Segment* segment() const { return (Segment*)explicitParent(); }
+    Measure* measure() const { return (Measure*)explicitParent()->explicitParent(); }
 
     bool showCourtesySig() const { return _showCourtesySig; }
     void setShowCourtesySig(bool v) { _showCourtesySig = v; }
@@ -117,13 +120,13 @@ public:
 
     void setLargeParentheses(bool v) { _largeParentheses = v; }
 
-    void setScale(const mu::SizeF& s) { _scale = s; }
+    void setScale(const mu::ScaleF& s) { _scale = s; }
 
     void setFrom(const TimeSig*);
 
-    QVariant getProperty(Pid propertyId) const override;
-    bool setProperty(Pid propertyId, const QVariant&) override;
-    QVariant propertyDefault(Pid id) const override;
+    mu::engraving::PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue propertyDefault(Pid id) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
     const Groups& groups() const { return _groups; }
@@ -134,8 +137,8 @@ public:
 
     bool isLocal() const { return _stretch != Fraction(1, 1); }
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 }     // namespace Ms

@@ -45,4 +45,8 @@
 
 #define UNUSED(x) (void)x;
 
+#define UNREACHABLE \
+    LOGE() << "\"UNREACHABLE!\":" << __FILE__ << __LINE__; \
+    Q_ASSERT_X(false, "UNREACHABLE", "UNREACHABLE was reached"); \
+
 #endif // MU_FRAMEWORK_LOG_H

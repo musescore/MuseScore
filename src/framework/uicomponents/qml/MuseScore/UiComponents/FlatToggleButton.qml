@@ -31,9 +31,13 @@ FocusScope {
 
     property alias icon: buttonIcon.iconCode
     property bool checked: false
-    property alias backgroundColor: backgroundRect.color
 
-    signal toggled
+    property bool transparent: false
+    property color normalColor: transparent ? "transparent" : ui.theme.buttonColor
+    property color hoverHitColor: ui.theme.buttonColor
+    property color checkedColor: ui.theme.accentColor
+
+    signal toggled()
 
     implicitHeight: 30
     implicitWidth: 30
@@ -46,93 +50,67 @@ FocusScope {
         }
     }
 
-    onToggled: root.ensureActiveFocus()
-
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "FlatToggleButton"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.RadioButton
+        accessible.checked: root.checked
+
         onTriggered: root.toggled()
     }
 
     Rectangle {
         id: backgroundRect
-
         anchors.fill: parent
 
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
-        color: ui.theme.buttonColor
+        color: root.checked ? root.checkedColor : root.normalColor
         opacity: ui.theme.buttonOpacityNormal
 
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
         radius: 2
     }
 
     StyledIconLabel {
         id: buttonIcon
-
         anchors.fill: parent
     }
 
     MouseArea {
-        id: clickableArea
-
+        id: mouseArea
         anchors.fill: parent
 
         hoverEnabled: true
-
-        onReleased: {
+        onClicked: {
+            root.ensureActiveFocus()
             root.toggled()
         }
     }
 
     states: [
         State {
-            name: "PRESSED"
-            when: clickableArea.pressed
-
-            PropertyChanges {
-                target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityHit
-                border.width: 0
-            }
-        },
-
-        State {
-            name: "SELECTED"
-            when: root.checked && !clickableArea.hovered
-
-            PropertyChanges {
-                target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityNormal
-                border.width: 0
-            }
-        },
-
-        State {
             name: "HOVERED"
-            when: clickableArea.containsMouse && !root.checked && !clickableArea.pressed
+            when: mouseArea.containsMouse && !mouseArea.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.buttonColor
+                color: root.checked ? root.checkedColor : root.hoverHitColor
                 opacity: ui.theme.buttonOpacityHover
-                border.color: ui.theme.strokeColor
-                border.width: 1
             }
         },
 
         State {
-            name: "SELECTED_HOVERED"
-            when: clickableArea.containsMouse && root.checked
+            name: "PRESSED"
+            when: mouseArea.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.accentColor
-                opacity: ui.theme.accentOpacityHover
-                border.width: 0
+                color: root.checked ? root.checkedColor : root.hoverHitColor
+                opacity: ui.theme.buttonOpacityHit
             }
         }
     ]

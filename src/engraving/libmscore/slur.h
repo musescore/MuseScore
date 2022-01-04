@@ -35,16 +35,13 @@ class SlurSegment final : public SlurTieSegment
 {
 protected:
     qreal _extraHeight = 0.0;
-    void changeAnchor(EditData&, Element*) override;
+    void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
-    SlurSegment(Score* s)
-        : SlurTieSegment(s) {}
-    SlurSegment(const SlurSegment& ss)
-        : SlurTieSegment(ss) {}
+    SlurSegment(System* parent);
+    SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
-    ElementType type() const override { return ElementType::SLUR_SEGMENT; }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
@@ -65,14 +62,19 @@ public:
 class Slur final : public SlurTie
 {
     void slurPosChord(SlurPos*);
+    int _sourceStemArrangement = -1;
+
+    friend class mu::engraving::Factory;
+    Slur(EngravingItem* parent);
+    Slur(const Slur&);
 
 public:
-    Slur(Score* = 0);
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
-    ElementType type() const override { return ElementType::SLUR; }
+
     void write(XmlWriter& xml) const override;
+    bool readProperties(XmlReader&) override;
     void layout() override;
     SpannerSegment* layoutSystem(System*) override;
     void setTrack(int val) override;
@@ -85,7 +87,7 @@ public:
     SlurSegment* segmentAt(int n) { return toSlurSegment(Spanner::segmentAt(n)); }
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(score()); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
 }     // namespace Ms
 #endif

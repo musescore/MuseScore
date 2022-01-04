@@ -25,44 +25,32 @@
 
 #include <QDomNode>
 
-#include <libmscore/score.h>
-#include <libmscore/mscore.h>
-#include <libmscore/fraction.h>
-#include <libmscore/fret.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/slur.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/hairpin.h>
-#include <libmscore/ottava.h>
-#include <libmscore/vibrato.h>
-#include <libmscore/drumset.h>
+#include "gtp/gp67dombuilder.h"
+#include "libmscore/score.h"
+#include "libmscore/vibrato.h"
 
 #include "modularity/ioc.h"
-#include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "iguitarproconfiguration.h"
 
 namespace Ms {
-class Score;
 class Chord;
-class Note;
-class Segment;
-class Measure;
-class Tuplet;
-class Volta;
 class LetRing;
+class Measure;
+class Note;
 class PalmMute;
+class Score;
+class Segment;
+class Tuplet;
 class Vibrato;
+class Volta;
 
-static const int GP_MAX_LYRIC_LINES = 5;
-static const int GP_MAX_TRACK_NUMBER = 32;
-static const int GP_MAX_STRING_NUMBER = 7;
-static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
-static const int GP_INVALID_KEYSIG = 127;
-static const int GP_VOLTA_BINARY = 1;
-static const int GP_VOLTA_FLAGS = 2;
+static constexpr int GP_MAX_LYRIC_LINES = 5;
+static constexpr int GP_MAX_TRACK_NUMBER = 32;
+static constexpr int GP_MAX_STRING_NUMBER = 7;
+static constexpr int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
+static constexpr int GP_INVALID_KEYSIG = 127;
+static constexpr int GP_VOLTA_BINARY = 1;
+static constexpr int GP_VOLTA_FLAGS = 2;
 
 Score::FileError importGTP(Score* score, const QString& filename, const char* data, unsigned int data_len);
 
@@ -121,6 +109,8 @@ struct GpBar {
 
     GpBar();
 };
+
+inline Drumset* gpDrumset = nullptr;
 
 //---------------------------------------------------------
 //   GuitarPro
@@ -260,6 +250,7 @@ protected:
     void addSlap(Note*);
     void addPop(Note*);
     void createTuningString(int strings, int tuning[]);
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
 
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
@@ -268,6 +259,7 @@ protected:
 public:
     std::vector<std::string> tunings;
 
+    static int harmonicOvertone(Note* note, float harmonicValue, int harmonicType);
     void setTempo(int n, Measure* measure);
     void initGuitarProDrumset();
     QString title, subtitle, artist, album, composer;
@@ -412,22 +404,13 @@ class GuitarPro6 : public GuitarPro
     QByteArray readString(QByteArray* buffer, int offset, int length);
     int readBits(QByteArray* buffer, int bitsToRead);
     int readBitsReversed(QByteArray* buffer, int bitsToRead);
-    void readScore(QDomNode* metadata);
-    void readChord(QDomNode* diagram, int track);
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(QDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx, int voiceNum,
-                       Tuplet* tuplets[], int measureCounter);
-    void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
-    virtual void readTracks(QDomNode* tracks);
-    void readMasterBars(GPPartInfo* partInfo);
-    Fraction rhythmToDuration(QString value);
-    Fraction fermataToFraction(int numerator, int denominator);
     QDomNode getNode(const QString& id, QDomNode currentDomNode);
     void unhandledNode(QString nodeName);
     void makeTie(Note* note);
-    void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
+    int readBeatEffects(int /*track*/, Segment*) override { return 0; }
 
     std::map<std::pair<int, int>, Note*> slideMap;
 
@@ -435,26 +418,25 @@ protected:
     const static std::map<QString, QString> instrumentMapping;
     int* previousDynamic;
     void readGpif(QByteArray* data);
-    void readNote(int string, Note* note);
-    virtual int readBeatEffects(int track, Segment*);
-    void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
+
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
     GuitarPro6(MasterScore* s)
         : GuitarPro(s, 6) {}
     GuitarPro6(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(QFile*);
+    bool read(QFile*) override;
 };
 
 class GuitarPro7 : public GuitarPro6
 {
-    virtual void readTracks(QDomNode* tracks);
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
-    virtual bool read(QFile*);
+    bool read(QFile*) override;
 };
 } // namespace Ms
 #endif

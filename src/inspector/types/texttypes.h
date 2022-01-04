@@ -31,10 +31,12 @@ class TextTypes
 
 public:
     enum class FontStyle {
+        //FONT_STYLE_UNDEFINED = -1,
         FONT_STYLE_NORMAL = 0,
-        FONT_STYLE_BOLD = 1,
-        FONT_STYLE_ITALIC = 2,
-        FONT_STYLE_UNDERLINE = 4
+        FONT_STYLE_BOLD = 1 << 0,
+        FONT_STYLE_ITALIC = 1 << 1,
+        FONT_STYLE_UNDERLINE = 1 << 2,
+        FONT_STYLE_STRIKE = 1 << 3
     };
 
     enum class FontHorizontalAlignment {
@@ -45,9 +47,9 @@ public:
 
     enum class FontVerticalAlignment {
         FONT_ALIGN_V_TOP = 0,
-        FONT_ALIGN_V_BOTTOM = 4,
-        FONT_ALIGN_V_CENTER = 8,
-        FONT_ALIGN_V_BASELINE = 16
+        FONT_ALIGN_V_CENTER = 1,
+        FONT_ALIGN_V_BOTTOM = 2,
+        FONT_ALIGN_V_BASELINE = 3
     };
 
     enum class FrameType {
@@ -55,57 +57,65 @@ public:
         FRAME_TYPE_SQUARE,
         FRAME_TYPE_CIRCLE
     };
-
+    // must match Ms::Tid
     enum class TextType {
         TEXT_TYPE_DEFAULT,
         TEXT_TYPE_TITLE,
         TEXT_TYPE_SUBTITLE,
         TEXT_TYPE_COMPOSER,
         TEXT_TYPE_POET,
-        TEXT_TYPE_LYRICS_ODD,
-        TEXT_TYPE_LYRICS_EVEN,
-        TEXT_TYPE_FINGERING,
-        TEXT_TYPE_LH_GUITAR_FINGERING,
-        TEXT_TYPE_RH_GUITAR_FINGERING,
-        TEXT_TYPE_STRING_NUMBER,
+        TEXT_TYPE_TRANSLATOR,
+        TEXT_TYPE_FRAME,
+        TEXT_TYPE_INSTRUMENT_EXCERPT,
         TEXT_TYPE_INSTRUMENT_LONG,
         TEXT_TYPE_INSTRUMENT_SHORT,
-        TEXT_TYPE_INSTRUMENT_EXCERPT,
-        TEXT_TYPE_DYNAMICS,
-        TEXT_TYPE_EXPRESSION,
+        TEXT_TYPE_INSTRUMENT_CHANGE,
+        TEXT_TYPE_HEADER,
+        TEXT_TYPE_FOOTER,
+        TEXT_TYPE_MEASURE_NUMBER,
+        TEXT_TYPE_MMREST_RANGE,
         TEXT_TYPE_TEMPO,
         TEXT_TYPE_METRONOME,
-        TEXT_TYPE_MEASURE_NUMBER,
-        TEXT_TYPE_TRANSLATOR,
-        TEXT_TYPE_TUPLET,
+        TEXT_TYPE_REPEAT_LEFT,       // align to start of measure
+        TEXT_TYPE_REPEAT_RIGHT,      // align to end of measure
+        TEXT_TYPE_REHEARSAL_MARK,
         TEXT_TYPE_SYSTEM,
         TEXT_TYPE_STAFF,
+        TEXT_TYPE_EXPRESSION,
+        TEXT_TYPE_DYNAMICS,
+        TEXT_TYPE_HAIRPIN,
+        TEXT_TYPE_LYRICS_ODD,
+        TEXT_TYPE_LYRICS_EVEN,
         TEXT_TYPE_HARMONY_A,
         TEXT_TYPE_HARMONY_B,
         TEXT_TYPE_HARMONY_ROMAN,
         TEXT_TYPE_HARMONY_NASHVILLE,
-        TEXT_TYPE_REHEARSAL_MARK,
-        TEXT_TYPE_REPEAT_LEFT,
-        TEXT_TYPE_REPEAT_RIGHT,
-        TEXT_TYPE_FRAME,
+        TEXT_TYPE_TUPLET,
+        TEXT_TYPE_STICKING,
+        TEXT_TYPE_FINGERING,
+        TEXT_TYPE_LH_GUITAR_FINGERING,
+        TEXT_TYPE_RH_GUITAR_FINGERING,
+        TEXT_TYPE_STRING_NUMBER,
         TEXT_TYPE_TEXTLINE,
-        TEXT_TYPE_GLISSANDO,
-        TEXT_TYPE_OTTAVA,
         TEXT_TYPE_VOLTA,
+        TEXT_TYPE_OTTAVA,
+        TEXT_TYPE_GLISSANDO,
         TEXT_TYPE_PEDAL,
+        TEXT_TYPE_BEND,
         TEXT_TYPE_LET_RING,
         TEXT_TYPE_PALM_MUTE,
-        TEXT_TYPE_HAIRPIN,
-        TEXT_TYPE_BEND,
-        TEXT_TYPE_HEADER,
-        TEXT_TYPE_FOOTER,
-        TEXT_TYPE_INSTRUMENT_CHANGE,
-        TEXT_TYPE_STICKING
-    };
-
-    enum class TextPlacement {
-        TEXT_PLACEMENT_ABOVE = 0,
-        TEXT_PLACEMENT_BELOW
+        TEXT_TYPE_USER1,
+        TEXT_TYPE_USER2,
+        TEXT_TYPE_USER3,
+        TEXT_TYPE_USER4,
+        TEXT_TYPE_USER5,
+        TEXT_TYPE_USER6,
+        TEXT_TYPE_USER7,
+        TEXT_TYPE_USER8,
+        TEXT_TYPE_USER9,
+        TEXT_TYPE_USER10,
+        TEXT_TYPE_USER11,
+        TEXT_TYPE_USER12
     };
 
     enum class TextSubscriptMode {
@@ -117,12 +127,34 @@ public:
     Q_ENUM(FontStyle)
     Q_ENUM(FrameType)
     Q_ENUM(TextType)
-    Q_ENUM(TextPlacement)
     Q_ENUM(TextSubscriptMode)
 
     Q_ENUM(FontHorizontalAlignment)
 
     Q_ENUM(FontVerticalAlignment)
+};
+
+static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
+    Ms::ElementType::TEXT,
+    Ms::ElementType::TEXTLINE,
+    Ms::ElementType::TEXTLINE_BASE,
+    Ms::ElementType::TEXTLINE_SEGMENT,
+    Ms::ElementType::STAFF_TEXT,
+    Ms::ElementType::SYSTEM_TEXT,
+    Ms::ElementType::DYNAMIC,
+    Ms::ElementType::FIGURED_BASS,
+    Ms::ElementType::FINGERING,
+    Ms::ElementType::HARMONY,
+    Ms::ElementType::INSTRUMENT_CHANGE,
+    Ms::ElementType::INSTRUMENT_NAME,
+    Ms::ElementType::JUMP,
+    Ms::ElementType::LYRICS,
+    Ms::ElementType::MARKER,
+    Ms::ElementType::MEASURE_NUMBER,
+    Ms::ElementType::REHEARSAL_MARK,
+    Ms::ElementType::STICKING,
+    Ms::ElementType::TEMPO_TEXT,
+    Ms::ElementType::TUPLET
 };
 }
 

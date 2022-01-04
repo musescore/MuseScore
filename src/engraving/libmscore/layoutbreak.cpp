@@ -21,12 +21,13 @@
  */
 
 #include "layoutbreak.h"
+#include "rw/xml.h"
 #include "score.h"
-#include "mscore.h"
-#include "xml.h"
+#include "measurebase.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -41,14 +42,14 @@ static const ElementStyle sectionBreakStyle {
 //   LayoutBreak
 //---------------------------------------------------------
 
-LayoutBreak::LayoutBreak(Score* score)
-    : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+LayoutBreak::LayoutBreak(MeasureBase* parent)
+    : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
     _pause = 0.;
     _startWithLongNames = false;
     _startWithMeasureOne = false;
     _firstSystemIdentation = false;
-    _layoutBreakType = Type(propertyDefault(Pid::LAYOUT_BREAK).toInt());
+    _layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
 
@@ -60,7 +61,7 @@ LayoutBreak::LayoutBreak(Score* score)
 }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
-    : Element(lb)
+    : EngravingItem(lb)
 {
     _layoutBreakType       = lb._layoutBreakType;
     lw                     = lb.lw;
@@ -71,21 +72,26 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     layout0();
 }
 
+void LayoutBreak::setParent(MeasureBase* parent)
+{
+    EngravingItem::setParent(parent);
+}
+
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
 void LayoutBreak::write(XmlWriter& xml) const
 {
-    xml.stag(this);
-    Element::writeProperties(xml);
+    xml.startObject(this);
+    EngravingItem::writeProperties(xml);
 
     for (auto id :
          { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
         writeProperty(xml, id);
     }
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -106,7 +112,7 @@ void LayoutBreak::read(XmlReader& e)
             readProperty(e, Pid::START_WITH_MEASURE_ONE);
         } else if (tag == "firstSystemIdentation") {
             readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -125,20 +131,22 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QPainterPathStroker stroker;
-    stroker.setWidth(lw / 2);
-    stroker.setJoinStyle(Qt::PenJoinStyle::MiterJoin);
-    stroker.setCapStyle(Qt::PenCapStyle::SquareCap);
+    Pen pen;
+    pen.setColor(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
+    pen.setWidthF(lw / 2);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setCapStyle(PenCapStyle::SquareCap);
+    pen.setDashPattern({ 1, 3 });
 
-    stroker.setDashPattern({ 1, 3 });
-    PainterPath stroke = stroker.createStroke(path);
-
-    painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
-
-    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                        lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+    painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(path2);
+    painter->drawRect(m_iconBorderRect);
+
+    pen.setWidthF(lw);
+    pen.setStyle(PenStyle::SolidLine);
+
+    painter->setPen(pen);
+    painter->drawPath(m_iconPath);
 }
 
 //---------------------------------------------------------
@@ -148,78 +156,75 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 void LayoutBreak::layout0()
 {
     qreal _spatium = spatium();
-    path      = PainterPath();
-    path2      = PainterPath();
-    qreal h  = _spatium * 2.5;
-    qreal w  = _spatium * 2.5;
+    qreal w = _spatium * 2.5;
+    qreal h = w;
 
-    RectF rect(0.0, 0.0, w, h);
-    path.addRect(rect.toQRectF());
+    m_iconBorderRect = RectF(0.0, 0.0, w, h);
+    m_iconPath = PainterPath();
 
     switch (layoutBreakType()) {
-    case Type::LINE:
-        path2.moveTo(w * .8, h * .3);
-        path2.lineTo(w * .8, h * .6);
-        path2.lineTo(w * .3, h * .6);
+    case LayoutBreakType::LINE:
+        m_iconPath.moveTo(w * .8, h * .3);
+        m_iconPath.lineTo(w * .8, h * .6);
+        m_iconPath.lineTo(w * .3, h * .6);
 
-        path2.moveTo(w * .4, h * .5);
-        path2.lineTo(w * .25, h * .6);
-        path2.lineTo(w * .4, h * .7);
-        path2.lineTo(w * .4, h * .5);
+        m_iconPath.moveTo(w * .4, h * .5);
+        m_iconPath.lineTo(w * .25, h * .6);
+        m_iconPath.lineTo(w * .4, h * .7);
+        m_iconPath.lineTo(w * .4, h * .5);
         break;
 
-    case Type::PAGE:
-        path2.moveTo(w * .25, h * .2);
-        path2.lineTo(w * .60, h * .2);
-        path2.lineTo(w * .75, h * .35);
-        path2.lineTo(w * .75, h * .8);
-        path2.lineTo(w * .25, h * .8);
-        path2.lineTo(w * .25, h * .2);
+    case LayoutBreakType::PAGE:
+        m_iconPath.moveTo(w * .25, h * .2);
+        m_iconPath.lineTo(w * .60, h * .2);
+        m_iconPath.lineTo(w * .75, h * .35);
+        m_iconPath.lineTo(w * .75, h * .8);
+        m_iconPath.lineTo(w * .25, h * .8);
+        m_iconPath.lineTo(w * .25, h * .2);
 
-        path2.moveTo(w * .55, h * .21);       // 0.01 to avoid overlap
-        path2.lineTo(w * .55, h * .40);
-        path2.lineTo(w * .74, h * .40);
+        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
+        m_iconPath.lineTo(w * .55, h * .40);
+        m_iconPath.lineTo(w * .74, h * .40);
         break;
 
-    case Type::SECTION:
-        path2.moveTo(w * .25, h * .2);
-        path2.lineTo(w * .75, h * .2);
-        path2.lineTo(w * .75, h * .8);
-        path2.lineTo(w * .25, h * .8);
+    case LayoutBreakType::SECTION:
+        m_iconPath.moveTo(w * .25, h * .2);
+        m_iconPath.lineTo(w * .75, h * .2);
+        m_iconPath.lineTo(w * .75, h * .8);
+        m_iconPath.lineTo(w * .25, h * .8);
 
-        path2.moveTo(w * .55, h * .21);       // 0.01 to avoid overlap
-        path2.lineTo(w * .55, h * .79);
+        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
+        m_iconPath.lineTo(w * .55, h * .79);
         break;
 
-    case Type::NOBREAK:
-        path2.moveTo(w * .1,  h * .5);
-        path2.lineTo(w * .9,  h * .5);
+    case LayoutBreakType::NOBREAK:
+        m_iconPath.moveTo(w * .1,  h * .5);
+        m_iconPath.lineTo(w * .9,  h * .5);
 
-        path2.moveTo(w * .7, h * .3);
-        path2.lineTo(w * .5, h * .5);
-        path2.lineTo(w * .7, h * .7);
-        path2.lineTo(w * .7, h * .3);
+        m_iconPath.moveTo(w * .7, h * .3);
+        m_iconPath.lineTo(w * .5, h * .5);
+        m_iconPath.lineTo(w * .7, h * .7);
+        m_iconPath.lineTo(w * .7, h * .3);
 
-        path2.moveTo(w * .3,  h * .3);
-        path2.lineTo(w * .5,  h * .5);
-        path2.lineTo(w * .3,  h * .7);
-        path2.lineTo(w * .3,  h * .3);
+        m_iconPath.moveTo(w * .3,  h * .3);
+        m_iconPath.lineTo(w * .5,  h * .5);
+        m_iconPath.lineTo(w * .3,  h * .7);
+        m_iconPath.lineTo(w * .3,  h * .3);
         break;
 
     default:
         qDebug("unknown layout break symbol");
         break;
     }
-    RectF bb(0, 0, w, h);
-    bb.adjust(-lw, -lw, lw, lw);
-    setbbox(bb);
+
+    setbbox(m_iconBorderRect.adjusted(-lw, -lw, lw, lw));
 }
 
 //---------------------------------------------------------
 //   setLayoutBreakType
 //---------------------------------------------------------
 
-void LayoutBreak::setLayoutBreakType(Type val)
+void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 {
     _layoutBreakType = val;
     layout0();
@@ -249,9 +254,9 @@ bool LayoutBreak::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* LayoutBreak::drop(EditData& data)
+EngravingItem* LayoutBreak::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);
     return e;
 }
@@ -260,11 +265,11 @@ Element* LayoutBreak::drop(EditData& data)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant LayoutBreak::getProperty(Pid propertyId) const
+PropertyValue LayoutBreak::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:
-        return int(_layoutBreakType);
+        return _layoutBreakType;
     case Pid::PAUSE:
         return _pause;
     case Pid::START_WITH_LONG_NAMES:
@@ -274,7 +279,7 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
     case Pid::FIRST_SYSTEM_INDENTATION:
         return _firstSystemIdentation;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -282,11 +287,11 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
+bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:
-        setLayoutBreakType(Type(v.toInt()));
+        setLayoutBreakType(v.value<LayoutBreakType>());
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
@@ -301,7 +306,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
         setFirstSystemIdentation(v.toBool());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -315,11 +320,11 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant LayoutBreak::propertyDefault(Pid id) const
+PropertyValue LayoutBreak::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LAYOUT_BREAK:
-        return QVariant();           // LAYOUT_BREAK_LINE;
+        return PropertyValue();           // LAYOUT_BREAK_LINE;
     case Pid::PAUSE:
         return score()->styleD(Sid::SectionPause);
     case Pid::START_WITH_LONG_NAMES:
@@ -329,7 +334,7 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
     case Pid::FIRST_SYSTEM_INDENTATION:
         return true;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -342,6 +347,6 @@ Pid LayoutBreak::propertyId(const QStringRef& name) const
     if (name == propertyName(Pid::LAYOUT_BREAK)) {
         return Pid::LAYOUT_BREAK;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 }

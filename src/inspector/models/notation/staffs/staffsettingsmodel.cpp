@@ -30,6 +30,7 @@ StaffSettingsModel::StaffSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_STAFF);
     setTitle(qtrc("inspector", "Staff"));
+    setIcon(ui::IconCode::Code::STAFF_TYPE_CHANGE);
     createProperties();
 }
 

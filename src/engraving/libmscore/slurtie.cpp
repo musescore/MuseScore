@@ -19,30 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "slurtie.h"
 
-#include <QGuiApplication>
+#include "draw/pen.h"
+#include "rw/xml.h"
 
+#include "chord.h"
 #include "measure.h"
+#include "mscoreview.h"
+#include "page.h"
 #include "score.h"
 #include "system.h"
-#include "undo.h"
-#include "slurtie.h"
 #include "tie.h"
-#include "chord.h"
-#include "page.h"
-#include "draw/pen.h"
+#include "undo.h"
 
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(Score* score)
-    : SpannerSegment(score)
+SlurTieSegment::SlurTieSegment(const ElementType& type, System* parent)
+    : SpannerSegment(type, parent)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -108,7 +110,7 @@ QVector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 
 void SlurTieSegment::move(const PointF& s)
 {
-    Element::move(s);
+    EngravingItem::move(s);
     for (int k = 0; k < int(Grip::GRIPS); ++k) {
         _ups[k].p += s;
     }
@@ -120,7 +122,7 @@ void SlurTieSegment::move(const PointF& s)
 
 void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     qreal diff = newValue / oldValue;
     for (UP& u : _ups) {
         u.off *= diff;
@@ -165,7 +167,7 @@ void SlurTieSegment::startEditDrag(EditData& ed)
 
 void SlurTieSegment::endEditDrag(EditData& ed)
 {
-    Element::endEditDrag(ed);
+    EngravingItem::endEditDrag(ed);
     triggerLayout();
 }
 
@@ -188,8 +190,8 @@ void SlurTieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
-            Qt::KeyboardModifiers km = qApp->keyboardModifiers();
-            Element* e = ed.view()->elementNear(ed.pos);
+            Qt::KeyboardModifiers km = ed.modifiers;
+            EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
@@ -230,7 +232,7 @@ void SlurTieSegment::editDrag(EditData& ed)
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::getProperty(Pid propertyId) const
+PropertyValue SlurTieSegment::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
@@ -253,7 +255,7 @@ QVariant SlurTieSegment::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
+bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
@@ -282,7 +284,7 @@ bool SlurTieSegment::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTieSegment::propertyDefault(Pid id) const
+PropertyValue SlurTieSegment::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LINE_TYPE:
@@ -304,7 +306,7 @@ QVariant SlurTieSegment::propertyDefault(Pid id) const
 
 void SlurTieSegment::reset()
 {
-    Element::reset();
+    EngravingItem::reset();
     undoResetProperty(Pid::SLUR_UOFF1);
     undoResetProperty(Pid::SLUR_UOFF2);
     undoResetProperty(Pid::SLUR_UOFF3);
@@ -316,7 +318,7 @@ void SlurTieSegment::reset()
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
@@ -337,7 +339,7 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFl
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 {
     if (visible() && autoplace()
-        && (color() == Qt::black)
+        && (color() == engravingConfiguration()->defaultColor())
         && offset().isNull()
         && ups(Grip::START).off.isNull()
         && ups(Grip::BEZIER1).off.isNull()
@@ -347,7 +349,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
         return;
     }
 
-    xml.stag(this, QString("no=\"%1\"").arg(no));
+    xml.startObject(this, QString("no=\"%1\"").arg(no));
 
     qreal _spatium = score()->spatium();
     if (!ups(Grip::START).off.isNull()) {
@@ -362,8 +364,8 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
     if (!ups(Grip::END).off.isNull()) {
         xml.tag("o4", ups(Grip::END).off / _spatium);
     }
-    Element::writeProperties(xml);
-    xml.etag();
+    EngravingItem::writeProperties(xml);
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -383,7 +385,7 @@ void SlurTieSegment::read(XmlReader& e)
             ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
         } else if (tag == "o4") {
             ups(Grip::END).off = e.readPoint() * _spatium;
-        } else if (!Element::readProperties(e)) {
+        } else if (!readProperties(e)) {
             e.unknown();
         }
     }
@@ -393,7 +395,7 @@ void SlurTieSegment::read(XmlReader& e)
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, qreal /*currentViewScaling*/)
 {
     using namespace mu::draw;
     PolygonF polygon(7);
@@ -404,21 +406,14 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
     polygon[4] = PointF(ed.grip[int(Grip::END)].center());
     polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
     polygon[6] = PointF(ed.grip[int(Grip::START)].center());
-    p->setPen(Pen(MScore::frameMarginColor, 0.0));
+    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 0.0));
     p->drawPolyline(polygon);
 
-    p->setPen(Pen(MScore::defaultColor, 0.0));
+    p->setPen(Pen(engravingConfiguration()->defaultColor(), 0.0));
     for (int i = 0; i < ed.grips; ++i) {
-        // This must be done with an if-else statement rather than a ternary operator.
-        // This is because there are two setBrush methods that take different types
-        // of argument, either a Qt::BrushStyle or a QBrush. Since a QBrush can be
-        // constructed from a QColour, passing Mscore::frameMarginColor works.
-        // BrushStyle::NoBrush is a Qt::BrushStyle, however, so if it is passed in a ternary
-        // operator with a QColor, a new QColor will be created from it, and from that
-        // a QBrush. Instead, what we really want to do is pass BrushStyle::NoBrush as a
-        // Qt::BrushStyle, therefore this requires two separate function calls:
+        // Can't use ternary operator, because we want different overloads of `setBrush`
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(MScore::frameMarginColor);
+            p->setBrush(engravingConfiguration()->formattingMarksColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }
@@ -430,10 +425,10 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(Score* s)
-    : Spanner(s)
+SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
+    : Spanner(type, parent)
 {
-    _slurDirection = Direction::AUTO;
+    _slurDirection = DirectionV::AUTO;
     _up            = true;
     _lineType      = 0;       // default is solid
 }
@@ -460,7 +455,7 @@ SlurTie::~SlurTie()
 
 void SlurTie::writeProperties(XmlWriter& xml) const
 {
-    Element::writeProperties(xml);
+    Spanner::writeProperties(xml);
     int idx = 0;
     for (const SpannerSegment* ss : spannerSegments()) {
         ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
@@ -484,12 +479,12 @@ bool SlurTie::readProperties(XmlReader& e)
         const int idx = e.intAttribute("no", 0);
         const int n = int(spannerSegments().size());
         for (int i = n; i < idx; ++i) {
-            add(newSlurTieSegment());
+            add(newSlurTieSegment(score()->dummy()->system()));
         }
-        SlurTieSegment* s = newSlurTieSegment();
+        SlurTieSegment* s = newSlurTieSegment(score()->dummy()->system());
         s->read(e);
         add(s);
-    } else if (!Element::readProperties(e)) {
+    } else if (!Spanner::readProperties(e)) {
         return false;
     }
     return true;
@@ -501,11 +496,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!SlurTie::readProperties(e)) {
-            e.unknown();
-        }
-    }
+    Spanner::read(e);
 }
 
 //---------------------------------------------------------
@@ -521,22 +512,22 @@ void SlurTie::undoSetLineType(int t)
 //   undoSetSlurDirection
 //---------------------------------------------------------
 
-void SlurTie::undoSetSlurDirection(Direction d)
+void SlurTie::undoSetSlurDirection(DirectionV d)
 {
-    undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(d));
+    undoChangeProperty(Pid::SLUR_DIRECTION, PropertyValue::fromValue<DirectionV>(d));
 }
 
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
-QVariant SlurTie::getProperty(Pid propertyId) const
+PropertyValue SlurTie::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
         return lineType();
     case Pid::SLUR_DIRECTION:
-        return QVariant::fromValue<Direction>(slurDirection());
+        return PropertyValue::fromValue<DirectionV>(slurDirection());
     default:
         return Spanner::getProperty(propertyId);
     }
@@ -546,14 +537,14 @@ QVariant SlurTie::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
+bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::LINE_TYPE:
         setLineType(v.toInt());
         break;
     case Pid::SLUR_DIRECTION:
-        setSlurDirection(v.value<Direction>());
+        setSlurDirection(v.value<DirectionV>());
         break;
     default:
         return Spanner::setProperty(propertyId, v);
@@ -566,13 +557,13 @@ bool SlurTie::setProperty(Pid propertyId, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant SlurTie::propertyDefault(Pid id) const
+PropertyValue SlurTie::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::LINE_TYPE:
         return 0;
     case Pid::SLUR_DIRECTION:
-        return QVariant::fromValue<Direction>(Direction::AUTO);
+        return PropertyValue::fromValue<DirectionV>(DirectionV::AUTO);
     default:
         return Spanner::propertyDefault(id);
     }
@@ -584,7 +575,7 @@ QVariant SlurTie::propertyDefault(Pid id) const
 
 void SlurTie::fixupSegments(unsigned nsegs)
 {
-    Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
+    Spanner::fixupSegments(nsegs, [this](System* parent) { return newSlurTieSegment(parent); });
 }
 
 //---------------------------------------------------------
@@ -593,7 +584,7 @@ void SlurTie::fixupSegments(unsigned nsegs)
 
 void SlurTie::reset()
 {
-    Element::reset();
+    EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::LINE_TYPE);
 }

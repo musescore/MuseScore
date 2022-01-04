@@ -142,7 +142,7 @@
             "type": 3
         },
         {
-            "comment": "Hidding DockWidget-2",
+            "comment": "Hiding DockWidget-2",
             "params": {
                 "dockWidgetName": "DockWidget-2"
             },
@@ -180,7 +180,7 @@
             "type": 5
         },
         {
-            "comment": "Hidding DockWidget-6",
+            "comment": "Hiding DockWidget-6",
             "params": {
                 "dockWidgetName": "DockWidget-6"
             },

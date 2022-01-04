@@ -25,6 +25,10 @@
 
 #include "text.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Segment;
 
@@ -60,7 +64,7 @@ and provides its FiguredBass parent with a normalized text for future editing.
 
 FiguredBassItem has not use for formats (italics, bold, ...) and it is never edited directly;
 more generally, it is never accessed directly, only via its FiguredBass parent;
-so it is directly derived from Element and returns INVALID as type.
+so it is directly derived from EngravingItem and returns INVALID as type.
 
 FiguredBass might require formatting (discouraged, but might be necessary for very uncommon cases)
 and it is edited (via the normalized text); so it is derived from Text.
@@ -87,7 +91,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 
 class FiguredBass;
 
-class FiguredBassItem final : public Element
+class FiguredBassItem final : public EngravingItem
 {
 public:
     enum class Modifier : char {
@@ -143,6 +147,10 @@ private:
     Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
     qreal textWidth;                            // the text width (in raster units), set during layout()
                                                 //    used by draw()
+    friend class FiguredBass;
+    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(const FiguredBassItem&);
+
     // part parsing
     int               parseDigit(QString& str);
     int               parseParenthesis(QString& str, int parenthIdx);
@@ -153,8 +161,7 @@ private:
     QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
 public:
-    FiguredBassItem(Score* s = 0, int line = 0);
-    FiguredBassItem(const FiguredBassItem&);
+
     ~FiguredBassItem();
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
@@ -163,7 +170,7 @@ public:
 
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
-    ElementType       type() const override { return ElementType::INVALID; }
+
     void              draw(mu::draw::Painter* painter) const override;
     void              layout() override;
     void              read(XmlReader&) override;
@@ -174,7 +181,7 @@ public:
     bool              startsWithParenthesis() const;
 
     // specific API
-    const FiguredBass* figuredBass() const { return (FiguredBass*)(parent()); }
+    const FiguredBass* figuredBass() const { return (FiguredBass*)(explicitParent()); }
     bool              parse(QString& text);
 
     // getters / setters
@@ -210,9 +217,9 @@ public:
     QString           normalizedText() const;
     QString           displayText() const { return _displayText; }
 
-    QVariant  getProperty(Pid propertyId) const override;
-    bool      setProperty(Pid propertyId, const QVariant&) override;
-    QVariant  propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue  propertyDefault(Pid) const override;
 };
 
 //---------------------------------------------------------
@@ -247,14 +254,18 @@ class FiguredBass final : public TextBase
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
     qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
+
+    friend class mu::engraving::Factory;
+    FiguredBass(Segment* parent = 0);
+    FiguredBass(const FiguredBass&);
+
     void              layoutLines();
     bool              hasParentheses() const;   // read / write MusicXML support
 
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    FiguredBass(Score* s = 0);
-    FiguredBass(const FiguredBass&);
+
     ~FiguredBass();
 
     // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
@@ -267,33 +278,22 @@ public:
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
-    ElementType   type() const override { return ElementType::FIGURED_BASS; }
+
+    FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
+
     void      draw(mu::draw::Painter* painter) const override;
-    void      endEdit(EditData&) override;
     void      layout() override;
     void      read(XmlReader&) override;
     void      setSelected(bool f) override;
     void      setVisible(bool f) override;
     void      startEdit(EditData&) override;
+    bool      edit(EditData&) override;
+    void      endEdit(EditData&) override;
     void      write(XmlWriter& xml) const override;
 
     // read / write MusicXML
     void writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick, bool writeDuration, int divisions) const;
 
-//DEBUG
-//Q_INVOKABLE Ms::FiguredBassItem* addItem();
-
-    // getters / setters / properties
-//      void qmlItemsAppend(QDeclarativeListProperty<FiguredBassItem> *list, FiguredBassItem * pItem)
-//                                                {     list->append(pItem);
-//                                                      items.append(&pItem);
-//                                                }
-//      QDeclarativeListProperty<FiguredBassItem> qmlItems()
-//                                                {     QList<FiguredBassItem*> list;
-//                                                      foreach(FiguredBassItem item, items)
-//                                                            list.append(&item);
-//                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
-//                                                }
     qreal lineLength(size_t idx) const
     {
         if (idx < _lineLengths.size()) {
@@ -306,16 +306,16 @@ public:
     bool              onNote() const { return _onNote; }
     size_t            numOfItems() const { return items.size(); }
     void              setOnNote(bool val) { _onNote = val; }
-    Segment* segment() const { return (Segment*)(parent()); }
+    Segment* segment() const { return (Segment*)(explicitParent()); }
     Fraction          ticks() const { return _ticks; }
     void              setTicks(const Fraction& v) { _ticks = v; }
 
     qreal             additionalContLineX(qreal pagePosY) const;  // returns the X coord (in page coord) of cont. line at pagePosY, if any
     FiguredBass* nextFiguredBass() const;                         // returns next *adjacent* f.b. item, if any
 
-    QVariant  getProperty(Pid propertyId) const override;
-    bool      setProperty(Pid propertyId, const QVariant&) override;
-    QVariant  propertyDefault(Pid) const override;
+    mu::engraving::PropertyValue  getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const mu::engraving::PropertyValue&) override;
+    mu::engraving::PropertyValue  propertyDefault(Pid) const override;
 
     void appendItem(FiguredBassItem* item) { items.push_back(item); }
 };

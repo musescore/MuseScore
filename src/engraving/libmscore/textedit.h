@@ -23,7 +23,7 @@
 #ifndef __TEXTEDIT_H__
 #define __TEXTEDIT_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "text.h"
 #include "undo.h"
 
@@ -60,14 +60,36 @@ struct TextEditData : public ElementEditData {
 class TextEditUndoCommand : public UndoCommand
 {
 protected:
-    TextCursor c;
+    TextCursor _cursor;
 public:
     TextEditUndoCommand(const TextCursor& tc)
-        : c(tc) {}
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override
+        : _cursor(tc) {}
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::TextEdit && c.text() == target;
+        return f == UndoCommand::Filter::TextEdit && _cursor.text() == target;
     }
+
+    TextCursor& cursor() { return _cursor; }
+};
+
+//---------------------------------------------------------
+//   ChangeText
+//---------------------------------------------------------
+
+class ChangeTextProperties : public TextEditUndoCommand
+{
+    QString xmlText;
+    Pid propertyId;
+    mu::engraving::PropertyValue propertyVal;
+    FontStyle existingStyle;
+    PropertyFlags flags;
+
+    void restoreSelection();
+
+public:
+    ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const mu::engraving::PropertyValue& propVal, PropertyFlags flags);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
 };
 
 //---------------------------------------------------------
@@ -87,7 +109,6 @@ public:
         : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
-    const TextCursor& cursor() const { return c; }
     const QString& string() const { return s; }
 };
 
@@ -116,7 +137,7 @@ public:
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }
-    UNDO_NAME("InsertText")
+    UNDO_NAME("RemoveText")
 };
 
 //---------------------------------------------------------

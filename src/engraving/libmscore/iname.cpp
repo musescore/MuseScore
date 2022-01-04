@@ -29,6 +29,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -49,8 +50,8 @@ static const ElementStyle shortInstrumentStyle {
 //   InstrumentName
 //---------------------------------------------------------
 
-InstrumentName::InstrumentName(Score* s)
-    : TextBase(s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING)
+InstrumentName::InstrumentName(System* s)
+    : TextBase(ElementType::INSTRUMENT_NAME, s, TextStyleType::INSTRUMENT_LONG, ElementFlag::NOTHING)
 {
     setFlag(ElementFlag::MOVABLE, false);
     setInstrumentNameType(InstrumentNameType::LONG);
@@ -88,10 +89,10 @@ void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 {
     _instrumentNameType = st;
     if (st == InstrumentNameType::SHORT) {
-        setTid(Tid::INSTRUMENT_SHORT);
+        setTextStyleType(TextStyleType::INSTRUMENT_SHORT);
         initElementStyle(&shortInstrumentStyle);
     } else {
-        setTid(Tid::INSTRUMENT_LONG);
+        setTextStyleType(TextStyleType::INSTRUMENT_LONG);
         initElementStyle(&longInstrumentStyle);
     }
 }
@@ -118,7 +119,7 @@ Fraction InstrumentName::playTick() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant InstrumentName::getProperty(Pid id) const
+PropertyValue InstrumentName::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:
@@ -132,7 +133,7 @@ QVariant InstrumentName::getProperty(Pid id) const
 //   setProperty
 //---------------------------------------------------------
 
-bool InstrumentName::setProperty(Pid id, const QVariant& v)
+bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
 {
     bool rv = true;
     switch (id) {
@@ -154,7 +155,7 @@ bool InstrumentName::setProperty(Pid id, const QVariant& v)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant InstrumentName::propertyDefault(Pid id) const
+PropertyValue InstrumentName::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:
@@ -168,7 +169,7 @@ QVariant InstrumentName::propertyDefault(Pid id) const
 //   scanElements
 //---------------------------------------------------------
 
-void InstrumentName::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void InstrumentName::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || sysStaff()->show()) {
         func(data, this);
