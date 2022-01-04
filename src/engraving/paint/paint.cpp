@@ -55,11 +55,11 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*
         if (e1->z() == e2->z()) {
             if (e1->selected()) {
                 return false;
-            } else if (e1->visible()) {
-                return false;
             } else if (e2->selected()) {
                 return true;
             } else if (e1->visible()) {
+                return false;
+            } else if (e2->visible()) {
                 return true;
             }
 
