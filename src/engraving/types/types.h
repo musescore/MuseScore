@@ -395,7 +395,7 @@ enum class HookType : char {
 };
 
 // P_TYPE::KEY_MODE
-enum class KeyMode : char {
+enum class KeyMode : signed char {
     UNKNOWN = -1,
     NONE,
     MAJOR,

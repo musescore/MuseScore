@@ -469,7 +469,7 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
 //   FontStyle
 //---------------------------------------------------------
 
-enum class FontStyle : char {
+enum class FontStyle : signed char {
     Undefined = -1,
     Normal = 0,
     Bold = 1 << 0,

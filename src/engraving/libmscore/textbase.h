@@ -46,7 +46,7 @@ enum class FrameType : char {
 //   VerticalAlignment
 //---------------------------------------------------------
 
-enum class VerticalAlignment : char {
+enum class VerticalAlignment : signed char {
     AlignUndefined = -1, AlignNormal, AlignSuperScript, AlignSubScript
 };
 
