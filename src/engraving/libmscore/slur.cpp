@@ -100,28 +100,71 @@ void SlurSegment::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
+//   nearestCR
+//---------------------------------------------------------
+
+static ChordRest* nearestCR(ChordRest* oldCR, ChordRest* limitCR, int track)
+{
+    Segment* segment = oldCR->segment();
+    bool leftLimit = limitCR->tick() < oldCR->tick();
+
+    if (EngravingItem* el = segment->element(track)) {
+        return toChordRest(el);
+    }
+
+    ChordRest* leftCR = nullptr;
+    for (Segment* s = segment->prev(SegmentType::ChordRest); s; s = s->prev(SegmentType::ChordRest)) {
+        if (EngravingItem* el = s->element(track)) {
+            ChordRest* cr = toChordRest(el);
+            if (!leftLimit || cr->tick() > limitCR->tick()) {
+                leftCR = cr;
+            }
+            break;
+        }
+    }
+
+    ChordRest* rightCR = nullptr;
+    for (Segment* s = segment->next(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+        if (EngravingItem* el = s->element(track)) {
+            ChordRest* cr = toChordRest(el);
+            if (leftLimit || cr->tick() < limitCR->tick()) {
+                rightCR = cr;
+            }
+            break;
+        }
+    }
+
+    if (!rightCR) {
+        return leftCR;
+    }
+    if (!leftCR) {
+        return rightCR;
+    }
+
+    // return closest one to oldCR
+    return ((oldCR->tick() - leftCR->tick()) > (rightCR->tick() - oldCR->tick())) ? rightCR : leftCR;
+}
+
+//---------------------------------------------------------
 //   searchCR
 //---------------------------------------------------------
 
-static ChordRest* searchCR(Segment* segment, int startTrack, int endTrack)
+static ChordRest* searchCR(ChordRest* oldCR, ChordRest* limitCR, int startTrack, int endTrack)
 {
-    // for (Segment* s = segment; s; s = s->next1MM(SegmentType::ChordRest)) {
-    for (Segment* s = segment; s; s = s->next(SegmentType::ChordRest)) {       // restrict search to measure
-        if (startTrack > endTrack) {
-            for (int t = startTrack - 1; t >= endTrack; --t) {
-                if (s->element(t)) {
-                    return toChordRest(s->element(t));
-                }
+    if (startTrack > endTrack) {
+        for (int t = startTrack - 1; t >= endTrack; --t) {
+            if (ChordRest* cr = nearestCR(oldCR, limitCR, t)) {
+                return cr;
             }
-        } else {
-            for (int t = startTrack; t < endTrack; ++t) {
-                if (s->element(t)) {
-                    return toChordRest(s->element(t));
-                }
+        }
+    } else {
+        for (int t = startTrack; t < endTrack; ++t) {
+            if (ChordRest* cr = nearestCR(oldCR, limitCR, t)) {
+                return cr;
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -149,34 +192,50 @@ bool SlurSegment::edit(EditData& ed)
         return false;
     }
 
-    ChordRest* cr = 0;
-    ChordRest* e;
-    ChordRest* e1;
+    ChordRest* newCR = nullptr;
+    ChordRest* currCR;
+    ChordRest* farCR;
     if (ed.curGrip == Grip::START) {
-        e  = sl->startCR();
-        e1 = sl->endCR();
+        currCR = sl->startCR();
+        farCR = sl->endCR();
     } else {
-        e  = sl->endCR();
-        e1 = sl->startCR();
+        currCR = sl->endCR();
+        farCR = sl->startCR();
     }
 
-    if (ed.key == Qt::Key_Left) {
-        cr = prevChordRest(e);
-    } else if (ed.key == Qt::Key_Right) {
-        cr = nextChordRest(e);
-    } else if (ed.key == Qt::Key_Up) {
-        Part* part     = e->part();
-        int startTrack = part->startTrack();
-        int endTrack   = e->track();
-        cr = searchCR(e->segment(), endTrack, startTrack);
-    } else if (ed.key == Qt::Key_Down) {
-        int startTrack = e->track() + 1;
-        Part* part     = e->part();
+    switch (ed.key) {
+    case Qt::Key_Left:
+        newCR = prevChordRest(currCR);
+        _savedCR = nullptr;
+        break;
+    case Qt::Key_Right:
+        newCR = nextChordRest(currCR);
+        _savedCR = nullptr;
+        break;
+    case Qt::Key_Down: {
+        int startTrack = currCR->track() + 1;
+        Part* part     = currCR->part();
         int endTrack   = part->endTrack();
-        cr = searchCR(e->segment(), startTrack, endTrack);
+        if (!_savedCR) {
+            _savedCR = currCR; // saved for future edit operations
+        }
+        newCR = searchCR(_savedCR, farCR, startTrack, endTrack);
+        break;
     }
-    if (cr && cr != e1) {
-        changeAnchor(ed, cr);
+    case Qt::Key_Up: {
+        Part* part     = currCR->part();
+        int startTrack = part->startTrack();
+        int endTrack   = currCR->track();
+        if (!_savedCR) {
+            _savedCR = currCR; // saved for future edit operations
+        }
+        newCR = searchCR(_savedCR, farCR, endTrack, startTrack);
+        break;
+    }
+    }
+
+    if (newCR && (ed.curGrip == Grip::START ? newCR->tick() < farCR->tick() : newCR->tick() > farCR->tick())) {
+        changeAnchor(ed, newCR);
     }
     return true;
 }
@@ -263,6 +322,46 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
         ed.view()->startEdit(newSegment, ed.curGrip);
         triggerLayout();
     }
+}
+
+//---------------------------------------------------------
+//   startEdit
+//---------------------------------------------------------
+
+void SlurSegment::startEdit(EditData& ed)
+{
+    _savedCR = nullptr;
+    SlurTieSegment::startEdit(ed);
+}
+
+//---------------------------------------------------------
+//   endEdit
+//---------------------------------------------------------
+
+void SlurSegment::endEdit(EditData& ed)
+{
+    _savedCR = nullptr;
+    SlurTieSegment::endEdit(ed);
+}
+
+//---------------------------------------------------------
+//   nextGrip
+//---------------------------------------------------------
+
+bool SlurSegment::nextGrip(EditData& ed) const
+{
+    _savedCR = nullptr;
+    return SlurTieSegment::nextGrip(ed);
+}
+
+//---------------------------------------------------------
+//   prevGrip
+//---------------------------------------------------------
+
+bool SlurSegment::prevGrip(EditData& ed) const
+{
+    _savedCR = nullptr;
+    return SlurTieSegment::prevGrip(ed);
 }
 
 //---------------------------------------------------------

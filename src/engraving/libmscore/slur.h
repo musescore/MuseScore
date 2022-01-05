@@ -33,6 +33,8 @@ namespace Ms {
 
 class SlurSegment final : public SlurTieSegment
 {
+    mutable ChordRest* _savedCR = nullptr; // used during editing of cross-track slurs
+
 protected:
     qreal _extraHeight = 0.0;
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -49,6 +51,11 @@ public:
 
     bool isEdited() const;
     bool edit(EditData&) override;
+    void startEdit(EditData&) override;
+    void endEdit(EditData&) override;
+
+    bool nextGrip(EditData&) const override;
+    bool prevGrip(EditData&) const override;
 
     Slur* slur() const { return toSlur(spanner()); }
 
