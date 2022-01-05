@@ -378,7 +378,7 @@ ChordRest* Score::downStaff(ChordRest* cr)
         return cr;
     }
 
-    for (int track = (cr->staffIdx() + 1) * VOICES; track < tracks; --track) {
+    for (int track = (cr->staffIdx() + 1) * VOICES; track < tracks; ++track) {
         EngravingItem* el = segment->element(track);
         if (!el) {
             continue;
