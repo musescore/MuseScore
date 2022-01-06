@@ -70,6 +70,11 @@ void AppMenuModel::load()
     setupConnections();
 }
 
+QWindow* AppMenuModel::appWindow() const
+{
+    return m_appWindow;
+}
+
 void AppMenuModel::setHighlightedMenuId(QString highlightedMenuId)
 {
     if (m_highlightedMenuId == highlightedMenuId) {

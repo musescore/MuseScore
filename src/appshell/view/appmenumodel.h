@@ -51,12 +51,14 @@ class AppMenuModel : public ui::AbstractMenuModel
 
     Q_PROPERTY(QString highlightedMenuId READ highlightedMenuId NOTIFY highlightedMenuIdChanged)
 
-    Q_PROPERTY(QWindow * appWindow WRITE setAppWindow)
+    Q_PROPERTY(QWindow * appWindow READ appWindow WRITE setAppWindow)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load() override;
+
+    QWindow* appWindow() const;
 
 public slots:
     void setHighlightedMenuId(QString highlightedMenuId);
