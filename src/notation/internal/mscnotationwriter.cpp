@@ -26,6 +26,11 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+using namespace mu::framework;
+using namespace mu::notation;
+using namespace mu::project;
+
 MscNotationWriter::MscNotationWriter(engraving::MscIoMode mode)
     : m_mode(mode)
 {
@@ -42,7 +47,7 @@ bool MscNotationWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MscNotationWriter::write(INotationPtr notation, Device& destinationDevice, const Options&)
+mu::Ret MscNotationWriter::write(INotationPtr notation, io::Device& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

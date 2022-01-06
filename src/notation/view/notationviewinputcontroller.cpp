@@ -267,8 +267,7 @@ void NotationViewInputController::setViewMode(const ViewMode& viewMode)
 }
 
 constexpr qreal scrollStep = .8;
-constexpr qreal thinPadding = 10.0;
-constexpr qreal thickPadding = 25.0;
+constexpr qreal notationScreenPadding = 25.0;
 
 void NotationViewInputController::moveScreen(int direction)
 {
@@ -283,14 +282,14 @@ void NotationViewInputController::moveScreen(int direction)
         auto offset = m_view->toLogical(QPoint());
         auto rect = m_view->notationContentRect();
         if (direction > 0 && offset.y() <= 0.0) {
-            if (offset.x() >= -thickPadding) {
+            if (offset.x() >= -notationScreenPadding) {
                 m_view->moveCanvas(m_view->width() * direction * scrollStep / scale,
-                                   offset.y() - thickPadding - (rect.height() - m_view->height() / scale));
+                                   offset.y() - notationScreenPadding - (rect.height() - m_view->height() / scale));
             }
         } else if (direction < 0 && offset.y() >= (rect.height() - m_view->height() / scale)) {
             auto dx = m_view->width() * direction * scrollStep / scale;
-            if (offset.x() < rect.width() + thickPadding + dx) {
-                m_view->moveCanvas(dx, offset.y() + thickPadding);
+            if (offset.x() < rect.width() + notationScreenPadding + dx) {
+                m_view->moveCanvas(dx, offset.y() + notationScreenPadding);
             }
         } else {
             m_view->moveCanvasVertical(m_view->height() * direction * scrollStep / scale);
@@ -310,10 +309,12 @@ void NotationViewInputController::movePage(int direction)
     }
     Page* page = notation->elements()->msScore()->pages().back();
     if (configuration()->canvasOrientation().val == mu::framework::Orientation::Vertical) {
-        qreal offset = std::min((page->height() + thickPadding) * direction, m_view->toLogical(QPoint()).y() + thickPadding);
+        qreal offset = std::min((page->height() + notationScreenPadding) * direction, m_view->toLogical(
+                                    QPoint()).y() + notationScreenPadding);
         m_view->moveCanvasVertical(offset);
     } else {
-        qreal offset = std::min((page->width() + thickPadding) * direction, m_view->toLogical(QPoint()).x() + thickPadding);
+        qreal offset
+            = std::min((page->width() + notationScreenPadding) * direction, m_view->toLogical(QPoint()).x() + notationScreenPadding);
         m_view->moveCanvasHorizontal(offset);
     }
 }
@@ -341,7 +342,7 @@ void NotationViewInputController::previousPage()
 void NotationViewInputController::startOfScore()
 {
     auto offset = m_view->toLogical(QPoint());
-    m_view->moveCanvas(offset.x() + thickPadding, offset.y() + thickPadding);
+    m_view->moveCanvas(offset.x() + notationScreenPadding, offset.y() + notationScreenPadding);
 }
 
 void NotationViewInputController::endOfScore()
@@ -353,9 +354,9 @@ void NotationViewInputController::endOfScore()
     Ms::MeasureBase* lastMeasure = notation->elements()->msScore()->lastMeasureMM();
     auto lmRect = lastMeasure->canvasBoundingRect();
     auto scale = m_view->currentScaling();
-    qreal desiredX = std::max(-thickPadding, lmRect.right() + thickPadding - m_view->width() / scale);
+    qreal desiredX = std::max(-notationScreenPadding, lmRect.right() + notationScreenPadding - m_view->width() / scale);
     qreal desiredY
-        = std::max(-thickPadding, lmRect.bottom() + lastMeasure->score()->styleD(Ms::Sid::spatium) * 5 - m_view->height() / scale);
+        = std::max(-notationScreenPadding, lmRect.bottom() + lastMeasure->score()->styleD(Ms::Sid::spatium) * 5 - m_view->height() / scale);
     auto offset = m_view->toLogical(QPoint());
     m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
 }

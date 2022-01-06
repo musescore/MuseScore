@@ -26,6 +26,8 @@
 #include <QMap>
 #include <QList>
 
+#include "types/fraction.h"
+
 namespace Ms {
 class Harmony;
 

@@ -53,6 +53,8 @@
 #include "layout/layoutbeams.h"
 #include "layout/layoutchords.h"
 
+#include "log.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

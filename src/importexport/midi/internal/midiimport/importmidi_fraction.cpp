@@ -139,7 +139,7 @@ ReducedFraction ReducedFraction::fromTicks(int ticks)
 
 ReducedFraction ReducedFraction::reduced() const
 {
-    const int tmp = gcd(numerator_, denominator_);
+    const int tmp = mu::engraving::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
@@ -184,7 +184,7 @@ void ReducedFraction::reduce()
         denominator_ = 1;
         return;
     }
-    const int tmp = gcd(numerator_, denominator_);
+    const int tmp = mu::engraving::gcd(numerator_, denominator_);
 
 #ifdef QT_DEBUG
     Q_ASSERT_X(!isDivisionOverflow(numerator_, tmp),
