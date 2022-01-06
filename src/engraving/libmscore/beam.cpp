@@ -348,10 +348,8 @@ void Beam::layout1()
     //
     if (_direction != DirectionV::AUTO) {
         _up = _direction == DirectionV::UP;
-    } else if (_maxMove > 0) {
+    } else if (_maxMove > 0 || _minMove < 0) {
         _up = true;
-    } else if (_minMove < 0) {
-        _up = false;
     } else if (_notes.size()) {
         ChordRest* firstNote = _elements.first();
         Measure* measure = firstNote->measure();
@@ -595,7 +593,7 @@ int Beam::getBeamCount(std::vector<ChordRest*> chordRests) const
 PointF Beam::chordBeamAnchor(Chord* chord) const
 {
     Note* note = chord->up() ? chord->downNote() : chord->upNote();
-    PointF position = note->pos() + chord->segment()->pos() + chord->measure()->pos();
+    PointF position = note->pagePos();
 
     int upValue = chord->up() ? -1 : 1;
     qreal beamWidth = score()->styleMM(Sid::beamWidth).val() * chord->mag();
@@ -610,7 +608,8 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
 {
     PointF posStart = chordBeamAnchor(startChord);
     PointF posEnd = chordBeamAnchor(endChord);
-    qreal y2 = _slope * (posEnd.x() - posStart.x()) + posStart.y();
+    qreal y1 = _slope * (posStart.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    qreal y2 = _slope * (posEnd.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
 
     int upValue = _up ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
@@ -621,7 +620,7 @@ void Beam::createBeamSegment(Chord* startChord, Chord* endChord, int level)
     _beamSegments.push_back(
         new LineF(
             posStart.x() + startOffsetX,
-            posStart.y() - verticalOffset,
+            y1 - verticalOffset,
             posEnd.x() + endOffsetX,
             y2 - verticalOffset
             )
@@ -710,9 +709,10 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
                           * mag()
                           * chord->staff()->staffMag(chord);
     qreal x2 = chordPos.x() + (isBefore ? -beamletLength : beamletLength);
-    qreal y2 = chordPos.y() + _slope * (x2 - chordPos.x());
+    qreal y1 = _slope * (chordPos.x() - _startAnchor.x()) + _startAnchor.y() - pagePos().y();
+    qreal y2 = _slope * (x2 - chordPos.x()) + y1;
 
-    int upValue = chord->up() ? -1 : 1;
+    int upValue = _up ? -1 : 1;
     qreal verticalOffset = _beamDist * level * upValue;
     qreal stemWidth = chord->stem()->lineWidth().val() * chord->mag();
     qreal startOffsetX = 0;
@@ -725,7 +725,7 @@ void Beam::createBeamletSegment(Chord* chord, bool isBefore, int level)
     _beamSegments.push_back(
         new LineF(
             chordPos.x() + startOffsetX,
-            chordPos.y() - verticalOffset,
+            y1 - verticalOffset,
             x2,
             y2 - verticalOffset
             )
@@ -828,10 +828,11 @@ void Beam::extendStems(std::vector<ChordRest*> chordRests)
         PointF anchor = chordBeamAnchor(chord);
         qreal proportionAlongX = (anchor.x() - _startAnchor.x()) / (_endAnchor.x() - _startAnchor.x());
         qreal desiredY = proportionAlongX * (_endAnchor.y() - _startAnchor.y()) + _startAnchor.y();
+        qreal beamsAddition = chord->up() != _up ? (chord->beams() - 1) * _beamDist : 0;
         if (chord->up()) {
-            chord->setBeamExtension(anchor.y() - desiredY);
+            chord->setBeamExtension(anchor.y() - desiredY + beamsAddition);
         } else {
-            chord->setBeamExtension(desiredY - anchor.y());
+            chord->setBeamExtension(desiredY - anchor.y() + beamsAddition);
         }
         if (chord->tremolo()) {
             chord->tremolo()->layout();
@@ -1023,8 +1024,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     if (_userModified[fragmentIndex]) {
-        qreal startY = fragments[frag]->py1[fragmentIndex];
-        qreal endY = fragments[frag]->py2[fragmentIndex];
+        qreal startY = fragments[frag]->py1[fragmentIndex] + pagePos().y();
+        qreal endY = fragments[frag]->py2[fragmentIndex] + pagePos().y();
         if (score()->styleB(Sid::snapCustomBeamsToGrid)) {
             const qreal quarterSpace = spatium() / 4;
             startY = round(startY / quarterSpace) * quarterSpace;
@@ -1064,8 +1065,8 @@ void Beam::layout2(std::vector<ChordRest*> chordRests, SpannerSegmentType, int f
 
     add8thSpaceSlant(isStartDictator ? _startAnchor : _endAnchor, dictator, pointer, beamCount, interval, middleLine, isFlat);
 
-    fragments[frag]->py1[fragmentIndex] = _startAnchor.y();
-    fragments[frag]->py2[fragmentIndex] = _endAnchor.y();
+    fragments[frag]->py1[fragmentIndex] = _startAnchor.y() - pagePos().y();
+    fragments[frag]->py2[fragmentIndex] = _endAnchor.y() - pagePos().y();
     _slope = (_endAnchor.y() - _startAnchor.y()) / (_endAnchor.x() - _startAnchor.x());
 
     extendStems(chordRests);
