@@ -336,7 +336,8 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
     case SaveMode::Save:
     case SaveMode::SaveAs:
     case SaveMode::SaveCopy:
-        return saveScore(path);
+    case SaveMode::Autosave:
+        return saveScore(path, saveMode);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -368,19 +369,29 @@ mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
     }
 
     io::path oldFilePath = m_engravingProject->path();
-    if (!path.empty()) {
+    if (saveMode != SaveMode::Autosave && !path.empty()) {
         m_engravingProject->setPath(path.toQString());
     }
 
+    if (saveMode == SaveMode::Autosave) {
+        std::string original_path = m_engravingProject->path().toStdString();
+        std::string name = m_engravingProject->title();
+        original_path.erase(original_path.end() - name.length() - 5, original_path.end());
+        original_path += ("autosave_" + name + ".mscz");
+        m_engravingProject->setPath(QString::fromStdString(original_path));
+    }
     Ret ret = doSave(true);
     if (!ret) {
         return ret;
     }
 
-    if (saveMode != SaveMode::SaveCopy || oldFilePath == path) {
+    if ((saveMode != SaveMode::SaveCopy && saveMode != SaveMode::Autosave) || oldFilePath == path) {
         m_masterNotation->onSaveCopy();
     }
 
+    if (saveMode == SaveMode::Autosave) {
+        m_engravingProject->setPath(oldFilePath.toQString());
+    }
     return make_ret(Ret::Code::Ok);
 }
 

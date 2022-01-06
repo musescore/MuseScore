@@ -69,7 +69,7 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    Ret ret = project->save();
+    Ret ret = project->save(mu::io::path(), SaveMode::Autosave);
     if (!ret) {
         LOGE() << "[autosave] failed to save project, err: " << ret.toString();
         return;

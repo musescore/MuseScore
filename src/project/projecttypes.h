@@ -61,7 +61,8 @@ enum class SaveMode
     Save,
     SaveAs,
     SaveCopy,
-    SaveSelection
+    SaveSelection,
+    Autosave
 };
 
 struct ProjectMeta
