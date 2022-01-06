@@ -373,12 +373,16 @@ mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
         m_engravingProject->setPath(path.toQString());
     }
 
+    std::string auto_path = m_engravingProject->path().toStdString();
+    std::string name = m_engravingProject->title();
+    auto_path.erase(auto_path.end() - name.length() - 5, auto_path.end());
+    auto_path += ("autosave_" + name + ".mscz");
+
     if (saveMode == SaveMode::Autosave) {
-        std::string original_path = m_engravingProject->path().toStdString();
-        std::string name = m_engravingProject->title();
-        original_path.erase(original_path.end() - name.length() - 5, original_path.end());
-        original_path += ("autosave_" + name + ".mscz");
-        m_engravingProject->setPath(QString::fromStdString(original_path));
+        m_engravingProject->setPath(QString::fromStdString(auto_path));
+    }
+    else {
+        remove(auto_path.c_str());
     }
     Ret ret = doSave(true);
     if (!ret) {
