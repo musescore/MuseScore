@@ -57,7 +57,7 @@ public:
 
     void trigger() override;
 
-    Q_INVOKABLE void requestActive();
+    Q_INVOKABLE void requestActive() override;
     Q_INVOKABLE void requestDeactive();
 
 public slots:
