@@ -34,6 +34,7 @@
 
 #include "smuflranges.h"
 
+using namespace mu::engraving;
 using namespace mu::palette;
 
 namespace Ms {

@@ -37,6 +37,7 @@
 using namespace Ms;
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 static constexpr int FALLBACK_FONT_INDEX = 1; // Bravura
 
