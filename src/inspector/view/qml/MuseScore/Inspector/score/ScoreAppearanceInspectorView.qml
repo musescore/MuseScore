@@ -65,7 +65,7 @@ InspectorSectionView {
                 Layout.fillWidth: false
                 Layout.minimumWidth: implicitWidth
 
-                enabled: root.model.hideEmptyStaves
+                enabled: root.model ? root.model.hideEmptyStaves : false
                 icon: IconCode.SETTINGS_COG
                 transparent: !popup.isOpened
 
