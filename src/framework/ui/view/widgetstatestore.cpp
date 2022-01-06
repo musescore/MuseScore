@@ -24,6 +24,8 @@
 #include <QWidget>
 #include <QSettings>
 
+using namespace mu::ui;
+
 void WidgetStateStore::saveGeometry(const QWidget* qw)
 {
     QSettings settings;

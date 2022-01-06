@@ -37,6 +37,10 @@
 
 #include "log.h"
 
+using namespace mu::engraving;
+using namespace mu::notation;
+using namespace mu::project;
+
 static const QString WORK_TITLE_TAG("workTitle");
 static const QString WORK_NUMBER_TAG("workNumber");
 static const QString SUBTITLE_TAG("subtitle");
@@ -93,10 +97,6 @@ static void setupProjectProperties(Ms::MasterScore* masterScore, const ProjectCr
         masterScore->setMetaTag("copyright", projectOptions.copyright);
     }
 }
-
-using namespace mu::project;
-using namespace mu::notation;
-using namespace mu::engraving;
 
 NotationProject::NotationProject()
 {

@@ -21,8 +21,9 @@
  */
 #include "noteheadgroupsmodel.h"
 
-#include "engraving/types/typesconv.h"
+#include "engraving/libmscore/note.h"
 #include "engraving/libmscore/scorefont.h"
+#include "engraving/types/typesconv.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;

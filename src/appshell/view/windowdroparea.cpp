@@ -24,6 +24,8 @@
 
 #include "log.h"
 
+using namespace mu::appshell;
+
 WindowDropArea::WindowDropArea(QQuickItem* parent)
     : QQuickItem(parent)
 {
