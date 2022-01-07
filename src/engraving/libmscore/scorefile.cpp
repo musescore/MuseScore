@@ -82,6 +82,10 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     // then some layout information is missing:
     // relayout with all parts set visible
 
+    if (selectionOnly && _selection.staffStart() == _selection.staffEnd()) {
+        return;
+    }
+
     QList<Part*> hiddenParts;
     bool unhide = false;
     if (styleB(Sid::createMultiMeasureRests)) {
