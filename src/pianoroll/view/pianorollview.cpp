@@ -310,6 +310,15 @@ void PianorollView::setTool(PianorollTool value)
     emit toolChanged();
 }
 
+void PianorollView::setTweaks(bool value)
+{
+    if (value == m_tweaks) {
+        return;
+    }
+    m_tweaks = value;
+    emit tweaksChanged();
+}
+
 void PianorollView::updateBoundingSize()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
