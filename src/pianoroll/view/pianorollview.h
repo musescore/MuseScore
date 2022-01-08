@@ -162,8 +162,8 @@ private:
     void onCurrentNotationChanged();
     void onSelectionChanged();
     void updateBoundingSize();
-    QRect boundingRect(Ms::Note* note);
-    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt);
+    QRect boundingRect(Ms::Note* note, bool applyEvents = false);
+    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt, bool applyEvents = false);
     QString serializeSelectedNotes();
 
     void buildNoteData();
@@ -247,6 +247,7 @@ private:
     QColor m_colorNoteVoice3 = QColor(0xffac85);
     QColor m_colorNoteVoice4 = QColor(0xff94db);
 
+    QColor m_colorTweaks = QColor(0xfd63fcc);
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);
     QColor m_colorTie = QColor(0xff0000);
