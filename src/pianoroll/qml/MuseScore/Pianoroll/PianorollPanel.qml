@@ -98,7 +98,7 @@ Rectangle {
                 }
 
                 RowLayout {
-                    id: automationButton
+                    id: automationButtons
 
                     ToolButton {
                         text: qsTr("Automation")
@@ -106,6 +106,15 @@ Rectangle {
 
                         onClicked: {
                             automationArea.visible = checked
+                        }
+                    }
+
+                    ToolButton {
+                        text: qsTr("Tweaks")
+                        checkable: true
+
+                        onClicked: {
+                            pianoView.tweaks = checked
                         }
                     }
 
