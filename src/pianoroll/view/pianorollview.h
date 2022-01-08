@@ -85,6 +85,7 @@ private:
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(double noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
+    Q_PROPERTY(bool tweaks READ tweaks WRITE setTweaks NOTIFY tweaksChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
     Q_PROPERTY(PianorollStripePattern stripePattern READ stripePattern WRITE setStripePattern NOTIFY stripePatternChanged)
@@ -107,6 +108,8 @@ public:
     void setNoteHeight(double value);
     PianorollTool tool() const { return m_tool; }
     void setTool(PianorollTool value);
+    bool tweaks() const { return m_tweaks; }
+    void setTweaks(bool value);
     int tuplet() const { return m_tuplet; }
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
@@ -146,6 +149,7 @@ signals:
     void wholeNoteWidthChanged();
     void noteHeightChanged();
     void toolChanged();
+    void tweaksChanged();
     void tupletChanged();
     void subdivisionChanged();
     void stripePatternChanged();
@@ -213,6 +217,8 @@ private:
     int m_subdivision = 0;
     PianorollStripePattern m_stripePattern = PianorollStripePattern::C_MAJ;
     PianorollTool m_tool = PianorollTool::SELECT;
+
+    bool m_tweaks = false;  //If true, display/adjust automation events rather than notation
 
     int m_editNoteVoice = 0;  //Voice to use when adding notes
     engraving::Fraction m_editNoteLength = engraving::Fraction(1, 4);  //Length of note used when adding notes
