@@ -299,6 +299,8 @@ void PianorollView::setTweaks(bool value)
         return;
     }
     m_tweaks = value;
+    update();
+
     emit tweaksChanged();
 }
 
@@ -602,35 +604,36 @@ void PianorollView::drawDraggedNote(QPainter* painter, Fraction startTick, Fract
     painter->drawRect(bounds);
 }
 
-QRect PianorollView::boundingRect(Note* note)
+QRect PianorollView::boundingRect(Note* note, bool applyEvents)
 {
     for (NoteEvent& e : note->playEvents()) {
-        QRect bounds = boundingRect(note, &e);
+        QRect bounds = boundingRect(note, &e, applyEvents);
         return bounds;
     }
     return QRect();
 }
 
-QRect PianorollView::boundingRect(Note* note, NoteEvent* evt)
+QRect PianorollView::boundingRect(Note* note, NoteEvent* evt, bool applyEvents)
 {
     Chord* chord = note->chord();
-
-    //Tuplet* tuplet = chord->tuplet();
-    //Fraction tupletRatio(1, 1);
-    //if (tuplet) {
-    //    tupletRatio = tuplet->ratio();
-    //}
-
-    Fraction baseLen = chord->ticks();
-    Fraction playLen = note->playTicksFraction();
-//    Fraction tieLen = note->playTicksFraction() - baseLen;
     int pitch = note->pitch() + (evt ? evt->pitch() : 0);
-//    Fraction len = (evt ? baseLen * evt->len() / 1000 : baseLen) + tieLen;
-    Fraction len = evt ? playLen * evt->len() / 1000 : playLen;
 
-    Fraction start = note->chord()->tick();
-    if (evt) {
-        start += evt->ontime() * baseLen / 1000;
+    Fraction ticks = chord->ticks(); // using length of base note to set pianoroll ontime
+    Tuplet* tup = chord->tuplet();
+    if (tup) {
+        Fraction frac = tup->ratio();
+        ticks = ticks * frac.inverse();
+    }
+    Fraction tieLen = note->playTicksFraction() - ticks;
+
+    Fraction start;
+    Fraction len;
+    if (evt && applyEvents) {
+        start = note->chord()->tick() + ticks * evt->ontime() / 1000;
+        len = ticks * evt->len() / 1000 + tieLen;
+    } else {
+        start = note->chord()->tick();
+        len = ticks + tieLen;
     }
 
     int x0 = wholeNoteToPixelX(start);
@@ -650,19 +653,23 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
     }
 
     QColor noteColor;
-    switch (block->voice) {
-    case 0:
-        noteColor = m_colorNoteVoice1;
-        break;
-    case 1:
-        noteColor = m_colorNoteVoice2;
-        break;
-    case 2:
-        noteColor = m_colorNoteVoice3;
-        break;
-    case 3:
-        noteColor = m_colorNoteVoice4;
-        break;
+    if (m_tweaks) {
+        noteColor = m_colorTweaks;
+    } else {
+        switch (block->voice) {
+        case 0:
+            noteColor = m_colorNoteVoice1;
+            break;
+        case 1:
+            noteColor = m_colorNoteVoice2;
+            break;
+        case 2:
+            noteColor = m_colorNoteVoice3;
+            break;
+        case 3:
+            noteColor = m_colorNoteVoice4;
+            break;
+        }
     }
 
     if (note->selected()) {
@@ -677,7 +684,7 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
     p->setPen(QPen(noteColor.darker(250)));
 
     for (NoteEvent& e : note->playEvents()) {
-        QRect bounds = boundingRect(note, &e);
+        QRect bounds = boundingRect(note, &e, m_tweaks);
         p->drawRect(bounds);
 
         //Pitch name
@@ -848,7 +855,7 @@ void PianorollView::hoverMoveEvent(QHoverEvent* event)
         NoteBlock* pi = pickNote(pos.x(), pos.y());
 
         if (pi) {
-            QRect bounds = boundingRect(pi->note);
+            QRect bounds = boundingRect(pi->note, m_tweaks);
             if (bounds.contains(pos.x(), pos.y())) {
                 if (pos.x() <= bounds.x() + m_dragNoteLengthMargin
                     || pos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
@@ -892,7 +899,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                     selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                 }
 
-                QRect bounds = boundingRect(pi->note);
+                QRect bounds = boundingRect(pi->note, m_tweaks);
                 if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
                     m_dragStyle = DragStyle::NOTE_LENGTH_START;
                 } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
@@ -1056,7 +1063,7 @@ Staff* PianorollView::activeStaff()
 bool PianorollView::intersects(NoteBlock* block, int pixX, int pixY)
 {
     for (NoteEvent& e : block->note->playEvents()) {
-        QRect bounds = boundingRect(block->note, &e);
+        QRect bounds = boundingRect(block->note, &e, m_tweaks);
         if (bounds.contains(pixX, pixY)) {
             return true;
         }
@@ -1069,7 +1076,7 @@ bool PianorollView::intersectsPixel(NoteBlock* block, int pixX, int pixY, int wi
     QRect hit(pixX, pixY, width, height);
 
     for (NoteEvent& e : block->note->playEvents()) {
-        QRect bounds = boundingRect(block->note, &e);
+        QRect bounds = boundingRect(block->note, &e, m_tweaks);
         if (width == 0 || height == 0) {
             if (bounds.contains(pixX, pixY)) {
                 return true;
