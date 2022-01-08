@@ -116,7 +116,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     PointF ap(pagePos());
     painter->translate(ap);
-    qreal lw = score()->styleMM(Sid::stemWidth);
+    qreal lw = score()->styleMM(Sid::stemWidth) * mag();
     Pen pen(engravingConfiguration()->highlightSelectionColor(voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
@@ -165,7 +165,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     if (hasStem()) {
         qreal x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
         qreal y1 = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
-        qreal y2 = (up ? -3.5 : 3.5) * sp * mag();
+        qreal y2 = (up ? -3.5 : 3.5) * sp;
 
         if (hasFlag()) {
             SymId flag = flagSym();
@@ -177,21 +177,21 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
 
     // Draw ledger lines if needed
     if (!m_isRest && m_lineIndex < 100 && m_lineIndex > -100) {
-        qreal extraLen = score()->styleMM(Sid::ledgerLineLength) * mag();
+        qreal extraLen = score()->styleS(Sid::ledgerLineLength).val() * sp * mag();
         qreal x1 = -extraLen;
         qreal x2 = noteheadWidth + extraLen;
 
-        lw = score()->styleMM(Sid::ledgerLineWidth);
+        lw = score()->styleMM(Sid::ledgerLineWidth) * mag();
         pen.setWidthF(lw);
         painter->setPen(pen);
 
         for (int i = -2; i >= m_lineIndex; i -= 2) {
-            qreal y = sp2 * mag() * (i - m_lineIndex);
+            qreal y = sp2 * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
         }
         int l = staff()->lines(tick()) * 2; // first ledger line below staff
         for (int i = l; i <= m_lineIndex; i += 2) {
-            qreal y = sp2 * mag() * (i - m_lineIndex);
+            qreal y = sp2 * (i - m_lineIndex);
             painter->drawLine(LineF(x1, y, x2, y));
         }
     }
