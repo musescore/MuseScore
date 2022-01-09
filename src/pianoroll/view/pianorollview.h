@@ -105,7 +105,7 @@ public:
 
     Q_INVOKABLE void load();
 
-    bool displayEventAdjustment() { return m_tool == PianorollTool::EVENT_ADJUST;  }
+    bool displayEventAdjustment() { return m_tool == PianorollTool::EVENT_ADJUST; }
     double wholeNoteWidth() const { return m_wholeNoteWidth; }
     void setWholeNoteWidth(double value);
     int noteHeight() const { return m_noteHeight; }
