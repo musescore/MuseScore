@@ -51,7 +51,10 @@ enum class DragStyle
     NOTE_POSITION,
     NOTE_LENGTH_START,
     NOTE_LENGTH_END,
-    DRAW_NOTE
+    DRAW_NOTE,
+    EVENT_ONTIME,
+    EVENT_MOVE,
+    EVENT_LENGTH
 };
 
 struct BarPattern
@@ -141,6 +144,7 @@ public:
     double pixelYToPitch(int tick) const;
 
     void finishNoteGroupDrag();
+    void finishNoteEventAdjustDrag();
     void selectNotes(double startTick, double endTick, double lowPitch, double highPitch, NoteSelectType selType);
     void handleSelectionClick();
 
