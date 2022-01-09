@@ -92,6 +92,15 @@ Rectangle {
                             pianoView.tool = PianorollView.ERASE
                         }
                     }
+
+                    ToolButton {
+                        text: qsTr("Event Adjust")
+                        checkable: true
+
+                        onClicked: {
+                            pianoView.tool = PianorollView.EVENT_ADJUST
+                        }
+                    }
                 }
 
                 RowLayout {
@@ -105,16 +114,6 @@ Rectangle {
                             automationArea.visible = checked
                         }
                     }
-
-                    ToolButton {
-                        text: qsTr("Tweaks")
-                        checkable: true
-
-                        onClicked: {
-                            pianoView.tweaks = checked
-                        }
-                    }
-
                 }
 
                 RowLayout {
