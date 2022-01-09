@@ -932,11 +932,9 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                 QRect bounds = boundingRect(pi->note, true);
                 if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
                     m_dragStyle = DragStyle::EVENT_ONTIME;
-                }
-                else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
+                } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
                     m_dragStyle = DragStyle::EVENT_LENGTH;
-                }
-                else {
+                } else {
                     m_dragStyle = DragStyle::EVENT_MOVE;
                 }
             } else if (!pi && m_tool == PianorollTool::SELECT) {
