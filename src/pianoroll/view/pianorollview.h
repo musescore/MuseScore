@@ -76,7 +76,7 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
 
 public:
     enum class PianorollTool : char {
-        SELECT, ADD, CUT, ERASE
+        SELECT, ADD, CUT, ERASE, EVENT_ADJUST
     };
     Q_ENUM(PianorollTool)
 
@@ -90,7 +90,6 @@ private:
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(double noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
-    Q_PROPERTY(bool tweaks READ tweaks WRITE setTweaks NOTIFY tweaksChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
     Q_PROPERTY(double centerX READ centerX WRITE setCenterX NOTIFY centerXChanged)
@@ -106,14 +105,13 @@ public:
 
     Q_INVOKABLE void load();
 
+    bool displayEventAdjustment() { return m_tool == PianorollTool::EVENT_ADJUST;  }
     double wholeNoteWidth() const { return m_wholeNoteWidth; }
     void setWholeNoteWidth(double value);
     int noteHeight() const { return m_noteHeight; }
     void setNoteHeight(double value);
     PianorollTool tool() const { return m_tool; }
     void setTool(PianorollTool value);
-    bool tweaks() const { return m_tweaks; }
-    void setTweaks(bool value);
     int tuplet() const { return m_tuplet; }
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
@@ -217,8 +215,6 @@ private:
     int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
     int m_barPattern = 0;
-
-    bool m_tweaks = false;  //If true, display/adjust automation events rather than notation
 
     int m_editNoteVoice = 0;  //Voice to use when adding notes
     Ms::Fraction m_editNoteLength = Ms::Fraction(1, 4);  //Length of note used when adding notes
