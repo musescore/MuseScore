@@ -307,18 +307,8 @@ void PianorollView::setTool(PianorollTool value)
         return;
     }
     m_tool = value;
-    emit toolChanged();
-}
-
-void PianorollView::setTweaks(bool value)
-{
-    if (value == m_tweaks) {
-        return;
-    }
-    m_tweaks = value;
     update();
-
-    emit tweaksChanged();
+    emit toolChanged();
 }
 
 void PianorollView::updateBoundingSize()
@@ -672,7 +662,7 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
     }
 
     QColor noteColor;
-    if (m_tweaks) {
+    if (displayEventAdjustment()) {
         noteColor = m_colorTweaks;
     } else {
         switch (block->voice) {
@@ -703,7 +693,7 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
     p->setPen(QPen(noteColor.darker(250)));
 
     for (Ms::NoteEvent& e : note->playEvents()) {
-        QRect bounds = boundingRect(note, &e, m_tweaks);
+        QRect bounds = boundingRect(note, &e, displayEventAdjustment());
         p->drawRect(bounds);
 
         //Pitch name
@@ -803,9 +793,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
             }
         } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE
                    || m_dragStyle == DragStyle::EVENT_LENGTH) {
-            if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
-                finishNoteEventAdjustDrag();
-            }
+            finishNoteEventAdjustDrag();
         } else if (m_dragStyle == DragStyle::DRAW_NOTE) {
             double startTick = pixelXToWholeNote(m_mouseDownPos.x());
             double endTick = pixelXToWholeNote(m_lastMousePos.x());
@@ -874,12 +862,12 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
 
 void PianorollView::hoverMoveEvent(QHoverEvent* event)
 {
-    if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
+    if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD || m_tool == PianorollTool::EVENT_ADJUST) {
         QPointF pos = event->pos();
         NoteBlock* pi = pickNote(pos.x(), pos.y());
 
         if (pi) {
-            QRect bounds = boundingRect(pi->note, m_tweaks);
+            QRect bounds = boundingRect(pi->note, displayEventAdjustment());
             if (bounds.contains(pos.x(), pos.y())) {
                 if (pos.x() <= bounds.x() + m_dragNoteLengthMargin
                     || pos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
@@ -923,19 +911,34 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                     selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                 }
 
-                QRect bounds = boundingRect(pi->note, m_tweaks);
+                QRect bounds = boundingRect(pi->note, false);
                 if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
-                    m_dragStyle = m_tweaks ? DragStyle::EVENT_ONTIME : DragStyle::NOTE_LENGTH_START;
+                    m_dragStyle = DragStyle::NOTE_LENGTH_START;
                 } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
-                    m_dragStyle = m_tweaks ? DragStyle::EVENT_LENGTH : DragStyle::NOTE_LENGTH_END;
+                    m_dragStyle = DragStyle::NOTE_LENGTH_END;
                 } else {
-                    m_dragStyle = m_tweaks ? DragStyle::EVENT_MOVE : DragStyle::NOTE_POSITION;
+                    m_dragStyle = DragStyle::NOTE_POSITION;
                 }
 
                 m_dragStartPitch = mouseDownPitch;
                 m_dragStartTick = pi->note->tick();
                 m_dragEndTick = m_dragStartTick + pi->note->chord()->ticks();
                 m_dragNoteCache = serializeSelectedNotes();
+            } else if (pi && m_tool == PianorollTool::EVENT_ADJUST) {
+                if (!pi->note->selected()) {
+                    selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
+                }
+
+                QRect bounds = boundingRect(pi->note, true);
+                if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
+                    m_dragStyle = DragStyle::EVENT_ONTIME;
+                }
+                else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
+                    m_dragStyle = DragStyle::EVENT_LENGTH;
+                }
+                else {
+                    m_dragStyle = DragStyle::EVENT_MOVE;
+                }
             } else if (!pi && m_tool == PianorollTool::SELECT) {
                 m_dragStyle = DragStyle::SELECTION_RECT;
             } else if (!pi && m_tool == PianorollTool::ADD) {
@@ -1086,7 +1089,7 @@ Ms::Staff* PianorollView::activeStaff()
 bool PianorollView::intersects(NoteBlock* block, int pixX, int pixY)
 {
     for (Ms::NoteEvent& e : block->note->playEvents()) {
-        QRect bounds = boundingRect(block->note, &e, m_tweaks);
+        QRect bounds = boundingRect(block->note, &e, displayEventAdjustment());
         if (bounds.contains(pixX, pixY)) {
             return true;
         }
@@ -1099,7 +1102,7 @@ bool PianorollView::intersectsPixel(NoteBlock* block, int pixX, int pixY, int wi
     QRect hit(pixX, pixY, width, height);
 
     for (Ms::NoteEvent& e : block->note->playEvents()) {
-        QRect bounds = boundingRect(block->note, &e, m_tweaks);
+        QRect bounds = boundingRect(block->note, &e, displayEventAdjustment());
         if (width == 0 || height == 0) {
             if (bounds.contains(pixX, pixY)) {
                 return true;
