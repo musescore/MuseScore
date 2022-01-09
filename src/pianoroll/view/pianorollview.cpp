@@ -801,7 +801,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
                     m_inProgressUndoEvent = false;
                 }
             }
-        } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE 
+        } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE
                    || m_dragStyle == DragStyle::EVENT_LENGTH) {
             if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
                 finishNoteEventAdjustDrag();
