@@ -803,6 +803,10 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
                     m_inProgressUndoEvent = false;
                 }
             }
+        } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE || m_dragStyle == DragStyle::EVENT_LENGTH) {
+            if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
+                finishNoteEventAdjustDrag();
+            }
         } else if (m_dragStyle == DragStyle::DRAW_NOTE) {
             double startTick = pixelXToWholeNote(m_mouseDownPos.x());
             double endTick = pixelXToWholeNote(m_lastMousePos.x());
@@ -922,11 +926,11 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
 
                 QRect bounds = boundingRect(pi->note, m_tweaks);
                 if (m_mouseDownPos.x() <= bounds.x() + m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::NOTE_LENGTH_START;
+                    m_dragStyle = m_tweaks ? DragStyle::EVENT_ONTIME : DragStyle::NOTE_LENGTH_START;
                 } else if (m_mouseDownPos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin) {
-                    m_dragStyle = DragStyle::NOTE_LENGTH_END;
+                    m_dragStyle = m_tweaks ? DragStyle::EVENT_LENGTH : DragStyle::NOTE_LENGTH_END;
                 } else {
-                    m_dragStyle = DragStyle::NOTE_POSITION;
+                    m_dragStyle = m_tweaks ? DragStyle::EVENT_MOVE : DragStyle::NOTE_POSITION;
                 }
 
                 m_dragStartPitch = mouseDownPitch;
@@ -1342,6 +1346,67 @@ void PianorollView::finishNoteGroupDrag()
     m_dragNoteCache = QByteArray();
 
     buildNoteData();
+    update();
+}
+
+void PianorollView::finishNoteEventAdjustDrag()
+{
+    Ms::Score* curScore = score();
+    Ms::Fraction dx = Ms::Fraction(m_lastMousePos.x() - m_mouseDownPos.x(), m_wholeNoteWidth).reduced();
+    
+    for (int i = 0; i < m_noteList.size(); ++i) {
+        NoteBlock* pi = m_noteList[i];
+        if (pi->note->selected()) {
+            for (Ms::NoteEvent& e : pi->note->playEvents()) {
+
+                Ms::Chord* chord = pi->note->chord();
+                Ms::Fraction ticks = chord->ticks();
+                Ms::Tuplet* tup = chord->tuplet();
+                if (tup) {
+                    Ms::Fraction frac = tup->ratio();
+                    ticks = ticks * frac.inverse();
+                }
+
+                Ms::Fraction start = pi->note->chord()->tick();
+                Ms::Fraction len = ticks;
+                Ms::Fraction startAdj = start + ticks * e.ontime() / 1000;
+                Ms::Fraction lenAdj = ticks * e.len() / 1000;
+
+                //Calc start, duration of where we dragged to
+                Ms::Fraction startNew;
+                Ms::Fraction lenNew;
+                switch (m_dragStyle) {
+                case DragStyle::EVENT_ONTIME:
+                    startNew = startAdj + dx;
+                    lenNew = lenAdj - dx;
+                    break;
+                case DragStyle::EVENT_MOVE:
+                    startNew = startAdj + dx;
+                    lenNew = lenAdj;
+                    break;
+                default:
+                case DragStyle::EVENT_LENGTH:
+                    startNew = startAdj;
+                    lenNew = lenAdj + dx;
+                    break;
+                }
+
+                int evtOntimeNew = int(((startNew - start).toDouble() / ticks.toDouble()) * 1000);
+                int evtLenNew = int((lenNew.toDouble() / ticks.toDouble()) * 1000);
+                if (evtLenNew < 1)
+                    evtLenNew = 1;
+
+                Ms::NoteEvent ne = e;
+                ne.setOntime(evtOntimeNew);
+                ne.setLen(evtLenNew);
+
+                curScore->startCmd();
+                curScore->undo(new Ms::ChangeNoteEvent(pi->note, &e, ne));
+                curScore->endCmd();
+            }
+        }
+    }
+
     update();
 }
 
