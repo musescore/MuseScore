@@ -650,8 +650,7 @@ QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt, bool apply
     if (evt && applyEvents) {
         start = note->chord()->tick() + ticks * evt->ontime() / 1000;
         len = ticks * evt->len() / 1000 + tieLen;
-    }
-    else {
+    } else {
         start = note->chord()->tick();
         len = ticks + tieLen;
     }
@@ -675,8 +674,7 @@ void PianorollView::drawNoteBlock(QPainter* p, NoteBlock* block)
     QColor noteColor;
     if (m_tweaks) {
         noteColor = m_colorTweaks;
-    }
-    else {
+    } else {
         switch (block->voice) {
         case 0:
             noteColor = m_colorNoteVoice1;
@@ -803,7 +801,8 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
                     m_inProgressUndoEvent = false;
                 }
             }
-        } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE || m_dragStyle == DragStyle::EVENT_LENGTH) {
+        } else if (m_dragStyle == DragStyle::EVENT_ONTIME || m_dragStyle == DragStyle::EVENT_MOVE 
+                   || m_dragStyle == DragStyle::EVENT_LENGTH) {
             if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
                 finishNoteEventAdjustDrag();
             }
@@ -1353,12 +1352,11 @@ void PianorollView::finishNoteEventAdjustDrag()
 {
     Ms::Score* curScore = score();
     Ms::Fraction dx = Ms::Fraction(m_lastMousePos.x() - m_mouseDownPos.x(), m_wholeNoteWidth).reduced();
-    
+
     for (int i = 0; i < m_noteList.size(); ++i) {
         NoteBlock* pi = m_noteList[i];
         if (pi->note->selected()) {
             for (Ms::NoteEvent& e : pi->note->playEvents()) {
-
                 Ms::Chord* chord = pi->note->chord();
                 Ms::Fraction ticks = chord->ticks();
                 Ms::Tuplet* tup = chord->tuplet();
@@ -1393,8 +1391,9 @@ void PianorollView::finishNoteEventAdjustDrag()
 
                 int evtOntimeNew = int(((startNew - start).toDouble() / ticks.toDouble()) * 1000);
                 int evtLenNew = int((lenNew.toDouble() / ticks.toDouble()) * 1000);
-                if (evtLenNew < 1)
+                if (evtLenNew < 1) {
                     evtLenNew = 1;
+                }
 
                 Ms::NoteEvent ne = e;
                 ne.setOntime(evtOntimeNew);
