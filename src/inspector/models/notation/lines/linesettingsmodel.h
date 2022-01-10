@@ -46,15 +46,12 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
 
     Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginingTextHorizontalOffset READ beginingTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * continiousText READ continiousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
-    Q_PROPERTY(PropertyItem * endTextHorizontalOffset READ endTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
@@ -76,15 +73,12 @@ public:
     PropertyItem* hookHeight() const;
 
     PropertyItem* beginingText() const;
-    PropertyItem* beginingTextHorizontalOffset() const;
     PropertyItem* beginingTextVerticalOffset() const;
 
     PropertyItem* continiousText() const;
-    PropertyItem* continiousTextHorizontalOffset() const;
     PropertyItem* continiousTextVerticalOffset() const;
 
     PropertyItem* endText() const;
-    PropertyItem* endTextHorizontalOffset() const;
     PropertyItem* endTextVerticalOffset() const;
 
     Q_INVOKABLE QVariantList possibleStartHookTypes() const;
@@ -141,15 +135,12 @@ private:
     PropertyItem* m_hookHeight = nullptr;
 
     PropertyItem* m_beginingText = nullptr;
-    PropertyItem* m_beginingTextHorizontalOffset = nullptr;
     PropertyItem* m_beginingTextVerticalOffset = nullptr;
 
     PropertyItem* m_continiousText = nullptr;
-    PropertyItem* m_continiousTextHorizontalOffset = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
-    PropertyItem* m_endTextHorizontalOffset = nullptr;
     PropertyItem* m_endTextVerticalOffset = nullptr;
 
     QVariantList m_possibleStartHookTypes;

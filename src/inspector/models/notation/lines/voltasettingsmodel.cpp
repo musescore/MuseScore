@@ -57,9 +57,6 @@ void VoltaSettingsModel::createProperties()
     LineSettingsModel::createProperties();
 
     m_repeatCount = buildPropertyItem(Ms::Pid::VOLTA_ENDING);
-
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
 }
 
 void VoltaSettingsModel::loadProperties()

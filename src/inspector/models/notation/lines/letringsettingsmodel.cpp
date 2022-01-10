@@ -42,7 +42,4 @@ void LetRingSettingsModel::createProperties()
     placement()->setIsVisible(true);
     startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
-
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
 }
