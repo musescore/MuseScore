@@ -38,7 +38,7 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes()
     return types;
 }
 
-void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
                                mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
@@ -53,7 +53,7 @@ void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articul
 
     const ArticulationAppliedData& articulationData = context.commonArticulations.at(preferredType);
 
-    duration_t stepDuration = durationFromTicks(context.beatsPerSecond, stepDurationTicksByType(preferredType));
+    duration_t stepDuration = durationFromTicks(context.beatsPerSecond.val, stepDurationTicksByType(preferredType));
 
     if (stepDuration <= 0) {
         LOGE() << "Unable to render unsupported tremolo type";
@@ -114,6 +114,6 @@ void TremoloRenderer::buildAndAppendEvents(const Ms::Chord* chord, const Articul
         noteCtx.timestamp += timestampOffset;
 
         updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
-        result.push_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
 }

@@ -47,7 +47,9 @@ private:
 
     void renderRestEvents(const Ms::Rest* rest, mpe::PlaybackEventList& result) const;
 
-    void renderArticulations(const Ms::Chord* chord, PlaybackContext&& ctx, mpe::PlaybackEventList& result) const;
+    void renderArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
+    bool renderChordArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
+    void renderNoteArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
 };
 }
 

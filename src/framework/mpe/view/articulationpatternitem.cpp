@@ -55,7 +55,7 @@ ArticulationPattern ArticulationPatternItem::patternData() const
     ArticulationPattern result;
 
     for (const auto& item : m_items) {
-        result.insert_or_assign(item->positionFrom(), item->patternSegmentData());
+        result.emplace(item->positionFrom(), item->patternSegmentData());
     }
 
     return result;
@@ -108,7 +108,7 @@ void ArticulationPatternItem::load(const ArticulationPattern& pattern)
         float scopePositionFrom = it->first;
         float scopePositionTo = HUNDRED_PERCENT;
 
-        if (next != pattern.end()) {
+        if (next != pattern.cend()) {
             scopePositionTo = next->first;
         }
 

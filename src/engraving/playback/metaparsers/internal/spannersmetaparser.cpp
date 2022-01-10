@@ -33,7 +33,7 @@
 using namespace mu::engraving;
 
 void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                 mpe::ArticulationMetaMap& result)
+                                 mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isSpanner() && ctx.isValid()) {
         return;
@@ -125,5 +125,5 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
     articulationMeta.overallPitchChangesRange = std::abs(overallPitchRange);
     articulationMeta.overallDuration = ctx.nominalDuration;
 
-    result.insert_or_assign(type, std::move(articulationMeta));
+    appendArticulationData(std::move(articulationMeta), result);
 }

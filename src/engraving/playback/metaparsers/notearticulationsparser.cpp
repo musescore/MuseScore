@@ -39,25 +39,22 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
         return;
     }
 
-    mpe::ArticulationMetaMap perNoteArticulationsMetaMap;
-    parse(note, ctx, perNoteArticulationsMetaMap);
+    parse(note, ctx, result);
 
-    if (result.isEmpty() && perNoteArticulationsMetaMap.empty()) {
-        mpe::ArticulationMeta standardMeta(mpe::ArticulationType::Standard,
-                                           ctx.profile->pattern(mpe::ArticulationType::Standard),
-                                           ctx.nominalTimestamp,
-                                           ctx.nominalDuration);
-
-        perNoteArticulationsMetaMap.insert_or_assign(standardMeta.type, std::move(standardMeta));
+    if (result.empty()) {
+        appendArticulationData({ mpe::ArticulationType::Standard,
+                                 ctx.profile->pattern(mpe::ArticulationType::Standard),
+                                 ctx.nominalTimestamp,
+                                 ctx.nominalDuration,
+                                 0,
+                                 0 }, result);
     }
 
-    for (auto& pair : perNoteArticulationsMetaMap) {
-        result.emplace(pair.first, mpe::ArticulationAppliedData(std::move(pair.second), 0, mpe::HUNDRED_PERCENT));
-    }
+    result.preCalculateAverageData();
 }
 
 void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                      mpe::ArticulationMetaMap& result)
+                                      mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE && ctx.isValid()) {
         return;
@@ -98,20 +95,20 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
 }
 
 void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result)
+                                             mpe::ArticulationMap& result)
 {
     if (!note->ghost()) {
         return;
     }
 
-    result.insert_or_assign(mpe::ArticulationType::GhostNote, mpe::ArticulationMeta(mpe::ArticulationType::GhostNote,
-                                                                                    ctx.profile->pattern(mpe::ArticulationType::GhostNote),
-                                                                                    ctx.nominalTimestamp,
-                                                                                    ctx.nominalDuration));
+    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::GhostNote,
+                                                 ctx.profile->pattern(mpe::ArticulationType::GhostNote),
+                                                 ctx.nominalTimestamp,
+                                                 ctx.nominalDuration), result);
 }
 
 void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result)
+                                            mpe::ArticulationMap& result)
 {
     mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
 
@@ -119,14 +116,14 @@ void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const Playback
         return;
     }
 
-    result.insert_or_assign(typeByNoteHead, mpe::ArticulationMeta(typeByNoteHead,
-                                                                  ctx.profile->pattern(typeByNoteHead),
-                                                                  ctx.nominalTimestamp,
-                                                                  ctx.nominalDuration));
+    appendArticulationData(mpe::ArticulationMeta(typeByNoteHead,
+                                                 ctx.profile->pattern(typeByNoteHead),
+                                                 ctx.nominalTimestamp,
+                                                 ctx.nominalDuration), result);
 }
 
 void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result)
+                                            mpe::ArticulationMap& result)
 {
     for (const Ms::Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();
@@ -135,10 +132,10 @@ void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const Playback
 
         PlaybackContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(note->score(), spannerFrom);
-        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond, spannerDurationTicks);
+        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
-        SpannersMetaParser::parse(spanner, std::move(ctx), result);
+        SpannersMetaParser::parse(spanner, spannerContext, result);
     }
 }

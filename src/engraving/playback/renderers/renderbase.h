@@ -39,14 +39,14 @@ public:
         return supportedTypes.find(type) != supportedTypes.cend();
     }
 
-    static void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+    static void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
                        mpe::PlaybackEventList& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
         }
 
-        T::doRender(item, preferredType, std::move(context), result);
+        T::doRender(item, preferredType, context, result);
     }
 
 protected:

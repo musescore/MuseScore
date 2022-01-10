@@ -31,7 +31,7 @@ class TremoloMetaParser : public MetaParserBase<TremoloMetaParser>
 protected:
     friend MetaParserBase;
 
-    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result);
 };
 }
 

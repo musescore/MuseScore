@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result)
+void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::TREMOLO && ctx.isValid()) {
         return;
@@ -71,5 +71,5 @@ void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCon
     articulationMeta.timestamp = ctx.nominalTimestamp;
     articulationMeta.overallDuration = ctx.nominalDuration;
 
-    result.insert_or_assign(type, std::move(articulationMeta));
+    appendArticulationData(std::move(articulationMeta), result);
 }

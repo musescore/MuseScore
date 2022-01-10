@@ -34,6 +34,7 @@ struct BeatsPerMinute // beats per minute
 
     inline bool operator ==(const BeatsPerMinute& other) const { return RealIsEqual(val, other.val); }
     inline bool operator !=(const BeatsPerMinute& other) const { return !operator ==(other); }
+    inline bool operator >(const BeatsPerMinute& other) const { return val > other.val; }
 
     inline BeatsPerMinute operator*(const BeatsPerMinute& v) const { return BeatsPerMinute(val * v.val); }
     inline BeatsPerMinute operator/(const BeatsPerMinute& v) const { return BeatsPerMinute(val / v.val); }
@@ -50,6 +51,7 @@ struct BeatsPerSecond // beats per second
 
     inline bool operator ==(const BeatsPerSecond& other) const { return RealIsEqual(val, other.val); }
     inline bool operator !=(const BeatsPerSecond& other) const { return !operator ==(other); }
+    inline bool operator >(const BeatsPerSecond& other) const { return val > other.val; }
 
     inline BeatsPerSecond operator*(const BeatsPerSecond& v) const { return BeatsPerSecond(val * v.val); }
     inline BeatsPerSecond operator/(const BeatsPerSecond& v) const { return BeatsPerSecond(val / v.val); }

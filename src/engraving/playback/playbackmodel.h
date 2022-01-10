@@ -20,38 +20,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAING_PARSERBASE_H
-#define MU_ENGRAING_PARSERBASE_H
+#ifndef MU_ENGRAVING_PLAYBACKMODEL_H
+#define MU_ENGRAVING_PLAYBACKMODEL_H
 
-#include "log.h"
-#include "mpe/mpetypes.h"
+#include "modularity/ioc.h"
+#include "mpe/events.h"
+#include "mpe/iarticulationprofilesrepository.h"
 
-#include "playback/playbackcontext.h"
+#include "playbackeventsrenderer.h"
 
 namespace Ms {
-class EngravingItem;
+class Score;
 }
 
 namespace mu::engraving {
-template<class T>
-class MetaParserBase
+class PlaybackModel
 {
+    INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
+
 public:
-    static void parse(const Ms::EngravingItem* item, const PlaybackContext& context, mpe::ArticulationMap& result)
-    {
-        IF_ASSERT_FAILED(item) {
-            return;
-        }
+    PlaybackModel(const Ms::Score* score);
 
-        T::doParse(item, context, result);
-    }
+private:
+    PlaybackEventsRenderer m_renderer;
 
-protected:
-    static void appendArticulationData(mpe::ArticulationMeta&& meta, mpe::ArticulationMap& result)
-    {
-        result.emplace(meta.type, mpe::ArticulationAppliedData(std::forward<mpe::ArticulationMeta>(meta), 0, mpe::HUNDRED_PERCENT));
-    }
+    mpe::PlaybackEventList m_events;
 };
 }
 
-#endif // MU_ENGRAING_PARSERBASE_H
+#endif // PLAYBACKMODEL_H

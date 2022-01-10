@@ -34,7 +34,7 @@ const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
     return types;
 }
 
-void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, PlaybackContext&& context,
+void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const PlaybackContext& context,
                                   mpe::PlaybackEventList& result)
 {
     const Ms::Note* note = Ms::toNote(item);
@@ -44,13 +44,13 @@ void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::Arti
     }
 
     if (type == ArticulationType::DiscreteGlissando) {
-        renderDiscreteGlissando(note, std::move(context), result);
+        renderDiscreteGlissando(note, context, result);
     } else {
-        renderContinuousGlissando(note, std::move(context), result);
+        renderContinuousGlissando(note, context, result);
     }
 }
 
-void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, PlaybackContext&& context,
+void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const PlaybackContext& context,
                                                  mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
@@ -68,12 +68,12 @@ void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, PlaybackC
                                      noteCtx.duration,
                                      noteCtx.chordCtx.commonArticulations);
 
-        result.push_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
 }
 
-void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, PlaybackContext&& context,
+void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, const PlaybackContext& context,
                                                    mpe::PlaybackEventList& result)
 {
-    result.push_back(buildNoteEvent(note, std::move(context)));
+    result.emplace_back(buildNoteEvent(note, context));
 }

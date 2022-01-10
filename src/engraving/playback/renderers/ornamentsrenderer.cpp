@@ -204,7 +204,7 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
     return types;
 }
 
-void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, PlaybackContext&& context,
+void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, const PlaybackContext& context,
                                  mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
@@ -244,7 +244,7 @@ void OrnamentsRenderer::convert(const ArticulationType type, NominalNoteCtx&& no
         int alterationsCount = 1;
 
         if (search->second.isAlterationsRepeatAllowed) {
-            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond, noteCtx.chordCtx.nominalDurationTicks);
+            alterationsCount = alterationsNumberByTempo(noteCtx.chordCtx.beatsPerSecond.val, noteCtx.chordCtx.nominalDurationTicks);
         }
 
         createEvents(type, noteCtx, alterationsCount,
@@ -299,7 +299,7 @@ void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx
             updateArticulationBoundaries(type, subNoteCtx.timestamp,
                                          subNoteCtx.duration, subNoteCtx.chordCtx.commonArticulations);
 
-            result.push_back(buildNoteEvent(std::move(subNoteCtx)));
+            result.emplace_back(buildNoteEvent(std::move(subNoteCtx)));
 
             noteCtx.timestamp += durationStep;
         }
