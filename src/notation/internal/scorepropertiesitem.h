@@ -36,9 +36,9 @@ namespace mu::notation {
     {
     public:
         ScorePropertiesItem(QWidget* label = nullptr, QWidget* value = nullptr);
-        QString ScorePropertiesItem::Label();
-        QString ScorePropertiesItem::Value();
-        void ScorePropertiesItem::SetFocus();
+        QString Label();
+        QString Value();
+        void SetFocus();
 
     private:
         QWidget* label;
