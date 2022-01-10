@@ -76,6 +76,11 @@ void NotationViewInputController::init()
         if (!m_isZoomInited) {
             initZoom();
         }
+
+        auto masterNotation = globalContext()->currentMasterNotation();
+        if (!masterNotation) {
+            m_isZoomInited = false;
+        }
     });
 }
 
