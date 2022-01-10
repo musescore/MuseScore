@@ -564,7 +564,7 @@ void PopupView::setErrCode(Ret::Code code)
 
 QRect PopupView::currentScreenGeometry() const
 {
-    QScreen* currentScreen = QGuiApplication::screenAt(m_globalPos.toPoint());
+    QScreen* currentScreen = mainWindow()->screen();
     if (!currentScreen) {
         currentScreen = QGuiApplication::primaryScreen();
     }
