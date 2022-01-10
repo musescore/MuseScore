@@ -109,9 +109,9 @@ QVariantList AbstractMenuModel::itemsProperty() const
 {
     QVariantList items;
 
-//    for (const MenuItem& item: m_items) { // todo
-//        items << item.toMap();
-//    }
+    for (MenuItem* item: m_items) {
+        items << QVariant::fromValue(item);
+    }
 
     return items;
 }

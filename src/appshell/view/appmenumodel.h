@@ -70,7 +70,6 @@ signals:
 
 private:
     void setupConnections();
-    void onActionsStateChanges(const actions::ActionCodeList& codes) override;
 
     using ui::AbstractMenuModel::makeMenuItem;
     ui::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;

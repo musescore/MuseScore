@@ -126,8 +126,6 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
         action.iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
         item->setAction(action);
     }
-
-    emit dataChanged(index(0), index(rowCount() - 1));
 }
 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const
