@@ -49,12 +49,16 @@ public:
 private:
     enum NoteInputRoles {
         IsMenuSecondaryRole = AbstractMenuModel::Roles::UserRole + 1,
-        OrderRole
+        OrderRole,
+        SectionRole
     };
 
     INotationPtr notation() const;
 
     void onNotationChanged();
+
+    void updateItemStateChecked(ui::MenuItem* item, bool checked);
+    void updateItemStateEnabled(ui::MenuItem* item, bool enabled);
 
     void updateState();
     void updateNoteInputState();
@@ -74,10 +78,10 @@ private:
 
     ui::UiAction currentNoteInputModeAction() const;
 
-    ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section, const ui::MenuItemList& subitems = {});
-    ui::MenuItem makeAddItem(const QString& section);
+    ui::MenuItem* makeActionItem(const ui::UiAction& action, const QString& section, const ui::MenuItemList& subitems = {});
+    ui::MenuItem* makeAddItem(const QString& section);
 
-    QVariantList subitems(const actions::ActionCode& actionCode) const;
+    ui::MenuItemList subitems(const actions::ActionCode& actionCode) const;
     ui::MenuItemList noteInputMethodItems() const;
     ui::MenuItemList tupletItems() const;
     ui::MenuItemList addItems() const;

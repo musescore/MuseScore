@@ -91,7 +91,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             height: 28
 
-            text: model.currentWorkspaceItem.itle
+            text: model.currentWorkspaceItem.title
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 

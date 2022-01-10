@@ -163,6 +163,7 @@ void MenuItem::setSubitems(const QList<MenuItem*>& subitems)
 void MenuItem::setAction(const UiAction& action)
 {
     m_action = action;
+    emit actionChanged();
 }
 
 void MenuItem::setArgs(const mu::actions::ActionData& args)

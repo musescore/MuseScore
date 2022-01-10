@@ -90,12 +90,6 @@ void AppMenuModel::setAppWindow(QWindow* appWindow)
     m_appWindow = appWindow;
 }
 
-void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
-{
-    AbstractMenuModel::onActionsStateChanges(codes);
-    emit itemsChanged();
-}
-
 void AppMenuModel::setupConnections()
 {
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
