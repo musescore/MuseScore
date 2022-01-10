@@ -119,6 +119,8 @@ void PopupView::componentComplete()
     if (!isDialog()) {
         m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
     }
+
+    emit windowChanged();
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
@@ -228,11 +230,6 @@ void PopupView::setParentWindow(QWindow* window)
     m_window->setParentWindow(window);
 }
 
-QWindow* PopupView::window()
-{
-    return qWindow();
-}
-
 bool PopupView::isOpened() const
 {
     return m_window ? m_window->isVisible() : false;
@@ -271,6 +268,11 @@ void PopupView::setContentItem(QQuickItem* content)
 QQuickItem* PopupView::contentItem() const
 {
     return m_contentItem;
+}
+
+QWindow* PopupView::window() const
+{
+    return qWindow();
 }
 
 qreal PopupView::localX() const
