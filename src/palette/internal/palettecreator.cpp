@@ -1087,6 +1087,19 @@ PalettePtr PaletteCreator::newLinesPalette()
         sp->appendElement(trill, trillTable[i].userName);
     }
 
+    auto staffTextLine = makeElement<TextLine>(gpaletteScore);
+    staffTextLine->setLen(w);
+    staffTextLine->setBeginText("Staff");
+    staffTextLine->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(staffTextLine, QT_TRANSLATE_NOOP("palette", "Staff Text line"));
+
+    auto systemTextLine = makeElement<TextLine>(gpaletteScore);
+    systemTextLine->setSystemFlag(true);
+    systemTextLine->setLen(w);
+    systemTextLine->setBeginText("System");
+    systemTextLine->setEndHookType(HookType::HOOK_90);
+    sp->appendElement(systemTextLine, QT_TRANSLATE_NOOP("palette", "System Text line"));
+
     auto textLine = makeElement<TextLine>(gpaletteScore);
     textLine->setLen(w);
     textLine->setBeginText("VII");
