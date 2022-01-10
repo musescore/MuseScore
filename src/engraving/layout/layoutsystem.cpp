@@ -39,6 +39,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/system.h"
+#include "libmscore/slur.h"
 
 #include "layoutbeams.h"
 #include "layoutharmonies.h"
@@ -885,6 +886,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     Fraction etick = useRange ? lc.endTick : system->measures().back()->endTick();
     auto spanners = score->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
+    // ties
+    doLayoutTies(system, sl, stick, etick);
+
+    // slurs
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
@@ -919,18 +924,6 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     std::vector<Dynamic*> dynamics;
     for (Segment* s : sl) {
-        for (EngravingItem* e : s->elist()) {
-            if (!e) {
-                continue;
-            }
-            if (e->isChord()) {
-                Chord* c = toChord(e);
-                for (Chord* ch : c->graceNotes()) {
-                    layoutTies(ch, system, stick);
-                }
-                layoutTies(c, system, stick);
-            }
-        }
         for (EngravingItem* e : s->annotations()) {
             if (e->isDynamic()) {
                 Dynamic* d = toDynamic(e);
@@ -1187,6 +1180,22 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     }
 }
 
+void LayoutSystem::doLayoutTies(System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick)
+{
+    for (Segment* s : sl) {
+        for (EngravingItem* e : s->elist()) {
+            if (!e || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Chord* ch : c->graceNotes()) {
+                layoutTies(ch, system, stick);
+            }
+            layoutTies(c, system, stick);
+        }
+    }
+}
+
 void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
@@ -1218,6 +1227,52 @@ void LayoutSystem::processLines(System* system, std::vector<Spanner*> lines, boo
                 ss->rypos() = staffY;
             } else {
                 ss->rypos() = defaultY;
+            }
+        }
+    }
+
+    if (segments.size() > 1) {
+        //how far vertically an endpoint should adjust to avoid other slur endpoints:
+        const qreal slurCollisionVertOffset = 0.65 * system->spatium();
+        const qreal fuzzyHorizCompare = 0.1 * system->spatium();
+        auto compare = [fuzzyHorizCompare](qreal x1, qreal x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
+        for (SpannerSegment* seg1 : segments) {
+            if (!seg1->isSlurSegment()) {
+                continue;
+            }
+            SlurSegment* slur1 = toSlurSegment(seg1);
+            for (SpannerSegment* seg2 : segments) {
+                if (!seg2->isSlurSegment()) {
+                    continue;
+                }
+                SlurSegment* slur2 = toSlurSegment(seg2);
+                // slurs don't collide with themselves
+                if (slur1 == slur2) {
+                    continue;
+                }
+                // slurs which don't overlap don't need to be checked
+                if (slur1->ups(Grip::END).p.x() < slur2->ups(Grip::START).p.x()
+                    || slur2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
+                    || slur1->slur()->up() != slur2->slur()->up()) {
+                    continue;
+                }
+                // START POINT
+                if (compare(slur1->ups(Grip::START).p.x(), slur2->ups(Grip::START).p.x())) {
+                    if (slur1->ups(Grip::END).p.x() > slur2->ups(Grip::END).p.x()) {
+                        // slur1 is the "outside" slur
+                        slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                        slur1->computeBezier();
+                    }
+                }
+                // END POINT
+                if (compare(slur1->ups(Grip::END).p.x(), slur2->ups(Grip::END).p.x())) {
+                    // slurs have the same endpoint
+                    if (slur1->ups(Grip::START).p.x() < slur2->ups(Grip::START).p.x()) {
+                        // slur1 is the "outside" slur
+                        slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                        slur1->computeBezier();
+                    }
+                }
             }
         }
     }
