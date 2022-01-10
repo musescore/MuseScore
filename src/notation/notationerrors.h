@@ -60,8 +60,11 @@ enum class Err {
     // notation
     NoScore = 1030,
 
-    //playback
+    // playback
     UnableToPlaybackElement = 1040,
+
+    // selection
+    EmptySelection = 1050,
 };
 
 inline Ret make_ret(Err err, const io::path& filePath = "")
