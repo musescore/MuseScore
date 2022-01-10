@@ -81,7 +81,9 @@ static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TY
     { Ms::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
     { Ms::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
     { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
-    { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET }
+    { Ms::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
+    { Ms::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
+    { Ms::ElementType::TEXTLINE_SEGMENT, InspectorModelType::TYPE_TEXT_LINE }
 };
 
 static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {

@@ -22,16 +22,30 @@
 #include "linesettingsmodel.h"
 
 #include "dataformatter.h"
-#include "log.h"
-
 #include "types/linetypes.h"
+#include "ui/view/iconcodes.h"
+#include "log.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
 
+using IconCode = mu::ui::IconCode::Code;
+
 LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : AbstractInspectorModel(parent, repository, elementType)
 {
+    setModelType(InspectorModelType::TYPE_TEXT_LINE);
+    setTitle(qtrc("inspector", "Text line"));
+
+    static const QList<HookTypeInfo> endHookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") }
+    };
+
+    setPossibleEndHookTypes(endHookTypes);
+
     createProperties();
 }
 
@@ -49,6 +63,7 @@ void LineSettingsModel::createProperties()
     m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
 
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
+    m_placement->setIsVisible(false);
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_dashLineLength = buildPropertyItem(Ms::Pid::DASH_LINE_LEN);

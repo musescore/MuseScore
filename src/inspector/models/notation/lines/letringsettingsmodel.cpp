@@ -30,6 +30,7 @@ LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositorySe
     setModelType(InspectorModelType::TYPE_LET_RING);
     setTitle(qtrc("inspector", "Let ring"));
     setIcon(ui::IconCode::Code::LET_RING);
+    setPossibleEndHookTypes({});
 
     createProperties();
 }
@@ -38,6 +39,7 @@ void LetRingSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
+    placement()->setIsVisible(true);
     startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
 
