@@ -222,6 +222,8 @@ public:
 
     qreal firstNoteRestSegmentX(bool leading = false);
     qreal lastNoteRestSegmentX(bool trailing = false);
+    ChordRest* lastChordRest(int track);
+    ChordRest* firstChordRest(int track);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     int firstVisibleStaff() const;
