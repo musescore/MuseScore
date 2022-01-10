@@ -130,7 +130,7 @@ void MainWindowProvider::toggleFullScreen()
     }
 }
 
-const QScreen* MainWindowProvider::screen() const
+QScreen* MainWindowProvider::screen() const
 {
     return m_window ? m_window->screen() : nullptr;
 }

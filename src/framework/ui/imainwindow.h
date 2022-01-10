@@ -42,7 +42,7 @@ public:
 
     virtual bool isFullScreen() const = 0;
     virtual void toggleFullScreen() = 0;
-    virtual const QScreen* screen() const = 0;
+    virtual QScreen* screen() const = 0;
 };
 }
 

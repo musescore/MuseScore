@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
+#include "ui/imainwindow.h"
 
 namespace mu::uicomponents {
 class PopupWindow_QQuickView : public IPopupWindow
@@ -35,6 +36,7 @@ class PopupWindow_QQuickView : public IPopupWindow
     Q_OBJECT
 
     INJECT(uicomponents, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(uicomponents, ui::IMainWindow, mainWindow)
 
 public:
     explicit PopupWindow_QQuickView(QObject* parent = nullptr);
