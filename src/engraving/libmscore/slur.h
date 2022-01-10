@@ -52,7 +52,7 @@ public:
     bool edit(EditData&) override;
 
     Slur* slur() const { return toSlur(spanner()); }
-
+    void adjustEndpoints();
     void computeBezier(mu::PointF so = mu::PointF()) override;
 };
 

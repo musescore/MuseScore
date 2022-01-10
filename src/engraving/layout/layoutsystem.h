@@ -46,6 +46,7 @@ private:
     static void hideEmptyStaves(Ms::Score* score, Ms::System* system, bool isFirstSystem);
     static void processLines(Ms::System* system, std::vector<Ms::Spanner*> lines, bool align);
     static void layoutTies(Ms::Chord* ch, Ms::System* system, const Ms::Fraction& stick);
+    static void doLayoutTies(Ms::System* system, std::vector<Ms::Segment*> sl, const Fraction& stick, const Fraction& etick);
 };
 }
 
