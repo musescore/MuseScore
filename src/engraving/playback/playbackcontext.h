@@ -37,9 +37,29 @@ struct PlaybackContext {
     mpe::dynamic_level_t nominalDynamicLevel = 0;
     int nominalPositionTick = 0;
     int nominalDurationTicks = 0;
-    qreal beatsPerSecond = 0;
+    BeatsPerSecond beatsPerSecond = 0;
     mpe::ArticulationMap commonArticulations;
     mpe::ArticulationsProfilePtr profile;
+
+    PlaybackContext() = default;
+
+    explicit PlaybackContext(const mpe::timestamp_t timestamp,
+                             const mpe::duration_t duration,
+                             const mpe::dynamic_level_t dynamicLevel,
+                             const int posTick,
+                             const int durationTicks,
+                             const BeatsPerSecond& bps,
+                             const mpe::ArticulationMap& articulations,
+                             const mpe::ArticulationsProfilePtr profilePtr)
+        : nominalTimestamp(timestamp),
+        nominalDuration(duration),
+        nominalDynamicLevel(dynamicLevel),
+        nominalPositionTick(posTick),
+        nominalDurationTicks(durationTicks),
+        beatsPerSecond(bps),
+        commonArticulations(articulations),
+        profile(profilePtr)
+    {}
 
     bool isValid() const
     {
@@ -59,12 +79,12 @@ struct NominalNoteCtx {
 
     PlaybackContext chordCtx;
 
-    explicit NominalNoteCtx(const Ms::Note* note, PlaybackContext ctx)
+    explicit NominalNoteCtx(const Ms::Note* note, const PlaybackContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(ctx.nominalDuration),
         pitchLevel(notePitchLevel(note->tpc(), note->octave())),
-        chordCtx(std::move(ctx))
+        chordCtx(ctx)
     {}
 };
 
@@ -75,17 +95,17 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.voiceIdx,
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
-                          std::move(ctx.chordCtx.commonArticulations));
+                          ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, PlaybackContext&& ctx)
+inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const PlaybackContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           ctx.nominalDuration,
                           note->voice(),
                           notePitchLevel(note->tpc(), note->octave()),
                           ctx.nominalDynamicLevel,
-                          std::move(ctx.commonArticulations));
+                          ctx.commonArticulations);
 }
 
 inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t eventDuration,
@@ -97,7 +117,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.voiceIdx,
                           ctx.pitchLevel + pitchLevelOffset,
                           ctx.chordCtx.nominalDynamicLevel,
-                          std::move(ctx.chordCtx.commonArticulations));
+                          ctx.chordCtx.commonArticulations);
 }
 }
 

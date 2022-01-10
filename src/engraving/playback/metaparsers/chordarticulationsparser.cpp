@@ -47,24 +47,26 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
         return;
     }
 
-    mpe::ArticulationMetaMap metaMap;
-    parse(chord, ctx, metaMap);
+    parse(chord, ctx, result);
 
-    for (auto&& pair : metaMap) {
+    for (const auto& pair : result) {
         if (isSingleNoteArticulation(pair.first)) {
-            result.emplace(pair.first, ArticulationAppliedData(std::move(pair.second), 0, HUNDRED_PERCENT));
             continue;
         }
 
-        duration_percentage_t occupiedFrom = occupiedPercentage(ctx.nominalTimestamp - pair.second.timestamp, pair.second.overallDuration);
-        duration_percentage_t occupiedTo = occupiedPercentage(ctx.nominalTimestamp + ctx.nominalDuration - pair.second.timestamp,
-                                                              pair.second.overallDuration);
-        result.emplace(pair.first, ArticulationAppliedData(std::move(pair.second), occupiedFrom, occupiedTo));
+        duration_percentage_t occupiedFrom = occupiedPercentage(ctx.nominalTimestamp - pair.second.meta.timestamp,
+                                                                pair.second.meta.overallDuration);
+        duration_percentage_t occupiedTo = occupiedPercentage(ctx.nominalTimestamp + ctx.nominalDuration - pair.second.meta.timestamp,
+                                                              pair.second.meta.overallDuration);
+
+        result.updateOccupiedRange(pair.first, occupiedFrom, occupiedTo);
     }
+
+    result.preCalculateAverageData();
 }
 
 void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                       mpe::ArticulationMetaMap& result)
+                                       mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;
@@ -81,7 +83,7 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Play
 }
 
 void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result)
+                                             mpe::ArticulationMap& result)
 {
     for (const auto& pair : chord->score()->spanner()) {
         const Ms::Spanner* spanner = pair.second;
@@ -101,7 +103,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Playb
 
         PlaybackContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(chord->score(), spannerFrom);
-        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond, spannerDurationTicks);
+        spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;
         spannerContext.nominalDurationTicks = spannerDurationTicks;
 
@@ -110,7 +112,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Playb
 }
 
 void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                                        mpe::ArticulationMetaMap& result)
+                                                        mpe::ArticulationMap& result)
 {
     for (const Ms::Articulation* articulation : chord->articulations()) {
         SymbolsMetaParser::parse(articulation, ctx, result);
@@ -118,7 +120,7 @@ void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, 
 }
 
 void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                                mpe::ArticulationMetaMap& result)
+                                                mpe::ArticulationMap& result)
 {
     for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
         AnnotationsMetaParser::parse(annotation, ctx, result);
@@ -126,7 +128,7 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Pl
 }
 
 void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                            mpe::ArticulationMetaMap& result)
+                                            mpe::ArticulationMap& result)
 {
     const Ms::Tremolo* tremolo = chord->tremolo();
 
@@ -138,7 +140,7 @@ void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const Playba
 }
 
 void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                             mpe::ArticulationMetaMap& result)
+                                             mpe::ArticulationMap& result)
 {
     const Ms::Arpeggio* arpeggio = chord->arpeggio();
 
@@ -154,7 +156,7 @@ void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const Playb
 }
 
 void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx,
-                                               mpe::ArticulationMetaMap& result)
+                                               mpe::ArticulationMap& result)
 {
     for (const Ms::Chord* graceChord : chord->graceNotes()) {
         GraceNotesMetaParser::parse(graceChord, ctx, result);

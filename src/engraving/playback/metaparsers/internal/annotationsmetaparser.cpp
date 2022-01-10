@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 
 void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                    mpe::ArticulationMetaMap& result)
+                                    mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isTextBase() && ctx.isValid()) {
         return;
@@ -54,5 +54,5 @@ void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const Playbac
         return;
     }
 
-    result.insert_or_assign(type, mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration));
+    appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
 }

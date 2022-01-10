@@ -99,6 +99,9 @@ signals:
     void selectedPitchOffsetIndexChanged();
 
 private:
+    PitchPattern::PitchOffsetMap pitchOffsetsMap() const;
+    ExpressionPattern::DynamicOffsetMap dynamicOffsetsMap() const;
+
     void setPitchOffsets(const QList<QPoint>& offsets);
     void setDynamicOffsets(const QList<QPoint>& offsets);
 

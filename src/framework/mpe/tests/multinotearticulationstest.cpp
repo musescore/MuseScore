@@ -102,7 +102,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
 
     ArticulationMeta meta;
     meta.type = ArticulationType::Standard;
-    meta.pattern = std::move(pattern);
+    meta.pattern = pattern;
     meta.timestamp = m_initialData.at(0).nominalTimestamp;
     meta.overallDuration = m_initialData.at(0).nominalDuration;
 
@@ -110,6 +110,7 @@ TEST_F(MultiNoteArticulationsTest, StandardPattern)
 
     ArticulationMap appliedArticulations;
     appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Notes sequence with given parameters being built
     std::map<size_t, NoteEvent> noteEvents;
@@ -191,18 +192,22 @@ TEST_F(MultiNoteArticulationsTest, GlissandoPattern)
     // [GIVEN] Glissando articulation applied on the first note, occupied range is from 0% to 50% of the entire articulation range
     ArticulationAppliedData glissandoAppliedOnTheFirstNote(glissandoMeta, 0, 5 * TEN_PERCENT);
     appliedArticulations[0].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheFirstNote));
+    appliedArticulations[0].preCalculateAverageData();
 
     // [GIVEN] Glissando articulation applied on the second note, occupied range is from 50% to 100% of the entire articulation range
     ArticulationAppliedData glissandoAppliedOnTheSecondNote(glissandoMeta, 50, HUNDRED_PERCENT);
     appliedArticulations[1].emplace(ArticulationType::DiscreteGlissando, std::move(glissandoAppliedOnTheSecondNote));
+    appliedArticulations[1].preCalculateAverageData();
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
     ArticulationAppliedData thirdNoteStandardArticulation(thirdNoteStandardMeta, 0, HUNDRED_PERCENT);
     appliedArticulations[2].emplace(ArticulationType::Standard, std::move(thirdNoteStandardArticulation));
+    appliedArticulations[2].preCalculateAverageData();
 
     // [GIVEN] No articulations applied on the third note, occupied range is from 0% to 100% of the entire articulation range
     ArticulationAppliedData fourthNoteStandardArticulation(fourthNoteStandardMeta, 0, HUNDRED_PERCENT);
     appliedArticulations[3].emplace(ArticulationType::Standard, std::move(fourthNoteStandardArticulation));
+    appliedArticulations[3].preCalculateAverageData();
 
     // [WHEN] Notes sequence with given parameters being built
     std::map<size_t, NoteEvent> noteEvents;
@@ -283,6 +288,7 @@ TEST_F(MultiNoteArticulationsTest, CrescendoPattern)
         // [GIVEN] Crescendo articulation applied on the note
         ArticulationAppliedData crescendoApplied(crescendoMeta, 25 * ONE_PERCENT * i, 25 * ONE_PERCENT * (i + 1));
         appliedArticulations[i].emplace(ArticulationType::Crescendo, std::move(crescendoApplied));
+        appliedArticulations[i].preCalculateAverageData();
     }
 
     // [WHEN] Notes sequence with given parameters being built

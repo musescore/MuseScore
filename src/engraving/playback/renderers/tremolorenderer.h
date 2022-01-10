@@ -31,7 +31,7 @@ class TremoloRenderer : public RenderBase<TremoloRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
                          mpe::PlaybackEventList& result);
 
 private:

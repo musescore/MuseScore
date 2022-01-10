@@ -85,6 +85,7 @@ TEST_F(SingleNoteArticulationsTest, StandardPattern)
 
     ArticulationMap appliedArticulations;
     appliedArticulations.emplace(ArticulationType::Standard, std::move(standardArticulationApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -133,6 +134,7 @@ TEST_F(SingleNoteArticulationsTest, StaccatoPattern)
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Staccato, std::move(staccatoApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -178,6 +180,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern)
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -232,6 +235,7 @@ TEST_F(SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Accent, std::move(accentApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -301,6 +305,7 @@ TEST_F(SingleNoteArticulationsTest, PocoTenuto)
     // [GIVEN] Tenuto articulation applied on the note
     ArticulationAppliedData tenutoApplied(std::move(tenutoMeta), 0, HUNDRED_PERCENT);
     appliedArticulations.emplace(ArticulationType::Tenuto, std::move(tenutoApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -350,6 +355,7 @@ TEST_F(SingleNoteArticulationsTest, QuickFall)
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::QuickFall, std::move(quickFallApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,
@@ -399,6 +405,7 @@ TEST_F(SingleNoteArticulationsTest, Scoop)
 
     ArticulationMap appliedArticulations = {};
     appliedArticulations.emplace(ArticulationType::Scoop, std::move(scoopApplied));
+    appliedArticulations.preCalculateAverageData();
 
     // [WHEN] Note event with given parameters being built
     NoteEvent event(m_nominalTimestamp,

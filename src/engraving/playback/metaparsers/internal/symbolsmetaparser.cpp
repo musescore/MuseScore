@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 
 void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
-                                mpe::ArticulationMetaMap& result)
+                                mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARTICULATION && ctx.isValid()) {
         return;
@@ -352,6 +352,6 @@ void SymbolsMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCon
     }
 
     for (const auto& type : types) {
-        result.insert_or_assign(type, mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration));
+        appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
     }
 }
