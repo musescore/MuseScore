@@ -45,6 +45,8 @@ class PopupView : public QObject, public QQmlParserStatus
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
 
+    Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
+
     //! NOTE Local, related parent
     Q_PROPERTY(qreal x READ localX WRITE setLocalX NOTIFY xChanged)
     Q_PROPERTY(qreal y READ localY WRITE setLocalY NOTIFY yChanged)
@@ -96,6 +98,8 @@ public:
     QQuickItem* parentItem() const;
     QQuickItem* contentItem() const;
 
+    QWindow* window() const;
+
     qreal localX() const;
     qreal localY() const;
     QRect geometry() const;
@@ -107,7 +111,6 @@ public:
     Q_INVOKABLE void toggleOpened();
 
     Q_INVOKABLE void setParentWindow(QWindow* window);
-    Q_INVOKABLE QWindow* window();
 
     ClosePolicy closePolicy() const;
     QObject* navigationParentControl() const;
@@ -150,6 +153,7 @@ public slots:
 signals:
     void parentItemChanged();
     void contentItemChanged();
+    void windowChanged();
     void xChanged(qreal x);
     void yChanged(qreal y);
     void closePolicyChanged(ClosePolicy closePolicy);

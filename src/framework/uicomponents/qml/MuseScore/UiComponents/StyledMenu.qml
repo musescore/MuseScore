@@ -208,7 +208,7 @@ StyledPopupView {
 
                     property string title: modelData.title
 
-                    parentWindow: root.window()
+                    parentWindow: root.window
 
                     navigation.panel: root.navigationPanel
                     navigation.row: model.index
