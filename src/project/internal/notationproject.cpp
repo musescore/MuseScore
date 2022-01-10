@@ -512,6 +512,10 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
         return make_ret(notation::Err::UnknownError);
     }
 
+    if (m_engravingProject->masterScore()->selectionEmpty()) {
+        LOGE() << "failed save, empty selection";
+        return make_ret(notation::Err::EmptySelection);
+    }
     // Check writable
     QFileInfo info(path.toQString());
     if (info.exists() && !info.isWritable()) {
