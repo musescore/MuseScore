@@ -363,6 +363,8 @@ Ret MasterNotationMidiData::playHarmonyMidiData(const Ms::Harmony* harmony) cons
 
 void MasterNotationMidiData::loadEvents(const tick_t fromTick, const tick_t toTick) const
 {
+    TRACEFUNC;
+
     Ms::EventMap msevents = renderMsEvents(fromTick, toTick);
 
     if (msevents.empty()) {

@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result)
+void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::ARPEGGIO && ctx.isValid()) {
         return;
@@ -66,5 +66,5 @@ void ArpeggioMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
     articulationMeta.timestamp = ctx.nominalTimestamp;
     articulationMeta.overallDuration = ctx.nominalDuration;
 
-    result.insert_or_assign(type, std::move(articulationMeta));
+    appendArticulationData(std::move(articulationMeta), result);
 }

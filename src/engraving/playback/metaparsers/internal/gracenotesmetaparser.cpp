@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result)
+void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
         return;
@@ -61,5 +61,5 @@ void GraceNotesMetaParser::doParse(const Ms::EngravingItem* item, const Playback
         return;
     }
 
-    result.insert_or_assign(type, mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration));
+    appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
 }

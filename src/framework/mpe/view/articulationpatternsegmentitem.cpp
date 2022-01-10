@@ -35,21 +35,12 @@ ArticulationPatternSegment ArticulationPatternSegmentItem::patternSegmentData() 
 {
     ArticulationPatternSegment result;
 
-    auto stdMapFromPoints = [](const QList<QPoint>& points) -> std::map<duration_percentage_t, percentage_t> {
-        std::map<duration_percentage_t, percentage_t> result;
-        for (const QPoint& point : points) {
-            result.emplace(point.x(), point.y());
-        }
-
-        return result;
-    };
-
     result.arrangementPattern.durationFactor = durationFactor();
     result.arrangementPattern.timestampOffset = timestampShiftFactor();
 
-    result.pitchPattern.pitchOffsetMap = stdMapFromPoints(pitchOffsets());
+    result.pitchPattern.pitchOffsetMap = pitchOffsetsMap();
 
-    result.expressionPattern.dynamicOffsetMap = stdMapFromPoints(dynamicOffsets());
+    result.expressionPattern.dynamicOffsetMap = dynamicOffsetsMap();
 
     return result;
 }
@@ -58,9 +49,9 @@ void ArticulationPatternSegmentItem::load(const ArticulationPatternSegment& segm
                                           const int scopePositionFrom,
                                           const int scopePositionTo)
 {
-    auto pointsFromStdMap = [](const std::map<duration_percentage_t, percentage_t>& stdMap) -> QList<QPoint> {
+    auto pointsFromMap = [](const SharedMap<duration_percentage_t, percentage_t>& map) -> QList<QPoint> {
         QList<QPoint> result;
-        for (const auto& pair : stdMap) {
+        for (const auto& pair : map) {
             result << QPoint(pair.first, pair.second);
         }
 
@@ -73,9 +64,9 @@ void ArticulationPatternSegmentItem::load(const ArticulationPatternSegment& segm
     setDurationFactor(segment.arrangementPattern.durationFactor);
     setTimestampShiftFactor(segment.arrangementPattern.timestampOffset);
 
-    setPitchOffsets(pointsFromStdMap(segment.pitchPattern.pitchOffsetMap));
+    setPitchOffsets(pointsFromMap(segment.pitchPattern.pitchOffsetMap));
 
-    setDynamicOffsets(pointsFromStdMap(segment.expressionPattern.dynamicOffsetMap));
+    setDynamicOffsets(pointsFromMap(segment.expressionPattern.dynamicOffsetMap));
 }
 
 int ArticulationPatternSegmentItem::durationFactor() const
@@ -233,4 +224,24 @@ void ArticulationPatternSegmentItem::setDynamicOffsets(const QList<QPoint>& offs
 int ArticulationPatternSegmentItem::singlePercentValue() const
 {
     return ONE_PERCENT;
+}
+
+PitchPattern::PitchOffsetMap ArticulationPatternSegmentItem::pitchOffsetsMap() const
+{
+    PitchPattern::PitchOffsetMap result;
+    for (const QPoint& point : m_pitchOffsets) {
+        result.emplace(point.x(), point.y());
+    }
+
+    return result;
+}
+
+ExpressionPattern::DynamicOffsetMap ArticulationPatternSegmentItem::dynamicOffsetsMap() const
+{
+    ExpressionPattern::DynamicOffsetMap result;
+    for (const QPoint& point : m_dynamicOffsets) {
+        result.emplace(point.x(), point.y());
+    }
+
+    return result;
 }

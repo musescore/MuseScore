@@ -38,7 +38,7 @@ const ArticulationTypeSet& ArpeggioRenderer::supportedTypes()
     return types;
 }
 
-void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, PlaybackContext&& context,
+void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
                                 mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
@@ -55,7 +55,7 @@ void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::Articu
 
         NominalNoteCtx noteCtx(note, context);
         noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, noteIdx * percentageStep, (noteIdx + 1) * percentageStep);
-        result.push_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     };
 
     if (isDirectionUp(preferredType)) {

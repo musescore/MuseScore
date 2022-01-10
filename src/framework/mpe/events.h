@@ -74,25 +74,6 @@ struct NoteEvent
                        const voice_layer_idx_t voiceIdx,
                        const pitch_level_t nominalPitchLevel,
                        const dynamic_level_t nominalDynamicLevel,
-                       ArticulationMap&& articulationsApplied)
-    {
-        m_arrangementCtx.nominalDuration = nominalDuration;
-        m_arrangementCtx.nominalTimestamp = nominalTimestamp;
-        m_arrangementCtx.voiceLayerIndex = voiceIdx;
-
-        m_pitchCtx.nominalPitchLevel = nominalPitchLevel;
-
-        m_expressionCtx.articulations = std::move(articulationsApplied);
-        m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
-
-        setUp();
-    }
-
-    explicit NoteEvent(const timestamp_t nominalTimestamp,
-                       const duration_t nominalDuration,
-                       const voice_layer_idx_t voiceIdx,
-                       const pitch_level_t nominalPitchLevel,
-                       const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied)
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
@@ -137,7 +118,7 @@ private:
     {
         m_arrangementCtx.actualTimestamp = m_arrangementCtx.nominalTimestamp;
 
-        if (articulationsApplied.isEmpty()) {
+        if (articulationsApplied.empty()) {
             return;
         }
 
@@ -149,7 +130,7 @@ private:
     {
         m_arrangementCtx.actualDuration = m_arrangementCtx.nominalDuration;
 
-        if (articulationsApplied.isEmpty()) {
+        if (articulationsApplied.empty()) {
             return;
         }
 
@@ -160,9 +141,7 @@ private:
     {
         const PitchPattern::PitchOffsetMap& appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
 
-        for (const auto& pair : appliedOffsetMap) {
-            m_pitchCtx.pitchCurve.emplace(pair.first, pair.second);
-        }
+        m_pitchCtx.pitchCurve = appliedOffsetMap;
     }
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied)
@@ -172,19 +151,26 @@ private:
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
 
+        m_expressionCtx.expressionCurve = appliedOffsetMap;
+
         constexpr dynamic_level_t naturalDynamicLevel = dynamicLevelFromType(DynamicType::Natural);
 
         float dynamicAmplifyFactor = static_cast<float>(articulationDynamicLevel - naturalDynamicLevel) / DYNAMIC_LEVEL_STEP;
+
         dynamic_level_t amplificationDiff = dynamicAmplifyFactor * std::max(articulationsApplied.averageDynamicRange(), DYNAMIC_LEVEL_STEP);
         dynamic_level_t actualDynamicLevel = nominalDynamicLevel + amplificationDiff;
+
+        if (actualDynamicLevel == articulationDynamicLevel) {
+            return;
+        }
 
         float ratio = actualDynamicLevel / static_cast<float>(articulationDynamicLevel);
         if (actualDynamicLevel < articulationDynamicLevel) {
             ratio = 1 / ratio;
         }
 
-        for (const auto& pair : appliedOffsetMap) {
-            m_expressionCtx.expressionCurve.emplace(pair.first, RealRound(pair.second * ratio, 0));
+        for (auto& pair : m_expressionCtx.expressionCurve) {
+            pair.second = RealRound(pair.second * ratio, 0);
         }
     }
 

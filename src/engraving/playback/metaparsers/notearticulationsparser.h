@@ -39,14 +39,14 @@ public:
 protected:
     friend MetaParserBase;
 
-    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result);
 
 private:
     static mpe::ArticulationType articulationTypeByNotehead(const NoteHeadGroup noteheadGroup);
 
-    static void parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
-    static void parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
-    static void parseSpanners(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMetaMap& result);
+    static void parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMap& result);
+    static void parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMap& result);
+    static void parseSpanners(const Ms::Note* note, const PlaybackContext& ctx, mpe::ArticulationMap& result);
 };
 }
 

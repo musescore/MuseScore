@@ -64,18 +64,24 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const mpe:
         return;
     }
 
-    PlaybackContext ctx;
-    ctx.nominalPositionTick = chord->tick().ticks();
-    ctx.nominalDurationTicks = chord->durationTypeTicks().ticks();
-    ctx.beatsPerSecond = chord->score()->tempomap()->tempo(ctx.nominalPositionTick).val;
-    ctx.nominalTimestamp = timestampFromTicks(chord->score(), ctx.nominalPositionTick);
-    ctx.nominalDuration = durationFromTicks(ctx.beatsPerSecond, ctx.nominalDurationTicks);
-    ctx.nominalDynamicLevel = nominalDynamicLevel;
-    ctx.profile = profile;
+    int chordPosTick = chord->tick().ticks();
+    int chordDurationTicks = chord->durationTypeTicks().ticks();
+    BeatsPerSecond bps = chord->score()->tempomap()->tempo(chordPosTick);
+
+    static ArticulationMap articulations;
+
+    PlaybackContext ctx(timestampFromTicks(chord->score(), chordPosTick),
+                        durationFromTicks(bps.val, chordDurationTicks),
+                        nominalDynamicLevel,
+                        chordPosTick,
+                        chordDurationTicks,
+                        bps,
+                        articulations,
+                        profile);
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
-    renderArticulations(chord, std::move(ctx), result);
+    renderArticulations(chord, ctx, result);
 }
 
 void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, mpe::PlaybackEventList& result) const
@@ -94,49 +100,63 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, mpe::Playbac
     result.push_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
 }
 
-void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, PlaybackContext&& ctx, mpe::PlaybackEventList& result) const
+void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const
 {
-    TRACEFUNC;
+    if (renderChordArticulations(chord, ctx, result)) {
+        return;
+    }
 
-    for (const auto& pair : ctx.commonArticulations.data()) {
+    renderNoteArticulations(chord, ctx, result);
+}
+
+bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, const PlaybackContext& ctx,
+                                                      mpe::PlaybackEventList& result) const
+{
+    for (const auto& pair : ctx.commonArticulations) {
         const ArticulationType type = pair.first;
 
         if (OrnamentsRenderer::isAbleToRender(type)) {
-            OrnamentsRenderer::render(chord, type, std::move(ctx), result);
-            return;
+            OrnamentsRenderer::render(chord, type, ctx, result);
+            return true;
         }
 
         if (TremoloRenderer::isAbleToRender(type)) {
-            TremoloRenderer::render(chord, type, std::move(ctx), result);
-            return;
+            TremoloRenderer::render(chord, type, ctx, result);
+            return true;
         }
 
         if (ArpeggioRenderer::isAbleToRender(type)) {
-            ArpeggioRenderer::render(chord, type, std::move(ctx), result);
-            return;
+            ArpeggioRenderer::render(chord, type, ctx, result);
+            return true;
         }
 
         if (GraceNotesRenderer::isAbleToRender(type)) {
-            GraceNotesRenderer::render(chord, type, std::move(ctx), result);
-            return;
+            GraceNotesRenderer::render(chord, type, ctx, result);
+            return true;
         }
     }
 
+    return false;
+}
+
+void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, const PlaybackContext& ctx,
+                                                     mpe::PlaybackEventList& result) const
+{
     for (const Ms::Note* note : chord->notes()) {
         NominalNoteCtx noteCtx(note, ctx);
 
         NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::DiscreteGlissando)) {
-            GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, std::move(noteCtx.chordCtx), result);
+            GlissandosRenderer::render(note, ArticulationType::DiscreteGlissando, noteCtx.chordCtx, result);
             continue;
         }
 
         if (noteCtx.chordCtx.commonArticulations.contains(ArticulationType::ContinuousGlissando)) {
-            GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, std::move(noteCtx.chordCtx), result);
+            GlissandosRenderer::render(note, ArticulationType::ContinuousGlissando, noteCtx.chordCtx, result);
             continue;
         }
 
-        result.push_back(buildNoteEvent(std::move(noteCtx)));
+        result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
 }
