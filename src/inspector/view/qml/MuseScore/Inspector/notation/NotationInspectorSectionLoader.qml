@@ -100,7 +100,8 @@ Loader {
             case Inspector.TYPE_OTTAVA:
             case Inspector.TYPE_PALM_MUTE:
             case Inspector.TYPE_LET_RING:
-            case Inspector.TYPE_VOLTA: return lineComp
+            case Inspector.TYPE_VOLTA:
+            case Inspector.TYPE_TEXT_LINE: return lineComp
             case Inspector.TYPE_STAFF_TYPE_CHANGES: return staffTypeComp
             case Inspector.TYPE_TEXT_FRAME: return textFrameComp
             case Inspector.TYPE_VERTICAL_FRAME: return verticalFrameComp

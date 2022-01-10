@@ -123,6 +123,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new PalmMuteSettingsModel(parent, repository);
     case InspectorModelType::TYPE_LET_RING:
         return new LetRingSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_TEXT_LINE:
+        return new LineSettingsModel(parent, repository);
     case InspectorModelType::TYPE_VIBRATO:
         return new VibratoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:

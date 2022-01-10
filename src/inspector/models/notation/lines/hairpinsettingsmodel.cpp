@@ -61,6 +61,8 @@ void HairpinSettingsModel::createProperties()
     m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
     m_height = buildPropertyItem(Ms::Pid::HAIRPIN_HEIGHT);
     m_continiousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
+
+    placement()->setIsVisible(true);
 }
 
 void HairpinSettingsModel::loadProperties()
