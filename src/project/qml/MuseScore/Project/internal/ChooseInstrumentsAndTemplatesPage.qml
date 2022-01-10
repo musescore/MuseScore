@@ -49,6 +49,8 @@ Item {
         return false
     }
 
+    signal done
+
     function result() {
         var result = {}
 
@@ -150,6 +152,10 @@ Item {
         ChooseTemplatePage {
             id: templatePage
             navigationSection: root.navigationSection
+
+            onDone: {
+                root.done()
+            }
         }
     }
 }

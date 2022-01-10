@@ -36,6 +36,8 @@ Item {
 
     signal titleClicked(var index)
 
+    signal doubleClicked(var index)
+
     QtObject {
         id: prv
 
@@ -119,6 +121,11 @@ Item {
             onClicked: {
                 view.currentIndex = model.index
                 root.titleClicked(model.index)
+            }
+
+            onDoubleClicked: {
+                view.currentIndex = model.index
+                root.doubleClicked(model.index)
             }
         }
     }

@@ -39,6 +39,25 @@ StyledDialogView {
 
     objectName: "NewScoreDialog"
 
+    function onDone() {
+        var result = {}
+
+        var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
+        for (var key in instrumentsAndTemplatePageResult) {
+            result[key] = instrumentsAndTemplatePageResult[key]
+        }
+
+        var scoreInfoPageResult = scoreInfoPage.result()
+        for (key in scoreInfoPageResult) {
+            result[key] = scoreInfoPageResult[key]
+        }
+
+        if (newScoreModel.createScore(result)) {
+            root.isDoActiveParentOnClose = false
+            root.accept()
+        }
+    }
+
     NewScoreModel {
         id: newScoreModel
     }
@@ -68,6 +87,10 @@ StyledDialogView {
 
             Component.onCompleted: {
                 preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
+            }
+
+            onDone: {
+                root.onDone()
             }
         }
 
@@ -192,22 +215,7 @@ StyledDialogView {
             text: qsTrc("project", "Done")
 
             onClicked: {
-                var result = {}
-
-                var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
-                for (var key in instrumentsAndTemplatePageResult) {
-                    result[key] = instrumentsAndTemplatePageResult[key]
-                }
-
-                var scoreInfoPageResult = scoreInfoPage.result()
-                for (key in scoreInfoPageResult) {
-                    result[key] = scoreInfoPageResult[key]
-                }
-
-                if (newScoreModel.createScore(result)) {
-                    root.isDoActiveParentOnClose = false
-                    root.accept()
-                }
+                root.onDone()
             }
         }
     }
