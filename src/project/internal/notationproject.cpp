@@ -522,12 +522,9 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     // Write project
     std::string suffix = io::suffix(info.fileName());
     MscWriter::Params params;
-    QString org_path = m_engravingProject->path();
-    m_engravingProject->setPath(path.toQString());
-    params.filePath = m_engravingProject->path();
+    params.filePath = path.toQString();
     params.mode = mcsIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
-        m_engravingProject->setPath(org_path);
         return make_ret(Ret::Code::InternalError);
     }
 
@@ -539,7 +536,6 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
                               QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
     }
     LOGI() << "success save file: " << info.filePath();
-    m_engravingProject->setPath(org_path);
     return ret;
 }
 
