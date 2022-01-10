@@ -62,6 +62,8 @@ void HairpinSettingsModel::createProperties()
     m_height = buildPropertyItem(Ms::Pid::HAIRPIN_HEIGHT);
     m_continiousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
 
+    isLineVisible()->setIsVisible(false);
+    allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(true);
 }
 

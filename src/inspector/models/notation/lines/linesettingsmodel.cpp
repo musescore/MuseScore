@@ -56,25 +56,28 @@ void LineSettingsModel::createProperties()
         onUpdateLinePropertiesAvailability();
     };
 
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
     m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
+    m_isLineVisible->setIsVisible(false);
+
+    m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
+    m_allowDiagonal->setIsVisible(false);
+
+    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
 
     m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
     m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
-
-    m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
-    m_placement->setIsVisible(false);
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_dashLineLength = buildPropertyItem(Ms::Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
 
-    m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
-
     m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         onPropertyValueChanged(Ms::Pid::BEGIN_HOOK_HEIGHT, newValue);
     });
+
+    m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
+    m_placement->setIsVisible(false);
 
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
@@ -108,19 +111,20 @@ void LineSettingsModel::loadProperties()
         return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
+    loadPropertyItem(m_isLineVisible);
+    loadPropertyItem(m_allowDiagonal);
+
     loadPropertyItem(m_lineStyle);
-    loadPropertyItem(m_placement);
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
     loadPropertyItem(m_dashLineLength, formatDoubleFunc);
     loadPropertyItem(m_dashGapLength, formatDoubleFunc);
 
-    loadPropertyItem(m_isLineVisible);
-    loadPropertyItem(m_allowDiagonal);
-
     loadPropertyItem(m_startHookType);
     loadPropertyItem(m_endHookType);
     loadPropertyItem(m_hookHeight);
+
+    loadPropertyItem(m_placement);
 
     loadPropertyItem(m_beginingText);
     loadPropertyItem(m_beginingTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
@@ -143,16 +147,16 @@ void LineSettingsModel::loadProperties()
 void LineSettingsModel::resetProperties()
 {
     QList<PropertyItem*> allProperties {
+        m_isLineVisible,
+        m_allowDiagonal,
         m_lineStyle,
-        m_placement,
         m_thickness,
         m_dashLineLength,
         m_dashGapLength,
-        m_isLineVisible,
-        m_allowDiagonal,
         m_startHookType,
         m_endHookType,
         m_hookHeight,
+        m_placement,
         m_beginingText,
         m_beginingTextVerticalOffset,
         m_continiousText,
@@ -168,14 +172,24 @@ void LineSettingsModel::resetProperties()
     }
 }
 
-PropertyItem* LineSettingsModel::thickness() const
+PropertyItem* LineSettingsModel::isLineVisible() const
 {
-    return m_thickness;
+    return m_isLineVisible;
+}
+
+PropertyItem* LineSettingsModel::allowDiagonal() const
+{
+    return m_allowDiagonal;
 }
 
 PropertyItem* LineSettingsModel::lineStyle() const
 {
     return m_lineStyle;
+}
+
+PropertyItem* LineSettingsModel::thickness() const
+{
+    return m_thickness;
 }
 
 PropertyItem* LineSettingsModel::dashLineLength() const
@@ -186,21 +200,6 @@ PropertyItem* LineSettingsModel::dashLineLength() const
 PropertyItem* LineSettingsModel::dashGapLength() const
 {
     return m_dashGapLength;
-}
-
-PropertyItem* LineSettingsModel::placement() const
-{
-    return m_placement;
-}
-
-PropertyItem* LineSettingsModel::isLineVisible() const
-{
-    return m_isLineVisible;
-}
-
-PropertyItem* LineSettingsModel::allowDiagonal() const
-{
-    return m_allowDiagonal;
 }
 
 PropertyItem* LineSettingsModel::startHookType() const
@@ -216,6 +215,11 @@ PropertyItem* LineSettingsModel::endHookType() const
 PropertyItem* LineSettingsModel::hookHeight() const
 {
     return m_hookHeight;
+}
+
+PropertyItem* LineSettingsModel::placement() const
+{
+    return m_placement;
 }
 
 PropertyItem* LineSettingsModel::beginingText() const

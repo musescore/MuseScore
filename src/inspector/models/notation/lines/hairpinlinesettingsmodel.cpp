@@ -52,6 +52,7 @@ void HairpinLineSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
+    isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(false);
     placement()->setIsVisible(true);
 }

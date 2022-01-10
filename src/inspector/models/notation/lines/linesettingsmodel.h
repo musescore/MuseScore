@@ -31,19 +31,20 @@ class LineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
+
     Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
     Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
-    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
-
     Q_PROPERTY(PropertyItem * startHookType READ startHookType CONSTANT)
     Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
     Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
+
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
     Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
@@ -58,19 +59,20 @@ public:
     explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository,
                                Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
 
+    PropertyItem* isLineVisible() const;
+    PropertyItem* allowDiagonal() const;
+
     PropertyItem* lineStyle() const;
-    PropertyItem* placement() const;
 
     PropertyItem* thickness() const;
     PropertyItem* dashLineLength() const;
     PropertyItem* dashGapLength() const;
 
-    PropertyItem* isLineVisible() const;
-    PropertyItem* allowDiagonal() const;
-
     PropertyItem* startHookType() const;
     PropertyItem* endHookType() const;
     PropertyItem* hookHeight() const;
+
+    PropertyItem* placement() const;
 
     PropertyItem* beginingText() const;
     PropertyItem* beginingTextVerticalOffset() const;

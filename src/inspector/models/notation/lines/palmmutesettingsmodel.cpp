@@ -38,6 +38,8 @@ void PalmMuteSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(true);
     startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
