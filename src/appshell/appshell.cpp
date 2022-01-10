@@ -82,6 +82,7 @@ int AppShell::run(int argc, char** argv)
 #endif
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");
@@ -159,6 +160,8 @@ int AppShell::run(int argc, char** argv)
             }, Qt::QueuedConnection);
     } break;
     case framework::IApplication::RunMode::Editor: {
+        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
         // ====================================================
         // Setup Qml Engine
         // ====================================================
