@@ -88,6 +88,10 @@ void OttavaSettingsModel::createProperties()
 
     m_ottavaType = buildPropertyItem(Ms::Pid::OTTAVA_TYPE);
     m_showNumbersOnly = buildPropertyItem(Ms::Pid::NUMBERS_ONLY);
+
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
+    placement()->setIsVisible(false);
 }
 
 void OttavaSettingsModel::loadProperties()

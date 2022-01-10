@@ -57,6 +57,10 @@ void VoltaSettingsModel::createProperties()
     LineSettingsModel::createProperties();
 
     m_repeatCount = buildPropertyItem(Ms::Pid::VOLTA_ENDING);
+
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
+    placement()->setIsVisible(false);
 }
 
 void VoltaSettingsModel::loadProperties()
