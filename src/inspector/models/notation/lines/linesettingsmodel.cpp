@@ -78,33 +78,23 @@ void LineSettingsModel::createProperties()
 
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
-        m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
-        });
 
         m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(m_beginingTextVerticalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContiniousText)) {
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
-        m_continiousTextHorizontalOffset
-            = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
-        });
 
         m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid,
                                                                                                  const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(pid, QPointF(m_continiousTextVerticalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(EndText)) {
         m_endText = buildPropertyItem(Ms::Pid::END_TEXT);
-        m_endTextHorizontalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
-            onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_endTextHorizontalOffset->value().toDouble()));
-        });
 
         m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
             onPropertyValueChanged(pid, QPointF(m_endTextVerticalOffset->value().toDouble(), newValue.toDouble()));
@@ -133,25 +123,16 @@ void LineSettingsModel::loadProperties()
     loadPropertyItem(m_hookHeight);
 
     loadPropertyItem(m_beginingText);
-    loadPropertyItem(m_beginingTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
     loadPropertyItem(m_beginingTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     loadPropertyItem(m_continiousText);
-    loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
     loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
 
     loadPropertyItem(m_endText);
-    loadPropertyItem(m_endTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().x());
-    });
     loadPropertyItem(m_endTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<QPointF>().y());
     });
@@ -173,13 +154,10 @@ void LineSettingsModel::resetProperties()
         m_endHookType,
         m_hookHeight,
         m_beginingText,
-        m_beginingTextHorizontalOffset,
         m_beginingTextVerticalOffset,
         m_continiousText,
-        m_continiousTextHorizontalOffset,
         m_continiousTextVerticalOffset,
         m_endText,
-        m_endTextHorizontalOffset,
         m_endTextVerticalOffset
     };
 
@@ -245,11 +223,6 @@ PropertyItem* LineSettingsModel::beginingText() const
     return m_beginingText;
 }
 
-PropertyItem* LineSettingsModel::beginingTextHorizontalOffset() const
-{
-    return m_beginingTextHorizontalOffset;
-}
-
 PropertyItem* LineSettingsModel::beginingTextVerticalOffset() const
 {
     return m_beginingTextVerticalOffset;
@@ -260,11 +233,6 @@ PropertyItem* LineSettingsModel::continiousText() const
     return m_continiousText;
 }
 
-PropertyItem* LineSettingsModel::continiousTextHorizontalOffset() const
-{
-    return m_continiousTextHorizontalOffset;
-}
-
 PropertyItem* LineSettingsModel::continiousTextVerticalOffset() const
 {
     return m_continiousTextVerticalOffset;
@@ -273,11 +241,6 @@ PropertyItem* LineSettingsModel::continiousTextVerticalOffset() const
 PropertyItem* LineSettingsModel::endText() const
 {
     return m_endText;
-}
-
-PropertyItem* LineSettingsModel::endTextHorizontalOffset() const
-{
-    return m_endTextHorizontalOffset;
 }
 
 PropertyItem* LineSettingsModel::endTextVerticalOffset() const

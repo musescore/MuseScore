@@ -58,7 +58,6 @@ FocusableItem {
 
         OffsetSection {
             id: beginningTextOffsetSection
-            horizontalOffset: root.model ? root.model.beginingTextHorizontalOffset : null
             verticalOffset: root.model ? root.model.beginingTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
@@ -78,7 +77,6 @@ FocusableItem {
 
         OffsetSection {
             id: continiousTextOffsetSection
-            horizontalOffset: root.model ? root.model.continiousTextHorizontalOffset : null
             verticalOffset: root.model ? root.model.continiousTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel
@@ -100,7 +98,6 @@ FocusableItem {
         OffsetSection {
             id: endTextOffsetSection
 
-            horizontalOffset: root.model ? root.model.endTextHorizontalOffset : null
             verticalOffset: root.model ? root.model.endTextVerticalOffset : null
 
             navigationPanel: root.navigationPanel

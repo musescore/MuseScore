@@ -88,10 +88,6 @@ void OttavaSettingsModel::createProperties()
 
     m_ottavaType = buildPropertyItem(Ms::Pid::OTTAVA_TYPE);
     m_showNumbersOnly = buildPropertyItem(Ms::Pid::NUMBERS_ONLY);
-
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
-    endTextHorizontalOffset()->setIsVisible(false);
 }
 
 void OttavaSettingsModel::loadProperties()
