@@ -62,6 +62,11 @@ Palette::~Palette()
             c->setParent(nullptr);
         }
     }
+
+    std::vector<PaletteCellPtr> cells = m_cells;
+    Palette* pal = this;
+
+    int k = -1;
 }
 
 QString Palette::id() const
@@ -143,19 +148,17 @@ PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::Actio
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
 {
-    if (idx > m_cells.size()) {
-        return false;
-    }
-
-    m_cells.insert(m_cells.begin() + idx, cell);
-
-    return true;
+    return insertCells(idx, { cell });
 }
 
 bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 {
     if (idx > m_cells.size()) {
         return false;
+    }
+
+    for (PaletteCellPtr& c : cells) {
+        c->setParent(this);
     }
 
     m_cells.insert(m_cells.begin() + idx, std::make_move_iterator(cells.begin()),
@@ -166,11 +169,8 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 
 PaletteCellPtr Palette::takeCell(size_t idx)
 {
-    if (idx >= m_cells.size()) {
-        return nullptr;
-    }
-
-    return *m_cells.erase(m_cells.begin() + idx);
+    std::vector<PaletteCellPtr> cells = takeCells(idx, 1);
+    return !cells.empty() ? cells.front() : nullptr;
 }
 
 std::vector<PaletteCellPtr> Palette::takeCells(size_t idx, size_t count)
@@ -187,6 +187,10 @@ std::vector<PaletteCellPtr> Palette::takeCells(size_t idx, size_t count)
 
     removedCells.insert(removedCells.end(), std::make_move_iterator(removeBegin), std::make_move_iterator(removeEnd));
     m_cells.erase(removeBegin, removeEnd);
+
+    for (PaletteCellPtr& c : removedCells) {
+        c->setParent(nullptr);
+    }
 
     return removedCells;
 }
