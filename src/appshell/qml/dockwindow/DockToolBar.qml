@@ -39,6 +39,21 @@ DockToolBarView {
 
     readonly property bool isVertical: orientation === Qt.Vertical
 
+    onFloatingChanged: {
+        if (!floating) {
+            //! NOTE: The dock widgets system determines the position of a toolbar
+            //  when inserting the toolbar into the app window.
+            //  It may be that the grip button can be moved to a different
+            //  location from where a user wanted to place it.
+            //  Because of this, the mouse area does not emit a signal
+            //  that the user has moved the mouse outside the grip button.
+            //  Therefore, the hover state of the grip button is not reset.
+            //  The hack is to hide and show the grip button to reset the hover state.
+            gripButton.visible = false
+            gripButton.visible = true
+        }
+    }
+
     minimumWidth: Math.min(contentWidth, maximumWidth)
     minimumHeight: Math.min(contentHeight, maximumHeight)
 
