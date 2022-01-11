@@ -26,9 +26,10 @@
 #include "../libmscore/rootitem.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
-#include "notation/notationtypes.h"
 
 namespace mu::engraving {
+using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
+
 class AccessibleRoot : public AccessibleItem
 {
     INJECT(engraving, context::IUiContextResolver, uicontextResolver)
@@ -38,7 +39,7 @@ public:
     void setFocusedElement(AccessibleItem* e);
     AccessibleItem* focusedElement() const;
 
-    void setMapToScreenFunc(const notation::AccessibleMapToScreenFunc& func);
+    void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
 
     const accessibility::IAccessible* accessibleParent() const override;
@@ -48,7 +49,7 @@ public:
 private:
     AccessibleItem* m_focusedElement = nullptr;
 
-    notation::AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
+    AccessibleMapToScreenFunc m_accessibleMapToScreenFunc;
 };
 }
 

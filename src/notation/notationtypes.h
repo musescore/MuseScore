@@ -140,8 +140,6 @@ using ScoreOrderList = QList<ScoreOrder>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
 
-using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
-
 static const QString COMMON_GENRE_ID("common");
 
 enum class DragMode
