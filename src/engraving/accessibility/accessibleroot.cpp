@@ -49,14 +49,6 @@ void AccessibleRoot::setFocusedElement(AccessibleItem* e)
 
 AccessibleItem* AccessibleRoot::focusedElement() const
 {
-    if (!m_focusedElement) {
-        return nullptr;
-    }
-
-    if (uicontextResolver()->currentUiContext() != mu::context::UiCtxNotationFocused) {
-        return nullptr;
-    }
-
     return m_focusedElement;
 }
 

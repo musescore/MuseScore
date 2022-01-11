@@ -24,15 +24,12 @@
 
 #include "accessibleitem.h"
 #include "../libmscore/rootitem.h"
-#include "modularity/ioc.h"
-#include "context/iuicontextresolver.h"
 
 namespace mu::engraving {
 using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
 
 class AccessibleRoot : public AccessibleItem
 {
-    INJECT(engraving, context::IUiContextResolver, uicontextResolver)
 public:
     AccessibleRoot(RootItem* e);
 
