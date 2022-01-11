@@ -33,7 +33,7 @@ using IconCode = mu::ui::IconCode::Code;
 static constexpr int HOOK_STAR = static_cast<int>(Ms::HookType::HOOK_90T) + 1;
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(qtrc("inspector", "Pedal"));
@@ -87,7 +87,7 @@ void PedalSettingsModel::setPedalSymbolVisible(bool visible)
 
 void PedalSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     connect(beginingText(), &PropertyItem::isModifiedChanged, this, [this]() {
         emit pedalSymbolVisibleChanged();
@@ -108,7 +108,7 @@ void PedalSettingsModel::createProperties()
 
 void PedalSettingsModel::loadProperties()
 {
-    LineSettingsModel::loadProperties();
+    TextLineSettingsModel::loadProperties();
 
     m_lineType->setIsEnabled(true);
 

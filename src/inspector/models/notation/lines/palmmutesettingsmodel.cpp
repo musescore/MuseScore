@@ -24,7 +24,7 @@
 using namespace mu::inspector;
 
 PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE)
 {
     setModelType(InspectorModelType::TYPE_PALM_MUTE);
     setTitle(qtrc("inspector", "Palm mute"));
@@ -36,7 +36,7 @@ PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepository
 
 void PalmMuteSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(true);
