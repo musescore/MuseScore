@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_PEDALSSETTINGSMODEL_H
 #define MU_INSPECTOR_PEDALSSETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class PedalSettingsModel : public LineSettingsModel
+class PedalSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

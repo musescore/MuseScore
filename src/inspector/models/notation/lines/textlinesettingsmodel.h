@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_LINESETTINGSMODEL_H
-#define MU_INSPECTOR_LINESETTINGSMODEL_H
+#ifndef MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
+#define MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
 #include "ui/view/iconcodes.h"
 
 namespace mu::inspector {
-class LineSettingsModel : public AbstractInspectorModel
+class TextLineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
@@ -56,8 +56,8 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
-    explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                               Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
+    explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
+                                   Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
 
     PropertyItem* isLineVisible() const;
     PropertyItem* allowDiagonal() const;
@@ -150,4 +150,4 @@ private:
 };
 }
 
-#endif // MU_INSPECTOR_LINESETTINGSMODEL_H
+#endif // MU_INSPECTOR_TEXTLINESETTINGSMODEL_H

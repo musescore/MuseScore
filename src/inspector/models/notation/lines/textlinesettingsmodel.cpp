@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 #include "dataformatter.h"
 #include "types/linetypes.h"
@@ -31,7 +31,7 @@ using namespace mu::engraving;
 
 using IconCode = mu::ui::IconCode::Code;
 
-LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
+TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : AbstractInspectorModel(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
@@ -49,7 +49,7 @@ LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService*
     createProperties();
 }
 
-void LineSettingsModel::createProperties()
+void TextLineSettingsModel::createProperties()
 {
     auto applyPropertyValueAndUpdateAvailability = [this](const Ms::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
@@ -105,7 +105,7 @@ void LineSettingsModel::createProperties()
     }
 }
 
-void LineSettingsModel::loadProperties()
+void TextLineSettingsModel::loadProperties()
 {
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.toDouble());
@@ -144,7 +144,7 @@ void LineSettingsModel::loadProperties()
     onUpdateLinePropertiesAvailability();
 }
 
-void LineSettingsModel::resetProperties()
+void TextLineSettingsModel::resetProperties()
 {
     QList<PropertyItem*> allProperties {
         m_isLineVisible,
@@ -172,97 +172,97 @@ void LineSettingsModel::resetProperties()
     }
 }
 
-PropertyItem* LineSettingsModel::isLineVisible() const
+PropertyItem* TextLineSettingsModel::isLineVisible() const
 {
     return m_isLineVisible;
 }
 
-PropertyItem* LineSettingsModel::allowDiagonal() const
+PropertyItem* TextLineSettingsModel::allowDiagonal() const
 {
     return m_allowDiagonal;
 }
 
-PropertyItem* LineSettingsModel::lineStyle() const
+PropertyItem* TextLineSettingsModel::lineStyle() const
 {
     return m_lineStyle;
 }
 
-PropertyItem* LineSettingsModel::thickness() const
+PropertyItem* TextLineSettingsModel::thickness() const
 {
     return m_thickness;
 }
 
-PropertyItem* LineSettingsModel::dashLineLength() const
+PropertyItem* TextLineSettingsModel::dashLineLength() const
 {
     return m_dashLineLength;
 }
 
-PropertyItem* LineSettingsModel::dashGapLength() const
+PropertyItem* TextLineSettingsModel::dashGapLength() const
 {
     return m_dashGapLength;
 }
 
-PropertyItem* LineSettingsModel::startHookType() const
+PropertyItem* TextLineSettingsModel::startHookType() const
 {
     return m_startHookType;
 }
 
-PropertyItem* LineSettingsModel::endHookType() const
+PropertyItem* TextLineSettingsModel::endHookType() const
 {
     return m_endHookType;
 }
 
-PropertyItem* LineSettingsModel::hookHeight() const
+PropertyItem* TextLineSettingsModel::hookHeight() const
 {
     return m_hookHeight;
 }
 
-PropertyItem* LineSettingsModel::placement() const
+PropertyItem* TextLineSettingsModel::placement() const
 {
     return m_placement;
 }
 
-PropertyItem* LineSettingsModel::beginingText() const
+PropertyItem* TextLineSettingsModel::beginingText() const
 {
     return m_beginingText;
 }
 
-PropertyItem* LineSettingsModel::beginingTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::beginingTextVerticalOffset() const
 {
     return m_beginingTextVerticalOffset;
 }
 
-PropertyItem* LineSettingsModel::continiousText() const
+PropertyItem* TextLineSettingsModel::continiousText() const
 {
     return m_continiousText;
 }
 
-PropertyItem* LineSettingsModel::continiousTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::continiousTextVerticalOffset() const
 {
     return m_continiousTextVerticalOffset;
 }
 
-PropertyItem* LineSettingsModel::endText() const
+PropertyItem* TextLineSettingsModel::endText() const
 {
     return m_endText;
 }
 
-PropertyItem* LineSettingsModel::endTextVerticalOffset() const
+PropertyItem* TextLineSettingsModel::endTextVerticalOffset() const
 {
     return m_endTextVerticalOffset;
 }
 
-QVariantList LineSettingsModel::possibleStartHookTypes() const
+QVariantList TextLineSettingsModel::possibleStartHookTypes() const
 {
     return m_possibleStartHookTypes;
 }
 
-QVariantList LineSettingsModel::possibleEndHookTypes() const
+QVariantList TextLineSettingsModel::possibleEndHookTypes() const
 {
     return m_possibleEndHookTypes;
 }
 
-QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types) const
+QVariantList TextLineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types) const
 {
     QVariantList result;
 
@@ -278,7 +278,7 @@ QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& ty
     return result;
 }
 
-void LineSettingsModel::onUpdateLinePropertiesAvailability()
+void TextLineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     auto hasHook = [](const PropertyItem* item) {
         return static_cast<HookType>(item->value().toInt()) != HookType::NONE;
@@ -301,18 +301,18 @@ void LineSettingsModel::onUpdateLinePropertiesAvailability()
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
 }
 
-bool LineSettingsModel::isTextVisible(TextType type) const
+bool TextLineSettingsModel::isTextVisible(TextType type) const
 {
     //! NOTE: the end text is hidden for most lines by default
     return type != TextType::EndText;
 }
 
-void LineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
+void TextLineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
 {
     m_possibleStartHookTypes = hookTypesToObjList(types);
 }
 
-void LineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& types)
+void TextLineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& types)
 {
     m_possibleEndHookTypes = hookTypesToObjList(types);
 }

@@ -33,7 +33,7 @@ using namespace mu::inspector;
 using IconCode = mu::ui::IconCode::Code;
 
 HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
-    : LineSettingsModel(parent, repository)
+    : TextLineSettingsModel(parent, repository)
 {
     if (lineType == Diminuendo) {
         setModelType(InspectorModelType::TYPE_DIMINUENDO);
@@ -50,7 +50,7 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
 
 void HairpinLineSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(false);

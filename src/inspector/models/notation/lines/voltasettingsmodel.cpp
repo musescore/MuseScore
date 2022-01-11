@@ -31,7 +31,7 @@ using namespace mu::inspector;
 using IconCode = mu::ui::IconCode::Code;
 
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(qtrc("inspector", "Volta"));
@@ -54,7 +54,7 @@ PropertyItem* VoltaSettingsModel::repeatCount() const
 
 void VoltaSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     m_repeatCount = buildPropertyItem(Ms::Pid::VOLTA_ENDING);
 
@@ -65,14 +65,14 @@ void VoltaSettingsModel::createProperties()
 
 void VoltaSettingsModel::loadProperties()
 {
-    LineSettingsModel::loadProperties();
+    TextLineSettingsModel::loadProperties();
 
     loadPropertyItem(m_repeatCount);
 }
 
 void VoltaSettingsModel::resetProperties()
 {
-    LineSettingsModel::resetProperties();
+    TextLineSettingsModel::resetProperties();
 
     m_repeatCount->resetToDefault();
 }

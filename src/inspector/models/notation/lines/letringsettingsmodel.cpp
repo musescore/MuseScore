@@ -25,7 +25,7 @@
 using namespace mu::inspector;
 
 LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::LET_RING)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::LET_RING)
 {
     setModelType(InspectorModelType::TYPE_LET_RING);
     setTitle(qtrc("inspector", "Let ring"));
@@ -37,7 +37,7 @@ LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositorySe
 
 void LetRingSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(true);
