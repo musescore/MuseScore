@@ -380,6 +380,11 @@
     <ctx>notation-focused</ctx>
     </SC>
   <SC>
+    <key>top-staff</key>
+    <seq></seq>
+    <ctx>notation-focused</ctx>
+    </SC>
+  <SC>
     <key>first-element</key>
     <seq>Ctrl+Home</seq>
     <ctx>notation-focused</ctx>
