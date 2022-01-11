@@ -91,7 +91,7 @@ enum class PlayEventType : char;
 class Excerpt;
 class EditData;
 
-#define UNDO_NAME(a)  virtual const char* name() const override { return a; }
+#define UNDO_NAME(a) const char* name() const override { return a; }
 
 //---------------------------------------------------------
 //   UndoCommand
@@ -143,6 +143,7 @@ public:
 
 class UndoMacro : public UndoCommand
 {
+public:
     struct SelectionInfo {
         std::vector<EngravingItem*> elements;
         Fraction tickStart;
@@ -153,26 +154,26 @@ class UndoMacro : public UndoCommand
         bool isValid() const { return !elements.empty() || staffStart != -1; }
     };
 
-    InputState undoInputState;
-    InputState redoInputState;
-    SelectionInfo undoSelectionInfo;
-    SelectionInfo redoSelectionInfo;
-
-    Score* score;
-
-    static void fillSelectionInfo(SelectionInfo&, const Selection&);
-    static void applySelectionInfo(const SelectionInfo&, Selection&);
-
-public:
     UndoMacro(Score* s);
-    virtual void undo(EditData*) override;
-    virtual void redo(EditData*) override;
-    bool empty() const { return childCount() == 0; }
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    bool empty() const;
     void append(UndoMacro&& other);
 
     static bool canRecordSelectedElement(const EngravingItem* e);
 
     UNDO_NAME("UndoMacro");
+
+private:
+    InputState m_undoInputState;
+    InputState m_redoInputState;
+    SelectionInfo m_undoSelectionInfo;
+    SelectionInfo m_redoSelectionInfo;
+
+    Score* m_score = nullptr;
+
+    static void fillSelectionInfo(SelectionInfo&, const Selection&);
+    static void applySelectionInfo(const SelectionInfo&, Selection&);
 };
 
 //---------------------------------------------------------
