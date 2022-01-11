@@ -198,19 +198,21 @@ void NotationPaintView::onCurrentNotationChanged()
         m_notation->setViewMode(globalContext()->currentProject()->viewSettings()->notationViewMode());
     }
 
-    m_notation->notationChanged().onNotify(this, [this]() {
+    INotationInteractionPtr interaction = notationInteraction();
+
+    m_notation->notationChanged().onNotify(this, [this, interaction]() {
+        interaction->hideShadowNote();
         update();
     });
 
-    onNoteInputChanged();
+    onNoteInputModeChanged();
     onSelectionChanged();
 
-    INotationInteractionPtr interaction = notationInteraction();
     interaction->noteInput()->stateChanged().onNotify(this, [this]() {
-        onNoteInputChanged();
+        onNoteInputModeChanged();
     });
     interaction->noteInput()->noteAdded().onNotify(this, [this]() {
-        onNoteInputChanged();
+        followNoteInputCursor();
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
@@ -316,20 +318,28 @@ INotationSelectionPtr NotationPaintView::notationSelection() const
     return notationInteraction() ? notationInteraction()->selection() : nullptr;
 }
 
-void NotationPaintView::onNoteInputChanged()
+void NotationPaintView::onNoteInputModeChanged()
+{
+    TRACEFUNC;
+
+    bool noteEnterMode = isNoteEnterMode();
+    setAcceptHoverEvents(noteEnterMode);
+
+    if (INotationInteractionPtr interaction = notationInteraction()) {
+        interaction->hideShadowNote();
+        update();
+    }
+}
+
+void NotationPaintView::followNoteInputCursor()
 {
     TRACEFUNC;
 
     if (isNoteEnterMode()) {
-        setAcceptHoverEvents(true);
         RectF cursorRect = notationNoteInput()->cursorRect();
         adjustCanvasPosition(cursorRect);
         emit activeFocusRequested();
-    } else {
-        setAcceptHoverEvents(false);
     }
-
-    update();
 }
 
 void NotationPaintView::onSelectionChanged()
