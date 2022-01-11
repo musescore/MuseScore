@@ -91,8 +91,10 @@ DockPage {
     }
 
     readonly property int verticalPanelDefaultWidth: 300
-    readonly property int verticalPanelMinimumHeight: 200
-    readonly property int horizontalPanelMinimumWidth: 300
+    readonly property int verticalPanelMinimumHeightFloating: 200
+    readonly property int verticalPanelMinimumHeightDocked: 50
+    readonly property int horizontalPanelMinimumWidthFloating: 300
+    readonly property int horizontalPanelMinimumWidthDocked: 100
 
     readonly property int horizontalPanelMinHeight: 100
     readonly property int horizontalPanelMaxHeight: 520
@@ -223,7 +225,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
-            minimumHeight: root.verticalPanelMinimumHeight
+            minimumHeight: floating ? root.verticalPanelMinimumHeightFloating : root.verticalPanelMinimumHeightDocked
 
             groupName: root.verticalPanelsGroup
 
@@ -249,7 +251,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
-            minimumHeight: root.verticalPanelMinimumHeight
+            minimumHeight: floating ? root.verticalPanelMinimumHeightFloating : root.verticalPanelMinimumHeightDocked
 
             groupName: root.verticalPanelsGroup
 
@@ -277,7 +279,7 @@ DockPage {
             maximumWidth: root.verticalPanelDefaultWidth
 
             groupName: root.verticalPanelsGroup
-            minimumHeight: root.verticalPanelMinimumHeight
+            minimumHeight: floating ? root.verticalPanelMinimumHeightFloating : root.verticalPanelMinimumHeightDocked
             
             dropDestinations: root.verticalPanelDropDestinations
 
@@ -298,7 +300,7 @@ DockPage {
             width: root.verticalPanelDefaultWidth
             minimumWidth: root.verticalPanelDefaultWidth
             maximumWidth: root.verticalPanelDefaultWidth
-            minimumHeight: root.verticalPanelMinimumHeight
+            minimumHeight: floating ? root.verticalPanelMinimumHeightFloating : root.verticalPanelMinimumHeightDocked
 
             groupName: root.verticalPanelsGroup
 
@@ -325,7 +327,8 @@ DockPage {
             height: 368
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
-            minimumWidth: root.horizontalPanelMinimumWidth
+
+            minimumWidth: floating ? root.horizontalPanelMinimumWidthFloating : root.horizontalPanelMinimumWidthDocked
 
             groupName: root.horizontalPanelsGroup
 
@@ -360,7 +363,7 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
-            minimumWidth: root.horizontalPanelMinimumWidth
+            minimumWidth: floating ? root.horizontalPanelMinimumWidthFloating : root.horizontalPanelMinimumWidthDocked
 
             groupName: root.horizontalPanelsGroup
 
@@ -387,9 +390,9 @@ DockPage {
             height: 200
             minimumHeight: root.horizontalPanelMinHeight
             maximumHeight: root.horizontalPanelMaxHeight
+            minimumWidth: floating ? root.horizontalPanelMinimumWidthFloating : root.horizontalPanelMinimumWidthDocked
 
             groupName: root.horizontalPanelsGroup
-            minimumWidth: root.horizontalPanelMinimumWidth
 
             //! NOTE: hidden by default
             visible: false
@@ -416,7 +419,7 @@ DockPage {
 
             floatable: false
             closable: false
-            minimumWidth: root.horizontalPanelMinimumWidth
+            minimumWidth: floating ? root.horizontalPanelMinimumWidthFloating : root.horizontalPanelMinimumWidthDocked
 
             location: Location.Bottom
 
