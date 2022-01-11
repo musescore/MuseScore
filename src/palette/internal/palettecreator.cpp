@@ -736,12 +736,12 @@ PalettePtr PaletteCreator::newBracketsPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    std::array<std::pair<BracketType, const char*>, 4> types {
-        { { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
-            { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
-            { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
-            { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
-    };
+    std::array<std::pair<BracketType, const char*>, 4> types { {
+        { BracketType::NORMAL, QT_TRANSLATE_NOOP("palette", "Bracket") },
+        { BracketType::BRACE,  QT_TRANSLATE_NOOP("palette", "Brace") },
+        { BracketType::SQUARE, QT_TRANSLATE_NOOP("palette", "Square") },
+        { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") }
+    } };
 
     static Part* bracketItemOwnerPart = new Part(gpaletteScore);
     static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
