@@ -556,49 +556,54 @@ void UndoMacro::applySelectionInfo(const SelectionInfo& info, Selection& sel)
 }
 
 UndoMacro::UndoMacro(Score* s)
-    : undoInputState(s->inputState()), score(s)
+    : m_undoInputState(s->inputState()), m_score(s)
 {
-    fillSelectionInfo(undoSelectionInfo, s->selection());
+    fillSelectionInfo(m_undoSelectionInfo, s->selection());
 }
 
 void UndoMacro::undo(EditData* ed)
 {
-    redoInputState = score->inputState();
-    fillSelectionInfo(redoSelectionInfo, score->selection());
-    score->deselectAll();
+    m_redoInputState = m_score->inputState();
+    fillSelectionInfo(m_redoSelectionInfo, m_score->selection());
+    m_score->deselectAll();
 
     // Undo for child commands.
     UndoCommand::undo(ed);
 
-    score->setInputState(undoInputState);
-    if (undoSelectionInfo.isValid()) {
-        score->deselectAll();
-        applySelectionInfo(undoSelectionInfo, score->selection());
+    m_score->setInputState(m_undoInputState);
+    if (m_undoSelectionInfo.isValid()) {
+        m_score->deselectAll();
+        applySelectionInfo(m_undoSelectionInfo, m_score->selection());
     }
 }
 
 void UndoMacro::redo(EditData* ed)
 {
-    undoInputState = score->inputState();
-    fillSelectionInfo(undoSelectionInfo, score->selection());
-    score->deselectAll();
+    m_undoInputState = m_score->inputState();
+    fillSelectionInfo(m_undoSelectionInfo, m_score->selection());
+    m_score->deselectAll();
 
     // Redo for child commands.
     UndoCommand::redo(ed);
 
-    score->setInputState(redoInputState);
-    if (redoSelectionInfo.isValid()) {
-        score->deselectAll();
-        applySelectionInfo(redoSelectionInfo, score->selection());
+    m_score->setInputState(m_redoInputState);
+    if (m_redoSelectionInfo.isValid()) {
+        m_score->deselectAll();
+        applySelectionInfo(m_redoSelectionInfo, m_score->selection());
     }
+}
+
+bool UndoMacro::empty() const
+{
+    return childCount() == 0;
 }
 
 void UndoMacro::append(UndoMacro&& other)
 {
     appendChildren(&other);
-    if (score == other.score) {
-        redoInputState = std::move(other.redoInputState);
-        redoSelectionInfo = std::move(other.redoSelectionInfo);
+    if (m_score == other.m_score) {
+        m_redoInputState = std::move(other.m_redoInputState);
+        m_redoSelectionInfo = std::move(other.m_redoSelectionInfo);
     }
 }
 
