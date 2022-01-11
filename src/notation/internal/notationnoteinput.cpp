@@ -209,6 +209,7 @@ void NotationNoteInput::addNote(NoteName noteName, NoteAddingMode addingMode)
     score()->cmdAddPitch(editData, inote, addToUpOnCurrentChord, insertNewChord);
     apply();
 
+    notifyNoteAddedChanged();
     notifyAboutStateChanged();
 }
 
