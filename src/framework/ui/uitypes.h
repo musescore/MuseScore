@@ -293,10 +293,13 @@ struct MenuItem : public UiAction
             subitemsVariantList << item.toMap();
         }
 
+        QString portableString = QString::fromStdString(mu::shortcuts::Shortcut::sequencesToString(shortcuts));
+
         return {
             { "id", id },
             { "code", QString::fromStdString(code) },
             { "shortcut", shortcutsTitle() },
+            { "portableShortcut", portableString },
             { "title", title },
             { "description", description },
             { "section", section },

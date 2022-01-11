@@ -77,7 +77,7 @@ AppWindow {
         menuItem.enabled = itemInfo.enabled
         menuItem.checked = itemInfo.checked
         menuItem.checkable = itemInfo.checkable
-        menuItem.shortcut = itemInfo.shortcut
+        menuItem.shortcut = itemInfo.portableShortcut
         menuItem.separator = !Boolean(itemInfo.title)
         menuItem.role = itemInfo.role
 
