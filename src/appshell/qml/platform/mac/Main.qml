@@ -40,8 +40,9 @@ AppWindow {
     Component.onCompleted: {
         menuModel.load()
 
-        for (var i in menuModel.items) {
-            var item = menuModel.items[i]
+        var items = menuModel.items
+        for (var i in items) {
+            var item = items[i]
             var menu = makeMenu(item)
 
             for (var j in item.subitems) {
@@ -49,14 +50,12 @@ AppWindow {
                 menu.addItem(menuItem)
             }
 
+            item.subitemsChanged.connect(function(subitems) {
+                menuBar.menus[i].subitems = subitems
+            })
+
             menuBar.addMenu(menu)
         }
-
-        menuModel.itemsChanged.connect(function() {
-            for (var i in menuModel.items) {
-                menuBar.menus[i].subitems = menuModel.items[i].subitems
-            }
-        })
     }
 
     function makeMenu(menuInfo) {

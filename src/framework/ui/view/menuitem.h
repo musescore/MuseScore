@@ -45,8 +45,9 @@ class MenuItem : public QObject
 
     Q_PROPERTY(QString id READ id NOTIFY idChanged)
 
-    Q_PROPERTY(QString code_property READ code_property NOTIFY actionChanged)
-    Q_PROPERTY(QString shortcuts READ shortcutsAsString NOTIFY actionChanged)
+    Q_PROPERTY(QString code READ code_property NOTIFY actionChanged)
+    Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
+    Q_PROPERTY(QString portableShortcut READ portableShortcut NOTIFY actionChanged)
 
     Q_PROPERTY(QString title READ title_property NOTIFY actionChanged)
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
@@ -86,7 +87,8 @@ public:
 
     bool isValid() const;
 
-    QString shortcutsAsString() const;
+    QString shortcutsTitle() const;
+    QString portableShortcut() const;
 
 public slots:
     void setId(const QString& id);

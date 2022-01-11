@@ -23,6 +23,8 @@
 
 #include <QVariantMap>
 
+#include "shortcuts/shortcutstypes.h"
+
 using namespace mu::ui;
 
 MenuItem::MenuItem(const UiAction& a)
@@ -81,13 +83,14 @@ bool MenuItem::isValid() const
     return !m_id.isEmpty();
 }
 
-QString MenuItem::shortcutsAsString() const
+QString MenuItem::shortcutsTitle() const
 {
-    QStringList list;
-    for (const std::string& sc : m_action.shortcuts) {
-        list << QString::fromStdString(sc);
-    }
-    return list.join("; ");
+    return mu::shortcuts::sequencesToNativeText(m_action.shortcuts);
+}
+
+QString MenuItem::portableShortcut() const
+{
+    return QString::fromStdString(mu::shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
 }
 
 void MenuItem::setId(const QString& id)
