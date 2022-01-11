@@ -89,7 +89,7 @@ QString AccessibleRoot::accessibleName() const
     return element()->score()->title();
 }
 
-void AccessibleRoot::setMapToScreenFunc(const notation::AccessibleMapToScreenFunc& func)
+void AccessibleRoot::setMapToScreenFunc(const AccessibleMapToScreenFunc& func)
 {
     m_accessibleMapToScreenFunc = func;
 }
