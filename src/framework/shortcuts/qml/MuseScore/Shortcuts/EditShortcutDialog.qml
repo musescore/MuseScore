@@ -47,6 +47,11 @@ Dialog {
 
     EditShortcutModel {
         id: model
+
+        onApplyNewSequenceRequested: function(newSequence) {
+            root.applySequenceRequested(newSequence)
+            root.accept()
+        }
     }
 
     Rectangle {
@@ -157,11 +162,10 @@ Dialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Add")
-                    enabled: model.canApplySequence
+                    enabled: model.canApplyInputedSequence
 
                     onClicked: {
-                        root.applySequenceRequested(model.unitedSequence())
-                        root.accept()
+                        model.addToOriginSequence()
                     }
                 }
 
@@ -169,11 +173,10 @@ Dialog {
                     width: parent.buttonWidth
 
                     text: qsTrc("global", "Replace")
-                    enabled: model.canApplySequence
+                    enabled: model.canApplyInputedSequence
 
                     onClicked: {
-                        root.applySequenceRequested(model.inputedSequence)
-                        root.accept()
+                        model.replaceOriginSequence()
                     }
                 }
 

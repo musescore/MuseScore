@@ -40,8 +40,11 @@ void EditShortcutModel::load(const QVariant& shortcut, const QVariantList& allSh
     clear();
 
     m_allShortcuts = allShortcuts;
-    m_originShortcut = shortcut.toMap();
-    emit originSequenceChanged(originSequence());
+
+    QVariantMap shortcutMap = shortcut.toMap();
+    m_originSequence = shortcutMap["sequence"].toString();
+    m_originShortcutContext = shortcutMap["context"];
+    emit originSequenceChanged(originSequenceInNativeFormat());
 }
 
 void EditShortcutModel::clear()
@@ -87,7 +90,7 @@ void EditShortcutModel::inputKey(int key, Qt::KeyboardModifiers modifiers)
 
     validateInputedSequence();
 
-    emit inputedSequenceChanged(inputedSequence());
+    emit inputedSequenceChanged(inputedSequenceInNativeFormat());
 }
 
 void EditShortcutModel::validateInputedSequence()
@@ -95,10 +98,9 @@ void EditShortcutModel::validateInputedSequence()
     m_errorMessage.clear();
 
     QString input = inputedSequence();
-    QVariant context = m_originShortcut.value("context");
     for (const QVariant& shortcut : m_allShortcuts) {
         QVariantMap sc = shortcut.toMap();
-        if (sc.value("context") != context) {
+        if (sc.value("context") != m_originShortcutContext) {
             continue;
         }
 
@@ -110,14 +112,16 @@ void EditShortcutModel::validateInputedSequence()
     }
 }
 
-QString EditShortcutModel::originSequence() const
+QString EditShortcutModel::originSequenceInNativeFormat() const
 {
-    return m_originShortcut.value("sequence").toString();
+    std::vector<std::string> sequences = Shortcut::sequencesFromString(m_originSequence.toStdString());
+
+    return sequencesToNativeText(sequences);
 }
 
-QString EditShortcutModel::inputedSequence() const
+QString EditShortcutModel::inputedSequenceInNativeFormat() const
 {
-    return m_inputedSequence.toString();
+    return m_inputedSequence.toString(QKeySequence::NativeText);
 }
 
 QString EditShortcutModel::errorMessage() const
@@ -125,17 +129,28 @@ QString EditShortcutModel::errorMessage() const
     return m_errorMessage;
 }
 
-bool EditShortcutModel::canApplySequence() const
+bool EditShortcutModel::canApplyInputedSequence() const
 {
     return m_errorMessage.isEmpty() && !m_inputedSequence.isEmpty();
 }
 
-QString EditShortcutModel::unitedSequence() const
+void EditShortcutModel::replaceOriginSequence()
 {
-    QString united = originSequence();
-    if (!united.isEmpty()) {
-        united += "; ";
+    m_originSequence = inputedSequence();
+    emit applyNewSequenceRequested(m_originSequence);
+}
+
+void EditShortcutModel::addToOriginSequence()
+{
+    if (!m_originSequence.isEmpty()) {
+        m_originSequence += "; ";
     }
-    united += inputedSequence();
-    return united;
+    m_originSequence += inputedSequence();
+
+    emit applyNewSequenceRequested(m_originSequence);
+}
+
+QString EditShortcutModel::inputedSequence() const
+{
+    return m_inputedSequence.toString();
 }

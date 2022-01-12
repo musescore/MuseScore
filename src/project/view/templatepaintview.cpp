@@ -30,6 +30,7 @@
 
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::actions;
 
 TemplatePaintView::TemplatePaintView(QQuickItem* parent)
     : NotationPaintView(parent)
@@ -54,14 +55,12 @@ void TemplatePaintView::load(const QString& templatePath)
 
 QString TemplatePaintView::zoomInSequence() const
 {
-    shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut("zoomin");
-    return QString::fromStdString(shortcut.sequencesAsString());
+    return shortcutsTitleByActionCode("zoomin");
 }
 
 QString TemplatePaintView::zoomOutSequence() const
 {
-    shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut("zoomout");
-    return QString::fromStdString(shortcut.sequencesAsString());
+    return shortcutsTitleByActionCode("zoomout");
 }
 
 void TemplatePaintView::adjustCanvas()
@@ -109,4 +108,10 @@ void TemplatePaintView::onNotationSetup()
     if (notationProject) {
         adjustCanvas();
     }
+}
+
+QString TemplatePaintView::shortcutsTitleByActionCode(const ActionCode& code) const
+{
+    shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut(code);
+    return shortcuts::sequencesToNativeText(shortcut.sequences);
 }

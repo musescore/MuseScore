@@ -53,7 +53,7 @@ QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
     case IconRole: return static_cast<int>(item.iconCode);
     case EnabledRole: return item.state.enabled;
     case DescriptionRole: return item.description;
-    case ShortcutRole: return item.shortcutsAsString();
+    case ShortcutRole: return item.shortcutsTitle();
     }
 
     return QVariant();
