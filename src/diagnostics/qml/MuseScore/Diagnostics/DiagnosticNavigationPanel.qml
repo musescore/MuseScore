@@ -170,8 +170,12 @@ Rectangle {
 
                         model: subitem.panel.controls
                         delegate: Rectangle {
+                            id: gridItem
 
                             property var control: modelData
+
+                            // need for tooltips
+                            property alias navigation: control
 
                             height: 28
                             width: 64
@@ -213,9 +217,9 @@ Rectangle {
                                                 + root.formatIndex(control.index) + "\n"
                                                 + "enabled: " + control.enabled
 
-                                        ui.tooltip.show(this, info)
+                                        ui.tooltip.show(gridItem, info)
                                     } else {
-                                        ui.tooltip.hide(this)
+                                        ui.tooltip.hide(gridItem)
                                     }
                                 }
 

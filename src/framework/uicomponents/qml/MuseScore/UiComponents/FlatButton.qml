@@ -230,7 +230,7 @@ FocusScope {
         }
 
         onPressed: {
-            ui.tooltip.hide(this)
+            ui.tooltip.hide(root)
         }
 
         onPressAndHold: function (mouse) {
@@ -243,9 +243,9 @@ FocusScope {
             }
 
             if (mouseArea.containsMouse) {
-                ui.tooltip.show(this, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
+                ui.tooltip.show(root, root.toolTipTitle, root.toolTipDescription, root.toolTipShortcut)
             } else {
-                ui.tooltip.hide(this)
+                ui.tooltip.hide(root)
             }
         }
     }
