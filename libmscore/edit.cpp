@@ -545,6 +545,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
             //
             // insert new calculated measures
             //
+            if (!nfm || !nlm)
+                  continue;
             nfm->setPrev(m1->prev());
             nlm->setNext(m2->next());
             s->undo(new InsertMeasures(nfm, nlm));
