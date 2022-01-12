@@ -105,7 +105,9 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
     m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
+
     m_scoreCallbacks.setScore(notation->score());
+    m_scoreCallbacks.setNotationInteraction(this);
 }
 
 NotationInteraction::~NotationInteraction()
@@ -2497,7 +2499,7 @@ void NotationInteraction::endEditText()
         return;
     }
 
-    doEndTextEdit();
+    doEndEditElement();
 
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChanged();
@@ -2638,7 +2640,10 @@ void NotationInteraction::startEditElement(EngravingItem* element)
     if (element->isTextBase()) {
         startEditText(element, PointF());
     } else if (m_editData.grips > 1) {
+        m_editData.element = element;
+
         startEditGrip(Ms::Grip::END);
+
         if (m_editData.element->generated()) {
             m_editData.element = nullptr;
         }
@@ -2646,6 +2651,20 @@ void NotationInteraction::startEditElement(EngravingItem* element)
         element->startEdit(m_editData);
         m_editData.element = element;
     }
+}
+
+void NotationInteraction::changeEditElement(EngravingItem* newElement)
+{
+    IF_ASSERT_FAILED(newElement) {
+        return;
+    }
+
+    if (m_editData.element == newElement) {
+        return;
+    }
+
+    doEndEditElement();
+    startEditElement(newElement);
 }
 
 void NotationInteraction::editElement(QKeyEvent* event)
@@ -2695,24 +2714,36 @@ void NotationInteraction::endEditElement()
     if (!m_editData.element) {
         return;
     }
+
     if (isTextEditingStarted()) {
         endEditText();
         return;
     }
+
     if (isDragStarted()) {
         doEndDrag();
         rollback();
-        m_dragData.reset();
     }
+
     if (m_editData.curGrip == Ms::Grip::NO_GRIP) {
-        m_editData.element->endEdit(m_editData);
-        m_editData.element = nullptr;
+        doEndEditElement();
         resetAnchorLines();
     } else {
         m_editData.curGrip = Ms::Grip::NO_GRIP;
         updateAnchorLines();
     }
+
     notifyAboutNotationChanged();
+}
+
+void NotationInteraction::doEndEditElement()
+{
+    if (m_editData.element) {
+        m_editData.element->endEdit(m_editData);
+        m_editData.element = nullptr;
+    }
+
+    m_editData.clearData();
 }
 
 void NotationInteraction::splitSelectedMeasure()
@@ -4565,20 +4596,10 @@ Ms::Harmony* NotationInteraction::createHarmony(Ms::Segment* segment, int track,
 
 void NotationInteraction::startEditText(Ms::TextBase* text)
 {
-    doEndTextEdit();
+    doEndEditElement();
     select({ text }, SelectType::SINGLE);
     startEditText(text, PointF());
     text->cursor()->moveCursorToEnd();
-}
-
-void NotationInteraction::doEndTextEdit()
-{
-    if (m_editData.element) {
-        m_editData.element->endEdit(m_editData);
-        m_editData.element = nullptr;
-    }
-
-    m_editData.clearData();
 }
 
 bool NotationInteraction::needEndTextEdit() const

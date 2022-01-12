@@ -134,6 +134,7 @@ public:
 
     virtual bool isElementEditStarted() const = 0;
     virtual void startEditElement(EngravingItem* element) = 0;
+    virtual void changeEditElement(EngravingItem* newElement) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
 

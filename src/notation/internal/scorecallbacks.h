@@ -25,6 +25,7 @@
 #include "libmscore/mscoreview.h"
 
 namespace mu::notation {
+class INotationInteraction;
 class ScoreCallbacks : public Ms::MuseScoreView
 {
 public:
@@ -36,12 +37,17 @@ public:
     const mu::Rect geometry() const override;
     qreal selectionProximity() const override;
     void setDropTarget(const Ms::EngravingItem* dropTarget) override;
+    void changeEditElement(Ms::EngravingItem* newElement) override;
 
     void setSelectionProximity(qreal proximity);
     const Ms::EngravingItem* dropTarget() const;
+
+    void setNotationInteraction(INotationInteraction* interaction);
+
 private:
     qreal m_selectionProximity = 0.0f;
     const Ms::EngravingItem* m_dropTarget = nullptr;
+    INotationInteraction* m_interaction = nullptr;
 };
 }
 
