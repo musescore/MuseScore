@@ -77,7 +77,7 @@ Item {
 
             onClicked: {
                 if (menuLoader.isMenuOpened || item.subitems.length) {
-                    menuLoader.toggleOpened(model.subitems)
+                    menuLoader.toggleOpened(item.subitems)
                     return
                 }
 
