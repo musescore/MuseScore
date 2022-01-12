@@ -22,6 +22,8 @@
 #include "scorecallbacks.h"
 #include "libmscore/engravingitem.h"
 
+#include "inotationinteraction.h"
+
 #include "log.h"
 
 using namespace mu::notation;
@@ -68,7 +70,21 @@ void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
     m_dropTarget = dropTarget;
 }
 
+void ScoreCallbacks::changeEditElement(Ms::EngravingItem* newElement)
+{
+    IF_ASSERT_FAILED(m_interaction) {
+        return;
+    }
+
+    m_interaction->changeEditElement(newElement);
+}
+
 const Ms::EngravingItem* ScoreCallbacks::dropTarget() const
 {
     return m_dropTarget;
+}
+
+void ScoreCallbacks::setNotationInteraction(INotationInteraction* interaction)
+{
+    m_interaction = interaction;
 }
