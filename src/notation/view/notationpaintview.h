@@ -193,8 +193,10 @@ private:
 
     void adjustCanvasPosition(const RectF& logicRect);
 
-    void onNoteInputChanged();
+    void onNoteInputModeChanged();
     void onSelectionChanged();
+
+    void followNoteInputCursor();
 
     void onPlayingChanged();
     void movePlaybackCursor(uint32_t tick);

@@ -616,10 +616,18 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
 
 void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 {
-    if (m_view->isNoteEnterMode()) {
-        PointF pos = m_view->toLogical(event->pos());
-        m_view->showShadowNote(pos);
+    if (!m_view->isNoteEnterMode()) {
+        return;
     }
+
+    PointF oldPos = m_view->toLogical(event->oldPosF());
+    PointF pos = m_view->toLogical(event->posF());
+
+    if (oldPos == pos) {
+        return;
+    }
+
+    m_view->showShadowNote(pos);
 }
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
