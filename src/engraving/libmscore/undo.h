@@ -160,6 +160,11 @@ public:
     bool empty() const;
     void append(UndoMacro&& other);
 
+    const InputState& undoInputState() const;
+    const InputState& redoInputState() const;
+    const SelectionInfo& undoSelectionInfo() const;
+    const SelectionInfo& redoSelectionInfo() const;
+
     static bool canRecordSelectedElement(const EngravingItem* e);
 
     UNDO_NAME("UndoMacro");

@@ -56,15 +56,22 @@ public:
     bool isLocked() const override;
 
     async::Notification stackChanged() const override;
+    async::Channel<int /*tickFrom*/, int /*tickTo*/> notationChangesRange() const override;
 
 private:
+    struct NotationChangesRange {
+        int tickFrom = 0;
+        int tickTo = 0;
+    };
+
     void notifyAboutNotationChanged();
-    void notifyAboutStateChanged();
+    void notifyAboutStateChanged(NotationChangesRange&& range);
     void notifyAboutUndo();
     void notifyAboutRedo();
 
     bool isStackClean() const;
 
+    NotationChangesRange changesRange() const;
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
     Ms::UndoStack* undoStack() const;
@@ -75,6 +82,7 @@ private:
     async::Notification m_stackStateChanged;
     async::Notification m_undoNotification;
     async::Notification m_redoNotification;
+    async::Channel<int, int> m_notationChangesChannel;
 
     bool m_isLocked = false;
 };
