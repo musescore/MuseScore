@@ -93,6 +93,8 @@ private:
     void chordTie();
     void addSlur();
 
+    void showInfoMessage(const std::string& message) const;
+
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
     void addText(TextStyleType type);

@@ -144,6 +144,7 @@ public:
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
+    virtual Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
 
     virtual void copySelection() = 0;
