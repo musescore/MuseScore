@@ -2839,6 +2839,29 @@ void NotationInteraction::joinSelectedMeasures()
     apply();
 }
 
+mu::Ret NotationInteraction::canAddBoxes() const
+{
+    if (selection()->isRange()) {
+        return make_ok();
+    }
+
+    static const std::vector<ElementType> boxesTypes {
+        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX
+    };
+
+    for (const EngravingItem* element: selection()->elements()) {
+        if (Ms::toMeasure(element->findMeasure())) {
+            return make_ok();
+        }
+
+        if (std::find(boxesTypes.cbegin(), boxesTypes.cend(), element->type()) != boxesTypes.cend()) {
+            return make_ok();
+        }
+    }
+
+    return make_ret(Err::MeasureIsNotSelected);
+}
+
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
     auto boxTypeToElementType = [](BoxType boxType) {
@@ -3376,7 +3399,7 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
 
 mu::Ret NotationInteraction::canAddText(TextStyleType type) const
 {
-    QList<TextStyleType> needSelectedNoteOrRestTypes {
+    static const std::vector<TextStyleType> needSelectedNoteOrRestTypes {
         TextStyleType::SYSTEM,
         TextStyleType::STAFF,
         TextStyleType::EXPRESSION,
@@ -3391,7 +3414,7 @@ mu::Ret NotationInteraction::canAddText(TextStyleType type) const
         TextStyleType::TEMPO
     };
 
-    if (needSelectedNoteOrRestTypes.contains(type)) {
+    if (std::find(needSelectedNoteOrRestTypes.cbegin(), needSelectedNoteOrRestTypes.cend(), type) != needSelectedNoteOrRestTypes.cend()) {
         bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::REST });
         return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }

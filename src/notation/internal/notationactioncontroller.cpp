@@ -22,7 +22,6 @@
 #include "notationactioncontroller.h"
 
 #include "notationtypes.h"
-#include "notationerrors.h"
 
 #include "log.h"
 
@@ -971,7 +970,7 @@ void NotationActionController::addText(TextStyleType type)
 
     Ret ret = interaction->canAddText(type);
     if (!ret) {
-        interactive()->info(ret.text(), "", {}, 0, IInteractive::Option::WithIcon);
+        showInfoMessage(ret.text());
         return;
     }
 
@@ -1153,6 +1152,18 @@ void NotationActionController::insertBoxes(BoxType boxType, int count)
 void NotationActionController::insertBox(BoxType boxType)
 {
     TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddBoxes();
+    if (!ret) {
+        showInfoMessage(ret.text());
+        return;
+    }
+
     insertBoxes(boxType, 1);
 }
 
@@ -1263,6 +1274,19 @@ void NotationActionController::resetBeamMode()
 
 void NotationActionController::selectMeasuresCountAndInsert()
 {
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddBoxes();
+    if (!ret) {
+        showInfoMessage(ret.text());
+        return;
+    }
+
     RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=insert");
 
     if (measureCount.ret) {
