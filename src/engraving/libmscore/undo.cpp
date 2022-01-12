@@ -607,6 +607,26 @@ void UndoMacro::append(UndoMacro&& other)
     }
 }
 
+const InputState& UndoMacro::undoInputState() const
+{
+    return m_undoInputState;
+}
+
+const InputState& UndoMacro::redoInputState() const
+{
+    return m_redoInputState;
+}
+
+const UndoMacro::SelectionInfo& UndoMacro::undoSelectionInfo() const
+{
+    return m_undoSelectionInfo;
+}
+
+const UndoMacro::SelectionInfo& UndoMacro::redoSelectionInfo() const
+{
+    return m_redoSelectionInfo;
+}
+
 //---------------------------------------------------------
 //   CloneVoice
 //---------------------------------------------------------
