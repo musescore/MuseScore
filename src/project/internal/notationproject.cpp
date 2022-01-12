@@ -239,7 +239,7 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
 
     // Load style if present
     if (!stylePath.empty()) {
-        project->masterScore()->loadStyle(stylePath.toQString());
+        score->loadStyle(stylePath.toQString());
         if (!Ms::MScore::lastError.isEmpty()) {
             LOGE() << Ms::MScore::lastError;
         }
@@ -256,10 +256,11 @@ mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePat
     m_engravingProject = project;
 
     m_masterNotation = std::shared_ptr<MasterNotation>(new MasterNotation());
-    m_masterNotation->setMasterScore(project->masterScore());
+    m_masterNotation->setMasterScore(score);
 
     m_projectAudioSettings = audioSettings;
     m_viewSettings = viewSettings;
+    score->setCreated(true);
 
     return make_ret(Ret::Code::Ok);
 }
