@@ -37,8 +37,6 @@ FocusScope {
 
     property alias isNavigatorVisible: notationNavigator.visible
 
-    signal textEdittingStarted()
-
     NavigationSection {
         id: navSec
         name: "NotationView"
@@ -120,10 +118,6 @@ FocusScope {
 
                     onActiveFocusRequested: {
                         fakeNavCtrl.requestActive()
-                    }
-
-                    onTextEdittingStarted: {
-                        root.textEdittingStarted()
                     }
 
                     onShowContextMenuRequested: function (elementType, viewPos) {

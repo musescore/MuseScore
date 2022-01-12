@@ -64,6 +64,7 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "view-mode-single", [this]() {
             setViewMode(ViewMode::SYSTEM);
         });
+
         dispatcher()->reg(this, "scr-next", this, &NotationViewInputController::nextScreen);
         dispatcher()->reg(this, "scr-prev", this, &NotationViewInputController::previousScreen);
         dispatcher()->reg(this, "page-next", this, &NotationViewInputController::nextPage);
