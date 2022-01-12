@@ -44,16 +44,9 @@ enum class HairpinType : signed char;
 
 class MuseScoreView
 {
-protected:
-    Score* _score;
-
 public:
     virtual ~MuseScoreView() = default;
-    Page* point2page(const mu::PointF&) const;
-    EngravingItem* elementAt(const mu::PointF& p) const;
-    const QList<EngravingItem*> elementsAt(const mu::PointF&) const;
-    EngravingItem* elementNear(const mu::PointF& pos) const;
-    const QList<EngravingItem*> elementsNear(const mu::PointF& pos) const;
+
     virtual qreal selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
@@ -61,16 +54,13 @@ public:
     virtual void updateAll() = 0;
 
     virtual void moveCursor() {}
-    virtual void showLoopCursors(bool) {}
 
     virtual void adjustCanvasPosition(const EngravingItem*, bool /*playBack*/, int /*staffIdx*/ = -1) {}
     virtual void setScore(Score* s) { _score = s; }
-    Score* score() const { return _score; }
     virtual void removeScore() {}
 
     virtual void changeEditElement(EngravingItem*) {}
     virtual void setDropRectangle(const mu::RectF&) {}
-    virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
     virtual void startEdit(EngravingItem*, Grip /*startGrip*/) {}
     virtual void startNoteEntryMode() {}
     virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const = 0;
@@ -78,15 +68,24 @@ public:
 
     virtual void textTab(bool /*back*/) {}
     virtual void lyricsTab(bool /*back*/, bool /*end*/, bool /*moveOnly*/) {}
-    virtual void lyricsReturn() {}
-    virtual void lyricsEndEdit() {}
-    virtual void lyricsUpDown(bool /*up*/, bool /*end*/) {}
     virtual void lyricsMinus() {}
     virtual void lyricsUnderscore() {}
 
     virtual void onElementDestruction(EngravingItem*) {}
 
     virtual const mu::Rect geometry() const = 0;
+
+    const QList<EngravingItem*> elementsAt(const mu::PointF&) const;
+    EngravingItem* elementNear(const mu::PointF& pos) const;
+    Score* score() const { return _score; }
+
+protected:
+    Score* _score;
+
+private:
+    Page* point2page(const mu::PointF&) const;
+    EngravingItem* elementAt(const mu::PointF& p) const;
+    const QList<EngravingItem*> elementsNear(const mu::PointF& pos) const;
 };
 }     // namespace Ms
 

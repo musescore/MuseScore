@@ -141,6 +141,7 @@ public:
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
+    void changeEditElement(EngravingItem* newElement) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
 
@@ -256,6 +257,8 @@ private:
     void rollback();
 
     bool handleKeyPress(QKeyEvent* event);
+
+    void doEndEditElement();
     void doEndDrag();
 
     void doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0);
@@ -275,7 +278,6 @@ private:
     Ms::Harmony* createHarmony(Ms::Segment* segment, int track, Ms::HarmonyType type) const;
 
     void startEditText(Ms::TextBase* text);
-    void doEndTextEdit();
     bool needEndTextEdit() const;
 
     Ms::Page* point2page(const PointF& p) const;
