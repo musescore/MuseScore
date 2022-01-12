@@ -24,6 +24,7 @@
 #define MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
 
 #include "async/notification.h"
+#include "async/channel.h"
 
 namespace Ms {
 class EditData;
@@ -52,6 +53,7 @@ public:
     virtual bool isLocked() const = 0;
 
     virtual async::Notification stackChanged() const = 0;
+    virtual async::Channel<int /*tickFrom*/, int /*tickTo*/> notationChangesRange() const = 0;
 };
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;

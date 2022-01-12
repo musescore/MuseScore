@@ -55,7 +55,7 @@ void NotationUndoStack::undo(Ms::EditData* editData)
 
     notifyAboutNotationChanged();
     notifyAboutUndo();
-    notifyAboutStateChanged();
+    notifyAboutStateChanged(changesRange());
 }
 
 Notification NotationUndoStack::undoNotification() const
@@ -83,7 +83,7 @@ void NotationUndoStack::redo(Ms::EditData* editData)
 
     notifyAboutNotationChanged();
     notifyAboutRedo();
-    notifyAboutStateChanged();
+    notifyAboutStateChanged(changesRange());
 }
 
 Notification NotationUndoStack::redoNotification() const
@@ -116,8 +116,6 @@ void NotationUndoStack::rollbackChanges()
 
     score()->endCmd(true);
     masterScore()->setSaved(isStackClean());
-
-    notifyAboutStateChanged();
 }
 
 void NotationUndoStack::commitChanges()
@@ -130,10 +128,12 @@ void NotationUndoStack::commitChanges()
         return;
     }
 
+    NotationChangesRange range = changesRange();
+
     score()->endCmd();
     masterScore()->setSaved(isStackClean());
 
-    notifyAboutStateChanged();
+    notifyAboutStateChanged(std::move(range));
 }
 
 void NotationUndoStack::lock()
@@ -156,6 +156,11 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
+Channel<int, int> NotationUndoStack::notationChangesRange() const
+{
+    return m_notationChangesChannel;
+}
+
 Ms::Score* NotationUndoStack::score() const
 {
     return m_getScore->score();
@@ -176,9 +181,14 @@ void NotationUndoStack::notifyAboutNotationChanged()
     m_notationChanged.notify();
 }
 
-void NotationUndoStack::notifyAboutStateChanged()
+void NotationUndoStack::notifyAboutStateChanged(NotationChangesRange&& range)
 {
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
     m_stackStateChanged.notify();
+    m_notationChangesChannel.send(range.tickFrom, range.tickTo);
 }
 
 void NotationUndoStack::notifyAboutUndo()
@@ -198,4 +208,10 @@ bool NotationUndoStack::isStackClean() const
     }
 
     return undoStack()->isClean();
+}
+
+NotationUndoStack::NotationChangesRange NotationUndoStack::changesRange() const
+{
+    const Ms::CmdState& cmdState = score()->cmdState();
+    return { cmdState.startTick().ticks(), cmdState.endTick().ticks() };
 }
