@@ -3415,7 +3415,8 @@ mu::Ret NotationInteraction::canAddText(TextStyleType type) const
     };
 
     if (std::find(needSelectedNoteOrRestTypes.cbegin(), needSelectedNoteOrRestTypes.cend(), type) != needSelectedNoteOrRestTypes.cend()) {
-        bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::REST });
+        bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::REST,
+                                                       ElementType::MEASURE_REPEAT, ElementType::CHORD });
         return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }
 
@@ -3444,7 +3445,7 @@ void NotationInteraction::addText(TextStyleType type)
 
 mu::Ret NotationInteraction::canAddFiguredBass() const
 {
-    bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::FIGURED_BASS });
+    bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::FIGURED_BASS, ElementType::REST });
     return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
@@ -3801,13 +3802,8 @@ void NotationInteraction::resetGripEdit()
 
 bool NotationInteraction::elementsSelected(const std::vector<ElementType>& elementsTypes) const
 {
-    for (const EngravingItem* element: selection()->elements()) {
-        if (std::find(elementsTypes.cbegin(), elementsTypes.cend(), element->type()) != elementsTypes.cend()) {
-            return true;
-        }
-    }
-
-    return false;
+    const EngravingItem* element = selection()->element();
+    return element && std::find(elementsTypes.cbegin(), elementsTypes.cend(), element->type()) != elementsTypes.cend();
 }
 
 void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
