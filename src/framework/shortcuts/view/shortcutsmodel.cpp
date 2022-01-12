@@ -50,8 +50,8 @@ QVariant ShortcutsModel::data(const QModelIndex& index, int role) const
     switch (role) {
     case RoleTitle: return this->action(shortcut.action).title;
     case RoleIcon: return static_cast<int>(this->action(shortcut.action).iconCode);
-    case RoleSequence: return QString::fromStdString(shortcut.sequencesAsString());
-    case RoleSearchKey: return this->action(shortcut.action).title + QString::fromStdString(shortcut.sequencesAsString());
+    case RoleSequence: return sequencesToNativeText(shortcut.sequences);
+    case RoleSearchKey: return this->action(shortcut.action).title + sequencesToNativeText(shortcut.sequences);
     }
 
     return QVariant();
@@ -62,7 +62,7 @@ const UiAction& ShortcutsModel::action(const std::string& actionCode) const
     return uiactionsRegister()->action(actionCode);
 }
 
-QString ShortcutsModel::actionTitle(const std::string& actionCode) const
+const QString& ShortcutsModel::actionTitle(const std::string& actionCode) const
 {
     const UiAction& action = this->action(actionCode);
     return action.title;
