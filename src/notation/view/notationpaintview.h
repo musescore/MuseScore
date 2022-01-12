@@ -124,8 +124,6 @@ signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
 
-    void textEdittingStarted();
-
     void horizontalScrollChanged();
     void verticalScrollChanged();
 

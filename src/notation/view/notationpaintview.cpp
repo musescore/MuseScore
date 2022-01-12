@@ -219,12 +219,13 @@ void NotationPaintView::onCurrentNotationChanged()
 
     interaction->textEditingStarted().onNotify(this, [this]() {
         if (!hasActiveFocus()) {
-            emit textEdittingStarted();
+            forceFocusIn();
         }
     });
+
     interaction->dropChanged().onNotify(this, [this]() {
         if (!hasActiveFocus()) {
-            emit textEdittingStarted(); // grab keyboard focus after element added from palette
+            forceFocusIn(); // grab keyboard focus after element added from palette
         }
     });
 

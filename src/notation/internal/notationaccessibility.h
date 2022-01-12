@@ -44,7 +44,7 @@ public:
 
     ValCh<std::string> accessibilityInfo() const override;
 
-    void setMapToScreenFunc(const AccessibleMapToScreenFunc& func) override;
+    void setMapToScreenFunc(const mu::engraving::AccessibleMapToScreenFunc& func) override;
 
 private:
     const Ms::Score* score() const;

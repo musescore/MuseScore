@@ -384,10 +384,6 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
-
-        onTextEdittingStarted: {
-            notationView.forceActiveFocus()
-        }
     }
 
     statusBar: DockStatusBar {

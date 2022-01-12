@@ -38,6 +38,7 @@
 
 using namespace mu::notation;
 using namespace mu::async;
+using namespace mu::engraving;
 
 NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notification selectionChangedNotification)
     : m_getScore(getScore)
