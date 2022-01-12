@@ -89,6 +89,10 @@ static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/a
 static const Settings::Key HORIZONTAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/horizontal");
 static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/vertical");
 
+static const Settings::Key NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddTextErrorMessage");
+static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddFiguredBassErrorMessage");
+static const Settings::Key NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddBoxesErrorMessage");
+
 static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
 
 void NotationConfiguration::init()
@@ -203,6 +207,10 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(HORIZONTAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
     settings()->setDefaultValue(VERTICAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
+
+    settings()->setDefaultValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(true));
+    settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
+    settings()->setDefaultValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(true));
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
@@ -770,6 +778,36 @@ void NotationConfiguration::setGridSize(framework::Orientation gridOrientation, 
         settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
     }
+}
+
+bool NotationConfiguration::needToShowAddTextErrorMessage() const
+{
+    return settings()->value(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY).toBool();
+}
+
+void NotationConfiguration::setNeedToShowAddTextErrorMessage(bool show)
+{
+    settings()->setSharedValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(show));
+}
+
+bool NotationConfiguration::needToShowAddFiguredBassErrorMessage() const
+{
+    return settings()->value(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY).toBool();
+}
+
+void NotationConfiguration::setNeedToShowAddFiguredBassErrorMessage(bool show)
+{
+    settings()->setSharedValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(show));
+}
+
+bool NotationConfiguration::needToShowAddBoxesErrorMessage() const
+{
+    return settings()->value(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY).toBool();
+}
+
+void NotationConfiguration::setNeedToShowAddBoxesErrorMessage(bool show)
+{
+    settings()->setSharedValue(NEED_TO_SHOW_ADD_BOXES_ERROR_MESSAGE_KEY, Val(show));
 }
 
 io::path NotationConfiguration::firstScoreOrderListPath() const
