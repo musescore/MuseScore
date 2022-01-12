@@ -60,6 +60,9 @@ enum class Err {
     // notation
     NoScore = 1030,
 
+    NoteOrRestIsNotSelected,
+    NoteOrFiguredBassIsNotSelected,
+
     // playback
     UnableToPlaybackElement = 1040,
 
@@ -118,6 +121,12 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
         break;
     case Err::NoScore:
         text = qtrc("notation", "No score");
+        break;
+    case Err::NoteOrRestIsNotSelected:
+        text = qtrc("notation", "No note or rest selected: Please select a note or rest and retry");
+        break;
+    case Err::NoteOrFiguredBassIsNotSelected:
+        text = qtrc("notation", "No note or figured bass selected: Please select a note or figured bass and retry");
         break;
     case Err::UnableToPlaybackElement:
         text = qtrc("notation", "Unable to playback element");

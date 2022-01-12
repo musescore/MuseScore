@@ -93,6 +93,11 @@ private:
     void chordTie();
     void addSlur();
 
+    bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
+
+    void addText(TextStyleType type);
+    void addFiguredBass();
+
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
