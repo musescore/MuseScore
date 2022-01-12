@@ -64,9 +64,9 @@ FocusableControl {
         }
 
         if (mouseArea.containsMouse) {
-            ui.tooltip.show(this, root.hint)
+            ui.tooltip.show(root, root.hint)
         } else {
-            ui.tooltip.hide(this)
+            ui.tooltip.hide(root)
         }
     }
 
