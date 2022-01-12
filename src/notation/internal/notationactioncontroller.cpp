@@ -954,9 +954,9 @@ void NotationActionController::addSlur()
     }
 }
 
-void NotationActionController::showInfoMessage(const std::string& message) const
+IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
 {
-    interactive()->info(message, "", {}, 0, IInteractive::Option::WithIcon);
+    return interactive()->info(message, "", {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
 }
 
 void NotationActionController::addText(TextStyleType type)
@@ -970,7 +970,13 @@ void NotationActionController::addText(TextStyleType type)
 
     Ret ret = interaction->canAddText(type);
     if (!ret) {
-        showInfoMessage(ret.text());
+        if (configuration()->needToShowAddTextErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddTextErrorMessage(false);
+            }
+        }
+
         return;
     }
 
@@ -988,7 +994,13 @@ void NotationActionController::addFiguredBass()
 
     Ret ret = interaction->canAddFiguredBass();
     if (!ret) {
-        showInfoMessage(ret.text());
+        if (configuration()->needToShowAddFiguredBassErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
+            }
+        }
+
         return;
     }
 
@@ -1160,7 +1172,13 @@ void NotationActionController::insertBox(BoxType boxType)
 
     Ret ret = interaction->canAddBoxes();
     if (!ret) {
-        showInfoMessage(ret.text());
+        if (configuration()->needToShowAddBoxesErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddBoxesErrorMessage(false);
+            }
+        }
+
         return;
     }
 
@@ -1283,7 +1301,7 @@ void NotationActionController::selectMeasuresCountAndInsert()
 
     Ret ret = interaction->canAddBoxes();
     if (!ret) {
-        showInfoMessage(ret.text());
+        showErrorMessage(ret.text());
         return;
     }
 
