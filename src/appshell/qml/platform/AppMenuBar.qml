@@ -187,6 +187,8 @@ ListView {
         StyledMenuLoader {
             id: menuLoader
 
+            navigationParentControl: radioButtonDelegate.navigation
+
             onHandleMenuItem: {
                 Qt.callLater(appMenuModel.handleMenuItem, itemId)
             }
