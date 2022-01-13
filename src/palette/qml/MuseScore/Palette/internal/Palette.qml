@@ -486,13 +486,6 @@ GridView {
             //property int cellRow: paletteView.ncolumns == 0 ? 0 : Math.floor(model.index / paletteView.ncolumns)
             //property int cellCol: model.index - (cellRow * paletteView.ncolumns)
 
-            onActiveFocusChanged: {
-                if (activeFocus) {
-                    paletteTree.currentTreeItem = this;
-                    paletteView.updateSelection(false);
-                }
-            }
-
             readonly property bool dragged: Drag.active && !dragDropReorderTimer.running
             property bool paletteDrag: false
             property bool internalDrag: false
@@ -515,7 +508,7 @@ GridView {
             navigation.column: 1
 
             navigation.onActiveChanged: {
-                if (navigation.active) {
+                if (navigation.highlight) {
                     paletteView.currentIndex = paletteCell.rowIndex;
                     paletteView.updateSelection(true);
                 }
@@ -535,15 +528,13 @@ GridView {
             // leftClickArea
             mouseArea.drag.target: draggedIcon
             mouseArea.onPressed: {
-                paletteView.currentIndex = paletteCell.rowIndex;
-                paletteView.updateSelection(true);
-                paletteCell.forceActiveFocus();
-                paletteCell.beginDrag();
+                paletteCell.beginDrag()
             }
 
             onClicked: {
-                if (paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
-                    paletteView.selectionModel.setCurrentIndex(paletteCell.modelIndex, ItemSelectionModel.Current);
+                if (!paletteView.paletteController.applyPaletteElement(paletteCell.modelIndex, ui.keyboardModifiers())) {
+                    paletteView.currentIndex = paletteCell.rowIndex;
+                    paletteView.updateSelection(true);
                 }
             }
 
@@ -596,6 +587,10 @@ GridView {
                     }
 
                     dropData = null;
+                }
+
+                if (Boolean(paletteView)) {
+                    paletteView.selectionModel.clearSelection()
                 }
             }
 
