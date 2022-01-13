@@ -70,6 +70,10 @@ FocusableControl {
         }
     }
 
+    mouseArea.onPressed: {
+        ui.tooltip.hide(root)
+    }
+
     onNavigationTriggered: root.clicked(null)
 
     states: [
