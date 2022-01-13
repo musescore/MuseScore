@@ -32,7 +32,7 @@ Item {
     id: root
 
     property string search: ""
-    property string backgroundColor: ui.theme.backgroundPrimaryColor
+    property string backgroundColor: ui.theme.backgroundSecondaryColor
 
     property int sideMargin: 46
 
@@ -172,7 +172,8 @@ Item {
             title: model.name
             statusTitle: model.statusTitle
 
-            normalColor: (index % 2 == 0) ? ui.theme.popupBackgroundColor : root.backgroundColor
+            //! NOTE: Assuming this is on a background with color ui.theme.backgroundSecondaryColor
+            normalColor: (index % 2 == 0) ? Utils.colorWithAlpha(ui.theme.backgroundPrimaryColor, 0.6) : "transparent"
 
             headerWidth: header.itemWidth
             sideMargin: root.sideMargin
