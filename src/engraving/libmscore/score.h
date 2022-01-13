@@ -779,6 +779,7 @@ public:
     void setPlayNote(bool v) { _updateState._playNote = v; }
     bool playChord() const { return _updateState._playChord; }
     void setPlayChord(bool v) { _updateState._playChord = v; }
+    bool selectionEmpty() const { return _selection.staffStart() == _selection.staffEnd(); }
     bool selectionChanged() const { return _updateState._selectionChanged; }
     void setSelectionChanged(bool val) { _updateState._selectionChanged = val; }
     void deleteLater(EngravingObject* e) { _updateState._deleteList.push_back(e); }
