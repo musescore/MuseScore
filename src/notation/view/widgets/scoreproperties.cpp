@@ -245,17 +245,29 @@ bool ScorePropertiesDialog::save()
     const int idx = scrollAreaLayout->rowCount();
     QVariantMap map;
     for (int i = 0; i < idx; ++i) {
-        QLayoutItem* tagItem   = scrollAreaLayout->itemAtPosition(i, 0);
+        QLayoutItem* tagItem  = scrollAreaLayout->itemAtPosition(i, 0);
         QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
         if (tagItem && valueItem) {
-            QLineEdit* tag   = static_cast<QLineEdit*>(tagItem->widget());
+
+            // Label could be a line edit (for none standard properties) or a label widget (for standard properties)
+            QString tagText = "";
+            
+            QLineEdit* lineEditItem = dynamic_cast<QLineEdit*>(tagItem);
+            if (lineEditItem) {
+                tagText = lineEditItem->text();
+            }
+
+            QLabel* labelItem = dynamic_cast<QLabel*>(tagItem);
+            if (labelItem) {
+                tagText = labelItem->text();
+            }
+
             QLineEdit* value = static_cast<QLineEdit*>(valueItem->widget());
 
-            QString tagText = tag->text();
             if (tagText.isEmpty()) {
                 interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "Tags can't have empty names."));
-                tag->setFocus();
+                lineEditItem->setFocus();
                 return false;
             }
             if (map.contains(tagText)) {
@@ -263,13 +275,13 @@ bool ScorePropertiesDialog::save()
                     interactive()->warning(trc("notation", "MuseScore"),
                                            qtrc("notation",
                                                 "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
-                    tag->setFocus();
+                    lineEditItem->setFocus();
                     return false;
                 }
 
                 interactive()->warning(trc("notation", "MuseScore"),
                                        trc("notation", "You have multiple tags with the same name."));
-                tag->setFocus();
+                lineEditItem->setFocus();
                 return false;
             }
             map.insert(tagText, value->text());
