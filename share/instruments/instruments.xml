@@ -5785,14 +5785,18 @@
                   <description>Hand Bells</description>
                   <musicXMLid>pitched-percussion.handbells</musicXMLid>
                   <staves>2</staves>
-                  <clef>G</clef>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8va</concertClef>
                   <bracket>1</bracket>
                   <bracketSpan>2</bracketSpan>
                   <barlineSpan>2</barlineSpan>
-                  <clef staff="2">F</clef>
+                  <transposingClef staff="2">F</transposingClef>
+                  <concertClef staff="2">F8va</concertClef>
                   <aPitchRange>36-97</aPitchRange>
                   <pPitchRange>36-97</pPitchRange>
                   <singleNoteDynamics>0</singleNoteDynamics>
+                  <transposeDiatonic>7</transposeDiatonic>
+                  <transposeChromatic>12</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 112; MS General: Tinker Bell-->
                         <program value="112"/> <!--Tinkle Bell-->
