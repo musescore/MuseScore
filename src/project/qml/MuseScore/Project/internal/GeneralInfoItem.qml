@@ -28,7 +28,7 @@ Column {
     id: root
 
     property string title: ""
-    property alias info: textField.currentText
+    property alias info: textField.hint
 
     property alias navigation: textField.navigation
 
@@ -45,7 +45,6 @@ Column {
 
     TextInputField {
         id: textField
-        hint: qsTrc("project", "Optional")
 
         navigation.accessible.name: root.title + " " + currentText
 
