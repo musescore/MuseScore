@@ -98,14 +98,12 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
                                 "You can convert this score by opening and then\n"
                                 "saving with MuseScore version 2.x.\n"
                                 "Visit the %1MuseScore download page%2 to obtain such a 2.x version.")
-               .arg("<a href=\"https://musescore.org/download#older-versions\">")
-               .arg("</a>");
+               .arg("<a href=\"https://musescore.org/download#older-versions\">", "</a>");
         break;
     case Err::FileTooNew:
         text = qtrc("notation", "This score was saved using a newer version of MuseScore.\n "
                                 "Visit the %1MuseScore website%2 to obtain the latest version.")
-               .arg("<a href=\"https://musescore.org\">")
-               .arg("</a>");
+               .arg("<a href=\"https://musescore.org\">", "</a>");
         break;
     case Err::FileOld300Format:
         text = qtrc("notation", "It was last saved with a developer version of 3.0.");
@@ -123,6 +121,9 @@ inline Ret make_ret(Err err, const io::path& filePath = "")
         break;
     case Err::UnableToPlaybackElement:
         text = qtrc("notation", "Unable to playback element");
+        break;
+    case Err::EmptySelection:
+        text = qtrc("notation", "The selection is empty");
         break;
     case Err::Undefined:
     case Err::NoError:
