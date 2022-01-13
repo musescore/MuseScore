@@ -156,9 +156,9 @@ void CommandLineController::apply()
     notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
     notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
 
-    QString sessionType;
+    QString modeType;
     if (m_parser.isSet("session-type")) {
-        sessionType = m_parser.value("session-type");
+        modeType = m_parser.value("session-type");
     }
 
     // Converter mode
@@ -279,7 +279,7 @@ void CommandLineController::apply()
     }
 
     if (application()->runMode() == IApplication::RunMode::Editor) {
-        startupScenario()->setSessionType(sessionType);
+        startupScenario()->setModeType(modeType);
 
         if (!scorefiles.isEmpty()) {
             startupScenario()->setStartupScorePath(scorefiles[0]);

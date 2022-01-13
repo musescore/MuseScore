@@ -34,7 +34,7 @@ class IStartupScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IStartupScenario() = default;
 
-    virtual void setSessionType(const QString& sessionType) = 0;
+    virtual void setModeType(const QString& modeType) = 0;
     virtual void setStartupScorePath(const io::path& path) = 0;
 
     virtual void run() = 0;

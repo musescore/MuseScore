@@ -48,7 +48,7 @@ static const DockName PLAYBACK_TOOLBAR_NAME("playbackToolBar");
 // Other:
 static const DockName NOTATION_STATUSBAR_NAME("notationStatusBar");
 
-enum class StartupSessionType
+enum class StartupModeType
 {
     StartEmpty,
     ContinueLastSession,
