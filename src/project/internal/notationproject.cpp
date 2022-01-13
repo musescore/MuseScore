@@ -513,6 +513,10 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
         return make_ret(notation::Err::UnknownError);
     }
 
+    if (m_engravingProject->masterScore()->selectionEmpty()) {
+        LOGE() << "failed save, empty selection";
+        return make_ret(notation::Err::EmptySelection);
+    }
     // Check writable
     QFileInfo info(path.toQString());
     if (info.exists() && !info.isWritable()) {
@@ -523,14 +527,14 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     // Write project
     std::string suffix = io::suffix(info.fileName());
     MscWriter::Params params;
-    params.filePath = m_engravingProject->path();
+    params.filePath = path.toQString();
     params.mode = mcsIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }
 
     MscWriter msczWriter(params);
-    Ret ret = writeProject(msczWriter, false);
+    Ret ret = writeProject(msczWriter, true);
 
     if (ret) {
         QFile::setPermissions(info.filePath(),
