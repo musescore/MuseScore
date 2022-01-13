@@ -46,8 +46,8 @@ public:
     bool hasCompletedFirstLaunchSetup() const override;
     void setHasCompletedFirstLaunchSetup(bool has) override;
 
-    StartupSessionType startupSessionType() const override;
-    void setStartupSessionType(StartupSessionType type) override;
+    StartupModeType startupModeType() const override;
+    void setStartupModeType(StartupModeType type) override;
 
     io::path startupScorePath() const override;
     void setStartupScorePath(const io::path& scorePath) override;

@@ -32,7 +32,7 @@ static const std::string module_name("appshell");
 
 static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "application/hasCompletedFirstLaunchSetup");
 
-static const Settings::Key STARTUP_SESSION_TYPE(module_name, "application/startup/sessionStart");
+static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
 static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
@@ -54,7 +54,7 @@ void AppShellConfiguration::init()
 {
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
-    settings()->setDefaultValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(StartupSessionType::StartEmpty)));
+    settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(static_cast<int>(StartupModeType::StartEmpty)));
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
@@ -70,14 +70,14 @@ void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
     settings()->setSharedValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(has));
 }
 
-StartupSessionType AppShellConfiguration::startupSessionType() const
+StartupModeType AppShellConfiguration::startupModeType() const
 {
-    return static_cast<StartupSessionType>(settings()->value(STARTUP_SESSION_TYPE).toInt());
+    return static_cast<StartupModeType>(settings()->value(STARTUP_MODE_TYPE).toInt());
 }
 
-void AppShellConfiguration::setStartupSessionType(StartupSessionType type)
+void AppShellConfiguration::setStartupModeType(StartupModeType type)
 {
-    settings()->setSharedValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(type)));
+    settings()->setSharedValue(STARTUP_MODE_TYPE, Val(static_cast<int>(type)));
 }
 
 mu::io::path AppShellConfiguration::startupScorePath() const

@@ -39,21 +39,21 @@ class StartupScenario : public IStartupScenario, public async::Asyncable
 
 public:
 
-    void setSessionType(const QString& sessionType) override;
+    void setModeType(const QString& modeType) override;
     void setStartupScorePath(const io::path& path) override;
 
     void run() override;
     bool startupCompleted() const override;
 
 private:
-    void onStartupPageOpened(StartupSessionType sessionType);
+    void onStartupPageOpened(StartupModeType modeType);
 
-    StartupSessionType resolveStartupSessionType() const;
-    Uri startupPageUri(StartupSessionType sessionType) const;
+    StartupModeType resolveStartupModeType() const;
+    Uri startupPageUri(StartupModeType modeType) const;
 
     void openScore(const io::path& path);
 
-    QString m_sessionType;
+    QString m_modeTypeStr;
     io::path m_startupScorePath;
     bool m_startupCompleted = false;
 };
