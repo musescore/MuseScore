@@ -76,6 +76,9 @@ public:
     virtual void rollbackSettings() = 0;
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
+
+    virtual io::paths sessionProjectsPaths() const = 0;
+    virtual Ret setSessionProjectsPaths(const io::paths& paths) = 0;
 };
 }
 

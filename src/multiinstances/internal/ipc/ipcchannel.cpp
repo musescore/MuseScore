@@ -50,6 +50,11 @@ const ID& IpcChannel::selfID() const
     return m_selfSocket->selfID();
 }
 
+bool IpcChannel::isServer() const
+{
+    return m_server != nullptr;
+}
+
 void IpcChannel::connect()
 {
     setupConnection();

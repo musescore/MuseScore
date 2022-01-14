@@ -19,51 +19,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_STARTUPSCENARIO_H
-#define MU_APPSHELL_STARTUPSCENARIO_H
+#ifndef MU_APPSHELL_SESSIONSMANAGER_H
+#define MU_APPSHELL_SESSIONSMANAGER_H
 
 #include "istartupscenario.h"
 
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iappshellconfiguration.h"
+
 #include "isessionsmanager.h"
 
 namespace mu::appshell {
-class StartupScenario : public IStartupScenario, public async::Asyncable
+class SessionsManager : public ISessionsManager, public async::Asyncable
 {
-    INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(appshell, context::IGlobalContext, globalContext)
     INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, ISessionsManager, sessionsManager)
 
 public:
+    void init();
+    void deinit();
 
-    void setModeType(const QString& modeType) override;
-    void setStartupScorePath(const io::path& path) override;
+    bool hasProjectsForRestore() override;
 
-    void run() override;
-    bool startupCompleted() const override;
+    void restore() override;
+    void reset() override;
 
 private:
-    void onStartupPageOpened(StartupModeType modeType);
+    void removeProjectFromSession(const io::path& projectPath);
+    void addProjectToSession(const io::path& projectPath);
 
-    StartupModeType resolveStartupModeType() const;
-    Uri startupPageUri(StartupModeType modeType) const;
-
-    void openScore(const io::path& path);
-
-    void restoreLastSession();
-
-    QString m_modeTypeStr;
-    io::path m_startupScorePath;
-    bool m_startupCompleted = false;
+    io::path m_lastOpenedProjectPath;
 };
 }
 
-#endif // MU_APPSHELL_STARTUPSCENARIO_H
+#endif // MU_APPSHELL_SESSIONSMANAGER_H

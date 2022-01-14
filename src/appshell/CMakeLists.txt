@@ -46,6 +46,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/isessionsmanager.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/devtools/settingslistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/appmenumodel.cpp
