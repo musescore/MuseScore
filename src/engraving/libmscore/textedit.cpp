@@ -616,10 +616,10 @@ void SplitJoinText::split(EditData* ed)
 
     CharFormat* charFmt = _cursor.format();           // take current format
     t->textBlockList().insert(line + 1, _cursor.curLine().split(_cursor.column(), t->cursorFromEditData(*ed)));
-    _cursor.curLine().setEol(eol);
+    _cursor.curLine().setEol(true);
 
     _cursor.setRow(line + 1);
-    _cursor.curLine().setEol(true);
+    _cursor.curLine().setEol(eol);
     _cursor.setColumn(0);
     _cursor.setFormat(*charFmt);               // restore orig. format at new line
     _cursor.clearSelection();
