@@ -21,8 +21,14 @@
  */
 #include "appshellconfiguration.h"
 
+#include <QJsonDocument>
+
 #include "config.h"
 #include "settings.h"
+
+#include "multiinstances/resourcelockguard.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -50,6 +56,8 @@ static const std::string UTM_MEDIUM_MENU("menu");
 static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 
+static const mu::io::path SESSION_FILE("/session.json");
+
 void AppShellConfiguration::init()
 {
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
@@ -58,6 +66,8 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
+
+    fileSystem()->makePath(sessionDataPath());
 }
 
 bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
@@ -219,6 +229,28 @@ void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings) co
     settings()->reset(keepDefaultSettings);
 }
 
+mu::io::paths AppShellConfiguration::sessionProjectsPaths() const
+{
+    RetVal<QByteArray> retVal = readSessionState();
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
+        return {};
+    }
+
+    return parseSessionProjectsPaths(retVal.val);
+}
+
+mu::Ret AppShellConfiguration::setSessionProjectsPaths(const mu::io::paths& paths)
+{
+    QJsonArray jsonArray;
+    for (const io::path& path : paths) {
+        jsonArray << QJsonValue(path.toQString());
+    }
+
+    QByteArray data = QJsonDocument(jsonArray).toJson();
+    return writeSessionState(data);
+}
+
 std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) const
 {
     return "utm_source=desktop&utm_medium=" + utmMedium
@@ -237,4 +269,44 @@ std::string AppShellConfiguration::currentLanguageCode() const
     QLocale locale(languageCode);
 
     return locale.bcp47Name().toStdString();
+}
+
+mu::io::path AppShellConfiguration::sessionDataPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/session";
+}
+
+mu::io::path AppShellConfiguration::sessionFilePath() const
+{
+    return sessionDataPath() + SESSION_FILE;
+}
+
+mu::RetVal<QByteArray> AppShellConfiguration::readSessionState() const
+{
+    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "SESSION_FILE");
+    return fileSystem()->readFile(sessionFilePath());
+}
+
+mu::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
+{
+    mi::ResourceLockGuard lock_guard(multiInstancesProvider(), "SESSION_FILE");
+    return fileSystem()->writeToFile(sessionFilePath(), data);
+}
+
+mu::io::paths AppShellConfiguration::parseSessionProjectsPaths(const QByteArray& json) const
+{
+    QJsonParseError err;
+    QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError || !jsodDoc.isArray()) {
+        LOGE() << "failed parse, err: " << err.errorString();
+        return {};
+    }
+
+    io::paths result;
+    const QVariantList pathsList = jsodDoc.array().toVariantList();
+    for (const QVariant& pathVal : pathsList) {
+        result.push_back(pathVal.toString().toStdString());
+    }
+
+    return result;
 }

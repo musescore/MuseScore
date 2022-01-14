@@ -19,29 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_APPSHELL_ISESSIONSMANAGER_H
+#define MU_APPSHELL_ISESSIONSMANAGER_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
-
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
 namespace mu::appshell {
-class AppShellModule : public modularity::IModuleSetup
+class ISessionsManager : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(ISessionsManager)
+
 public:
-    AppShellModule();
+    virtual ~ISessionsManager() = default;
 
-    std::string moduleName() const override;
+    virtual bool hasProjectsForRestore() = 0;
 
-    void registerExports() override;
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    virtual void restore() = 0;
+    virtual void reset() = 0;
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_APPSHELL_ISESSIONSMANAGER_H

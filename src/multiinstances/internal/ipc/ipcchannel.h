@@ -47,6 +47,8 @@ public:
 
     const ID& selfID() const;
 
+    bool isServer() const;
+
     void connect();
 
     bool send(const Msg& msg);

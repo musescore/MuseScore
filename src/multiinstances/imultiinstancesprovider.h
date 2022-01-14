@@ -59,6 +59,7 @@ public:
 
     // Instances info
     virtual const std::string& selfID() const = 0;
+    virtual bool isMainInstance() const = 0;
     virtual std::vector<InstanceMeta> instances() const = 0;
     virtual async::Notification instancesChanged() const = 0;
 

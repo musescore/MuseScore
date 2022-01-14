@@ -22,23 +22,31 @@
 #ifndef MU_APPSHELL_APPSHELLCONFIGURATION_H
 #define MU_APPSHELL_APPSHELLCONFIGURATION_H
 
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "iappshellconfiguration.h"
+#include "iglobalconfiguration.h"
+#include "framework/system/ifilesystem.h"
+#include "multiinstances/imultiinstancesprovider.h"
+#include "ui/iuiconfiguration.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "ui/iuiconfiguration.h"
-#include "async/asyncable.h"
+
+#include "iappshellconfiguration.h"
 
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
+    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(appshell, system::IFileSystem, fileSystem)
+    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();
@@ -83,11 +91,22 @@ public:
 
     void revertToFactorySettings(bool keepDefaultSettings = false) const override;
 
+    io::paths sessionProjectsPaths() const override;
+    Ret setSessionProjectsPaths(const io::paths& paths) override;
+
 private:
     std::string utmParameters(const std::string& utmMedium) const;
     std::string sha() const;
 
     std::string currentLanguageCode() const;
+
+    io::path sessionDataPath() const;
+    io::path sessionFilePath() const;
+
+    RetVal<QByteArray> readSessionState() const;
+    Ret writeSessionState(const QByteArray& data);
+
+    io::paths parseSessionProjectsPaths(const QByteArray& json) const;
 };
 }
 

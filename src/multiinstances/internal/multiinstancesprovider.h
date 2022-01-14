@@ -72,6 +72,7 @@ public:
 
     // Instances info
     const std::string& selfID() const override;
+    bool isMainInstance() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
 

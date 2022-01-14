@@ -23,10 +23,12 @@
 #include "startupscenario.h"
 
 #include "async/async.h"
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::actions;
+using namespace mu::framework;
 
 static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const mu::Uri HOME_URI("musescore://home");
@@ -72,6 +74,11 @@ void StartupScenario::run()
     }
 
     StartupModeType modeType = resolveStartupModeType();
+    bool isMainInstance = multiInstancesProvider()->isMainInstance();
+    if (isMainInstance && sessionsManager()->hasProjectsForRestore()) {
+        modeType = StartupModeType::ContinueLastSession;
+    }
+
     Uri startupUri = startupPageUri(modeType);
 
     async::Channel<Uri> opened = interactive()->opened();
@@ -123,7 +130,7 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         dispatcher()->dispatch("file-new");
         break;
     case StartupModeType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
+        restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
         io::path path = m_startupScorePath.empty() ? configuration()->startupScorePath()
@@ -143,9 +150,10 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     case StartupModeType::StartEmpty:
     case StartupModeType::StartWithNewScore:
         return HOME_URI;
-    case StartupModeType::ContinueLastSession:
     case StartupModeType::StartWithScore:
         return NOTATION_URI;
+    case StartupModeType::ContinueLastSession:
+        return HOME_URI;
     }
 
     return HOME_URI;
@@ -154,4 +162,22 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
 void StartupScenario::openScore(const io::path& path)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(path));
+}
+
+void StartupScenario::restoreLastSession()
+{
+    if (!sessionsManager()->hasProjectsForRestore()) {
+        dispatcher()->dispatch("continue-last-session");
+        return;
+    }
+
+    IInteractive::Result result = interactive()->question(trc("appshell", "The previous session quit unexpectedly."),
+                                                          trc("appshell", "Restore session?"),
+                                                          { IInteractive::Button::No, IInteractive::Button::Yes });
+
+    if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
+        sessionsManager()->restore();
+    } else {
+        sessionsManager()->reset();
+    }
 }
