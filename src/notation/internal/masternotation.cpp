@@ -231,7 +231,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, const ScoreCreateO
     parts()->setParts(scoreOptions.parts, scoreOptions.order);
 
     score->checkChordList();
-    createMeasures(score, scoreOptions);
 
     applyOptions(score, scoreOptions);
 
