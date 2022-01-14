@@ -23,6 +23,8 @@
 
 #include "log.h"
 
+static const std::string AUTOSAVE_SUFFIX = ".autosave";
+
 using namespace mu::project;
 
 void ProjectAutoSaver::init()
@@ -49,6 +51,38 @@ void ProjectAutoSaver::init()
     configuration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
         m_timer.setInterval(minutes * 60000);
     });
+
+    globalContext()->currentProjectChanged().onNotify(this, [this](){
+        auto currentProject = globalContext()->currentProject();
+        if (!currentProject) {
+            fileSystem()->remove(projectAutoSavePath(m_lastOpenedProjectPath));
+            return;
+        }
+
+        currentProject->needSave().notification.onNotify(this, [this, currentProject](){
+            if (!currentProject->needSave().val) {
+                fileSystem()->remove(projectAutoSavePath(currentProject->path()));
+            }
+        });
+
+        m_lastOpenedProjectPath = currentProject->path();
+    });
+}
+
+bool ProjectAutoSaver::projectHasUnsavedChanges(const io::path& projectPath) const
+{
+    io::path autoSavePath = projectAutoSavePath(projectPath);
+    return fileSystem()->exists(autoSavePath);
+}
+
+mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const
+{
+    return io::completebasename(projectAutoSavePath);
+}
+
+mu::io::path ProjectAutoSaver::projectAutoSavePath(const io::path& projectPath) const
+{
+    return projectPath + AUTOSAVE_SUFFIX;
 }
 
 void ProjectAutoSaver::onTrySave()
@@ -69,7 +103,9 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    Ret ret = project->save();
+    io::path savePath = projectAutoSavePath(project->path());
+
+    Ret ret = project->save(savePath, SaveMode::AutoSave);
     if (!ret) {
         LOGE() << "[autosave] failed to save project, err: " << ret.toString();
         return;

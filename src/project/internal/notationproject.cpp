@@ -123,8 +123,15 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     }
 
     MscReader::Params params;
-    params.filePath = path.toQString();
-    params.mode = mcsIoModeBySuffix(suffix);
+
+    bool needRestoreUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(path);
+    if (needRestoreUnsavedChanges) {
+        params.filePath = projectAutoSaver()->projectAutoSavePath(path).toQString();
+    } else {
+        params.filePath = path.toQString();
+    }
+
+    params.mode = mscIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }
@@ -134,7 +141,17 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
         return make_ret(engraving::Err::FileOpenError);
     }
 
-    return doLoad(reader, stylePath, forceMode);
+    Ret ret = doLoad(reader, stylePath, forceMode);
+    if (!ret) {
+        return ret;
+    }
+
+    if (needRestoreUnsavedChanges) {
+        m_engravingProject->setPath(path.toQString());
+        m_masterNotation->score()->setSaved(false);
+    }
+
+    return ret;
 }
 
 mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode)
@@ -336,8 +353,32 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         return saveSelectionOnScore(path);
     case SaveMode::Save:
     case SaveMode::SaveAs:
-    case SaveMode::SaveCopy:
-        return saveScore(path);
+    case SaveMode::SaveCopy: {
+        io::path oldFilePath = m_engravingProject->path();
+
+        io::path savePath = path;
+        if (!savePath.empty()) {
+            m_engravingProject->setPath(savePath.toQString());
+        } else {
+            savePath = m_engravingProject->path();
+        }
+
+        std::string suffix = io::suffix(savePath);
+
+        Ret ret = saveScore(savePath, suffix);
+        if (ret) {
+            if (saveMode != SaveMode::SaveCopy || oldFilePath == savePath) {
+                m_masterNotation->onSaveCopy();
+            }
+        }
+
+        return ret;
+    }
+    case SaveMode::AutoSave:
+        io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
+        std::string suffix = io::suffix(originalPath);
+
+        return saveScore(path, suffix);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -361,33 +402,20 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
     return ret;
 }
 
-mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
+mu::Ret NotationProject::saveScore(const io::path& path, const std::string& fileSuffix)
 {
-    std::string suffix = io::suffix(path);
-    if (!isMuseScoreFile(suffix) && !suffix.empty()) {
-        return exportProject(path, suffix);
+    if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
+        return exportProject(path, fileSuffix);
     }
 
-    io::path oldFilePath = m_engravingProject->path();
-    if (!path.empty()) {
-        m_engravingProject->setPath(path.toQString());
-    }
+    MscIoMode ioMode = mscIoModeBySuffix(fileSuffix);
 
-    Ret ret = doSave(true);
-    if (!ret) {
-        return ret;
-    }
-
-    if (saveMode != SaveMode::SaveCopy || oldFilePath == path) {
-        m_masterNotation->onSaveCopy();
-    }
-
-    return make_ret(Ret::Code::Ok);
+    return doSave(path, true, ioMode);
 }
 
-mu::Ret NotationProject::doSave(bool generateBackup)
+mu::Ret NotationProject::doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode)
 {
-    QString currentPath = m_engravingProject->path();
+    QString currentPath = path.toQString();
     QString savePath = currentPath + "_saving";
 
     // Step 1: check writable
@@ -401,10 +429,9 @@ mu::Ret NotationProject::doSave(bool generateBackup)
 
     // Step 2: write project
     {
-        std::string suffix = io::suffix(currentPath);
         MscWriter::Params params;
         params.filePath = savePath;
-        params.mode = mcsIoModeBySuffix(suffix);
+        params.mode = ioMode;
         IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
             return make_ret(Ret::Code::InternalError);
         }
@@ -528,7 +555,7 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     std::string suffix = io::suffix(info.fileName());
     MscWriter::Params params;
     params.filePath = path.toQString();
-    params.mode = mcsIoModeBySuffix(suffix);
+    params.mode = mscIoModeBySuffix(suffix);
     IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }

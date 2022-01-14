@@ -48,7 +48,7 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path& filePath) const
 
     MscReader::Params params;
     params.filePath = filePath.toQString();
-    params.mode = mcsIoModeBySuffix(io::suffix(filePath));
+    params.mode = mscIoModeBySuffix(io::suffix(filePath));
     if (params.mode == MscIoMode::Unknown) {
         return make_ret(Ret::Code::InternalError);
     }
