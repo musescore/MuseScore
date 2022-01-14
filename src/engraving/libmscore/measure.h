@@ -338,10 +338,7 @@ public:
     void triggerLayout() const override;
     qreal basicStretch() const;
     qreal basicWidth() const;
-    int layoutWeight(int maxMMRestLength = 0) const;
-    qreal stretchWeight();
-    qreal stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretchCoeff);
-    Fraction minSysTicks();
+    float durationStretch(Fraction curTicks, const Fraction minTicks) const;
     void computeWidth(Fraction minTicks, qreal stretchCoeff);
     void checkHeader();
     void checkTrailer();
@@ -399,7 +396,7 @@ private:
 
     Fraction m_quantumOfSegmentCell = { 1, 16 };
 
-    qreal m_layoutStretch = 1;
+    double m_layoutStretch = 1.0;
 };
 }     // namespace Ms
 #endif
