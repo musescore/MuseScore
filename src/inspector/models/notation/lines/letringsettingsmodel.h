@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_LETRINGSETTINGSMODEL_H
 #define MU_INSPECTOR_LETRINGSETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class LetRingSettingsModel : public LineSettingsModel
+class LetRingSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

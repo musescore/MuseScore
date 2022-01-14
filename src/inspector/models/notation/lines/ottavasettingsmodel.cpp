@@ -31,7 +31,7 @@ using namespace mu::inspector;
 using IconCode = mu::ui::IconCode::Code;
 
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::OTTAVA)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::OTTAVA)
 {
     setTitle(qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
@@ -84,20 +84,19 @@ QVariantList OttavaSettingsModel::possibleOttavaTypes() const
 
 void OttavaSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     m_ottavaType = buildPropertyItem(Ms::Pid::OTTAVA_TYPE);
     m_showNumbersOnly = buildPropertyItem(Ms::Pid::NUMBERS_ONLY);
 
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
     placement()->setIsVisible(false);
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
-    endTextHorizontalOffset()->setIsVisible(false);
 }
 
 void OttavaSettingsModel::loadProperties()
 {
-    LineSettingsModel::loadProperties();
+    TextLineSettingsModel::loadProperties();
 
     loadPropertyItem(m_ottavaType);
     loadPropertyItem(m_showNumbersOnly);
@@ -105,7 +104,7 @@ void OttavaSettingsModel::loadProperties()
 
 void OttavaSettingsModel::resetProperties()
 {
-    LineSettingsModel::resetProperties();
+    TextLineSettingsModel::resetProperties();
 
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();

@@ -24,22 +24,23 @@
 using namespace mu::inspector;
 
 PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE)
 {
     setModelType(InspectorModelType::TYPE_PALM_MUTE);
     setTitle(qtrc("inspector", "Palm mute"));
     setIcon(ui::IconCode::Code::PALM_MUTE);
+    setPossibleEndHookTypes({});
 
     createProperties();
 }
 
 void PalmMuteSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
+    placement()->setIsVisible(true);
     startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
-
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
 }

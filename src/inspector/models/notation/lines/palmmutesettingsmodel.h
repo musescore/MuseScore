@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_PALMMUTESETTINGSMODEL_H
 #define MU_INSPECTOR_PALMMUTESETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class PalmMuteSettingsModel : public LineSettingsModel
+class PalmMuteSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

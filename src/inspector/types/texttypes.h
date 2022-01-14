@@ -136,9 +136,6 @@ public:
 
 static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
     Ms::ElementType::TEXT,
-    Ms::ElementType::TEXTLINE,
-    Ms::ElementType::TEXTLINE_BASE,
-    Ms::ElementType::TEXTLINE_SEGMENT,
     Ms::ElementType::STAFF_TEXT,
     Ms::ElementType::SYSTEM_TEXT,
     Ms::ElementType::DYNAMIC,

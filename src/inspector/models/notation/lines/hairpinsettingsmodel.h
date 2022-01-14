@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_HAIRPINSETTINGSMODEL_H
 #define MU_INSPECTOR_HAIRPINSETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class HairpinSettingsModel : public LineSettingsModel
+class HairpinSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

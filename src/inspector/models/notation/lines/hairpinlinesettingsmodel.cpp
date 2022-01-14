@@ -33,7 +33,7 @@ using namespace mu::inspector;
 using IconCode = mu::ui::IconCode::Code;
 
 HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
-    : LineSettingsModel(parent, repository)
+    : TextLineSettingsModel(parent, repository)
 {
     if (lineType == Diminuendo) {
         setModelType(InspectorModelType::TYPE_DIMINUENDO);
@@ -45,23 +45,16 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
         setIcon(ui::IconCode::Code::CRESCENDO);
     }
 
-    static const QList<HookTypeInfo> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hoocked 90 T-style") }
-    };
-
-    setPossibleEndHookTypes(hookTypes);
-
     createProperties();
 }
 
 void HairpinLineSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
+    isLineVisible()->setIsVisible(true);
     allowDiagonal()->setIsVisible(false);
+    placement()->setIsVisible(true);
 }
 
 void HairpinLineSettingsModel::requestElements()
