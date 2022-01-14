@@ -2127,8 +2127,12 @@ void NotationInteraction::selectTopStaff()
     if (score()->noteEntryMode()) {
         score()->inputState().moveInputPos(el);
     }
-    score()->select(el, SelectType::SINGLE, 0);
-    notifyAboutSelectionChanged();
+
+    if (el->type() == ElementType::CHORD) {
+        el = Ms::toChord(el)->upNote();
+    }
+
+    select({ el }, SelectType::SINGLE, 0);
 }
 
 void NotationInteraction::selectEmptyTrailingMeasure()
