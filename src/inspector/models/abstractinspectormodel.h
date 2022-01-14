@@ -113,7 +113,8 @@ public:
         TYPE_TREMOLO,
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
-        TYPE_TUPLET
+        TYPE_TUPLET,
+        TYPE_TEXT_LINE
     };
     Q_ENUM(InspectorModelType)
 

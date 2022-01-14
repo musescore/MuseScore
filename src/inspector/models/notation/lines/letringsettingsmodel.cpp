@@ -25,22 +25,23 @@
 using namespace mu::inspector;
 
 LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::LET_RING)
+    : TextLineSettingsModel(parent, repository, Ms::ElementType::LET_RING)
 {
     setModelType(InspectorModelType::TYPE_LET_RING);
     setTitle(qtrc("inspector", "Let ring"));
     setIcon(ui::IconCode::Code::LET_RING);
+    setPossibleEndHookTypes({});
 
     createProperties();
 }
 
 void LetRingSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
+    isLineVisible()->setIsVisible(true);
+    allowDiagonal()->setIsVisible(true);
+    placement()->setIsVisible(true);
     startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
-
-    beginingTextHorizontalOffset()->setIsVisible(false);
-    continiousTextHorizontalOffset()->setIsVisible(false);
 }

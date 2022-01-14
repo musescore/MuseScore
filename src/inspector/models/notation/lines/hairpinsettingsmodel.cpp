@@ -30,7 +30,7 @@
 using namespace mu::inspector;
 
 HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository)
+    : TextLineSettingsModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(qtrc("inspector", "Hairpin"));
@@ -56,11 +56,15 @@ PropertyItem* HairpinSettingsModel::continiousHeight() const
 
 void HairpinSettingsModel::createProperties()
 {
-    LineSettingsModel::createProperties();
+    TextLineSettingsModel::createProperties();
 
     m_isNienteCircleVisible = buildPropertyItem(Ms::Pid::HAIRPIN_CIRCLEDTIP);
     m_height = buildPropertyItem(Ms::Pid::HAIRPIN_HEIGHT);
     m_continiousHeight = buildPropertyItem(Ms::Pid::HAIRPIN_CONT_HEIGHT);
+
+    isLineVisible()->setIsVisible(false);
+    allowDiagonal()->setIsVisible(true);
+    placement()->setIsVisible(true);
 }
 
 void HairpinSettingsModel::loadProperties()
@@ -69,7 +73,7 @@ void HairpinSettingsModel::loadProperties()
         return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
-    LineSettingsModel::loadProperties();
+    TextLineSettingsModel::loadProperties();
 
     loadPropertyItem(m_isNienteCircleVisible);
     loadPropertyItem(m_height, formatDoubleFunc);
@@ -78,7 +82,7 @@ void HairpinSettingsModel::loadProperties()
 
 void HairpinSettingsModel::resetProperties()
 {
-    LineSettingsModel::resetProperties();
+    TextLineSettingsModel::resetProperties();
 
     m_isNienteCircleVisible->resetToDefault();
     m_height->resetToDefault();

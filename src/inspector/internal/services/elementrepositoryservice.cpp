@@ -83,6 +83,7 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::VOLTA:
     case Ms::ElementType::LET_RING:
     case Ms::ElementType::OTTAVA:
+    case Ms::ElementType::TEXTLINE:
     case Ms::ElementType::PALM_MUTE: return findLines(elementType);
     default:
         QList<Ms::EngravingItem*> resultList;
@@ -253,7 +254,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
         { Ms::ElementType::VOLTA, Ms::ElementType::VOLTA_SEGMENT },
         { Ms::ElementType::LET_RING, Ms::ElementType::LET_RING_SEGMENT },
         { Ms::ElementType::PALM_MUTE, Ms::ElementType::PALM_MUTE_SEGMENT },
-        { Ms::ElementType::OTTAVA, Ms::ElementType::OTTAVA_SEGMENT }
+        { Ms::ElementType::OTTAVA, Ms::ElementType::OTTAVA_SEGMENT },
+        { Ms::ElementType::TEXTLINE, Ms::ElementType::TEXTLINE_SEGMENT }
     };
 
     QList<Ms::EngravingItem*> resultList;

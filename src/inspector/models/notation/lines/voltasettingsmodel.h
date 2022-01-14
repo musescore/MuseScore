@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_VOLTASETTINGSMODEL_H
 #define MU_INSPECTOR_VOLTASETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class VoltaSettingsModel : public LineSettingsModel
+class VoltaSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

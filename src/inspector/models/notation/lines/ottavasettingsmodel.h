@@ -22,10 +22,10 @@
 #ifndef MU_INSPECTOR_OTTAVASETTINGSMODEL_H
 #define MU_INSPECTOR_OTTAVASETTINGSMODEL_H
 
-#include "linesettingsmodel.h"
+#include "textlinesettingsmodel.h"
 
 namespace mu::inspector {
-class OttavaSettingsModel : public LineSettingsModel
+class OttavaSettingsModel : public TextLineSettingsModel
 {
     Q_OBJECT
 

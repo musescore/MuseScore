@@ -19,72 +19,68 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_LINESETTINGSMODEL_H
-#define MU_INSPECTOR_LINESETTINGSMODEL_H
+#ifndef MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
+#define MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
 
 #include "models/abstractinspectormodel.h"
 
 #include "ui/view/iconcodes.h"
 
 namespace mu::inspector {
-class LineSettingsModel : public AbstractInspectorModel
+class TextLineSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
+
     Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
-    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     Q_PROPERTY(PropertyItem * thickness READ thickness CONSTANT)
     Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
     Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
-    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
-    Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
-
     Q_PROPERTY(PropertyItem * startHookType READ startHookType CONSTANT)
     Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
     Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
 
+    Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
+
     Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginingTextHorizontalOffset READ beginingTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * continiousText READ continiousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
-    Q_PROPERTY(PropertyItem * endTextHorizontalOffset READ endTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
-    explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                               Ms::ElementType elementType = Ms::ElementType::INVALID);
+    explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
+                                   Ms::ElementType elementType = Ms::ElementType::TEXTLINE);
+
+    PropertyItem* isLineVisible() const;
+    PropertyItem* allowDiagonal() const;
 
     PropertyItem* lineStyle() const;
-    PropertyItem* placement() const;
 
     PropertyItem* thickness() const;
     PropertyItem* dashLineLength() const;
     PropertyItem* dashGapLength() const;
 
-    PropertyItem* isLineVisible() const;
-    PropertyItem* allowDiagonal() const;
-
     PropertyItem* startHookType() const;
     PropertyItem* endHookType() const;
     PropertyItem* hookHeight() const;
 
+    PropertyItem* placement() const;
+
     PropertyItem* beginingText() const;
-    PropertyItem* beginingTextHorizontalOffset() const;
     PropertyItem* beginingTextVerticalOffset() const;
 
     PropertyItem* continiousText() const;
-    PropertyItem* continiousTextHorizontalOffset() const;
     PropertyItem* continiousTextVerticalOffset() const;
 
     PropertyItem* endText() const;
-    PropertyItem* endTextHorizontalOffset() const;
     PropertyItem* endTextVerticalOffset() const;
 
     Q_INVOKABLE QVariantList possibleStartHookTypes() const;
@@ -141,15 +137,12 @@ private:
     PropertyItem* m_hookHeight = nullptr;
 
     PropertyItem* m_beginingText = nullptr;
-    PropertyItem* m_beginingTextHorizontalOffset = nullptr;
     PropertyItem* m_beginingTextVerticalOffset = nullptr;
 
     PropertyItem* m_continiousText = nullptr;
-    PropertyItem* m_continiousTextHorizontalOffset = nullptr;
     PropertyItem* m_continiousTextVerticalOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
-    PropertyItem* m_endTextHorizontalOffset = nullptr;
     PropertyItem* m_endTextVerticalOffset = nullptr;
 
     QVariantList m_possibleStartHookTypes;
@@ -157,4 +150,4 @@ private:
 };
 }
 
-#endif // MU_INSPECTOR_LINESETTINGSMODEL_H
+#endif // MU_INSPECTOR_TEXTLINESETTINGSMODEL_H
