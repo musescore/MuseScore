@@ -400,7 +400,8 @@ void NotationPaintView::paint(QPainter* qp)
 
     painter->setWorldTransform(m_matrix * guiScalingCompensation);
 
-    notation()->painting()->paintView(painter, toLogical(rect), publishMode());
+    bool isPrinting = publishMode() || m_inputController->readonly();
+    notation()->painting()->paintView(painter, toLogical(rect), isPrinting);
 
     m_playbackCursor->paint(painter);
     m_noteInputCursor->paint(painter);

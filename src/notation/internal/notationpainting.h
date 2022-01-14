@@ -52,7 +52,7 @@ public:
     int pageCount() const override;
     SizeF pageSizeInch() const override;
 
-    void paintView(draw::Painter* painter, const RectF& frameRect, bool isPublish) override;
+    void paintView(draw::Painter* painter, const RectF& frameRect, bool isPrinting) override;
     void paintPdf(draw::Painter* painter, const Options& opt) override;
     void paintPrint(draw::Painter* painter, const Options& opt) override;
     void paintPng(draw::Painter* painter, const Options& opt) override;

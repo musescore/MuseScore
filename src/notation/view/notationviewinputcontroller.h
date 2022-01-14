@@ -92,6 +92,7 @@ public:
     void startOfScore();
     void endOfScore();
 
+    bool readonly() const;
     void setReadonly(bool readonly);
 
     void wheelEvent(QWheelEvent* event);

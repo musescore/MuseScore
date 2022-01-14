@@ -1963,7 +1963,7 @@ void NotationInteraction::drawGripPoints(draw::Painter* painter)
     }
 
     m_editData.element->updateGrips(m_editData);
-    m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
+    m_editData.element->drawEditMode(painter, m_editData, scaling);
 
     if (!editingElement) {
         m_editData.element = nullptr;
