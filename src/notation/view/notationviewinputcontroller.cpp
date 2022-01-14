@@ -104,6 +104,11 @@ void NotationViewInputController::initZoom()
     }
 }
 
+bool NotationViewInputController::readonly() const
+{
+    return m_readonly;
+}
+
 void NotationViewInputController::setReadonly(bool readonly)
 {
     m_readonly = readonly;

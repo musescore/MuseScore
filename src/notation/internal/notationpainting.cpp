@@ -267,14 +267,14 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
     }
 }
 
-void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPublish)
+void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool isPrinting)
 {
     Options opt;
     opt.isSetViewport = false;
     opt.isMultiPage = true;
     opt.frameRect = frameRect;
     opt.deviceDpi = uiConfiguration()->dpi();
-    opt.isPrinting = isPublish;
+    opt.isPrinting = isPrinting;
     doPaint(painter, opt);
 }
 
