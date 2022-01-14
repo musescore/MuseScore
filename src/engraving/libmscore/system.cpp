@@ -1825,4 +1825,24 @@ int System::lastVisibleSysStaffOfPart(const Part* part) const
     }
     return -1;   // No visible staves on this part.
 }
+
+//---------------------------------------------------------
+//      minSysTicks
+//      returns the shortest note/rest in the system
+//---------------------------------------------------------
+
+Fraction System::minSysTicks() const
+{
+    Fraction minTicks = Fraction(10, 1); // Initializing the variable at a random high value.
+    for (MeasureBase* mb : measures()) {
+        if (mb->isMeasure()) {
+            Measure* m = toMeasure(mb);
+            Fraction curMinTicks = m->computeTicks();
+            if (curMinTicks < minTicks) {
+                minTicks = curMinTicks;
+            }
+        }
+    }
+    return minTicks;
+}
 }
