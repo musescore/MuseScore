@@ -233,6 +233,8 @@ public:
     int firstVisibleSysStaffOfPart(const Part* part) const;
     int lastSysStaffOfPart(const Part* part) const;
     int lastVisibleSysStaffOfPart(const Part* part) const;
+
+    Fraction minSysTicks() const;
 };
 
 typedef QList<System*>::iterator iSystem;

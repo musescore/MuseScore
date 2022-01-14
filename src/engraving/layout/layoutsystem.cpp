@@ -324,7 +324,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
                     } else {
                         m->removeSystemTrailer();
                     }
-                    m->computeWidth(m->minSysTicks(), oldStretch);
+                    m->computeWidth(m->system()->minSysTicks(), oldStretch);
                     m->layoutMeasureElements();
                     LayoutBeams::restoreBeams(m);
                     if (m == nm || !m->noBreak()) {

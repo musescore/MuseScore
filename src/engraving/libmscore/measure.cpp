@@ -3531,7 +3531,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             qDebug("Clef Segment without Clef elements at tick %d/%d", clefSeg->tick().numerator(), clefSeg->tick().denominator());
         }
         if ((wasVisible != clefSeg->visible()) && system()) {   // recompute the width only if necessary
-            computeWidth(minSysTicks(), 1);
+            computeWidth(system()->minSysTicks(), 1);
         }
         if (seg) {
             Segment* s1;
@@ -3554,7 +3554,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
     Segment* s = seg->prevActive();
     if (s) {
         qreal x    = s->rxpos();
-        computeWidth(s, x, false, minSysTicks(), 1);
+        computeWidth(s, x, false, system()->minSysTicks(), 1);
     }
 
     return width() - oldWidth;
@@ -3584,57 +3584,6 @@ qreal Measure::basicWidth() const
     qreal minMeasureWidth = score()->styleMM(Sid::minMeasureWidth);
     if (w < minMeasureWidth) {
         w = minMeasureWidth;
-    }
-    return w;
-}
-
-//---------------------------------------------------------
-//   stretchWeight
-//   Returns a weight parameter proportional to the
-//   current with of the measure.
-//---------------------------------------------------------
-qreal Measure::stretchWeight()
-{
-    if (isMMRest()) {
-        return width();
-    }
-    qreal w = 0;
-    qreal W = 0;
-    qreal weight = 0;
-    qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
-    Fraction minTicks = minSysTicks();
-    for (Segment* s = first(); s; s = s->next()) {
-        if (s->enabled() && s->visible() && !s->allElementsInvisible() && s->isChordRestType()) {
-            qreal str = stretchFormula(s->ticks(), minTicks, 1);
-            w += minNoteSpace * str * basicStretch();
-            W += s->width();
-            // You cannot simply do weight += s->width(), because the s->width() also includes accidentals
-        }
-        continue;
-    }
-    weight = w * (w / W); // Empirical correction factor (see documentation)
-    return weight;
-}
-
-//---------------------------------------------------------
-//   layoutWeight
-//---------------------------------------------------------
-
-int Measure::layoutWeight(int maxMMRestLength) const
-{
-    int w = ticks().ticks();
-    // reduce weight of mmrests
-    // so the nominal width is not directly proportional to duration (still linear, just not 1:1)
-    // and they are not so "greedy" in taking up available space on a system
-    if (isMMRest()) {
-        int timesigTicks = timesig().ticks();
-        // TODO: style setting
-        if (maxMMRestLength) {
-            int maxW = timesigTicks * maxMMRestLength;
-            w = qMin(w, maxW);
-        }
-        w -= timesigTicks;
-        w = timesigTicks + w / 32;
     }
     return w;
 }
@@ -3987,7 +3936,7 @@ void Measure::removeSystemTrailer()
     }
     setTrailer(false);
     if (system() && changed) {
-        computeWidth(minSysTicks(), 1);
+        computeWidth(system()->minSysTicks(), 1);
     }
 }
 
@@ -4029,21 +3978,6 @@ void Measure::setStretchedWidth(qreal w)
     if (w < minWidth) {
         w = minWidth;
     }
-
-    // New spacing algorithm: this stretching is not necessary anymore.
-
-#if 0
-    qreal stretchableWidth = 0.0;
-    for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        if (!s->enabled()) {
-            continue;
-        }
-        stretchableWidth += s->width();
-    }
-    const int maxMMRestLength = 32;       // TODO: style
-    int weight = layoutWeight(maxMMRestLength);
-    w += stretchableWidth * (basicStretch() - 1.0) * weight / 1920.0;
-#endif
     setWidth(w);
 }
 
@@ -4074,65 +4008,55 @@ static bool hasAccidental(Segment* s)
 }
 
 //---------------------------------------------------------
-//      minSysTicks
-//      returns the shortest note/rest in the system
-//---------------------------------------------------------
-
-Fraction Measure::minSysTicks()
-{
-    Fraction minTicks = Fraction(10, 1);
-    for (MeasureBase* mb : system()->measures()) {
-        if (mb->isMeasure()) {
-            Measure* m = toMeasure(mb);
-            Fraction curMinTicks = m->computeTicks();
-            if (curMinTicks < minTicks) {
-                minTicks = curMinTicks;
-            }
-        }
-    }
-    return minTicks;
-}
-
-//---------------------------------------------------------
 //      Stretch formula
 //      Computes the stretch for a given segment depending
 //      on its duration with respect to the shortest one.
 //      Three different options proposed (see documentation).
 //---------------------------------------------------------
-qreal Measure::stretchFormula(Fraction curTicks, Fraction minTicks, qreal stretchCoeff)
+float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
 {
-    qreal slope = userStretch() * score()->styleD(Sid::measureSpacing);
+    qreal userSlope = userStretch() * score()->styleD(Sid::measureSpacing);
+    static constexpr qreal baseSlope = 0.647;
+    qreal slope = userSlope * baseSlope;
+    // The slope of the spacing formula is determined by the multiplication of user-defined settings and baseSlope.
+    // The value of baseSlope is chosen such that, for the default user settings, the curve matches the Gould.
+    // See documentation PDF for more detail.
+
+    static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
+    static constexpr Fraction shortNoteThreshold = Fraction(1, 16);
+    static constexpr Fraction longNoteThreshold = Fraction(1, 16);
 
     if (curTicks > m_timesig) { // This is the case of MM rests
-        curTicks = curTicks - m_timesig; // 2 bars MM rests is spaced same as 1 bar
-        if (curTicks > m_timesig * 20) { // To avoid excessive
-            curTicks = m_timesig * 20;
+        curTicks = curTicks - m_timesig; // A 2-bar MM rests receives the same space as one bar.
+        if (curTicks > m_timesig * maxMMRestWidth) {
+            curTicks = m_timesig * maxMMRestWidth; // Avoids long MM rests being excessively wide.
         }
     }
 
-    if (minTicks <= Fraction(1, 32)) {
+    if (minTicks < shortNoteThreshold) {
         // Reduces the slope of the spacing curve in case very short notes are present.
-        // Avoids having longer notes too wide.
-        qreal reduction = qMax((1 - 0.2 * log2(qreal(Fraction(1, 16).ticks()) / qreal(minTicks.ticks()))), 0.3);
+        // Avoids having the longer notes too wide.
+        qreal reduction = qMax((1 - 0.2 * log2(qreal(shortNoteThreshold.ticks()) / qreal(minTicks.ticks()))), 0.3);
+        // The numbers (and the formula itself) are purely empirical.
         slope = slope * reduction;
     }
 
+    //TODO: choose formula in style settings
     // Linear spacing
     //qreal str = 1 - 0.112 * slope +  0.112 * slope * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
     // Logarithmic spacing (MS 3.6)
     //qreal str = 1.0 + 0.721 * slope * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
     // Quadratic spacing (Gould)
-    qreal str = 1 - 0.647 * slope + 0.647 * slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
+    qreal str = 1 - slope + slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
 
-    if (minTicks > Fraction(1, 16)) {
+    if (minTicks > longNoteThreshold) {
         // Avoids long notes being too narrow in the absense of shorter notes.
-        str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(Fraction(1, 16).ticks())));
+        str = str * (1 - 0.5 + 0.5 * sqrt(qreal(minTicks.ticks()) / qreal(longNoteThreshold.ticks())));
+        // This is equivalent to assuming that a 1/16 note is present and spacing longer notes according to it.
+        // The 0.5 factor is purely empirical.
     }
 
-    str *= stretchCoeff;
-
     return str;
-    //TODO: choose formula in style settings
 }
 
 //---------------------------------------------------------
@@ -4154,7 +4078,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
     qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
-    qreal stretch = qMax(userStretch() * score()->styleD(Sid::measureSpacing), qreal(1));
+    qreal usrStretch = qMax(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The qMax avoids stretch going to zero
 
     while (s) {
         s->rxpos() = x;
@@ -4190,8 +4114,11 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                 // the note with respect to the shortest note *of the system*.
                 if (s->isChordRestType()) {
                     Fraction t = s->ticks();
-                    qreal str = stretchFormula(t, minTicks, stretchCoeff);
-                    qreal minStretchedWidth = minNoteSpace * str * stretch;
+                    qreal durStretch = durationStretch(t, minTicks);
+                    qreal minStretchedWidth = minNoteSpace * durStretch * usrStretch * stretchCoeff;
+                    // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
+                    // usrStretch is the spacing factor determined by user settings.
+                    // stretchCoeff is the spacing factor used to justify the systems, i.e. getting the systems to fill the page.
                     w = qMax(w, minStretchedWidth);
                 }
             }
@@ -4252,21 +4179,6 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
         x += w;
         s = s->next();
     }
-
-    // This doesn't seem to be needed but I'm not sure yet.
-    /*if (isMMRest()) {
-        // Reset MM rest to initial size and position
-        Segment* seg = findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
-        const int nstaves = score()->nstaves();
-        for (int st = 0; st < nstaves; ++st) {
-            MMRest* mmRest = toMMRest(seg->element(staff2track(st)));
-            if (mmRest) {
-                mmRest->rxpos() = 0;
-                mmRest->setWidth(score()->styleMM(Sid::minMMRestWidth) * mag());
-                mmRest->segment()->createShapes();
-            }
-        }
-    }*/
     if (isMMRest() && x < score()->styleMM(Sid::minMMRestWidth)) {
         x = score()->styleMM(Sid::minMMRestWidth);
     }
