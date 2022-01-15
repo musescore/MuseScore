@@ -121,10 +121,10 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
     if (isPlayAllowed() && containsAction(codes, PLAY_ACTION_CODE)) {
         bool isPlaying = playbackController()->isPlaying();
 
-        MenuItem* item = findItem(PLAY_ACTION_CODE);
-        UiAction action = item->action();
+        MenuItem& item = findItem(PLAY_ACTION_CODE);
+        UiAction action = item.action();
         action.iconCode = isPlaying ? IconCode::Code::PAUSE : IconCode::Code::PLAY;
-        item->setAction(action);
+        item.setAction(action);
     }
 }
 

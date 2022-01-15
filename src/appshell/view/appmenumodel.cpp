@@ -93,7 +93,7 @@ void AppMenuModel::setAppWindow(QWindow* appWindow)
 void AppMenuModel::setupConnections()
 {
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
-        MenuItem* recentScoreListItem = findMenu("menu-file-open");
+        MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
         MenuItemList recentScoresList = recentScores();
         bool openRecentEnabled = !recentScoresList.empty();
@@ -102,21 +102,21 @@ void AppMenuModel::setupConnections()
             recentScoresList = appendClearRecentSection(recentScoresList);
         }
 
-        UiActionState state = recentScoreListItem->state();
+        UiActionState state = recentScoreListItem.state();
         state.enabled = openRecentEnabled;
-        recentScoreListItem->setState(state);
+        recentScoreListItem.setState(state);
 
-        recentScoreListItem->setSubitems(recentScoresList);
+        recentScoreListItem.setSubitems(recentScoresList);
     });
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        MenuItem* workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem->setSubitems(workspacesItems());
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
+        workspacesItem.setSubitems(workspacesItems());
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem* workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem->setSubitems(workspacesItems());
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
+        workspacesItem.setSubitems(workspacesItems());
     });
 
     connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
@@ -703,7 +703,7 @@ void AppMenuModel::navigate(int key)
             newIndex = rowCount() - 1;
         }
 
-        setHighlightedMenuId(item(newIndex)->id());
+        setHighlightedMenuId(item(newIndex).id());
         break;
     }
     case Qt::Key_Right: {
@@ -712,7 +712,7 @@ void AppMenuModel::navigate(int key)
             newIndex = 0;
         }
 
-        setHighlightedMenuId(item(newIndex)->id());
+        setHighlightedMenuId(item(newIndex).id());
         break;
     }
     case Qt::Key_Down:
@@ -749,7 +749,7 @@ void AppMenuModel::resetNavigation()
 
 void AppMenuModel::navigateToFirstMenu()
 {
-    setHighlightedMenuId(item(0)->id());
+    setHighlightedMenuId(item(0).id());
 }
 
 void AppMenuModel::saveMUNavigationSystemState()
@@ -786,8 +786,8 @@ QString AppMenuModel::highlightedMenuId() const
 QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
 {
     for (int i = 0; i < rowCount(); i++) {
-        MenuItem* menuItem = item(i);
-        QString title = menuItem->action().title;
+        MenuItem& menuItem = item(i);
+        QString title = menuItem.action().title;
 
         int activateKeyIndex = title.indexOf('&');
         if (activateKeyIndex == -1) {
@@ -795,7 +795,7 @@ QString AppMenuModel::menuIdByActivateSymbol(const QString& symbol)
         }
 
         if (title[activateKeyIndex + 1].toLower() == symbol.toLower()) {
-            return menuItem->id();
+            return menuItem.id();
         }
     }
 

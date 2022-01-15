@@ -179,9 +179,9 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
     }
 
     QString sectionItemId = QString::number(sectionTypeInt);
-    MenuItem* viewMenu = findMenu(VIEW_MENU_ID);
+    MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
 
-    for (MenuItem* item : viewMenu->subitems()) {
+    for (MenuItem* item : viewMenu.subitems()) {
         if (item->id() == sectionItemId) {
             UiActionState state = item->state();
             state.checked = newVisibilityValue;

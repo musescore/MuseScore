@@ -212,6 +212,17 @@ struct UiAction
             { "checkable", checkable == Checkable::No ? 0 : 1 }
         };
     }
+
+    bool operator==(const UiAction& other) const
+    {
+        return code == other.code
+               && context == other.context
+               && title == other.title
+               && description == other.description
+               && iconCode == other.iconCode
+               && checkable == other.checkable
+               && shortcuts == shortcuts;
+    }
 };
 
 class UiActionList : public std::vector<UiAction>
