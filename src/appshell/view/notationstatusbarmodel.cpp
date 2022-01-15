@@ -43,7 +43,7 @@ static const ActionCode SELECT_WORKSPACE_CODE("configure-workspaces");
 
 static constexpr int MIN_DISPLAYED_ZOOM_PERCENTAGE = 25;
 
-static const QMap<ViewMode, ActionCode> allModeMap {
+static const QMap<ViewMode, ActionCode> ALL_MODE_MAP {
     { ViewMode::PAGE, "view-mode-page" },
     { ViewMode::LINE, "view-mode-continuous" },
     { ViewMode::SYSTEM, "view-mode-single" }
@@ -102,7 +102,7 @@ QVariant NotationStatusBarModel::currentViewMode() const
     ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
 
     for (MenuItem* mode : availableViewModeList()) {
-        if (allModeMap.key(mode->id().toStdString()) == viewMode) {
+        if (ALL_MODE_MAP.key(mode->id().toStdString()) == viewMode) {
             return QVariant::fromValue(mode);
         }
     }
@@ -132,8 +132,8 @@ MenuItemList NotationStatusBarModel::availableViewModeList() const
 
     ViewMode currentViewMode = notation()->viewMode();
 
-    for (const ViewMode& viewMode: allModeMap.keys()) {
-        ActionCode code = allModeMap[viewMode];
+    for (const ViewMode& viewMode: ALL_MODE_MAP.keys()) {
+        ActionCode code = ALL_MODE_MAP[viewMode];
         UiAction action = actionsRegister()->action(code);
 
         MenuItem* viewModeItem = new MenuItem();

@@ -124,11 +124,11 @@ private:
                 return;
             }
 
-            MenuItem* item = this->item(index);
+            MenuItem& item = this->item(index);
 
-            UiAction action = item->action();
+            UiAction action = item.action();
             action.title = toggleFloatingActionTitle();
-            item->setAction(action);
+            item.setAction(action);
         });
     }
 
@@ -140,11 +140,7 @@ private:
             return;
         }
 
-        MenuItem* item = this->item(index);
-        item = newItem;
-
-        QModelIndex modelIndex = this->index(index);
-        emit dataChanged(modelIndex, modelIndex);
+        setItem(index, newItem);
     }
 
     AbstractMenuModel* m_customMenuModel = nullptr;

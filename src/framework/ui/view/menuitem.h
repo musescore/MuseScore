@@ -47,7 +47,7 @@ class MenuItem : public QObject
 
     Q_PROPERTY(QString code READ code_property NOTIFY actionChanged)
     Q_PROPERTY(QString shortcuts READ shortcutsTitle NOTIFY actionChanged)
-    Q_PROPERTY(QString portableShortcut READ portableShortcut NOTIFY actionChanged)
+    Q_PROPERTY(QString portableShortcuts READ portableShortcuts NOTIFY actionChanged)
 
     Q_PROPERTY(QString title READ title_property NOTIFY actionChanged)
     Q_PROPERTY(QString description READ description_property NOTIFY actionChanged)
@@ -88,17 +88,17 @@ public:
     bool isValid() const;
 
     QString shortcutsTitle() const;
-    QString portableShortcut() const;
+    QString portableShortcuts() const;
 
 public slots:
     void setId(const QString& id);
     void setSection(const QString& section);
-    void setState(const UiActionState& state);
+    void setState(const mu::ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
-    void setRole(MenuItemRole role);
-    void setSubitems(const QList<MenuItem*>& subitems);
-    void setAction(const UiAction& action);
+    void setRole(mu::ui::MenuItemRole role);
+    void setSubitems(const QList<mu::ui::MenuItem*>& subitems);
+    void setAction(const mu::ui::UiAction& action);
     void setArgs(const actions::ActionData& args);
 
 signals:
@@ -109,7 +109,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<MenuItem*> subitems);
+    void subitemsChanged(QList<mu::ui::MenuItem*> subitems);
     void actionChanged();
 
 private:

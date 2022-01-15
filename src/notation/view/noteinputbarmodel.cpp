@@ -211,11 +211,11 @@ void NoteInputBarModel::updateState()
     bool enabled = notation() && !playbackController()->isPlaying();
 
     for (int i = 0; i < rowCount(); ++i) {
-        MenuItem* item = this->item(i);
-        UiActionState state = item->state();
+        MenuItem& item = this->item(i);
+        UiActionState state = item.state();
         state.checked = false;
         state.enabled = enabled;
-        item->setState(state);
+        item.setState(state);
     }
 
     if (enabled) {
@@ -246,16 +246,16 @@ void NoteInputBarModel::updateNoteInputModeState()
         return;
     }
 
-    MenuItem* item = this->item(noteInputModeIndex);
+    MenuItem& item = this->item(noteInputModeIndex);
 
-    QString currentSection = item->section();
+    QString currentSection = item.section();
     MenuItemList subitems = noteInputMethodItems();
 
-    item->setAction(currentNoteInputModeAction());
-    item->setSection(currentSection);
-    item->setSubitems(subitems);
+    item.setAction(currentNoteInputModeAction());
+    item.setSection(currentSection);
+    item.setSubitems(subitems);
 
-    updateItemStateChecked(item, isNoteInputMode());
+    updateItemStateChecked(&item, isNoteInputMode());
 }
 
 void NoteInputBarModel::updateNoteDotState()
@@ -270,7 +270,7 @@ void NoteInputBarModel::updateNoteDotState()
     int durationDots = noteInputState().duration.dots();
 
     for (const ActionCode& actionCode: dotActions) {
-        updateItemStateChecked(findItem(actionCode), durationDots == NotationUiActions::actionDotCount(actionCode));
+        updateItemStateChecked(&findItem(actionCode), durationDots == NotationUiActions::actionDotCount(actionCode));
     }
 }
 
@@ -294,7 +294,7 @@ void NoteInputBarModel::updateNoteDurationState()
 
     DurationType durationType = resolveCurrentDurationType();
     for (const ActionCode& actionCode: noteActions) {
-        updateItemStateChecked(findItem(actionCode), durationType == NotationUiActions::actionDurationType(actionCode));
+        updateItemStateChecked(&findItem(actionCode), durationType == NotationUiActions::actionDurationType(actionCode));
     }
 }
 
@@ -311,7 +311,7 @@ void NoteInputBarModel::updateNoteAccidentalState()
     AccidentalType accidentalType = noteInputState().accidentalType;
 
     for (const ActionCode& actionCode: accidentalActions) {
-        updateItemStateChecked(findItem(actionCode), accidentalType == NotationUiActions::actionAccidentalType(actionCode));
+        updateItemStateChecked(&findItem(actionCode), accidentalType == NotationUiActions::actionAccidentalType(actionCode));
     }
 }
 
@@ -331,12 +331,12 @@ void NoteInputBarModel::updateTieState()
         }
     }
 
-    updateItemStateChecked(findItem(codeFromQString("tie")), checked); // todo
+    updateItemStateChecked(&findItem(codeFromQString("tie")), checked); // todo
 }
 
 void NoteInputBarModel::updateSlurState()
 {
-    updateItemStateChecked(findItem(codeFromQString("add-slur")), notation()->elements()->msScore()->inputState().slur() != nullptr);
+    updateItemStateChecked(&findItem(codeFromQString("add-slur")), notation()->elements()->msScore()->inputState().slur() != nullptr);
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -351,7 +351,7 @@ void NoteInputBarModel::updateVoicesState()
     int currentVoice = resolveCurrentVoiceIndex();
 
     for (const ActionCode& actionCode: voiceActions) {
-        updateItemStateChecked(findItem(actionCode), currentVoice == NotationUiActions::actionVoice(actionCode));
+        updateItemStateChecked(&findItem(actionCode), currentVoice == NotationUiActions::actionVoice(actionCode));
     }
 }
 
@@ -372,23 +372,23 @@ void NoteInputBarModel::updateArticulationsState()
     };
 
     for (const ActionCode& actionCode: articulationActions) {
-        updateItemStateChecked(findItem(actionCode), isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
+        updateItemStateChecked(&findItem(actionCode), isArticulationSelected(NotationUiActions::actionArticulationSymbolId(actionCode)));
     }
 }
 
 void NoteInputBarModel::updateRestState()
 {
-    updateItemStateChecked(findItem(ActionCode("pad-rest")), resolveRestSelected());
+    updateItemStateChecked(&findItem(ActionCode("pad-rest")), resolveRestSelected());
 }
 
 void NoteInputBarModel::updateTupletState()
 {
-    updateItemStateEnabled(findItem(ActionCode(TUPLET_ACTION_CODE)), resolveTupletEnabled());
+    updateItemStateEnabled(&findItem(ActionCode(TUPLET_ACTION_CODE)), resolveTupletEnabled());
 }
 
 void NoteInputBarModel::updateAddState()
 {
-    findItem(ActionCode(ADD_ACTION_CODE))->setSubitems(addItems());
+    findItem(ActionCode(ADD_ACTION_CODE)).setSubitems(addItems());
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const

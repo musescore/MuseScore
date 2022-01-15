@@ -126,9 +126,9 @@ void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::Action
 
 void InstrumentsPanelContextMenuModel::updateOrderingMenu(const QString& newOrderId)
 {
-    MenuItem* orderingMenu = findMenu(ORDERING_MENU_ID);
+    MenuItem& orderingMenu = findMenu(ORDERING_MENU_ID);
 
-    for (MenuItem* item : orderingMenu->subitems()) {
+    for (MenuItem* item : orderingMenu.subitems()) {
         UiActionState state = item->state();
         state.checked = item->id() == newOrderId;
         item->setState(state);

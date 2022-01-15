@@ -88,7 +88,7 @@ QString MenuItem::shortcutsTitle() const
     return mu::shortcuts::sequencesToNativeText(m_action.shortcuts);
 }
 
-QString MenuItem::portableShortcut() const
+QString MenuItem::portableShortcuts() const
 {
     return QString::fromStdString(mu::shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
 }
@@ -165,6 +165,10 @@ void MenuItem::setSubitems(const QList<MenuItem*>& subitems)
 
 void MenuItem::setAction(const UiAction& action)
 {
+    if (m_action == action) {
+        return;
+    }
+
     m_action = action;
     emit actionChanged();
 }

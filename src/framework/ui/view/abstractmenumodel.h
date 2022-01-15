@@ -59,7 +59,7 @@ public:
 
 signals:
     void itemsChanged();
-    void itemChanged(MenuItem* item);
+    void itemChanged(mu::ui::MenuItem* item);
 
 protected:
     enum Roles {
@@ -70,17 +70,18 @@ protected:
 
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
 
+    void setItem(int index, MenuItem* item);
     void setItems(const MenuItemList& items);
     void clear();
 
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const QString& itemId) const;
 
-    MenuItem* item(int index);
+    MenuItem& item(int index);
 
-    MenuItem* findItem(const QString& itemId);
-    MenuItem* findItem(const actions::ActionCode& actionCode);
-    MenuItem* findMenu(const QString& menuId);
+    MenuItem& findItem(const QString& itemId);
+    MenuItem& findItem(const actions::ActionCode& actionCode);
+    MenuItem& findMenu(const QString& menuId);
 
     MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
 
@@ -91,9 +92,9 @@ protected:
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
-    MenuItem* item(MenuItemList& items, const QString& itemId);
-    MenuItem* item(MenuItemList& items, const actions::ActionCode& actionCode);
-    MenuItem* menu(MenuItemList& items, const QString& menuId);
+    MenuItem& item(MenuItemList& items, const QString& itemId);
+    MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
+    MenuItem& menu(MenuItemList& items, const QString& menuId);
 
     MenuItemList m_items;
 };
