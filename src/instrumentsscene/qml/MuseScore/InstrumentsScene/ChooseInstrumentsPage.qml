@@ -64,7 +64,7 @@ Rectangle {
     InstrumentListModel {
         id: instrumentsModel
 
-        onFocusRequested: {
+        onFocusRequested: function(groupIndex) {
             familyView.focusGroup(groupIndex)
             instrumentsView.focusInstrument(instrumentIndex)
         }
