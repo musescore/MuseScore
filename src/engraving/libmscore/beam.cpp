@@ -1675,6 +1675,8 @@ ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
         return ActionIconType::BEAM_START;
     case BeamMode::MID:
         return ActionIconType::BEAM_MID;
+    case BeamMode::END:
+        return ActionIconType::BEAM_END;
     case BeamMode::NONE:
         return ActionIconType::BEAM_NONE;
     case BeamMode::BEGIN32:

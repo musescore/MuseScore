@@ -329,6 +329,7 @@ void NotationActionController::init()
 
     registerAction("beam-start", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN);
     registerAction("beam-mid", &Interaction::addBeamToSelectedChordRests, BeamMode::MID);
+    registerAction("beam-end", &Interaction::addBeamToSelectedChordRests, BeamMode::END);
     registerAction("no-beam", &Interaction::addBeamToSelectedChordRests, BeamMode::NONE);
     registerAction("beam-32", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN32);
     registerAction("beam-64", &Interaction::addBeamToSelectedChordRests, BeamMode::BEGIN64);

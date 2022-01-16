@@ -86,6 +86,7 @@ NoteGroups::NoteGroups(QWidget* parent)
 
     iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
     iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_END, "beam-end");
     iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
     iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
 
@@ -166,6 +167,9 @@ void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
         break;
     case ActionIconType::BEAM_MID:
         updateBeams(chord, BeamMode::AUTO);
+        break;
+    case ActionIconType::BEAM_END:
+        updateBeams(chord, BeamMode::END);
         break;
     case ActionIconType::BEAM_BEGIN_32:
         updateBeams(chord, BeamMode::BEGIN32);

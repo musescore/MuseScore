@@ -1707,6 +1707,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_END)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
@@ -1833,6 +1834,7 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::BEAM_START:
         case ActionIconType::BEAM_MID:
         case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_END:
         case ActionIconType::BEAM_BEGIN_32:
         case ActionIconType::BEAM_BEGIN_64:
         case ActionIconType::BEAM_AUTO:

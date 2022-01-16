@@ -40,6 +40,7 @@ enum class ActionIconType {
 
     BEAM_START,
     BEAM_MID,
+    BEAM_END,
     BEAM_NONE,
     BEAM_BEGIN_32,
     BEAM_BEGIN_64,

@@ -184,6 +184,7 @@ PalettePtr PaletteCreator::newBeamPalette()
 
     sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
     sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
+    sp->appendActionIcon(ActionIconType::BEAM_END, "beam-end");
     sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
     sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
     sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");

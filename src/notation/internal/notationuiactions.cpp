@@ -566,6 +566,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Beam middle"),
              IconCode::Code::BEAM_MIDDLE
              ),
+    UiAction("beam-end",
+            mu::context::UiCtxNotationOpened,
+            QT_TRANSLATE_NOOP("action", "Beam end"),
+            IconCode::Code::BEAM_END
+    ),
     UiAction("no-beam",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "No beam"),

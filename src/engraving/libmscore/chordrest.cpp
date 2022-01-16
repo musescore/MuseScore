@@ -569,6 +569,9 @@ EngravingItem* ChordRest::drop(EditData& data)
         case ActionIconType::BEAM_MID:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::MID);
             break;
+        case ActionIconType::BEAM_END:
+            undoChangeProperty(Pid::BEAM_MODE, BeamMode::END);
+            break;
         case ActionIconType::BEAM_NONE:
             undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
             break;

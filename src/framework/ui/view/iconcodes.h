@@ -204,6 +204,7 @@ public:
         NOTE_HEAD_EIGHTH = 0xF33A,
         BEAM_START = 0xF33B,
         BEAM_MIDDLE = 0xF33D,
+        BEAM_END = 0xF33C,
         BEAM_32 = 0xF33E,
         BEAM_64 = 0xF33F,
 
