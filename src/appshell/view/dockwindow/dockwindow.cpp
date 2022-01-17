@@ -197,6 +197,11 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         return;
     }
 
+    //! NOTE: show window as maximized if the user closed app in FullScreen mode
+    if (isFirstOpening && (m_mainWindow->windowHandle()->windowStates() & QWindow::FullScreen)) {
+        m_mainWindow->showMaximized();
+    }
+
     emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
