@@ -113,8 +113,7 @@ void MainWindowProvider::requestShowOnFront()
 
 bool MainWindowProvider::isFullScreen() const
 {
-    Qt::WindowStates states = m_window ? m_window->windowStates() : Qt::WindowStates();
-    return states.testFlag(Qt::WindowFullScreen);
+    return m_window ? m_window->visibility() == QWindow::FullScreen : false;
 }
 
 void MainWindowProvider::toggleFullScreen()
@@ -124,9 +123,10 @@ void MainWindowProvider::toggleFullScreen()
     }
 
     if (isFullScreen()) {
-        m_window->showNormal();
+        m_window->setVisibility(m_windowVisibility);
     } else {
-        m_window->showFullScreen();
+        m_windowVisibility = m_window->visibility();
+        m_window->setVisibility(QWindow::FullScreen);
     }
 }
 
