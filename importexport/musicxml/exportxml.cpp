@@ -2601,6 +2601,8 @@ static QString symIdToOrnam(const SymId sid)
                   return "turn";
                   break;
             case SymId::ornamentTrill:
+            case SymId::ornamentShake3:
+            case SymId::ornamentShakeMuffat1:
                   return "trill-mark";
                   break;
             case SymId::ornamentMordent:
