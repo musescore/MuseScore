@@ -59,7 +59,7 @@ AppWindow {
         height: 32
         title: root.title
 
-        windowIsMiximized: root.visibility === Window.Maximized
+        windowVisibility: root.visibility
 
         appWindow: root
 
