@@ -58,6 +58,7 @@ public:
 
     virtual PointF toLogical(const PointF& p) const = 0;
     virtual PointF toLogical(const QPointF& p) const = 0;
+    virtual RectF fromLogical(const RectF& r) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
@@ -102,6 +103,9 @@ public:
     void hoverMoveEvent(QHoverEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void inputMethodEvent(QInputMethodEvent* event);
+
+    bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     void dragEnterEvent(QDragEnterEvent* event);
     void dragLeaveEvent(QDragLeaveEvent* event);

@@ -120,6 +120,7 @@ public:
     virtual bool isTextEditingStarted() const = 0;
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const PointF& elementPos = PointF()) = 0;
+    virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
     virtual const TextBase* editedText() const = 0;
@@ -138,7 +139,6 @@ public:
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
-    virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditElement() = 0;
 
     virtual void splitSelectedMeasure() = 0;
