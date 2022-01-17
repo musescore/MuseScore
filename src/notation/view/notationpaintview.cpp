@@ -41,6 +41,7 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
+    setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
     setAntialiasing(true);
 
@@ -885,6 +886,13 @@ bool NotationPaintView::eventFilter(QObject* obj, QEvent* ev)
         }
     }
     return QObject::eventFilter(obj, ev);
+}
+
+void NotationPaintView::inputMethodEvent(QInputMethodEvent* event)
+{
+    if (isInited()) {
+        m_inputController->inputMethodEvent(event);
+    }
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)

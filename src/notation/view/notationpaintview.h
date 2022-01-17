@@ -183,6 +183,7 @@ private:
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void inputMethodEvent(QInputMethodEvent* event) override;
 
     void ensureViewportInsideScrollableArea();
 

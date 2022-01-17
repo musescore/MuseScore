@@ -156,6 +156,7 @@ public:
     int key                          { 0 };
     Qt::KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
     QString s;
+    QString preeditString;
 
     Qt::MouseButtons buttons         { Qt::NoButton };
 

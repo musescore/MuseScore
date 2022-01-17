@@ -642,6 +642,13 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
     }
 }
 
+void NotationViewInputController::inputMethodEvent(QInputMethodEvent* event)
+{
+    if (viewInteraction()->isTextEditingStarted()) {
+        viewInteraction()->editText(event);
+    }
+}
+
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
