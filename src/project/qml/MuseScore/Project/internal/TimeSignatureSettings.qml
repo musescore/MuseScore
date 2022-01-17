@@ -142,11 +142,11 @@ FlatButton {
             navigationRowStart: 0
             navigationColumnStart: 1
 
-            onNumeratorSelected: {
+            onNumeratorSelected: function(value) {
                 root.model.setTimeSignatureNumerator(value)
             }
 
-            onDenominatorSelected: {
+            onDenominatorSelected: function(value) {
                 root.model.setTimeSignatureDenominator(value)
             }
         }

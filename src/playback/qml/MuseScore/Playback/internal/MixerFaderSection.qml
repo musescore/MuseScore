@@ -54,7 +54,7 @@ MixerPanelSection {
                     }
                 }
 
-                onVolumeLevelMoved: {
+                onVolumeLevelMoved: function(level) {
                     channelItem.volumeLevel = Math.round(level * 10) / 10
                 }
 

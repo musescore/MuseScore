@@ -57,7 +57,7 @@ Row {
         navigation.row: root.navigationRowStart
         navigation.column: root.navigationColumnStart
 
-        onValueEdited: {
+        onValueEdited: function(newValue) {
             root.numeratorSelected(newValue)
         }
     }

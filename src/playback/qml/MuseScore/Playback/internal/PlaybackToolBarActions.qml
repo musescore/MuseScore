@@ -87,7 +87,7 @@ Item {
 
                 navigationParentControl: btn.navigation
 
-                onHandleMenuItem: {
+                onHandleMenuItem: function(itemId) {
                     root.playbackModel.handleMenuItem(itemId)
                 }
             }

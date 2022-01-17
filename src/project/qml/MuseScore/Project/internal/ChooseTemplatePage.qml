@@ -68,7 +68,7 @@ Item {
             model: model.categoriesTitles
             searchEnabled: false
 
-            onTitleClicked: {
+            onTitleClicked: function(index) {
                 model.setCurrentCategory(index)
             }
         }
@@ -86,7 +86,7 @@ Item {
             listTitle: qsTrc("project", "Template")
             model: model.templatesTitles
 
-            onTitleClicked: {
+            onTitleClicked: function(index) {
                 model.setCurrentTemplate(index)
             }
 

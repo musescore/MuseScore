@@ -102,7 +102,7 @@ MixerPanelSection {
 
                 currentText: channelItem.balance
 
-                onCurrentTextEdited: {
+                onCurrentTextEdited: function(newTextValue) {
                     if (channelItem.balance !== Number(newTextValue)) {
                         channelItem.balance = Number(newTextValue)
                     }
