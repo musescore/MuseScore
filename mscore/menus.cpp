@@ -1015,6 +1015,8 @@ PalettePanel* MuseScore::newOrnamentsPalettePanel()
             SymId::ornamentPrallUp,
             SymId::ornamentLinePrall,
             SymId::ornamentPrecompSlide,
+            SymId::ornamentShake3,
+            SymId::ornamentShakeMuffat1,
             };
       for (auto i : art) {
             Articulation* s = new Articulation(i, gscore);

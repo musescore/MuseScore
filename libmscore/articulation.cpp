@@ -659,7 +659,9 @@ bool Articulation::isOrnament() const
           || _symId == SymId::ornamentDownMordent
           || _symId == SymId::ornamentPrallUp
           || _symId == SymId::ornamentPrallDown
-          || _symId == SymId::ornamentPrecompSlide;
+          || _symId == SymId::ornamentPrecompSlide
+          || _symId == SymId::ornamentShake3
+          || _symId == SymId::ornamentShakeMuffat1;
       }
 
 //---------------------------------------------------------
