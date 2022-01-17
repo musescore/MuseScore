@@ -26,6 +26,7 @@
 
 using namespace mu::playback;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::actions;
 
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");

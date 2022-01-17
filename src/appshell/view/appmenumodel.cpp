@@ -32,6 +32,7 @@
 
 using namespace mu::appshell;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
@@ -401,7 +402,7 @@ MenuItemList AppMenuModel::recentScores() const
     return items;
 }
 
-MenuItemList AppMenuModel::appendClearRecentSection(const ui::MenuItemList& recentScores) const
+MenuItemList AppMenuModel::appendClearRecentSection(const uicomponents::MenuItemList& recentScores) const
 {
     MenuItemList result = recentScores;
     result << makeSeparator()
@@ -573,7 +574,7 @@ MenuItemList AppMenuModel::workspacesItems() const
 
     int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
-        MenuItem* item = new MenuItem(uiactionsRegister()->action("select-workspace"));
+        MenuItem* item = new MenuItem(uiActionsRegister()->action("select-workspace"));
         item->setId(makeId(item->action().code, index++));
 
         UiAction action = item->action();

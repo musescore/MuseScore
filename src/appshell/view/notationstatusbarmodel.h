@@ -27,7 +27,7 @@
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
-#include "ui/view/menuitem.h"
+#include "uicomponents/view/menuitem.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -67,8 +67,8 @@ public:
     QVariant currentViewMode() const;
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-    ui::MenuItemList availableViewModeList() const;
-    ui::MenuItemList availableZoomList() const;
+    uicomponents::MenuItemList availableViewModeList() const;
+    uicomponents::MenuItemList availableZoomList() const;
 
     Q_INVOKABLE void load();
 
@@ -101,7 +101,7 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
-    ui::MenuItem* menuItem(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItem* menuItem(const actions::ActionCode& actionCode) const;
 
     void dispatch(const actions::ActionCode& code, const actions::ActionData& args = actions::ActionData());
 
@@ -112,7 +112,7 @@ private:
     QVariantList availableViewModeList_property() const;
     QVariantList availableZoomList_property() const;
 
-    QVariantList menuItemListToVariantList(const ui::MenuItemList& list) const;
+    QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list) const;
 
     notation::ZoomType m_currentZoomType = notation::ZoomType::Percentage;
 };

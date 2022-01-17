@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_NOTEINPUTBARMODEL_H
 #define MU_NOTATION_NOTEINPUTBARMODEL_H
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -30,7 +30,7 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class NoteInputBarModel : public ui::AbstractMenuModel
+class NoteInputBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -57,8 +57,8 @@ private:
 
     void onNotationChanged();
 
-    void updateItemStateChecked(ui::MenuItem* item, bool checked);
-    void updateItemStateEnabled(ui::MenuItem* item, bool enabled);
+    void updateItemStateChecked(uicomponents::MenuItem* item, bool checked);
+    void updateItemStateEnabled(uicomponents::MenuItem* item, bool enabled);
 
     void updateState();
     void updateNoteInputState();
@@ -78,19 +78,20 @@ private:
 
     ui::UiAction currentNoteInputModeAction() const;
 
-    ui::MenuItem* makeActionItem(const ui::UiAction& action, const QString& section, const ui::MenuItemList& subitems = {});
-    ui::MenuItem* makeAddItem(const QString& section);
+    uicomponents::MenuItem* makeActionItem(const ui::UiAction& action, const QString& section,
+                                           const uicomponents::MenuItemList& subitems = {});
+    uicomponents::MenuItem* makeAddItem(const QString& section);
 
-    ui::MenuItemList subitems(const actions::ActionCode& actionCode) const;
-    ui::MenuItemList noteInputMethodItems() const;
-    ui::MenuItemList tupletItems() const;
-    ui::MenuItemList addItems() const;
-    ui::MenuItemList notesItems() const;
-    ui::MenuItemList intervalsItems() const;
-    ui::MenuItemList measuresItems() const;
-    ui::MenuItemList framesItems() const;
-    ui::MenuItemList textItems() const;
-    ui::MenuItemList linesItems() const;
+    uicomponents::MenuItemList subitems(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItemList noteInputMethodItems() const;
+    uicomponents::MenuItemList tupletItems() const;
+    uicomponents::MenuItemList addItems() const;
+    uicomponents::MenuItemList notesItems() const;
+    uicomponents::MenuItemList intervalsItems() const;
+    uicomponents::MenuItemList measuresItems() const;
+    uicomponents::MenuItemList framesItems() const;
+    uicomponents::MenuItemList textItems() const;
+    uicomponents::MenuItemList linesItems() const;
 
     bool isMenuSecondary(const actions::ActionCode& actionCode) const;
 

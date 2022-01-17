@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_MENUITEM_H
-#define MU_UI_MENUITEM_H
+#ifndef MU_UICOMPONENTS_MENUITEM_H
+#define MU_UICOMPONENTS_MENUITEM_H
 
 #include <QObject>
 #include <QString>
 
-#include "../uitypes.h"
+#include "ui/uitypes.h"
 
-namespace mu::ui {
+namespace mu::uicomponents {
 // This must be in sync with QAction::MenuRole
 enum class MenuItemRole {
     NoRole = 0,
@@ -69,7 +69,7 @@ class MenuItem : public QObject
 
 public:
     MenuItem() = default;
-    MenuItem(const UiAction& a);
+    MenuItem(const ui::UiAction& a);
 
     QString id() const;
     QString section() const;
@@ -81,8 +81,8 @@ public:
 
     QList<MenuItem*> subitems() const;
 
-    UiAction action() const;
-    UiActionState state() const;
+    ui::UiAction action() const;
+    ui::UiActionState state() const;
     actions::ActionData args() const;
 
     bool isValid() const;
@@ -96,8 +96,8 @@ public slots:
     void setState(const mu::ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
-    void setRole(mu::ui::MenuItemRole role);
-    void setSubitems(const QList<mu::ui::MenuItem*>& subitems);
+    void setRole(mu::uicomponents::MenuItemRole role);
+    void setSubitems(const QList<mu::uicomponents::MenuItem*>& subitems);
     void setAction(const mu::ui::UiAction& action);
     void setArgs(const actions::ActionData& args);
 
@@ -109,7 +109,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<mu::ui::MenuItem*> subitems);
+    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems);
     void actionChanged();
 
 private:
@@ -132,16 +132,16 @@ private:
 
     QString m_id;
     QString m_section;
-    UiActionState m_state;
+    ui::UiActionState m_state;
     bool m_selectable = false;
     bool m_selected = false;
     MenuItemRole m_role = MenuItemRole::NoRole;
     actions::ActionData m_args;
     QList<MenuItem*> m_subitems;
 
-    UiAction m_action;
+    ui::UiAction m_action;
 };
 using MenuItemList = QList<MenuItem*>;
 }
 
-#endif // MU_UI_MENUITEM_H
+#endif // MU_UICOMPONENTS_MENUITEM_H

@@ -24,7 +24,7 @@
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
