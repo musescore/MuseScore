@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QClipboard>
 #include <QApplication>
+#include <QKeyEvent>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -2404,6 +2405,49 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
     }
 
     notifyAboutTextEditingStarted();
+    notifyAboutTextEditingChanged();
+}
+
+//! NOTE: Copied from TextBase::inputTransition
+void NotationInteraction::editText(QInputMethodEvent* event)
+{
+    if (!isTextEditingStarted()) {
+        return;
+    }
+
+    Ms::TextBase* text = Ms::toTextBase(m_editData.element);
+    Ms::TextCursor* cursor = text->cursor();
+    QString& preeditString = m_editData.preeditString;
+
+    // remove preedit string
+    int n = preeditString.size();
+    while (n--) {
+        if (cursor->movePosition(Ms::TextCursor::MoveOperation::Left)) {
+            Ms::TextBlock& curLine = cursor->curLine();
+            curLine.remove(cursor->column(), cursor);
+            text->triggerLayout();
+            text->setTextInvalid();
+        }
+    }
+
+    if (!event->commitString().isEmpty()) {
+        score()->startCmd();
+        text->insertText(m_editData, event->commitString());
+        score()->endCmd();
+        preeditString.clear();
+    } else {
+        preeditString = event->preeditString();
+
+        if (!preeditString.isEmpty()) {
+            cursor->updateCursorFormat();
+            text->editInsertText(cursor, preeditString);
+            text->setTextInvalid();
+            text->layout1();
+            score()->update();
+        }
+    }
+
+    event->accept();
     notifyAboutTextEditingChanged();
 }
 

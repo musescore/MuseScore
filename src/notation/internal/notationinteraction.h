@@ -128,6 +128,7 @@ public:
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const PointF& cursorPos = PointF()) override;
+    void editText(QInputMethodEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
     const TextBase* editedText() const override;
