@@ -249,7 +249,7 @@ bool ScorePropertiesDialog::save()
         QLayoutItem* valueItem = scrollAreaLayout->itemAtPosition(i, 1);
         if (tagItem && valueItem) {
             QString tagText = "";
-            
+
             // Is the property a standard one?
             QLabel* labelItem = dynamic_cast<QLabel*>(tagItem->widget());
             if (labelItem) {
@@ -263,21 +263,21 @@ bool ScorePropertiesDialog::save()
                     // Validate none standard properties names (empty / reserved or duplicates)
                     if (tagText.isEmpty()) {
                         interactive()->warning(trc("notation", "MuseScore"),
-                            trc("notation", "Tags can't have empty names."));
+                                               trc("notation", "Tags can't have empty names."));
                         lineEditItem->setFocus();
                         return false;
                     }
                     if (map.contains(tagText)) {
                         if (isStandardTag(tagText)) {
                             interactive()->warning(trc("notation", "MuseScore"),
-                                qtrc("notation",
-                                    "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
+                                                   qtrc("notation",
+                                                        "%1 is a reserved builtin tag.\n It can't be used.").arg(tagText).toStdString());
                             lineEditItem->setFocus();
                             return false;
                         }
 
                         interactive()->warning(trc("notation", "MuseScore"),
-                            trc("notation", "You have multiple tags with the same name."));
+                                               trc("notation", "You have multiple tags with the same name."));
                         lineEditItem->setFocus();
                         return false;
                     }
