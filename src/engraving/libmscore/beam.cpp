@@ -1344,14 +1344,19 @@ std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 
 void Beam::setBeamDirection(DirectionV d)
 {
+    if (_direction == d) {
+        return;
+    }
+
     _direction = d;
+
     if (d != DirectionV::AUTO) {
         _up = d == DirectionV::UP;
-        if (!_elements.empty()) {
-            Chord* c = toChord(_elements.first());
-            if (c) {
-                c->setStemDirection(d, d);
-            }
+    }
+
+    for (ChordRest* rest : elements()) {
+        if (Chord* chord = toChord(rest)) {
+            chord->setStemDirection(d);
         }
     }
 }
@@ -1519,7 +1524,7 @@ void Beam::setUserModified(bool val)
 PropertyValue Beam::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::STEM_DIRECTION : return beamDirection();
+    case Pid::STEM_DIRECTION: return beamDirection();
     case Pid::DISTRIBUTE:     return distribute();
     case Pid::GROW_LEFT:      return growLeft();
     case Pid::GROW_RIGHT:     return growRight();
