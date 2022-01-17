@@ -68,6 +68,8 @@ protected:
     void resetProperties() override;
 
 private:
+    void onStemDirectionChanged(Ms::DirectionV newDirection);
+
     PropertyItem* m_isStemHidden = nullptr;
     PropertyItem* m_thickness = nullptr;
     PropertyItem* m_length = nullptr;

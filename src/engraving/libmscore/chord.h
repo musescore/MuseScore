@@ -153,7 +153,7 @@ public:
     EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;
-    void setStemDirection(DirectionV d, DirectionV beamDir = DirectionV::AUTO);
+    void setStemDirection(DirectionV d);
     DirectionV stemDirection() const { return _stemDirection; }
 
     void setIsUiItem(bool val) { _isUiItem = val; }
