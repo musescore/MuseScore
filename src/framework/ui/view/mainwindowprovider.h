@@ -24,7 +24,7 @@
 #define MU_DOCK_MAINWINDOWPROVIDER_H
 
 #include <QObject>
-#include <QStack>
+#include <QWindow>
 
 #include "modularity/ioc.h"
 #include "../iinteractiveprovider.h"
@@ -66,6 +66,8 @@ protected:
     virtual void init();
 
     QWindow* m_window = nullptr;
+
+    QWindow::Visibility m_windowVisibility = QWindow::AutomaticVisibility;
 
 private slots: // Should only be used from QML
     void setWindow(QWindow* window);
