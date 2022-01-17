@@ -64,6 +64,7 @@ ChordRest::ChordRest(Score* s)
       _up          = true;
       _beamMode    = Beam::Mode::AUTO;
       m_isSmall    = false;
+      _melismaEnd  = false;
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
@@ -79,7 +80,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
       _beamMode     = cr._beamMode;
       _up           = cr._up;
       m_isSmall     = cr.m_isSmall;
-      _melismaEnds   = cr._melismaEnds;
+      _melismaEnd   = cr._melismaEnd;
       _crossMeasure = cr._crossMeasure;
 
       for (Lyrics* l : cr._lyrics) {        // make deep copy
@@ -1231,21 +1232,20 @@ QString ChordRest::accessibleExtraInfo() const
 
 bool ChordRest::isMelismaEnd() const
       {
-      return !_melismaEnds.empty();
+      return _melismaEnd;
       }
 
 //---------------------------------------------------------
-//   removeMelismaEnd()
-//    removes a Lyrics object from the _melismaEnds set
-//    if present by iterating through the set.
-//    Returns a boolean representing whether the Lyrics
-//    was found.
-//    No-op and return false if Lyrics not present in _melismaEnds.
+//   setMelismaEnd
 //---------------------------------------------------------
 
-void ChordRest::removeMelismaEnd(Lyrics* const l)
+void ChordRest::setMelismaEnd(bool v)
       {
-      _melismaEnds.erase(l);
+      _melismaEnd = v;
+      // TODO: don't take "false" at face value
+      // check to see if some other melisma ends here,
+      // in which case we can leave this set to true
+      // for now, rely on the fact that we'll generate the value correctly on layout
       }
 
 //---------------------------------------------------------
@@ -1256,8 +1256,6 @@ Shape ChordRest::shape() const
       {
       Shape shape;
       {
-      // Add horizontal spacing for lyrics
-
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
@@ -1267,14 +1265,11 @@ Shape ChordRest::shape() const
             qreal lmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             qreal rmargin = lmargin;
             Lyrics::Syllabic syl = l->syllabic();
-            bool hasHyphen = syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE;
-            if (hasHyphen && score()->styleB(Sid::lyricsDashForce))
+            if ((syl == Lyrics::Syllabic::BEGIN || syl == Lyrics::Syllabic::MIDDLE) && score()->styleB(Sid::lyricsDashForce))
                   rmargin = qMax(rmargin, styleP(Sid::lyricsDashMinLength));
-            // for horizontal spacing we only need the lyrics' width:
+            // for horizontal spacing we only need the lyrics width:
             x1 = qMin(x1, l->bbox().x() - lmargin + l->pos().x());
-            // Melismas (without hyphens) only create right spacing on their last note
-            if (!l->isMelisma() || hasHyphen)
-                  x2 = qMax(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
+            x2 = qMax(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS))
                   x2 += spatium();
             adjustWidth = true;
@@ -1284,8 +1279,6 @@ Shape ChordRest::shape() const
       }
 
       {
-      // Add horizontal spacing for annotations
-
       qreal x1 = 1000000.0;
       qreal x2 = -1000000.0;
       bool adjustWidth = false;
@@ -1332,24 +1325,8 @@ Shape ChordRest::shape() const
       }
 
       if (isMelismaEnd()) {
-            // Add horizontal spacing (only on the right) for melismaEnds
-            // in case a melisma syllable extends beyond its last note.
-            // TODO: distribute this extra spacing rather than dumping
-            // it all on the last note (or otherwise overhaul horizontal spacing).
-            // TODO: this doesn't redraw on layout reset (like line breaks), 
-            // causing temporary incorrect rendering.
-
-            qreal rmargin = score()->styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
             qreal right = rightEdge();
-
-            for (Lyrics* me : melismaEnds()) {
-                  if (me->measure()->system() != measure()->system()) // ignore cross-system melisma
-                        continue;
-                  // Lyric's right edge relative to Chord by way of page position
-                  qreal meRight = me->pageBoundingRect().right() + rmargin - pagePos().x();
-                  right = qMax(right, meRight);
-                  }
-            shape.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, right);
+            shape.addHorizontalSpacing(Shape::SPACING_LYRICS, right, right);
             }
 
       return shape;
