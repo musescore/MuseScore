@@ -31,6 +31,7 @@
 using namespace mu::playback;
 using namespace mu::actions;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::notation;
 
 static const ActionCode PLAY_ACTION_CODE("play");

@@ -29,6 +29,7 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");

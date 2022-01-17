@@ -29,17 +29,17 @@
 #include "translation.h"
 
 #include "ui/uitypes.h"
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 using namespace mu::dock;
-using namespace mu::uicomponents;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::actions;
 
 static const QString SET_DOCK_OPEN_ACTION_CODE = "dock-set-open";
 static const QString TOGGLE_FLOATING_ACTION_CODE = "dock-toggle-floating";
 
-class DockPanelView::DockPanelMenuModel : public AbstractMenuModel
+class DockPanelView::DockPanelMenuModel : public uicomponents::AbstractMenuModel
 {
 public:
     DockPanelMenuModel(DockPanelView* panel)

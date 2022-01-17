@@ -22,10 +22,10 @@
 
 #include "undoredomodel.h"
 
-#include "ui/view/menuitem.h"
+#include "uicomponents/view/menuitem.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 UndoRedoModel::UndoRedoModel(QObject* parent)
     : QObject(parent)
@@ -36,7 +36,7 @@ QVariant UndoRedoModel::undoItem() const
 {
     MenuItem* item = new MenuItem(actionsRegister()->action("undo"));
 
-    UiActionState state;
+    ui::UiActionState state;
     state.enabled = undoStack() ? undoStack()->canUndo() : false;
     item->setState(state);
 
@@ -47,7 +47,7 @@ QVariant UndoRedoModel::redoItem() const
 {
     MenuItem* item = new MenuItem(actionsRegister()->action("redo"));
 
-    UiActionState state;
+    ui::UiActionState state;
     state.enabled = undoStack() ? undoStack()->canRedo() : false;
     item->setState(state);
 

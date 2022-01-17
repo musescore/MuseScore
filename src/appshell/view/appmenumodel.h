@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "actions/actionable.h"
 #include "modularity/ioc.h"
@@ -37,7 +37,7 @@
 #include "project/irecentprojectsprovider.h"
 
 namespace mu::appshell {
-class AppMenuModel : public ui::AbstractMenuModel
+class AppMenuModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -71,30 +71,30 @@ signals:
 private:
     void setupConnections();
 
-    using ui::AbstractMenuModel::makeMenuItem;
-    ui::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, ui::MenuItemRole role) const;
+    using uicomponents::AbstractMenuModel::makeMenuItem;
+    uicomponents::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, uicomponents::MenuItemRole role) const;
 
-    ui::MenuItem* fileItem() const;
-    ui::MenuItem* editItem() const;
-    ui::MenuItem* viewItem() const;
-    ui::MenuItem* addItem() const;
-    ui::MenuItem* formatItem() const;
-    ui::MenuItem* toolsItem() const;
-    ui::MenuItem* helpItem() const;
-    ui::MenuItem* diagnosticItem() const;
+    uicomponents::MenuItem* fileItem() const;
+    uicomponents::MenuItem* editItem() const;
+    uicomponents::MenuItem* viewItem() const;
+    uicomponents::MenuItem* addItem() const;
+    uicomponents::MenuItem* formatItem() const;
+    uicomponents::MenuItem* toolsItem() const;
+    uicomponents::MenuItem* helpItem() const;
+    uicomponents::MenuItem* diagnosticItem() const;
 
-    ui::MenuItemList recentScores() const;
-    ui::MenuItemList appendClearRecentSection(const ui::MenuItemList& recentScores) const;
+    uicomponents::MenuItemList recentScores() const;
+    uicomponents::MenuItemList appendClearRecentSection(const uicomponents::MenuItemList& recentScores) const;
 
-    ui::MenuItemList notesItems() const;
-    ui::MenuItemList intervalsItems() const;
-    ui::MenuItemList tupletsItems() const;
-    ui::MenuItemList measuresItems() const;
-    ui::MenuItemList framesItems() const;
-    ui::MenuItemList textItems() const;
-    ui::MenuItemList linesItems() const;
-    ui::MenuItemList toolbarsItems() const;
-    ui::MenuItemList workspacesItems() const;
+    uicomponents::MenuItemList notesItems() const;
+    uicomponents::MenuItemList intervalsItems() const;
+    uicomponents::MenuItemList tupletsItems() const;
+    uicomponents::MenuItemList measuresItems() const;
+    uicomponents::MenuItemList framesItems() const;
+    uicomponents::MenuItemList textItems() const;
+    uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList toolbarsItems() const;
+    uicomponents::MenuItemList workspacesItems() const;
 
     // Custom navigation
     bool eventFilter(QObject* watched, QEvent* event) override;

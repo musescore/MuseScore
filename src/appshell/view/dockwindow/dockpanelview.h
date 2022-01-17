@@ -27,9 +27,9 @@
 
 #include "framework/uicomponents/view/qmllistproperty.h"
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
-namespace mu::ui {
+namespace mu::uicomponents {
 class AbstractMenuModel;
 }
 
@@ -40,7 +40,9 @@ class DockPanelView : public DockBase
 
     Q_PROPERTY(DockPanelView * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
-    Q_PROPERTY(mu::ui::AbstractMenuModel * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
+    Q_PROPERTY(
+        mu::uicomponents::AbstractMenuModel
+        * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
 
 public:
     explicit DockPanelView(QQuickItem* parent = nullptr);
@@ -48,7 +50,7 @@ public:
 
     DockPanelView* tabifyPanel() const;
     QObject* navigationSection() const;
-    ui::AbstractMenuModel* contextMenuModel() const;
+    uicomponents::AbstractMenuModel* contextMenuModel() const;
 
     void addPanelAsTab(DockPanelView* tab);
     void setCurrentTabIndex(int index);
@@ -56,7 +58,7 @@ public:
 public slots:
     void setTabifyPanel(DockPanelView* panel);
     void setNavigationSection(QObject* newNavigation);
-    void setContextMenuModel(ui::AbstractMenuModel* model);
+    void setContextMenuModel(uicomponents::AbstractMenuModel* model);
 
 signals:
     void tabifyPanelChanged(DockPanelView* panel);

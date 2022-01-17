@@ -25,7 +25,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 PublishToolBarModel::PublishToolBarModel(QObject* parent)
     : AbstractMenuModel(parent)

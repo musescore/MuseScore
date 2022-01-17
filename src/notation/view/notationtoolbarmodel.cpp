@@ -23,7 +23,7 @@
 #include "notationtoolbarmodel.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 void NotationToolBarModel::load()
 {
@@ -43,7 +43,7 @@ MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) 
 {
     MenuItem* item = new MenuItem(actionsRegister()->action(actionCode));
 
-    UiActionState state;
+    ui::UiActionState state;
     state.enabled = context()->currentNotation() != nullptr;
     item->setState(state);
 

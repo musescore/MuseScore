@@ -22,13 +22,13 @@
 #ifndef MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
 #define MU_PLAYBACK_PLAYBACKTOOLBARMODEL_H
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackToolBarModel : public ui::AbstractMenuModel
+class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -88,7 +88,7 @@ private:
 
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 
-    ui::MenuItem* makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItem* makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const;
 
     QTime totalPlayTime() const;
     uint64_t totalPlayTimeMilliseconds() const;

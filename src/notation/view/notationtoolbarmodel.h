@@ -23,14 +23,14 @@
 #ifndef MU_NOTATION_NOTATIONTOOLBARMODEL_H
 #define MU_NOTATION_NOTATIONTOOLBARMODEL_H
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuiactionsregister.h"
 
 namespace mu::notation {
-class NotationToolBarModel : public ui::AbstractMenuModel
+class NotationToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -41,7 +41,7 @@ public:
     Q_INVOKABLE void load() override;
 
 private:
-    ui::MenuItem* makeItem(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItem* makeItem(const actions::ActionCode& actionCode) const;
 };
 }
 

@@ -25,11 +25,11 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
-class NotationContextMenuModel : public ui::AbstractMenuModel
+class NotationContextMenuModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -39,17 +39,17 @@ public:
     Q_INVOKABLE void loadItems(int elementType);
 
 private:
-    ui::MenuItemList itemsByElementType(ElementType type) const;
+    uicomponents::MenuItemList itemsByElementType(ElementType type) const;
 
-    ui::MenuItemList pageItems() const;
-    ui::MenuItemList defaultCopyPasteItems() const;
-    ui::MenuItemList measureItems() const;
-    ui::MenuItemList staffTextItems() const;
-    ui::MenuItemList systemTextItems() const;
-    ui::MenuItemList timeSignatureItems() const;
-    ui::MenuItemList harmonyItems() const;
-    ui::MenuItemList selectItems() const;
-    ui::MenuItemList elementItems() const;
+    uicomponents::MenuItemList pageItems() const;
+    uicomponents::MenuItemList defaultCopyPasteItems() const;
+    uicomponents::MenuItemList measureItems() const;
+    uicomponents::MenuItemList staffTextItems() const;
+    uicomponents::MenuItemList systemTextItems() const;
+    uicomponents::MenuItemList timeSignatureItems() const;
+    uicomponents::MenuItemList harmonyItems() const;
+    uicomponents::MenuItemList selectItems() const;
+    uicomponents::MenuItemList elementItems() const;
 
     bool isSingleSelection() const;
     bool isDrumsetStaff() const;

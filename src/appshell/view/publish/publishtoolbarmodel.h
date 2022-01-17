@@ -23,10 +23,10 @@
 #define MU_APPSHELL_PUBLISHTOOLBARMODEL_H
 
 #include "modularity/ioc.h"
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 namespace mu::appshell {
-class PublishToolBarModel : public ui::AbstractMenuModel
+class PublishToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 

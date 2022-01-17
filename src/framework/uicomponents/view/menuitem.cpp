@@ -25,6 +25,7 @@
 
 #include "shortcuts/shortcutstypes.h"
 
+using namespace mu::uicomponents;
 using namespace mu::ui;
 
 MenuItem::MenuItem(const UiAction& a)
@@ -178,7 +179,7 @@ void MenuItem::setArgs(const mu::actions::ActionData& args)
     m_args = args;
 }
 
-QString mu::ui::MenuItem::code_property() const
+QString mu::uicomponents::MenuItem::code_property() const
 {
     return QString::fromStdString(m_action.code);
 }

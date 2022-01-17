@@ -29,6 +29,7 @@
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 
 static const QString TOOLBAR_NAME("noteInput");
 
@@ -140,7 +141,7 @@ void NoteInputBarModel::load()
             subitems = tupletItems();
         }
 
-        MenuItem* item = makeActionItem(uiactionsRegister()->action(citem.action), QString::number(section), subitems);
+        MenuItem* item = makeActionItem(uiActionsRegister()->action(citem.action), QString::number(section), subitems);
 
         items << item;
     }
@@ -565,10 +566,10 @@ bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) cons
 UiAction NoteInputBarModel::currentNoteInputModeAction() const
 {
     NoteInputMethod method = noteInputState().method;
-    return uiactionsRegister()->action(actionCodeForNoteInputMethod(method));
+    return uiActionsRegister()->action(actionCodeForNoteInputMethod(method));
 }
 
-MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section, const ui::MenuItemList& subitems)
+MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section, const uicomponents::MenuItemList& subitems)
 {
     MenuItem* item = new MenuItem(action);
     item->setSection(section);

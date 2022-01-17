@@ -23,6 +23,7 @@
 
 #include "log.h"
 
+using namespace mu::uicomponents;
 using namespace mu::ui;
 using namespace mu::actions;
 
@@ -100,7 +101,7 @@ QVariantMap AbstractMenuModel::get(int index)
 
 void AbstractMenuModel::load()
 {
-    uiactionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
+    uiActionsRegister()->actionStateChanged().onReceive(this, [this](const ActionCodeList& codes) {
         onActionsStateChanges(codes);
     });
 }
@@ -194,14 +195,14 @@ MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& 
 
 MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
 {
-    const UiAction& action = uiactionsRegister()->action(actionCode);
+    const UiAction& action = uiActionsRegister()->action(actionCode);
     if (!action.isValid()) {
         LOGW() << "not found action: " << actionCode;
         return nullptr;
     }
 
     MenuItem* item = new MenuItem(action);
-    item->setState(uiactionsRegister()->actionState(actionCode));
+    item->setState(uiActionsRegister()->actionState(actionCode));
 
     return item;
 }
@@ -226,7 +227,7 @@ void AbstractMenuModel::onActionsStateChanges(const actions::ActionCodeList& cod
     for (const ActionCode& code : codes) {
         MenuItem& actionItem = findItem(code);
         if (actionItem.isValid()) {
-            actionItem.setState(uiactionsRegister()->actionState(code));
+            actionItem.setState(uiActionsRegister()->actionState(code));
         }
     }
 }

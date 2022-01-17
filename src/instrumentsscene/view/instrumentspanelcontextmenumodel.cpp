@@ -31,6 +31,7 @@ using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::actions;
 
 static const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
