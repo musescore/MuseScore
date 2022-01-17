@@ -48,7 +48,7 @@ ExportSettingsPage {
             decimals: 0
             measureUnitsSymbol: qsTrc("project", "dpi")
 
-            onValueEdited: function (newValue) {
+            onValueEdited: function(newValue) {
                 root.model.pdfResolution = newValue
             }
         }

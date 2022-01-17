@@ -57,7 +57,7 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 2
             navigation.accessible.name: sampleRateLabel.text + " " + currentText
 
-            model: root.model.availableSampleRates().map(function (sampleRate) {
+            model: root.model.availableSampleRates().map(function(sampleRate) {
                 return { text: qsTrc("project", "%1 Hz").arg(sampleRate), value: sampleRate }
             })
 
@@ -81,7 +81,7 @@ ExportSettingsPage {
             navigation.row: root.navigationOrder + 3
             navigation.accessible.name: bitrateLabel.text + " " + currentText
 
-            model: root.model.availableBitRates().map(function (bitRate) {
+            model: root.model.availableBitRates().map(function(bitRate) {
                 return { text: qsTrc("project", "%1 kBit/s").arg(bitRate), value: bitRate }
             })
 

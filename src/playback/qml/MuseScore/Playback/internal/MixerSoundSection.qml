@@ -60,7 +60,7 @@ MixerPanelSection {
                 }
             }
 
-            onNavigateControlIndexChanged: {
+            onNavigateControlIndexChanged: function(index) {
                 root.navigateControlIndexChanged(index)
             }
         }

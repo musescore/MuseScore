@@ -124,11 +124,11 @@ FlatButton {
                 navigationRowStart: 1
                 navigationColumnStart: 0
 
-                onNumeratorSelected: {
+                onNumeratorSelected: function(value) {
                     root.model.setPickupTimeSignatureNumerator(value)
                 }
 
-                onDenominatorSelected: {
+                onDenominatorSelected: function(value) {
                     root.model.setPickupTimeSignatureDenominator(value)
                 }
             }
@@ -168,7 +168,7 @@ FlatButton {
                 navigation.column: 0
                 navigation.accessible.name: numberOfMeasuresLabel.text + " " + currentValue
 
-                onValueEdited: {
+                onValueEdited: function(newValue) {
                     root.model.measureCount = newValue
                 }
             }

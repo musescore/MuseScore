@@ -73,7 +73,7 @@ MixerPanelSection {
                     modelData.requestToLaunchNativeEditorView()
                 }
 
-                onNavigateControlIndexChanged: {
+                onNavigateControlIndexChanged: function(index) {
                     root.navigateControlIndexChanged(index)
                 }
             }
