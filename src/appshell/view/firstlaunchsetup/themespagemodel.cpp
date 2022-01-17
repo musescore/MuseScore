@@ -61,7 +61,7 @@ QVariantList ThemesPageModel::highContrastThemes() const
     QVariantList result;
 
     for (const ThemeInfo& theme : allThemes()) {
-        if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE || theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+        if (theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE || theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
             result << ThemeConverter::toMap(theme);
         }
     }

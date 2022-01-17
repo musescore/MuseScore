@@ -39,16 +39,16 @@ using ThemeCode = std::string;
 
 static const ThemeCode DARK_THEME_CODE("dark");
 static const ThemeCode LIGHT_THEME_CODE("light");
-static const ThemeCode HIGH_CONTRAST_BLACK_THEME_CODE("high_contrast_black");
 static const ThemeCode HIGH_CONTRAST_WHITE_THEME_CODE("high_contrast_white");
+static const ThemeCode HIGH_CONTRAST_BLACK_THEME_CODE("high_contrast_black");
 
 inline std::vector<ThemeCode> allStandardThemeCodes()
 {
     return {
         LIGHT_THEME_CODE,
         DARK_THEME_CODE,
-        HIGH_CONTRAST_BLACK_THEME_CODE,
-        HIGH_CONTRAST_WHITE_THEME_CODE
+        HIGH_CONTRAST_WHITE_THEME_CODE,
+        HIGH_CONTRAST_BLACK_THEME_CODE
     };
 }
 
