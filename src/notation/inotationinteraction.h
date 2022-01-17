@@ -22,7 +22,6 @@
 #ifndef MU_NOTATION_INOTATIONINTERACTION_H
 #define MU_NOTATION_INOTATIONINTERACTION_H
 
-#include <QKeyEvent>
 #include <functional>
 
 #include "async/notification.h"
@@ -31,6 +30,9 @@
 #include "inotationnoteinput.h"
 #include "inotationselection.h"
 #include "actions/actiontypes.h"
+
+class QKeyEvent;
+class QInputMethodEvent;
 
 namespace mu::notation {
 class INotationInteraction
@@ -136,6 +138,7 @@ public:
     virtual void startEditElement(EngravingItem* element) = 0;
     virtual void changeEditElement(EngravingItem* newElement) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
+    virtual void editText(QInputMethodEvent* event) = 0;
     virtual void endEditElement() = 0;
 
     virtual void splitSelectedMeasure() = 0;
