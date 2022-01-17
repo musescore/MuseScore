@@ -212,10 +212,17 @@ void TextCursor::endEdit()
 
 void TextCursor::init()
 {
-    _format.setFontFamily("Edwin");
-    _format.setFontSize(12.0);
-    _format.setStyle(FontStyle::Normal);
-    _format.setValign(VerticalAlignment::AlignNormal);
+    PropertyValue family = _text->propertyDefault(Pid::FONT_FACE);
+    _format.setFontFamily(family.toString());
+
+    PropertyValue size = _text->propertyDefault(Pid::FONT_SIZE);
+    _format.setFontSize(size.toReal());
+
+    PropertyValue style = _text->propertyDefault(Pid::FONT_STYLE);
+    _format.setStyle(static_cast<FontStyle>(style.toInt()));
+
+    PropertyValue verticalAlign = _text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN);
+    _format.setValign(static_cast<VerticalAlignment>(verticalAlign.toInt()));
 }
 
 //---------------------------------------------------------
@@ -1692,11 +1699,8 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
-    _cursor                 = new TextCursor(this);
-    _cursor->init();
     _textLineSpacing        = 1.0;
-
-    _textStyleType                    = tid;
+    _textStyleType          = tid;
     _bgColor                = mu::draw::Color::transparent;
     _frameColor             = mu::draw::Color::black;
     _align                  = { AlignH::LEFT, AlignV::TOP };
@@ -1704,6 +1708,9 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingItem* parent, TextS
     _frameWidth             = Spatium(0.1);
     _paddingWidth           = Spatium(0.2);
     _frameRound             = 0;
+
+    _cursor                 = new TextCursor(this);
+    _cursor->init();
 }
 
 TextBase::TextBase(const ElementType& type, Ms::EngravingItem* parent, ElementFlags f)
@@ -3079,36 +3086,37 @@ mu::engraving::PropertyValue TextBase::propertyDefault(Pid id) const
     if (id == Pid::Z) {
         return EngravingItem::propertyDefault(id);
     }
+
     if (composition()) {
         PropertyValue v = explicitParent()->propertyDefault(id);
         if (v.isValid()) {
             return v;
         }
     }
+
     Sid sid = getPropertyStyle(id);
     if (sid != Sid::NOSTYLE) {
         return styleValue(id, sid);
     }
-    PropertyValue v;
+
     switch (id) {
     case Pid::TEXT_STYLE:
-        v = TextStyleType::DEFAULT;
-        break;
+        return TextStyleType::DEFAULT;
     case Pid::TEXT:
-        v = QString();
-        break;
+        return QString();
     case Pid::TEXT_SCRIPT_ALIGN:
-        v = static_cast<int>(VerticalAlignment::AlignNormal);
-        break;
+        return static_cast<int>(VerticalAlignment::AlignNormal);
     default:
         for (const StyledProperty& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
                 return styleValue(id, p.sid);
             }
         }
+
         return EngravingItem::propertyDefault(id);
     }
-    return v;
+
+    return PropertyValue();
 }
 
 //---------------------------------------------------------
