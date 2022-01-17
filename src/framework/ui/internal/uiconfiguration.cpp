@@ -160,7 +160,7 @@ void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_PREVIOUS_GENERAL_THEME, Val(LIGHT_THEME_CODE));
-    settings()->setDefaultValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(HIGH_CONTRAST_BLACK_THEME_CODE));
+    settings()->setDefaultValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(HIGH_CONTRAST_WHITE_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -297,12 +297,12 @@ ThemeInfo UiConfiguration::makeStandardTheme(const ThemeCode& codeKey) const
     } else if (codeKey == DARK_THEME_CODE) {
         theme.title = trc("ui", "Dark");
         theme.values = DARK_THEME_VALUES;
-    } else if (codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
-        theme.title = trc("ui", "Black");
-        theme.values = HIGH_CONTRAST_BLACK_THEME_VALUES;
     } else if (codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
         theme.title = trc("ui", "White");
         theme.values = HIGH_CONTRAST_WHITE_THEME_VALUES;
+    } else if (codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        theme.title = trc("ui", "Black");
+        theme.values = HIGH_CONTRAST_BLACK_THEME_VALUES;
     }
 
     return theme;
@@ -433,7 +433,7 @@ bool UiConfiguration::isHighContrast() const
 {
     ThemeCode currentThemeCode = currentThemeCodeKey();
 
-    return currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE || currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE;
+    return currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE || currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE;
 }
 
 void UiConfiguration::setIsHighContrast(bool highContrast)
