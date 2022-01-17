@@ -51,6 +51,7 @@ class Lyrics final : public TextBase {
       Syllabic _syllabic;
       LyricsLine* _separator;
 
+      bool isMelisma() const;
       void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
    protected:
@@ -92,7 +93,6 @@ class Lyrics final : public TextBase {
       Fraction ticks() const                          { return _ticks;    }
       void setTicks(const Fraction& tick)             { _ticks = tick;    }
       Fraction endTick() const;
-      bool isMelisma() const;
       void removeFromScore();
 
       using ScoreElement::undoChangeProperty;

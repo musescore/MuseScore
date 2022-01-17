@@ -28,11 +28,7 @@ void Shape::addHorizontalSpacing(HorizontalSpacingType type, qreal leftEdge, qre
       const qreal y = eps * int(type);
       if (leftEdge == rightEdge) // HACK zero-width shapes collide with everything currently.
             rightEdge += eps;
-#ifndef NDEBUG
-      add(QRectF(leftEdge, y, rightEdge - leftEdge, 0), "Horizontal Spacing");
-#else
       add(QRectF(leftEdge, y, rightEdge - leftEdge, 0));
-#endif
       }
 
 //---------------------------------------------------------

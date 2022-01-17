@@ -61,7 +61,7 @@ class ChordRest : public DurationElement {
       Beam::Mode _beamMode;
       bool _up;                           // actual stem direction
       bool m_isSmall;
-      std::set<Lyrics*> _melismaEnds;     // lyrics ending on this ChordRest, used for spacing
+      bool _melismaEnd;
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
       CrossMeasure _crossMeasure;         ///< 0: no cross-measure modification; 1: 1st note of a mod.; -1: 2nd note
@@ -138,10 +138,8 @@ class ChordRest : public DurationElement {
       std::vector<Lyrics*>& lyrics()             { return _lyrics; }
       Lyrics* lyrics(int verse, Placement) const;
       int lastVerse(Placement) const;
-      const std::set<Lyrics*>& melismaEnds() const { return _melismaEnds; }
-      std::set<Lyrics*>& melismaEnds()             { return _melismaEnds; }
-      void removeMelismaEnd(Lyrics* const l);
       bool isMelismaEnd() const;
+      void setMelismaEnd(bool v);
 
       virtual void add(Element*);
       virtual void remove(Element*);
