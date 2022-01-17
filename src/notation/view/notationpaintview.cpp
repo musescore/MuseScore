@@ -239,7 +239,7 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopInMarker->setStyle(m_notation->style());
     m_loopOutMarker->setStyle(m_notation->style());
 
-    notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect){
+    notation()->accessibility()->setMapToScreenFunc([this](const RectF& elementRect) {
         auto res = fromLogical(elementRect);
         res = RectF(PointF::fromQPointF(mapToGlobal(res.topLeft().toQPointF())), SizeF(res.width(), res.height()));
 
@@ -893,6 +893,15 @@ void NotationPaintView::inputMethodEvent(QInputMethodEvent* event)
     if (isInited()) {
         m_inputController->inputMethodEvent(event);
     }
+}
+
+QVariant NotationPaintView::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    if (isInited() && m_inputController->canHandleInputMethodQuery(query)) {
+        return m_inputController->inputMethodQuery(query);
+    }
+
+    return QQuickPaintedItem::inputMethodQuery(query);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)

@@ -649,6 +649,50 @@ void NotationViewInputController::inputMethodEvent(QInputMethodEvent* event)
     }
 }
 
+bool NotationViewInputController::canHandleInputMethodQuery(Qt::InputMethodQuery query) const
+{
+    if (!viewInteraction()->isTextEditingStarted()) {
+        return false;
+    }
+
+    static const QList<Qt::InputMethodQuery> allowedQueries {
+        Qt::ImCursorRectangle,
+        Qt::ImEnabled,
+        Qt::ImHints
+    };
+
+    return allowedQueries.contains(query);
+}
+
+//! NOTE: Copied from ScoreView::inputMethodQuery
+QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery query) const
+{
+    if (!viewInteraction()->isTextEditingStarted()) {
+        return QVariant();
+    }
+
+    switch (query) {
+    case Qt::ImCursorRectangle: {
+        const TextBase* editedText = viewInteraction()->editedText();
+        RectF cursorRect = editedText->cursor()->cursorRect().translated(editedText->canvasPos());
+
+        QRectF rect = m_view->fromLogical(cursorRect).toQRectF();
+        rect.setWidth(1); // InputMethod doesn't display properly if width left at 0
+        rect.setHeight(rect.height() + 10); // add a little margin under the cursor
+
+        return rect;
+    }
+    case Qt::ImEnabled:
+        return true; // TextBase will always accept input method input
+    case Qt::ImHints:
+        return Qt::ImhNone; // No hints for now, but maybe in future will give hints
+    default:
+        return QVariant();
+    }
+
+    return QVariant();
+}
+
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();

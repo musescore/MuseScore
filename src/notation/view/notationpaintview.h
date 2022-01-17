@@ -90,6 +90,7 @@ public:
 
     PointF toLogical(const PointF& point) const override;
     PointF toLogical(const QPointF& point) const override;
+    RectF fromLogical(const RectF& rect) const override;
 
     Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
     void moveCanvasVertical(qreal dy) override;
@@ -144,7 +145,6 @@ protected:
 
     RectF toLogical(const RectF& rect) const;
     PointF fromLogical(const PointF& point) const;
-    RectF fromLogical(const RectF& rect) const;
 
     // Draw
     void paint(QPainter* painter) override;
@@ -184,6 +184,7 @@ private:
     void dropEvent(QDropEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
     void inputMethodEvent(QInputMethodEvent* event) override;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
     void ensureViewportInsideScrollableArea();
 
