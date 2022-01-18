@@ -112,13 +112,13 @@ Item {
         itemDelegate: FlatButton {
             id: btn
 
-            property var item: Boolean(itemModel) ? itemModel : null
+            property var item: Boolean(itemModel) ? itemModel.itemRole : null
             property var hasMenu: Boolean(item) && item.subitems.length !== 0
 
             width: gridView.cellWidth
             height: gridView.cellWidth
 
-            enabled: item.enabled
+            enabled: Boolean(item) && item.enabled
 
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             transparent: !accentButton
@@ -128,11 +128,11 @@ Item {
 
             toolTipTitle: Boolean(item) ? item.title : ""
             toolTipDescription: Boolean(item) ? item.description : ""
-            toolTipShortcut: Boolean(item) ? item.shortcut : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
             navigation.panel: keynavSub
-            navigation.name: item.id
-            navigation.order: Boolean(item) ? item.order : 0
+            navigation.name: Boolean(item) ? item.id : ""
+            navigation.order: Boolean(itemModel) ? itemModel.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
                 if (menuLoader.isMenuOpened || hasMenu) {
@@ -143,7 +143,7 @@ Item {
             }
 
             mouseArea.pressAndHoldInterval: 200
-            mouseArea.acceptedButtons: hasMenu && item.isMenuSecondary
+            mouseArea.acceptedButtons: hasMenu && itemModel.isMenuSecondary
                                        ? Qt.LeftButton | Qt.RightButton
                                        : Qt.LeftButton
 
@@ -158,7 +158,7 @@ Item {
             onClicked: function(mouse) {
                 if (menuLoader.isMenuOpened // If already menu open, close it
                         || (hasMenu // Or if can open menu
-                            && (!item.isMenuSecondary // And _should_ open menu
+                            && (!itemModel.isMenuSecondary // And _should_ open menu
                                 || mouse.button === Qt.RightButton))) {
                     toggleMenuOpened()
                     return
@@ -178,7 +178,7 @@ Item {
             }
 
             Canvas {
-                visible: Boolean(btn.item) && btn.item.isMenuSecondary
+                visible: Boolean(itemModel) && itemModel.isMenuSecondary
 
                 property color fillColor: ui.theme.fontPrimaryColor
                 onFillColorChanged: {

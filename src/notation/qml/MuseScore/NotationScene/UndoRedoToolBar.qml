@@ -66,14 +66,16 @@ Item {
             width: 30
             height: width
 
-            icon: model.undoItem.icon
+            property var item: Boolean(model) ? model.undoItem : null
+
+            icon: Boolean(item) ? item.icon : IconCode.NONE
             iconFont: ui.theme.toolbarIconsFont
 
-            toolTipTitle: model.undoItem.title
-            toolTipDescription: model.undoItem.description
-            toolTipShortcut: model.undoItem.shortcut
+            toolTipTitle: Boolean(item) ? item.title : ""
+            toolTipDescription: Boolean(item) ? item.description : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
-            enabled: model.undoItem.enabled
+            enabled: Boolean(item) ? item.enabled : false
             transparent: true
 
             navigation.panel: navPanel
@@ -88,14 +90,16 @@ Item {
             width: 30
             height: width
 
-            icon: model.redoItem.icon
+            property var item: Boolean(model) ? model.redoItem : null
+
+            icon: Boolean(item) ? item.icon : IconCode.NONE
             iconFont: ui.theme.toolbarIconsFont
 
-            toolTipTitle: model.redoItem.title
-            toolTipDescription: model.redoItem.description
-            toolTipShortcut: model.redoItem.shortcut
+            toolTipTitle: Boolean(item) ? item.title : ""
+            toolTipDescription: Boolean(item) ? item.description : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
-            enabled: model.redoItem.enabled
+            enabled: Boolean(item) ? item.enabled : false
             transparent: true
 
             navigation.panel: navPanel

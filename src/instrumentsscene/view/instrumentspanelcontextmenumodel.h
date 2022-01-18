@@ -22,7 +22,7 @@
 #ifndef MU_INSTRUMENTSSCENE_INSTRUMENTPANELCONTEXTMENUMODEL_H
 #define MU_INSTRUMENTSSCENE_INSTRUMENTPANELCONTEXTMENUMODEL_H
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
 
 #include "modularity/ioc.h"
@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelContextMenuModel : public ui::AbstractMenuModel, public actions::Actionable
+class InstrumentsPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
 {
     Q_OBJECT
 

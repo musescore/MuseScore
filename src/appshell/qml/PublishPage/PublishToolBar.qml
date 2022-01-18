@@ -63,12 +63,14 @@ Rectangle {
         model: toolBarModel
 
         delegate: FlatButton {
-            text: model.title
-            icon: model.icon
-            //enabled: model.enabled
-            toolTipTitle: model.title
-            toolTipDescription: model.description
-            toolTipShortcut: model.shortcut
+            property var item: Boolean(model) ? model.itemRole : null
+
+            text: Boolean(item) ? item.title : ""
+            icon: Boolean(item) ? item.icon : IconCode.NONE
+            //enabled: Boolean(item) ? item.enabled : false
+            toolTipTitle: Boolean(item) ? item.title : ""
+            toolTipDescription: Boolean(item) ? item.description : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
             orientation: Qt.Horizontal
             transparent: true
@@ -80,7 +82,7 @@ Rectangle {
             height: 36
 
             onClicked: {
-                toolBarModel.handleMenuItem(model.id)
+                toolBarModel.handleMenuItem(item.id)
             }
         }
     }

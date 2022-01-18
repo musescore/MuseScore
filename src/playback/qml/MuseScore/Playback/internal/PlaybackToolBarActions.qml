@@ -58,28 +58,30 @@ Item {
             width: 30
             height: width
 
-            icon: model.icon
+            property var item: Boolean(model) ? model.itemRole : null
 
-            toolTipTitle: model.title
-            toolTipDescription: model.description
-            toolTipShortcut: model.shortcut
+            icon: Boolean(item) ? item.icon : IconCode.NONE
+
+            toolTipTitle: Boolean(item) ? item.title : ""
+            toolTipDescription: Boolean(item) ? item.description : ""
+            toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
             iconFont: ui.theme.toolbarIconsFont
 
-            accentButton: model.checked || menuLoader.isMenuOpened
+            accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
             transparent: !accentButton
 
             navigation.panel: root.navPanel
-            navigation.name: model.title
+            navigation.name: toolTipTitle
             navigation.order: model.index
 
             onClicked: {
-                if (menuLoader.isMenuOpened || model.subitems.length) {
-                    menuLoader.toggleOpened(model.subitems)
+                if (menuLoader.isMenuOpened || item.subitems.length) {
+                    menuLoader.toggleOpened(item.subitems)
                     return
                 }
 
-                Qt.callLater(root.playbackModel.handleMenuItem, model.id)
+                Qt.callLater(root.playbackModel.handleMenuItem, item.id)
             }
 
             StyledMenuLoader {

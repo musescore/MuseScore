@@ -34,8 +34,8 @@ class UndoRedoModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariant undoItem READ undoItem NOTIFY stackChanged)
-    Q_PROPERTY(QVariant redoItem READ redoItem NOTIFY stackChanged)
+    Q_PROPERTY(QVariant undoItem READ makeUndoItem NOTIFY stackChanged)
+    Q_PROPERTY(QVariant redoItem READ makeRedoItem NOTIFY stackChanged)
 
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
@@ -43,8 +43,8 @@ class UndoRedoModel : public QObject, public async::Asyncable
 public:
     explicit UndoRedoModel(QObject* parent = nullptr);
 
-    QVariant undoItem() const;
-    QVariant redoItem() const;
+    QVariant makeUndoItem();
+    QVariant makeRedoItem();
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void undo();

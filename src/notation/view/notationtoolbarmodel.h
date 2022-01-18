@@ -23,48 +23,25 @@
 #ifndef MU_NOTATION_NOTATIONTOOLBARMODEL_H
 #define MU_NOTATION_NOTATIONTOOLBARMODEL_H
 
-#include <QAbstractListModel>
+#include "uicomponents/view/abstractmenumodel.h"
 
-#include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
+#include "context/iglobalcontext.h"
 #include "ui/iuiactionsregister.h"
-#include "actions/iactionsdispatcher.h"
-
-#include "framework/ui/view/iconcodes.h"
 
 namespace mu::notation {
-class NotationToolBarModel : public QAbstractListModel, public async::Asyncable
+class NotationToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
 
 public:
-    explicit NotationToolBarModel(QObject* parent = nullptr);
-
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void load() override;
 
 private:
-    enum Roles {
-        TitleRole = Qt::UserRole + 1,
-        CodeRole,
-        IconRole,
-        EnabledRole,
-        DescriptionRole,
-        ShortcutRole
-    };
-
-    ui::MenuItem makeItem(const actions::ActionCode& actionCode) const;
-
-    QList<ui::MenuItem> m_items;
+    uicomponents::MenuItem* makeItem(const actions::ActionCode& actionCode);
 };
 }
 

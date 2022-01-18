@@ -32,11 +32,11 @@
 
 #include "log.h"
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 using namespace mu::dock;
 using namespace mu::actions;
-using namespace mu::ui;
+using namespace mu::uicomponents;
 
 DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent)

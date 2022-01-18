@@ -23,7 +23,7 @@
 #ifndef MU_PLAYBACK_MIXERPANELCONTEXTMENUMODEL_H
 #define MU_PLAYBACK_MIXERPANELCONTEXTMENUMODEL_H
 
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 #include "actions/actionable.h"
 
 #include "actions/iactionsdispatcher.h"
@@ -32,7 +32,7 @@
 #include "playback/playbacktypes.h"
 
 namespace mu::playback {
-class MixerPanelContextMenuModel : public ui::AbstractMenuModel, public actions::Actionable
+class MixerPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
 {
     Q_OBJECT
 
@@ -75,7 +75,7 @@ signals:
 private:
     bool isSectionVisible(MixerSectionType sectionType) const;
 
-    ui::MenuItem buildViewMenuItem(MixerSectionType sectionType) const;
+    uicomponents::MenuItem* buildViewMenuItem(MixerSectionType sectionType);
 
     void toggleMixerSection(const actions::ActionData& args);
 };

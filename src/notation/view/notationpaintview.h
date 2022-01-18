@@ -37,7 +37,7 @@
 #include "ui/iuicontextresolver.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
