@@ -91,7 +91,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             height: 28
 
-            text: model.currentWorkspaceAction.title
+            text: model.currentWorkspaceItem.title
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
@@ -110,10 +110,10 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             height: 28
 
-            text: model.concertPitchAction.title
-            icon: model.concertPitchAction.icon
-            checked: model.concertPitchAction.checked
-            enabled: model.concertPitchAction.enabled
+            text: model.concertPitchItem.title
+            icon: model.concertPitchItem.icon
+            checked: model.concertPitchItem.checked
+            enabled: model.concertPitchItem.enabled
             visible: statusBarRow.remainingSpace > width
 
             navigation.panel: navPanel
@@ -190,11 +190,11 @@ Item {
                 var result = []
 
                 if (!concertPitchControl.visible) {
-                    result.push(model.concertPitchAction)
+                    result.push(model.concertPitchItem)
                 }
 
                 if (!workspaceControl.visible) {
-                    result.push(model.currentWorkspaceAction)
+                    result.push(model.currentWorkspaceItem)
                 }
 
                 return result
@@ -202,11 +202,11 @@ Item {
 
             onHandleMenuItem: function(itemId) {
                 switch (itemId) {
-                case model.concertPitchAction.id:
-                    model.handleAction(model.concertPitchAction.code)
+                case model.concertPitchItem.id:
+                    model.handleAction(model.concertPitchItem.code)
                     break
-                case model.currentWorkspaceAction.id:
-                    model.handleAction(model.concertPitchAction.code)
+                case model.currentWorkspaceItem.id:
+                    model.handleAction(model.concertPitchItem.code)
                     break
                 }
             }

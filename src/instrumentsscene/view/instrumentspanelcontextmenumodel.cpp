@@ -31,6 +31,7 @@ using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::actions;
 
 static const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
@@ -80,15 +81,21 @@ void InstrumentsPanelContextMenuModel::loadItems()
     MenuItemList orderItems;
 
     for (const ScoreOrder& order : m_orders) {
-        MenuItem orderItem;
+        MenuItem* orderItem = new MenuItem(this);
+        orderItem->setId(order.id);
 
-        orderItem.id = order.id;
-        orderItem.title = order.name;
-        orderItem.code = SET_INSTRUMENTS_ORDER_CODE;
-        orderItem.checkable = Checkable::Yes;
-        orderItem.state.enabled = true;
-        orderItem.state.checked = currentOrder.id == order.id;
-        orderItem.args = ActionData::make_arg1<QString>(order.id);
+        UiAction action;
+        action.title = order.name;
+        action.code = SET_INSTRUMENTS_ORDER_CODE;
+        action.checkable = Checkable::Yes;
+        orderItem->setAction(action);
+
+        UiActionState state;
+        state.enabled = true;
+        state.checked = currentOrder.id == order.id;
+        orderItem->setState(state);
+
+        orderItem->setArgs(ActionData::make_arg1<QString>(order.id));
 
         orderItems << orderItem;
     }
@@ -122,9 +129,9 @@ void InstrumentsPanelContextMenuModel::updateOrderingMenu(const QString& newOrde
 {
     MenuItem& orderingMenu = findMenu(ORDERING_MENU_ID);
 
-    for (MenuItem& item : orderingMenu.subitems) {
-        item.state.checked = item.id == newOrderId;
+    for (MenuItem* item : orderingMenu.subitems()) {
+        UiActionState state = item->state();
+        state.checked = item->id() == newOrderId;
+        item->setState(state);
     }
-
-    emit itemChanged(orderingMenu);
 }

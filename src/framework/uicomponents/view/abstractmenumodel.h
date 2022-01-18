@@ -19,24 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_ABSTRACTMENUMODEL_H
-#define MU_UI_ABSTRACTMENUMODEL_H
+#ifndef MU_UICOMPONENTS_ABSTRACTMENUMODEL_H
+#define MU_UICOMPONENTS_ABSTRACTMENUMODEL_H
 
 #include <QAbstractListModel>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "ui/uitypes.h"
+#include "menuitem.h"
+
+#include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace mu::ui {
+namespace mu::uicomponents {
 class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui, IUiActionsRegister, uiactionsRegister)
-    INJECT(ui, actions::IActionsDispatcher, dispatcher)
+    INJECT(uicomponents, ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(uicomponents, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
@@ -58,26 +60,18 @@ public:
 
 signals:
     void itemsChanged();
-    void itemChanged(const MenuItem& item);
+    void itemChanged(mu::uicomponents::MenuItem* item);
 
 protected:
     enum Roles {
-        CodeRole = Qt::UserRole + 1,
-        IdRole,
-        TitleRole,
-        DescriptionRole,
-        ShortcutRole,
-        IconRole,
-        CheckedRole,
-        EnabledRole,
-        SubitemsRole,
-        SectionRole,
+        ItemRole,
 
-        UserRole,
+        UserRole
     };
 
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
 
+    void setItem(int index, MenuItem* item);
     void setItems(const MenuItemList& items);
     void clear();
 
@@ -90,10 +84,10 @@ protected:
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
-    MenuItem makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
+    MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
 
-    MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
-    MenuItem makeSeparator() const;
+    MenuItem* makeMenuItem(const actions::ActionCode& actionCode);
+    MenuItem* makeSeparator();
 
     bool isIndexValid(int index) const;
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
@@ -107,4 +101,4 @@ private:
 };
 }
 
-#endif // MU_UI_ABSTRACTMENUMODEL_H
+#endif // MU_UICOMPONENTS_ABSTRACTMENUMODEL_H

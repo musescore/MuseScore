@@ -100,8 +100,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllauncher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltooltip.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnavigation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/view/navigationsection.cpp

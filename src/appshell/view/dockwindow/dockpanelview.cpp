@@ -29,17 +29,17 @@
 #include "translation.h"
 
 #include "ui/uitypes.h"
-#include "ui/view/abstractmenumodel.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 using namespace mu::dock;
-using namespace mu::uicomponents;
 using namespace mu::ui;
+using namespace mu::uicomponents;
 using namespace mu::actions;
 
 static const QString SET_DOCK_OPEN_ACTION_CODE = "dock-set-open";
 static const QString TOGGLE_FLOATING_ACTION_CODE = "dock-toggle-floating";
 
-class DockPanelView::DockPanelMenuModel : public AbstractMenuModel
+class DockPanelView::DockPanelMenuModel : public uicomponents::AbstractMenuModel
 {
 public:
     DockPanelMenuModel(DockPanelView* panel)
@@ -59,12 +59,12 @@ public:
             items << makeSeparator();
         }
 
-        MenuItem closeDockItem = buildMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("dock", "Close"));
-        closeDockItem.args = ActionData::make_arg2<QString, bool>(m_panel->objectName(), false);
+        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("dock", "Close"));
+        closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
         items << closeDockItem;
 
-        MenuItem toggleFloatingItem = buildMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
-        toggleFloatingItem.args = ActionData::make_arg1<QString>(m_panel->objectName());
+        MenuItem* toggleFloatingItem = makeMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
+        toggleFloatingItem->setArgs(ActionData::make_arg1<QString>(m_panel->objectName()));
         items << toggleFloatingItem;
 
         setItems(items);
@@ -87,19 +87,25 @@ public:
             load();
         });
 
-        connect(model, &AbstractMenuModel::itemChanged, this, [this](const MenuItem& item) {
+        connect(model, &AbstractMenuModel::itemChanged, this, [this](MenuItem* item) {
             updateItem(item);
         });
     }
 
 private:
-    MenuItem buildMenuItem(const QString& actionCode, const QString& title) const
+    MenuItem* makeMenuItem(const QString& actionCode, const QString& title)
     {
-        MenuItem item;
-        item.id = actionCode;
-        item.code = codeFromQString(actionCode);
-        item.title = title;
-        item.state.enabled = true;
+        MenuItem* item = new MenuItem(this);
+        item->setId(actionCode);
+
+        UiAction action;
+        action.code = codeFromQString(actionCode);
+        action.title = title;
+        item->setAction(action);
+
+        UiActionState state;
+        state.enabled = true;
+        item->setState(state);
 
         return item;
     }
@@ -119,25 +125,22 @@ private:
             }
 
             MenuItem& item = this->item(index);
-            item.title = toggleFloatingActionTitle();
 
-            QModelIndex modelIndex = this->index(index);
-            emit dataChanged(modelIndex, modelIndex, { TitleRole });
+            UiAction action = item.action();
+            action.title = toggleFloatingActionTitle();
+            item.setAction(action);
         });
     }
 
-    void updateItem(const MenuItem& newItem)
+    void updateItem(MenuItem* newItem)
     {
-        int index = itemIndex(newItem.id);
+        int index = itemIndex(newItem->id());
 
         if (index == INVALID_ITEM_INDEX) {
             return;
         }
 
-        item(index) = newItem;
-
-        QModelIndex modelIndex = this->index(index);
-        emit dataChanged(modelIndex, modelIndex);
+        setItem(index, newItem);
     }
 
     AbstractMenuModel* m_customMenuModel = nullptr;

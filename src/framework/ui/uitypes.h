@@ -195,6 +195,34 @@ struct UiAction
     {
         return !code.empty();
     }
+
+    QVariantMap toMap() const
+    {
+        QStringList list;
+        for (const std::string& sc : shortcuts) {
+            list << QString::fromStdString(sc);
+        }
+
+        return {
+            { "code", QString::fromStdString(code) },
+            { "title", title },
+            { "description", description },
+            { "icon", static_cast<int>(iconCode) },
+            { "shortcuts", list.join("; ") },
+            { "checkable", checkable == Checkable::No ? 0 : 1 }
+        };
+    }
+
+    bool operator==(const UiAction& other) const
+    {
+        return code == other.code
+               && context == other.context
+               && title == other.title
+               && description == other.description
+               && iconCode == other.iconCode
+               && checkable == other.checkable
+               && shortcuts == shortcuts;
+    }
 };
 
 class UiActionList : public std::vector<UiAction>
@@ -250,76 +278,15 @@ struct UiActionState
     {
         return UiActionState { true, checked };
     }
-};
-
-// This must be in sync with QAction::MenuRole
-enum class MenuItemRole {
-    NoRole = 0,
-    TextHeuristicRole,
-    ApplicationSpecificRole,
-    AboutQtRole,
-    AboutRole,
-    PreferencesRole,
-    QuitRole
-};
-
-struct MenuItem : public UiAction
-{
-    QString id;
-    QString section;
-    UiActionState state;
-    bool selectable = false;
-    bool selected = false;
-    MenuItemRole role = MenuItemRole::NoRole;
-    actions::ActionData args;
-    QList<MenuItem> subitems;
-
-    MenuItem() = default;
-    MenuItem(const UiAction& a)
-        : UiAction(a)
-    {
-        id = QString::fromStdString(a.code);
-    }
-
-    QString shortcutsTitle() const
-    {
-        return mu::shortcuts::sequencesToNativeText(shortcuts);
-    }
 
     QVariantMap toMap() const
     {
-        QVariantList subitemsVariantList;
-        for (const MenuItem& item: subitems) {
-            subitemsVariantList << item.toMap();
-        }
-
-        QString portableString = QString::fromStdString(mu::shortcuts::Shortcut::sequencesToString(shortcuts));
-
         return {
-            { "id", id },
-            { "code", QString::fromStdString(code) },
-            { "shortcut", shortcutsTitle() },
-            { "portableShortcut", portableString },
-            { "title", title },
-            { "description", description },
-            { "section", section },
-            { "icon", static_cast<int>(iconCode) },
-            { "enabled", state.enabled },
-            { "checkable", checkable == Checkable::Yes },
-            { "checked", state.checked },
-            { "selectable", selectable },
-            { "selected", selected },
-            { "role", static_cast<int>(role) },
-            { "subitems", subitemsVariantList }
+            { "enabled", enabled },
+            { "checked", checked }
         };
     }
-
-    bool isValid() const
-    {
-        return !id.isEmpty();
-    }
 };
-using MenuItemList = QList<MenuItem>;
 
 struct ToolConfig
 {
