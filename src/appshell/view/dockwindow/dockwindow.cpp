@@ -192,18 +192,11 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
         clearRegistry();
     }
 
-    DockPageView* newPage = pageByUri(uri);
-    IF_ASSERT_FAILED(newPage) {
+    bool ok = doLoadPage(uri, params);
+    if (!ok) {
         return;
     }
 
-    loadPageContent(newPage);
-    restorePageState(newPage->objectName());
-    initDocks(newPage);
-
-    newPage->setParams(params);
-
-    m_currentPage = newPage;
     emit currentPageUriChanged(uri);
 
     if (isFirstOpening) {
@@ -460,6 +453,24 @@ DockPageView* DockWindow::pageByUri(const QString& uri) const
     return nullptr;
 }
 
+bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
+{
+    DockPageView* newPage = pageByUri(uri);
+    IF_ASSERT_FAILED(newPage) {
+        return false;
+    }
+
+    loadPageContent(newPage);
+    restorePageState(newPage->objectName());
+    initDocks(newPage);
+
+    newPage->setParams(params);
+
+    m_currentPage = newPage;
+
+    return true;
+}
+
 void DockWindow::saveGeometry()
 {
     TRACEFUNC;
@@ -529,7 +540,12 @@ void DockWindow::resetWindowState()
     /// NOTE: for reset geometry
     m_currentPage = nullptr;
 
-    loadPage(currentPageUriBackup, {});
+    bool ok = doLoadPage(currentPageUriBackup, {});
+    if (!ok) {
+        return;
+    }
+
+    notifyAboutDocksOpenStatus();
 }
 
 void DockWindow::initDocks(DockPageView* page)
