@@ -591,7 +591,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             GPBeat::LegatoType legato = legatoType(origin, destination);
             beat->setLegatoType(legato);
         } else if (nodeName == "Rhythm") {
-            auto rIdx = innerNode.attributes().namedItem("ref").toElement().text().toInt();
+            auto rIdx = innerNode.attributes().namedItem("ref").toAttr().value().toInt();
             beat->addGPRhytm(_rhytms.at(rIdx));
         } else if (nodeName == "Notes") {
             auto notesStr = innerNode.toElement().text();
