@@ -95,6 +95,8 @@ private slots:
 private:
     DockPageView* pageByUri(const QString& uri) const;
 
+    bool doLoadPage(const QString& uri, const QVariantMap& params);
+
     void componentComplete() override;
     void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
