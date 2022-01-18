@@ -42,8 +42,8 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
     UiAction("fullscreen",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Full screen"),
-             QT_TRANSLATE_NOOP("action", "Full screen"),
+             QT_TRANSLATE_NOOP("action", "Enter Full screen"),
+             QT_TRANSLATE_NOOP("action", "Enter full screen"),
              Checkable::Yes
              ),
     UiAction("about",

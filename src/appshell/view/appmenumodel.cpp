@@ -198,6 +198,9 @@ MenuItem* AppMenuModel::makeEditMenu()
 MenuItem* AppMenuModel::makeViewMenu()
 {
     MenuItemList viewItems {
+#ifndef Q_OS_MAC
+        makeMenuItem("fullscreen"),
+#endif
         makeMenuItem("toggle-palettes"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),
@@ -206,27 +209,12 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
-        makeMenuItem("synth-control"), // need implement
         makeMenuItem("toggle-piano"), // need implement
-        makeMenuItem("toggle-scorecmp-tool"), // need implement
-        makeSeparator(),
-        makeMenuItem("zoomin"),
-        makeMenuItem("zoomout"),
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
         makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-select-workspace"),
-        makeMenuItem("toggle-statusbar"),
         makeSeparator(),
-        makeMenuItem("split-h"), // need implement
-        makeMenuItem("split-v"), // need implement
-        makeSeparator(),
-        makeMenuItem("show-invisible"),
-        makeMenuItem("show-unprintable"),
-        makeMenuItem("show-frames"),
-        makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular"),
-        makeSeparator(),
-        makeMenuItem("fullscreen"),
+        makeMenu(qtrc("appshell", "Show"), makeShowMenuItems(), "menu-show"),
         makeSeparator(),
         makeMenuItem("dock-restore-default-layout")
     };
@@ -311,7 +299,6 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("unroll-repeats"),
         makeSeparator(),
         makeMenuItem("copy-lyrics-to-clipboard"),
-        // makeMenuItem("fotomode"), // need implement
         makeMenuItem("del-empty-measures"),
     };
 
@@ -555,7 +542,8 @@ MenuItemList AppMenuModel::makeToolbarsItems()
         makeMenuItem("toggle-transport"),
         makeMenuItem("toggle-noteinput"),
         makeMenuItem("toggle-notationtoolbar"),
-        makeMenuItem("toggle-undoredo")
+        makeMenuItem("toggle-undoredo"),
+        makeMenuItem("toggle-statusbar")
     };
 
     return items;
@@ -593,6 +581,19 @@ MenuItemList AppMenuModel::makeWorkspacesItems()
 
     items << makeSeparator()
           << makeMenuItem("configure-workspaces");
+
+    return items;
+}
+
+MenuItemList AppMenuModel::makeShowMenuItems()
+{
+    MenuItemList items {
+        makeMenuItem("show-invisible"),
+        makeMenuItem("show-unprintable"),
+        makeMenuItem("show-frames"),
+        makeMenuItem("show-pageborders"),
+        makeMenuItem("show-irregular")
+    };
 
     return items;
 }

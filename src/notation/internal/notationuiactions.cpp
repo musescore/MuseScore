@@ -1820,18 +1820,6 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              QT_TRANSLATE_NOOP("action", "Mark irregular measures"),
              QT_TRANSLATE_NOOP("action", "Mark irregular measures"),
              Checkable::Yes
-             ),
-    UiAction("split-h",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Documents side by side"),
-             QT_TRANSLATE_NOOP("action", "Display documents side by side"),
-             Checkable::Yes
-             ),
-    UiAction("split-v",
-             mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Documents stacked"),
-             QT_TRANSLATE_NOOP("action", "Display documents stacked"),
-             Checkable::Yes
              )
 };
 
