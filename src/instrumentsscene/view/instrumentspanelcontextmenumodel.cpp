@@ -81,7 +81,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
     MenuItemList orderItems;
 
     for (const ScoreOrder& order : m_orders) {
-        MenuItem* orderItem = new MenuItem();
+        MenuItem* orderItem = new MenuItem(this);
         orderItem->setId(order.id);
 
         UiAction action;

@@ -59,11 +59,11 @@ public:
             items << makeSeparator();
         }
 
-        MenuItem* closeDockItem = buildMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("dock", "Close"));
+        MenuItem* closeDockItem = makeMenuItem(SET_DOCK_OPEN_ACTION_CODE, mu::qtrc("dock", "Close"));
         closeDockItem->setArgs(ActionData::make_arg2<QString, bool>(m_panel->objectName(), false));
         items << closeDockItem;
 
-        MenuItem* toggleFloatingItem = buildMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
+        MenuItem* toggleFloatingItem = makeMenuItem(TOGGLE_FLOATING_ACTION_CODE, toggleFloatingActionTitle());
         toggleFloatingItem->setArgs(ActionData::make_arg1<QString>(m_panel->objectName()));
         items << toggleFloatingItem;
 
@@ -93,9 +93,9 @@ public:
     }
 
 private:
-    MenuItem* buildMenuItem(const QString& actionCode, const QString& title) const
+    MenuItem* makeMenuItem(const QString& actionCode, const QString& title)
     {
-        MenuItem* item = new MenuItem();
+        MenuItem* item = new MenuItem(this);
         item->setId(actionCode);
 
         UiAction action;

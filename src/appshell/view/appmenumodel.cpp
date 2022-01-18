@@ -54,15 +54,15 @@ void AppMenuModel::load()
     AbstractMenuModel::load();
 
     MenuItemList items {
-        fileItem(),
-        editItem(),
-        viewItem(),
-        addItem(),
-        formatItem(),
-        toolsItem(),
-        helpItem(),
+        makeFileMenu(),
+        makeEditMenu(),
+        makeViewMenu(),
+        makeAddMenu(),
+        makeFormatMenu(),
+        makeToolsMenu(),
+        makeHelpMenu(),
 #ifdef BUILD_DIAGNOSTICS
-        diagnosticItem()
+        makeDiagnosticMenu()
 #endif
     };
 
@@ -96,7 +96,7 @@ void AppMenuModel::setupConnections()
     recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
-        MenuItemList recentScoresList = recentScores();
+        MenuItemList recentScoresList = makeRecentScoresItems();
         bool openRecentEnabled = !recentScoresList.empty();
 
         if (!recentScoresList.empty()) {
@@ -112,12 +112,12 @@ void AppMenuModel::setupConnections()
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
         MenuItem& workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem.setSubitems(workspacesItems());
+        workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
         MenuItem& workspacesItem = findMenu("menu-select-workspace");
-        workspacesItem.setSubitems(workspacesItems());
+        workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
     connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
@@ -129,16 +129,16 @@ void AppMenuModel::setupConnections()
     qApp->installEventFilter(this);
 }
 
-MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole) const
+MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole)
 {
     MenuItem* item = makeMenuItem(actionCode);
     item->setRole(menuRole);
     return item;
 }
 
-MenuItem* AppMenuModel::fileItem() const
+MenuItem* AppMenuModel::makeFileMenu()
 {
-    MenuItemList recentScoresList = recentScores();
+    MenuItemList recentScoresList = makeRecentScoresItems();
     bool openRecentEnabled = !recentScoresList.isEmpty();
 
     if (!recentScoresList.empty()) {
@@ -171,7 +171,7 @@ MenuItem* AppMenuModel::fileItem() const
     return makeMenu(qtrc("appshell", "&File"), fileItems, "menu-file");
 }
 
-MenuItem* AppMenuModel::editItem() const
+MenuItem* AppMenuModel::makeEditMenu()
 {
     MenuItemList editItems {
         makeMenuItem("undo"),
@@ -195,7 +195,7 @@ MenuItem* AppMenuModel::editItem() const
     return makeMenu(qtrc("appshell", "&Edit"), editItems, "menu-edit");
 }
 
-MenuItem* AppMenuModel::viewItem() const
+MenuItem* AppMenuModel::makeViewMenu()
 {
     MenuItemList viewItems {
         makeMenuItem("toggle-palettes"),
@@ -213,8 +213,8 @@ MenuItem* AppMenuModel::viewItem() const
         makeMenuItem("zoomin"),
         makeMenuItem("zoomout"),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems(), "menu-toolbars"),
-        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), "menu-select-workspace"),
+        makeMenu(qtrc("appshell", "&Toolbars"), makeToolbarsItems(), "menu-toolbars"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), makeWorkspacesItems(), "menu-select-workspace"),
         makeMenuItem("toggle-statusbar"),
         makeSeparator(),
         makeMenuItem("split-h"), // need implement
@@ -234,23 +234,23 @@ MenuItem* AppMenuModel::viewItem() const
     return makeMenu(qtrc("appshell", "&View"), viewItems, "menu-view");
 }
 
-MenuItem* AppMenuModel::addItem() const
+MenuItem* AppMenuModel::makeAddMenu()
 {
     MenuItemList addItems {
-        makeMenu(qtrc("appshell", "N&otes"), notesItems()),
-        makeMenu(qtrc("appshell", "&Intervals"), intervalsItems()),
-        makeMenu(qtrc("appshell", "T&uplets"), tupletsItems()),
+        makeMenu(qtrc("appshell", "N&otes"), makeNotesItems()),
+        makeMenu(qtrc("appshell", "&Intervals"), makeIntervalsItems()),
+        makeMenu(qtrc("appshell", "T&uplets"), makeTupletsItems()),
         makeSeparator(),
-        makeMenu(qtrc("appshell", "&Measures"), measuresItems()),
-        makeMenu(qtrc("appshell", "&Frames"), framesItems()),
-        makeMenu(qtrc("appshell", "&Text"), textItems()),
-        makeMenu(qtrc("appshell", "&Lines"), linesItems()),
+        makeMenu(qtrc("appshell", "&Measures"), makeMeasuresItems()),
+        makeMenu(qtrc("appshell", "&Frames"), makeFramesItems()),
+        makeMenu(qtrc("appshell", "&Text"), makeTextItems()),
+        makeMenu(qtrc("appshell", "&Lines"), makeLinesItems()),
     };
 
     return makeMenu(qtrc("appshell", "&Add"), addItems, "menu-add");
 }
 
-MenuItem* AppMenuModel::formatItem() const
+MenuItem* AppMenuModel::makeFormatMenu()
 {
     MenuItemList stretchItems {
         makeMenuItem("stretch+"),
@@ -276,7 +276,7 @@ MenuItem* AppMenuModel::formatItem() const
     return makeMenu(qtrc("appshell", "F&ormat"), formatItems, "menu-format");
 }
 
-MenuItem* AppMenuModel::toolsItem() const
+MenuItem* AppMenuModel::makeToolsMenu()
 {
     MenuItemList voicesItems {
         makeMenuItem("voice-x12"),
@@ -318,7 +318,7 @@ MenuItem* AppMenuModel::toolsItem() const
     return makeMenu(qtrc("appshell", "&Tools"), toolsItems, "menu-tools");
 }
 
-MenuItem* AppMenuModel::helpItem() const
+MenuItem* AppMenuModel::makeHelpMenu()
 {
     MenuItemList helpItems {
         makeMenuItem("online-handbook"),
@@ -342,7 +342,7 @@ MenuItem* AppMenuModel::helpItem() const
     return makeMenu(qtrc("appshell", "&Help"), helpItems, "menu-help");
 }
 
-MenuItem* AppMenuModel::diagnosticItem() const
+MenuItem* AppMenuModel::makeDiagnosticMenu()
 {
     MenuItemList systemItems {
         makeMenuItem("diagnostic-show-paths"),
@@ -373,14 +373,14 @@ MenuItem* AppMenuModel::diagnosticItem() const
     return makeMenu(qtrc("appshell", "&Diagnostic"), items, "menu-diagnostic");
 }
 
-MenuItemList AppMenuModel::recentScores() const
+MenuItemList AppMenuModel::makeRecentScoresItems()
 {
     MenuItemList items;
     ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
 
     int index = 0;
     for (const ProjectMeta& meta : recentProjects) {
-        MenuItem* item = new MenuItem();
+        MenuItem* item = new MenuItem(this);
 
         UiAction action;
         action.code = "file-open";
@@ -402,7 +402,7 @@ MenuItemList AppMenuModel::recentScores() const
     return items;
 }
 
-MenuItemList AppMenuModel::appendClearRecentSection(const uicomponents::MenuItemList& recentScores) const
+MenuItemList AppMenuModel::appendClearRecentSection(const uicomponents::MenuItemList& recentScores)
 {
     MenuItemList result = recentScores;
     result << makeSeparator()
@@ -411,7 +411,7 @@ MenuItemList AppMenuModel::appendClearRecentSection(const uicomponents::MenuItem
     return result;
 }
 
-MenuItemList AppMenuModel::notesItems() const
+MenuItemList AppMenuModel::makeNotesItems()
 {
     MenuItemList items {
         makeMenuItem("note-input"),
@@ -436,7 +436,7 @@ MenuItemList AppMenuModel::notesItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::intervalsItems() const
+MenuItemList AppMenuModel::makeIntervalsItems()
 {
     MenuItemList items {
         makeMenuItem("interval1"),
@@ -462,7 +462,7 @@ MenuItemList AppMenuModel::intervalsItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::tupletsItems() const
+MenuItemList AppMenuModel::makeTupletsItems()
 {
     MenuItemList items {
         makeMenuItem("duplet"),
@@ -479,7 +479,7 @@ MenuItemList AppMenuModel::tupletsItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::measuresItems() const
+MenuItemList AppMenuModel::makeMeasuresItems()
 {
     MenuItemList items {
         makeMenuItem("insert-measure"),
@@ -492,7 +492,7 @@ MenuItemList AppMenuModel::measuresItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::framesItems() const
+MenuItemList AppMenuModel::makeFramesItems()
 {
     MenuItemList items {
         makeMenuItem("insert-hbox"),
@@ -507,7 +507,7 @@ MenuItemList AppMenuModel::framesItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::textItems() const
+MenuItemList AppMenuModel::makeTextItems()
 {
     MenuItemList items {
         makeMenuItem("title-text"),
@@ -535,7 +535,7 @@ MenuItemList AppMenuModel::textItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::linesItems() const
+MenuItemList AppMenuModel::makeLinesItems()
 {
     MenuItemList items {
         makeMenuItem("add-slur"),
@@ -549,7 +549,7 @@ MenuItemList AppMenuModel::linesItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::toolbarsItems() const
+MenuItemList AppMenuModel::makeToolbarsItems()
 {
     MenuItemList items {
         makeMenuItem("toggle-transport"),
@@ -561,7 +561,7 @@ MenuItemList AppMenuModel::toolbarsItems() const
     return items;
 }
 
-MenuItemList AppMenuModel::workspacesItems() const
+MenuItemList AppMenuModel::makeWorkspacesItems()
 {
     MenuItemList items;
 
@@ -574,7 +574,7 @@ MenuItemList AppMenuModel::workspacesItems() const
 
     int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
-        MenuItem* item = new MenuItem(uiActionsRegister()->action("select-workspace"));
+        MenuItem* item = new MenuItem(uiActionsRegister()->action("select-workspace"), this);
         item->setId(makeId(item->action().code, index++));
 
         UiAction action = item->action();

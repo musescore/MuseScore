@@ -72,14 +72,14 @@ QString NotationStatusBarModel::accessibilityInfo() const
     return accessibility() ? QString::fromStdString(accessibility()->accessibilityInfo().val) : QString();
 }
 
-QVariant NotationStatusBarModel::concertPitchItem() const
+QVariant NotationStatusBarModel::concertPitchItem()
 {
-    return QVariant::fromValue(menuItem(TOGGLE_CONCERT_PITCH_CODE));
+    return QVariant::fromValue(makeMenuItem(TOGGLE_CONCERT_PITCH_CODE));
 }
 
-QVariant NotationStatusBarModel::currentWorkspaceItem() const
+QVariant NotationStatusBarModel::currentWorkspaceItem()
 {
-    MenuItem* item = menuItem(SELECT_WORKSPACE_CODE);
+    MenuItem* item = makeMenuItem(SELECT_WORKSPACE_CODE);
     item->setId(QString::fromStdString(item->action().code));
 
     UiAction action;
@@ -89,20 +89,20 @@ QVariant NotationStatusBarModel::currentWorkspaceItem() const
     return QVariant::fromValue(item);
 }
 
-MenuItem* NotationStatusBarModel::menuItem(const actions::ActionCode& actionCode) const
+MenuItem* NotationStatusBarModel::makeMenuItem(const actions::ActionCode& actionCode)
 {
-    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode));
+    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
     item->setId(QString::fromStdString(item->action().code));
     item->setState(actionsRegister()->actionState(actionCode));
 
     return item;
 }
 
-QVariant NotationStatusBarModel::currentViewMode() const
+QVariant NotationStatusBarModel::currentViewMode()
 {
     ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
 
-    for (MenuItem* mode : availableViewModeList()) {
+    for (MenuItem* mode : makeAvailableViewModeList()) {
         if (ALL_MODE_MAP.key(mode->id().toStdString()) == viewMode) {
             return QVariant::fromValue(mode);
         }
@@ -111,7 +111,7 @@ QVariant NotationStatusBarModel::currentViewMode() const
     return QVariant();
 }
 
-MenuItemList NotationStatusBarModel::availableViewModeList() const
+MenuItemList NotationStatusBarModel::makeAvailableViewModeList()
 {
     if (!notation()) {
         return {};
@@ -137,7 +137,7 @@ MenuItemList NotationStatusBarModel::availableViewModeList() const
         ActionCode code = ALL_MODE_MAP[viewMode];
         UiAction action = actionsRegister()->action(code);
 
-        MenuItem* viewModeItem = new MenuItem();
+        MenuItem* viewModeItem = new MenuItem(this);
         action.title = correctedTitle(viewMode, action.title);
         viewModeItem->setAction(action);
 
@@ -251,7 +251,7 @@ void NotationStatusBarModel::setCurrentViewMode(const QString& modeCode)
     dispatch(codeFromQString(modeCode));
 }
 
-MenuItemList NotationStatusBarModel::availableZoomList() const
+MenuItemList NotationStatusBarModel::makeAvailableZoomList()
 {
     MenuItemList result;
 
@@ -262,7 +262,7 @@ MenuItemList NotationStatusBarModel::availableZoomList() const
     };
 
     auto buildZoomItem = [=](ZoomType type, const QString& title = QString(), int value = 0) {
-        MenuItem* menuItem = new MenuItem();
+        MenuItem* menuItem = new MenuItem(this);
         menuItem->setId(QString::number(static_cast<int>(type)) + QString::number(value));
 
         UiAction action;
@@ -305,7 +305,7 @@ MenuItemList NotationStatusBarModel::availableZoomList() const
 
 void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
 {
-    MenuItemList zoomList = availableZoomList();
+    MenuItemList zoomList = makeAvailableZoomList();
     int zoomIndex = -1;
     for (int i = 0; i < zoomList.count(); ++i) {
         MenuItem* zoomItem = zoomList[i];
@@ -382,14 +382,14 @@ QList<int> NotationStatusBarModel::possibleZoomPercentageList() const
     return result;
 }
 
-QVariantList NotationStatusBarModel::availableViewModeList_property() const
+QVariantList NotationStatusBarModel::availableViewModeList_property()
 {
-    return menuItemListToVariantList(availableViewModeList());
+    return menuItemListToVariantList(makeAvailableViewModeList());
 }
 
-QVariantList NotationStatusBarModel::availableZoomList_property() const
+QVariantList NotationStatusBarModel::availableZoomList_property()
 {
-    return menuItemListToVariantList(availableZoomList());
+    return menuItemListToVariantList(makeAvailableZoomList());
 }
 
 QVariantList NotationStatusBarModel::menuItemListToVariantList(const MenuItemList& list) const

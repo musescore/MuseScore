@@ -134,7 +134,7 @@ bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionC
     return PlaybackUiActions::loopBoundaryActions().contains(actionCode);
 }
 
-MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode) const
+MenuItem* PlaybackToolBarModel::makeActionWithDescriptionAsTitle(const actions::ActionCode& actionCode)
 {
     MenuItem* item = makeMenuItem(actionCode);
 

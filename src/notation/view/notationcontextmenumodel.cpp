@@ -28,33 +28,33 @@ using namespace mu::uicomponents;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
-    MenuItemList items = itemsByElementType(static_cast<ElementType>(elementType));
+    MenuItemList items = makeItemsByElementType(static_cast<ElementType>(elementType));
     setItems(items);
 }
 
-MenuItemList NotationContextMenuModel::itemsByElementType(ElementType elementType) const
+MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elementType)
 {
     switch (elementType) {
     case ElementType::MEASURE:
-        return measureItems();
+        return makeMeasureItems();
     case ElementType::PAGE:
-        return pageItems();
+        return makePageItems();
     case ElementType::STAFF_TEXT:
-        return staffTextItems();
+        return makeStaffTextItems();
     case ElementType::SYSTEM_TEXT:
-        return systemTextItems();
+        return makeSystemTextItems();
     case ElementType::TIMESIG:
-        return timeSignatureItems();
+        return makeTimeSignatureItems();
     case ElementType::HARMONY:
-        return harmonyItems();
+        return makeHarmonyItems();
     default:
         break;
     }
 
-    return elementItems();
+    return makeElementItems();
 }
 
-MenuItemList NotationContextMenuModel::pageItems() const
+MenuItemList NotationContextMenuModel::makePageItems()
 {
     MenuItemList items {
         makeMenuItem("edit-style"),
@@ -65,7 +65,7 @@ MenuItemList NotationContextMenuModel::pageItems() const
     return items;
 }
 
-MenuItemList NotationContextMenuModel::defaultCopyPasteItems() const
+MenuItemList NotationContextMenuModel::makeDefaultCopyPasteItems()
 {
     MenuItemList items {
         makeMenuItem("notation-cut"),
@@ -78,9 +78,9 @@ MenuItemList NotationContextMenuModel::defaultCopyPasteItems() const
     return items;
 }
 
-MenuItemList NotationContextMenuModel::measureItems() const
+MenuItemList NotationContextMenuModel::makeMeasureItems()
 {
-    MenuItemList items = elementItems();
+    MenuItemList items = makeElementItems();
     items << makeSeparator();
 
     if (isDrumsetStaff()) {
@@ -94,43 +94,43 @@ MenuItemList NotationContextMenuModel::measureItems() const
     return items;
 }
 
-MenuItemList NotationContextMenuModel::staffTextItems() const
+MenuItemList NotationContextMenuModel::makeStaffTextItems()
 {
-    MenuItemList items = elementItems();
+    MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenuItem("staff-text-properties");
 
     return items;
 }
 
-MenuItemList NotationContextMenuModel::systemTextItems() const
+MenuItemList NotationContextMenuModel::makeSystemTextItems()
 {
-    MenuItemList items = elementItems();
+    MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenuItem("system-text-properties");
 
     return items;
 }
 
-MenuItemList NotationContextMenuModel::timeSignatureItems() const
+MenuItemList NotationContextMenuModel::makeTimeSignatureItems()
 {
-    MenuItemList items = elementItems();
+    MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenuItem("time-signature-properties");
 
     return items;
 }
 
-MenuItemList NotationContextMenuModel::harmonyItems() const
+MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
-    MenuItemList items = elementItems();
+    MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenuItem("realize-chord-symbols");
 
     return items;
 }
 
-MenuItemList NotationContextMenuModel::selectItems() const
+MenuItemList NotationContextMenuModel::makeSelectItems()
 {
     MenuItemList items {
         makeMenuItem("select-similar"),
@@ -142,12 +142,12 @@ MenuItemList NotationContextMenuModel::selectItems() const
     return items;
 }
 
-MenuItemList NotationContextMenuModel::elementItems() const
+MenuItemList NotationContextMenuModel::makeElementItems()
 {
-    MenuItemList items = defaultCopyPasteItems();
+    MenuItemList items = makeDefaultCopyPasteItems();
 
     if (isSingleSelection()) {
-        items << makeMenu(qtrc("notation", "Select"), selectItems());
+        items << makeMenu(qtrc("notation", "Select"), makeSelectItems());
     }
 
     return items;

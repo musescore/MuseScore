@@ -62,13 +62,13 @@ public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
 
     QString accessibilityInfo() const;
-    QVariant currentWorkspaceItem() const;
-    QVariant concertPitchItem() const;
-    QVariant currentViewMode() const;
+    QVariant currentWorkspaceItem();
+    QVariant concertPitchItem();
+    QVariant currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-    uicomponents::MenuItemList availableViewModeList() const;
-    uicomponents::MenuItemList availableZoomList() const;
+    uicomponents::MenuItemList makeAvailableViewModeList();
+    uicomponents::MenuItemList makeAvailableZoomList();
 
     Q_INVOKABLE void load();
 
@@ -101,7 +101,7 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
-    uicomponents::MenuItem* menuItem(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItem* makeMenuItem(const actions::ActionCode& actionCode);
 
     void dispatch(const actions::ActionCode& code, const actions::ActionData& args = actions::ActionData());
 
@@ -109,8 +109,8 @@ private:
 
     QList<int> possibleZoomPercentageList() const;
 
-    QVariantList availableViewModeList_property() const;
-    QVariantList availableZoomList_property() const;
+    QVariantList availableViewModeList_property();
+    QVariantList availableZoomList_property();
 
     QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list) const;
 
