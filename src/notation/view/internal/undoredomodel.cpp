@@ -32,9 +32,9 @@ UndoRedoModel::UndoRedoModel(QObject* parent)
 {
 }
 
-QVariant UndoRedoModel::undoItem() const
+QVariant UndoRedoModel::makeUndoItem()
 {
-    MenuItem* item = new MenuItem(actionsRegister()->action("undo"));
+    MenuItem* item = new MenuItem(actionsRegister()->action("undo"), this);
 
     ui::UiActionState state;
     state.enabled = undoStack() ? undoStack()->canUndo() : false;
@@ -43,9 +43,9 @@ QVariant UndoRedoModel::undoItem() const
     return QVariant::fromValue(item);
 }
 
-QVariant UndoRedoModel::redoItem() const
+QVariant UndoRedoModel::makeRedoItem()
 {
-    MenuItem* item = new MenuItem(actionsRegister()->action("redo"));
+    MenuItem* item = new MenuItem(actionsRegister()->action("redo"), this);
 
     ui::UiActionState state;
     state.enabled = undoStack() ? undoStack()->canRedo() : false;

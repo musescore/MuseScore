@@ -72,29 +72,29 @@ private:
     void setupConnections();
 
     using uicomponents::AbstractMenuModel::makeMenuItem;
-    uicomponents::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, uicomponents::MenuItemRole role) const;
+    uicomponents::MenuItem* makeMenuItem(const actions::ActionCode& actionCode, uicomponents::MenuItemRole role);
 
-    uicomponents::MenuItem* fileItem() const;
-    uicomponents::MenuItem* editItem() const;
-    uicomponents::MenuItem* viewItem() const;
-    uicomponents::MenuItem* addItem() const;
-    uicomponents::MenuItem* formatItem() const;
-    uicomponents::MenuItem* toolsItem() const;
-    uicomponents::MenuItem* helpItem() const;
-    uicomponents::MenuItem* diagnosticItem() const;
+    uicomponents::MenuItem* makeFileMenu();
+    uicomponents::MenuItem* makeEditMenu();
+    uicomponents::MenuItem* makeViewMenu();
+    uicomponents::MenuItem* makeAddMenu();
+    uicomponents::MenuItem* makeFormatMenu();
+    uicomponents::MenuItem* makeToolsMenu();
+    uicomponents::MenuItem* makeHelpMenu();
+    uicomponents::MenuItem* makeDiagnosticMenu();
 
-    uicomponents::MenuItemList recentScores() const;
-    uicomponents::MenuItemList appendClearRecentSection(const uicomponents::MenuItemList& recentScores) const;
+    uicomponents::MenuItemList makeRecentScoresItems();
+    uicomponents::MenuItemList appendClearRecentSection(const uicomponents::MenuItemList& recentScores);
 
-    uicomponents::MenuItemList notesItems() const;
-    uicomponents::MenuItemList intervalsItems() const;
-    uicomponents::MenuItemList tupletsItems() const;
-    uicomponents::MenuItemList measuresItems() const;
-    uicomponents::MenuItemList framesItems() const;
-    uicomponents::MenuItemList textItems() const;
-    uicomponents::MenuItemList linesItems() const;
-    uicomponents::MenuItemList toolbarsItems() const;
-    uicomponents::MenuItemList workspacesItems() const;
+    uicomponents::MenuItemList makeNotesItems();
+    uicomponents::MenuItemList makeIntervalsItems();
+    uicomponents::MenuItemList makeTupletsItems();
+    uicomponents::MenuItemList makeMeasuresItems();
+    uicomponents::MenuItemList makeFramesItems();
+    uicomponents::MenuItemList makeTextItems();
+    uicomponents::MenuItemList makeLinesItems();
+    uicomponents::MenuItemList makeToolbarsItems();
+    uicomponents::MenuItemList makeWorkspacesItems();
 
     // Custom navigation
     bool eventFilter(QObject* watched, QEvent* event) override;

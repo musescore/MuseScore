@@ -28,10 +28,16 @@
 using namespace mu::uicomponents;
 using namespace mu::ui;
 
-MenuItem::MenuItem(const UiAction& a)
+MenuItem::MenuItem(QObject* parent)
+    : QObject(parent)
 {
-    m_id = QString::fromStdString(a.code);
-    m_action = a;
+}
+
+MenuItem::MenuItem(const UiAction& action, QObject* parent)
+    : QObject(parent)
+{
+    m_id = QString::fromStdString(action.code);
+    m_action = action;
 }
 
 QString MenuItem::id() const

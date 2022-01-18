@@ -39,17 +39,17 @@ public:
     Q_INVOKABLE void loadItems(int elementType);
 
 private:
-    uicomponents::MenuItemList itemsByElementType(ElementType type) const;
+    uicomponents::MenuItemList makeItemsByElementType(ElementType type);
 
-    uicomponents::MenuItemList pageItems() const;
-    uicomponents::MenuItemList defaultCopyPasteItems() const;
-    uicomponents::MenuItemList measureItems() const;
-    uicomponents::MenuItemList staffTextItems() const;
-    uicomponents::MenuItemList systemTextItems() const;
-    uicomponents::MenuItemList timeSignatureItems() const;
-    uicomponents::MenuItemList harmonyItems() const;
-    uicomponents::MenuItemList selectItems() const;
-    uicomponents::MenuItemList elementItems() const;
+    uicomponents::MenuItemList makePageItems();
+    uicomponents::MenuItemList makeDefaultCopyPasteItems();
+    uicomponents::MenuItemList makeMeasureItems();
+    uicomponents::MenuItemList makeStaffTextItems();
+    uicomponents::MenuItemList makeSystemTextItems();
+    uicomponents::MenuItemList makeTimeSignatureItems();
+    uicomponents::MenuItemList makeHarmonyItems();
+    uicomponents::MenuItemList makeSelectItems();
+    uicomponents::MenuItemList makeElementItems();
 
     bool isSingleSelection() const;
     bool isDrumsetStaff() const;

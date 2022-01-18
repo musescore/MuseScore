@@ -41,7 +41,7 @@ public:
     Q_INVOKABLE void load() override;
 
 private:
-    uicomponents::MenuItem* makeItem(const actions::ActionCode& actionCode) const;
+    uicomponents::MenuItem* makeItem(const actions::ActionCode& actionCode);
 };
 }
 

@@ -84,10 +84,10 @@ protected:
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
-    MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true) const;
+    MenuItem* makeMenu(const QString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
 
-    MenuItem* makeMenuItem(const actions::ActionCode& actionCode) const;
-    MenuItem* makeSeparator() const;
+    MenuItem* makeMenuItem(const actions::ActionCode& actionCode);
+    MenuItem* makeSeparator();
 
     bool isIndexValid(int index) const;
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());

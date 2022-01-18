@@ -136,9 +136,9 @@ void NoteInputBarModel::load()
 
         MenuItemList subitems;
         if (isNoteInputModeAction(citem.action)) {
-            subitems = noteInputMethodItems();
+            subitems = makeNoteInputMethodItems();
         } else if (citem.action == TUPLET_ACTION_CODE) {
-            subitems = tupletItems();
+            subitems = makeTupletItems();
         }
 
         MenuItem* item = makeActionItem(uiActionsRegister()->action(citem.action), QString::number(section), subitems);
@@ -250,7 +250,7 @@ void NoteInputBarModel::updateNoteInputModeState()
     MenuItem& item = this->item(noteInputModeIndex);
 
     QString currentSection = item.section();
-    MenuItemList subitems = noteInputMethodItems();
+    MenuItemList subitems = makeNoteInputMethodItems();
 
     item.setAction(currentNoteInputModeAction());
     item.setSection(currentSection);
@@ -389,7 +389,7 @@ void NoteInputBarModel::updateTupletState()
 
 void NoteInputBarModel::updateAddState()
 {
-    findItem(ActionCode(ADD_ACTION_CODE)).setSubitems(addItems());
+    findItem(ActionCode(ADD_ACTION_CODE)).setSubitems(makeAddItems());
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const
@@ -571,7 +571,7 @@ UiAction NoteInputBarModel::currentNoteInputModeAction() const
 
 MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section, const uicomponents::MenuItemList& subitems)
 {
-    MenuItem* item = new MenuItem(action);
+    MenuItem* item = new MenuItem(action, this);
     item->setSection(section);
     item->setSubitems(subitems);
     return item;
@@ -580,24 +580,24 @@ MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QStrin
 MenuItem* NoteInputBarModel::makeAddItem(const QString& section)
 {
     UiAction addAction(ADD_ACTION_CODE, UiCtxAny, ADD_ACTION_TITLE, ADD_ACTION_ICON_CODE);
-    return makeActionItem(addAction, section, addItems());
+    return makeActionItem(addAction, section, makeAddItems());
 }
 
-MenuItemList NoteInputBarModel::subitems(const ActionCode& actionCode) const
+MenuItemList NoteInputBarModel::makeSubitems(const ActionCode& actionCode)
 {
     MenuItemList items;
     if (isNoteInputModeAction(actionCode)) {
-        items = noteInputMethodItems();
+        items = makeNoteInputMethodItems();
     } else if (actionCode == TUPLET_ACTION_CODE) {
-        items = tupletItems();
+        items = makeTupletItems();
     } else if (actionCode == ADD_ACTION_CODE) {
-        items = addItems();
+        items = makeAddItems();
     }
 
     return items;
 }
 
-MenuItemList NoteInputBarModel::noteInputMethodItems() const
+MenuItemList NoteInputBarModel::makeNoteInputMethodItems()
 {
     MenuItemList items;
     actions::ActionCode currentInputMethod = currentNoteInputModeAction().code;
@@ -617,7 +617,7 @@ MenuItemList NoteInputBarModel::noteInputMethodItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::tupletItems() const
+MenuItemList NoteInputBarModel::makeTupletItems()
 {
     MenuItemList items = {
         makeMenuItem("duplet"),
@@ -634,21 +634,21 @@ MenuItemList NoteInputBarModel::tupletItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::addItems() const
+MenuItemList NoteInputBarModel::makeAddItems()
 {
     MenuItemList items = {
-        makeMenu(qtrc("notation", "Notes"), notesItems()),
-        makeMenu(qtrc("notation", "Intervals"), intervalsItems()),
-        makeMenu(qtrc("notation", "Measures"), measuresItems()),
-        makeMenu(qtrc("notation", "Frames"), framesItems()),
-        makeMenu(qtrc("notation", "Text"), textItems()),
-        makeMenu(qtrc("notation", "Lines"), linesItems())
+        makeMenu(qtrc("notation", "Notes"), makeNotesItems()),
+        makeMenu(qtrc("notation", "Intervals"), makeIntervalsItems()),
+        makeMenu(qtrc("notation", "Measures"), makeMeasuresItems()),
+        makeMenu(qtrc("notation", "Frames"), makeFramesItems()),
+        makeMenu(qtrc("notation", "Text"), makeTextItems()),
+        makeMenu(qtrc("notation", "Lines"), makeLinesItems())
     };
 
     return items;
 }
 
-MenuItemList NoteInputBarModel::notesItems() const
+MenuItemList NoteInputBarModel::makeNotesItems()
 {
     MenuItemList items {
         makeMenuItem("note-c"),
@@ -671,7 +671,7 @@ MenuItemList NoteInputBarModel::notesItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::intervalsItems() const
+MenuItemList NoteInputBarModel::makeIntervalsItems()
 {
     MenuItemList items {
         makeMenuItem("interval1"),
@@ -697,7 +697,7 @@ MenuItemList NoteInputBarModel::intervalsItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::measuresItems() const
+MenuItemList NoteInputBarModel::makeMeasuresItems()
 {
     MenuItemList items {
         makeMenuItem("insert-measure"),
@@ -710,7 +710,7 @@ MenuItemList NoteInputBarModel::measuresItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::framesItems() const
+MenuItemList NoteInputBarModel::makeFramesItems()
 {
     MenuItemList items {
         makeMenuItem("insert-hbox"),
@@ -725,7 +725,7 @@ MenuItemList NoteInputBarModel::framesItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::textItems() const
+MenuItemList NoteInputBarModel::makeTextItems()
 {
     MenuItemList items {
         makeMenuItem("title-text"),
@@ -753,7 +753,7 @@ MenuItemList NoteInputBarModel::textItems() const
     return items;
 }
 
-MenuItemList NoteInputBarModel::linesItems() const
+MenuItemList NoteInputBarModel::makeLinesItems()
 {
     MenuItemList items {
         makeMenuItem("add-slur"),

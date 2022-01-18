@@ -68,8 +68,8 @@ class MenuItem : public QObject
     Q_PROPERTY(QList<MenuItem*> subitems READ subitems NOTIFY subitemsChanged)
 
 public:
-    MenuItem() = default;
-    MenuItem(const ui::UiAction& a);
+    MenuItem(QObject* parent = nullptr);
+    MenuItem(const ui::UiAction& action, QObject* parent = nullptr);
 
     QString id() const;
     QString section() const;

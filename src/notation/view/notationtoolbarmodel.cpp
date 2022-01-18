@@ -39,9 +39,9 @@ void NotationToolBarModel::load()
     });
 }
 
-MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const
+MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode)
 {
-    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode));
+    MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
 
     ui::UiActionState state;
     state.enabled = context()->currentNotation() != nullptr;

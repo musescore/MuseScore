@@ -116,11 +116,11 @@ bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) 
     return configuration()->isMixerSectionVisible(sectionType);
 }
 
-MenuItem* MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionType) const
+MenuItem* MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionType)
 {
     int sectionTypeInt = static_cast<int>(sectionType);
 
-    MenuItem* item = new MenuItem();
+    MenuItem* item = new MenuItem(this);
     item->setId(QString::number(sectionTypeInt));
     item->setArgs(ActionData::make_arg1<int>(sectionTypeInt));
 

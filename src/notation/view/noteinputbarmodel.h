@@ -82,16 +82,16 @@ private:
                                            const uicomponents::MenuItemList& subitems = {});
     uicomponents::MenuItem* makeAddItem(const QString& section);
 
-    uicomponents::MenuItemList subitems(const actions::ActionCode& actionCode) const;
-    uicomponents::MenuItemList noteInputMethodItems() const;
-    uicomponents::MenuItemList tupletItems() const;
-    uicomponents::MenuItemList addItems() const;
-    uicomponents::MenuItemList notesItems() const;
-    uicomponents::MenuItemList intervalsItems() const;
-    uicomponents::MenuItemList measuresItems() const;
-    uicomponents::MenuItemList framesItems() const;
-    uicomponents::MenuItemList textItems() const;
-    uicomponents::MenuItemList linesItems() const;
+    uicomponents::MenuItemList makeSubitems(const actions::ActionCode& actionCode);
+    uicomponents::MenuItemList makeNoteInputMethodItems();
+    uicomponents::MenuItemList makeTupletItems();
+    uicomponents::MenuItemList makeAddItems();
+    uicomponents::MenuItemList makeNotesItems();
+    uicomponents::MenuItemList makeIntervalsItems();
+    uicomponents::MenuItemList makeMeasuresItems();
+    uicomponents::MenuItemList makeFramesItems();
+    uicomponents::MenuItemList makeTextItems();
+    uicomponents::MenuItemList makeLinesItems();
 
     bool isMenuSecondary(const actions::ActionCode& actionCode) const;
 

@@ -176,9 +176,9 @@ MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
 }
 
 MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& items,
-                                      const QString& menuId, bool enabled) const
+                                      const QString& menuId, bool enabled)
 {
-    MenuItem* item = new MenuItem();
+    MenuItem* item = new MenuItem(this);
     item->setId(menuId);
     item->setSubitems(items);
 
@@ -193,7 +193,7 @@ MenuItem* AbstractMenuModel::makeMenu(const QString& title, const MenuItemList& 
     return item;
 }
 
-MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
+MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode)
 {
     const UiAction& action = uiActionsRegister()->action(actionCode);
     if (!action.isValid()) {
@@ -201,15 +201,15 @@ MenuItem* AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
         return nullptr;
     }
 
-    MenuItem* item = new MenuItem(action);
+    MenuItem* item = new MenuItem(action, this);
     item->setState(uiActionsRegister()->actionState(actionCode));
 
     return item;
 }
 
-MenuItem* AbstractMenuModel::makeSeparator() const
+MenuItem* AbstractMenuModel::makeSeparator()
 {
-    MenuItem* item = new MenuItem();
+    MenuItem* item = new MenuItem(this);
 
     UiAction action;
     action.title = QString();
