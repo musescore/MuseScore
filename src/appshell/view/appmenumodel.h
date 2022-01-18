@@ -95,6 +95,7 @@ private:
     uicomponents::MenuItemList makeLinesItems();
     uicomponents::MenuItemList makeToolbarsItems();
     uicomponents::MenuItemList makeWorkspacesItems();
+    uicomponents::MenuItemList makeShowMenuItems();
 
     // Custom navigation
     bool eventFilter(QObject* watched, QEvent* event) override;
