@@ -37,8 +37,6 @@ using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
-static const Settings::Key UI_PREVIOUS_GENERAL_THEME("ui", "ui/application/previousGeneralTheme");
-static const Settings::Key UI_PREVIOUS_HIGH_CONTRAST_THEME("ui", "ui/application/previousHighContrastTheme");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
@@ -161,8 +159,6 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
-    settings()->setDefaultValue(UI_PREVIOUS_GENERAL_THEME, Val(LIGHT_THEME_CODE));
-    settings()->setDefaultValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(HIGH_CONTRAST_WHITE_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -440,21 +436,24 @@ bool UiConfiguration::isHighContrast() const
 
 void UiConfiguration::setIsHighContrast(bool highContrast)
 {
+    ThemeCode currentThemeCode = currentThemeCodeKey();
     if (highContrast) {
-        setCurrentTheme(settings()->value(UI_PREVIOUS_HIGH_CONTRAST_THEME).toQString().QString::toStdString());
+        if (currentThemeCode == LIGHT_THEME_CODE) {
+            setCurrentTheme(HIGH_CONTRAST_WHITE_THEME_CODE);
+        } else {
+            setCurrentTheme(HIGH_CONTRAST_BLACK_THEME_CODE);
+        }
     } else {
-        setCurrentTheme(settings()->value(UI_PREVIOUS_GENERAL_THEME).toQString().QString::toStdString());
+        if (currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE) {
+            setCurrentTheme(LIGHT_THEME_CODE);
+        } else {
+            setCurrentTheme(DARK_THEME_CODE);
+        }
     }
 }
 
 void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
 {
-    if (isHighContrast()) {
-        settings()->setSharedValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(currentThemeCodeKey()));
-    } else {
-        settings()->setSharedValue(UI_PREVIOUS_GENERAL_THEME, Val(currentThemeCodeKey()));
-    }
-
     settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
 }
 
