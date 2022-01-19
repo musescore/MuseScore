@@ -46,6 +46,7 @@ public:
     void init();
 
     bool projectHasUnsavedChanges(const io::path& projectPath) const override;
+    void removeProjectUnsavedChanges(const io::path& projectPath) override;
 
     io::path projectOriginalPath(const io::path& projectAutoSavePath) const override;
     io::path projectAutoSavePath(const io::path& projectPath) const override;
@@ -54,8 +55,6 @@ private:
     void onTrySave();
 
     QTimer m_timer;
-
-    io::path m_lastOpenedProjectPath;
 };
 }
 
