@@ -55,17 +55,14 @@ void ProjectAutoSaver::init()
     globalContext()->currentProjectChanged().onNotify(this, [this](){
         auto currentProject = globalContext()->currentProject();
         if (!currentProject) {
-            fileSystem()->remove(projectAutoSavePath(m_lastOpenedProjectPath));
             return;
         }
 
         currentProject->needSave().notification.onNotify(this, [this, currentProject](){
             if (!currentProject->needSave().val) {
-                fileSystem()->remove(projectAutoSavePath(currentProject->path()));
+                removeProjectUnsavedChanges(currentProject->path());
             }
         });
-
-        m_lastOpenedProjectPath = currentProject->path();
     });
 }
 
@@ -73,6 +70,11 @@ bool ProjectAutoSaver::projectHasUnsavedChanges(const io::path& projectPath) con
 {
     io::path autoSavePath = projectAutoSavePath(projectPath);
     return fileSystem()->exists(autoSavePath);
+}
+
+void ProjectAutoSaver::removeProjectUnsavedChanges(const io::path& projectPath)
+{
+    fileSystem()->remove(projectAutoSavePath(projectPath));
 }
 
 mu::io::path ProjectAutoSaver::projectOriginalPath(const mu::io::path& projectAutoSavePath) const

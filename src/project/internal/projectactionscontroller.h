@@ -42,6 +42,7 @@
 #include "iprojectconfiguration.h"
 #include "iprojectcreator.h"
 #include "iplatformrecentfilescontroller.h"
+#include "iprojectautosaver.h"
 
 namespace mu::project {
 class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
@@ -50,6 +51,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, IProjectCreator, projectCreator)
     INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
+    INJECT(project, IProjectAutoSaver, projectAutoSaver)
 
     INJECT(project, actions::IActionsDispatcher, dispatcher)
     INJECT(project, framework::IInteractive, interactive)

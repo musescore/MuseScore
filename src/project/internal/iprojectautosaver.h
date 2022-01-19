@@ -35,6 +35,7 @@ public:
     virtual ~IProjectAutoSaver() = default;
 
     virtual bool projectHasUnsavedChanges(const io::path& projectPath) const = 0;
+    virtual void removeProjectUnsavedChanges(const io::path& projectPath) = 0;
 
     virtual io::path projectOriginalPath(const io::path& projectAutoSavePath) const = 0;
     virtual io::path projectAutoSavePath(const io::path& projectPath) const = 0;
