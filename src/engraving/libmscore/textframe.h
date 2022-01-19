@@ -42,23 +42,28 @@ public:
     TBox(const TBox&);
     ~TBox();
 
+    Text* text() const { return _text; }
+
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
 
-    virtual TBox* clone() const override { return new TBox(*this); }
+    TBox* clone() const override { return new TBox(*this); }
 
-    virtual void write(XmlWriter&) const override;
+    void write(XmlWriter&) const override;
     using VBox::write;
-    virtual void read(XmlReader&) override;
-    virtual EngravingItem* drop(EditData&) override;
-    virtual void add(EngravingItem* e) override;
-    virtual void remove(EngravingItem* el) override;
+    void read(XmlReader&) override;
+    EngravingItem* drop(EditData&) override;
+    void add(EngravingItem* e) override;
+    void remove(EngravingItem* el) override;
 
-    virtual void layout() override;
-    virtual QString accessibleExtraInfo() const override;
-    Text* text() const { return _text; }
+    void layout() override;
+    QString accessibleExtraInfo() const override;
+
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override;
+    Grip defaultGrip() const override;
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::SelectOnly; }
 };
