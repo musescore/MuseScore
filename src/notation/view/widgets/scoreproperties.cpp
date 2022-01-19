@@ -23,6 +23,7 @@
 #include "scoreproperties.h"
 
 #include <QScrollBar>
+#include <QCloseEvent>
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
