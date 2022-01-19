@@ -501,21 +501,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
 bool NotationViewInputController::needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const
 {
-    if (!event) {
+    if (!event || !hitElement()) {
         return false;
     }
 
-    const EngravingItem* hitElement = this->hitElement();
-    if (!hitElement) {
-        return false;
-    }
+    bool result = true;
 
-    Qt::MouseButton button = event->button();
-
-    bool result = hitElement && !hitElement->selected();
-
-    if (button == Qt::MouseButton::RightButton && result) {
-        result &= !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
+    if (event->button() == Qt::MouseButton::RightButton) {
+        result = !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
     }
 
     return result;
