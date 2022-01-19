@@ -135,7 +135,8 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const int track
                     DynamicMap& dynamicMap = m_dynamicsMap[trackId];
                     updateDynamicsMap(segment, segmentPositionTick, dynamicMap);
 
-                    m_renderer.render(item, tickPositionOffset, nominalDynamicLevel(segmentPositionTick, dynamicMap), std::move(profile), m_events[trackId]);
+                    m_renderer.render(item, tickPositionOffset, nominalDynamicLevel(segmentPositionTick, dynamicMap),
+                                      std::move(profile), m_events[trackId]);
                 }
             }
         }
