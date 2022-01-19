@@ -67,7 +67,8 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(static_cast<int>(PlaybackCursorType::STEPPED)));
 
     for (MixerSectionType sectionType : allMixerSectionTypes()) {
-        settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(true));
+        bool sectionEnabledByDefault = sectionType != MixerSectionType::Volume;
+        settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(sectionEnabledByDefault));
     }
 }
 
