@@ -597,8 +597,14 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
 {
     TRACEFUNC;
 
+    const Ms::Selection& selection = score()->selection();
+    QList<EngravingItem*> oldSelectedElements = selection.elements();
+
     doSelect(elements, type, staffIndex);
-    notifyAboutSelectionChanged();
+
+    if (oldSelectedElements != selection.elements()) {
+        notifyAboutSelectionChanged();
+    }
 }
 
 void NotationInteraction::selectAll()
