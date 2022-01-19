@@ -101,3 +101,8 @@ void HairpinSettingsModel::requestElements()
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
     });
 }
+
+bool HairpinSettingsModel::isTextVisible(TextType) const
+{
+    return true;
+}
