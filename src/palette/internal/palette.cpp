@@ -62,11 +62,6 @@ Palette::~Palette()
             c->setParent(nullptr);
         }
     }
-
-    std::vector<PaletteCellPtr> cells = m_cells;
-    Palette* pal = this;
-
-    int k = -1;
 }
 
 QString Palette::id() const

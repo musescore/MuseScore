@@ -625,8 +625,8 @@ private:
         m_averagePitchRange = 0;
 
         for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-            m_averagePitchOffsetMap.emplace(i * TEN_PERCENT, 0);
-            m_averageDynamicOffsetMap.emplace(i * TEN_PERCENT, 0);
+            m_averagePitchOffsetMap.emplace(static_cast<int>(i) * TEN_PERCENT, 0);
+            m_averageDynamicOffsetMap.emplace(static_cast<int>(i) * TEN_PERCENT, 0);
         }
     }
 
