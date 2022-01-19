@@ -35,6 +35,7 @@ struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
+using PlaybackEventsMap = std::unordered_map<msecs_t, PlaybackEventList>;
 
 struct ArrangementContext
 {

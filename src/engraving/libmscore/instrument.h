@@ -441,6 +441,7 @@ public:
     const Instrument* instrument(int tick) const;
     Instrument* instrument(int tick);
     void setInstrument(Instrument*, int tick);
+    bool contains(const std::string& instrumentId) const;
 };
 }     // namespace Ms
 #endif
