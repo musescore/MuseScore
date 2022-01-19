@@ -101,27 +101,17 @@ mu::RectF NotationSelection::canvasBoundingRect() const
         return RectF();
     }
 
-    Ms::EngravingItem* el = score()->selection().element();
-    if (el) {
-        return el->canvasBoundingRect();
+    if (const Ms::EngravingItem* element = score()->selection().element()) {
+        return element->canvasBoundingRect();
     }
 
-    QList<Ms::EngravingItem*> els = score()->selection().elements();
-    if (els.isEmpty()) {
-        LOGW() << "selection not none, but no elements";
-        return RectF();
+    RectF result;
+
+    for (const RectF& rect : range()->boundingArea()) {
+        result = result.united(rect);
     }
 
-    RectF rect;
-    for (const Ms::EngravingItem* elm: els) {
-        if (rect.isNull()) {
-            rect = elm->canvasBoundingRect();
-        } else {
-            rect = rect.united(elm->canvasBoundingRect());
-        }
-    }
-
-    return rect;
+    return result;
 }
 
 INotationSelectionRangePtr NotationSelection::range() const
