@@ -1833,14 +1833,13 @@ int System::lastVisibleSysStaffOfPart(const Part* part) const
 
 Fraction System::minSysTicks() const
 {
-    Fraction minTicks = Fraction(10, 1); // Initializing the variable at a random high value.
+    Fraction minTicks = Fraction (10000, 1); // Initializing the variable at a random high value.
+    // In principle, it just needs to be longer than any possible note, such that the following loop
+    // always correctly returns the shortest note/rest of the system.
     for (MeasureBase* mb : measures()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
-            Fraction curMinTicks = m->computeTicks();
-            if (curMinTicks < minTicks) {
-                minTicks = curMinTicks;
-            }
+            minTicks = std::min(m->computeTicks(), minTicks);
         }
     }
     return minTicks;

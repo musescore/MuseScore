@@ -86,8 +86,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minTicks = Fraction(4, 1); // Inizialize variable which stores the shortest note of the system
-    Fraction prevMinTicks = Fraction(4, 1);
+    Fraction minTicks = Fraction(10000, 1); // Initializing this variable at a random high value.
+    // In principle, it just needs to be longer than any possible note.
+    Fraction prevMinTicks = Fraction(1, 1);
     bool changeMinSysTicks = false;
     qreal oldStretch = 1;
 
@@ -387,8 +388,12 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     qreal stretchCoeff = 1;
     qreal prevWidth = 0;
     int iter = 0;
-    while (abs(newRest) > score->spatium() * 0.08 && iter < 200) { // spatium*0.08 is about the width of a note stem
-        stretchCoeff += 1.5 * newRest / curSysWidth;
+    static double epsilon = score->spatium() * 0.08; // For reference: this is approximately as small as the width of a note stem
+    static constexpr int maxIter = 200; // Limits the number of iterations, just for safety. In reality, most systems require less then 10 iterations.
+    static constexpr float multiplier = 1.5; // Empirically optimized value which allows the fastest convergence of the following algorithm.
+
+    while (abs(newRest) > epsilon && iter < maxIter) {
+        stretchCoeff += multiplier * newRest / curSysWidth;
         for (MeasureBase* mb : system->measures()) {
             if (mb->isMeasure()) {
                 Measure* m = toMeasure(mb);
