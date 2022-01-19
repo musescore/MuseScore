@@ -3149,8 +3149,6 @@ QString Measure::accessibleInfo() const
 
 void Measure::layoutMeasureElements()
 {
-    //bbox().setWidth(targetWidth); // Doesn't seem to be needed but I keep it here just to be safe
-
     //---------------------------------------------------
     //    layout individual elements
     //---------------------------------------------------
@@ -4008,7 +4006,7 @@ static bool hasAccidental(Segment* s)
 }
 
 //---------------------------------------------------------
-//      Stretch formula
+//      durationStretch
 //      Computes the stretch for a given segment depending
 //      on its duration with respect to the shortest one.
 //      Three different options proposed (see documentation).
@@ -4019,7 +4017,7 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     static constexpr qreal baseSlope = 0.647;
     qreal slope = userSlope * baseSlope;
     // The slope of the spacing formula is determined by the multiplication of user-defined settings and baseSlope.
-    // The value of baseSlope is chosen such that, for the default user settings, the curve matches the Gould.
+    // The value of baseSlope is chosen such that the curve matches the "ideal" one when user settings are at default.
     // See documentation PDF for more detail.
 
     static constexpr int maxMMRestWidth = 20; // At most, MM rests will be spaced "as if" they were 20 bars long.
@@ -4046,7 +4044,7 @@ float Measure::durationStretch(Fraction curTicks, const Fraction minTicks) const
     //qreal str = 1 - 0.112 * slope +  0.112 * slope * qreal(curTicks.ticks()) / qreal(minTicks.ticks());
     // Logarithmic spacing (MS 3.6)
     //qreal str = 1.0 + 0.721 * slope * log(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
-    // Quadratic spacing (Gould)
+    // Quadratic spacing
     qreal str = 1 - slope + slope * sqrt(qreal(curTicks.ticks()) / qreal(minTicks.ticks()));
 
     if (minTicks > longNoteThreshold) {
@@ -4077,8 +4075,10 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
     bool first  = isFirstInSystem();
     const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, spatium() * 4));
 
-    qreal minNoteSpace = score()->noteHeadWidth() * 1.05;
-    qreal usrStretch = qMax(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The qMax avoids stretch going to zero
+    qreal minNoteSpace = score()->noteHeadWidth() * 1.05; // This used to be minNoteSpace = noteHeadWidth() + minNoteDistance().
+    // I have removed minNoteDistance() because it was causing an unintuitive behaviour in the spacing,
+    // and I've substituted it with a purely empirical factor (*1.05) which obtains a similar default distance.
+    qreal usrStretch = std::max(userStretch() * score()->styleD(Sid::measureSpacing), qreal(0.1)); // The max() avoids stretch going to zero
 
     while (s) {
         s->rxpos() = x;
@@ -4119,7 +4119,7 @@ void Measure::computeWidth(Segment* s, qreal x, bool isSystemHeader, Fraction mi
                     // NOTE: durStretch is the spacing factor purely determined by the duration of the note.
                     // usrStretch is the spacing factor determined by user settings.
                     // stretchCoeff is the spacing factor used to justify the systems, i.e. getting the systems to fill the page.
-                    w = qMax(w, minStretchedWidth);
+                    w = std::max(w, minStretchedWidth);
                 }
             }
             // look back for collisions with previous segments
