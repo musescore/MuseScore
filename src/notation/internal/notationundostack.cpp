@@ -156,7 +156,7 @@ mu::async::Notification NotationUndoStack::stackChanged() const
     return m_stackStateChanged;
 }
 
-Channel<int, int> NotationUndoStack::notationChangesRange() const
+Channel<int, int, int, int> NotationUndoStack::notationChangesRange() const
 {
     return m_notationChangesChannel;
 }
@@ -188,7 +188,7 @@ void NotationUndoStack::notifyAboutStateChanged(NotationChangesRange&& range)
     }
 
     m_stackStateChanged.notify();
-    m_notationChangesChannel.send(range.tickFrom, range.tickTo);
+    m_notationChangesChannel.send(range.tickFrom, range.tickTo, range.staffIdxFrom, range.staffIdxTo);
 }
 
 void NotationUndoStack::notifyAboutUndo()
@@ -213,5 +213,6 @@ bool NotationUndoStack::isStackClean() const
 NotationUndoStack::NotationChangesRange NotationUndoStack::changesRange() const
 {
     const Ms::CmdState& cmdState = score()->cmdState();
-    return { cmdState.startTick().ticks(), cmdState.endTick().ticks() };
+    return { cmdState.startTick().ticks(), cmdState.endTick().ticks(),
+             cmdState.startStaff(), cmdState.endStaff() };
 }
