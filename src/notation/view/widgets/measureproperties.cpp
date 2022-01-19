@@ -22,6 +22,8 @@
 
 #include "measureproperties.h"
 
+#include <QKeyEvent>
+
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/measure.h"
 #include "engraving/libmscore/measurerepeat.h"

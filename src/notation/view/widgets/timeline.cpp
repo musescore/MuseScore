@@ -26,6 +26,7 @@
 #include <QMenu>
 #include <QScrollBar>
 #include <QTextDocument>
+#include <QMouseEvent>
 
 #include "libmscore/barline.h"
 #include "libmscore/chord.h"
