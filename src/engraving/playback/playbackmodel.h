@@ -23,6 +23,13 @@
 #ifndef MU_ENGRAVING_PLAYBACKMODEL_H
 #define MU_ENGRAVING_PLAYBACKMODEL_H
 
+#include <unordered_map>
+#include <map>
+#include <functional>
+
+#include "async/asyncable.h"
+#include "async/channel.h"
+#include "id.h"
 #include "modularity/ioc.h"
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
@@ -31,20 +38,60 @@
 
 namespace Ms {
 class Score;
+class EngravingItem;
+class Segment;
 }
 
 namespace mu::engraving {
-class PlaybackModel
+class PlaybackModel : public async::Asyncable
 {
     INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
-    PlaybackModel(const Ms::Score* score);
+    void load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel);
+
+    const mpe::PlaybackEventsMap& events(const ID& partId, const std::string& instrumentId) const;
 
 private:
+    struct TrackIdKey {
+        ID partId = 0;
+        std::string instrumentId;
+
+        bool operator ==(const TrackIdKey& other) const
+        {
+            return partId == other.partId && instrumentId == other.instrumentId;
+        }
+    };
+
+    struct IdKeyHash
+    {
+        std::size_t operator()(const TrackIdKey& s) const noexcept
+        {
+            std::size_t h1 = std::hash<int> {}(s.partId.toUint64());
+            std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
+            return h1 ^ (h2 << 1);
+        }
+    };
+
+    TrackIdKey idKey(const Ms::EngravingItem* item) const;
+    TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
+
+    using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+
+    void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
+    void clearExpiredEvents();
+    void clearExpiredDynamics();
+    void updateDynamicsMap(const Ms::Segment* segment, const int segmentPositionTick, DynamicMap& dynamicMap);
+    mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick, const DynamicMap& dynamicMap) const;
+
+    mpe::ArticulationsProfilePtr profileByFamily(const std::string& familyId) const;
+
+    Ms::Score* m_score = nullptr;
+
     PlaybackEventsRenderer m_renderer;
 
-    mpe::PlaybackEventList m_events;
+    std::unordered_map<TrackIdKey, DynamicMap, IdKeyHash> m_dynamicsMap;
+    std::unordered_map<TrackIdKey, mpe::PlaybackEventsMap, IdKeyHash> m_events;
 };
 }
 

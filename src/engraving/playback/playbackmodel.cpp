@@ -22,35 +22,225 @@
 
 #include "playbackmodel.h"
 
+#include <QString>
+
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/segment.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/part.h"
+#include "libmscore/staff.h"
+
+#include "utils/dynamicutils.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
+using namespace mu::async;
 
-PlaybackModel::PlaybackModel(const Ms::Score* score)
+static const std::set<std::string> KEYBOARDS_FAMILY_SET = {
+    "keyboards", "organs", "synths",
+};
+
+static const std::set<std::string> STRINGS_FAMILY_SET = {
+    "harps", "guitars", "bass-guitars", "banjos",
+    "ukuleles", "mandolins", "mtn-dulcimers",  "lutes",
+    "balalaikas", "bouzoukis", "kotos", "ouds",
+    "shamisens", "sitars", "tamburicas", "bandurrias",
+    "lauds", "strings", "orchestral-strings", "viols",
+    "octobasses", "erhus", "nyckelharpas"
+};
+
+static const std::set<std::string> WINDS_FAMILY_SET = {
+    "winds", "flutes", "dizis", "shakuhachis",
+    "fifes", "whistles", "flageolets", "recorders",
+    "ocarinas", "gemshorns", "pan-flutes", "quenas",
+    "oboes", "shawms", "cromornes", "crumhorns",
+    "cornamuses", "kelhorns", "rauschpfeifes", "duduks",
+    "shenais", "clarinets", "chalumeaus", "xaphoons",
+    "tarogatos", "octavins", "saxophones", "bassoons",
+    "reed-contrabasses", "dulcians", "racketts", "sarrusophones",
+    "bagpipes", "accordions", "harmonicas", "melodicas",
+    "shengs", "brass", "horns", "wagner-tubas",
+    "cornets", "saxhorns", "alto-horns", "baritone-horns",
+    "posthorns", "trumpets", "baroque-trumpets", "bugles",
+    "flugelhorns", "ophicleides", "cornetts", "serpents",
+    "trombones", "sackbuts", "euphoniums", "tubas",
+    "sousaphones", "conches", "alphorns", "rag-dungs",
+    "didgeridoos", "shofars", "vuvuzelas", "klaxon-horns",
+    "kazoos"
+};
+
+static const std::set<std::string> PERCUSSION_FAMILY_SET = {
+    "timpani", "roto-toms", "tubaphones", "steel-drums",
+    "keyboard-percussion", "pitched-metal-percussion",
+    "orff-percussion", "flexatones", "musical-saws",
+    "glass-percussion", "kalimbas", "drums", "unpitched-metal-percussion",
+    "unpitched-wooden-percussion", "other-percussion",
+    "batterie", "body-percussion"
+};
+
+void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int> notationChangesRangeChannel)
 {
-    NOT_IMPLEMENTED;
+    m_score = score;
+    notationChangesRangeChannel.resetOnReceive(this);
 
-    m_events.reserve(15000);
+    notationChangesRangeChannel.onReceive(this, [this](const int tickFrom, const int tickTo,
+                                                       const int staffIdxFrom, const int staffIdxTo) {
+        clearExpiredEvents();
+        clearExpiredDynamics();
+        update(tickFrom, tickTo, Ms::staff2track(staffIdxFrom, 0), Ms::staff2track(staffIdxTo, Ms::VOICES));
+    });
 
-    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(ArticulationFamily::StringsArticulation);
+    update(0, score->lastMeasure()->endTick().ticks(), 0, m_score->ntracks());
+}
 
-    for (const Ms::RepeatSegment* repeatSegment : score->repeatList()) {
+const PlaybackEventsMap& PlaybackModel::events(const ID& partId, const std::string& instrumentId) const
+{
+    return m_events.at(idKey(partId, instrumentId));
+}
+
+void PlaybackModel::update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo)
+{
+    for (const Ms::RepeatSegment* repeatSegment : m_score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
         for (const Ms::Measure* measure : repeatSegment->measureList()) {
+            int measureStartTick = measure->tick().ticks();
+            int measureEndTick = measure->endTick().ticks();
+
+            if (measureStartTick > tickTo || measureEndTick < tickFrom) {
+                continue;
+            }
+
             for (Ms::Segment* segment = measure->first(); segment; segment = segment->next()) {
-                for (int i = 0; i < score->ntracks(); ++i) {
+                int segmentPositionTick = segment->tick().ticks();
+
+                for (int i = trackFrom; i < trackTo; ++i) {
                     Ms::EngravingItem* item = segment->element(i);
 
-                    if (!item || !item->isChordRest()) {
+                    if (!item || !item->isChordRest() || !item->part()) {
                         continue;
                     }
 
-                    m_renderer.render(item, dynamicLevelFromType(mpe::DynamicType::Natural), profile, m_events);
+                    ArticulationsProfilePtr profile = profileByFamily(item->part()->familyId().toStdString());
+
+                    if (!profile) {
+                        LOGE() << "unsupported instrument family: " << item->part()->familyId();
+                        continue;
+                    }
+
+                    TrackIdKey trackId = idKey(item);
+
+                    DynamicMap& dynamicMap = m_dynamicsMap[trackId];
+                    updateDynamicsMap(segment, segmentPositionTick, dynamicMap);
+
+                    m_renderer.render(item, tickPositionOffset, nominalDynamicLevel(segmentPositionTick, dynamicMap), std::move(profile), m_events[trackId]);
                 }
             }
         }
     }
+}
+
+void PlaybackModel::clearExpiredEvents()
+{
+    auto it = m_events.cbegin();
+
+    while (it != m_events.cend())
+    {
+        const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
+
+        if (!part || part->instruments()->contains(it->first.instrumentId)) {
+            it = m_events.erase(it);
+            continue;
+        }
+
+        ++it;
+    }
+}
+
+void PlaybackModel::clearExpiredDynamics()
+{
+    auto it = m_dynamicsMap.cbegin();
+
+    while (it != m_dynamicsMap.cend())
+    {
+        const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
+
+        if (!part || part->instruments()->contains(it->first.instrumentId)) {
+            it = m_dynamicsMap.erase(it);
+            continue;
+        }
+
+        ++it;
+    }
+}
+
+void PlaybackModel::updateDynamicsMap(const Ms::Segment* segment, const int segmentPositionTick, DynamicMap& dynamicMap)
+{
+    for (const Ms::EngravingItem* annotation : segment->annotations()) {
+        if (!annotation || !annotation->isDynamic()) {
+            continue;
+        }
+
+        const Ms::Dynamic* dynamic = Ms::toDynamic(annotation);
+        const Ms::DynamicType type = dynamic->dynamicType();
+        if (isOrdinaryDynamicType(type)) {
+            dynamicMap[segmentPositionTick] = dynamicLevelFromType(type);
+            return;
+        }
+
+        const DynamicTransition& transition = dynamicTransitionFromType(type);
+        dynamicMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
+
+        if (!segment->next()) {
+            return;
+        }
+
+        int nextSegmentPositionTick = segment->next()->tick().ticks();
+        dynamicMap[nextSegmentPositionTick] = dynamicLevelFromType(transition.to);
+    }
+}
+
+dynamic_level_t PlaybackModel::nominalDynamicLevel(const int nominalPositionTick, const DynamicMap& dynamicMap) const
+{
+    auto it = dynamicMap.lower_bound(nominalPositionTick);
+
+    if (it != dynamicMap.cend()) {
+        return it->second;
+    }
+
+    return dynamicLevelFromType(mpe::DynamicType::Natural);
+}
+
+PlaybackModel::TrackIdKey PlaybackModel::idKey(const Ms::EngravingItem* item) const
+{
+    return { item->part()->id(),
+             item->part()->instrumentId(item->tick()).toStdString() };
+}
+
+PlaybackModel::TrackIdKey PlaybackModel::idKey(const ID& partId, const std::string& instrimentId) const
+{
+    return { partId, instrimentId };
+}
+
+ArticulationsProfilePtr PlaybackModel::profileByFamily(const std::string& familyId) const
+{
+    if (KEYBOARDS_FAMILY_SET.find(familyId) != KEYBOARDS_FAMILY_SET.cend()) {
+        return profilesRepository()->defaultProfile(ArticulationFamily::KeyboardsArticulation);
+    }
+
+    if (STRINGS_FAMILY_SET.find(familyId) != STRINGS_FAMILY_SET.cend()) {
+        return profilesRepository()->defaultProfile(ArticulationFamily::StringsArticulation);
+    }
+
+    if (WINDS_FAMILY_SET.find(familyId) != WINDS_FAMILY_SET.cend()) {
+        return profilesRepository()->defaultProfile(ArticulationFamily::WindsArticulation);
+    }
+
+    if (PERCUSSION_FAMILY_SET.find(familyId) != PERCUSSION_FAMILY_SET.cend()) {
+        return profilesRepository()->defaultProfile(ArticulationFamily::PercussionsArticulation);
+    }
+
+    return nullptr;
 }
