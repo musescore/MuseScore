@@ -923,4 +923,19 @@ QString TBox::accessibleExtraInfo() const
     QString rez = _text->screenReaderInfo();
     return rez;
 }
+
+int TBox::gripsCount() const
+{
+    return 0;
+}
+
+Grip TBox::initialEditModeGrip() const
+{
+    return Grip::NO_GRIP;
+}
+
+Grip TBox::defaultGrip() const
+{
+    return Grip::NO_GRIP;
+}
 }
