@@ -1626,6 +1626,17 @@ void InstrumentList::setInstrument(Instrument* instr, int tick)
     }
 }
 
+bool InstrumentList::contains(const std::string& instrumentId) const
+{
+    for (const auto& pair : *this) {
+        if (pair.second->instrumentId().toStdString() == instrumentId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   longName
 //---------------------------------------------------------

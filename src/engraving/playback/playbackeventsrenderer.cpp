@@ -42,7 +42,14 @@ using namespace mu::mpe;
 
 void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
                                     const ArticulationsProfilePtr profile,
-                                    PlaybackEventList& result) const
+                                    PlaybackEventsMap& result) const
+{
+    render(item, 0, nominalDynamicLevel, profile, result);
+}
+
+void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tickPositionOffset, const dynamic_level_t nominalDynamicLevel,
+                                    const ArticulationsProfilePtr profile,
+                                    PlaybackEventsMap& result) const
 {
     TRACEFUNC;
 
@@ -51,20 +58,21 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const dynamic
     }
 
     if (item->type() == Ms::ElementType::CHORD) {
-        renderNoteEvents(Ms::toChord(item), nominalDynamicLevel, profile, result);
+        renderNoteEvents(Ms::toChord(item), tickPositionOffset, nominalDynamicLevel, profile, result);
     } else if (item->type() == Ms::ElementType::REST) {
-        renderRestEvents(Ms::toRest(item), result);
+        renderRestEvents(Ms::toRest(item), tickPositionOffset, result);
     }
 }
 
-void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const mpe::dynamic_level_t nominalDynamicLevel,
-                                              const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
+void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int tickPositionOffset,
+                                              const mpe::dynamic_level_t nominalDynamicLevel,
+                                              const mpe::ArticulationsProfilePtr profile, PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(chord) {
         return;
     }
 
-    int chordPosTick = chord->tick().ticks();
+    int chordPosTick = chord->tick().ticks() + tickPositionOffset;
     int chordDurationTicks = chord->durationTypeTicks().ticks();
     BeatsPerSecond bps = chord->score()->tempomap()->tempo(chordPosTick);
 
@@ -81,23 +89,23 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const mpe:
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
-    renderArticulations(chord, ctx, result);
+    renderArticulations(chord, ctx, result[ctx.nominalTimestamp]);
 }
 
-void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, mpe::PlaybackEventList& result) const
+void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(rest) {
         return;
     }
 
-    int positionTick = rest->tick().ticks();
+    int positionTick = rest->tick().ticks() + tickPositionOffset;
     int durationTicks = rest->durationTypeTicks().ticks();
     qreal beatsPerSecond = rest->score()->tempomap()->tempo(positionTick).val;
 
     timestamp_t nominalTimestamp = timestampFromTicks(rest->score(), positionTick);
     duration_t nominalDuration = durationFromTicks(beatsPerSecond, durationTicks);
 
-    result.push_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
+    result[nominalTimestamp].push_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
 }
 
 void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const
