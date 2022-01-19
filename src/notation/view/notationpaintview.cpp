@@ -68,8 +68,6 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
         update();
     });
-
-    qApp->installEventFilter(this);
 }
 
 void NotationPaintView::load()
@@ -867,25 +865,24 @@ void NotationPaintView::shortcutOverride(QKeyEvent* event)
     }
 }
 
-bool NotationPaintView::event(QEvent* ev)
+bool NotationPaintView::event(QEvent* event)
 {
-    if (ev->type() == QEvent::Type::ShortcutOverride) {
-        shortcutOverride(dynamic_cast<QKeyEvent*>(ev));
+    if (event->type() == QEvent::Type::ShortcutOverride) {
+        shortcutOverride(dynamic_cast<QKeyEvent*>(event));
     }
 
-    return QQuickPaintedItem::event(ev);
-}
-
-bool NotationPaintView::eventFilter(QObject* obj, QEvent* ev)
-{
-    if (hasFocus() && ev->type() == QEvent::Type::ContextMenu) {
+    if (hasFocus() && event->type() == QEvent::Type::ContextMenu) {
+        QPointF contextMenuPosition;
         if (m_inputController->selectionType() == ElementType::PAGE) {
-            showContextMenu(m_inputController->selectionType(), QPointF(width() / 2, height() / 2));
+            contextMenuPosition = QPointF(width() / 2, height() / 2);
         } else {
-            showContextMenu(m_inputController->selectionType(), m_matrix.map(m_inputController->hitElementPos()).toQPointF());
+            contextMenuPosition = fromLogical(m_inputController->hitElementPos()).toQPointF();
         }
+
+        showContextMenu(m_inputController->selectionType(), contextMenuPosition);
     }
-    return QObject::eventFilter(obj, ev);
+
+    return QQuickPaintedItem::event(event);
 }
 
 void NotationPaintView::inputMethodEvent(QInputMethodEvent* event)
