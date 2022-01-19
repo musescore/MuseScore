@@ -48,6 +48,8 @@ private:
     void resetProperties() override;
     void requestElements() override;
 
+    bool isTextVisible(TextType type) const override;
+
     PropertyItem* m_isNienteCircleVisible = nullptr;
 
     PropertyItem* m_height = nullptr;
