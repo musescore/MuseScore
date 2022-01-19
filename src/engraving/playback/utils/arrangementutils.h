@@ -33,7 +33,7 @@
 namespace mu::engraving {
 inline mpe::timestamp_t timestampFromTicks(const Ms::Score* score, const int tick)
 {
-    return score->repeatList().utick2utime(tick);
+    return score->repeatList().utick2utime(tick) * 1000;
 }
 
 inline mpe::duration_t durationFromTicks(const qreal beatsPerSecond, const int durationTicks)
