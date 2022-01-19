@@ -85,13 +85,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
     m_defaultProfile->setPattern(ArticulationType::Tenuto, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    NoteEvent event = std::get<NoteEvent>(result.front());
+    NoteEvent event = std::get<NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -130,13 +130,13 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    NoteEvent event = std::get<NoteEvent>(result.front());
+    NoteEvent event = std::get<NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -171,13 +171,13 @@ TEST_F(PlaybackEventsRendererTests, DISABLED_Rest)
     ASSERT_TRUE(rest);
 
     // [WHEN] Request to render the rest
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(rest, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that a single rest event will be rendered
     EXPECT_EQ(result.size(), 1);
 
-    RestEvent event = std::get<RestEvent>(result.front());
+    RestEvent event = std::get<RestEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the rest event will match time expectations of the whole measure rest with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -211,30 +211,32 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedTrillSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Trill
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Trill));
+            // [THEN] We expect that each note event has only one articulation applied - Trill
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Trill));
 
-        // [THEN] The amount of trill alterations depends on many things, such as a tempo
-        //        However, there is a couple of general rules of this disclosure:
-        //        - Trill should start from a principal note
-        //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
-        if (i == 0 || i == result.size() - 1) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
-        }
+            // [THEN] The amount of trill alterations depends on many things, such as a tempo
+            //        However, there is a couple of general rules of this disclosure:
+            //        - Trill should start from a principal note
+            //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
+            if (i == 0 || i == result.size() - 1) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
+            }
 
-        // [THEN] In modern trills each even note should be higher than the principal one on a single pitch level
-        if ((i + 1) % 2 == 0) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+            // [THEN] In modern trills each even note should be higher than the principal one on a single pitch level
+            if ((i + 1) % 2 == 0) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+            }
         }
     }
 }
@@ -266,7 +268,7 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
     m_defaultProfile->setPattern(ArticulationType::Trill, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that the only one note event will be rendered,
@@ -300,39 +302,41 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
     m_defaultProfile->setPattern(ArticulationType::TrillBaroque, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedTrillSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - TrillBaroque
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::TrillBaroque));
+            // [THEN] We expect that each note event has only one articulation applied - TrillBaroque
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::TrillBaroque));
 
-        // [THEN] The amount of trill alterations depends on various things, such as a tempo
-        //        However, there is a couple of general rules of this disclosure in Baroque style:
-        //        - Trill should start from a principal note + 1 pitch level
-        //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
-        if (i == 0) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
-        }
+            // [THEN] The amount of trill alterations depends on various things, such as a tempo
+            //        However, there is a couple of general rules of this disclosure in Baroque style:
+            //        - Trill should start from a principal note + 1 pitch level
+            //        - Trill should end up on a principal note. For that reasons is highly common to put a triplet on the last notes
+            if (i == 0) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+            }
 
-        if (i == result.size() - 1) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
-        }
+            if (i == pair.second.size() - 1) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
+            }
 
-        // [THEN] In baroque trills each odd note should be higher than the principal one on a single pitch level
-        if (i % 2 == 0 && i < result.size() - 2) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
-        }
+            // [THEN] In baroque trills each odd note should be higher than the principal one on a single pitch level
+            if (i % 2 == 0 && i < pair.second.size() - 2) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) + PITCH_LEVEL_STEP);
+            }
 
-        // [THEN] However, the note before the last should be lowe than the principal one on a single pitch level
-        if (i == result.size() - 2) {
-            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) - PITCH_LEVEL_STEP);
+            // [THEN] However, the note before the last should be lowe than the principal one on a single pitch level
+            if (i == pair.second.size() - 2) {
+                EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4) - PITCH_LEVEL_STEP);
+            }
         }
     }
 }
@@ -371,25 +375,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
     m_defaultProfile->setPattern(ArticulationType::Turn, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Turn
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Turn));
+            // [THEN] We expect that each note event has only one articulation applied - Turn
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Turn));
 
-        // [THEN] We expect that each sub-note in Regular Turn articulation will be equal to 0.25 of the principal note
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            // [THEN] We expect that each sub-note in Regular Turn articulation will be equal to 0.25 of the principal note
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -427,25 +433,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
     m_defaultProfile->setPattern(ArticulationType::InvertedTurn, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
+            // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
 
-        // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -485,25 +493,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
     m_defaultProfile->setPattern(ArticulationType::InvertedTurn, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
+            // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::InvertedTurn));
 
-        // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            // [THEN] We expect that each sub-note in Inverted Turn articulation will be equal to 0.25 of the principal note
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -554,25 +564,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
     m_defaultProfile->setPattern(ArticulationType::UpperMordent, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Upper Mordent
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::UpperMordent));
+            // [THEN] We expect that each note event has only one articulation applied - Upper Mordent
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::UpperMordent));
 
-        // [THEN] We expect that each sub-note in Upper Mordent articulation has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note in Upper Mordent articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -623,25 +635,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
     m_defaultProfile->setPattern(ArticulationType::LowerMordent, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Lower Mordent
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::LowerMordent));
+            // [THEN] We expect that each note event has only one articulation applied - Lower Mordent
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::LowerMordent));
 
-        // [THEN] We expect that each sub-note has an expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note has an expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -680,25 +694,27 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
 
-        // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<int>(i * expectedDuration));
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<int>(i * expectedDuration));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -738,25 +754,27 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
     m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Continous Glissando
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
+            // [THEN] We expect that each note event has only one articulation applied - Continous Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
 
-        // [THEN] We expect that each sub-note has an expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            // [THEN] We expect that each sub-note has an expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -797,25 +815,27 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Standard articulation
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+            // [THEN] We expect that each note event has only one articulation applied - Standard articulation
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
-        // [THEN] We expect that each sub-note has an expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
+            // [THEN] We expect that each sub-note has an expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, i * expectedDuration);
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -860,25 +880,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
     // [WHEN] Request to render a chord with the F4 note on it
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+            // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -927,25 +949,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+            // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -991,25 +1015,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1058,25 +1084,27 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1118,24 +1146,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
     m_defaultProfile->setPattern(ArticulationType::Arpeggio, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Arpeggio));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Arpeggio));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1177,24 +1207,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1236,24 +1268,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioDown, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioDown));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioDown));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1295,24 +1329,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioStraightDown, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightDown));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightDown));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1354,24 +1390,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
     m_defaultProfile->setPattern(ArticulationType::ArpeggioStraightUp, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightUp));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightUp));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1414,24 +1452,26 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
     m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1475,24 +1515,26 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo8th, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
-    // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedSubNotesCount);
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
-    for (size_t i = 0; i < result.size(); ++i) {
-        const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(i));
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const NoteEvent& noteEvent = std::get<NoteEvent>(pair.second.at(i));
 
-        // [THEN] We expect that each note event has only one articulation applied
-        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-        EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo8th));
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Tremolo8th));
 
-        // [THEN] We expect that each sub-note has expected duration
-        EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
-        // [THEN] We expect that each note event will match expected pitch disclosure
-        EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
     }
 }
 
@@ -1536,17 +1578,17 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedChordsCount * expectedSubNotesCount);
+    EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * expectedSubNotesCount);
 
     for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
         for (int noteIdx = 0; noteIdx < expectedSubNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * expectedSubNotesCount) + noteIdx;
 
-            const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(eventIdx));
+            const NoteEvent& noteEvent = std::get<NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1602,17 +1644,17 @@ TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
     m_defaultProfile->setPattern(ArticulationType::Tremolo16th, m_dummyPattern);
 
     // [WHEN] Request to render a chord
-    PlaybackEventList result;
+    PlaybackEventsMap result;
     m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
-    EXPECT_EQ(result.size(), expectedChordsCount * chordNotesCount);
+    EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * chordNotesCount);
 
     for (int chordIdx = 0; chordIdx < expectedChordsCount; ++chordIdx) {
         for (int noteIdx = 0; noteIdx < chordNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * chordNotesCount) + noteIdx;
 
-            const NoteEvent& noteEvent = std::get<NoteEvent>(result.at(eventIdx));
+            const NoteEvent& noteEvent = std::get<NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
