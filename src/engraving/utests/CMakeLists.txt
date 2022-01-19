@@ -67,6 +67,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tuplet_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrendering_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playbackmodel_tests.cpp
 )
 
 set(MODULE_TEST_LINK
