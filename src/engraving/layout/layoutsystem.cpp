@@ -86,7 +86,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    Fraction minTicks = Fraction(10000, 1); // Initializing this variable at a random high value.
+    Fraction minTicks = Fraction::max(); // Initializing this variable at an arbitrary high value.
     // In principle, it just needs to be longer than any possible note.
     Fraction prevMinTicks = Fraction(1, 1);
     bool changeMinSysTicks = false;
