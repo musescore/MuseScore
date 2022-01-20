@@ -1216,21 +1216,21 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 }
                                 currentProperty = currentProperty.nextSibling();
                             }
-
-                            if (midi != "") {
-                                note->setPitch(midi.toInt());
-                            } else if (element != "") {
+                            if (midi == "" && element != "") {
                                 readDrumNote(note, element.toInt(), variation.toInt());
                             } else if (stringNum != "" && stringNum.toInt() >= 0 && note->headGroup() != NoteHeadGroup::HEAD_DIAMOND) {
                                 Staff* staff        = note->staff();
                                 int fretNumber      = fretNum.toInt();
                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
-                                auto pitch          = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber,
-                                                                                                          nullptr);
+                                if (midi != "") {
+                                    note->setPitch(midi.toInt());
+                                } else {
+                                    auto pitch = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber, nullptr);
+                                    note->setPitch(pitch);
+                                }
                                 note->setFret(fretNumber);
                                 // we need to turn this string number for GP to the correct string number for musescore
                                 note->setString(musescoreString);
-                                note->setPitch(pitch);
                             } else if (tone != "") {
                                 note->setPitch((octave.toInt() * 12) + tone.toInt());                 // multiply octaves by 12 as 12 semitones in octave
                             }
