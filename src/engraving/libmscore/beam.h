@@ -107,6 +107,8 @@ class Beam final : public EngravingItem
     void addChordRest(ChordRest* a);
     void removeChordRest(ChordRest* a);
 
+    const Chord* findChordWithCustomStemDirection() const;
+
 public:
     ~Beam();
 

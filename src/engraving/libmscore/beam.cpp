@@ -220,6 +220,22 @@ void Beam::removeChordRest(ChordRest* a)
     a->setBeam(0);
 }
 
+const Chord* Beam::findChordWithCustomStemDirection() const
+{
+    for (const ChordRest* rest: elements()) {
+        if (!rest->isChord()) {
+            continue;
+        }
+
+        const Chord* chord = toChord(rest);
+        if (chord->stemDirection() != DirectionV::AUTO) {
+            return chord;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -298,6 +314,7 @@ void Beam::layout1()
         }
         return;
     }
+
     if (staff()->isDrumStaff(Fraction(0, 1))) {
         if (_direction != DirectionV::AUTO) {
             _up = _direction == DirectionV::UP;
@@ -343,8 +360,10 @@ void Beam::layout1()
             _maxDuration = cr->durationType();
         }
     }
+
     std::sort(_notes.begin(), _notes.end());
     setMag(mag);
+
     //
     // determine beam stem direction
     //
@@ -361,10 +380,14 @@ void Beam::layout1()
         if (hasMultipleVoices) {
             _up = firstNote->track() % 2 == 0;
         } else {
-            std::vector<int> notes;
-            std::set<int> noteSet(_notes.begin(), _notes.end());
-            notes.assign(noteSet.begin(), noteSet.end());
-            _up = Chord::computeAutoStemDirection(&notes) > 0;
+            if (const Chord* chord = findChordWithCustomStemDirection()) {
+                _up = chord->stemDirection() == DirectionV::UP;
+            } else {
+                std::vector<int> notes;
+                std::set<int> noteSet(_notes.begin(), _notes.end());
+                notes.assign(noteSet.begin(), noteSet.end());
+                _up = Chord::computeAutoStemDirection(&notes) > 0;
+            }
         }
     } else {
         _up = true;
