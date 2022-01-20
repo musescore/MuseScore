@@ -40,13 +40,15 @@ using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::engraving;
 
-NotationAccessibility::NotationAccessibility(const IGetScore* getScore, Notification selectionChangedNotification)
-    : m_getScore(getScore)
+NotationAccessibility::NotationAccessibility(const Notation* notation)
+    : m_getScore(notation)
 {
-    selectionChangedNotification.onNotify(this, [this]() {
-        if (score()) {
-            updateAccessibilityInfo();
-        }
+    notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        updateAccessibilityInfo();
+    });
+
+    notation->notationChanged().onNotify(this, [this]() {
+        updateAccessibilityInfo();
     });
 }
 
@@ -73,6 +75,10 @@ void NotationAccessibility::setMapToScreenFunc(const AccessibleMapToScreenFunc& 
 
 void NotationAccessibility::updateAccessibilityInfo()
 {
+    if (!score()) {
+        return;
+    }
+
     QString newAccessibilityInfo;
 
     if (selection()->isSingle()) {
