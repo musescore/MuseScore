@@ -389,7 +389,6 @@ Item {
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
                     item["partId"] = model.itemRole.id
-                    item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
 
                 } else if (root.type === InstrumentsTreeItemType.STAFF) {
