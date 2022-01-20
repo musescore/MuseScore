@@ -90,26 +90,6 @@ QString AccessibleItem::accessibleDescription() const
     return m_description;
 }
 
-QVariant AccessibleItem::accesibleValue() const
-{
-    return m_value;
-}
-
-QVariant AccessibleItem::accesibleMaximumValue() const
-{
-    return m_maximumValue;
-}
-
-QVariant AccessibleItem::accesibleMinimumValue() const
-{
-    return m_minimumValue;
-}
-
-QVariant AccessibleItem::accesibleValueStepSize() const
-{
-    return m_stepSize;
-}
-
 bool AccessibleItem::accessibleState(State st) const
 {
     return m_state.value(st, false);
@@ -163,6 +143,26 @@ QRect AccessibleItem::accessibleRect() const
     QPointF scenePos = vitem->mapToScene(QPointF(0, 0));
     QPoint globalPos = vitem->window()->mapToGlobal(scenePos.toPoint());
     return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
+}
+
+QVariant AccessibleItem::accesibleValue() const
+{
+    return m_value;
+}
+
+QVariant AccessibleItem::accesibleMaximumValue() const
+{
+    return m_maximumValue;
+}
+
+QVariant AccessibleItem::accesibleMinimumValue() const
+{
+    return m_minimumValue;
+}
+
+QVariant AccessibleItem::accesibleValueStepSize() const
+{
+    return m_stepSize;
 }
 
 mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
