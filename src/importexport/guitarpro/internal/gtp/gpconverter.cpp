@@ -675,6 +675,11 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
                 tunning = standartTuning;
             }
 
+            int transpose = tR->transponce();
+            for (auto& t : tunning) {
+                t -= transpose;
+            }
+
             StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
 
             part->instrument()->setStringData(stringData);
@@ -1366,7 +1371,9 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         //       instead.
         pitch = note->part()->instrument()->channel(0)->program();
     } else {
-        pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret, nullptr);
+        pitch
+            = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret,
+                                                                 nullptr) + note->part()->instrument()->transpose().chromatic;
     }
 
     if (musescoreString == -1) {
