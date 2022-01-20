@@ -409,6 +409,25 @@ QString AccessibilityController::accessibleDescription() const
     return QString();
 }
 
+bool AccessibilityController::accessibleState(State st) const
+{
+    switch (st) {
+    case State::Undefined: return false;
+    case State::Enabled: return true;
+    case State::Active: return true;
+    default: {
+        LOGW() << "not handled state: " << static_cast<int>(st);
+    }
+    }
+
+    return false;
+}
+
+QRect AccessibilityController::accessibleRect() const
+{
+    return mainWindow()->qWindow()->geometry();
+}
+
 QVariant AccessibilityController::accesibleValue() const
 {
     return QVariant();
@@ -427,25 +446,6 @@ QVariant AccessibilityController::accesibleMinimumValue() const
 QVariant AccessibilityController::accesibleValueStepSize() const
 {
     return QVariant();
-}
-
-bool AccessibilityController::accessibleState(State st) const
-{
-    switch (st) {
-    case State::Undefined: return false;
-    case State::Enabled: return true;
-    case State::Active: return true;
-    default: {
-        LOGW() << "not handled state: " << static_cast<int>(st);
-    }
-    }
-
-    return false;
-}
-
-QRect AccessibilityController::accessibleRect() const
-{
-    return mainWindow()->qWindow()->geometry();
 }
 
 mu::async::Channel<IAccessible::Property> AccessibilityController::accessiblePropertyChanged() const

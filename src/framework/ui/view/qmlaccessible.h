@@ -118,12 +118,13 @@ public:
     IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;
     QString accessibleDescription() const override;
+    bool accessibleState(State st) const override;
+    QRect accessibleRect() const override;
+
     QVariant accesibleValue() const override;
     QVariant accesibleMaximumValue() const override;
     QVariant accesibleMinimumValue() const override;
     QVariant accesibleValueStepSize() const override;
-    bool accessibleState(State st) const override;
-    QRect accessibleRect() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;

@@ -84,12 +84,13 @@ public:
     virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
     virtual QString accessibleDescription() const = 0;
+    virtual bool accessibleState(State st) const = 0;
+    virtual QRect accessibleRect() const = 0;
+
     virtual QVariant accesibleValue() const = 0;
     virtual QVariant accesibleMaximumValue() const = 0;
     virtual QVariant accesibleMinimumValue() const = 0;
     virtual QVariant accesibleValueStepSize() const = 0;
-    virtual bool accessibleState(State st) const = 0;
-    virtual QRect accessibleRect() const = 0;
 
     virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
     virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
