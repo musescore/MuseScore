@@ -99,12 +99,8 @@ Item {
 
                 anchors.centerIn: parent
 
-                property var itemModel: null
+                property var itemModel: model
                 sourceComponent: root.itemDelegate
-
-                onLoaded: {
-                    itemModel = Qt.binding( function() { return Boolean(model) ? model : null });
-                }
             }
         }
     }
