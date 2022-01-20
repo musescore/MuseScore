@@ -71,6 +71,9 @@ public:
     int numerator() const { return m_numerator; }
     int denominator() const { return m_denominator; }
 
+    static constexpr Fraction max() { return Fraction(10000, 1); }
+    // Use this when you need to initialize a Fraction to an arbitrary high value
+
     void setNumerator(int v) { m_numerator = v; }
     void setDenominator(int v)
     {
