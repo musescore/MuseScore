@@ -32,7 +32,7 @@ void PalettePropertiesModel::load(const QVariant& properties)
     QVariantMap map = document.toVariant().toMap();
 
     m_paletteId = map["paletteId"].toString();
-    m_originConfig.name = map["name"].toString();
+    m_originConfig.name = QString(QByteArray::fromPercentEncoding(map["name"].toByteArray()));
     m_originConfig.size.setWidth(map["cellWidth"].toInt());
     m_originConfig.size.setHeight(map["cellHeight"].toInt());
     m_originConfig.scale = map["scale"].toDouble();

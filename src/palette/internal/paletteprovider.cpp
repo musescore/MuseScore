@@ -490,7 +490,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
 
     QVariantMap properties;
     properties["paletteId"] = palette->id();
-    properties["name"] = palette->translatedName();
+    properties["name"] = QString(palette->translatedName().toUtf8().toPercentEncoding());
     properties["cellWidth"] = palette->gridSize().width();
     properties["cellHeight"] = palette->gridSize().height();
     properties["scale"] = palette->mag();
