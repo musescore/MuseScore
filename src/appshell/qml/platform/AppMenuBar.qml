@@ -86,6 +86,7 @@ ListView {
 
         property var item: model ? model.itemRole : null
         property string menuId: Boolean(item) ? item.id : ""
+        property string title: Boolean(item) ? item.title : ""
 
         property bool highlight: appMenuModel.highlightedMenuId === menuId
         onHighlightChanged: {
@@ -107,7 +108,7 @@ ListView {
 
             width: textMetrics.width
 
-            text: Boolean(radioButtonDelegate.item) ? correctText(radioButtonDelegate.item.title) : ""
+            text: correctText(radioButtonDelegate.title)
             textFormat: Text.RichText
             color: ui.theme.fontPrimaryColor
             font.pixelSize: 12
@@ -116,7 +117,7 @@ ListView {
                 id: textMetrics
 
                 font: textLabel.font
-                text: textLabel.removeAmpersands(radioButtonDelegate.item.title)
+                text: textLabel.removeAmpersands(radioButtonDelegate.title)
             }
 
             function correctText(text) {
@@ -145,7 +146,7 @@ ListView {
         }
 
         Accessible.role: Accessible.Button
-        Accessible.name: Utils.removeAmpersands(text)
+        Accessible.name: Utils.removeAmpersands(title)
 
         mouseArea.onContainsMouseChanged: {
             if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu == menuLoader.menu) {
