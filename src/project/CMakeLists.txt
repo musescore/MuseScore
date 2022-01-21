@@ -66,6 +66,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/irecentprojectsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/imscmetareader.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectautosaver.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h

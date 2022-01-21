@@ -19,29 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_PROJECT_IPROJECTAUTOSAVER_H
+#define MU_PROJECT_IPROJECTAUTOSAVER_H
 
-#ifndef MU_APPSHELL_APPSHELLMODULE_H
-#define MU_APPSHELL_APPSHELLMODULE_H
+#include "io/path.h"
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleexport.h"
 
-namespace mu::appshell {
-class AppShellModule : public modularity::IModuleSetup
+namespace mu::project {
+class IProjectAutoSaver : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IProjectAutoSaver)
+
 public:
-    AppShellModule();
+    virtual ~IProjectAutoSaver() = default;
 
-    std::string moduleName() const override;
+    virtual bool projectHasUnsavedChanges(const io::path& projectPath) const = 0;
+    virtual void removeProjectUnsavedChanges(const io::path& projectPath) = 0;
 
-    void registerExports() override;
-    void resolveImports() override;
-
-    void registerResources() override;
-    void registerUiTypes() override;
-
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit() override;
+    virtual io::path projectOriginalPath(const io::path& projectAutoSavePath) const = 0;
+    virtual io::path projectAutoSavePath(const io::path& projectPath) const = 0;
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLMODULE_H
+#endif // MU_PROJECT_IPROJECTAUTOSAVER_H

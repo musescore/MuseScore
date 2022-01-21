@@ -40,8 +40,8 @@ public:
     virtual bool hasCompletedFirstLaunchSetup() const = 0;
     virtual void setHasCompletedFirstLaunchSetup(bool has) = 0;
 
-    virtual StartupSessionType startupSessionType() const = 0;
-    virtual void setStartupSessionType(StartupSessionType type) = 0;
+    virtual StartupModeType startupModeType() const = 0;
+    virtual void setStartupModeType(StartupModeType type) = 0;
 
     virtual io::path startupScorePath() const = 0;
     virtual void setStartupScorePath(const io::path& scorePath) = 0;
@@ -76,6 +76,9 @@ public:
     virtual void rollbackSettings() = 0;
 
     virtual void revertToFactorySettings(bool keepDefaultSettings = false) const = 0;
+
+    virtual io::paths sessionProjectsPaths() const = 0;
+    virtual Ret setSessionProjectsPaths(const io::paths& paths) = 0;
 };
 }
 

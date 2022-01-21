@@ -25,9 +25,10 @@
 #include "../inotationproject.h"
 
 #include "modularity/ioc.h"
+#include "system/ifilesystem.h"
 #include "inotationreadersregister.h"
 #include "inotationwritersregister.h"
-#include "system/ifilesystem.h"
+#include "iprojectautosaver.h"
 
 #include "engraving/engravingproject.h"
 
@@ -48,6 +49,7 @@ class NotationProject : public INotationProject
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
     INJECT(project, IProjectMigrator, migrator)
+    INJECT(project, IProjectAutoSaver, projectAutoSaver)
 
 public:
     NotationProject();
@@ -76,10 +78,10 @@ private:
     Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
-    Ret saveScore(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
+    Ret saveScore(const io::path& path, const std::string& fileSuffix);
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
-    Ret doSave(bool generateBackup);
+    Ret doSave(const io::path& path, bool generateBackup, engraving::MscIoMode ioMode);
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 

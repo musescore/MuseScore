@@ -36,6 +36,7 @@
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
+#include "internal/projectautosaver.h"
 
 #include "view/exportdialogmodel.h"
 #include "view/recentprojectsmodel.h"
@@ -62,6 +63,7 @@ using namespace mu::modularity;
 static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
 static std::shared_ptr<ProjectActionsController> s_actionsController = std::make_shared<ProjectActionsController>();
 static std::shared_ptr<RecentProjectsProvider> s_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
+static std::shared_ptr<ProjectAutoSaver> s_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
 
 static void project_init_qrc()
 {
@@ -85,6 +87,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
+    ioc()->registerExport<IProjectAutoSaver>(moduleName(), s_projectAutoSaver);
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -136,7 +139,5 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
     s_configuration->init();
     s_actionsController->init();
     s_recentProjectsProvider->init();
-
-    static ProjectAutoSaver autoSaver;
-    autoSaver.init();
+    s_projectAutoSaver->init();
 }

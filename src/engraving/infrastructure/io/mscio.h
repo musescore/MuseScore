@@ -54,7 +54,7 @@ enum class MscIoMode {
     XmlFile
 };
 
-inline MscIoMode mcsIoModeBySuffix(const std::string& suffix)
+inline MscIoMode mscIoModeBySuffix(const std::string& suffix)
 {
     if (suffix == MSCZ) {
         return MscIoMode::Zip;

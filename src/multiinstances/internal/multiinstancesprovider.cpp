@@ -336,6 +336,11 @@ const std::string& MultiInstancesProvider::selfID() const
     return m_selfID;
 }
 
+bool MultiInstancesProvider::isMainInstance() const
+{
+    return m_ipcChannel ? m_ipcChannel->isServer() : false;
+}
+
 std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
