@@ -922,6 +922,12 @@ void Chord::computeUp()
 
     _usesAutoUp = false;
 
+    bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
+    if (hasCustomStemDirection) {
+        _up = _stemDirection == DirectionV::UP;
+        return;
+    }
+
     if (_beam) {
         _up = _beam->up();
         return;
@@ -943,12 +949,6 @@ void Chord::computeUp()
     bool isTabStaff  = tab && tab->isTabStaff();
     if (isTabStaff && (tab->stemless() || !tab->stemThrough())) {
         _up = tab->stemless() ? false : !tab->stemsDown();
-        return;
-    }
-
-    bool hasCustomStemDirection = _stemDirection != DirectionV::AUTO;
-    if (hasCustomStemDirection) {
-        _up = _stemDirection == DirectionV::UP;
         return;
     }
 
@@ -2843,20 +2843,9 @@ qreal Chord::dotPosX() const
 //   setStemDirection
 //---------------------------------------------------------
 
-void Chord::setStemDirection(DirectionV d, DirectionV beamDir)
+void Chord::setStemDirection(DirectionV d)
 {
     _stemDirection = d;
-    if (beam()) {
-        for (ChordRest* cr : beam()->elements()) {
-            Chord* c = toChord(cr);
-            if (c) {
-                c->_stemDirection = d;
-            }
-        }
-        if (beamDir == DirectionV::AUTO) {
-            beam()->setBeamDirection(beamDir);
-        }
-    }
 }
 
 //---------------------------------------------------------

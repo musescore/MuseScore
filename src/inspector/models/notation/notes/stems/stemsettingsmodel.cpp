@@ -25,6 +25,7 @@
 #include "dataformatter.h"
 
 #include "translation.h"
+#include "log.h"
 
 using namespace mu::inspector;
 
@@ -45,7 +46,10 @@ void StemSettingsModel::createProperties()
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_length = buildPropertyItem(Ms::Pid::USER_LEN);
-    m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION);
+
+    m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION, [this](const Ms::Pid, const QVariant& newValue) {
+        onStemDirectionChanged(static_cast<Ms::DirectionV>(newValue.toInt()));
+    });
 
     m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
@@ -144,4 +148,26 @@ void StemSettingsModel::setUseStraightNoteFlags(bool use)
     context()->currentNotation()->undoStack()->prepareChanges();
     context()->currentNotation()->style()->setStyleValue(Ms::Sid::useStraightNoteFlags, use);
     context()->currentNotation()->undoStack()->commitChanges();
+}
+
+void StemSettingsModel::onStemDirectionChanged(Ms::DirectionV newDirection)
+{
+    beginCommand();
+
+    for (Ms::EngravingItem* element : m_elementList) {
+        Ms::Stem* stem = Ms::toStem(element);
+        IF_ASSERT_FAILED(stem) {
+            continue;
+        }
+
+        Ms::EngravingItem* root = stem;
+        if (Ms::Beam* beam = stem->chord()->beam()) {
+            root = beam;
+        }
+
+        root->undoChangeProperty(Ms::Pid::STEM_DIRECTION, newDirection);
+    }
+
+    endCommand();
+    updateNotation();
 }
