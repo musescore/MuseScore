@@ -139,6 +139,7 @@ public:
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
+    void startEditGrip(EngravingItem* element, Ms::Grip grip) override;
 
     bool isElementEditStarted() const override;
     void startEditElement(EngravingItem* element) override;
@@ -322,7 +323,6 @@ private:
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
-    void startEditGrip(Ms::Grip grip);
     void updateGripEdit();
     void resetGripEdit();
 

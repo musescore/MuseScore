@@ -2650,7 +2650,7 @@ void NotationInteraction::startEditGrip(const PointF& pos)
     if (grip == -1) {
         return;
     }
-    startEditGrip(Ms::Grip(grip));
+    startEditGrip(selection()->element(), Ms::Grip(grip));
 }
 
 void NotationInteraction::updateAnchorLines()
@@ -2670,14 +2670,18 @@ void NotationInteraction::updateAnchorLines()
     setAnchorLines(lines);
 }
 
-void NotationInteraction::startEditGrip(Ms::Grip grip)
+void NotationInteraction::startEditGrip(EngravingItem* element, Ms::Grip grip)
 {
-    if (m_editData.element == nullptr) {
-        m_editData.element = score()->selection().element();
+    if (m_editData.element == element && m_editData.curGrip == grip) {
+        return;
     }
-    m_editData.curGrip = Ms::Grip(grip);
+
+    m_editData.element = element;
+    m_editData.curGrip = grip;
+
     updateAnchorLines();
     m_editData.element->startEdit(m_editData);
+
     notifyAboutNotationChanged();
 }
 
@@ -2699,9 +2703,7 @@ void NotationInteraction::startEditElement(EngravingItem* element)
     if (element->isTextBase()) {
         startEditText(element, PointF());
     } else if (m_editData.grips > 1) {
-        m_editData.element = element;
-
-        startEditGrip(Ms::Grip::END);
+        startEditGrip(element, Ms::Grip::END);
 
         if (m_editData.element->generated()) {
             m_editData.element = nullptr;
@@ -3778,10 +3780,11 @@ void NotationInteraction::updateGripEdit()
     }
 
     EngravingItem* element = elements.front();
-    if (element->gripsCount() <= 0) {
+    if (!element->hasGrips()) {
         resetGripEdit();
         return;
     }
+
     m_editData.grips = element->gripsCount();
     m_editData.curGrip = Ms::Grip::NO_GRIP;
     bool editingElement = m_editData.element != nullptr;

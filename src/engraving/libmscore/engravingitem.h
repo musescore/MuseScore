@@ -416,6 +416,8 @@ public:
     /** Returns grips positions in page coordinates. */
     virtual std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const { return std::vector<mu::PointF>(); }
 
+    bool hasGrips() const;
+
     int track() const;
     virtual void setTrack(int val);
 
