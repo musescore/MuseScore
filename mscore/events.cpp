@@ -149,6 +149,15 @@ void ScoreView::wheelEvent(QWheelEvent* event)
       int dx = 0, dy = 0, n = 0;
       qreal nReal = 0.0;
 
+// pixelDelta is unreliable on X11
+#ifdef Q_OS_LINUX
+      if (std::getenv("WAYLAND_DISPLAY") == NULL) {
+          // Ignore pixelsScrolled unless Wayland is used
+          pixelsScrolled.setX(0);
+          pixelsScrolled.setY(0);
+      }
+#endif
+
       if (!pixelsScrolled.isNull()) {
             dx = pixelsScrolled.x();
             dy = pixelsScrolled.y();
