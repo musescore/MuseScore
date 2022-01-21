@@ -120,20 +120,20 @@ TEST_F(BeamTests, flatBeams)
 
 // cross staff beaming is not yet supported
 // in the new beams code
-// TEST_F(BeamTests, beamCrossMeasure2)
-// {
-//     beam("Beam-CrossM2.mscx");
-// }
+TEST_F(BeamTests, DISABLED_beamCrossMeasure2)
+{
+    beam("Beam-CrossM2.mscx");
+}
 
-// TEST_F(BeamTests, beamCrossMeasure3)
-// {
-//     beam("Beam-CrossM3.mscx");
-// }
+TEST_F(BeamTests, DISABLED_beamCrossMeasure3)
+{
+    beam("Beam-CrossM3.mscx");
+}
 
-// TEST_F(BeamTests, beamCrossMeasure4)
-// {
-//     beam("Beam-CrossM4.mscx");
-// }
+TEST_F(BeamTests, DISABLED_beamCrossMeasure4)
+{
+    beam("Beam-CrossM4.mscx");
+}
 
 //---------------------------------------------------------
 //   beamCrossMeasure1
@@ -144,73 +144,85 @@ TEST_F(BeamTests, flatBeams)
 
 // cross measure beams are not yet supported
 // in the refactored beams code
-// TEST_F(BeamTests, beamCrossMeasure1)
-// {
-//     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
-//     EXPECT_TRUE(score);
+TEST_F(BeamTests, DISABLED_beamCrossMeasure1)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
+    EXPECT_TRUE(score);
 
-//     Measure* first_measure = score->firstMeasure();
-//     EXPECT_TRUE(first_measure);
+    Measure* first_measure = score->firstMeasure();
+    EXPECT_TRUE(first_measure);
 
-//     // find the first segment that has a chord
-//     Segment* s = first_measure->first(SegmentType::ChordRest);
-//     while (s && !s->element(0)->isChord()) {
-//         s = s->next(SegmentType::ChordRest);
-//     }
-//     EXPECT_TRUE(s);
+    // find the first segment that has a chord
+    Segment* s = first_measure->first(SegmentType::ChordRest);
+    while (s && !s->element(0)->isChord()) {
+        s = s->next(SegmentType::ChordRest);
+    }
+    EXPECT_TRUE(s);
 
-//     // locate the first beam
-//     ChordRest* first_note = toChordRest(s->element(0));
-//     EXPECT_TRUE(first_note);
+    // locate the first beam
+    ChordRest* first_note = toChordRest(s->element(0));
+    EXPECT_TRUE(first_note);
 
-//     Beam* b = first_note->beam();
-//     score->update();
-//     // locate the beam again, and check if it is still b
-//     Beam* new_b = first_note->beam();
+    Beam* b = first_note->beam();
+    score->update();
+    // locate the beam again, and check if it is still b
+    Beam* new_b = first_note->beam();
 
-//     EXPECT_EQ(new_b, b);
+    EXPECT_EQ(new_b, b);
 
-//     delete score;
-// }
+    delete score;
+}
 
 //---------------------------------------------------------
 //   beamStemDir
-//   This method tests if a beam's stem direction can be
-//   set with a note other than the first one.
+//   This method tests if a beam's stem direction will be set to
+//   all its chords and will not affect other beams in score
 //---------------------------------------------------------
 
-// TEST_F(BeamTests, beamStemDir)
-// {
-//     MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
-//     EXPECT_TRUE(score);
-//     Measure* m1 = score->firstMeasure();
-//     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
-//     Chord* c2 = toChord(cr->beam()->elements()[1]);
-//     c2->setStemDirection(DirectionV::UP);
-//     score->update();
-//     score->doLayout();
-//     EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
-//     delete score;
-// }
+TEST_F(BeamTests, beamStemDir)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "beamStemDir.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+
+    cr->beam()->setBeamDirection(DirectionV::UP);
+
+    score->update();
+    score->doLayout();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "beamStemDir-01.mscx", BEAM_DATA_DIR + "beamStemDir-01-ref.mscx"));
+
+    delete score;
+}
 
 //---------------------------------------------------------
 //   flipBeamStemDir
-//   This method tests if a beam's stem direction can be
-//   set with a note after its direction has been set
-//   with the beam's own setBeamDirection method.
+//   This method tests if a beam's stem direction will be set to
+//   all its chords and will not affect other beams in score
+//   after using the flip command
 //---------------------------------------------------------
 
-//TEST_F(BeamTests, flipBeamStemDir)
-//{
-//    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
-//    EXPECT_TRUE(score);
-//    Measure* m1 = score->firstMeasure();
-//    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
-//    Chord* c2 = toChord(cr->beam()->elements()[1]);
-//    cr->beam()->setBeamDirection(DirectionV::UP);
-//    c2->setStemDirection(DirectionV::DOWN);
-//    score->update();
-//    score->doLayout();
-//    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
-//    delete score;
-//}
+TEST_F(BeamTests, flipBeamStemDir)
+{
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "flipBeamStemDir.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
+    Chord* c2 = toChord(cr->beam()->elements()[1]);
+
+    score->select(c2);
+    score->startCmd();
+    score->cmdFlip();
+    score->endCmd();
+    cr->beam()->setBeamDirection(DirectionV::DOWN);
+
+    score->update();
+    score->doLayout();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "flipBeamStemDir-01.mscx", BEAM_DATA_DIR + "flipBeamStemDir-01-ref.mscx"));
+
+    delete score;
+}
