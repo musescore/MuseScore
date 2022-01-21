@@ -449,11 +449,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         hitStaffIndex = context.staff ? context.staff->idx() : -1;
     }
 
-    if (viewInteraction()->isHitGrip(logicPos)) {
-        viewInteraction()->startEditGrip(logicPos);
-        return;
-    }
-
     if (hitElement) {
         RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(hitElement);
 
@@ -492,6 +487,14 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (!hitElement) {
         viewInteraction()->endEditElement();
+        return;
+    }
+
+    if (viewInteraction()->isHitGrip(logicPos)) {
+        viewInteraction()->startEditGrip(logicPos);
+        return;
+    } else if (hitElement->hasGrips()) {
+        viewInteraction()->startEditGrip(hitElement, hitElement->defaultGrip());
         return;
     }
 

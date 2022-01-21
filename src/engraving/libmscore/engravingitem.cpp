@@ -397,6 +397,11 @@ bool EngravingItem::onTabStaff() const
     return stt ? stt->isTabStaff() : false;
 }
 
+bool EngravingItem::hasGrips() const
+{
+    return gripsCount() > 0;
+}
+
 int EngravingItem::track() const
 {
     return _track;
