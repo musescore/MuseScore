@@ -330,10 +330,8 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
 
 void ScoreOrder::setSystemObjectStaves(Score* score)
 {
-    // the cool thing is that the template is populated by both the full template used
-    // and also orders.xml. If we want to do some jiggery-pokery with adding system object
-    // staves in the situation where the user has added the instruments manually, orders.xml
-    // is the place to go, and will likely need special handling here.
+    // for now, orders.xml doesn't contain any system object information, but can be used in the future
+    // when we start phase 2 of the system objects thing (post 4.0)
     if (!score->getSystemObjectStaves().isEmpty()) {
         return;
     }
