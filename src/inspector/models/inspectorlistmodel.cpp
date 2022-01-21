@@ -70,6 +70,10 @@ void InspectorListModel::buildModelsForEmptySelection(const ElementKeySet& selec
 
 void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList)
 {
+    if (selectedElementList == m_repository->takeAllElements()) {
+        return;
+    }
+
     ElementKeySet newElementKeySet;
 
     for (const Ms::EngravingItem* element : selectedElementList) {
