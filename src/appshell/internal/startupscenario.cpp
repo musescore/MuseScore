@@ -183,7 +183,7 @@ void StartupScenario::restoreLastSession()
     }
 }
 
-void StartupScenario::removeProjectsUnsavedChanges(const io::paths &projectsPaths)
+void StartupScenario::removeProjectsUnsavedChanges(const io::paths& projectsPaths)
 {
     for (const io::path& path : projectsPaths) {
         projectAutoSaver()->removeProjectUnsavedChanges(path);

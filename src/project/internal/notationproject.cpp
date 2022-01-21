@@ -378,7 +378,12 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
         io::path originalPath = projectAutoSaver()->projectOriginalPath(path);
         std::string suffix = io::suffix(originalPath);
 
-        return saveScore(path, suffix);
+        Ret ret = saveScore(path, suffix);
+        if (ret) {
+            m_masterNotation->score()->setSaved(false);
+        }
+
+        return ret;
     }
 
     return make_ret(notation::Err::UnknownError);
