@@ -39,7 +39,7 @@
         <section id="voices" barLineSpan="false">
             <family>voices</family>
         </section>
-        <section id="strings" showSystemMarkings="true">
+        <section id="strings">
             <family>orchestral-strings</family>
         </section>
         <unsorted/>
