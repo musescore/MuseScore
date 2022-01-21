@@ -124,6 +124,7 @@ public:
     static Ms::Rest* createRest(Ms::Segment* parent, bool setupAccessible = true);
     static Ms::Rest* createRest(Ms::Segment* parent, const Ms::TDuration& t, bool setupAccessible = true);
     static Ms::Rest* copyRest(const Ms::Rest& src, bool link = false);
+    static Ms::MMRest* createMMRest(Ms::EngravingItem* parent, bool setupAccessible = true);
 
     static Ms::Segment* createSegment(Ms::Measure* parent, bool setupAccessible = true);
     static Ms::Segment* createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t, bool setupAccessible = true);
