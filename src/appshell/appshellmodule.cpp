@@ -34,6 +34,7 @@
 #include "internal/appshellconfiguration.h"
 #include "internal/startupscenario.h"
 #include "internal/applicationactioncontroller.h"
+#include "internal/sessionsmanager.h"
 
 #include "view/devtools/settingslistmodel.h"
 #include "view/appmenumodel.h"
@@ -71,6 +72,7 @@ using namespace mu::dock;
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
+static std::shared_ptr<SessionsManager> s_sessionsManager = std::make_shared<SessionsManager>();
 
 static void appshell_init_qrc()
 {
@@ -93,6 +95,7 @@ void AppShellModule::registerExports()
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<IApplicationActionController>(moduleName(), s_applicationActionController);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
+    ioc()->registerExport<ISessionsManager>(moduleName(), s_sessionsManager);
 }
 
 void AppShellModule::resolveImports()
@@ -161,4 +164,10 @@ void AppShellModule::onInit(const IApplication::RunMode&)
     s_appShellConfiguration->init();
     s_applicationActionController->init();
     s_applicationUiActions->init();
+    s_sessionsManager->init();
+}
+
+void AppShellModule::onDeinit()
+{
+    s_sessionsManager->deinit();
 }

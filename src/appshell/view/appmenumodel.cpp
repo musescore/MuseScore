@@ -355,6 +355,7 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
         makeMenu(qtrc("appshell", "Engraving"), engravingItems),
         makeMenu(qtrc("appshell", "Autobot"), autobotItems),
+        makeMenuItem("multiinstances-dev-show-info")
     };
 
     return makeMenu(qtrc("appshell", "&Diagnostic"), items, "menu-diagnostic");

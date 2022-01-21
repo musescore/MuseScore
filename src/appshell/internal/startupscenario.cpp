@@ -23,39 +23,41 @@
 #include "startupscenario.h"
 
 #include "async/async.h"
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::actions;
+using namespace mu::framework;
 
 static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const mu::Uri HOME_URI("musescore://home");
 static const mu::Uri NOTATION_URI("musescore://notation");
 
-static StartupSessionType sessionTypeTromString(const QString& str)
+static StartupModeType modeTypeTromString(const QString& str)
 {
     if ("start-empty" == str) {
-        return StartupSessionType::StartEmpty;
+        return StartupModeType::StartEmpty;
     }
 
     if ("continue-last" == str) {
-        return StartupSessionType::ContinueLastSession;
+        return StartupModeType::ContinueLastSession;
     }
 
     if ("start-with-new" == str) {
-        return StartupSessionType::StartWithNewScore;
+        return StartupModeType::StartWithNewScore;
     }
 
     if ("start-with-file" == str) {
-        return StartupSessionType::StartWithScore;
+        return StartupModeType::StartWithScore;
     }
 
-    return StartupSessionType::StartEmpty;
+    return StartupModeType::StartEmpty;
 }
 
-void StartupScenario::setSessionType(const QString& sessionType)
+void StartupScenario::setModeType(const QString& modeType)
 {
-    m_sessionType = sessionType;
+    m_modeTypeStr = modeType;
 }
 
 void StartupScenario::setStartupScorePath(const io::path& path)
@@ -71,18 +73,23 @@ void StartupScenario::run()
         return;
     }
 
-    StartupSessionType sessionType = resolveStartupSessionType();
-    Uri startupUri = startupPageUri(sessionType);
+    StartupModeType modeType = resolveStartupModeType();
+    bool isMainInstance = multiInstancesProvider()->isMainInstance();
+    if (isMainInstance && sessionsManager()->hasProjectsForRestore()) {
+        modeType = StartupModeType::ContinueLastSession;
+    }
+
+    Uri startupUri = startupPageUri(modeType);
 
     async::Channel<Uri> opened = interactive()->opened();
-    opened.onReceive(this, [this, opened, sessionType](const Uri&) {
+    opened.onReceive(this, [this, opened, modeType](const Uri&) {
         static bool once = false;
         if (once) {
             return;
         }
         once = true;
 
-        onStartupPageOpened(sessionType);
+        onStartupPageOpened(modeType);
 
         async::Async::call(this, [this, opened]() {
             async::Channel<Uri> mut = opened;
@@ -99,33 +106,33 @@ bool StartupScenario::startupCompleted() const
     return m_startupCompleted;
 }
 
-StartupSessionType StartupScenario::resolveStartupSessionType() const
+StartupModeType StartupScenario::resolveStartupModeType() const
 {
     if (!m_startupScorePath.empty()) {
-        return StartupSessionType::StartWithScore;
+        return StartupModeType::StartWithScore;
     }
 
-    if (!m_sessionType.isEmpty()) {
-        return sessionTypeTromString(m_sessionType);
+    if (!m_modeTypeStr.isEmpty()) {
+        return modeTypeTromString(m_modeTypeStr);
     }
 
-    return configuration()->startupSessionType();
+    return configuration()->startupModeType();
 }
 
-void StartupScenario::onStartupPageOpened(StartupSessionType sessionType)
+void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 {
     TRACEFUNC;
 
-    switch (sessionType) {
-    case StartupSessionType::StartEmpty:
+    switch (modeType) {
+    case StartupModeType::StartEmpty:
         break;
-    case StartupSessionType::StartWithNewScore:
+    case StartupModeType::StartWithNewScore:
         dispatcher()->dispatch("file-new");
         break;
-    case StartupSessionType::ContinueLastSession:
-        dispatcher()->dispatch("continue-last-session");
+    case StartupModeType::ContinueLastSession:
+        restoreLastSession();
         break;
-    case StartupSessionType::StartWithScore: {
+    case StartupModeType::StartWithScore: {
         io::path path = m_startupScorePath.empty() ? configuration()->startupScorePath()
                         : m_startupScorePath;
         openScore(path);
@@ -137,15 +144,16 @@ void StartupScenario::onStartupPageOpened(StartupSessionType sessionType)
     }
 }
 
-mu::Uri StartupScenario::startupPageUri(StartupSessionType sessionType) const
+mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
 {
-    switch (sessionType) {
-    case StartupSessionType::StartEmpty:
-    case StartupSessionType::StartWithNewScore:
+    switch (modeType) {
+    case StartupModeType::StartEmpty:
+    case StartupModeType::StartWithNewScore:
         return HOME_URI;
-    case StartupSessionType::ContinueLastSession:
-    case StartupSessionType::StartWithScore:
+    case StartupModeType::StartWithScore:
         return NOTATION_URI;
+    case StartupModeType::ContinueLastSession:
+        return HOME_URI;
     }
 
     return HOME_URI;
@@ -154,4 +162,30 @@ mu::Uri StartupScenario::startupPageUri(StartupSessionType sessionType) const
 void StartupScenario::openScore(const io::path& path)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(path));
+}
+
+void StartupScenario::restoreLastSession()
+{
+    if (!sessionsManager()->hasProjectsForRestore()) {
+        dispatcher()->dispatch("continue-last-session");
+        return;
+    }
+
+    IInteractive::Result result = interactive()->question(trc("appshell", "The previous session quit unexpectedly."),
+                                                          trc("appshell", "Restore session?"),
+                                                          { IInteractive::Button::No, IInteractive::Button::Yes });
+
+    if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
+        sessionsManager()->restore();
+    } else {
+        removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
+        sessionsManager()->reset();
+    }
+}
+
+void StartupScenario::removeProjectsUnsavedChanges(const io::paths& projectsPaths)
+{
+    for (const io::path& path : projectsPaths) {
+        projectAutoSaver()->removeProjectUnsavedChanges(path);
+    }
 }
