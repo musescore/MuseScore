@@ -31,7 +31,7 @@
 #include "system/ifilesystem.h"
 #include "iprojectconfiguration.h"
 
-#include "iprojectautosaver.h"
+#include "../iprojectautosaver.h"
 
 namespace mu::project {
 class ProjectAutoSaver : public IProjectAutoSaver, public async::Asyncable

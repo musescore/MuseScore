@@ -32,6 +32,7 @@
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iappshellconfiguration.h"
 #include "isessionsmanager.h"
+#include "project/iprojectautosaver.h"
 
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public async::Asyncable
@@ -41,6 +42,7 @@ class StartupScenario : public IStartupScenario, public async::Asyncable
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, ISessionsManager, sessionsManager)
+    INJECT(appshell, project::IProjectAutoSaver, projectAutoSaver)
 
 public:
 
@@ -59,6 +61,7 @@ private:
     void openScore(const io::path& path);
 
     void restoreLastSession();
+    void removeProjectsUnsavedChanges(const io::paths& projectsPaths);
 
     QString m_modeTypeStr;
     io::path m_startupScorePath;

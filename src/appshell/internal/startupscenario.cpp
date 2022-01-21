@@ -178,6 +178,14 @@ void StartupScenario::restoreLastSession()
     if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
         sessionsManager()->restore();
     } else {
+        removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
         sessionsManager()->reset();
+    }
+}
+
+void StartupScenario::removeProjectsUnsavedChanges(const io::paths &projectsPaths)
+{
+    for (const io::path& path : projectsPaths) {
+        projectAutoSaver()->removeProjectUnsavedChanges(path);
     }
 }
