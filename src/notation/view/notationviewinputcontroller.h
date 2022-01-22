@@ -45,7 +45,7 @@ public:
     virtual qreal width() const = 0;
     virtual qreal height() const = 0;
 
-    virtual PointF canvasPos() const = 0;
+    virtual PointF viewportTopLeft() const = 0;
 
     //! Returns true if the canvas has been moved
     virtual bool moveCanvas(qreal dx, qreal dy) = 0;
@@ -58,6 +58,7 @@ public:
 
     virtual PointF toLogical(const PointF& p) const = 0;
     virtual PointF toLogical(const QPointF& p) const = 0;
+    virtual PointF fromLogical(const PointF& r) const = 0;
     virtual RectF fromLogical(const RectF& r) const = 0;
 
     virtual bool isNoteEnterMode() const = 0;
