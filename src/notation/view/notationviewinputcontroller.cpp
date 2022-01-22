@@ -150,16 +150,24 @@ void NotationViewInputController::zoomOut()
 
 PointF NotationViewInputController::findZoomFocusPoint() const
 {
+    double resultX = 0.0;
+    double resultY = 0.0;
+
     INotationSelectionPtr selection = m_view->notationInteraction()->selection();
 
-    // No selection: zoom at the center of the view
     if (selection->isNone()) {
-        return PointF(m_view->width() / 2, m_view->height() / 2);
+        // No selection: zoom at the center of the view
+        resultX = m_view->width() / 2;
+        resultY = m_view->height() / 2;
+    } else {
+        // Selection: zoom at the center of the selection
+        PointF result = m_view->fromLogical(selection->canvasBoundingRect().center());
+        resultX = result.x();
+        resultY = result.y();
     }
 
-    // Selection: zoom at the center of the selection
-    return (selection->canvasBoundingRect().center() * m_view->currentScaling())
-           + m_view->canvasPos();
+    return PointF(std::clamp(resultX, 0.0, m_view->width()),
+                  std::clamp(resultY, 0.0, m_view->height()));
 }
 
 void NotationViewInputController::zoomToPageWidth()
