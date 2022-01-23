@@ -32,6 +32,8 @@
 #include "libmscore/hook.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/mmrestrange.h"
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
 #include "libmscore/page.h"
@@ -853,6 +855,9 @@ public:
 
     Measure* prevMeasureMM() { return wrap<Measure>(measure()->prevMeasureMM(), Ownership::SCORE); }
     Measure* nextMeasureMM() { return wrap<Measure>(measure()->nextMeasureMM(), Ownership::SCORE); }
+
+    Q_INVOKABLE Ms::PluginAPI::EngravingItem* noText(int staffIdx) { return wrap(measure()->noText(staffIdx)); }
+    Q_INVOKABLE Ms::PluginAPI::EngravingItem* mmRangeText(int staffIdx) { return wrap(measure()->mmRangeText(staffIdx)); }
 
     QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, measure()->el()); }
     /// \endcond
