@@ -58,6 +58,7 @@ private:
 
     void updateRecentScores(const ProjectMetaList& recentProjectsList);
     void setRecentScores(const QVariantList& recentScores);
+    QString fileNameWithExtensionProvider(QString paths);
 
     QVariantList m_recentScores;
     QHash<int, QByteArray> m_roles;

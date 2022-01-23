@@ -104,7 +104,8 @@ GridView {
                 }
             }
 
-            title: score.title
+            title: (score.fileNameWithExtension != undefined) ? score.title + score.fileNameWithExtension : score.title
+            toolTipTitle: (score.path != null) ? score.path : "Create a new Score"
             thumbnail: score.thumbnail
             isAdd: score.isAddNew
             timeSinceModified: !isAdd ? score.timeSinceModified : ""

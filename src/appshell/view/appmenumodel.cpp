@@ -120,7 +120,7 @@ void AppMenuModel::setupConnections()
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
-    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state){
+    connect(qApp, &QApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
         if (state != Qt::ApplicationActive) {
             resetNavigation();
         }
@@ -372,7 +372,12 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
 
         UiAction action;
         action.code = "file-open";
-        action.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
+        if (!meta.title.isEmpty()) {
+            QString recentFilePath = meta.filePath.toQString().prepend(" (").append(")");
+            action.title = meta.title + recentFilePath;
+        } else {
+            action.title = meta.fileName.toQString();
+        }
         item->setAction(action);
 
         item->setId(makeId(item->action().code, index++));

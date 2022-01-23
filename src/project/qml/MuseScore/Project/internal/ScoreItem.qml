@@ -30,6 +30,7 @@ FocusScope {
     id: root
 
     property string title: ""
+    property string toolTipTitle: ""
     property alias timeSinceModified: timeSinceModified.text
     property alias thumbnail: loader.thumbnail
     property bool isAdd: false
@@ -217,7 +218,17 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: {
+            ui.tooltip.hide(root)
             root.clicked()
         }
+
+        onEntered: {
+            ui.tooltip.show(root, root.toolTipTitle)        
+        }
+
+        onExited: {
+            ui.tooltip.hide(root)
+        }
+
     }
 }

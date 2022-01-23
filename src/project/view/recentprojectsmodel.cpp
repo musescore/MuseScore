@@ -34,6 +34,7 @@ using namespace mu::notation;
 namespace {
 const QString SCORE_TITLE_KEY("title");
 const QString SCORE_PATH_KEY("path");
+const QString SCORE_FILENAME_KEY("fileNameWithExtension");
 const QString SCORE_THUMBNAIL_KEY("thumbnail");
 const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
@@ -115,6 +116,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
 
         obj[SCORE_TITLE_KEY] = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         obj[SCORE_PATH_KEY] = meta.filePath.toQString();
+        obj[SCORE_FILENAME_KEY] = fileNameWithExtensionProvider(meta.filePath.toQString());
         obj[SCORE_THUMBNAIL_KEY] = meta.thumbnail;
         obj[SCORE_TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(QFileInfo(meta.filePath.toQString()).lastModified().date());
         obj[SCORE_ADD_NEW_KEY] = false;
@@ -129,4 +131,11 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     recentScores.prepend(QVariant::fromValue(obj));
 
     setRecentScores(recentScores);
+}
+
+QString RecentProjectsModel::fileNameWithExtensionProvider(QString paths)
+{
+    QString fileNameWithExtension = paths.remove(0, paths.lastIndexOf("/") + 1);
+    fileNameWithExtension.prepend("(").append(")");
+    return fileNameWithExtension;
 }
