@@ -22,7 +22,6 @@
 #include "notationpaintview.h"
 
 #include <QPainter>
-#include <QWindow>
 
 #include "actions/actiontypes.h"
 #include "stringutils.h"
@@ -503,6 +502,11 @@ std::pair<qreal, qreal> NotationPaintView::constraintCanvas(qreal dx, qreal dy) 
     return { dx, dy };
 }
 
+PointF NotationPaintView::viewportTopLeft() const
+{
+    return toLogical(PointF(0.0, 0.0));
+}
+
 RectF NotationPaintView::viewport() const
 {
     return toLogical(RectF(0.0, 0.0, width(), height()));
@@ -710,7 +714,7 @@ void NotationPaintView::ensureViewportInsideScrollableArea()
 void NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
 {
     TRACEFUNC;
-    PointF viewTopLeft = canvasPos();
+    PointF viewTopLeft = viewportTopLeft();
     moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
@@ -956,11 +960,6 @@ qreal NotationPaintView::width() const
 qreal NotationPaintView::height() const
 {
     return QQuickPaintedItem::height();
-}
-
-PointF NotationPaintView::canvasPos() const
-{
-    return toLogical(PointF(0.0, 0.0));
 }
 
 PointF NotationPaintView::toLogical(const PointF& point) const
