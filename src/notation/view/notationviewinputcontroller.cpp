@@ -612,6 +612,14 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent*)
 {
+    if (m_view->isNoteEnterMode()) {
+        return;
+    }
+
+    if (viewInteraction()->isElementEditStarted()) {
+        return;
+    }
+
     dispatcher()->dispatch("edit-element");
 }
 
