@@ -999,6 +999,7 @@ bool NotationPaintView::isInited() const
 void NotationPaintView::onPlayingChanged()
 {
     TRACEFUNC;
+
     if (!notationPlayback()) {
         return;
     }
@@ -1018,12 +1019,17 @@ void NotationPaintView::onPlayingChanged()
 void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
     TRACEFUNC;
+
     if (!notationPlayback()) {
         return;
     }
 
     RectF cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
     m_playbackCursor->setRect(cursorRect);
+
+    if (!m_playbackCursor->visible()) {
+        return;
+    }
 
     if (configuration()->isAutomaticallyPanEnabled()) {
         adjustCanvasPosition(cursorRect);
