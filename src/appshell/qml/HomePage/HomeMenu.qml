@@ -89,9 +89,7 @@ Item {
                 { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
                 { "name": "add-ons", "title": qsTrc("appshell", "Add-ons"), "icon":  IconCode.PLUS },
                 { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
-                { "name": "feautured", "title": qsTrc("appshell", "Featured"), "icon":  IconCode.STAR },
-                { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD },
-                { "name": "support", "title": qsTrc("appshell", "Support"), "icon": IconCode.FEEDBACK },
+                { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD }
             ]
 
             currentIndex: 0
