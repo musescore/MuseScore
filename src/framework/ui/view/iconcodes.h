@@ -358,6 +358,8 @@ public:
 
         MEASURE_REPEAT = 0xF431,
 
+        INSERT_ONE_MEASURE = 0xF432,
+
         NONE = 0xFFFF
     };
 
