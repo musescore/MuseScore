@@ -24,7 +24,6 @@
 
 #include "engraving/libmscore/repeatlist.h"
 #include "engraving/libmscore/tempo.h"
-#include "engraving/playback/playbackmodel.h"
 
 #include "log.h"
 
@@ -62,12 +61,9 @@ void MasterNotationMidiData::init(INotationPartsPtr parts)
     }
 
     m_parts = std::move(parts);
-    //m_midiRenderImpl = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score()));
+    m_midiRenderImpl = std::unique_ptr<Ms::MidiRenderer>(new Ms::MidiRenderer(score()));
 
-    PlaybackModel model;
-    model.load(score(), {});
-
-    /*m_midiDataMap.clear();
+    m_midiDataMap.clear();
 
     for (const Part* part : m_parts->partList()) {
         m_midiDataMap.insert({ part->id(), buildMidiData(part) });
@@ -79,7 +75,7 @@ void MasterNotationMidiData::init(INotationPartsPtr parts)
 
     m_parts->partList().onItemRemoved(this, [this](const Part* part) {
         m_midiDataMap.erase(part->id());
-    });*/
+    });
 }
 
 MidiData MasterNotationMidiData::trackMidiData(const ID& partId) const

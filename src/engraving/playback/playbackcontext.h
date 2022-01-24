@@ -32,13 +32,16 @@
 #include "utils/expressionutils.h"
 
 namespace mu::engraving {
-
 using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
 using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
 struct PlaybackContext {
     mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick) const
     {
+        if (m_dynamicsMap.size() == 1) {
+            return m_dynamicsMap.at(0);
+        }
+
         auto it = m_dynamicsMap.lower_bound(nominalPositionTick);
         if (it != m_dynamicsMap.cend()) {
             return it->second;
@@ -49,6 +52,10 @@ struct PlaybackContext {
 
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const
     {
+        if (m_playTechniquesMap.size() == 1) {
+            return m_playTechniquesMap.at(0);
+        }
+
         auto it = m_playTechniquesMap.lower_bound(nominalPositionTick);
         if (it != m_playTechniquesMap.cend()) {
             return it->second;
