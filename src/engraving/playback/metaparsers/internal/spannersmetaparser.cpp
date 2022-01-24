@@ -44,6 +44,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
     mpe::ArticulationType type = mpe::ArticulationType::Undefined;
 
     mpe::pitch_level_t overallPitchRange = 0;
+    int overallDurationTicks = spanner->ticks().ticks();
 
     switch (spanner->type()) {
     case Ms::ElementType::SLUR:
@@ -64,6 +65,10 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
         }
         break;
     }
+    case Ms::ElementType::PALM_MUTE: {
+        type = mpe::ArticulationType::Mute;
+        break;
+    }
     case Ms::ElementType::TRILL: {
         const Ms::Trill* trill = Ms::toTrill(spanner);
         if (trill->trillType() == Ms::Trill::Type::TRILL_LINE) {
@@ -75,6 +80,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
         } else if (trill->trillType() == Ms::Trill::Type::PRALLPRALL_LINE) {
             type = mpe::ArticulationType::LinePrall;
         }
+        overallDurationTicks = ctx.nominalDurationTicks;
         break;
     }
     case Ms::ElementType::GLISSANDO: {
@@ -123,7 +129,7 @@ void SpannersMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCo
     articulationMeta.pattern = ctx.profile->pattern(type);
     articulationMeta.timestamp = ctx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = std::abs(overallPitchRange);
-    articulationMeta.overallDuration = ctx.nominalDuration;
+    articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
 
     appendArticulationData(std::move(articulationMeta), result);
 }
