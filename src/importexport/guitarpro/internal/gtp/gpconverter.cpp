@@ -589,7 +589,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     int staves = _score->staves().count();
 
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
-        if (_lastKeySigs[staffIdx] == mB->keySig()) {
+        if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
             continue;
         }
 
@@ -626,6 +626,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
+    part->setPartName(tR->name());
     part->setId(idx);
 
     _score->appendPart(part);
@@ -684,6 +685,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 //            part->staff(0)->insertIntoCapoList({0, 1}, 0);
 //            part->setCapoFret(0);
         }
+        part->instrument()->setSingleNoteDynamics(false);
     }
 
     // this code is almost a direct copy-paste code from android_improvement branch.
