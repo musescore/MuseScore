@@ -19,73 +19,66 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 1.5
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
-TabPanel {
+Column {
     id: root
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
-                             advancedTab.visible ? advancedTab.implicitHeight : 0) + tabBarHeight + 24
-    width: parent ? parent.width : 0
+    width: parent.width
+    spacing: 12
 
     function focusOnFirst() {
-        generalTab.navigation.requestActive()
+        tabBar.focusOnCurrentTab()
     }
 
-    TabItem {
-        id: generalTab
+    InspectorTabBar {
+        id: tabBar
 
-        title: qsTrc("inspector", "General")
-        checked: root.currentIndex === 0
+        InspectorTabButton {
+            text: qsTrc("inspector", "General")
 
-        navigation.name: "GeneralTab"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart
-        onNavigationTriggered: root.currentIndex = 0
+            navigation.name: "GeneralTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart
+        }
+
+        InspectorTabButton {
+            text: qsTrc("inspector", "Settings")
+
+            navigation.name: "SettingsTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 1
+        }
+    }
+
+    StackLayout {
+        width: parent.width
+        currentIndex: tabBar.currentIndex
+
+        height: itemAt(currentIndex).implicitHeight
 
         FretGeneralSettingsTab {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
-            enabled: generalTab.checked
+            height: implicitHeight
 
             model: root.model
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1000
         }
-    }
-
-    TabItem {
-        id: advancedTab
-
-        title: qsTrc("inspector", "Settings")
-        checked: root.currentIndex === 1
-
-        enabled: root.model ? root.model.areSettingsAvailable : false
-
-        navigation.name: "SettingsTab"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart + 1
-        onNavigationTriggered: root.currentIndex = 1
 
         FretAdvancedSettingsTab {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
-            enabled: advancedTab.checked
+            height: implicitHeight
 
             model: root.model
 

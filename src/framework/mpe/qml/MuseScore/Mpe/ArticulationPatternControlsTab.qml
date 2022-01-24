@@ -19,56 +19,62 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
-import QtQuick.Controls 1.5
+import QtQuick.Layouts 1.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-TabPanel {
+Column {
     id: root
 
     property QtObject patternModel: null
 
     height: 64
     width: 400
+    spacing: 12
 
-    Tab {
-        title: qsTrc("mpe", "Arrangement")
+    StyledTabBar {
+        id: tabBar
+        width: parent.width
+        spacing: 12
+
+        StyledTabButton {
+            fillWidth: true
+            text: qsTrc("mpe", "Arrangement")
+        }
+
+        StyledTabButton {
+            fillWidth: true
+            text: qsTrc("mpe", "Pitch")
+        }
+
+        StyledTabButton {
+            fillWidth: true
+            text: qsTrc("mpe", "Expression")
+        }
+    }
+
+    StackLayout {
+        width: parent.width
+        currentIndex: tabBar.currentIndex
+
+        height: itemAt(currentIndex).implicitHeight
 
         ArrangementPatternControl {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
             height: implicitHeight
-            width: root.width
 
             patternModel: root.patternModel
         }
-    }
-    Tab {
-        title: qsTrc("mpe", "Pitch")
 
         PitchPatternControl {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
             height: implicitHeight
-            width: root.width
 
             patternModel: root.patternModel
         }
-    }
-
-    Tab {
-        title: qsTrc("mpe", "Expression")
 
         ExpressionPatternControl {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
             height: implicitHeight
-            width: root.width
 
             patternModel: root.patternModel
         }
