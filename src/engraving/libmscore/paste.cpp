@@ -392,6 +392,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                            || tag == "Image"
                            || tag == "Text"
                            || tag == "StaffText"
+                           || tag == "PlayTechAnnotation"
                            || tag == "TempoText"
                            || tag == "FiguredBass"
                            || tag == "Sticking"
@@ -909,7 +910,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         } else {
                             undoAddElement(el);
                         }
-                    } else if (tag == "StaffText" || tag == "Sticking") {
+                    } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Sticking") {
                         EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                         el->read(e);
                         el->setTrack(destTrack);

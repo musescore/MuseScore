@@ -3978,6 +3978,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                    || el->type() == ElementType::INSTRUMENT_CHANGE
                    || el->type() == ElementType::REHEARSAL_MARK
                    || el->type() == ElementType::STAFF_TEXT
+                   || el->type() == ElementType::PLAYTECH_ANNOTATION
                    || el->type() == ElementType::SYMBOL
                    || el->type() == ElementType::TEXT) {
             // handle other elements attached (e.g. via Segment / Measure) to a system
@@ -5562,7 +5563,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int s
         exp->symbol(toSymbol(e), sstaff);
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
-    } else if (e->isStaffText() || e->isSystemText() || e->isText() || (e->isInstrumentChange() && e->visible())) {
+    } else if (e->isPlayTechAnnotation() || e->isStaffText() || e->isSystemText() || e->isText()
+               || (e->isInstrumentChange() && e->visible())) {
         exp->words(toTextBase(e), sstaff);
     } else if (e->isDynamic()) {
         exp->dynamic(toDynamic(e), sstaff);

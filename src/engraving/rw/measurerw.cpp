@@ -436,6 +436,7 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
                    || tag == "StaffText"
                    || tag == "Sticking"
                    || tag == "SystemText"
+                   || tag == "PlayTechAnnotation"
                    || tag == "RehearsalMark"
                    || tag == "InstrumentChange"
                    || tag == "StaffState"
@@ -610,6 +611,7 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
             ElementType et = e->type();
             if ((et == ElementType::REHEARSAL_MARK)
                 || (et == ElementType::SYSTEM_TEXT)
+                || (et == ElementType::PLAYTECH_ANNOTATION)
                 || (et == ElementType::JUMP)
                 || (et == ElementType::MARKER)
                 || (et == ElementType::TEMPO_TEXT)

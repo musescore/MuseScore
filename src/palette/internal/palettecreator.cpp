@@ -71,6 +71,7 @@
 #include "libmscore/spacer.h"
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/playtechannotation.h"
 #include "libmscore/stafftypechange.h"
 #include "libmscore/systemtext.h"
 #include "libmscore/tempo.h"
@@ -103,6 +104,7 @@ MAKE_ELEMENT(Hairpin, score->dummy()->segment())
 MAKE_ELEMENT(SystemText, score->dummy()->segment())
 MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
+MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
@@ -1293,48 +1295,68 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
     sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
     if (!defaultPalette) {
-        auto pz = makeElement<StaffText>(gpaletteScore);
+        auto pz = makeElement<PlayTechAnnotation>(gpaletteScore);
         pz->setXmlText(QT_TRANSLATE_NOOP("palette", "pizz."));
-        pz->setChannelName(0, "pizzicato");
-        pz->setChannelName(1, "pizzicato");
-        pz->setChannelName(2, "pizzicato");
-        pz->setChannelName(3, "pizzicato");
+        pz->setTechniqueType(PlayingTechniqueType::Pizzicato);
         sp->appendElement(pz, QT_TRANSLATE_NOOP("palette", "Pizzicato"))->setElementTranslated(true);
 
-        auto ar = makeElement<StaffText>(gpaletteScore);
+        auto ar = makeElement<PlayTechAnnotation>(gpaletteScore);
         ar->setXmlText(QT_TRANSLATE_NOOP("palette", "arco"));
-        ar->setChannelName(0, "arco");
-        ar->setChannelName(1, "arco");
-        ar->setChannelName(2, "arco");
-        ar->setChannelName(3, "arco");
+        ar->setTechniqueType(PlayingTechniqueType::Natural);
         sp->appendElement(ar, QT_TRANSLATE_NOOP("palette", "Arco"))->setElementTranslated(true);
 
-        auto tm = makeElement<StaffText>(gpaletteScore);
+        auto detache = makeElement<PlayTechAnnotation>(gpaletteScore);
+        detache->setXmlText(QT_TRANSLATE_NOOP("palette", "detache"));
+        detache->setTechniqueType(PlayingTechniqueType::Detache);
+        sp->appendElement(detache, QT_TRANSLATE_NOOP("palette", "Detache"))->setElementTranslated(true);
+
+        auto martele = makeElement<PlayTechAnnotation>(gpaletteScore);
+        martele->setXmlText(QT_TRANSLATE_NOOP("palette", "martele"));
+        martele->setTechniqueType(PlayingTechniqueType::Martele);
+        sp->appendElement(martele, QT_TRANSLATE_NOOP("palette", "Martele"))->setElementTranslated(true);
+
+        auto colLegno = makeElement<PlayTechAnnotation>(gpaletteScore);
+        colLegno->setXmlText(QT_TRANSLATE_NOOP("palette", "col legno"));
+        colLegno->setTechniqueType(PlayingTechniqueType::ColLegno);
+        sp->appendElement(colLegno, QT_TRANSLATE_NOOP("palette", "Martele"))->setElementTranslated(true);
+
+        auto sulPont = makeElement<PlayTechAnnotation>(gpaletteScore);
+        sulPont->setXmlText(QT_TRANSLATE_NOOP("palette", "sul pont."));
+        sulPont->setTechniqueType(PlayingTechniqueType::SulPonticello);
+        sp->appendElement(sulPont, QT_TRANSLATE_NOOP("palette", "Sul Ponticello"))->setElementTranslated(true);
+
+        auto sulTasto = makeElement<PlayTechAnnotation>(gpaletteScore);
+        sulTasto->setXmlText(QT_TRANSLATE_NOOP("palette", "sul tasto"));
+        sulTasto->setTechniqueType(PlayingTechniqueType::SulTasto);
+        sp->appendElement(sulTasto, QT_TRANSLATE_NOOP("palette", "Sul Tasto"))->setElementTranslated(true);
+
+        auto vibrato = makeElement<PlayTechAnnotation>(gpaletteScore);
+        vibrato->setXmlText(QT_TRANSLATE_NOOP("palette", "vibrato"));
+        vibrato->setTechniqueType(PlayingTechniqueType::Vibrato);
+        sp->appendElement(vibrato, QT_TRANSLATE_NOOP("palette", "Vibrato"))->setElementTranslated(true);
+
+        auto legato = makeElement<PlayTechAnnotation>(gpaletteScore);
+        legato->setXmlText(QT_TRANSLATE_NOOP("palette", "legato"));
+        legato->setTechniqueType(PlayingTechniqueType::Legato);
+        sp->appendElement(legato, QT_TRANSLATE_NOOP("palette", "Legato"))->setElementTranslated(true);
+
+        auto tm = makeElement<PlayTechAnnotation>(gpaletteScore);
         tm->setTextStyleType(TextStyleType::EXPRESSION);
         tm->setXmlText(QT_TRANSLATE_NOOP("palette", "tremolo"));
-        tm->setChannelName(0, "tremolo");
-        tm->setChannelName(1, "tremolo");
-        tm->setChannelName(2, "tremolo");
-        tm->setChannelName(3, "tremolo");
+        tm->setTechniqueType(PlayingTechniqueType::Tremolo);
         sp->appendElement(tm, QT_TRANSLATE_NOOP("palette", "Tremolo"))->setElementTranslated(true);
 
-        auto mu = makeElement<StaffText>(gpaletteScore);
+        auto mu = makeElement<PlayTechAnnotation>(gpaletteScore);
         /*: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
         mu->setXmlText(QT_TRANSLATE_NOOP("palette", "mute"));
-        mu->setChannelName(0, "mute");
-        mu->setChannelName(1, "mute");
-        mu->setChannelName(2, "mute");
-        mu->setChannelName(3, "mute");
+        mu->setTechniqueType(PlayingTechniqueType::Mute);
         /*: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music) */
         sp->appendElement(mu, QT_TRANSLATE_NOOP("palette", "Mute"))->setElementTranslated(true);
 
-        auto no = makeElement<StaffText>(gpaletteScore);
+        auto no = makeElement<PlayTechAnnotation>(gpaletteScore);
         /*: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
         no->setXmlText(QT_TRANSLATE_NOOP("palette", "open"));
-        no->setChannelName(0, "open");
-        no->setChannelName(1, "open");
-        no->setChannelName(2, "open");
-        no->setChannelName(3, "open");
+        no->setTechniqueType(PlayingTechniqueType::Open);
         /*: For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music) */
         sp->appendElement(no, QT_TRANSLATE_NOOP("palette", "Open"))->setElementTranslated(true);
 

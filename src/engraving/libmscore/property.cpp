@@ -383,9 +383,11 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::START_WITH_MEASURE_ONE,  true,  "startWithMeasureOne",   P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "start with measure one") },
     { Pid::FIRST_SYSTEM_INDENTATION,true,  "firstSystemIndentation",P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "first system indentation") },
 
-    { Pid::PATH,                    false, "path",                  P_TYPE::DRAW_PATH,           DUMMY_QT_TR_NOOP("propertyName", "path") },
+    { Pid::PATH,                    false, "path",                  P_TYPE::DRAW_PATH,      DUMMY_QT_TR_NOOP("propertyName", "path") },
 
     { Pid::PREFER_SHARP_FLAT,       true,  "preferSharpFlat",       P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "prefer sharps or flats") },
+
+    { Pid::PLAY_TECH_TYPE,          true,  "playTechType",          P_TYPE::PLAYTECH_TYPE,  DUMMY_QT_TR_NOOP("propertyName", "playing technique type") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
@@ -569,6 +571,9 @@ PropertyValue readProperty(Pid id, XmlReader& e)
     case P_TYPE::DURATION_TYPE_WITH_DOTS:
     case P_TYPE::INT_LIST:
         return PropertyValue();
+
+    case P_TYPE::PLAYTECH_TYPE:
+        return PropertyValue(TConv::fromXml(e.readElementText(), PlayingTechniqueType::Natural));
     default:
         qFatal("unhandled PID type");
         break;

@@ -445,6 +445,12 @@ void XmlWriter::tagProperty(const char* name, P_TYPE type, const PropertyValue& 
         *this << TConv::toXml(data.value<AccidentalRole>());
         *this << "</" << ename << ">\n";
     } break;
+    case P_TYPE::PLAYTECH_TYPE: {
+        putLevel();
+        *this << "<" << name << ">";
+        *this << TConv::toXml(data.value<PlayingTechniqueType>());
+        *this << "</" << ename << ">\n";
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

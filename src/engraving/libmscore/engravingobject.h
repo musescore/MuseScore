@@ -135,6 +135,7 @@ class StaffTypeChange;
 class MeasureBase;
 class Page;
 class SystemText;
+class PlayTechAnnotation;
 class BracketItem;
 class Spanner;
 class SpannerSegment;
@@ -383,6 +384,7 @@ public:
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
     CONVERT(SystemText,    SYSTEM_TEXT)
+    CONVERT(PlayTechAnnotation, PLAYTECH_ANNOTATION)
     CONVERT(BracketItem,   BRACKET_ITEM)
     CONVERT(Score,         SCORE)
     CONVERT(Staff,         STAFF)
@@ -461,7 +463,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText();
+        return isStaffText() || isSystemText() || isPlayTechAnnotation();
     }
 };
 
@@ -625,6 +627,7 @@ CONVERT(Harmony)
 CONVERT(Volta)
 CONVERT(Jump)
 CONVERT(StaffText)
+CONVERT(PlayTechAnnotation)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(Segment)

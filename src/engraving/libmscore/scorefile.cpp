@@ -565,6 +565,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                     ElementType et = e1->type();
                     if ((et == ElementType::REHEARSAL_MARK)
                         || (et == ElementType::SYSTEM_TEXT)
+                        || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)
