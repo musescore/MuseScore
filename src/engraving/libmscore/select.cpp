@@ -70,6 +70,7 @@
 #include "stafftext.h"
 #include "sticking.h"
 #include "linkedobjects.h"
+#include "playtechannotation.h"
 
 #include "log.h"
 
@@ -1003,8 +1004,9 @@ QByteArray Selection::symbolListMimeData() const
                 break;
             }
             continue;
+        case ElementType::PLAYTECH_ANNOTATION:
         case ElementType::STAFF_TEXT:
-            seg = toStaffText(e)->segment();
+            seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::STICKING:
             seg = toSticking(e)->segment();

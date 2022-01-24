@@ -152,6 +152,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::HOOK_TYPE:        return static_cast<int>(value<HookType>());
     case P_TYPE::KEY_MODE:         return static_cast<int>(value<KeyMode>());
     case P_TYPE::TEXT_STYLE:       return static_cast<int>(value<TextStyleType>());
+    case P_TYPE::PLAYTECH_TYPE:    return static_cast<int>(value<PlayingTechniqueType>());
 
     // Other
     case P_TYPE::GROUPS: {
@@ -238,6 +239,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::HOOK_TYPE:        return PropertyValue(HookType(v.toInt()));
     case P_TYPE::KEY_MODE:         return PropertyValue(KeyMode(v.toInt()));
     case P_TYPE::TEXT_STYLE:       return PropertyValue(TextStyleType(v.toInt()));
+    case P_TYPE::PLAYTECH_TYPE:    return PropertyValue(PlayingTechniqueType(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

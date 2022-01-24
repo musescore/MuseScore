@@ -489,6 +489,44 @@ enum class TextStyleType {
     IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
 
+enum class AnnotationCategory {
+    Undefined = -1,
+    TempoAnnotation,
+    PlayingAnnotation,
+    Other,
+};
+
+enum class PlayingTechniqueType {
+    Undefined = -1,
+    Natural,
+    Pizzicato,
+    Open,
+    Mute,
+    Tremolo,
+    Detache,
+    Martele,
+    ColLegno,
+    SulPonticello,
+    SulTasto,
+    Vibrato,
+    Legato
+};
+
+enum class TempoTechniqueType {
+    Undefined = -1,
+    Accelerando,
+    Allargando,
+    Calando,
+    Lentando,
+    Morendo,
+    Precipitando,
+    Rallentando,
+    Ritardando,
+    Smorzando,
+    Sostenuto,
+    Stringendo
+};
+
 // P_TYPE::CHANGE_METHOD
 enum class ChangeMethod : signed char {
     NORMAL,
@@ -542,6 +580,8 @@ using ChangeDirection = mu::engraving::ChangeDirection;
 using AccidentalRole = mu::engraving::AccidentalRole;
 using DurationType = mu::engraving::DurationType;
 using DurationTypeWithDots = mu::engraving::DurationTypeWithDots;
+using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
+using TempoTechniqueType = mu::engraving::TempoTechniqueType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H

@@ -576,6 +576,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::FRET_DIAGRAM:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -740,6 +741,7 @@ void Segment::remove(EngravingItem* el)
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -860,6 +862,7 @@ void Segment::sortStaves(QList<int>& dst)
         if (!e->systemFlag()
             || (et == ElementType::REHEARSAL_MARK)
             || (et == ElementType::SYSTEM_TEXT)
+            || (et == ElementType::PLAYTECH_ANNOTATION)
             || (et == ElementType::JUMP)
             || (et == ElementType::MARKER)
             || (et == ElementType::TEMPO_TEXT)
@@ -1757,6 +1760,7 @@ EngravingItem* Segment::nextElement(int activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -1898,6 +1902,7 @@ EngravingItem* Segment::prevElement(int activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -2264,7 +2269,8 @@ void Segment::createShape(int staffIdx)
                    && !e->isInstrumentChange()
                    && !e->isArticulation()
                    && !e->isFermata()
-                   && !e->isStaffText()) {
+                   && !e->isStaffText()
+                   && !e->isPlayTechAnnotation()) {
             // annotations added here are candidates for collision detection
             // lyrics, ...
             s.add(e->shape().translated(e->pos()));

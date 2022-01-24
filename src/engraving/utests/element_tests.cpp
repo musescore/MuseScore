@@ -60,6 +60,7 @@ TEST_F(ElementTests, DISABLED_testIds)
         ElementType::TEXT,
         ElementType::INSTRUMENT_NAME,
         ElementType::STAFF_TEXT,
+        ElementType::PLAYTECH_ANNOTATION,
         ElementType::REHEARSAL_MARK,
         ElementType::INSTRUMENT_CHANGE,
         ElementType::NOTEHEAD,

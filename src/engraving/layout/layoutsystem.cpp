@@ -1008,7 +1008,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
-            if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange()) {
+            if (e->isPlayTechAnnotation() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange()) {
                 e->layout();
             }
         }
