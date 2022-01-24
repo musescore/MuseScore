@@ -475,7 +475,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("insert-measure",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Insert one measure")
+             QT_TRANSLATE_NOOP("action", "Insert one measure"),
+             IconCode::Code::INSERT_ONE_MEASURE
              ),
     UiAction("insert-measures",
              mu::context::UiCtxNotationOpened,
