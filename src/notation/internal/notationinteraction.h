@@ -110,6 +110,7 @@ public:
     void redo() override;
 
     // Change selection
+    bool moveSelectionAvailable(MoveSelectionType type) const override;
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
     void expandSelection(ExpandSelectionMode mode) override;
     void addToSelection(MoveDirection d, MoveSelectionType type) override;

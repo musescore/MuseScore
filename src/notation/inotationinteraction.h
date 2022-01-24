@@ -101,7 +101,9 @@ public:
     virtual void redo() = 0;
 
     // Change selection
+    virtual bool moveSelectionAvailable(MoveSelectionType type) const = 0;
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
+
     virtual void moveLyrics(MoveDirection d) = 0;
     virtual void expandSelection(ExpandSelectionMode mode) = 0;
     virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
