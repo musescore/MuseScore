@@ -36,6 +36,7 @@
 
 #include "types/types.h"
 #include "playbackeventsrenderer.h"
+#include "playbackcontext.h"
 
 namespace Ms {
 class Score;
@@ -77,14 +78,9 @@ private:
     TrackIdKey idKey(const Ms::EngravingItem* item) const;
     TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
 
-    using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
-    using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
-
     void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void clearExpiredEvents();
-    void clearExpiredDynamics();
-    void updateDynamicsMap(const Ms::Segment* segment, const int segmentPositionTick, DynamicMap& dynamicMap);
-    mpe::dynamic_level_t nominalDynamicLevel(const int nominalPositionTick, const DynamicMap& dynamicMap) const;
+    void clearExpiredContexts();
 
     mpe::ArticulationsProfilePtr profileByFamily(const std::string& familyId) const;
 
@@ -92,8 +88,7 @@ private:
 
     PlaybackEventsRenderer m_renderer;
 
-    std::unordered_map<TrackIdKey, DynamicMap, IdKeyHash> m_dynamicsMap;
-    std::unordered_map<TrackIdKey, PlayTechniquesMap, IdKeyHash> m_playTechniquesMap;
+    std::unordered_map<TrackIdKey, PlaybackContext, IdKeyHash> m_playbackCtxMap;
     std::unordered_map<TrackIdKey, mpe::PlaybackEventsMap, IdKeyHash> m_events;
 };
 }

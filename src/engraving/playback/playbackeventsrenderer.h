@@ -38,15 +38,18 @@ class PlaybackEventsRenderer
 public:
     PlaybackEventsRenderer() = default;
 
-    void render(const Ms::EngravingItem* item, const mpe::dynamic_level_t nominalDynamicLevel, const mpe::ArticulationsProfilePtr profile,
+    void render(const Ms::EngravingItem* item, const mpe::dynamic_level_t nominalDynamicLevel,
+                const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
                 mpe::PlaybackEventsMap& result) const;
 
     void render(const Ms::EngravingItem* item, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
-                const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
+                const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
+                mpe::PlaybackEventsMap& result) const;
 
 private:
     void renderNoteEvents(const Ms::Chord* chord, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
-                          const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
+                          const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
+                          mpe::PlaybackEventsMap& result) const;
 
     void renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const;
 

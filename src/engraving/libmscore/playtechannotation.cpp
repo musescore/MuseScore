@@ -41,6 +41,11 @@ PlayTechAnnotation::PlayTechAnnotation(Segment* parent, PlayingTechniqueType tec
     initElementStyle(&annotationStyle);
 }
 
+PlayingTechniqueType PlayTechAnnotation::techniqueType() const
+{
+    return m_techniqueType;
+}
+
 void PlayTechAnnotation::setTechniqueType(const PlayingTechniqueType techniqueType)
 {
     m_techniqueType = techniqueType;

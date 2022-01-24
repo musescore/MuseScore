@@ -113,6 +113,31 @@ static const DynamicTransition& dynamicTransitionFromType(const Ms::DynamicType 
     static DynamicTransition empty;
     return empty;
 }
+
+static mpe::ArticulationType articulationFromPlayTechType(const Ms::PlayingTechniqueType technique)
+{
+    static const std::unordered_map<Ms::PlayingTechniqueType, mpe::ArticulationType> PLAYING_TECH_TYPES = {
+        { Ms::PlayingTechniqueType::Undefined, mpe::ArticulationType::Undefined },
+        { Ms::PlayingTechniqueType::Natural, mpe::ArticulationType::Standard },
+        { Ms::PlayingTechniqueType::Pizzicato, mpe::ArticulationType::Pizzicato },
+        { Ms::PlayingTechniqueType::Open, mpe::ArticulationType::Open },
+        { Ms::PlayingTechniqueType::Mute, mpe::ArticulationType::Mute },
+        { Ms::PlayingTechniqueType::Tremolo, mpe::ArticulationType::Tremolo64th },
+        { Ms::PlayingTechniqueType::Detache, mpe::ArticulationType::Detache },
+        { Ms::PlayingTechniqueType::Martele, mpe::ArticulationType::Martele },
+        { Ms::PlayingTechniqueType::ColLegno, mpe::ArticulationType::ColLegno },
+        { Ms::PlayingTechniqueType::SulPonticello, mpe::ArticulationType::SulPont },
+        { Ms::PlayingTechniqueType::SulTasto, mpe::ArticulationType::SulTasto }
+    };
+
+    auto search = PLAYING_TECH_TYPES.find(technique);
+
+    if (search != PLAYING_TECH_TYPES.cend()) {
+        return search->second;
+    }
+
+    return mpe::ArticulationType::Undefined;
+}
 }
 
 #endif // MU_ENGRAVING_DYNAMICUTILS_H

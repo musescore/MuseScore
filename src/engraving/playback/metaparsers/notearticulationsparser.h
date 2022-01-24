@@ -44,6 +44,7 @@ protected:
 private:
     static mpe::ArticulationType articulationTypeByNotehead(const NoteHeadGroup noteheadGroup);
 
+    static void parsePersistentMeta(const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseGhostNote(const Ms::Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseNoteHead(const Ms::Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseSpanners(const Ms::Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);

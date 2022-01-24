@@ -157,6 +157,9 @@ enum class ArticulationType {
     Detache,
     Martele,
     Jete,
+    ColLegno,
+    SulPont,
+    SulTasto,
 
     GhostNote,
     CrossNote,

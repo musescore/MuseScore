@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_PLAYBACKCONTEXT_H
-#define MU_ENGRAVING_PLAYBACKCONTEXT_H
+#ifndef MU_ENGRAVING_RENDERINGCONTEXT_H
+#define MU_ENGRAVING_RENDERINGCONTEXT_H
 
 #include "mpe/events.h"
 
@@ -38,6 +38,7 @@ struct RenderingContext {
     int nominalPositionTick = 0;
     int nominalDurationTicks = 0;
     BeatsPerSecond beatsPerSecond = 0;
+    mpe::ArticulationType persistentArticulation = mpe::ArticulationType::Undefined;
     mpe::ArticulationMap commonArticulations;
     mpe::ArticulationsProfilePtr profile;
 
@@ -49,6 +50,7 @@ struct RenderingContext {
                              const int posTick,
                              const int durationTicks,
                              const BeatsPerSecond& bps,
+                             const mpe::ArticulationType persistentArticulationType,
                              const mpe::ArticulationMap& articulations,
                              const mpe::ArticulationsProfilePtr profilePtr)
         : nominalTimestamp(timestamp),
@@ -57,6 +59,7 @@ struct RenderingContext {
         nominalPositionTick(posTick),
         nominalDurationTicks(durationTicks),
         beatsPerSecond(bps),
+        persistentArticulation(persistentArticulationType),
         commonArticulations(articulations),
         profile(profilePtr)
     {}
@@ -121,4 +124,4 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
 }
 }
 
-#endif // MU_ENGRAVING_PLAYBACKCONTEXT_H
+#endif // MU_ENGRAVING_RENDERINGCONTEXT_H
