@@ -66,6 +66,13 @@ void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const Rende
         return;
     }
 
+    appendArticulationData({ ctx.persistentArticulation,
+                             ctx.profile->pattern(ctx.persistentArticulation),
+                             ctx.nominalTimestamp,
+                             ctx.nominalDuration,
+                             0,
+                             0 }, result);
+
     parseGhostNote(note, ctx, result);
     parseNoteHead(note, ctx, result);
     parseSpanners(note, ctx, result);
@@ -92,6 +99,20 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
     default:
         return mpe::ArticulationType::Undefined;
     }
+}
+
+void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    if (ctx.persistentArticulation == ArticulationType::Undefined) {
+        return;
+    }
+
+    appendArticulationData({ ctx.persistentArticulation,
+                             ctx.profile->pattern(ctx.persistentArticulation),
+                             ctx.nominalTimestamp,
+                             ctx.nominalDuration,
+                             0,
+                             0 }, result);
 }
 
 void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const RenderingContext& ctx,
