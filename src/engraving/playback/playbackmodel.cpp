@@ -32,8 +32,6 @@
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 
-#include "utils/dynamicutils.h"
-
 using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu::async;
@@ -88,7 +86,7 @@ void PlaybackModel::load(Ms::Score* score, async::Channel<int, int, int, int> no
     notationChangesRangeChannel.onReceive(this, [this](const int tickFrom, const int tickTo,
                                                        const int staffIdxFrom, const int staffIdxTo) {
         clearExpiredEvents();
-        clearExpiredDynamics();
+        clearExpiredContexts();
         update(tickFrom, tickTo, Ms::staff2track(staffIdxFrom, 0), Ms::staff2track(staffIdxTo, Ms::VOICES));
     });
 
@@ -132,11 +130,11 @@ void PlaybackModel::update(const int tickFrom, const int tickTo, const int track
 
                     TrackIdKey trackId = idKey(item);
 
-                    DynamicMap& dynamicMap = m_dynamicsMap[trackId];
-                    updateDynamicsMap(segment, segmentPositionTick, dynamicMap);
+                    PlaybackContext& ctx = m_playbackCtxMap[trackId];
+                    ctx.update(segment, segmentPositionTick);
 
-                    m_renderer.render(item, tickPositionOffset, nominalDynamicLevel(segmentPositionTick, dynamicMap),
-                                      std::move(profile), m_events[trackId]);
+                    m_renderer.render(item, tickPositionOffset, ctx.nominalDynamicLevel(segmentPositionTick),
+                                      ctx.persistentArticulationType(segmentPositionTick), std::move(profile), m_events[trackId]);
                 }
             }
         }
@@ -160,58 +158,21 @@ void PlaybackModel::clearExpiredEvents()
     }
 }
 
-void PlaybackModel::clearExpiredDynamics()
+void PlaybackModel::clearExpiredContexts()
 {
-    auto it = m_dynamicsMap.cbegin();
+    auto it = m_playbackCtxMap.cbegin();
 
-    while (it != m_dynamicsMap.cend())
+    while (it != m_playbackCtxMap.cend())
     {
         const Ms::Part* part = m_score->partById(it->first.partId.toUint64());
 
         if (!part || part->instruments()->contains(it->first.instrumentId)) {
-            it = m_dynamicsMap.erase(it);
+            it = m_playbackCtxMap.erase(it);
             continue;
         }
 
         ++it;
     }
-}
-
-void PlaybackModel::updateDynamicsMap(const Ms::Segment* segment, const int segmentPositionTick, DynamicMap& dynamicMap)
-{
-    for (const Ms::EngravingItem* annotation : segment->annotations()) {
-        if (!annotation || !annotation->isDynamic()) {
-            continue;
-        }
-
-        const Ms::Dynamic* dynamic = Ms::toDynamic(annotation);
-        const Ms::DynamicType type = dynamic->dynamicType();
-        if (isOrdinaryDynamicType(type)) {
-            dynamicMap[segmentPositionTick] = dynamicLevelFromType(type);
-            return;
-        }
-
-        const DynamicTransition& transition = dynamicTransitionFromType(type);
-        dynamicMap[segmentPositionTick] = dynamicLevelFromType(transition.from);
-
-        if (!segment->next()) {
-            return;
-        }
-
-        int nextSegmentPositionTick = segment->next()->tick().ticks();
-        dynamicMap[nextSegmentPositionTick] = dynamicLevelFromType(transition.to);
-    }
-}
-
-dynamic_level_t PlaybackModel::nominalDynamicLevel(const int nominalPositionTick, const DynamicMap& dynamicMap) const
-{
-    auto it = dynamicMap.lower_bound(nominalPositionTick);
-
-    if (it != dynamicMap.cend()) {
-        return it->second;
-    }
-
-    return dynamicLevelFromType(mpe::DynamicType::Natural);
 }
 
 PlaybackModel::TrackIdKey PlaybackModel::idKey(const Ms::EngravingItem* item) const

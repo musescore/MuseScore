@@ -86,7 +86,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
@@ -131,7 +132,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_NoArticulations)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
@@ -172,7 +174,8 @@ TEST_F(PlaybackEventsRendererTests, DISABLED_Rest)
 
     // [WHEN] Request to render the rest
     PlaybackEventsMap result;
-    m_renderer.render(rest, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(rest, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single rest event will be rendered
     EXPECT_EQ(result.size(), 1);
@@ -212,7 +215,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -269,7 +273,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that the only one note event will be rendered,
     //        since Trill consists of 32-nd note, we can't break down 32-nd principal note into smaller sub-notes
@@ -303,7 +308,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -376,7 +382,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -434,7 +441,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -494,7 +502,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Variation)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -565,7 +574,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -636,7 +646,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -695,7 +706,8 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -755,7 +767,8 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -816,7 +829,8 @@ TEST_F(PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -881,7 +895,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -950,7 +965,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1016,7 +1032,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1085,7 +1102,8 @@ TEST_F(PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1147,7 +1165,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1208,7 +1227,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1269,7 +1289,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1330,7 +1351,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1391,7 +1413,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1453,7 +1476,8 @@ TEST_F(PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1516,7 +1540,8 @@ TEST_F(PlaybackEventsRendererTests, Single_Note_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
         // [THEN] We expect that rendered note events number will match expectations
@@ -1579,7 +1604,8 @@ TEST_F(PlaybackEventsRendererTests, Single_Chord_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
     EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * expectedSubNotesCount);
@@ -1645,7 +1671,8 @@ TEST_F(PlaybackEventsRendererTests, Two_Chords_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural), m_defaultProfile, result);
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
     EXPECT_EQ(result.begin()->second.size(), expectedChordsCount * chordNotesCount);

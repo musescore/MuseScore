@@ -41,14 +41,15 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 
 void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const dynamic_level_t nominalDynamicLevel,
+                                    const ArticulationType persistentArticulationApplied,
                                     const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
-    render(item, 0, nominalDynamicLevel, profile, result);
+    render(item, 0, nominalDynamicLevel, persistentArticulationApplied, profile, result);
 }
 
 void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tickPositionOffset, const dynamic_level_t nominalDynamicLevel,
-                                    const ArticulationsProfilePtr profile,
+                                    const ArticulationType persistentArticulationApplied, const ArticulationsProfilePtr profile,
                                     PlaybackEventsMap& result) const
 {
     TRACEFUNC;
@@ -58,7 +59,7 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tic
     }
 
     if (item->type() == Ms::ElementType::CHORD) {
-        renderNoteEvents(Ms::toChord(item), tickPositionOffset, nominalDynamicLevel, profile, result);
+        renderNoteEvents(Ms::toChord(item), tickPositionOffset, nominalDynamicLevel, persistentArticulationApplied, profile, result);
     } else if (item->type() == Ms::ElementType::REST) {
         renderRestEvents(Ms::toRest(item), tickPositionOffset, result);
     }
@@ -66,6 +67,7 @@ void PlaybackEventsRenderer::render(const Ms::EngravingItem* item, const int tic
 
 void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int tickPositionOffset,
                                               const mpe::dynamic_level_t nominalDynamicLevel,
+                                              const ArticulationType persistentArticulationApplied,
                                               const mpe::ArticulationsProfilePtr profile, PlaybackEventsMap& result) const
 {
     IF_ASSERT_FAILED(chord) {
@@ -79,13 +81,14 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
     static ArticulationMap articulations;
 
     RenderingContext ctx(timestampFromTicks(chord->score(), chordPosTick),
-                        durationFromTicks(bps.val, chordDurationTicks),
-                        nominalDynamicLevel,
-                        chordPosTick,
-                        chordDurationTicks,
-                        bps,
-                        articulations,
-                        profile);
+                         durationFromTicks(bps.val, chordDurationTicks),
+                         nominalDynamicLevel,
+                         chordPosTick,
+                         chordDurationTicks,
+                         bps,
+                         persistentArticulationApplied,
+                         articulations,
+                         profile);
 
     ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
