@@ -586,8 +586,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             GPBeat::DynamicType dynamic = dynamicType(innerNode.toElement().text());
             beat->setDynamic(dynamic);
         } else if (nodeName == "Legato") {
-            auto origin = innerNode.attributes().namedItem("origin").toElement().text();
-            auto destination = innerNode.attributes().namedItem("destination").toElement().text();
+            auto origin = innerNode.attributes().namedItem("origin").toAttr().value();
+            auto destination = innerNode.attributes().namedItem("destination").toAttr().value();
             GPBeat::LegatoType legato = legatoType(origin, destination);
             beat->setLegatoType(legato);
         } else if (nodeName == "Rhythm") {
