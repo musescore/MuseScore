@@ -279,11 +279,67 @@ TEST_F(PlaybackModelTests, Da_Capo_Al_Coda)
 }
 
 /**
+ * @brief PlaybackModelTests_Da_Capo_Al_Coda
+ * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 1 measure
+ *          Additionally, the first note is marked by "pizzicato" + "stacattissimo". The 3-rd note is marked by "arco"
+ *          We'll be playing 4 events overall
+ */
+TEST_F(PlaybackModelTests, Pizz_To_Arco_Technique)
+{
+    // [GIVEN] Simple piece of score (Viollin, 4/4, 120 bpm, Treble Cleff)
+    Ms::Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "pizz_to_arco/pizz_to_arco.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Ms::Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments()->size(), 1);
+
+    // [GIVEN] Expected amount of events
+    int expectedSize = 4;
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(ArticulationFamily::StringsArticulation)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score, m_notationChangesRangeChannel);
+
+    const PlaybackEventsMap& result = model.events(part->id(), part->instrumentId().toStdString());
+
+    // [THEN] Amount of events does match expectations
+    EXPECT_EQ(result.size(), expectedSize);
+
+    // [THEN] The first note has Pizzicato and Staccatissimo articulations applied
+    const NoteEvent& firstNoteEvent = std::get<NoteEvent>(result.at(0).at(0));
+    EXPECT_EQ(firstNoteEvent.expressionCtx().articulations.size(), 2);
+    EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
+    EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Staccatissimo));
+
+    // [THEN] The second note has only Pizzicato articulation applied
+    const NoteEvent& secondNoteEvent = std::get<NoteEvent>(result.at(500).at(0));
+    EXPECT_EQ(secondNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(secondNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
+
+    // [THEN] The third note has only Standard articulation applied
+    const NoteEvent& thirdNoteEvent = std::get<NoteEvent>(result.at(1000).at(0));
+    EXPECT_EQ(thirdNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(thirdNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+
+    // [THEN] The fourth note has only Standard articulation applied
+    const NoteEvent& fourthNoteEvent = std::get<NoteEvent>(result.at(1500).at(0));
+    EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
+    EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+}
+
+/**
  * @brief PlaybackModelTests_Repeat_Last_Measure
  * @details In this case we're building up a playback model of a simple score - Viollin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "repeat last measure" sign on the 6-th measure. In total, we'll be playing 7 measures overall
  *
- * @bug The is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
+ * @bug The test is currently disabled. At the moment it shows a flaw in libmscore - repeatSegments. RepeatSegments calculations don't
  *      take into account MeasureRepeat elements which leads to issues with playback model. Whenever the root issue will be finished, this test
  *      will be enabled
  */
