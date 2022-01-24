@@ -86,10 +86,11 @@ public:
     qreal width() const override;
     qreal height() const override;
 
-    PointF canvasPos() const override;
-
     PointF toLogical(const PointF& point) const override;
     PointF toLogical(const QPointF& point) const override;
+    RectF toLogical(const RectF& rect) const;
+
+    PointF fromLogical(const PointF& point) const override;
     RectF fromLogical(const RectF& rect) const override;
 
     Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
@@ -115,6 +116,7 @@ public:
     qreal startVerticalScrollPosition() const;
     qreal verticalScrollbarSize() const;
 
+    PointF viewportTopLeft() const override;
     RectF viewport() const;
     QRectF viewport_property() const;
 
@@ -142,9 +144,6 @@ protected:
     void moveCanvasToPosition(const PointF& logicPos);
 
     RectF notationContentRect() const override;
-
-    RectF toLogical(const RectF& rect) const;
-    PointF fromLogical(const PointF& point) const;
 
     // Draw
     void paint(QPainter* painter) override;
