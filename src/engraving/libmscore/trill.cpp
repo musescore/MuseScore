@@ -47,17 +47,12 @@ namespace Ms {
 //    must be in sync with Trill::Type
 //---------------------------------------------------------
 
-const TrillTableItem trillTable[] = {
+const std::vector<TrillTableItem> trillTable = {
     { Trill::Type::TRILL_LINE,      "trill",      QT_TRANSLATE_NOOP("trillType", "Trill line") },
     { Trill::Type::UPPRALL_LINE,    "upprall",    QT_TRANSLATE_NOOP("trillType", "Upprall line") },
     { Trill::Type::DOWNPRALL_LINE,  "downprall",  QT_TRANSLATE_NOOP("trillType", "Downprall line") },
     { Trill::Type::PRALLPRALL_LINE, "prallprall", QT_TRANSLATE_NOOP("trillType", "Prallprall line") }
 };
-
-int trillTableSize()
-{
-    return sizeof(trillTable) / sizeof(TrillTableItem);
-}
 
 //---------------------------------------------------------
 //   trillStyle
