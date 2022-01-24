@@ -38,7 +38,7 @@ const ArticulationTypeSet& ArpeggioRenderer::supportedTypes()
     return types;
 }
 
-void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
+void ArpeggioRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
                                 mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);

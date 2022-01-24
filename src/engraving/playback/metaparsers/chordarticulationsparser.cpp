@@ -39,7 +39,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord, const RenderingContext& ctx,
                                                          mpe::ArticulationMap& result)
 {
     if (!chord) {
@@ -65,7 +65,7 @@ void ChordArticulationsParser::buildChordArticulationMap(const Ms::Chord* chord,
     result.preCalculateAverageData();
 }
 
-void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
+void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                        mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::CHORD && ctx.isValid()) {
@@ -82,7 +82,7 @@ void ChordArticulationsParser::doParse(const Ms::EngravingItem* item, const Play
     parseGraceNotes(chord, ctx, result);
 }
 
-void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
     for (const auto& pair : chord->score()->spanner()) {
@@ -101,7 +101,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Playb
 
         int spannerDurationTicks = spannerTo - spannerFrom;
 
-        PlaybackContext spannerContext = ctx;
+        RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(chord->score(), spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;
@@ -111,7 +111,7 @@ void ChordArticulationsParser::parseSpanners(const Ms::Chord* chord, const Playb
     }
 }
 
-void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, const RenderingContext& ctx,
                                                         mpe::ArticulationMap& result)
 {
     for (const Ms::Articulation* articulation : chord->articulations()) {
@@ -119,7 +119,7 @@ void ChordArticulationsParser::parseArticulationSymbols(const Ms::Chord* chord, 
     }
 }
 
-void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const RenderingContext& ctx,
                                                 mpe::ArticulationMap& result)
 {
     for (const Ms::EngravingItem* annotation : chord->segment()->annotations()) {
@@ -127,7 +127,7 @@ void ChordArticulationsParser::parseAnnotations(const Ms::Chord* chord, const Pl
     }
 }
 
-void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
     const Ms::Tremolo* tremolo = chord->tremolo();
@@ -139,7 +139,7 @@ void ChordArticulationsParser::parseTremolo(const Ms::Chord* chord, const Playba
     TremoloMetaParser::parse(tremolo, ctx, result);
 }
 
-void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
     const Ms::Arpeggio* arpeggio = chord->arpeggio();
@@ -155,7 +155,7 @@ void ChordArticulationsParser::parseArpeggio(const Ms::Chord* chord, const Playb
     ArpeggioMetaParser::parse(arpeggio, ctx, result);
 }
 
-void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx,
+void ChordArticulationsParser::parseGraceNotes(const Ms::Chord* chord, const RenderingContext& ctx,
                                                mpe::ArticulationMap& result)
 {
     for (const Ms::Chord* graceChord : chord->graceNotes()) {

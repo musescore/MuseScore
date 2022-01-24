@@ -78,7 +78,7 @@ void PlaybackEventsRenderer::renderNoteEvents(const Ms::Chord* chord, const int 
 
     static ArticulationMap articulations;
 
-    PlaybackContext ctx(timestampFromTicks(chord->score(), chordPosTick),
+    RenderingContext ctx(timestampFromTicks(chord->score(), chordPosTick),
                         durationFromTicks(bps.val, chordDurationTicks),
                         nominalDynamicLevel,
                         chordPosTick,
@@ -108,7 +108,7 @@ void PlaybackEventsRenderer::renderRestEvents(const Ms::Rest* rest, const int ti
     result[nominalTimestamp].push_back(mpe::RestEvent(nominalTimestamp, nominalDuration, rest->voice()));
 }
 
-void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const
+void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
 {
     if (renderChordArticulations(chord, ctx, result)) {
         return;
@@ -117,7 +117,7 @@ void PlaybackEventsRenderer::renderArticulations(const Ms::Chord* chord, const P
     renderNoteArticulations(chord, ctx, result);
 }
 
-bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, const PlaybackContext& ctx,
+bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, const RenderingContext& ctx,
                                                       mpe::PlaybackEventList& result) const
 {
     for (const auto& pair : ctx.commonArticulations) {
@@ -147,7 +147,7 @@ bool PlaybackEventsRenderer::renderChordArticulations(const Ms::Chord* chord, co
     return false;
 }
 
-void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, const PlaybackContext& ctx,
+void PlaybackEventsRenderer::renderNoteArticulations(const Ms::Chord* chord, const RenderingContext& ctx,
                                                      mpe::PlaybackEventList& result) const
 {
     for (const Ms::Note* note : chord->notes()) {

@@ -31,7 +31,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const PlaybackContext& ctx,
+void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, const RenderingContext& ctx,
                                                        mpe::ArticulationMap& result)
 {
     if (!note) {
@@ -53,7 +53,7 @@ void NoteArticulationsParser::buildNoteArticulationMap(const Ms::Note* note, con
     result.preCalculateAverageData();
 }
 
-void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
+void NoteArticulationsParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                       mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->type() == Ms::ElementType::NOTE && ctx.isValid()) {
@@ -94,7 +94,7 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
     }
 }
 
-void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const PlaybackContext& ctx,
+void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const RenderingContext& ctx,
                                              mpe::ArticulationMap& result)
 {
     if (!note->ghost()) {
@@ -107,7 +107,7 @@ void NoteArticulationsParser::parseGhostNote(const Ms::Note* note, const Playbac
                                                  ctx.nominalDuration), result);
 }
 
-void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const PlaybackContext& ctx,
+void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
     mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
@@ -122,7 +122,7 @@ void NoteArticulationsParser::parseNoteHead(const Ms::Note* note, const Playback
                                                  ctx.nominalDuration), result);
 }
 
-void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const PlaybackContext& ctx,
+void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const RenderingContext& ctx,
                                             mpe::ArticulationMap& result)
 {
     for (const Ms::Spanner* spanner : note->spannerFor()) {
@@ -130,7 +130,7 @@ void NoteArticulationsParser::parseSpanners(const Ms::Note* note, const Playback
         int spannerTo = spanner->tick().ticks() + spanner->ticks().ticks();
         int spannerDurationTicks = spannerTo - spannerFrom;
 
-        PlaybackContext spannerContext = ctx;
+        RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = timestampFromTicks(note->score(), spannerFrom);
         spannerContext.nominalDuration = durationFromTicks(ctx.beatsPerSecond.val, spannerDurationTicks);
         spannerContext.nominalPositionTick = spannerFrom;

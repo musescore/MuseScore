@@ -33,20 +33,20 @@ namespace mu::engraving {
 class ChordArticulationsParser : public MetaParserBase<ChordArticulationsParser>
 {
 public:
-    static void buildChordArticulationMap(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
+    static void buildChordArticulationMap(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
 
 protected:
     friend MetaParserBase;
 
-    static void doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx, mpe::ArticulationMap& result);
+    static void doParse(const Ms::EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
 
 private:
-    static void parseSpanners(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
-    static void parseArticulationSymbols(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
-    static void parseAnnotations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
-    static void parseTremolo(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
-    static void parseArpeggio(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
-    static void parseGraceNotes(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::ArticulationMap& result);
+    static void parseSpanners(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseArticulationSymbols(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseAnnotations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseTremolo(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseArpeggio(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseGraceNotes(const Ms::Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
 };
 }
 

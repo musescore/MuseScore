@@ -31,7 +31,7 @@
 #include "playback/utils/pitchutils.h"
 
 namespace mu::engraving {
-struct PlaybackContext {
+struct RenderingContext {
     mpe::timestamp_t nominalTimestamp = 0;
     mpe::duration_t nominalDuration = 0;
     mpe::dynamic_level_t nominalDynamicLevel = 0;
@@ -41,9 +41,9 @@ struct PlaybackContext {
     mpe::ArticulationMap commonArticulations;
     mpe::ArticulationsProfilePtr profile;
 
-    PlaybackContext() = default;
+    RenderingContext() = default;
 
-    explicit PlaybackContext(const mpe::timestamp_t timestamp,
+    explicit RenderingContext(const mpe::timestamp_t timestamp,
                              const mpe::duration_t duration,
                              const mpe::dynamic_level_t dynamicLevel,
                              const int posTick,
@@ -77,9 +77,9 @@ struct NominalNoteCtx {
 
     mpe::pitch_level_t pitchLevel = 0;
 
-    PlaybackContext chordCtx;
+    RenderingContext chordCtx;
 
-    explicit NominalNoteCtx(const Ms::Note* note, const PlaybackContext& ctx)
+    explicit NominalNoteCtx(const Ms::Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
         timestamp(ctx.nominalTimestamp),
         duration(ctx.nominalDuration),
@@ -98,7 +98,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.chordCtx.commonArticulations);
 }
 
-inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const PlaybackContext& ctx)
+inline mpe::NoteEvent buildNoteEvent(const Ms::Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           ctx.nominalDuration,

@@ -26,7 +26,7 @@
 #include "log.h"
 #include "mpe/mpetypes.h"
 
-#include "playback/playbackcontext.h"
+#include "playback/renderingcontext.h"
 
 namespace Ms {
 class EngravingItem;
@@ -37,7 +37,7 @@ template<class T>
 class MetaParserBase
 {
 public:
-    static void parse(const Ms::EngravingItem* item, const PlaybackContext& context, mpe::ArticulationMap& result)
+    static void parse(const Ms::EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
