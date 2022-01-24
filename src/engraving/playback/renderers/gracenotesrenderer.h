@@ -37,22 +37,22 @@ class GraceNotesRenderer : public RenderBase<GraceNotesRenderer>
 public:
     static const mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const PlaybackContext& context,
+    static void doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                          mpe::PlaybackEventList& result);
 private:
     static bool isPlacedBeforePrincipalNote(const mpe::ArticulationType type);
 
-    static void renderPrependedGraceNotes(const Ms::Chord* chord, const PlaybackContext& context, mpe::PlaybackEventList& result);
-    static void renderAppendedGraceNotes(const Ms::Chord* chord, const PlaybackContext& context, mpe::PlaybackEventList& result);
+    static void renderPrependedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void renderAppendedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result);
 
     static mpe::duration_t graceNotesTotalDuration(const std::vector<NominalNoteCtx>& noteCtxList);
     static float graceNotesDurationRatio(const mpe::duration_t totalDuration, const mpe::duration_t maxAvailableDuration);
-    static std::vector<NominalNoteCtx> graceNotesCtxList(const QVector<Ms::Chord*>& graceChords, const PlaybackContext& context);
+    static std::vector<NominalNoteCtx> graceNotesCtxList(const QVector<Ms::Chord*>& graceChords, const RenderingContext& context);
 
     static void buildGraceNoteEvents(std::vector<NominalNoteCtx>&& noteCtxList, const mpe::timestamp_t timestampFrom,
                                      const float durationRatio, mpe::PlaybackEventList& result);
 
-    static void buildPrincipalNoteEvents(const Ms::Chord* chord, const PlaybackContext& context, const mpe::duration_t duration,
+    static void buildPrincipalNoteEvents(const Ms::Chord* chord, const RenderingContext& context, const mpe::duration_t duration,
                                          const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result);
 };
 }

@@ -37,7 +37,7 @@ const ArticulationTypeSet& GraceNotesRenderer::supportedTypes()
     return types;
 }
 
-void GraceNotesRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const PlaybackContext& context,
+void GraceNotesRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                                   mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
@@ -62,7 +62,7 @@ bool GraceNotesRenderer::isPlacedBeforePrincipalNote(const mpe::ArticulationType
     return false;
 }
 
-void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const PlaybackContext& context, mpe::PlaybackEventList& result)
+void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.5;
 
@@ -81,7 +81,7 @@ void GraceNotesRenderer::renderPrependedGraceNotes(const Ms::Chord* chord, const
     buildPrincipalNoteEvents(chord, context, totalPrincipalNotesDuration, principalNotesTimestampFrom, result);
 }
 
-void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const PlaybackContext& context, mpe::PlaybackEventList& result)
+void GraceNotesRenderer::renderAppendedGraceNotes(const Ms::Chord* chord, const RenderingContext& context, mpe::PlaybackEventList& result)
 {
     duration_t maxAvailableGraceNotesDuration = context.nominalDuration * 0.5;
 
@@ -122,7 +122,7 @@ float GraceNotesRenderer::graceNotesDurationRatio(const mpe::duration_t totalDur
 }
 
 std::vector<NominalNoteCtx> GraceNotesRenderer::graceNotesCtxList(const QVector<Ms::Chord*>& graceChords,
-                                                                  const PlaybackContext& context)
+                                                                  const RenderingContext& context)
 {
     std::vector<NominalNoteCtx> result;
 
@@ -150,7 +150,7 @@ void GraceNotesRenderer::buildGraceNoteEvents(std::vector<NominalNoteCtx>&& note
     }
 }
 
-void GraceNotesRenderer::buildPrincipalNoteEvents(const Ms::Chord* chord, const PlaybackContext& context,
+void GraceNotesRenderer::buildPrincipalNoteEvents(const Ms::Chord* chord, const RenderingContext& context,
                                                   const mpe::duration_t duration,
                                                   const mpe::timestamp_t timestamp, mpe::PlaybackEventList& result)
 {

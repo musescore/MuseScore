@@ -25,7 +25,7 @@
 
 #include "mpe/events.h"
 
-#include "playbackcontext.h"
+#include "renderingcontext.h"
 
 namespace Ms {
 class Chord;
@@ -50,9 +50,9 @@ private:
 
     void renderRestEvents(const Ms::Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const;
 
-    void renderArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
-    bool renderChordArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
-    void renderNoteArticulations(const Ms::Chord* chord, const PlaybackContext& ctx, mpe::PlaybackEventList& result) const;
+    void renderArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
+    bool renderChordArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
+    void renderNoteArticulations(const Ms::Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
 };
 }
 

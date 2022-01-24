@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-#include "playback/playbackcontext.h"
+#include "playback/renderingcontext.h"
 
 namespace mu::engraving {
 template<class T>
@@ -39,7 +39,7 @@ public:
         return supportedTypes.find(type) != supportedTypes.cend();
     }
 
-    static void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
+    static void render(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
                        mpe::PlaybackEventList& result)
     {
         IF_ASSERT_FAILED(item) {
