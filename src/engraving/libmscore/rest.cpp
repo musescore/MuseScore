@@ -186,6 +186,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::TIMESIG)
         || (type == ElementType::SYSTEM_TEXT)
         || (type == ElementType::STAFF_TEXT)
+        || (type == ElementType::PLAYTECH_ANNOTATION)
         || (type == ElementType::BAR_LINE)
         || (type == ElementType::BREATH)
         || (type == ElementType::CHORD)

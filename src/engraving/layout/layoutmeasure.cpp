@@ -337,7 +337,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
-                  || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in mmr
@@ -361,7 +361,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         for (EngravingItem* e : s->annotations()) {
             // look at elements in mmr
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
-                  || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 continue;
             }
             // try to find a match in underlying measure
@@ -400,7 +400,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
     for (Segment* s = m->first(); s; s = s->next()) {
         for (EngravingItem* e : s->annotations()) {
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
-                  || e->isInstrumentChange())) {
+                  || e->isPlayTechAnnotation() || e->isInstrumentChange())) {
                 return false;
             }
         }
@@ -505,7 +505,7 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
             }
             if (e->isRehearsalMark()
                 || e->isTempoText()
-                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
+                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isPlayTechAnnotation() || e->isInstrumentChange())
                     && (e->systemFlag() || ctx.score()->staff(e->staffIdx())->show()))) {
                 return true;
             }

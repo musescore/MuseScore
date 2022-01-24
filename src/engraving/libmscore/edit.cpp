@@ -2138,6 +2138,7 @@ void Score::cmdFlip()
                    || e->isJump()
                    || e->isMarker()
                    || e->isStaffText()
+                   || e->isPlayTechAnnotation()
                    || e->isSticking()
                    || e->isFingering()
                    || e->isDynamic()
@@ -5270,6 +5271,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
             && et != ElementType::DYNAMIC
             && et != ElementType::STAFF_TEXT
             && et != ElementType::SYSTEM_TEXT
+            && et != ElementType::PLAYTECH_ANNOTATION
             && et != ElementType::STICKING
             && et != ElementType::TREMOLO
             && et != ElementType::ARPEGGIO
@@ -5330,6 +5332,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                              || element->isTremoloBar()
                              || element->isDynamic()
                              || element->isStaffText()
+                             || element->isPlayTechAnnotation()
                              || element->isSticking()
                              || element->isFretDiagram()
                              || element->isHarmony()
@@ -5355,6 +5358,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                     // this should be same list excluded in cloneStaff()
                     case ElementType::STAFF_TEXT:
                     case ElementType::SYSTEM_TEXT:
+                    case ElementType::PLAYTECH_ANNOTATION:
                     case ElementType::FRET_DIAGRAM:
                     case ElementType::HARMONY:
                     case ElementType::FIGURED_BASS:
@@ -5446,6 +5450,7 @@ void Score::undoAddElement(EngravingItem* element, bool ctrlModifier)
                      || element->isTremoloBar()
                      || element->isDynamic()
                      || element->isStaffText()
+                     || element->isPlayTechAnnotation()
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()

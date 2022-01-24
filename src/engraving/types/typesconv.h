@@ -100,6 +100,9 @@ public:
     static QString toUserName(DurationType v);
     static QString toXml(DurationType v);
     static DurationType fromXml(const QString& tag, DurationType def);
+
+    static QString toXml(PlayingTechniqueType v);
+    static PlayingTechniqueType fromXml(const QString& tag, PlayingTechniqueType def);
 };
 }
 

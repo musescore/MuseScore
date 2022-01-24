@@ -388,6 +388,7 @@ enum class Pid {
     PATH,   // for ChordLine to make its shape changes undoable
 
     PREFER_SHARP_FLAT,
+    PLAY_TECH_TYPE,
 
     END
 };

@@ -807,3 +807,29 @@ DurationType TConv::fromXml(const QString& tag, DurationType def)
 {
     return findTypeByXmlTag<DurationType>(DURATION_TYPES, tag, def);
 }
+
+static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
+    { PlayingTechniqueType::Undefined,           "undefined" },
+    { PlayingTechniqueType::Natural,             "natural" },
+    { PlayingTechniqueType::Pizzicato,           "pizzicato" },
+    { PlayingTechniqueType::Open,                "open" },
+    { PlayingTechniqueType::Mute,                "mute" },
+    { PlayingTechniqueType::Tremolo,             "tremolo" },
+    { PlayingTechniqueType::Detache,             "detache" },
+    { PlayingTechniqueType::Martele,             "martele" },
+    { PlayingTechniqueType::ColLegno,            "col_legno" },
+    { PlayingTechniqueType::SulPonticello,       "sul_ponticello" },
+    { PlayingTechniqueType::SulTasto,            "sul_tasto" },
+    { PlayingTechniqueType::Vibrato,             "vibrato" },
+    { PlayingTechniqueType::Legato,              "legato" }
+};
+
+QString TConv::toXml(PlayingTechniqueType v)
+{
+    return findXmlTagByType<PlayingTechniqueType>(PLAY_TECH_TYPES, v);
+}
+
+PlayingTechniqueType TConv::fromXml(const QString& tag, PlayingTechniqueType def)
+{
+    return findTypeByXmlTag<PlayingTechniqueType>(PLAY_TECH_TYPES, tag, def);
+}
