@@ -344,11 +344,11 @@ void NotationPaintView::followNoteInputCursor()
 void NotationPaintView::onSelectionChanged()
 {
     TRACEFUNC;
-    if (notationSelection()->isNone()) {
-        return;
-    }
 
     RectF selectionRect = notationSelection()->canvasBoundingRect();
+    if (selectionRect.isNull()) {
+        return;
+    }
 
     adjustCanvasPosition(selectionRect);
     update();
