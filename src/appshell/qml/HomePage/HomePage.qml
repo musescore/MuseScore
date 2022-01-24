@@ -65,9 +65,7 @@ DockPage {
         case "scores": root.central = scoresComp; break
         case "add-ons": root.central = addonsComp; break
         case "audio": root.central = audioComp; break
-        case "feautured": root.central = feauturedComp; break
         case "learn": root.central = learnComp; break
-        case "support": root.central = supportComp; break
         case "account": root.central = accountComp; break
         }
     }
@@ -124,28 +122,10 @@ DockPage {
     }
 
     Component {
-        id: feauturedComp
-
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Feautured"
-        }
-    }
-
-    Component {
         id: learnComp
 
         LearnPage {
             section: root.subSection
-        }
-    }
-
-    Component {
-        id: supportComp
-
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Support"
         }
     }
 }
