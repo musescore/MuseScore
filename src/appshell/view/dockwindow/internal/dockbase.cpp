@@ -307,7 +307,6 @@ void DockBase::setFloating(bool floating)
     emit floatingChanged();
 }
 
-
 void DockBase::init()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
