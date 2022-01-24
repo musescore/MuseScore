@@ -298,8 +298,15 @@ void DockBase::setFloating(bool floating)
         return;
     }
 
+    if (floating == m_floating) {
+        return;
+    }
+
+    m_floating = floating;
     m_dockWidget->setFloating(floating);
+    emit floatingChanged();
 }
+
 
 void DockBase::init()
 {
