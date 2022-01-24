@@ -36,27 +36,27 @@ class PaletteCreator
 public:
     static PalettePtr newTempoPalette(bool defaultPalette = false);
     static PalettePtr newTextPalette(bool defaultPalette = false);
-    static PalettePtr newTimePalette();
-    static PalettePtr newRepeatsPalette();
+    static PalettePtr newTimePalette(bool defaultPalette = false);
+    static PalettePtr newRepeatsPalette(bool defaultPalette = false);
     static PalettePtr newBeamPalette();
     static PalettePtr newDynamicsPalette(bool defaultPalette = false);
     static PalettePtr newLayoutPalette();
-    static PalettePtr newFingeringPalette();
+    static PalettePtr newFingeringPalette(bool defaultPalette = false);
     static PalettePtr newTremoloPalette();
     static PalettePtr newNoteHeadsPalette();
-    static PalettePtr newArticulationsPalette();
-    static PalettePtr newOrnamentsPalette();
+    static PalettePtr newArticulationsPalette(bool defaultPalette = false);
+    static PalettePtr newOrnamentsPalette(bool defaultPalette = false);
     static PalettePtr newAccordionPalette();
     static PalettePtr newBracketsPalette();
-    static PalettePtr newBreathPalette();
+    static PalettePtr newBreathPalette(bool defaultPalette = false);
     static PalettePtr newArpeggioPalette();
     static PalettePtr newClefsPalette(bool defaultPalette = false);
     static PalettePtr newGraceNotePalette();
     static PalettePtr newBagpipeEmbellishmentPalette();
     static PalettePtr newKeySigPalette();
     static PalettePtr newAccidentalsPalette(bool defaultPalette = false);
-    static PalettePtr newBarLinePalette();
-    static PalettePtr newLinesPalette();
+    static PalettePtr newBarLinePalette(bool defaultPalette = false);
+    static PalettePtr newLinesPalette(bool defaultPalette = false);
     static PalettePtr newFretboardDiagramPalette();
 
     static PaletteTreePtr newMasterPaletteTree();

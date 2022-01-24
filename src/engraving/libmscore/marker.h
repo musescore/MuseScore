@@ -96,8 +96,7 @@ struct MarkerTypeItem {
     QString name;
 };
 
-extern const MarkerTypeItem markerTypeTable[];
-int markerTypeTableSize();
+extern const std::vector<MarkerTypeItem> markerTypeTable;
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Marker::Type);

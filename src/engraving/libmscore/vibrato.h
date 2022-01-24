@@ -115,8 +115,7 @@ struct VibratoTableItem {
     QString userName;
 };
 
-extern const VibratoTableItem vibratoTable[];
-extern int vibratoTableSize();
+extern const std::vector<VibratoTableItem> vibratoTable;
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::Vibrato::Type);
