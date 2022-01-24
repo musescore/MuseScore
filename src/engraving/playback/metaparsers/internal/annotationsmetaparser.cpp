@@ -26,7 +26,7 @@
 
 using namespace mu::engraving;
 
-void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackContext& ctx,
+void AnnotationsMetaParser::doParse(const Ms::EngravingItem* item, const RenderingContext& ctx,
                                     mpe::ArticulationMap& result)
 {
     IF_ASSERT_FAILED(item->isTextBase() && ctx.isValid()) {

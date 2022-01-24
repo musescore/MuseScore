@@ -179,7 +179,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/chordarticulationsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/metaparserbase.h
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/dynamicutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h

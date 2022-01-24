@@ -204,7 +204,7 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
     return types;
 }
 
-void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, const PlaybackContext& context,
+void OrnamentsRenderer::doRender(const Ms::EngravingItem* item, const ArticulationType preferredType, const RenderingContext& context,
                                  mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);

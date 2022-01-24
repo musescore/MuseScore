@@ -34,7 +34,7 @@ const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
     return types;
 }
 
-void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const PlaybackContext& context,
+void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& context,
                                   mpe::PlaybackEventList& result)
 {
     const Ms::Note* note = Ms::toNote(item);
@@ -50,7 +50,7 @@ void GlissandosRenderer::doRender(const Ms::EngravingItem* item, const mpe::Arti
     }
 }
 
-void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const PlaybackContext& context,
+void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const RenderingContext& context,
                                                  mpe::PlaybackEventList& result)
 {
     const mpe::ArticulationAppliedData& articulationData = context.commonArticulations.at(ArticulationType::DiscreteGlissando);
@@ -72,7 +72,7 @@ void GlissandosRenderer::renderDiscreteGlissando(const Ms::Note* note, const Pla
     }
 }
 
-void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, const PlaybackContext& context,
+void GlissandosRenderer::renderContinuousGlissando(const Ms::Note* note, const RenderingContext& context,
                                                    mpe::PlaybackEventList& result)
 {
     result.emplace_back(buildNoteEvent(note, context));

@@ -38,7 +38,7 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes()
     return types;
 }
 
-void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const PlaybackContext& context,
+void TremoloRenderer::doRender(const Ms::EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
                                mpe::PlaybackEventList& result)
 {
     const Ms::Chord* chord = Ms::toChord(item);
@@ -105,7 +105,7 @@ int TremoloRenderer::stepDurationTicksByType(const mpe::ArticulationType& type)
 }
 
 void TremoloRenderer::buildAndAppendEvents(const Ms::Chord* chord, const ArticulationType type, const mpe::duration_t stepDuration,
-                                           const mpe::timestamp_t timestampOffset, const PlaybackContext& context,
+                                           const mpe::timestamp_t timestampOffset, const RenderingContext& context,
                                            mpe::PlaybackEventList& result)
 {
     for (size_t noteIdx = 0; noteIdx < chord->notes().size(); ++noteIdx) {
