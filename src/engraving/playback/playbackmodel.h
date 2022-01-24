@@ -34,6 +34,7 @@
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
 
+#include "types/types.h"
 #include "playbackeventsrenderer.h"
 
 namespace Ms {
@@ -77,6 +78,7 @@ private:
     TrackIdKey idKey(const ID& partId, const std::string& instrimentId) const;
 
     using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+    using PersistentArticulationsMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
     void update(const int tickFrom, const int tickTo, const int trackFrom, const int trackTo);
     void clearExpiredEvents();
@@ -91,6 +93,7 @@ private:
     PlaybackEventsRenderer m_renderer;
 
     std::unordered_map<TrackIdKey, DynamicMap, IdKeyHash> m_dynamicsMap;
+    std::unordered_map<TrackIdKey, PersistentArticulationsMap, IdKeyHash> m_persistentArticulationsMap;
     std::unordered_map<TrackIdKey, mpe::PlaybackEventsMap, IdKeyHash> m_events;
 };
 }

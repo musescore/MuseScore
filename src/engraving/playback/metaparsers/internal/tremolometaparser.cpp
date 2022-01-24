@@ -23,6 +23,7 @@
 #include "tremolometaparser.h"
 
 #include "libmscore/tremolo.h"
+#include "libmscore/chord.h"
 
 using namespace mu::engraving;
 
@@ -65,11 +66,16 @@ void TremoloMetaParser::doParse(const Ms::EngravingItem* item, const PlaybackCon
         return;
     }
 
+    int overallDurationTicks = ctx.nominalDurationTicks;
+    if (tremolo->twoNotes() && tremolo->chord1() && tremolo->chord2()) {
+        overallDurationTicks = tremolo->chord1()->ticks().ticks() + tremolo->chord2()->ticks().ticks();
+    }
+
     mpe::ArticulationMeta articulationMeta;
     articulationMeta.type = type;
     articulationMeta.pattern = ctx.profile->pattern(type);
     articulationMeta.timestamp = ctx.nominalTimestamp;
-    articulationMeta.overallDuration = ctx.nominalDuration;
+    articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
 
     appendArticulationData(std::move(articulationMeta), result);
 }
