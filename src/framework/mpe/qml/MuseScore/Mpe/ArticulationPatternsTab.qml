@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+ColumnLayout {
     id: root
 
     property QtObject model: null
@@ -51,21 +51,14 @@ Column {
     }
 
     StackLayout {
-        width: parent.width
         currentIndex: tabBar.currentIndex
 
-        height: itemAt(currentIndex).implicitHeight
-
         ArticulationPatternsList {
-            height: implicitHeight
-
             editorModel: root.model
             model: root.model ? root.model.singleNoteItems : null
         }
 
         ArticulationPatternsList {
-            height: implicitHeight
-
             editorModel: root.model
             model: root.model ? root.model.multiNoteItems : null
         }
