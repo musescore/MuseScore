@@ -206,7 +206,6 @@ FocusScope {
             navigation.name: "Plugins"
             navigation.panel: navTabPanel
             navigation.order: 1
-            onNavigationTriggered: tabBar.currentIndex = 0
         }
 
         StyledTabButton {
@@ -215,7 +214,6 @@ FocusScope {
             navigation.name: "Extensions"
             navigation.panel: navTabPanel
             navigation.order: 2
-            onNavigationTriggered: tabBar.currentIndex = 1
         }
 
         StyledTabButton {
@@ -224,7 +222,6 @@ FocusScope {
             navigation.name: "Languages"
             navigation.panel: navTabPanel
             navigation.order: 3
-            onNavigationTriggered: tabBar.currentIndex = 2
         }
     }
 

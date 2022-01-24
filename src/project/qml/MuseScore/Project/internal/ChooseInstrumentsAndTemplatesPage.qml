@@ -81,6 +81,12 @@ Item {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
 
+        onCurrentItemChanged: {
+            if (currentItem && currentItem.navigation) {
+                currentItemNavigationIndex = [currentItem.navigation.row, currentItem.navigation.column]
+            }
+        }
+
         property var currentItemNavigationIndex: []
 
         NavigationPanel {
@@ -103,10 +109,6 @@ Item {
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
             navigation.column: 0
-            onNavigationTriggered: {
-                bar.currentItemNavigationIndex = [navigation.row, navigation.column]
-                bar.currentIndex = 0
-            }
         }
 
         StyledTabButton {
@@ -116,10 +118,6 @@ Item {
             navigation.name: "Choose from template"
             navigation.panel: topNavPanel
             navigation.column: 1
-            onNavigationTriggered: {
-                bar.currentItemNavigationIndex = [navigation.row, navigation.column]
-                bar.currentIndex = 1
-            }
         }
 
         Component.onCompleted: {

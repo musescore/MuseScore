@@ -20,28 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-TabBar {
+StyledTabBar {
     id: root
-
-    spacing: 36
+    width: parent.width
+    spacing: 12
 
     background: Item {
-        implicitHeight: 32
-    }
-
-    function focusOnTab(index) {
-        let item = itemAt(index)
-        if (item && item.navigation) {
-            item.navigation.requestActive()
-        }
-    }
-
-    function focusOnCurrentTab() {
-        focusOnTab(currentIndex)
+        implicitHeight: 28
     }
 }

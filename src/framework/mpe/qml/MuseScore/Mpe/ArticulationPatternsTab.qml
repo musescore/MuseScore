@@ -19,44 +19,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
-import QtQuick.Controls 1.5
+import QtQuick.Layouts 1.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-TabPanel {
+ColumnLayout {
     id: root
 
     property QtObject model: null
 
     height: 400
     width: 400
+    spacing: 12
 
-    Tab {
-        title: qsTrc("mpe", "Single Note")
+    StyledTabBar {
+        id: tabBar
+        width: parent.width
+        spacing: 12
 
-        ArticulationPatternsList {
-            anchors.top: parent.top
-            anchors.topMargin: 24
+        StyledTabButton {
+            fillWidth: true
+            text: qsTrc("mpe", "Single Note")
+        }
 
-            width: root.width
-
-            editorModel: root.model
-            model: root.model ? root.model.singleNoteItems : 0
+        StyledTabButton {
+            fillWidth: true
+            text: qsTrc("mpe", "Multi Note")
         }
     }
-    Tab {
-        title: qsTrc("mpe", "Multi Note")
+
+    StackLayout {
+        currentIndex: tabBar.currentIndex
 
         ArticulationPatternsList {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
             editorModel: root.model
-            model: root.model ? root.model.multiNoteItems : 0
+            model: root.model ? root.model.singleNoteItems : null
+        }
+
+        ArticulationPatternsList {
+            editorModel: root.model
+            model: root.model ? root.model.multiNoteItems : null
         }
     }
 }

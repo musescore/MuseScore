@@ -19,8 +19,6 @@ SeparatorLine 1.0 SeparatorLine.qml
 Dropdown 1.0 Dropdown.qml
 Icon 1.0 Icon.qml
 StyledPopup 1.0 StyledPopup.qml
-TabPanel 1.0 TabPanel.qml
-TabItem 1.0 TabItem.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
 RoundedRectangle 1.0 RoundedRectangle.qml

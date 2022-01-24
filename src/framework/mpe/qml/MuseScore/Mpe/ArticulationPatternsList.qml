@@ -23,6 +23,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -35,10 +36,11 @@ ListView {
         {id: "copy", title: qsTrc("mpe", "Copy pattern data")}
     ]
 
-    height: 400
-    width: 180
+    implicitWidth: 180
+    implicitHeight: contentHeight
 
     spacing: 4
+    clip: true
 
     ScrollBar.vertical: StyledScrollBar { }
 
@@ -90,7 +92,7 @@ ListView {
                             return
                         }
 
-                        if (mouse.button == Qt.RightButton && root.editorModel && !modelData.isSelected ) {
+                        if (mouse.button === Qt.RightButton && root.editorModel && !modelData.isSelected ) {
                             menuLoader.toggleOpened(root.contextMenuModel, mouseX, mouseY)
                         }
                     }
