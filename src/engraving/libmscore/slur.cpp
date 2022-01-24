@@ -62,6 +62,9 @@ SlurSegment::SlurSegment(const SlurSegment& ss)
 void SlurSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    if (onTabStaff()) {
+        return;
+    }
     using namespace mu::draw;
     Pen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
@@ -412,6 +415,9 @@ void SlurSegment::computeBezier(mu::PointF p6o)
 
 void SlurSegment::layoutSegment(const PointF& p1, const PointF& p2)
 {
+    if (onTabStaff()) {
+        return;
+    }
     setPos(PointF());
     ups(Grip::START).p = p1;
     ups(Grip::END).p   = p2;

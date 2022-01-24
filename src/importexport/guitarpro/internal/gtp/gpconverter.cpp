@@ -1354,8 +1354,9 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
 {
     int32_t fret = midiPitch.fret;
     int32_t musescoreString{ -1 };
+    Ms::Instrument* instrument = note->part()->instrument();
     if (midiPitch.string != -1) {
-        musescoreString = note->part()->instrument()->stringData()->strings() - 1 - midiPitch.string;
+        musescoreString = instrument->stringData()->strings() - 1 - midiPitch.string;
     }
 
     int pitch = 0;
@@ -1365,23 +1366,23 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         pitch = midiPitch.octave * 12 + midiPitch.tone;
     } else if (midiPitch.variation != -1) {
         pitch = calculateDrumPitch(midiPitch.element, midiPitch.variation, note->part()->shortName());
-    } else if (note->part()->instrument()->channel(0)->channel() == 9) {
+    } else if (instrument->channel(0)->channel() == 9) {
         //!@NOTE This is a case, when part of the note is a
         //       single drum instrument. It seems, that GP
         //       sets to -1 all midi parameters for the note,
         //       but sets the midi pitch value to the program
         //       instead.
-        pitch = note->part()->instrument()->channel(0)->program();
+        pitch = instrument->channel(0)->program();
     } else {
         pitch
-            = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret,
-                                                                 nullptr) + note->part()->instrument()->transpose().chromatic;
+            = instrument->stringData()->getPitch(musescoreString, midiPitch.fret,
+                                                 nullptr) + instrument->transpose().chromatic;
     }
 
     if (musescoreString == -1) {
         musescoreString = getStringNumberFor(note, pitch);
 
-        fret = note->part()->instrument()->stringData()->fret(pitch, musescoreString, nullptr);
+        fret = instrument->stringData()->fret(pitch, musescoreString, nullptr);
     }
 
     note->setFret(fret);
