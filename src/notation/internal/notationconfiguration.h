@@ -166,6 +166,15 @@ public:
     int gridSizeSpatium(framework::Orientation gridOrientation) const override;
     void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) override;
 
+    bool needToShowAddTextErrorMessage() const override;
+    void setNeedToShowAddTextErrorMessage(bool show) override;
+
+    bool needToShowAddFiguredBassErrorMessage() const override;
+    void setNeedToShowAddFiguredBassErrorMessage(bool show) override;
+
+    bool needToShowAddBoxesErrorMessage() const override;
+    void setNeedToShowAddBoxesErrorMessage(bool show) override;
+
 private:
     io::path firstInstrumentListPath() const;
     void setFirstInstrumentListPath(const io::path& path);

@@ -74,11 +74,6 @@ PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag, QObject
     drawStaff = needsStaff(element);
 }
 
-PaletteCell::~PaletteCell()
-{
-    LOGI() << this;
-}
-
 QAccessibleInterface* PaletteCell::accessibleInterface(QObject* object)
 {
     PaletteCell* cell = qobject_cast<PaletteCell*>(object);

@@ -144,6 +144,7 @@ public:
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
+    virtual Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) = 0;
 
     virtual void copySelection() = 0;
@@ -163,7 +164,7 @@ public:
     virtual void addBracketsToSelection(BracketsType type) = 0;
     virtual void changeSelectedNotesArticulation(SymbolId articulationSymbolId) = 0;
     virtual void addGraceNotesToSelectedNotes(GraceNoteType type) = 0;
-    virtual bool canAddTupletToSelecredChordRests() const = 0;
+    virtual bool canAddTupletToSelectedChordRests() const = 0;
     virtual void addTupletToSelectedChordRests(const TupletOptions& options) = 0;
     virtual void addBeamToSelectedChordRests(BeamMode mode) = 0;
 
@@ -178,7 +179,10 @@ public:
     virtual void changeSelectedNotesVoice(int voiceIndex) = 0;
     virtual void addAnchoredLineToSelectedNotes() = 0;
 
+    virtual Ret canAddText(TextStyleType type) const = 0;
     virtual void addText(TextStyleType type) = 0;
+
+    virtual Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
 
     virtual void addStretch(qreal value) = 0;

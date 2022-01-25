@@ -270,24 +270,26 @@ void NotationActionController::init()
     registerAction("add-hairpin-reverse", &Interaction::addHairpinToSelection, HairpinType::DECRESC_HAIRPIN);
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
-    registerAction("title-text", &Interaction::addText, TextStyleType::TITLE);
-    registerAction("subtitle-text", &Interaction::addText, TextStyleType::SUBTITLE);
-    registerAction("composer-text", &Interaction::addText, TextStyleType::COMPOSER);
-    registerAction("poet-text", &Interaction::addText, TextStyleType::POET);
-    registerAction("part-text", &Interaction::addText, TextStyleType::INSTRUMENT_EXCERPT);
-    registerAction("system-text", &Interaction::addText, TextStyleType::SYSTEM);
-    registerAction("staff-text", &Interaction::addText, TextStyleType::STAFF);
-    registerAction("expression-text", &Interaction::addText, TextStyleType::EXPRESSION);
-    registerAction("rehearsalmark-text", &Interaction::addText, TextStyleType::REHEARSAL_MARK);
-    registerAction("instrument-change-text", &Interaction::addText, TextStyleType::INSTRUMENT_CHANGE);
-    registerAction("fingering-text", &Interaction::addText, TextStyleType::FINGERING);
-    registerAction("sticking-text", &Interaction::addText, TextStyleType::STICKING);
-    registerAction("chord-text", &Interaction::addText, TextStyleType::HARMONY_A);
-    registerAction("roman-numeral-text", &Interaction::addText, TextStyleType::HARMONY_ROMAN);
-    registerAction("nashville-number-text", &Interaction::addText, TextStyleType::HARMONY_NASHVILLE);
-    registerAction("lyrics", &Interaction::addText, TextStyleType::LYRICS_ODD);
-    registerAction("figured-bass", &Interaction::addFiguredBass);
-    registerAction("tempo", &Interaction::addText, TextStyleType::TEMPO);
+    registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
+    registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
+    registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
+    registerAction("poet-text", [this]() { addText(TextStyleType::POET); });
+    registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
+
+    registerAction("system-text", [this]() { addText(TextStyleType::SYSTEM); });
+    registerAction("staff-text", [this]() { addText(TextStyleType::STAFF); });
+    registerAction("expression-text", [this]() { addText(TextStyleType::EXPRESSION); });
+    registerAction("rehearsalmark-text", [this]() { addText(TextStyleType::REHEARSAL_MARK); });
+    registerAction("instrument-change-text", [this]() { addText(TextStyleType::INSTRUMENT_CHANGE); });
+    registerAction("fingering-text", [this]() { addText(TextStyleType::FINGERING); });
+    registerAction("sticking-text", [this]() { addText(TextStyleType::STICKING); });
+    registerAction("chord-text", [this]() { addText(TextStyleType::HARMONY_A); });
+    registerAction("roman-numeral-text", [this]() { addText(TextStyleType::HARMONY_ROMAN); });
+    registerAction("nashville-number-text", [this]() { addText(TextStyleType::HARMONY_NASHVILLE); });
+    registerAction("lyrics", [this]() { addText(TextStyleType::LYRICS_ODD); });
+    registerAction("tempo", [this]() { addText(TextStyleType::TEMPO); });
+
+    registerAction("figured-bass", [this]() { addFiguredBass(); });
 
     registerAction("stretch-", [this]() { addStretch(-STRETCH_STEP); });
     registerAction("stretch+", [this]() { addStretch(STRETCH_STEP); });
@@ -713,7 +715,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
         return;
     }
 
-    if (!interaction->canAddTupletToSelecredChordRests()) {
+    if (!interaction->canAddTupletToSelectedChordRests()) {
         interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"),
                              { IInteractive::Button::Ok });
         return;
@@ -952,6 +954,59 @@ void NotationActionController::addSlur()
     }
 }
 
+IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
+{
+    return interactive()->info(message, "", {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
+}
+
+void NotationActionController::addText(TextStyleType type)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddText(type);
+    if (!ret) {
+        if (configuration()->needToShowAddTextErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddTextErrorMessage(false);
+            }
+        }
+
+        return;
+    }
+
+    interaction->addText(type);
+}
+
+void NotationActionController::addFiguredBass()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddFiguredBass();
+    if (!ret) {
+        if (configuration()->needToShowAddFiguredBassErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
+            }
+        }
+
+        return;
+    }
+
+    interaction->addFiguredBass();
+}
+
 void NotationActionController::selectAllSimilarElements()
 {
     TRACEFUNC;
@@ -1109,6 +1164,24 @@ void NotationActionController::insertBoxes(BoxType boxType, int count)
 void NotationActionController::insertBox(BoxType boxType)
 {
     TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddBoxes();
+    if (!ret) {
+        if (configuration()->needToShowAddBoxesErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddBoxesErrorMessage(false);
+            }
+        }
+
+        return;
+    }
+
     insertBoxes(boxType, 1);
 }
 
@@ -1219,6 +1292,19 @@ void NotationActionController::resetBeamMode()
 
 void NotationActionController::selectMeasuresCountAndInsert()
 {
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddBoxes();
+    if (!ret) {
+        showErrorMessage(ret.text());
+        return;
+    }
+
     RetVal<Val> measureCount = interactive()->open("musescore://notation/selectmeasurescount?operation=insert");
 
     if (measureCount.ret) {

@@ -150,6 +150,7 @@ public:
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
 
+    Ret canAddBoxes() const override;
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex = -1) override;
 
     void copySelection() override;
@@ -169,7 +170,7 @@ public:
     void addBracketsToSelection(BracketsType type) override;
     void changeSelectedNotesArticulation(SymbolId articulationSymbolId) override;
     void addGraceNotesToSelectedNotes(GraceNoteType type) override;
-    bool canAddTupletToSelecredChordRests() const override;
+    bool canAddTupletToSelectedChordRests() const override;
     void addTupletToSelectedChordRests(const TupletOptions& options) override;
     void addBeamToSelectedChordRests(BeamMode mode) override;
 
@@ -184,7 +185,10 @@ public:
     void changeSelectedNotesVoice(int voiceIndex) override;
     void addAnchoredLineToSelectedNotes() override;
 
+    Ret canAddText(TextStyleType type) const override;
     void addText(TextStyleType type) override;
+
+    Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
@@ -321,6 +325,8 @@ private:
     void startEditGrip(Ms::Grip grip);
     void updateGripEdit();
     void resetGripEdit();
+
+    bool elementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
     template<typename P>
     void execute(void (Ms::Score::* function)(P), P param);

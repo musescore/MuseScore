@@ -72,6 +72,7 @@
 #include "scorecallbacks.h"
 #include "notationnoteinput.h"
 #include "notationselection.h"
+#include "notationerrors.h"
 
 using namespace mu::notation;
 using namespace mu::framework;
@@ -2838,6 +2839,29 @@ void NotationInteraction::joinSelectedMeasures()
     apply();
 }
 
+mu::Ret NotationInteraction::canAddBoxes() const
+{
+    if (selection()->isRange()) {
+        return make_ok();
+    }
+
+    static const std::vector<ElementType> boxesTypes {
+        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX
+    };
+
+    for (const EngravingItem* element: selection()->elements()) {
+        if (Ms::toMeasure(element->findMeasure())) {
+            return make_ok();
+        }
+
+        if (std::find(boxesTypes.cbegin(), boxesTypes.cend(), element->type()) != boxesTypes.cend()) {
+            return make_ok();
+        }
+    }
+
+    return make_ret(Err::MeasureIsNotSelected);
+}
+
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
 {
     auto boxTypeToElementType = [](BoxType boxType) {
@@ -3187,7 +3211,7 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
     notifyAboutNotationChanged();
 }
 
-bool NotationInteraction::canAddTupletToSelecredChordRests() const
+bool NotationInteraction::canAddTupletToSelectedChordRests() const
 {
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
         if (chordRest->isGrace()) {
@@ -3373,6 +3397,32 @@ void NotationInteraction::addAnchoredLineToSelectedNotes()
     notifyAboutSelectionChanged();
 }
 
+mu::Ret NotationInteraction::canAddText(TextStyleType type) const
+{
+    static const std::vector<TextStyleType> needSelectedNoteOrRestTypes {
+        TextStyleType::SYSTEM,
+        TextStyleType::STAFF,
+        TextStyleType::EXPRESSION,
+        TextStyleType::REHEARSAL_MARK,
+        TextStyleType::INSTRUMENT_CHANGE,
+        TextStyleType::FINGERING,
+        TextStyleType::STICKING,
+        TextStyleType::HARMONY_A,
+        TextStyleType::HARMONY_ROMAN,
+        TextStyleType::HARMONY_NASHVILLE,
+        TextStyleType::LYRICS_ODD,
+        TextStyleType::TEMPO
+    };
+
+    if (std::find(needSelectedNoteOrRestTypes.cbegin(), needSelectedNoteOrRestTypes.cend(), type) != needSelectedNoteOrRestTypes.cend()) {
+        bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::REST,
+                                                       ElementType::MEASURE_REPEAT, ElementType::CHORD });
+        return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
+    }
+
+    return make_ok();
+}
+
 void NotationInteraction::addText(TextStyleType type)
 {
     if (!scoreHasMeasure()) {
@@ -3391,6 +3441,12 @@ void NotationInteraction::addText(TextStyleType type)
     if (textBox) {
         startEditText(textBox);
     }
+}
+
+mu::Ret NotationInteraction::canAddFiguredBass() const
+{
+    bool isNoteOrRestSelected = elementsSelected({ ElementType::NOTE, ElementType::FIGURED_BASS, ElementType::REST });
+    return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
 void NotationInteraction::addFiguredBass()
@@ -3742,6 +3798,12 @@ void NotationInteraction::resetGripEdit()
     m_editData.grip.clear();
 
     resetAnchorLines();
+}
+
+bool NotationInteraction::elementsSelected(const std::vector<ElementType>& elementsTypes) const
+{
+    const EngravingItem* element = selection()->element();
+    return element && std::find(elementsTypes.cbegin(), elementsTypes.cend(), element->type()) != elementsTypes.cend();
 }
 
 void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
