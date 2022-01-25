@@ -525,7 +525,7 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
         return;
     }
 
-    if (m_dragStyle == DragStyle::EVENT_LENGTH || m_dragStyle == DragStyle::EVENT_MOVE 
+    if (m_dragStyle == DragStyle::EVENT_LENGTH || m_dragStyle == DragStyle::EVENT_MOVE
         || m_dragStyle == DragStyle::EVENT_ONTIME) {
         Ms::Fraction dx = Ms::Fraction(m_lastMousePos.x() - m_mouseDownPos.x(), m_wholeNoteWidth).reduced();
 
