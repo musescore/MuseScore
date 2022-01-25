@@ -160,6 +160,15 @@ public:
 
     virtual int gridSizeSpatium(framework::Orientation gridOrientation) const = 0;
     virtual void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) = 0;
+
+    virtual bool needToShowAddTextErrorMessage() const = 0;
+    virtual void setNeedToShowAddTextErrorMessage(bool show) = 0;
+
+    virtual bool needToShowAddFiguredBassErrorMessage() const = 0;
+    virtual void setNeedToShowAddFiguredBassErrorMessage(bool show) = 0;
+
+    virtual bool needToShowAddBoxesErrorMessage() const = 0;
+    virtual void setNeedToShowAddBoxesErrorMessage(bool show) = 0;
 };
 }
 

@@ -71,7 +71,6 @@ class PaletteCell : public QObject
 public:
     explicit PaletteCell(QObject* parent = nullptr);
     PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0, QObject* parent = nullptr);
-    ~PaletteCell();
 
     static QAccessibleInterface* accessibleInterface(QObject* object);
 
