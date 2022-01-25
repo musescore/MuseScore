@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-static const int SELECTION_SIDE_PADDING = 8;
+static constexpr int SELECTION_SIDE_PADDING = 8;
 
 using namespace mu::notation;
 
@@ -80,8 +80,8 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
         return {};
     }
 
-    Ms::Segment* startSegment = rangeStartSegment();
-    Ms::Segment* endSegment = rangeEndSegment();
+    const Ms::Segment* startSegment = rangeStartSegment();
+    const Ms::Segment* endSegment = rangeEndSegment();
     if (!endSegment) {
         endSegment = score()->lastSegment();
     }
@@ -101,8 +101,8 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
         const Ms::Segment* sectionStartSegment = rangeSection.startSegment;
         const Ms::Segment* sectionEndSegment = rangeSection.endSegment;
 
-        Ms::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
-        Ms::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
+        const Ms::SysStaff* segmentFirstStaff = sectionSystem->staff(score()->selection().staffStart());
+        const Ms::SysStaff* segmentLastStaff = sectionSystem->staff(lastStaff);
 
         int topY = sectionElementsMaxY(rangeSection);
         int bottomY = sectionElementsMinY(rangeSection);

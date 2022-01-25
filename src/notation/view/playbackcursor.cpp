@@ -42,14 +42,20 @@ void PlaybackCursor::setRect(const RectF& rect)
     m_rect = rect;
 }
 
+bool PlaybackCursor::visible() const
+{
+    return m_visible;
+}
+
 void PlaybackCursor::setVisible(bool arg)
 {
     m_visible = arg;
 }
 
-QColor PlaybackCursor::color()
+QColor PlaybackCursor::color() const
 {
     QColor color = configuration()->playbackCursorColor();
     color.setAlpha(configuration()->cursorOpacity());
+
     return color;
 }
