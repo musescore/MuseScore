@@ -103,6 +103,9 @@ public:
 
     static QString toXml(PlayingTechniqueType v);
     static PlayingTechniqueType fromXml(const QString& tag, PlayingTechniqueType def);
+
+    static QString toXml(TempoTechniqueType v);
+    static TempoTechniqueType fromXml(const QString& tag, TempoTechniqueType def);
 };
 }
 

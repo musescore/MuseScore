@@ -110,6 +110,7 @@
 #include "libmscore/textframe.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/letring.h"
+#include "libmscore/tempochangeranged.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/vibrato.h"
 
@@ -3959,7 +3960,8 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
         const LineSegment* seg = 0;
         if (el->type() == ElementType::HAIRPIN || el->type() == ElementType::OTTAVA
             || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
-            || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE) {
+            || el->type() == ElementType::LET_RING || el->type() == ElementType::PALM_MUTE
+            || el->type() == ElementType::TEMPO_RANGED_CHANGE) {
             // handle elements derived from SLine
             // find the system containing the first linesegment
             const SLine* sl = static_cast<const SLine*>(el);
@@ -5740,6 +5742,9 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                     break;
                 case ElementType::LET_RING:
                     exp->textLine(toLetRing(e), sstaff, seg->tick());
+                    break;
+                case ElementType::TEMPO_RANGED_CHANGE:
+                    exp->textLine(toTempoChangeRanged(e), sstaff, seg->tick());
                     break;
                 case ElementType::PALM_MUTE:
                     exp->textLine(toPalmMute(e), sstaff, seg->tick());

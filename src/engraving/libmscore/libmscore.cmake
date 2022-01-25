@@ -341,4 +341,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/volta.h
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playtechannotation.h
+    ${CMAKE_CURRENT_LIST_DIR}/tempochangeranged.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tempochangeranged.h
 )

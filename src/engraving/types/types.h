@@ -581,7 +581,7 @@ using AccidentalRole = mu::engraving::AccidentalRole;
 using DurationType = mu::engraving::DurationType;
 using DurationTypeWithDots = mu::engraving::DurationTypeWithDots;
 using PlayingTechniqueType = mu::engraving::PlayingTechniqueType;
-using TempoTechniqueType = mu::engraving::TempoTechniqueType;
+using TempoChangeType = mu::engraving::TempoTechniqueType;
 }
 
 #endif // MU_ENGRAVING_TYPES_H
