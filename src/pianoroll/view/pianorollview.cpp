@@ -468,7 +468,9 @@ void PianorollView::paint(QPainter* p)
     }
 
     if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_END
-        || m_dragStyle == DragStyle::NOTE_LENGTH_START || m_dragStyle == DragStyle::DRAW_NOTE) {
+        || m_dragStyle == DragStyle::NOTE_LENGTH_START || m_dragStyle == DragStyle::DRAW_NOTE
+        || m_dragStyle == DragStyle::EVENT_LENGTH || m_dragStyle == DragStyle::EVENT_MOVE
+        || m_dragStyle == DragStyle::EVENT_ONTIME) {
         drawDraggedNotes(p);
     }
 
@@ -520,6 +522,58 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
 
             drawDraggedNote(painter, startTickFrac, endTickFrac - startTickFrac, pitch, track, m_colorNoteDrag);
         }
+        return;
+    }
+
+    if (m_dragStyle == DragStyle::EVENT_LENGTH || m_dragStyle == DragStyle::EVENT_MOVE 
+        || m_dragStyle == DragStyle::EVENT_ONTIME) {
+        Ms::Fraction dx = Ms::Fraction(m_lastMousePos.x() - m_mouseDownPos.x(), m_wholeNoteWidth).reduced();
+
+        for (int i = 0; i < m_noteList.size(); ++i) {
+            NoteBlock* pi = m_noteList[i];
+            if (pi->note->selected()) {
+                for (Ms::NoteEvent& e : pi->note->playEvents()) {
+                    Ms::Chord* chord = pi->note->chord();
+                    Ms::Fraction ticks = chord->ticks();
+                    Ms::Tuplet* tup = chord->tuplet();
+                    if (tup) {
+                        Ms::Fraction frac = tup->ratio();
+                        ticks = ticks * frac.inverse();
+                    }
+
+                    Ms::Fraction start = pi->note->chord()->tick();
+                    Ms::Fraction len = ticks;
+                    Ms::Fraction startAdj = start + ticks * e.ontime() / 1000;
+                    Ms::Fraction lenAdj = ticks * e.len() / 1000;
+
+                    //Calc start, duration of where we dragged to
+                    Ms::Fraction startNew;
+                    Ms::Fraction lenNew;
+                    switch (m_dragStyle) {
+                    case DragStyle::EVENT_ONTIME:
+                        startNew = startAdj + dx;
+                        lenNew = lenAdj - dx;
+                        break;
+                    case DragStyle::EVENT_MOVE:
+                        startNew = startAdj + dx;
+                        lenNew = lenAdj;
+                        break;
+                    default:
+                    case DragStyle::EVENT_LENGTH:
+                        startNew = startAdj;
+                        lenNew = lenAdj + dx;
+                        break;
+                    }
+
+                    int pitch = pi->note->pitch();
+                    int voice = pi->note->voice();
+                    int track = staff->idx() * VOICES + voice;
+
+                    drawDraggedNote(painter, startNew, lenNew, pitch, track, m_colorNoteDrag);
+                }
+            }
+        }
+
         return;
     }
 
@@ -952,6 +1006,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
         case PianorollTool::SELECT:
         case PianorollTool::ADD:
         case PianorollTool::CUT:
+        case PianorollTool::EVENT_ADJUST:
 //                scene()->update();
             update();
             break;
