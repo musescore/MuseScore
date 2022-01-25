@@ -833,3 +833,28 @@ PlayingTechniqueType TConv::fromXml(const QString& tag, PlayingTechniqueType def
 {
     return findTypeByXmlTag<PlayingTechniqueType>(PLAY_TECH_TYPES, tag, def);
 }
+
+static const std::vector<Item<TempoTechniqueType> > TEMPO_CHANGE_TYPES = {
+    { TempoTechniqueType::Undefined, "undefined" },
+    { TempoTechniqueType::Accelerando, "accelerando" },
+    { TempoTechniqueType::Allargando, "allargando" },
+    { TempoTechniqueType::Calando, "calando" },
+    { TempoTechniqueType::Lentando, "lentando" },
+    { TempoTechniqueType::Morendo, "morendo" },
+    { TempoTechniqueType::Precipitando, "precipitando" },
+    { TempoTechniqueType::Rallentando, "rallentando" },
+    { TempoTechniqueType::Ritardando, "ritardando" },
+    { TempoTechniqueType::Smorzando, "smorzando" },
+    { TempoTechniqueType::Sostenuto, "sostenuto" },
+    { TempoTechniqueType::Stringendo, "stringendo" }
+};
+
+QString TConv::toXml(TempoTechniqueType v)
+{
+    return findXmlTagByType<TempoTechniqueType>(TEMPO_CHANGE_TYPES, v);
+}
+
+TempoTechniqueType TConv::fromXml(const QString& tag, TempoTechniqueType def)
+{
+    return findTypeByXmlTag<TempoTechniqueType>(TEMPO_CHANGE_TYPES, tag, def);
+}

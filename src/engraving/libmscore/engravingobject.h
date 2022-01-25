@@ -149,6 +149,8 @@ class Fermata;
 
 class LetRing;
 class LetRingSegment;
+class TempoChangeRanged;
+class TempoChangeRangedSegment;
 class Vibrato;
 class VibratoSegment;
 class PalmMute;
@@ -362,6 +364,8 @@ public:
     CONVERT(TrillSegment,  TRILL_SEGMENT)
     CONVERT(LetRing,       LET_RING)
     CONVERT(LetRingSegment, LET_RING_SEGMENT)
+    CONVERT(TempoChangeRanged, TEMPO_RANGED_CHANGE)
+    CONVERT(TempoChangeRangedSegment, TEMPO_RANGED_CHANGE_SEGMENT)
     CONVERT(Vibrato,       VIBRATO)
     CONVERT(PalmMute,      PALM_MUTE)
     CONVERT(PalmMuteSegment, PALM_MUTE_SEGMENT)
@@ -408,6 +412,7 @@ public:
     {
         return isHairpinSegment()
                || isLetRingSegment()
+               || isTempoChangeRangedSegment()
                || isTextLineSegment()
                || isOttavaSegment()
                || isPalmMuteSegment()
@@ -436,6 +441,7 @@ public:
     {
         return isHairpin()
                || isLetRing()
+               || isTempoChangeRanged()
                || isNoteLine()
                || isOttava()
                || isPalmMute()
@@ -674,6 +680,8 @@ CONVERT(Trill)
 CONVERT(TrillSegment)
 CONVERT(LetRing)
 CONVERT(LetRingSegment)
+CONVERT(TempoChangeRanged)
+CONVERT(TempoChangeRangedSegment)
 CONVERT(Vibrato)
 CONVERT(VibratoSegment)
 CONVERT(PalmMute)
