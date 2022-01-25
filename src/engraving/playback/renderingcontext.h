@@ -45,14 +45,14 @@ struct RenderingContext {
     RenderingContext() = default;
 
     explicit RenderingContext(const mpe::timestamp_t timestamp,
-                             const mpe::duration_t duration,
-                             const mpe::dynamic_level_t dynamicLevel,
-                             const int posTick,
-                             const int durationTicks,
-                             const BeatsPerSecond& bps,
-                             const mpe::ArticulationType persistentArticulationType,
-                             const mpe::ArticulationMap& articulations,
-                             const mpe::ArticulationsProfilePtr profilePtr)
+                              const mpe::duration_t duration,
+                              const mpe::dynamic_level_t dynamicLevel,
+                              const int posTick,
+                              const int durationTicks,
+                              const BeatsPerSecond& bps,
+                              const mpe::ArticulationType persistentArticulationType,
+                              const mpe::ArticulationMap& articulations,
+                              const mpe::ArticulationsProfilePtr profilePtr)
         : nominalTimestamp(timestamp),
         nominalDuration(duration),
         nominalDynamicLevel(dynamicLevel),
