@@ -141,7 +141,7 @@ protected:
     void setReadonly(bool readonly);
 
     void moveCanvasToCenter();
-    void moveCanvasToPosition(const PointF& logicPos);
+    bool moveCanvasToPosition(const PointF& logicPos);
 
     RectF notationContentRect() const override;
 
@@ -191,7 +191,7 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    void adjustCanvasPosition(const RectF& logicRect);
+    bool adjustCanvasPosition(const RectF& logicRect);
 
     void onNoteInputModeChanged();
     void onSelectionChanged();

@@ -344,13 +344,16 @@ void NotationPaintView::followNoteInputCursor()
 void NotationPaintView::onSelectionChanged()
 {
     TRACEFUNC;
-    if (notationSelection()->isNone()) {
+
+    RectF selectionRect = notationSelection()->canvasBoundingRect();
+    if (selectionRect.isNull()) {
         return;
     }
 
-    RectF selectionRect = notationSelection()->canvasBoundingRect();
+    if (adjustCanvasPosition(selectionRect)) {
+        return;
+    }
 
-    adjustCanvasPosition(selectionRect);
     update();
 }
 
@@ -646,18 +649,19 @@ qreal NotationPaintView::startVerticalScrollPosition() const
     return (viewport.top() - contentRect.top()) / contentRect.height();
 }
 
-void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
+bool NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
 {
     TRACEFUNC;
+
     RectF viewRect = viewport();
     RectF showRect = logicRect;
 
     if (viewRect.isEmpty()) {
-        return;
+        return false;
     }
 
     if (viewRect.contains(showRect)) {
-        return;
+        return false;
     }
 
     constexpr int BORDER_SPACING_RATIO = 3;
@@ -691,17 +695,16 @@ void NotationPaintView::adjustCanvasPosition(const RectF& logicRect)
     pos = alignToCurrentPageBorder(showRect, pos);
 
     if (pos == oldPos) {
-        return;
+        return false;
     }
 
-    moveCanvasToPosition(pos);
-
-    update();
+    return moveCanvasToPosition(pos);
 }
 
 void NotationPaintView::ensureViewportInsideScrollableArea()
 {
     TRACEFUNC;
+
     auto [dx, dy] = constraintCanvas(0, 0);
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return;
@@ -711,11 +714,12 @@ void NotationPaintView::ensureViewportInsideScrollableArea()
     update();
 }
 
-void NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
+bool NotationPaintView::moveCanvasToPosition(const PointF& logicPos)
 {
     TRACEFUNC;
+
     PointF viewTopLeft = viewportTopLeft();
-    moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
+    return moveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y());
 }
 
 bool NotationPaintView::moveCanvas(qreal dx, qreal dy)
@@ -999,6 +1003,7 @@ bool NotationPaintView::isInited() const
 void NotationPaintView::onPlayingChanged()
 {
     TRACEFUNC;
+
     if (!notationPlayback()) {
         return;
     }
@@ -1018,6 +1023,7 @@ void NotationPaintView::onPlayingChanged()
 void NotationPaintView::movePlaybackCursor(uint32_t tick)
 {
     TRACEFUNC;
+
     if (!notationPlayback()) {
         return;
     }
@@ -1025,8 +1031,14 @@ void NotationPaintView::movePlaybackCursor(uint32_t tick)
     RectF cursorRect = notationPlayback()->playbackCursorRectByTick(tick);
     m_playbackCursor->setRect(cursorRect);
 
+    if (!m_playbackCursor->visible()) {
+        return;
+    }
+
     if (configuration()->isAutomaticallyPanEnabled()) {
-        adjustCanvasPosition(cursorRect);
+        if (adjustCanvasPosition(cursorRect)) {
+            return;
+        }
     }
 
     update(); //! TODO set rect to optimization

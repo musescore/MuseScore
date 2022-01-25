@@ -41,10 +41,11 @@ public:
     const RectF& rect() const;
     void setRect(const RectF& rect);
 
+    bool visible() const;
     void setVisible(bool arg);
 
 private:
-    QColor color();
+    QColor color() const;
 
     bool m_visible = false;
     RectF m_rect;
