@@ -401,8 +401,15 @@ void MidiFile::writeEvent(const MidiEvent& event)
             case MidieEventType::META:
                   put(MidiEventType::META);
                   put(event.metaType());
-                  putvl(event.len());
-                  write(event.edata(), event.len());
+                  // Don't null terminate text meta events
+                  if (event.metaType() >= 0x1 && event.metaType() <= 0x14) {
+                        putvl(event.len() - 1);
+                        write(event.edata(), event.len() - 1);
+                        }
+                  else {
+                        putvl(event.len());
+                        write(event.edata(), event.len());
+                        }
                   resetRunningStatus();     // really ?!
                   break;
 
