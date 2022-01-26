@@ -55,6 +55,7 @@
 #include "libmscore/keysig.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/letring.h"
+#include "libmscore/tempochangeranged.h"
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
@@ -1238,6 +1239,27 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
             tt->setTempo(tp.f);
             sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
         }
+    }
+
+    static const std::map<TempoTechniqueType, const char*> TEMPO_CHANGE_MAP = {
+        { TempoTechniqueType::Accelerando, QT_TRANSLATE_NOOP("palette", "accel.") },
+        { TempoTechniqueType::Allargando, QT_TRANSLATE_NOOP("palette", "allarg.") },
+        { TempoTechniqueType::Calando, QT_TRANSLATE_NOOP("palette", "calando") },
+        { TempoTechniqueType::Lentando, QT_TRANSLATE_NOOP("palette", "lentando") },
+        { TempoTechniqueType::Morendo, QT_TRANSLATE_NOOP("palette", "morendo") },
+        { TempoTechniqueType::Precipitando, QT_TRANSLATE_NOOP("palette", "precipitando") },
+        { TempoTechniqueType::Rallentando, QT_TRANSLATE_NOOP("palette", "rall.") },
+        { TempoTechniqueType::Ritardando, QT_TRANSLATE_NOOP("palette", "rit.") },
+        { TempoTechniqueType::Smorzando, QT_TRANSLATE_NOOP("palette", "smorz.") },
+        { TempoTechniqueType::Sostenuto, QT_TRANSLATE_NOOP("palette", "sost.") },
+        { TempoTechniqueType::Stringendo, QT_TRANSLATE_NOOP("palette", "string.") }
+    };
+
+    for (const auto& pair : TEMPO_CHANGE_MAP) {
+        auto item = makeElement<TempoChangeRanged>(gpaletteScore);
+        item->setTempoChangeType(pair.first);
+        item->setBeginText(pair.second);
+        sp->appendElement(item, pair.second);
     }
 
     return sp;

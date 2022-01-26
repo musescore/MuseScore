@@ -2153,6 +2153,7 @@ void Score::cmdFlip()
                    || e->isTextLineSegment()
                    || e->isPedalSegment()
                    || e->isLetRingSegment()
+                   || e->isTempoChangeRanged()
                    || e->isPalmMuteSegment()
                    || e->isFermata()
                    || e->isLyrics()
@@ -2606,6 +2607,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::PEDAL_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::LET_RING_SEGMENT:
+    case ElementType::TEMPO_RANGED_CHANGE_SEGMENT:
     case ElementType::PALM_MUTE_SEGMENT:
     {
         el = toSpannerSegment(el)->spanner();

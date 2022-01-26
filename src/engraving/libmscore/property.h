@@ -389,6 +389,8 @@ enum class Pid {
 
     PREFER_SHARP_FLAT,
     PLAY_TECH_TYPE,
+    TEMPO_CHANGE_TYPE,
+    TEMPO_EASING_METHOD,
 
     END
 };
