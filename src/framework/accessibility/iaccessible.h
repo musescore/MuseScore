@@ -74,7 +74,17 @@ public:
         Parent,
         Name,
         Description,
-        Value
+        Value,
+        Selection
+    };
+
+    enum TextBoundaryType {
+        CharBoundary,
+        WordBoundary,
+        SentenceBoundary,
+        ParagraphBoundary,
+        LineBoundary,
+        NoBoundary
     };
 
     virtual const IAccessible* accessibleParent() const = 0;
@@ -87,10 +97,21 @@ public:
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
 
-    virtual QVariant accesibleValue() const = 0;
-    virtual QVariant accesibleMaximumValue() const = 0;
-    virtual QVariant accesibleMinimumValue() const = 0;
-    virtual QVariant accesibleValueStepSize() const = 0;
+    // Value Interface
+    virtual QVariant accessibleValue() const = 0;
+    virtual QVariant accessibleMaximumValue() const = 0;
+    virtual QVariant accessibleMinimumValue() const = 0;
+    virtual QVariant accessibleValueStepSize() const = 0;
+
+    // Text Interface
+    virtual void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const = 0;
+    virtual int accessibleSelectionCount() const = 0;
+
+    virtual int accessibleCursorPosition() const = 0;
+
+    virtual QString accessibleText(int startOffset, int endOffset) const = 0;
+    virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
+    virtual int accesibleCharacterCount() const = 0;
 
     virtual async::Channel<IAccessible::Property> accessiblePropertyChanged() const = 0;
     virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;

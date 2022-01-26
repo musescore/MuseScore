@@ -27,6 +27,7 @@
 #include "accessibility/iaccessibilitycontroller.h"
 
 #include "libmscore/engravingitem.h"
+#include "libmscore/textbase.h"
 
 //! NOTE At the moment this is just a concept, not a production-ready system, a lot of work yet.
 
@@ -37,7 +38,7 @@ class AccessibleItem : public accessibility::IAccessible
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 
 public:
-    AccessibleItem(Ms::EngravingItem* e);
+    AccessibleItem(Ms::EngravingItem* e, Role role = Role::ElementOnScore);
     virtual ~AccessibleItem();
     virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
 
@@ -62,10 +63,19 @@ public:
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 
-    QVariant accesibleValue() const override;
-    QVariant accesibleMaximumValue() const override;
-    QVariant accesibleMinimumValue() const override;
-    QVariant accesibleValueStepSize() const override;
+    QVariant accessibleValue() const override;
+    QVariant accessibleMaximumValue() const override;
+    QVariant accessibleMinimumValue() const override;
+    QVariant accessibleValueStepSize() const override;
+
+    void accessibleSelection(int selectionIndex, int* startOffset, int* endOffset) const override;
+    int accessibleSelectionCount() const override;
+
+    int accessibleCursorPosition() const override;
+
+    QString accessibleText(int startOffset, int endOffset) const override;
+    QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
+    int accesibleCharacterCount() const override;
 
     async::Channel<Property> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;
@@ -73,11 +83,17 @@ public:
 
     static bool enabled;
 
+private:
+    Ms::TextCursor* textCursor() const;
+
 protected:
 
     Ms::EngravingItem* m_element = nullptr;
     bool m_registred = false;
 
+    Role m_role = Role::ElementOnScore;
+
+    mu::async::Channel<IAccessible::Property> m_accessiblePropertyChanged;
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
 }

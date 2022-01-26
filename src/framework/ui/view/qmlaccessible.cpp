@@ -145,24 +145,53 @@ QRect AccessibleItem::accessibleRect() const
     return QRect(globalPos.x(), globalPos.y(), vitem->width(), vitem->height());
 }
 
-QVariant AccessibleItem::accesibleValue() const
+QVariant AccessibleItem::accessibleValue() const
 {
     return m_value;
 }
 
-QVariant AccessibleItem::accesibleMaximumValue() const
+QVariant AccessibleItem::accessibleMaximumValue() const
 {
     return m_maximumValue;
 }
 
-QVariant AccessibleItem::accesibleMinimumValue() const
+QVariant AccessibleItem::accessibleMinimumValue() const
 {
     return m_minimumValue;
 }
 
-QVariant AccessibleItem::accesibleValueStepSize() const
+QVariant AccessibleItem::accessibleValueStepSize() const
 {
     return m_stepSize;
+}
+
+void AccessibleItem::accessibleSelection(int, int*, int*) const
+{
+}
+
+int AccessibleItem::accessibleSelectionCount() const
+{
+    return 0;
+}
+
+int AccessibleItem::accessibleCursorPosition() const
+{
+    return 0;
+}
+
+QString AccessibleItem::accessibleText(int, int) const
+{
+    return QString();
+}
+
+QString AccessibleItem::accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const
+{
+    return QString();
+}
+
+int AccessibleItem::accesibleCharacterCount() const
+{
+    return 0;
 }
 
 mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
